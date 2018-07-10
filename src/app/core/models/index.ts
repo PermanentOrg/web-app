@@ -1,7 +1,7 @@
-export * from './account-password-vo';
-export * from './account-vo';
-export * from './auth-vo';
-export * from './folder-vo';
-export * from './record-vo';
-export * from './request-vo';
-export * from './simple-vo';
+export { AccountPasswordVO } from './account-password-vo';
+export { AccountVO } from './account-vo';
+export { AuthVO } from './auth-vo';
+export { FolderVO } from './folder-vo';
+export { RecordVO } from './record-vo';
+export { RequestVO } from './request-vo';
+export { SimpleVO } from './simple-vo';

@@ -1,11 +1,9 @@
 import { AccountVO, AccountPasswordVO } from '../../models';
-import { HttpService, Observable } from './http.service';
+import { HttpService, Observable } from '../http/http.service';
 import { BaseResponse } from './base';
 
 export class AuthRepo {
-  constructor(private http: HttpService) {
-    console.log('auth.repo.ts', 7, 'new auth repo!');
-  }
+  constructor(private http: HttpService) { }
 
   public isLoggedIn() {
     return this.http.sendRequest('/auth/isLoggedIn', []);

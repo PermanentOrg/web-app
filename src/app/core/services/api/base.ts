@@ -2,9 +2,9 @@ export class BaseResponse {
   public isSuccessful: Boolean;
   public isSystemUp: Boolean;
   public results: any[];
+  public csrf: string;
 
-  private sessionId: String;
-  private csrf: String;
+  private sessionId: string;
   private createdDT: Date;
   private updatedDT: Date;
 

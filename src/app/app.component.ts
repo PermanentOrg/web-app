@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './core/services/api/api.service';
-import { HttpService } from './core/services/api/http.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
