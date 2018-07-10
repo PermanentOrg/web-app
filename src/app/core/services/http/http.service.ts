@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 
 import { RequestVO } from '../../models/request-vo';
 import { BaseResponse } from '../api/base';
-import { SessionService } from '../session/session.service';
+import { StorageService } from '../storage/storage.service';
 
 const API_URL = environment.apiUrl;
 const API_KEY = environment.apiKey;
@@ -15,19 +15,25 @@ const API_KEY = environment.apiKey;
   providedIn: 'root'
 })
 export class HttpService {
+  private defaultResponseClass;
 
-  constructor(private http: HttpClient, private session: SessionService ) { }
+  constructor(private http: HttpClient, private storage: StorageService ) {
+    this.defaultResponseClass = BaseResponse;
+  }
 
-  public sendRequest(endpoint: string, data = [{}]): Observable<BaseResponse> {
-    const requestVO = new RequestVO(API_KEY, this.session.get('csrf'), data);
+  public sendRequest(endpoint: string, data = [{}], responseClass ?: any): Observable<any> {
+    const requestVO = new RequestVO(API_KEY, this.storage.session.get('csrf'), data);
     const url = API_URL + endpoint;
 
     return this.http
       .post(url, {RequestVO: requestVO})
       .pipe(map((response: any) => {
-        const baseResponse = new BaseResponse(response);
-        this.session.set('csrf', baseResponse.csrf);
-        return baseResponse;
+        this.storage.session.set('csrf', response.csrf);
+        if (responseClass) {
+          return new responseClass(response);
+        } else {
+          return new this.defaultResponseClass(response);
+        }
       }));
   }
 }

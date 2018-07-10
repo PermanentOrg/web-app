@@ -32,6 +32,10 @@ export class BaseResponse {
   }
 
   public getResults(): any[] {
+    return this.Results;
+  }
+
+  public getResultsData(): any[] {
     return this.Results.map(result => result.data);
   }
 

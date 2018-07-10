@@ -3,10 +3,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { environment } from '../../../../environments/environment';
 
 import { HttpService } from '../http/http.service';
-import { AuthRepo } from './auth.repo';
-import { BaseResponse } from './base';
+import { AuthRepo, AuthResponse } from './auth.repo';
 import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '../../models';
-import { subscribeOn } from 'rxjs/operators';
 
 describe('AuthRepo', () => {
   let repo: AuthRepo;
@@ -54,7 +52,7 @@ describe('AuthRepo', () => {
       })
     }];
 
-    const expected = new BaseResponse({isSuccessful: true});
+    const expected = new AuthResponse({isSuccessful: true});
     expected.setData(returnData);
 
     repo.isLoggedIn()
@@ -77,7 +75,7 @@ describe('AuthRepo', () => {
       ArchiveVO: new ArchiveVO(testArchive)
     }];
 
-    const expected = new BaseResponse({isSuccessful: true});
+    const expected = new AuthResponse({isSuccessful: true});
     expected.setData(returnData);
 
     repo.logIn(testUser.email, testUser.password, testUser.rememberMe, true)
