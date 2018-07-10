@@ -18,7 +18,7 @@ export class HttpService {
 
   constructor(private http: HttpClient, private session: SessionService ) { }
 
-  public sendRequest(endpoint: string, data: any[]): Observable<BaseResponse> {
+  public sendRequest(endpoint: string, data = [{}]): Observable<BaseResponse> {
     const requestVO = new RequestVO(API_KEY, this.session.get('csrf'), data);
     const url = API_URL + endpoint;
 

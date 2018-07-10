@@ -1,39 +1,56 @@
+import { HttpService } from '../http/http.service';
+
 export class BaseResponse {
   public isSuccessful: Boolean;
   public isSystemUp: Boolean;
-  public results: any[];
+  public Results: any[];
   public csrf: string;
 
   private sessionId: string;
   private createdDT: Date;
   private updatedDT: Date;
 
-  constructor(response: any) {
+  constructor(response?: any) {
+    if (!response) {
+      return;
+    }
+
     this.isSuccessful = response.isSuccessful;
     this.isSystemUp = response.isSystemUp;
-    this.results = response.Results;
+    this.Results = response.Results;
 
     this.sessionId = response.sessionId;
     this.csrf = response.csrf;
   }
 
   public getMessage(): String {
-    if (!this.results.length) {
+    if (!this.Results.length) {
       return '';
     }
 
-    return this.results[0].message[0];
+    return this.Results[0].message[0];
   }
 
   public getResults(): any[] {
-    return this.results.map(result => result.data);
+    return this.Results.map(result => result.data);
   }
 
   public messageIncludes(phrase: String): Boolean {
-    for (let i = 0; i < this.results[0].message; i++) {
-      if (this.results[0].message[i].includes(phrase)) {
+    for (let i = 0; i < this.Results[0].message; i++) {
+      if (this.Results[0].message[i].includes(phrase)) {
         return true;
       }
     }
   }
+
+  public setData(data: any[]) {
+    this.Results = [{
+      data: data
+    }];
+  }
+}
+
+export class BaseRepo {
+  constructor(public http: HttpService) { }
+
 }
