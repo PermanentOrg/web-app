@@ -1,4 +1,5 @@
 export class ArchiveVO {
+  public archiveId;
   public ChildFolderVOs;
   public FolderSizeVOs;
   public RecordVOs;

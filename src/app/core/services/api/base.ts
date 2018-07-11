@@ -39,7 +39,11 @@ export class BaseResponse {
     return this.Results.map(result => result.data);
   }
 
-  public messageIncludes(phrase: String): Boolean {
+  public messageIncludes(exact: String): Boolean {
+    return this.Results[0].message.indexOf(exact) > -1;
+  }
+
+  public messageIncludesPhrase(phrase: String): Boolean {
     for (let i = 0; i < this.Results[0].message; i++) {
       if (this.Results[0].message[i].includes(phrase)) {
         return true;
@@ -48,9 +52,19 @@ export class BaseResponse {
   }
 
   public setData(data: any[]) {
-    this.Results = [{
-      data: data
-    }];
+    if (!this.Results) {
+      this.Results = [{}];
+    }
+
+    this.Results[0].data = data;
+  }
+
+  public setMessage(message: string[]) {
+    if (!this.Results) {
+      this.Results = [{}];
+    }
+
+    this.Results[0].message = message;
   }
 }
 

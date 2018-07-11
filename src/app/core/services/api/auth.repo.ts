@@ -1,4 +1,4 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO } from '../../models';
+import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '../../models';
 import { BaseResponse, BaseRepo } from './base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -8,9 +8,9 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest('/auth/loggedIn', undefined, AuthResponse);
   }
 
-  public logIn(email: String, password: String, rememberMe: Boolean, keepLoggedIn: Boolean): Observable<any> {
+  public logIn(email: String, password: String, rememberMe: Boolean, keepLoggedIn: Boolean): Observable<AuthResponse> {
     const accountVO = new AccountVO({
-      email: email,
+      primaryEmail: email,
       rememberMe: rememberMe,
       keepLoggedIn: keepLoggedIn
     });
@@ -30,7 +30,17 @@ export class AuthRepo extends BaseRepo {
   public signUp() {
   }
 
-  public verify() {
+  public verify(email: String, token: String, type: String) {
+    const accountVO = new AccountVO({
+      primaryEmail: email
+    });
+
+    const authVO = new AuthVO({
+      token: token,
+      type: type
+    });
+
+    return this.http.sendRequest('/auth/verify', [{AccountVO: accountVO, AuthVO: authVO}], AuthResponse);
   }
 
 
@@ -39,11 +49,11 @@ export class AuthRepo extends BaseRepo {
 export class AuthResponse extends BaseResponse {
   public getAccountVO() {
     const data = this.getResultsData();
-    if (!data || !data.length) {
+    if (!data || !data.length || !data[0]) {
       return null;
     }
 
-    return new AccountVO(data[0].AccountVO);
+    return new AccountVO(data[0][0].AccountVO);
   }
 
   public getArchiveVO() {
@@ -52,6 +62,14 @@ export class AuthResponse extends BaseResponse {
       return null;
     }
 
-    return new ArchiveVO(data[0].ArchiveVO);
+    return new ArchiveVO(data[0][0].ArchiveVO);
+  }
+
+  public needsVerification() {
+    return !this.isSuccessful;
+  }
+
+  public needsMFA() {
+    return !this.isSuccessful && this.messageIncludes('warning.auth.mfaToken');
   }
 }

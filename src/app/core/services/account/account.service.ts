@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 import { ApiService } from '../api/api.service';
 import { StorageService } from '../storage/storage.service';
@@ -36,23 +37,55 @@ export class AccountService {
     return this.archive;
   }
 
-  public isLoggedIn() {
-    return this.api.auth.isLoggedIn()
-      .subscribe((response: AuthResponse) => {
-        console.log('account.service.ts', 42, response);
-      });
+  public clearAccount() {
+    this.account = undefined;
+    this.storage.local.delete(ACCOUNT_KEY);
   }
 
-  public logIn(email: String, password: String, rememberMe: Boolean, keepLoggedIn: Boolean) {
+  public clearArchive() {
+    this.archive = undefined;
+    this.storage.local.delete(ARCHIVE_KEY);
+  }
+
+  public isLoggedIn(): Promise<AuthResponse> {
+    return this.api.auth.isLoggedIn().toPromise();
+  }
+
+  public logIn(email: String, password: String, rememberMe: Boolean, keepLoggedIn: Boolean): Promise<AuthResponse> {
     return this.api.auth.logIn(email, password, rememberMe, keepLoggedIn)
-      .subscribe(response => {
-        console.log('account.service.ts', 43, response);
-      });
-  }
-  public logOut() {
-    return this.api.auth.logOut()
-      .subscribe(response => {
+      .pipe(map((response: AuthResponse) => {
 
-      });
+        if (response.isSuccessful) {
+          this.setAccount(response.getAccountVO());
+          this.setArchive(response.getArchiveVO());
+        } else if (response.needsMFA()) {
+          this.setAccount(new AccountVO({primaryEmail: email}));
+        }
+        return response;
+      })).toPromise();
+  }
+
+  public logOut(): Promise<AuthResponse> {
+    return this.api.auth.logOut()
+      .pipe(map((response: AuthResponse) => {
+        if ( response.isSuccessful) {
+          console.log('account.service.ts', 71, 'done logout?');
+          this.clearAccount();
+          this.clearArchive();
+          console.log('account.service.ts', 74, this.account, this.archive);
+        }
+
+        return response;
+      })).toPromise();
+  }
+
+  public verifyMfa(token: String): Promise<AuthResponse> {
+    return this.api.auth.verify(this.account.primaryEmail, token, 'type.auth.mfaValidation')
+      .pipe(map((response: AuthResponse) => {
+        if (response.isSuccessful) {
+          this.setAccount(response.getAccountVO());
+        }
+        return response;
+      })).toPromise();
   }
 }

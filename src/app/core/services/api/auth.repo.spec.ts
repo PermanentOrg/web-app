@@ -6,7 +6,7 @@ import { HttpService } from '../http/http.service';
 import { AuthRepo, AuthResponse } from './auth.repo';
 import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '../../models';
 
-describe('AuthRepo', () => {
+xdescribe('AuthRepo', () => {
   let repo: AuthRepo;
   let httpMock: HttpTestingController;
 

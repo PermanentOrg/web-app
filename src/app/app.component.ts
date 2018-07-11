@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './core/services/api/api.service';
 import { AccountService } from './core/services/account/account.service';
+import { AuthResponse } from './core/services/api/auth.repo';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,14 @@ export class AppComponent implements OnInit {
       password: 'yomama0101'
     };
 
-    this.account.isLoggedIn();
+    this.account.logIn(testUser.email, testUser.password, true, true)
+    .then((response: AuthResponse) => {
+      if (response.needsMFA()) {
+        const tokenValue = prompt('whats the token baby?');
+        return this.account.verifyMfa(tokenValue).then(console.log);
+      } else {
+        console.log('i guess its logged in');
+      }
+    });
   }
 }
