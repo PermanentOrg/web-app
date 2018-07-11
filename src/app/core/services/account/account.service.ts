@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from '../api/api.service';
@@ -51,15 +52,16 @@ export class AccountService {
     return this.api.auth.isLoggedIn().toPromise();
   }
 
-  public logIn(email: String, password: String, rememberMe: Boolean, keepLoggedIn: Boolean): Promise<AuthResponse> {
+  public logIn(email: string, password: string, rememberMe: Boolean, keepLoggedIn: Boolean): Promise<any> {
     return this.api.auth.logIn(email, password, rememberMe, keepLoggedIn)
       .pipe(map((response: AuthResponse) => {
-
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
           this.setArchive(response.getArchiveVO());
         } else if (response.needsMFA()) {
           this.setAccount(new AccountVO({primaryEmail: email}));
+        } else {
+          throw new Error(response.getMessage());
         }
         return response;
       })).toPromise();
@@ -79,7 +81,7 @@ export class AccountService {
       })).toPromise();
   }
 
-  public verifyMfa(token: String): Promise<AuthResponse> {
+  public verifyMfa(token: string): Promise<AuthResponse> {
     return this.api.auth.verify(this.account.primaryEmail, token, 'type.auth.mfaValidation')
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {

@@ -23,7 +23,7 @@ export class BaseResponse {
     this.csrf = response.csrf;
   }
 
-  public getMessage(): String {
+  public getMessage(): string {
     if (!this.Results.length) {
       return '';
     }
@@ -39,11 +39,11 @@ export class BaseResponse {
     return this.Results.map(result => result.data);
   }
 
-  public messageIncludes(exact: String): Boolean {
+  public messageIncludes(exact: string): Boolean {
     return this.Results[0].message.indexOf(exact) > -1;
   }
 
-  public messageIncludesPhrase(phrase: String): Boolean {
+  public messageIncludesPhrase(phrase: string): Boolean {
     for (let i = 0; i < this.Results[0].message; i++) {
       if (this.Results[0].message[i].includes(phrase)) {
         return true;

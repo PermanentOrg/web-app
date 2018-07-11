@@ -5,7 +5,7 @@ import { AuthResponse } from './core/services/api/auth.repo';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: '<router-outlet></router-outlet>',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
@@ -15,19 +15,5 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    const testUser = {
-      email: 'aatwood@permanent.org',
-      password: 'yomama0101'
-    };
-
-    this.account.logIn(testUser.email, testUser.password, true, true)
-    .then((response: AuthResponse) => {
-      if (response.needsMFA()) {
-        const tokenValue = prompt('whats the token baby?');
-        return this.account.verifyMfa(tokenValue).then(console.log);
-      } else {
-        console.log('i guess its logged in');
-      }
-    });
   }
 }
