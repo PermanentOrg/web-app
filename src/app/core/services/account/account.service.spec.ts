@@ -9,7 +9,7 @@ import { AuthResponse } from '../api/auth.repo';
 import { AccountVO, ArchiveVO } from '../../models';
 import { environment } from '../../../../environments/environment';
 
-fdescribe('AccountService', () => {
+describe('AccountService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -56,7 +56,7 @@ fdescribe('AccountService', () => {
     req.flush(expected);
   }));
 
-  it('should detected failed login due to MFA', inject([AccountService], (service: AccountService) => {
+  it('should detect failed login due to MFA', inject([AccountService], (service: AccountService) => {
     service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
         expect(response.isSuccessful).toBeFalsy();
