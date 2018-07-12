@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { StorageService } from './storage.service';
 
-fdescribe('StorageService', () => {
+describe('StorageService', () => {
   const testKey = 'test';
   const testValue = 'testValue';
   const testObject = {
