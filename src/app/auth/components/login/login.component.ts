@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { AccountService } from '../../../shared/services/account/account.service';
 import { AuthResponse } from '../../../shared/services/api/auth.repo';
-import { Router } from '@angular/router';
+import { MessageService } from '../../../shared/services/message/message.service';
 
 @Component({
   selector: 'pr-login',
@@ -13,7 +15,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   waiting: Boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {
+  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.loginForm = fb.group({
       'email': ['aatwood@permanent.org'],
       'password': ['yomama0101']
@@ -31,8 +33,10 @@ export class LoginComponent implements OnInit {
         this.waiting = false;
 
         if (response.needsMFA()) {
+          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
           this.router.navigate(['/mfa']);
         } else {
+          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
           this.router.navigate(['/app']);
         }
       })

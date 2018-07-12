@@ -2,3 +2,9 @@ html, body, app-root {
   height: 100%;
   position: relative;
 }
+
+app-root {
+  max-width: 500px;
+  margin: 0 auto;
+  display: block;
+}

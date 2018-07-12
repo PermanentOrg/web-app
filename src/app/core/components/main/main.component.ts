@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '../../../../../node_modules/@angular/router';
 
 import { AccountService } from '../../../shared/services/account/account.service';
+import { MessageService } from '../../../shared/services/message/message.service';
 
 @Component({
   selector: 'pr-main',
@@ -10,14 +11,15 @@ import { AccountService } from '../../../shared/services/account/account.service
 })
 export class MainComponent implements OnInit {
 
-  constructor(private account: AccountService, private router: Router) { }
+  constructor(private accountService: AccountService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit() {
   }
 
   logOut() {
-    this.account.logOut()
+    this.accountService.logOut()
     .then(() => {
+      this.messageService.showMessage(`Logged out`, 'success');
       this.router.navigate(['/login']);
     });
   }

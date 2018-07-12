@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { AccountService } from '../../../shared/services/account/account.service';
 import { AuthResponse } from '../../../shared/services/api/auth.repo';
 import { Router } from '@angular/router';
+import { MessageService } from '../../../shared/services/message/message.service';
 
 @Component({
   selector: 'pr-mfa',
@@ -13,7 +14,7 @@ export class MfaComponent implements OnInit {
   mfaForm: FormGroup;
   waiting: Boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {
+  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.mfaForm = fb.group({
       'token': [],
     });
@@ -27,7 +28,7 @@ export class MfaComponent implements OnInit {
 
     this.accountService.verifyMfa(formValue.token)
       .then((response: AuthResponse) => {
-        console.log('mfa.component.ts', 30, 'done mfa?');
+        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
         this.router.navigate(['/app']);
       })
       .catch((response: AuthResponse) => {
