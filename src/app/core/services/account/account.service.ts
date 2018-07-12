@@ -29,8 +29,6 @@ export class AccountService {
     if (cachedArchive) {
       this.setArchive(new ArchiveVO(cachedArchive));
     }
-
-    console.log('account.service.ts', 33, this.account, this.archive);
   }
 
   public setAccount(newAccount: AccountVO) {
@@ -61,8 +59,11 @@ export class AccountService {
     this.storage.local.delete(ARCHIVE_KEY);
   }
 
-  public checkSession(): Promise<AuthResponse> {
-    return this.api.auth.isLoggedIn().toPromise();
+  public checkSession(): Promise<Boolean> {
+    return this.api.auth.isLoggedIn().toPromise()
+      .then((response: AuthResponse) => {
+        return response.getSimpleVO().value;
+      });
   }
 
   public isLoggedIn(): Boolean {

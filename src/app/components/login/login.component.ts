@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private accountService: AccountService) {
     this.loginForm = fb.group({
-      'username': ['aatwood@permanent.org'],
+      'email': ['aatwood@permanent.org'],
       'password': ['yomama0101']
     });
   }

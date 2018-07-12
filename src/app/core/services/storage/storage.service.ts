@@ -27,7 +27,7 @@ class BaseStorage {
     if (this.storeInMemory) {
       return this.store[key];
     } else {
-      return this.storage.getItem(key);
+      return JSON.parse(this.storage.getItem(key));
     }
   }
 
@@ -35,7 +35,7 @@ class BaseStorage {
     if (this.storeInMemory) {
       this.store[key] = value;
     } else {
-      this.storage.setItem(key, value);
+      this.storage.setItem(key, JSON.stringify(value));
     }
   }
 

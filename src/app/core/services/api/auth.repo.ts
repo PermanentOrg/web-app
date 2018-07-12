@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class AuthRepo extends BaseRepo {
-  public isLoggedIn() {
+  public isLoggedIn(): Observable<AuthResponse> {
     return this.http.sendRequest('/auth/loggedIn', undefined, AuthResponse);
   }
 
