@@ -14,7 +14,7 @@ import { CoreModule } from './core/core.module';
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'app', loadChildren: () => CoreModule },
+  { path: 'app', loadChildren: './core/core.module#CoreModule' },
   { path: '**', redirectTo: 'app', pathMatch: 'full' },
 ];
 

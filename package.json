@@ -6,7 +6,8 @@
     "serve": "ng serve",
     "dev": "ng serve --host local.permanent.org --disable-host-check",
     "dev_local": "ng serve --base-href /",
-    "build": "ng build",
+    "build": "ng build --base-href /m/ --aot --build-optimizer --prod",
+    "build_local": "ng build --base-href /m/ --aot --build-optimizer",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
