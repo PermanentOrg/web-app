@@ -21,6 +21,9 @@ describe('AccountService', () => {
     });
 
     httpMock = TestBed.get(HttpTestingController);
+
+    window.sessionStorage.clear();
+    window.localStorage.clear();
   });
 
   afterEach(() => {
@@ -28,6 +31,7 @@ describe('AccountService', () => {
   });
 
   it('should be created with no account or archive data', inject([AccountService], (service: AccountService) => {
+
     expect(service.getAccount()).toBeUndefined();
     expect(service.getArchive()).toBeUndefined();
   }));

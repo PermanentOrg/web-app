@@ -27,7 +27,16 @@ class BaseStorage {
     if (this.storeInMemory) {
       return this.store[key];
     } else {
-      return JSON.parse(this.storage.getItem(key));
+      const storeValue = this.storage.getItem(key);
+      if (!storeValue || storeValue.length < 2) {
+        return storeValue;
+      } else if (storeValue[0] === '[' && storeValue[storeValue.length - 1] === ']') {
+        return JSON.parse(storeValue);
+      } else if (storeValue[0] === '{' && storeValue[storeValue.length - 1] === '}') {
+        return JSON.parse(storeValue);
+      } else {
+        return storeValue;
+      }
     }
   }
 
@@ -35,7 +44,8 @@ class BaseStorage {
     if (this.storeInMemory) {
       this.store[key] = value;
     } else {
-      this.storage.setItem(key, JSON.stringify(value));
+      const isString = typeof value === 'string';
+      this.storage.setItem(key, isString ? value : JSON.stringify(value));
     }
   }
 

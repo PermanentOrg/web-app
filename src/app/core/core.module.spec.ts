@@ -1,5 +1,5 @@
 import { CoreModule } from './core.module';
-import { ArchiveVO } from './models';
+import { ArchiveVO } from '../models';
 
 const testUser = {
   name: 'Test Account',
