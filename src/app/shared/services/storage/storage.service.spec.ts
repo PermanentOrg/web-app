@@ -51,13 +51,13 @@ describe('StorageService', () => {
     }
   }));
 
-  fit('should handle an undefined value from SessionStorage', inject([StorageService], (service: StorageService) => {
+  it('should handle an undefined value from SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       expect(service.session.get(testKey)).toBeFalsy();
     }
   }));
 
-  fit('should handle storing a null-ish value to SessionStorage', inject([StorageService], (service: StorageService) => {
+  it('should handle storing a null-ish value to SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       service.session.set(testKey, null);
       expect(service.session.get(testKey)).toBeNull();
