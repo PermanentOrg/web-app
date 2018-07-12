@@ -4,9 +4,9 @@ import { last } from 'rxjs/operators';
 import { concat } from 'rxjs';
 
 import { AccountService } from './account.service';
-import { TEST_DATA } from '../../core.module.spec';
+import { TEST_DATA } from '../../../core/core.module.spec';
 import { AuthResponse } from '../api/auth.repo';
-import { AccountVO, ArchiveVO } from '../../models';
+import { AccountVO, ArchiveVO } from '../../../models';
 import { environment } from '../../../../environments/environment';
 
 describe('AccountService', () => {

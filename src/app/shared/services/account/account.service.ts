@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { ApiService } from '../api/api.service';
 import { StorageService } from '../storage/storage.service';
-import { ArchiveVO, AccountVO } from '../../models';
+import { ArchiveVO, AccountVO } from '../../../models';
 import { AuthResponse } from '../api/auth.repo';
 
 const ACCOUNT_KEY = 'account';

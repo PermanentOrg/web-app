@@ -1,5 +1,5 @@
 import { HttpService } from '../http/http.service';
-import { SimpleVO } from '../../models';
+import { SimpleVO } from '../../../models';
 
 export class BaseResponse {
   public isSuccessful: Boolean;
@@ -41,7 +41,7 @@ export class BaseResponse {
   }
 
   public getSimpleVO(): SimpleVO {
-    return this.getResultsData()[0][0].SimpleVO;
+    return new SimpleVO(this.getResultsData()[0][0].SimpleVO);
   }
 
   public messageIncludes(exact: string): Boolean {

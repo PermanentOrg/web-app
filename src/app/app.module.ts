@@ -5,10 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { HttpService } from './core/services/http/http.service';
-import { ApiService } from './core/services/api/api.service';
+import { HttpService } from './shared/services/http/http.service';
+import { ApiService } from './shared/services/api/api.service';
 import { LoginComponent } from './components/login/login.component';
-import { MessageComponent } from './shared/message/component/message.component';
+import { MessageComponent } from './shared/components/message/message.component';
 import { CoreModule } from './core/core.module';
 
 const routes: Routes = [

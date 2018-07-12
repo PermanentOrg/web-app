@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MessageComponent } from '../component/message.component';
+import { MessageComponent } from '../../components/message/message.component';
 
 @Injectable({
   providedIn: 'root'
