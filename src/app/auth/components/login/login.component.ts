@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { AccountService } from '../../shared/services/account/account.service';
-import { AuthResponse } from '../../shared/services/api/auth.repo';
+import { AccountService } from '../../../shared/services/account/account.service';
+import { AuthResponse } from '../../../shared/services/api/auth.repo';
 import { Router } from '@angular/router';
 
 @Component({

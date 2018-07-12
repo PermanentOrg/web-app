@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HttpService } from './shared/services/http/http.service';
 import { ApiService } from './shared/services/api/api.service';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './auth/components/login/login.component';
 import { MessageComponent } from './shared/components/message/message.component';
 import { CoreModule } from './core/core.module';
 
