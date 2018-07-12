@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '../../../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 
 import { AccountService } from '../../../shared/services/account/account.service';
 import { MessageService } from '../../../shared/services/message/message.service';
@@ -19,7 +19,7 @@ export class MainComponent implements OnInit {
   logOut() {
     this.accountService.logOut()
     .then(() => {
-      this.messageService.showMessage(`Logged out`, 'success');
+      this.messageService.showMessage(`Logged out successfully`, 'success');
       this.router.navigate(['/login']);
     });
   }

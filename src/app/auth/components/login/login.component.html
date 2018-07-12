@@ -1,11 +1,10 @@
-<h1>Log In</h1>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
   <div class="input-group-vertical">
     <input type="text" class="form-control" id="email" placeholder="Email"
-      [formControl]="loginForm.controls['email']"
+      [formControl]="loginForm.controls['email']" required="required"
       autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">
     <input type="password" class="form-control" id="password" placeholder="Password"
-      [formControl]="loginForm.controls['password']">
+      [formControl]="loginForm.controls['password']" required="required">
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="waiting">Log in</button>
+  <button type="submit" class="btn btn-primary" [disabled]="waiting || loginForm.invalid">Log in</button>
 </form>

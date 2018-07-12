@@ -31,7 +31,7 @@ form {
       background-color: darken(white, 3%)
     }
 
-    &.ng-invalid {
+    &.ng-touched.ng-invalid {
       background-color: rgba($danger, 0.2);
       border-color: $danger !important; 
     }

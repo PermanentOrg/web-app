@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AccountService } from '../../../shared/services/account/account.service';
@@ -17,8 +17,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.loginForm = fb.group({
-      'email': ['aatwood@permanent.org'],
-      'password': ['yomama0101']
+      'email': ['', Validators.required],
+      'password': ['', Validators.required]
     });
   }
 
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         }
       })
       .catch((response: AuthResponse) => {
-        console.error(response);
+        this.message.showMessage('Incorrect email or password', 'danger');
         this.waiting = false;
       });
   }

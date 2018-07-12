@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiKey: '`2QOGhZvC.1.VdaoPn;-gIhi',
   apiUrl: 'https://local.permanent.org/api',
-  hmr: false
+  hmr: true
 };
 
 /*
