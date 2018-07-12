@@ -89,10 +89,8 @@ export class AccountService {
     return this.api.auth.logOut()
       .pipe(map((response: AuthResponse) => {
         if ( response.isSuccessful) {
-          console.log('account.service.ts', 71, 'done logout?');
           this.clearAccount();
           this.clearArchive();
-          console.log('account.service.ts', 74, this.account, this.archive);
         }
 
         return response;
