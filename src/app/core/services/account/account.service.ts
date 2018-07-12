@@ -18,7 +18,18 @@ export class AccountService {
   private archive: ArchiveVO;
   public authStatus: string[];
 
-  constructor(private api: ApiService, private storage: StorageService) { }
+  constructor(private api: ApiService, private storage: StorageService) {
+    const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
+    const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
+
+    if (cachedAccount) {
+      this.setAccount(new AccountVO(cachedAccount));
+    }
+
+    if (cachedArchive) {
+      this.setArchive(new ArchiveVO(cachedArchive));
+    }
+  }
 
   public setAccount(newAccount: AccountVO) {
     this.account = newAccount;
@@ -48,8 +59,12 @@ export class AccountService {
     this.storage.local.delete(ARCHIVE_KEY);
   }
 
-  public isLoggedIn(): Promise<AuthResponse> {
+  public checkSession(): Promise<AuthResponse> {
     return this.api.auth.isLoggedIn().toPromise();
+  }
+
+  public isLoggedIn(): Boolean {
+    return !!this.account && !!this.archive;
   }
 
   public logIn(email: string, password: string, rememberMe: Boolean, keepLoggedIn: Boolean): Promise<any> {
@@ -61,7 +76,7 @@ export class AccountService {
         } else if (response.needsMFA()) {
           this.setAccount(new AccountVO({primaryEmail: email}));
         } else {
-          throw new Error(response.getMessage());
+          throw response;
         }
         return response;
       })).toPromise();

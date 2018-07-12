@@ -5,6 +5,7 @@
     "ng": "ng",
     "serve": "ng serve",
     "dev": "ng serve --host local.permanent.org --base-href / --public-host http://permanent.org/mdev --disable-host-check",
+    "dev_local": "ng serve --base-href /",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

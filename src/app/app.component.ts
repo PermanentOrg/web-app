@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './core/services/api/api.service';
 import { AccountService } from './core/services/account/account.service';
-import { AuthResponse } from './core/services/api/auth.repo';
+import { MessageService } from './shared/message/service/message.service';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   title = 'app';
 
-  constructor(private api: ApiService, private account: AccountService) {
+  constructor(private api: ApiService, private account: AccountService, private message: MessageService) {
   }
 
   ngOnInit() {
+    this.message.showMessage('test 1', 'primary');
+
+    setTimeout(() => {
+      this.message.showMessage('test 2', 'danger');
+    }, 5000);
   }
 }

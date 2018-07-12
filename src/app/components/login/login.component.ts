@@ -28,9 +28,15 @@ export class LoginComponent implements OnInit {
     this.accountService.logIn(formValue.email, formValue.password, true, true)
       .then((response: AuthResponse) => {
         this.waiting = false;
+
+        if (response.needsMFA()) {
+          console.log('going to verify!');
+        } else {
+          console.log('going to app!');
+        }
       })
-      .catch((err: Error) => {
-        console.log(err.message);
+      .catch((response: AuthResponse) => {
+        console.error(response);
         this.waiting = false;
       });
   }
