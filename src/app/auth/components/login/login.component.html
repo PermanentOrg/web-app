@@ -1,0 +1,8 @@
+<h1>Log In</h1>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+  <input type="text" class="form-control" id="email" placeholder="Email"
+    [formControl]="loginForm.controls['email']">
+  <input type="password" class="form-control" id="password" placeholder="Password"
+    [formControl]="loginForm.controls['password']">
+  <button type="submit" class="btn btn-primary" [disabled]="waiting">Log in</button>
+</form>
