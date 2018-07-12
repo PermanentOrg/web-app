@@ -27,13 +27,12 @@ export class MessageComponent implements OnInit {
   }
 
   display(textToDisplay: string, style?: string, displayTime = this.displayTime) {
-    const fullStyle = style ? `alert-${style}` : null;
 
     if (this.visible) {
-      this.queue.push({text: textToDisplay, style: fullStyle});
+      this.queue.push({text: textToDisplay, style: style});
     } else {
       this.displayText = textToDisplay;
-      this.style = fullStyle;
+      this.style = style ? `alert-${style}` : null;
       this.visible = true;
       setTimeout(this.dismiss.bind(this), displayTime);
     }

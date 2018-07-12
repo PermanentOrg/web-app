@@ -41,7 +41,11 @@ export class LoginComponent implements OnInit {
         }
       })
       .catch((response: AuthResponse) => {
-        this.message.showMessage('Incorrect email or password', 'danger');
+        if (response.messageIncludes('warning.signin.unknown')) {
+          this.message.showMessage('Incorrect email or password', 'danger');
+        } else {
+          this.message.showMessage('Log in failed. Please try again.', 'danger');
+        }
         this.waiting = false;
       });
   }
