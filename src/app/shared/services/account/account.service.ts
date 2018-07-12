@@ -102,8 +102,14 @@ export class AccountService {
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
+          return response;
+        } else {
+          throw response;
         }
-        return response;
       })).toPromise();
+      // .then((response: AuthResponse) => {
+      //   this.api
+      //   return response;
+      // });
   }
 }

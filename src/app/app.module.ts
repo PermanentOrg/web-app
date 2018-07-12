@@ -9,10 +9,12 @@ import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/components/login/login.component';
 import { MessageComponent } from './shared/components/message/message.component';
+import { MfaComponent } from './auth/components/mfa/mfa.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'mfa', component: MfaComponent },
   { path: 'app', loadChildren: './core/core.module#CoreModule' },
   { path: '**', redirectTo: 'app', pathMatch: 'full' },
 ];
@@ -21,6 +23,7 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
+    MfaComponent,
     MessageComponent,
   ],
   imports: [

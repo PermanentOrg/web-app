@@ -5,18 +5,17 @@ import { AuthResponse } from '../../../shared/services/api/auth.repo';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'pr-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'pr-mfa',
+  templateUrl: './mfa.component.html',
+  styleUrls: ['./mfa.component.scss']
 })
-export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+export class MfaComponent implements OnInit {
+  mfaForm: FormGroup;
   waiting: Boolean;
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {
-    this.loginForm = fb.group({
-      'email': ['aatwood@permanent.org'],
-      'password': ['yomama0101']
+    this.mfaForm = fb.group({
+      'token': [],
     });
   }
 
@@ -26,15 +25,10 @@ export class LoginComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, true, true)
+    this.accountService.verifyMfa(formValue.token)
       .then((response: AuthResponse) => {
-        this.waiting = false;
-
-        if (response.needsMFA()) {
-          this.router.navigate(['/mfa']);
-        } else {
-          this.router.navigate(['/app']);
-        }
+        console.log('mfa.component.ts', 30, 'done mfa?');
+        this.router.navigate(['/app']);
       })
       .catch((response: AuthResponse) => {
         console.error(response);

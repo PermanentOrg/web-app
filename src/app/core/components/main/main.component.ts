@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '../../../../../node_modules/@angular/router';
+
+import { AccountService } from '../../../shared/services/account/account.service';
 
 @Component({
   selector: 'pr-main',
@@ -7,9 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  constructor(private account: AccountService, private router: Router) { }
 
   ngOnInit() {
+  }
+
+  logOut() {
+    this.account.logOut()
+    .then(() => {
+      this.router.navigate(['/login']);
+    });
   }
 
 }
