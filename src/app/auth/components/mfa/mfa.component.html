@@ -1,6 +1,7 @@
 <h1>Verify MFA</h1>
 <form [formGroup]="mfaForm" (ngSubmit)="onSubmit(mfaForm.value)">
-  <input type="text" class="form-control" id="token" placeholder="Token"
-    [formControl]="mfaForm.controls['token']">
+  <input type="tel" class="form-control" id="token" placeholder="Token"
+    [formControl]="mfaForm.controls['token']"
+    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify MFA</button>
 </form>
