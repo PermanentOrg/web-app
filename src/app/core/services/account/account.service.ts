@@ -29,6 +29,8 @@ export class AccountService {
     if (cachedArchive) {
       this.setArchive(new ArchiveVO(cachedArchive));
     }
+
+    console.log('account.service.ts', 33, this.account, this.archive);
   }
 
   public setAccount(newAccount: AccountVO) {

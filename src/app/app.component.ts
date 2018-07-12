@@ -15,10 +15,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.message.showMessage('test 1', 'primary');
+    // this.message.showMessage('test 1', 'primary');
 
-    setTimeout(() => {
-      this.message.showMessage('test 2', 'danger');
-    }, 5000);
+    // setTimeout(() => {
+    //   this.message.showMessage('test 2', 'danger');
+    // }, 5000);
   }
 }

@@ -9,18 +9,20 @@ import { HttpService } from './core/services/http/http.service';
 import { ApiService } from './core/services/api/api.service';
 import { LoginComponent } from './components/login/login.component';
 import { MessageComponent } from './shared/message/component/message.component';
+import { CoreModule } from './core/core.module';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'app', loadChildren: () => CoreModule },
+  { path: '**', redirectTo: 'app', pathMatch: 'full' },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MessageComponent
+    MessageComponent,
   ],
   imports: [
     BrowserModule,
