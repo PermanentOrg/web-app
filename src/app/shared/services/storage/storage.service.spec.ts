@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { StorageService } from './storage.service';
 
-describe('StorageService', () => {
+fdescribe('StorageService', () => {
   const testKey = 'test';
   const testValue = 'testValue';
   const testObject = {
@@ -48,6 +48,22 @@ describe('StorageService', () => {
     if (window.sessionStorage) {
       window.sessionStorage.setItem(testKey, JSON.stringify(testObject));
       expect(service.session.get(testKey)).toEqual(testObject);
+    }
+  }));
+
+  fit('should handle an undefined value from SessionStorage', inject([StorageService], (service: StorageService) => {
+    if (window.sessionStorage) {
+      expect(service.session.get(testKey)).toBeFalsy();
+    }
+  }));
+
+  fit('should handle storing a null-ish value to SessionStorage', inject([StorageService], (service: StorageService) => {
+    if (window.sessionStorage) {
+      service.session.set(testKey, null);
+      expect(service.session.get(testKey)).toBeNull();
+      service.session.delete(testKey);
+      service.session.set(testKey, false);
+      expect(service.session.get(testKey)).toBeFalsy();
     }
   }));
 

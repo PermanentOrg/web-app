@@ -4,12 +4,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { CoreModule } from './core/core.module';
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/components/login/login.component';
 import { MessageComponent } from './shared/components/message/message.component';
 import { MfaComponent } from './auth/components/mfa/mfa.component';
+import { VerifyComponent } from './auth/components/verify/verify.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -24,6 +23,7 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     MfaComponent,
+    VerifyComponent,
     MessageComponent,
   ],
   imports: [
