@@ -1,5 +1,8 @@
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
   <div class="input-group-vertical">
+    <input type="text" class="form-control" id="name" placeholder="Full name"
+      [formControl]="signupForm.controls['name']" required="required"
+      autocomplete="name" autocorrect="off" autocapitalize="yes" spellcheck="false">
     <input type="text" class="form-control" id="email" placeholder="Email"
       [formControl]="signupForm.controls['email']" required="required"
       autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">

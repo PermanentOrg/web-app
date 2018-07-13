@@ -19,7 +19,7 @@ export class SignupComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.signupForm = fb.group({
-      'email': ['', [Validators.required, Validators.email]],
+      'email': ['', [Validators.required]],
       'name': ['', Validators.required],
       'passwords': fb.group({
         'password': ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
@@ -36,11 +36,11 @@ export class SignupComponent implements OnInit {
 
     if (match) {
       group.controls['confirm'].setErrors(null);
+      setTimeout(() => console.log(group.valid), 100);
       return null;
     }
 
     const errors = { mismatch: true };
-
     group.controls['confirm'].setErrors(errors);
 
     return errors;
