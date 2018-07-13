@@ -6,20 +6,37 @@ import { AccountService } from '../../../shared/services/account/account.service
 import { AuthResponse } from '../../../shared/services/api/auth.repo';
 import { MessageService } from '../../../shared/services/message/message.service';
 
+const MIN_PASSWORD_LENGTH = 10;
+
+const FORM_ERROR_MESSAGES = {
+  email: {
+    email: 'Invalid email address',
+    required: 'Email required'
+  },
+  password: {
+    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters`,
+    required: 'Password required'
+  }
+};
+
 @Component({
   selector: 'pr-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  host: {'class': 'pr-auth-form'}
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   waiting: Boolean;
+  formErrors: any = {};
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.loginForm = fb.group({
-      'email': ['', Validators.required],
-      'password': ['', Validators.required]
-    });
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
+    }, { updateOn: 'blur' });
+
+    this.loginForm.statusChanges.subscribe(() => this.setErrorMessages());
   }
 
   ngOnInit() {
@@ -48,6 +65,25 @@ export class LoginComponent implements OnInit {
         }
         this.waiting = false;
       });
+  }
+
+  setErrorMessages() {
+    if (this.loginForm.valid) {
+      this.formErrors = {};
+      return;
+    }
+
+    for (const controlName in this.loginForm.controls) {
+      if (this.loginForm.get(controlName) ) {
+        const control = this.loginForm.get(controlName);
+        if (control.touched && control.errors) {
+          const errorName = Object.keys(control.errors).pop();
+          this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
+        } else {
+          this.formErrors[controlName] = null;
+        }
+      }
+    }
   }
 
 }

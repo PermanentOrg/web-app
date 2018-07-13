@@ -8,7 +8,8 @@ import { MessageService } from '../../../shared/services/message/message.service
 @Component({
   selector: 'pr-mfa',
   templateUrl: './mfa.component.html',
-  styleUrls: ['./mfa.component.scss']
+  styleUrls: ['./mfa.component.scss'],
+  host: {'class': 'pr-auth-form'}
 })
 export class MfaComponent implements OnInit {
   mfaForm: FormGroup;

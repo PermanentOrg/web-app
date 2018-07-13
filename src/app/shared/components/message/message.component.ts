@@ -17,7 +17,7 @@ export class MessageComponent implements OnInit {
   style: string;
   queue: Message[] = [];
 
-  private displayTime = 4000;
+  private displayTime = 3000;
 
   constructor(private service: MessageService) {
     this.service.registerComponent(this);
@@ -34,7 +34,7 @@ export class MessageComponent implements OnInit {
       this.displayText = textToDisplay;
       this.style = style ? `alert-${style}` : null;
       this.visible = true;
-      // setTimeout(this.dismiss.bind(this), displayTime);
+      setTimeout(this.dismiss.bind(this), displayTime);
     }
   }
 

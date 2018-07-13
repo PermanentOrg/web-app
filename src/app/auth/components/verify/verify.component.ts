@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'pr-verify',
   templateUrl: './verify.component.html',
-  styleUrls: ['./verify.component.scss']
+  styleUrls: ['./verify.component.scss'],
+  host: {'class': 'pr-auth-form'}
 })
 export class VerifyComponent implements OnInit {
   verifyForm: FormGroup;

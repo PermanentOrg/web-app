@@ -11,7 +11,8 @@ const MIN_PASSWORD_LENGTH = 10;
 @Component({
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  styleUrls: ['./signup.component.scss'],
+  host: {'class': 'pr-auth-form'}
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
@@ -19,11 +20,12 @@ export class SignupComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.signupForm = fb.group({
-      'email': ['', [Validators.required]],
-      'name': ['', Validators.required],
-      'passwords': fb.group({
-        'password': ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-        'confirm': ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
+      invitation: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      name: ['', Validators.required],
+      passwords: fb.group({
+        password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+        confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
       }, { validator: [Validators.required, this.matchValidator] })
     });
   }
