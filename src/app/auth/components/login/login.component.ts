@@ -33,7 +33,9 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      rememberMe: [true],
+      keepLoggedIn: [true]
     }, { updateOn: 'blur' });
 
     this.loginForm.statusChanges.subscribe(() => this.setErrorMessages());
@@ -45,7 +47,7 @@ export class LoginComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, true, true)
+    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
       .then((response: AuthResponse) => {
         this.waiting = false;
 
@@ -60,6 +62,7 @@ export class LoginComponent implements OnInit {
       .catch((response: AuthResponse) => {
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password', 'danger');
+          this.loginForm.setErrors({unknown: true});
         } else {
           this.message.showMessage('Log in failed. Please try again.', 'danger');
         }

@@ -1,4 +1,6 @@
-export class AuthVO {
+import { BaseVO } from './base-vo';
+
+export class AuthVO extends BaseVO {
   public authId;
   public accountId;
   public archiveId;
@@ -7,14 +9,4 @@ export class AuthVO {
   public ipAddress;
   public status;
   public type;
-
-  constructor (voData: any) {
-    if (voData) {
-      for ( const key in voData ) {
-        if (voData[key]) {
-          this[key] = voData[key];
-        }
-      }
-    }
-  }
 }
