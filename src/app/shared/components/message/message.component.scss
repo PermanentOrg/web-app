@@ -5,6 +5,7 @@ $transition-length: 0.33s;
   top: 0;
   left: 0;
   right: 0;
+  transform: translateY(-100%);
 }
 
 .alert {
@@ -14,13 +15,14 @@ $transition-length: 0.33s;
 
 .alert-wrapper {
   padding: 10px 10px;
-  transform: translateY(-100%);
+
+  transform: translateY(0);
   transition: $transition-length ease-in transform;
   display: block;
   margin: 0 auto;
   
   &.visible {
-    transform: translateY(0);
+    transform: translateY(100%);
     transition: $transition-length ease-out transform;
   }
 }
