@@ -34,7 +34,7 @@ export class MessageComponent implements OnInit {
       this.displayText = textToDisplay;
       this.style = style ? `alert-${style}` : null;
       this.visible = true;
-      setTimeout(this.dismiss.bind(this), displayTime);
+      // setTimeout(this.dismiss.bind(this), displayTime);
     }
   }
 

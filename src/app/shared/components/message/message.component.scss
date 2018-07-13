@@ -15,7 +15,6 @@ $transition-length: 0.33s;
 
 .alert-wrapper {
   padding: 10px 10px;
-
   transform: translateY(0);
   transition: $transition-length ease-in transform;
   display: block;

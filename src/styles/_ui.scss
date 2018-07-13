@@ -7,4 +7,7 @@ button.btn {
 
 .alert-wrapper {
   max-width: $max-form-width + 100px;
+  .alert {
+    box-shadow: $box-shadow;
+  }
 }
