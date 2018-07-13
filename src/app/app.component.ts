@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.message.showMessage('test 1', 'primary');
-    // this.message.showMessage('test 2', 'danger');
+    this.message.showMessage('test 1', 'primary');
+    this.message.showMessage('test 2', 'danger');
   }
 }

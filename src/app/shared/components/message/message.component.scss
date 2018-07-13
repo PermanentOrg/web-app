@@ -16,6 +16,8 @@ $transition-length: 0.33s;
   padding: 0px 10px 10px;
   transform: translateY(100%);
   transition: $transition-length ease-in transform;
+  display: block;
+  margin: 0 auto;
   
   &.visible {
     transform: translateY(0);
