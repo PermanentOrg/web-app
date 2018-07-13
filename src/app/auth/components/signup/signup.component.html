@@ -7,9 +7,9 @@
       [formControl]="signupForm.controls['email']" required="required"
       autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">
     <input type="password" class="form-control" id="password" placeholder="Password (min. 10 chars)"
-      [formControl]="signupForm.controls['passwords'].controls['password']" required="required">
+      [formControl]="signupForm.controls['passwords']['controls']['password']" required="required">
     <input type="password" class="form-control" id="passwordConfirm" placeholder="Confirm password"
-      [formControl]="signupForm.controls['passwords'].controls['confirm']" required="required">
+      [formControl]="signupForm.controls['passwords']['controls']['confirm']" required="required">
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
     Sign up

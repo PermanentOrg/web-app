@@ -2,7 +2,7 @@ $transition-length: 0.33s;
 
 :host {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
 }
@@ -13,8 +13,8 @@ $transition-length: 0.33s;
 }
 
 .alert-wrapper {
-  padding: 0px 10px 10px;
-  transform: translateY(100%);
+  padding: 10px 10px;
+  transform: translateY(-100%);
   transition: $transition-length ease-in transform;
   display: block;
   margin: 0 auto;
