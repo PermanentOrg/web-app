@@ -2,6 +2,11 @@ form {
   padding: 10px;
   margin: 0 auto;
   max-width: $max-form-width;
+
+  > a {
+    display: block;
+    text-align: center;
+  }
 }
 
 .input-group-vertical {

@@ -7,4 +7,5 @@
       [formControl]="loginForm.controls['password']" required="required">
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="waiting || loginForm.invalid">Log in</button>
+  <a [routerLink]="['/signup']">Need to create an account?</a>
 </form>

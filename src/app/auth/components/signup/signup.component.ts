@@ -24,7 +24,7 @@ export class SignupComponent implements OnInit {
       'passwords': fb.group({
         'password': ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
         'confirm': ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
-      }, { validator: this.matchValidator })
+      }, { validator: [Validators.required, this.matchValidator] })
     });
   }
 
@@ -34,7 +34,7 @@ export class SignupComponent implements OnInit {
   matchValidator(group: FormGroup) {
     const match = group.controls['password'].value === group.controls['confirm'].value;
 
-    if (match) {
+    if (match && group.value.confirm) {
       group.controls['confirm'].setErrors(null);
       setTimeout(() => console.log(group.valid), 100);
       return null;
