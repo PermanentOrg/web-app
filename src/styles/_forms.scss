@@ -6,7 +6,7 @@ form {
 
 .input-group-vertical {
   input {
-    border-color: $gray-400 !important;
+    border-color: $gray-400;
 
     &:not(:first-child):not(:last-child) {
       border-top: 0px solid;
@@ -28,7 +28,8 @@ form {
 
     &:focus {
       box-shadow: none;
-      background-color: darken(white, 3%)
+      background-color: darken(white, 3%);
+      border-color: $gray-500;
     }
 
     &.ng-touched.ng-invalid {

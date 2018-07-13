@@ -9,10 +9,12 @@ import { LoginComponent } from './auth/components/login/login.component';
 import { MessageComponent } from './shared/components/message/message.component';
 import { MfaComponent } from './auth/components/mfa/mfa.component';
 import { VerifyComponent } from './auth/components/verify/verify.component';
+import { SignupComponent } from './auth/components/signup/signup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
   { path: 'mfa', component: MfaComponent },
   { path: 'app', loadChildren: './core/core.module#CoreModule' },
   { path: '**', redirectTo: 'app', pathMatch: 'full' },
@@ -24,6 +26,7 @@ const routes: Routes = [
     LoginComponent,
     MfaComponent,
     VerifyComponent,
+    SignupComponent,
     MessageComponent,
   ],
   imports: [

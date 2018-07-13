@@ -15,8 +15,8 @@ export class VerifyComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {
     this.verifyForm = fb.group({
-      'email': ['aatwood@permanent.org'],
-      'password': ['yomama0101']
+      'email': [''],
+      'password': ['']
     });
   }
 
