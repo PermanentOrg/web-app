@@ -26,6 +26,7 @@
     "@types/lodash": "^4.14.111",
     "core-js": "^2.5.4",
     "lodash": "^4.17.10",
+    "ngx-cookie-service": "^1.0.10",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

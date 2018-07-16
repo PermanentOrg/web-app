@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 import { AccountService } from '../../../shared/services/account/account.service';
 import { AuthResponse } from '../../../shared/services/api/auth.repo';
@@ -30,9 +31,15 @@ export class LoginComponent implements OnInit {
   waiting: Boolean;
   formErrors: any = {};
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private message: MessageService,
+    private cookies: CookieService
+  ) {
     this.loginForm = fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [this.cookies.get('rememberMe'), [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       rememberMe: [true],
       keepLoggedIn: [true]
