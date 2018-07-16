@@ -2,7 +2,7 @@ $transition-length: 0.4s;
 $shadow-color: rgba(black, 0.15);
 
 .hamburger-menu-wrapper {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   width: 100%;
