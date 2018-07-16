@@ -31,4 +31,8 @@ export class AccountVO extends BaseVO {
   public fileLeft;
   public changePrimaryEmail;
   public changePrimaryPhone;
+
+  needsVerification(): boolean {
+    return this.status.includes('status.auth.need');
+  }
 }

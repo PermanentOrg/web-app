@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AccountService } from '../../../shared/services/account/account.service';
 import { AuthResponse } from '../../../shared/services/api/auth.repo';
 import { MessageService } from '../../../shared/services/message/message.service';
+import { AccountResponse } from '../../../shared/services/api/index.repo';
 
 const MIN_PASSWORD_LENGTH = 10;
 
@@ -16,7 +17,7 @@ const MIN_PASSWORD_LENGTH = 10;
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
-  waiting: Boolean;
+  waiting: boolean;
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.signupForm = fb.group({
@@ -26,7 +27,9 @@ export class SignupComponent implements OnInit {
       passwords: fb.group({
         password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
         confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
-      }, { validator: [Validators.required, this.matchValidator] })
+      }, { validator: [Validators.required, this.matchValidator] }),
+      agreed: ['', [Validators.required]],
+      optIn: [true]
     });
   }
 
@@ -38,7 +41,6 @@ export class SignupComponent implements OnInit {
 
     if (match && group.value.confirm) {
       group.controls['confirm'].setErrors(null);
-      setTimeout(() => console.log(group.valid), 100);
       return null;
     }
 
@@ -51,19 +53,20 @@ export class SignupComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, true, true)
-      .then((response: AuthResponse) => {
-        this.waiting = false;
-
-        if (response.needsMFA()) {
-          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
-          this.router.navigate(['/mfa']);
+    this.accountService.signUp(
+      formValue.email, formValue.name, formValue.passwords.password, formValue.passwords.confirm,
+      formValue.agreed, formValue.optIn, null, formValue.invitation
+    ).then((response: AccountResponse) => {
+        const account = response.getAccountVO();
+        if (account.needsVerification()) {
+          this.message.showMessage(`Verify to continue as ${account.primaryEmail}`, 'warning');
+          this.router.navigate(['/verify']);
         } else {
           this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
           this.router.navigate(['/app']);
         }
       })
-      .catch((response: AuthResponse) => {
+      .catch((response: AccountResponse) => {
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password', 'danger');
         } else {

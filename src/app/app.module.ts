@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'mfa', component: MfaComponent },
+  { path: 'verify', component: VerifyComponent },
   { path: 'app', loadChildren: './core/core.module#CoreModule' },
   { path: '**', redirectTo: 'app', pathMatch: 'full' },
 ];

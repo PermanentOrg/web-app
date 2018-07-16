@@ -8,7 +8,7 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest('/auth/loggedIn', undefined, AuthResponse);
   }
 
-  public logIn(email: string, password: string, rememberMe: Boolean, keepLoggedIn: Boolean): Observable<AuthResponse> {
+  public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Observable<AuthResponse> {
     const accountVO = new AccountVO({
       primaryEmail: email,
       rememberMe: rememberMe,
@@ -25,9 +25,6 @@ export class AuthRepo extends BaseRepo {
   public logOut() {
     return this.http.sendRequest('/auth/logout');
 
-  }
-
-  public signUp() {
   }
 
   public verify(email: string, token: string, type: string) {
@@ -66,7 +63,7 @@ export class AuthResponse extends BaseResponse {
   }
 
   public needsVerification() {
-    return !this.isSuccessful;
+    return !this.isSuccessful && (!!this.getAccountVO() && this.getAccountVO().needsVerification());
   }
 
   public needsMFA() {

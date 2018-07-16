@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { AccountService } from '../../../shared/services/account/account.service';
-import { AuthResponse } from '../../../shared/services/api/auth.repo';
 import { Router } from '@angular/router';
+
+import { AccountService } from '../../../shared/services/account/account.service';
+import { MessageService } from '../../../shared/services/message/message.service';
+import { AuthResponse } from '../../../shared/services/api/auth.repo';
 
 @Component({
   selector: 'pr-verify',
@@ -12,12 +14,11 @@ import { Router } from '@angular/router';
 })
 export class VerifyComponent implements OnInit {
   verifyForm: FormGroup;
-  waiting: Boolean;
+  waiting: boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {
+  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.verifyForm = fb.group({
-      'email': [''],
-      'password': ['']
+      'token': [],
     });
   }
 
@@ -27,15 +28,10 @@ export class VerifyComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, true, true)
+    this.accountService.verifyEmail(formValue.token)
       .then((response: AuthResponse) => {
-        this.waiting = false;
-
-        if (response.needsMFA()) {
-          console.log('going to verify!');
-        } else {
-          this.router.navigate(['/app']);
-        }
+        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
+        this.router.navigate(['/app']);
       })
       .catch((response: AuthResponse) => {
         console.error(response);

@@ -13,7 +13,7 @@ interface Message {
 })
 export class MessageComponent implements OnInit {
   displayText: string;
-  visible: Boolean;
+  visible: boolean;
   style: string;
   queue: Message[] = [];
 
