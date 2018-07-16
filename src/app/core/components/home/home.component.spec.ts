@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { HomeComponent } from './home.component';
+import { CookieService } from 'ngx-cookie-service';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -12,6 +14,10 @@ describe('HomeComponent', () => {
       declarations: [ HomeComponent ],
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        CookieService
       ]
     })
     .compileComponents();
