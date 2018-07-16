@@ -1,0 +1,21 @@
+button.btn {
+  display: block;
+  margin: 10px auto;
+  width: 100%;
+  max-width: $max-form-width;
+}
+
+.alert-wrapper {
+  max-width: $max-form-width + 100px;
+  .alert {
+    box-shadow: $box-shadow;
+  }
+}
+
+.hamburger-menu {
+  box-shadow: $box-shadow;
+
+  .menu-item {
+    padding: $input-btn-padding-y 10px;
+  }
+}

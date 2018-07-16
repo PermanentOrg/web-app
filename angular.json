@@ -55,6 +55,9 @@
           "configurations": {
             "production": {
               "browserTarget": "mdot:build:production"
+            },
+            "hmr": {
+              "hmr": true
             }
           }
         },

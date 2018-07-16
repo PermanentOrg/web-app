@@ -1,4 +1,6 @@
-export class ArchiveVO {
+import { BaseVO } from './base-vo';
+
+export class ArchiveVO extends BaseVO {
   public archiveId;
   public ChildFolderVOs;
   public FolderSizeVOs;
@@ -16,14 +18,4 @@ export class ArchiveVO {
   public ItemVOs;
   public birthDay;
   public company;
-
-  constructor (voData: any) {
-    if (voData) {
-      for ( const key in voData ) {
-        if (voData[key]) {
-          this[key] = voData[key];
-        }
-      }
-    }
-  }
 }

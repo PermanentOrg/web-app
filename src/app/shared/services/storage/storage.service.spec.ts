@@ -51,6 +51,22 @@ describe('StorageService', () => {
     }
   }));
 
+  it('should handle an undefined value from SessionStorage', inject([StorageService], (service: StorageService) => {
+    if (window.sessionStorage) {
+      expect(service.session.get(testKey)).toBeFalsy();
+    }
+  }));
+
+  it('should handle storing a null-ish value to SessionStorage', inject([StorageService], (service: StorageService) => {
+    if (window.sessionStorage) {
+      service.session.set(testKey, null);
+      expect(service.session.get(testKey)).toBeNull();
+      service.session.delete(testKey);
+      service.session.set(testKey, false);
+      expect(service.session.get(testKey)).toBeFalsy();
+    }
+  }));
+
   it('should save a value to memory when SessionStorage not present', inject([StorageService], (service: StorageService) => {
     service.session.setStoreInMemory(true);
     service.session.set(testKey, testValue);

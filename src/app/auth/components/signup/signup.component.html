@@ -1,0 +1,37 @@
+<pr-login-logo></pr-login-logo>
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
+  <h1 class="form-title">
+    Sign up for Permanent.org
+  </h1>
+  <div class="input-group-vertical">
+    <input type="text" class="form-control" id="invitation" placeholder="Invitation code"
+      [formControl]="signupForm.controls['invitation']" required="required"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <input type="text" class="form-control" id="name" placeholder="Full name"
+      [formControl]="signupForm.controls['name']" required="required"
+      autocomplete="name" autocorrect="off" autocapitalize="yes" spellcheck="false">
+    <input type="text" class="form-control" id="email" placeholder="Email"
+      [formControl]="signupForm.controls['email']" required="required"
+      autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <input type="password" class="form-control" id="password" placeholder="Password (min. 10 chars)"
+      [formControl]="signupForm.controls['passwords']['controls']['password']" required="required">
+    <input type="password" class="form-control" id="passwordConfirm" placeholder="Confirm password"
+      [formControl]="signupForm.controls['passwords']['controls']['confirm']" required="required">
+  </div>
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="terms">
+      <label class="form-check-label" for="terms">
+        I agree with the terms
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="mailingList">
+      <label class="form-check-label" for="mailingList">
+        Send me occasional updates via email
+      </label>
+    </div>
+  <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
+    Sign up
+  </button>
+  <a [routerLink]="['/login']">Already have an account?</a>
+</form>

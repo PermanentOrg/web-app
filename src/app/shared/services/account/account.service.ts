@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from '../api/api.service';
@@ -102,8 +101,15 @@ export class AccountService {
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
+          this.setArchive(response.getArchiveVO());
+          return response;
+        } else {
+          throw response;
         }
-        return response;
       })).toPromise();
+      // .then((response: AuthResponse) => {
+      //   this.api
+      //   return response;
+      // });
   }
 }

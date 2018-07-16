@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AccountService } from '../../../shared/services/account/account.service';
+import { MessageService } from '../../../shared/services/message/message.service';
 
 @Component({
   selector: 'pr-main',
@@ -7,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  constructor(private accountService: AccountService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit() {
   }
