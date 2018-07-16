@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'pr-nav',
@@ -6,10 +6,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
+  hambugerMenuVisible: boolean;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+
+  showHamburgerMenu() {
+    this.hambugerMenuVisible = true;
+  }
+
+  hideHamburgerMenu() {
+    this.hambugerMenuVisible = false;
   }
 
 }

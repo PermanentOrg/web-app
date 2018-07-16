@@ -16,12 +16,4 @@ export class MainComponent implements OnInit {
   ngOnInit() {
   }
 
-  logOut() {
-    this.accountService.logOut()
-    .then(() => {
-      this.messageService.showMessage(`Logged out successfully`, 'success');
-      this.router.navigate(['/login']);
-    });
-  }
-
 }
