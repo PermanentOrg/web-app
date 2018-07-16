@@ -63,7 +63,7 @@ export class AuthResponse extends BaseResponse {
   }
 
   public needsVerification() {
-    return !this.isSuccessful && (!!this.getAccountVO() && this.getAccountVO().needsVerification());
+    return !this.isSuccessful && this.messageIncludesPhrase('status.auth.need');
   }
 
   public needsMFA() {

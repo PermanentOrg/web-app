@@ -108,7 +108,7 @@ describe('AccountService', () => {
 
     service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
-        expect(response.isSuccessful).toBeTruthy();
+        expect(response.isSuccessful).toBeFalsy();
         expect(response.needsVerification()).toBeTruthy();
       });
 
