@@ -16,7 +16,7 @@ const ARCHIVE_KEY = 'archive';
 export class AccountService {
   private account: AccountVO;
   private archive: ArchiveVO;
-  public authStatus: string[];
+  private skipSessionCheck: boolean;
 
   constructor(private api: ApiService, private storage: StorageService, private cookies: CookieService) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
@@ -60,6 +60,11 @@ export class AccountService {
   }
 
   public checkSession(): Promise<boolean> {
+    if (this.skipSessionCheck) {
+      this.skipSessionCheck = false;
+      return Promise.resolve(true);
+    }
+
     return this.api.auth.isLoggedIn().toPromise()
       .then((response: AuthResponse) => {
         return response.getSimpleVO().value;
@@ -71,6 +76,8 @@ export class AccountService {
   }
 
   public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Promise<any> {
+    this.skipSessionCheck = false;
+
     if (rememberMe && this.cookies.check('rememberMe')) {
       this.cookies.set('rememberMe', email);
     }
@@ -80,6 +87,7 @@ export class AccountService {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
           this.setArchive(response.getArchiveVO());
+          this.skipSessionCheck = true;
         } else if (response.needsMFA() || response.needsVerification()) {
           this.setAccount(new AccountVO({primaryEmail: email}));
         } else {
@@ -131,6 +139,8 @@ export class AccountService {
     email: string, fullName: string, password: string, passwordConfirm: string,
     agreed: boolean, optIn: boolean, phone: string, inviteCode: string
   ) {
+    this.skipSessionCheck = false;
+
     return this.api.account.signUp(email, fullName, password, passwordConfirm, agreed, optIn, phone, inviteCode)
       .pipe(map((response: AccountResponse) => {
         if (response.isSuccessful) {

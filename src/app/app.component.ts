@@ -9,13 +9,9 @@ import { MessageService } from './shared/services/message/message.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
-
   constructor(private api: ApiService, private account: AccountService, private message: MessageService) {
   }
 
   ngOnInit() {
-    // this.message.showMessage('test 1', 'primary');
-    // this.message.showMessage('test 2', 'danger');
   }
 }
