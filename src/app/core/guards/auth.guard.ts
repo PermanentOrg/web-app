@@ -14,9 +14,12 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     return this.account.checkSession()
-    .then((isSessionValid: Boolean) => {
-      if (isSessionValid) {
+    .then((isSessionValid: boolean) => {
+      if (isSessionValid && this.account.isLoggedIn()) {
         return true;
+      } else if (this.account.getAccount() && this.account.getAccount().needsVerification()) {
+        this.router.navigate(['/verify']);
+        return false;
       } else {
         this.router.navigate(['/login']);
         return false;

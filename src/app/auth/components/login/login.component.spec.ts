@@ -2,8 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CookieService } from 'ngx-cookie-service';
 
 import { LoginComponent } from './login.component';
+import { LogoComponent } from '../logo/logo.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -11,12 +13,18 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
+      declarations: [
+        LogoComponent,
+        LoginComponent
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
         RouterTestingModule
+      ],
+      providers: [
+        CookieService
       ]
     })
     .compileComponents();

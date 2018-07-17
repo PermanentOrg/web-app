@@ -28,7 +28,7 @@ const FORM_ERROR_MESSAGES = {
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  waiting: Boolean;
+  waiting: boolean;
   formErrors: any = {};
 
   constructor(
@@ -61,19 +61,23 @@ export class LoginComponent implements OnInit {
         if (response.needsMFA()) {
           this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
           this.router.navigate(['/mfa']);
+        } else if (response.needsVerification()) {
+          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
+          this.router.navigate(['/verify']);
         } else {
           this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
           this.router.navigate(['/app']);
         }
       })
       .catch((response: AuthResponse) => {
+        this.waiting = false;
+
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password', 'danger');
           this.loginForm.setErrors({unknown: true});
         } else {
           this.message.showMessage('Log in failed. Please try again.', 'danger');
         }
-        this.waiting = false;
       });
   }
 

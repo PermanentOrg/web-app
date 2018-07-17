@@ -13,7 +13,7 @@ import { MessageService } from '../../../shared/services/message/message.service
 })
 export class MfaComponent implements OnInit {
   mfaForm: FormGroup;
-  waiting: Boolean;
+  waiting: boolean;
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.mfaForm = fb.group({

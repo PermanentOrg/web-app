@@ -15,7 +15,7 @@ export class StorageService {
 
 class BaseStorage {
   private store: Object;
-  private storeInMemory: Boolean;
+  private storeInMemory: boolean;
 
   constructor(private storage: any) {
     if (!this.storage) {
@@ -61,7 +61,7 @@ class BaseStorage {
     }
   }
 
-  public setStoreInMemory(storeInMemory: Boolean) {
+  public setStoreInMemory(storeInMemory: boolean) {
     this.storeInMemory = storeInMemory;
     if (this.storeInMemory && !this.store) {
       this.store = {};

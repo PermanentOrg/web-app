@@ -2,8 +2,8 @@ import { HttpService } from '../http/http.service';
 import { SimpleVO } from '../../../models';
 
 export class BaseResponse {
-  public isSuccessful: Boolean;
-  public isSystemUp: Boolean;
+  public isSuccessful: boolean;
+  public isSystemUp: boolean;
   public Results: any[];
   public csrf: string;
 
@@ -44,16 +44,17 @@ export class BaseResponse {
     return new SimpleVO(this.getResultsData()[0][0].SimpleVO);
   }
 
-  public messageIncludes(exact: string): Boolean {
+  public messageIncludes(exact: string): boolean {
     return this.Results[0].message.indexOf(exact) > -1;
   }
 
-  public messageIncludesPhrase(phrase: string): Boolean {
-    for (let i = 0; i < this.Results[0].message; i++) {
+  public messageIncludesPhrase(phrase: string): boolean {
+    for (let i = 0; i < this.Results[0].message.length; i++) {
       if (this.Results[0].message[i].includes(phrase)) {
         return true;
       }
     }
+    return false;
   }
 
   public setData(data: any[]) {

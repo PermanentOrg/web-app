@@ -1,8 +1,10 @@
-<h1>Verify</h1>
+<pr-login-logo></pr-login-logo>
 <form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
-  <input type="text" class="form-control" id="email" placeholder="Email"
-    [formControl]="verifyForm.controls['email']">
-  <input type="password" class="form-control" id="password" placeholder="Password"
-    [formControl]="verifyForm.controls['password']">
-  <button type="submit" class="btn btn-primary" [disabled]="waiting">Log in</button>
+  <h1 class="form-title">
+    Verify Access
+  </h1>
+  <input type="text" class="form-control" id="token" placeholder="Token"
+    [formControl]="verifyForm.controls['token']"
+    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify</button>
 </form>
