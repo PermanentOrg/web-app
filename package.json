@@ -7,7 +7,9 @@
     "dev": "ng serve --host local.permanent.org --disable-host-check --hmr",
     "dev_local": "ng serve --base-href /",
     "build": "ng build --base-href /m/ --aot --build-optimizer --prod",
-    "build_local": "ng build --base-href /m/ --aot --build-optimizer",
+    "build_local": "ng build --base-href /m/ --aot --build-optimizer --configuration=local",
+    "build_dev": "ng build --base-href /m/ --aot --build-optimizer --configuration=dev",
+    "build_staging": "ng build --base-href /m/ --aot --build-optimizer --configuration=staging",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -27,7 +29,6 @@
     "core-js": "^2.5.4",
     "lodash": "^4.17.10",
     "ngx-cookie-service": "^1.0.10",
-    "node-sass": "^4.9.2",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },
