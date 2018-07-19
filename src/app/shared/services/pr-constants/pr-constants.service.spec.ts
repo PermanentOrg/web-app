@@ -2,6 +2,8 @@ import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
 import { PrConstantsService } from './pr-constants.service';
 
+const CONSTANTS = require('../../../../../../files/constants/master_en.json');
+
 fdescribe('PrConstantsService', () => {
   let service: PrConstantsService;
 
@@ -23,7 +25,7 @@ fdescribe('PrConstantsService', () => {
 
   it('should translate a constants string', () => {
     const translateString = 'warning.auth.token_does_not_match';
-    expect(service.translate(translateString)).toEqual('The verification token entered is not valid. Please re-enter verification token.');
+    expect(service.translate(translateString)).toEqual(CONSTANTS.warning.auth.token_does_not_match);
   });
 
   it('should return the original string if not found', () => {
