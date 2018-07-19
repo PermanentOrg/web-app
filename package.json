@@ -11,6 +11,7 @@
     "build_dev": "ng build --base-href /m/ --aot --build-optimizer --configuration=development",
     "build_staging": "ng build --base-href /m/ --aot --build-optimizer --configuration=staging",
     "test": "ng test",
+    "test_build": "ng test ---watch=false --browsers ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
