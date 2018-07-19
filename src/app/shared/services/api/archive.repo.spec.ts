@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { TEST_DATA, TEST_DATA_2 } from '../../../core/core.module.spec';
 import { HttpService, Observable } from '../http/http.service';
 import { ArchiveRepo, ArchiveResponse } from './archive.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '../../../models';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@models/index';
 
 describe('ArchiveRepo', () => {
   let repo: ArchiveRepo;

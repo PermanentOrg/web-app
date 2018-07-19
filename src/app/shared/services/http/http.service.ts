@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
-import { RequestVO } from '../../../models/request-vo';
+import { RequestVO } from '@models/request-vo';
 import { BaseResponse } from '../api/base';
 import { StorageService } from '../storage/storage.service';
 

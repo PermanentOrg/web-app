@@ -1,5 +1,4 @@
 import { CoreModule } from './core.module';
-import { ArchiveVO } from '../models';
 
 const testData = require('../../test/data.json');
 const testData2 = require('../../test/data.2.json');

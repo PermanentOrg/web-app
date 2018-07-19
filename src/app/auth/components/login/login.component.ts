@@ -3,9 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
-import { AccountService } from '../../../shared/services/account/account.service';
-import { AuthResponse } from '../../../shared/services/api/auth.repo';
-import { MessageService } from '../../../shared/services/message/message.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { AuthResponse } from '@shared/services/api/auth.repo';
+import { MessageService } from '@shared/services/message/message.service';
 
 const MIN_PASSWORD_LENGTH = 10;
 

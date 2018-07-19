@@ -8,7 +8,7 @@ import { concat } from 'rxjs';
 import { AccountService } from './account.service';
 import { TEST_DATA } from '../../../core/core.module.spec';
 import { AuthResponse } from '../api/auth.repo';
-import { AccountVO, ArchiveVO } from '../../../models';
+import { AccountVO, ArchiveVO } from '@models/index';
 import { environment } from '../../../../environments/environment';
 import { AccountResponse } from '../api/index.repo';
 

@@ -4,7 +4,7 @@ import { PrConstantsService } from './pr-constants.service';
 
 const CONSTANTS = require('../../../../../../files/constants/master_en.json');
 
-fdescribe('PrConstantsService', () => {
+describe('PrConstantsService', () => {
   let service: PrConstantsService;
 
   beforeEach(() => {

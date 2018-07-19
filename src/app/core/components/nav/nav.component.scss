@@ -5,3 +5,9 @@ nav {
   right: 0;
   background-color: white;
 }
+
+.navbar-toggler {
+  &:focus {
+    outline: none;
+  }
+}

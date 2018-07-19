@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AccountService } from '../../../shared/services/account/account.service';
-import { MessageService } from '../../../shared/services/message/message.service';
-import { ApiService } from '../../../shared/services/api/api.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-home',
