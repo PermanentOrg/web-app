@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { AccountService } from '../../../shared/services/account/account.service';
 import { MessageService } from '../../../shared/services/message/message.service';
-import { AuthResponse } from '../../../shared/services/api/auth.repo';
+import { AuthResponse, ArchiveResponse, AccountResponse } from '../../../shared/services/api/index.repo';
 
 @Component({
   selector: 'pr-verify',
@@ -29,13 +29,17 @@ export class VerifyComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.verifyEmail(formValue.token)
-      .then((response: AuthResponse) => {
+      .then(() => {
+        return this.accountService.switchToDefaultArchive();
+      })
+      .then((response: ArchiveResponse) => {
+        this.waiting = false;
         this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
         this.router.navigate(['/app']);
       })
-      .catch((response: AuthResponse) => {
-        console.error(response);
+      .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;
+        this.message.showError(response.getMessage());
       });
   }
 

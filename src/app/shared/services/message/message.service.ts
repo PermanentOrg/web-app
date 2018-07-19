@@ -24,4 +24,8 @@ export class MessageService {
 
     this.component.display(message, style);
   }
+
+  public showError(message: string, translate ?: boolean) {
+    return this.showMessage(message, 'danger', translate);
+  }
 }

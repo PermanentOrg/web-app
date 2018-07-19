@@ -70,6 +70,8 @@ describe('AccountService', () => {
   });
 
   it('should detect need to verify MFA after login', () => {
+    const expected = require('../../../../test/responses/auth.login.verifyMfa.json');
+
     service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
         expect(response.isSuccessful).toBeFalsy();
@@ -77,14 +79,13 @@ describe('AccountService', () => {
         expect(response.needsMFA()).toBeTruthy();
       });
 
-    const expected = new AuthResponse({isSuccessful: false});
-    expected.setMessage(['warning.auth.mfaToken', 'sms']);
-
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush(expected);
   });
 
   it('should verify MFA', () => {
+    const expected = require('../../../../test/responses/auth.signup.duplicate.json');
+
     service.setAccount(new AccountVO(TEST_DATA.account));
 
     service.verifyMfa('1111')
@@ -93,11 +94,6 @@ describe('AccountService', () => {
 
         expect(service.getAccount().accountId).toEqual(TEST_DATA.account.accountId);
       });
-
-    const expected = new AuthResponse({isSuccessful: true});
-    expected.setData([{
-      AccountVO: new AccountVO(TEST_DATA.account),
-    }]);
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
     req.flush(expected);
