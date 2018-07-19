@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AccountService } from '../../../shared/services/account/account.service';
 import { MessageService } from '../../../shared/services/message/message.service';
+import { ApiService } from '../../../shared/services/api/api.service';
 
 @Component({
   selector: 'pr-home',
@@ -11,7 +12,9 @@ import { MessageService } from '../../../shared/services/message/message.service
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private accountService: AccountService, private router: Router, private messageService: MessageService) { }
+  constructor(private accountService: AccountService, private router: Router, private messageService: MessageService,
+    private api: ApiService
+  ) { }
 
   ngOnInit() {
   }

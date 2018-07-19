@@ -2,6 +2,7 @@ import { BaseVO } from './base-vo';
 
 export class ArchiveVO extends BaseVO {
   public archiveId;
+  public archiveNbr;
   public ChildFolderVOs;
   public FolderSizeVOs;
   public RecordVOs;

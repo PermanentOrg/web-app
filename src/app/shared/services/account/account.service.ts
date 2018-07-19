@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from '../api/api.service';
 import { StorageService } from '../storage/storage.service';
 import { ArchiveVO, AccountVO } from '../../../models';
-import { AuthResponse, AccountResponse } from '../api/index.repo';
+import { AuthResponse, AccountResponse, ArchiveResponse } from '../api/index.repo';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -127,6 +127,17 @@ export class AccountService {
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
+          return response;
+        } else {
+          throw response;
+        }
+      })).toPromise();
+  }
+
+  public switchToDefaultArchive(): Promise<ArchiveResponse> {
+    return this.api.archive.get([this.account.defaultArchiveId])
+      .pipe(map((response: ArchiveResponse) => {
+        if (response.isSuccessful) {
           this.setArchive(response.getArchiveVO());
           return response;
         } else {
