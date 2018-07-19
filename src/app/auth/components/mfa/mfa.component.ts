@@ -38,7 +38,7 @@ export class MfaComponent implements OnInit {
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage());
+        this.message.showError(response.getMessage(), true);
       });
   }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MessageComponent } from '../../components/message/message.component';
+import { PrConstantsService } from '../pr-constants/pr-constants.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { MessageComponent } from '../../components/message/message.component';
 export class MessageService {
   private component: MessageComponent;
 
-  constructor() { }
+  constructor(private constants: PrConstantsService) { }
 
   registerComponent(toRegister: MessageComponent) {
     if (this.component) {
@@ -22,7 +23,12 @@ export class MessageService {
       throw new Error('MessageService - Missing component');
     }
 
-    this.component.display(message, style);
+    if (!translate) {
+      this.component.display(message, style);
+    } else {
+      this.component.display(this.constants.translate(message), style);
+    }
+
   }
 
   public showError(message: string, translate ?: boolean) {
