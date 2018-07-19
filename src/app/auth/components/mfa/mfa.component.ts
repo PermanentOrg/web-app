@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AccountService } from '../../../shared/services/account/account.service';
-import { AuthResponse, ArchiveResponse } from '../../../shared/services/api/index.repo';
+import { AuthResponse, ArchiveResponse, AccountResponse } from '../../../shared/services/api/index.repo';
 import { Router } from '@angular/router';
 import { MessageService } from '../../../shared/services/message/message.service';
 
@@ -28,10 +28,6 @@ export class MfaComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.verifyMfa(formValue.token)
-      .catch((response: AuthResponse) => {
-        this.waiting = false;
-        this.message.showError(response.getMessage());
-      })
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
@@ -40,7 +36,7 @@ export class MfaComponent implements OnInit {
         this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
         this.router.navigate(['/app']);
       })
-      .catch((response: ArchiveResponse) => {
+      .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
         this.message.showError(response.getMessage());
       });
