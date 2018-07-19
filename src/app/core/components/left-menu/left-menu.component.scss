@@ -1,3 +1,5 @@
+@import 'variables';
+
 $transition-length: 0.4s;
 $shadow-color: rgba(black, 0.15);
 
@@ -33,4 +35,9 @@ $shadow-color: rgba(black, 0.15);
   transform: translateX(-100%);
   transition:  transform $transition-length ease-in;
   background-color: white;
+  box-shadow: $box-shadow;
+
+  .menu-item {
+    padding: $input-btn-padding-y 10px;
+  }
 }
