@@ -13,7 +13,11 @@ export class LeftMenuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) { }
+  public accountName: string;
+
+  constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) {
+    this.accountName = this.accountService.getAccount().fullName;
+  }
 
   ngOnInit() {
   }
