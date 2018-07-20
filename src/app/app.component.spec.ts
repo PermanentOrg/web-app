@@ -5,12 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
-import { MessageComponent } from './shared/components/message/message.component';
-import { LoginComponent } from './auth/components/login/login.component';
-import { LogoComponent } from './auth/components/logo/logo.component';
-import { SignupComponent } from './auth/components/signup/signup.component';
-import { VerifyComponent } from './auth/components/verify/verify.component';
-import { MfaComponent } from './auth/components/mfa/mfa.component';
+import { MessageComponent } from '@shared/components/message/message.component';
+import { LoginComponent } from '@auth/components/login/login.component';
+import { LogoComponent } from '@auth/components/logo/logo.component';
+import { SignupComponent } from '@auth/components/signup/signup.component';
+import { VerifyComponent } from '@auth/components/verify/verify.component';
+import { MfaComponent } from '@auth/components/mfa/mfa.component';
+import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -28,6 +29,7 @@ describe('AppComponent', () => {
         LoginComponent,
         SignupComponent,
         VerifyComponent,
+        ForgotPasswordComponent,
         MfaComponent
       ],
       providers: [

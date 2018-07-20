@@ -40,6 +40,13 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest('/auth/verify', [{AccountVO: accountVO, AuthVO: authVO}], AuthResponse);
   }
 
+  public forgotPassword(email: string) {
+    const accountVO = new AccountVO({
+      primaryEmail: email
+    });
+
+    return this.http.sendRequest('/auth/sendEmailForgotPassword', [{AccountVO: accountVO}], AuthResponse);
+  }
 
 }
 
