@@ -11,3 +11,15 @@ button.btn {
     box-shadow: $box-shadow;
   }
 }
+
+.pr-auth-form {
+  & > div, & > p {
+    padding: 10px;
+  }
+}
+
+.block-center {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}

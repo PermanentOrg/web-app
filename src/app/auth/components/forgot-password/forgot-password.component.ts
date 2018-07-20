@@ -29,8 +29,10 @@ const FORM_ERROR_MESSAGES = {
 })
 export class ForgotPasswordComponent implements OnInit {
   forgotForm: FormGroup;
-  waiting: boolean;
   formErrors: any = {};
+
+  waiting: boolean;
+  success: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +57,11 @@ export class ForgotPasswordComponent implements OnInit {
     this.api.auth.forgotPassword(formValue.email)
       .subscribe((response: AuthResponse) => {
         this.waiting = false;
-        console.log(response);
+        if (response.isSuccessful) {
+          this.success = true;
+        } else {
+          this.message.showError(response.getMessage(), true);
+        }
       });
   }
 
