@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 const MIN_PASSWORD_LENGTH = 10;
 
@@ -33,7 +34,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountService,
+    private api: ApiService,
     private router: Router,
     private message: MessageService,
     private cookies: CookieService
@@ -51,30 +52,10 @@ export class ForgotPasswordComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
-      .then((response: AuthResponse) => {
+    this.api.auth.forgotPassword(formValue.email)
+      .subscribe((response: AuthResponse) => {
         this.waiting = false;
-
-        if (response.needsMFA()) {
-          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
-          this.router.navigate(['/mfa']);
-        } else if (response.needsVerification()) {
-          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
-          this.router.navigate(['/verify']);
-        } else {
-          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-          this.router.navigate(['/app']);
-        }
-      })
-      .catch((response: AuthResponse) => {
-        this.waiting = false;
-
-        if (response.messageIncludes('warning.signin.unknown')) {
-          this.message.showMessage('Incorrect email or password', 'danger');
-          this.forgotForm.setErrors({unknown: true});
-        } else {
-          this.message.showMessage('Log in failed. Please try again.', 'danger');
-        }
+        console.log(response);
       });
   }
 
