@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import * as Testing from '@root/test/testbedConfig';
 
 import { NavComponent } from './nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
@@ -7,14 +8,15 @@ describe('NavComponent', () => {
   let component: NavComponent;
   let fixture: ComponentFixture<NavComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        NavComponent,
-        LeftMenuComponent
-      ]
-    })
-    .compileComponents();
+  beforeEach(Testing.async(() => {
+    const config = Testing.BASE_TEST_CONFIG;
+
+    config.declarations = [
+      NavComponent,
+      LeftMenuComponent
+    ];
+
+    TestBed.configureTestingModule(config).compileComponents();
   }));
 
   beforeEach(() => {

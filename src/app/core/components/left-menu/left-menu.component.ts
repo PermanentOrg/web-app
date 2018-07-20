@@ -1,4 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AccountService } from '@shared/services/account/account.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -9,7 +13,7 @@ export class LeftMenuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor() { }
+  constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -18,6 +22,14 @@ export class LeftMenuComponent implements OnInit {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
     return false;
+  }
+
+  logOut() {
+    this.accountService.logOut()
+    .then(() => {
+      this.messageService.showMessage(`Logged out successfully`, 'success');
+      this.router.navigate(['/login']);
+    });
   }
 
 }
