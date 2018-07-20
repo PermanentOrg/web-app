@@ -4,10 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie-service';
 
 import { LeftMenuComponent } from './left-menu.component';
+import { AccountService } from '@shared/services/account/account.service';
+import { TEST_DATA } from '@core/core.module.spec';
 
-describe('LeftMenuComponent', () => {
+fdescribe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
   let fixture: ComponentFixture<LeftMenuComponent>;
+  let accountService: AccountService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -17,10 +20,15 @@ describe('LeftMenuComponent', () => {
         RouterTestingModule
       ],
       providers: [
-        CookieService
+        CookieService,
+        AccountService
       ]
     })
     .compileComponents();
+
+    accountService = TestBed.get(AccountService);
+    accountService.setAccount(TEST_DATA.account);
+    accountService.setArchive(TEST_DATA.archive);
   }));
 
   beforeEach(() => {
@@ -31,5 +39,9 @@ describe('LeftMenuComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have the current account name as a property', () => {
+    expect(component.accountName).toEqual(TEST_DATA.account.fullName);
   });
 });
