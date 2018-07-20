@@ -6,7 +6,7 @@ import { HttpService } from '../http/http.service';
 import { AuthRepo, AuthResponse } from './auth.repo';
 import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@models/index';
 
-xdescribe('AuthRepo', () => {
+describe('AuthRepo', () => {
   let repo: AuthRepo;
   let httpMock: HttpTestingController;
 
@@ -84,6 +84,19 @@ xdescribe('AuthRepo', () => {
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
+    req.flush(expected);
+  });
+
+  it('should send a forgot password email', () => {
+    const expected = require ('@root/test/responses/auth.forgotPassword.success.json');
+
+    repo.forgotPassword(testUser.email)
+    .subscribe((response: AuthResponse) => {
+      expect(response.isSuccessful).toBeTruthy();
+      expect(response.getMessage()).toEqual('Change Password URL sent to email address provided');
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/sendEmailForgotPassword`);
     req.flush(expected);
   });
 });
