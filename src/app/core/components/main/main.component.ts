@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AccountService } from '../../../shared/services/account/account.service';
-import { MessageService } from '../../../shared/services/message/message.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-main',

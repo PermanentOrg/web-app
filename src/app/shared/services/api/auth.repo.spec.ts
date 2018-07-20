@@ -4,7 +4,7 @@ import { environment } from '../../../../environments/environment';
 
 import { HttpService } from '../http/http.service';
 import { AuthRepo, AuthResponse } from './auth.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '../../../models';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@models/index';
 
 xdescribe('AuthRepo', () => {
   let repo: AuthRepo;

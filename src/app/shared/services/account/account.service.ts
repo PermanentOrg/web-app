@@ -4,7 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { ApiService } from '../api/api.service';
 import { StorageService } from '../storage/storage.service';
-import { ArchiveVO, AccountVO } from '../../../models';
+import { ArchiveVO, AccountVO } from '@models/index';
 import { AuthResponse, AccountResponse, ArchiveResponse } from '../api/index.repo';
 
 const ACCOUNT_KEY = 'account';

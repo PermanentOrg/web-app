@@ -1,3 +1,5 @@
+@import 'colors';
+
 $breadcrumb-divider: quote(">");
 
 $primary: $PR-blue;
@@ -9,3 +11,6 @@ $input-btn-padding-y: .75rem;
 $input-transition: border-color .15s ease-in-out, background-color .15s ease-in-out;
 
 $max-form-width: 400px;
+
+@import 'vendor/bootstrap/functions';
+@import 'vendor/bootstrap/variables';

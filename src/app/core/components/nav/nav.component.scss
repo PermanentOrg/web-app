@@ -1,7 +1,15 @@
+@import 'variables';
+
 nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: white;
+}
+
+.navbar-toggler {
+  &:focus {
+    outline: none;
+  }
 }

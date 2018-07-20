@@ -1,4 +1,4 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '../../../models';
+import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@models/index';
 import { BaseResponse, BaseRepo } from './base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
