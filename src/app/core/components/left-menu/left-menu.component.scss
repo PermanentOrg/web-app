@@ -36,7 +36,6 @@ $shadow-color: rgba(black, 0.15);
   transition:  transform $transition-length ease-in;
   background-color: white;
   box-shadow: $box-shadow;
-  padding-top: 50px;
 
   .menu-item {
     padding: $input-btn-padding-y * 1.5 10px;
@@ -44,5 +43,12 @@ $shadow-color: rgba(black, 0.15);
     line-height: $btn-line-height;
     cursor: pointer;
     user-select: none;
+  }
+
+  .menu-header {
+    padding: 10px;
+    strong {
+      display: block;
+    }
   }
 }

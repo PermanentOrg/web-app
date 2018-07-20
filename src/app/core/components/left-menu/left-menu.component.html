@@ -1,8 +1,9 @@
 <div class="hamburger-menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide()">
   <div class="hamburger-menu">
-    <div class="menu-item">My Files</div>
-    <div class="menu-item">Account</div>
-    <div class="menu-item">Preferences</div>
+    <div class="menu-header">
+      Current Archive
+      <strong>{{accountName}}</strong>
+    </div>
     <div class="menu-item" (click)='logOut()'>Log Out</div>
   </div>
 </div>
