@@ -23,6 +23,7 @@ form {
 
 .input-group-vertical {
   margin-bottom: 10px;
+  $transition-length: 0.1s;
 
   > input, > .input-vertical {
     position: relative;
@@ -67,7 +68,7 @@ form {
     background: none;
     pointer-events: none;
     opacity: 1;
-    transition: 0.2s ease-in opacity;
+    transition: $transition-length ease-in opacity;
   }
 
   .hidden {

@@ -4,19 +4,16 @@
     Sign up for Permanent.org
   </h1>
   <div class="input-group-vertical">
-    <input type="text" class="form-control" id="invitation" placeholder="Invitation code"
-      formControlName="invitation" required="required"
-      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-    <input type="text" class="form-control" id="name" placeholder="Full name"
-      formControlName="name" required="required"
-      autocomplete="name" autocorrect="off" autocapitalize="yes" spellcheck="false">
-    <input type="text" class="form-control" id="email" placeholder="Email"
-      formControlName="email" required="required"
-      autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">
-    <input type="password" class="form-control" id="password" placeholder="Password (min. 10 chars)"
-      [formControl]="signupForm.controls['passwords']['controls']['password']" required="required">
-    <input type="password" class="form-control" id="passwordConfirm" placeholder="Confirm password"
-      [formControl]="signupForm.controls['passwords']['controls']['confirm']" required="required">
+    <pr-form-input fieldName="invitation" placeholder="Invitation code" [control]="signupForm.controls['invitation']"
+      [errors]="formErrors.invitation" [config]="{autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
+      [errors]="formErrors.name" [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
+      [errors]="formErrors.email" [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input type="password" fieldName="password" placeholder="Password (min. 10 chars)" [control]="signupForm.controls['passwords']['controls']['password']"
+      [errors]="formErrors.password"></pr-form-input>
+    <pr-form-input type="password" fieldName="passwordConfirm" placeholder="Confirm password" [control]="signupForm.controls['passwords']['controls']['confirm']"
+      [errors]="formErrors.passwordConfirm"></pr-form-input>
   </div>
   <div class="form-check">
       <input class="form-check-input" type="checkbox" id="terms"
