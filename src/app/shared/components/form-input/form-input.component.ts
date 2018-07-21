@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -13,15 +13,29 @@ export class FormInputComponent implements OnInit {
   @Input() control: FormControl;
   @Input() errors;
 
-  @Input() id: string;
-  @Input() autocomplete: string;
-  @Input() autocorrect: string;
-  @Input() autocapitalize: string;
-  @Input() spellcheck: string;
+  @Input() config: any;
 
-  constructor() { }
+  constructor(private element: ElementRef) { }
 
   ngOnInit() {
+    const inputField = this.element.nativeElement.querySelector('input');
+    if (this.config) {
+      if (this.config.autocorrect) {
+        inputField.setAttribute('autocorrect', this.config.autocorrect);
+      }
+
+      if (this.config.autocomplete) {
+        inputField.setAttribute('autocomplete', this.config.autocomplete);
+      }
+
+      if (this.config.autocapitalize) {
+        inputField.setAttribute('autocapitalize', this.config.autocapitalize);
+      }
+
+      if (this.config.spellcheck) {
+        inputField.setAttribute('spellcheck', this.config.spellcheck);
+      }
+    }
   }
 
 }
