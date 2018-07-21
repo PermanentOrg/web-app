@@ -4,14 +4,16 @@
     Log in to Permanent.org
   </h1>
   <div class="input-group-vertical">
-    <div class="input-vertical">
+    <pr-form-input [fieldName]="'email'" [control]="loginForm.controls['email']" [placeholder]="'Email'"
+      [errors]="formErrors.email"></pr-form-input>
+    <!-- <div class="input-vertical">
         <input type="text" class="form-control" id="email" placeholder="Email" required="required"
         formControlName="email"
         autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">
         <div class="input-vertical-error" *ngIf="formErrors.email">
           {{formErrors.email}}
         </div>
-    </div>
+    </div> -->
     <div class="input-vertical">
       <input type="password" class="form-control" id="password" placeholder="Password"
         formControlName="password" required="required">

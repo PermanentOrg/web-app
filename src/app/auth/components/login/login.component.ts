@@ -90,6 +90,7 @@ export class LoginComponent implements OnInit {
     for (const controlName in this.loginForm.controls) {
       if (this.loginForm.get(controlName) ) {
         const control = this.loginForm.get(controlName);
+        console.log('login.component.ts', 93, control);
         if (control.touched && control.errors) {
           const errorName = Object.keys(control.errors).pop();
           this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
