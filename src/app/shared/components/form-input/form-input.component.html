@@ -1,7 +1,7 @@
 <div class="input-vertical-label" [ngClass]="{'hidden': !control.value.length }">
   {{placeholder}}
 </div>
-<input type="text" class="form-control" 
+<input [type]="type" class="form-control" 
 [id]="fieldName" [placeholder]="placeholder" [formControl]="control">
 <div class="input-vertical-error" [ngClass]="{'hidden': !errors }">
   {{errors}}

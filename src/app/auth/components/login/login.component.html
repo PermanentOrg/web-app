@@ -4,23 +4,10 @@
     Log in to Permanent.org
   </h1>
   <div class="input-group-vertical">
-    <pr-form-input fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
+    <pr-form-input type="text" fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
       [errors]="formErrors.email" [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-    <!-- <div class="input-vertical">
-        <input type="text" class="form-control" id="email" placeholder="Email" required="required"
-        formControlName="email"
-        autocomplete="email" autocorrect="off" autocapitalize="off" spellcheck="false">
-        <div class="input-vertical-error" *ngIf="formErrors.email">
-          {{formErrors.email}}
-        </div>
-    </div> -->
-    <div class="input-vertical">
-      <input type="password" class="form-control" id="password" placeholder="Password"
-        formControlName="password" required="required">
-      <div class="input-vertical-error" *ngIf="formErrors.password">
-        {{formErrors.password}}
-      </div>
-    </div>
+    <pr-form-input type="password" fieldName="password" placeholder="Password" [control]="loginForm.controls['password']"
+      [errors]="formErrors.password"></pr-form-input>
   </div>
   <div class="form-check">
     <input class="form-check-input" type="checkbox" id="rememberMe"

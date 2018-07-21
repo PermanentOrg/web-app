@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
   host: {'class': 'input-vertical'}
 })
 export class FormInputComponent implements OnInit {
+  @Input() type = 'text';
   @Input() fieldName: string;
   @Input() placeholder: string;
   @Input() control: FormControl;
