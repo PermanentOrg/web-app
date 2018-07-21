@@ -4,7 +4,7 @@
     Log in to Permanent.org
   </h1>
   <div class="input-group-vertical">
-    <pr-form-input [fieldName]="'email'" [control]="loginForm.controls['email']" [placeholder]="'Email'"
+    <pr-form-input fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
       [errors]="formErrors.email" [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
     <!-- <div class="input-vertical">
         <input type="text" class="form-control" id="email" placeholder="Email" required="required"

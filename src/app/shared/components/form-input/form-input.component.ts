@@ -11,7 +11,7 @@ export class FormInputComponent implements OnInit {
   @Input() fieldName: string;
   @Input() placeholder: string;
   @Input() control: FormControl;
-  @Input() errors;
+  @Input() errors: string;
 
   @Input() config: any;
 
