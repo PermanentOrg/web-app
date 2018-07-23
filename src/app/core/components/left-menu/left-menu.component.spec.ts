@@ -48,6 +48,5 @@ describe('LeftMenuComponent', () => {
 
   it('should have the current account name as a property', () => {
     expect(component.accountName).toEqual(TEST_DATA.account.fullName);
-
   });
 });
