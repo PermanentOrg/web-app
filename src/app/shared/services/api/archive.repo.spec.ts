@@ -28,7 +28,7 @@ describe('ArchiveRepo', () => {
   });
 
   it('should get a single archive', () => {
-    const expected = require('../../../../test/responses/archive.get.single.success.json');
+    const expected = require('@root/test/responses/archive.get.single.success.json');
 
     repo.get([TEST_DATA.archive.archiveId])
     .subscribe((response) => {
@@ -41,7 +41,7 @@ describe('ArchiveRepo', () => {
   });
 
   it('should get multiple archives', () => {
-    const expected = require('../../../../test/responses/archive.get.multiple.success.json');
+    const expected = require('@root/test/responses/archive.get.multiple.success.json');
 
     repo.get([TEST_DATA.archive.archiveId, TEST_DATA_2.archive.archiveId])
     .subscribe((response) => {

@@ -11,10 +11,12 @@ import { AuthResponse } from '../api/auth.repo';
 import { AccountVO, ArchiveVO } from '@models/index';
 import { environment } from '../../../../environments/environment';
 import { AccountResponse } from '../api/index.repo';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 describe('AccountService', () => {
   let httpMock: HttpTestingController;
   let service: AccountService;
+  let storageService: StorageService;
 
 
   beforeEach(() => {
@@ -24,20 +26,23 @@ describe('AccountService', () => {
       ],
       providers: [
         CookieService,
-        AccountService
+        AccountService,
+        StorageService
       ]
     });
 
     httpMock = TestBed.get(HttpTestingController);
     service = TestBed.get(AccountService);
-    window.sessionStorage.clear();
-    window.localStorage.clear();
+    storageService = TestBed.get(StorageService);
+
+    storageService.local.clear();
+    storageService.session.clear();
   });
 
   afterEach(() => {
     httpMock.verify();
-    window.localStorage.clear();
-    window.sessionStorage.clear();
+    storageService.local.clear();
+    storageService.session.clear();
   });
 
   it('should be created with no account or archive data', () => {
@@ -70,7 +75,7 @@ describe('AccountService', () => {
   });
 
   it('should detect need to verify MFA after login', () => {
-    const expected = require('../../../../test/responses/auth.login.verifyMfa.json');
+    const expected = require('@root/test/responses/auth.login.verifyMfa.json');
 
     service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
@@ -84,7 +89,7 @@ describe('AccountService', () => {
   });
 
   it('should verify MFA', () => {
-    const expected = require('../../../../test/responses/auth.signup.duplicate.json');
+    const expected = require('@root/test/responses/auth.verify.success.json');
 
     service.setAccount(new AccountVO(TEST_DATA.account));
 
@@ -100,7 +105,7 @@ describe('AccountService', () => {
   });
 
   it('should detect need to verify email after login', () => {
-    const expected = require('../../../../test/responses/auth.login.verifyEmail.json');
+    const expected = require('@root/test/responses/auth.login.verifyEmail.json');
 
     service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
@@ -131,7 +136,7 @@ describe('AccountService', () => {
   });
 
   it('should sign up for an account', () => {
-    const expected = require('../../../../test/responses/auth.signup.success.json');
+    const expected = require('@root/test/responses/auth.signup.success.json');
 
     service.signUp(TEST_DATA.user.email, TEST_DATA.user.name, TEST_DATA.user.password, TEST_DATA.user.password,
       true, true, null, 'Permanent Archive')
@@ -155,7 +160,7 @@ describe('AccountService', () => {
   });
 
   it('should trigger catch on failed signup', () => {
-    const expected = require('../../../../test/responses/auth.signup.duplicate.json');
+    const expected = require('@root/test/responses/auth.signup.duplicate.json');
 
     service.signUp(TEST_DATA.user.email, TEST_DATA.user.name, TEST_DATA.user.password, TEST_DATA.user.password,
       true, true, null, 'Permanent Archive')
