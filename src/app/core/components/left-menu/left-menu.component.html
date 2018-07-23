@@ -4,6 +4,11 @@
       Current Archive
       <strong>{{accountName}}</strong>
     </div>
-    <div class="menu-item" (click)='logOut()'>Log Out</div>
+    <a class="menu-item" [routerLink]="['/app/myfiles']">
+      My Files
+    </a>
+    <div class="menu-item" (click)='logOut()'>
+      Log Out
+    </div>
   </div>
 </div>
