@@ -20,20 +20,20 @@ export class FolderRepo extends BaseRepo {
 }
 
 export class FolderResponse extends BaseResponse {
-  public getFolderVO() {
+  public getFolderVO(initChildren?: boolean) {
     const data = this.getResultsData();
     if (!data || !data.length) {
       return null;
     }
 
-    return new FolderVO(data[0][0].FolderVO);
+    return new FolderVO(data[0][0].FolderVO, initChildren);
   }
 
-  public getFolderVOs() {
+  public getFolderVOs(initChildren?: boolean) {
     const data = this.getResultsData();
 
     return data.map((result) => {
-      return new FolderVO(result[0].FolderVO);
+      return new FolderVO(result[0].FolderVO, initChildren);
     });
   }
 }

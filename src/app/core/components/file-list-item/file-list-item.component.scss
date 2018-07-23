@@ -1,0 +1,20 @@
+@import 'variables';
+
+$row-height: 50px;
+
+.file-list-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $gray-300
+}
+
+.name {
+  flex: 1 1 auto;
+}
+
+img {
+  height: $row-height - 10px;
+  width: $row-height - 10px;
+  flex: 0 0 $row-height - 10px;
+  margin: 5px 5px;
+}

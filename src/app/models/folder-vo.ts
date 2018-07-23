@@ -1,6 +1,9 @@
 import { BaseVO } from './base-vo';
+import { RecordVO } from '@models/record-vo';
 
 export class FolderVO extends BaseVO {
+  public isFolder = true;
+  public isRecord = false;
   public folderId;
   public archiveNbr;
   public archiveId;
@@ -59,7 +62,7 @@ export class FolderVO extends BaseVO {
   public FolderSizeVO;
   public AttachmentRecordVOs;
   public hasAttachments;
-  public ChildItemVOs;
+  public ChildItemVOs: Array<RecordVO | FolderVO | any>;
   public ShareVOs;
   public AccessVO;
   public AccessVOs;
@@ -67,4 +70,18 @@ export class FolderVO extends BaseVO {
   // For the UI
   public posStart;
   public posLimit;
+
+  constructor(voData: any, initChildren?: boolean) {
+    super(voData);
+
+    if (initChildren) {
+      this.ChildItemVOs = this.ChildItemVOs.map((item) => {
+        if (item.folderId) {
+          return new FolderVO(item);
+        } else {
+          return new RecordVO(item);
+        }
+      });
+    }
+  }
 }

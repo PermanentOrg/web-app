@@ -14,7 +14,6 @@ export class FileListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('file-list.component.ts', 17, this.currentFolder);
   }
 
 }

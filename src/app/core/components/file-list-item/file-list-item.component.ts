@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { FolderVO, RecordVO } from '@models/index';
+
 @Component({
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
@@ -11,6 +13,7 @@ export class FileListItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('file-list-item.component.ts', 16, this.item.isRecord);
   }
 
 }

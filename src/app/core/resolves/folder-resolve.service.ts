@@ -23,7 +23,7 @@ export class FolderResolveService implements Resolve<any> {
           throw response;
         }
 
-        return response.getFolderVO();
+        return response.getFolderVO(true);
       }))).toPromise();
   }
 }
