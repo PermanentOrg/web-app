@@ -4,15 +4,23 @@
 
 .breadcrumbs {
   width: 100%;
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
   padding: 5px 10px;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }
 
 .breadcrumb {
   display: inline-block;
-  padding-right: 10px;
+
+  .current {
+    font-weight: 500;
+  }
 }
 
-.breadcrumb-separator {
+.separator {
   display: inline-block;
+  padding: 0px 6px 0px 4px;
+  opacity: 0.5;
 }

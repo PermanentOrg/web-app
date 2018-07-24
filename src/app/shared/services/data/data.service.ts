@@ -11,7 +11,7 @@ export class DataService {
   public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO};
-  private currentFolder: FolderVO;
+  public currentFolder: FolderVO;
 
   constructor(private api: ApiService) {
     this.byFolderLinkId = {};

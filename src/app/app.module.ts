@@ -16,12 +16,12 @@ import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 const routes: Routes = [
-  { path: '', loadChildren: './core/core.module#CoreModule' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'mfa', component: MfaComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
+  { path: '', loadChildren: './core/core.module#CoreModule' },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

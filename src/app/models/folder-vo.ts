@@ -87,7 +87,7 @@ export class FolderVO extends BaseVO {
     if (initChildren) {
       this.ChildItemVOs = this.ChildItemVOs.map((item) => {
         if (item.folderId) {
-          return new FolderVO(item);
+          return new FolderVO(item, false);
         } else {
           return new RecordVO(item);
         }

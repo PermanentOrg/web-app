@@ -31,6 +31,8 @@ export class FolderResolveService implements Resolve<any> {
         }
 
         return response.getFolderVO(true);
-      }))).toPromise();
+      }))).toPromise().catch((error) => {
+        console.error(error);
+      });
   }
 }

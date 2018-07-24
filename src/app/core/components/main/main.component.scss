@@ -1,3 +1,10 @@
 .main-content {
   margin-top: 50px;
+  opacity: 1;
+
+  &.navigating {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: 0.1s ease-in opacity;
+  }
 }
