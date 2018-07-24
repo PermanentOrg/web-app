@@ -5,7 +5,9 @@ $row-height: 50px;
 .file-list-item {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid $gray-300
+  border-bottom: 1px solid $gray-300;
+  cursor: pointer;
+  user-select: none;
 }
 
 .name {
