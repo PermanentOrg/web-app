@@ -13,6 +13,7 @@ import { LeftMenuComponent } from '@core/components/left-menu/left-menu.componen
 import { FileListComponent } from '@core/components/file-list/file-list.component';
 import { FileListItemComponent } from '@core/components/file-list-item/file-list-item.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
+import { FileViewerComponent } from './components/file-viewer/file-viewer.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
     LeftMenuComponent,
     FileListComponent,
     FileListItemComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    FileViewerComponent
   ],
   providers: [
     DataService
