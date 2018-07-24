@@ -1,6 +1,6 @@
 <div class="file-viewer">
   <div class="file-viewer-close">
-    <span (click)="close()">< Back</span>
+    <a [routerLink]="['../']">< Back</a>
   </div>
   <div class="file-viewer-image" [ngStyle]="{'background-image': 'url(' + record.thumbURL500 + ')' }"></div>
   <div class="file-viewer-name">

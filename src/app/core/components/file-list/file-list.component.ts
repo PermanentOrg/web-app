@@ -52,7 +52,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!this.routeListener) {
       this.routeListener = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))
-      .subscribe((event) => {
+      .subscribe((event: NavigationEnd) => {
         if (this.reinit) {
           this.ngOnInit();
           setTimeout(() => {
@@ -77,8 +77,8 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
         this.listItems = this.listItemsQuery.toArray();
       }
 
-      this.document.documentElement.scrollTop = 0;
       this.calculateListViewport();
+      this.document.documentElement.scrollTop = 0;
     }, 0);
   }
 

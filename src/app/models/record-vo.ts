@@ -90,7 +90,6 @@ export class RecordVO extends BaseVO {
     super(voData);
 
     if (initChildren) {
-      console.log('record-vo.ts', 85, 'gonna build out these children');
     }
 
     if (dataStatus) {
