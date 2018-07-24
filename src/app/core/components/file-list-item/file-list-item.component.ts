@@ -13,7 +13,6 @@ export class FileListItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('file-list-item.component.ts', 16, this.item.isRecord);
   }
 
 }

@@ -17,7 +17,7 @@ export class FolderResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     const myFiles =  _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
 
-    return this.api.folder.get([new FolderVO(myFiles)])
+    return this.api.folder.navigate(new FolderVO(myFiles))
       .pipe(map(((response: FolderResponse) => {
         if (!response.isSuccessful) {
           throw response;

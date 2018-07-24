@@ -17,6 +17,14 @@ export class FolderRepo extends BaseRepo {
 
     return this.http.sendRequest('/folder/get', data, FolderResponse);
   }
+
+  public navigate(folderVO: FolderVO): Observable<FolderResponse> {
+    const data = [{
+      FolderVO: new FolderVO(folderVO)
+    }];
+
+    return this.http.sendRequest('/folder/navigateMin', data, FolderResponse);
+  }
 }
 
 export class FolderResponse extends BaseResponse {
