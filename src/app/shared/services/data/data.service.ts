@@ -4,9 +4,12 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderVO, RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse } from '@shared/services/api/index.repo';
+import { EventEmitter } from '@angular/core';
 
 @Injectable()
 export class DataService {
+  public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
+
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO};
   private currentFolder: FolderVO;
 
@@ -24,6 +27,7 @@ export class DataService {
 
   public setCurrentFolder(folder: FolderVO) {
     this.currentFolder = folder;
+    this.currentFolderChange.emit(folder);
   }
 
   public fetchLeanItems(items: Array<FolderVO | RecordVO>): Promise<number> {

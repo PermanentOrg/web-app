@@ -18,8 +18,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
   goToItem() {
     if (this.item.isFolder) {
-      console.log(this.item.archiveNbr, this.item.folder_linkId);
-      // this.router.navigate(['/myfiles'])
+      this.router.navigate(['/myfiles', this.item.archiveNbr, this.item.folder_linkId ]);
     }
   }
 

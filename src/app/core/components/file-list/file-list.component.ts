@@ -6,7 +6,8 @@ import {
   ElementRef,
   QueryList,
   ViewChildren,
-  HostListener
+  HostListener,
+  OnDestroy
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -26,7 +27,7 @@ const SCROLL_DEBOUNCE = 150;
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss']
 })
-export class FileListComponent implements OnInit, AfterContentInit {
+export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
 
   currentFolder: FolderVO;
@@ -55,6 +56,10 @@ export class FileListComponent implements OnInit, AfterContentInit {
 
       this.calculateListViewport();
     }, 0);
+  }
+
+  ngOnDestroy() {
+
   }
 
   @HostListener('window:scroll', ['$event'])
