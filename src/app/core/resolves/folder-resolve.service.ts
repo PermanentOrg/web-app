@@ -15,9 +15,16 @@ export class FolderResolveService implements Resolve<any> {
   constructor(private api: ApiService, private accountService: AccountService) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
-    const myFiles =  _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
+    let targetFolder;
 
-    return this.api.folder.navigate(new FolderVO(myFiles))
+    if (route.params.archiveNbr && route.params.folderLinkId) {
+      targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
+    } else {
+      const myFiles = _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
+      targetFolder = new FolderVO(myFiles);
+    }
+
+    return this.api.folder.navigate(targetFolder)
       .pipe(map(((response: FolderResponse) => {
         if (!response.isSuccessful) {
           throw response;

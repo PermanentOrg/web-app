@@ -27,6 +27,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: HomeComponent},
       { path: 'myfiles', component: FileListComponent, resolve: folderResolve},
+      { path: 'myfiles/:archiveNbr/:folderLinkId', component: FileListComponent, resolve: folderResolve},
       { path: '**', redirectTo: ''}
     ]
   }
