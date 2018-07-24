@@ -24,6 +24,7 @@ export class FileViewerComponent implements OnInit {
     } else {
       this.router.navigate(['/myfiles']);
     }
+    return false;
   }
 
 }
