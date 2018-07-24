@@ -19,6 +19,7 @@ import { DataStatus } from '@models/data-status.enum';
 
 const NAV_HEIGHT = 50;
 const ITEM_HEIGHT = 51;
+const SCROLL_DEBOUNCE = 150;
 
 @Component({
   selector: 'pr-file-list',
@@ -38,7 +39,7 @@ export class FileListComponent implements OnInit, AfterContentInit {
   constructor(private route: ActivatedRoute, private dataService: DataService, @Inject(DOCUMENT) private document: any) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.dataService.setCurrentFolder(this.currentFolder);
-    this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), 100);
+    this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
   }
 
   ngOnInit() {
@@ -51,6 +52,8 @@ export class FileListComponent implements OnInit, AfterContentInit {
       if (this.listItemsQuery) {
         this.listItems = this.listItemsQuery.toArray();
       }
+
+      this.calculateListViewport();
     }, 0);
   }
 
