@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { CoreRoutingModule } from './core-routing.module';
 
+import { DataService } from '@shared/services/data/data.service';
+
 import { HomeComponent } from './components/home/home.component';
 import { MainComponent } from './components/main/main.component';
 import { NavComponent } from './components/nav/nav.component';
@@ -22,6 +24,9 @@ import { FileListItemComponent } from './components/file-list-item/file-list-ite
     LeftMenuComponent,
     FileListComponent,
     FileListItemComponent
+  ],
+  providers: [
+    DataService
   ]
 })
 export class CoreModule { }

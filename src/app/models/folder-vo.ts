@@ -1,9 +1,17 @@
-import { BaseVO } from './base-vo';
+import { orderBy } from 'lodash';
+
+import { BaseVO } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
+import { DataStatus } from '@models/data-status.enum';
 
 export class FolderVO extends BaseVO {
   public isFolder = true;
   public isRecord = false;
+
+  public isFetching = false;
+
+  public dataStatus = DataStatus.Placeholder;
+
   public folderId;
   public archiveNbr;
   public archiveId;
@@ -43,10 +51,10 @@ export class FolderVO extends BaseVO {
   public shareDT;
 
   // For the iParentFolderVO
-  public pathAsFolder_linkId;
+  public pathAsFolder_linkId: number;
   public pathAsText;
-  public folder_linkId;
-  public parentFolder_linkId;
+  public folder_linkId: number;
+  public parentFolder_linkId: number;
   public ParentFolderVOs;
   public parentArchiveNbr;
   public pathAsArchiveNbr;
@@ -71,8 +79,10 @@ export class FolderVO extends BaseVO {
   public posStart;
   public posLimit;
 
-  constructor(voData: any, initChildren?: boolean) {
+  constructor(voData: any, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
+
+    this.ChildItemVOs = orderBy(this.ChildItemVOs, 'position');
 
     if (initChildren) {
       this.ChildItemVOs = this.ChildItemVOs.map((item) => {
@@ -82,6 +92,10 @@ export class FolderVO extends BaseVO {
           return new RecordVO(item);
         }
       });
+    }
+
+    if (dataStatus) {
+      this.dataStatus = dataStatus;
     }
   }
 }

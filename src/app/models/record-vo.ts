@@ -1,8 +1,14 @@
-import { BaseVO } from './base-vo';
+import { BaseVO } from '@models/base-vo';
+import { DataStatus } from '@models/data-status.enum';
 
 export class RecordVO extends BaseVO {
   public isRecord = true;
   public isFolder = false;
+
+  public isFetching = false;
+
+  public dataStatus = DataStatus.Placeholder;
+
   public recordId;
   public archiveId;
   public archiveNbr;
@@ -46,11 +52,11 @@ export class RecordVO extends BaseVO {
 
   // Comes from the FolderLinkVO
   public FolderLinkVOs;
-  public folder_linkId;
-  public parentFolderId;
+  public folder_linkId: number;
+  public parentFolderId: number;
   public position;
   public accessRole;
-  public folderArchiveId;
+  public folderArchiveId: number;
   public folder_linkType;
 
   // For the iParentFolderVO
@@ -80,11 +86,15 @@ export class RecordVO extends BaseVO {
   public ShareVOs;
   public AccessVO;
 
-  constructor(voData: any, initChildren?: boolean) {
+  constructor(voData: any, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
     if (initChildren) {
       console.log('record-vo.ts', 85, 'gonna build out these children');
+    }
+
+    if (dataStatus) {
+      this.dataStatus = dataStatus;
     }
   }
 }
