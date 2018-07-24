@@ -1,3 +1,7 @@
-<p>
-  {{currentFolder.displayName}}
-</p>
+<div class="breadcrumbs" *ngIf="currentFolder">
+  <div class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs">
+    <a [routerLink]="[breadcrumb.routerPath]">
+      {{breadcrumb.text}}
+    </a>
+  </div>
+</div>

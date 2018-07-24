@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.breadcrumbs {
+  width: 100%;
+  overflow: hidden;
+  padding: 5px 10px;
+}
+
+.breadcrumb {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.breadcrumb-separator {
+  display: inline-block;
+}

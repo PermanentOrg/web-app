@@ -25,7 +25,7 @@ export class DataService {
     delete this.byFolderLinkId[item.folder_linkId];
   }
 
-  public setCurrentFolder(folder: FolderVO) {
+  public setCurrentFolder(folder?: FolderVO) {
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
   }

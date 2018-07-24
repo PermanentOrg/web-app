@@ -59,7 +59,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.dataService.setCurrentFolder();
   }
 
   @HostListener('window:scroll', ['$event'])
