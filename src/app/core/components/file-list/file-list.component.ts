@@ -22,7 +22,7 @@ import { FolderVO } from '@root/app/models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 
-const NAV_HEIGHT = 50;
+const NAV_HEIGHT = 84;
 const ITEM_HEIGHT = 51;
 const SCROLL_DEBOUNCE = 150;
 
@@ -37,7 +37,6 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   currentFolder: FolderVO;
   listItems: FileListItemComponent[];
 
-  private viewportHeight;
   private scrollHandlerDebounced;
   private itemsFetchedCount;
   private routeListener: Subscription;
@@ -67,9 +66,6 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   ngOnInit() {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.dataService.setCurrentFolder(this.currentFolder);
-
-    const totalHeight = this.document.documentElement.clientHeight || this.document.body.clientHeight;
-    this.viewportHeight = totalHeight - NAV_HEIGHT;
 
     this.itemsFetchedCount = 0;
     this.reinit = true;
@@ -101,9 +97,12 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
       return;
     }
 
+    const totalHeight = this.document.documentElement.clientHeight || this.document.body.clientHeight;
+    const viewportHeight = totalHeight - NAV_HEIGHT;
+
     const top = this.document.documentElement.scrollTop || this.document.body.scrollTop;
     const offset = Math.floor(top / ITEM_HEIGHT);
-    const count = Math.ceil(this.viewportHeight / ITEM_HEIGHT);
+    const count = Math.ceil(viewportHeight / ITEM_HEIGHT) + 4;
 
     const itemsToFetch = this.currentFolder.ChildItemVOs
       .slice(offset, offset + count)
