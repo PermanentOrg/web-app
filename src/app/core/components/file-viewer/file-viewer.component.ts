@@ -18,7 +18,12 @@ export class FileViewerComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['..'], {relativeTo: this.route });
+    const routeParams = this.route.parent.snapshot.params;
+    if (routeParams.archiveNbr) {
+      this.router.navigate(['/myfiles', routeParams.archiveNbr, routeParams.folderLinkId]);
+    } else {
+      this.router.navigate(['/myfiles']);
+    }
   }
 
 }
