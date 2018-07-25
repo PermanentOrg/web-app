@@ -41,6 +41,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   private itemsFetchedCount;
   private routeListener: Subscription;
   private reinit = false;
+  private inFileView = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,11 +54,19 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
       this.routeListener = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))
       .subscribe((event: NavigationEnd) => {
-        if (this.reinit) {
+        if (event.url.includes('record')) {
+          this.inFileView = true;
+        }
+
+        if (this.reinit && !this.inFileView) {
           this.ngOnInit();
           setTimeout(() => {
             this.ngAfterContentInit();
           }, 0);
+        }
+
+        if (!event.url.includes('record') && this.inFileView) {
+          this.inFileView = false;
         }
       });
     }
