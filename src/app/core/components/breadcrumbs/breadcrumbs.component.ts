@@ -22,10 +22,10 @@ class Breadcrumb {
   styleUrls: ['./breadcrumbs.component.scss']
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
-  private currentFolder;
-  private breadcrumbs;
-  private scrollElement: Element;
+  public currentFolder;
+  public breadcrumbs;
 
+  private scrollElement: Element;
   private folderChangeListener: Subscription;
 
   constructor(private dataService: DataService, private elementRef: ElementRef) {
