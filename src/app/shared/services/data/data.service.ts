@@ -82,7 +82,7 @@ export class DataService {
           items[index].fetched = null;
           reject();
         });
-        console.error(response.getMessage());
+        console.error(response);
       });
   }
 

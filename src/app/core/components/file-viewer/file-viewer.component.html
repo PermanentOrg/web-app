@@ -2,7 +2,8 @@
   <div class="file-viewer-close">
     <a (click)="close()">< Back</a>
   </div>
-  <div class="file-viewer-image" [ngStyle]="{'background-image': 'url(' + record.thumbURL500 + ')' }"></div>
+  <!-- <div class="file-viewer-image" [ngStyle]="{'background-image': 'url(' + record.thumbURL500 + ')' }"></div> -->
+  <pr-thumbnail [item]="record"></pr-thumbnail>
   <div class="file-viewer-name">
     {{record.displayName}}
   </div>
