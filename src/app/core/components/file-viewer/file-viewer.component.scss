@@ -1,6 +1,6 @@
 @import 'variables';
 
-$toolbar-height: 50px;
+$toolbar-height: 30px;
 
 .file-viewer {
   position: fixed;
@@ -17,8 +17,11 @@ $toolbar-height: 50px;
   top: 0;
   width: 100%;
   height: $toolbar-height;
-  span {
+
+  a, span {
     line-height: $toolbar-height;
+    padding: 0px 10px;
+    cursor: pointer;
   }
 }
 
