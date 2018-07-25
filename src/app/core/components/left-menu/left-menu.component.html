@@ -1,17 +1,17 @@
-<div class="hamburger-menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide()">
+<div class="hamburger-menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="hamburger-menu">
     <div class="menu-header">
       Current Archive
       <strong>{{accountName}}</strong>
     </div>
     <a class="menu-item" [routerLink]="['/']">
-      Home?
+      Home
     </a>
     <a class="menu-item" [routerLink]="['/myfiles']">
       My Files
     </a>
-    <div class="menu-item" (click)='logOut()'>
+    <a class="menu-item" (click)='logOut()'>
       Log Out
-    </div>
+    </a>
   </div>
 </div>

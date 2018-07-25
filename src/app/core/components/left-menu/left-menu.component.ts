@@ -24,9 +24,10 @@ export class LeftMenuComponent implements OnInit {
   ngOnInit() {
   }
 
-  hide() {
+  hide(event: Event) {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
+    event.stopPropagation();
     return false;
   }
 
