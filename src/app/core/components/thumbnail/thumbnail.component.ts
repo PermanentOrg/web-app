@@ -35,7 +35,6 @@ export class ThumbnailComponent implements OnInit {
   ngOnInit() {
     this.imageElement = this.element.querySelector('.pr-thumbnail-image');
     this.placeholderElement = this.element.querySelector('.pr-thumbnail-placeholder');
-    this.setPlaceholderSize();
     this.setImageBg(this.item.thumbURL200);
     this.checkElementWidth();
   }
@@ -43,16 +42,6 @@ export class ThumbnailComponent implements OnInit {
   @HostListener('window:resize', [])
   onViewportResize(event) {
     this.debouncedResize();
-  }
-
-  setPlaceholderSize() {
-    if (this.item.imageRatio > 1) {
-      this.renderer.setElementClass(this.placeholderElement, 'tall', true);
-      this.renderer.setElementClass(this.placeholderElement, 'wide', false);
-    } else {
-      this.renderer.setElementClass(this.placeholderElement, 'tall', true);
-      this.renderer.setElementClass(this.placeholderElement, 'wide', false);
-    }
   }
 
   checkElementWidth() {
