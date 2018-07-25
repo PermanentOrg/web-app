@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 
 import { FolderVO, RecordVO } from '@models/index';
+import { DataStatus } from '@models/data-status.enum';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -17,6 +18,16 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   }
 
   goToItem() {
+    if (this.item.dataStatus < DataStatus.Lean) {
+      if (!this.item.isFetching) {
+        this.dataService.fetchLeanItems([this.item]);
+      }
+
+      return this.item.fetched.then((fetched) => {
+        this.goToItem();
+      });
+    }
+
     if (this.item.isFolder) {
       this.router.navigate(['/myfiles', this.item.archiveNbr, this.item.folder_linkId ]);
     } else {

@@ -6,6 +6,7 @@ export class RecordVO extends BaseVO {
   public isFolder = false;
 
   public isFetching = false;
+  public fetched: Promise<boolean>;
 
   public dataStatus = DataStatus.Placeholder;
 

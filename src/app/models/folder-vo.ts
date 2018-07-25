@@ -9,6 +9,7 @@ export class FolderVO extends BaseVO {
   public isRecord = false;
 
   public isFetching = false;
+  public fetched: Promise<boolean>;
 
   public dataStatus = DataStatus.Placeholder;
 

@@ -31,7 +31,8 @@ export class DataService {
   }
 
   public fetchLeanItems(items: Array<FolderVO | RecordVO>): Promise<number> {
-
+    const itemResolves = [];
+    const itemRejects = [];
     const folder = new FolderVO({
       archiveNbr: this.currentFolder.archiveNbr,
       ChildItemVOs: items.filter((item) => {
@@ -40,6 +41,10 @@ export class DataService {
           }
 
           item.isFetching = true;
+          item.fetched = new Promise((resolve, reject) => {
+            itemResolves.push(resolve);
+            itemRejects.push(reject);
+          });
           return true;
         })
     });
@@ -59,18 +64,24 @@ export class DataService {
         return fetchedFolder.ChildItemVOs;
       })).toPromise()
       .then((leanItems) => {
-        leanItems.map((leanItem) => {
+        leanItems.map((leanItem, index) => {
           const item = this.byFolderLinkId[leanItem.folder_linkId];
           if (item) {
             item.update(leanItem);
             item.dataStatus = DataStatus.Lean;
             item.isFetching = false;
+            itemResolves[index]();
+            item.fetched = null;
           }
         });
 
         return Promise.resolve(leanItems.length);
       })
       .catch((response) => {
+        itemRejects.map((reject, index) => {
+          items[index].fetched = null;
+          reject();
+        });
         console.error(response.getMessage());
       });
   }
