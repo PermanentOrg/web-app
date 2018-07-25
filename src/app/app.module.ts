@@ -35,7 +35,7 @@ const routes: Routes = [
     MessageComponent,
     LogoComponent,
     ForgotPasswordComponent,
-    FormInputComponent,
+    FormInputComponent
   ],
   imports: [
     BrowserModule,

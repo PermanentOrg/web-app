@@ -1,0 +1,21 @@
+[prBgImage] {
+  background-size: contain;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    background-color: rgba($gray-200, 1);
+  }
+
+  &.bg-image-loaded:after {
+    background-color: rgba(white, 0);
+  }
+}

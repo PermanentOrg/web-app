@@ -12,9 +12,12 @@ $row-height: 50px;
 
 .name {
   flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-img {
+[prBgImage] {
   height: $row-height - 10px;
   width: $row-height - 10px;
   flex: 0 0 $row-height - 10px;
