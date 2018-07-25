@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileListComponent } from './file-list.component';
+import { FileListComponent } from '@core/components/file-list/file-list.component';
 
-xdescribe('FileListComponent', () => {
+xxdescribe('FileListComponent', () => {
   let component: FileListComponent;
   let fixture: ComponentFixture<FileListComponent>;
 

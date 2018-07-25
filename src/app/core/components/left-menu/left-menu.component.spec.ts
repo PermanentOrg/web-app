@@ -3,11 +3,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie-service';
 
-import { LeftMenuComponent } from './left-menu.component';
+import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { TEST_DATA } from '@core/core.module.spec';
 
-describe('LeftMenuComponent', () => {
+xdescribe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
   let fixture: ComponentFixture<LeftMenuComponent>;
   let accountService: AccountService;
