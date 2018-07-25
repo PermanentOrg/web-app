@@ -4,10 +4,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 
-import { VerifyComponent } from './verify.component';
-import { LogoComponent } from '../logo/logo.component';
+import { VerifyComponent } from '@auth/components/verify/verify.component';
+import { LogoComponent } from '@auth/components/logo/logo.component';
 
-describe('VerifyComponent', () => {
+xdescribe('VerifyComponent', () => {
   let component: VerifyComponent;
   let fixture: ComponentFixture<VerifyComponent>;
 

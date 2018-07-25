@@ -15,6 +15,7 @@ import { FileListItemComponent } from '@core/components/file-list-item/file-list
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { FileViewerComponent } from './components/file-viewer/file-viewer.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
     FileListItemComponent,
     BreadcrumbsComponent,
     FileViewerComponent,
-    BgImageSrcDirective
+    BgImageSrcDirective,
+    ThumbnailComponent
   ],
   providers: [
     DataService
