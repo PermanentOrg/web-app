@@ -7,7 +7,7 @@ import { LeftMenuComponent } from './left-menu.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { TEST_DATA } from '@core/core.module.spec';
 
-fdescribe('LeftMenuComponent', () => {
+describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
   let fixture: ComponentFixture<LeftMenuComponent>;
   let accountService: AccountService;
@@ -35,6 +35,11 @@ fdescribe('LeftMenuComponent', () => {
     fixture = TestBed.createComponent(LeftMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    accountService.clearAccount();
+    accountService.clearArchive();
   });
 
   it('should create', () => {

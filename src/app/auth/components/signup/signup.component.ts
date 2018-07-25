@@ -18,6 +18,13 @@ const MIN_PASSWORD_LENGTH = 10;
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   waiting: boolean;
+  formErrors = {
+    name: false,
+    invitation: false,
+    email: false,
+    password: false,
+    passwordConfirm: false
+  };
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.signupForm = fb.group({

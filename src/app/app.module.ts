@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from '@root/app/app.component';
 import { LoginComponent } from '@auth/components/login/login.component';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { MfaComponent } from '@auth/components/mfa/mfa.component';
@@ -13,16 +13,16 @@ import { VerifyComponent } from '@auth/components/verify/verify.component';
 import { SignupComponent } from '@auth/components/signup/signup.component';
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
+import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'mfa', component: MfaComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
-  { path: 'app', loadChildren: './core/core.module#CoreModule' },
-  { path: '**', redirectTo: 'app', pathMatch: 'full' },
+  { path: '', loadChildren: './core/core.module#CoreModule' },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({
@@ -35,6 +35,7 @@ const routes: Routes = [
     MessageComponent,
     LogoComponent,
     ForgotPasswordComponent,
+    FormInputComponent
   ],
   imports: [
     BrowserModule,

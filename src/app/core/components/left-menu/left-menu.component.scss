@@ -43,6 +43,7 @@ $shadow-color: rgba(black, 0.15);
     line-height: $btn-line-height;
     cursor: pointer;
     user-select: none;
+    display: block;
   }
 
   .menu-header {

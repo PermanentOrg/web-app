@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { SignupComponent } from './signup.component';
 import { LogoComponent } from '../logo/logo.component';
+import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -15,7 +16,8 @@ describe('SignupComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         SignupComponent,
-        LogoComponent
+        LogoComponent,
+        FormInputComponent
       ],
       imports: [
         FormsModule,

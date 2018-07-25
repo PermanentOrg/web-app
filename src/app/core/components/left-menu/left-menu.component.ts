@@ -16,15 +16,18 @@ export class LeftMenuComponent implements OnInit {
   public accountName: string;
 
   constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) {
-    this.accountName = this.accountService.getAccount().fullName;
+    if (this.accountService.getAccount()) {
+      this.accountName = this.accountService.getAccount().fullName;
+    }
   }
 
   ngOnInit() {
   }
 
-  hide() {
+  hide(event: Event) {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
+    event.stopPropagation();
     return false;
   }
 

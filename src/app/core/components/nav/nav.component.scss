@@ -1,12 +1,14 @@
 @import 'variables';
 
-nav {
+:host {
+  border-bottom: 1px $gray-500 solid;
+  display: block;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 1;
   background-color: white;
-  border-bottom: 1px $gray-300 solid;
 }
 
 .navbar-toggler {

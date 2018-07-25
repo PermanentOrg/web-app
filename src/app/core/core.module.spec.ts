@@ -1,7 +1,7 @@
 import { CoreModule } from './core.module';
 
-const testData = require('../../test/data.json');
-const testData2 = require('../../test/data.2.json');
+const testData = require('@root/test/data.json');
+const testData2 = require('@root/test/data.2.json');
 
 const testUser = {
   name: 'Unit Test',

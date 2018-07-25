@@ -1,2 +1,4 @@
 <pr-nav></pr-nav>
-<router-outlet></router-outlet>
+<div class="main-content" [ngClass]="{'navigating': isNavigating}">
+  <router-outlet></router-outlet>
+</div>

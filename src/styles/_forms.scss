@@ -23,9 +23,11 @@ form {
 
 .input-group-vertical {
   margin-bottom: 10px;
+  $transition-length: 0.1s;
 
   > input, > .input-vertical {
     position: relative;
+    display: block;
 
     &:not(:first-child):not(:last-child),
     &:not(:first-child):not(:last-child) > input {
@@ -59,13 +61,30 @@ form {
     }
   }
 
-  .input-vertical-error {
+  .input-vertical-error, .input-vertical-label {
     position: absolute;
+    font-size: 12px;
+    line-height: $input-btn-padding-y * 1.5;
+    background: none;
+    pointer-events: none;
+    opacity: 1;
+    transition: $transition-length ease-in opacity;
+  }
+
+  .hidden {
+    opacity: 0;
+    transition: 0s ease-in opacity;
+  }
+
+  .input-vertical-error {
     bottom: 0px;
     right: $input-btn-padding-x;
-    font-size: 12px;
     color: $danger;
-    background: none;
+  }
+
+  .input-vertical-label {
+    left: $input-btn-padding-x;
+    color: rgba($body-color, 0.7);
   }
 
 

@@ -61,6 +61,14 @@ class BaseStorage {
     }
   }
 
+  public clear() {
+    if (this.storeInMemory) {
+      this.store = {};
+    } else {
+      this.storage.clear();
+    }
+  }
+
   public setStoreInMemory(storeInMemory: boolean) {
     this.storeInMemory = storeInMemory;
     if (this.storeInMemory && !this.store) {

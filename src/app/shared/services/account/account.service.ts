@@ -4,11 +4,12 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { ApiService } from '../api/api.service';
 import { StorageService } from '../storage/storage.service';
-import { ArchiveVO, AccountVO } from '@models/index';
-import { AuthResponse, AccountResponse, ArchiveResponse } from '../api/index.repo';
+import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
+import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '../api/index.repo';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
+const ROOT_KEY = 'root';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,13 @@ const ARCHIVE_KEY = 'archive';
 export class AccountService {
   private account: AccountVO;
   private archive: ArchiveVO;
+  private rootFolder: FolderVO;
   private skipSessionCheck: boolean;
 
   constructor(private api: ApiService, private storage: StorageService, private cookies: CookieService) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
+    const cachedRoot = this.storage.local.get(ROOT_KEY);
 
     if (cachedAccount) {
       this.setAccount(new AccountVO(cachedAccount));
@@ -28,6 +31,10 @@ export class AccountService {
 
     if (cachedArchive) {
       this.setArchive(new ArchiveVO(cachedArchive));
+    }
+
+    if (cachedRoot) {
+      this.setRootFolder(new FolderVO(cachedRoot));
     }
   }
 
@@ -49,6 +56,10 @@ export class AccountService {
     return this.archive;
   }
 
+  public getRootFolder() {
+    return this.rootFolder;
+  }
+
   public clearAccount() {
     this.account = undefined;
     this.storage.local.delete(ACCOUNT_KEY);
@@ -57,6 +68,16 @@ export class AccountService {
   public clearArchive() {
     this.archive = undefined;
     this.storage.local.delete(ARCHIVE_KEY);
+  }
+
+  public setRootFolder(rootFolder: FolderVO) {
+    this.rootFolder = rootFolder;
+    this.storage.local.set(ROOT_KEY, rootFolder);
+  }
+
+  public clearRootFolder() {
+    this.rootFolder = undefined;
+    this.storage.local.delete(ROOT_KEY);
   }
 
   public checkSession(): Promise<boolean> {
@@ -103,6 +124,7 @@ export class AccountService {
         if ( response.isSuccessful) {
           this.clearAccount();
           this.clearArchive();
+          this.clearRootFolder();
         }
 
         return response;
