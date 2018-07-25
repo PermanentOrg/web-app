@@ -17,12 +17,14 @@ $transition-length: 0.33s;
 .alert-wrapper {
   padding: 10px 10px;
   transform: translateY(0);
-  transition: $transition-length ease-in transform;
+  transition: transform $transition-length ease-in 0s, visibility 0s linear $transition-length;
   display: block;
   margin: 0 auto;
+  visibility: hidden;
   
   &.visible {
     transform: translateY(100%);
-    transition: $transition-length ease-out transform;
+    transition: transform $transition-length ease-out, visibility 0s linear  0s;
+    visibility: visible;
   }
 }
