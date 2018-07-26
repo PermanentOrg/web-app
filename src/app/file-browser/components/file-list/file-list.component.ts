@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { debounce } from 'lodash';
 
-import { FileListItemComponent } from '@core/components/file-list-item/file-list-item.component';
+import { FileListItemComponent } from '../file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';

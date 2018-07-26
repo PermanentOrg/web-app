@@ -6,3 +6,4 @@ export { FolderVO } from '@models/folder-vo';
 export { RecordVO } from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { SimpleVO } from '@models/simple-vo';
+export { ConnectorOverviewVO } from '@models/connector-overview-vo';

@@ -20,6 +20,7 @@
       "@core/*": ["src/app/core/*"],
       "@apps/*": ["src/app/apps/*"],
       "@shared/*": ["src/app/shared/*"],
+      "@fileBrowser/*": ["src/app/file-browser/*"],
       "@auth/*": ["src/app/auth/*"],
       "@models/*": ["src/app/models/*"],
       "@root/*": ["src/*"],

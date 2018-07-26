@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CoreModule } from '@core/core.module';
+import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 import { AppsRoutingModule } from '@apps/apps-routing.module';
 import { AppsComponent } from '@apps/components/apps/apps.component';
@@ -11,7 +11,7 @@ import { AppsComponent } from '@apps/components/apps/apps.component';
     CommonModule,
     RouterModule,
     AppsRoutingModule,
-    CoreModule
+    FileBrowserModule
   ],
   declarations: [
     AppsComponent
