@@ -3,11 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
-import { AppsFolderResolveService } from '@apps/resolves/apps-folder-resolve.service';
 
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
-import { AppsComponent } from '@apps/components/apps/apps.component';
 
 
 
@@ -23,22 +21,22 @@ const fileListChildRoutes = [
   {
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,
-    resolve: recordResolve
+    resolve: recordResolve,
   }
 ];
 
 export const routes: Routes = [
-  { path: '',
+  {
+    path: '',
     component: FileListComponent,
     resolve: folderResolve,
-    children: [
-      {
-        path: ':archiveNbr/:folderLinkId',
-        component: FileListComponent,
-        resolve: folderResolve,
-        children: fileListChildRoutes
-      },
-    ]
+    children: fileListChildRoutes
+  },
+  {
+    path: ':archiveNbr/:folderLinkId',
+    component: FileListComponent,
+    resolve: folderResolve,
+    children: fileListChildRoutes
   }
 ];
 @NgModule({

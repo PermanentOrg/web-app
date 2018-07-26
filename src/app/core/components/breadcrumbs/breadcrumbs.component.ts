@@ -8,10 +8,22 @@ import { FolderVO } from '@root/app/models';
 class Breadcrumb {
   public routerPath: string;
   constructor(public text: string, archiveNbr?: string, folder_linkId?: number) {
+
     if (!archiveNbr && !folder_linkId) {
-      this.routerPath = ['/myfiles'].join('/');
+      this.routerPath = this.getSpecialRouterPath(text).join('/');
     } else {
       this.routerPath = ['/myfiles', archiveNbr, folder_linkId].join('/');
+    }
+  }
+
+  getSpecialRouterPath(displayText) {
+    switch (displayText) {
+      case 'My Files':
+        return ['/myfiles'];
+      case 'Apps':
+        return ['/apps'];
+      default:
+        return null;
     }
   }
 }
@@ -55,7 +67,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.breadcrumbs.push(new Breadcrumb('My Files'));
+    this.breadcrumbs.push(new Breadcrumb(folder.pathAsText[0]));
 
     for (let i = 1; i < folder.pathAsText.length; i++) {
       this.breadcrumbs.push(new Breadcrumb(

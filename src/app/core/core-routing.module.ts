@@ -3,34 +3,19 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
-import { FileListComponent } from '@core/components/file-list/file-list.component';
+import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 
 import { AuthGuard } from '@core/guards/auth.guard';
 
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
-import { FileViewerComponent } from '@core/components/file-viewer/file-viewer.component';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
-
-const folderResolve = {
-  currentFolder: FolderResolveService
-};
-
-const recordResolve = {
-  currentRecord: RecordResolveService
-};
-
-const fileListChildRoutes = [
-  {
-    path: 'record/:recArchiveNbr',
-    component: FileViewerComponent,
-    resolve: recordResolve
-  }
-];
 
 export const routes: Routes = [
   { path: '',
@@ -40,8 +25,7 @@ export const routes: Routes = [
     resolve: rootFolderResolve,
     children: [
       { path: '', component: HomeComponent},
-      { path: 'myfiles', component: FileListComponent, resolve: folderResolve, children: fileListChildRoutes},
-      { path: 'myfiles/:archiveNbr/:folderLinkId', component: FileListComponent, resolve: folderResolve, children: fileListChildRoutes},
+      { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'},
       { path: 'apps', loadChildren: '../apps/apps.module#AppsModule' },
       { path: '**', redirectTo: ''}
     ]
@@ -49,7 +33,7 @@ export const routes: Routes = [
 ];
 @NgModule({
   imports: [
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
   exports: [
     RouterModule
