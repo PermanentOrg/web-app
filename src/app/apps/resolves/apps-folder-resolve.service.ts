@@ -44,12 +44,12 @@ export class AppsFolderResolveService implements Resolve<any> {
       this.dataService.registerItem(item);
     });
 
-    return this.dataService.fetchLeanItems(appsFolder.ChildItemVOs, appsFolder)
+    return this.dataService.fetchFullItems(appsFolder.ChildItemVOs)
     .then(() => {
       appsFolder.ChildItemVOs.forEach((item) => {
         this.dataService.deregisterItem(item);
       });
-      return Promise.resolve(appsFolder);
+      return appsFolder;
     });
 
   }

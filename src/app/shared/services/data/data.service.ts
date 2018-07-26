@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { partition } from 'lodash';
+
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderVO, RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
-import { FolderResponse } from '@shared/services/api/index.repo';
+import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
 
 @Injectable()
@@ -89,7 +91,74 @@ export class DataService {
       });
   }
 
-  public fetchFullItems(folderLinkIds: number[]) {
+  public fetchFullItems(items: Array<FolderVO | RecordVO>) {
+    const itemResolves = [];
+    const itemRejects = [];
+
+    const records: Array<any | RecordVO> = [];
+    const folders: Array<any | FolderVO> = [];
+
+    items.forEach((item) => {
+      item.isFetching = true;
+      item.fetched = new Promise((resolve, reject) => {
+        itemResolves.push(resolve);
+        itemRejects.push(reject);
+      });
+
+      if (item.isRecord) {
+        records.push(item);
+      } else {
+        folders.push(item);
+      }
+    });
+
+    const promises: Promise<any>[] = [];
+
+    promises.push(records.length ? this.api.record.get(records).toPromise() : Promise.resolve());
+    promises.push(folders.length ? this.api.folder.get(folders).toPromise() : Promise.resolve());
+
+    return Promise.all(promises)
+    .then((results) => {
+      let recordResponse: RecordResponse;
+      let folderResponse: FolderResponse;
+
+      [ recordResponse, folderResponse ] = results;
+
+      let fullRecords: Array<any | RecordVO>;
+      let fullFolders: Array<any | FolderVO>;
+
+      if (recordResponse) {
+        fullRecords = recordResponse.getRecordVOs();
+      }
+
+      if (folderResponse) {
+        fullFolders = folderResponse.getFolderVOs();
+      }
+
+      for (let i = 0; i < records.length; i++) {
+        records[i].update(fullRecords[i]);
+      }
+
+      for (let i = 0; i < folders.length; i++) {
+        folders[i].update(fullFolders[i]);
+      }
+
+      itemResolves.map((resolve, index) => {
+        items[index].fetched = null;
+        resolve();
+      });
+
+      return Promise.resolve(true);
+    })
+    .catch((response) => {
+      itemRejects.map((reject, index) => {
+        items[index].fetched = null;
+        reject();
+      });
+      console.error(response);
+    });
+
+
 
   }
 

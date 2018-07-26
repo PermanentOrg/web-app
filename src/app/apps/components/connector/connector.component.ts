@@ -15,12 +15,14 @@ export class ConnectorComponent implements OnInit {
   @Input() appsFolder: FolderVO;
 
   public folder: FolderVO;
+  public hasFiles: boolean;
 
   constructor(private router: Router) { }
 
   ngOnInit() {
     const type = this.connector.type.split('.').pop();
     this.folder = _.find(this.appsFolder.ChildItemVOs, {special: `${type}.root.folder`}) as FolderVO;
+    this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
   }
 
   goToFolder() {

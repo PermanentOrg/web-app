@@ -7,6 +7,10 @@ $info-height: $file-list-row-height;
   align-items: center;
 }
 
+.connector-actions {
+  padding: 0px 10px;
+}
+
 .name {
   flex: 1 1 auto;
   white-space: nowrap;

@@ -11,7 +11,11 @@ export class FolderRepo extends BaseRepo {
   public get(folderVOs: FolderVO[]): Observable<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
-        FolderVO: new FolderVO(folderVO)
+        FolderVO: {
+          archiveNbr: folderVO.archiveNbr,
+          folder_linkId: folderVO.folder_linkId,
+          folderId: folderVO.folderId
+        }
       };
     });
 

@@ -3,7 +3,12 @@
   <div class="name">
     {{folder.displayName}}
   </div>
-  <div class="view-files" (click)="goToFolder()">
+  <div class="view-files" (click)="goToFolder()" *ngIf="hasFiles">
     View Files
   </div>
+</div>
+<div class="connector-actions">
+  <button class="btn btn-primary">Connect</button>
+  <button class="btn btn-primary">Disconnect</button>
+  <button class="btn btn-primary">Import</button>
 </div>
