@@ -23,7 +23,7 @@ class Breadcrumb {
       case 'Apps':
         return ['/apps'];
       default:
-        return null;
+        return ['/'];
     }
   }
 }
