@@ -35,7 +35,7 @@ export class VerifyComponent implements OnInit {
       .then((response: ArchiveResponse) => {
         this.waiting = false;
         this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-        this.router.navigate(['/app']);
+        this.router.navigate(['/']);
       })
       .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;

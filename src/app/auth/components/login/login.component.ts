@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/verify']);
         } else {
           this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-          this.router.navigate(['/app']);
+          this.router.navigate(['/']);
         }
       })
       .catch((response: AuthResponse) => {
