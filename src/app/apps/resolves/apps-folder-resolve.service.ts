@@ -5,26 +5,29 @@ import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
+import { DataService } from '@shared/services/data/data.service';
+
 import { FolderVO } from '@root/app/models';
+
+import { FolderResponse } from '@shared/services/api/index.repo';
 
 @Injectable()
 export class AppsFolderResolveService implements Resolve<any> {
 
-  constructor(private api: ApiService, private accountService: AccountService) { }
+  constructor(private api: ApiService, private accountService: AccountService, private dataService: DataService) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
-    let targetFolder;
+    return this.loadAppsFolder()
+      .then((appsFolder: FolderVO) => {
+        return this.loadConnectorFolders(appsFolder);
+      });
+  }
 
-    if (route.params.archiveNbr && route.params.folderLinkId) {
-      targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
-    } else {
-      const myFiles = _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
-      targetFolder = new FolderVO(myFiles);
-    }
+  loadAppsFolder() {
+    const apps = _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
 
-    return this.api.folder.navigate(targetFolder)
+    return this.api.folder.navigate(new FolderVO(apps))
       .pipe(map(((response: FolderResponse) => {
         if (!response.isSuccessful) {
           throw response;
@@ -35,4 +38,21 @@ export class AppsFolderResolveService implements Resolve<any> {
         console.error(error);
       });
   }
+
+  loadConnectorFolders(appsFolder: FolderVO) {
+    appsFolder.ChildItemVOs.forEach((item) => {
+      this.dataService.registerItem(item);
+    });
+
+    return this.dataService.fetchLeanItems(appsFolder.ChildItemVOs, appsFolder)
+    .then(() => {
+      appsFolder.ChildItemVOs.forEach((item) => {
+        this.dataService.deregisterItem(item);
+      });
+      return Promise.resolve(appsFolder);
+    });
+
+  }
+
+
 }

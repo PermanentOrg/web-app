@@ -30,11 +30,14 @@ export class DataService {
     this.currentFolderChange.emit(folder);
   }
 
-  public fetchLeanItems(items: Array<FolderVO | RecordVO>): Promise<number> {
+  public fetchLeanItems(items: Array<FolderVO | RecordVO>, currentFolder ?: FolderVO): Promise<number> {
     const itemResolves = [];
     const itemRejects = [];
+    if (!currentFolder) {
+      currentFolder = this.currentFolder;
+    }
     const folder = new FolderVO({
-      archiveNbr: this.currentFolder.archiveNbr,
+      archiveNbr: currentFolder.archiveNbr,
       ChildItemVOs: items.filter((item) => {
           if (item.isFetching || item.dataStatus >= DataStatus.Lean) {
             return false;

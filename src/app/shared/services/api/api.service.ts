@@ -19,5 +19,6 @@ export class ApiService {
     this.archive = new Repo.ArchiveRepo(this.http);
     this.folder = new Repo.FolderRepo(this.http);
     this.record = new Repo.RecordRepo(this.http);
+    this.connector = new Repo.ConnectorRepo(this.http);
   }
 }

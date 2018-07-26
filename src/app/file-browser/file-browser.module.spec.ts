@@ -1,4 +1,4 @@
-import { FileBrowserModule } from './file-browser.module';
+import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 describe('FileBrowserModule', () => {
   let fileBrowserModule: FileBrowserModule;

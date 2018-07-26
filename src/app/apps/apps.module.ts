@@ -5,6 +5,7 @@ import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 import { AppsRoutingModule } from '@apps/apps-routing.module';
 import { AppsComponent } from '@apps/components/apps/apps.component';
+import { ConnectorComponent } from '@apps/components/connector/connector.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { AppsComponent } from '@apps/components/apps/apps.component';
     FileBrowserModule
   ],
   declarations: [
-    AppsComponent
+    AppsComponent,
+    ConnectorComponent
   ],
   providers: [
   ]

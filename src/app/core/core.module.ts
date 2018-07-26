@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { CoreRoutingModule } from '@core/core-routing.module';
-import { FileBrowserModule } from '@root/app/file-browser/file-browser.module';
+import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 import { DataService } from '@shared/services/data/data.service';
 
