@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@root/environments/environment';
 
 import { RequestVO } from '@models/request-vo';
-import { BaseResponse } from '../api/base';
-import { StorageService } from '../storage/storage.service';
+import { BaseResponse } from '@shared/services/api/base';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 const API_URL = environment.apiUrl;
 const API_KEY = environment.apiKey;

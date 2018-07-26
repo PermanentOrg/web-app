@@ -1,4 +1,4 @@
-import { CoreModule } from './core.module';
+import { CoreModule } from '@core/core.module';
 
 const testData = require('@root/test/data.json');
 const testData2 = require('@root/test/data.2.json');

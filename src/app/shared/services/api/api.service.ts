@@ -11,6 +11,7 @@ export class ApiService {
   public archive: Repo.ArchiveRepo;
   public folder: Repo.FolderRepo;
   public record: Repo.RecordRepo;
+  public connector: Repo.ConnectorRepo;
 
   constructor(private http: HttpService) {
     this.auth = new Repo.AuthRepo(this.http);

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileViewerComponent } from './file-viewer.component';
+import { FileViewerComponent } from '@core/components/file-viewer/file-viewer.component';
 
 xdescribe('FileViewerComponent', () => {
   let component: FileViewerComponent;

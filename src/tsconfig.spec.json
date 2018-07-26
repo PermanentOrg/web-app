@@ -6,14 +6,7 @@
     "types": [
       "jasmine",
       "node"
-    ],
-    "paths": {
-      "@core/*": ["src/app/core/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@auth/*": ["src/app/auth/*"],
-      "@models/*": ["src/app/models/*"],
-      "@root/*": ["src/*"],
-    }
+    ]
   },
   "files": [
     "test.ts",

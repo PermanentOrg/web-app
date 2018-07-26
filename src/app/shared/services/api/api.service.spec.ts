@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import * as Repo from './index.repo';
+import * as Repo from '@shared/services/api/index.repo';
 
-import { ApiService } from './api.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 describe('ApiService', () => {
   beforeEach(() => {

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
 
-import { FolderVO, RecordVO } from '@models/index';
+import { FolderVO, RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 
 @Component({

@@ -18,7 +18,7 @@ import { debounce } from 'lodash';
 
 import { FileListItemComponent } from '@core/components/file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO } from '@root/app/models/folder-vo';
+import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 

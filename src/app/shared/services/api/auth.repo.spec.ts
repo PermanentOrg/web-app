@@ -1,10 +1,10 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@root/environments/environment';
 
-import { HttpService } from '../http/http.service';
-import { AuthRepo, AuthResponse } from './auth.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@models/index';
+import { HttpService } from '@shared/services/http/http.service';
+import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@root/app/models';
 
 describe('AuthRepo', () => {
   let repo: AuthRepo;

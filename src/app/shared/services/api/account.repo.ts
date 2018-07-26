@@ -1,5 +1,5 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO } from '@models/index';
-import { BaseResponse, BaseRepo } from './base';
+import { AccountVO, AccountPasswordVO, ArchiveVO } from '@root/app/models';
+import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { Observable } from 'rxjs';
 
 export class AccountRepo extends BaseRepo {

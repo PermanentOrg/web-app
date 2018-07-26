@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { StorageService } from './storage.service';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 describe('StorageService', () => {
   const testKey = 'test';

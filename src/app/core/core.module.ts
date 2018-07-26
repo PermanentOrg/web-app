@@ -13,9 +13,9 @@ import { LeftMenuComponent } from '@core/components/left-menu/left-menu.componen
 import { FileListComponent } from '@core/components/file-list/file-list.component';
 import { FileListItemComponent } from '@core/components/file-list-item/file-list-item.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
-import { FileViewerComponent } from './components/file-viewer/file-viewer.component';
+import { FileViewerComponent } from '@core/components/file-viewer/file-viewer.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
-import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
+import { ThumbnailComponent } from '@core/components/thumbnail/thumbnail.component';
 
 @NgModule({
   imports: [

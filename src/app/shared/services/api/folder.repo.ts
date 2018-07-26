@@ -1,5 +1,5 @@
-import { FolderVO } from '@models/index';
-import { BaseResponse, BaseRepo } from './base';
+import { FolderVO } from '@root/app/models';
+import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 

@@ -1,5 +1,5 @@
-import { HttpService } from '../http/http.service';
-import { SimpleVO } from '@models/index';
+import { HttpService } from '@shared/services/http/http.service';
+import { SimpleVO } from '@root/app/models';
 
 export class BaseResponse {
   public isSuccessful: boolean;
