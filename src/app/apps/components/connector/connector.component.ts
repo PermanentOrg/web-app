@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import * as _ from 'lodash';
 
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+
 import { ConnectorOverviewVO, FolderVO } from '@root/app/models';
 
 @Component({
@@ -16,13 +18,18 @@ export class ConnectorComponent implements OnInit {
 
   public folder: FolderVO;
   public hasFiles: boolean;
+  public connectorName: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private prConstants: PrConstantsService) { }
 
   ngOnInit() {
+
     const type = this.connector.type.split('.').pop();
     this.folder = _.find(this.appsFolder.ChildItemVOs, {special: `${type}.root.folder`}) as FolderVO;
-    this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
+    if (this.folder) {
+      this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
+    }
+    this.connectorName = this.prConstants.translate(this.connector.type);
   }
 
   goToFolder() {

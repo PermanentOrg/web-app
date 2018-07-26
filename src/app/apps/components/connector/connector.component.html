@@ -1,7 +1,7 @@
 <div class="connector-info">
-  <div prBgImage [bgSrc]="folder.thumbURL200"></div>
+  <div prBgImage [bgSrc]="folder.thumbURL200" *ngIf="folder"></div>
   <div class="name">
-    {{folder.displayName}}
+    {{connectorName}}
   </div>
   <div class="view-files" (click)="goToFolder()" *ngIf="hasFiles">
     View Files
