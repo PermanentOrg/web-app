@@ -5,7 +5,7 @@ $info-height: $file-list-row-height;
 .connector-info {
   display: flex;
   align-items: center;
-  margin: 0px 10px;
+  padding: 0px 10px;
   min-height: $info-height;
 }
 
@@ -24,6 +24,6 @@ $info-height: $file-list-row-height;
   height: $info-height - 10px;
   width: $info-height - 10px;
   flex: 0 0 $info-height - 10px;
-  margin: 5px 5px;
-  margin-left: 5px;
+  margin: 5px 0px;
+  margin-right: 5px;
 }

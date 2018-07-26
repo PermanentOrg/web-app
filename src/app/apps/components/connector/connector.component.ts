@@ -16,6 +16,7 @@ export class ConnectorComponent implements OnInit {
   @Input() connector: ConnectorOverviewVO;
   @Input() appsFolder: FolderVO;
 
+  public connected: boolean;
   public folder: FolderVO;
   public hasFiles: boolean;
   public connectorName: string;
@@ -30,6 +31,7 @@ export class ConnectorComponent implements OnInit {
       this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
+    this.connected = this.connector.status === 'status.connector.connected';
   }
 
   goToFolder() {
