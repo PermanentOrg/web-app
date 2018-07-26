@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { ConnectorsResolveService } from '@apps/resolves/connectors-resolve.service';
 
 import { AppsComponent } from '@apps/components/apps/apps.component';
