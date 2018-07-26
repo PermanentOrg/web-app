@@ -1,6 +1,6 @@
 @import 'variables';
 
-$row-height: 50px;
+$row-height: $file-list-row-height;
 
 .file-list-item {
   display: flex;

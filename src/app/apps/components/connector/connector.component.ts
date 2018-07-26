@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ConnectorOverviewVO } from '@root/app/models';
+import { Router } from '@angular/router';
+
+import * as _ from 'lodash';
+
+import { ConnectorOverviewVO, FolderVO } from '@root/app/models';
 
 @Component({
   selector: 'pr-connector',
@@ -8,11 +12,19 @@ import { ConnectorOverviewVO } from '@root/app/models';
 })
 export class ConnectorComponent implements OnInit {
   @Input() connector: ConnectorOverviewVO;
+  @Input() appsFolder: FolderVO;
 
-  constructor() { }
+  public folder: FolderVO;
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
-    console.log('connector.component.ts', 15, this.connector);
+    const type = this.connector.type.split('.').pop();
+    this.folder = _.find(this.appsFolder.ChildItemVOs, {special: `${type}.root.folder`}) as FolderVO;
+  }
+
+  goToFolder() {
+    this.router.navigate(['/apps', this.folder.archiveNbr, this.folder.folder_linkId]);
   }
 
 }

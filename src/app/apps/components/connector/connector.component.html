@@ -1,3 +1,9 @@
-<p>
-  connector works! {{connector.type}}
-</p>
+<div class="connector-info">
+  <div prBgImage [bgSrc]="folder.thumbURL200"></div>
+  <div class="name">
+    {{folder.displayName}}
+  </div>
+  <div class="view-files" (click)="goToFolder()">
+    View Files
+  </div>
+</div>

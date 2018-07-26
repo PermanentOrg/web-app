@@ -6,6 +6,7 @@ import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { AppsRoutingModule } from '@apps/apps-routing.module';
 import { AppsComponent } from '@apps/components/apps/apps.component';
 import { ConnectorComponent } from '@apps/components/connector/connector.component';
+import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { ConnectorComponent } from '@apps/components/connector/connector.compone
   ],
   declarations: [
     AppsComponent,
-    ConnectorComponent
+    ConnectorComponent,
   ],
   providers: [
   ]

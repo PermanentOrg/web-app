@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
 
@@ -14,7 +14,7 @@ import { DataStatus } from '@models/data-status.enum';
 export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
 
-  constructor(private dataService: DataService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
   }
 
   goToItem() {
@@ -28,10 +28,18 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (this.item.isFolder) {
-      this.router.navigate(['/myfiles', this.item.archiveNbr, this.item.folder_linkId ]);
+    let rootUrl;
+
+    if (this.router.routerState.snapshot.url.includes('/apps')) {
+      rootUrl = '/apps';
     } else {
-      this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.activatedRoute});
+      rootUrl = '/myfiles';
+    }
+
+    if (this.item.isFolder) {
+      this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route});
+    } else {
+      this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
   }
 

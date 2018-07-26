@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
@@ -7,12 +8,12 @@ import { FolderVO } from '@root/app/models';
 
 class Breadcrumb {
   public routerPath: string;
-  constructor(public text: string, archiveNbr?: string, folder_linkId?: number) {
+  constructor(rootUrl: string, public text: string, archiveNbr?: string, folder_linkId?: number) {
 
     if (!archiveNbr && !folder_linkId) {
       this.routerPath = this.getSpecialRouterPath(text).join('/');
     } else {
-      this.routerPath = ['/myfiles', archiveNbr, folder_linkId].join('/');
+      this.routerPath = [rootUrl, archiveNbr, folder_linkId].join('/');
     }
   }
 
@@ -40,7 +41,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   private scrollElement: Element;
   private folderChangeListener: Subscription;
 
-  constructor(private dataService: DataService, private elementRef: ElementRef) {
+  constructor(private dataService: DataService, private elementRef: ElementRef, private router: Router) {
   }
 
   ngOnInit() {
@@ -63,14 +64,23 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     this.currentFolder = folder;
     this.breadcrumbs = [];
 
+    let rootUrl;
+
+    if (this.router.routerState.snapshot.url.includes('/apps')) {
+      rootUrl = '/apps';
+    } else {
+      rootUrl = '/myfiles';
+    }
+
     if (!folder) {
       return;
     }
 
-    this.breadcrumbs.push(new Breadcrumb(folder.pathAsText[0]));
+    this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
 
     for (let i = 1; i < folder.pathAsText.length; i++) {
       this.breadcrumbs.push(new Breadcrumb(
+        rootUrl,
         folder.pathAsText[i],
         folder.pathAsArchiveNbr[i],
         folder.pathAsFolder_linkId[i]

@@ -20,7 +20,9 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
   exports: [
     FileListComponent,
     FileListItemComponent,
-    FileViewerComponent
+    FileViewerComponent,
+    ThumbnailComponent,
+    BgImageSrcDirective
   ],
   declarations: [
     FileListComponent,

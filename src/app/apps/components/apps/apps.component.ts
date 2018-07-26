@@ -19,8 +19,6 @@ export class AppsComponent implements OnInit, OnDestroy {
     this.connectors = this.route.snapshot.data.connectors;
 
     this.dataService.setCurrentFolder(this.appsFolder);
-
-    console.log('apps.component.ts', 23, this.appsFolder);
   }
 
   ngOnInit() {
