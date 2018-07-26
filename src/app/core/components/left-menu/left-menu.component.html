@@ -1,0 +1,20 @@
+<div class="hamburger-menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
+  <div class="hamburger-menu">
+    <div class="menu-header">
+      Current Archive
+      <strong>{{accountName}}</strong>
+    </div>
+    <a class="menu-item" [routerLink]="['/']">
+      Home
+    </a>
+    <a class="menu-item" [routerLink]="['/myfiles']">
+      My Files
+    </a>
+    <a class="menu-item" [routerLink]="['/apps']">
+      Apps
+    </a>
+    <a class="menu-item" (click)='logOut()'>
+      Log Out
+    </a>
+  </div>
+</div>

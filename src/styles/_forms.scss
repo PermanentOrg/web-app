@@ -1,0 +1,101 @@
+form {
+  padding: 10px;
+  margin: 0 auto;
+  max-width: $max-form-width;
+
+  > a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+
+.form-title {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.form-check {
+  margin-top: 5px;
+}
+
+.input-group-vertical {
+  margin-bottom: 10px;
+  $transition-length: 0.1s;
+
+  > input, > .input-vertical {
+    position: relative;
+    display: block;
+
+    &:not(:first-child):not(:last-child),
+    &:not(:first-child):not(:last-child) > input {
+      border-top: 0px solid;
+      border-bottom: 0px solid;
+      border-radius: 0px;
+    }
+
+    &:first-child:not(:last-child), &:first-child:not(:last-child) > input {
+      border-bottom: 0px solid;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    &:last-child:not(:first-child), &:last-child:not(:first-child) > input {
+      border-top: 0px solid;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+    }
+
+    &:focus, & > input:focus  {
+      box-shadow: none;
+      background-color: darken(white, 3%);
+      border-color: $gray-500;
+    }
+
+    &.ng-touched.ng-invalid,
+    & > input.ng-touched.ng-invalid {
+      background-color: rgba($danger, 0.2);
+      border-color: $danger !important;
+    }
+  }
+
+  .input-vertical-error, .input-vertical-label {
+    position: absolute;
+    font-size: 12px;
+    line-height: $input-btn-padding-y * 1.5;
+    background: none;
+    pointer-events: none;
+    opacity: 1;
+    transition: $transition-length ease-in opacity;
+  }
+
+  .hidden {
+    opacity: 0;
+    transition: 0s ease-in opacity;
+  }
+
+  .input-vertical-error {
+    bottom: 0px;
+    right: $input-btn-padding-x;
+    color: $danger;
+  }
+
+  .input-vertical-label {
+    left: $input-btn-padding-x;
+    color: rgba($body-color, 0.7);
+  }
+
+
+}
+
+.pr-auth-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: block;
+  // min-height: 100%;
+  // width: 100%;
+  // display: block;
+  // background-color: $gray-200;
+}
