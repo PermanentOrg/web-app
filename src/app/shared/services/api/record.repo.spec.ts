@@ -1,11 +1,11 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { environment } from '../../../../environments/environment';
+import { environment } from '@root/environments/environment';
 
-import { TEST_DATA, TEST_DATA_2 } from '../../../core/core.module.spec';
-import { HttpService, Observable } from '../http/http.service';
-import { RecordRepo, RecordResponse } from './record.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@models/index';
+import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
+import { HttpService, Observable } from '@shared/services/http/http.service';
+import { RecordRepo, RecordResponse } from '@shared/services/api/record.repo';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@root/app/models';
 
 describe('RecordRepo', () => {
   let repo: RecordRepo;

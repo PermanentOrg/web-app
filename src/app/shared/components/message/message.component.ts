@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '../../services/message/message.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 interface Message {
   text: string;

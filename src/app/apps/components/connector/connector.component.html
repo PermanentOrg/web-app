@@ -1,0 +1,14 @@
+<div class="connector-info">
+  <div prBgImage [bgSrc]="folder.thumbURL200" *ngIf="folder"></div>
+  <div class="name">
+    {{connectorName}}
+  </div>
+  <div class="view-files" (click)="goToFolder()" *ngIf="hasFiles">
+    View Files
+  </div>
+</div>
+<div class="connector-actions">
+  <button class="btn btn-primary" [hidden]="connected">Connect</button>
+  <button class="btn btn-primary" [hidden]="!connected">Import</button>
+  <button class="btn btn-primary" [hidden]="!connected">Disconnect</button>
+</div>

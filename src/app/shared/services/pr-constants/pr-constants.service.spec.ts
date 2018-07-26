@@ -1,6 +1,6 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
-import { PrConstantsService } from './pr-constants.service';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 const CONSTANTS = require('../../../../../../files/constants/master_en.json');
 

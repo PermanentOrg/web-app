@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 
-import { ApiService } from '../api/api.service';
-import { StorageService } from '../storage/storage.service';
-import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
-import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '../api/index.repo';
+import { ApiService } from '@shared/services/api/api.service';
+import { StorageService } from '@shared/services/storage/storage.service';
+import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
+import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';

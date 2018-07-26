@@ -1,5 +1,5 @@
-import { FolderVO } from '@models/index';
-import { BaseResponse, BaseRepo } from './base';
+import { FolderVO } from '@root/app/models';
+import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -11,7 +11,11 @@ export class FolderRepo extends BaseRepo {
   public get(folderVOs: FolderVO[]): Observable<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
-        FolderVO: new FolderVO(folderVO)
+        FolderVO: {
+          archiveNbr: folderVO.archiveNbr,
+          folder_linkId: folderVO.folder_linkId,
+          folderId: folderVO.folderId
+        }
       };
     });
 

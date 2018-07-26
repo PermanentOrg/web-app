@@ -1,4 +1,4 @@
-import { BaseVO } from './base-vo';
+import { BaseVO } from '@models/base-vo';
 
 export class SimpleVO extends BaseVO {
   public key;

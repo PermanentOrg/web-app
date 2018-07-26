@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BreadcrumbsComponent } from './breadcrumbs.component';
+import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 
 xdescribe('BreadcrumbsComponent', () => {
   let component: BreadcrumbsComponent;

@@ -16,9 +16,9 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { debounce } from 'lodash';
 
-import { FileListItemComponent } from '@core/components/file-list-item/file-list-item.component';
+import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO } from '@root/app/models/folder-vo';
+import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 
@@ -49,7 +49,11 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     private router: Router,
     @Inject(DOCUMENT) private document: any
   ) {
+
+    // create debounced scroll handler for placeholder loading
     this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
+
+    // register for navigation events to reinit page on folder changes
     if (!this.routeListener) {
       this.routeListener = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))

@@ -1,4 +1,4 @@
-import { CoreRoutingModule } from './core-routing.module';
+import { CoreRoutingModule } from '@core/core-routing.module';
 
 describe('CoreRoutingModule', () => {
   let coreRoutingModule: CoreRoutingModule;

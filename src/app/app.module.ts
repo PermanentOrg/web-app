@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'mfa', component: MfaComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
-  { path: '', loadChildren: './core/core.module#CoreModule' },
+  { path: '', loadChildren: '@core/core.module#CoreModule' },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
@@ -40,7 +40,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {paramsInheritanceStrategy: 'always'}),
     FormsModule,
     ReactiveFormsModule
   ],

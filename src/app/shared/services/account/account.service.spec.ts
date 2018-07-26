@@ -5,12 +5,12 @@ import { CookieService } from 'ngx-cookie-service';
 import { last } from 'rxjs/operators';
 import { concat } from 'rxjs';
 
-import { AccountService } from './account.service';
-import { TEST_DATA } from '../../../core/core.module.spec';
-import { AuthResponse } from '../api/auth.repo';
-import { AccountVO, ArchiveVO } from '@models/index';
-import { environment } from '../../../../environments/environment';
-import { AccountResponse } from '../api/index.repo';
+import { AccountService } from '@shared/services/account/account.service';
+import { TEST_DATA } from '@core/core.module.spec';
+import { AuthResponse } from '@shared/services/api/auth.repo';
+import { AccountVO, ArchiveVO } from '@root/app/models';
+import { environment } from '@root/environments/environment';
+import { AccountResponse } from '@shared/services/api/index.repo';
 import { StorageService } from '@shared/services/storage/storage.service';
 
 describe('AccountService', () => {
