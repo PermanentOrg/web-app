@@ -37,7 +37,7 @@ export class VerifyEmbedComponent implements OnInit {
       })
       .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage());
+        this.message.showError(response.getMessage(), true);
       });
   }
 
