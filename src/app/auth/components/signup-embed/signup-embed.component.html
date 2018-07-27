@@ -1,0 +1,31 @@
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
+  <div class="input-group-vertical">
+    <pr-form-input fieldName="invitation" placeholder="Invitation code" [control]="signupForm.controls['invitation']" *ngIf="!inviteCode"
+      [errors]="formErrors.invitation" [config]="{autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
+      [errors]="formErrors.name" [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
+      [errors]="formErrors.email" [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input type="password" fieldName="password" placeholder="Password (min. 10 chars)" [control]="signupForm.controls['passwords']['controls']['password']"
+      [errors]="formErrors.password"></pr-form-input>
+    <pr-form-input type="password" fieldName="passwordConfirm" placeholder="Confirm password" [control]="signupForm.controls['passwords']['controls']['confirm']"
+      [errors]="formErrors.passwordConfirm"></pr-form-input>
+  </div>
+  <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="terms"
+        formControlName="agreed">
+      <label class="form-check-label" for="terms">
+        I agree with the terms
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="mailingList"
+        formControlName="optIn">
+      <label class="form-check-label" for="mailingList">
+        Send me occasional updates via email
+      </label>
+    </div>
+  <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
+    Sign up
+  </button>
+</form>
