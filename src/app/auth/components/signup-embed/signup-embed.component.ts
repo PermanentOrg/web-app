@@ -85,11 +85,7 @@ export class SignupEmbedComponent implements OnInit {
         }
       })
       .catch((response: AccountResponse) => {
-        if (response.messageIncludes('warning.signin.unknown')) {
-          this.message.showMessage('Incorrect email or password', 'danger');
-        } else {
-          this.message.showMessage('Log in failed. Please try again.', 'danger');
-        }
+        this.message.showError(response.getMessage(), true);
         this.waiting = false;
       });
   }
