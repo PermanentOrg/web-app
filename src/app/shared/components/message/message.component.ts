@@ -14,6 +14,7 @@ interface Message {
 export class MessageComponent implements OnInit {
   displayText: string;
   visible: boolean;
+  useFade = !!window.frameElement;
   style: string;
   queue: Message[] = [];
 
