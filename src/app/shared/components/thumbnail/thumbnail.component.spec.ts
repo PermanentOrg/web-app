@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ThumbnailComponent } from '@core/components/thumbnail/thumbnail.component';
+import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 
 xdescribe('ThumbnailComponent', () => {
   let component: ThumbnailComponent;
