@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { find } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -157,10 +158,12 @@ export class AccountService {
   }
 
   public switchToDefaultArchive(): Promise<ArchiveResponse> {
-    return this.api.archive.get([this.account.defaultArchiveId])
+    return this.api.archive.getAllArchives(this.account)
       .pipe(map((response: ArchiveResponse) => {
         if (response.isSuccessful) {
-          this.setArchive(response.getArchiveVO());
+          const archives = response.getArchiveVOs();
+          const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
+          this.setArchive(new ArchiveVO(defaultArchiveData));
           return response;
         } else {
           throw response;
