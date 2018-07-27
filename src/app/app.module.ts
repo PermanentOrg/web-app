@@ -1,21 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AppRoutingModule } from '@root/app/app-routing.module';
+import { CookieService } from 'ngx-cookie-service';
+import { MessageService } from '@shared/services/message/message.service';
+
+import { AppRoutingModule } from '@root/app/app.routes';
 
 import { AppComponent } from '@root/app/app.component';
+import { MessageComponent } from '@shared/components/message/message.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
   imports: [
     AppRoutingModule,
-    RouterModule
+    RouterModule,
+    BrowserModule
+  ],
+  declarations: [
+    AppComponent,
+    MessageComponent,
   ],
   providers: [
-    CookieService
+    CookieService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
