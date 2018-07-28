@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'mfa', component: MfaComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'verifyEmbed', component: VerifyEmbedComponent },
+  { path: 'doneEmbed', component: DoneEmbedComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
   { path: '', loadChildren: '@core/core.module#CoreModule' },
   { path: '**', redirectTo: '', pathMatch: 'full' },
