@@ -55,7 +55,7 @@ export class SignupEmbedComponent implements OnInit {
 
   ngOnInit() {
     const currentAccount = this.accountService.getAccount();
-    if (currentAccount) {
+    if (currentAccount && currentAccount.primaryEmail) {
       this.router.navigate(['/doneEmbed'], {queryParams: { existing: true }});
     }
   }
