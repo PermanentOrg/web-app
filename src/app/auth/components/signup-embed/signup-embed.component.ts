@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -11,13 +11,15 @@ const MIN_PASSWORD_LENGTH = 10;
 
 @Component({
   selector: 'pr-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss'],
+  templateUrl: './signup-embed.component.html',
+  styleUrls: ['./signup-embed.component.scss'],
   host: {'class': 'pr-auth-form'}
 })
-export class SignupComponent implements OnInit {
+export class SignupEmbedComponent implements OnInit {
   signupForm: FormGroup;
   waiting: boolean;
+  inviteCode: string;
+
   formErrors = {
     name: false,
     invitation: false,
@@ -26,9 +28,20 @@ export class SignupComponent implements OnInit {
     passwordConfirm: false
   };
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private message: MessageService
+  ) {
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams.invite) {
+      this.inviteCode = queryParams.invite;
+    }
+
     this.signupForm = fb.group({
-      invitation: ['', [Validators.required]],
+      invitation: [this.inviteCode ? this.inviteCode : '', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       passwords: fb.group({
@@ -41,6 +54,10 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit() {
+    const currentAccount = this.accountService.getAccount();
+    if (currentAccount && currentAccount.primaryEmail) {
+      this.router.navigate(['/doneEmbed'], {queryParams: { existing: true }});
+    }
   }
 
   matchValidator(group: FormGroup) {
@@ -66,11 +83,9 @@ export class SignupComponent implements OnInit {
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
-          this.message.showMessage(`Verify to continue as ${account.primaryEmail}`, 'warning');
-          this.router.navigate(['/verify']);
+          this.router.navigate(['/verifyEmbed']);
         } else {
-          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-          this.router.navigate(['/']);
+          this.router.navigate(['/doneEmbed']);
         }
       })
       .catch((response: AccountResponse) => {

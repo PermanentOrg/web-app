@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MessageService {
   private component: MessageComponent;
 

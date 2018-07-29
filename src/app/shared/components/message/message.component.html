@@ -1,4 +1,4 @@
-<div class="alert-wrapper" [ngClass]="{'visible': visible}" (click)="dismiss()">
+<div class="alert-wrapper" [ngClass]="{'visible': visible, 'fade': useFade}" (click)="dismiss()">
   <div class="alert alert-primary" [ngClass]="style">
     {{displayText}}
     <!-- <button type="button" class="close" aria-label="Close" (click)="dismiss()">

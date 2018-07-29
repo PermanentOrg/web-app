@@ -34,6 +34,8 @@ class BaseStorage {
         return JSON.parse(storeValue);
       } else if (storeValue[0] === '{' && storeValue[storeValue.length - 1] === '}') {
         return JSON.parse(storeValue);
+      } else if (storeValue[0] === '"' && storeValue[storeValue.length - 1] === '"') {
+        return JSON.parse(storeValue);
       } else {
         return storeValue;
       }

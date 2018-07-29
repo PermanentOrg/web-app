@@ -28,3 +28,13 @@ $transition-length: 0.33s;
     visibility: visible;
   }
 }
+
+.alert-wrapper.fade {
+  opacity: 0;
+  transition: transform 0s linear $transition-length, opacity $transition-length ease-in 0s, visibility 0s linear $transition-length;
+
+  &.visible {
+    opacity: 1;
+    transition: transform 0s, opacity $transition-length ease-out, visibility 0s linear  0s;
+  }
+}

@@ -8,11 +8,10 @@ import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services
 
 @Component({
   selector: 'pr-verify',
-  templateUrl: './verify.component.html',
-  styleUrls: ['./verify.component.scss'],
-  host: {'class': 'pr-auth-form'}
+  templateUrl: './verify-embed.component.html',
+  styleUrls: ['./verify-embed.component.scss']
 })
-export class VerifyComponent implements OnInit {
+export class VerifyEmbedComponent implements OnInit {
   verifyForm: FormGroup;
   waiting: boolean;
 
@@ -34,8 +33,7 @@ export class VerifyComponent implements OnInit {
       })
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-        this.router.navigate(['/']);
+        this.router.navigate(['/doneEmbed']);
       })
       .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;
