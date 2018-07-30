@@ -44,6 +44,10 @@ $shadow-color: rgba(black, 0.15);
     cursor: pointer;
     user-select: none;
     display: block;
+
+    &.active {
+      font-weight: 600;
+    }
   }
 
   .menu-header {

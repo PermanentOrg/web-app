@@ -4,15 +4,16 @@
       Current Archive
       <strong>{{accountName}}</strong>
     </div>
-    <a class="menu-item" [routerLink]="['/']">
+    <a class="menu-item" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+      true}">
       Home
     </a>
-    <a class="menu-item" [routerLink]="['/myfiles']">
+    <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
       My Files
     </a>
-    <a class="menu-item" [routerLink]="['/apps']">
+    <!-- <a class="menu-item" [routerLink]="['/apps']">
       Apps
-    </a>
+    </a> -->
     <a class="menu-item" (click)='logOut()'>
       Log Out
     </a>
