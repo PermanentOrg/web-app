@@ -7,7 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 
-const MIN_PASSWORD_LENGTH = 10;
+const MIN_PASSWORD_LENGTH = 8;
 
 const FORM_ERROR_MESSAGES = {
   email: {

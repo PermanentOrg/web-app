@@ -1,0 +1,10 @@
+<form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
+  <h1 class="form-title">
+    Verify Email
+  </h1>
+  <p>Check your email for a verification token.</p>
+  <input type="text" class="form-control" id="token" placeholder="Token"
+    [formControl]="verifyForm.controls['token']"
+    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify</button>
+</form>

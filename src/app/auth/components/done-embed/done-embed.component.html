@@ -1,0 +1,9 @@
+<p *ngIf="!existingAccount">
+  You've signed up with <strong>{{account.primaryEmail}}</strong>
+</p>
+<p *ngIf="existingAccount">
+  You're logged in as <strong>{{account.primaryEmail}}</strong>
+</p>
+<a href="/app/" class="btn btn-primary" target="_parent">
+  Go to my account
+</a>
