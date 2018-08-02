@@ -1,0 +1,10 @@
+<pr-login-logo></pr-login-logo>
+<form [formGroup]="mfaForm" (ngSubmit)="onSubmit(mfaForm.value)">
+  <h1 class="form-title">
+    Verify Access
+  </h1>
+  <input type="tel" class="form-control" id="token" placeholder="Token"
+    [formControl]="mfaForm.controls['token']"
+    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify MFA</button>
+</form>

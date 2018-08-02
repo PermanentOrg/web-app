@@ -1,0 +1,11 @@
+<div class="breadcrumbs" [hidden]="!currentFolder">
+  <div class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last">
+    <a [routerLink]="[breadcrumb.routerPath]" *ngIf="!last">
+      {{breadcrumb.text}}
+    </a>
+    <span class="separator" *ngIf="!last">></span>
+    <span class="current" *ngIf="last">
+      {{breadcrumb.text}}
+    </span>
+  </div>
+</div>

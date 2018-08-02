@@ -1,0 +1,62 @@
+{
+  "Results": [
+    {
+      "data": [
+        {
+          "ArchiveVO": {
+            "ChildFolderVOs": [],
+            "FolderSizeVOs": [],
+            "RecordVOs": [],
+            "accessRole": "access.role.owner",
+            "fullName": "Unit Test",
+            "spaceTotal": null,
+            "spaceLeft": null,
+            "fileTotal": null,
+            "fileLeft": null,
+            "relationType": null,
+            "homeCity": null,
+            "homeState": null,
+            "homeCountry": null,
+            "ItemVOs": [],
+            "birthDay": null,
+            "company": null,
+            "archiveId": 1,
+            "publicDT": "2018-07-19T15:33:47.000000",
+            "archiveNbr": "0001-0000",
+            "view": null,
+            "viewProperty": null,
+            "vaultKey": "846S7FBM",
+            "thumbArchiveNbr": null,
+            "imageRatio": "1.00",
+            "type": "type.archive.person",
+            "thumbStatus": "status.generic.ok",
+            "thumbURL200": "https:\/\/localcdn.permanent.org\/_Andrew\/0001-0000.thumb.w200?t=1563550470&Expires=1563550470&Signature=N1mKi2HsQq3u1ln-5SKBLR3zeZVjg5uNpOe7G4hA1oSCN91p6SV0vFUnI8ISEkvd2ey3Vc3UI8EqkE8n5P42PbhHIHJxBbZuoohVS8DajTch7HmOF5GV0lhX9uitZiaWPpHjrLU0ENvAgtcAe1jk3QOqQKUOWWQuRrSFHZzLHMOMSSTb0KHJgs~gLqFkUumBx2py4gHOZsVWCAk2euuK8T6mXxmORutuLa4KSKv9wmWFbS5uGwztHvYQF3D8gmpkh6wrtPusAaTm0DmE-z2HYTkh99p2pej8V8o3q3emmu7Qn0heH4tje-qolFB8d68nD7I8oeUSfI89bFidueAKRg__&Key-Pair-Id=APKAJP2D34UGZ6IG443Q",
+            "thumbURL500": "https:\/\/localcdn.permanent.org\/_Andrew\/0001-0000.thumb.w500?t=1563550470&Expires=1563550470&Signature=XmKysm9H5CLJg8ifLlM7XP~uCVLdXUo6~JDOEuIAKkwZdyY-w4UwBUWSzh1GnNHqRwxOBGnU8cvhc5jNSCn1VisW9tgVfNZKhH45qcGSB29IQ6-orHS38iSzOHfEdVHvzeaDqOlJqgQwSE-s1dQQKTu3BqLPvWpGKggbFq3v1z9gipSVH8i10ykyyxxzPgSR4MX1V8UBq9cocUT3RK4Bu03fvl4~TD7FdYUyYBMvabNjEMnNb7rsvzLtAr7zDmnnB7EKRpaTy13l9g0uCLS~5CPJYc-hBJOg8~E28hWlbVKRfojOi~I~gPP5exyosxZV4L4GQDmKmmzpJylT8bRKnw__&Key-Pair-Id=APKAJP2D34UGZ6IG443Q",
+            "thumbURL1000": "https:\/\/localcdn.permanent.org\/_Andrew\/0001-0000.thumb.w1000?t=1563550470&Expires=1563550470&Signature=Ha~K7168C32MgIdhJbAS2czRJNxOjvYb6GjnmGYvt7E1ioRS5z2YP7k1OLteaC5miQRHbmw~Rq7RsQ5BPQ6evVHDSOjBo8F1Lh4hpRBrqctUrW1zJa0keW-cPdXQulid52ozn4vfuXI2VrIrzGv9OKcf1CbfoK06L-DXFYmOrPTY1Wn1DNB3tKKMfzdgvv5c0stFpxSL7Ol8OX5LdFrdEE0CZHjA~8OFRn9nJIomspkj-xEMuf9l495cFDOrTrnMULqyP4T2Y8Wz069ReM2EpAvdemB1G3mzQW7LzEggp33LRj7ZhLL4e5j1eJot-2yGpGGpYpzoH0jXt0JVIRkCOA__&Key-Pair-Id=APKAJP2D34UGZ6IG443Q",
+            "thumbURL2000": "https:\/\/localcdn.permanent.org\/_Andrew\/0001-0000.thumb.w2000?t=1563550470&Expires=1563550470&Signature=jPAAvXmvvePyTPX4A1d3qlD3yo5Prnt5rmWSCc0gvoo02eoAbkKeC-5pesAzDDBsSkhQRPI86szl4LD2q2biNN9jJL8HfaT9saaDxHnIfHoBYRRfdoiiszPZM9IXu69R1cmfGUD2U7~RqS8-7W8E-aEaNZYEESeQUnpU9Omh4o0ZJdbWLYxXu5FJHVjYDuGD0SsGXNov-Pq~KD9-q5-37tsGOklULVkBVVeKZl4r3RVj42VY56BkMylu2VDqm6oUw7We9WaoTrJZtqmowqgxQeoXcWHIJyh4GRjty3JO6a0IQh3BgLduwQXQaPc34y-uxzw3MYPbHryz0B4RXDq51g__&Key-Pair-Id=APKAJP2D34UGZ6IG443Q",
+            "thumbDT": "2019-07-19T15:34:30.000000",
+            "status": "status.auth.ok",
+            "createdDT": "2018-07-19T15:33:47.000000",
+            "updatedDT": "2018-07-19T15:34:30.000000"
+          }
+        }
+      ],
+      "message": [
+        "Archive has been retrieved."
+      ],
+      "status": true,
+      "resultDT": "2018-07-19T16:08:00.000000",
+      "createdDT": null,
+      "updatedDT": null
+    }
+  ],
+  "isSuccessful": true,
+  "actionFailKeys": [],
+  "isSystemUp": true,
+  "systemMessage": "Everything is A-OK",
+  "sessionId": null,
+  "csrf": "bea0f71d4ec717accf8786e194a2f920",
+  "vaultExpirationTime": "2018-07-18T16:07:51.000000",
+  "createdDT": null,
+  "updatedDT": null
+}

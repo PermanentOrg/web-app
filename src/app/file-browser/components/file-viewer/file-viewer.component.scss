@@ -1,0 +1,53 @@
+@import 'variables';
+
+$toolbar-height: 30px;
+
+.file-viewer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 10;
+}
+
+.file-viewer-close {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: $toolbar-height;
+
+  a {
+    line-height: $toolbar-height;
+    padding: 0px 5px;
+    cursor: pointer;
+    > span {
+      opacity: 0.5;
+    }
+  }
+}
+
+.file-viewer-name {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  height: $toolbar-height;
+  line-height: $toolbar-height;
+  text-align: center;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-viewer-image, pr-thumbnail {
+  position: absolute;
+  top: $toolbar-height;
+  bottom: $toolbar-height;
+  left: 5px;
+  right: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}

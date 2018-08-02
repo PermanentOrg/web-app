@@ -1,0 +1,18 @@
+@import 'variables';
+
+:host {
+  border-bottom: 1px $gray-500 solid;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background-color: white;
+}
+
+.navbar-toggler {
+  &:focus {
+    outline: none;
+  }
+}

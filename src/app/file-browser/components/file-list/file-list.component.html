@@ -1,0 +1,5 @@
+<pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs" [item]="item"></pr-file-list-item>
+<div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
+  This folder is empty
+</div>
+<router-outlet></router-outlet>
