@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { CoreRoutingModule } from '@core/core-routing.module';
+import { CoreRoutingModule } from '@core/core.routes';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 import { DataService } from '@shared/services/data/data.service';
