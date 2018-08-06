@@ -56,17 +56,21 @@ export class LoginComponent implements OnInit {
 
     this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
       .then((response: AuthResponse) => {
-        this.waiting = false;
-
         if (response.needsMFA()) {
-          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
-          this.router.navigate(['/mfa']);
+          this.router.navigate(['/auth', 'mfa'])
+            .then(() => {
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
+            });
         } else if (response.needsVerification()) {
-          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
-          this.router.navigate(['/verify']);
+          this.router.navigate(['/auth', 'verify'])
+            .then(() => {
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
+            });
         } else {
-          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-          this.router.navigate(['/']);
+          this.router.navigate(['/'])
+            .then(() => {
+              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
+            });
         }
       })
       .catch((response: AuthResponse) => {
