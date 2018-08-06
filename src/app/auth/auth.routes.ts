@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'mfa', component: MfaComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
-  { path: '**', redirectTo: ''}
+  { path: '**', redirectTo: 'login'}
 ];
 @NgModule({
   imports: [
