@@ -39,12 +39,16 @@ export class ResetPasswordComponent implements OnInit {
       },
       { validator: [Validators.required, FormUtilities.matchValidator], updateOn: 'blur' });
 
-    this.resetForm.statusChanges.subscribe(() => FormUtilities.setFormErrors(this.resetForm, this.formErrors));
+    this.resetForm.statusChanges.subscribe(() => this.setErrorMessages());
   }
 
   ngOnInit() {
     this.accountId = Number(this.route.snapshot.params.accountId);
     this.token = this.route.snapshot.params.token;
+  }
+
+  setErrorMessages() {
+    FormUtilities.setFormErrors(this.resetForm, this.formErrors);
   }
 
   onSubmit(formValue: any) {
