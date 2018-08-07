@@ -7,6 +7,8 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 
+import * as FormUtilities from '@shared/utilities/forms';
+
 const MIN_PASSWORD_LENGTH = 10;
 
 @Component({
@@ -47,7 +49,7 @@ export class SignupEmbedComponent implements OnInit {
       passwords: fb.group({
         password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
         confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
-      }, { validator: [Validators.required, this.matchValidator] }),
+      }, { validator: [Validators.required, FormUtilities.matchValidator] }),
       agreed: ['', [Validators.required]],
       optIn: [true]
     });
@@ -56,22 +58,8 @@ export class SignupEmbedComponent implements OnInit {
   ngOnInit() {
     const currentAccount = this.accountService.getAccount();
     if (currentAccount && currentAccount.primaryEmail) {
-      this.router.navigate(['/doneEmbed'], {queryParams: { existing: true }});
+      this.router.navigate(['/embed', 'done'], {queryParams: { existing: true }});
     }
-  }
-
-  matchValidator(group: FormGroup) {
-    const match = group.controls['password'].value === group.controls['confirm'].value;
-
-    if (match && group.value.confirm) {
-      group.controls['confirm'].setErrors(null);
-      return null;
-    }
-
-    const errors = { mismatch: true };
-    group.controls['confirm'].setErrors(errors);
-
-    return errors;
   }
 
   onSubmit(formValue: any) {
@@ -83,9 +71,9 @@ export class SignupEmbedComponent implements OnInit {
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
-          this.router.navigate(['/verifyEmbed']);
+          this.router.navigate(['/embed', 'verify']);
         } else {
-          this.router.navigate(['/doneEmbed']);
+          this.router.navigate(['/embed', 'done']);
         }
       })
       .catch((response: AccountResponse) => {
