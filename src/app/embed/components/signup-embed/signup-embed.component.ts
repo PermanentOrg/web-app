@@ -27,7 +27,7 @@ export class SignupEmbedComponent implements OnInit {
     invitation: false,
     email: false,
     password: false,
-    passwordConfirm: false
+    confirm: false
   };
 
   constructor(
