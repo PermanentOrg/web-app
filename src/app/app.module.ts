@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
-import { Subscription } from 'node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie-service';
