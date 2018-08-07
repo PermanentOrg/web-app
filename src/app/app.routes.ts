@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'reset', redirectTo: 'auth/reset', pathMatch: 'full'  },
   { path: 'signupEmbed', redirectTo: 'embed/signup', pathMatch: 'full'  },
   { path: 'verifyEmbed', redirectTo: 'embed/verify', pathMatch: 'full'  },
+  { path: 'doneEmbed', redirectTo: 'embed/done', pathMatch: 'full'  },
   { path: 'auth', loadChildren: '@auth/auth.module#AuthModule' },
   { path: 'embed', loadChildren: '@embed/embed.module#EmbedModule' },
   { path: '', loadChildren: '@core/core.module#CoreModule' },

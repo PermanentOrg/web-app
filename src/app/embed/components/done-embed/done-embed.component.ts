@@ -17,12 +17,9 @@ export class DoneEmbedComponent implements OnInit {
 
   ngOnInit() {
     const queryParams = this.route.snapshot.queryParams;
-    console.log('done-embed.component.ts', 20, queryParams);
     if (queryParams.existing) {
       this.existingAccount = true;
     }
-
-    console.log('done-embed.component.ts', 26, this.existingAccount);
 
     this.account = this.accountService.getAccount();
   }
