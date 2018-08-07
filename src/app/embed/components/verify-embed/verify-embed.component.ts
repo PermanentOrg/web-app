@@ -33,7 +33,7 @@ export class VerifyEmbedComponent implements OnInit {
       })
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.router.navigate(['/doneEmbed']);
+        this.router.navigate(['/embed', 'done']);
       })
       .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;

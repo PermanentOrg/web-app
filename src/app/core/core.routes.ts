@@ -21,9 +21,9 @@ export const routes: Routes = [
     canActivateChild: [ AuthGuard ],
     resolve: rootFolderResolve,
     children: [
-      { path: '', component: HomeComponent},
-      { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'},
-      { path: 'apps', loadChildren: '@apps/apps.module#AppsModule' },
+      { path: '', component: HomeComponent, data: { title: 'Home'} },
+      { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
+      { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
       { path: '**', redirectTo: ''}
     ]
   }
