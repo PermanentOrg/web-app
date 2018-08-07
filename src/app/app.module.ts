@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
+import { Subscription } from 'node_modules/rxjs';
+import { filter } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -31,4 +33,26 @@ import { MessageComponent } from '@shared/components/message/message.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  private routerListener: Subscription;
+  constructor(private title: Title, private router: Router, private route: ActivatedRoute) {
+    const count = 1;
+    this.routerListener = this.router.events
+    .pipe(filter((event) => {
+      return event instanceof NavigationEnd;
+    })).subscribe((event) => {
+      let currentRoute = this.route;
+      let currentTitle;
+      while (currentRoute.firstChild) {
+        currentRoute = currentRoute.firstChild;
+        if (currentRoute.snapshot.data.title) {
+          currentTitle = currentRoute.snapshot.data.title;
+        }
+      }
+      if (!currentTitle) {
+        this.title.setTitle(`Permanent.org`);
+      } else {
+        this.title.setTitle(`${currentTitle} | Permanent.org`);
+      }
+    });
+  }
 }

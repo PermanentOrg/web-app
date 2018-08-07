@@ -11,12 +11,12 @@ import { ResetPasswordComponent } from '@auth/components/reset-password/reset-pa
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'mfa', component: MfaComponent },
-  { path: 'verify', component: VerifyComponent },
-  { path: 'forgot', component: ForgotPasswordComponent },
-  { path: 'reset/:accountId/:token', component: ResetPasswordComponent },
+  { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
+  { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' } },
+  { path: 'mfa', component: MfaComponent, data: { title: 'Verify'} },
+  { path: 'verify', component: VerifyComponent, data: { title: 'Verify'} },
+  { path: 'forgot', component: ForgotPasswordComponent, data: { title: 'Forgot Password'} },
+  { path: 'reset/:accountId/:token', component: ResetPasswordComponent, data: { title: 'Reset Password'} },
   { path: 'reset_password/:accountId/:token', redirectTo: 'reset/:accountId/:token', pathMatch: 'full'},
   { path: '**', redirectTo: 'login'}
 ];
