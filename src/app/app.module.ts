@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -19,9 +18,11 @@ import { MessageComponent } from '@shared/components/message/message.component';
     HttpClientModule,
     BrowserModule
   ],
+  exports: [
+  ],
   declarations: [
     AppComponent,
-    MessageComponent,
+    MessageComponent
   ],
   providers: [
     CookieService,

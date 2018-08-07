@@ -24,10 +24,10 @@
     </label>
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="waiting || loginForm.invalid">Log in</button>
-  <a [routerLink]="['/signup']">
+  <a [routerLink]="['/auth','signup']">
     Need to sign up?
   </a>
-  <a [routerLink]="['/forgot']">
+  <a [routerLink]="['/auth','forgot']">
     Forgot password?
   </a>
 </form>

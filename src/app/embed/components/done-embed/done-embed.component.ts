@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@root/app/models';
-import { query } from '../../../../../node_modules/@angular/core/src/render3/query';
 
 @Component({
   selector: 'pr-done-embed',
