@@ -1,14 +1,47 @@
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import { AppPage } from './app.po';
 
-describe('workspace-project App', () => {
+const HAMBURGER_MENU_DELAY = 400;
+
+const TEST_ACCOUNT = {
+  email: 'aatwood+e2e@permanent.org',
+  password: 'Abc123!!!!'
+};
+
+describe('M-Dot', () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should redirect to login screen when not logged in', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to mdot!');
+    expect(browser.getCurrentUrl()).toContain('/login');
+  });
+
+  xit('should prompt for MFA token', () => {
+    page.navigateTo();
+    element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
+    element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
+    element(by.buttonText('Log in')).click();
+    expect(browser.getCurrentUrl()).toContain('/mfa');
+  });
+
+  it('should log in when MFA cookie set', () => {
+    page.navigateTo();
+    (browser.manage() as any).addCookie({name: 'permMFA', value: 'JVI9M28SX70ZG605441C423U1D2B52061K0924X6'});
+    element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
+    element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
+    element(by.buttonText('Log in')).click();
+    expect(browser.getCurrentUrl()).not.toContain('/mfa');
+  });
+
+  it('should navigate to My Files from hamburger menu', () => {
+    page.navigateTo();
+    element(by.css('button.navbar-toggler')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    element(by.linkText('My Files')).click();
+    expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 });
