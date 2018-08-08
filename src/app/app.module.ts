@@ -35,7 +35,6 @@ import { MessageComponent } from '@shared/components/message/message.component';
 export class AppModule {
   private routerListener: Subscription;
   constructor(private title: Title, private router: Router, private route: ActivatedRoute) {
-    const count = 1;
     this.routerListener = this.router.events
     .pipe(filter((event) => {
       return event instanceof NavigationEnd;

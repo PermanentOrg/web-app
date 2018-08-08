@@ -33,6 +33,6 @@ export class AccountVO extends BaseVO {
   public changePrimaryPhone;
 
   needsVerification(): boolean {
-    return this.status.includes('status.auth.need');
+    return this.status && this.status.includes('status.auth.need');
   }
 }
