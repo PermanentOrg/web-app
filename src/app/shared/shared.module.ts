@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
+import { TermsComponent } from './components/terms/terms.component';
 
 @NgModule({
   imports: [
@@ -16,11 +17,13 @@ import { LogoComponent } from '@auth/components/logo/logo.component';
     FormsModule,
     ReactiveFormsModule,
     FormInputComponent,
-    LogoComponent
+    LogoComponent,
+    TermsComponent
   ],
   declarations: [
     FormInputComponent,
-    LogoComponent
+    LogoComponent,
+    TermsComponent
   ]
 })
 export class SharedModule { }
