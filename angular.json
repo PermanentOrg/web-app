@@ -30,7 +30,9 @@
                 "src/styles"
               ]
             },
-            "scripts": []
+            "scripts": [
+              "src/vendor/binary.js"
+            ]
           },
           "configurations": {
             "local": {
@@ -132,7 +134,9 @@
                 "src/styles"
               ]
             },
-            "scripts": [],
+            "scripts": [
+              "src/vendors/binary.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"

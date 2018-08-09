@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { CoreRoutingModule } from '@core/core.routes';
-import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 import { DataService } from '@shared/services/data/data.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
@@ -27,7 +27,8 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
     BreadcrumbsComponent,
   ],
   providers: [
-    DataService
+    DataService,
+    UploadService
   ]
 })
 export class CoreModule { }
