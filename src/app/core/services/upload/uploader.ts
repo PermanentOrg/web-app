@@ -1,10 +1,9 @@
-import {BinaryClient, binaryFeatures} from '@root/vendor/binary';
+import { BinaryClient, binaryFeatures } from '@root/vendor/binary';
 
 const SOCKET_CHUNK_SIZE = 122880;
 
 export class Uploader {
-  private socketClient;
-  private ajaxClient;
+  private socketClient: BinaryClient;
 
   constructor() {
     if (binaryFeatures.supportsBinaryWebsockets) {
@@ -16,7 +15,7 @@ export class Uploader {
 
   openSocketConnection() {
     if (!this.socketClient) {
-      this.socketClient = new BinaryClient('wss://local.permanent.org:9000/uploadsvc', {
+      this.socketClient = new BinaryClient(`wss://${location.hostname}:9000/uploadsvc`, {
         chunkSize: SOCKET_CHUNK_SIZE
       });
     }
@@ -24,6 +23,7 @@ export class Uploader {
 
   closeSocketConnection() {
     if (this.socketClient) {
+      this.socketClient.close();
     }
   }
 }
