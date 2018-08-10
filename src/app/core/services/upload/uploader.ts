@@ -71,8 +71,6 @@ export class Uploader {
         }
 
         this.uploadQueue = remove(this.metaQueue, {uploadStatus: UploadStatus.Meta});
-
-        console.log(this.metaQueue, this.uploadQueue);
       })
       .catch((response: RecordResponse) => {
 
