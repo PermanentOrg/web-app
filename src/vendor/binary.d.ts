@@ -1,6 +1,7 @@
 import { Stream } from "stream";
+import { EventEmitter } from "events";
 
-declare class BinaryClient {
+declare class BinaryClient extends EventEmitter {
   public streams: any;
   constructor(socket: string, options: any);
 

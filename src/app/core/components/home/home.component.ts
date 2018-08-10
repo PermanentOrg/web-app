@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { find } from 'lodash';
+
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { FolderVO } from '@root/app/models';
 
 @Component({
   selector: 'pr-home',
@@ -12,6 +15,7 @@ import { UploadService } from '@core/services/upload/upload.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  public files: File[] = [];
 
   constructor(private accountService: AccountService, private router: Router, private messageService: MessageService,
     private api: ApiService, private upload: UploadService
@@ -26,6 +30,17 @@ export class HomeComponent implements OnInit {
       this.messageService.showMessage(`Logged out successfully`, 'success');
       this.router.navigate(['/login']);
     });
+  }
+
+  onFileChange(event) {
+    this.files = Array.from(event.target.files);
+  }
+
+  uploadFiles() {
+    const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
+    console.log('home.component.ts', 41, myFiles);
+    const targetFolder = new FolderVO(myFiles);
+    this.upload.uploadFiles(targetFolder, this.files);
   }
 
 }

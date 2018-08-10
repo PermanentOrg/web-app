@@ -13,6 +13,16 @@ export class RecordRepo extends BaseRepo {
 
     return this.http.sendRequest('/record/get', data, RecordResponse);
   }
+
+  public postMeta(recordVOs: RecordVO[]): Observable<RecordResponse> {
+    const data = recordVOs.map((recordVO) => {
+      return {
+        RecordVO: recordVO
+      };
+    });
+
+    return this.http.sendRequest('/record/postMetaBatch', data, RecordResponse);
+  }
 }
 
 export class RecordResponse extends BaseResponse {
