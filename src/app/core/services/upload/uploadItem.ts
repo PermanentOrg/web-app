@@ -13,7 +13,7 @@ export class UploadItem {
   public streamId: string;
   public RecordVO: RecordVO;
 
-  constructor(public file: File, public parentFolder: FolderVO) {
+  constructor(public file: File, public parentFolder: FolderVO, public uploadItemId: number) {
     this.RecordVO = new RecordVO({
       parentFolderId: parentFolder.folderId,
       parentFolder_linkId: parentFolder.folder_linkId,

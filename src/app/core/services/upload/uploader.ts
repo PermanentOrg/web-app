@@ -12,8 +12,13 @@ const SOCKET_CHUNK_SIZE = 122880;
 
 export class Uploader {
   private socketClient: BinaryClient;
+  private uploadItemsById: {[key: number]: UploadItem} = {};
+
+  public uploadItemList: UploadItem[] = [];
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
+
+  private uploadItemId = 0;
 
   constructor(private api: ApiService) {
     if (binaryFeatures.supportsBinaryWebsockets) {
@@ -44,11 +49,17 @@ export class Uploader {
 
   addFilesToQueue(parentFolder: FolderVO, files: File[]) {
     files.forEach((file) => {
-      this.metaQueue.push(new UploadItem(file, parentFolder));
+      const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
+      this.uploadItemsById[uploadItem.uploadItemId] = uploadItem;
+      this.uploadItemList.push(uploadItem);
+      this.metaQueue.push(uploadItem);
     });
 
     if (this.metaQueue.length) {
-      this.postMetaFromQueue();
+      this.postMetaFromQueue()
+      .then(() => {
+        this.uploadFromQueue();
+      });
     }
   }
 
@@ -64,13 +75,16 @@ export class Uploader {
         return response;
       })).toPromise()
       .then((response: RecordResponse) => {
-        const postedRecordVOs = response.getRecordVOs();
-        for (let i = 0; i < postedRecordVOs.length; i++) {
-          const uploadItem = this.metaQueue[i];
-          uploadItem.uploadStatus = UploadStatus.Meta;
-        }
+        const createdRecordVOs = response.getRecordVOs();
 
-        this.uploadQueue = remove(this.metaQueue, {uploadStatus: UploadStatus.Meta});
+        this.uploadQueue = this.metaQueue.map((uploadItem, i) => {
+          uploadItem.uploadStatus = UploadStatus.Meta;
+          uploadItem.RecordVO = createdRecordVOs[i];
+          return uploadItem;
+        });
+        this.metaQueue = [];
+
+        return Promise.resolve();
       })
       .catch((response: RecordResponse) => {
 
@@ -78,6 +92,26 @@ export class Uploader {
   }
 
   uploadFromQueue() {
+    const currentItem = this.uploadQueue.shift();
 
+    const fileMeta = {
+      name: currentItem.file.name,
+      size: currentItem.file.size,
+      recordid: currentItem.RecordVO.recordId
+    };
+
+    currentItem.uploadStatus = UploadStatus.Transfer;
+
+    const stream = this.socketClient.send(currentItem.file, fileMeta);
+
+    currentItem.streamId = stream.id;
+
+    stream.on('data', (data) => {
+      if (data.fileProg) {
+        console.log('uploader.ts', 107, data.fileProg);
+      } else if (data.done) {
+        console.log('uploader.ts', 109, 'done?');
+      }
+    });
   }
 }

@@ -5,7 +5,7 @@ declare class BinaryClient extends EventEmitter {
   public streams: any;
   constructor(socket: string, options: any);
 
-  send(data: Stream | Buffer | Blob | File | ArrayBuffer | object | string);
+  send(data: Stream | Buffer | Blob | File | ArrayBuffer | object | string, meta: any);
   close();
   createReadStream(meta: any);
 }
