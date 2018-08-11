@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 import { Uploader } from './uploader';
 import { FolderVO } from '@root/app/models';
 import { ApiService } from '@shared/services/api/api.service';
+import { UploadItem } from '@core/services/upload/uploadItem';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
-  private uploader: Uploader = new Uploader(this.api);
+  public uploader: Uploader = new Uploader(this.api);
 
   constructor(private api: ApiService) {
   }
@@ -16,7 +17,7 @@ export class UploadService {
   uploadFiles(parentFolder: FolderVO, files: File[]) {
     return this.uploader.openSocketConnection()
     .then(() => {
-      this.uploader.addFilesToQueue(parentFolder, files);
+      return this.uploader.uploadFiles(parentFolder, files);
     });
   }
 }

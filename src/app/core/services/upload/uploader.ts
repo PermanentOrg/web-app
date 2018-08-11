@@ -4,6 +4,7 @@ import { remove } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 
+import { EventEmitter } from '@angular/core';
 import { FolderVO } from '@root/app/models';
 import { UploadItem, UploadStatus } from './uploadItem';
 import { RecordResponse } from '@shared/services/api/index.repo';
@@ -12,11 +13,20 @@ const SOCKET_CHUNK_SIZE = 122880;
 
 export class Uploader {
   private socketClient: BinaryClient;
+  public uploadItem: EventEmitter<UploadItem> = new EventEmitter();
+
   private uploadItemsById: {[key: number]: UploadItem} = {};
 
   public uploadItemList: UploadItem[] = [];
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
+  private errorQueue: UploadItem[] = [];
+
+  public uploadInProgress: boolean;
+
+  private uploadPromise: Promise<boolean>;
+  private uploadResolve: Function;
+  private uploadReject: Function;
 
   private uploadItemId = 0;
 
@@ -47,7 +57,7 @@ export class Uploader {
     }
   }
 
-  addFilesToQueue(parentFolder: FolderVO, files: File[]) {
+  uploadFiles(parentFolder: FolderVO, files: File[]): Promise<any> {
     files.forEach((file) => {
       const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
       this.uploadItemsById[uploadItem.uploadItemId] = uploadItem;
@@ -56,15 +66,29 @@ export class Uploader {
     });
 
     if (this.metaQueue.length) {
-      this.postMetaFromQueue()
+      return this.postMetaFromQueue()
       .then(() => {
-        this.uploadFromQueue();
+        if (!this.uploadInProgress) {
+          this.uploadPromise = new Promise((resolve, reject) => {
+            this.uploadResolve = resolve;
+            this.uploadReject = reject;
+          });
+          this.uploadNextFromQueue();
+        }
+
+        return this.uploadPromise;
       });
+    } else {
+      return Promise.resolve();
     }
   }
 
   postMetaFromQueue() {
-    const recordVOs = this.metaQueue.map((uploadItem) => uploadItem.RecordVO);
+    // use entire meta queue for current batch
+    const queue = this.metaQueue;
+    this.metaQueue = [];
+
+    const recordVOs = queue.map((uploadItem) => uploadItem.RecordVO);
 
     return this.api.record.postMeta(recordVOs)
       .pipe(map((response: RecordResponse) => {
@@ -77,22 +101,24 @@ export class Uploader {
       .then((response: RecordResponse) => {
         const createdRecordVOs = response.getRecordVOs();
 
-        this.uploadQueue = this.metaQueue.map((uploadItem, i) => {
+        // transition current batch to upload queue
+        this.uploadQueue = queue.map((uploadItem, i) => {
           uploadItem.uploadStatus = UploadStatus.Meta;
           uploadItem.RecordVO = createdRecordVOs[i];
           return uploadItem;
         });
-        this.metaQueue = [];
 
         return Promise.resolve();
       })
       .catch((response: RecordResponse) => {
-
+        // failed, put current batch back in meta queue
+        this.metaQueue = queue.concat(this.metaQueue);
       });
   }
 
-  uploadFromQueue() {
+  uploadNextFromQueue() {
     const currentItem = this.uploadQueue.shift();
+    this.uploadItem.emit(currentItem);
 
     const fileMeta = {
       name: currentItem.file.name,
@@ -108,10 +134,32 @@ export class Uploader {
 
     stream.on('data', (data) => {
       if (data.fileProg) {
-        console.log('uploader.ts', 107, data.fileProg);
-      } else if (data.done) {
-        console.log('uploader.ts', 109, 'done?');
+        currentItem.transferProgress += data.fileProg;
+      }
+
+      if (data.done) {
+
+        this.checkForNextOrFinish();
       }
     });
+
+    stream.on('error', () => {
+      this.errorQueue.push(currentItem);
+      this.checkForNextOrFinish();
+    });
+  }
+
+  checkForNextOrFinish() {
+    if (this.uploadQueue.length) {
+      this.uploadNextFromQueue();
+    } else {
+      this.uploadInProgress = false;
+      this.uploadResolve();
+
+      this.uploadReject = null;
+      this.uploadResolve = null;
+      this.uploadPromise = null;
+      console.log('no more?');
+    }
   }
 }

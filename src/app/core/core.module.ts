@@ -12,6 +12,7 @@ import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
+import { UploadProgressComponent } from './components/upload-progress/upload-progress.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
     NavComponent,
     LeftMenuComponent,
     BreadcrumbsComponent,
+    UploadProgressComponent,
   ],
   providers: [
     DataService,

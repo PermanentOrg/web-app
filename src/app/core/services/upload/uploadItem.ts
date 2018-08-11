@@ -1,3 +1,5 @@
+import { EventEmitter } from '@angular/core';
+
 import { FolderVO, RecordVO, RecordVOData } from '@root/app/models';
 
 export enum UploadStatus {
@@ -9,9 +11,11 @@ export enum UploadStatus {
 }
 
 export class UploadItem {
-  public uploadStatus: UploadStatus = UploadStatus.Init;
   public streamId: string;
   public RecordVO: RecordVO;
+  public uploadStatus: UploadStatus = UploadStatus.Init;
+  public transferProgress = 0;
+  public updated: EventEmitter<null> = new EventEmitter();
 
   constructor(public file: File, public parentFolder: FolderVO, public uploadItemId: number) {
     this.RecordVO = new RecordVO({
@@ -21,5 +25,10 @@ export class UploadItem {
       uploadFileName: file.name,
       derivedCreatedDT: file.lastModifiedDate,
     });
+  }
+
+  updateProgress(increment: number) {
+    this.transferProgress += increment;
+    this.updated.emit();
   }
 }
