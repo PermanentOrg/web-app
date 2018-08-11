@@ -9,8 +9,9 @@ import { UploadItem } from '@core/services/upload/uploadItem';
   styleUrls: ['./upload-progress.component.scss']
 })
 export class UploadProgressComponent implements OnInit {
-  public visible: boolean;
+  public visible = true;
   public currentItem: UploadItem;
+  public fileCount: any;
 
   constructor(private upload: UploadService) { }
 
@@ -18,6 +19,16 @@ export class UploadProgressComponent implements OnInit {
     this.upload.uploader.uploadItem.subscribe((uploadItem) => {
       this.currentItem = uploadItem;
     });
+
+    this.fileCount = this.upload.uploader.fileCount;
+  }
+
+  getProgressTransform() {
+    if (this.currentItem) {
+      return `scaleX(${this.currentItem.transferProgress})`;
+    } else {
+      return 'scaleX(0)';
+    }
   }
 
 

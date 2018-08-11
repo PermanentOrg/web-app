@@ -1,13 +1,8 @@
-<div *ngIf="currentItem">
-  <p>
-    <strong>current file:</strong>
-    <br>
-    {{currentItem.file.name}}
-  </p>
-  <p>
-    <strong>progress:</strong>
-    <br>
-    {{currentItem.transferProgress}}
-  </p>
+<div class="upload-wrapper" [ngClass]="{'visible': visible, 'fade': useFade}">
+  <div class="upload">
+    <div class="current-file">{{currentItem.file.name}}</div>
+    <div class="file-count">
+      <strong>{{fileCount.current}}</strong> of <strong>{{fileCount.total}}</strong></div>
+  </div>
+  <div class="upload-progress" [ngStyle]="{transform: getProgressTransform()}"></div>
 </div>
-
