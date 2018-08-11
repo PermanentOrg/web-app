@@ -14,7 +14,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { throttle } from 'lodash';
+import { throttle, debounce } from 'lodash';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
@@ -24,7 +24,10 @@ import { DataStatus } from '@models/data-status.enum';
 
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT = 51;
-const SCROLL_DEBOUNCE = 200;
+const SCROLL_DEBOUNCE = 150;
+const SCROLL_THROTTLE = 500;
+const SCROLL_TIMING = 16;
+const SCROLL_VELOCITY_THRESHOLD = 4;
 
 @Component({
   selector: 'pr-file-list',
@@ -37,11 +40,16 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   currentFolder: FolderVO;
   listItems: FileListItemComponent[];
 
-  private scrollHandlerDebounced;
-  private itemsFetchedCount;
+  private scrollHandlerDebounced: Function;
+  private scrollHandlerThrottled: Function;
+
+  private itemsFetchedCount: number;
   private routeListener: Subscription;
   private reinit = false;
   private inFileView = false;
+
+  private lastScrollTop: number;
+  private currentScrollTop: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +59,8 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   ) {
 
     // create debounced scroll handler for placeholder loading
-    this.scrollHandlerDebounced = throttle(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
+    this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
+    this.scrollHandlerThrottled = throttle(this.calculateListViewport.bind(this), SCROLL_THROTTLE);
 
     // register for navigation events to reinit page on folder changes
     if (!this.routeListener) {
@@ -102,7 +111,14 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @HostListener('window:scroll', ['$event'])
   onViewportScroll(event) {
-    this.scrollHandlerDebounced();
+    this.lastScrollTop = this.currentScrollTop;
+    this.currentScrollTop = this.document.documentElement.scrollTop || this.document.body.scrollTop;
+    const scrollVelocity = (this.lastScrollTop - this.currentScrollTop) / SCROLL_TIMING;
+    if (Math.abs(scrollVelocity) < SCROLL_VELOCITY_THRESHOLD) {
+      this.scrollHandlerThrottled();
+    } else {
+      this.scrollHandlerDebounced();
+    }
   }
 
   calculateListViewport() {
