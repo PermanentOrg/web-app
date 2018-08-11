@@ -11,9 +11,18 @@ import { RecordResponse } from '@shared/services/api/index.repo';
 
 const SOCKET_CHUNK_SIZE = 122880;
 
+export enum UploadSessionStatus {
+  Start,
+  InProgress,
+  Done
+}
+
 export class Uploader {
   private socketClient: BinaryClient;
+
   public uploadItem: EventEmitter<UploadItem> = new EventEmitter();
+
+  public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
 
   private uploadItemsById: {[key: number]: UploadItem} = {};
 
@@ -53,7 +62,7 @@ export class Uploader {
       });
     }
 
-    console.log('already open');
+    this.uploadSessionStatus.emit(UploadSessionStatus.Start);
 
     return Promise.resolve(true);
   }
@@ -83,6 +92,7 @@ export class Uploader {
           });
           this.uploadInProgress = true;
           this.uploadNextFromQueue();
+          this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
         }
 
         return this.uploadPromise;
@@ -172,6 +182,9 @@ export class Uploader {
       this.uploadReject = null;
       this.uploadResolve = null;
       this.uploadPromise = null;
+
+      this.closeSocketConnection();
+      this.uploadSessionStatus.emit(UploadSessionStatus.Done);
     }
   }
 }

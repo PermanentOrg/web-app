@@ -115,8 +115,10 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     this.currentScrollTop = this.document.documentElement.scrollTop || this.document.body.scrollTop;
     const scrollVelocity = (this.lastScrollTop - this.currentScrollTop) / SCROLL_TIMING;
     if (Math.abs(scrollVelocity) < SCROLL_VELOCITY_THRESHOLD) {
+      // use throttled handler if scrolling slowly
       this.scrollHandlerThrottled();
     } else {
+      // use debounced handler if scrolling quickly
       this.scrollHandlerDebounced();
     }
   }
