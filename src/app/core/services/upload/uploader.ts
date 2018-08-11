@@ -48,6 +48,8 @@ export class Uploader {
       });
     }
 
+    console.log('already open');
+
     return Promise.resolve(true);
   }
 
@@ -70,9 +72,11 @@ export class Uploader {
       .then(() => {
         if (!this.uploadInProgress) {
           this.uploadPromise = new Promise((resolve, reject) => {
+            console.log('set resolve', resolve);
             this.uploadResolve = resolve;
             this.uploadReject = reject;
           });
+          this.uploadInProgress = true;
           this.uploadNextFromQueue();
         }
 
@@ -86,6 +90,7 @@ export class Uploader {
   postMetaFromQueue() {
     // use entire meta queue for current batch
     const queue = this.metaQueue;
+    console.log('post meta for:', queue);
     this.metaQueue = [];
 
     const recordVOs = queue.map((uploadItem) => uploadItem.RecordVO);
@@ -102,22 +107,30 @@ export class Uploader {
         const createdRecordVOs = response.getRecordVOs();
 
         // transition current batch to upload queue
-        this.uploadQueue = queue.map((uploadItem, i) => {
+        this.uploadQueue = this.uploadQueue.concat(queue.map((uploadItem, i) => {
           uploadItem.uploadStatus = UploadStatus.Meta;
           uploadItem.RecordVO = createdRecordVOs[i];
           return uploadItem;
-        });
+        }));
+
+        console.log('meta done, upload queue:', this.uploadQueue);
 
         return Promise.resolve();
       })
       .catch((response: RecordResponse) => {
         // failed, put current batch back in meta queue
+        console.error('meta failed!');
         this.metaQueue = queue.concat(this.metaQueue);
       });
   }
 
   uploadNextFromQueue() {
     const currentItem = this.uploadQueue.shift();
+    console.log('upload queue:', this.uploadQueue);
+    if (!currentItem) {
+      return this.checkForNextOrFinish();
+    }
+
     this.uploadItem.emit(currentItem);
 
     const fileMeta = {
@@ -138,7 +151,6 @@ export class Uploader {
       }
 
       if (data.done) {
-
         this.checkForNextOrFinish();
       }
     });
@@ -154,12 +166,12 @@ export class Uploader {
       this.uploadNextFromQueue();
     } else {
       this.uploadInProgress = false;
+      console.warn('call resolve');
       this.uploadResolve();
 
       this.uploadReject = null;
       this.uploadResolve = null;
       this.uploadPromise = null;
-      console.log('no more?');
     }
   }
 }

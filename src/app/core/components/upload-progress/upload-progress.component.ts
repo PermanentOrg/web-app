@@ -16,7 +16,6 @@ export class UploadProgressComponent implements OnInit {
 
   ngOnInit() {
     this.upload.uploader.uploadItem.subscribe((uploadItem) => {
-      console.log('new item', uploadItem);
       this.currentItem = uploadItem;
     });
   }
