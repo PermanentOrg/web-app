@@ -14,7 +14,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
@@ -24,7 +24,7 @@ import { DataStatus } from '@models/data-status.enum';
 
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT = 51;
-const SCROLL_DEBOUNCE = 150;
+const SCROLL_DEBOUNCE = 200;
 
 @Component({
   selector: 'pr-file-list',
@@ -51,7 +51,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   ) {
 
     // create debounced scroll handler for placeholder loading
-    this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
+    this.scrollHandlerDebounced = throttle(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
 
     // register for navigation events to reinit page on folder changes
     if (!this.routeListener) {
