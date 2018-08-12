@@ -24,6 +24,9 @@ export class UploadService {
     return this.uploader.openSocketConnection()
     .then(() => {
       return this.uploader.uploadFiles(parentFolder, files);
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }
 
