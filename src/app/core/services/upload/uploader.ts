@@ -67,9 +67,10 @@ export class Uploader {
     return Promise.resolve(true);
   }
 
-  closeSocketConnection() {
+closeSocketConnection() {
     if (this.socketClient) {
       this.socketClient.close();
+      this.socketClient = null;
     }
   }
 

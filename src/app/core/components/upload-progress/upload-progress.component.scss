@@ -1,6 +1,8 @@
 @import 'variables';
 
 $transition-length: 0.33s;
+$delay-length: 3s;
+
 $progress-bar-height: 2px;
 
 :host {
@@ -45,7 +47,7 @@ $progress-bar-height: 2px;
 .upload-wrapper {
   padding: 10px 10px;
   transform: translateY(0);
-  transition: transform $transition-length ease-in 0s, visibility 0s linear $transition-length;
+  transition: transform $transition-length ease-in $delay-length, visibility 0s linear $delay-length + $transition-length;
   border-top: 1px $gray-500 solid;
   display: block;
   margin: 0 auto;

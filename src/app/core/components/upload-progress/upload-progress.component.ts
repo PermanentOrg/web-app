@@ -27,15 +27,12 @@ export class UploadProgressComponent implements OnInit {
     this.upload.registerComponent(this);
     this.upload.uploader.uploadSessionStatus.subscribe((status: UploadSessionStatus) => {
       this.status = status;
-      console.log('upload-progress.component.ts', 28, status);
       switch (status) {
         case UploadSessionStatus.Start:
-          this.visible = true;
+          this.show();
           break;
         case UploadSessionStatus.Done:
-          setTimeout(() => {
-            this.visible = false;
-          }, UPLOAD_COMPLETE_HIDE_DELAY);
+          this.dismiss();
           break;
       }
     });
@@ -47,6 +44,14 @@ export class UploadProgressComponent implements OnInit {
     });
 
     this.fileCount = this.upload.uploader.fileCount;
+  }
+
+  show() {
+    this.visible = true;
+  }
+
+  dismiss() {
+    this.visible = false;
   }
 
   getProgressTransform() {

@@ -19,7 +19,7 @@ binaryFeatures.useArrayBufferView = !binaryFeatures.useBlobBuilder && (function(
 })();
 binaryFeatures.supportsBinaryWebsockets = (function(){
   try {
-    var wstest = new WebSocket('wss://' + location.hostname + ':9000');
+    var wstest = new WebSocket('wss://' + location.hostname + ':9000/uploadsvc');
     wstest.onerror = function(){};
     if (typeof(wstest.binaryType) !== "undefined") {
       return true;
