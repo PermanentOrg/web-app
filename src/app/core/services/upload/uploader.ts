@@ -14,7 +14,8 @@ const SOCKET_CHUNK_SIZE = 122880;
 export enum UploadSessionStatus {
   Start,
   InProgress,
-  Done
+  Done,
+  Error
 }
 
 export class Uploader {
@@ -45,11 +46,6 @@ export class Uploader {
   private uploadItemId = 0;
 
   constructor(private api: ApiService) {
-    if (binaryFeatures.supportsBinaryWebsockets) {
-      this.openSocketConnection();
-    } else {
-      window.alert('Your device does not support uploading.');
-    }
   }
 
   openSocketConnection() {
@@ -58,7 +54,11 @@ export class Uploader {
         this.socketClient = new BinaryClient(`wss://${location.hostname}:9000/uploadsvc`, {
           chunkSize: SOCKET_CHUNK_SIZE
         });
-        this.socketClient.on('open', resolve);
+        this.socketClient.on('open', () => {
+          this.uploadSessionStatus.emit(UploadSessionStatus.Start);
+          resolve();
+        });
+        this.socketClient.on('error', reject);
       });
     }
 
