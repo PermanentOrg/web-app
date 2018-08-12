@@ -24,7 +24,7 @@
       "@auth/*": ["src/app/auth/*"],
       "@embed/*": ["src/app/embed/*"],
       "@models/*": ["src/app/models/*"],
-      "@root/*": ["src/*"],
+      "@root/*": ["src/*"]
     }
   }
 }
