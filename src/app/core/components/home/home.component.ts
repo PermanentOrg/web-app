@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
 
   onFileChange(event) {
     this.files = Array.from(event.target.files);
+    this.uploadFiles();
   }
 
   uploadFiles() {

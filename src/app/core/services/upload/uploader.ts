@@ -26,7 +26,6 @@ export class Uploader {
   public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
 
   private uploadItemsById: {[key: number]: UploadItem} = {};
-
   public uploadItemList: UploadItem[] = [];
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
@@ -55,6 +54,9 @@ export class Uploader {
           chunkSize: SOCKET_CHUNK_SIZE
         });
         this.socketClient.on('open', () => {
+          this.fileCount.current = 0;
+          this.fileCount.total = 0;
+
           this.uploadSessionStatus.emit(UploadSessionStatus.Start);
           resolve();
         });
@@ -62,12 +64,10 @@ export class Uploader {
       });
     }
 
-    this.uploadSessionStatus.emit(UploadSessionStatus.Start);
-
     return Promise.resolve(true);
   }
 
-closeSocketConnection() {
+  closeSocketConnection() {
     if (this.socketClient) {
       this.socketClient.close();
       this.socketClient = null;
@@ -132,6 +132,7 @@ closeSocketConnection() {
       })
       .catch((response: RecordResponse) => {
         // failed, put current batch back in meta queue
+        console.error(response.getMessage());
         this.metaQueue = queue.concat(this.metaQueue);
       });
   }
