@@ -29,7 +29,7 @@ describe('M-Dot', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  it('should log in when MFA cookie set', () => {
+  it('should log in', () => {
     page.navigateTo();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);

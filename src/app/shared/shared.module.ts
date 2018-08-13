@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
-import { TermsComponent } from './components/terms/terms.component';
+import { TermsComponent } from '@shared/components/terms/terms.component';
 
 @NgModule({
   imports: [

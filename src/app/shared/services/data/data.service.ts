@@ -12,6 +12,8 @@ import { EventEmitter } from '@angular/core';
 export class DataService {
   public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
+  public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
+
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO};
   public currentFolder: FolderVO;
 
@@ -164,5 +166,23 @@ export class DataService {
 
   public getLocalItems(folderLinkIds: number[]) {
 
+  }
+
+  public refreshCurrentFolder() {
+    return this.api.folder.navigate(this.currentFolder)
+      .pipe(map(((response: FolderResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
+
+        return response.getFolderVO(true);
+      }))).toPromise()
+      .then((folder: FolderVO) => {
+        this.currentFolder.update(folder);
+        this.folderUpdate.emit(this.currentFolder);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 }

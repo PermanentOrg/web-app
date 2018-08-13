@@ -1,0 +1,4 @@
+<label class="btn btn-primary" *ngIf="currentFolder">
+  Upload Files
+  <input id="uploadFiles" type="file" (change)="onFileChange($event)" multiple="multiple" hidden>
+</label>

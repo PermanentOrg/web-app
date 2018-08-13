@@ -87,7 +87,7 @@ export class RecordVO extends BaseVO {
   public ShareVOs;
   public AccessVO;
 
-  constructor(voData: any, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(voData: RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
     if (initChildren) {
@@ -97,4 +97,70 @@ export class RecordVO extends BaseVO {
       this.dataStatus = dataStatus;
     }
   }
+}
+
+export interface RecordVOData {
+  recordId?: any;
+  archiveId?: any;
+  archiveNbr?: any;
+  publicDT?: any;
+  note?: any;
+  displayName?: any;
+  uploadFileName?: any;
+  uploadAccountId?: any;
+  size?: any;
+  description?: any;
+  displayDT?: any;
+  displayEndDT?: any;
+  derivedDT?: any;
+  derivedEndDT?: any;
+  derivedCreatedDT?: any;
+  locnId?: any;
+  timeZoneId?: any;
+  view?: any;
+  viewProperty?: any;
+  imageRatio?: any;
+  encryption?: any;
+  metaToken?: any;
+  refArchiveNbr?: any;
+  type?: any;
+  thumbStatus?: any;
+  thumbURL200?: any;
+  thumbURL500?: any;
+  thumbURL1000?: any;
+  thumbURL2000?: any;
+  thumbDT?: any;
+  fileStatus?: any;
+  status?: any;
+  processedDT?: any;
+  FolderLinkVOs?: any;
+  folder_linkId?: number;
+  parentFolderId?: number;
+  position?: any;
+  accessRole?: any;
+  folderArchiveId?: number;
+  folder_linkType?: any;
+  pathAsFolder_linkId?: any;
+  pathAsText?: any;
+  parentFolder_linkId?: any;
+  ParentFolderVOs?: any;
+  parentArchiveNbr?: any;
+  pathAsArchiveNbr?: any;
+  LocnVO?: any;
+  TimezoneVO?: any;
+  FileVOs?: any;
+  DirectiveVOs?: any;
+  TagVOs?: any;
+  TextDataVOs?: any;
+  ArchiveVOs?: any;
+  saveAs?: any;
+  AttachmentRecordVOs?: any;
+  isAttachment?: any;
+  hasAttachments?: any;
+  uploadUri?: any;
+  fileDurationInSecs?: any;
+  batchNbr?: any;
+  RecordExifVO?: any;
+  ShareVOs?: any;
+  AccessVO?: any;
 }
