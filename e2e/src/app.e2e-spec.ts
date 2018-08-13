@@ -17,10 +17,11 @@ describe('M-Dot', () => {
 
   it('should redirect to login screen when not logged in', () => {
     page.navigateTo();
+    browser.wait(ExpectedConditions.urlContains('login'));
     expect(browser.getCurrentUrl()).toContain('/login');
   });
 
-  xit('should prompt for MFA token', () => {
+  it('should prompt for MFA token', () => {
     page.navigateTo();
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
     element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
@@ -30,7 +31,7 @@ describe('M-Dot', () => {
 
   it('should log in when MFA cookie set', () => {
     page.navigateTo();
-    (browser.manage() as any).addCookie({name: 'permMFA', value: 'JVI9M28SX70ZG605441C423U1D2B52061K0924X6'});
+    (browser.manage() as any).addCookie({name: 'testing', value: '42'});
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
     element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
     element(by.buttonText('Log in')).click();
