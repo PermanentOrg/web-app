@@ -12,7 +12,7 @@ const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
   styleUrls: ['./upload-progress.component.scss']
 })
 export class UploadProgressComponent implements OnInit {
-  public visible = false;
+  public visible = true;
 
   public status: UploadSessionStatus;
 
@@ -34,6 +34,9 @@ export class UploadProgressComponent implements OnInit {
         case UploadSessionStatus.Done:
           this.dismiss();
           break;
+        case UploadSessionStatus.ConnectionError:
+          console.error('uploader error! broken connection');
+          break;
       }
     });
   }
@@ -52,6 +55,10 @@ export class UploadProgressComponent implements OnInit {
 
   dismiss() {
     this.visible = false;
+  }
+
+  tryAgain() {
+    this.upload.retryFiles();
   }
 
   getProgressTransform() {

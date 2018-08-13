@@ -7,9 +7,30 @@
       <strong>{{fileCount.current}}</strong> of <strong>{{fileCount.total}}</strong></div>
   </div>
   <div *ngIf="status === 2">
-    <strong>{{fileCount.current}}</strong> files uploaded
+    <div [hidden]="fileCount.error">
+        <strong>{{fileCount.completed}}</strong> files uploaded 
+    </div>
+    <div [hidden]="!fileCount.error">
+        <strong>{{fileCount.completed}}</strong> of <strong>{{fileCount.total}}</strong>files uploaded 
+    </div>
   </div>
-  <div *ngIf="status === 3">
-    An error occurred
+  <div *ngIf="status === 4" class="upload">
+    <div class="message">
+      <strong>
+        Upload error
+      </strong>
+      <br>
+      <span *ngIf="fileCount.completed || true">{{fileCount.completed}} uploaded, </span>
+      <span *ngIf="fileCount.completed < fileCount.total || true">{{fileCount.total - fileCount.completed}} skipped</span>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" (click)="tryAgain()">Try again</button>
+    </div>
+  </div>
+  <div *ngIf="status === 5" class="upload">
+    <div class="message">Your account does not have enough storage</div>
+    <div class="actions">
+      <button class="btn btn-primary">OK</button>
+    </div>
   </div>
 </div>

@@ -16,7 +16,8 @@ $progress-bar-height: 2px;
 
 .upload {
   margin: 0;
-  display: flex
+  display: flex;
+  align-items: center;
 }
 
 .upload-progress {
@@ -39,7 +40,12 @@ $progress-bar-height: 2px;
   text-overflow: ellipsis;
 }
 
-.file-count {
+.message {
+  flex: 2 0 auto;
+  padding-right: 5px;
+}
+
+.file-count, .actions {
   flex: 0 0 auto;
   white-space: nowrap;
 }
