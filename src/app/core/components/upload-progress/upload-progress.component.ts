@@ -24,17 +24,18 @@ export class UploadProgressComponent implements OnInit {
   public fileCount: any;
 
   constructor(private upload: UploadService) {
+    this.upload.registerComponent(this);
+
     this.upload.uploader.uploadSessionStatus.subscribe((status: UploadSessionStatus) => {
       this.status = status;
       switch (status) {
         case UploadSessionStatus.Start:
-          this.show();
+          this.upload.showProgress();
           break;
         case UploadSessionStatus.Done:
-          this.dismiss();
+          this.upload.dismissProgress();
           break;
         case UploadSessionStatus.ConnectionError:
-          console.error('uploader error! broken connection');
           break;
       }
     });

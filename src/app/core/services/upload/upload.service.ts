@@ -17,8 +17,14 @@ import { RecordResponse } from '@shared/services/api/index.repo';
 })
 export class UploadService {
   public uploader: Uploader = new Uploader(this.api, this.message);
+  public component: UploadProgressComponent;
+  public progressVisible: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private api: ApiService, private message: MessageService) {
+  }
+
+  registerComponent(component: UploadProgressComponent) {
+    this.component = component;
   }
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {
@@ -41,5 +47,19 @@ export class UploadService {
         this.message.showError('You do not have enough storage available to upload these files.');
       }
     }
+  }
+
+  showProgress() {
+    if (this.component) {
+      this.component.show();
+    }
+    this.progressVisible.emit(true);
+  }
+
+  dismissProgress() {
+    if (this.component) {
+      this.component.dismiss();
+    }
+    this.progressVisible.emit(false);
   }
 }

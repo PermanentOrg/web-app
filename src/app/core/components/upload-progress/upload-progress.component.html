@@ -1,6 +1,8 @@
 <div class="upload-wrapper" [ngClass]="{visible: visible, 'fade': useFade}">
   <div class="upload-progress" [ngStyle]="{transform: getProgressTransform()}" *ngIf="currentItem"></div>
-  <div *ngIf="status === 0"></div>
+  <div *ngIf="status === 0">
+    Connecting...
+  </div>
   <div class="upload" *ngIf="status === 1 && currentItem">
     <div class="current-file">{{currentItem.file.name}}</div>
     <div class="file-count">
