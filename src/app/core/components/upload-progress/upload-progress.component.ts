@@ -13,6 +13,7 @@ const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
 })
 export class UploadProgressComponent implements OnInit {
   public visible = true;
+  public useFade = false;
 
   public status: UploadSessionStatus;
 
