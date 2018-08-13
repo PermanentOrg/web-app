@@ -3,7 +3,13 @@
   <h1 class="form-title">
     Verify Access
   </h1>
-  <input type="tel" class="form-control" id="token" placeholder="Token"
+  <p>
+    A verification code has been sent to your email address.
+    <br>
+    <br>
+    Enter it below to continue.
+  </p>
+  <input type="tel" class="form-control" id="token" placeholder="Code"
     [formControl]="mfaForm.controls['token']"
     autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify MFA</button>
