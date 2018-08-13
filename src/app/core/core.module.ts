@@ -13,6 +13,7 @@ import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { UploadProgressComponent } from './components/upload-progress/upload-progress.component';
+import { UploadButtonComponent } from './components/upload-button/upload-button.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { UploadProgressComponent } from './components/upload-progress/upload-pro
     LeftMenuComponent,
     BreadcrumbsComponent,
     UploadProgressComponent,
+    UploadButtonComponent,
   ],
   providers: [
     DataService,
