@@ -72,10 +72,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
         }
 
         if (this.reinit && !this.inFileView) {
-          this.ngOnInit();
-          setTimeout(() => {
-            this.ngAfterContentInit();
-          }, 0);
+          this.refreshView();
         }
 
         if (!event.url.includes('record') && this.inFileView) {
@@ -83,6 +80,22 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
         }
       });
     }
+
+    // register for folder update events
+    this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
+      if (folder.folderId === this.currentFolder.folderId) {
+        setTimeout(() => {
+          this.refreshView();
+        }, 100);
+      }
+    });
+  }
+
+  refreshView() {
+    this.ngOnInit();
+    setTimeout(() => {
+      this.ngAfterContentInit();
+    }, 1);
   }
 
   ngOnInit() {

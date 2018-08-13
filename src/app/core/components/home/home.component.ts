@@ -31,16 +31,4 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['/login']);
     });
   }
-
-  onFileChange(event) {
-    this.files = Array.from(event.target.files);
-    this.uploadFiles();
-  }
-
-  uploadFiles() {
-    const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
-    const targetFolder = new FolderVO(myFiles);
-    this.upload.uploadFiles(targetFolder, this.files);
-  }
-
 }

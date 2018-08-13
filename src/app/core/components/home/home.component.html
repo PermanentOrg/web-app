@@ -10,7 +10,3 @@
 <button class="btn btn-primary" [routerLink]="['/myfiles']">
   Go To My Files
 </button>
-<input type="file" (change)="onFileChange($event)" multiple="multiple">
-<button class="btn btn-primary" [disabled]="!files.length" (click)="uploadFiles()">
-  Upload Files
-</button>

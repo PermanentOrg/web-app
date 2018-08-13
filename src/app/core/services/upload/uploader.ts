@@ -27,6 +27,7 @@ export class Uploader {
   public uploadItem: EventEmitter<UploadItem> = new EventEmitter();
 
   public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
+  public fileUploadComplete: EventEmitter<UploadItem> = new EventEmitter<UploadItem>();
 
   private uploadItemsById: {[key: number]: UploadItem} = {};
   public uploadItemList: UploadItem[] = [];
@@ -124,7 +125,7 @@ export class Uploader {
 
     return this.openSocketConnection()
     .then(() => {
-      this.uploadFiles();
+      return this.uploadFiles();
     });
   }
 
@@ -185,8 +186,6 @@ export class Uploader {
 
   uploadNextFromQueue() {
     const currentItem = this.uploadQueue.shift();
-
-
     if (!currentItem) {
       return this.checkForNextOrFinish();
     }
@@ -217,6 +216,7 @@ export class Uploader {
         transferComplete = true;
         this.fileCount.completed++;
         this.checkForNextOrFinish();
+        this.fileUploadComplete.emit(currentItem);
       }
     });
 
