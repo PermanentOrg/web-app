@@ -13,7 +13,8 @@
     "test": "ng test",
     "test_build": "ng test ---watch=false --browsers ChromeHeadless",
     "lint": "ng lint",
-    "e2e_local": "protractor e2e/protractor.conf.js"
+    "e2e_local": "protractor e2e/protractor.conf.js",
+    "e2e_dev": "protractor e2e/protractor.dev.conf.js"
   },
   "private": true,
   "dependencies": {
