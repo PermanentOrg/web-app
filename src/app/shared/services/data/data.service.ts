@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { partition } from 'lodash';
+import { partition, remove } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderVO, RecordVO } from '@root/app/models';
@@ -8,14 +8,18 @@ import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
 
+const THUMBNAIL_REFRESH_INTERVAL = 7500;
+
 @Injectable()
 export class DataService {
+  public currentFolder: FolderVO;
   public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO};
-  public currentFolder: FolderVO;
+  private thumbRefreshQueue: Array<FolderVO | RecordVO> = [];
+  private thumbRefreshTimeout;
 
   constructor(private api: ApiService) {
     this.byFolderLinkId = {};
@@ -32,6 +36,13 @@ export class DataService {
   public setCurrentFolder(folder?: FolderVO) {
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
+
+    clearTimeout(this.thumbRefreshTimeout);
+    this.thumbRefreshQueue = [];
+
+    if (this.currentFolder) {
+      this.scheduleMissingThumbsCheck();
+    }
   }
 
   public fetchLeanItems(items: Array<FolderVO | RecordVO>, currentFolder ?: FolderVO): Promise<number> {
@@ -43,7 +54,7 @@ export class DataService {
     const folder = new FolderVO({
       archiveNbr: currentFolder.archiveNbr,
       ChildItemVOs: items.filter((item) => {
-          if (item.isFetching || item.dataStatus >= DataStatus.Lean) {
+          if (item.isFetching) {
             return false;
           }
 
@@ -79,6 +90,10 @@ export class DataService {
             item.isFetching = false;
             itemResolves[index]();
             item.fetched = null;
+
+            if (!item.thumbURL200 && item.parentFolderId === this.currentFolder.folderId) {
+              this.thumbRefreshQueue.push(item);
+            }
           }
         });
 
@@ -184,5 +199,28 @@ export class DataService {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  public checkMissingThumbs() {
+    if (!this.currentFolder) {
+      return;
+    }
+
+    if (!this.thumbRefreshQueue.length) {
+      return this.scheduleMissingThumbsCheck();
+    }
+
+    const itemsToCheck = this.thumbRefreshQueue;
+    this.thumbRefreshQueue = [];
+    this.fetchLeanItems(itemsToCheck)
+      .then(() => {
+        this.scheduleMissingThumbsCheck();
+      });
+  }
+
+  public scheduleMissingThumbsCheck() {
+    this.thumbRefreshTimeout = setTimeout(() => {
+      this.checkMissingThumbs();
+    }, THUMBNAIL_REFRESH_INTERVAL);
   }
 }
