@@ -17,11 +17,11 @@
   <div *ngIf="status === 4" class="upload">
     <div class="message">
       <strong>
-        Upload error
+        Connection error
       </strong>
       <br>
-      <span *ngIf="fileCount.completed || true">{{fileCount.completed}} uploaded, </span>
-      <span *ngIf="fileCount.completed < fileCount.total || true">{{fileCount.total - fileCount.completed}} skipped</span>
+      <span *ngIf="fileCount.completed">{{fileCount.completed}} uploaded, </span>
+      <span *ngIf="fileCount.completed < fileCount.total">{{fileCount.total - fileCount.completed}} skipped</span>
     </div>
     <div class="actions">
       <button class="btn btn-primary" (click)="tryAgain()">Try again</button>

@@ -43,13 +43,9 @@ export class Uploader {
 
   public uploadInProgress: boolean;
 
-  private uploadPromise: Promise<boolean>;
-  private uploadResolve: Function;
-  private uploadReject: Function;
-
   private uploadItemId = 0;
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private message: MessageService) {
   }
 
   openSocketConnection() {
@@ -57,11 +53,18 @@ export class Uploader {
 
     const failedToConnect = (error) => {
       this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
-      connectionReject();
+      this.message.showError('Unable to connect - try again in a moment');
+
+      this.errorQueue = this.metaQueue.concat(this.uploadQueue);
+
+      this.metaQueue = [];
+      this.uploadQueue = [];
+
       this.socketClient = null;
+      connectionReject();
     };
 
-    if (!this.socketClient) {
+    if (!this.socketClient || this.socketClient._socket.readyState !== 1 ) {
       return new Promise((resolve, reject) => {
         connectionReject = reject;
 
@@ -71,8 +74,8 @@ export class Uploader {
         this.socketClient.on('open', () => {
           this.fileCount.current = 0;
           this.fileCount.completed = 0;
-          this.fileCount.total = 0;
           this.fileCount.error = 0;
+          this.fileCount.total = this.metaQueue.length + this.uploadQueue.length;
 
           this.uploadSessionStatus.emit(UploadSessionStatus.Start);
           this.socketClient.removeListener('error', failedToConnect);
@@ -110,7 +113,7 @@ export class Uploader {
     }
   }
 
-  uploadFiles(parentFolder: FolderVO, files: File[]): Promise<any> {
+  connectAndUpload(parentFolder: FolderVO, files: File[]): Promise<any> {
     files.forEach((file) => {
       const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
       this.uploadItemsById[uploadItem.uploadItemId] = uploadItem;
@@ -119,20 +122,22 @@ export class Uploader {
       this.fileCount.total++;
     });
 
+    return this.openSocketConnection()
+    .then(() => {
+      this.uploadFiles();
+    });
+  }
+
+  uploadFiles(): Promise<any> {
     if (this.metaQueue.length) {
       return this.postMetaFromQueue()
       .then(() => {
         if (!this.uploadInProgress) {
-          this.uploadPromise = new Promise((resolve, reject) => {
-            this.uploadResolve = resolve;
-            this.uploadReject = reject;
-          });
           this.uploadInProgress = true;
           this.uploadNextFromQueue();
           this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
         }
 
-        return this.uploadPromise;
       })
       .catch((response: RecordResponse) => {
         this.uploadSessionStatus.emit(UploadSessionStatus.Done);
@@ -216,6 +221,8 @@ export class Uploader {
     });
 
     stream.on('error', (err) => {
+      currentItem.transferProgress = 0;
+
       this.fileCount.error++;
       this.errorQueue.push(currentItem);
       this.checkForNextOrFinish();
@@ -223,6 +230,7 @@ export class Uploader {
 
     stream.on('close', (event) => {
       if (!transferComplete) {
+        currentItem.transferProgress = 0;
         this.errorQueue.push(currentItem);
       }
     });
@@ -233,11 +241,6 @@ export class Uploader {
       this.uploadNextFromQueue();
     } else {
       this.uploadInProgress = false;
-      this.uploadResolve();
-
-      this.uploadReject = null;
-      this.uploadResolve = null;
-      this.uploadPromise = null;
 
       this.closeSocketConnection();
       this.uploadSessionStatus.emit(UploadSessionStatus.Done);
@@ -252,27 +255,23 @@ export class Uploader {
 
     let hasMeta, needsMeta;
 
+    // grab files from error queue and reset it
     [ hasMeta , needsMeta ] = partition(this.errorQueue, (item: UploadItem) => item.RecordVO.recordId);
     this.errorQueue = [];
 
-
     // put files that have RecordVOs in upload queue
-    if (hasMeta.length) {
-      this.uploadQueue = this.uploadQueue.concat(hasMeta);
-    }
-
-    let metaPromise: Promise<any> = Promise.resolve();
+    this.uploadQueue = hasMeta;
 
     // puts files that need RecordVOs in meta queue
-    if (needsMeta.length) {
-      this.metaQueue = this.metaQueue.concat(needsMeta);
-      metaPromise = this.postMetaFromQueue();
-    }
+    this.metaQueue = needsMeta;
 
-    // post meta for files if needed before finishing upload queue
-    metaPromise
+    return this.openSocketConnection()
       .then(() => {
-        return this.openSocketConnection();
+        if (this.metaQueue.length) {
+          return this.postMetaFromQueue();
+        }
+
+        return Promise.resolve();
       })
       .then(() => {
         this.uploadNextFromQueue();

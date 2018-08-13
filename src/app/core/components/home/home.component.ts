@@ -40,10 +40,7 @@ export class HomeComponent implements OnInit {
   uploadFiles() {
     const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
     const targetFolder = new FolderVO(myFiles);
-    this.upload.uploadFiles(targetFolder, this.files)
-    .then(() => {
-      console.log('done upload');
-    });
+    this.upload.uploadFiles(targetFolder, this.files);
   }
 
 }

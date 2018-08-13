@@ -16,32 +16,30 @@ import { RecordResponse } from '@shared/services/api/index.repo';
   providedIn: 'root'
 })
 export class UploadService {
-  public uploader: Uploader = new Uploader(this.api);
-  private component: UploadProgressComponent;
+  public uploader: Uploader = new Uploader(this.api, this.message);
 
   constructor(private api: ApiService, private message: MessageService) {
   }
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {
-    return this.uploader.openSocketConnection()
-    .then(() => {
-      return this.uploader.uploadFiles(parentFolder, files);
-    })
-    .catch((response: any) => {
-      if (response && typeof response.getMessage === 'function') {
-        if (response.messageIncludesPhrase('no_space_left')) {
-          this.message.showError('You do not have enough storage available to upload these files.');
-          // this.message.showError(response.getMessage(), true);
-        }
-      }
-    });
+    return this.uploader.connectAndUpload(parentFolder, files)
+      .catch((response: any) => {
+        this.handleUploaderError(response);
+      });
   }
 
   retryFiles() {
-    return this.uploader.retryFiles();
+    return this.uploader.retryFiles()
+      .catch((response: any) => {
+        this.handleUploaderError(response);
+      });
   }
 
-  registerComponent(component: UploadProgressComponent) {
-    this.component = component;
+  handleUploaderError(response: any) {
+    if (response && typeof response.getMessage === 'function') {
+      if (response.messageIncludesPhrase('no_space_left')) {
+        this.message.showError('You do not have enough storage available to upload these files.');
+      }
+    }
   }
 }

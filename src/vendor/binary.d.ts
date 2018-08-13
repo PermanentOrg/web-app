@@ -8,6 +8,7 @@ declare class BinaryClient extends EventEmitter {
   send(data: Stream | Buffer | Blob | File | ArrayBuffer | object | string, meta: any);
   close();
   createReadStream(meta: any);
+  _socket: WebSocket;
 }
 
 declare var binaryFeatures: {
