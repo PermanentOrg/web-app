@@ -10,7 +10,7 @@ import { FolderVO } from '@root/app/models';
 })
 export class UploadButtonComponent implements OnInit {
   private files: File[];
-  private currentFolder: FolderVO;
+  public currentFolder: FolderVO;
 
   constructor(private upload: UploadService, private dataService: DataService) {
     this.dataService.currentFolderChange.subscribe((currentFolder) => {
