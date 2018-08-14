@@ -33,7 +33,7 @@ $progress-bar-height: 2px;
 }
 
 .current-file {
-  flex: 2 0 auto;
+  flex: 0 1 auto;
   padding-right: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -41,7 +41,7 @@ $progress-bar-height: 2px;
 }
 
 .message {
-  flex: 2 0 auto;
+  flex: 0 1 auto;
   padding-right: 5px;
 }
 
