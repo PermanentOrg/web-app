@@ -23,7 +23,7 @@ export class SignupComponent implements OnInit {
     invitation: false,
     email: false,
     password: false,
-    passwordConfirm: false
+    confirm: false
   };
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {

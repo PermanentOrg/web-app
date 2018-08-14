@@ -2,16 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { CoreRoutingModule } from '@core/core-routing.module';
-import { FileBrowserModule } from '@fileBrowser/file-browser.module';
+import { CoreRoutingModule } from '@core/core.routes';
 
 import { DataService } from '@shared/services/data/data.service';
+import { UploadService } from '@core/services/upload/upload.service';
 
 import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
+import { UploadProgressComponent } from './components/upload-progress/upload-progress.component';
+import { UploadButtonComponent } from './components/upload-button/upload-button.component';
 
 @NgModule({
   imports: [
@@ -25,9 +27,12 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
     NavComponent,
     LeftMenuComponent,
     BreadcrumbsComponent,
+    UploadProgressComponent,
+    UploadButtonComponent,
   ],
   providers: [
-    DataService
+    DataService,
+    UploadService
   ]
 })
 export class CoreModule { }

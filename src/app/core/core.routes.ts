@@ -3,15 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
-import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
-import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 
 import { AuthGuard } from '@core/guards/auth.guard';
 
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
-import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -24,9 +21,9 @@ export const routes: Routes = [
     canActivateChild: [ AuthGuard ],
     resolve: rootFolderResolve,
     children: [
-      { path: '', component: HomeComponent},
-      { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'},
-      { path: 'apps', loadChildren: '../apps/apps.module#AppsModule' },
+      { path: '', component: HomeComponent, data: { title: 'Home'} },
+      { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
+      { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
       { path: '**', redirectTo: ''}
     ]
   }

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { FileBrowserRoutingModule } from '@fileBrowser/file-browser-routing.module';
+import { FileBrowserRoutingModule } from '@fileBrowser/file-browser.routes';
 
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';

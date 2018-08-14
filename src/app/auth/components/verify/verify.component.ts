@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
+import { AccountVO } from '@root/app/models';
 
 @Component({
   selector: 'pr-verify',
@@ -16,9 +17,21 @@ export class VerifyComponent implements OnInit {
   verifyForm: FormGroup;
   waiting: boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private message: MessageService,
+    private route: ActivatedRoute
+  ) {
+
+    const params = route.snapshot.params;
+    if (params.email) {
+      this.accountService.setAccount(new AccountVO({primaryEmail: window.atob(params.email)}));
+    }
+
     this.verifyForm = fb.group({
-      'token': [],
+      'token': [params.code || ''],
     });
   }
 

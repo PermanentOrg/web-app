@@ -1,0 +1,79 @@
+@import 'variables';
+
+$transition-length: 0.33s;
+$delay-length: 3s;
+
+$progress-bar-height: 2px;
+
+:host {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  z-index: 2;
+}
+
+.upload {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.upload-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $progress-bar-height;
+  background-color: $green;
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.05s linear;
+}
+
+.current-file {
+  flex: 0 1 auto;
+  padding-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message {
+  flex: 0 1 auto;
+  padding-right: 5px;
+}
+
+.file-count, .actions {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.upload-wrapper {
+  padding: 10px 10px;
+  transform: translateY(0);
+  transition: transform $transition-length ease-in $delay-length, visibility 0s linear $delay-length + $transition-length;
+  border-top: 1px $gray-500 solid;
+  display: block;
+  margin: 0 auto;
+  visibility: hidden;
+  background: white;
+  position: relative;
+  
+  &.visible {
+    transform: translateY(-100%);
+    transition: transform $transition-length ease-out, visibility 0s linear  0s;
+    visibility: visible;
+  }
+}
+
+.upload-wrapper.fade {
+  opacity: 0;
+  transition: transform 0s linear $transition-length, opacity $transition-length ease-in 0s, visibility 0s linear $transition-length;
+
+  &.visible {
+    opacity: 1;
+    transition: transform 0s, opacity $transition-length ease-out, visibility 0s linear  0s;
+  }
+}

@@ -11,7 +11,6 @@ if (environment.production) {
 }
 
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
-
 if (environment.hmr) {
   hmrBootstrap(module, bootstrap);
 } else {
