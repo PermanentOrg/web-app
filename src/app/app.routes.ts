@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'verify', redirectTo: 'auth/verify', pathMatch: 'full'  },
   { path: 'forgot', redirectTo: 'auth/forgot', pathMatch: 'full'  },
   { path: 'reset', redirectTo: 'auth/reset', pathMatch: 'full'  },
+  { path: 'terms', redirectTo: 'auth/terms', pathMatch: 'full'  },
   { path: 'signupEmbed', redirectTo: 'embed/signup', pathMatch: 'full'  },
   { path: 'verifyEmbed', redirectTo: 'embed/verify', pathMatch: 'full'  },
   { path: 'doneEmbed', redirectTo: 'embed/done', pathMatch: 'full'  },

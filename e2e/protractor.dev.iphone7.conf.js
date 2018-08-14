@@ -8,11 +8,16 @@ exports.config = {
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
+  seleniumAddress: 'http://hub-cloud.browserstack.com/wd/hub',
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'safari',
+    'browserstack.user': 'danielhurlbert1',
+    'browserstack.key': 'eCW3yyoq6xLJ8TbDGKyk',
+    'device': 'iPhone 7',
+    'realMobile': 'true',
+    'os_version': '10.3'
   },
-  directConnect: true,
-  baseUrl: 'https://local.permanent.org',
+  baseUrl: 'https://dev.permanent.org',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
@@ -24,6 +29,6 @@ exports.config = {
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-    browser.baseUrl = 'https://local.permanent.org/';
+    browser.baseUrl = 'https://dev.permanent.org/';
   }
 };
