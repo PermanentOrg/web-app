@@ -174,9 +174,6 @@ export class DataService {
       });
       console.error(response);
     });
-
-
-
   }
 
   public getLocalItems(folderLinkIds: number[]) {
