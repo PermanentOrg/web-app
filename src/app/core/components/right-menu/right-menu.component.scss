@@ -31,6 +31,7 @@ $shadow-color: rgba(black, 0.15);
   left: 0;
   right: 0;
   bottom: 0;
+  padding-bottom: 20px;
   transform: translateY(100%);
   transition:  transform $transition-length ease-in;
   background-color: white;
