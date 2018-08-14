@@ -17,9 +17,6 @@ export class AuthGuard implements CanActivate {
     .then((isSessionValid: boolean) => {
       if (isSessionValid && this.account.isLoggedIn()) {
         return true;
-      } else if (this.account.getAccount() && this.account.getAccount().needsVerification()) {
-        this.router.navigate(['/verify']);
-        return false;
       } else {
         this.router.navigate(['/login']);
         return false;
