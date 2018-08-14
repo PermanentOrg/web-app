@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' } },
   { path: 'mfa', component: MfaComponent, data: { title: 'Verify'} },
   { path: 'verify', component: VerifyComponent, data: { title: 'Verify'} },
+  { path: 'verify/:email/:code', component: VerifyComponent, data: { title: 'Verify'} },
   { path: 'forgot', component: ForgotPasswordComponent, data: { title: 'Forgot Password'} },
   { path: 'terms', component: TermsComponent, data: { title: 'Terms'} },
   { path: 'reset/:accountId/:token', component: ResetPasswordComponent, data: { title: 'Reset Password'} },
