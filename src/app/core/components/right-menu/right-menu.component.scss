@@ -1,0 +1,58 @@
+@import 'variables';
+
+$transition-length: 0.4s;
+$shadow-color: rgba(black, 0.15);
+
+.right-menu-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(black, 0);
+  transition: background-color $transition-length ease-out, visibility 0s linear $transition-length;
+  visibility: hidden;
+
+  &.visible {
+    left: 0;
+    right: 0;
+    background-color: $shadow-color;
+    visibility: visible;
+    transition:  background-color $transition-length ease-out;
+
+    .right-menu {
+      transform: translateY(0);
+      transition: transform $transition-length ease-out;
+    }
+  }
+}
+
+.right-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+  transition:  transform $transition-length ease-in;
+  background-color: white;
+  box-shadow: $box-shadow;
+
+  .menu-item {
+    padding: $input-btn-padding-y * 1.5 10px;
+    font-size: $font-size-base;
+    line-height: $btn-line-height;
+    cursor: pointer;
+    user-select: none;
+    display: block;
+
+    &.active {
+      font-weight: 600;
+    }
+  }
+
+  .menu-header {
+    padding: 10px;
+    strong {
+      display: block;
+    }
+  }
+}

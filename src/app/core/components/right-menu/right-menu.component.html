@@ -1,0 +1,17 @@
+<div class="right-menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
+  <div class="right-menu">
+    <div class="menu-header">
+      Options
+    </div>
+    <a class="menu-item" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+      true}">
+      Home
+    </a>
+    <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
+      My Files
+    </a>
+    <a class="menu-item" (click)='logOut()'>
+      Log Out
+    </a>
+  </div>
+</div>

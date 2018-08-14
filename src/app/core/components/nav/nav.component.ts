@@ -7,6 +7,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 })
 export class NavComponent implements OnInit {
   hambugerMenuVisible: boolean;
+  rightMenuVisible: boolean;
 
   constructor() {
   }
@@ -20,6 +21,14 @@ export class NavComponent implements OnInit {
 
   hideHamburgerMenu() {
     this.hambugerMenuVisible = false;
+  }
+
+  showRightMenu() {
+    this.rightMenuVisible = true;
+  }
+
+  hideRightMenu() {
+    this.rightMenuVisible = false;
   }
 
 }

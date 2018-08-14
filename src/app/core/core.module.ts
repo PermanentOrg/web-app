@@ -12,8 +12,9 @@ import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
-import { UploadProgressComponent } from './components/upload-progress/upload-progress.component';
-import { UploadButtonComponent } from './components/upload-button/upload-button.component';
+import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
+import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
+import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { UploadButtonComponent } from './components/upload-button/upload-button.
     MainComponent,
     NavComponent,
     LeftMenuComponent,
+    RightMenuComponent,
     BreadcrumbsComponent,
     UploadProgressComponent,
     UploadButtonComponent,
