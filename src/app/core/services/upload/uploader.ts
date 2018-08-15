@@ -30,7 +30,7 @@ export class Uploader {
   public fileUploadComplete: EventEmitter<UploadItem> = new EventEmitter<UploadItem>();
 
   private uploadItemsById: {[key: number]: UploadItem} = {};
-  public uploadItemList: UploadItem[] = [];
+
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
   private errorQueue: UploadItem[] = [];
@@ -118,7 +118,6 @@ export class Uploader {
     files.forEach((file) => {
       const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
       this.uploadItemsById[uploadItem.uploadItemId] = uploadItem;
-      this.uploadItemList.push(uploadItem);
       this.metaQueue.push(uploadItem);
       this.fileCount.total++;
     });
