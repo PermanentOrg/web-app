@@ -73,7 +73,10 @@ export class SignupEmbedComponent implements OnInit {
         if (account.needsVerification()) {
           this.router.navigate(['/embed', 'verify']);
         } else {
-          this.router.navigate(['/embed', 'done']);
+          this.accountService.logIn(formValue.email, formValue.passwords.password, true, true)
+          .then(() => {
+            this.router.navigate(['/embed', 'done']);
+          });
         }
       })
       .catch((response: AccountResponse) => {
