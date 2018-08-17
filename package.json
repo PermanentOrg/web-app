@@ -30,6 +30,7 @@
     "@types/lodash": "^4.14.116",
     "binaryjs": "^0.2.1",
     "core-js": "^2.5.4",
+    "gsap": "^2.0.1",
     "lodash": "^4.17.10",
     "ngx-cookie-service": "^1.0.10",
     "rxjs": "^6.2.2",
