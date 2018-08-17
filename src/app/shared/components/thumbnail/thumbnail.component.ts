@@ -56,7 +56,7 @@ export class ThumbnailComponent implements OnInit {
       if (elemSize <= size) {
         targetWidth = size;
       } else if (elemSize >= THUMB_SIZES[THUMB_SIZES.length - 1]) {
-        targetWidth = size;
+        targetWidth = THUMB_SIZES[THUMB_SIZES.length - 1];
       }
 
       if (targetWidth) {
