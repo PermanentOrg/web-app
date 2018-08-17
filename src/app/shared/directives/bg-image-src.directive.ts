@@ -1,5 +1,6 @@
 import { Directive, Input, OnInit, OnChanges, ElementRef, Renderer } from '@angular/core';
 import { TweenMax } from 'gsap';
+
 const FADE_IN_DURATION = 0.3;
 
 @Directive({

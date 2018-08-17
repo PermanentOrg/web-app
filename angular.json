@@ -31,7 +31,8 @@
               ]
             },
             "scripts": [
-              "src/vendor/binary.js"
+              "src/vendor/binary.js",
+              "node_modules/gsap/src/uncompressed/TweenMax.js"
             ]
           },
           "configurations": {
@@ -144,7 +145,8 @@
               ]
             },
             "scripts": [
-              "src/vendors/binary.js"
+              "src/vendors/binary.js",
+              "node_modules/gsap/src/uncompressed/TweenMax.js"
             ],
             "assets": [
               "src/favicon.ico",
