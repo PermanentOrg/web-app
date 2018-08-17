@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
@@ -14,7 +14,7 @@ import { DataStatus } from '@models/data-status.enum';
 export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, public element: ElementRef) {
   }
 
   goToItem() {
