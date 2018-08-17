@@ -1,5 +1,6 @@
 import { Directive, Input, OnInit, OnChanges, ElementRef, Renderer } from '@angular/core';
 import { TweenMax } from 'gsap';
+const FADE_IN_DURATION = 0.3;
 
 @Directive({
   selector: '[prBgImage]',
@@ -34,7 +35,7 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
         this.fadeIn = false;
         TweenMax.from(
           this.element,
-          0.35,
+          FADE_IN_DURATION,
           {
             opacity: 0,
             ease: 'Power4.easeOut'

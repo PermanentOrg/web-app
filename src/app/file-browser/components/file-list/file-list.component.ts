@@ -156,7 +156,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
           opacity: 0,
           ease: 'Power4.easeOut'
         },
-        0.01
+        0.015
       );
     }
 
