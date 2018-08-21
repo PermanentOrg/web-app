@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 
 import { FolderResponse} from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
@@ -46,24 +46,26 @@ export class RightMenuComponent implements OnInit {
   }
 
   createNewFolder() {
-    const testForm = this.fb.group({
-      folderName: ['', [Validators.required, Validators.email]],
-    });
-
-    const testFieldNames = [{
-      name: 'folderName',
+    const fields: PromptField[] = [{
+      fieldName: 'folderName',
       placeholder: 'Folder Name',
-      config: {autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}
+      config: {
+        autocapitalize: 'off',
+        autocorrect: 'off',
+        autocomplete: 'off',
+        spellcheck: 'off'
+      },
+      validators: [Validators.required]
     }];
 
-    this.prompt.prompt(testForm, testFieldNames)
+
+    return this.prompt.prompt(fields, 'Create Folder')
       .then((value) => {
         const newFolder = new FolderVO({
           parentFolderId: this.currentFolder.folderId,
           parentFolder_linkId: this.currentFolder.folder_linkId,
           displayName: value.folderName
         });
-
         return this.api.folder.post([newFolder])
           .pipe(map(((response: FolderResponse) => {
             if (!response.isSuccessful) {
@@ -78,12 +80,7 @@ export class RightMenuComponent implements OnInit {
           .catch((error) => {
             console.error(error);
           });
-      })
-      .catch(() => {
-        console.error('cancelled!');
       });
-
-
   }
 
 }

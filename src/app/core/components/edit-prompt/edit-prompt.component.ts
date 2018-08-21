@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-edit-prompt',
@@ -15,6 +15,9 @@ export class EditPromptComponent implements OnInit {
   public editForm: FormGroup;
   public fields: any[];
   public placeholderText = 'test';
+
+  public saveText = 'OK';
+  public cancelText = 'Cancel';
 
   public donePromise: Promise<any>;
   public doneResolve: Function;
@@ -34,9 +37,17 @@ export class EditPromptComponent implements OnInit {
     return false;
   }
 
-  prompt(form: FormGroup, fields: any[]) {
+  prompt(form: FormGroup, fields: PromptField[], saveText?: string, cancelText?: string) {
     if (this.editForm || this.donePromise) {
       throw new Error('Prompt in progress');
+    }
+
+    if (saveText) {
+      this.saveText = saveText;
+    }
+
+    if (cancelText) {
+      this.cancelText = cancelText;
     }
 
     this.editForm = form;

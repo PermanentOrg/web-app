@@ -24,30 +24,6 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const testForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      email2: ['', [Validators.required, Validators.email]]
-    });
-
-    const testFieldNames = [{
-      name: 'email',
-      placeholder: 'Email',
-      config: {autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}
-    },
-    {
-      name: 'email2',
-      placeholder: 'Email 2',
-      config: {autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}
-    }
-  ];
-
-    this.prompt.prompt(testForm, testFieldNames)
-      .then((value) => {
-        console.log('done!', value);
-      })
-      .catch(() => {
-        console.error('cancelled!');
-      });
   }
 
   logOut() {

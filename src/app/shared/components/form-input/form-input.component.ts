@@ -1,6 +1,13 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+export interface FormInputConfig {
+  autocorrect?: string;
+  autocomplete?: string;
+  autocapitalize?: string;
+  spellcheck?: string;
+}
+
 @Component({
   selector: 'pr-form-input',
   templateUrl: './form-input.component.html',
@@ -14,7 +21,7 @@ export class FormInputComponent implements OnInit {
   @Input() control: FormControl;
   @Input() errors: string;
 
-  @Input() config: any;
+  @Input() config: FormInputConfig;
 
   constructor(private element: ElementRef) { }
 
