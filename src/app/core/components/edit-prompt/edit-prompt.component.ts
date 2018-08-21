@@ -55,6 +55,7 @@ export class EditPromptComponent implements OnInit {
     event.stopPropagation();
     this.doneResolve(this.editForm.value);
     this.hide(event);
+    this.reset();
     return false;
   }
 
@@ -62,6 +63,7 @@ export class EditPromptComponent implements OnInit {
     event.stopPropagation();
     this.doneReject();
     this.hide(event);
+    this.reset();
     return false;
   }
 

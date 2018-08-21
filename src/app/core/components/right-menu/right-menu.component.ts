@@ -4,9 +4,11 @@ import { map } from 'rxjs/operators';
 
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 import { FolderResponse} from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
+import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'pr-right-menu',
@@ -21,7 +23,13 @@ export class RightMenuComponent implements OnInit {
 
   public currentFolder: FolderVO;
 
-  constructor(private router: Router, private dataService: DataService, private api: ApiService) {
+  constructor(
+    private router: Router,
+    private dataService: DataService,
+    private api: ApiService,
+    private fb: FormBuilder,
+    private prompt: PromptService
+  ) {
     this.dataService.currentFolderChange.subscribe((currentFolder: FolderVO) => {
       this.currentFolder = currentFolder;
     });
@@ -38,27 +46,44 @@ export class RightMenuComponent implements OnInit {
   }
 
   createNewFolder() {
-    const folderName = prompt('folder name:');
-    const newFolder = new FolderVO({
-      parentFolderId: this.currentFolder.folderId,
-      parentFolder_linkId: this.currentFolder.folder_linkId,
-      displayName: folderName
+    const testForm = this.fb.group({
+      folderName: ['', [Validators.required, Validators.email]],
     });
 
-    return this.api.folder.post([newFolder])
-      .pipe(map(((response: FolderResponse) => {
-        if (!response.isSuccessful) {
-          throw response;
-        }
+    const testFieldNames = [{
+      name: 'folderName',
+      placeholder: 'Folder Name',
+      config: {autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}
+    }];
 
-        return response.getFolderVO(true);
-      }))).toPromise()
-      .then((folder: FolderVO) => {
-        return this.dataService.refreshCurrentFolder();
+    this.prompt.prompt(testForm, testFieldNames)
+      .then((value) => {
+        const newFolder = new FolderVO({
+          parentFolderId: this.currentFolder.folderId,
+          parentFolder_linkId: this.currentFolder.folder_linkId,
+          displayName: value.folderName
+        });
+
+        return this.api.folder.post([newFolder])
+          .pipe(map(((response: FolderResponse) => {
+            if (!response.isSuccessful) {
+              throw response;
+            }
+
+            return response.getFolderVO(true);
+          }))).toPromise()
+          .then((folder: FolderVO) => {
+            return this.dataService.refreshCurrentFolder();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
-      .catch((error) => {
-        console.error(error);
+      .catch(() => {
+        console.error('cancelled!');
       });
+
+
   }
 
 }
