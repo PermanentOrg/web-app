@@ -3,7 +3,7 @@
 $transition-length: 0.25s;
 $shadow-color: rgba(black, 0.15);
 
-.right-menu-wrapper {
+.edit-prompt-wrapper {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -11,6 +11,7 @@ $shadow-color: rgba(black, 0.15);
   background-color: rgba(black, 0);
   transition: background-color $transition-length ease-out, visibility 0s linear $transition-length;
   visibility: hidden;
+  z-index: 2;
 
   &.visible {
     left: 0;
@@ -19,41 +20,30 @@ $shadow-color: rgba(black, 0.15);
     visibility: visible;
     transition:  background-color $transition-length ease-out;
 
-    .right-menu {
+    .edit-prompt {
       transform: translateY(0);
       transition: transform $transition-length ease-out;
     }
   }
 }
 
-.right-menu {
+.edit-prompt {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  padding-bottom: $bottom-safe-area-padding;
+  padding: 10px 10px $bottom-safe-area-padding;
   transform: translateY(100%);
   transition:  transform $transition-length ease-in;
   background-color: white;
   box-shadow: $box-shadow;
+}
 
-  .menu-item {
-    padding: $input-btn-padding-y * 1.5 10px;
-    font-size: $font-size-base;
-    line-height: $btn-line-height;
-    cursor: pointer;
-    user-select: none;
-    display: block;
-
-    &.active {
-      font-weight: 600;
-    }
-  }
-
-  .menu-header {
-    padding: 10px;
-    strong {
-      display: block;
-    }
+.edit-prompt-buttons {
+  text-align: right;
+  button {
+    display: inline-block;
+    width: auto;
+    margin: 0 0 0 10px
   }
 }

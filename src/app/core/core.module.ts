@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { CoreRoutingModule } from '@core/core.routes';
 
+import { SharedModule } from '@shared/shared.module';
+
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
@@ -15,11 +17,12 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
+import { EditPromptComponent } from './components/edit-prompt/edit-prompt.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
+    SharedModule,
     CoreRoutingModule,
   ],
   declarations: [
@@ -31,10 +34,12 @@ import { RightMenuComponent } from '@core/components/right-menu/right-menu.compo
     BreadcrumbsComponent,
     UploadProgressComponent,
     UploadButtonComponent,
+    EditPromptComponent,
   ],
   providers: [
     DataService,
-    UploadService
+    UploadService,
+    PromptService
   ]
 })
 export class CoreModule { }

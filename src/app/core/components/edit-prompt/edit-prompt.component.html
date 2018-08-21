@@ -1,0 +1,12 @@
+<div class="edit-prompt-wrapper" [ngClass]="{'visible': isVisible}">
+  <div class="edit-prompt">
+    <div class="input-group-vertical">
+      <pr-form-input type="Text" fieldName="name" [placeholder]="field.placeholder" [control]="editForm.controls[field.name]"
+        *ngFor="let field of fields"></pr-form-input>
+    </div>
+    <div class="edit-prompt-buttons">
+      <button class="btn btn-primary" (click)="save($event)">Save</button>
+      <button class="btn btn-default" (click)="cancel($event)">Cancel</button>
+    </div>
+  </div>
+</div>
