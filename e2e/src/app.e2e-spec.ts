@@ -1,7 +1,7 @@
 import { browser, by, element, ExpectedConditions } from 'protractor';
 import { AppPage } from './app.po';
 
-const HAMBURGER_MENU_DELAY = 400;
+const HAMBURGER_MENU_DELAY = 500;
 
 const TEST_ACCOUNT = {
   email: 'aatwood+e2e@permanent.org',
@@ -41,8 +41,9 @@ describe('M-Dot', () => {
   it('should navigate to My Files from hamburger menu', () => {
     page.navigateTo();
     element(by.css('button.navbar-toggler')).click();
+    const myFilesButton = element(by.linkText('My Files'));
     browser.sleep(HAMBURGER_MENU_DELAY);
-    element(by.linkText('My Files')).click();
+    myFilesButton.click();
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 });
