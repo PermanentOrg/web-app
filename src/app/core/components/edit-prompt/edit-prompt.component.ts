@@ -12,6 +12,7 @@ export class EditPromptComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  public waiting = false;
   public editForm: FormGroup;
   public fields: any[];
   public placeholderText = 'test';
@@ -34,6 +35,9 @@ export class EditPromptComponent implements OnInit {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
     event.stopPropagation();
+    setTimeout(() => {
+      this.reset();
+    }, 500);
     return false;
   }
 
@@ -66,7 +70,6 @@ export class EditPromptComponent implements OnInit {
     event.stopPropagation();
     this.doneResolve(this.editForm.value);
     this.hide(event);
-    this.reset();
     return false;
   }
 
@@ -74,7 +77,6 @@ export class EditPromptComponent implements OnInit {
     event.stopPropagation();
     this.doneReject();
     this.hide(event);
-    this.reset();
     return false;
   }
 

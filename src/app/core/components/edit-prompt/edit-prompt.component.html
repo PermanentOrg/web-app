@@ -1,12 +1,14 @@
 <div class="edit-prompt-wrapper" [ngClass]="{'visible': isVisible}">
   <div class="edit-prompt">
-    <div class="input-group-vertical">
-      <pr-form-input type="Text" [fieldName]="field.fieldName" [placeholder]="field.placeholder" [control]="editForm.controls[field.fieldName]" [config]="field.config"
-        *ngFor="let field of fields"></pr-form-input>
-    </div>
-    <div class="edit-prompt-buttons">
-        <button class="btn btn-default" (click)="cancel($event)">{{cancelText}}</button>
-        <button class="btn btn-primary" (click)="save($event)">{{saveText}}</button>
-    </div>
+    <form [formGroup]="editForm" (ngSubmit)="save($event)">
+      <div class="input-group-vertical">
+        <pr-form-input type="Text" [fieldName]="field.fieldName" [placeholder]="field.placeholder" [control]="editForm.controls[field.fieldName]" [config]="field.config"
+          *ngFor="let field of fields"></pr-form-input>
+      </div>
+      <div class="edit-prompt-buttons">
+          <button type="button" class="btn btn-default" (click)="cancel($event)" [disabled]="waiting">{{cancelText}}</button>
+          <button type="submit" class="btn btn-primary" [disabled]="waiting || editForm.invalid">{{saveText}}</button>
+      </div>
+    </form>
   </div>
 </div>
