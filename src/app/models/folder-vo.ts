@@ -80,7 +80,7 @@ export class FolderVO extends BaseVO {
   public posStart;
   public posLimit;
 
-  constructor(voData: any, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(voData: FolderVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
     this.ChildItemVOs = orderBy(this.ChildItemVOs, 'position');
@@ -99,4 +99,63 @@ export class FolderVO extends BaseVO {
       this.dataStatus = dataStatus;
     }
   }
+}
+
+export interface FolderVOData {
+  folderId?: any;
+  archiveNbr?: any;
+  archiveId?: any;
+  displayName?: any;
+  displayDT?: any;
+  displayEndDT?: any;
+  derivedDT?: any;
+  derivedEndDT?: any;
+  note?: any;
+  description?: any;
+  special?: any;
+  sort?: any;
+  locnId?: any;
+  timeZoneId?: any;
+  view?: any;
+  viewProperty?: any;
+  thumbArchiveNbr?: any;
+  imageRatio?: any;
+  type?: any;
+  thumbStatus?: any;
+  thumbURL200?: any;
+  thumbURL500?: any;
+  thumbURL1000?: any;
+  thumbURL2000?: any;
+  thumbDT?: any;
+  status?: any;
+  publicDT?: any;
+  parentFolderId?: any;
+  folder_linkType?: any;
+  FolderLinkVOs?: any;
+  accessRole?: any;
+  position?: any;
+  shareDT?: any;
+  pathAsFolder_linkId?: number;
+  pathAsText?: any;
+  folder_linkId?: number;
+  parentFolder_linkId?: number;
+  ParentFolderVOs?: any;
+  parentArchiveNbr?: any;
+  pathAsArchiveNbr?: any;
+  ChildFolderVOs?: any;
+  RecordVOs?: any;
+  LocnVO?: any;
+  TimezoneVO?: any;
+  DirectiveVOs?: any;
+  TagVOs?: any;
+  SharedArchiveVOs?: any;
+  FolderSizeVO?: any;
+  AttachmentRecordVOs?: any;
+  hasAttachments?: any;
+  ChildItemVOs?: any;
+  ShareVOs?: any;
+  AccessVO?: any;
+  AccessVOs?: any;
+  posStart?: any;
+  posLimit?: any;
 }
