@@ -10,7 +10,6 @@ import { PromptService, PromptField } from '@core/services/prompt/prompt.service
 })
 export class EditPromptComponent implements OnInit {
   @Input() isVisible: boolean;
-  @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public waiting = false;
   public editForm: FormGroup;
@@ -19,6 +18,8 @@ export class EditPromptComponent implements OnInit {
 
   public saveText = 'OK';
   public cancelText = 'Cancel';
+
+  public savePromise: Promise<any>;
 
   public donePromise: Promise<any>;
   public doneResolve: Function;
@@ -33,18 +34,18 @@ export class EditPromptComponent implements OnInit {
 
   hide(event: Event) {
     this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-    event.stopPropagation();
     setTimeout(() => {
       this.reset();
     }, 500);
     return false;
   }
 
-  prompt(form: FormGroup, fields: PromptField[], saveText?: string, cancelText?: string) {
+  prompt(form: FormGroup, fields: PromptField[], savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
     if (this.editForm || this.donePromise) {
       throw new Error('Prompt in progress');
     }
+
+    this.savePromise = savePromise;
 
     if (saveText) {
       this.saveText = saveText;
@@ -56,6 +57,7 @@ export class EditPromptComponent implements OnInit {
 
     this.editForm = form;
     this.fields = fields;
+
     this.donePromise = new Promise((resolve, reject) => {
       this.doneResolve = resolve;
       this.doneReject = reject;
@@ -69,13 +71,24 @@ export class EditPromptComponent implements OnInit {
   save(event: Event) {
     event.stopPropagation();
     this.doneResolve(this.editForm.value);
-    this.hide(event);
+    if (!this.savePromise) {
+      this.hide(event);
+    } else {
+      this.waiting = true;
+      this.savePromise
+        .then(() => {
+          this.waiting = false;
+          this.hide(event);
+        })
+        .catch(() => {
+          this.waiting = false;
+        });
+    }
     return false;
   }
 
   cancel(event: Event) {
     event.stopPropagation();
-    this.doneReject();
     this.hide(event);
     return false;
   }

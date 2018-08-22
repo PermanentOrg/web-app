@@ -29,7 +29,7 @@ export class PromptService {
     this.component = toRegister;
   }
 
-  prompt(fields: PromptField[], saveText?: string, cancelText?: string) {
+  prompt(fields: PromptField[], savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
     if (!this.component) {
       throw new Error('PromptService - Missing prompt component');
     }
@@ -40,8 +40,7 @@ export class PromptService {
       formConfig[field.fieldName] = [field.initialValue || '', field.validators || []];
     }
 
-
-    return this.component.prompt(this.fb.group(formConfig), fields, saveText, cancelText);
+    return this.component.prompt(this.fb.group(formConfig), fields, savePromise, saveText, cancelText);
   }
 }
 
