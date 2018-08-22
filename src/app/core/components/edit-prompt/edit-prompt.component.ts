@@ -13,7 +13,7 @@ export class EditPromptComponent implements OnInit {
 
   public waiting = false;
   public editForm: FormGroup;
-  public fields: any[];
+  public fields: any[] = [];
   public placeholderText = 'test';
 
   public saveText = 'OK';
@@ -25,11 +25,16 @@ export class EditPromptComponent implements OnInit {
   public doneResolve: Function;
   public doneReject: Function;
 
+  private defaultForm: FormGroup;
+
   constructor(private service: PromptService, private fb: FormBuilder, private element: ElementRef) {
     this.service.registerComponent(this);
+    this.defaultForm = fb.group({});
+    this.editForm = this.defaultForm;
   }
 
   ngOnInit() {
+
   }
 
   hide(event: Event) {
@@ -41,7 +46,7 @@ export class EditPromptComponent implements OnInit {
   }
 
   prompt(form: FormGroup, fields: PromptField[], savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
-    if (this.editForm || this.donePromise) {
+    if (this.donePromise) {
       throw new Error('Prompt in progress');
     }
 
@@ -99,7 +104,7 @@ export class EditPromptComponent implements OnInit {
   }
 
   reset() {
-    this.editForm = null;
+    this.editForm = this.defaultForm;
     this.fields = null;
     this.donePromise = null;
     this.doneResolve = null;
