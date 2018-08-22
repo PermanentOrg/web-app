@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
@@ -25,7 +25,7 @@ export class EditPromptComponent implements OnInit {
   public doneResolve: Function;
   public doneReject: Function;
 
-  constructor(private service: PromptService, private fb: FormBuilder) {
+  constructor(private service: PromptService, private fb: FormBuilder, private element: ElementRef) {
     this.service.registerComponent(this);
   }
 
@@ -64,6 +64,11 @@ export class EditPromptComponent implements OnInit {
     });
 
     this.isVisible = true;
+
+    setTimeout(() => {
+      const elem = this.element.nativeElement as Element;
+      elem.querySelector('input').focus();
+    });
 
     return this.donePromise;
   }
