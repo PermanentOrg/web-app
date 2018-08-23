@@ -22,4 +22,18 @@ export class AppsGuard implements CanActivate {
       return true;
     }
   }
+
+  canActivateChild(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    const queryParams = next.queryParams;
+
+    if (queryParams && queryParams.redirect === 'facebook') {
+      this.router.navigate(['/apps']);
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

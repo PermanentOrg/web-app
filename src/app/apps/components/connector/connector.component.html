@@ -9,6 +9,6 @@
 </div>
 <div class="connector-actions">
   <button class="btn btn-primary" [hidden]="connected" (click)="connect()" [disabled]="waiting">Connect</button>
-  <button class="btn btn-primary" [hidden]="!connected" [disabled]="waiting">Import</button>
+  <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting">Import Photos</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
 </div>

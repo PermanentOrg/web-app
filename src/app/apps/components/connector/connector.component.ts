@@ -11,6 +11,13 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ConnectorOverviewVO, FolderVO, SimpleVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ConnectorResponse } from '@shared/services/api/index.repo';
+import { MessageService } from '@shared/services/message/message.service';
+import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+
+export enum ConnectorImportType {
+  Everything,
+  Tagged
+}
 
 @Component({
   selector: 'pr-connector',
@@ -28,7 +35,14 @@ export class ConnectorComponent implements OnInit {
 
   public waiting: boolean;
 
-  constructor(private router: Router, private prConstants: PrConstantsService, private api: ApiService, private account: AccountService) { }
+  constructor(
+    private router: Router,
+    private prConstants: PrConstantsService,
+    private api: ApiService,
+    private account: AccountService,
+    private message: MessageService,
+    private prompt: PromptService
+  ) { }
 
   ngOnInit() {
     const type = this.connector.type.split('.').pop();
@@ -72,8 +86,8 @@ export class ConnectorComponent implements OnInit {
         .then((result: SimpleVO) => {
           location.assign(result.value);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((response: ConnectorResponse) => {
+          this.message.showError(response.getMessage(), true);
         });
     }
   }
@@ -103,8 +117,75 @@ export class ConnectorComponent implements OnInit {
           this.connector = connector;
           this.setStatus();
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((response: ConnectorResponse) => {
+          this.message.showError(response.getMessage(), true);
+        });
+    }
+  }
+
+  importPrompt() {
+    let buttons: PromptButton[] = [];
+    let title: string;
+    switch (this.connector.type) {
+      case 'type.connector.facebook':
+        buttons = [
+          {
+            buttonName: 'tagged',
+            buttonText: '#permanent',
+            value: ConnectorImportType.Tagged
+          },
+          {
+            buttonName: 'everything',
+            buttonText: 'Everything',
+            value: ConnectorImportType.Everything
+          }
+        ];
+        title = 'Import Facebook Photos';
+        break;
+    }
+
+    if (!buttons.length) {
+      this.import();
+    } else {
+      this.prompt.promptButtons(buttons, title)
+        .then((value) => {
+          this.import(value);
+        });
+    }
+
+  }
+
+  import(importType: ConnectorImportType = ConnectorImportType.Everything) {
+    let importRequest: Observable<any>;
+    const archive = this.account.getArchive();
+
+    this.waiting = true;
+
+    switch (this.connector.type) {
+      case 'type.connector.facebook':
+        if (importType === ConnectorImportType.Tagged) {
+          importRequest = this.api.connector.facebookTaggedImport(archive);
+        } else {
+          importRequest = this.api.connector.facebookTaggedImport(archive);
+        }
+        break;
+    }
+
+    if (importRequest) {
+      return importRequest
+        .pipe(map(((response: ConnectorResponse) => {
+          this.waiting = false;
+          if (!response.isSuccessful) {
+            throw response;
+          }
+
+          return response;
+        }))).toPromise()
+        .then(() => {
+          this.message.showMessage('Facebook import started - we\'ll send an email when it\'s complete.', 'success');
+        })
+        .catch((response: ConnectorResponse) => {
+          this.message.showError(response.getMessage(), true);
         });
     }
   }

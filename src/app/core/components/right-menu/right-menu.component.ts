@@ -67,7 +67,7 @@ export class RightMenuComponent implements OnInit {
       createReject = reject;
     });
 
-    return this.prompt.prompt(fields, createPromise, 'Create Folder')
+    return this.prompt.prompt(fields, 'Create New Folder', createPromise, 'Create Folder')
       .then((value) => {
         const newFolder = new FolderVO({
           parentFolderId: this.currentFolder.folderId,

@@ -23,6 +23,17 @@ export class ConnectorRepo extends BaseRepo {
 
     return this.http.sendRequest('/connector/facebookDisconnect', data, ConnectorResponse);
   }
+
+  public facebookTaggedImport(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive,
+      ConnectorFacebookAlbumVO: {
+        discardContent: false
+      }
+    }];
+
+    return this.http.sendRequest('/connector/facebookRetrieveRequest', data, ConnectorResponse);
+  }
 }
 
 export class ConnectorResponse extends BaseResponse {

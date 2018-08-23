@@ -39,11 +39,20 @@ $shadow-color: rgba(black, 0.15);
   box-shadow: $box-shadow;
 }
 
-.edit-prompt-buttons {
+.edit-prompt-field-buttons {
   text-align: right;
   button {
     display: inline-block;
     width: auto;
     margin: 0 0 0 10px
   }
+}
+
+.edit-prompt-buttons {
+  padding: 0px 10px;
+}
+
+.edit-prompt-title {
+  padding: 10px 10px 0px;
+  font-weight: 600;
 }
