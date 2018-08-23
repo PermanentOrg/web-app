@@ -59,7 +59,7 @@ export class ConnectorComponent implements OnInit {
         connectRequest = this.api.connector.facebookConnect(archive);
     }
 
-    if (connectRequest) {
+  if (connectRequest) {
       return connectRequest
         .pipe(map(((response: ConnectorResponse) => {
           this.waiting = false;
