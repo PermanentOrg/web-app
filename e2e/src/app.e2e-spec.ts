@@ -64,8 +64,9 @@ describe('M-Dot', () => {
     page.navigateTo();
     expect(browser.getCurrentUrl()).not.toContain('auth');
     element(by.css('button.navbar-toggler')).click();
+    const myFilesButton = element(by.linkText('My Files'));
     browser.sleep(HAMBURGER_MENU_DELAY);
-    element(by.linkText('My Files')).click();
+    myFilesButton.click();
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 });
