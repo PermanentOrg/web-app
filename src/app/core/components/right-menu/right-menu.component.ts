@@ -23,6 +23,9 @@ export class RightMenuComponent implements OnInit {
   public accountName: string;
 
   public currentFolder: FolderVO;
+  public allowedActions = {
+    createFolder: false
+  };
 
   constructor(
     private router: Router,
@@ -34,10 +37,17 @@ export class RightMenuComponent implements OnInit {
   ) {
     this.dataService.currentFolderChange.subscribe((currentFolder: FolderVO) => {
       this.currentFolder = currentFolder;
+      this.setAvailableActions();
     });
   }
 
   ngOnInit() {
+    this.currentFolder = this.dataService.currentFolder;
+    this.setAvailableActions();
+  }
+
+  setAvailableActions() {
+    this.allowedActions.createFolder = this.currentFolder && !this.currentFolder.type.includes('app');
   }
 
   hide(event: Event) {
