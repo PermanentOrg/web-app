@@ -40,6 +40,7 @@ describe('M-Dot', () => {
 
   it('should navigate to My Files from hamburger menu', () => {
     page.navigateTo();
+    browser.wait(ExpectedConditions.urlIs(`${browser.baseUrl}m/`));
     element(by.css('button.navbar-toggler')).click();
     const myFilesButton = element(by.linkText('My Files'));
     browser.sleep(HAMBURGER_MENU_DELAY);
