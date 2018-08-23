@@ -1,9 +1,9 @@
 <div class="right-menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="right-menu">
-    <a class="menu-item" (click)='createNewFolder()' *ngIf="currentFolder">
+    <a class="menu-item" (click)='createNewFolder()' *ngIf="allowedActions.createFolder">
       Create New Folder
     </a>
-    <a class="menu-item" *ngIf="!currentFolder">
+    <a class="menu-item" *ngIf="!allowedActions.createFolder">
       <em>No actions available</em>
     </a>
   </div>

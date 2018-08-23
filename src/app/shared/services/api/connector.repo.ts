@@ -7,6 +7,44 @@ export class ConnectorRepo extends BaseRepo {
   public getOverview(connectors: ConnectorOverviewVO[]): Observable<ConnectorResponse> {
     return this.http.sendRequest('/connector/getOverview', connectors, ConnectorResponse);
   }
+
+  public facebookConnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/facebookSetup', data, ConnectorResponse);
+  }
+
+  public facebookDisconnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/facebookDisconnect', data, ConnectorResponse);
+  }
+
+  public facebookTaggedImport(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive,
+      ConnectorFacebookAlbumVO: {
+        discardContent: false
+      }
+    }];
+
+    return this.http.sendRequest('/connector/facebookRetrieveRequest', data, ConnectorResponse);
+  }
+
+  public facebookBulkImport(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive,
+      ConnectorFacebookAlbumVO: {
+        discardContent: false
+      }
+    }];
+
+    return this.http.sendRequest('/connector/uploadFacebookBulkImport', data, ConnectorResponse);
+  }
 }
 
 export class ConnectorResponse extends BaseResponse {

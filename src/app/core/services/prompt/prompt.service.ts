@@ -13,6 +13,13 @@ export interface PromptField {
   validators ?: ValidationErrors[];
 }
 
+export interface PromptButton {
+  buttonName: string;
+  buttonText: string;
+  value ?: any;
+  class ?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,7 +36,7 @@ export class PromptService {
     this.component = toRegister;
   }
 
-  prompt(fields: PromptField[], savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
+  prompt(fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
     if (!this.component) {
       throw new Error('PromptService - Missing prompt component');
     }
@@ -40,7 +47,15 @@ export class PromptService {
       formConfig[field.fieldName] = [field.initialValue || '', field.validators || []];
     }
 
-    return this.component.prompt(this.fb.group(formConfig), fields, savePromise, saveText, cancelText);
+    return this.component.prompt(this.fb.group(formConfig), fields, title, savePromise, saveText, cancelText);
+  }
+
+  promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>) {
+    if (!this.component) {
+      throw new Error('PromptService - Missing prompt component');
+    }
+
+    return this.component.promptButtons(buttons, title, savePromise);
   }
 }
 

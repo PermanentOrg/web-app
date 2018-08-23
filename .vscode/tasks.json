@@ -6,6 +6,18 @@
     {
       "type": "npm",
       "script": "build_local",
+      "problemMatcher": [
+        "$tsc"
+      ]
+    },
+    {
+      "type": "npm",
+      "script": "e2e_local",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "dev",
       "problemMatcher": []
     }
   ]
