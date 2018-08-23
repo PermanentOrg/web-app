@@ -34,6 +34,17 @@ export class ConnectorRepo extends BaseRepo {
 
     return this.http.sendRequest('/connector/facebookRetrieveRequest', data, ConnectorResponse);
   }
+
+  public facebookBulkImport(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive,
+      ConnectorFacebookAlbumVO: {
+        discardContent: false
+      }
+    }];
+
+    return this.http.sendRequest('/connector/uploadFacebookBulkImport', data, ConnectorResponse);
+  }
 }
 
 export class ConnectorResponse extends BaseResponse {

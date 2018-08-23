@@ -12,7 +12,7 @@
       </div>
     </form>
     <div class="edit-prompt-buttons" *ngIf="editButtons">
-      <button [id]="button.buttonName" class="btn btn-primary" type="button" *ngFor="let button of editButtons" (click)="clickButton(button, $event)">
+      <button [id]="button.buttonName" class="btn btn-primary" type="button" *ngFor="let button of editButtons" (click)="clickButton(button, $event)" [disabled]="waiting">
         {{button.buttonText}}
       </button>
     </div>

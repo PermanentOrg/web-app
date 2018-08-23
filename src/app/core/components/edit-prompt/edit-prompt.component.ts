@@ -129,7 +129,19 @@ export class EditPromptComponent implements OnInit {
   clickButton(button: PromptButton, event: Event) {
     this.doneResolve(button.value || button.buttonName);
     event.stopPropagation();
-    this.hide(event);
+    if (!this.savePromise) {
+      this.hide(event);
+    } else {
+      this.waiting = true;
+      this.savePromise
+        .then(() => {
+          this.waiting = false;
+          this.hide(event);
+        })
+        .catch(() => {
+          this.waiting = false;
+        });
+    }
     return false;
   }
 

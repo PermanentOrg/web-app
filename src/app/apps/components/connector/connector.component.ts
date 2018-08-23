@@ -126,6 +126,9 @@ export class ConnectorComponent implements OnInit {
   importPrompt() {
     let buttons: PromptButton[] = [];
     let title: string;
+
+    let importStartResolve;
+
     switch (this.connector.type) {
       case 'type.connector.facebook':
         buttons = [
@@ -144,12 +147,22 @@ export class ConnectorComponent implements OnInit {
         break;
     }
 
+    const importStartPromise = new Promise((resolve, reject) => {
+      importStartResolve = resolve;
+    });
+
     if (!buttons.length) {
       this.import();
     } else {
-      this.prompt.promptButtons(buttons, title)
+      this.prompt.promptButtons(buttons, title, importStartPromise)
         .then((value) => {
-          this.import(value);
+          return this.import(value);
+        })
+        .then(() => {
+          importStartResolve();
+        })
+        .catch(() => {
+          importStartResolve();
         });
     }
 
@@ -159,6 +172,7 @@ export class ConnectorComponent implements OnInit {
     let importRequest: Observable<any>;
     const archive = this.account.getArchive();
 
+
     this.waiting = true;
 
     switch (this.connector.type) {
@@ -166,7 +180,7 @@ export class ConnectorComponent implements OnInit {
         if (importType === ConnectorImportType.Tagged) {
           importRequest = this.api.connector.facebookTaggedImport(archive);
         } else {
-          importRequest = this.api.connector.facebookTaggedImport(archive);
+          importRequest = this.api.connector.facebookBulkImport(archive);
         }
         break;
     }
