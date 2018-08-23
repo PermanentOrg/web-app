@@ -26,6 +26,8 @@ export class ConnectorComponent implements OnInit {
   public hasFiles: boolean;
   public connectorName: string;
 
+  public waiting: boolean;
+
   constructor(private router: Router, private prConstants: PrConstantsService, private api: ApiService, private account: AccountService) { }
 
   ngOnInit() {
@@ -35,6 +37,10 @@ export class ConnectorComponent implements OnInit {
       this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
+    this.setStatus();
+  }
+
+  setStatus() {
     this.connected = this.connector.status === 'status.connector.connected';
   }
 
@@ -43,16 +49,20 @@ export class ConnectorComponent implements OnInit {
   }
 
   connect() {
-    let connectFn: Function;
+    let connectRequest: Observable<any>;
+    const archive = this.account.getArchive();
+
+    this.waiting = true;
 
     switch (this.connector.type) {
       case 'type.connector.facebook':
-        connectFn = this.api.connector.facebookConnect;
+        connectRequest = this.api.connector.facebookConnect(archive);
     }
 
-    if (connectFn) {
-      return connectFn(this.account.getArchive())
+    if (connectRequest) {
+      return connectRequest
         .pipe(map(((response: ConnectorResponse) => {
+          this.waiting = false;
           if (!response.isSuccessful) {
             throw response;
           }
@@ -61,6 +71,37 @@ export class ConnectorComponent implements OnInit {
         }))).toPromise()
         .then((result: SimpleVO) => {
           location.assign(result.value);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }
+
+  disconnect() {
+    let disconnectRequest: Observable<any>;
+    const archive = this.account.getArchive();
+
+    this.waiting = true;
+
+    switch (this.connector.type) {
+      case 'type.connector.facebook':
+        disconnectRequest = this.api.connector.facebookDisconnect(archive);
+    }
+
+    if (disconnectRequest) {
+      return disconnectRequest
+        .pipe(map(((response: ConnectorResponse) => {
+          this.waiting = false;
+          if (!response.isSuccessful) {
+            throw response;
+          }
+
+          return response.getConnectorOverviewVO();
+        }))).toPromise()
+        .then((connector: ConnectorOverviewVO) => {
+          this.connector = connector;
+          this.setStatus();
         })
         .catch((error) => {
           console.error(error);

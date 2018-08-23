@@ -10,13 +10,18 @@ export class ConnectorRepo extends BaseRepo {
 
   public facebookConnect(archive: ArchiveVO) {
     const data = [{
-      ArchiveVO: {
-        archiveId: archive.archiveId,
-        archiveNbr: archive.archiveId
-      }
+      ArchiveVO: archive
     }];
 
     return this.http.sendRequest('/connector/facebookSetup', data, ConnectorResponse);
+  }
+
+  public facebookDisconnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/facebookDisconnect', data, ConnectorResponse);
   }
 }
 
