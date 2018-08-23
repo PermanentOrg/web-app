@@ -7,6 +7,11 @@
       "type": "npm",
       "script": "build_local",
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "e2e_local",
+      "problemMatcher": []
     }
   ]
 }

@@ -21,6 +21,28 @@ describe('M-Dot', () => {
     expect(browser.getCurrentUrl()).toContain('/login');
   });
 
+  it('should attempt to sign up for E2E test account', () => {
+    page.goToSignup();
+    browser.wait(ExpectedConditions.urlContains('signup'));
+    expect(browser.getCurrentUrl()).toContain('/signup');
+    element(by.id('invitation')).sendKeys('Permanent Archive');
+    element(by.id('name')).sendKeys('E2E TEST');
+    element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
+    element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
+    element(by.id('passwordConfirm')).sendKeys(TEST_ACCOUNT.password);
+    element(by.id('terms')).click();
+    element(by.buttonText('Sign up')).click();
+
+    element(by.css('.alert-wrapper.visible')).isDisplayed()
+      .then((visible) => {
+        if (visible) {
+          expect(browser.getCurrentUrl()).toContain('/signup');
+        } else {
+          expect(browser.getCurrentUrl()).not.toContain('/verify');
+        }
+      });
+  });
+
   it('should prompt for MFA token', () => {
     page.navigateTo();
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
@@ -40,10 +62,10 @@ describe('M-Dot', () => {
 
   it('should navigate to My Files from hamburger menu', () => {
     page.navigateTo();
+    expect(browser.getCurrentUrl()).not.toContain('auth');
     element(by.css('button.navbar-toggler')).click();
-    const myFilesButton = element(by.linkText('My Files'));
     browser.sleep(HAMBURGER_MENU_DELAY);
-    myFilesButton.click();
+    element(by.linkText('My Files')).click();
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 });

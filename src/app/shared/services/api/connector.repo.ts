@@ -7,6 +7,17 @@ export class ConnectorRepo extends BaseRepo {
   public getOverview(connectors: ConnectorOverviewVO[]): Observable<ConnectorResponse> {
     return this.http.sendRequest('/connector/getOverview', connectors, ConnectorResponse);
   }
+
+  public facebookConnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: {
+        archiveId: archive.archiveId,
+        archiveNbr: archive.archiveId
+      }
+    }];
+
+    return this.http.sendRequest('/connector/facebookSetup', data, ConnectorResponse);
+  }
 }
 
 export class ConnectorResponse extends BaseResponse {
