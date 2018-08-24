@@ -145,7 +145,7 @@
               ]
             },
             "scripts": [
-              "src/vendors/binary.js",
+              "src/vendor/binary.js",
               "node_modules/gsap/src/uncompressed/TweenMax.js"
             ],
             "assets": [
