@@ -11,10 +11,8 @@ xdescribe('NavComponent', () => {
   beforeEach(Testing.async(() => {
     const config = Testing.BASE_TEST_CONFIG;
 
-    config.declarations = [
-      NavComponent,
-      LeftMenuComponent
-    ];
+    config.declarations.push(NavComponent);
+    config.declarations.push(LeftMenuComponent);
 
     TestBed.configureTestingModule(config).compileComponents();
   }));
