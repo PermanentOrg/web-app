@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { PromptService } from '@shared/services/prompt/prompt.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 xdescribe('PromptService', () => {
   beforeEach(() => {
