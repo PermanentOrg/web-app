@@ -36,6 +36,10 @@ export class PromptService {
     this.component = toRegister;
   }
 
+  deregisterComponent() {
+    this.component = null;
+  }
+
   prompt(fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
     if (!this.component) {
       throw new Error('PromptService - Missing prompt component');
