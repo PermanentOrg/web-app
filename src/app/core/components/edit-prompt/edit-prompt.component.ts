@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output, ElementRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { PromptService, PromptField, PromptButton } from '@core/services/prompt/prompt.service';
@@ -8,7 +8,7 @@ import { PromptService, PromptField, PromptButton } from '@core/services/prompt/
   templateUrl: './edit-prompt.component.html',
   styleUrls: ['./edit-prompt.component.scss']
 })
-export class EditPromptComponent implements OnInit {
+export class EditPromptComponent implements OnInit, OnDestroy {
   @Input() isVisible: boolean;
 
   public waiting = false;
@@ -33,11 +33,13 @@ export class EditPromptComponent implements OnInit {
   constructor(private service: PromptService, private fb: FormBuilder, private element: ElementRef) {
     this.service.registerComponent(this);
     this.defaultForm = fb.group({});
-    // this.editForm = this.defaultForm;
   }
 
   ngOnInit() {
+  }
 
+  ngOnDestroy() {
+    this.service.deregisterComponent();
   }
 
   hide(event: Event) {
