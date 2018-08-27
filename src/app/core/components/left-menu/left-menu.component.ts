@@ -13,11 +13,11 @@ export class LeftMenuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  public accountName: string;
+  public archiveName: string;
 
   constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) {
-    if (this.accountService.getAccount()) {
-      this.accountName = this.accountService.getAccount().fullName;
+    if (this.accountService.getArchive()) {
+      this.archiveName = this.accountService.getArchive().fullName;
     }
   }
 

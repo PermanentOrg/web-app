@@ -1,7 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { CookieService } from 'ngx-cookie-service';
+import * as Testing from '@root/test/testbedConfig';
 
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { AccountService } from '@shared/services/account/account.service';
@@ -13,18 +11,10 @@ xdescribe('LeftMenuComponent', () => {
   let accountService: AccountService;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ LeftMenuComponent ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      providers: [
-        CookieService,
-        AccountService
-      ]
-    })
-    .compileComponents();
+    const config = Testing.BASE_TEST_CONFIG;
+    config.declarations.push(LeftMenuComponent);
+
+    TestBed.configureTestingModule(config).compileComponents();
 
     accountService = TestBed.get(AccountService);
     accountService.setAccount(TEST_DATA.account);
@@ -46,7 +36,7 @@ xdescribe('LeftMenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have the current account name as a property', () => {
-    expect(component.accountName).toEqual(TEST_DATA.account.fullName);
+  it('should have the current archive name as a property', () => {
+    expect(component.archiveName).toEqual(TEST_DATA.archive.fullName);
   });
 });
