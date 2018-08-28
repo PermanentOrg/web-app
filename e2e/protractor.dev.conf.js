@@ -12,7 +12,7 @@ exports.config = {
     'browserName': 'chrome',
     'chromeOptions': {
       args: [
-        "disable-infobars", "--no-sandbox"
+        "--no-sandbox", "--headless", "--disable-gpu"
       ]
     }
   },
