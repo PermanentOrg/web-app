@@ -13,6 +13,7 @@ describe('M-Dot', () => {
 
   beforeEach(() => {
     page = new AppPage();
+    browser.waitForAngularEnabled(true);
   });
 
   it('should redirect to login screen when not logged in', () => {
@@ -69,4 +70,18 @@ describe('M-Dot', () => {
     myFilesButton.click();
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
+
+  it('should have a Photos folder in My Files and navigate into it', () => {
+    page.goToMyFiles();
+    browser.waitForAngularEnabled(false);
+    const anyListItem = element(by.css('.file-list-item'));
+    browser.wait(ExpectedConditions.presenceOf(anyListItem));
+    browser.sleep(500);
+    const photosFolder = element(by.cssContainingText('.file-list-item', 'Photos'));
+    browser.wait(ExpectedConditions.elementToBeClickable(photosFolder));
+    photosFolder.click();
+    browser.wait(ExpectedConditions.urlContains('-'));
+    expect(browser.getCurrentUrl()).toContain('-');
+  });
+
 });
