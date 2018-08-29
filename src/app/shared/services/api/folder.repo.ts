@@ -40,14 +40,24 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequest('/folder/getLeanItems', data, FolderResponse);
   }
 
-  public post(folderVOs: FolderVO[]): Observable<FolderResponse> {
+  public post(folderVOs: FolderVO[]): Promise<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
         FolderVO: new FolderVO(folderVO)
       };
     });
 
-    return this.http.sendRequest('/folder/post', data, FolderResponse);
+    return this.http.sendRequestPromise('/folder/post', data, FolderResponse);
+  }
+
+  public delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: new FolderVO(folderVO)
+      };
+    });
+
+    return this.http.sendRequestPromise('/folder/delete', data, FolderResponse);
   }
 }
 

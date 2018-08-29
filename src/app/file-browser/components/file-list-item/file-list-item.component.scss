@@ -21,6 +21,10 @@ $row-height: $file-list-row-height;
   text-overflow: ellipsis;
 }
 
+.actions {
+  margin-right: 0.5rem;
+}
+
 [prBgImage] {
   height: $row-height - 10px;
   width: $row-height - 10px;

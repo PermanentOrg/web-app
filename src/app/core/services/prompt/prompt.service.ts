@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validator, ValidationErrors } from '@angular/fo
 
 import { FormInputConfig } from '@shared/components/form-input/form-input.component';
 
-import { EditPromptComponent } from '@core/components/edit-prompt/edit-prompt.component';
+import { PromptComponent } from '@core/components/prompt/prompt.component';
 
 export interface PromptField {
   fieldName: string;
@@ -24,11 +24,11 @@ export interface PromptButton {
   providedIn: 'root'
 })
 export class PromptService {
-  private component: EditPromptComponent;
+  private component: PromptComponent;
 
   constructor(private fb: FormBuilder) { }
 
-  registerComponent(toRegister: EditPromptComponent) {
+  registerComponent(toRegister: PromptComponent) {
     if (this.component) {
       throw new Error('PromptService - Prompt component already registered');
     }

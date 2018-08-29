@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FolderResponse} from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
 import { Validators, FormBuilder } from '@angular/forms';
+import { EditService } from '@core/services/edit/edit.service';
 
 @Component({
   selector: 'pr-right-menu',
@@ -30,10 +31,11 @@ export class RightMenuComponent implements OnInit {
   constructor(
     private router: Router,
     private message: MessageService,
+    private edit: EditService,
     private dataService: DataService,
     private api: ApiService,
     private fb: FormBuilder,
-    private prompt: PromptService
+    private prompt: PromptService,
   ) {
     this.dataService.currentFolderChange.subscribe((currentFolder: FolderVO) => {
       this.currentFolder = currentFolder;
@@ -79,19 +81,7 @@ export class RightMenuComponent implements OnInit {
 
     return this.prompt.prompt(fields, 'Create New Folder', createPromise, 'Create Folder')
       .then((value) => {
-        const newFolder = new FolderVO({
-          parentFolderId: this.currentFolder.folderId,
-          parentFolder_linkId: this.currentFolder.folder_linkId,
-          displayName: value.folderName
-        });
-        return this.api.folder.post([newFolder])
-          .pipe(map(((response: FolderResponse) => {
-            if (!response.isSuccessful) {
-              throw response;
-            }
-
-            return response.getFolderVO(true);
-          }))).toPromise()
+        this.edit.createFolder(value.folderName, this.currentFolder)
           .then((folder: FolderVO) => {
             this.message.showMessage(`Folder "${value.folderName}" has been created`, 'success');
             createResolve();
@@ -103,5 +93,4 @@ export class RightMenuComponent implements OnInit {
           });
       });
   }
-
 }
