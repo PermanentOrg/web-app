@@ -10,6 +10,7 @@ const TEST_ACCOUNT = {
 
 describe('M-Dot', () => {
   let page: AppPage;
+  let newFolderName: string;
 
   beforeEach(() => {
     page = new AppPage();
@@ -52,7 +53,7 @@ describe('M-Dot', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  it('should log in', () => {
+  fit('should log in', () => {
     page.navigateTo();
     waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
@@ -71,16 +72,16 @@ describe('M-Dot', () => {
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 
-  it('should have a Photos folder in My Files and navigate into it', () => {
+  fit('should have a Photos folder in My Files and navigate into it', () => {
     page.goToMyFiles();
     browser.waitForAngularEnabled(false);
     navigateIntoFolderByName('Photos');
     expect(element.all(by.css('.file-list-item')).count()).toBe(4);
   });
 
-  it('should create a new folder', () => {
+  fit('should create a new folder', () => {
     let initialCount: number;
-    const testName = new Date().toISOString();
+    newFolderName = new Date().toISOString();
     page.goToMyFiles();
     browser.waitForAngularEnabled(false);
     navigateIntoFolderByName('Test Folders');
@@ -91,12 +92,30 @@ describe('M-Dot', () => {
       browser.sleep(HAMBURGER_MENU_DELAY);
       element(by.linkText('Create New Folder')).click();
       browser.sleep(HAMBURGER_MENU_DELAY);
-      element(by.id('folderName')).sendKeys(testName);
+      element(by.id('folderName')).sendKeys(newFolderName);
       element(by.buttonText('Create Folder')).click();
       browser.sleep(3000);
       expect(element.all(by.css('.file-list-item')).count()).toBe(initialCount + 1);
-      const newFolderElement = element(by.cssContainingText('.file-list-item', testName));
+      const newFolderElement = element(by.cssContainingText('.file-list-item', newFolderName));
       expect(newFolderElement.isPresent()).toBeTruthy();
+    });
+  });
+
+  fit('should delete the previously created folder', () => {
+    let initialCount: number;
+    page.goToMyFiles();
+    browser.waitForAngularEnabled(false);
+    navigateIntoFolderByName('Test Folders');
+    element.all(by.css('.file-list-item')).count()
+    .then((count) => {
+      initialCount = count;
+      const newFolderElement = element(by.cssContainingText('.file-list-item', newFolderName));
+      newFolderElement.element(by.css('button.right-menu-toggler')).click();
+      browser.sleep(HAMBURGER_MENU_DELAY);
+      element(by.buttonText('Delete')).click();
+      browser.sleep(3000);
+      expect(element.all(by.css('.file-list-item')).count()).toBe(initialCount - 1);
+      expect(newFolderElement.isPresent()).toBeFalsy();
     });
   });
 });
