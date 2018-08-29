@@ -8,7 +8,7 @@ import { PromptService, PromptField } from '@core/services/prompt/prompt.service
 import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderResponse} from '@shared/services/api/index.repo';
-import { FolderVO } from '@root/app/models';
+import { FolderVO, RecordVO } from '@root/app/models';
 import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -22,9 +22,10 @@ export class ItemActionsMenuComponent implements OnInit {
 
   public accountName: string;
 
+  public item: FolderVO | RecordVO;
   public currentFolder: FolderVO;
   public allowedActions = {
-    createFolder: false
+    delete: false
   };
 
   constructor(
@@ -47,7 +48,7 @@ export class ItemActionsMenuComponent implements OnInit {
   }
 
   setAvailableActions() {
-    this.allowedActions.createFolder = this.currentFolder && !this.currentFolder.type.includes('app');
+    this.allowedActions.delete = this.currentFolder && !this.currentFolder.type.includes('app');
   }
 
   hide(event: Event) {

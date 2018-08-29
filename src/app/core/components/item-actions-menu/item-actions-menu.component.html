@@ -1,5 +1,5 @@
-<div class="item-actions-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
-  <div class="item-actions">
+<div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
+  <div class="item-actions-menu">
     <a class="menu-item" (click)='createNewFolder()' *ngIf="allowedActions.createFolder">
       Create New Folder
     </a>
