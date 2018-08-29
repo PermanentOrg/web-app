@@ -1,42 +1,21 @@
 @import 'variables';
 
 $transition-length: 0.25s;
-$shadow-color: rgba(black, 0.15);
 
-.edit-prompt-wrapper {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: rgba(black, 0);
-  transition: background-color $transition-length ease-out, visibility 0s linear $transition-length;
-  visibility: hidden;
-  z-index: 2;
-
-  &.visible {
-    left: 0;
-    right: 0;
-    background-color: $shadow-color;
-    visibility: visible;
-    transition:  background-color $transition-length ease-out;
-
-    .edit-prompt {
-      transform: translateY(0);
-      transition: transform $transition-length ease-out;
-    }
+.menu-wrapper.visible {
+  .edit-prompt {
+    transform: translateY(0);
+    transition: transform $transition-length ease-out;
   }
 }
 
 .edit-prompt {
-  position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   padding-bottom: $bottom-safe-area-padding;
   transform: translateY(100%);
   transition:  transform $transition-length ease-in;
-  background-color: white;
-  box-shadow: $box-shadow;
 }
 
 .edit-prompt-field-buttons {
@@ -55,4 +34,6 @@ $shadow-color: rgba(black, 0.15);
 .edit-prompt-title {
   padding: 10px 10px 0px;
   font-weight: 600;
+  max-width: 420px;
+  margin: 0px auto;
 }

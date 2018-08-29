@@ -1,5 +1,5 @@
-<div class="edit-prompt-wrapper" [ngClass]="{'visible': isVisible}" (click)="cancel($event)">
-  <div class="edit-prompt" (click)="$event.stopPropagation();">
+<div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="cancel($event)">
+  <div class="menu edit-prompt" (click)="$event.stopPropagation();">
     <div class="edit-prompt-title" *ngIf="title">{{title}}</div>
     <form [formGroup]="editForm" (ngSubmit)="save($event)" *ngIf="editForm">
       <div class="input-group-vertical">

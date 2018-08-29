@@ -36,14 +36,9 @@ export class ItemActionsMenuComponent implements OnInit {
     private fb: FormBuilder,
     private prompt: PromptService
   ) {
-    this.dataService.currentFolderChange.subscribe((currentFolder: FolderVO) => {
-      this.currentFolder = currentFolder;
-      this.setAvailableActions();
-    });
   }
 
   ngOnInit() {
-    this.currentFolder = this.dataService.currentFolder;
     this.setAvailableActions();
   }
 
@@ -58,50 +53,7 @@ export class ItemActionsMenuComponent implements OnInit {
     return false;
   }
 
-  createNewFolder() {
-    let createResolve, createReject;
+  deleteItem() {
 
-    const fields: PromptField[] = [{
-      fieldName: 'folderName',
-      placeholder: 'Folder Name',
-      config: {
-        autocapitalize: 'off',
-        autocorrect: 'off',
-        autocomplete: 'off',
-        spellcheck: 'off'
-      },
-      validators: [Validators.required]
-    }];
-
-    const createPromise = new Promise((resolve, reject) => {
-      createResolve = resolve;
-      createReject = reject;
-    });
-
-    return this.prompt.prompt(fields, 'Create New Folder', createPromise, 'Create Folder')
-      .then((value) => {
-        const newFolder = new FolderVO({
-          parentFolderId: this.currentFolder.folderId,
-          parentFolder_linkId: this.currentFolder.folder_linkId,
-          displayName: value.folderName
-        });
-        return this.api.folder.post([newFolder])
-          .pipe(map(((response: FolderResponse) => {
-            if (!response.isSuccessful) {
-              throw response;
-            }
-
-            return response.getFolderVO(true);
-          }))).toPromise()
-          .then((folder: FolderVO) => {
-            this.message.showMessage(`Folder "${value.folderName}" has been created`, 'success');
-            createResolve();
-            return this.dataService.refreshCurrentFolder();
-          })
-          .catch((response: FolderResponse) => {
-            this.message.showError(response.getMessage(), true);
-            createReject();
-          });
-      });
   }
 }
