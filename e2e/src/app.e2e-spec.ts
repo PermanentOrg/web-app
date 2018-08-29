@@ -53,7 +53,7 @@ describe('M-Dot', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  fit('should log in', () => {
+  it('should log in', () => {
     page.navigateTo();
     waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
@@ -72,14 +72,14 @@ describe('M-Dot', () => {
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 
-  fit('should have a Photos folder in My Files and navigate into it', () => {
+  it('should have a Photos folder in My Files and navigate into it', () => {
     page.goToMyFiles();
     browser.waitForAngularEnabled(false);
     navigateIntoFolderByName('Photos');
     expect(element.all(by.css('.file-list-item')).count()).toBe(4);
   });
 
-  fit('should create a new folder', () => {
+  it('should create a new folder', () => {
     let initialCount: number;
     newFolderName = new Date().toISOString();
     page.goToMyFiles();
@@ -101,7 +101,7 @@ describe('M-Dot', () => {
     });
   });
 
-  fit('should delete the previously created folder', () => {
+  it('should delete the previously created folder', () => {
     let initialCount: number;
     page.goToMyFiles();
     browser.waitForAngularEnabled(false);
