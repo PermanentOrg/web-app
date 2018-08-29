@@ -31,11 +31,11 @@ export class RightMenuComponent implements OnInit {
   constructor(
     private router: Router,
     private message: MessageService,
+    private edit: EditService,
     private dataService: DataService,
     private api: ApiService,
     private fb: FormBuilder,
     private prompt: PromptService,
-    private edit: EditService
   ) {
     this.dataService.currentFolderChange.subscribe((currentFolder: FolderVO) => {
       this.currentFolder = currentFolder;

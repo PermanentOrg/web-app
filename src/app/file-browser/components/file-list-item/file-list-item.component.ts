@@ -6,6 +6,7 @@ import { PromptService, PromptButton } from '@core/services/prompt/prompt.servic
 
 import { FolderVO, RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import { EditService } from '@core/services/edit/edit.service';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -20,7 +21,8 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     public element: ElementRef,
-    private prompt: PromptService
+    private prompt: PromptService,
+    private edit: EditService
   ) {
   }
 
@@ -55,17 +57,42 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
     let actionButtons: PromptButton[];
 
+    let deleteResolve, deleteReject;
+
+    const deletePromise = new Promise((resolve, reject) => {
+      deleteResolve = resolve;
+      deleteReject = reject;
+    });
+
     actionButtons = [
       {
         buttonName: 'delete',
         buttonText: 'Delete',
-        class: 'danger'
+        class: 'btn-danger'
       }
     ];
 
-    this.prompt.promptButtons(actionButtons, this.item.displayName);
+    this.prompt.promptButtons(actionButtons, this.item.displayName, deletePromise)
+      .then((value: string) => {
+        switch (value) {
+          case 'delete':
+            this.deleteItem(deleteResolve);
+            break;
+        }
+      });
 
     return false;
+  }
+
+  deleteItem(resolve: Function) {
+    return this.edit.deleteItems([this.item])
+      .then(() => {
+        this.dataService.refreshCurrentFolder();
+        resolve();
+      })
+      .catch(() => {
+        resolve();
+      });
   }
 
   ngOnInit() {
