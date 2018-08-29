@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -26,11 +26,33 @@ export class SignupComponent implements OnInit {
     confirm: false
   };
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private message: MessageService
+  ) {
+    const params = route.snapshot.queryParams;
+
+    let name, email, inviteCode;
+
+    if (params.fullName) {
+      name = window.atob(params.fullName);
+    }
+
+    if (params.primaryEmail) {
+      email = window.atob(params.primaryEmail);
+    }
+
+    if (params.inviteCode) {
+      inviteCode = window.atob(params.inviteCode);
+    }
+
     this.signupForm = fb.group({
-      invitation: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', Validators.required],
+      invitation: [inviteCode || '', [Validators.required]],
+      email: [email || '', [Validators.required, Validators.email]],
+      name: [name || '', Validators.required],
       passwords: fb.group({
         password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
         confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
