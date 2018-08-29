@@ -15,6 +15,7 @@ import { EditService } from '@core/services/edit/edit.service';
 })
 export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
+  public allowActions = true;
 
   constructor(
     private dataService: DataService,
@@ -24,6 +25,17 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     private prompt: PromptService,
     private edit: EditService
   ) {
+  }
+
+  ngOnInit() {
+    this.dataService.registerItem(this.item);
+    if (this.item.type.includes('app')) {
+      this.allowActions = false;
+    }
+  }
+
+  ngOnDestroy() {
+    this.dataService.deregisterItem(this.item);
   }
 
   goToItem() {
@@ -95,12 +107,5 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {
-    this.dataService.registerItem(this.item);
-  }
-
-  ngOnDestroy() {
-    this.dataService.deregisterItem(this.item);
-  }
 
 }

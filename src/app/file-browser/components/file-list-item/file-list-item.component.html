@@ -3,7 +3,7 @@
   <div class="name">
     {{item.displayName}}
   </div>
-  <div class="actions">
+  <div class="actions" *ngIf="allowActions">
     <button class="right-menu-toggler" (click)="showActions($event)">
       <span class="right-menu-toggler-icon"></span>
     </button>
