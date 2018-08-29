@@ -17,7 +17,7 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
-import { EditPromptComponent } from './components/edit-prompt/edit-prompt.component';
+import { PromptComponent } from './components/prompt/prompt.component';
 
 @NgModule({
   imports: [
@@ -34,7 +34,7 @@ import { EditPromptComponent } from './components/edit-prompt/edit-prompt.compon
     BreadcrumbsComponent,
     UploadProgressComponent,
     UploadButtonComponent,
-    EditPromptComponent,
+    PromptComponent,
   ],
   providers: [
     DataService,

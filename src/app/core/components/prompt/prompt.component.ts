@@ -4,11 +4,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PromptService, PromptField, PromptButton } from '@core/services/prompt/prompt.service';
 
 @Component({
-  selector: 'pr-edit-prompt',
-  templateUrl: './edit-prompt.component.html',
-  styleUrls: ['./edit-prompt.component.scss']
+  selector: 'pr-prompt',
+  templateUrl: './prompt.component.html',
+  styleUrls: ['./prompt.component.scss']
 })
-export class EditPromptComponent implements OnInit, OnDestroy {
+export class PromptComponent implements OnInit, OnDestroy {
   @Input() isVisible: boolean;
 
   public waiting = false;

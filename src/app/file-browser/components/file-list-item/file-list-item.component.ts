@@ -63,7 +63,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.prompt.promptButtons(actionButtons, null);
+    this.prompt.promptButtons(actionButtons, this.item.displayName);
 
     return false;
   }
