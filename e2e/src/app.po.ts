@@ -13,4 +13,9 @@ export class AppPage {
     browser.get('/m/');
     return browser.wait(ExpectedConditions.urlIs(`${browser.baseUrl}m/`));
   }
+
+  goToMyFiles() {
+    browser.get('/m/myfiles');
+    return browser.wait(ExpectedConditions.urlContains('myfiles'));
+  }
 }

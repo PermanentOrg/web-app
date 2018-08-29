@@ -13,6 +13,7 @@ describe('M-Dot', () => {
 
   beforeEach(() => {
     page = new AppPage();
+    browser.waitForAngularEnabled(true);
   });
 
   it('should redirect to login screen when not logged in', () => {
@@ -53,6 +54,7 @@ describe('M-Dot', () => {
 
   it('should log in', () => {
     page.navigateTo();
+    waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
     element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
@@ -64,9 +66,49 @@ describe('M-Dot', () => {
     page.navigateTo();
     expect(browser.getCurrentUrl()).not.toContain('auth');
     element(by.css('button.navbar-toggler')).click();
-    const myFilesButton = element(by.linkText('My Files'));
     browser.sleep(HAMBURGER_MENU_DELAY);
-    myFilesButton.click();
+    element(by.linkText('My Files')).click();
     expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
+
+  it('should have a Photos folder in My Files and navigate into it', () => {
+    page.goToMyFiles();
+    browser.waitForAngularEnabled(false);
+    navigateIntoFolderByName('Photos');
+    expect(element.all(by.css('.file-list-item')).count()).toBe(4);
+  });
+
+  it('should create a new folder', () => {
+    let initialCount: number;
+    const testName = new Date().toISOString();
+    page.goToMyFiles();
+    browser.waitForAngularEnabled(false);
+    navigateIntoFolderByName('Test Folders');
+    element.all(by.css('.file-list-item')).count()
+    .then((count) => {
+      initialCount = count;
+      element(by.css('.right-menu-toggler')).click();
+      browser.sleep(HAMBURGER_MENU_DELAY);
+      element(by.linkText('Create New Folder')).click();
+      browser.sleep(HAMBURGER_MENU_DELAY);
+      element(by.id('folderName')).sendKeys(testName);
+      element(by.buttonText('Create Folder')).click();
+      browser.sleep(3000);
+      expect(element.all(by.css('.file-list-item')).count()).toBe(initialCount + 1);
+      const newFolderElement = element(by.cssContainingText('.file-list-item', testName));
+      expect(newFolderElement.isPresent()).toBeTruthy();
+    });
+  });
 });
+
+function waitForUpdate() {
+  return browser.sleep(0);
+}
+
+function navigateIntoFolderByName(folderName) {
+  browser.wait(ExpectedConditions.presenceOf(element(by.css('.file-list-item'))));
+  waitForUpdate();
+  element(by.cssContainingText('.file-list-item', folderName)).click();
+  browser.wait(ExpectedConditions.presenceOf(element(by.cssContainingText('.breadcrumb', folderName))));
+  waitForUpdate();
+}
