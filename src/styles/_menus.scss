@@ -6,7 +6,8 @@
   background-color: rgba(black, 0);
   transition: background-color $default-transition-length ease-out, visibility 0s linear $default-transition-length;
   visibility: hidden;
-
+  z-index: 5;
+  
   .menu {
     position: absolute;
     transition:  transform $default-transition-length ease-in;

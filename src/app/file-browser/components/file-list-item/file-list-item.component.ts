@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
+import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
 
 import { FolderVO, RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -14,7 +15,13 @@ import { DataStatus } from '@models/data-status.enum';
 export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute, public element: ElementRef) {
+  constructor(
+    private dataService: DataService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public element: ElementRef,
+    private prompt: PromptService
+  ) {
   }
 
   goToItem() {
@@ -41,6 +48,24 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
+  }
+
+  showActions(event: Event) {
+    event.stopPropagation();
+
+    let actionButtons: PromptButton[];
+
+    actionButtons = [
+      {
+        buttonName: 'delete',
+        buttonText: 'Delete',
+        class: 'danger'
+      }
+    ];
+
+    this.prompt.promptButtons(actionButtons, null);
+
+    return false;
   }
 
   ngOnInit() {
