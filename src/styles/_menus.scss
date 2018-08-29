@@ -1,0 +1,29 @@
+.menu-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(black, 0);
+  transition: background-color $default-transition-length ease-out, visibility 0s linear $default-transition-length;
+  visibility: hidden;
+
+  .menu {
+    position: absolute;
+    transition:  transform $default-transition-length ease-in;
+    box-shadow: $box-shadow;
+    background-color: white;
+  }
+
+  &.visible {
+    left: 0;
+    right: 0;
+    background-color: $shadow-color;
+    visibility: visible;
+    transition:  background-color $default-transition-length ease-out;
+
+    .menu {
+      transform: translate(0, 0);
+      transition: transform $default-transition-length ease-out;
+    }
+  }
+}

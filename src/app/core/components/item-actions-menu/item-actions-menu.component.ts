@@ -13,8 +13,8 @@ import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'pr-item-actions',
-  templateUrl: './item-actions.component.html',
-  styleUrls: ['./item-actions.component.scss']
+  templateUrl: './item-actions-menu.component.html',
+  styleUrls: ['./item-actions-menu.component.scss']
 })
 export class ItemActionsMenuComponent implements OnInit {
   @Input() isVisible: boolean;
