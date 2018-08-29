@@ -18,7 +18,6 @@ import { UploadProgressComponent } from '@core/components/upload-progress/upload
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { EditPromptComponent } from './components/edit-prompt/edit-prompt.component';
-import { ItemActionsMenuComponent } from '@core/components/item-actions-menu/item-actions-menu.component';
 
 @NgModule({
   imports: [
@@ -36,7 +35,6 @@ import { ItemActionsMenuComponent } from '@core/components/item-actions-menu/ite
     UploadProgressComponent,
     UploadButtonComponent,
     EditPromptComponent,
-    ItemActionsMenuComponent
   ],
   providers: [
     DataService,
