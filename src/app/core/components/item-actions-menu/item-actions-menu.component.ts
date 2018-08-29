@@ -12,11 +12,11 @@ import { FolderVO } from '@root/app/models';
 import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'pr-right-menu',
-  templateUrl: './right-menu.component.html',
-  styleUrls: ['./right-menu.component.scss']
+  selector: 'pr-item-actions',
+  templateUrl: './item-actions.component.html',
+  styleUrls: ['./item-actions.component.scss']
 })
-export class RightMenuComponent implements OnInit {
+export class ItemActionsMenuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
