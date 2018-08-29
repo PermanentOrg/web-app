@@ -1,12 +1,17 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
-import { DataService } from '@shared/services/data/data.service';
-import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { clone } from 'lodash';
 
-import { FolderVO, RecordVO } from '@root/app/models';
+import { DataService } from '@shared/services/data/data.service';
+import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+
+import { FolderVO, RecordVO, FolderVOData, RecordVOData } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
+import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo';
+import { Validators } from '@angular/forms';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -22,6 +27,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     public element: ElementRef,
+    private message: MessageService,
     private prompt: PromptService,
     private edit: EditService
   ) {
@@ -69,11 +75,10 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
     let actionButtons: PromptButton[];
 
-    let deleteResolve, deleteReject;
+    let actionResolve;
 
-    const deletePromise = new Promise((resolve, reject) => {
-      deleteResolve = resolve;
-      deleteReject = reject;
+    const actionPromise = new Promise((resolve) => {
+      actionResolve = resolve;
     });
 
     actionButtons = [
@@ -81,14 +86,21 @@ export class FileListItemComponent implements OnInit, OnDestroy {
         buttonName: 'delete',
         buttonText: 'Delete',
         class: 'btn-danger'
+      },
+      {
+        buttonName: 'rename',
+        buttonText: 'Rename',
       }
     ];
 
-    this.prompt.promptButtons(actionButtons, this.item.displayName, deletePromise)
+    this.prompt.promptButtons(actionButtons, this.item.displayName, actionPromise)
       .then((value: string) => {
         switch (value) {
           case 'delete':
-            this.deleteItem(deleteResolve);
+            return this.deleteItem(actionResolve);
+          case 'rename':
+            actionResolve();
+            this.promptForUpdate();
             break;
         }
       });
@@ -105,6 +117,61 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       .catch(() => {
         resolve();
       });
+  }
+
+  promptForUpdate() {
+    let updateResolve;
+
+    const updatePromise = new Promise((resolve) => {
+      updateResolve = resolve;
+    });
+
+    const fields: PromptField[] = [
+      {
+        fieldName: 'displayName',
+        validators: [Validators.required],
+        placeholder: 'Name',
+        initialValue: this.item.displayName,
+        config: {
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          autocomplete: 'off',
+          spellcheck: 'off'
+        }
+      }
+    ];
+
+    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updatePromise, 'Save', 'Cancel')
+      .then((values) => {
+        this.saveUpdates(values, updateResolve);
+      });
+  }
+
+  saveUpdates(changes: RecordVOData | FolderVOData, resolve: Function) {
+    const originalData = {};
+    Object.keys(changes)
+      .forEach((key) => {
+        if (this.item[key] === changes[key]) {
+          delete changes[key];
+        } else {
+          originalData[key] = this.item[key];
+        }
+      });
+
+    if (!Object.keys(changes).length) {
+      return resolve();
+    } else {
+      this.item.update(changes);
+      return this.edit.updateItems([this.item])
+        .then(() => {
+          resolve();
+        })
+        .catch((response: RecordResponse | FolderResponse) => {
+          resolve();
+          this.message.showError(response.getMessage(), true);
+          this.item.update(originalData);
+        });
+    }
   }
 
 

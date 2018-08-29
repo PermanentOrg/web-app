@@ -50,6 +50,16 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise('/folder/post', data, FolderResponse);
   }
 
+  public update(folderVOs: FolderVO[]): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: new FolderVO(folderVO)
+      };
+    });
+
+    return this.http.sendRequestPromise('/folder/update', data, FolderResponse);
+  }
+
   public delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {

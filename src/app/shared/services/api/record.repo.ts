@@ -24,6 +24,16 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequest('/record/postMetaBatch', data, RecordResponse);
   }
 
+  public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
+    const data = recordVOs.map((recordVO) => {
+      return {
+        RecordVO: new RecordVO(recordVO)
+      };
+    });
+
+    return this.http.sendRequestPromise('/record/update', data, RecordResponse);
+  }
+
   public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {

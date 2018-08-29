@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { PromptService, PromptField, PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField, PromptButton, PromptConfig } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-prompt',
@@ -30,6 +30,8 @@ export class PromptComponent implements OnInit, OnDestroy {
 
   private defaultForm: FormGroup;
 
+  private promptQueue: PromptConfig[] = [];
+
   constructor(private service: PromptService, private fb: FormBuilder, private element: ElementRef) {
     this.service.registerComponent(this);
     this.defaultForm = fb.group({});
@@ -50,9 +52,38 @@ export class PromptComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  prompt(form: FormGroup, fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
+  prompt(
+    form: FormGroup,
+    fields: PromptField[],
+    title: string,
+    savePromise?: Promise<any>,
+    saveText?: string,
+    cancelText?: string,
+    donePromise?: Promise<any>,
+    doneResolve?: Function,
+    doneReject?: Function
+  ) {
     if (this.donePromise) {
-      throw new Error('Prompt in progress');
+      let newDoneReject, newDoneResolve;
+
+      const newDonePromise = new Promise((resolve, reject) => {
+        newDoneResolve = resolve;
+        newDoneReject = reject;
+      });
+
+      this.promptQueue.push({
+        form: form,
+        fields: fields,
+        title: title,
+        savePromise: savePromise,
+        saveText: saveText,
+        cancelText: cancelText,
+        donePromise: newDonePromise,
+        doneResolve: newDoneResolve,
+        doneReject: newDoneReject
+      });
+
+      return newDonePromise;
     }
 
     this.title = title;
@@ -69,16 +100,26 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.editForm = form;
     this.fields = fields;
 
-    this.donePromise = new Promise((resolve, reject) => {
-      this.doneResolve = resolve;
-      this.doneReject = reject;
-    });
+    if (!donePromise) {
+      this.donePromise = new Promise((resolve, reject) => {
+        this.doneResolve = resolve;
+        this.doneReject = reject;
+      });
+    } else {
+      this.donePromise = donePromise;
+      this.doneResolve = doneResolve;
+      this.doneReject = doneReject;
+    }
 
     this.isVisible = true;
 
     setTimeout(() => {
       const elem = this.element.nativeElement as Element;
-      elem.querySelector('input').focus();
+      const firstInput = elem.querySelector('input');
+      if (firstInput) {
+        firstInput.focus();
+        firstInput.setSelectionRange(0, firstInput.value.length);
+      }
     });
 
     return this.donePromise;
@@ -155,5 +196,20 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.donePromise = null;
     this.doneResolve = null;
     this.doneReject = null;
+
+    if (this.promptQueue.length) {
+      const next = this.promptQueue.shift();
+      this.prompt(
+        next.form,
+        next.fields,
+        next.title,
+        next.savePromise,
+        next.saveText,
+        next.cancelText,
+        next.donePromise,
+        next.doneResolve,
+        next.doneReject
+      );
+    }
   }
 }
