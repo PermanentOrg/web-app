@@ -25,14 +25,20 @@
     }
   }
 
-
-  .loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    visibility: hidden;
+  &.processing {
+    background-color: rgba(white, 0.7);
+    video, .loader {
+      display: none;
+    }
   }
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
 }
 
 video {
@@ -47,3 +53,8 @@ video {
   max-width: 100%
 }
 
+.message {
+  max-width: 320px;
+  text-align: center;
+  font-weight: 600;
+}

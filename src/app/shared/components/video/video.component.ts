@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ElementRef, Renderer } from '@angular/core';
 import { TweenMax } from 'gsap';
+import { find } from 'lodash';
 
 import { RecordVO } from '@root/app/models';
 
@@ -16,6 +17,7 @@ export class VideoComponent implements OnInit {
   private videoWrapperElem: Element;
   private videoElem: Element;
   public videoSrc: string;
+  public isProcessing: boolean;
 
   constructor(private elementRef: ElementRef, private renderer: Renderer) { }
 
@@ -35,8 +37,16 @@ export class VideoComponent implements OnInit {
       );
     });
 
-    const fileVO = this.item.FileVOs[0];
-    this.videoSrc = fileVO.fileURL;
+    const mp4File = find(this.item.FileVOs, {type: 'type.file.video.mp4'}) as any;
+
+    console.log('video.component.ts', 42, mp4File);
+    if (mp4File) {
+      this.videoSrc = mp4File.fileURL;
+      this.isProcessing = false;
+    } else {
+      this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
+      this.isProcessing = true;
+    }
   }
 
 }
