@@ -41,7 +41,7 @@ $toolbar-height: 30px;
   text-overflow: ellipsis;
 }
 
-.file-viewer-image, pr-thumbnail {
+.file-viewer-image, pr-thumbnail, pr-video {
   position: absolute;
   top: $toolbar-height;
   bottom: $toolbar-height;
