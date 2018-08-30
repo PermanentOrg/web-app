@@ -14,6 +14,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   private viewerElement: Element;
   private bodyScroll: number;
 
+  public showThumbnail = true;
+  public isVideo = false;
+
   constructor(private router: Router, private route: ActivatedRoute, private element: ElementRef, @Inject(DOCUMENT) private document: any) {
     this.record = route.snapshot.data.currentRecord;
   }
@@ -21,6 +24,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.viewerElement = this.element.nativeElement.querySelector('.file-viewer');
     this.document.body.style.setProperty('overflow', 'hidden');
+
+    this.isVideo = this.record.type.includes('video');
   }
 
   ngOnDestroy() {
