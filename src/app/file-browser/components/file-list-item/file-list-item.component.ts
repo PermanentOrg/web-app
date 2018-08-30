@@ -90,6 +90,10 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       {
         buttonName: 'rename',
         buttonText: 'Rename',
+      },
+      {
+        buttonName: 'download',
+        buttonText: 'Download'
       }
     ];
 
@@ -101,6 +105,12 @@ export class FileListItemComponent implements OnInit, OnDestroy {
           case 'rename':
             actionResolve();
             this.promptForUpdate();
+            break;
+          case 'download':
+            this.dataService.downloadFile(this.item as RecordVO)
+              .then(() => {
+                actionResolve();
+              });
             break;
         }
       });

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { partition, remove } from 'lodash';
+import { partition, remove, find } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderVO, RecordVO } from '@root/app/models';
@@ -219,5 +219,30 @@ export class DataService {
     this.thumbRefreshTimeout = setTimeout(() => {
       this.checkMissingThumbs();
     }, THUMBNAIL_REFRESH_INTERVAL);
+  }
+
+  public downloadFile(item: RecordVO): Promise<any> {
+    if (item.FileVOs && item.FileVOs.length) {
+      downloadOriginalFile(item);
+      return Promise.resolve();
+    } else {
+      return this.fetchFullItems([item])
+      .then(() => {
+        downloadOriginalFile(item);
+      });
+    }
+
+    function downloadOriginalFile(fileItem: any) {
+      const fileVO = getOriginalFile(fileItem) as any;
+      console.log(fileVO);
+      const link = document.createElement('a');
+      link.href = fileVO.downloadURL;
+      link.download = `${item.displayName}.${fileVO.type.split('.').pop()}`;
+      link.click();
+    }
+
+    function getOriginalFile(fileItem: RecordVO) {
+      return find(fileItem.FileVOs, {format: 'file.format.original'});
+    }
   }
 }
