@@ -73,7 +73,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   showActions(event: Event) {
     event.stopPropagation();
 
-    let actionButtons: PromptButton[];
+    const actionButtons: PromptButton[] = [];
 
     let actionResolve;
 
@@ -81,7 +81,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       actionResolve = resolve;
     });
 
-    actionButtons = [
+    actionButtons.push(
       {
         buttonName: 'delete',
         buttonText: 'Delete',
@@ -91,11 +91,16 @@ export class FileListItemComponent implements OnInit, OnDestroy {
         buttonName: 'rename',
         buttonText: 'Rename',
       },
-      {
-        buttonName: 'download',
-        buttonText: 'Download'
-      }
-    ];
+    );
+
+    if (this.item.isRecord) {
+      actionButtons.push(
+        {
+          buttonName: 'download',
+          buttonText: 'Download'
+        }
+      );
+    }
 
     this.prompt.promptButtons(actionButtons, this.item.displayName, actionPromise)
       .then((value: string) => {

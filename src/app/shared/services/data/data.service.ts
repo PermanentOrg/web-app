@@ -234,10 +234,8 @@ export class DataService {
 
     function downloadOriginalFile(fileItem: any) {
       const fileVO = getOriginalFile(fileItem) as any;
-      console.log(fileVO);
       const link = document.createElement('a');
       link.href = fileVO.downloadURL;
-      link.download = `${item.displayName}.${fileVO.type.split('.').pop()}`;
       link.click();
     }
 
