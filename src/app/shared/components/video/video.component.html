@@ -1,3 +1,4 @@
-<div class="pr-video-wrapper" [ngClass]="{'tall': item.imageRatio > 1}">
-  <video class="loading" [src]="videoSrc" controls></video>
+<div class="pr-video-wrapper loading" [ngClass]="{'tall': item.imageRatio > 1}">
+  <video [src]="videoSrc" controls></video>
+  <div class="lds-dual-ring loader"></div>
 </div>

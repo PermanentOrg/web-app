@@ -13,6 +13,7 @@ const FADE_IN_DURATION = 0.3;
 export class VideoComponent implements OnInit {
   @Input() item: RecordVO;
 
+  private videoWrapperElem: Element;
   private videoElem: Element;
   public videoSrc: string;
 
@@ -20,9 +21,10 @@ export class VideoComponent implements OnInit {
 
   ngOnInit() {
     this.videoElem = this.elementRef.nativeElement.querySelector('video');
+    this.videoWrapperElem = this.elementRef.nativeElement.querySelector('.pr-video-wrapper');
 
     this.videoElem.addEventListener('canplay', (event) => {
-      this.renderer.setElementClass(this.videoElem, 'loading', false);
+      this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
       TweenMax.from(
         this.videoElem,
         FADE_IN_DURATION,
