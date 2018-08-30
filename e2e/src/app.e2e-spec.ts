@@ -8,9 +8,8 @@ const TEST_ACCOUNT = {
   password: 'Abc123!!!!'
 };
 
-describe('M-Dot', () => {
+describe('Login/Signup Flow', () => {
   let page: AppPage;
-  let newFolderName: string;
 
   beforeEach(() => {
     page = new AppPage();
@@ -62,6 +61,16 @@ describe('M-Dot', () => {
     element(by.buttonText('Log in')).click();
     expect(browser.getCurrentUrl()).not.toContain('/mfa');
   });
+});
+
+describe('File Navigation Flow', () => {
+  let page: AppPage;
+  let newFolderName: string;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
 
   it('should navigate to My Files from hamburger menu', () => {
     page.navigateTo();
@@ -88,7 +97,7 @@ describe('M-Dot', () => {
     element.all(by.css('.file-list-item')).count()
     .then((count) => {
       initialCount = count;
-      element(by.css('.right-menu-toggler')).click();
+      element(by.css('nav .right-menu-toggler')).click();
       browser.sleep(HAMBURGER_MENU_DELAY);
       element(by.linkText('Create New Folder')).click();
       browser.sleep(HAMBURGER_MENU_DELAY);
@@ -101,13 +110,40 @@ describe('M-Dot', () => {
     });
   });
 
+  it('should rename the new folder', () => {
+    page.goToMyFiles();
+    browser.waitForAngularEnabled(false);
+    navigateIntoFolderByName('Test Folders');
+    const newFolder = element(by.cssContainingText('.file-list-item', newFolderName));
+    newFolder.element(by.css('.actions button')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    element(by.buttonText('Rename')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY * 2);
+    element(by.id('displayName')).sendKeys('RENAME ME');
+    element(by.buttonText('Save')).click();
+    browser.sleep(3000);
+    const renamedFolder = element(by.cssContainingText('.file-list-item', 'RENAME ME'));
+    renamedFolder.element(by.css('.actions button')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    element(by.buttonText('Rename')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY * 2);
+    element(by.id('displayName')).sendKeys(newFolderName);
+    element(by.buttonText('Save')).click();
+    browser.sleep(3000);
+    expect(newFolder.isPresent()).toBeTruthy();
+    expect(newFolder.element(by.css('.name')).getText()).toEqual(newFolderName);
+  });
+
+
   it('should delete the previously created folder', () => {
     let initialCount: number;
     page.goToMyFiles();
     browser.waitForAngularEnabled(false);
     navigateIntoFolderByName('Test Folders');
+    waitForUpdate();
     element.all(by.css('.file-list-item')).count()
     .then((count) => {
+      browser.sleep(1000);
       initialCount = count;
       const newFolderElement = element(by.cssContainingText('.file-list-item', newFolderName));
       newFolderElement.element(by.css('button.right-menu-toggler')).click();
