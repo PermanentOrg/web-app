@@ -20,6 +20,18 @@ export interface PromptButton {
   class ?: string;
 }
 
+export interface PromptConfig {
+  form: FormGroup;
+  fields: PromptField[];
+  title: string;
+  savePromise?: Promise<any>;
+  saveText?: string;
+  cancelText?: string;
+  donePromise?: Promise<any>;
+  doneResolve?: Function;
+  doneReject?: Function;
+}
+
 @Injectable({
   providedIn: 'root'
 })
