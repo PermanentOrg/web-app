@@ -16,7 +16,7 @@ export class VideoComponent implements OnInit {
 
   ngOnInit() {
     const fileVO = this.item.FileVOs[0];
-    console.log('video.component.ts', 19, fileVO);
+    console.log('video.component.ts', 19, this.item.imageRatio);
     this.videoSrc = fileVO.fileURL;
   }
 
