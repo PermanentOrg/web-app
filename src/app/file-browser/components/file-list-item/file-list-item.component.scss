@@ -2,6 +2,10 @@
 
 $row-height: $file-list-row-height;
 
+:host {
+  display: block;
+}
+
 .file-list-item {
   display: flex;
   align-items: center;
@@ -15,6 +19,10 @@ $row-height: $file-list-row-height;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.actions {
+  margin-right: 0.5rem;
 }
 
 [prBgImage] {

@@ -87,7 +87,7 @@ export class RecordVO extends BaseVO {
   public ShareVOs;
   public AccessVO;
 
-  constructor(voData: RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(voData: any | RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
     if (initChildren) {

@@ -1,0 +1,43 @@
+@import 'variables';
+
+$transition-length: 0.25s;
+
+.menu-wrapper.visible {
+  .prompt {
+    transform: translateY(0);
+    transition: transform $transition-length ease-out;
+  }
+}
+
+.prompt {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: $bottom-safe-area-padding;
+  transform: translateY(100%);
+  transition:  transform $transition-length ease-in;
+}
+
+.prompt-field-buttons {
+  text-align: right;
+  button {
+    display: inline-block;
+    width: auto;
+    margin: 0 0 0 10px
+  }
+}
+
+.prompt-buttons {
+  padding: 0px 10px;
+}
+
+.prompt-title {
+  padding: 10px 10px 0px;
+  font-weight: 600;
+  max-width: 420px;
+  margin: 0px auto;
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

@@ -1,11 +1,21 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class AppPage {
   navigateTo() {
     return browser.get('/m/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  goToSignup() {
+    return browser.get('/m/auth/signup');
+  }
+
+  goToHome() {
+    browser.get('/m/');
+    return browser.wait(ExpectedConditions.urlIs(`${browser.baseUrl}m/`));
+  }
+
+  goToMyFiles() {
+    browser.get('/m/myfiles');
+    return browser.wait(ExpectedConditions.urlContains('myfiles'));
   }
 }

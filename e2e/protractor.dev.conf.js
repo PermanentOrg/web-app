@@ -4,12 +4,17 @@
 const { SpecReporter } = require('jasmine-spec-reporter');
 
 exports.config = {
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 15000,
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'chromeOptions': {
+      args: [
+        "--no-sandbox", "--headless", "--disable-gpu"
+      ]
+    }
   },
   directConnect: true,
   baseUrl: 'https://dev.permanent.org',

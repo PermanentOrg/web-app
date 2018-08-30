@@ -8,6 +8,7 @@ import { FileListComponent } from '@fileBrowser/components/file-list/file-list.c
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
+import { VideoComponent } from '@shared/components/video/video.component';
 
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 
@@ -22,6 +23,7 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
     FileListItemComponent,
     FileViewerComponent,
     ThumbnailComponent,
+    VideoComponent,
     BgImageSrcDirective
   ],
   declarations: [
@@ -29,6 +31,7 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
     FileListItemComponent,
     FileViewerComponent,
     ThumbnailComponent,
+    VideoComponent,
     BgImageSrcDirective
   ]
 })
