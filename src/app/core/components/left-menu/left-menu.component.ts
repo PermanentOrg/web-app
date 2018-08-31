@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { ArchiveVO } from '@root/app/models';
 
 @Component({
   selector: 'pr-left-menu',
@@ -14,10 +15,12 @@ export class LeftMenuComponent implements OnInit {
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public archiveName: string;
+  public archive: ArchiveVO;
 
   constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) {
     if (this.accountService.getArchive()) {
-      this.archiveName = this.accountService.getArchive().fullName;
+      this.archive = this.accountService.getArchive();
+      this.archiveName = this.archive.fullName;
     }
   }
 

@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { TermsComponent } from '@shared/components/terms/terms.component';
+import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 
 @NgModule({
   imports: [
@@ -18,12 +19,14 @@ import { TermsComponent } from '@shared/components/terms/terms.component';
     ReactiveFormsModule,
     FormInputComponent,
     LogoComponent,
-    TermsComponent
+    TermsComponent,
+    BgImageSrcDirective
   ],
   declarations: [
     FormInputComponent,
     LogoComponent,
-    TermsComponent
+    TermsComponent,
+    BgImageSrcDirective
   ]
 })
 export class SharedModule { }

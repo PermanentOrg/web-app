@@ -9,6 +9,7 @@ import { AuthGuard } from '@core/guards/auth.guard';
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { SharedModule } from '@shared/shared.module';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -31,6 +32,7 @@ export const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
+    SharedModule
   ],
   exports: [
     RouterModule

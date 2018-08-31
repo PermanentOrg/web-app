@@ -1,8 +1,9 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
     <div class="menu-header">
-      Current Archive
-      <strong>{{archiveName}}</strong>
+      <pr-archive-small [archive]="archive"></pr-archive-small>
+      <!-- Current Archive
+      <strong>{{archiveName}}</strong> -->
     </div>
     <a class="menu-item" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
       true}">
