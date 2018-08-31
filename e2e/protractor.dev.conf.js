@@ -31,7 +31,7 @@ exports.config = {
       fs.unlinkSync(`${jsonReportPath}.lock`);
     }
     if (fs.existsSync(jsonReportPath)) {
-      fs.unlink(jsonReportPath);
+      fs.unlinkSync(jsonReportPath);
     }
   }
   ,
