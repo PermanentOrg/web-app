@@ -1,6 +1,7 @@
 import { BinaryClient, binaryFeatures } from '@root/vendor/binary';
 import { map } from 'rxjs/operators';
 import { remove, partition } from 'lodash';
+import { environment } from '@root/environments/environment';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -68,10 +69,16 @@ export class Uploader {
     if (!this.socketClient || this.socketClient._socket.readyState !== 1 ) {
       return new Promise((resolve, reject) => {
         connectionReject = reject;
+        if ((environment as any).uploaderUrl) {
+          this.socketClient = new BinaryClient((environment as any).uploaderUrl, {
+            chunkSize: SOCKET_CHUNK_SIZE
+          });
+        } else {
+          this.socketClient = new BinaryClient(`wss://${location.hostname}:9000/uploadsvc`, {
+            chunkSize: SOCKET_CHUNK_SIZE
+          });
+        }
 
-        this.socketClient = new BinaryClient(`wss://${location.hostname}:9000/uploadsvc`, {
-          chunkSize: SOCKET_CHUNK_SIZE
-        });
         this.socketClient.on('open', () => {
           this.fileCount.current = 0;
           this.fileCount.completed = 0;
