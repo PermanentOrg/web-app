@@ -72,15 +72,6 @@ describe('File Navigation Flow', () => {
     browser.waitForAngularEnabled(true);
   });
 
-  it('should navigate to My Files from hamburger menu', () => {
-    page.navigateTo();
-    expect(browser.getCurrentUrl()).not.toContain('auth');
-    element(by.css('button.navbar-toggler')).click();
-    browser.sleep(HAMBURGER_MENU_DELAY);
-    element(by.linkText('My Files')).click();
-    expect(browser.getCurrentUrl()).toContain('/myfiles');
-  });
-
   it('should have a Photos folder in My Files and navigate into it', () => {
     page.goToMyFiles();
     browser.waitForAngularEnabled(false);
