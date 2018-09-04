@@ -1,24 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { reject } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
+import { TweenMax } from 'gsap';
 
 import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveVO } from '@root/app/models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
-import { defer } from 'q';
-import { MessageService } from '@shared/services/message/message.service';
 import { BaseResponse } from '@shared/services/api/base';
-import { resolve } from 'dns';
+
+import { ArchiveSmallComponent } from '@core/components/archive-small/archive-small.component';
 
 @Component({
   selector: 'pr-archive-selector',
   templateUrl: './archive-selector.component.html',
   styleUrls: ['./archive-selector.component.scss']
 })
-export class ArchiveSelectorComponent implements OnInit {
+export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
   public currentArchive: ArchiveVO;
   public archives: ArchiveVO[];
 
@@ -34,6 +35,20 @@ export class ArchiveSelectorComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+      const targetElems = document.querySelectorAll('.archive-list pr-archive-small');
+      TweenMax.staggerFrom(
+        targetElems,
+        0.75,
+        {
+          opacity: 0,
+          ease: 'Power4.easeOut'
+        },
+        0.05
+      );
+
   }
 
   archiveClick(archive: ArchiveVO) {
