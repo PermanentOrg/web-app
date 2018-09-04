@@ -14,7 +14,8 @@
     "test_build": "ng test ---watch=false --browsers ChromeHeadless",
     "lint": "ng lint",
     "e2e_local": "protractor e2e/protractor.conf.js",
-    "e2e_dev": "protractor e2e/protractor.dev.conf.js"
+    "e2e_dev": "protractor e2e/protractor.dev.conf.js",
+    "e2e_proxy": "ng e2e -c proxy --protractor-config e2e/protractor.local_build.conf.js --host local.permanent.org"
   },
   "private": true,
   "dependencies": {

@@ -1,0 +1,20 @@
+{
+  "/api": {
+    "target": "https://dev.permanent.org",
+    "secure": false,
+    "changeOrigin": true,
+    "cookieDomainRewrite": {
+      "dev.permanent.org": "local.permanent.org",
+      ".permanent.org": "local.permanent.org",
+      "local.permanent.org": "dev.permanent.org"
+    }
+  },
+  "/uploader": {
+    "target": "wss://dev.permanent.org:9000/uploadsvc",
+    "secure": true,
+    "ws": true,
+    "pathRewrite": {
+      "^/uploader": ""
+    }
+  }
+}
