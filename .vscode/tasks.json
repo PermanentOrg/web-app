@@ -24,6 +24,11 @@
       "type": "npm",
       "script": "dev_proxy",
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "e2e_proxy",
+      "problemMatcher": []
     }
   ]
 }

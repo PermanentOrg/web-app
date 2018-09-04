@@ -18,4 +18,9 @@ export class AppPage {
     browser.get('/m/myfiles');
     return browser.wait(ExpectedConditions.urlContains('myfiles'));
   }
+
+  goToArchiveSelector() {
+    browser.get('/m/choosearchive');
+    return browser.wait(ExpectedConditions.urlContains('choosearchive'));
+  }
 }
