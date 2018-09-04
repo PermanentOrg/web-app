@@ -165,7 +165,8 @@ describe('Multiple Archives Flow', () => {
 
   it('should be logged into default archive', () => {
     page.navigateTo();
-    element(by.css('nav .navbar-toggler')).click();
+    waitForUpdate();
+    element(by.css('button.navbar-toggler')).click();
     browser.sleep(HAMBURGER_MENU_DELAY);
     expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
@@ -180,7 +181,8 @@ describe('Multiple Archives Flow', () => {
     element(by.buttonText('Switch archive')).click();
     browser.wait(ExpectedConditions.urlContains('myfiles'));
     browser.waitForAngularEnabled(false);
-    element(by.css('nav .navbar-toggler')).click();
+    browser.sleep(1000);
+    element(by.css('button.navbar-toggler')).click();
     browser.sleep(HAMBURGER_MENU_DELAY);
     expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_2.name);
   });
@@ -196,7 +198,8 @@ describe('Multiple Archives Flow', () => {
     element(by.buttonText('Switch archive')).click();
     browser.wait(ExpectedConditions.urlContains('myfiles'));
     browser.waitForAngularEnabled(false);
-    element(by.css('nav .navbar-toggler')).click();
+    browser.sleep(1000);
+    element(by.css('button.navbar-toggler')).click();
     browser.sleep(HAMBURGER_MENU_DELAY);
     expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
