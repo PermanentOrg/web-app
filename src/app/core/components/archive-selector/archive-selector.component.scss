@@ -2,7 +2,8 @@
 
 :host {
   position: absolute;
-  display: block;
+  display: flex;
+  flex-direction: column;
   top: 0;
   left: 0;
   bottom: 0;
@@ -19,9 +20,22 @@
   font-weight: 600;
 }
 
+.archive-list-wrapper{
+  flex: 1 1;
+}
+
+.current-archive {
+  border: 1px solid $gray-300;
+  padding: 20px;
+}  
+
 .archive-list {
   margin: 0 auto;
   max-width: 300px;
+  border-radius: 0.25rem;
   padding: 20px;
-  border: 1px solid $gray-300;
+}
+
+.archives-empty {
+  margin-top: 20px;
 }

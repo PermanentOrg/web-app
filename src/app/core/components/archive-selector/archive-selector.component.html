@@ -1,4 +1,14 @@
 <div class="archive-list-title">Choose archive:</div>
-<div class="archive-list">
+<div class="archive-list-wrapper">
+  <div class="current-archive">
     <pr-archive-small [archive]="currentArchive"></pr-archive-small>
+  </div>
+  <div class="archive-list">
+    <div *ngIf="!archives.length" class="archives-empty">
+      You have no other archives
+    </div>
+  </div>
+</div>
+<div class="archive-list-button">
+  <button class="btn btn-default">Cancel</button>
 </div>
