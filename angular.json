@@ -63,6 +63,14 @@
                 }
               ]
             },
+            "proxy_hmr": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.hmr.proxy.ts"
+                }
+              ]
+            },
             "development": {
               "fileReplacements": [
                 {
@@ -132,9 +140,20 @@
             "proxy": {
               "host": "local.permanent.org",
               "ssl": true,
-              "sslCert": "../operations/vagrant/etc/ssl/permanent.crt",
+              "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy",
+              "deployUrl": "/m/",
+              "baseHref": "/m",
+              "proxyConfig": "proxy.conf.json"
+            },
+            "proxy_hmr": {
+              "host": "local.permanent.org",
+              "ssl": true,
+              "hmr": true,
+              "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
+              "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
+              "browserTarget": "mdot:build:proxy_hmr",
               "deployUrl": "/m/",
               "baseHref": "/m",
               "proxyConfig": "proxy.conf.json"
