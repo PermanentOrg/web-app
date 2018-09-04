@@ -23,6 +23,14 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/archive/getAllArchives', data, ArchiveResponse);
   }
+
+  public change(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/change', data, ArchiveResponse);
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {

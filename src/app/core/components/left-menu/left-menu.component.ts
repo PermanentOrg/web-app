@@ -20,12 +20,17 @@ export class LeftMenuComponent implements OnInit {
   constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
-      this.archiveName = this.archive.fullName;
     }
+
+    this.accountService.archiveChange.subscribe((archive: ArchiveVO) => {
+      this.archive = archive;
+    });
   }
 
   ngOnInit() {
   }
+
+
 
   hide(event: Event) {
     this.isVisible = false;
