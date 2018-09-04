@@ -9,9 +9,8 @@
       "local.permanent.org": "dev.permanent.org"
     }
   },
-  "/uploader": {
-    "target": "wss://dev.permanent.org:9000/uploadsvc",
-    "secure": true,
+  "/uploadsvc": {
+    "target": "wss://dev.permanent.org:9000",
     "ws": true,
     "pathRewrite": {
       "^/uploader": ""
