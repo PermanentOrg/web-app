@@ -21,6 +21,9 @@ $thumb-size: 50px;
 .archive-name {
   font-weight: 600;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .archive-current {
