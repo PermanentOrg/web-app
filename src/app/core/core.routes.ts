@@ -10,6 +10,7 @@ import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { SharedModule } from '@shared/shared.module';
+import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -25,6 +26,7 @@ export const routes: Routes = [
       { path: '', component: HomeComponent, data: { title: 'Home'} },
       { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
       { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
+      { path: 'choosearchive', component: ArchiveSelectorComponent, data: { title: 'Choose Archive'} },
       { path: '**', redirectTo: ''}
     ]
   }

@@ -1,0 +1,27 @@
+@import 'variables';
+
+:host {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  background-color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.archive-list-title {
+  padding: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.archive-list {
+  margin: 0 auto;
+  max-width: 300px;
+  padding: 20px;
+  border: 1px solid $gray-300;
+}

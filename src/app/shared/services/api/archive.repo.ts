@@ -14,14 +14,14 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequest('/archive/get', data, ArchiveResponse);
   }
 
-  public getAllArchives(accountVO: AccountVO): Observable<ArchiveResponse> {
+  public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
     const data = [{
       AccountVO: {
         accountId: accountVO.accountId
       }
     }];
 
-    return this.http.sendRequest('/archive/getAllArchives', data, ArchiveResponse);
+    return this.http.sendRequestPromise('/archive/getAllArchives', data, ArchiveResponse);
   }
 }
 

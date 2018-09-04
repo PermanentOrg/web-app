@@ -159,16 +159,12 @@ export class AccountService {
 
   public switchToDefaultArchive(): Promise<ArchiveResponse> {
     return this.api.archive.getAllArchives(this.account)
-      .pipe(map((response: ArchiveResponse) => {
-        if (response.isSuccessful) {
-          const archives = response.getArchiveVOs();
-          const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
-          this.setArchive(new ArchiveVO(defaultArchiveData));
-          return response;
-        } else {
-          throw response;
-        }
-      })).toPromise();
+      .then((response: ArchiveResponse) => {
+        const archives = response.getArchiveVOs();
+        const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
+        this.setArchive(new ArchiveVO(defaultArchiveData));
+        return response;
+      });
   }
 
   public signUp(
