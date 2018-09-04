@@ -19,6 +19,11 @@
       "type": "npm",
       "script": "dev",
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "dev_proxy",
+      "problemMatcher": []
     }
   ]
 }

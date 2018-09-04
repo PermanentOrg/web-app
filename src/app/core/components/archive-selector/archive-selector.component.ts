@@ -5,6 +5,7 @@ import { AccountService } from '@shared/services/account/account.service';
 
 import { ArchiveVO } from '@root/app/models';
 import { ActivatedRoute } from '@angular/router';
+import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-archive-selector',
@@ -17,13 +18,26 @@ export class ArchiveSelectorComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private prompt: PromptService
   ) {
     this.currentArchive = accountService.getArchive();
     this.archives = reject(this.route.snapshot.data['archives'], { archiveId: this.currentArchive.archiveId }) as ArchiveVO[];
   }
 
   ngOnInit() {
+  }
+
+  archiveClick(archive: ArchiveVO) {
+
+    console.log('archive clicked:', archive);
+    const buttons: PromptButton[] = [
+      {
+        buttonName: 'cancel',
+        buttonText: 'Cancel',
+        class: 'btn-default'
+      }
+    ];
   }
 
 }

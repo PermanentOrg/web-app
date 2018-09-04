@@ -1,4 +1,7 @@
 @import 'variables';
+:host {
+  display: block;
+}
 
 .archive {
   display: flex;

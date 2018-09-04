@@ -1,9 +1,10 @@
-<div class="archive-list-title">Choose archive:</div>
 <div class="archive-list-wrapper">
+  <div class="archive-list-title">Choose archive:</div>
   <div class="current-archive">
     <pr-archive-small [archive]="currentArchive"></pr-archive-small>
   </div>
   <div class="archive-list">
+    <pr-archive-small *ngFor="let archive of archives" [archive]="archive" (click)="archiveClick(archive)"></pr-archive-small>
     <div *ngIf="!archives.length" class="archives-empty">
       You have no other archives
     </div>

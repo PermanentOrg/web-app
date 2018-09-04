@@ -14,7 +14,6 @@ export class ArchivesResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     return this.api.archive.getAllArchives(this.accountService.getAccount())
       .then((response: ArchiveResponse) => {
-        console.log('archives-resolve.service.ts', 17, response);
         return response.getArchiveVOs();
       });
   }
