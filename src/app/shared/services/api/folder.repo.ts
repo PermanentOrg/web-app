@@ -4,8 +4,8 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class FolderRepo extends BaseRepo {
-  public getRoot(): Observable<FolderResponse> {
-    return this.http.sendRequest('/folder/getRoot', [], FolderResponse);
+  public getRoot(): Promise<FolderResponse> {
+    return this.http.sendRequestPromise('/folder/getRoot', [], FolderResponse);
   }
 
   public get(folderVOs: FolderVO[]): Observable<FolderResponse> {

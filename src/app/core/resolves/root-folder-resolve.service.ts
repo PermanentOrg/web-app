@@ -21,16 +21,10 @@ export class RootFolderResolveService implements Resolve<any> {
     }
 
     return this.api.folder.getRoot()
-      .pipe(map(((response: FolderResponse) => {
-        if (!response.isSuccessful) {
-          throw response;
-        }
-
+      .then((response: FolderResponse) => {
         const root = response.getFolderVO();
-
         this.accountService.setRootFolder(root);
-
         return root;
-      }))).toPromise();
+      });
   }
 }
