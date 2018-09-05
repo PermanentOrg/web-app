@@ -5,8 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
 
-import { RecordVO } from '@root/app/models';
+import { RecordVO} from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
+import { DataStatus } from '@models/data-status.enum';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -38,14 +39,12 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2
   ) {
     this.record = route.snapshot.data.currentRecord;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit() {
     this.viewerElement = this.element.nativeElement.querySelector('.file-viewer');
     this.document.body.style.setProperty('overflow', 'hidden');
 
-    this.isVideo = this.record.type.includes('video');
 
     this.dataService.getPrevNextRecord(this.record)
       .then((results) => {
@@ -68,6 +67,15 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.document.body.style.setProperty('overflow', '');
   }
+
+  initRecord() {
+    this.isVideo = this.record.type.includes('video');
+    if (this.record.dataStatus < DataStatus.Full) {
+
+    }
+  }
+
+
 
   handlePanEvent(evt: HammerInput) {
     const allThumbs = document.querySelectorAll('.thumb-wrapper');

@@ -17,20 +17,26 @@ export class DataService {
 
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
-  private byFolderLinkId: {[key: number]: FolderVO | RecordVO};
+  private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
+  private byArchiveNbr: {[key: string]: FolderVO | RecordVO} = {};
   private thumbRefreshQueue: Array<FolderVO | RecordVO> = [];
   private thumbRefreshTimeout;
 
   constructor(private api: ApiService) {
-    this.byFolderLinkId = {};
   }
 
   public registerItem(item: FolderVO | RecordVO) {
     this.byFolderLinkId[item.folder_linkId] = item;
+    if (item.archiveNbr) {
+      this.byArchiveNbr[item.archiveNbr] = item;
+    }
   }
 
   public deregisterItem(item: FolderVO | RecordVO) {
     delete this.byFolderLinkId[item.folder_linkId];
+    if (item.archiveNbr) {
+      delete this.byArchiveNbr[item.archiveNbr];
+    }
   }
 
   public setCurrentFolder(folder?: FolderVO) {
@@ -85,7 +91,9 @@ export class DataService {
         leanItems.map((leanItem, index) => {
           const item = this.byFolderLinkId[leanItem.folder_linkId];
           if (item) {
+            this.byArchiveNbr[leanItem.archiveNbr] = item;
             item.update(leanItem);
+
             item.dataStatus = DataStatus.Lean;
             item.isFetching = false;
             itemResolves[index]();
@@ -176,10 +184,6 @@ export class DataService {
     });
   }
 
-  public getLocalItems(folderLinkIds: number[]) {
-
-  }
-
   public refreshCurrentFolder() {
     return this.api.folder.navigate(this.currentFolder)
       .pipe(map(((response: FolderResponse) => {
@@ -219,6 +223,10 @@ export class DataService {
     this.thumbRefreshTimeout = setTimeout(() => {
       this.checkMissingThumbs();
     }, THUMBNAIL_REFRESH_INTERVAL);
+  }
+
+  public getItemByArchiveNbr(archiveNbr: string): RecordVO | FolderVO {
+    return this.byArchiveNbr[archiveNbr];
   }
 
   public getPrevNextRecord(currentRecord: RecordVO): Promise<any> {
