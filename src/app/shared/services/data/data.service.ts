@@ -221,6 +221,40 @@ export class DataService {
     }, THUMBNAIL_REFRESH_INTERVAL);
   }
 
+  public getPrevNextRecord(currentRecord: RecordVO): Promise<any> {
+    let prev: RecordVO, next: RecordVO;
+    const toFetch = [];
+    let currentIndex = currentRecord.position - 1;
+    while (!prev && currentIndex > 0) {
+      const checkItem = this.currentFolder.ChildItemVOs[--currentIndex];
+      if (checkItem.isRecord) {
+        prev = checkItem;
+        if (!prev.thumbURL200) {
+          toFetch.push(prev);
+        }
+      }
+    }
+
+    currentIndex = currentRecord.position - 1;
+    while (!next && currentIndex < this.currentFolder.ChildItemVOs.length - 1) {
+      const checkItem = this.currentFolder.ChildItemVOs[++currentIndex];
+      if (checkItem) {
+        next = checkItem;
+        if (!next.thumbURL200) {
+          toFetch.push(next);
+        }
+      }
+    }
+
+    return this.fetchLeanItems(toFetch)
+      .then(() => {
+        return {
+          prev: prev,
+          next: next
+        };
+      });
+  }
+
   public downloadFile(item: RecordVO): Promise<any> {
     if (item.FileVOs && item.FileVOs.length) {
       downloadOriginalFile(item);

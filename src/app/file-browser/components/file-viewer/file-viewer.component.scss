@@ -41,13 +41,29 @@ $toolbar-height: 30px;
   text-overflow: ellipsis;
 }
 
-.file-viewer-image, pr-thumbnail, pr-video {
+.file-viewer-image, pr-thumbnail, pr-video, .thumb-preview {
   position: absolute;
-  top: $toolbar-height;
-  bottom: $toolbar-height;
+  top: 0px;
+  bottom: 0px;
   left: 5px;
   right: 5px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+}
+
+#prev {
+  transform: translateX(-100%);
+}
+
+#next {
+  transform: translateX(100%);
+}
+
+.thumb-wrapper {
+  position: absolute;
+  top: $toolbar-height;
+  bottom: $toolbar-height;
+  left: 0px;
+  right: 0px;
 }

@@ -6,6 +6,7 @@ import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
 
 import { RecordVO } from '@root/app/models';
+import { DataService } from '@shared/services/data/data.service';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -13,7 +14,9 @@ import { RecordVO } from '@root/app/models';
   styleUrls: ['./file-viewer.component.scss']
 })
 export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
-  record: RecordVO;
+  public record: RecordVO;
+  public prevRecord: RecordVO;
+  public nextRecord: RecordVO;
 
   private viewerElement: HTMLElement;
   private thumbElement: HTMLElement;
@@ -30,10 +33,12 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private element: ElementRef,
+    private dataService: DataService,
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2
   ) {
     this.record = route.snapshot.data.currentRecord;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit() {
@@ -41,11 +46,16 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.document.body.style.setProperty('overflow', 'hidden');
 
     this.isVideo = this.record.type.includes('video');
+
+    this.dataService.getPrevNextRecord(this.record)
+      .then((results) => {
+        this.prevRecord = results.prev;
+        this.nextRecord = results.next;
+      });
   }
 
   ngAfterViewInit() {
     this.thumbElement = this.element.nativeElement.querySelector('#main-thumb') as HTMLElement;
-
     this.hammer = new Hammer(this.thumbElement);
 
     this.offscreenThreshold = this.thumbElement.clientWidth / 2;
@@ -60,35 +70,57 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handlePanEvent(evt: HammerInput) {
+    const allThumbs = document.querySelectorAll('.thumb-wrapper');
+    const screenWidth = this.thumbElement.clientWidth;
+    const previous = evt.deltaX > 0;
+    const next = evt.deltaX < 0;
+    const canNavigate = (previous && this.prevRecord) || (next && this.nextRecord);
+    const fastEnough = Math.abs(evt.velocityX) > this.velocityThreshold;
+    const farEnough = Math.abs(evt.deltaX) > this.offscreenThreshold;
     if (!evt.isFinal) {
-      this.renderer.setStyle(this.thumbElement, 'transform', `translateX(${evt.deltaX}px)`);
-    } else if (Math.abs(evt.velocityX) <= this.velocityThreshold && Math.abs(evt.deltaX) <= this.offscreenThreshold) {
-      TweenMax.fromTo(
-        this.thumbElement,
+      // follow pointer for panning
+      TweenMax.set(
+        allThumbs,
+        {
+          x: (index, target) => {
+            return evt.deltaX + ((index - 1) * screenWidth);
+          }
+        }
+      );
+    } else if (!(fastEnough || farEnough) || !canNavigate) {
+      // reset to center, not fast enough or far enough
+      TweenMax.to(
+        allThumbs,
         0.5,
         {
-          x: evt.deltaX
-        },
-        {
-          x: 0,
-          ease: 'Power4.easeOut'
+          x: (index, target) => {
+            return (index - 1) * screenWidth;
+          },
+          ease: 'Power4.easeOut',
         } as any
       );
     } else {
-      let offscreenX = this.thumbElement.clientWidth + 10;
+      // send offscreen to left or right, depending on direction
+      let offset = 0;
       if (evt.deltaX < 0) {
-        offscreenX = -1 * offscreenX;
+        offset = -2;
       }
-      TweenMax.fromTo(
-        this.thumbElement,
+      TweenMax.to(
+        allThumbs,
         0.5,
         {
-          x: evt.deltaX
-        },
-        {
-          x: offscreenX,
-          ease: 'Power4.easeOut'
-        }
+          x: (index, target) => {
+            return (index + offset) * screenWidth;
+          },
+          ease: 'Power4.easeOut',
+          onComplete: () => {
+            if (previous) {
+              this.router.navigate(['../', this.prevRecord.archiveNbr], {relativeTo: this.route});
+            } else {
+              this.router.navigate(['../', this.nextRecord.archiveNbr], {relativeTo: this.route});
+            }
+          }
+        } as any
       );
     }
   }

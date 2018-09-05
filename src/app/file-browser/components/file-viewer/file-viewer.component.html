@@ -4,8 +4,16 @@
       <span><</span> Back
     </a>
   </div>
-  <pr-thumbnail [item]="record" *ngIf="showThumbnail" id="main-thumb"></pr-thumbnail>
-  <pr-video [item]="record" *ngIf="isVideo"></pr-video>
+  <div class="thumb-wrapper" id="prev">
+    <div class="thumb-preview" prBgImage [bgSrc]="prevRecord.thumbURL200" *ngIf="prevRecord"></div>
+  </div>
+  <div class="thumb-wrapper" id="main-thumb">
+    <pr-thumbnail [item]="record" *ngIf="showThumbnail"></pr-thumbnail>
+    <pr-video [item]="record" *ngIf="isVideo"></pr-video>
+  </div>
+  <div class="thumb-wrapper" id="next">
+    <div class="thumb-preview" prBgImage [bgSrc]="nextRecord.thumbURL200" *ngIf="nextRecord"></div>
+  </div>
   <div class="file-viewer-name">
     {{record.displayName}}
   </div>
