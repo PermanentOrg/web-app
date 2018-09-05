@@ -4,7 +4,7 @@
       <span><</span> Back
     </a>
   </div>
-  <pr-thumbnail [item]="record" *ngIf="showThumbnail"></pr-thumbnail>
+  <pr-thumbnail [item]="record" *ngIf="showThumbnail" id="main-thumb"></pr-thumbnail>
   <pr-video [item]="record" *ngIf="isVideo"></pr-video>
   <div class="file-viewer-name">
     {{record.displayName}}
