@@ -1,4 +1,4 @@
-<div class="file-viewer">
+<div class="file-viewer" [ngClass]="{'minimal': useMinimalView}">
   <div class="file-viewer-close">
     <a (click)="close()">
       <span><</span> Back

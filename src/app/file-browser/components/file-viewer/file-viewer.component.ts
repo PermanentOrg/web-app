@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2} from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2, HostListener} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
@@ -17,7 +17,7 @@ import { DataStatus } from '@models/data-status.enum';
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss']
 })
-export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FileViewerComponent implements OnInit, OnDestroy {
 
   public currentRecord: RecordVO;
   public prevRecord: RecordVO;
@@ -38,8 +38,7 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   public showThumbnail = true;
   public isVideo = false;
 
-  private routeListener: Subscription;
-  private reinit = false;
+  public useMinimalView = false;
 
   constructor(
     private router: Router,
@@ -73,17 +72,22 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.hammer.on('pan', (evt: HammerInput) => {
       this.handlePanEvent(evt);
     });
+    this.hammer.on('tap', (evt: HammerInput) => {
+      this.useMinimalView = !this.useMinimalView;
+    });
 
     this.screenWidth = this.touchElement.clientWidth;
     this.offscreenThreshold = this.screenWidth / 2;
-    console.log('file-viewer.component.ts', 74, this.isVideo);
-  }
-
-  ngAfterViewInit() {
   }
 
   ngOnDestroy() {
     this.document.body.style.setProperty('overflow', '');
+  }
+
+  @HostListener('window:resize', [])
+  onViewportResize(event) {
+    this.screenWidth = this.touchElement.clientWidth;
+    this.offscreenThreshold = this.screenWidth / 2;
   }
 
   initRecord() {
