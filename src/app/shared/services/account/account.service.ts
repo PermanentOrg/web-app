@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { find } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
@@ -20,6 +20,8 @@ export class AccountService {
   private archive: ArchiveVO;
   private rootFolder: FolderVO;
   private skipSessionCheck: boolean;
+
+  public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
 
   constructor(private api: ApiService, private storage: StorageService, private cookies: CookieService) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
@@ -79,6 +81,30 @@ export class AccountService {
   public clearRootFolder() {
     this.rootFolder = undefined;
     this.storage.local.delete(ROOT_KEY);
+  }
+
+  public refreshAccount() {
+
+  }
+
+  public refreshArchive() {
+
+  }
+
+  public changeArchive(archive: ArchiveVO) {
+    return this.api.archive.change(archive)
+      .then((response: ArchiveResponse) => {
+        archive = response.getArchiveVO();
+        this.setArchive(archive);
+      })
+      .then(() => {
+        return this.api.folder.getRoot();
+      })
+      .then((response: FolderResponse) => {
+        const root = response.getFolderVO();
+        this.setRootFolder(root);
+        this.archiveChange.emit(this.archive);
+      });
   }
 
   public checkSession(): Promise<boolean> {
@@ -159,16 +185,12 @@ export class AccountService {
 
   public switchToDefaultArchive(): Promise<ArchiveResponse> {
     return this.api.archive.getAllArchives(this.account)
-      .pipe(map((response: ArchiveResponse) => {
-        if (response.isSuccessful) {
-          const archives = response.getArchiveVOs();
-          const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
-          this.setArchive(new ArchiveVO(defaultArchiveData));
-          return response;
-        } else {
-          throw response;
-        }
-      })).toPromise();
+      .then((response: ArchiveResponse) => {
+        const archives = response.getArchiveVOs();
+        const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
+        this.setArchive(new ArchiveVO(defaultArchiveData));
+        return response;
+      });
   }
 
   public signUp(

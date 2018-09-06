@@ -14,14 +14,22 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequest('/archive/get', data, ArchiveResponse);
   }
 
-  public getAllArchives(accountVO: AccountVO): Observable<ArchiveResponse> {
+  public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
     const data = [{
       AccountVO: {
         accountId: accountVO.accountId
       }
     }];
 
-    return this.http.sendRequest('/archive/getAllArchives', data, ArchiveResponse);
+    return this.http.sendRequestPromise('/archive/getAllArchives', data, ArchiveResponse);
+  }
+
+  public change(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/change', data, ArchiveResponse);
   }
 }
 
@@ -37,9 +45,8 @@ export class ArchiveResponse extends BaseResponse {
 
   public getArchiveVOs() {
     const data = this.getResultsData();
-
-    return data.map((result) => {
-      return new ArchiveVO(result[0].ArchiveVO);
+    return data[0].map((result) => {
+      return new ArchiveVO(result.ArchiveVO);
     });
   }
 }

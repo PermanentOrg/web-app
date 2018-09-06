@@ -5,6 +5,7 @@
     "ng": "ng",
     "serve": "ng serve",
     "dev": "ng serve --host local.permanent.org --disable-host-check --configuration=hmr",
+    "dev_proxy": "ng serve --host local.permanent.org --disable-host-check --configuration=proxy_hmr",
     "dev_local": "ng serve --base-href /",
     "build": "ng build --base-href /m/ --aot --build-optimizer --prod",
     "build_local": "ng build --base-href /m/ --aot --build-optimizer --configuration=local",
@@ -14,7 +15,8 @@
     "test_build": "ng test ---watch=false --browsers ChromeHeadless",
     "lint": "ng lint",
     "e2e_local": "protractor e2e/protractor.conf.js",
-    "e2e_dev": "protractor e2e/protractor.dev.conf.js"
+    "e2e_dev": "protractor e2e/protractor.dev.conf.js",
+    "e2e_proxy": "ng e2e -c proxy --protractor-config e2e/protractor.local_build.conf.js --host local.permanent.org"
   },
   "private": true,
   "dependencies": {
@@ -22,7 +24,7 @@
     "@angular/common": "^6.1.2",
     "@angular/compiler": "^6.1.2",
     "@angular/core": "^6.1.2",
-    "@angular/forms": "^6.1.2",
+  "@angular/forms": "^6.1.2",
     "@angular/http": "^6.1.2",
     "@angular/platform-browser": "^6.1.2",
     "@angular/platform-browser-dynamic": "^6.1.2",
@@ -47,6 +49,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^8.10.25",
     "codelyzer": "~4.2.1",
+    "jasmine-bamboo-reporter": "0.0.2",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.1",

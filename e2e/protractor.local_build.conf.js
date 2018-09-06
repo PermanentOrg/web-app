@@ -11,15 +11,16 @@ exports.config = {
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome',
-    'chromeOptions': {
+    browserName: 'chrome',
+    chromeOptions: {
       args: [
         "--no-sandbox", "--headless", "--disable-gpu"
       ]
-    }
+    },
+    acceptInsecureCerts : true
   },
   directConnect: true,
-  baseUrl: 'https://dev.permanent.org',
+  baseUrl: 'https://local.permanent.org:4200',
   framework: 'jasmine2',
   jasmineNodeOpts: {
     showColors: true,
@@ -45,6 +46,6 @@ exports.config = {
       beautify: true,
       indentationLevel: 4
     }));
-    browser.baseUrl = 'https://dev.permanent.org/';
+    browser.baseUrl = 'https://local.permanent.org:4200';
   }
 };

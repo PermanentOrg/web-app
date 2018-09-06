@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CoreRoutingModule } from '@core/core.routes';
-
 import { SharedModule } from '@shared/shared.module';
 
 import { DataService } from '@shared/services/data/data.service';
@@ -18,6 +17,8 @@ import { UploadProgressComponent } from '@core/components/upload-progress/upload
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { PromptComponent } from './components/prompt/prompt.component';
+import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
+import { ArchiveSmallComponent } from './components/archive-small/archive-small.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,8 @@ import { PromptComponent } from './components/prompt/prompt.component';
     UploadProgressComponent,
     UploadButtonComponent,
     PromptComponent,
+    ArchiveSelectorComponent,
+    ArchiveSmallComponent,
   ],
   providers: [
     DataService,

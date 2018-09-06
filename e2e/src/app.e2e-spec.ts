@@ -8,6 +8,14 @@ const TEST_ACCOUNT = {
   password: 'Abc123!!!!'
 };
 
+const TEST_ARCHIVE_1 = {
+  name: 'E2E Test'
+};
+
+const TEST_ARCHIVE_2 = {
+  name: 'Second Archive'
+};
+
 describe('Login/Signup Flow', () => {
   let page: AppPage;
 
@@ -27,7 +35,7 @@ describe('Login/Signup Flow', () => {
     browser.wait(ExpectedConditions.urlContains('signup'));
     expect(browser.getCurrentUrl()).toContain('/signup');
     element(by.id('invitation')).sendKeys('Permanent Archive');
-    element(by.id('name')).sendKeys('E2E TEST');
+    element(by.id('name')).sendKeys(TEST_ARCHIVE_1.name);
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
     element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
     element(by.id('passwordConfirm')).sendKeys(TEST_ACCOUNT.password);
@@ -70,15 +78,6 @@ describe('File Navigation Flow', () => {
   beforeEach(() => {
     page = new AppPage();
     browser.waitForAngularEnabled(true);
-  });
-
-  it('should navigate to My Files from hamburger menu', () => {
-    page.navigateTo();
-    expect(browser.getCurrentUrl()).not.toContain('auth');
-    element(by.css('button.navbar-toggler')).click();
-    browser.sleep(HAMBURGER_MENU_DELAY);
-    element(by.linkText('My Files')).click();
-    expect(browser.getCurrentUrl()).toContain('/myfiles');
   });
 
   it('should have a Photos folder in My Files and navigate into it', () => {
@@ -153,6 +152,56 @@ describe('File Navigation Flow', () => {
       expect(element.all(by.css('.file-list-item')).count()).toBe(initialCount - 1);
       expect(newFolderElement.isPresent()).toBeFalsy();
     });
+  });
+});
+
+describe('Multiple Archives Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should be logged into default archive', () => {
+    page.navigateTo();
+    waitForUpdate();
+    element(by.css('button.navbar-toggler')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
+  });
+
+  it('should have second archive and switch to it', () => {
+    page.goToArchiveSelector();
+    waitForUpdate();
+    const secondArchive = element(by.cssContainingText('.archive-list pr-archive-small', TEST_ARCHIVE_2.name));
+    browser.wait(ExpectedConditions.elementToBeClickable(secondArchive));
+    secondArchive.click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    element(by.buttonText('Switch archive')).click();
+    browser.wait(ExpectedConditions.urlContains('myfiles'));
+    browser.waitForAngularEnabled(false);
+    browser.sleep(1000);
+    element(by.css('button.navbar-toggler')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_2.name);
+  });
+
+  it('should switch back to the first archive', () => {
+    page.goToArchiveSelector();
+    waitForUpdate();
+    const firstArchive = element(by.cssContainingText('.archive-list pr-archive-small', TEST_ARCHIVE_1.name));
+    browser.wait(ExpectedConditions.elementToBeClickable(firstArchive));
+    expect(firstArchive.isPresent()).toBeTruthy();
+    firstArchive.click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    element(by.buttonText('Switch archive')).click();
+    browser.wait(ExpectedConditions.urlContains('myfiles'));
+    browser.waitForAngularEnabled(false);
+    browser.sleep(1000);
+    element(by.css('button.navbar-toggler')).click();
+    browser.sleep(HAMBURGER_MENU_DELAY);
+    expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
 });
 
