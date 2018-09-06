@@ -62,7 +62,7 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
       {
         buttonName: 'cancel',
         buttonText: 'Cancel',
-        class: 'btn-default'
+        class: 'btn-secondary'
       }
     ];
 

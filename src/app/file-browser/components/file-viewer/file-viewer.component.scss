@@ -1,6 +1,7 @@
 @import 'variables';
 
 $toolbar-height: 30px;
+$transition-length: 0.35s;
 
 .file-viewer {
   position: fixed;
@@ -10,6 +11,19 @@ $toolbar-height: 30px;
   right: 0;
   background-color: white;
   z-index: 10;
+
+  &.minimal {
+    background-color: black;
+    .file-viewer-close {
+      transform: translateY(-100%);
+    }
+
+    .file-viewer-name {
+      transform: translateY(100%);
+    }
+  }
+
+  transition: background-color $transition-length ease-in-out;
 }
 
 .file-viewer-close {
@@ -17,6 +31,7 @@ $toolbar-height: 30px;
   top: 0;
   width: 100%;
   height: $toolbar-height;
+  transform: translateY(0);
 
   a {
     line-height: $toolbar-height;
@@ -39,15 +54,54 @@ $toolbar-height: 30px;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
+  transform: translateY(0)
 }
 
-.file-viewer-image, pr-thumbnail, pr-video {
+.file-viewer-name, .file-viewer-close {
+  transition: transform $transition-length ease-in-out;
+}
+
+.file-viewer-image, pr-thumbnail, pr-video, .thumb-preview {
   position: absolute;
-  top: $toolbar-height;
-  bottom: $toolbar-height;
+  top: 0px;
+  bottom: 0px;
   left: 5px;
   right: 5px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+
+  &.full {
+    z-index: 1;
+  }
+}
+
+.thumb-target {
+  position: absolute;
+  top: $toolbar-height;
+  bottom: $toolbar-height;
+  left: 0px;
+  right: 0px;
+}
+
+.thumb-wrapper {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+
+  &.prev {
+    transform: translateX(-100%);
+    z-index: 1;
+  }
+  
+  &.next {
+    transform: translateX(100%);
+    z-index: 1;
+  }
+
+  &.current {
+    z-index: 2;
+  }
 }

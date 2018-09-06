@@ -7,7 +7,7 @@
           *ngFor="let field of fields"></pr-form-input>
       </div>
       <div class="prompt-field-buttons">
-          <button type="button" class="btn btn-default" (click)="cancel($event)" [disabled]="waiting">{{cancelText}}</button>
+          <button type="button" class="btn btn-secondary" (click)="cancel($event)" [disabled]="waiting">{{cancelText}}</button>
           <button type="submit" class="btn btn-primary" [disabled]="waiting || editForm.invalid">{{saveText}}</button>
       </div>
     </form>

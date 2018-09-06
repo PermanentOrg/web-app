@@ -39,7 +39,6 @@ export class VideoComponent implements OnInit {
 
     const mp4File = find(this.item.FileVOs, {type: 'type.file.video.mp4'}) as any;
 
-    console.log('video.component.ts', 42, mp4File);
     if (mp4File) {
       this.videoSrc = mp4File.fileURL;
       this.isProcessing = false;

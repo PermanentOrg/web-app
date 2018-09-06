@@ -5,25 +5,34 @@ import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
+import { DataService } from '@shared/services/data/data.service';
+import { MessageService } from '@shared/services/message/message.service';
+
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
-import { AccountService } from '@shared/services/account/account.service';
 import { RecordVO } from '@root/app/models';
+import { DataStatus } from '@models/data-status.enum';
 
 @Injectable()
 export class RecordResolveService implements Resolve<any> {
 
-  constructor(private api: ApiService, private accountService: AccountService) { }
+  constructor(private api: ApiService, private dataService: DataService, private message: MessageService) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
-    return this.api.record.get([new RecordVO({archiveNbr: route.params.recArchiveNbr})])
-      .pipe(map(((response: RecordResponse) => {
-        if (!response.isSuccessful) {
-          throw response;
-        }
+    const localItem = this.dataService.getItemByArchiveNbr(route.params.recArchiveNbr);
 
-        return response.getRecordVO(true);
-      }))).toPromise().catch((error) => {
-        console.error(error);
+    if (localItem) {
+      return Promise.resolve(localItem);
+    }
+
+    return this.api.record.get([new RecordVO({archiveNbr: route.params.recArchiveNbr})])
+      .then((response: RecordResponse) => {
+        const record = response.getRecordVO();
+        record.dataStatus = DataStatus.Full;
+        return record;
+      })
+      .catch((response: RecordResponse) => {
+        this.message.showError(response.getMessage(), true);
+        return Promise.reject(response);
       });
   }
 }
