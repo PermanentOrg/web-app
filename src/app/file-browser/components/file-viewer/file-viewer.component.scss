@@ -93,9 +93,15 @@ $transition-length: 0.35s;
 
   &.prev {
     transform: translateX(-100%);
+    z-index: 1;
   }
   
   &.next {
     transform: translateX(100%);
+    z-index: 1;
+  }
+
+  &.current {
+    z-index: 2;
   }
 }
