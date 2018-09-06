@@ -49,10 +49,15 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2
   ) {
+    const resolvedRecord = route.snapshot.data.currentRecord;
 
-    this.currentRecord = route.snapshot.data.currentRecord;
     this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
-    this.currentIndex = findIndex(this.records, {folder_linkId: this.currentRecord.folder_linkId});
+    this.currentIndex = findIndex(this.records, {folder_linkId: resolvedRecord.folder_linkId});
+    this.currentRecord = this.records[this.currentIndex];
+    if (resolvedRecord !== this.currentRecord) {
+      this.currentRecord.update(resolvedRecord);
+    }
+
     this.loadQueuedItems();
   }
 
@@ -71,8 +76,7 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.screenWidth = this.touchElement.clientWidth;
     this.offscreenThreshold = this.screenWidth / 2;
-
-    this.reinit = true;
+    console.log('file-viewer.component.ts', 74, this.isVideo);
   }
 
   ngAfterViewInit() {
@@ -83,7 +87,7 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   initRecord() {
-    this.currentRecord = this.route.snapshot.data.currentRecord;
+    console.log(this.currentRecord.type);
     this.isVideo = this.currentRecord.type.includes('video');
   }
 
@@ -154,6 +158,8 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
             this.currentIndex = targetIndex;
             this.currentRecord = targetRecord;
+
+            this.initRecord();
 
             this.disableSwipes = false;
             this.loadQueuedItems();

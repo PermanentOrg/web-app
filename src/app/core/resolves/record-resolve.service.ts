@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { RecordVO } from '@root/app/models';
+import { DataStatus } from '@models/data-status.enum';
 
 @Injectable()
 export class RecordResolveService implements Resolve<any> {
@@ -25,7 +26,9 @@ export class RecordResolveService implements Resolve<any> {
 
     return this.api.record.get([new RecordVO({archiveNbr: route.params.recArchiveNbr})])
       .then((response: RecordResponse) => {
-        return response.getRecordVO();
+        const record = response.getRecordVO();
+        record.dataStatus = DataStatus.Full;
+        return record;
       })
       .catch((response: RecordResponse) => {
         this.message.showError(response.getMessage(), true);
