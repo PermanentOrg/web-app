@@ -7,7 +7,11 @@ export class RecordRepo extends BaseRepo {
   public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
-        RecordVO: new RecordVO(recordVO)
+        RecordVO: new RecordVO({
+          folder_linkId: recordVO.folder_linkId,
+          recordId: recordVO.recordId,
+          archiveNbr: recordVO.archiveNbr
+        })
       };
     });
 

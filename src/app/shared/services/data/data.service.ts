@@ -170,6 +170,7 @@ export class DataService {
 
       itemResolves.map((resolve, index) => {
         items[index].fetched = null;
+        this.byArchiveNbr[items[index].archiveNbr] = items[index];
         resolve();
       });
 

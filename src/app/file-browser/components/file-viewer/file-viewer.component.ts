@@ -87,7 +87,6 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   initRecord() {
-    console.log(this.currentRecord.type);
     this.isVideo = this.currentRecord.type.includes('video');
   }
 
@@ -163,13 +162,24 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
             this.disableSwipes = false;
             this.loadQueuedItems();
-            this.router.navigate(['../', targetRecord.archiveNbr], {relativeTo: this.route});
+
+            if (targetRecord.archiveNbr) {
+              this.navigateToCurrentRecord();
+            } else if (targetRecord.isFetching) {
+              targetRecord.fetched
+                .then(() => {
+                  this.navigateToCurrentRecord();
+                });
+            } else {
+              this.dataService.fetchLeanItems([targetRecord])
+                .then(() => {
+                  this.navigateToCurrentRecord();
+                });
+            }
           }
         } as any
       );
     }
-
-
 
     function getOrder(elem: HTMLElement) {
       if (elem.classList.contains('prev')) {
@@ -182,13 +192,17 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  navigateToCurrentRecord() {
+    this.router.navigate(['../', this.currentRecord.archiveNbr], {relativeTo: this.route});
+  }
+
   loadQueuedItems() {
-    const surroundingCount = 4;
+    const surroundingCount = 5;
     const start = Math.max(this.currentIndex - surroundingCount, 0);
     const end = Math.min(this.currentIndex + surroundingCount + 1, this.records.length);
-    const itemsToFetch = this.records.slice(start, end).filter((item: RecordVO) => item.dataStatus < DataStatus.Lean );
+    const itemsToFetch = this.records.slice(start, end).filter((item: RecordVO) => item.dataStatus < DataStatus.Full );
     if (itemsToFetch.length) {
-      this.dataService.fetchLeanItems(itemsToFetch);
+      this.dataService.fetchFullItems(itemsToFetch);
     }
   }
 

@@ -40,9 +40,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.currentThumbWidth = 200;
-    this.setImageBg(this.item.thumbURL200);
-    this.checkElementWidth();
+    // console.log('on changes?', this.item.displayName);
+    // this.setImageBg(this.item.thumbURL200);
+    // this.currentThumbWidth = 200;
+    // this.targetThumbWidth = 200;
+    // this.checkElementWidth();
   }
 
   @HostListener('window:resize', [])
@@ -82,8 +84,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     }
   }
 
-  setImageBg(imageUrl) {
+  setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;
+    if (!this.imageElement) {
+      return;
+    }
     if (!imageUrl) {
       this.renderer.setElementStyle(this.imageElement, 'background-image', ``);
     } else {
