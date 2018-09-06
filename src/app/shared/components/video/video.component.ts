@@ -25,21 +25,22 @@ export class VideoComponent implements OnInit {
     this.videoElem = this.elementRef.nativeElement.querySelector('video');
     this.videoWrapperElem = this.elementRef.nativeElement.querySelector('.pr-video-wrapper');
 
-    this.videoElem.addEventListener('canplay', (event) => {
-      this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
-      TweenMax.from(
-        this.videoElem,
-        FADE_IN_DURATION,
-        {
-          opacity: 0,
-          ease: 'Power4.easeOut'
-        }
-      );
+    this.videoElem.addEventListener('loadstart', (event) => {
+      setTimeout(() => {
+        this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
+        TweenMax.from(
+          this.videoElem,
+          FADE_IN_DURATION,
+          {
+            opacity: 0,
+            ease: 'Power4.easeOut'
+          }
+        );
+      }, 250);
     });
 
     const mp4File = find(this.item.FileVOs, {type: 'type.file.video.mp4'}) as any;
 
-    console.log('video.component.ts', 42, mp4File);
     if (mp4File) {
       this.videoSrc = mp4File.fileURL;
       this.isProcessing = false;
