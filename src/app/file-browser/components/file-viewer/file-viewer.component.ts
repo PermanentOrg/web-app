@@ -6,11 +6,11 @@ import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { filter as lodashFilter, findIndex } from 'lodash';
 
-import { RecordVO} from '@root/app/models';
+import { RecordVO, FolderVO} from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
-
 
 @Component({
   selector: 'pr-file-viewer',
@@ -18,16 +18,21 @@ import { DataStatus } from '@models/data-status.enum';
   styleUrls: ['./file-viewer.component.scss']
 })
 export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
-  public record: RecordVO;
+
+  public currentRecord: RecordVO;
   public prevRecord: RecordVO;
   public nextRecord: RecordVO;
+  public records: RecordVO[];
+  public currentIndex: number;
 
-  private viewerElement: HTMLElement;
+  private touchElement: HTMLElement;
   private thumbElement: HTMLElement;
   private bodyScroll: number;
   private hammer: HammerManager;
+  private disableSwipes: boolean;
 
   private velocityThreshold = 0.2;
+  private screenWidth: number;
   private offscreenThreshold: number;
 
   public showThumbnail = true;
@@ -44,31 +49,29 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2
   ) {
-    this.record = route.snapshot.data.currentRecord;
 
-    if (!this.routeListener) {
-      this.routeListener = this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd ))
-      .subscribe((event: NavigationEnd) => {
-        if (event.url.includes('record') && this.reinit) {
-          this.initRecord();
-        }
-      });
-    }
+    this.currentRecord = route.snapshot.data.currentRecord;
+    this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
+    this.currentIndex = findIndex(this.records, {folder_linkId: this.currentRecord.folder_linkId});
+    this.loadQueuedItems();
   }
 
   ngOnInit() {
-    this.viewerElement = this.element.nativeElement.querySelector('.file-viewer');
+    this.initRecord();
+
+    // disable scrolling file list in background
     this.document.body.style.setProperty('overflow', 'hidden');
 
-    this.thumbElement = this.element.nativeElement.querySelector('#main-thumb') as HTMLElement;
-    this.offscreenThreshold = this.thumbElement.clientWidth / 2;
-    this.hammer = new Hammer(this.thumbElement);
+    // bind hammer events to thumbnail area
+    this.touchElement = this.element.nativeElement.querySelector('.thumb-target');
+    this.hammer = new Hammer(this.touchElement);
     this.hammer.on('pan', (evt: HammerInput) => {
       this.handlePanEvent(evt);
     });
 
-    this.initRecord();
+    this.screenWidth = this.touchElement.clientWidth;
+    this.offscreenThreshold = this.screenWidth / 2;
+
     this.reinit = true;
   }
 
@@ -77,88 +80,109 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.document.body.style.setProperty('overflow', '');
-    this.routeListener.unsubscribe();
   }
 
   initRecord() {
-    this.record = this.route.snapshot.data.currentRecord;
-    this.isVideo = this.record.type.includes('video');
+    this.currentRecord = this.route.snapshot.data.currentRecord;
+    this.isVideo = this.currentRecord.type.includes('video');
+  }
 
-    this.dataService.getPrevNextRecord(this.record)
-      .then((results) => {
-        this.prevRecord = results.prev;
-        this.nextRecord = results.next;
-      });
-
-    if (this.reinit) {
-      const screenWidth = this.thumbElement.clientWidth;
-      setTimeout(() => {
-        TweenMax.set(
-          document.querySelectorAll('.thumb-wrapper'),
-          {
-            x: (index, target) => {
-              return (index - 1) * screenWidth;
-            }
-          }
-        );
-      }, 10);
-    }
-
+  isQueued(indexToCheck: number) {
+    return indexToCheck >= this.currentIndex - 1 && indexToCheck <= this.currentIndex + 1;
   }
 
   handlePanEvent(evt: HammerInput) {
-    const allThumbs = document.querySelectorAll('.thumb-wrapper');
-    const screenWidth = this.thumbElement.clientWidth;
+    if (this.disableSwipes) {
+      return;
+    }
+
+    const queuedThumbs = document.querySelectorAll('.thumb-wrapper.queue');
+
     const previous = evt.deltaX > 0;
     const next = evt.deltaX < 0;
-    const canNavigate = (previous && this.prevRecord) || (next && this.nextRecord);
+    const canNavigate = (previous && this.records[this.currentIndex - 1]) || (next && this.records[this.currentIndex + 1]);
     const fastEnough = Math.abs(evt.velocityX) > this.velocityThreshold;
     const farEnough = Math.abs(evt.deltaX) > this.offscreenThreshold;
+
     if (!evt.isFinal) {
       // follow pointer for panning
       TweenMax.set(
-        allThumbs,
+        queuedThumbs,
         {
           x: (index, target) => {
-            return evt.deltaX + ((index - 1) * screenWidth);
+            return evt.deltaX + (getOrder(target) * this.screenWidth);
           }
         }
       );
     } else if (!(fastEnough || farEnough) || !canNavigate) {
       // reset to center, not fast enough or far enough
       TweenMax.to(
-        allThumbs,
+        queuedThumbs,
         0.5,
         {
           x: (index, target) => {
-            return (index - 1) * screenWidth;
+            return getOrder(target) * this.screenWidth;
           },
           ease: 'Power4.easeOut',
         } as any
       );
     } else {
       // send offscreen to left or right, depending on direction
-      let offset = 0;
+      let offset = 1;
       if (evt.deltaX < 0) {
-        offset = -2;
+        offset = -1;
       }
+      this.disableSwipes = true;
       TweenMax.to(
-        allThumbs,
+        queuedThumbs,
         0.5,
         {
           x: (index, target) => {
-            return (index + offset) * screenWidth;
+            return (getOrder(target) + offset) * this.screenWidth;
           },
           ease: 'Power4.easeOut',
           onComplete: () => {
+            let targetIndex = this.currentIndex;
             if (previous) {
-              this.router.navigate(['../', this.prevRecord.archiveNbr], {relativeTo: this.route});
+              targetIndex--;
             } else {
-              this.router.navigate(['../', this.nextRecord.archiveNbr], {relativeTo: this.route});
+              targetIndex++;
             }
+
+            // update current record and fetch surrounding items
+            const targetRecord = this.records[targetIndex];
+
+            this.currentIndex = targetIndex;
+            this.currentRecord = targetRecord;
+
+            this.disableSwipes = false;
+            this.loadQueuedItems();
+            this.router.navigate(['../', targetRecord.archiveNbr], {relativeTo: this.route});
           }
         } as any
       );
+    }
+
+
+
+    function getOrder(elem: HTMLElement) {
+      if (elem.classList.contains('prev')) {
+        return -1;
+      } if (elem.classList.contains('next')) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  loadQueuedItems() {
+    const surroundingCount = 4;
+    const start = Math.max(this.currentIndex - surroundingCount, 0);
+    const end = Math.min(this.currentIndex + surroundingCount + 1, this.records.length);
+    const itemsToFetch = this.records.slice(start, end).filter((item: RecordVO) => item.dataStatus < DataStatus.Lean );
+    if (itemsToFetch.length) {
+      this.dataService.fetchLeanItems(itemsToFetch);
     }
   }
 

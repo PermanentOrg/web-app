@@ -41,7 +41,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.currentThumbWidth = 200;
-    this.setImageBg(this.item.thumbURL200, true);
+    this.setImageBg(this.item.thumbURL200);
     this.checkElementWidth();
   }
 
@@ -82,13 +82,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     }
   }
 
-  setImageBg(imageUrl, noWait ?: boolean) {
+  setImageBg(imageUrl) {
     this.currentThumbUrl = imageUrl;
     if (!imageUrl) {
       this.renderer.setElementStyle(this.imageElement, 'background-image', ``);
-    } else if (noWait) {
-      this.thumbLoaded = true;
-      this.renderer.setElementStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
     } else {
       const imageLoader = new Image();
       imageLoader.onload = () => {

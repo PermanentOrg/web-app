@@ -50,20 +50,32 @@ $toolbar-height: 30px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+
+  &.full {
+    z-index: 1;
+  }
 }
 
-#prev {
-  transform: translateX(-100%);
-}
-
-#next {
-  transform: translateX(100%);
-}
-
-.thumb-wrapper {
+.thumb-target {
   position: absolute;
   top: $toolbar-height;
   bottom: $toolbar-height;
   left: 0px;
   right: 0px;
+}
+
+.thumb-wrapper {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+
+  &.prev {
+    transform: translateX(-100%);
+  }
+  
+  &.next {
+    transform: translateX(100%);
+  }
 }
