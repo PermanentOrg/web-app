@@ -139,7 +139,7 @@ export class DataService {
 
     const promises: Promise<any>[] = [];
 
-    promises.push(records.length ? this.api.record.get(records).toPromise() : Promise.resolve());
+    promises.push(records.length ? this.api.record.get(records) : Promise.resolve());
     promises.push(folders.length ? this.api.folder.get(folders).toPromise() : Promise.resolve());
 
     return Promise.all(promises)
@@ -229,6 +229,10 @@ export class DataService {
     return this.byArchiveNbr[archiveNbr];
   }
 
+  public getItemByFolderLinkId(folder_linkId: number): RecordVO | FolderVO {
+    return this.byFolderLinkId[folder_linkId];
+  }
+
   public getPrevNextRecord(currentRecord: RecordVO): Promise<any> {
     let prev: RecordVO, next: RecordVO;
     const toFetch = [];
@@ -237,7 +241,8 @@ export class DataService {
       const checkItem = this.currentFolder.ChildItemVOs[--currentIndex];
       if (checkItem.isRecord) {
         prev = checkItem;
-        if (!prev.thumbURL200) {
+        this.registerItem(prev);
+        if (prev.dataStatus < DataStatus.Lean) {
           toFetch.push(prev);
         }
       }
@@ -248,7 +253,8 @@ export class DataService {
       const checkItem = this.currentFolder.ChildItemVOs[++currentIndex];
       if (checkItem) {
         next = checkItem;
-        if (!next.thumbURL200) {
+        this.registerItem(next);
+        if (next.dataStatus < DataStatus.Lean) {
           toFetch.push(next);
         }
       }

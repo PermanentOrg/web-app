@@ -2,6 +2,8 @@ import { RecordVOData } from '@models/record-vo';
 import { FolderVOData } from '@models/folder-vo';
 
 export class BaseVO {
+  public dataWhitelist: string[];
+
   constructor (voData: any) {
     if (voData) {
       for ( const key in voData ) {

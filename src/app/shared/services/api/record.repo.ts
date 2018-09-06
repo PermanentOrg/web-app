@@ -1,23 +1,25 @@
 import { RecordVO } from '@root/app/models';
-import { BaseResponse, BaseRepo } from '@shared/services/api/base';
+import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class RecordRepo extends BaseRepo {
-  public get(recordVOs: RecordVO[]): Observable<RecordResponse> {
+  public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
         RecordVO: new RecordVO(recordVO)
       };
     });
 
-    return this.http.sendRequest('/record/get', data, RecordResponse);
+    return this.http.sendRequestPromise('/record/get', data, RecordResponse);
   }
 
-  public getLean(recordVOs: RecordVO[]): Promise<RecordResponse> {
+  public getLean(recordVOs: RecordVO[], whitelist ?: string[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
+      const newVO = new RecordVO(recordVO);
+      newVO.dataWhitelist = whitelist || LeanWhitelist;
       return {
-        RecordVO: new RecordVO(recordVO)
+        RecordVO: newVO
       };
     });
 

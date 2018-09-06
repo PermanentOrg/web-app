@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer, HostListener, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer, HostListener, DoCheck, OnChanges } from '@angular/core';
 
 import { debounce } from 'lodash';
 
@@ -11,7 +11,7 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss']
 })
-export class ThumbnailComponent implements OnInit {
+export class ThumbnailComponent implements OnInit, OnChanges {
   @Input() item: FolderVO | RecordVO;
 
   thumbLoaded = false;
@@ -36,6 +36,12 @@ export class ThumbnailComponent implements OnInit {
     this.imageElement = this.element.querySelector('.pr-thumbnail-image');
     this.placeholderElement = this.element.querySelector('.pr-thumbnail-placeholder');
     this.setImageBg(this.item.thumbURL200);
+    this.checkElementWidth();
+  }
+
+  ngOnChanges() {
+    this.currentThumbWidth = 200;
+    this.setImageBg(this.item.thumbURL200, true);
     this.checkElementWidth();
   }
 
@@ -76,10 +82,13 @@ export class ThumbnailComponent implements OnInit {
     }
   }
 
-  setImageBg(imageUrl) {
+  setImageBg(imageUrl, noWait ?: boolean) {
     this.currentThumbUrl = imageUrl;
     if (!imageUrl) {
       this.renderer.setElementStyle(this.imageElement, 'background-image', ``);
+    } else if (noWait) {
+      this.thumbLoaded = true;
+      this.renderer.setElementStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
     } else {
       const imageLoader = new Image();
       imageLoader.onload = () => {

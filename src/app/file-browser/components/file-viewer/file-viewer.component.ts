@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { RecordVO} from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
+
 
 @Component({
   selector: 'pr-file-viewer',
@@ -30,6 +33,9 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   public showThumbnail = true;
   public isVideo = false;
 
+  private routeListener: Subscription;
+  private reinit = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -39,43 +45,66 @@ export class FileViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2
   ) {
     this.record = route.snapshot.data.currentRecord;
+
+    if (!this.routeListener) {
+      this.routeListener = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd ))
+      .subscribe((event: NavigationEnd) => {
+        if (event.url.includes('record') && this.reinit) {
+          this.initRecord();
+        }
+      });
+    }
   }
 
   ngOnInit() {
     this.viewerElement = this.element.nativeElement.querySelector('.file-viewer');
     this.document.body.style.setProperty('overflow', 'hidden');
 
+    this.thumbElement = this.element.nativeElement.querySelector('#main-thumb') as HTMLElement;
+    this.offscreenThreshold = this.thumbElement.clientWidth / 2;
+    this.hammer = new Hammer(this.thumbElement);
+    this.hammer.on('pan', (evt: HammerInput) => {
+      this.handlePanEvent(evt);
+    });
+
+    this.initRecord();
+    this.reinit = true;
+  }
+
+  ngAfterViewInit() {
+  }
+
+  ngOnDestroy() {
+    this.document.body.style.setProperty('overflow', '');
+    this.routeListener.unsubscribe();
+  }
+
+  initRecord() {
+    this.record = this.route.snapshot.data.currentRecord;
+    this.isVideo = this.record.type.includes('video');
 
     this.dataService.getPrevNextRecord(this.record)
       .then((results) => {
         this.prevRecord = results.prev;
         this.nextRecord = results.next;
       });
-  }
 
-  ngAfterViewInit() {
-    this.thumbElement = this.element.nativeElement.querySelector('#main-thumb') as HTMLElement;
-    this.hammer = new Hammer(this.thumbElement);
-
-    this.offscreenThreshold = this.thumbElement.clientWidth / 2;
-
-    this.hammer.on('pan', (evt: HammerInput) => {
-      this.handlePanEvent(evt);
-    });
-  }
-
-  ngOnDestroy() {
-    this.document.body.style.setProperty('overflow', '');
-  }
-
-  initRecord() {
-    this.isVideo = this.record.type.includes('video');
-    if (this.record.dataStatus < DataStatus.Full) {
-
+    if (this.reinit) {
+      const screenWidth = this.thumbElement.clientWidth;
+      setTimeout(() => {
+        TweenMax.set(
+          document.querySelectorAll('.thumb-wrapper'),
+          {
+            x: (index, target) => {
+              return (index - 1) * screenWidth;
+            }
+          }
+        );
+      }, 10);
     }
+
   }
-
-
 
   handlePanEvent(evt: HammerInput) {
     const allThumbs = document.querySelectorAll('.thumb-wrapper');

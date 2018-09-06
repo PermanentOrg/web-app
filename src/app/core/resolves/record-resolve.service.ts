@@ -23,9 +23,9 @@ export class RecordResolveService implements Resolve<any> {
       return Promise.resolve(localItem);
     }
 
-    return this.api.record.getLean([new RecordVO({archiveNbr: route.params.recArchiveNbr})])
+    return this.api.record.get([new RecordVO({archiveNbr: route.params.recArchiveNbr})])
       .then((response: RecordResponse) => {
-        return response.getRecordVO(true);
+        return response.getRecordVO();
       })
       .catch((response: RecordResponse) => {
         this.message.showError(response.getMessage(), true);
