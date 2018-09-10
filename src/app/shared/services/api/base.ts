@@ -78,3 +78,37 @@ export class BaseRepo {
   constructor(public http: HttpService) { }
 
 }
+
+export const LeanWhitelist = [
+  'displayName',
+  'accessRole',
+  'description',
+  'displayDT',
+  'displayEndDT',
+  'status',
+  'archiveNbr',
+  'timeZoneId',
+  'locnId',
+  'thumbStatus',
+  'type',
+  'updatedDT',
+  'imageRatio',
+  'viewProperty',
+  'publicDT',
+  'createdDT',
+  'thumbURL200',
+  'thumbURL500',
+  'thumbURL1000',
+  'thumbURL2000',
+  'thumbDT',
+  'refArchiveNbr',
+  'folder_linkId',
+  'recordId',
+  'folderId',
+  'position',
+  'folder_linkType',
+  'stdAbbrev',
+  'stdOffset',
+  'dstAbbrev',
+  'dstOffset',
+];

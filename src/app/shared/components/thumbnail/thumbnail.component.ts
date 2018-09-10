@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer, HostListener, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer, HostListener, DoCheck, OnChanges } from '@angular/core';
 
 import { debounce } from 'lodash';
 
@@ -11,7 +11,7 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss']
 })
-export class ThumbnailComponent implements OnInit {
+export class ThumbnailComponent implements OnInit, OnChanges {
   @Input() item: FolderVO | RecordVO;
 
   thumbLoaded = false;
@@ -39,6 +39,14 @@ export class ThumbnailComponent implements OnInit {
     this.checkElementWidth();
   }
 
+  ngOnChanges() {
+    // console.log('on changes?', this.item.displayName);
+    // this.setImageBg(this.item.thumbURL200);
+    // this.currentThumbWidth = 200;
+    // this.targetThumbWidth = 200;
+    // this.checkElementWidth();
+  }
+
   @HostListener('window:resize', [])
   onViewportResize(event) {
     this.debouncedResize();
@@ -56,7 +64,7 @@ export class ThumbnailComponent implements OnInit {
       if (elemSize <= size) {
         targetWidth = size;
       } else if (elemSize >= THUMB_SIZES[THUMB_SIZES.length - 1]) {
-        targetWidth = size;
+        targetWidth = THUMB_SIZES[THUMB_SIZES.length - 1];
       }
 
       if (targetWidth) {
@@ -76,8 +84,11 @@ export class ThumbnailComponent implements OnInit {
     }
   }
 
-  setImageBg(imageUrl) {
+  setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;
+    if (!this.imageElement) {
+      return;
+    }
     if (!imageUrl) {
       this.renderer.setElementStyle(this.imageElement, 'background-image', ``);
     } else {

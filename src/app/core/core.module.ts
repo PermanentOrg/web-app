@@ -1,24 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { CoreRoutingModule } from '@core/core.routes';
+import { SharedModule } from '@shared/shared.module';
 
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
-import { UploadProgressComponent } from './components/upload-progress/upload-progress.component';
-import { UploadButtonComponent } from './components/upload-button/upload-button.component';
+import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
+import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
+import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
+import { PromptComponent } from './components/prompt/prompt.component';
+import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
+import { ArchiveSmallComponent } from './components/archive-small/archive-small.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
+    SharedModule,
     CoreRoutingModule,
   ],
   declarations: [
@@ -26,13 +31,18 @@ import { UploadButtonComponent } from './components/upload-button/upload-button.
     MainComponent,
     NavComponent,
     LeftMenuComponent,
+    RightMenuComponent,
     BreadcrumbsComponent,
     UploadProgressComponent,
     UploadButtonComponent,
+    PromptComponent,
+    ArchiveSelectorComponent,
+    ArchiveSmallComponent,
   ],
   providers: [
     DataService,
-    UploadService
+    UploadService,
+    PromptService
   ]
 })
 export class CoreModule { }

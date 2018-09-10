@@ -8,6 +8,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { FolderVO } from '@root/app/models';
+import { FormBuilder, Validators } from '@angular/forms';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-home',
@@ -18,7 +20,7 @@ export class HomeComponent implements OnInit {
   public files: File[] = [];
 
   constructor(private accountService: AccountService, private router: Router, private messageService: MessageService,
-    private api: ApiService, private upload: UploadService
+    private api: ApiService, private upload: UploadService, private fb: FormBuilder, private prompt: PromptService
   ) { }
 
   ngOnInit() {

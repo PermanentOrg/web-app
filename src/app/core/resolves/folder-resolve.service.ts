@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
+import { MessageService } from '@shared/services/message/message.service';
+
+import { FolderResponse } from '@shared/services/api/index.repo';
+
 import { FolderVO } from '@root/app/models';
 
 @Injectable()
 export class FolderResolveService implements Resolve<any> {
 
-  constructor(private api: ApiService, private accountService: AccountService) { }
+  constructor(private api: ApiService, private accountService: AccountService, private message: MessageService, private router: Router) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     let targetFolder;
@@ -34,8 +37,14 @@ export class FolderResolveService implements Resolve<any> {
         }
 
         return response.getFolderVO(true);
-      }))).toPromise().catch((error) => {
-        console.error(error);
+      }))).toPromise().catch((response: FolderResponse) => {
+        this.message.showError(response.getMessage(), true);
+        if (state.url.includes('apps')) {
+          this.router.navigate(['/apps']);
+        } else {
+          this.router.navigate(['/myfiles']);
+        }
+        return Promise.reject(false);
       });
   }
 }

@@ -1,30 +1,7 @@
 @import 'variables';
 
-$transition-length: 0.4s;
-$shadow-color: rgba(black, 0.15);
+$transition-length: $default-transition-length;
 
-.hamburger-menu-wrapper {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: rgba(black, 0);
-  transition: background-color $transition-length ease-out, visibility 0s linear $transition-length;
-  visibility: hidden;
-
-  &.visible {
-    left: 0;
-    right: 0;
-    background-color: $shadow-color;
-    visibility: visible;
-    transition:  background-color $transition-length ease-out;
-
-    .hamburger-menu {
-      transform: translateX(0);
-      transition: transform $transition-length ease-out;
-    }
-  }
-}
 
 .hamburger-menu {
   position: absolute;
@@ -33,9 +10,6 @@ $shadow-color: rgba(black, 0.15);
   width: 300px;
   max-width: 80%;
   transform: translateX(-100%);
-  transition:  transform $transition-length ease-in;
-  background-color: white;
-  box-shadow: $box-shadow;
 
   .menu-item {
     padding: $input-btn-padding-y * 1.5 10px;

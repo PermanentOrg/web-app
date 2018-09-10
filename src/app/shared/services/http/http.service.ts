@@ -37,6 +37,17 @@ export class HttpService {
         }
       }));
   }
+
+  public sendRequestPromise(endpoint: string, data = [{}], responseClass ?: any): Promise<any> {
+    return this.sendRequest(endpoint, data, responseClass)
+      .pipe(map((response: any | BaseResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
+
+        return response;
+      })).toPromise();
+  }
 }
 
 export { Observable };

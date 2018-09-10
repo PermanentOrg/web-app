@@ -1,0 +1,215 @@
+import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { PromptService, PromptField, PromptButton, PromptConfig } from '@core/services/prompt/prompt.service';
+
+@Component({
+  selector: 'pr-prompt',
+  templateUrl: './prompt.component.html',
+  styleUrls: ['./prompt.component.scss']
+})
+export class PromptComponent implements OnInit, OnDestroy {
+  @Input() isVisible: boolean;
+
+  public waiting = false;
+  public editForm: FormGroup;
+  public fields: any[] = [];
+  public placeholderText = 'test';
+  public title: string;
+
+  public editButtons: PromptButton[];
+
+  public saveText = 'OK';
+  public cancelText = 'Cancel';
+
+  public savePromise: Promise<any>;
+
+  public donePromise: Promise<any>;
+  public doneResolve: Function;
+  public doneReject: Function;
+
+  private defaultForm: FormGroup;
+
+  private promptQueue: PromptConfig[] = [];
+
+  constructor(private service: PromptService, private fb: FormBuilder, private element: ElementRef) {
+    this.service.registerComponent(this);
+    this.defaultForm = fb.group({});
+  }
+
+  ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.service.deregisterComponent();
+  }
+
+  hide(event: Event) {
+    this.isVisible = false;
+    setTimeout(() => {
+      this.reset();
+    }, 500);
+    return false;
+  }
+
+  prompt(
+    form: FormGroup,
+    fields: PromptField[],
+    title: string,
+    savePromise?: Promise<any>,
+    saveText?: string,
+    cancelText?: string,
+    donePromise?: Promise<any>,
+    doneResolve?: Function,
+    doneReject?: Function
+  ) {
+    if (this.donePromise) {
+      let newDoneReject, newDoneResolve;
+
+      const newDonePromise = new Promise((resolve, reject) => {
+        newDoneResolve = resolve;
+        newDoneReject = reject;
+      });
+
+      this.promptQueue.push({
+        form: form,
+        fields: fields,
+        title: title,
+        savePromise: savePromise,
+        saveText: saveText,
+        cancelText: cancelText,
+        donePromise: newDonePromise,
+        doneResolve: newDoneResolve,
+        doneReject: newDoneReject
+      });
+
+      return newDonePromise;
+    }
+
+    this.title = title;
+    this.savePromise = savePromise;
+
+    if (saveText) {
+      this.saveText = saveText;
+    }
+
+    if (cancelText) {
+      this.cancelText = cancelText;
+    }
+
+    this.editForm = form;
+    this.fields = fields;
+
+    if (!donePromise) {
+      this.donePromise = new Promise((resolve, reject) => {
+        this.doneResolve = resolve;
+        this.doneReject = reject;
+      });
+    } else {
+      this.donePromise = donePromise;
+      this.doneResolve = doneResolve;
+      this.doneReject = doneReject;
+    }
+
+    this.isVisible = true;
+
+    setTimeout(() => {
+      const elem = this.element.nativeElement as Element;
+      const firstInput = elem.querySelector('input');
+      if (firstInput) {
+        firstInput.focus();
+        firstInput.setSelectionRange(0, firstInput.value.length);
+      }
+    });
+
+    return this.donePromise;
+  }
+
+  save(event: Event) {
+    event.stopPropagation();
+    this.doneResolve(this.editForm.value);
+    if (!this.savePromise) {
+      this.hide(event);
+    } else {
+      this.waiting = true;
+      this.savePromise
+        .then(() => {
+          this.waiting = false;
+          this.hide(event);
+        })
+        .catch(() => {
+          this.waiting = false;
+        });
+    }
+    return false;
+  }
+
+  cancel(event: Event) {
+    event.stopPropagation();
+    this.hide(event);
+    return false;
+  }
+
+  promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>) {
+    if (this.donePromise) {
+      throw new Error('Prompt in progress');
+    }
+
+    this.editButtons = buttons;
+    this.title = title;
+    this.savePromise = savePromise;
+
+    this.donePromise = new Promise((resolve, reject) => {
+      this.doneResolve = resolve;
+      this.doneReject = reject;
+    });
+
+    this.isVisible = true;
+
+    return this.donePromise;
+  }
+
+  clickButton(button: PromptButton, event: Event) {
+    this.doneResolve(button.value || button.buttonName);
+    event.stopPropagation();
+    if (!this.savePromise) {
+      this.hide(event);
+    } else {
+      this.waiting = true;
+      this.savePromise
+        .then(() => {
+          this.waiting = false;
+          this.hide(event);
+        })
+        .catch(() => {
+          this.waiting = false;
+        });
+    }
+    return false;
+  }
+
+  reset() {
+    this.editForm =  null;
+    this.editButtons = null;
+    this.title = null;
+    this.fields = null;
+    this.donePromise = null;
+    this.doneResolve = null;
+    this.doneReject = null;
+
+    if (this.promptQueue.length) {
+      const next = this.promptQueue.shift();
+      this.prompt(
+        next.form,
+        next.fields,
+        next.title,
+        next.savePromise,
+        next.saveText,
+        next.cancelText,
+        next.donePromise,
+        next.doneResolve,
+        next.doneReject
+      );
+    }
+  }
+}

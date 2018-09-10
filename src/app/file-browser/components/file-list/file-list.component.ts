@@ -2,7 +2,7 @@ import {
   Component,
   Inject,
   OnInit,
-  AfterContentInit,
+  AfterViewInit,
   ElementRef,
   QueryList,
   ViewChildren,
@@ -15,6 +15,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { throttle, debounce } from 'lodash';
+import { TweenMax } from 'gsap';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
@@ -34,11 +35,11 @@ const SCROLL_VELOCITY_THRESHOLD = 4;
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss']
 })
-export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
+export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
 
   currentFolder: FolderVO;
-  listItems: FileListItemComponent[];
+  listItems: FileListItemComponent[] = [];
 
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
@@ -57,6 +58,8 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     private router: Router,
     @Inject(DOCUMENT) private document: any
   ) {
+    this.currentFolder = this.route.snapshot.data.currentFolder;
+    this.dataService.setCurrentFolder(this.currentFolder);
 
     // create debounced scroll handler for placeholder loading
     this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
@@ -94,7 +97,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
   refreshView() {
     this.ngOnInit();
     setTimeout(() => {
-      this.ngAfterContentInit();
+      this.ngAfterViewInit();
     }, 1);
   }
 
@@ -106,15 +109,13 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     this.reinit = true;
   }
 
-  ngAfterContentInit() {
-    setTimeout(() => {
-      if (this.listItemsQuery) {
-        this.listItems = this.listItemsQuery.toArray();
-      }
+  ngAfterViewInit() {
+    if (this.listItemsQuery) {
+      this.listItems = this.listItemsQuery.toArray();
+    }
 
-      this.calculateListViewport();
-      this.document.documentElement.scrollTop = 0;
-    }, 0);
+    this.calculateListViewport(true);
+    this.document.documentElement.scrollTop = 0;
   }
 
   ngOnDestroy() {
@@ -136,7 +137,7 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  calculateListViewport() {
+  calculateListViewport(animate ?: boolean) {
     if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {
       return;
     }
@@ -147,6 +148,19 @@ export class FileListComponent implements OnInit, AfterContentInit, OnDestroy {
     const top = this.document.documentElement.scrollTop || this.document.body.scrollTop;
     const offset = Math.floor(top / ITEM_HEIGHT);
     const count = Math.ceil(viewportHeight / ITEM_HEIGHT) + 4;
+
+    if (animate) {
+      const targetElems = this.listItems.slice(0, count).map((item) => item.element.nativeElement);
+      TweenMax.staggerFrom(
+        targetElems,
+        0.25,
+        {
+          opacity: 0,
+          ease: 'Power4.easeOut'
+        },
+        0.015
+      );
+    }
 
     const itemsToFetch = this.currentFolder.ChildItemVOs
       .slice(offset, offset + count)

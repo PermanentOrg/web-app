@@ -1,0 +1,78 @@
+import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validator, ValidationErrors } from '@angular/forms';
+
+import { FormInputConfig } from '@shared/components/form-input/form-input.component';
+
+import { PromptComponent } from '@core/components/prompt/prompt.component';
+
+export interface PromptField {
+  fieldName: string;
+  placeholder: string;
+  initialValue?: any;
+  config ?: FormInputConfig;
+  validators ?: ValidationErrors[];
+}
+
+export interface PromptButton {
+  buttonName: string;
+  buttonText: string;
+  value ?: any;
+  class ?: string;
+}
+
+export interface PromptConfig {
+  form: FormGroup;
+  fields: PromptField[];
+  title: string;
+  savePromise?: Promise<any>;
+  saveText?: string;
+  cancelText?: string;
+  donePromise?: Promise<any>;
+  doneResolve?: Function;
+  doneReject?: Function;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PromptService {
+  private component: PromptComponent;
+
+  constructor(private fb: FormBuilder) { }
+
+  registerComponent(toRegister: PromptComponent) {
+    if (this.component) {
+      throw new Error('PromptService - Prompt component already registered');
+    }
+
+    this.component = toRegister;
+  }
+
+  deregisterComponent() {
+    this.component = null;
+  }
+
+  prompt(fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
+    if (!this.component) {
+      throw new Error('PromptService - Missing prompt component');
+    }
+
+    const formConfig = {};
+
+    for (const field of fields) {
+      formConfig[field.fieldName] = [field.initialValue || '', field.validators || []];
+    }
+
+    return this.component.prompt(this.fb.group(formConfig), fields, title, savePromise, saveText, cancelText);
+  }
+
+  promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>) {
+    if (!this.component) {
+      throw new Error('PromptService - Missing prompt component');
+    }
+
+    return this.component.promptButtons(buttons, title, savePromise);
+  }
+}
+
+

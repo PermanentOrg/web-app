@@ -4,7 +4,7 @@
 const { SpecReporter } = require('jasmine-spec-reporter');
 
 exports.config = {
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 20000,
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
@@ -12,7 +12,7 @@ exports.config = {
     'browserName': 'chrome'
   },
   directConnect: true,
-  baseUrl: 'https://local.permanent.org',
+  baseUrl: 'https://local.permanent.org:4200',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
@@ -24,6 +24,6 @@ exports.config = {
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-    browser.baseUrl = 'https://local.permanent.org/';
+    browser.baseUrl = 'https://local.permanent.org:4200/';
   }
 };

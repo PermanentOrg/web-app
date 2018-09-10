@@ -3,6 +3,10 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <pr-upload-button></pr-upload-button>
+  <button class="right-menu-toggler" type="button" (click)="showRightMenu()">
+    <span class="right-menu-toggler-icon"></span>
+  </button>
 </nav>
 <pr-breadcrumbs></pr-breadcrumbs>
 <pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>
+<pr-right-menu [(isVisible)]="rightMenuVisible"></pr-right-menu>

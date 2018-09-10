@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 
-import { AppsRoutingModule } from '@apps/apps-routing.module';
+import { AppsRoutingModule } from '@apps/apps.routes';
 import { AppsComponent } from '@apps/components/apps/apps.component';
 import { ConnectorComponent } from '@apps/components/connector/connector.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule,
     AppsRoutingModule,
     FileBrowserModule
