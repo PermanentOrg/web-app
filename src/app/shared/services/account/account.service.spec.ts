@@ -18,7 +18,6 @@ describe('AccountService', () => {
   let service: AccountService;
   let storageService: StorageService;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -46,6 +45,8 @@ describe('AccountService', () => {
   });
 
   it('should be created with no account or archive data', () => {
+    console.log('account.service.spec.ts', 48, service.getAccount());
+    console.log('account.service.spec.ts', 48, service.getArchive());
     expect(service.getAccount()).toBeUndefined();
     expect(service.getArchive()).toBeUndefined();
   });

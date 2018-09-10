@@ -9,7 +9,7 @@ import { AccountService } from '@shared/services/account/account.service';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
-fdescribe('ArchiveSelectorComponent', () => {
+describe('ArchiveSelectorComponent', () => {
   let component: ArchiveSelectorComponent;
   let fixture: ComponentFixture<ArchiveSelectorComponent>;
 
@@ -37,6 +37,11 @@ fdescribe('ArchiveSelectorComponent', () => {
     component = fixture.componentInstance;
     component.archives = archives;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    const accountService = TestBed.get(AccountService) as AccountService;
+    accountService.clearArchive();
   });
 
   it('should create', () => {
