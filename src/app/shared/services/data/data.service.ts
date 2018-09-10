@@ -17,20 +17,26 @@ export class DataService {
 
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
-  private byFolderLinkId: {[key: number]: FolderVO | RecordVO};
+  private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
+  private byArchiveNbr: {[key: string]: FolderVO | RecordVO} = {};
   private thumbRefreshQueue: Array<FolderVO | RecordVO> = [];
   private thumbRefreshTimeout;
 
   constructor(private api: ApiService) {
-    this.byFolderLinkId = {};
   }
 
   public registerItem(item: FolderVO | RecordVO) {
     this.byFolderLinkId[item.folder_linkId] = item;
+    if (item.archiveNbr) {
+      this.byArchiveNbr[item.archiveNbr] = item;
+    }
   }
 
   public deregisterItem(item: FolderVO | RecordVO) {
     delete this.byFolderLinkId[item.folder_linkId];
+    if (item.archiveNbr) {
+      delete this.byArchiveNbr[item.archiveNbr];
+    }
   }
 
   public setCurrentFolder(folder?: FolderVO) {
@@ -85,7 +91,9 @@ export class DataService {
         leanItems.map((leanItem, index) => {
           const item = this.byFolderLinkId[leanItem.folder_linkId];
           if (item) {
+            this.byArchiveNbr[leanItem.archiveNbr] = item;
             item.update(leanItem);
+
             item.dataStatus = DataStatus.Lean;
             item.isFetching = false;
             itemResolves[index]();
@@ -131,7 +139,7 @@ export class DataService {
 
     const promises: Promise<any>[] = [];
 
-    promises.push(records.length ? this.api.record.get(records).toPromise() : Promise.resolve());
+    promises.push(records.length ? this.api.record.get(records) : Promise.resolve());
     promises.push(folders.length ? this.api.folder.get(folders).toPromise() : Promise.resolve());
 
     return Promise.all(promises)
@@ -162,6 +170,7 @@ export class DataService {
 
       itemResolves.map((resolve, index) => {
         items[index].fetched = null;
+        this.byArchiveNbr[items[index].archiveNbr] = items[index];
         resolve();
       });
 
@@ -174,10 +183,6 @@ export class DataService {
       });
       console.error(response);
     });
-  }
-
-  public getLocalItems(folderLinkIds: number[]) {
-
   }
 
   public refreshCurrentFolder() {
@@ -219,6 +224,14 @@ export class DataService {
     this.thumbRefreshTimeout = setTimeout(() => {
       this.checkMissingThumbs();
     }, THUMBNAIL_REFRESH_INTERVAL);
+  }
+
+  public getItemByArchiveNbr(archiveNbr: string): RecordVO | FolderVO {
+    return this.byArchiveNbr[archiveNbr];
+  }
+
+  public getItemByFolderLinkId(folder_linkId: number): RecordVO | FolderVO {
+    return this.byFolderLinkId[folder_linkId];
   }
 
   public downloadFile(item: RecordVO): Promise<any> {

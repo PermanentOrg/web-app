@@ -58,6 +58,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     @Inject(DOCUMENT) private document: any
   ) {
+    this.currentFolder = this.route.snapshot.data.currentFolder;
+    this.dataService.setCurrentFolder(this.currentFolder);
 
     // create debounced scroll handler for placeholder loading
     this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);

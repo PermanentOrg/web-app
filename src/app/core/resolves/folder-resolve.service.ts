@@ -33,7 +33,6 @@ export class FolderResolveService implements Resolve<any> {
     return this.api.folder.navigate(targetFolder)
       .pipe(map(((response: FolderResponse) => {
         if (!response.isSuccessful) {
-          console.log('folder-resolve.service.ts', 36, 'unsuccessful!', response);
           throw response;
         }
 
