@@ -29,7 +29,6 @@ describe('ArchiveSelectorComponent', () => {
   }));
 
   beforeEach(() => {
-
     const accountService = TestBed.get(AccountService) as AccountService;
     accountService.setArchive(currentArchive);
 
