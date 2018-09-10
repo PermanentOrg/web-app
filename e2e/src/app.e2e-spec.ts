@@ -164,11 +164,10 @@ describe('Multiple Archives Flow', () => {
   });
 
   it('should be logged into default archive', () => {
-    page.navigateTo();
-    waitForUpdate();
-    element(by.css('button.navbar-toggler')).click();
-    browser.sleep(HAMBURGER_MENU_DELAY);
-    expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
+    page.goToArchiveSelector();
+    const currentArchive = element(by.cssContainingText('.current-archive pr-archive-small', 'Current Archive'));
+    browser.wait(ExpectedConditions.presenceOf(currentArchive));
+    expect(currentArchive.element(by.css('.archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
 
   it('should have second archive and switch to it', () => {
