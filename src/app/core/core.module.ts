@@ -8,7 +8,6 @@ import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
 
-import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
@@ -27,7 +26,6 @@ import { ArchiveSmallComponent } from './components/archive-small/archive-small.
     CoreRoutingModule,
   ],
   declarations: [
-    HomeComponent,
     MainComponent,
     NavComponent,
     LeftMenuComponent,

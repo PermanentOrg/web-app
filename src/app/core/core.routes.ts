@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from '@core/components/home/home.component';
 import { MainComponent } from '@core/components/main/main.component';
 
 import { AuthGuard } from '@core/guards/auth.guard';
@@ -24,7 +23,6 @@ export const routes: Routes = [
     canActivateChild: [ AuthGuard ],
     resolve: rootFolderResolve,
     children: [
-      { path: '', component: HomeComponent, data: { title: 'Home'} },
       { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
       { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
       {
@@ -33,7 +31,7 @@ export const routes: Routes = [
         data: { title: 'Choose Archive'},
         resolve: { archives: ArchivesResolveService }
       },
-      { path: '**', redirectTo: ''}
+      { path: '**', redirectTo: 'myfiles'}
     ]
   }
 ];
