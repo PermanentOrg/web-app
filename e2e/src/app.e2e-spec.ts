@@ -60,7 +60,7 @@ describe('Login/Signup Flow', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  it('should log in', () => {
+  fit('should log in', () => {
     page.navigateTo();
     waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
@@ -153,6 +153,27 @@ describe('File Navigation Flow', () => {
       expect(newFolderElement.isPresent()).toBeFalsy();
     });
   });
+});
+
+fdescribe('Apps Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should have a View Files button for existing FB files', () => {
+    page.goToApps();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const connectorBlock = element(by.css('pr-connector'));
+    browser.wait(ExpectedConditions.presenceOf(connectorBlock));
+    waitForUpdate();
+    const viewFilesButton = connectorBlock.element(by.css('.view-files'));
+    expect(viewFilesButton.isPresent()).toBeTruthy();
+  });
+
 });
 
 describe('Multiple Archives Flow', () => {

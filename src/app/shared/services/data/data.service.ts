@@ -116,7 +116,7 @@ export class DataService {
       });
   }
 
-  public fetchFullItems(items: Array<FolderVO | RecordVO>) {
+  public fetchFullItems(items: Array<FolderVO | RecordVO>, withChildren?: boolean) {
     const itemResolves = [];
     const itemRejects = [];
 
@@ -140,7 +140,12 @@ export class DataService {
     const promises: Promise<any>[] = [];
 
     promises.push(records.length ? this.api.record.get(records) : Promise.resolve());
-    promises.push(folders.length ? this.api.folder.get(folders).toPromise() : Promise.resolve());
+
+    if (!withChildren) {
+      promises.push(folders.length ? this.api.folder.get(folders) : Promise.resolve());
+    } else {
+      promises.push(folders.length ? this.api.folder.getWithChildren(folders) : Promise.resolve());
+    }
 
     return Promise.all(promises)
     .then((results) => {
