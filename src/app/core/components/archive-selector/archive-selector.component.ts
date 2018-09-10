@@ -4,15 +4,12 @@ import { reject } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 import { TweenMax } from 'gsap';
 
-import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveVO } from '@root/app/models';
 import { BaseResponse } from '@shared/services/api/base';
-
-import { ArchiveSmallComponent } from '@core/components/archive-small/archive-small.component';
 
 @Component({
   selector: 'pr-archive-selector',
