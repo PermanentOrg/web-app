@@ -45,8 +45,8 @@ export class ArchiveResponse extends BaseResponse {
 
   public getArchiveVOs() {
     const data = this.getResultsData();
-    return data[0].map((result) => {
-      return new ArchiveVO(result.ArchiveVO);
+    return data.map((result) => {
+      return new ArchiveVO(result[0].ArchiveVO);
     });
   }
 }
