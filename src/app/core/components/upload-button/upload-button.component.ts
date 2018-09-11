@@ -26,9 +26,9 @@ export class UploadButtonComponent implements OnInit {
   checkCurrentFolder() {
     if (!this.currentFolder) {
       this.hidden = true;
+    } else {
+      this.hidden = this.currentFolder.type.includes('app');
     }
-
-    this.hidden = this.currentFolder.type.includes('app');
   }
 
   onFileChange(event) {
