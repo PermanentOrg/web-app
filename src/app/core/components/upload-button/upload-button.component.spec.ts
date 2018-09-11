@@ -40,12 +40,8 @@ fdescribe('UploadButtonComponent', () => {
     dataService.setCurrentFolder(new FolderVO({
       type: 'type.folder.private'
     }));
-    fixture.whenRenderingDone().then(() => {
-      const button = fixture.debugElement.nativeElement.querySelector('.btn');
-      setTimeout(() => {
-        expect(component.hidden).toBeFalsy();
-        // expect(button.hidden).toBeFalsy();
-      });
+    fixture.whenStable().then(() => {
+      expect(component.hidden).toBeFalsy();
     });
   });
 
@@ -53,12 +49,8 @@ fdescribe('UploadButtonComponent', () => {
     dataService.setCurrentFolder(new FolderVO({
       type: 'type.folder.app'
     }));
-    fixture.whenRenderingDone().then(() => {
-      const button = fixture.debugElement.nativeElement.querySelector('.btn');
-      setTimeout(() => {
-        expect(component.hidden).toBeTruthy();
-        // expect(button.hidden).toBeTruthy();
-      });
+    fixture.whenStable().then(() => {
+      expect(component.hidden).toBeTruthy();
     });
   });
 });
