@@ -12,15 +12,15 @@ export const BASE_TEST_CONFIG = {
     RouterTestingModule,
     FormsModule,
     ReactiveFormsModule
-  ],
+  ] as any[],
   providers: [
     CookieService,
     MessageService,
     UploadService,
     PromptService
-  ],
+  ] as any[],
   declarations: [
-  ]
+  ] as any[]
 };
 
 // export {

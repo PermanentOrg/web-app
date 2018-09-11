@@ -9,6 +9,7 @@ import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { MessageService } from '@shared/services/message/message.service';
 import { TEST_DATA } from '@core/core.module.spec';
+import { AccountService } from '@shared/services/account/account.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -29,7 +30,8 @@ describe('LoginComponent', () => {
       ],
       providers: [
         CookieService,
-        MessageService
+        MessageService,
+        AccountService
       ]
     })
     .compileComponents();
