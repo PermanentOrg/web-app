@@ -1,22 +1,41 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import * as Testing from '@root/test/testbedConfig';
 
 import { ArchiveSmallComponent } from './archive-small.component';
+import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { ArchiveVO } from '@root/app/models';
+import { TEST_DATA } from '@core/core.module.spec';
+import { AccountService } from '@shared/services/account/account.service';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 describe('ArchiveSmallComponent', () => {
   let component: ArchiveSmallComponent;
   let fixture: ComponentFixture<ArchiveSmallComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ArchiveSmallComponent ]
-    })
+    const config = Testing.BASE_TEST_CONFIG;
+
+    config.declarations.push(ArchiveSmallComponent);
+    config.declarations.push(BgImageSrcDirective);
+
+    TestBed.configureTestingModule(config)
     .compileComponents();
   }));
 
   beforeEach(() => {
+    const currentArchive = new ArchiveVO(TEST_DATA.archive);
+    const accountService = TestBed.get(AccountService) as AccountService;
+    accountService.setArchive(currentArchive);
+
     fixture = TestBed.createComponent(ArchiveSmallComponent);
     component = fixture.componentInstance;
+    component.archive = currentArchive;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    const storage = TestBed.get(StorageService) as StorageService;
+    storage.local.clear();
   });
 
   it('should create', () => {

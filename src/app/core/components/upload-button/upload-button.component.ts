@@ -11,14 +11,24 @@ import { FolderVO } from '@root/app/models';
 export class UploadButtonComponent implements OnInit {
   private files: File[];
   public currentFolder: FolderVO;
+  public hidden: boolean;
 
   constructor(private upload: UploadService, private dataService: DataService) {
     this.dataService.currentFolderChange.subscribe((currentFolder) => {
       this.currentFolder = currentFolder;
+      this.checkCurrentFolder();
     });
   }
 
   ngOnInit() {
+  }
+
+  checkCurrentFolder() {
+    if (!this.currentFolder) {
+      this.hidden = true;
+    }
+
+    this.hidden = this.currentFolder.type.includes('app');
   }
 
   onFileChange(event) {

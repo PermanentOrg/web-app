@@ -8,7 +8,7 @@ xdescribe('NavComponent', () => {
   let component: NavComponent;
   let fixture: ComponentFixture<NavComponent>;
 
-  beforeEach(Testing.async(() => {
+  beforeEach(async(() => {
     const config = Testing.BASE_TEST_CONFIG;
 
     config.declarations.push(NavComponent);
