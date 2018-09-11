@@ -5,7 +5,7 @@ import { UploadButtonComponent } from './upload-button.component';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
 
-fdescribe('UploadButtonComponent', () => {
+describe('UploadButtonComponent', () => {
   let component: UploadButtonComponent;
   let fixture: ComponentFixture<UploadButtonComponent>;
 

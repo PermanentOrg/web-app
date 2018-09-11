@@ -58,4 +58,17 @@ describe('ArchiveRepo', () => {
     const req = httpMock.expectOne(`${environment.apiUrl}/archive/get`);
     req.flush(expected);
   });
+
+  it('should get all archives for account', () => {
+    const expected = require('@root/test/responses/archive.getAllArchive.success.json');
+    repo.getAllArchives(new AccountVO(TEST_DATA.account))
+    .then((response: ArchiveResponse) => {
+      const archives = response.getArchiveVOs();
+      const count = expected.Results.data.length;
+      expect(archives.length).toBe(count);
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/archive/getAllArchives`);
+    req.flush(expected);
+  });
 });
