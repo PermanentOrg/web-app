@@ -10,6 +10,7 @@ import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 import { TEST_DATA } from '@core/core.module.spec';
+import { Router, ActivatedRoute } from '@angular/router';
 
 fdescribe('SignupComponent', () => {
   let component: SignupComponent;
@@ -30,7 +31,19 @@ fdescribe('SignupComponent', () => {
       ],
       providers: [
         CookieService,
-        MessageService
+        MessageService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParams: {
+                fullName: window.btoa(TEST_DATA.user.name),
+                primaryEmail: window.btoa(TEST_DATA.user.email),
+                inviteCode: window.btoa('invite')
+              }
+            }
+          }
+        }
       ]
     })
     .compileComponents();
@@ -44,6 +57,12 @@ fdescribe('SignupComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should fill form from URL params', () => {
+    expect(component.signupForm.value.email).toBe(TEST_DATA.user.email);
+    expect(component.signupForm.value.name).toBe(TEST_DATA.user.name);
+    expect(component.signupForm.value.invitation).toBe('invite');
   });
 
   it('should set error for missing invitation code', () => {
