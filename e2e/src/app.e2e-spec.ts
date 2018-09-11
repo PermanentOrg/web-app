@@ -60,7 +60,7 @@ describe('Login/Signup Flow', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  fit('should log in', () => {
+  it('should log in', () => {
     page.navigateTo();
     waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
@@ -155,7 +155,7 @@ describe('File Navigation Flow', () => {
   });
 });
 
-fdescribe('Apps Flow', () => {
+describe('Apps Flow', () => {
   let page: AppPage;
 
   beforeEach(() => {

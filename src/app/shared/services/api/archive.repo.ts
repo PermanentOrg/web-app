@@ -1,6 +1,6 @@
 import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { map } from 'rxjs/operators';
+import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
 
 export class ArchiveRepo extends BaseRepo {
@@ -45,8 +45,12 @@ export class ArchiveResponse extends BaseResponse {
 
   public getArchiveVOs() {
     const data = this.getResultsData();
-    return data.map((result) => {
-      return new ArchiveVO(result[0].ArchiveVO);
+    const archives = data.map((result) => {
+      return result.map((resultList) => {
+        return resultList.ArchiveVO;
+      });
     });
+
+    return flatten(archives);
   }
 }
