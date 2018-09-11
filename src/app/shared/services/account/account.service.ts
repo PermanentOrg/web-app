@@ -28,8 +28,6 @@ export class AccountService {
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
     const cachedRoot = this.storage.local.get(ROOT_KEY);
 
-    console.log(cachedAccount, cachedArchive);
-
     if (cachedAccount) {
       this.setAccount(new AccountVO(cachedAccount));
     }
