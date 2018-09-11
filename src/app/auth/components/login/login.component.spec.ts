@@ -4,13 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 
-import { LoginComponent } from '@auth/components/login/login.component';
+import { LoginComponent, FORM_ERROR_MESSAGES } from '@auth/components/login/login.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { MessageService } from '@shared/services/message/message.service';
 import { TEST_DATA } from '@core/core.module.spec';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
@@ -73,6 +73,7 @@ fdescribe('LoginComponent', () => {
       password: ''
     });
     expect(component.formErrors.password).toBeTruthy();
+    expect(component.formErrors.password).toEqual(FORM_ERROR_MESSAGES.password.required);
   });
 
   it('should set error for too short password', () => {
@@ -81,6 +82,7 @@ fdescribe('LoginComponent', () => {
       password: 'short'
     });
     expect(component.formErrors.password).toBeTruthy();
+    expect(component.formErrors.password).toEqual(FORM_ERROR_MESSAGES.password.minlength);
   });
 
   it('should have no errors when email and password valid', () => {
