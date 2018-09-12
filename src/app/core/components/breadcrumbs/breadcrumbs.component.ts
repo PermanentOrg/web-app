@@ -68,6 +68,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       rootUrl = '/apps';
+    } else if (this.router.routerState.snapshot.url.includes('/shares')) {
+      rootUrl = '/shares';
     } else {
       rootUrl = '/myfiles';
     }
