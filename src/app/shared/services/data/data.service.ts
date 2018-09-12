@@ -167,10 +167,12 @@ export class DataService {
 
       for (let i = 0; i < records.length; i++) {
         records[i].update(fullRecords[i]);
+        records[i].dataStatus = DataStatus.Full;
       }
 
       for (let i = 0; i < folders.length; i++) {
         folders[i].update(fullFolders[i]);
+        folders[i].dataStatus = DataStatus.Full;
       }
 
       itemResolves.map((resolve, index) => {
