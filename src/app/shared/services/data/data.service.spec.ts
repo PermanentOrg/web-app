@@ -16,7 +16,7 @@ const getFullRecordsData = require('@root/test/responses/record.get.multiple.suc
 const testFolder = new FolderVO({folderId: 1, displayName: 'test folder'});
 const testRecord = new RecordVO({recordId: 1, displayName: 'test record', folder_linkId: 4, archiveNbr: 'archivenbr'});
 
-fdescribe('DataService', () => {
+describe('DataService', () => {
   beforeEach(() => {
     const config = Testing.BASE_TEST_CONFIG;
     const providers = config.providers;
