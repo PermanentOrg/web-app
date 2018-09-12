@@ -23,7 +23,7 @@ module.exports = function (config) {
     },
     reporters: ['progress', 'kjhtml', 'junit'],
     junitReporter: {
-      outputDir: require('path').join(__dirname, '../results'), // results will be saved as $outputDir/$browserName.xml
+      outputDir: require('path').join(__dirname, '../test-reports'), // results will be saved as $outputDir/$browserName.xml
       suite: '', // suite will become the package name attribute in xml testsuite element
       useBrowserName: false, // add browser name to report and classes names
     },
