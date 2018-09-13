@@ -26,7 +26,7 @@ export class SharesResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     return this.api.share.getShares()
       .then((response: ShareResponse) => {
-        return response.getArchiveVOs();
+        return response.getShareArchiveVOs();
       });
   }
 }

@@ -25,7 +25,7 @@ describe('SharesComponent', () => {
   const rootFolderData = require('@root/test/responses/folder.getRoot.success.json');
   const getSharesData = require('@root/test/responses/share.getShares.success.json');
 
-  const shares = new ShareResponse(getSharesData).getArchiveVOs();
+  const shares = new ShareResponse(getSharesData).getShareArchiveVOs();
   const currentArchive = new ArchiveVO({
     archiveId: 8552,
     fullName: 'John Smith'

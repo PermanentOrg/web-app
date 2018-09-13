@@ -9,7 +9,7 @@ export class ShareRepo extends BaseRepo {
 }
 
 export class ShareResponse extends BaseResponse {
-  public getArchiveVOs() {
+  public getShareArchiveVOs() {
     const data = this.getResultsData();
     const archives = data.map((result) => {
       if (!result) {

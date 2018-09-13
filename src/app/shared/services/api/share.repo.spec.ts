@@ -1,0 +1,59 @@
+import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { environment } from '@root/environments/environment';
+
+import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
+import { HttpService, Observable } from '@shared/services/http/http.service';
+import { ShareRepo, ShareResponse } from '@shared/services/api/share.repo';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
+
+fdescribe('ShareRepo', () => {
+  let repo: ShareRepo;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [HttpService]
+    });
+
+    repo = new ShareRepo(TestBed.get(HttpService));
+    httpMock = TestBed.get(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('returns the correct number of ArchiveVOs', () => {
+    const expected = require('@root/test/responses/share.getShares.success.json');
+    repo.getShares()
+      .then((response: ShareResponse) => {
+        expect(response.getShareArchiveVOs().length).toEqual(expected.Results[0].data.length);
+      });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/share/getShares`);
+    req.flush(expected);
+  });
+
+  it('initializes ItemVOs on getShareArchiveVOs', () => {
+    const expected = require('@root/test/responses/share.getShares.success.json');
+    repo.getShares()
+      .then((response: ShareResponse) => {
+        const shareArchive = response.getShareArchiveVOs()[0] as ArchiveVO;
+        shareArchive.ItemVOs.forEach((item: FolderVO | RecordVO) => {
+          if (item.type.includes('folder')) {
+            expect(item.isFolder).toBeTruthy();
+          } else {
+            expect(item.isRecord).toBeTruthy();
+          }
+        });
+      });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/share/getShares`);
+    req.flush(expected);
+  });
+
+});

@@ -12,6 +12,7 @@ import { EditService } from '@core/services/edit/edit.service';
 import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
+import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -21,6 +22,10 @@ import { MessageService } from '@shared/services/message/message.service';
 export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
   public allowActions = true;
+  public isMyItem = true;
+
+  private isInShares: boolean;
+  private isInApps: boolean;
 
   constructor(
     private dataService: DataService,
@@ -29,7 +34,8 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     public element: ElementRef,
     private message: MessageService,
     private prompt: PromptService,
-    private edit: EditService
+    private edit: EditService,
+    private accountService: AccountService
   ) {
   }
 
@@ -38,6 +44,20 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     if (this.item.type.includes('app')) {
       this.allowActions = false;
     }
+
+    if (this.router.routerState.snapshot.url.includes('/apps')) {
+      this.isInApps = true;
+    }
+
+    if (this.router.routerState.snapshot.url.includes('/shares')) {
+      this.isInShares = true;
+    }
+
+    if (this.item.accessRole === 'access.role.owner') {
+      this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
+      console.log('file-list-item.component.ts', 58, 'owner!', 'my item?', this.isMyItem);
+    }
+
   }
 
   ngOnDestroy() {
@@ -57,14 +77,16 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
     let rootUrl;
 
-    if (this.router.routerState.snapshot.url.includes('/apps')) {
+    if (this.isInApps) {
       rootUrl = '/apps';
+    } else if (this.isInShares && !this.isMyItem) {
+      rootUrl = '/shares';
     } else {
       rootUrl = '/myfiles';
     }
 
     if (this.item.isFolder) {
-      this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route});
+      this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
