@@ -7,7 +7,7 @@ import { HttpService, Observable } from '@shared/services/http/http.service';
 import { ShareRepo, ShareResponse } from '@shared/services/api/share.repo';
 import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
 
-fdescribe('ShareRepo', () => {
+describe('ShareRepo', () => {
   let repo: ShareRepo;
   let httpMock: HttpTestingController;
 

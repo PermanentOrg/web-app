@@ -31,7 +31,7 @@ describe('SharesComponent', () => {
     fullName: 'John Smith'
   });
 
-  function init(sharesDataOverride ?: any[]) {
+  async function init(sharesDataOverride ?: any[]) {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.imports.push(SharedModule);
     config.declarations.push(SharesComponent);
@@ -49,7 +49,7 @@ describe('SharesComponent', () => {
         }
       }
     });
-    TestBed.configureTestingModule(config).compileComponents();
+    await TestBed.configureTestingModule(config).compileComponents();
 
     const rootFolder = new FolderResponse(rootFolderData).getFolderVO();
     accountService = TestBed.get(AccountService);
@@ -67,13 +67,13 @@ describe('SharesComponent', () => {
     accountService.clearRootFolder();
   });
 
-  it('should create', () => {
-    init();
+  it('should create', async () => {
+    await init();
     expect(component).toBeTruthy();
   });
 
-  it('should separate out shared by me from shared with me', () => {
-    init();
+  it('should separate out shared by me from shared with me', async () => {
+    await init();
     const current = find(shares, {archiveId: currentArchive.archiveId}) as ArchiveVO;
     const sharedByMe = current.ItemVOs;
     const sharedWithMe = shares.filter((item) => item.archiveId !== currentArchive.archiveId);
@@ -84,16 +84,16 @@ describe('SharesComponent', () => {
 
   });
 
-  it('should work when shared by me is empty', () => {
+  it('should work when shared by me is empty', async () => {
     const sharedByMeEmpty = shares.filter((item) => item.archiveId !== currentArchive.archiveId);
-    init(sharedByMeEmpty);
+    await init(sharedByMeEmpty);
     expect(component.sharedByMe.length).toBe(0);
   });
 
 
-  it('should work when shared with me is empty', () => {
+  it('should work when shared with me is empty', async () => {
     const sharedWithMeEmpty = shares.filter((item) => item.archiveId === currentArchive.archiveId);
-    init(sharedWithMeEmpty);
+    await init(sharedWithMeEmpty);
     expect(component.sharedWithMe.length).toBe(0);
   });
 });

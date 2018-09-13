@@ -23,6 +23,8 @@ class Breadcrumb {
         return ['/myfiles'];
       case 'Apps':
         return ['/apps'];
+      case 'Shares':
+        return ['/shares'];
       default:
         return ['/'];
     }
