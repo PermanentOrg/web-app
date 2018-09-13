@@ -1,0 +1,7 @@
+<div class="archive">
+  <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+  <div class="archive-name">
+    Shared by {{archive.fullName}}
+  </div>
+</div>
+<pr-file-list-item [item]="share" *ngFor="let share of archive.ItemVOs"></pr-file-list-item>

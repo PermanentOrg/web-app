@@ -12,6 +12,10 @@ export class ShareResponse extends BaseResponse {
   public getArchiveVOs() {
     const data = this.getResultsData();
     const archives = data.map((result) => {
+      if (!result) {
+        return null;
+      }
+
       return result.map((resultList) => {
         return new ArchiveVO(resultList.ArchiveVO);
       });

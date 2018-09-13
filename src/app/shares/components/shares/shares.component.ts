@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { find } from 'lodash';
+import { find, remove } from 'lodash';
 import { DataService } from '@shared/services/data/data.service';
 
-import { ConnectorOverviewVO, FolderVO } from '@root/app/models';
+import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
@@ -14,16 +14,22 @@ import { AccountService } from '@shared/services/account/account.service';
 })
 export class SharesComponent implements OnInit, OnDestroy {
   sharesFolder: FolderVO;
-  connectors: ConnectorOverviewVO[];
+  sharedByMe: Array<FolderVO | RecordVO>;
+  sharedWithMe: ArchiveVO[];
 
   constructor(private route: ActivatedRoute, private dataService: DataService, private accountService: AccountService) {
-    const sharesFolder = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.share'}) as FolderVO;
-    sharesFolder.pathAsText = ['Shares'];
-    this.sharesFolder = sharesFolder;
+    this.sharesFolder = new FolderVO({
+      displayName: 'Shares',
+      pathAsText: ['Shares'],
+      type: 'type.folder.root.share'
+    });
     this.dataService.setCurrentFolder(this.sharesFolder);
 
-    const shares = this.route.snapshot.data.shares;
-    console.log(shares);
+    const shares = this.route.snapshot.data.shares as ArchiveVO[];
+    const currentArchive = remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop() as ArchiveVO;
+
+    this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
+    this.sharedWithMe = shares;
   }
 
   ngOnInit() {
