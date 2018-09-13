@@ -55,7 +55,6 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
     if (this.item.accessRole === 'access.role.owner') {
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
-      console.log('file-list-item.component.ts', 58, 'owner!', 'my item?', this.isMyItem);
     }
 
   }
