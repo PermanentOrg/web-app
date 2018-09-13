@@ -8,7 +8,7 @@ import { CoreModule } from '@core/core.module';
 import { Router } from '@angular/router';
 import { FolderVO } from '@root/app/models';
 
-fdescribe('BreadcrumbsComponent', () => {
+describe('BreadcrumbsComponent', () => {
   let component: BreadcrumbsComponent;
   let fixture: ComponentFixture<BreadcrumbsComponent>;
   let dataService: DataService;
