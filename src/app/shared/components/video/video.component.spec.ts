@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { VideoComponent } from './video.component';
 import { RecordVO } from '@root/app/models';
@@ -9,7 +10,7 @@ describe('VideoComponent', () => {
   let fixture: ComponentFixture<VideoComponent>;
 
   beforeEach(async(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.declarations.push(VideoComponent);
 

@@ -10,11 +10,13 @@ import { AccountService } from '@shared/services/account/account.service';
 
 import { FolderVO, ArchiveVO } from '@root/app/models';
 import { FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
+import { cloneDeep  } from 'lodash';
 
 import { SharesComponent } from './shares.component';
+import { ShareComponent } from '@shares/components/share/share.component';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 
-fdescribe('SharesComponent', () => {
+describe('SharesComponent', () => {
   let component: SharesComponent;
   let fixture: ComponentFixture<SharesComponent>;
 
@@ -30,9 +32,10 @@ fdescribe('SharesComponent', () => {
   });
 
   function init(sharesDataOverride ?: any[]) {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.imports.push(SharedModule);
     config.declarations.push(SharesComponent);
+    config.declarations.push(ShareComponent);
     config.declarations.push(FileListItemComponent);
     config.providers.push(DataService);
     config.providers.push(AccountService);
