@@ -1,7 +1,7 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
     <div class="menu-header">
-      <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']"></pr-archive-small>
+      <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
     <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
       My Files
