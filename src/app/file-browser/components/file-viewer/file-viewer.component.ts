@@ -19,26 +19,29 @@ import { DataStatus } from '@models/data-status.enum';
 })
 export class FileViewerComponent implements OnInit, OnDestroy {
 
+  // Record
   public currentRecord: RecordVO;
   public prevRecord: RecordVO;
   public nextRecord: RecordVO;
   public records: RecordVO[];
   public currentIndex: number;
+  public isVideo = false;
+  public showThumbnail = true;
 
+  // Swiping
   private touchElement: HTMLElement;
   private thumbElement: HTMLElement;
   private bodyScroll: number;
   private hammer: HammerManager;
   private disableSwipes: boolean;
-
   private velocityThreshold = 0.2;
   private screenWidth: number;
   private offscreenThreshold: number;
 
-  public showThumbnail = true;
-  public isVideo = false;
 
+  // UI
   public useMinimalView = false;
+  private bodyScrollTop: number;
 
   constructor(
     private router: Router,
@@ -48,6 +51,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2
   ) {
+    // store current scroll position in file list
+    this.bodyScrollTop = window.scrollY;
+
     const resolvedRecord = route.snapshot.data.currentRecord;
 
     if (route.snapshot.data.singleFile) {
@@ -88,7 +94,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // re-enable scrolling and return to initial scroll position
     this.document.body.style.setProperty('overflow', '');
+    setTimeout(() => {
+      window.scrollTo(0, this.bodyScrollTop);
+    });
   }
 
   @HostListener('window:resize', [])
