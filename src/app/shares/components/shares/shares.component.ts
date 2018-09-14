@@ -55,7 +55,7 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
         }) as ShareComponent;
 
         if (targetShare) {
-          window.scrollTo(0, targetShare.element.nativeElement.offsetTop);
+          window.scrollTo(0, targetShare.element.nativeElement.offsetTop - 100);
         }
       }
     }

@@ -51,9 +51,6 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
-    }
-
-    if (this.item.accessRole === 'access.role.owner') {
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
     }
 
