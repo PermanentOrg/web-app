@@ -26,13 +26,11 @@ $transition-length: $default-transition-length;
   }
 
   .menu-header {
-    $header-color: $PR-blue;
     padding: 10px;
     strong {
       display: block;
     }
     box-shadow: $box-shadow-sm;
-    // background-color: $header-color;
     border-bottom: 1px solid $gray-300;
     margin-bottom: $input-btn-padding-y * 1.5;
   }
