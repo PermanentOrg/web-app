@@ -54,4 +54,8 @@ describe('UploadButtonComponent', () => {
       expect(component.hidden).toBeTruthy();
     });
   });
+
+  it('should be hidden when current folder does not have write access', () => {
+
+  });
 });
