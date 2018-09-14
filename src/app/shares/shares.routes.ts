@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { SharesComponent } from '@shares/components/shares/shares.component';
 import { SharesResolveService } from '@shares/resolves/shares-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
 
 const sharesRootResolve = {
   shares: SharesResolveService
@@ -13,6 +15,18 @@ export const routes: Routes = [
     path: '',
     component: SharesComponent,
     resolve: sharesRootResolve,
+    children: [
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        data: {
+          singleFile: true
+        },
+        resolve: {
+          currentRecord: RecordResolveService
+        }
+      }
+    ]
   },
   {
     path: ':archiveNbr',

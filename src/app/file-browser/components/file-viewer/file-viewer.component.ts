@@ -50,14 +50,21 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   ) {
     const resolvedRecord = route.snapshot.data.currentRecord;
 
-    this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
-    this.currentIndex = findIndex(this.records, {folder_linkId: resolvedRecord.folder_linkId});
-    this.currentRecord = this.records[this.currentIndex];
-    if (resolvedRecord !== this.currentRecord) {
-      this.currentRecord.update(resolvedRecord);
+    if (route.snapshot.data.singleFile) {
+      this.currentRecord = resolvedRecord;
+      this.records = [ this.currentRecord ];
+      this.currentIndex = 0;
+    } else {
+      this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
+      this.currentIndex = findIndex(this.records, {folder_linkId: resolvedRecord.folder_linkId});
+      this.currentRecord = this.records[this.currentIndex];
+      if (resolvedRecord !== this.currentRecord) {
+        this.currentRecord.update(resolvedRecord);
+      }
+
+      this.loadQueuedItems();
     }
 
-    this.loadQueuedItems();
   }
 
   ngOnInit() {
@@ -212,10 +219,13 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   close() {
     const routeParams = this.route.snapshot.params;
+    const inShares = this.router.url.includes('/shares');
+    const rootUrl = inShares ? '/shares' : '/myfiles';
+
     if (routeParams.archiveNbr) {
-      this.router.navigate(['/myfiles', routeParams.archiveNbr, routeParams.folderLinkId]);
+      this.router.navigate([rootUrl, routeParams.archiveNbr, routeParams.folderLinkId]);
     } else {
-      this.router.navigate(['/myfiles']);
+      this.router.navigate([rootUrl]);
     }
     return false;
   }
