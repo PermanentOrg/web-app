@@ -15,6 +15,11 @@ export const routes: Routes = [
     resolve: sharesRootResolve,
   },
   {
+    path: ':archiveNbr',
+    component: SharesComponent,
+    resolve: sharesRootResolve,
+  },
+  {
     path: ':archiveNbr/:folderLinkId',
     loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
   },
