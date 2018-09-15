@@ -5,6 +5,8 @@ import { SharesComponent } from '@shares/components/shares/shares.component';
 import { SharesResolveService } from '@shares/resolves/shares-resolve.service';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { ShareByMeComponent } from '@shares/components/share-by-me/share-by-me.component';
+import { ShareWithMeComponent } from '@shares/components/share-with-me/share-with-me.component';
 
 const sharesRootResolve = {
   shares: SharesResolveService
@@ -13,9 +15,34 @@ const sharesRootResolve = {
 export const routes: Routes = [
   {
     path: '',
-    component: SharesComponent,
+    redirectTo: 'byme',
+    pathMatch: 'full'
+  },
+  {
+    path: ':archiveNbr/:folderLinkId',
+    redirectTo: 'withme/:archiveNbr/:folderLinkId',
+    pathMatch: 'full'
+  },
+  {
+    path: 'record/:recArchiveNbr',
+    redirectTo: 'withme/record/:recArchiveNbr',
+    pathMatch: 'full'
+  },
+  {
+    path: 'byme',
+    component: ShareByMeComponent,
+    resolve: sharesRootResolve
+  },
+  {
+    path: 'withme',
+    component: ShareWithMeComponent,
     resolve: sharesRootResolve,
     children: [
+      {
+        path: ':archiveNbr',
+        component: SharesComponent,
+        resolve: sharesRootResolve,
+      },
       {
         path: 'record/:recArchiveNbr',
         component: FileViewerComponent,
@@ -25,18 +52,13 @@ export const routes: Routes = [
         resolve: {
           currentRecord: RecordResolveService
         }
-      }
+      },
+      {
+        path: ':archiveNbr/:folderLinkId',
+        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+      },
     ]
-  },
-  {
-    path: ':archiveNbr',
-    component: SharesComponent,
-    resolve: sharesRootResolve,
-  },
-  {
-    path: ':archiveNbr/:folderLinkId',
-    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-  },
+  }
 ];
 @NgModule({
   imports: [
