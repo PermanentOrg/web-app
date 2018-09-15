@@ -39,11 +39,6 @@ export const routes: Routes = [
     resolve: sharesRootResolve,
     children: [
       {
-        path: ':archiveNbr',
-        component: SharesComponent,
-        resolve: sharesRootResolve,
-      },
-      {
         path: 'record/:recArchiveNbr',
         component: FileViewerComponent,
         data: {
@@ -52,13 +47,23 @@ export const routes: Routes = [
         resolve: {
           currentRecord: RecordResolveService
         }
-      },
-      {
-        path: ':archiveNbr/:folderLinkId',
-        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-      },
+      }
     ]
-  }
+  },
+  {
+    path: ':archiveNbr',
+    redirectTo: 'withme/:archiveNbr',
+    pathMatch: 'full'
+  },
+  {
+    path: 'withme/:archiveNbr',
+    component: ShareWithMeComponent,
+    resolve: sharesRootResolve,
+  },
+  {
+    path: 'withme/:archiveNbr/:folderLinkId',
+    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'
+  },
 ];
 @NgModule({
   imports: [
