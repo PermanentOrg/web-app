@@ -24,8 +24,17 @@ $thumb-size: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &.clickable {
+    line-height: 1;
+  }
 }
 
 .archive-current {
   font-weight: 400;
+}
+
+.archive-switch {
+  font-weight: 400;
+  font-size: 12px;
 }
