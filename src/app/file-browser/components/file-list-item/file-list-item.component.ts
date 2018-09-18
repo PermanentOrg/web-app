@@ -76,15 +76,15 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     if (this.isInApps) {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
-      rootUrl = '/shares';
+      rootUrl = '/shares/withme';
     } else {
       rootUrl = '/myfiles';
     }
 
     if (this.item.isFolder) {
       this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
-    } else if (this.isInShares) {
-      this.router.navigate(['/shares', 'record', this.item.archiveNbr]);
+    } else if (!this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
+      this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }

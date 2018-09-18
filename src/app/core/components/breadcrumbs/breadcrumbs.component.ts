@@ -12,6 +12,9 @@ class Breadcrumb {
 
     if (!archiveNbr && !folder_linkId) {
       this.routerPath = this.getSpecialRouterPath(text).join('/');
+      if (text === 'Shares') {
+        this.text = 'Shared With Me';
+      }
     } else {
       this.routerPath = [rootUrl, archiveNbr, folder_linkId].join('/');
     }
@@ -24,7 +27,7 @@ class Breadcrumb {
       case 'Apps':
         return ['/apps'];
       case 'Shares':
-        return ['/shares'];
+        return ['/shares/withme'];
       default:
         return ['/'];
     }
@@ -70,8 +73,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       rootUrl = '/apps';
-    } else if (this.router.routerState.snapshot.url.includes('/shares')) {
-      rootUrl = '/shares';
+    } else if (this.router.routerState.snapshot.url.includes('/shares/withme')) {
+      rootUrl = '/shares/withme';
+    } else if (this.router.routerState.snapshot.url.includes('/shares/byme')) {
+      rootUrl = '/shares/byme';
     } else {
       rootUrl = '/myfiles';
     }

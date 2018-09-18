@@ -95,14 +95,15 @@ describe('BreadcrumbsComponent', () => {
   });
 
   it('should link to Shares for folders in Shares', async () => {
-    await init('/shares');
+    await init('/shares/withme');
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['Shares', 'Archive Name', 'Shared Folder'],
       pathAsFolder_linkId: [1, 2, 3]
     });
     (TestBed.get(DataService) as DataService).setCurrentFolder(testFolder);
-    expect(component.breadcrumbs[0].routerPath).toEqual('/shares');
-    expect(component.breadcrumbs[1].routerPath).toContain('/shares');
+    expect(component.breadcrumbs[0].routerPath).toEqual('/shares/withme');
+    expect(component.breadcrumbs[0].text).toEqual('Shared With Me');
+    expect(component.breadcrumbs[1].routerPath).toContain('/shares/withme/test2');
   });
 });

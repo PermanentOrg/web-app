@@ -31,7 +31,19 @@ export const routes: Routes = [
   {
     path: 'byme',
     component: ShareByMeComponent,
-    resolve: sharesRootResolve
+    resolve: sharesRootResolve,
+    children: [
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        data: {
+          singleFile: true
+        },
+        resolve: {
+          currentRecord: RecordResolveService
+        }
+      }
+    ]
   },
   {
     path: 'withme',
