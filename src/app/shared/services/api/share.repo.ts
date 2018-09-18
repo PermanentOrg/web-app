@@ -1,6 +1,6 @@
 import { FolderVO, ArchiveVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { flatten } from 'lodash';
+import { flatten, compact } from 'lodash';
 
 export class ShareRepo extends BaseRepo {
   public getShares(): Promise<ShareResponse> {
@@ -21,6 +21,6 @@ export class ShareResponse extends BaseResponse {
       });
     });
 
-    return flatten(archives);
+    return compact(flatten(archives));
   }
 }

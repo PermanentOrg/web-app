@@ -35,8 +35,7 @@ export class ShareWithMeComponent implements OnInit, AfterViewInit, OnDestroy {
       type: 'type.folder.root.share'
     });
     this.dataService.setCurrentFolder(this.sharesFolder);
-
-    const shares = this.route.snapshot.data.shares as ArchiveVO[];
+    const shares = this.route.snapshot.data.shares as ArchiveVO[] || [];
     remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop();
 
     this.sharedWithMe = shares;
