@@ -104,6 +104,6 @@ describe('BreadcrumbsComponent', () => {
     (TestBed.get(DataService) as DataService).setCurrentFolder(testFolder);
     expect(component.breadcrumbs[0].routerPath).toEqual('/shares/withme');
     expect(component.breadcrumbs[0].text).toEqual('Shared With Me');
-    expect(component.breadcrumbs[1].routerPath).toContain('/shares/withme/test2');
+    expect(component.breadcrumbs[1].routerPath).toContain('/shares/test2');
   });
 });
