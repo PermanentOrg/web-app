@@ -173,7 +173,35 @@ describe('Apps Flow', () => {
     const viewFilesButton = connectorBlock.element(by.css('.view-files'));
     expect(viewFilesButton.isPresent()).toBeTruthy();
   });
+});
 
+describe('Shares Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should load Shared By Me', () => {
+    page.goToSharedByMe();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const breadcrumb = element(by.css('.breadcrumb .current'));
+    browser.wait(ExpectedConditions.presenceOf(breadcrumb));
+    waitForUpdate();
+    expect(breadcrumb.getText()).toContain('Shared By Me');
+  });
+
+  it('should load Shared With Me', () => {
+    page.goToSharedWithMe();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const breadcrumb = element(by.css('.breadcrumb .current'));
+    browser.wait(ExpectedConditions.presenceOf(breadcrumb));
+    waitForUpdate();
+    expect(breadcrumb.getText()).toContain('Shared With Me');
+  });
 });
 
 describe('Multiple Archives Flow', () => {

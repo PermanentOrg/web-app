@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { ArchiveSelectorComponent } from './archive-selector.component';
-import { ArchiveSmallComponent } from '@core/components/archive-small/archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
+import { SharedModule } from '@shared/shared.module';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
@@ -18,11 +19,10 @@ describe('ArchiveSelectorComponent', () => {
   const currentArchive = archives.pop();
 
   beforeEach(async(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
+    config.imports.push(SharedModule);
     config.declarations.push(ArchiveSelectorComponent);
-    config.declarations.push(ArchiveSmallComponent);
-    config.declarations.push(BgImageSrcDirective);
 
     TestBed.configureTestingModule(config)
     .compileComponents();

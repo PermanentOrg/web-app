@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { UploadButtonComponent } from './upload-button.component';
 import { DataService } from '@shared/services/data/data.service';
@@ -12,7 +13,7 @@ describe('UploadButtonComponent', () => {
   let dataService: DataService;
 
   beforeEach(async(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(UploadButtonComponent);
     const providers = config.providers as any[];
     providers.push(DataService);
@@ -52,5 +53,9 @@ describe('UploadButtonComponent', () => {
     fixture.whenStable().then(() => {
       expect(component.hidden).toBeTruthy();
     });
+  });
+
+  it('should be hidden when current folder does not have write access', () => {
+
   });
 });

@@ -19,26 +19,29 @@ import { DataStatus } from '@models/data-status.enum';
 })
 export class FileViewerComponent implements OnInit, OnDestroy {
 
+  // Record
   public currentRecord: RecordVO;
   public prevRecord: RecordVO;
   public nextRecord: RecordVO;
   public records: RecordVO[];
   public currentIndex: number;
+  public isVideo = false;
+  public showThumbnail = true;
 
+  // Swiping
   private touchElement: HTMLElement;
   private thumbElement: HTMLElement;
   private bodyScroll: number;
   private hammer: HammerManager;
   private disableSwipes: boolean;
-
   private velocityThreshold = 0.2;
   private screenWidth: number;
   private offscreenThreshold: number;
 
-  public showThumbnail = true;
-  public isVideo = false;
 
+  // UI
   public useMinimalView = false;
+  private bodyScrollTop: number;
 
   constructor(
     private router: Router,
@@ -48,16 +51,26 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private renderer: Renderer2
   ) {
+    // store current scroll position in file list
+    this.bodyScrollTop = window.scrollY;
+
     const resolvedRecord = route.snapshot.data.currentRecord;
 
-    this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
-    this.currentIndex = findIndex(this.records, {folder_linkId: resolvedRecord.folder_linkId});
-    this.currentRecord = this.records[this.currentIndex];
-    if (resolvedRecord !== this.currentRecord) {
-      this.currentRecord.update(resolvedRecord);
+    if (route.snapshot.data.singleFile) {
+      this.currentRecord = resolvedRecord;
+      this.records = [ this.currentRecord ];
+      this.currentIndex = 0;
+    } else {
+      this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
+      this.currentIndex = findIndex(this.records, {folder_linkId: resolvedRecord.folder_linkId});
+      this.currentRecord = this.records[this.currentIndex];
+      if (resolvedRecord !== this.currentRecord) {
+        this.currentRecord.update(resolvedRecord);
+      }
+
+      this.loadQueuedItems();
     }
 
-    this.loadQueuedItems();
   }
 
   ngOnInit() {
@@ -81,7 +94,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // re-enable scrolling and return to initial scroll position
     this.document.body.style.setProperty('overflow', '');
+    setTimeout(() => {
+      window.scrollTo(0, this.bodyScrollTop);
+    });
   }
 
   @HostListener('window:resize', [])
@@ -212,10 +229,20 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   close() {
     const routeParams = this.route.snapshot.params;
+    let rootUrl = '/myfiles';
+
+    if (this.router.url.includes('/shares')) {
+      if (this.router.url.includes('/withme')) {
+        rootUrl = '/shares/withme';
+      } else {
+        rootUrl = '/shares/byme';
+      }
+    }
+
     if (routeParams.archiveNbr) {
-      this.router.navigate(['/myfiles', routeParams.archiveNbr, routeParams.folderLinkId]);
+      this.router.navigate([rootUrl, routeParams.archiveNbr, routeParams.folderLinkId]);
     } else {
-      this.router.navigate(['/myfiles']);
+      this.router.navigate([rootUrl]);
     }
     return false;
   }

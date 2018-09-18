@@ -59,6 +59,7 @@ export class DataService {
     }
     const folder = new FolderVO({
       archiveNbr: currentFolder.archiveNbr,
+      folder_linkId: currentFolder.folder_linkId,
       ChildItemVOs: items.filter((item) => {
           if (item.isFetching) {
             return false;
@@ -70,6 +71,10 @@ export class DataService {
             itemRejects.push(reject);
           });
           return true;
+        }).map((item) => {
+          return {
+            folder_linkId: item.folder_linkId
+          };
         })
     });
 

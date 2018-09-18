@@ -1,5 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -18,7 +19,7 @@ const testRecord = new RecordVO({recordId: 1, displayName: 'test record', folder
 
 describe('DataService', () => {
   beforeEach(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     const providers = config.providers;
     providers.push(DataService);
     providers.push(ApiService);

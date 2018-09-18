@@ -64,7 +64,7 @@ describe('ArchiveRepo', () => {
     repo.getAllArchives(new AccountVO(TEST_DATA.account))
     .then((response: ArchiveResponse) => {
       const archives = response.getArchiveVOs();
-      const count = expected.Results.data.length;
+      const count = expected.Results[0].data.length;
       expect(archives.length).toBe(count);
     });
 
