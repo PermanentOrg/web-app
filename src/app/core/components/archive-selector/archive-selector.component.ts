@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { reject, remove } from 'lodash';
+import { remove } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 import { TweenMax } from 'gsap';
 
