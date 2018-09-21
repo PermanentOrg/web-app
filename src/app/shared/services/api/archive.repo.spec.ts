@@ -30,8 +30,8 @@ describe('ArchiveRepo', () => {
   it('should get a single archive', () => {
     const expected = require('@root/test/responses/archive.get.single.success.json');
 
-    repo.get([TEST_DATA.archive.archiveId])
-    .subscribe((response) => {
+    repo.get([TEST_DATA.archive])
+    .then((response) => {
       expect(response.getArchiveVO().archiveId).toEqual(TEST_DATA.archive.archiveId);
       expect(response.getArchiveVO().archiveNbr).toEqual(TEST_DATA.archive.archiveNbr);
     });
@@ -43,8 +43,8 @@ describe('ArchiveRepo', () => {
   it('should get multiple archives', () => {
     const expected = require('@root/test/responses/archive.get.multiple.success.json');
 
-    repo.get([TEST_DATA.archive.archiveId, TEST_DATA_2.archive.archiveId])
-    .subscribe((response) => {
+    repo.get([TEST_DATA.archive, TEST_DATA_2.archive])
+    .then((response) => {
       const archives = response.getArchiveVOs();
       expect(archives.length).toBe(2);
 

@@ -7,6 +7,7 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { SharedModule } from '@shared/shared.module';
+import { ArchiveVO } from '@root/app/models';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
@@ -16,7 +17,7 @@ describe('ArchiveSelectorComponent', () => {
 
   const archiveResponse = new ArchiveResponse(archiveResponseData);
   const archives = archiveResponse.getArchiveVOs();
-  const currentArchive = archives.pop();
+  const currentArchive = new ArchiveVO(archives.pop());
 
   beforeEach(async(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
