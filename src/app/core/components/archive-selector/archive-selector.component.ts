@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { reject } from 'lodash';
+import { reject, remove } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 import { TweenMax } from 'gsap';
 
@@ -28,7 +28,14 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
     private router: Router
   ) {
     this.currentArchive = accountService.getArchive();
-    this.archives = reject(this.route.snapshot.data['archives'], { archiveId: this.currentArchive.archiveId }) as ArchiveVO[];
+
+    const archives = this.route.snapshot.data['archives'];
+    const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;
+
+    this.currentArchive.update(currentArchiveFetched);
+    this.accountService.setArchive(this.currentArchive);
+
+    this.archives = archives as ArchiveVO[];
   }
 
   ngOnInit() {

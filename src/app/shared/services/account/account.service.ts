@@ -96,6 +96,7 @@ export class AccountService {
       .then((response: ArchiveResponse) => {
         const newArchive = response.getArchiveVO();
         this.archive.update(newArchive);
+        this.storage.local.set(ARCHIVE_KEY, this.archive);
       });
   }
 
