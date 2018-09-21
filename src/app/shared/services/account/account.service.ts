@@ -34,6 +34,7 @@ export class AccountService {
 
     if (cachedArchive) {
       this.setArchive(new ArchiveVO(cachedArchive));
+      this.refreshArchive();
     }
 
     if (cachedRoot) {
@@ -84,11 +85,19 @@ export class AccountService {
   }
 
   public refreshAccount() {
-
   }
 
   public refreshArchive() {
+    if (!this.archive) {
+      return Promise.resolve();
+    }
 
+    return this.api.archive.get([this.archive])
+      .then((response: ArchiveResponse) => {
+        const newArchive = response.getArchiveVO();
+        this.archive.update(newArchive);
+        this.storage.local.set(ARCHIVE_KEY, this.archive);
+      });
   }
 
   public changeArchive(archive: ArchiveVO) {
