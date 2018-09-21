@@ -12,3 +12,10 @@
   <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting">Import Photos</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
 </div>
+<div class="connector-help">
+  <div *ngIf="connector.type.includes('facebook')">
+    Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
+    <br><br>
+    You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
+  </div>
+</div>
