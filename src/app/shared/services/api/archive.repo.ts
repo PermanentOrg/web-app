@@ -4,14 +4,17 @@ import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
 
 export class ArchiveRepo extends BaseRepo {
-  public get(archiveIds: number[]): Observable<ArchiveResponse> {
-    const data = archiveIds.map((archiveId) => {
+  public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
+    const data = archives.map((archive) => {
       return {
-        ArchiveVO: new ArchiveVO({archiveId: archiveId})
+        ArchiveVO: new ArchiveVO({
+          archiveNbr: archive.archiveNbr,
+          archiveId: archive.archiveId
+        })
       };
     });
 
-    return this.http.sendRequest('/archive/get', data, ArchiveResponse);
+    return this.http.sendRequestPromise('/archive/get', data, ArchiveResponse);
   }
 
   public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
