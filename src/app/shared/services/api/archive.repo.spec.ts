@@ -31,7 +31,7 @@ describe('ArchiveRepo', () => {
     const expected = require('@root/test/responses/archive.get.single.success.json');
 
     repo.get([TEST_DATA.archive.archiveId])
-    .subscribe((response) => {
+    .then((response) => {
       expect(response.getArchiveVO().archiveId).toEqual(TEST_DATA.archive.archiveId);
       expect(response.getArchiveVO().archiveNbr).toEqual(TEST_DATA.archive.archiveNbr);
     });
@@ -44,7 +44,7 @@ describe('ArchiveRepo', () => {
     const expected = require('@root/test/responses/archive.get.multiple.success.json');
 
     repo.get([TEST_DATA.archive.archiveId, TEST_DATA_2.archive.archiveId])
-    .subscribe((response) => {
+    .then((response) => {
       const archives = response.getArchiveVOs();
       expect(archives.length).toBe(2);
 
