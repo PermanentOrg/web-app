@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-main',
@@ -18,7 +19,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
   private routerListener: Subscription;
 
-  constructor(private accountService: AccountService,
+  constructor(
+    private accountService: AccountService,
     private router: Router,
     private messageService: MessageService,
     private upload: UploadService
@@ -40,6 +42,14 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const account = this.accountService.getAccount();
+    if (account.emailNeedsVerification() && account.phoneNeedsVerification()) {
+      this.messageService.showMessage('needs both', 'info');
+    } else if (account.emailNeedsVerification()) {
+      this.messageService.showMessage('needs email', 'info');
+    } else if (account.phoneNeedsVerification()) {
+      this.messageService.showMessage('needs phone', 'info');
+    }
   }
 
   ngOnDestroy() {
