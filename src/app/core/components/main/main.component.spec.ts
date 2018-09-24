@@ -23,7 +23,7 @@ import { DataService } from '@shared/services/data/data.service';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
-fdescribe('MainComponent', () => {
+describe('MainComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
 
@@ -81,23 +81,48 @@ fdescribe('MainComponent', () => {
     const data = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
     await init(data);
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
-    expect(messageService.showMessage).toHaveBeenCalledWith(jasmine.stringMatching('both'), 'info');
+    expect(messageService.showMessage).toHaveBeenCalledWith(
+      jasmine.stringMatching('email and phone'),
+      'info',
+      jasmine.anything(),
+      ['/auth/verify']
+    );
   });
 
   it('should show a prompt when only email is unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
     await init(data);
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
-    expect(messageService.showMessage).toHaveBeenCalledWith(jasmine.stringMatching('email'), 'info');
-    expect(messageService.showMessage).not.toHaveBeenCalledWith(jasmine.stringMatching('both'), 'info');
+    expect(messageService.showMessage).toHaveBeenCalledWith(
+      jasmine.stringMatching('email'),
+      'info',
+      jasmine.anything(),
+      ['/auth/verify']
+    );
+    expect(messageService.showMessage).not.toHaveBeenCalledWith(
+      jasmine.stringMatching('email and phone'),
+      jasmine.anything(),
+      jasmine.anything(),
+      jasmine.anything()
+    );
   });
 
   it('should show a prompt when only phone is unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
     await init(data);
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
-    expect(messageService.showMessage).toHaveBeenCalledWith(jasmine.stringMatching('phone'), 'info');
-    expect(messageService.showMessage).not.toHaveBeenCalledWith(jasmine.stringMatching('both'), 'info');
+    expect(messageService.showMessage).toHaveBeenCalledWith(
+      jasmine.stringMatching('phone'),
+      'info',
+      jasmine.anything(),
+      ['/auth/verify']
+    );
+    expect(messageService.showMessage).not.toHaveBeenCalledWith(
+      jasmine.stringMatching('email and phone'),
+      jasmine.anything(),
+      jasmine.anything(),
+      jasmine.anything()
+    );
   });
 
   it('should show a prompt when nothing is unverified', async () => {

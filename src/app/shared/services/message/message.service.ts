@@ -16,20 +16,20 @@ export class MessageService {
     this.component = toRegister;
   }
 
-  public showMessage(message: string, style ?: string, translate ?: boolean) {
+  public showMessage(message: string, style ?: string, translate ?: boolean, navigateTo ?: string[]) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
     }
 
     if (!translate) {
-      this.component.display(message, style);
+      this.component.display(message, style, navigateTo);
     } else {
-      this.component.display(this.constants.translate(message), style);
+      this.component.display(this.constants.translate(message), style, navigateTo);
     }
 
   }
 
-  public showError(message: string, translate ?: boolean) {
-    return this.showMessage(message, 'danger', translate);
+  public showError(message: string, translate ?: boolean, navigateTo ?: string[]) {
+    return this.showMessage(message, 'danger', translate, navigateTo);
   }
 }

@@ -44,11 +44,26 @@ export class MainComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const account = this.accountService.getAccount();
     if (account.emailNeedsVerification() && account.phoneNeedsVerification()) {
-      this.messageService.showMessage('needs both', 'info');
+      this.messageService.showMessage(
+        'Your email and phone number need verification. Tap this message to verify.',
+        'info',
+        false,
+        ['/auth/verify']
+      );
     } else if (account.emailNeedsVerification()) {
-      this.messageService.showMessage('needs email', 'info');
+      this.messageService.showMessage(
+        'Your email needs verification. Tap this message to verify.',
+        'info',
+        false,
+        ['/auth/verify']
+      );
     } else if (account.phoneNeedsVerification()) {
-      this.messageService.showMessage('needs phone', 'info');
+      this.messageService.showMessage(
+        'Your phone number needs verification. Tap this message to verify.',
+        'info',
+        false,
+        ['/auth/verify']
+      );
     }
   }
 
