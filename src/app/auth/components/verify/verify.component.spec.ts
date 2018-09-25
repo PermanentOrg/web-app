@@ -15,7 +15,7 @@ import { ApiService } from '@shared/services/api/api.service';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
-fdescribe('VerifyComponent', () => {
+describe('VerifyComponent', () => {
   let component: VerifyComponent;
   let fixture: ComponentFixture<VerifyComponent>;
 
