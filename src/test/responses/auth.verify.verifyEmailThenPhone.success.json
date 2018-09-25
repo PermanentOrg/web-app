@@ -1,0 +1,62 @@
+{
+  "Results": [
+    {
+      "data": [
+        {
+          "AccountVO": {
+            "accountId": 1,
+            "primaryEmail": "aatwood@permanent.org",
+            "fullName": "Andrew Atwood",
+            "address": null,
+            "address2": null,
+            "country": null,
+            "city": null,
+            "state": null,
+            "zip": null,
+            "primaryPhone": "8324553388",
+            "defaultArchiveId": 1,
+            "level": null,
+            "apiToken": null,
+            "facebookAccountId": null,
+            "googleAccountId": null,
+            "status": "status.auth.ok",
+            "type": "type.account.standard",
+            "emailStatus": "status.auth.verified",
+            "phoneStatus": "status.auth.unverified",
+            "agreed": null,
+            "optIn": null,
+            "emailArray": null,
+            "inviteCode": null,
+            "rememberMe": null,
+            "keepLoggedIn": null,
+            "accessRole": null,
+            "spaceTotal": 104857600,
+            "spaceLeft": 104857600,
+            "fileTotal": null,
+            "fileLeft": 100000,
+            "changePrimaryEmail": null,
+            "changePrimaryPhone": null,
+            "createdDT": "2018-09-25T13:18:17.000000",
+            "updatedDT": "2018-09-25T21:56:58.000000"
+          }
+        }
+      ],
+      "message": [
+        "Verify successful."
+      ],
+      "status": true,
+      "resultDT": "2018-09-25T21:56:58.000000",
+      "createdDT": null,
+      "updatedDT": null
+    }
+  ],
+  "isSuccessful": true,
+  "actionFailKeys": [],
+  "isSystemUp": true,
+  "systemMessage": "Everything is A-OK",
+  "sessionId": null,
+  "csrf": "3b8ad3dfabd27723ab29747553f3fbe9",
+  "vaultExpirationTime": "2018-09-24T20:41:13.000000",
+  "createdDT": null,
+  "updatedDT": null
+}

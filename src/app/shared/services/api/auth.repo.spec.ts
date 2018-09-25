@@ -56,9 +56,9 @@ describe('AuthRepo', () => {
     expected.setData(returnData);
 
     repo.isLoggedIn()
-    .subscribe(response => {
-      expect(response).toEqual(expected);
-    });
+      .then(response => {
+        expect(response).toEqual(expected);
+      });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/loggedIn`);
     req.flush(expected);

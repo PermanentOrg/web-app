@@ -105,7 +105,7 @@ export class AccountService {
         }
 
         const newAccount = response.getAccountVO();
-        this.archive.update(newAccount);
+        this.account.update(newAccount);
         this.storage.local.set(ACCOUNT_KEY, this.account);
       })
       .catch((response: AccountResponse | any) => {

@@ -81,7 +81,7 @@ export class VerifyComponent implements OnInit {
       return;
     }
 
-    verifyPromise
+    return verifyPromise
       .then((response: AuthResponse) => {
         if (!response.isSuccessful) {
           throw response;
