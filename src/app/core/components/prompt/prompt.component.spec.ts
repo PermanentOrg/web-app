@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { PromptComponent } from './prompt.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
@@ -9,7 +10,7 @@ describe('PromptComponent', () => {
   let fixture: ComponentFixture<PromptComponent>;
 
   beforeEach(async(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations = [
       FormInputComponent,
       PromptComponent

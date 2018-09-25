@@ -9,7 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 const MIN_PASSWORD_LENGTH = 8;
 
-const FORM_ERROR_MESSAGES = {
+export const FORM_ERROR_MESSAGES = {
   email: {
     email: 'Invalid email address',
     required: 'Email required'

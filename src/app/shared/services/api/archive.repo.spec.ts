@@ -30,8 +30,8 @@ describe('ArchiveRepo', () => {
   it('should get a single archive', () => {
     const expected = require('@root/test/responses/archive.get.single.success.json');
 
-    repo.get([TEST_DATA.archive.archiveId])
-    .subscribe((response) => {
+    repo.get([TEST_DATA.archive])
+    .then((response) => {
       expect(response.getArchiveVO().archiveId).toEqual(TEST_DATA.archive.archiveId);
       expect(response.getArchiveVO().archiveNbr).toEqual(TEST_DATA.archive.archiveNbr);
     });
@@ -43,8 +43,8 @@ describe('ArchiveRepo', () => {
   it('should get multiple archives', () => {
     const expected = require('@root/test/responses/archive.get.multiple.success.json');
 
-    repo.get([TEST_DATA.archive.archiveId, TEST_DATA_2.archive.archiveId])
-    .subscribe((response) => {
+    repo.get([TEST_DATA.archive, TEST_DATA_2.archive])
+    .then((response) => {
       const archives = response.getArchiveVOs();
       expect(archives.length).toBe(2);
 
@@ -56,6 +56,19 @@ describe('ArchiveRepo', () => {
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/archive/get`);
+    req.flush(expected);
+  });
+
+  it('should get all archives for account', () => {
+    const expected = require('@root/test/responses/archive.getAllArchive.success.json');
+    repo.getAllArchives(new AccountVO(TEST_DATA.account))
+    .then((response: ArchiveResponse) => {
+      const archives = response.getArchiveVOs();
+      const count = expected.Results[0].data.length;
+      expect(archives.length).toBe(count);
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/archive/getAllArchives`);
     req.flush(expected);
   });
 });

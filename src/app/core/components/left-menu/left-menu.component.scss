@@ -10,6 +10,7 @@ $transition-length: $default-transition-length;
   width: 300px;
   max-width: 80%;
   transform: translateX(-100%);
+  overflow: auto;
 
   .menu-item {
     padding: $input-btn-padding-y * 1.5 10px;
@@ -29,5 +30,8 @@ $transition-length: $default-transition-length;
     strong {
       display: block;
     }
+    box-shadow: $box-shadow-sm;
+    border-bottom: 1px solid $gray-300;
+    margin-bottom: $input-btn-padding-y * 1.5;
   }
 }

@@ -1,17 +1,20 @@
 import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { map } from 'rxjs/operators';
+import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
 
 export class ArchiveRepo extends BaseRepo {
-  public get(archiveIds: number[]): Observable<ArchiveResponse> {
-    const data = archiveIds.map((archiveId) => {
+  public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
+    const data = archives.map((archive) => {
       return {
-        ArchiveVO: new ArchiveVO({archiveId: archiveId})
+        ArchiveVO: new ArchiveVO({
+          archiveNbr: archive.archiveNbr,
+          archiveId: archive.archiveId
+        })
       };
     });
 
-    return this.http.sendRequest('/archive/get', data, ArchiveResponse);
+    return this.http.sendRequestPromise('/archive/get', data, ArchiveResponse);
   }
 
   public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
@@ -45,8 +48,12 @@ export class ArchiveResponse extends BaseResponse {
 
   public getArchiveVOs() {
     const data = this.getResultsData();
-    return data[0].map((result) => {
-      return new ArchiveVO(result.ArchiveVO);
+    const archives = data.map((result) => {
+      return result.map((resultList) => {
+        return resultList.ArchiveVO;
+      });
     });
+
+    return flatten(archives);
   }
 }

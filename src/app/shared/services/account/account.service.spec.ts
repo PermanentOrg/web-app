@@ -18,7 +18,6 @@ describe('AccountService', () => {
   let service: AccountService;
   let storageService: StorageService;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [

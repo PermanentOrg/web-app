@@ -155,6 +155,55 @@ describe('File Navigation Flow', () => {
   });
 });
 
+describe('Apps Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should have a View Files button for existing FB files', () => {
+    page.goToApps();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const connectorBlock = element(by.css('pr-connector'));
+    browser.wait(ExpectedConditions.presenceOf(connectorBlock));
+    waitForUpdate();
+    const viewFilesButton = connectorBlock.element(by.css('.view-files'));
+    expect(viewFilesButton.isPresent()).toBeTruthy();
+  });
+});
+
+describe('Shares Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should load Shared By Me', () => {
+    page.goToSharedByMe();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const breadcrumb = element(by.css('.breadcrumb .current'));
+    browser.wait(ExpectedConditions.presenceOf(breadcrumb));
+    waitForUpdate();
+    expect(breadcrumb.getText()).toContain('Shared By Me');
+  });
+
+  it('should load Shared With Me', () => {
+    page.goToSharedWithMe();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const breadcrumb = element(by.css('.breadcrumb .current'));
+    browser.wait(ExpectedConditions.presenceOf(breadcrumb));
+    waitForUpdate();
+    expect(breadcrumb.getText()).toContain('Shared With Me');
+  });
+});
+
 describe('Multiple Archives Flow', () => {
   let page: AppPage;
 

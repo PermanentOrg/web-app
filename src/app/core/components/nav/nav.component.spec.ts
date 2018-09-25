@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
@@ -8,8 +9,8 @@ xdescribe('NavComponent', () => {
   let component: NavComponent;
   let fixture: ComponentFixture<NavComponent>;
 
-  beforeEach(Testing.async(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+  beforeEach(async(() => {
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.declarations.push(NavComponent);
     config.declarations.push(LeftMenuComponent);

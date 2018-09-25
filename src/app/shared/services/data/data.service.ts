@@ -59,6 +59,7 @@ export class DataService {
     }
     const folder = new FolderVO({
       archiveNbr: currentFolder.archiveNbr,
+      folder_linkId: currentFolder.folder_linkId,
       ChildItemVOs: items.filter((item) => {
           if (item.isFetching) {
             return false;
@@ -70,6 +71,10 @@ export class DataService {
             itemRejects.push(reject);
           });
           return true;
+        }).map((item) => {
+          return {
+            folder_linkId: item.folder_linkId
+          };
         })
     });
 
@@ -116,7 +121,7 @@ export class DataService {
       });
   }
 
-  public fetchFullItems(items: Array<FolderVO | RecordVO>) {
+  public fetchFullItems(items: Array<FolderVO | RecordVO>, withChildren?: boolean) {
     const itemResolves = [];
     const itemRejects = [];
 
@@ -140,7 +145,12 @@ export class DataService {
     const promises: Promise<any>[] = [];
 
     promises.push(records.length ? this.api.record.get(records) : Promise.resolve());
-    promises.push(folders.length ? this.api.folder.get(folders).toPromise() : Promise.resolve());
+
+    if (!withChildren) {
+      promises.push(folders.length ? this.api.folder.get(folders) : Promise.resolve());
+    } else {
+      promises.push(folders.length ? this.api.folder.getWithChildren(folders) : Promise.resolve());
+    }
 
     return Promise.all(promises)
     .then((results) => {
@@ -162,10 +172,12 @@ export class DataService {
 
       for (let i = 0; i < records.length; i++) {
         records[i].update(fullRecords[i]);
+        records[i].dataStatus = DataStatus.Full;
       }
 
       for (let i = 0; i < folders.length; i++) {
         folders[i].update(fullFolders[i]);
+        folders[i].dataStatus = DataStatus.Full;
       }
 
       itemResolves.map((resolve, index) => {

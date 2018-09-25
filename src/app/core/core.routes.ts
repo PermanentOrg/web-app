@@ -25,6 +25,7 @@ export const routes: Routes = [
     children: [
       { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
       { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
+      { path: 'shares', loadChildren: '@shares/shares.module#SharesModule', data: { title: 'Shares'} },
       {
         path: 'choosearchive',
         component: ArchiveSelectorComponent,

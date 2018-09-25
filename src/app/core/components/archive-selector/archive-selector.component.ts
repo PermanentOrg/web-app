@@ -1,18 +1,15 @@
 import { Component, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { reject } from 'lodash';
+import { remove } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 import { TweenMax } from 'gsap';
 
-import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveVO } from '@root/app/models';
 import { BaseResponse } from '@shared/services/api/base';
-
-import { ArchiveSmallComponent } from '@core/components/archive-small/archive-small.component';
 
 @Component({
   selector: 'pr-archive-selector',
@@ -31,7 +28,14 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
     private router: Router
   ) {
     this.currentArchive = accountService.getArchive();
-    this.archives = reject(this.route.snapshot.data['archives'], { archiveId: this.currentArchive.archiveId }) as ArchiveVO[];
+
+    const archives = this.route.snapshot.data['archives'];
+    const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;
+
+    this.currentArchive.update(currentArchiveFetched);
+    this.accountService.setArchive(this.currentArchive);
+
+    this.archives = archives as ArchiveVO[];
   }
 
   ngOnInit() {

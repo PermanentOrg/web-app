@@ -11,6 +11,7 @@ export class ApiService {
   public archive: Repo.ArchiveRepo;
   public folder: Repo.FolderRepo;
   public record: Repo.RecordRepo;
+  public share: Repo.ShareRepo;
   public connector: Repo.ConnectorRepo;
 
   constructor(private http: HttpService) {
@@ -19,6 +20,7 @@ export class ApiService {
     this.archive = new Repo.ArchiveRepo(this.http);
     this.folder = new Repo.FolderRepo(this.http);
     this.record = new Repo.RecordRepo(this.http);
+    this.share = new Repo.ShareRepo(this.http);
     this.connector = new Repo.ConnectorRepo(this.http);
   }
 }

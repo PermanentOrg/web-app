@@ -8,7 +8,7 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise('/folder/getRoot', [], FolderResponse);
   }
 
-  public get(folderVOs: FolderVO[]): Observable<FolderResponse> {
+  public get(folderVOs: FolderVO[]): Promise<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
         FolderVO: {
@@ -19,7 +19,21 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequest('/folder/get', data, FolderResponse);
+    return this.http.sendRequestPromise('/folder/get', data, FolderResponse);
+  }
+
+  public getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: {
+          archiveNbr: folderVO.archiveNbr,
+          folder_linkId: folderVO.folder_linkId,
+          folderId: folderVO.folderId
+        }
+      };
+    });
+
+    return this.http.sendRequestPromise('/folder/getWithChildren', data, FolderResponse);
   }
 
   public navigate(folderVO: FolderVO): Observable<FolderResponse> {

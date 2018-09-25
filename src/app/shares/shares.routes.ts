@@ -1,0 +1,89 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { SharesComponent } from '@shares/components/shares/shares.component';
+import { SharesResolveService } from '@shares/resolves/shares-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { ShareByMeComponent } from '@shares/components/share-by-me/share-by-me.component';
+import { ShareWithMeComponent } from '@shares/components/share-with-me/share-with-me.component';
+
+const sharesRootResolve = {
+  shares: SharesResolveService
+};
+
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'byme',
+    pathMatch: 'full'
+  },
+  {
+    path: ':archiveNbr/:folderLinkId',
+    redirectTo: 'withme/:archiveNbr/:folderLinkId',
+    pathMatch: 'full'
+  },
+  {
+    path: 'record/:recArchiveNbr',
+    redirectTo: 'withme/record/:recArchiveNbr',
+    pathMatch: 'full'
+  },
+  {
+    path: 'byme',
+    component: ShareByMeComponent,
+    resolve: sharesRootResolve,
+    children: [
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        data: {
+          singleFile: true
+        },
+        resolve: {
+          currentRecord: RecordResolveService
+        }
+      }
+    ]
+  },
+  {
+    path: 'withme',
+    component: ShareWithMeComponent,
+    resolve: sharesRootResolve,
+    children: [
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        data: {
+          singleFile: true
+        },
+        resolve: {
+          currentRecord: RecordResolveService
+        }
+      }
+    ]
+  },
+  {
+    path: ':archiveNbr',
+    redirectTo: 'withme/:archiveNbr',
+    pathMatch: 'full'
+  },
+  {
+    path: 'withme/:archiveNbr',
+    component: ShareWithMeComponent,
+    resolve: sharesRootResolve,
+  },
+  {
+    path: 'withme/:archiveNbr/:folderLinkId',
+    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'
+  },
+];
+@NgModule({
+  imports: [
+    RouterModule.forChild(routes)
+  ],
+  providers: [
+    SharesResolveService,
+  ]
+})
+export class AppsRoutingModule { }
+

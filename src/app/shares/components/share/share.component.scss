@@ -1,15 +1,18 @@
 @import 'variables';
+
 :host {
   display: block;
-  cursor: pointer;
+  padding-bottom: 25px;
 }
 
 .archive {
   display: flex;
   align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid $gray-300;
 }
 
-$thumb-size: 50px;
+$thumb-size: 40px;
 
 .archive-thumb {
   width: $thumb-size;
@@ -19,13 +22,9 @@ $thumb-size: 50px;
 }
 
 .archive-name {
-  font-weight: 600;
+  font-weight: 500;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.archive-current {
-  font-weight: 400;
 }

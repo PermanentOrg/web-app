@@ -52,13 +52,13 @@ export class FolderVO extends BaseVO {
   public shareDT;
 
   // For the iParentFolderVO
-  public pathAsFolder_linkId: number;
-  public pathAsText;
+  public pathAsFolder_linkId: number[];
+  public pathAsText: string[];
   public folder_linkId: number;
   public parentFolder_linkId: number;
   public ParentFolderVOs;
   public parentArchiveNbr;
-  public pathAsArchiveNbr;
+  public pathAsArchiveNbr: string[];
 
   // Children
   public ChildFolderVOs;
@@ -135,13 +135,13 @@ export interface FolderVOData {
   accessRole?: any;
   position?: any;
   shareDT?: any;
-  pathAsFolder_linkId?: number;
-  pathAsText?: any;
+  pathAsFolder_linkId?: number[];
+  pathAsText?: string[];
   folder_linkId?: number;
   parentFolder_linkId?: number;
   ParentFolderVOs?: any;
   parentArchiveNbr?: any;
-  pathAsArchiveNbr?: any;
+  pathAsArchiveNbr?: string[];
   ChildFolderVOs?: any;
   RecordVOs?: any;
   LocnVO?: any;
