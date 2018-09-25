@@ -90,10 +90,13 @@ export class VerifyComponent implements OnInit {
         this.waiting = false;
 
         const account = response.getAccountVO();
+        this.accountService.setAccount(account);
+
         this.needsEmail = account.emailNeedsVerification();
         this.needsPhone = account.phoneNeedsVerification();
 
         if (this.needsPhone) {
+          this.verifyForm.controls['token'].setValue('');
           this.verifyingEmail = false;
           this.verifyingPhone = true;
           this.formTitle = 'Verify Phone Number';
@@ -105,15 +108,33 @@ export class VerifyComponent implements OnInit {
         this.waiting = false;
         this.message.showError(response.getMessage(), true);
       });
+  }
 
+  resendCode() {
+    this.waiting = true;
 
+    let resendPromise: Promise<AuthResponse>;
+    if (this.verifyingEmail) {
+      resendPromise = this.accountService.resendEmailVerification();
+    } else {
+      resendPromise = this.accountService.resendPhoneVerification();
+    }
+
+    resendPromise
+      .then((response: AuthResponse) => {
+        this.waiting = false;
+        this.message.showMessage(response.getMessage(), null, true);
+      })
+      .catch((response: AuthResponse) => {
+        this.waiting = false;
+        this.message.showError(response.getMessage(), true);
+      });
   }
 
   finish() {
     return this.accountService.switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
         this.router.navigate(['/']);
       });
   }

@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
 import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
+import { Router } from '@angular/router';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -23,13 +24,19 @@ export class AccountService {
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
 
-  constructor(private api: ApiService, private storage: StorageService, private cookies: CookieService) {
+  constructor(
+    private api: ApiService,
+    private storage: StorageService,
+    private cookies: CookieService,
+    private router: Router
+  ) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
     const cachedRoot = this.storage.local.get(ROOT_KEY);
 
     if (cachedAccount) {
       this.setAccount(new AccountVO(cachedAccount));
+      this.refreshAccount();
     }
 
     if (cachedArchive) {
@@ -84,7 +91,28 @@ export class AccountService {
     this.storage.local.delete(ROOT_KEY);
   }
 
+  public clear() {
+    this.clearAccount();
+    this.clearArchive();
+    this.clearRootFolder();
+  }
+
   public refreshAccount() {
+    return this.api.account.get(this.account)
+      .then((response: AccountResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
+
+        const newAccount = response.getAccountVO();
+        this.archive.update(newAccount);
+        this.storage.local.set(ACCOUNT_KEY, this.account);
+      })
+      .catch((response: AccountResponse | any) => {
+        this.logOut();
+        this.clear();
+        this.router.navigate(['/login']);
+      });
   }
 
   public refreshArchive() {
@@ -94,9 +122,17 @@ export class AccountService {
 
     return this.api.archive.get([this.archive])
       .then((response: ArchiveResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
         const newArchive = response.getArchiveVO();
         this.archive.update(newArchive);
         this.storage.local.set(ARCHIVE_KEY, this.archive);
+      })
+      .catch((response: ArchiveResponse | any) => {
+        this.logOut();
+        this.clear();
+        this.router.navigate(['/login']);
       });
   }
 
@@ -122,8 +158,11 @@ export class AccountService {
       return Promise.resolve(true);
     }
 
-    return this.api.auth.isLoggedIn().toPromise()
+    return this.api.auth.isLoggedIn()
       .then((response: AuthResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
         return response.getSimpleVO().value;
       });
   }
@@ -202,6 +241,14 @@ export class AccountService {
           throw response;
         }
       })).toPromise();
+  }
+
+  public resendEmailVerification(): Promise<AuthResponse> {
+    return this.api.auth.resendEmailVerification(this.account);
+  }
+
+  public resendPhoneVerification(): Promise<AuthResponse> {
+    return this.api.auth.resendPhoneVerification(this.account);
   }
 
   public switchToDefaultArchive(): Promise<ArchiveResponse> {

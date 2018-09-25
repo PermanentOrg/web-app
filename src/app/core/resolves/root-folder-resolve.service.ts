@@ -22,6 +22,9 @@ export class RootFolderResolveService implements Resolve<any> {
 
     return this.api.folder.getRoot()
       .then((response: FolderResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
         const root = response.getFolderVO();
         this.accountService.setRootFolder(root);
         return root;

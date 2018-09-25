@@ -3,6 +3,14 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { Observable } from 'rxjs';
 
 export class AccountRepo extends BaseRepo {
+  public get(accountVO: AccountVO) {
+    const account = {
+      accountId: accountVO.accountId
+    };
+
+    return this.http.sendRequestPromise('/account/get', [account], AccountResponse);
+  }
+
   public signUp(
     email: string, fullName: string, password: string, passwordConfirm: string,
     agreed: boolean, optIn: boolean, phone: string, inviteCode: string
