@@ -1,0 +1,13 @@
+{
+  "/api": {
+    "target": "https://local.permanent.org",
+    "secure": false
+  },
+  "/uploadsvc": {
+    "target": "wss://local.permanent.org:9000",
+    "ws": true,
+    "pathRewrite": {
+      "^/uploader": ""
+    }
+  }
+}

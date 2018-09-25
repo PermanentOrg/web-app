@@ -1,10 +1,10 @@
 <pr-login-logo></pr-login-logo>
 <form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
   <h1 class="form-title">
-    Verify Access
+    {{formTitle}}
   </h1>
   <p>
-    A verification code has been sent to your email address.
+    A verification code has been sent to your {{verifyingEmail ? 'email address' : 'mobile device'}}.
     <br>
     <br>
     Enter it below to continue.
@@ -12,5 +12,6 @@
   <input type="text" class="form-control" id="token" placeholder="Code"
     [formControl]="verifyForm.controls['token']"
     autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-  <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify</button>
+    <button type="submit" class="btn btn-primary" [disabled]="waiting">{{formTitle}}</button>
+    <!-- <button type="button" class="btn btn-primary" [disabled]="waiting" [routerLink]="['/myfiles']">Back</button> -->
 </form>

@@ -192,6 +192,18 @@ export class AccountService {
       })).toPromise();
   }
 
+  public verifyPhone(token: string): Promise<AuthResponse> {
+    return this.api.auth.verify(this.account.primaryEmail, token, 'type.auth.phone')
+      .pipe(map((response: AuthResponse) => {
+        if (response.isSuccessful) {
+          this.setAccount(response.getAccountVO());
+          return response;
+        } else {
+          throw response;
+        }
+      })).toPromise();
+  }
+
   public switchToDefaultArchive(): Promise<ArchiveResponse> {
     return this.api.archive.getAllArchives(this.account)
       .then((response: ArchiveResponse) => {
