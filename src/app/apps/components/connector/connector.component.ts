@@ -59,6 +59,10 @@ export class ConnectorComponent implements OnInit {
   }
 
   goToFolder() {
+    if (!this.hasFiles) {
+      return;
+    }
+
     this.router.navigate(['/apps', this.folder.archiveNbr, this.folder.folder_linkId]);
   }
 
