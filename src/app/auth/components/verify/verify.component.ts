@@ -15,7 +15,14 @@ import { AccountVO } from '@root/app/models';
 })
 export class VerifyComponent implements OnInit {
   verifyForm: FormGroup;
+  formTitle = 'Verify Email';
   waiting: boolean;
+
+  verifyingEmail = true;
+  verifyingPhone = false;
+
+  needsEmail: boolean;
+  needsPhone: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -25,9 +32,32 @@ export class VerifyComponent implements OnInit {
     private route: ActivatedRoute
   ) {
 
+    const account = this.accountService.getAccount();
+
     const params = route.snapshot.params;
-    if (params.email) {
-      this.accountService.setAccount(new AccountVO({primaryEmail: window.atob(params.email)}));
+    // if (params.email) {
+    //   const email = window.atob(params.email);
+    //   if (email !== account.primaryEmail) {
+    //     this.accountService.logOut();
+    //     account = new AccountVO(
+    //       {
+    //         primaryEmail: window.atob(params.email),
+    //         emailStatus: 'status.auth.unverified'
+    //       }
+    //     );
+    //     this.accountService.setAccount(account);
+    //   }
+    // }
+
+    this.needsEmail = account.emailNeedsVerification();
+    this.needsPhone = account.phoneNeedsVerification();
+
+    if (!this.needsEmail && this.needsPhone) {
+      this.verifyingEmail = false;
+      this.verifyingPhone = true;
+      this.formTitle = 'Verify Phone Number';
+    } else if (!this.needsEmail) {
+      console.log('redirect...all verified');
     }
 
     this.verifyForm = fb.group({
@@ -41,18 +71,71 @@ export class VerifyComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.verifyEmail(formValue.token)
-      .then(() => {
-        return this.accountService.switchToDefaultArchive();
-      })
-      .then((response: ArchiveResponse) => {
+    let verifyPromise: Promise<AuthResponse>;
+
+    if (this.verifyingEmail) {
+      verifyPromise = this.accountService.verifyEmail(formValue.token);
+    } else if (this.verifyingPhone) {
+      verifyPromise = this.accountService.verifyPhone(formValue.token);
+    } else {
+      return;
+    }
+
+    return verifyPromise
+      .then((response: AuthResponse) => {
+        if (!response.isSuccessful) {
+          throw response;
+        }
+
         this.waiting = false;
-        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
-        this.router.navigate(['/']);
+
+        const account = response.getAccountVO();
+        this.accountService.setAccount(account);
+
+        this.needsEmail = account.emailNeedsVerification();
+        this.needsPhone = account.phoneNeedsVerification();
+
+        if (this.needsPhone) {
+          this.verifyForm.controls['token'].setValue('');
+          this.verifyingEmail = false;
+          this.verifyingPhone = true;
+          this.formTitle = 'Verify Phone Number';
+        } else {
+          this.finish();
+        }
       })
-      .catch((response: ArchiveResponse | AccountResponse) => {
+      .catch((response: AuthResponse | ArchiveResponse | AccountResponse) => {
         this.waiting = false;
         this.message.showError(response.getMessage(), true);
+      });
+  }
+
+  resendCode() {
+    this.waiting = true;
+
+    let resendPromise: Promise<AuthResponse>;
+    if (this.verifyingEmail) {
+      resendPromise = this.accountService.resendEmailVerification();
+    } else {
+      resendPromise = this.accountService.resendPhoneVerification();
+    }
+
+    resendPromise
+      .then((response: AuthResponse) => {
+        this.waiting = false;
+        this.message.showMessage(response.getMessage(), null, true);
+      })
+      .catch((response: AuthResponse) => {
+        this.waiting = false;
+        this.message.showError(response.getMessage(), true);
+      });
+  }
+
+  finish() {
+    return this.accountService.switchToDefaultArchive()
+      .then((response: ArchiveResponse) => {
+        this.waiting = false;
+        this.router.navigate(['/']);
       });
   }
 

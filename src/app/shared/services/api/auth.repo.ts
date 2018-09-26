@@ -4,8 +4,8 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class AuthRepo extends BaseRepo {
-  public isLoggedIn(): Observable<AuthResponse> {
-    return this.http.sendRequest('/auth/loggedIn', undefined, AuthResponse);
+  public isLoggedIn(): Promise<AuthResponse> {
+    return this.http.sendRequestPromise('/auth/loggedIn', undefined, AuthResponse);
   }
 
   public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Observable<AuthResponse> {
@@ -57,6 +57,24 @@ export class AuthRepo extends BaseRepo {
     };
 
     return this.http.sendRequest('/auth/resetPassword', [data], AuthResponse);
+  }
+
+  public resendEmailVerification(accountVO: AccountVO) {
+    const account = {
+      primaryEmail: accountVO.primaryEmail,
+      accountId: accountVO.accountId
+    };
+
+    return this.http.sendRequestPromise('/auth/resendMailCreatedAccount', [account], AuthResponse);
+  }
+
+  public resendPhoneVerification(accountVO: AccountVO) {
+    const account = {
+      primaryEmail: accountVO.primaryEmail,
+      accountId: accountVO.accountId
+    };
+
+    return this.http.sendRequestPromise('/auth/resendTextCreatedAccount', [account], AuthResponse);
   }
 
 }

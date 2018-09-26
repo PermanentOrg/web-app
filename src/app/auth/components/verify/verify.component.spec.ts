@@ -1,42 +1,159 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { CookieService } from 'ngx-cookie-service';
+import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep } from 'lodash';
 
 import { VerifyComponent } from '@auth/components/verify/verify.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
+import { SharedModule } from '@shared/shared.module';
+import { AccountService } from '@shared/services/account/account.service';
+import { AuthResponse } from '@shared/services/api/index.repo';
+import { HttpTestingController } from '@angular/common/http/testing';
+import { environment } from '@root/environments/environment';
 
-xdescribe('VerifyComponent', () => {
+import { HttpService } from '@shared/services/http/http.service';
+import { ApiService } from '@shared/services/api/api.service';
+
+const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
+
+describe('VerifyComponent', () => {
   let component: VerifyComponent;
   let fixture: ComponentFixture<VerifyComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        VerifyComponent,
-        LogoComponent
-      ],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      providers: [
-        CookieService
-      ]
-    })
-    .compileComponents();
-  }));
+  let httpMock: HttpTestingController;
+  let accountService: AccountService;
 
-  beforeEach(() => {
+  async function init(authResponseData = defaultAuthData) {
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+
+    config.declarations.push(VerifyComponent);
+
+    config.imports.push(SharedModule);
+
+    config.providers.push(HttpService);
+    config.providers.push(ApiService);
+    config.providers.push(AccountService);
+
+    await TestBed.configureTestingModule(config).compileComponents();
+
+    httpMock = TestBed.get(HttpTestingController);
+
+    accountService = TestBed.get(AccountService);
+
+    const authResponse = new AuthResponse(authResponseData);
+
+    accountService.setAccount(authResponse.getAccountVO());
+    accountService.setArchive(authResponse.getArchiveVO());
+
     fixture = TestBed.createComponent(VerifyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  }
+
+  afterEach(() => {
+    accountService.clear();
+    // httpMock.verify();
   });
 
-  it('should create', () => {
+  it('should create', async () => {
+    await init();
     expect(component).toBeTruthy();
+  });
+
+  it('should require only email verification if only email unverified', async () => {
+    await init();
+    expect(component.verifyingEmail).toBeTruthy();
+    expect(component.needsEmail).toBeTruthy();
+    expect(component.needsPhone).toBeFalsy();
+  });
+
+  it('should require only phone verification if only phone unverified', async () => {
+    const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+    await init(unverifiedPhoneData);
+    expect(component.verifyingPhone).toBeTruthy();
+    expect(component.needsPhone).toBeTruthy();
+    expect(component.needsEmail).toBeFalsy();
+  });
+
+  it('should require verification of both if both unverified, and verify email first', async () => {
+    const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
+    await init(unverifiedBothData);
+    expect(component.verifyingEmail).toBeTruthy();
+    expect(component.needsPhone).toBeTruthy();
+    expect(component.needsEmail).toBeTruthy();
+  });
+
+  it('should verify email and then switch to phone verification if needed', async () => {
+    const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
+    await init(unverifiedBothData);
+
+    expect(component.verifyingEmail).toBeTruthy();
+    expect(component.needsPhone).toBeTruthy();
+    expect(component.needsEmail).toBeTruthy();
+
+    component.onSubmit(component.verifyForm.value)
+      .then(() => {
+        expect(component.waiting).toBeFalsy();
+        expect(component.verifyingEmail).toBeFalsy();
+        expect(component.needsEmail).toBeFalsy();
+        expect(component.needsPhone).toBeTruthy();
+        expect(component.verifyingPhone).toBeTruthy();
+      });
+
+    expect(component.waiting).toBeTruthy();
+
+    const verifyEmailResponse = require('@root/test/responses/auth.verify.verifyEmailThenPhone.success.json');
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
+    req.flush(verifyEmailResponse);
+  });
+
+  it('should verify email and redirect if only email needed', async () => {
+    const unverifiedEmailData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
+    await init(unverifiedEmailData);
+
+    spyOn(component, 'finish');
+
+    expect(component.verifyingEmail).toBeTruthy();
+    expect(component.needsPhone).toBeFalsy();
+    expect(component.needsEmail).toBeTruthy();
+
+    component.onSubmit(component.verifyForm.value)
+      .then(() => {
+        expect(component.waiting).toBeFalsy();
+        expect(component.needsEmail).toBeFalsy();
+        expect(component.needsPhone).toBeFalsy();
+        expect(component.finish).toHaveBeenCalled();
+      });
+
+    expect(component.waiting).toBeTruthy();
+
+    const verifyEmailResponse = require('@root/test/responses/auth.verify.verifyEmailNoPhone.success.json');
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
+    req.flush(verifyEmailResponse);
+  });
+
+  it('should verify phone and redirect if only phone needed', async () => {
+    const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+    await init(unverifiedPhoneData);
+
+    spyOn(component, 'finish');
+
+    expect(component.verifyingPhone).toBeTruthy();
+    expect(component.verifyingEmail).toBeFalsy();
+    expect(component.needsPhone).toBeTruthy();
+    expect(component.needsEmail).toBeFalsy();
+
+    component.onSubmit(component.verifyForm.value)
+      .then(() => {
+        expect(component.waiting).toBeFalsy();
+        expect(component.needsEmail).toBeFalsy();
+        expect(component.needsPhone).toBeFalsy();
+        expect(component.finish).toHaveBeenCalled();
+      });
+
+    expect(component.waiting).toBeTruthy();
+
+    const verifyPhoneResponse = require('@root/test/responses/auth.verify.verifyPhone.success.json');
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
+    req.flush(verifyPhoneResponse);
   });
 });
