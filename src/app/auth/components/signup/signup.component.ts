@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import APP_CONFIG from '@root/app/app.config';
+
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 
-const MIN_PASSWORD_LENGTH = 10;
+const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 export const FORM_ERROR_MESSAGES = {
   invitation: {
