@@ -36,7 +36,10 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   show(startingFolder: FolderVO) {
     this.visible = true;
-    this.setFolder(startingFolder);
+    this.setFolder(startingFolder)
+      .then(() => {
+        this.loadCurrentFolderChildData();
+      });
 
     this.chooseFolderDeferred = new Deferred();
 
