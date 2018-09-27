@@ -8,6 +8,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { FolderVO, FolderVOData } from '@root/app/models';
+import { find } from 'lodash';
 
 @Component({
   selector: 'pr-main',
@@ -68,7 +70,12 @@ export class MainComponent implements OnInit, OnDestroy {
       );
     }
 
-    this.folderPicker.chooseFolder(this.accountService.getRootFolder());
+    const rootFolder = this.accountService.getRootFolder();
+    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
+    this.folderPicker.chooseFolder(myFiles)
+      .then((chosenFolder: FolderVO) => {
+        console.log('got folder', chosenFolder);
+      });
   }
 
   ngOnDestroy() {

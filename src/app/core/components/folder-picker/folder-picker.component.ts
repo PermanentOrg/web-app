@@ -49,16 +49,13 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
       .then((response: FolderResponse) => {
         this.waiting = false;
         this.currentFolder = response.getFolderVO(true);
-        console.log('got a folder', this.currentFolder);
         remove(this.currentFolder.ChildItemVOs, 'isRecord');
-        return this.loadCurrentFolderChildData();
       });
   }
 
   loadCurrentFolderChildData() {
     return this.dataService.fetchLeanItems(this.currentFolder.ChildItemVOs, this.currentFolder)
       .then(() => {
-        console.log('all fetched for picker');
       });
   }
 
@@ -66,6 +63,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     if (this.currentFolder) {
       this.chooseFolderDeferred.resolve(this.currentFolder);
     }
+    this.hide();
   }
 
   hide() {

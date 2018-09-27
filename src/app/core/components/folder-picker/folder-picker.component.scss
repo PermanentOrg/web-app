@@ -10,6 +10,7 @@ $transition-length: 0.4s;
   right: $picker-margin;
   transform: translateY(100%);
   transition:  transform $transition-length ease-in;
+  border-radius: $border-radius;
 }
 
 .visible .folder-picker{
