@@ -1,0 +1,17 @@
+@import 'variables';
+
+$picker-margin: 20px;
+$transition-length: 0.4s;
+
+.folder-picker {
+  top: $picker-margin * 2;
+  bottom: $picker-margin * 2;
+  left: $picker-margin;
+  right: $picker-margin;
+  transform: translateY(100%);
+  transition:  transform $transition-length ease-in;
+}
+
+.visible .folder-picker{
+  transition: transform $transition-length ease-out;
+}

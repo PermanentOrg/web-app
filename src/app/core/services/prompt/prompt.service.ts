@@ -32,9 +32,7 @@ export interface PromptConfig {
   doneReject?: Function;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PromptService {
   private component: PromptComponent;
 
