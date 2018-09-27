@@ -60,7 +60,7 @@ describe('Login/Signup Flow', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  fit('should log in', () => {
+  it('should log in', () => {
     page.navigateTo();
     waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
@@ -155,7 +155,7 @@ describe('File Navigation Flow', () => {
   });
 });
 
-fdescribe('Apps Flow', () => {
+describe('Apps Flow', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -173,7 +173,35 @@ fdescribe('Apps Flow', () => {
     const viewFilesButton = connectorBlock.element(by.css('.view-files'));
     expect(viewFilesButton.isPresent()).toBeTruthy();
   });
+});
 
+describe('Shares Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should load Shared By Me', () => {
+    page.goToSharedByMe();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const breadcrumb = element(by.css('.breadcrumb .current'));
+    browser.wait(ExpectedConditions.presenceOf(breadcrumb));
+    waitForUpdate();
+    expect(breadcrumb.getText()).toContain('Shared By Me');
+  });
+
+  it('should load Shared With Me', () => {
+    page.goToSharedWithMe();
+    browser.waitForAngularEnabled(false);
+    waitForUpdate();
+    const breadcrumb = element(by.css('.breadcrumb .current'));
+    browser.wait(ExpectedConditions.presenceOf(breadcrumb));
+    waitForUpdate();
+    expect(breadcrumb.getText()).toContain('Shared With Me');
+  });
 });
 
 describe('Multiple Archives Flow', () => {

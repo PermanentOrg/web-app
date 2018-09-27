@@ -59,6 +59,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(DOCUMENT) private document: any
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
+
     this.dataService.setCurrentFolder(this.currentFolder);
 
     // create debounced scroll handler for placeholder loading

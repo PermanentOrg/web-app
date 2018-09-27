@@ -134,8 +134,15 @@
               "browserTarget": "mdot:build:production"
             },
             "hmr": {
+              "host": "local.permanent.org",
+              "ssl": true,
+              "hmr": true,
+              "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
+              "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",
-              "hmr": true
+              "deployUrl": "/m/",
+              "baseHref": "/m",
+              "proxyConfig": "proxy.conf.local.json"
             },
             "proxy": {
               "host": "local.permanent.org",

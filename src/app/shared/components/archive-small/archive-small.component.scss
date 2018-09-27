@@ -1,0 +1,40 @@
+@import 'variables';
+:host {
+  display: block;
+  cursor: pointer;
+}
+
+.archive {
+  display: flex;
+  align-items: center;
+}
+
+$thumb-size: 50px;
+
+.archive-thumb {
+  width: $thumb-size;
+  height: $thumb-size;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.archive-name {
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.clickable {
+    line-height: 1;
+  }
+}
+
+.archive-current {
+  font-weight: 400;
+}
+
+.archive-switch {
+  font-weight: 400;
+  font-size: 12px;
+}

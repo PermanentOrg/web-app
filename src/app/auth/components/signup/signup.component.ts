@@ -2,12 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import APP_CONFIG from '@root/app/app.config';
+
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 
-const MIN_PASSWORD_LENGTH = 10;
+const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+
+export const FORM_ERROR_MESSAGES = {
+  invitation: {
+    required: 'Invitation code required'
+  },
+  name: {
+    required: 'Name required'
+  },
+  email: {
+    email: 'Invalid email address',
+    required: 'Email required'
+  },
+  passwords: {
+    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters`,
+    required: 'Password required',
+    mismatch: 'Passwords must match'
+  }
+};
 
 @Component({
   selector: 'pr-signup',
@@ -18,12 +38,11 @@ const MIN_PASSWORD_LENGTH = 10;
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   waiting: boolean;
-  formErrors = {
+  formErrors: any = {
     name: false,
     invitation: false,
     email: false,
-    password: false,
-    confirm: false
+    passwords: false,
   };
 
   constructor(
@@ -59,13 +78,28 @@ export class SignupComponent implements OnInit {
       }, { validator: [Validators.required, this.matchValidator] }),
       agreed: ['', [Validators.required]],
       optIn: [true]
-    });
+    }, { updateOn: 'blur' });
+
+    this.signupForm.statusChanges.subscribe(() => this.setErrorMessages());
   }
 
   ngOnInit() {
   }
 
   matchValidator(group: FormGroup) {
+    let errors: any;
+
+    if (!group.controls['password'].value) {
+      errors = { required: true };
+      group.controls['confirm'].setErrors(errors);
+      return errors;
+    }
+
+    if (group.controls['password'].errors && group.controls['password'].errors.minlength) {
+      errors = { minlength: true};
+      return errors;
+    }
+
     const match = group.controls['password'].value === group.controls['confirm'].value;
 
     if (match && group.value.confirm) {
@@ -73,7 +107,7 @@ export class SignupComponent implements OnInit {
       return null;
     }
 
-    const errors = { mismatch: true };
+    errors = { mismatch: true };
     group.controls['confirm'].setErrors(errors);
 
     return errors;
@@ -102,6 +136,25 @@ export class SignupComponent implements OnInit {
         this.message.showError(response.getMessage(), true);
         this.waiting = false;
       });
+  }
+
+  setErrorMessages() {
+    if (this.signupForm.valid) {
+      this.formErrors = {};
+      return;
+    }
+
+    for (const controlName in this.signupForm.controls) {
+      if (this.signupForm.get(controlName) ) {
+        const control = this.signupForm.get(controlName);
+        if (control.touched && control.errors) {
+          const errorName = Object.keys(control.errors).pop();
+          this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
+        } else {
+          this.formErrors[controlName] = null;
+        }
+      }
+    }
   }
 
 }

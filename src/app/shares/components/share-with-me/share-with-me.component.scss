@@ -1,0 +1,11 @@
+@import 'variables';
+
+:host {
+  display: block;
+  padding-top: 34px;
+}
+
+.shares-empty-message {
+  text-align: center;
+  padding: 20px 0px;
+}

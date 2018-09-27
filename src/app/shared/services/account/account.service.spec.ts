@@ -12,17 +12,18 @@ import { AccountVO, ArchiveVO } from '@root/app/models';
 import { environment } from '@root/environments/environment';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AccountService', () => {
   let httpMock: HttpTestingController;
   let service: AccountService;
   let storageService: StorageService;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       providers: [
         CookieService,

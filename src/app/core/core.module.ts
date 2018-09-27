@@ -17,7 +17,6 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { PromptComponent } from './components/prompt/prompt.component';
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
-import { ArchiveSmallComponent } from './components/archive-small/archive-small.component';
 
 @NgModule({
   imports: [
@@ -35,7 +34,6 @@ import { ArchiveSmallComponent } from './components/archive-small/archive-small.
     UploadButtonComponent,
     PromptComponent,
     ArchiveSelectorComponent,
-    ArchiveSmallComponent,
   ],
   providers: [
     DataService,

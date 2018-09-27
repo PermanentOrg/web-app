@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import APP_CONFIG from '@root/app/app.config';
+
 import * as FormUtilities from '@shared/utilities/forms';
 
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 
-const MIN_PASSWORD_LENGTH = 10;
+const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 @Component({
   selector: 'pr-login',

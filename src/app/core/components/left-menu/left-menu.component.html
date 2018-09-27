@@ -1,13 +1,19 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
     <div class="menu-header">
-      <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']"></pr-archive-small>
+      <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
     <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
       My Files
     </a>
     <a class="menu-item" [routerLink]="['/apps']" routerLinkActive="active">
       Apps
+    </a>
+    <a class="menu-item" [routerLink]="['/shares/byme']" routerLinkActive="active">
+      Shared By Me
+    </a>
+    <a class="menu-item" [routerLink]="['/shares/withme']" routerLinkActive="active">
+      Shared With Me
     </a>
     <a class="menu-item" (click)='logOut()'>
       Log Out

@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { cloneDeep  } from 'lodash';
 
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { AccountService } from '@shared/services/account/account.service';
@@ -11,7 +12,7 @@ xdescribe('LeftMenuComponent', () => {
   let accountService: AccountService;
 
   beforeEach(async(() => {
-    const config = Testing.BASE_TEST_CONFIG;
+    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(LeftMenuComponent);
 
     TestBed.configureTestingModule(config).compileComponents();

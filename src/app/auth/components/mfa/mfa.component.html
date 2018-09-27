@@ -11,6 +11,6 @@
   </p>
   <input type="tel" class="form-control" id="token" placeholder="Code"
     [formControl]="mfaForm.controls['token']"
-    autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false">
   <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify Access</button>
 </form>

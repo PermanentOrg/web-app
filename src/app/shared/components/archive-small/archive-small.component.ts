@@ -10,6 +10,8 @@ import { AccountService } from '@shared/services/account/account.service';
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() archive: ArchiveVO;
+  @Input() clickable: boolean;
+
   public isCurrent = false;
 
   constructor(private account: AccountService) { }
