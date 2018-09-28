@@ -48,49 +48,10 @@ fdescribe('FolderPickerComponent', () => {
     expect(component.currentFolder).toBeFalsy();
   });
 
-  it('should initialize a folder and strip out any child records', () => {
-    const myFiles = new FolderVO({
-      folder_linkId: 158329
-    });
-
-    const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
-
-    component.setFolder(myFiles)
-      .then(() => {
-        expect(component.currentFolder).toBeTruthy();
-        expect(component.currentFolder.folder_linkId).toEqual(myFiles.folder_linkId);
-        expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
-      });
-
-    const navigateReq = httpMock.match(`${environment.apiUrl}/folder/navigateMin`)[0];
-    navigateReq.flush(navigateMinExpected);
-  });
-
-  it('should fetch data for folders in an initialized folder', () => {
-    const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
-    const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
-    const myFiles = new FolderResponse(navigateMinExpected).getFolderVO(true);
-
-    remove(myFiles.ChildItemVOs, 'isRecord');
-    component.currentFolder = myFiles;
-
-    component.loadCurrentFolderChildData()
-      .then(() => {
-        expect(component.currentFolder).toBeTruthy();
-        expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
-        expect(some(component.currentFolder.ChildItemVOs as FolderVO[], (childFolder: FolderVO) => {
-          return childFolder.dataStatus === DataStatus.Placeholder;
-        })).toBeFalsy();
-      });
-
-    const getLeanReq = httpMock.match(`${environment.apiUrl}/folder/getLeanItems`)[0];
-    getLeanReq.flush(getLeanItemsExpected);
-  });
-
-  fit('test spy on repo instead of http mock', async () => {
+  fit('should initialize a folder, strip out records, and load lean child folders', async () => {
+    const api = TestBed.get(ApiService) as ApiService;
     const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
     const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
-    const api = TestBed.get(ApiService) as ApiService;
 
     spyOn(api.folder, 'navigate').and.returnValue(of(new FolderResponse(navigateMinExpected)));
 
@@ -100,5 +61,16 @@ fdescribe('FolderPickerComponent', () => {
     expect(component.currentFolder).toBeTruthy();
     expect(component.currentFolder.folder_linkId).toEqual(myFiles.folder_linkId);
     expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
+
+    const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
+    spyOn(api.folder, 'getLeanItems').and.returnValue(of(new FolderResponse(getLeanItemsExpected)));
+
+    await component.loadCurrentFolderChildData();
+
+    expect(component.currentFolder).toBeTruthy();
+    expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
+    expect(some(component.currentFolder.ChildItemVOs as FolderVO[], (childFolder: FolderVO) => {
+      return childFolder.dataStatus === DataStatus.Placeholder;
+    })).toBeFalsy();
   });
 });
