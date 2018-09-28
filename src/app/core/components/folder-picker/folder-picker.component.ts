@@ -46,6 +46,13 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     return this.chooseFolderDeferred.promise;
   }
 
+  navigate(folder: FolderVO, evt: Event) {
+    this.setFolder(folder);
+    evt.stopPropagation();
+    evt.preventDefault();
+    return false;
+  }
+
   setFolder(folder: FolderVO) {
     this.waiting = true;
     return this.api.folder.navigate(folder).toPromise()

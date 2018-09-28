@@ -1,17 +1,17 @@
-<div class="menu-wrapper" [ngClass]="{'visible': visible}">
-  <div class="menu folder-picker" (click)="chooseFolder()">
+<div class="menu-wrapper" [ngClass]="{'visible': visible}" (click)="hide()">
+  <div class="menu folder-picker">
     <div class="picker-header">Choose a folder</div>
     <div class="picker-contents" *ngIf="!currentFolder">
       <em>Loading folder</em>
     </div>
-    <div class="picker-contents" *ngIf="currentFolder">
-      <div class="picker-row" *ngFor="let folder of currentFolder.ChildItemVOs">
+    <div class="picker-contents" *ngIf="currentFolder" [ngClass]="{'navigating': waiting}">
+      <div class="picker-row" *ngFor="let folder of currentFolder.ChildItemVOs" (click)="navigate(folder, $event)">
           <div prBgImage [bgSrc]="folder.thumbURL200"></div>
         <div class="name">{{folder.displayName}}</div>
       </div>
     </div>
     <div class="picker-footer">
-      <button class="btn btn-primary">Use folder</button>
+      <button class="btn btn-primary" (click)="chooseFolder()">Use folder</button>
     </div>
   </div>
 </div>

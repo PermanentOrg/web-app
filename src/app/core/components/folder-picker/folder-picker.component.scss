@@ -27,6 +27,11 @@ $row-height: 40px;
   overflow-y: auto;
   position: relative;
   z-index: 0;
+
+  &.navigating {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 .picker-header, .picker-footer {
