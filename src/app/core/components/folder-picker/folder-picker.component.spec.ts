@@ -12,6 +12,7 @@ import { FolderVO } from '@root/app/models';
 import { HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
+import { of } from 'rxjs';
 
 fdescribe('FolderPickerComponent', () => {
   let component: FolderPickerComponent;
@@ -84,6 +85,20 @@ fdescribe('FolderPickerComponent', () => {
 
     const getLeanReq = httpMock.match(`${environment.apiUrl}/folder/getLeanItems`)[0];
     getLeanReq.flush(getLeanItemsExpected);
+  });
 
+  fit('test spy on repo instead of http mock', async () => {
+    const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
+    const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
+    const api = TestBed.get(ApiService) as ApiService;
+
+    spyOn(api.folder, 'navigate').and.returnValue(of(new FolderResponse(navigateMinExpected)));
+
+    await component.setFolder(myFiles);
+
+    expect(api.folder.navigate).toHaveBeenCalledTimes(1);
+    expect(component.currentFolder).toBeTruthy();
+    expect(component.currentFolder.folder_linkId).toEqual(myFiles.folder_linkId);
+    expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
   });
 });
