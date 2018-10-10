@@ -3,7 +3,7 @@
     <div class="prompt-title" *ngIf="title">{{title}}</div>
     <form [formGroup]="editForm" (ngSubmit)="save($event)" *ngIf="editForm">
       <div class="input-group-vertical">
-        <pr-form-input type="Text" [fieldName]="field.fieldName" [placeholder]="field.placeholder" [control]="editForm.controls[field.fieldName]" [config]="field.config"
+        <pr-form-input [type]="field.type || 'text'" [fieldName]="field.fieldName" [placeholder]="field.placeholder" [control]="editForm.controls[field.fieldName]" [config]="field.config"
           *ngFor="let field of fields"></pr-form-input>
       </div>
       <div class="prompt-field-buttons">
