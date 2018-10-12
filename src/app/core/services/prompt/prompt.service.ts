@@ -9,6 +9,7 @@ export interface PromptField {
   fieldName: string;
   placeholder: string;
   initialValue?: any;
+  type ?: string;
   config ?: FormInputConfig;
   validators ?: ValidationErrors[];
 }
@@ -21,8 +22,9 @@ export interface PromptButton {
 }
 
 export interface PromptConfig {
-  form: FormGroup;
-  fields: PromptField[];
+  form?: FormGroup;
+  fields?: PromptField[];
+  buttons?: PromptButton[];
   title: string;
   savePromise?: Promise<any>;
   saveText?: string;

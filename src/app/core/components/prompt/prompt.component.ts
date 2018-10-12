@@ -150,23 +150,62 @@ export class PromptComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>) {
+  promptButtons(
+    buttons: PromptButton[],
+    title: string,
+    savePromise?: Promise<any>,
+    donePromise?: Promise<any>,
+    doneResolve?: Function,
+    doneReject?: Function
+  ) {
     if (this.donePromise) {
-      throw new Error('Prompt in progress');
+      let newDoneReject, newDoneResolve;
+
+      const newDonePromise = new Promise((resolve, reject) => {
+        newDoneResolve = resolve;
+        newDoneReject = reject;
+      });
+
+      this.promptQueue.push({
+        buttons: buttons,
+        title: title,
+        savePromise: savePromise,
+        donePromise: newDonePromise,
+        doneResolve: newDoneResolve,
+        doneReject: newDoneReject
+      });
+
+      return newDonePromise;
     }
 
     this.editButtons = buttons;
     this.title = title;
     this.savePromise = savePromise;
 
-    this.donePromise = new Promise((resolve, reject) => {
-      this.doneResolve = resolve;
-      this.doneReject = reject;
-    });
+    if (!donePromise) {
+      this.donePromise = new Promise((resolve, reject) => {
+        this.doneResolve = resolve;
+        this.doneReject = reject;
+      });
+    } else {
+      this.donePromise = donePromise;
+      this.doneResolve = doneResolve;
+      this.doneReject = doneReject;
+    }
 
     this.isVisible = true;
 
-    return this.donePromise;
+    return this.donePromise
+      .then((result) => {
+        if (!savePromise) {
+          this.reset();
+        } else {
+          savePromise.then(() => {
+            this.reset();
+          });
+        }
+        return Promise.resolve(result);
+      });
   }
 
   clickButton(button: PromptButton, event: Event) {
@@ -199,17 +238,28 @@ export class PromptComponent implements OnInit, OnDestroy {
 
     if (this.promptQueue.length) {
       const next = this.promptQueue.shift();
-      this.prompt(
-        next.form,
-        next.fields,
-        next.title,
-        next.savePromise,
-        next.saveText,
-        next.cancelText,
-        next.donePromise,
-        next.doneResolve,
-        next.doneReject
-      );
+      if (next.fields) {
+        this.prompt(
+          next.form,
+          next.fields,
+          next.title,
+          next.savePromise,
+          next.saveText,
+          next.cancelText,
+          next.donePromise,
+          next.doneResolve,
+          next.doneReject
+        );
+      } else if (next.buttons) {
+        this.promptButtons(
+          next.buttons,
+          next.title,
+          next.savePromise,
+          next.donePromise,
+          next.doneResolve,
+          next.doneReject
+        );
+      }
     }
   }
 }
