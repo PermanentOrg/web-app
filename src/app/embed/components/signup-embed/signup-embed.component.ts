@@ -60,7 +60,7 @@ export class SignupEmbedComponent implements OnInit {
   ngOnInit() {
     const currentAccount = this.accountService.getAccount();
     if (currentAccount && currentAccount.primaryEmail) {
-      this.router.navigate(['/embed', 'done'], {queryParams: { existing: true }});
+      this.router.navigate(['/embed', 'done'], {queryParams: { existing: true, inviteCode: this.inviteCode }});
     }
   }
 
@@ -77,7 +77,7 @@ export class SignupEmbedComponent implements OnInit {
         } else {
           this.accountService.logIn(formValue.email, formValue.passwords.password, true, true)
           .then(() => {
-            this.router.navigate(['/embed', 'done']);
+            this.router.navigate(['/embed', 'done'], {queryParams: { inviteCode: this.inviteCode }});
           });
         }
       })
