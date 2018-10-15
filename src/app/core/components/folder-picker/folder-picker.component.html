@@ -1,6 +1,8 @@
 <div class="menu-wrapper" [ngClass]="{'visible': visible}" (click)="hide()">
   <div class="menu folder-picker">
-    <div class="picker-header">Choose a folder</div>
+    <div class="picker-header">
+      Choose a folder
+    </div>
     <div class="picker-contents" *ngIf="!currentFolder">
       <em>Loading folder</em>
     </div>
@@ -9,9 +11,12 @@
           <div prBgImage [bgSrc]="folder.thumbURL200"></div>
         <div class="name">{{folder.displayName}}</div>
       </div>
+      <div class="picker-empty" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
+        No subfolders
+      </div>
     </div>
     <div class="picker-footer">
-      <button class="btn btn-primary" (click)="chooseFolder()">Use folder</button>
+      <button class="btn btn-primary" (click)="chooseFolder()">Use this folder</button>
     </div>
   </div>
 </div>

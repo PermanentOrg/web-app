@@ -34,6 +34,11 @@ $row-height: 40px;
   }
 }
 
+.picker-empty {
+  text-align: center;
+  padding-top: 10px;
+}
+
 .picker-header, .picker-footer {
   box-shadow: $box-shadow-sm;
 }
