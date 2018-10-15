@@ -119,6 +119,10 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
             value: 'type.archive.person'
           },
           {
+            text: 'Family',
+            value: 'type.archive.family'
+          },
+          {
             text: 'Organization',
             value: 'type.archive.organization'
           }
