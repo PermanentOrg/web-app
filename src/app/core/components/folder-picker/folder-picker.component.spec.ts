@@ -14,7 +14,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { DataStatus } from '@models/data-status.enum';
 import { of } from 'rxjs';
 
-fdescribe('FolderPickerComponent', () => {
+describe('FolderPickerComponent', () => {
   let component: FolderPickerComponent;
   let fixture: ComponentFixture<FolderPickerComponent>;
   let httpMock: HttpTestingController;
@@ -48,7 +48,7 @@ fdescribe('FolderPickerComponent', () => {
     expect(component.currentFolder).toBeFalsy();
   });
 
-  fit('should initialize a folder, strip out records, and load lean child folders', async () => {
+  it('should initialize a folder, strip out records, and load lean child folders', async () => {
     const api = TestBed.get(ApiService) as ApiService;
     const navigateMinExpected = require('@root/test/responses/folder.navigateMin.myFiles.success.json');
     const myFiles = new FolderResponse(navigateMinExpected).getFolderVO();
