@@ -1,5 +1,10 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+
+export interface FormInputSelectOption {
+  text: string;
+  value: string;
+}
 
 export interface FormInputConfig {
   autocorrect?: string;
@@ -14,18 +19,19 @@ export interface FormInputConfig {
   styleUrls: ['./form-input.component.scss'],
   host: {'class': 'input-vertical'}
 })
-export class FormInputComponent implements OnInit {
+export class FormInputComponent implements AfterViewInit {
   @Input() type = 'text';
   @Input() fieldName: string;
   @Input() placeholder: string;
   @Input() control: FormControl;
   @Input() errors: string;
+  @Input() selectOptions: FormInputSelectOption[];
 
   @Input() config: FormInputConfig;
 
   constructor(private element: ElementRef) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     const inputField = this.element.nativeElement.querySelector('input');
     if (this.config) {
       if (this.config.autocorrect) {
