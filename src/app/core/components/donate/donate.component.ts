@@ -10,7 +10,6 @@ enum DonationStage {
   Confirm,
   Complete
 }
-
 @Component({
   selector: 'pr-donate',
   templateUrl: './donate.component.html',
@@ -19,6 +18,7 @@ enum DonationStage {
 export class DonateComponent implements OnInit {
   public donationStage: DonationStage = DonationStage.Storage;
   public donationForm: FormGroup;
+  public storageOptions = [1, 3, 5, 10, 25];
 
   constructor(
     fb: FormBuilder,
@@ -34,8 +34,8 @@ export class DonateComponent implements OnInit {
   ngOnInit() {
   }
 
-  setStorageAmount(amount: string) {
-    this.donationForm.controls['storageAmount'].setValue(amount);
+  setStorageAmount(amount: string | Number ) {
+    this.donationForm.controls['storageAmount'].setValue(amount.toString());
     console.log(this.donationForm.value);
   }
 

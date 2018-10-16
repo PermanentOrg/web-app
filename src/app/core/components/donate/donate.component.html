@@ -4,35 +4,15 @@
   </div>
   <input type="num" id="storageAmount" [formControlName]="'storageAmount'" hidden>
   <div class="donate-options">
-    <div class="donate-option" (click)="setStorageAmount('1')">
-      <div class="donate-option-content">
-      1 GB
-      </div>
+    <div class="donate-option" *ngFor="let amount of storageOptions;">
+      <button class="btn btn-primary donate-option-content" (click)="setStorageAmount(amount)" [ngClass]="{'active': donationForm.value.storageAmount == amount}">
+      {{amount}} GB
+      </button>
     </div>
-    <div class="donate-option" (click)="setStorageAmount('3')">
-      <div class="donate-option-content">
-      3 GB
-      </div>
-    </div>
-    <div class="donate-option" (click)="setStorageAmount('5')">
-      <div class="donate-option-content">
-      5 GB
-      </div>
-    </div>
-    <div class="donate-option" (click)="setStorageAmount('10')">
-      <div class="donate-option-content">
-      10 GB
-      </div>
-    </div>
-    <div class="donate-option" (click)="setStorageAmount('25')">
-      <div class="donate-option-content">
-      25 GB
-      </div>
-    </div>
-    <div class="donate-option" (click)="setStorageAmount('custom')">
-      <div class="donate-option-content">
-      Custom
-      </div>
+    <div class="donate-option">
+      <button class="btn btn-primary donate-option-content" (click)="setStorageAmount('custom')">
+        <input type="text" class="form-control"> GB 
+      </button>
     </div>
   </div>
 </form>
