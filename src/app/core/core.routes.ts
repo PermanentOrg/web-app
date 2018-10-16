@@ -11,6 +11,7 @@ import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
 import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
+import { DonateComponent } from './components/donate/donate.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -31,6 +32,11 @@ export const routes: Routes = [
         component: ArchiveSelectorComponent,
         data: { title: 'Choose Archive'},
         resolve: { archives: ArchivesResolveService }
+      },
+      {
+        path: 'donate',
+        component: DonateComponent,
+        data: { title: 'Add Storage'},
       },
       { path: '**', redirectTo: 'myfiles'}
     ]
