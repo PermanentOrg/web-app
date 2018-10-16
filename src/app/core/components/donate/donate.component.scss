@@ -8,12 +8,14 @@
 .donate-options {
   display: flex;
   flex-wrap: wrap;
-  padding-top: 10px;
+  padding-top: 0px;
+  margin-left: -5px;
+  margin-right: -5px;
 }
 
 .donate-option {
   flex: 0 0 50%;
-  padding: 20px 10px;
+  padding: 10px 5px;
   padding-top: 0;
   text-align: center;
   color: white;
@@ -22,6 +24,7 @@
     padding: 1rem;
     margin: 0;
     height: 5rem;
+    font-weight: 600;
 
     input {
       max-width: 100%;

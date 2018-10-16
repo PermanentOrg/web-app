@@ -11,8 +11,10 @@
     </div>
     <div class="donate-option">
       <button class="btn btn-primary donate-option-content" (click)="setStorageAmount('custom')">
-        <input type="text" class="form-control"> GB 
+        <input type="number" class="form-control" [formControlName]="'customAmount'"> GB 
       </button>
     </div>
+  </div>
+  <div class="donate-storage-total">
   </div>
 </form>

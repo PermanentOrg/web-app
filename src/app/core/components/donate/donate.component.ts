@@ -19,6 +19,7 @@ export class DonateComponent implements OnInit {
   public donationStage: DonationStage = DonationStage.Storage;
   public donationForm: FormGroup;
   public storageOptions = [1, 3, 5, 10, 25];
+  public storageAmount: number;
 
   constructor(
     fb: FormBuilder,
@@ -36,7 +37,13 @@ export class DonateComponent implements OnInit {
 
   setStorageAmount(amount: string | Number ) {
     this.donationForm.controls['storageAmount'].setValue(amount.toString());
-    console.log(this.donationForm.value);
+    if (amount !== 'custom') {
+      this.storageAmount = Number(amount);
+    } else {
+      if (!this.donationForm.value.customAmount) {
+        this.donationForm.controls['customAmount'].setValue(this.storageAmount || 10);
+      }
+    }
   }
 
 }
