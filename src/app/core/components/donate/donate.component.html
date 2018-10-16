@@ -1,6 +1,38 @@
-<form action="" *ngIf="donationStage === 0">
-  <div class="donation-header">One-Time Storage Fee</div>
-  <div class="donation-header">Make It Permanent</div>
-  <div class="donation-header">Byte for Byte Match</div>
-  <div class="donation-header">Payment Options</div>
+<form [formGroup]="donationForm" *ngIf="donationStage <= 2">
+  <div class="donate-step-header">
+    Storage Amount
+  </div>
+  <input type="num" id="storageAmount" [formControlName]="'storageAmount'" hidden>
+  <div class="donate-options">
+    <div class="donate-option" (click)="setStorageAmount('1')">
+      <div class="donate-option-content">
+      1 GB
+      </div>
+    </div>
+    <div class="donate-option" (click)="setStorageAmount('3')">
+      <div class="donate-option-content">
+      3 GB
+      </div>
+    </div>
+    <div class="donate-option" (click)="setStorageAmount('5')">
+      <div class="donate-option-content">
+      5 GB
+      </div>
+    </div>
+    <div class="donate-option" (click)="setStorageAmount('10')">
+      <div class="donate-option-content">
+      10 GB
+      </div>
+    </div>
+    <div class="donate-option" (click)="setStorageAmount('25')">
+      <div class="donate-option-content">
+      25 GB
+      </div>
+    </div>
+    <div class="donate-option" (click)="setStorageAmount('custom')">
+      <div class="donate-option-content">
+      Custom
+      </div>
+    </div>
+  </div>
 </form>
