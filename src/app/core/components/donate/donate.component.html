@@ -1,20 +1,37 @@
 <form [formGroup]="donationForm" *ngIf="donationStage <= 2">
-  <div class="donate-step-header">
-    Storage Amount
-  </div>
-  <input type="num" id="storageAmount" [formControlName]="'storageAmount'" hidden>
-  <div class="donate-options">
-    <div class="donate-option" *ngFor="let amount of storageOptions;">
-      <button class="btn btn-primary donate-option-content" (click)="setStorageAmount(amount)" [ngClass]="{'active': donationForm.value.storageAmount == amount}">
-      {{amount}} GB
-      </button>
+  <div [hidden]="donationStage !== 0">
+    <div class="donate-step-header">
+      Choose storage amount
     </div>
-    <div class="donate-option">
-      <button class="btn btn-primary donate-option-content" (click)="setStorageAmount('custom')">
-        <input type="number" class="form-control" [formControlName]="'customAmount'"> GB 
-      </button>
+    <input type="num" id="storageAmount" formControlName="storageAmount" hidden>
+    <div class="donate-options">
+      <div class="donate-option" *ngFor="let amount of storageOptions;">
+        <button class="btn btn-primary donate-option-content" (click)="setStorageAmount(amount)" [ngClass]="{'active': donationForm.value.storageAmount == amount}">
+        {{amount}} GB
+        </button>
+      </div>
+      <div class="donate-option">
+        <button class="btn btn-primary donate-option-content" (click)="setStorageAmount('custom')">
+          <input #customStorageAmount type="number" class="form-control" formControlName="customStorageAmount" min="1"> GB 
+        </button>
+      </div>
     </div>
   </div>
-  <div class="donate-storage-total">
+  <div class="donate-details">
+    <div class="donate-line-item">
+      <div class="donate-item-name">{{storageAmount}} GB storage</div>
+      <div class="donate-item-cost">{{pricePerGb * storageAmount | currency}}</div>
+    </div>
+    <div class="donate-line-item donate-total">
+      <div class="donate-item-name">
+        Total donation
+      </div>
+      <div class="donate-item-cost">
+        {{getTotalDonation() | currency}}
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount">
+      Continue
+    </button>
   </div>
 </form>
