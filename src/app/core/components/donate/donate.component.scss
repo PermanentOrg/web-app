@@ -29,16 +29,24 @@
     input {
       max-width: 100%;
       width: 3.5rem;
-      margin-right: 0.15rem;
+      margin: 0 0.15rem;
       text-align: right;
       display: inline-block;
       padding: 0.2rem;
     }
+
+    &.btn-secondary {
+      font-weight: 400;
+    }
   }
 }
 
+.donate-option:last-child:nth-child(odd), .donate-options.full-width .donate-option {
+  flex: 0 0 100%;
+}
+
 .donate-details {
-  // margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .donate-line-item {

@@ -110,8 +110,12 @@ export class DonateComponent {
     }
   }
 
+  setByteForByte(byteForByte) {
+    this.byteForByte = byteForByte;
+  }
+
   getTotalDonation() {
-    return ((this.pricePerGb * this.storageAmount) * (this.byteForByte ? 2 : 1)) + (this.donationStage > 0 ? this.extraDonation : 0);
+    return (this.pricePerGb * this.storageAmount + (this.donationStage > 0 ? this.extraDonation : 0)) * (this.byteForByte ? 2 : 1);
   }
 
   nextStep() {
