@@ -17,10 +17,31 @@
       </div>
     </div>
   </div>
+  <div [hidden]="donationStage !== 1">
+    <div class="donate-step-header">
+      Make it Permanent
+    </div>
+    <div class="donate-options">
+      <div class="donate-option">
+        <button class="btn btn-primary donate-option-content" (click)="setExtraDonation('suggested')" [ngClass]="{'active': donationForm.value.extraDonation == 'suggested'}">
+          ${{storageAmount * pricePerGb}}
+        </button>
+      </div>
+      <div class="donate-option">
+        <button class="btn btn-primary donate-option-content" (click)="setExtraDonation('custom')" [ngClass]="{'active': donationForm.value.extraDonation == 'custom'}">
+          $<input #customDonationAmount type="number" class="form-control" formControlName="customExtraDonationAmount" min="1">
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="donate-details">
     <div class="donate-line-item">
       <div class="donate-item-name">{{storageAmount}} GB storage</div>
       <div class="donate-item-cost">{{pricePerGb * storageAmount | currency}}</div>
+    </div>
+    <div class="donate-line-item" [hidden]="donationStage < 1">
+      <div class="donate-item-name">Add'l donation</div>
+      <div class="donate-item-cost">{{extraDonation | currency}}</div>
     </div>
     <div class="donate-line-item donate-total">
       <div class="donate-item-name">

@@ -29,6 +29,9 @@ export class DonateComponent {
   public pricePerGb: number = APP_CONFIG.pricePerGb;
   @ViewChild('customStorageAmount') customStorageInput: ElementRef;
 
+  public extraDonation = APP_CONFIG.pricePerGb * DEFAULT_STORAGE_AMOUNT;
+  @ViewChild('customDonationAmount') customDonationInput: ElementRef;
+
   public byteForByte = false;
 
   constructor(
@@ -39,24 +42,46 @@ export class DonateComponent {
     this.donationForm = fb.group({
       storageAmount: [DEFAULT_STORAGE_AMOUNT, [Validators.required]],
       customStorageAmount: [''],
+      extraDonation: ['suggested', [Validators.required]],
+      customExtraDonationAmount: [''],
     });
 
     this.donationForm.controls['customStorageAmount'].valueChanges.subscribe((value) => {
-      // check for positive and whole number amounts
-      if (value < 1) {
-        return this.donationForm.controls['customStorageAmount'].setValue(1);
-      }
-      value = parseInt(value, 10);
+      this.checkCustomStorageAmount(value);
+    });
 
-      if (this.donationForm.value.storageAmount === 'custom') {
-        this.storageAmount = value;
-      }
-
-      this.donationForm.controls['customStorageAmount'].setValue(value, {emitEvent: false});
+    this.donationForm.controls['customExtraDonationAmount'].valueChanges.subscribe((value) => {
+      this.checkCustomDonationAmount(value);
     });
   }
 
-  setStorageAmount(amount: string | Number ) {
+  checkCustomStorageAmount(value) {
+    if (value < 1) {
+      return this.donationForm.controls['customStorageAmount'].setValue(1);
+    }
+    value = parseInt(value, 10);
+
+    if (this.donationForm.value.storageAmount === 'custom') {
+      this.storageAmount = value;
+    }
+
+    this.donationForm.controls['customStorageAmount'].setValue(value, {emitEvent: false});
+  }
+
+  checkCustomDonationAmount(value) {
+    if (value < 1) {
+      return this.donationForm.controls['customExtraDonationAmount'].setValue(1);
+    }
+    value = parseInt(value, 10);
+
+    if (this.donationForm.value.extraDonation === 'custom') {
+      this.extraDonation = value;
+    }
+
+    this.donationForm.controls['customExtraDonationAmount'].setValue(value, {emitEvent: false});
+  }
+
+  setStorageAmount(amount: string | Number) {
     this.donationForm.controls['storageAmount'].setValue(amount.toString());
     if (amount !== 'custom') {
       this.storageAmount = Number(amount);
@@ -67,10 +92,26 @@ export class DonateComponent {
       this.storageAmount = this.donationForm.value.customStorageAmount;
       this.customStorageInput.nativeElement.focus();
     }
+
+    this.extraDonation = this.storageAmount * this.pricePerGb;
+  }
+
+  setExtraDonation(amount: string) {
+    this.donationForm.controls['extraDonation'].setValue(amount);
+    if (amount === 'custom') {
+      this.customStorageInput.nativeElement.focus();
+      if (this.donationForm.value.customExtraDonationAmount !== this.storageAmount * this.pricePerGb) {
+        this.extraDonation = this.storageAmount * this.pricePerGb;
+      }
+    } else if (amount === 'suggested') {
+      this.extraDonation = this.storageAmount * this.pricePerGb;
+    } else {
+      this.extraDonation = 0;
+    }
   }
 
   getTotalDonation() {
-    return ((this.pricePerGb * this.storageAmount) * (this.byteForByte ? 2 : 1));
+    return ((this.pricePerGb * this.storageAmount) * (this.byteForByte ? 2 : 1)) + (this.donationStage > 0 ? this.extraDonation : 0);
   }
 
   nextStep() {
