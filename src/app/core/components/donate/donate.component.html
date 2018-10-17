@@ -1,4 +1,4 @@
-<form [formGroup]="donationForm" *ngIf="donationStage <= 2">
+<form [formGroup]="donationForm">
   <div [hidden]="donationStage !== 0">
     <div class="donate-step-header">
       1. One-time storage fee
@@ -42,7 +42,9 @@
     </div>
   </div>
   <div [hidden]="donationStage !== 2">
-    <div class="donate-step-header">Byte For Byte match</div>
+    <div class="donate-step-header">
+      3. Byte For Byte match
+    </div>
     <p>
       We believe that everyone has a legacy that is special and deserves to be preserved. We work with non-profit partner organizations to provide free storage to their communities. We call this program Byte for Byte.
     </p>
@@ -59,29 +61,36 @@
       </div>
     </div>
   </div>
-  <div class="donate-details">
-    <div class="donate-line-item">
-      <div class="donate-item-name">{{storageAmount}} GB storage</div>
-      <div class="donate-item-cost">{{pricePerGb * storageAmount | currency}}</div>
-    </div>
-    <div class="donate-line-item" [hidden]="donationStage < 1">
-      <div class="donate-item-name">Add'l donation</div>
-      <div class="donate-item-cost">{{extraDonation | currency}}</div>
-    </div>
-    <div class="donate-line-item" [hidden]="donationStage < 2">
-      <div class="donate-item-name">Byte For Byte match</div>
-      <div class="donate-item-cost">{{(byteForByte ? pricePerGb * storageAmount + extraDonation : 0) | currency}}</div>
-    </div>
-    <div class="donate-line-item donate-total">
-      <div class="donate-item-name">
-        Total donation
-      </div>
-      <div class="donate-item-cost">
-        {{getTotalDonation() | currency}}
-      </div>
-    </div>
-    <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount">
-      Continue
-    </button>
+  <div [hidden]="donationStage !== 3">
+    <div class="donate-step-header">4. Payment method</div>
+    <select class="form-control" [hidden]="!cards.length">
+      <option *ngFor="let card of cards; let i = index;" [value]="i">{{card.nickname}}</option>
+    </select>
+    <button class="btn btn-primary" type="button">Add card</button>
   </div>
 </form>
+<div class="donate-details">
+  <div class="donate-line-item">
+    <div class="donate-item-name">{{storageAmount}} GB storage</div>
+    <div class="donate-item-cost">{{pricePerGb * storageAmount | currency}}</div>
+  </div>
+  <div class="donate-line-item" [hidden]="donationStage < 1">
+    <div class="donate-item-name">Add'l donation</div>
+    <div class="donate-item-cost">{{extraDonation | currency}}</div>
+  </div>
+  <div class="donate-line-item" [hidden]="donationStage < 2">
+    <div class="donate-item-name">Byte For Byte match</div>
+    <div class="donate-item-cost">{{(byteForByte ? pricePerGb * storageAmount + extraDonation : 0) | currency}}</div>
+  </div>
+  <div class="donate-line-item donate-total">
+    <div class="donate-item-name">
+      Total donation
+    </div>
+    <div class="donate-item-cost">
+      {{getTotalDonation() | currency}}
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount || (donationStage > 2 && !selectedCard)">
+    {{donationStage < 4 ? 'Continue' : 'Confirm donation'}}
+  </button>
+</div>

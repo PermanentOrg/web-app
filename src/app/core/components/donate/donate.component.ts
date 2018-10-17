@@ -1,9 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { find } from 'lodash';
+
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 
+import { BillingCardVO } from '@models/billing-card-vo';
+
 import APP_CONFIG from '@root/app/app.config';
+import { ActivatedRoute } from '@angular/router';
 
 const DEFAULT_STORAGE_AMOUNT = 3;
 
@@ -11,6 +16,7 @@ enum DonationStage {
   Storage,
   Permanent,
   ByteForByte,
+  Payment,
   Confirm,
   Complete
 }
@@ -21,8 +27,10 @@ enum DonationStage {
   styleUrls: ['./donate.component.scss']
 })
 export class DonateComponent {
-  public donationStage: DonationStage = DonationStage.Storage;
+  public donationStage: DonationStage = DonationStage.Payment;
   public donationForm: FormGroup;
+  public cards: BillingCardVO[];
+  public selectedCard: BillingCardVO = null;
 
   public storageOptions = [1, 3, 5, 10, 25];
   public storageAmount = DEFAULT_STORAGE_AMOUNT;
@@ -35,10 +43,17 @@ export class DonateComponent {
   public byteForByte = false;
 
   constructor(
+    route: ActivatedRoute,
     fb: FormBuilder,
     api: ApiService,
     accountService: AccountService
   ) {
+    this.cards = route.snapshot.data.cards || [];
+
+    if (this.cards.length) {
+      this.selectedCard = find(this.cards, 'isDefault') as BillingCardVO;
+    }
+
     this.donationForm = fb.group({
       storageAmount: [DEFAULT_STORAGE_AMOUNT, [Validators.required]],
       customStorageAmount: [''],

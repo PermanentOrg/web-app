@@ -8,9 +8,11 @@ import { AuthGuard } from '@core/guards/auth.guard';
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
+import { DonateResolveService} from '@core/resolves/donate-resolve.service';
+
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
-import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
 import { DonateComponent } from './components/donate/donate.component';
 
 const rootFolderResolve = {
@@ -37,6 +39,7 @@ export const routes: Routes = [
         path: 'donate',
         component: DonateComponent,
         data: { title: 'Add Storage'},
+        resolve: { cards: DonateResolveService }
       },
       { path: '**', redirectTo: 'myfiles'}
     ]
@@ -54,7 +57,8 @@ export const routes: Routes = [
     FolderResolveService,
     RootFolderResolveService,
     RecordResolveService,
-    ArchivesResolveService
+    ArchivesResolveService,
+    DonateResolveService
   ],
   declarations: []
 })
