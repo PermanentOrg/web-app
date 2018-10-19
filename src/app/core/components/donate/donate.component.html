@@ -66,7 +66,7 @@
     <select class="form-control" [hidden]="!cards.length">
       <option *ngFor="let card of cards; let i = index;" [value]="i">{{card.nickname}}</option>
     </select>
-    <button class="btn btn-primary" type="button">Add card</button>
+    <button class="btn btn-primary" type="button" (click)="addCard()">Add card</button>
   </div>
 </form>
 <div class="donate-details">

@@ -2,9 +2,9 @@
   {{placeholder}}
 </div>
 <input *ngIf="type !== 'select'" [type]="type" class="form-control"
-  [id]="fieldName" [placeholder]="placeholder" [formControl]="control">
+  [id]="fieldName" [name]="fieldName" [placeholder]="placeholder" [formControl]="control">
 <select *ngIf="type === 'select'" class="form-control input-vertical" [ngClass]="{'placeholder': !control.value }"
-  [id]="fieldName" [formControl]="control">
+  [id]="fieldName" [name]="fieldName" [formControl]="control">
   <option disabled selected hidden>
     {{placeholder}}
   </option>
