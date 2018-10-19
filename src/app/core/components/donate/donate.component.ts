@@ -10,6 +10,7 @@ import { BillingCardVO } from '@models/billing-card-vo';
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { BillingResponse } from '@shared/services/api/index.repo';
 
 const DEFAULT_STORAGE_AMOUNT = 3;
 
@@ -201,12 +202,12 @@ export class DonateComponent {
         })
       },
       {
-        fieldName: 'cardZip',
-        placeholder: 'Billing zip code',
-        type: 'tel',
+        fieldName: 'cardNickname',
+        placeholder: 'Card nickname',
+        type: 'text',
         validators: [Validators.required],
         config: {
-          autocomplete: 'postal-code',
+          autocomplete: 'off',
           autocorrect: 'off',
           autocapitalize: 'off'
         }
@@ -215,7 +216,23 @@ export class DonateComponent {
 
     this.promptService.prompt(fields, 'Add credit card')
       .then((value) => {
-        console.log(value);
+        const newCard = new BillingCardVO({
+          nickname: value.cardNickname,
+          creditCardNbr: value.cardNumber,
+          CVC: value.cardCvc,
+          expirationMonth: value.cardExpMonth,
+          expirationYear: value.cardExpYear
+        });
+
+        return this.api.billing.addCard(newCard);
+      })
+      .then((response: BillingResponse) => {
+        const newCard = response.getBillingCardVO();
+        this.cards.push(newCard);
+        this.selectedCard = newCard;
+        console.log(newCard);
+      })
+      .catch((response: BillingResponse) => {
       });
   }
 
