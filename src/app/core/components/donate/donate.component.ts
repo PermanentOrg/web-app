@@ -11,6 +11,7 @@ import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 import { BillingResponse } from '@shared/services/api/index.repo';
+import { MessageService } from '@shared/services/message/message.service';
 
 const DEFAULT_STORAGE_AMOUNT = 3;
 
@@ -49,7 +50,8 @@ export class DonateComponent {
     private fb: FormBuilder,
     private api: ApiService,
     private accountService: AccountService,
-    private promptService: PromptService
+    private promptService: PromptService,
+    private messageService: MessageService
   ) {
     this.cards = route.snapshot.data.cards || [];
 
@@ -144,6 +146,9 @@ export class DonateComponent {
     const expMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
+
+    let newCard: BillingCardVO;
+
     const fields: PromptField[] = [
       {
         fieldName: 'cardNumber',
@@ -216,7 +221,7 @@ export class DonateComponent {
 
     this.promptService.prompt(fields, 'Add credit card')
       .then((value) => {
-        const newCard = new BillingCardVO({
+        newCard = new BillingCardVO({
           nickname: value.cardNickname,
           creditCardNbr: value.cardNumber,
           CVC: value.cardCvc,
@@ -227,12 +232,12 @@ export class DonateComponent {
         return this.api.billing.addCard(newCard);
       })
       .then((response: BillingResponse) => {
-        const newCard = response.getBillingCardVO();
         this.cards.push(newCard);
         this.selectedCard = newCard;
         console.log(newCard);
       })
       .catch((response: BillingResponse) => {
+        this.messageService.showError(response.getMessage(), true);
       });
   }
 
