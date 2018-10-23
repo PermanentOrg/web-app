@@ -16,7 +16,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { CREDIT_CARD_FIELDS, ADDRESS_FIELDS } from '@core/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
 
-const DEFAULT_STORAGE_AMOUNT = 3;
+const DEFAULT_STORAGE_AMOUNT = 10;
 
 enum DonationStage {
   Storage,
