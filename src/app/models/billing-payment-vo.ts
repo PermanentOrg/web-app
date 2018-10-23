@@ -8,7 +8,7 @@ export class BillingPaymentVO extends BaseVO {
   public monetaryAmount: string;
   public receiptEmail: true;
   public refIdToIncrease: number;
-  public refTableToIncrease: 'account';
+  public refTableToIncrease = 'account';
   public spaceAmountInGb: number;
   public storageAmount: number;
 

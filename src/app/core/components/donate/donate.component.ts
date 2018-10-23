@@ -36,6 +36,7 @@ export class DonateComponent {
   public donationForm: FormGroup;
   public cards: BillingCardVO[];
   public currentAddress: any;
+  public waiting: boolean;
 
   public storageOptions = [1, 3, 5, 10, 25];
   public storageAmount = DEFAULT_STORAGE_AMOUNT;
@@ -215,7 +216,7 @@ export class DonateComponent {
     const account = this.accountService.getAccount();
     const card = formValue.paymentCard;
 
-    const spaceAmountInGb = Number(formValue.storageAmount === 'custom' ? formValue.customStorageAmount : formValue.storageAmount);
+    const spaceAmountInGb = Number(this.storageAmount);
     const storageAmount = spaceAmountInGb * this.pricePerGb;
 
     const donationAmount = Number(formValue.extraDonation === 'custom' ? formValue.customExtraDonationAmount : storageAmount);
@@ -231,12 +232,16 @@ export class DonateComponent {
       spaceAmountInGb: spaceAmountInGb
     });
 
+    this.waiting = true;
+
     this.api.billing.processPayment(card, payment)
       .then((response: BillingResponse) => {
+        this.waiting = false;
         this.messageService.showMessage('Donation successful', 'success');
-        console.log(response);
+        this.donationStage = DonationStage.Complete;
       })
       .catch((response: BillingResponse) => {
+        this.waiting = false;
         this.messageService.showError(response.getMessage(), true);
       });
   }
