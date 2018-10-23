@@ -6,4 +6,6 @@ export * from '@models/folder-vo';
 export *  from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { SimpleVO } from '@models/simple-vo';
+export { BillingCardVO } from '@models/billing-card-vo';
+export * from '@models/billing-payment-vo';
 export { ConnectorOverviewVO } from '@models/connector-overview-vo';

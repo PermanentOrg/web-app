@@ -5,8 +5,7 @@ import { find } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 
-import { BillingCardVO } from '@models/billing-card-vo';
-import { AccountVO } from '@models/account-vo';
+import { AccountVO, BillingCardVO, BillingPaymentVO, BillingPaymentVOData } from '@models/index';
 
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';
@@ -33,7 +32,7 @@ enum DonationStage {
   styleUrls: ['./donate.component.scss']
 })
 export class DonateComponent {
-  public donationStage: DonationStage = DonationStage.Payment;
+  public donationStage: DonationStage = DonationStage.Storage;
   public donationForm: FormGroup;
   public cards: BillingCardVO[];
   public currentAddress: any;
@@ -213,7 +212,33 @@ export class DonateComponent {
   }
 
   onSubmit(formValue: any) {
-    console.log('yeet', formValue);
+    const account = this.accountService.getAccount();
+    const card = formValue.paymentCard;
+
+    const spaceAmountInGb = Number(formValue.storageAmount === 'custom' ? formValue.customStorageAmount : formValue.storageAmount);
+    const storageAmount = spaceAmountInGb * this.pricePerGb;
+
+    const donationAmount = Number(formValue.extraDonation === 'custom' ? formValue.customExtraDonationAmount : storageAmount);
+    const donationMatchAmount = this.byteForByte ? donationAmount : 0;
+
+    const payment = new BillingPaymentVO({
+      accountIdThatPaid: account.accountId,
+      refIdToIncrease: account.accountId,
+      donationAmount: donationAmount,
+      donationMatchAmount: donationMatchAmount,
+      storageAmount: storageAmount,
+      monetaryAmount: this.getTotalDonation().toFixed(2),
+      spaceAmountInGb: spaceAmountInGb
+    });
+
+    this.api.billing.processPayment(card, payment)
+      .then((response: BillingResponse) => {
+        this.messageService.showMessage('Donation successful', 'success');
+        console.log(response);
+      })
+      .catch((response: BillingResponse) => {
+        this.messageService.showError(response.getMessage(), true);
+      });
   }
 
 }

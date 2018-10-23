@@ -1,6 +1,6 @@
 import { ArchiveVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { BillingCardVO } from '@models/billing-card-vo';
+import { BillingCardVO, BillingPaymentVO } from '@models/index';
 
 export class BillingRepo extends BaseRepo {
   public getCards(): Promise<BillingResponse> {
@@ -13,6 +13,15 @@ export class BillingRepo extends BaseRepo {
     }];
 
     return this.http.sendRequestPromise('/billing/addCard', data, BillingResponse);
+  }
+
+  public processPayment(billingCardVO: BillingCardVO, billingPaymentVO: BillingPaymentVO) {
+    const data = [{
+      BillingCardVO: billingCardVO,
+      BillingPaymentVO: billingPaymentVO
+    }];
+
+    return this.http.sendRequestPromise('/billing/processPayment', data, BillingResponse);
   }
 }
 

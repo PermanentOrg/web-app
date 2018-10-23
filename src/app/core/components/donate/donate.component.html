@@ -106,7 +106,20 @@
       {{getTotalDonation() | currency}}
     </div>
   </div>
-  <button class="btn btn-primary" [disabled]="!donationForm.valid" (click)="onSubmit(donationForm.value)">
+  <button class="btn btn-primary"[hidden]="donationStage < 3" [disabled]="!donationForm.valid" (click)="onSubmit(donationForm.value)">
     Confirm Donation
   </button>
+</div>
+<div [hidden]="donationStage < 4">
+  <div class="donate-step-header">Thank you</div>
+  <p>
+    Thank you for your donation. This one time fee has secured your storage for all time.
+  </p>
+  <p>
+    Your contribution will be applied to endow 10.00 Gb of storage for your personal archive on Permanent.org. Donations to our endowment also support the ongoing work of our Foundation; ensuring the permanence of your digital files and preserving your legacy forever.
+  </p>
+  <p>
+      You will receive a full donation receipt (PDF) by email for your records and tax purposes.
+  </p>
+  <a class="btn btn-primary" [routerLink]="['/myfiles']">Go to My Files</a>
 </div>
