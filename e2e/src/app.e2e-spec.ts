@@ -298,7 +298,6 @@ describe('Donation Flow', () => {
     step3Button.click();
     waitForUpdate();
     expect(confirmButton.isDisplayed()).toBeTruthy();
-    expect(confirmButton.getAttribute('disabled')).toMatch('true');
   });
 
 });
