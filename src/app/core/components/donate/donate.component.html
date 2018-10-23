@@ -17,7 +17,7 @@
         </button>
       </div>
     </div>
-    <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount">
+    <button id="step1Continue" type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount">
       Continue
     </button>
   </div>
@@ -43,7 +43,7 @@
         </button>
       </div>
     </div>
-    <button type="button" class="btn btn-primary" (click)="nextStep()">
+    <button id="step2Continue" type="button" class="btn btn-primary" (click)="nextStep()">
       Continue
     </button>
   </div>
@@ -62,11 +62,11 @@
       </div>
       <div class="donate-option">
         <button class="btn btn-secondary donate-option-content" (click)="setByteForByte(false)" [ngClass]="{'active': !byteForByte}">
-          No thanks
+          No, thanks
         </button>
       </div>
     </div>
-    <button type="button" class="btn btn-primary" (click)="nextStep()">
+    <button id="step3Continue" type="button" class="btn btn-primary" (click)="nextStep()">
       Continue
     </button>
   </div>
@@ -75,14 +75,14 @@
     <select class="form-control" [hidden]="!cards.length" formControlName="paymentCard">
       <option *ngFor="let card of cards; let i = index;" [ngValue]="card">{{card.nickname}}</option>
     </select>
-    <button class="btn btn-primary" type="button" (click)="addCard()">Add card</button>
+    <button id="addCard" class="btn btn-primary" type="button" (click)="addCard()">Add card</button>
     <div *ngIf="currentAddress">
       <strong>Address on file:</strong>
       <div>{{currentAddress.address}}</div>
       <div *ngIf="currentAddress.address2">{{currentAddress.address2}}</div>
       <div>{{currentAddress.city}}, {{currentAddress.state}}, {{currentAddress.zip}}</div>
     </div>
-    <button class="btn btn-primary" type="button" (click)="addAddress()">{{currentAddress ? 'Change' : 'Add'}} address</button>
+    <button id="addAddress" class="btn btn-primary" type="button" (click)="addAddress()">{{currentAddress ? 'Change' : 'Add'}} address</button>
   </div>
 </form>
 <div class="donate-details" [hidden]="donationStage >= 4">
@@ -106,7 +106,7 @@
       {{getTotalDonation() | currency}}
     </div>
   </div>
-  <button class="btn btn-primary"[hidden]="donationStage < 3" [disabled]="!donationForm.valid || !currentAddress || waiting" (click)="onSubmit(donationForm.value)">
+  <button id="confirmDonation" class="btn btn-primary"[hidden]="donationStage < 3" [disabled]="!donationForm.valid || !currentAddress || waiting" (click)="onSubmit(donationForm.value)">
     Confirm Donation
   </button>
 </div>
