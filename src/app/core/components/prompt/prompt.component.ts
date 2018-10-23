@@ -139,6 +139,7 @@ export class PromptComponent implements OnInit, OnDestroy {
         })
         .catch(() => {
           this.waiting = false;
+          this.hide(event);
         });
     }
     return false;

@@ -6,12 +6,16 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { BillingCardVO } from '@models/billing-card-vo';
+import { AccountVO } from '@models/account-vo';
 
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
-import { BillingResponse } from '@shared/services/api/index.repo';
+import { BillingResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
+
+import { CREDIT_CARD_FIELDS, ADDRESS_FIELDS } from '@core/components/prompt/prompt-fields';
+import { Deferred } from '@root/vendor/deferred';
 
 const DEFAULT_STORAGE_AMOUNT = 3;
 
@@ -20,7 +24,6 @@ enum DonationStage {
   Permanent,
   ByteForByte,
   Payment,
-  Confirm,
   Complete
 }
 
@@ -33,7 +36,7 @@ export class DonateComponent {
   public donationStage: DonationStage = DonationStage.Payment;
   public donationForm: FormGroup;
   public cards: BillingCardVO[];
-  public selectedCard: BillingCardVO = null;
+  public currentAddress: any;
 
   public storageOptions = [1, 3, 5, 10, 25];
   public storageAmount = DEFAULT_STORAGE_AMOUNT;
@@ -55,8 +58,22 @@ export class DonateComponent {
   ) {
     this.cards = route.snapshot.data.cards || [];
 
+    let selectedCard: BillingCardVO;
+
     if (this.cards.length) {
-      this.selectedCard = find(this.cards, 'isDefault') as BillingCardVO;
+      selectedCard = find(this.cards, 'isDefault') as BillingCardVO;
+    }
+
+    const account = this.accountService.getAccount();
+
+    if (account.address) {
+      this.currentAddress = {
+        address: account.address,
+        address2: account.address2,
+        city: account.city,
+        state: account.state,
+        zip: account.zip
+      };
     }
 
     this.donationForm = fb.group({
@@ -64,6 +81,7 @@ export class DonateComponent {
       customStorageAmount: [''],
       extraDonation: ['suggested', [Validators.required]],
       customExtraDonationAmount: [''],
+      paymentCard: [selectedCard, [Validators.required]],
     });
 
     this.donationForm.controls['customStorageAmount'].valueChanges.subscribe((value) => {
@@ -123,6 +141,7 @@ export class DonateComponent {
       if (this.donationForm.value.customExtraDonationAmount !== this.storageAmount * this.pricePerGb) {
         this.extraDonation = this.storageAmount * this.pricePerGb;
       }
+      this.donationForm.controls['customExtraDonationAmount'].setValue(this.extraDonation);
     } else if (amount === 'suggested') {
       this.extraDonation = this.storageAmount * this.pricePerGb;
     } else {
@@ -143,83 +162,11 @@ export class DonateComponent {
   }
 
   addCard() {
-    const expMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-    const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
-
-
     let newCard: BillingCardVO;
+    const fields = CREDIT_CARD_FIELDS;
+    const deferred = new Deferred();
 
-    const fields: PromptField[] = [
-      {
-        fieldName: 'cardNumber',
-        placeholder: 'Card number',
-        type: 'tel',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'cc-number',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      },
-      {
-        fieldName: 'cardCvc',
-        placeholder: 'Security code',
-        type: 'tel',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'cc-csc',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      },
-      {
-        fieldName: 'cardExpMonth',
-        placeholder: 'Expiration month',
-        type: 'select',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'cc-exp-month',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        },
-        selectOptions: expMonths.map((month) => {
-          return {
-            text: month,
-            value: month
-          };
-        })
-      },
-      {
-        fieldName: 'cardExpYear',
-        placeholder: 'Expiration year',
-        type: 'select',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'cc-exp-yeah',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        },
-        selectOptions: expYears.map((year) => {
-          return {
-            text: year,
-            value: year
-          };
-        })
-      },
-      {
-        fieldName: 'cardNickname',
-        placeholder: 'Card nickname',
-        type: 'text',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      },
-    ];
-
-    this.promptService.prompt(fields, 'Add credit card')
+    this.promptService.prompt(fields, 'Add credit card', deferred.promise)
       .then((value) => {
         newCard = new BillingCardVO({
           nickname: value.cardNickname,
@@ -233,11 +180,35 @@ export class DonateComponent {
       })
       .then((response: BillingResponse) => {
         this.cards.push(newCard);
-        this.selectedCard = newCard;
-        console.log(newCard);
+        this.donationForm.patchValue({paymentCard: newCard});
+        this.messageService.showMessage('Card added successfully', 'success');
+        deferred.resolve();
       })
       .catch((response: BillingResponse) => {
         this.messageService.showError(response.getMessage(), true);
+        deferred.reject();
+      });
+  }
+
+  addAddress() {
+    let newAddress: any;
+    const fields = ADDRESS_FIELDS;
+    const deferred = new Deferred();
+
+    this.promptService.prompt(fields, 'Add address', deferred.promise)
+      .then((value) => {
+        newAddress = value;
+        const changes = new AccountVO(value);
+        return this.accountService.updateAccount(changes);
+      })
+      .then(() => {
+        this.messageService.showMessage('Address updated successfully', 'success');
+        this.currentAddress = newAddress;
+        deferred.resolve();
+      })
+      .catch((response: AccountResponse) => {
+        this.messageService.showError(response.getMessage(), true);
+        deferred.reject();
       });
   }
 

@@ -17,6 +17,9 @@
         </button>
       </div>
     </div>
+    <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount">
+      Continue
+    </button>
   </div>
   <div [hidden]="donationStage !== 1">
     <div class="donate-step-header">
@@ -40,6 +43,9 @@
         </button>
       </div>
     </div>
+    <button type="button" class="btn btn-primary" (click)="nextStep()">
+      Continue
+    </button>
   </div>
   <div [hidden]="donationStage !== 2">
     <div class="donate-step-header">
@@ -60,13 +66,23 @@
         </button>
       </div>
     </div>
+    <button type="button" class="btn btn-primary" (click)="nextStep()">
+      Continue
+    </button>
   </div>
   <div [hidden]="donationStage !== 3">
     <div class="donate-step-header">4. Payment method</div>
-    <select class="form-control" [hidden]="!cards.length">
-      <option *ngFor="let card of cards; let i = index;" [value]="i">{{card.nickname}}</option>
+    <select class="form-control" [hidden]="!cards.length" formControlName="paymentCard">
+      <option *ngFor="let card of cards; let i = index;" [ngValue]="card">{{card.nickname}}</option>
     </select>
     <button class="btn btn-primary" type="button" (click)="addCard()">Add card</button>
+    <div *ngIf="currentAddress">
+      <strong>Address on file:</strong>
+      <div>{{currentAddress.address}}</div>
+      <div *ngIf="currentAddress.address2">{{currentAddress.address2}}</div>
+      <div>{{currentAddress.city}}, {{currentAddress.state}}, {{currentAddress.zip}}</div>
+    </div>
+    <button class="btn btn-primary" type="button" (click)="addAddress()">{{currentAddress ? 'Change' : 'Add'}} address</button>
   </div>
 </form>
 <div class="donate-details">
@@ -90,7 +106,7 @@
       {{getTotalDonation() | currency}}
     </div>
   </div>
-  <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!storageAmount || (donationStage > 2 && !selectedCard)">
-    {{donationStage < 4 ? 'Continue' : 'Confirm donation'}}
+  <button type="submit" class="btn btn-primary" [disabled]="!donationForm.value.paymentCard || !currentAddress">
+    Confirm Donation
   </button>
 </div>
