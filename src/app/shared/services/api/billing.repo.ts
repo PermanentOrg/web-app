@@ -28,6 +28,9 @@ export class BillingRepo extends BaseRepo {
 export class BillingResponse extends BaseResponse {
   getBillingCardVOs(): BillingCardVO[] {
     const data = this.getResultsData();
+    if (!data || !data[0]) {
+      return [];
+    }
 
     return data[0].map(result => {
       return new BillingCardVO(result.BillingCardVO);

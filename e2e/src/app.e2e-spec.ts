@@ -16,7 +16,7 @@ const TEST_ARCHIVE_2 = {
   name: 'Second Archive'
 };
 
-describe('Login/Signup Flow', () => {
+fdescribe('Login/Signup Flow', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -52,7 +52,7 @@ describe('Login/Signup Flow', () => {
       });
   });
 
-  it('should prompt for MFA token', () => {
+  xit('should prompt for MFA token', () => {
     page.navigateTo();
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
     element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
@@ -60,7 +60,7 @@ describe('Login/Signup Flow', () => {
     expect(browser.getCurrentUrl()).toContain('/mfa');
   });
 
-  it('should log in', () => {
+  fit('should log in', () => {
     page.navigateTo();
     waitForUpdate();
     (browser.manage() as any).addCookie({name: 'testing', value: '42'});
@@ -252,6 +252,24 @@ describe('Multiple Archives Flow', () => {
     browser.sleep(HAMBURGER_MENU_DELAY);
     expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
+});
+
+fdescribe('Donation Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should load the donation page with proper defaults', () => {
+    page.goToDonate();
+    waitForUpdate();
+    const tenGigOption = element(by.buttonText('10 GB'));
+    browser.wait(ExpectedConditions.presenceOf(tenGigOption));
+    expect(tenGigOption.getAttribute('class')).toMatch('active');
+  });
+
 });
 
 function waitForUpdate() {
