@@ -219,7 +219,7 @@ export class DonateComponent {
     const spaceAmountInGb = Number(this.storageAmount);
     const storageAmount = spaceAmountInGb * this.pricePerGb;
 
-    const donationAmount = Number(formValue.extraDonation === 'custom' ? formValue.customExtraDonationAmount : storageAmount);
+    const donationAmount = Number(this.extraDonation);
     const donationMatchAmount = this.byteForByte ? donationAmount : 0;
 
     const payment = new BillingPaymentVO({
