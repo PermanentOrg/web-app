@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ElementRef, AfterViewInit } from '@angular/co
 import { FormControl } from '@angular/forms';
 
 export interface FormInputSelectOption {
-  text: string;
-  value: string;
+  text: string | number;
+  value: string | number;
 }
 
 export interface FormInputConfig {
@@ -32,7 +32,7 @@ export class FormInputComponent implements AfterViewInit {
   constructor(private element: ElementRef) { }
 
   ngAfterViewInit() {
-    const inputField = this.element.nativeElement.querySelector('input');
+    const inputField = this.element.nativeElement.querySelector('.form-control');
     if (this.config) {
       if (this.config.autocorrect) {
         inputField.setAttribute('autocorrect', this.config.autocorrect);
