@@ -212,4 +212,8 @@ export class DonateComponent {
       });
   }
 
+  onSubmit(formValue: any) {
+    console.log('yeet', formValue);
+  }
+
 }

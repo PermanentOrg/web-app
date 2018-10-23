@@ -106,7 +106,7 @@
       {{getTotalDonation() | currency}}
     </div>
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="!donationForm.value.paymentCard || !currentAddress">
+  <button class="btn btn-primary" [disabled]="!donationForm.valid" (click)="onSubmit(donationForm.value)">
     Confirm Donation
   </button>
 </div>
