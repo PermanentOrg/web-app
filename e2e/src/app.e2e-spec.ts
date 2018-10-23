@@ -16,7 +16,7 @@ const TEST_ARCHIVE_2 = {
   name: 'Second Archive'
 };
 
-fdescribe('Login/Signup Flow', () => {
+describe('Login/Signup Flow', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -254,7 +254,7 @@ describe('Multiple Archives Flow', () => {
   });
 });
 
-fdescribe('Donation Flow', () => {
+describe('Donation Flow', () => {
   let page: AppPage;
 
   beforeEach(() => {

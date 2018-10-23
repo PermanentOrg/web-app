@@ -18,7 +18,7 @@ import { Deferred } from '@root/vendor/deferred';
 
 const DEFAULT_STORAGE_AMOUNT = 10;
 
-enum DonationStage {
+export enum DonationStage {
   Storage,
   Permanent,
   ByteForByte,
@@ -220,7 +220,7 @@ export class DonateComponent {
     const storageAmount = spaceAmountInGb * this.pricePerGb;
 
     const donationAmount = Number(this.extraDonation);
-    const donationMatchAmount = this.byteForByte ? donationAmount : 0;
+    const donationMatchAmount = this.byteForByte ? (donationAmount + storageAmount) : 0;
 
     const payment = new BillingPaymentVO({
       accountIdThatPaid: account.accountId,
