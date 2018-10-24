@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -10,14 +10,21 @@ import { ArchiveVO } from '@root/app/models';
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss']
 })
-export class LeftMenuComponent implements OnInit {
+export class LeftMenuComponent implements OnInit, OnChanges {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public archiveName: string;
   public archive: ArchiveVO;
 
-  constructor(private accountService: AccountService, private messageService: MessageService, private router: Router) {
+  private hamburgerMenuDiv: HTMLElement;
+
+  constructor(
+    private accountService: AccountService,
+    private messageService: MessageService,
+    private router: Router,
+    private elementRef: ElementRef
+  ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
     }
@@ -28,9 +35,15 @@ export class LeftMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.hamburgerMenuDiv = (this.elementRef.nativeElement as HTMLElement).querySelector('.hamburger-menu');
+
   }
 
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isVisible.currentValue && !changes.isVisible.previousValue) {
+      this.hamburgerMenuDiv.scrollTop = 0;
+    }
+  }
 
   hide(event: Event) {
     this.isVisible = false;

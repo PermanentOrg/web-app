@@ -14,7 +14,7 @@ import { DonateResolveService} from '@core/resolves/donate-resolve.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
 import { DonateComponent } from './components/donate/donate.component';
-
+import { InvitationsComponent } from './components/invitations/invitations.component';
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
@@ -40,6 +40,15 @@ export const routes: Routes = [
         component: DonateComponent,
         data: { title: 'Add Storage'},
         resolve: { cards: DonateResolveService }
+      },
+      {
+        path: 'invitations',
+        component: InvitationsComponent,
+        data: { title: 'Invitations' }
+      },
+      {
+        path: 'archive/sentInvites',
+        redirectTo: 'invitations'
       },
       { path: '**', redirectTo: 'myfiles'}
     ]
