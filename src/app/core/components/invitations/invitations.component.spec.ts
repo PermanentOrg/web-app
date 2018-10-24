@@ -10,8 +10,6 @@ import { AccountService } from '@shared/services/account/account.service';
 
 import { TEST_DATA } from '@core/core.module.spec';
 
-const cardData = require('@root/test/responses/billing.getBillingCards.multiple.success.json');
-
 describe('InvitationsComponent', () => {
   let component: InvitationsComponent;
   let fixture: ComponentFixture<InvitationsComponent>;

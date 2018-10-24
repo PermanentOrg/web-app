@@ -8,6 +8,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 
 import { InviteVO, InviteVOData } from '@models/index';
+import { InviteResponse } from '@shared/services/api/index.repo';
 
 @Component({
   selector: 'pr-invitations',
@@ -24,6 +25,7 @@ export class InvitationsComponent {
   }
 
   createNewInvitation() {
+    let newInvite: InviteVO;
     const deferred = new Deferred();
 
     const fields: PromptField[] = [
@@ -53,8 +55,18 @@ export class InvitationsComponent {
 
     this.promptService.prompt(fields, 'Send invitation', deferred.promise)
       .then((value: InviteVOData) => {
-        console.log(value);
+        value.relationship = 'relation.friend';
+        newInvite = new InviteVO(value);
+        return this.api.invite.send([newInvite]);
+      })
+      .then((response: InviteResponse) => {
+        const message = `Invitation to ${newInvite.email} successfully sent`;
+        this.messageService.showMessage(message, 'success');
         deferred.resolve();
+      })
+      .catch((response: InviteResponse) => {
+        this.messageService.showError(response.getMessage(), true);
+        deferred.reject();
       });
   }
 }
