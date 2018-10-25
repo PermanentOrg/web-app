@@ -13,19 +13,19 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 export const FORM_ERROR_MESSAGES = {
   invitation: {
-    required: 'Invitation code required'
+    required: 'Invitation code required.'
   },
   name: {
-    required: 'Name required'
+    required: 'Name required.'
   },
   email: {
-    email: 'Invalid email address',
-    required: 'Email required'
+    email: 'Invalid email address.',
+    required: 'Email required.'
   },
   passwords: {
-    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters`,
-    required: 'Password required',
-    mismatch: 'Passwords must match'
+    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters.`,
+    required: 'Password required.',
+    mismatch: 'Passwords must match.'
   }
 };
 
@@ -122,12 +122,12 @@ export class SignupComponent implements OnInit {
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
-          this.message.showMessage(`Verify to continue as ${account.primaryEmail}`, 'warning');
+          this.message.showMessage(`Verify to continue as ${account.primaryEmail}.`, 'warning');
           this.router.navigate(['/verify']);
         } else {
           this.accountService.logIn(formValue.email, formValue.passwords.password, true, true)
             .then(() => {
-              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
+              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
               this.router.navigate(['/']);
             });
         }
