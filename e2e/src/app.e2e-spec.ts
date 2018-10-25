@@ -52,7 +52,7 @@ describe('Login/Signup Flow', () => {
       });
   });
 
-  it('should prompt for MFA token', () => {
+  xit('should prompt for MFA token', () => {
     page.navigateTo();
     element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
     element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
@@ -252,6 +252,54 @@ describe('Multiple Archives Flow', () => {
     browser.sleep(HAMBURGER_MENU_DELAY);
     expect(element(by.css('pr-archive-small .archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
+});
+
+describe('Donation Flow', () => {
+  let page: AppPage;
+
+  beforeEach(() => {
+    page = new AppPage();
+    browser.waitForAngularEnabled(true);
+  });
+
+  it('should load the donation page with proper defaults', () => {
+    page.goToDonate();
+    waitForUpdate();
+    const tenGigOption = element(by.buttonText('10 GB'));
+    browser.wait(ExpectedConditions.presenceOf(tenGigOption));
+    expect(tenGigOption.getAttribute('class')).toMatch('active');
+
+    const totalDonation = element(by.css('.donate-line-item.donate-total'));
+    expect(totalDonation.getText()).toContain('$30.00');
+
+    const suggestedDonation = element(by.buttonText('$30'));
+    expect(suggestedDonation.getAttribute('class')).toMatch('active');
+
+    const skipByteForByte = element(by.buttonText('No, thanks'));
+    expect(skipByteForByte.getAttribute('class')).toMatch('active');
+  });
+
+  it('should click through the donation steps', () => {
+    page.goToDonate();
+    waitForUpdate();
+    const step1Button = element(by.id('step1Continue'));
+    const step2Button = element(by.id('step2Continue'));
+    const step3Button = element(by.id('step3Continue'));
+    const confirmButton = element(by.id('confirmDonation'));
+
+    step1Button.click();
+    waitForUpdate();
+    expect(step2Button.isDisplayed()).toBeTruthy();
+
+    step2Button.click();
+    waitForUpdate();
+    expect(step3Button.isDisplayed()).toBeTruthy();
+
+    step3Button.click();
+    waitForUpdate();
+    expect(confirmButton.isDisplayed()).toBeTruthy();
+  });
+
 });
 
 function waitForUpdate() {

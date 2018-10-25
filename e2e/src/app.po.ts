@@ -33,4 +33,9 @@ export class AppPage {
     browser.get('/m/choosearchive');
     return browser.wait(ExpectedConditions.urlContains('choosearchive'));
   }
+
+  goToDonate() {
+    browser.get('/m/donate');
+    return browser.wait(ExpectedConditions.urlContains('donate'));
+  }
 }

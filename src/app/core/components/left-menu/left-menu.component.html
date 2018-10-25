@@ -3,6 +3,9 @@
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
+    <a class="menu-item" [routerLink]="['/donate']" routerLinkActive="active">
+      Add Storage
+    </a>
     <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
       My Files
     </a>
@@ -14,6 +17,9 @@
     </a>
     <a class="menu-item" [routerLink]="['/shares/withme']" routerLinkActive="active">
       Shared With Me
+    </a>
+    <a class="menu-item" [routerLink]="['/invitations']" routerLinkActive="active">
+      Invitations
     </a>
     <a class="menu-item" (click)='logOut()'>
       Log Out
