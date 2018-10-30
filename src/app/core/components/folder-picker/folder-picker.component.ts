@@ -29,6 +29,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   public visible: boolean;
   public waiting: boolean;
+  public isRootFolder = true;
 
   constructor(
     private dataService: DataService,
@@ -73,12 +74,25 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   setFolder(folder: FolderVO) {
     this.waiting = true;
-    return this.api.folder.navigate(folder).toPromise()
+    return this.api.folder.navigate(new FolderVO({
+      folder_linkId: folder.folder_linkId,
+      folderId: folder.folderId,
+      archiveNbr: folder.archiveNbr
+    })).toPromise()
       .then((response: FolderResponse) => {
         this.waiting = false;
         this.currentFolder = response.getFolderVO(true);
+        this.isRootFolder = this.currentFolder.type.includes('root');
         remove(this.currentFolder.ChildItemVOs, 'isRecord');
       });
+  }
+
+  goToParentFolder() {
+    const parentFolder = new FolderVO({
+      folder_linkId: this.currentFolder.parentFolder_linkId,
+      folderId: this.currentFolder.parentFolderId
+    });
+    return this.setFolder(parentFolder);
   }
 
   loadCurrentFolderChildData() {
@@ -99,6 +113,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.currentFolder = null;
       this.chooseFolderDeferred = null;
+      this.isRootFolder = true;
     }, 1500);
   }
 

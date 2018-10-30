@@ -44,8 +44,20 @@ $row-height: 40px;
 }
 
 .picker-header {
-  font-weight: 600;
   padding: 10px;
+  display: flex;
+}
+
+.picker-folder-name {
+  font-weight: 600;
+  text-align: center;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.picker-back {
+  flex: 0 0 3.5rem;
 }
 
 .picker-footer {
