@@ -159,6 +159,7 @@ export class DonateComponent {
 
   nextStep() {
     this.donationStage++;
+    window.scrollTo(0, 0);
   }
 
   addCard() {
