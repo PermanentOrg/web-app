@@ -121,7 +121,7 @@ export const ADDRESS_FIELDS: PromptField[] = [
   {
     fieldName: 'zip',
     placeholder: 'Zip code',
-    type: 'text',
+    type: 'tel',
     validators: [Validators.required],
     config: {
       autocomplete: 'postal-code',
