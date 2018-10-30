@@ -94,26 +94,26 @@ export class DonateComponent {
   }
 
   checkCustomStorageAmount(value) {
-    if (value < 1) {
-      return this.donationForm.controls['customStorageAmount'].setValue(1);
+    if (value < 0) {
+      return this.donationForm.controls['customStorageAmount'].setValue(0);
     }
-    value = parseInt(value, 10);
+    value = value === null ? null : parseInt(value, 10);
 
     if (this.donationForm.value.storageAmount === 'custom') {
-      this.storageAmount = value;
+      this.storageAmount = value === null ? 0 : value;
     }
 
     this.donationForm.controls['customStorageAmount'].setValue(value, {emitEvent: false});
   }
 
   checkCustomDonationAmount(value) {
-    if (value < 1) {
+    if (value < 0) {
       return this.donationForm.controls['customExtraDonationAmount'].setValue(1);
     }
-    value = parseInt(value, 10);
+    value = value === null ? null : parseInt(value, 10);
 
     if (this.donationForm.value.extraDonation === 'custom') {
-      this.extraDonation = value;
+      this.extraDonation = value === null ? 0 : value;
     }
 
     this.donationForm.controls['customExtraDonationAmount'].setValue(value, {emitEvent: false});
@@ -137,7 +137,7 @@ export class DonateComponent {
   setExtraDonation(amount: string) {
     this.donationForm.controls['extraDonation'].setValue(amount);
     if (amount === 'custom') {
-      this.customStorageInput.nativeElement.focus();
+      this.customDonationInput.nativeElement.focus();
       if (this.donationForm.value.customExtraDonationAmount !== this.storageAmount * this.pricePerGb) {
         this.extraDonation = this.storageAmount * this.pricePerGb;
       }
@@ -244,6 +244,15 @@ export class DonateComponent {
         this.waiting = false;
         this.messageService.showError(response.getMessage(), true);
       });
+  }
+
+  unfocusOnEnter(event: KeyboardEvent) {
+    if (event.keyCode === 13) {
+      this.customStorageInput.nativeElement.blur();
+      this.customDonationInput.nativeElement.blur();
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 
 }
