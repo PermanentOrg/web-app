@@ -196,17 +196,7 @@ export class PromptComponent implements OnInit, OnDestroy {
 
     this.isVisible = true;
 
-    return this.donePromise
-      .then((result) => {
-        if (!savePromise) {
-          this.reset();
-        } else {
-          savePromise.then(() => {
-            this.reset();
-          });
-        }
-        return Promise.resolve(result);
-      });
+    return this.donePromise;
   }
 
   clickButton(button: PromptButton, event: Event) {
