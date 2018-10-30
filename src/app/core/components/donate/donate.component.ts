@@ -94,13 +94,14 @@ export class DonateComponent {
   }
 
   checkCustomStorageAmount(value) {
-    if (value < 1) {
-      return this.donationForm.controls['customStorageAmount'].setValue(1);
+    console.log(value);
+    if (value < 0) {
+      return this.donationForm.controls['customStorageAmount'].setValue(0);
     }
-    value = parseInt(value, 10);
+    value = value === null ? null : parseInt(value, 10);
 
     if (this.donationForm.value.storageAmount === 'custom') {
-      this.storageAmount = value;
+      this.storageAmount = value === null ? 0 : value;
     }
 
     this.donationForm.controls['customStorageAmount'].setValue(value, {emitEvent: false});
