@@ -1,0 +1,75 @@
+@import 'variables';
+
+.donate-step-header {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.donate-options {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 0px;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.donate-option {
+  flex: 0 0 50%;
+  padding: 10px 5px;
+  padding-top: 0;
+  text-align: center;
+  color: white;
+
+  .donate-option-content {
+    padding: 1rem;
+    margin: 0;
+    height: 4rem;
+    font-weight: 600;
+
+    input {
+      max-width: 100%;
+      width: 3.5rem;
+      margin: 0 0.15rem;
+      text-align: right;
+      display: inline-block;
+      padding: 0.2rem;
+    }
+
+    &.btn-secondary {
+      font-weight: 400;
+    }
+  }
+}
+
+.donate-option:last-child:nth-child(odd), .donate-options.full-width .donate-option {
+  flex: 0 0 100%;
+}
+
+.donate-details, .donate-complete {
+  padding: 0px 10px;
+  max-width: 400px;
+  margin: 0.5rem auto 0;
+}
+
+.donate-line-item {
+  display: flex;
+
+  .donate-item-name {
+    text-align: left;
+    flex: 1;
+  }
+
+  .donate-item-cost {
+    text-align: right;
+    flex: 1;
+    font-weight: 600;
+  }
+}
+
+.donate-total {
+  margin-top: 0.5rem;
+  font-weight: 700;
+  & .donate-item-cost {
+    font-weight: 700;
+  }
+}

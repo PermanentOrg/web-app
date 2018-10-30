@@ -12,6 +12,7 @@ import { AccountVO } from '@root/app/models';
 export class DoneEmbedComponent implements OnInit {
   account: AccountVO;
   existingAccount: boolean;
+  linkToFacebook = false;
 
   constructor(private accountService: AccountService, private route: ActivatedRoute) { }
 
@@ -19,6 +20,10 @@ export class DoneEmbedComponent implements OnInit {
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams.existing) {
       this.existingAccount = true;
+    }
+
+    if (queryParams.inviteCode === 'facebook') {
+      this.linkToFacebook = true;
     }
 
     this.account = this.accountService.getAccount();

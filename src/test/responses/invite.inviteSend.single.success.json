@@ -1,0 +1,44 @@
+{
+  "Results": [
+    {
+      "data": [
+        {
+          "InviteVO": {
+            "inviteId": 1,
+            "email": "testinvite@gmail.com",
+            "byArchiveId": 1,
+            "byAccountId": 1,
+            "expiresDT": "2018-11-23T17:40:33.000000",
+            "fullName": "Test Invite",
+            "message": null,
+            "relationship": "relation.friend",
+            "accessRole": null,
+            "timesSent": 1,
+            "giftSizeInMB": null,
+            "token": "G54475J6BW",
+            "status": "status.invite.pending",
+            "type": "type.invite.invite_early_access",
+            "createdDT": "2018-10-24T17:40:33.000000",
+            "updatedDT": "2018-10-24T17:40:33.000000"
+          }
+        }
+      ],
+      "message": [
+        "Sent invite"
+      ],
+      "status": true,
+      "resultDT": "2018-10-24T17:40:34.000000",
+      "createdDT": null,
+      "updatedDT": null
+    }
+  ],
+  "isSuccessful": true,
+  "actionFailKeys": [],
+  "isSystemUp": true,
+  "systemMessage": "Everything is A-OK",
+  "sessionId": null,
+  "csrf": "a293f0327f0651f89be9d0c90e8b01c7",
+  "vaultExpirationTime": "2018-10-23T17:26:50.000000",
+  "createdDT": null,
+  "updatedDT": null
+}

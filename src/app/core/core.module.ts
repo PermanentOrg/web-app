@@ -19,6 +19,8 @@ import { RightMenuComponent } from '@core/components/right-menu/right-menu.compo
 import { PromptComponent } from './components/prompt/prompt.component';
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
+import { DonateComponent } from './components/donate/donate.component';
+import { InvitationsComponent } from './components/invitations/invitations.component';
 
 @NgModule({
   imports: [
@@ -37,6 +39,8 @@ import { FolderPickerComponent } from '@core/components/folder-picker/folder-pic
     PromptComponent,
     ArchiveSelectorComponent,
     FolderPickerComponent
+    DonateComponent,
+    InvitationsComponent
   ],
   providers: [
     DataService,
