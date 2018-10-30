@@ -13,12 +13,12 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 export const FORM_ERROR_MESSAGES = {
   email: {
-    email: 'Invalid email address',
-    required: 'Email required'
+    email: 'Invalid email address.',
+    required: 'Email required.'
   },
   password: {
-    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters`,
-    required: 'Password required'
+    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters.`,
+    required: 'Password required.'
   }
 };
 
@@ -61,17 +61,17 @@ export class LoginComponent implements OnInit {
         if (response.needsMFA()) {
           this.router.navigate(['/auth', 'mfa'])
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
         } else if (response.needsVerification()) {
           this.router.navigate(['/auth', 'verify'])
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}`, 'warning');
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
         } else {
           this.router.navigate(['/'])
             .then(() => {
-              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}`, 'success');
+              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
             });
         }
       })
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
         this.waiting = false;
 
         if (response.messageIncludes('warning.signin.unknown')) {
-          this.message.showMessage('Incorrect email or password', 'danger');
+          this.message.showMessage('Incorrect email or password.', 'danger');
           this.loginForm.setErrors({unknown: true});
         } else {
           this.message.showMessage('Log in failed. Please try again.', 'danger');
