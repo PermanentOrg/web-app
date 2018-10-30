@@ -176,13 +176,8 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   openFolderPicker(operation: FolderPickerOperations) {
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
-    this.folderPicker.chooseFolder(myFiles, operation)
-    .then((chosenFolder: FolderVO) => {
-      console.log('got folder', chosenFolder);
-    });
+    this.folderPicker.chooseFolder(myFiles, operation);
   }
-
-
 
   promptForUpdate() {
     let updateResolve;

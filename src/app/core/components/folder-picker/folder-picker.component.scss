@@ -59,6 +59,7 @@ $row-height: 40px;
 
 .picker-back {
   flex: 0 0 3.5rem;
+  cursor: pointer;
 }
 
 .picker-footer {
@@ -67,6 +68,10 @@ $row-height: 40px;
 
   button:not(:first-child) {
     margin-left: 10px;
+  }
+
+  button.btn-secondary {
+    flex: 0 0 33.33%
   }
 }
 

@@ -70,9 +70,6 @@ export class MainComponent implements OnInit, OnDestroy {
         ['/auth/verify']
       );
     }
-
-    const rootFolder = this.accountService.getRootFolder();
-    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
   }
 
   ngOnDestroy() {

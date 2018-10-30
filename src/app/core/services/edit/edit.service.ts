@@ -126,4 +126,66 @@ export class EditService {
         }
       });
   }
+
+  moveItems(items: any[]) {
+    const folders: FolderVO[] = [];
+    const records: RecordVO[] = [];
+
+    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+
+    items.forEach((item) => {
+      item.isFolder ? folders.push(item) : records.push(item);
+      itemsByLinkId[item.folder_linkId] = item;
+    });
+
+    const promises: Array<Promise<any>> = [];
+
+    if (folders.length) {
+      promises.push(
+        this.api.folder.update(folders)
+      );
+    } else {
+      promises.push(Promise.resolve());
+    }
+
+    if (records.length) {
+      promises.push(
+        this.api.record.update(records)
+      );
+    } else {
+      promises.push(Promise.resolve());
+    }
+
+    return Promise.all(promises)
+      .then((results) => {
+        let folderResponse: FolderResponse;
+        let recordResponse: RecordResponse;
+
+        [folderResponse, recordResponse] =  results;
+        if (folderResponse) {
+          folderResponse.getFolderVOs()
+            .forEach((updatedItem) => {
+              itemsByLinkId[updatedItem.folder_linkId].update(updatedItem);
+            });
+        }
+
+        if (recordResponse) {
+          recordResponse.getRecordVOs()
+          .forEach((updatedItem) => {
+            itemsByLinkId[updatedItem.folder_linkId].update(updatedItem);
+          });
+        }
+      }).catch((results) => {
+        let folderResponse: FolderResponse;
+        let recordResponse: RecordResponse;
+
+        [folderResponse, recordResponse] =  results;
+
+        if (folderResponse && !folderResponse.isSuccessful) {
+          return Promise.reject(folderResponse);
+        } else if (recordResponse) {
+          return Promise.reject(recordResponse);
+        }
+      });
+  }
 }
