@@ -38,7 +38,7 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
     UploadButtonComponent,
     PromptComponent,
     ArchiveSelectorComponent,
-    FolderPickerComponent
+    FolderPickerComponent,
     DonateComponent,
     InvitationsComponent
   ],
