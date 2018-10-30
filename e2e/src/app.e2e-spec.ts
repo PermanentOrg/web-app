@@ -52,13 +52,13 @@ describe('Login/Signup Flow', () => {
       });
   });
 
-  xit('should prompt for MFA token', () => {
-    page.navigateTo();
-    element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
-    element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
-    element(by.buttonText('Log in')).click();
-    expect(browser.getCurrentUrl()).toContain('/mfa');
-  });
+  // xit('should prompt for MFA token', () => {
+  //   page.navigateTo();
+  //   element(by.id('email')).sendKeys(TEST_ACCOUNT.email);
+  //   element(by.id('password')).sendKeys(TEST_ACCOUNT.password);
+  //   element(by.buttonText('Log in')).click();
+  //   expect(browser.getCurrentUrl()).toContain('/mfa');
+  // });
 
   it('should log in', () => {
     page.navigateTo();
