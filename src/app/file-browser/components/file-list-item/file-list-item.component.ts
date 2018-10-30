@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
-import { clone } from 'lodash';
+import { clone, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
@@ -13,6 +13,8 @@ import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo'
 import { Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -35,7 +37,8 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     private message: MessageService,
     private prompt: PromptService,
     private edit: EditService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private folderPicker: FolderPickerService
   ) {
   }
 
@@ -103,14 +106,22 @@ export class FileListItemComponent implements OnInit, OnDestroy {
 
     actionButtons.push(
       {
-        buttonName: 'delete',
-        buttonText: 'Delete',
-        class: 'btn-danger'
-      },
-      {
         buttonName: 'rename',
         buttonText: 'Rename',
       },
+      {
+        buttonName: 'copy',
+        buttonText: 'Copy',
+      },
+      {
+        buttonName: 'move',
+        buttonText: 'Move',
+      },
+      {
+        buttonName: 'delete',
+        buttonText: 'Delete',
+        class: 'btn-danger'
+      }
     );
 
     if (this.item.isRecord) {
@@ -130,6 +141,14 @@ export class FileListItemComponent implements OnInit, OnDestroy {
           case 'rename':
             actionResolve();
             this.promptForUpdate();
+            break;
+          case 'move':
+            actionResolve();
+            this.openFolderPicker(FolderPickerOperations.Move);
+            break;
+          case 'copy':
+            actionResolve();
+            this.openFolderPicker(FolderPickerOperations.Copy);
             break;
           case 'download':
             this.dataService.downloadFile(this.item as RecordVO)
@@ -153,6 +172,17 @@ export class FileListItemComponent implements OnInit, OnDestroy {
         resolve();
       });
   }
+
+  openFolderPicker(operation: FolderPickerOperations) {
+    const rootFolder = this.accountService.getRootFolder();
+    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
+    this.folderPicker.chooseFolder(myFiles, operation)
+    .then((chosenFolder: FolderVO) => {
+      console.log('got folder', chosenFolder);
+    });
+  }
+
+
 
   promptForUpdate() {
     let updateResolve;

@@ -73,10 +73,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
-    this.folderPicker.chooseFolder(myFiles, FolderPickerOperations.Copy)
-      .then((chosenFolder: FolderVO) => {
-        console.log('got folder', chosenFolder);
-      });
   }
 
   ngOnDestroy() {
