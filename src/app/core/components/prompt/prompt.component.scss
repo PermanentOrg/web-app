@@ -16,6 +16,8 @@ $transition-length: 0.25s;
   padding-bottom: $bottom-safe-area-padding;
   transform: translateY(100%);
   transition:  transform $transition-length ease-in;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .prompt-field-buttons {
