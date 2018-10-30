@@ -50,6 +50,11 @@ $row-height: 40px;
 
 .picker-footer {
   padding: 0px 10px;
+  display: flex;
+
+  button:not(:first-child) {
+    margin-left: 10px;
+  }
 }
 
 :host {

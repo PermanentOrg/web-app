@@ -1,7 +1,7 @@
 <div class="menu-wrapper" [ngClass]="{'visible': visible}" (click)="hide()">
   <div class="menu folder-picker">
     <div class="picker-header">
-      Choose a folder
+      {{currentFolder ? currentFolder.displayName : 'Choose a folder'}}
     </div>
     <div class="picker-contents" *ngIf="!currentFolder">
       <em>Loading folder</em>
@@ -16,7 +16,8 @@
       </div>
     </div>
     <div class="picker-footer">
-      <button class="btn btn-primary" (click)="chooseFolder()">Use this folder</button>
+      <button class="btn btn-secondary">Cancel</button>
+      <button class="btn btn-primary" (click)="chooseFolder()">{{operation ? operationName : 'Choose'}}</button>
     </div>
   </div>
 </div>

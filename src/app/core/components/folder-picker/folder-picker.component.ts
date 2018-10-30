@@ -11,6 +11,11 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
+export enum FolderPickerOperations {
+  Move = 1,
+  Copy
+}
+
 @Component({
   selector: 'pr-folder-picker',
   templateUrl: './folder-picker.component.html',
@@ -19,6 +24,8 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 export class FolderPickerComponent implements OnInit, OnDestroy {
   public currentFolder: FolderVO;
   public chooseFolderDeferred: Deferred;
+  public operation: FolderPickerOperations;
+  public operationName: string;
 
   public visible: boolean;
   public waiting: boolean;
@@ -34,8 +41,19 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  show(startingFolder: FolderVO) {
+  show(startingFolder: FolderVO, operation: FolderPickerOperations) {
     this.visible = true;
+    this.operation = operation;
+
+    switch (operation) {
+      case FolderPickerOperations.Move:
+        this.operationName = 'Move';
+        break;
+      case FolderPickerOperations.Copy:
+        this.operationName = 'Copy';
+        break;
+    }
+
     this.setFolder(startingFolder)
       .then(() => {
         this.loadCurrentFolderChildData();

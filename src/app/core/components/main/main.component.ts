@@ -10,6 +10,7 @@ import { PromptService } from '@core/services/prompt/prompt.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { FolderVO, FolderVOData } from '@root/app/models';
 import { find } from 'lodash';
+import { FolderPickerOperations } from '../folder-picker/folder-picker.component';
 
 @Component({
   selector: 'pr-main',
@@ -72,7 +73,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
-    this.folderPicker.chooseFolder(myFiles)
+    this.folderPicker.chooseFolder(myFiles, FolderPickerOperations.Copy)
       .then((chosenFolder: FolderVO) => {
         console.log('got folder', chosenFolder);
       });
