@@ -54,6 +54,7 @@ $row-height: 40px;
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .picker-back {
