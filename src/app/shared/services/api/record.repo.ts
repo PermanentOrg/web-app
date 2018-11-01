@@ -53,13 +53,7 @@ export class RecordRepo extends BaseRepo {
   public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
-        RecordVO: {
-          recordId: recordVO.recordId,
-          folder_linkId: recordVO.folder_linkId,
-          parentFolder_linkId: recordVO.parentFolder_linkId,
-          parentFolderId: recordVO.parentFolderId,
-          archiveNbr: recordVO.archiveNbr
-        },
+        RecordVO: new RecordVO(recordVO).getCleanVO()
       };
     });
 
@@ -69,13 +63,7 @@ export class RecordRepo extends BaseRepo {
   public move(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
-        RecordVO: {
-          recordId: recordVO.recordId,
-          folder_linkId: recordVO.folder_linkId,
-          parentFolder_linkId: recordVO.parentFolder_linkId,
-          parentFolderId: recordVO.parentFolderId,
-          archiveNbr: recordVO.archiveNbr
-        },
+        RecordVO: new RecordVO(recordVO).getCleanVO(),
         FolderDestVO: {
           folder_linkId: destination.folder_linkId
         }
@@ -88,13 +76,7 @@ export class RecordRepo extends BaseRepo {
   public copy(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
-        RecordVO: {
-          recordId: recordVO.recordId,
-          folder_linkId: recordVO.folder_linkId,
-          parentFolder_linkId: recordVO.parentFolder_linkId,
-          parentFolderId: recordVO.parentFolderId,
-          archiveNbr: recordVO.archiveNbr
-        },
+        RecordVO: new RecordVO(recordVO).getCleanVO(),
         FolderDestVO: {
           folder_linkId: destination.folder_linkId
         }

@@ -3,6 +3,7 @@ import { FolderVOData } from '@models/folder-vo';
 
 export class BaseVO {
   public dataWhitelist: string[];
+  public cleanParams = [];
 
   constructor (voData: any) {
     if (voData) {
@@ -21,6 +22,19 @@ export class BaseVO {
           this[key] = voData[key];
         }
       }
+    }
+  }
+
+  public getCleanVO () {
+    if (!this.cleanParams.length) {
+      return this;
+    } else {
+      const clean = {};
+      this.cleanParams.forEach((param) => {
+        clean[param] = this[param];
+      });
+
+      return clean;
     }
   }
 }
