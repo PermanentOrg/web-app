@@ -32,6 +32,14 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequest('/account/post', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AccountResponse);
 
   }
+
+  public update(accountVO: AccountVO) {
+    const data = [{
+      AccountVO: accountVO
+    }];
+
+    return this.http.sendRequestPromise('/account/update', data, AccountResponse);
+  }
 }
 
 export class AccountResponse extends BaseResponse {

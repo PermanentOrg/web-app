@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validator, ValidationErrors } from '@angular/forms';
 
-import { FormInputConfig } from '@shared/components/form-input/form-input.component';
+import { FormInputConfig, FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 
 import { PromptComponent } from '@core/components/prompt/prompt.component';
 
@@ -9,7 +9,8 @@ export interface PromptField {
   fieldName: string;
   placeholder: string;
   initialValue?: any;
-  type ?: string;
+  type?: string;
+  selectOptions?: FormInputSelectOption[];
   config ?: FormInputConfig;
   validators ?: ValidationErrors[];
 }

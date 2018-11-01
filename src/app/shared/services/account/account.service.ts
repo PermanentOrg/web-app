@@ -136,6 +136,18 @@ export class AccountService {
       });
   }
 
+  public updateAccount(accountChanges: AccountVO) {
+    const updated = new AccountVO(this.account);
+    updated.update(accountChanges);
+
+    return this.api.account.update(updated)
+      .then((response: AccountResponse) => {
+        const newAccount = response.getAccountVO();
+        this.account.update(newAccount);
+        this.storage.local.set(ACCOUNT_KEY, this.account);
+      });
+  }
+
   public changeArchive(archive: ArchiveVO) {
     return this.api.archive.change(archive)
       .then((response: ArchiveResponse) => {

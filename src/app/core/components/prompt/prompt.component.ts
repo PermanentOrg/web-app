@@ -3,6 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { PromptService, PromptField, PromptButton, PromptConfig } from '@core/services/prompt/prompt.service';
 
+const DEFAULT_SAVE_TEXT = 'OK';
+const DEFAULT_CANCEL_TEXT = 'Cancel';
+
 @Component({
   selector: 'pr-prompt',
   templateUrl: './prompt.component.html',
@@ -19,8 +22,8 @@ export class PromptComponent implements OnInit, OnDestroy {
 
   public editButtons: PromptButton[];
 
-  public saveText = 'OK';
-  public cancelText = 'Cancel';
+  public saveText = DEFAULT_SAVE_TEXT;
+  public cancelText = DEFAULT_CANCEL_TEXT;
 
   public savePromise: Promise<any>;
 
@@ -89,13 +92,8 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.title = title;
     this.savePromise = savePromise;
 
-    if (saveText) {
-      this.saveText = saveText;
-    }
-
-    if (cancelText) {
-      this.cancelText = cancelText;
-    }
+    this.saveText = saveText || DEFAULT_SAVE_TEXT;
+    this.cancelText = cancelText || DEFAULT_CANCEL_TEXT;
 
     this.editForm = form;
     this.fields = fields;
@@ -139,6 +137,7 @@ export class PromptComponent implements OnInit, OnDestroy {
         })
         .catch(() => {
           this.waiting = false;
+          this.hide(event);
         });
     }
     return false;
@@ -195,17 +194,7 @@ export class PromptComponent implements OnInit, OnDestroy {
 
     this.isVisible = true;
 
-    return this.donePromise
-      .then((result) => {
-        if (!savePromise) {
-          this.reset();
-        } else {
-          savePromise.then(() => {
-            this.reset();
-          });
-        }
-        return Promise.resolve(result);
-      });
+    return this.donePromise;
   }
 
   clickButton(button: PromptButton, event: Event) {
