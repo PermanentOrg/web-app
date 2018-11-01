@@ -21,7 +21,7 @@ export class EditService {
 
   constructor(private api: ApiService, private message: MessageService) { }
 
-  createFolder(folderName: string, parentFolder: FolderVO) {
+  createFolder(folderName: string, parentFolder: FolderVO): Promise<FolderVO | FolderResponse>   {
     const newFolder = new FolderVO({
       parentFolderId: parentFolder.folderId,
       parentFolder_linkId: parentFolder.folder_linkId,
@@ -34,7 +34,7 @@ export class EditService {
       });
   }
 
-  deleteItems(items: any[]) {
+  deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
     let folders: FolderVO[];
     let records: RecordVO[];
 
@@ -65,7 +65,7 @@ export class EditService {
       });
   }
 
-  updateItems(items: any[]) {
+  updateItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
@@ -99,7 +99,7 @@ export class EditService {
         let folderResponse: FolderResponse;
         let recordResponse: RecordResponse;
 
-        [folderResponse, recordResponse] =  results;
+        [folderResponse, recordResponse] = results;
         if (folderResponse) {
           folderResponse.getFolderVOs()
             .forEach((updatedItem) => {
@@ -127,7 +127,7 @@ export class EditService {
       });
   }
 
-  moveItems(items: any[]) {
+  moveItems(items: any[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
@@ -142,7 +142,7 @@ export class EditService {
 
     if (folders.length) {
       promises.push(
-        this.api.folder.update(folders)
+        this.api.folder.move(folders, destination)
       );
     } else {
       promises.push(Promise.resolve());
@@ -150,7 +150,7 @@ export class EditService {
 
     if (records.length) {
       promises.push(
-        this.api.record.update(records)
+        this.api.record.move(records, destination)
       );
     } else {
       promises.push(Promise.resolve());

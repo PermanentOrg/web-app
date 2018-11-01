@@ -27,8 +27,10 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public operation: FolderPickerOperations;
   public operationName: string;
 
+  public savePromise: Promise<any>;
   public visible: boolean;
   public waiting: boolean;
+  public saving: boolean;
   public isRootFolder = true;
 
   constructor(
@@ -42,9 +44,11 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  show(startingFolder: FolderVO, operation: FolderPickerOperations) {
+  show(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>) {
     this.visible = true;
     this.operation = operation;
+
+    this.savePromise = savePromise;
 
     switch (operation) {
       case FolderPickerOperations.Move:
@@ -105,7 +109,19 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     if (this.currentFolder) {
       this.chooseFolderDeferred.resolve(this.currentFolder);
     }
-    this.hide();
+    if (!this.savePromise) {
+      this.hide();
+    } else {
+      this.saving = true;
+      this.savePromise
+        .then(() => {
+          this.saving = false;
+          this.hide();
+        })
+        .catch(() => {
+          this.saving = false;
+        });
+    }
   }
 
   hide() {

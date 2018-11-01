@@ -20,11 +20,11 @@ export class FolderPickerService {
     this.component = null;
   }
 
-  chooseFolder(startingFolder: FolderVO, operation: FolderPickerOperations) {
+  chooseFolder(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>) {
     if (!this.component) {
       throw new Error('FolderPickerService - Folder picker component missing');
     }
 
-    return this.component.show(startingFolder, operation);
+    return this.component.show(startingFolder, operation, savePromise);
   }
 }

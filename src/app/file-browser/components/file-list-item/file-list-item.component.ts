@@ -15,6 +15,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { Deferred } from '@root/vendor/deferred';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -173,10 +174,37 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       });
   }
 
+  moveItem(destination: FolderVO) {
+    return this.edit.moveItems([this.item], destination);
+  }
+
+  copyItem(destination: FolderVO) {
+  }
+
   openFolderPicker(operation: FolderPickerOperations) {
+    const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
-    this.folderPicker.chooseFolder(myFiles, operation);
+    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise)
+      .then((destination: FolderVO) => {
+        switch (operation) {
+          case FolderPickerOperations.Copy:
+            return this.copyItem(destination);
+          case FolderPickerOperations.Move:
+            return this.moveItem(destination);
+        }
+      })
+      .then(() => {
+        setTimeout(() => {
+          deferred.resolve();
+          if (operation === FolderPickerOperations.Move) {
+            this.dataService.refreshCurrentFolder();
+          }
+        }, 500);
+      })
+      .catch((response: FolderResponse | RecordResponse) => {
+        this.message.showError(response.getMessage(), true);
+      });
   }
 
   promptForUpdate() {
