@@ -7,13 +7,13 @@
     <input type="num" id="storageAmount" formControlName="storageAmount" hidden>
     <div class="donate-options">
       <div class="donate-option" *ngFor="let amount of storageOptions;">
-        <button class="btn btn-primary donate-option-content" (click)="setStorageAmount(amount)" [ngClass]="{'active': donationForm.value.storageAmount == amount}">
+        <button type="button" class="btn btn-primary donate-option-content" (click)="setStorageAmount(amount)" [ngClass]="{'active': donationForm.value.storageAmount == amount}">
         {{amount}} GB
         </button>
       </div>
       <div class="donate-option">
-        <button class="btn btn-primary donate-option-content" (click)="setStorageAmount('custom')">
-          <input #customStorageAmount type="number" class="form-control" formControlName="customStorageAmount" min="1"> GB 
+        <button type="button" class="btn btn-primary donate-option-content" (click)="setStorageAmount('custom')">
+          <input #customStorageAmount type="number" class="form-control" formControlName="customStorageAmount" min="1" (keydown)="unfocusOnEnter($event)"> GB 
         </button>
       </div>
     </div>
@@ -33,12 +33,12 @@
         </button>
       </div>
       <div class="donate-option">
-        <button class="btn btn-primary donate-option-content" (click)="setExtraDonation('custom')" [ngClass]="{'active': donationForm.value.extraDonation == 'custom'}">
-          $<input #customDonationAmount type="number" class="form-control" formControlName="customExtraDonationAmount" min="1">
+        <button type="button" class="btn btn-primary donate-option-content" (click)="setExtraDonation('custom')" [ngClass]="{'active': donationForm.value.extraDonation == 'custom'}">
+          $<input #customDonationAmount type="number" class="form-control" formControlName="customExtraDonationAmount" min="1" (keydown)="unfocusOnEnter($event)">
         </button>
       </div>
       <div class="donate-option">
-        <button class="btn btn-secondary donate-option-content" (click)="setExtraDonation('none')" [ngClass]="{'active': donationForm.value.extraDonation == 'none'}">
+        <button type="button" class="btn btn-secondary donate-option-content" (click)="setExtraDonation('none')" [ngClass]="{'active': donationForm.value.extraDonation == 'none'}">
           None at this time
         </button>
       </div>
@@ -56,12 +56,12 @@
     </p>
     <div class="donate-options full-width">
       <div class="donate-option">
-        <button class="btn btn-primary donate-option-content" (click)="setByteForByte(true)" [ngClass]="{'active': byteForByte}">
+        <button type="button" class="btn btn-primary donate-option-content" (click)="setByteForByte(true)" [ngClass]="{'active': byteForByte}">
           Yes, double my donation today
         </button>
       </div>
       <div class="donate-option">
-        <button class="btn btn-secondary donate-option-content" (click)="setByteForByte(false)" [ngClass]="{'active': !byteForByte}">
+        <button type="button" class="btn btn-secondary donate-option-content" (click)="setByteForByte(false)" [ngClass]="{'active': !byteForByte}">
           No, thanks
         </button>
       </div>
