@@ -57,7 +57,6 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       this.isInShares = true;
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
     }
-
   }
 
   ngOnDestroy() {
@@ -179,12 +178,16 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   }
 
   copyItem(destination: FolderVO) {
+    return this.edit.copyItems([this.item], destination);
   }
 
   openFolderPicker(operation: FolderPickerOperations) {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
+    setTimeout(() => {
+      this.message.showMessage('test message', 'success');
+    }, 400);
     this.folderPicker.chooseFolder(myFiles, operation, deferred.promise)
       .then((destination: FolderVO) => {
         switch (operation) {
@@ -203,6 +206,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
         }, 500);
       })
       .catch((response: FolderResponse | RecordResponse) => {
+        deferred.reject();
         this.message.showError(response.getMessage(), true);
       });
   }

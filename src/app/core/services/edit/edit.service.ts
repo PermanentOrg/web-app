@@ -156,36 +156,38 @@ export class EditService {
       promises.push(Promise.resolve());
     }
 
-    return Promise.all(promises)
-      .then((results) => {
-        let folderResponse: FolderResponse;
-        let recordResponse: RecordResponse;
+    return Promise.all(promises);
+  }
 
-        [folderResponse, recordResponse] =  results;
-        if (folderResponse) {
-          folderResponse.getFolderVOs()
-            .forEach((updatedItem) => {
-              itemsByLinkId[updatedItem.folder_linkId].update(updatedItem);
-            });
-        }
+  copyItems(items: any[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
+    const folders: FolderVO[] = [];
+    const records: RecordVO[] = [];
 
-        if (recordResponse) {
-          recordResponse.getRecordVOs()
-          .forEach((updatedItem) => {
-            itemsByLinkId[updatedItem.folder_linkId].update(updatedItem);
-          });
-        }
-      }).catch((results) => {
-        let folderResponse: FolderResponse;
-        let recordResponse: RecordResponse;
+    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
 
-        [folderResponse, recordResponse] =  results;
+    items.forEach((item) => {
+      item.isFolder ? folders.push(item) : records.push(item);
+      itemsByLinkId[item.folder_linkId] = item;
+    });
 
-        if (folderResponse && !folderResponse.isSuccessful) {
-          return Promise.reject(folderResponse);
-        } else if (recordResponse) {
-          return Promise.reject(recordResponse);
-        }
-      });
+    const promises: Array<Promise<any>> = [];
+
+    if (folders.length) {
+      promises.push(
+        this.api.folder.copy(folders, destination)
+      );
+    } else {
+      promises.push(Promise.resolve());
+    }
+
+    if (records.length) {
+      promises.push(
+        this.api.record.copy(records, destination)
+      );
+    } else {
+      promises.push(Promise.resolve());
+    }
+
+    return Promise.all(promises);
   }
 }
