@@ -185,9 +185,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
-    setTimeout(() => {
-      this.message.showMessage('test message', 'success');
-    }, 400);
+
     this.folderPicker.chooseFolder(myFiles, operation, deferred.promise)
       .then((destination: FolderVO) => {
         switch (operation) {
@@ -200,7 +198,10 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       .then(() => {
         setTimeout(() => {
           deferred.resolve();
-          if (operation === FolderPickerOperations.Move) {
+          // tslint:disable-next-line:max-line-length
+          const msg = `${this.item.isFolder ? 'Folder' : 'Record'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
+          this.message.showMessage(msg, 'success');
+          if (operation === FolderPickerOperations.Move || this.item.isFolder) {
             this.dataService.refreshCurrentFolder();
           }
         }, 500);

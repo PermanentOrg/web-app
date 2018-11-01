@@ -120,6 +120,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
         })
         .catch(() => {
           this.saving = false;
+          this.hide();
         });
     }
   }
