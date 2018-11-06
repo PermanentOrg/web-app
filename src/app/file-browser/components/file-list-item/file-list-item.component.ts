@@ -17,6 +17,31 @@ import { FolderPickerOperations } from '@core/components/folder-picker/folder-pi
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { Deferred } from '@root/vendor/deferred';
 
+const ItemActions: {[key: string]: PromptButton} = {
+  Rename: {
+    buttonName: 'rename',
+    buttonText: 'Rename',
+  },
+  Copy: {
+    buttonName: 'copy',
+    buttonText: 'Copy',
+  },
+  Move: {
+    buttonName: 'move',
+    buttonText: 'Move',
+  },
+  Delete: {
+    buttonName: 'delete',
+    buttonText: 'Delete',
+    class: 'btn-danger'
+  },
+  Unshare: {
+    buttonName: 'delete',
+    buttonText: 'Remove',
+    class: 'btn-danger'
+  }
+};
+
 @Component({
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
@@ -26,6 +51,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
   public allowActions = true;
   public isMyItem = true;
+  public canWrite = true;
 
   private isInShares: boolean;
   private isInApps: boolean;
@@ -56,6 +82,10 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
+    }
+
+    if (this.item.accessRole === 'access.role.viewer' || this.item.accessRole === 'access.role.contributor') {
+      this.canWrite = false;
     }
   }
 
@@ -96,7 +126,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   showActions(event: Event) {
     event.stopPropagation();
 
-    const actionButtons: PromptButton[] = [];
+    const actionButtons: PromptButton[] = [ItemActions.Copy];
 
     let actionResolve;
 
@@ -104,33 +134,12 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       actionResolve = resolve;
     });
 
-    actionButtons.push(
-      {
-        buttonName: 'rename',
-        buttonText: 'Rename',
-      },
-      {
-        buttonName: 'copy',
-        buttonText: 'Copy',
-      },
-      {
-        buttonName: 'move',
-        buttonText: 'Move',
-      },
-      {
-        buttonName: 'delete',
-        buttonText: 'Delete',
-        class: 'btn-danger'
+    if (this.canWrite) {
+      actionButtons.push(ItemActions.Move);
+      actionButtons.push(ItemActions.Rename);
+      if (this.item.isRecord ) {
+        actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
       }
-    );
-
-    if (this.item.isRecord) {
-      actionButtons.push(
-        {
-          buttonName: 'download',
-          buttonText: 'Download'
-        }
-      );
     }
 
     this.prompt.promptButtons(actionButtons, this.item.displayName, actionPromise)
