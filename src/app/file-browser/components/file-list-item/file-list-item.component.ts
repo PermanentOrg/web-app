@@ -208,7 +208,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           deferred.resolve();
           // tslint:disable-next-line:max-line-length
-          const msg = `${this.item.isFolder ? 'Folder' : 'Record'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
+          const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
           this.message.showMessage(msg, 'success');
           if (operation === FolderPickerOperations.Move || this.item.isFolder) {
             this.dataService.refreshCurrentFolder();
