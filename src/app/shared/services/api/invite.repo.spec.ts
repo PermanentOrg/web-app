@@ -6,7 +6,7 @@ import { HttpService } from '@shared/services/http/http.service';
 import { InviteRepo, InviteResponse } from '@shared/services/api/invite.repo';
 import { InviteVO } from '@root/app/models';
 
-fdescribe('InviteRepo', () => {
+describe('InviteRepo', () => {
   let repo: InviteRepo;
   let httpMock: HttpTestingController;
 
