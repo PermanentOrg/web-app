@@ -30,6 +30,10 @@ const ItemActions: {[key: string]: PromptButton} = {
     buttonName: 'move',
     buttonText: 'Move',
   },
+  Download: {
+    buttonName: 'download',
+    buttonText: 'Download'
+  },
   Delete: {
     buttonName: 'delete',
     buttonText: 'Delete',
@@ -137,8 +141,9 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     if (this.canWrite) {
       actionButtons.push(ItemActions.Move);
       actionButtons.push(ItemActions.Rename);
-      if (this.item.isRecord ) {
-        actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
+      actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
+      if (this.item.isRecord) {
+        actionButtons.push(ItemActions.Download);
       }
     }
 
