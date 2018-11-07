@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
-import { clone } from 'lodash';
+import { clone, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
@@ -13,6 +13,34 @@ import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo'
 import { Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { Deferred } from '@root/vendor/deferred';
+
+const ItemActions: {[key: string]: PromptButton} = {
+  Rename: {
+    buttonName: 'rename',
+    buttonText: 'Rename',
+  },
+  Copy: {
+    buttonName: 'copy',
+    buttonText: 'Copy',
+  },
+  Move: {
+    buttonName: 'move',
+    buttonText: 'Move',
+  },
+  Delete: {
+    buttonName: 'delete',
+    buttonText: 'Delete',
+    class: 'btn-danger'
+  },
+  Unshare: {
+    buttonName: 'delete',
+    buttonText: 'Remove',
+    class: 'btn-danger'
+  }
+};
 
 @Component({
   selector: 'pr-file-list-item',
@@ -23,6 +51,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   @Input() item: FolderVO | RecordVO;
   public allowActions = true;
   public isMyItem = true;
+  public canWrite = true;
 
   private isInShares: boolean;
   private isInApps: boolean;
@@ -35,7 +64,8 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     private message: MessageService,
     private prompt: PromptService,
     private edit: EditService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private folderPicker: FolderPickerService
   ) {
   }
 
@@ -54,6 +84,9 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
     }
 
+    if (this.item.accessRole === 'access.role.viewer' || this.item.accessRole === 'access.role.contributor') {
+      this.canWrite = false;
+    }
   }
 
   ngOnDestroy() {
@@ -93,7 +126,7 @@ export class FileListItemComponent implements OnInit, OnDestroy {
   showActions(event: Event) {
     event.stopPropagation();
 
-    const actionButtons: PromptButton[] = [];
+    const actionButtons: PromptButton[] = [ItemActions.Copy];
 
     let actionResolve;
 
@@ -101,25 +134,12 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       actionResolve = resolve;
     });
 
-    actionButtons.push(
-      {
-        buttonName: 'delete',
-        buttonText: 'Delete',
-        class: 'btn-danger'
-      },
-      {
-        buttonName: 'rename',
-        buttonText: 'Rename',
-      },
-    );
-
-    if (this.item.isRecord) {
-      actionButtons.push(
-        {
-          buttonName: 'download',
-          buttonText: 'Download'
-        }
-      );
+    if (this.canWrite) {
+      actionButtons.push(ItemActions.Move);
+      actionButtons.push(ItemActions.Rename);
+      if (this.item.isRecord ) {
+        actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
+      }
     }
 
     this.prompt.promptButtons(actionButtons, this.item.displayName, actionPromise)
@@ -130,6 +150,14 @@ export class FileListItemComponent implements OnInit, OnDestroy {
           case 'rename':
             actionResolve();
             this.promptForUpdate();
+            break;
+          case 'move':
+            actionResolve();
+            this.openFolderPicker(FolderPickerOperations.Move);
+            break;
+          case 'copy':
+            actionResolve();
+            this.openFolderPicker(FolderPickerOperations.Copy);
             break;
           case 'download':
             this.dataService.downloadFile(this.item as RecordVO)
@@ -151,6 +179,45 @@ export class FileListItemComponent implements OnInit, OnDestroy {
       })
       .catch(() => {
         resolve();
+      });
+  }
+
+  moveItem(destination: FolderVO) {
+    return this.edit.moveItems([this.item], destination);
+  }
+
+  copyItem(destination: FolderVO) {
+    return this.edit.copyItems([this.item], destination);
+  }
+
+  openFolderPicker(operation: FolderPickerOperations) {
+    const deferred = new Deferred();
+    const rootFolder = this.accountService.getRootFolder();
+    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
+
+    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise)
+      .then((destination: FolderVO) => {
+        switch (operation) {
+          case FolderPickerOperations.Copy:
+            return this.copyItem(destination);
+          case FolderPickerOperations.Move:
+            return this.moveItem(destination);
+        }
+      })
+      .then(() => {
+        setTimeout(() => {
+          deferred.resolve();
+          // tslint:disable-next-line:max-line-length
+          const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
+          this.message.showMessage(msg, 'success');
+          if (operation === FolderPickerOperations.Move || this.item.isFolder) {
+            this.dataService.refreshCurrentFolder();
+          }
+        }, 500);
+      })
+      .catch((response: FolderResponse | RecordResponse) => {
+        deferred.reject();
+        this.message.showError(response.getMessage(), true);
       });
   }
 

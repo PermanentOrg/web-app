@@ -83,6 +83,32 @@ export class FolderRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/folder/delete', data, FolderResponse);
   }
+
+  public move(folderVOs: FolderVO[], destination: FolderVO): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: new FolderVO(folderVO),
+        FolderDestVO: {
+          folder_linkId: destination.folder_linkId
+        }
+      };
+    });
+
+    return this.http.sendRequestPromise('/folder/move', data, FolderResponse);
+  }
+
+  public copy(folderVOs: FolderVO[], destination: FolderVO): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: new FolderVO(folderVO),
+        FolderDestVO: {
+          folder_linkId: destination.folder_linkId
+        }
+      };
+    });
+
+    return this.http.sendRequestPromise('/folder/copy', data, FolderResponse);
+  }
 }
 
 export class FolderResponse extends BaseResponse {
