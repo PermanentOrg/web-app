@@ -15,6 +15,8 @@ import { cloneDeep  } from 'lodash';
 import { SharesComponent } from './shares.component';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 describe('SharesComponent', () => {
   let component: SharesComponent;
@@ -37,8 +39,10 @@ describe('SharesComponent', () => {
     config.declarations.push(SharesComponent);
     config.declarations.push(ShareComponent);
     config.declarations.push(FileListItemComponent);
+    config.declarations.push(FolderPickerComponent);
     config.providers.push(DataService);
     config.providers.push(AccountService);
+    config.providers.push(FolderPickerService);
     config.providers.push({
       provide: ActivatedRoute,
       useValue: {

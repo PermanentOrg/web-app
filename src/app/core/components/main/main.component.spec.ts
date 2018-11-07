@@ -20,6 +20,8 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
+import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
@@ -44,9 +46,11 @@ describe('MainComponent', () => {
     config.declarations.push(RightMenuComponent);
     config.declarations.push(UploadProgressComponent);
     config.declarations.push(UploadButtonComponent);
+    config.declarations.push(FolderPickerComponent);
 
     config.providers.push(AccountService);
     config.providers.push(DataService);
+    config.providers.push(FolderPickerService);
 
     await TestBed.configureTestingModule(config).compileComponents();
 

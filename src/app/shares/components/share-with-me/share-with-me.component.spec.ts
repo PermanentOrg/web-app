@@ -13,6 +13,8 @@ import { ShareComponent } from '@shares/components/share/share.component';
 import { ActivatedRoute } from '@angular/router';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { ArchiveVO } from '@root/app/models';
+import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 const getSharesData = require('@root/test/responses/share.getShares.success.json');
 
@@ -30,8 +32,10 @@ describe('ShareWithMeComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(ShareWithMeComponent);
     config.declarations.push(ShareComponent);
+    config.declarations.push(FolderPickerComponent);
 
     config.providers.push(DataService);
+    config.providers.push(FolderPickerService);
     config.imports.push(SharedModule);
     config.imports.push(FileBrowserModule);
 
