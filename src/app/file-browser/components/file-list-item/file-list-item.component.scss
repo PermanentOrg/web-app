@@ -11,6 +11,8 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   &.grid-view {
     width: 50%;
     float: left;
+    padding-bottom: 5px;
+    background-color: $gray-100;
     @for $i from 3 through 10 {
       @media screen and (min-width: $i * $max-grid-width + 1){
         width: 100% / $i;
@@ -26,6 +28,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   cursor: pointer;
   user-select: none;
   &.grid-view {
+    background-color: white;
     flex-wrap: wrap;
     padding-bottom: $grid-info-section-height;
     position: relative;
