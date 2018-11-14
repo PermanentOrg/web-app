@@ -81,8 +81,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // create debounced scroll handler for placeholder loading
-    this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
-    this.scrollHandlerThrottled = throttle(this.calculateListViewport.bind(this), SCROLL_THROTTLE);
+    this.scrollHandlerDebounced = debounce(this.loadVisibleItems.bind(this), SCROLL_DEBOUNCE);
+    this.scrollHandlerThrottled = throttle(this.loadVisibleItems.bind(this), SCROLL_THROTTLE);
 
     // register for navigation events to reinit page on folder changes
     if (!this.routeListener) {
@@ -133,7 +133,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.listItems = this.listItemsQuery.toArray();
     }
 
-    this.calculateListViewport(true);
+    this.loadVisibleItems(true);
     this.document.documentElement.scrollTop = 0;
   }
 
@@ -162,7 +162,12 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  calculateListViewport(animate ?: boolean) {
+  @HostListener('window:resize', ['$event'])
+  onViewportResize(event) {
+    this.scrollHandlerDebounced();
+  }
+
+  loadVisibleItems(animate ?: boolean) {
     if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {
       return;
     }
@@ -179,7 +184,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.folderView === FolderView.List) {
       itemHeight = ITEM_HEIGHT_LIST_VIEW;
     } else {
-      itemsPerRow = 2 || Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW);
+      itemsPerRow = Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW);
       itemHeight = ITEM_HEIGHT_LIST_VIEW;
     }
 

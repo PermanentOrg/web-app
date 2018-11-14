@@ -1,4 +1,4 @@
-import { Directive, Input, OnInit, OnChanges, ElementRef, Renderer } from '@angular/core';
+import { Directive, Input, OnInit, OnChanges, ElementRef, Renderer, SimpleChanges } from '@angular/core';
 import { TweenMax } from 'gsap';
 
 const FADE_IN_DURATION = 0.3;
@@ -8,6 +8,7 @@ const FADE_IN_DURATION = 0.3;
 })
 export class BgImageSrcDirective implements OnInit, OnChanges {
   @Input() bgSrc: string;
+  @Input() cover: boolean;
 
   private element: Element;
   private fadeIn = false;
@@ -23,8 +24,8 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges() {
-    this.setBgImage();
+  ngOnChanges(changes: SimpleChanges) {
+    this.setBgImage(changes);
   }
 
   loadBgImage() {
@@ -47,13 +48,16 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
     bgImage.src = this.bgSrc;
   }
 
-  setBgImage() {
+  setBgImage(changes?: SimpleChanges) {
+    console.log(changes);
     if (!this.bgSrc) {
       this.renderer.setElementStyle(this.element, 'background-image', '');
       this.renderer.setElementClass(this.element, 'bg-image-loaded', false);
     } else {
       this.loadBgImage();
     }
+
+    this.renderer.setElementClass(this.element, 'bg-image-cover', this.cover);
   }
 
 }
