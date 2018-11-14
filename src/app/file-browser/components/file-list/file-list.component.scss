@@ -1,6 +1,16 @@
+@import 'variables';
+
 :host {
   display: block;
   padding-top: 34px;
+  &.grid-view {
+    // background-color: $gray-100;
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
 }
 
 .empty-message {
