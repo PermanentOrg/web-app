@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
@@ -16,6 +16,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { Deferred } from '@root/vendor/deferred';
+import { FolderView } from '@fileBrowser/folder-view.enum';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -51,8 +52,12 @@ const ItemActions: {[key: string]: PromptButton} = {
   templateUrl: './file-list-item.component.html',
   styleUrls: ['./file-list-item.component.scss']
 })
-export class FileListItemComponent implements OnInit, OnDestroy {
+export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() item: FolderVO | RecordVO;
+  @Input() folderView: FolderView;
+
+  @HostBinding('class.grid-view') inGridView = false;
+
   public allowActions = true;
   public isMyItem = true;
   public canWrite = true;
@@ -91,6 +96,12 @@ export class FileListItemComponent implements OnInit, OnDestroy {
     if (this.item.accessRole === 'access.role.viewer' || this.item.accessRole === 'access.role.contributor') {
       this.canWrite = false;
     }
+
+    this.inGridView = this.folderView === FolderView.Grid;
+  }
+
+  ngOnChanges() {
+    this.inGridView = this.folderView === FolderView.Grid;
   }
 
   ngOnDestroy() {

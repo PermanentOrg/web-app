@@ -7,7 +7,8 @@ import {
   QueryList,
   ViewChildren,
   HostListener,
-  OnDestroy
+  OnDestroy,
+  HostBinding
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -22,6 +23,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import { FolderView } from '@fileBrowser/folder-view.enum';
 
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT = 51;
@@ -40,6 +42,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   currentFolder: FolderVO;
   listItems: FileListItemComponent[] = [];
+
+  folderView = FolderView.Grid;
+  @HostBinding('class.grid-view') inGridView = this.folderView === FolderView.Grid;
 
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
