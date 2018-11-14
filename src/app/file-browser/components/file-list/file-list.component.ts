@@ -59,6 +59,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   private inFileView = false;
 
   private lastScrollTop: number;
+  private lastItemOffset: number;
   private currentScrollTop: number;
 
   constructor(
@@ -145,7 +146,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   setFolderView(folderView: FolderView) {
     this.folderView = folderView;
     this.inGridView = folderView === FolderView.Grid;
-    this.scrollHandlerThrottled();
+    setTimeout(() => {
+      // scroll to show items after change
+      const scrollTarget: FileListItemComponent = this.listItems[this.lastItemOffset];
+      console.log(scrollTarget.item.displayName);
+      this.document.documentElement.scrollTop = (scrollTarget.element.nativeElement as HTMLElement).offsetTop - NAV_HEIGHT;
+      this.scrollHandlerThrottled();
+    });
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -184,13 +191,14 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.folderView === FolderView.List) {
       itemHeight = ITEM_HEIGHT_LIST_VIEW;
     } else {
-      itemsPerRow = Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW);
-      itemHeight = ITEM_HEIGHT_LIST_VIEW;
+      itemsPerRow = Math.max(Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW), 2);
+      itemHeight = this.listItems[0] ? this.listItems[0].element.nativeElement.clientHeight : ITEM_HEIGHT_LIST_VIEW;
     }
 
     offset = Math.floor(top / itemHeight) * itemsPerRow;
-    count = (Math.ceil(viewportHeight / itemHeight) + 4) * itemsPerRow;
+    this.lastItemOffset = offset;
 
+    count = (Math.ceil(viewportHeight / itemHeight) + 4) * itemsPerRow;
 
     if (animate) {
       const targetElems = this.listItems.slice(0, count).map((item) => item.element.nativeElement);
