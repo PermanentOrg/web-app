@@ -11,6 +11,8 @@ import { FolderResponse} from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
 import { Validators, FormBuilder } from '@angular/forms';
 import { EditService } from '@core/services/edit/edit.service';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
 @Component({
   selector: 'pr-right-menu',
@@ -25,7 +27,9 @@ export class RightMenuComponent implements OnInit {
 
   public currentFolder: FolderVO;
   public allowedActions = {
-    createFolder: false
+    createFolder: false,
+    useGridView: false,
+    useListView: false
   };
 
   constructor(
@@ -36,9 +40,14 @@ export class RightMenuComponent implements OnInit {
     private api: ApiService,
     private fb: FormBuilder,
     private prompt: PromptService,
+    private folderViewService: FolderViewService
   ) {
     this.dataService.currentFolderChange.subscribe((currentFolder: FolderVO) => {
       this.currentFolder = currentFolder;
+      this.setAvailableActions();
+    });
+
+    this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
       this.setAvailableActions();
     });
   }
@@ -50,6 +59,8 @@ export class RightMenuComponent implements OnInit {
 
   setAvailableActions() {
     this.allowedActions.createFolder = this.currentFolder && !this.currentFolder.type.includes('app');
+    this.allowedActions.useGridView = !!this.currentFolder && this.folderViewService.folderView !== FolderView.Grid;
+    this.allowedActions.useListView = !!this.currentFolder && this.folderViewService.folderView !== FolderView.List;
   }
 
   hide(event: Event) {
@@ -57,6 +68,10 @@ export class RightMenuComponent implements OnInit {
     this.isVisibleChange.emit(this.isVisible);
     event.stopPropagation();
     return false;
+  }
+
+  setFolderView(folderView: FolderView) {
+    this.folderViewService.setFolderView(folderView);
   }
 
   createNewFolder() {

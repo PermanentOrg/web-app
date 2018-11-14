@@ -4,6 +4,11 @@ $row-height: $file-list-row-height;
 
 :host {
   display: block;
+  &.grid-view {
+    // display: inline-block;
+    width: 50%;
+    float: left;
+  }
 }
 
 .file-list-item {

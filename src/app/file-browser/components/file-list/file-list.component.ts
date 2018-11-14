@@ -23,10 +23,14 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
-import { FolderView } from '@fileBrowser/folder-view.enum';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
 const NAV_HEIGHT = 84;
-const ITEM_HEIGHT = 51;
+const ITEM_HEIGHT_LIST_VIEW = 51;
+
+const ITEM_MAX_WIDTH_GRID_VIEW = 200;
+
 const SCROLL_DEBOUNCE = 150;
 const SCROLL_THROTTLE = 500;
 const SCROLL_TIMING = 16;
@@ -43,8 +47,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   currentFolder: FolderVO;
   listItems: FileListItemComponent[] = [];
 
-  folderView = FolderView.Grid;
-  @HostBinding('class.grid-view') inGridView = this.folderView === FolderView.Grid;
+  folderView = FolderView.List;
+  @HostBinding('class.grid-view') inGridView = false;
 
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
@@ -61,11 +65,23 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private dataService: DataService,
     private router: Router,
+    private elementRef: ElementRef,
+    private folderViewService: FolderViewService,
     @Inject(DOCUMENT) private document: any
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
 
     this.dataService.setCurrentFolder(this.currentFolder);
+
+    // get current app-wide folder view and register for updates
+    this.folderView = this.folderViewService.folderView;
+    this.inGridView = this.folderView === FolderView.Grid;
+    this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
+      this.folderView = folderView;
+      this.inGridView = folderView === FolderView.Grid;
+    });
+
+    console.log('current view?', this.folderView, FolderView.Grid, this.inGridView);
 
     // create debounced scroll handler for placeholder loading
     this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
@@ -129,6 +145,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.routeListener.unsubscribe();
   }
 
+  setFolderView(folderView: FolderView) {
+    this.folderView = folderView;
+    this.scrollHandlerThrottled();
+  }
+
   @HostListener('window:scroll', ['$event'])
   onViewportScroll(event) {
     this.lastScrollTop = this.currentScrollTop;
@@ -150,10 +171,23 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const totalHeight = this.document.documentElement.clientHeight || this.document.body.clientHeight;
     const viewportHeight = totalHeight - NAV_HEIGHT;
+    const listWidth = (this.elementRef.nativeElement as HTMLElement).clientWidth;
 
     const top = this.document.documentElement.scrollTop || this.document.body.scrollTop;
-    const offset = Math.floor(top / ITEM_HEIGHT);
-    const count = Math.ceil(viewportHeight / ITEM_HEIGHT) + 4;
+
+    let offset, count, itemHeight;
+    let itemsPerRow = 1;
+
+    if (this.folderView === FolderView.List) {
+      itemHeight = ITEM_HEIGHT_LIST_VIEW;
+    } else {
+      itemsPerRow = 2 || Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW);
+      itemHeight = ITEM_HEIGHT_LIST_VIEW;
+    }
+
+    offset = Math.floor(top / itemHeight) * itemsPerRow;
+    count = (Math.ceil(viewportHeight / itemHeight) + 4) * itemsPerRow;
+
 
     if (animate) {
       const targetElems = this.listItems.slice(0, count).map((item) => item.element.nativeElement);

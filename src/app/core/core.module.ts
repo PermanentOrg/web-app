@@ -7,6 +7,7 @@ import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 import { MainComponent } from '@core/components/main/main.component';
@@ -44,6 +45,7 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
   ],
   providers: [
     DataService,
+    FolderViewService,
     UploadService,
     PromptService,
     FolderPickerService

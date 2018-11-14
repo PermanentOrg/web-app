@@ -16,7 +16,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { Deferred } from '@root/vendor/deferred';
-import { FolderView } from '@fileBrowser/folder-view.enum';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
