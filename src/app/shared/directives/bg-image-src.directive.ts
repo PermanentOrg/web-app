@@ -49,7 +49,6 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
   }
 
   setBgImage(changes?: SimpleChanges) {
-    console.log(changes);
     if (!this.bgSrc) {
       this.renderer.setElementStyle(this.element, 'background-image', '');
       this.renderer.setElementClass(this.element, 'bg-image-loaded', false);
