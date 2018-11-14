@@ -52,6 +52,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.scrollElement = this.elementRef.nativeElement.querySelector('.breadcrumbs');
     this.setFolder(this.dataService.currentFolder);
+    setTimeout(() => {
+      this.scrollToEnd();
+    });
 
     this.folderChangeListener = this.dataService.currentFolderChange.subscribe((folder: FolderVO) => {
       this.setFolder(folder);
