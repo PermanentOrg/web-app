@@ -1,9 +1,22 @@
 @import 'variables';
 
 $row-height: $file-list-row-height;
+$max-grid-width: 200px;
+$action-button-height: 32px;
+$grid-info-section-margin: 5px;
+$grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin;
 
 :host {
   display: block;
+  &.grid-view {
+    width: 50%;
+    float: left;
+    @for $i from 3 through 10 {
+      @media screen and (min-width: $i * $max-grid-width + 1){
+        width: 100% / $i;
+      }
+    }
+  }
 }
 
 .file-list-item {
@@ -12,6 +25,14 @@ $row-height: $file-list-row-height;
   border-bottom: 1px solid $gray-300;
   cursor: pointer;
   user-select: none;
+  &.grid-view {
+    flex-wrap: wrap;
+    padding-bottom: $grid-info-section-height;
+    position: relative;
+    border-right: 1px solid $gray-300;
+  }
+
+
 }
 
 .name {
@@ -19,10 +40,24 @@ $row-height: $file-list-row-height;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  .grid-view & {
+    line-height: $grid-info-section-height;
+    height: $grid-info-section-height;
+    position: absolute;
+    bottom: 0px;
+    left: $grid-info-section-margin;
+    right: $action-button-height;
+  }
 }
 
 .actions {
   margin-right: 0.5rem;
+  .grid-view & {
+    position: absolute;
+    bottom: $grid-info-section-margin;
+    right: 0px;
+    margin: 0px;
+  }
 }
 
 [prBgImage] {
@@ -30,4 +65,10 @@ $row-height: $file-list-row-height;
   width: $row-height - 10px;
   flex: 0 0 $row-height - 10px;
   margin: 5px 5px;
+  .grid-view & {
+    flex: 0 0 100%;
+    width: 100%;
+    padding-top: 100%;
+    margin: 0px;
+  }
 }

@@ -12,4 +12,8 @@
   &.no-placeholder {
     background-color: rgba(white, 0);
   }
+
+  &.bg-image-cover {
+    background-size: cover;
+  }
 }
