@@ -13,19 +13,10 @@ export class FolderViewService {
   viewChange: EventEmitter<FolderView> = new EventEmitter<FolderView>();
 
   constructor(private storage: StorageService) {
-    const storedView = storage.session.get(VIEW_STORAGE_KEY);
-    switch (storedView) {
-      case 0:
-        console.log(storedView);
-        this.folderView = FolderView.List;
-        break;
-      case 1:
-        console.log(storedView);
-        this.folderView = FolderView.Grid;
-        break;
+    const storedView = Number(storage.session.get(VIEW_STORAGE_KEY));
+    if (storedView) {
+      this.folderView = storedView;
     }
-
-    console.log(storage.session.get(VIEW_STORAGE_KEY), storedView, this.folderView);
   }
 
   setFolderView(folderView: FolderView) {

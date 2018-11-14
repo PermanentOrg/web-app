@@ -77,11 +77,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.folderView = this.folderViewService.folderView;
     this.inGridView = this.folderView === FolderView.Grid;
     this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
-      this.folderView = folderView;
-      this.inGridView = folderView === FolderView.Grid;
+      this.setFolderView(folderView);
     });
-
-    console.log('current view?', this.folderView, FolderView.Grid, this.inGridView);
 
     // create debounced scroll handler for placeholder loading
     this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
@@ -147,6 +144,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setFolderView(folderView: FolderView) {
     this.folderView = folderView;
+    this.inGridView = folderView === FolderView.Grid;
     this.scrollHandlerThrottled();
   }
 
