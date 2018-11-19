@@ -7,6 +7,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { FolderVO, FolderVOData } from '@root/app/models';
+import { find } from 'lodash';
+import { FolderPickerOperations } from '../folder-picker/folder-picker.component';
 
 @Component({
   selector: 'pr-main',
@@ -23,7 +27,8 @@ export class MainComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private router: Router,
     private messageService: MessageService,
-    private upload: UploadService
+    private upload: UploadService,
+    private folderPicker: FolderPickerService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {

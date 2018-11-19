@@ -7,6 +7,8 @@ import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
@@ -17,6 +19,7 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { PromptComponent } from './components/prompt/prompt.component';
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
+import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 
@@ -36,13 +39,16 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
     UploadButtonComponent,
     PromptComponent,
     ArchiveSelectorComponent,
+    FolderPickerComponent,
     DonateComponent,
     InvitationsComponent
   ],
   providers: [
     DataService,
+    FolderViewService,
     UploadService,
-    PromptService
+    PromptService,
+    FolderPickerService
   ]
 })
 export class CoreModule { }

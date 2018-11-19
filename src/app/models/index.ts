@@ -10,3 +10,5 @@ export * from '@models/invite-vo';
 export *  from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { SimpleVO } from '@models/simple-vo';
+
+export { AccessRole } from '@models/access-role';

@@ -54,8 +54,15 @@ export class DataService {
   public fetchLeanItems(items: Array<FolderVO | RecordVO>, currentFolder ?: FolderVO): Promise<number> {
     const itemResolves = [];
     const itemRejects = [];
+    let handleItemRegistration = false;
+
     if (!currentFolder) {
       currentFolder = this.currentFolder;
+    } else {
+      handleItemRegistration = true;
+      items.map(item => {
+        this.registerItem(item);
+      });
     }
     const folder = new FolderVO({
       archiveNbr: currentFolder.archiveNbr,
@@ -109,6 +116,12 @@ export class DataService {
             }
           }
         });
+
+        if (handleItemRegistration) {
+          items.map(item => {
+            this.deregisterItem(item);
+          });
+        }
 
         return Promise.resolve(leanItems.length);
       })

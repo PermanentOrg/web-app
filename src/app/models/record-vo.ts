@@ -2,6 +2,7 @@ import { BaseVO } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 
 export class RecordVO extends BaseVO {
+  public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId'];
   public isRecord = true;
   public isFolder = false;
 

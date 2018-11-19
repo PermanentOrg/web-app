@@ -1,4 +1,4 @@
-import { RecordVO } from '@root/app/models';
+import { RecordVO, FolderVO } from '@root/app/models';
 import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -53,11 +53,37 @@ export class RecordRepo extends BaseRepo {
   public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
-        RecordVO: recordVO
+        RecordVO: new RecordVO(recordVO).getCleanVO()
       };
     });
 
     return this.http.sendRequestPromise('/record/delete', data, RecordResponse);
+  }
+
+  public move(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
+    const data = recordVOs.map((recordVO) => {
+      return {
+        RecordVO: new RecordVO(recordVO).getCleanVO(),
+        FolderDestVO: {
+          folder_linkId: destination.folder_linkId
+        }
+      };
+    });
+
+    return this.http.sendRequestPromise('/record/move', data, RecordResponse);
+  }
+
+  public copy(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
+    const data = recordVOs.map((recordVO) => {
+      return {
+        RecordVO: new RecordVO(recordVO).getCleanVO(),
+        FolderDestVO: {
+          folder_linkId: destination.folder_linkId
+        }
+      };
+    });
+
+    return this.http.sendRequestPromise('/record/copy', data, RecordResponse);
   }
 }
 
