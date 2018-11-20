@@ -40,4 +40,8 @@ export class ArchiveVO extends BaseVO {
       });
     }
   }
+
+  isPending() {
+    return this.status.includes('pending');
+  }
 }
