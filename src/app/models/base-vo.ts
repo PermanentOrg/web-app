@@ -5,6 +5,8 @@ export class BaseVO {
   public dataWhitelist: string[];
   public cleanParams = [];
 
+  public status: string;
+
   constructor (voData: any) {
     if (voData) {
       for ( const key in voData ) {

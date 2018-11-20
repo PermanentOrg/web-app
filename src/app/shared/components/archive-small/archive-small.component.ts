@@ -13,11 +13,13 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() clickable: boolean;
 
   public isCurrent = false;
+  public isPending = false;
 
   constructor(private account: AccountService) { }
 
   ngOnInit() {
     this.isCurrent = this.account.getArchive().archiveId === this.archive.archiveId;
+    this.isPending = this.archive.isPending();
   }
 
   ngOnChanges(changes: SimpleChanges) {
