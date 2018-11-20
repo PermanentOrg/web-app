@@ -36,7 +36,8 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
   ) {
     this.currentArchive = accountService.getArchive();
 
-    const archives = this.route.snapshot.data['archives'].map((archiveData) => {
+    const archivesData = this.route.snapshot.data['archives'] || [];
+    const archives = archivesData.map((archiveData) => {
       return new ArchiveVO(archiveData);
     });
     const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;

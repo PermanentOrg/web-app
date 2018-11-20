@@ -8,6 +8,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveVO } from '@root/app/models';
+import { ActivatedRoute } from '@angular/router';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
@@ -25,6 +26,16 @@ describe('ArchiveSelectorComponent', () => {
     config.imports.push(SharedModule);
     config.declarations.push(ArchiveSelectorComponent);
 
+    config.providers.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          data: {
+            archives: archives
+          }
+        }
+      }
+    });
     TestBed.configureTestingModule(config)
     .compileComponents();
   }));
@@ -35,7 +46,6 @@ describe('ArchiveSelectorComponent', () => {
 
     fixture = TestBed.createComponent(ArchiveSelectorComponent);
     component = fixture.componentInstance;
-    component.archives = archives;
     fixture.detectChanges();
   });
 
