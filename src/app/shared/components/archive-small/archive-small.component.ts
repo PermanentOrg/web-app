@@ -9,8 +9,8 @@ import { AccountService } from '@shared/services/account/account.service';
   styleUrls: ['./archive-small.component.scss']
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {
-  @Input() archive: ArchiveVO;
-  @Input() clickable: boolean;
+  @Input() archive: ArchiveVO = null;
+  @Input() clickable = false;
 
   public isCurrent = false;
   public isPending = false;

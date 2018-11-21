@@ -5,8 +5,11 @@ import { cloneDeep  } from 'lodash';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { TEST_DATA } from '@core/core.module.spec';
+import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
+import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { AccountVO, ArchiveVO } from '@models/index';
 
-xdescribe('LeftMenuComponent', () => {
+describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
   let fixture: ComponentFixture<LeftMenuComponent>;
   let accountService: AccountService;
@@ -14,12 +17,14 @@ xdescribe('LeftMenuComponent', () => {
   beforeEach(async(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(LeftMenuComponent);
+    config.declarations.push(ArchiveSmallComponent);
+    config.declarations.push(BgImageSrcDirective);
 
     TestBed.configureTestingModule(config).compileComponents();
 
     accountService = TestBed.get(AccountService);
-    accountService.setAccount(TEST_DATA.account);
-    accountService.setArchive(TEST_DATA.archive);
+    accountService.setAccount(new AccountVO(TEST_DATA.account));
+    accountService.setArchive(new ArchiveVO(TEST_DATA.archive));
   }));
 
   beforeEach(() => {
@@ -38,6 +43,6 @@ xdescribe('LeftMenuComponent', () => {
   });
 
   it('should have the current archive name as a property', () => {
-    expect(component.archiveName).toEqual(TEST_DATA.archive.fullName);
+    expect(component.archive.fullName).toEqual(TEST_DATA.archive.fullName);
   });
 });

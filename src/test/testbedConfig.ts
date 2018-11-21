@@ -7,6 +7,7 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -20,7 +21,8 @@ export const BASE_TEST_CONFIG = {
     MessageService,
     UploadService,
     PromptService,
-    FolderViewService
+    FolderViewService,
+    PrConstantsService
   ] as any[],
   declarations: [
   ] as any[]
