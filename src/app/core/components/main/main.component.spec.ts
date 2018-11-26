@@ -20,6 +20,9 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
+import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
@@ -44,14 +47,16 @@ describe('MainComponent', () => {
     config.declarations.push(RightMenuComponent);
     config.declarations.push(UploadProgressComponent);
     config.declarations.push(UploadButtonComponent);
+    config.declarations.push(FolderPickerComponent);
 
     config.providers.push(AccountService);
     config.providers.push(DataService);
+    config.providers.push(FolderPickerService);
 
     await TestBed.configureTestingModule(config).compileComponents();
 
     const authResponse = new AuthResponse(authResponseData);
-
+    console.log(authResponse);
     accountService = TestBed.get(AccountService);
 
     accountService.setAccount(authResponse.getAccountVO());
@@ -60,9 +65,12 @@ describe('MainComponent', () => {
     messageService = TestBed.get(MessageService);
     spyOn(messageService, 'showMessage');
 
+    console.log('about to create');
     fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
+    console.log(component);
     fixture.detectChanges();
+    console.log('detect');
   }
 
   afterEach(() => {
@@ -80,6 +88,7 @@ describe('MainComponent', () => {
   it('should show a prompt when both email and phone are unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
     await init(data);
+    console.log('init done!');
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
     expect(messageService.showMessage).toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),

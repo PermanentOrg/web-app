@@ -11,7 +11,7 @@ import { ArchiveVO } from '@root/app/models';
   styleUrls: ['./left-menu.component.scss']
 })
 export class LeftMenuComponent implements OnInit, OnChanges {
-  @Input() isVisible: boolean;
+  @Input() isVisible = false;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public archiveName: string;

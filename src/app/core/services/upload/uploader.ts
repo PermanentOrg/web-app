@@ -85,6 +85,8 @@ export class Uploader {
           this.fileCount.error = 0;
           this.fileCount.total = this.metaQueue.length + this.uploadQueue.length;
 
+          this.message.showMessage('Please don\'t close your browser until the upload is complete.');
+
           this.uploadSessionStatus.emit(UploadSessionStatus.Start);
           this.socketClient.removeListener('error', failedToConnect);
           this.socketClient.on('close', (event) => {

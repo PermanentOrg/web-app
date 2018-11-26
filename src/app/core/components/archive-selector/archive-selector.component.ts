@@ -15,6 +15,7 @@ import { BaseResponse } from '@shared/services/api/base';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 @Component({
   selector: 'pr-archive-selector',
@@ -27,6 +28,7 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
   constructor(
     private accountService: AccountService,
     private api: ApiService,
+    private prConstants: PrConstantsService,
     private route: ActivatedRoute,
     private prompt: PromptService,
     private message: MessageService,
@@ -34,7 +36,10 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
   ) {
     this.currentArchive = accountService.getArchive();
 
-    const archives = this.route.snapshot.data['archives'];
+    const archivesData = this.route.snapshot.data['archives'] || [];
+    const archives = archivesData.map((archiveData) => {
+      return new ArchiveVO(archiveData);
+    });
     const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;
 
     this.currentArchive.update(currentArchiveFetched);
@@ -66,7 +71,7 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
     const buttons: PromptButton[] = [
       {
         buttonName: 'switch',
-        buttonText: 'Switch archive'
+        buttonText: archive.isPending() ? 'Accept and switch archive' : 'Switch archive'
       },
       {
         buttonName: 'cancel',
@@ -75,10 +80,25 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
       }
     ];
 
-    this.prompt.promptButtons(buttons, `Switch archive to ${archive.fullName}?`, deferred.promise)
+    let message = `Switch archive to ?`;
+
+    if (archive.isPending()) {
+      message = `Accept and switch to archive ${archive.fullName} as ${this.prConstants.translate(archive.accessRole)}?`;
+    }
+
+    this.prompt.promptButtons(buttons, message, deferred.promise)
       .then((result) => {
         if (result === 'switch') {
-          this.accountService.changeArchive(archive)
+          let acceptIfNeeded: Promise<ArchiveResponse | any> = Promise.resolve();
+
+          if (archive.isPending()) {
+            acceptIfNeeded = this.api.archive.accept(archive);
+          }
+
+          acceptIfNeeded
+            .then(() => {
+              return this.accountService.changeArchive(archive);
+            })
             .then(() => {
               deferred.resolve();
               this.router.navigate(['/myfiles']);

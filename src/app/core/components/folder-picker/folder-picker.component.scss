@@ -1,0 +1,102 @@
+@import 'variables';
+
+$picker-margin: 20px;
+$transition-length: 0.4s;
+$row-height: 40px;
+
+.folder-picker {
+  top: $picker-margin * 2;
+  bottom: $picker-margin * 2;
+  left: $picker-margin;
+  right: $picker-margin;
+  transform: translateY(100%);
+  transition:  transform $transition-length ease-in;
+  border-radius: $border-radius;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.visible .folder-picker{
+  transition: transform $transition-length ease-out;
+}
+
+.picker-contents {
+  flex: 1 0;
+  overflow: hidden;
+  overflow-y: auto;
+  position: relative;
+  z-index: 0;
+
+  &.navigating {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.picker-empty {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.picker-header, .picker-footer {
+  box-shadow: $box-shadow-sm;
+}
+
+.picker-header {
+  padding: 10px;
+  display: flex;
+}
+
+.picker-folder-name {
+  font-weight: 600;
+  text-align: center;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.picker-back {
+  flex: 0 0 3.5rem;
+  cursor: pointer;
+}
+
+.picker-footer {
+  padding: 0px 10px;
+  display: flex;
+
+  button:not(:first-child) {
+    margin-left: 10px;
+  }
+
+  button.btn-secondary {
+    flex: 0 0 33.33%
+  }
+}
+
+:host {
+  display: block;
+}
+
+.picker-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $gray-300;
+  cursor: pointer;
+  user-select: none;
+}
+
+.name {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[prBgImage] {
+  height: $row-height - 10px;
+  width: $row-height - 10px;
+  flex: 0 0 $row-height - 10px;
+  margin: 5px 5px;
+}

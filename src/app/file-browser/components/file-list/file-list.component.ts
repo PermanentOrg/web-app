@@ -7,7 +7,8 @@ import {
   QueryList,
   ViewChildren,
   HostListener,
-  OnDestroy
+  OnDestroy,
+  HostBinding
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -22,9 +23,14 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
 const NAV_HEIGHT = 84;
-const ITEM_HEIGHT = 51;
+const ITEM_HEIGHT_LIST_VIEW = 51;
+
+const ITEM_MAX_WIDTH_GRID_VIEW = 200;
+
 const SCROLL_DEBOUNCE = 150;
 const SCROLL_THROTTLE = 500;
 const SCROLL_TIMING = 16;
@@ -41,6 +47,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   currentFolder: FolderVO;
   listItems: FileListItemComponent[] = [];
 
+  folderView = FolderView.List;
+  @HostBinding('class.grid-view') inGridView = false;
+
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
 
@@ -50,21 +59,31 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   private inFileView = false;
 
   private lastScrollTop: number;
+  private lastItemOffset: number;
   private currentScrollTop: number;
 
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
     private router: Router,
+    private elementRef: ElementRef,
+    private folderViewService: FolderViewService,
     @Inject(DOCUMENT) private document: any
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
 
     this.dataService.setCurrentFolder(this.currentFolder);
 
+    // get current app-wide folder view and register for updates
+    this.folderView = this.folderViewService.folderView;
+    this.inGridView = this.folderView === FolderView.Grid;
+    this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
+      this.setFolderView(folderView);
+    });
+
     // create debounced scroll handler for placeholder loading
-    this.scrollHandlerDebounced = debounce(this.calculateListViewport.bind(this), SCROLL_DEBOUNCE);
-    this.scrollHandlerThrottled = throttle(this.calculateListViewport.bind(this), SCROLL_THROTTLE);
+    this.scrollHandlerDebounced = debounce(this.loadVisibleItems.bind(this), SCROLL_DEBOUNCE);
+    this.scrollHandlerThrottled = throttle(this.loadVisibleItems.bind(this), SCROLL_THROTTLE);
 
     // register for navigation events to reinit page on folder changes
     if (!this.routeListener) {
@@ -115,13 +134,25 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.listItems = this.listItemsQuery.toArray();
     }
 
-    this.calculateListViewport(true);
+    this.loadVisibleItems(true);
     this.document.documentElement.scrollTop = 0;
   }
 
   ngOnDestroy() {
     this.dataService.setCurrentFolder();
     this.routeListener.unsubscribe();
+  }
+
+  setFolderView(folderView: FolderView) {
+    this.folderView = folderView;
+    this.inGridView = folderView === FolderView.Grid;
+    setTimeout(() => {
+      // scroll to show items after change
+      const scrollTarget: FileListItemComponent = this.listItems[this.lastItemOffset];
+      console.log(scrollTarget.item.displayName);
+      this.document.documentElement.scrollTop = (scrollTarget.element.nativeElement as HTMLElement).offsetTop - NAV_HEIGHT;
+      this.scrollHandlerThrottled();
+    });
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -138,17 +169,36 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  calculateListViewport(animate ?: boolean) {
+  @HostListener('window:resize', ['$event'])
+  onViewportResize(event) {
+    this.scrollHandlerDebounced();
+  }
+
+  loadVisibleItems(animate ?: boolean) {
     if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {
       return;
     }
 
     const totalHeight = this.document.documentElement.clientHeight || this.document.body.clientHeight;
     const viewportHeight = totalHeight - NAV_HEIGHT;
+    const listWidth = (this.elementRef.nativeElement as HTMLElement).clientWidth;
 
     const top = this.document.documentElement.scrollTop || this.document.body.scrollTop;
-    const offset = Math.floor(top / ITEM_HEIGHT);
-    const count = Math.ceil(viewportHeight / ITEM_HEIGHT) + 4;
+
+    let offset, count, itemHeight;
+    let itemsPerRow = 1;
+
+    if (this.folderView === FolderView.List) {
+      itemHeight = ITEM_HEIGHT_LIST_VIEW;
+    } else {
+      itemsPerRow = Math.max(Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW), 2);
+      itemHeight = this.listItems[0] ? this.listItems[0].element.nativeElement.clientHeight : ITEM_HEIGHT_LIST_VIEW;
+    }
+
+    offset = Math.floor(top / itemHeight) * itemsPerRow;
+    this.lastItemOffset = offset;
+
+    count = (Math.ceil(viewportHeight / itemHeight) + 4) * itemsPerRow;
 
     if (animate) {
       const targetElems = this.listItems.slice(0, count).map((item) => item.element.nativeElement);
