@@ -254,7 +254,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
           autocapitalize: 'off',
           autocorrect: 'off',
           autocomplete: 'off',
-          spellcheck: 'off'
+          spellcheck: 'off',
+          autoselect: true
         }
       }
     ];

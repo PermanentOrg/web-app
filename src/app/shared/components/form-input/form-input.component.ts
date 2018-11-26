@@ -11,6 +11,7 @@ export interface FormInputConfig {
   autocomplete?: string;
   autocapitalize?: string;
   spellcheck?: string;
+  autoselect?: boolean;
 }
 
 @Component({
@@ -49,7 +50,15 @@ export class FormInputComponent implements AfterViewInit {
       if (this.config.spellcheck) {
         inputField.setAttribute('spellcheck', this.config.spellcheck);
       }
+
+      if (this.config.autoselect) {
+        inputField.addEventListener('focus', (event) => {
+          inputField.setSelectionRange(0, inputField.value.length);
+        });
+      }
     }
   }
+
+
 
 }
