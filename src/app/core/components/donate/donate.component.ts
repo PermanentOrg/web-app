@@ -104,6 +104,7 @@ export class DonateComponent {
     }
 
     this.donationForm.controls['customStorageAmount'].setValue(value, {emitEvent: false});
+    this.extraDonation = this.storageAmount * this.pricePerGb;
   }
 
   checkCustomDonationAmount(value) {
