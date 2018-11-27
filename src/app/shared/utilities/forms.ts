@@ -33,6 +33,12 @@ const FORM_ERROR_MESSAGES = {
     email: 'Invalid email address',
     required: 'Email required'
   },
+  name: {
+    required: 'Full name required'
+  },
+  invitation: {
+    required: 'Invitation code required'
+  },
   password: {
     minlength: `Passwords must be ${APP_CONFIG.passwordMinLength} characters`,
     required: 'Password required',

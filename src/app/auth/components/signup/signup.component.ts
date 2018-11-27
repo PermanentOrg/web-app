@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
+import { matchControlValidator } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -72,45 +73,22 @@ export class SignupComponent implements OnInit {
       invitation: [inviteCode || '', [Validators.required]],
       email: [email || '', [Validators.required, Validators.email]],
       name: [name || '', Validators.required],
-      passwords: fb.group({
-        password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-        confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
-      }, { validator: [Validators.required, this.matchValidator] }),
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: ['', [Validators.required]],
       optIn: [true]
-    }, { updateOn: 'blur' });
+    }, { updateOn: 'change' });
 
-    this.signupForm.statusChanges.subscribe(() => this.setErrorMessages());
+    const confirmPasswordControl = new FormControl('',
+      [
+        Validators.required,
+        matchControlValidator(this.signupForm.controls['password'])
+      ]);
+
+
+    this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
   ngOnInit() {
-  }
-
-  matchValidator(group: FormGroup) {
-    let errors: any;
-
-    if (!group.controls['password'].value) {
-      errors = { required: true };
-      group.controls['confirm'].setErrors(errors);
-      return errors;
-    }
-
-    if (group.controls['password'].errors && group.controls['password'].errors.minlength) {
-      errors = { minlength: true};
-      return errors;
-    }
-
-    const match = group.controls['password'].value === group.controls['confirm'].value;
-
-    if (match && group.value.confirm) {
-      group.controls['confirm'].setErrors(null);
-      return null;
-    }
-
-    errors = { mismatch: true };
-    group.controls['confirm'].setErrors(errors);
-
-    return errors;
   }
 
   onSubmit(formValue: any) {
@@ -137,24 +115,4 @@ export class SignupComponent implements OnInit {
         this.waiting = false;
       });
   }
-
-  setErrorMessages() {
-    if (this.signupForm.valid) {
-      this.formErrors = {};
-      return;
-    }
-
-    for (const controlName in this.signupForm.controls) {
-      if (this.signupForm.get(controlName) ) {
-        const control = this.signupForm.get(controlName);
-        if (control.touched && control.errors) {
-          const errorName = Object.keys(control.errors).pop();
-          this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
-        } else {
-          this.formErrors[controlName] = null;
-        }
-      }
-    }
-  }
-
 }
