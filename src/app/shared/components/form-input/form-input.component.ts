@@ -42,6 +42,11 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const inputField = this.element.nativeElement.querySelector('.form-control');
+
+    inputField.addEventListener('blur', (event) => {
+      this.errors = getFormInputError(this);
+    });
+
     if (this.config) {
       if (this.config.autocorrect) {
         inputField.setAttribute('autocorrect', this.config.autocorrect);

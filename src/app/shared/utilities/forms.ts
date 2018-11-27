@@ -18,7 +18,7 @@ export function matchValidator(group: FormGroup) {
 
 export function matchControlValidator(controlToMatch: AbstractControl): ValidatorFn {
   return function validator(controlToValidate: AbstractControl): {[key: string]: boolean} | null {
-    if (controlToMatch.value !== controlToValidate.value) {
+    if (controlToValidate.value && controlToValidate.value.length && controlToMatch.value !== controlToValidate.value) {
       return {
         mismatch: true
       };
@@ -40,6 +40,7 @@ const FORM_ERROR_MESSAGES = {
   },
   confirm: {
     mismatch: 'Passwords must match',
+    required: 'Password confirmation required'
   }
 };
 
@@ -71,6 +72,8 @@ export function getFormInputError(formInput: FormInputComponent) {
   if (control.valid || !(control.touched || (formInput.config && formInput.config.validateDirty && control.dirty))) {
     return null;
   }
+
+  console.log(formInput.fieldName, control.errors);
 
   const errorName = Object.keys(control.errors).pop();
   return FORM_ERROR_MESSAGES[formInput.fieldName][errorName];
