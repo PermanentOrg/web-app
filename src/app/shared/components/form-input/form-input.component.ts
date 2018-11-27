@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { getFormInputError } from '@shared/utilities/forms';
 
 export interface FormInputSelectOption {
   text: string | number;
@@ -12,6 +13,7 @@ export interface FormInputConfig {
   autocapitalize?: string;
   spellcheck?: string;
   autoselect?: boolean;
+  validateDirty?: boolean;
 }
 
 @Component({
@@ -20,7 +22,7 @@ export interface FormInputConfig {
   styleUrls: ['./form-input.component.scss'],
   host: {'class': 'input-vertical'}
 })
-export class FormInputComponent implements AfterViewInit {
+export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() type = 'text';
   @Input() fieldName: string;
   @Input() placeholder: string;
@@ -31,6 +33,12 @@ export class FormInputComponent implements AfterViewInit {
   @Input() config: FormInputConfig;
 
   constructor(private element: ElementRef) { }
+
+  ngOnInit() {
+    this.control.statusChanges.subscribe(() => {
+      this.errors = getFormInputError(this);
+    });
+  }
 
   ngAfterViewInit() {
     const inputField = this.element.nativeElement.querySelector('.form-control');
