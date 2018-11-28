@@ -50,7 +50,7 @@ export class SignupEmbedComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-      agreed: ['', [Validators.required]],
+      agreed: [false, [Validators.requiredTrue]],
       optIn: [true]
     });
 

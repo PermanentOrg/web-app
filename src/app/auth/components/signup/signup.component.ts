@@ -74,7 +74,7 @@ export class SignupComponent implements OnInit {
       email: [email || '', [Validators.required, Validators.email]],
       name: [name || '', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-      agreed: ['', [Validators.required]],
+      agreed: [false, [Validators.requiredTrue]],
       optIn: [true]
     });
 
