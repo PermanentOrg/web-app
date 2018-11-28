@@ -12,7 +12,7 @@ import { TEST_DATA } from '@core/core.module.spec';
 import { AccountService } from '@shared/services/account/account.service';
 import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
