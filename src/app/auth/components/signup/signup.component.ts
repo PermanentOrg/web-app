@@ -12,24 +12,6 @@ import { AccountResponse } from '@shared/services/api/index.repo';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
-export const FORM_ERROR_MESSAGES = {
-  invitation: {
-    required: 'Invitation code required.'
-  },
-  name: {
-    required: 'Name required.'
-  },
-  email: {
-    email: 'Invalid email address.',
-    required: 'Email required.'
-  },
-  passwords: {
-    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters.`,
-    required: 'Password required.',
-    mismatch: 'Passwords must match.'
-  }
-};
-
 @Component({
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
@@ -39,12 +21,6 @@ export const FORM_ERROR_MESSAGES = {
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   waiting: boolean;
-  formErrors: any = {
-    name: false,
-    invitation: false,
-    email: false,
-    passwords: false,
-  };
 
   constructor(
     private fb: FormBuilder,

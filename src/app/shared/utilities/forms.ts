@@ -28,7 +28,7 @@ export function matchControlValidator(controlToMatch: AbstractControl): Validato
   };
 }
 
-const FORM_ERROR_MESSAGES = {
+export const FORM_ERROR_MESSAGES = {
   email: {
     email: 'Invalid email address',
     required: 'Email required'

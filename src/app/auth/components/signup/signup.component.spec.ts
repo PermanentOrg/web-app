@@ -5,12 +5,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { SignupComponent, FORM_ERROR_MESSAGES } from '@auth/components/signup/signup.component';
+import { SignupComponent } from '@auth/components/signup/signup.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -66,90 +67,98 @@ describe('SignupComponent', () => {
   });
 
   it('should set error for missing invitation code', () => {
-    (component.signupForm.controls['invitation'] as FormControl).markAsTouched();
+    component.signupForm.get('invitation').markAsTouched();
     component.signupForm.patchValue({
-      invitation: ''
+      invitation: '',
+      email: TEST_DATA.user.email,
+      name: TEST_DATA.user.name,
+      password: TEST_DATA.user.password,
+      confirm: TEST_DATA.user.password
     });
-    expect(component.formErrors.invitation).toBeTruthy();
+    expect(component.signupForm.invalid).toBeTruthy();
+    expect(component.signupForm.get('invitation').errors.required).toBeTruthy();
   });
 
   it('should set error for missing email', () => {
-    (component.signupForm.controls['email'] as FormControl).markAsTouched();
+    component.signupForm.get('email').markAsTouched();
     component.signupForm.patchValue({
-      email: ''
+      invitation: 'invite',
+      email: '',
+      name: TEST_DATA.user.name,
+      password: TEST_DATA.user.password,
+      confirm: TEST_DATA.user.password
     });
-    expect(component.formErrors.email).toBeTruthy();
+    expect(component.signupForm.invalid).toBeTruthy();
+    expect(component.signupForm.get('email').errors.required).toBeTruthy();
   });
 
   it('should set error for invalid email', () => {
-    (component.signupForm.controls['email'] as FormControl).markAsTouched();
+    component.signupForm.get('email').markAsTouched();
     component.signupForm.patchValue({
       email: 'lasld;f;aslkj'
     });
-    expect(component.formErrors.email).toBeTruthy();
+    expect(component.signupForm.invalid).toBeTruthy();
+    expect(component.signupForm.get('email').errors.email).toBeTruthy();
   });
 
   it('should set error for missing name', () => {
-    (component.signupForm.controls['name'] as FormControl).markAsTouched();
+    component.signupForm.get('name').markAsTouched();
     component.signupForm.patchValue({
       name: ''
     });
-    expect(component.formErrors.name).toBeTruthy();
+    expect(component.signupForm.invalid).toBeTruthy();
+    expect(component.signupForm.get('name').errors.required).toBeTruthy();
   });
 
   it('should set error for missing password', () => {
-    (component.signupForm.controls['passwords'] as FormGroup).markAsTouched();
+    component.signupForm.get('password').markAsTouched();
+    component.signupForm.get('confirm').markAsTouched();
     component.signupForm.patchValue({
-      passwords: {
-        password: null,
-        confirm: null
-      }
+      invitation: 'invite',
+      email: TEST_DATA.user.email,
+      name: TEST_DATA.user.name,
+      password: null,
+      confirm: null
     });
     fixture.whenStable().then(() => {
       expect(component.signupForm.invalid).toBeTruthy();
-      expect(component.formErrors.passwords).toEqual(FORM_ERROR_MESSAGES.passwords.required);
+      expect(component.signupForm.get('password').errors.required).toBeTruthy();
+      expect(component.signupForm.get('confirm').errors.required).toBeTruthy();
     });
   });
 
-  it('should set error for too short password', () => {
-    (component.signupForm.controls['passwords'] as FormControl).markAsTouched();
+  it('should set invalid for too short password', () => {
+    component.signupForm.get('password').markAsTouched();
+    component.signupForm.get('confirm').markAsTouched();
     component.signupForm.patchValue({
-      passwords: {
-        password: 'ass',
-        confirm: 'ass'
-      }
+      password: 'ass',
+      confirm: 'ass'
     });
     expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.formErrors.passwords).toEqual(FORM_ERROR_MESSAGES.passwords.minlength);
+    expect(component.signupForm.get('password').errors.minlength).toBeTruthy();
   });
 
-  it('should set error for mismatched password', () => {
-    (component.signupForm.controls['passwords'] as FormControl).markAsTouched();
+  it('should set invalid for mismatched password', () => {
+    component.signupForm.get('password').markAsTouched();
     component.signupForm.patchValue({
-      passwords: {
-        password: 'longenough',
-        confirm: 'longenougher'
-      }
+      password: 'longenough',
+      confirm: 'longenougher'
     });
     expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.formErrors.passwords).toEqual(FORM_ERROR_MESSAGES.passwords.mismatch);
+    expect(component.signupForm.get('confirm').errors.mismatch).toBeTruthy();
   });
 
   it('should have no errors when email and password valid', () => {
-    (component.signupForm.controls['passwords'] as FormControl).markAsTouched();
-    (component.signupForm.controls['email'] as FormControl).markAsTouched();
+    component.signupForm.markAsTouched();
     component.signupForm.patchValue({
       optIn: false,
       agreed: true,
       name: TEST_DATA.user.name,
       invitation: 'perm',
       email: TEST_DATA.user.email,
-      passwords: {
-        password: TEST_DATA.user.password,
-        confirm: TEST_DATA.user.password
-      }
+      password: TEST_DATA.user.password,
+      confirm: TEST_DATA.user.password
     });
-    expect(component.formErrors.email).toBeFalsy();
-    expect(component.formErrors.passwords).toBeFalsy();
+    expect(component.signupForm.valid).toBeTruthy();
   });
 });

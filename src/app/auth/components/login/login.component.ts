@@ -11,17 +11,6 @@ import { MessageService } from '@shared/services/message/message.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
-export const FORM_ERROR_MESSAGES = {
-  email: {
-    email: 'Invalid email address.',
-    required: 'Email required.'
-  },
-  password: {
-    minlength: `Passwords must be ${MIN_PASSWORD_LENGTH} characters.`,
-    required: 'Password required.'
-  }
-};
-
 @Component({
   selector: 'pr-login',
   templateUrl: './login.component.html',
@@ -31,7 +20,6 @@ export const FORM_ERROR_MESSAGES = {
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   waiting: boolean;
-  formErrors: any = {};
 
   constructor(
     private fb: FormBuilder,
