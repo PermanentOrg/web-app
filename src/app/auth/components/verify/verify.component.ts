@@ -144,7 +144,11 @@ export class VerifyComponent implements OnInit {
       })
       .catch((response: AuthResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage(), true);
+        let translateString = response.getMessage();
+        if (translateString === 'error.auth.lookup') {
+          translateString = 'warning.auth.token_does_not_match';
+        }
+        this.message.showError(translateString, true);
       });
   }
 

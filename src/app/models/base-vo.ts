@@ -39,4 +39,16 @@ export class BaseVO {
       return clean;
     }
   }
+
+  toJSON() {
+    const clone: any = {};
+    for ( const key in this ) {
+      if (this[key] !== undefined) {
+        clone[key] = this[key];
+      }
+    }
+
+    delete clone.cleanParams;
+    return clone;
+  }
 }
