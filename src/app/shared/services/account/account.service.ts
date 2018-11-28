@@ -219,7 +219,7 @@ export class AccountService {
   }
 
   public verifyMfa(token: string): Promise<AuthResponse> {
-    return this.api.auth.verify(this.account.primaryEmail, token, 'type.auth.mfaValidation')
+    return this.api.auth.verify(this.account, token, 'type.auth.mfaValidation')
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
@@ -232,7 +232,7 @@ export class AccountService {
   }
 
   public verifyEmail(token: string): Promise<AuthResponse> {
-    return this.api.auth.verify(this.account.primaryEmail, token, 'type.auth.email')
+    return this.api.auth.verify(this.account, token, 'type.auth.email')
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
@@ -244,7 +244,7 @@ export class AccountService {
   }
 
   public verifyPhone(token: string): Promise<AuthResponse> {
-    return this.api.auth.verify(this.account.primaryEmail, token, 'type.auth.phone')
+    return this.api.auth.verify(this.account, token, 'type.auth.phone')
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());

@@ -34,6 +34,11 @@ export class VerifyComponent implements OnInit {
 
     const account = this.accountService.getAccount();
 
+    if (!account) {
+      this.router.navigate(['/auth', 'login']);
+      return;
+    }
+
     const params = route.snapshot.params;
     // if (params.email) {
     //   const email = window.atob(params.email);
@@ -61,7 +66,6 @@ export class VerifyComponent implements OnInit {
       }
     }
 
-
     this.needsEmail = account.emailNeedsVerification();
     this.needsPhone = account.phoneNeedsVerification();
 
@@ -70,7 +74,7 @@ export class VerifyComponent implements OnInit {
       this.verifyingPhone = true;
       this.formTitle = 'Verify Phone Number';
     } else if (!this.needsEmail) {
-      console.log('redirect...all verified');
+      this.router.navigate(['/myfiles']);
     }
 
     this.verifyForm = fb.group({
@@ -140,7 +144,11 @@ export class VerifyComponent implements OnInit {
       })
       .catch((response: AuthResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage(), true);
+        let translateString = response.getMessage();
+        if (translateString === 'error.auth.lookup') {
+          translateString = 'warning.auth.token_does_not_match';
+        }
+        this.message.showError(translateString, true);
       });
   }
 

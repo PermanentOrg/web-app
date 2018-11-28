@@ -10,8 +10,9 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AccountService } from '@shared/services/account/account.service';
 
-fdescribe('SignupEmbedComponent', () => {
+describe('SignupEmbedComponent', () => {
   let component: SignupEmbedComponent;
   let fixture: ComponentFixture<SignupEmbedComponent>;
 
@@ -30,6 +31,7 @@ fdescribe('SignupEmbedComponent', () => {
       providers: [
         CookieService,
         MessageService,
+        AccountService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -47,6 +49,11 @@ fdescribe('SignupEmbedComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SignupEmbedComponent);
+
+    const accountService = TestBed.get(AccountService) as AccountService;
+    accountService.clearAccount();
+    accountService.clearArchive();
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
