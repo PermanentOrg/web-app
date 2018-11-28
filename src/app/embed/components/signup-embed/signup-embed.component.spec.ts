@@ -5,23 +5,20 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { SignupComponent } from '@auth/components/signup/signup.component';
-import { LogoComponent } from '@auth/components/logo/logo.component';
+import { SignupEmbedComponent } from '@embed/components/signup-embed/signup-embed.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
 
-describe('SignupComponent', () => {
-  let component: SignupComponent;
-  let fixture: ComponentFixture<SignupComponent>;
+fdescribe('SignupEmbedComponent', () => {
+  let component: SignupEmbedComponent;
+  let fixture: ComponentFixture<SignupEmbedComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        SignupComponent,
-        LogoComponent,
+        SignupEmbedComponent,
         FormInputComponent
       ],
       imports: [
@@ -38,9 +35,7 @@ describe('SignupComponent', () => {
           useValue: {
             snapshot: {
               queryParams: {
-                fullName: window.btoa(TEST_DATA.user.name),
-                primaryEmail: window.btoa(TEST_DATA.user.email),
-                inviteCode: window.btoa('invite')
+                invite: 'invite'
               }
             }
           }
@@ -51,7 +46,7 @@ describe('SignupComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SignupComponent);
+    fixture = TestBed.createComponent(SignupEmbedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -60,9 +55,7 @@ describe('SignupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fill form from URL params', () => {
-    expect(component.signupForm.value.email).toBe(TEST_DATA.user.email);
-    expect(component.signupForm.value.name).toBe(TEST_DATA.user.name);
+  it('should fill invite from URL param', () => {
     expect(component.signupForm.value.invitation).toBe('invite');
   });
 

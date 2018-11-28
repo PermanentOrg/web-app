@@ -62,7 +62,11 @@ form {
 
     &.ng-touched.ng-invalid,
     & > input.ng-touched.ng-invalid,
-    & > select.ng-touched.ng-invalid {
+    & > select.ng-touched.ng-invalid,
+    & .validate-dirty.ng-dirty.ng-invalid,
+    & > input.validate-dirty.ng-dirty.ng-invalid,
+    & > select.validate-dirty.ng-dirty.ng-invalid
+    {
       background-color: rgba($danger, 0.2);
       border-color: $danger !important;
     }

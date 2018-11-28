@@ -8,13 +8,6 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 
-const FORM_ERROR_MESSAGES = {
-  email: {
-    email: 'Invalid email address',
-    required: 'Email required'
-  }
-};
-
 @Component({
   selector: 'pr-login',
   templateUrl: './forgot-password.component.html',
@@ -38,8 +31,6 @@ export class ForgotPasswordComponent implements OnInit {
     this.forgotForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
     }, { updateOn: 'blur' });
-
-    this.forgotForm.statusChanges.subscribe(() => this.setErrorMessages());
   }
 
   ngOnInit() {
@@ -58,24 +49,4 @@ export class ForgotPasswordComponent implements OnInit {
         }
       });
   }
-
-  setErrorMessages() {
-    if (this.forgotForm.valid) {
-      this.formErrors = {};
-      return;
-    }
-
-    for (const controlName in this.forgotForm.controls) {
-      if (this.forgotForm.get(controlName) ) {
-        const control = this.forgotForm.get(controlName);
-        if (control.touched && control.errors) {
-          const errorName = Object.keys(control.errors).pop();
-          this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
-        } else {
-          this.formErrors[controlName] = null;
-        }
-      }
-    }
-  }
-
 }

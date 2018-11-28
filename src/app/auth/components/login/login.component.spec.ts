@@ -4,12 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 
-import { LoginComponent, FORM_ERROR_MESSAGES } from '@auth/components/login/login.component';
+import { LoginComponent } from '@auth/components/login/login.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { MessageService } from '@shared/services/message/message.service';
 import { TEST_DATA } from '@core/core.module.spec';
 import { AccountService } from '@shared/services/account/account.service';
+import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -54,47 +55,51 @@ describe('LoginComponent', () => {
   });
 
   it('should set error for missing email', () => {
-    (component.loginForm.controls['email'] as FormControl).markAsTouched();
+    component.loginForm.get('email').markAsTouched();
     component.loginForm.patchValue({
-      email: ''
+      email: '',
+      password: TEST_DATA.user.password
     });
-    expect(component.formErrors.email).toBeTruthy();
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('email').errors.required).toBeTruthy();
   });
 
   it('should set error for invalid email', () => {
-    (component.loginForm.controls['email'] as FormControl).markAsTouched();
+    component.loginForm.get('email').markAsTouched();
     component.loginForm.patchValue({
-      email: 'lasld;f;aslkj'
+      email: 'lasld;f;aslkj',
+      password: TEST_DATA.user.password
     });
-    expect(component.formErrors.email).toBeTruthy();
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('email').errors.email).toBeTruthy();
   });
 
   it('should set error for missing password', () => {
-    (component.loginForm.controls['password'] as FormControl).markAsTouched();
+    component.loginForm.get('password').markAsTouched();
     component.loginForm.patchValue({
+      email: TEST_DATA.user.email,
       password: ''
     });
-    expect(component.formErrors.password).toBeTruthy();
-    expect(component.formErrors.password).toEqual(FORM_ERROR_MESSAGES.password.required);
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('password').errors.required).toBeTruthy();
   });
 
   it('should set error for too short password', () => {
-    (component.loginForm.controls['password'] as FormControl).markAsTouched();
+    component.loginForm.get('password').markAsTouched();
     component.loginForm.patchValue({
+      email: TEST_DATA.user.email,
       password: 'short'
     });
-    expect(component.formErrors.password).toBeTruthy();
-    expect(component.formErrors.password).toEqual(FORM_ERROR_MESSAGES.password.minlength);
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('password').errors.minlength).toBeTruthy();
   });
 
   it('should have no errors when email and password valid', () => {
-    (component.loginForm.controls['password'] as FormControl).markAsTouched();
-    (component.loginForm.controls['email'] as FormControl).markAsTouched();
+    component.loginForm.markAsTouched();
     component.loginForm.patchValue({
       email: TEST_DATA.user.email,
       password: TEST_DATA.user.password
     });
-    expect(component.formErrors.email).toBeFalsy();
-    expect(component.formErrors.password).toBeFalsy();
+    expect(component.loginForm.valid).toBeTruthy();
   });
 });
