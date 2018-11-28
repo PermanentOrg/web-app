@@ -56,7 +56,6 @@ describe('MainComponent', () => {
     await TestBed.configureTestingModule(config).compileComponents();
 
     const authResponse = new AuthResponse(authResponseData);
-    console.log(authResponse);
     accountService = TestBed.get(AccountService);
 
     accountService.setAccount(authResponse.getAccountVO());
