@@ -53,21 +53,21 @@ export class MainComponent implements OnInit, OnDestroy {
         'Your email and phone number need verification. Tap this message to verify.',
         'info',
         false,
-        ['/auth/verify']
+        ['/auth/verify?sendEmail=true&sendSms=true']
       );
     } else if (account.emailNeedsVerification()) {
       this.messageService.showMessage(
         'Your email needs verification. Tap this message to verify.',
         'info',
         false,
-        ['/auth/verify']
+        ['/auth/verify?sendEmail=true']
       );
     } else if (account.phoneNeedsVerification()) {
       this.messageService.showMessage(
         'Your phone number needs verification. Tap this message to verify.',
         'info',
         false,
-        ['/auth/verify']
+        ['/auth/verify?sendSms=true']
       );
     }
   }

@@ -49,6 +49,14 @@ export class VerifyComponent implements OnInit {
     //   }
     // }
 
+    if (params.sendEmail) {
+      this.accountService.resendEmailVerification();
+    }
+
+    if (params.sendSms) {
+      this.accountService.resendPhoneVerification();
+    }
+
     this.needsEmail = account.emailNeedsVerification();
     this.needsPhone = account.phoneNeedsVerification();
 
