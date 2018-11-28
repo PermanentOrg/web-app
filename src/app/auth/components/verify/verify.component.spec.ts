@@ -12,6 +12,7 @@ import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { ActivatedRoute } from '@angular/router';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
@@ -22,7 +23,7 @@ describe('VerifyComponent', () => {
   let httpMock: HttpTestingController;
   let accountService: AccountService;
 
-  async function init(authResponseData = defaultAuthData) {
+  async function init(authResponseData = defaultAuthData, queryParams = {}) {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.declarations.push(VerifyComponent);
@@ -32,6 +33,15 @@ describe('VerifyComponent', () => {
     config.providers.push(HttpService);
     config.providers.push(ApiService);
     config.providers.push(AccountService);
+    config.providers.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          queryParams: queryParams,
+          params: {}
+        }
+      }
+    });
 
     await TestBed.configureTestingModule(config).compileComponents();
 
@@ -57,6 +67,16 @@ describe('VerifyComponent', () => {
   it('should create', async () => {
     await init();
     expect(component).toBeTruthy();
+  });
+
+  it('should send email verification if sendEmail flag set', async () => {
+    await init(defaultAuthData, {sendEmail: true});
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/resendMailCreatedAccount`);
+  });
+
+  it('should send sms verification if sendSms flag set', async () => {
+    await init(defaultAuthData, {sendSms: true});
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/resendTextCreatedAccount`);
   });
 
   it('should require only email verification if only email unverified', async () => {
