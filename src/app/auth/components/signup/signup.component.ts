@@ -77,7 +77,7 @@ export class SignupComponent implements OnInit {
           this.message.showMessage(`Verify to continue as ${account.primaryEmail}.`, 'warning');
           this.router.navigate(['/verify']);
         } else {
-          this.accountService.logIn(formValue.email, formValue.passwords.password, true, true)
+          this.accountService.logIn(formValue.email, formValue.password, true, true)
             .then(() => {
               this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
               this.router.navigate(['/']);
