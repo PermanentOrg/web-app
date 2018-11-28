@@ -6,6 +6,7 @@ interface Message {
   text: string;
   style: string;
   navigateTo?: string[];
+  navigateParams?: any;
 }
 
 @Component({
@@ -16,6 +17,7 @@ interface Message {
 export class MessageComponent implements OnInit {
   displayText: string;
   navigateTo: string[];
+  navigateParams: any;
   visible: boolean;
   useFade = !!window.frameElement;
   style: string;
@@ -30,12 +32,13 @@ export class MessageComponent implements OnInit {
   ngOnInit() {
   }
 
-  display(textToDisplay: string, style?: string, navigateTo?: string[]) {
+  display(textToDisplay: string, style?: string, navigateTo?: string[], navigateParams = {}) {
     if (this.visible) {
-      this.queue.push({text: textToDisplay, style: style, navigateTo: navigateTo});
+      this.queue.push({text: textToDisplay, style: style, navigateTo: navigateTo, navigateParams: navigateParams});
     } else {
       this.displayText = textToDisplay;
       this.navigateTo = navigateTo;
+      this.navigateParams = navigateParams;
       this.style = style ? `alert-${style}` : null;
       this.visible = true;
       setTimeout(this.dismiss.bind(this), this.displayTime);
@@ -44,7 +47,8 @@ export class MessageComponent implements OnInit {
 
   onClick() {
     if (this.navigateTo) {
-      this.router.navigate(this.navigateTo);
+      console.log('navigating', this.navigateTo, this.navigateParams);
+      this.router.navigate(this.navigateTo, { queryParams: this.navigateParams});
     }
 
     this.dismiss();

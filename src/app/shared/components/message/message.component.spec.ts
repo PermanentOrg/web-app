@@ -59,6 +59,20 @@ describe('MessageComponent', () => {
 
     expect(component.dismiss).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledTimes(1);
-    expect(router.navigate).toHaveBeenCalledWith(testUrl);
+    expect(router.navigate).toHaveBeenCalledWith(testUrl, {queryParams: {}});
+  });
+
+  it('should navigate and dismiss when clicked if navigation URL and param given', () => {
+    const router = TestBed.get(Router);
+    spyOn(router, 'navigate');
+    spyOn(component, 'dismiss');
+
+    component.display('test', null, testUrl, {testParam: true});
+
+    component.onClick();
+
+    expect(component.dismiss).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledWith(testUrl, {queryParams: {testParam: true}});
   });
 });

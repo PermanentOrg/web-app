@@ -49,6 +49,19 @@ export class VerifyComponent implements OnInit {
     //   }
     // }
 
+    const queryParams = route.snapshot.queryParams;
+
+    if (queryParams) {
+      if (queryParams.sendEmail) {
+        this.accountService.resendEmailVerification();
+      }
+
+      if (queryParams.sendSms) {
+        this.accountService.resendPhoneVerification();
+      }
+    }
+
+
     this.needsEmail = account.emailNeedsVerification();
     this.needsPhone = account.phoneNeedsVerification();
 

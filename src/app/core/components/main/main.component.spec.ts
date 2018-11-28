@@ -94,7 +94,11 @@ describe('MainComponent', () => {
       jasmine.stringMatching('email and phone'),
       'info',
       jasmine.anything(),
-      ['/auth/verify']
+      ['/auth/verify'],
+      {
+        sendEmail: true,
+        sendSms: true
+      }
     );
   });
 
@@ -106,7 +110,10 @@ describe('MainComponent', () => {
       jasmine.stringMatching('email'),
       'info',
       jasmine.anything(),
-      ['/auth/verify']
+      ['/auth/verify'],
+      {
+        sendEmail: true
+      }
     );
     expect(messageService.showMessage).not.toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),
@@ -124,7 +131,10 @@ describe('MainComponent', () => {
       jasmine.stringMatching('phone'),
       'info',
       jasmine.anything(),
-      ['/auth/verify']
+      ['/auth/verify'],
+      {
+        sendSms: true
+      }
     );
     expect(messageService.showMessage).not.toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),
