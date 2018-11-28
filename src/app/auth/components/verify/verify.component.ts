@@ -34,6 +34,11 @@ export class VerifyComponent implements OnInit {
 
     const account = this.accountService.getAccount();
 
+    if (!account) {
+      this.router.navigate(['/auth', 'login']);
+      return;
+    }
+
     const params = route.snapshot.params;
     // if (params.email) {
     //   const email = window.atob(params.email);
@@ -61,7 +66,6 @@ export class VerifyComponent implements OnInit {
       }
     }
 
-
     this.needsEmail = account.emailNeedsVerification();
     this.needsPhone = account.phoneNeedsVerification();
 
@@ -70,7 +74,7 @@ export class VerifyComponent implements OnInit {
       this.verifyingPhone = true;
       this.formTitle = 'Verify Phone Number';
     } else if (!this.needsEmail) {
-      console.log('redirect...all verified');
+      this.router.navigate(['/myfiles']);
     }
 
     this.verifyForm = fb.group({
