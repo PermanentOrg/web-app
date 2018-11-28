@@ -66,7 +66,9 @@ export class LoginComponent implements OnInit {
 
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password.', 'danger');
-          this.loginForm.setErrors({unknown: true});
+          this.loginForm.patchValue({
+            password: ''
+          });
         } else {
           this.message.showMessage('Log in failed. Please try again.', 'danger');
         }
