@@ -38,8 +38,6 @@ export class ForgotPasswordComponent implements OnInit {
     this.forgotForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
     }, { updateOn: 'blur' });
-
-    this.forgotForm.statusChanges.subscribe(() => this.setErrorMessages());
   }
 
   ngOnInit() {
@@ -58,24 +56,4 @@ export class ForgotPasswordComponent implements OnInit {
         }
       });
   }
-
-  setErrorMessages() {
-    if (this.forgotForm.valid) {
-      this.formErrors = {};
-      return;
-    }
-
-    for (const controlName in this.forgotForm.controls) {
-      if (this.forgotForm.get(controlName) ) {
-        const control = this.forgotForm.get(controlName);
-        if (control.touched && control.errors) {
-          const errorName = Object.keys(control.errors).pop();
-          this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
-        } else {
-          this.formErrors[controlName] = null;
-        }
-      }
-    }
-  }
-
 }

@@ -79,8 +79,6 @@ export function getFormInputError(formInput: FormInputComponent) {
     return null;
   }
 
-  console.log(formInput.fieldName, control.errors);
-
   const errorName = Object.keys(control.errors).pop();
   return FORM_ERROR_MESSAGES[formInput.fieldName][errorName];
 }

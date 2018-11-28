@@ -76,15 +76,13 @@ export class SignupComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: ['', [Validators.required]],
       optIn: [true]
-    }, { updateOn: 'change' });
+    });
 
     const confirmPasswordControl = new FormControl('',
       [
         Validators.required,
         matchControlValidator(this.signupForm.controls['password'])
       ]);
-
-
     this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
+import { matchControlValidator } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -48,13 +49,17 @@ export class SignupEmbedComponent implements OnInit {
       invitation: [this.inviteCode ? this.inviteCode : '', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
-      passwords: fb.group({
-        password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-        confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
-      }, { validator: [Validators.required, FormUtilities.matchValidator] }),
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: ['', [Validators.required]],
       optIn: [true]
     });
+
+    const confirmPasswordControl = new FormControl('',
+    [
+      Validators.required,
+      matchControlValidator(this.signupForm.controls['password'])
+    ]);
+    this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
   ngOnInit() {

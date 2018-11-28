@@ -45,9 +45,7 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       rememberMe: [true],
       keepLoggedIn: [true]
-    }, { updateOn: 'blur' });
-
-    this.loginForm.statusChanges.subscribe(() => this.setErrorMessages());
+    });
   }
 
   ngOnInit() {
@@ -86,24 +84,4 @@ export class LoginComponent implements OnInit {
         }
       });
   }
-
-  setErrorMessages() {
-    if (this.loginForm.valid) {
-      this.formErrors = {};
-      return;
-    }
-
-    for (const controlName in this.loginForm.controls) {
-      if (this.loginForm.get(controlName) ) {
-        const control = this.loginForm.get(controlName);
-        if (control.touched && control.errors) {
-          const errorName = Object.keys(control.errors).pop();
-          this.formErrors[controlName] = FORM_ERROR_MESSAGES[controlName][errorName];
-        } else {
-          this.formErrors[controlName] = null;
-        }
-      }
-    }
-  }
-
 }
