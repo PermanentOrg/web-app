@@ -73,14 +73,14 @@ export class SignupEmbedComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.signUp(
-      formValue.email, formValue.name, formValue.passwords.password, formValue.passwords.confirm,
+      formValue.email, formValue.name, formValue.password, formValue.confirm,
       formValue.agreed, formValue.optIn, null, formValue.invitation
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
           this.router.navigate(['/embed', 'verify']);
         } else {
-          this.accountService.logIn(formValue.email, formValue.passwords.password, true, true)
+          this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
             this.router.navigate(['/embed', 'done'], {queryParams: { inviteCode: this.inviteCode }});
           });
