@@ -84,7 +84,6 @@ describe('MainComponent', () => {
   it('should show a prompt when both email and phone are unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
     await init(data);
-    console.log('init done!');
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
     expect(messageService.showMessage).toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),
