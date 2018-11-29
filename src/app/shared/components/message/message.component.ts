@@ -47,7 +47,6 @@ export class MessageComponent implements OnInit {
 
   onClick() {
     if (this.navigateTo) {
-      console.log('navigating', this.navigateTo, this.navigateParams);
       this.router.navigate(this.navigateTo, { queryParams: this.navigateParams});
     }
 
