@@ -64,12 +64,9 @@ describe('MainComponent', () => {
     messageService = TestBed.get(MessageService);
     spyOn(messageService, 'showMessage');
 
-    console.log('about to create');
     fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
-    console.log(component);
     fixture.detectChanges();
-    console.log('detect');
   }
 
   afterEach(() => {
