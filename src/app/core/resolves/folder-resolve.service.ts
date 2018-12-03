@@ -38,7 +38,6 @@ export class FolderResolveService implements Resolve<any> {
 
         return response.getFolderVO(true);
       }))).toPromise().catch((response: FolderResponse) => {
-        console.log(response.getMessage());
         this.message.showError(response.getMessage(), true);
         if (targetFolder.type.includes('root')) {
           this.accountService.logOut()
