@@ -38,8 +38,17 @@ export class FolderResolveService implements Resolve<any> {
 
         return response.getFolderVO(true);
       }))).toPromise().catch((response: FolderResponse) => {
+        console.log(response.getMessage());
         this.message.showError(response.getMessage(), true);
-        if (state.url.includes('apps')) {
+        if (targetFolder.type.includes('root')) {
+          this.accountService.logOut()
+          .then(() => {
+            this.router.navigate(['/login']);
+          })
+          .catch(() => {
+            this.router.navigate(['/login']);
+          });
+        } else if (state.url.includes('apps')) {
           this.router.navigate(['/apps']);
         } else {
           this.router.navigate(['/myfiles']);

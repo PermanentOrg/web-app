@@ -15,6 +15,8 @@ import { SharedModule } from '@shared/shared.module';
 import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
+import { RelationshipsComponent } from './components/relationships/relationships.component';
+
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
@@ -49,6 +51,15 @@ export const routes: Routes = [
       {
         path: 'archive/sentInvites',
         redirectTo: 'invitations'
+      },
+      {
+        path: 'relationships',
+        component: RelationshipsComponent,
+        data: { title: 'Relationships' }
+      },
+      {
+        path: 'archive/relationships',
+        redirectTo: 'relationships'
       },
       { path: '**', redirectTo: 'myfiles'}
     ]
