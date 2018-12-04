@@ -93,7 +93,7 @@ export class PromptService {
         if (value === 'confirm') {
           return Promise.resolve(true);
         } else {
-          return Promise.resolve(false);
+          return Promise.reject(false);
         }
       });
   }

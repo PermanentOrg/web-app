@@ -118,12 +118,12 @@ export class RelationshipsComponent implements OnInit {
       });
   }
 
-  async removeRelation(relation: RelationVO) {
+  removeRelation(relation: RelationVO) {
     const deferred = new Deferred();
     const confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
-    const confirmed = await this.promptService.confirm('Remove', confirmTitle, deferred.promise);
-    if (confirmed) {
-      this.api.relation.delete(relation)
+    this.promptService.confirm('Remove', confirmTitle, deferred.promise)
+      .then(() => {
+        this.api.relation.delete(relation)
         .then((response: RelationResponse) => {
           this.messageService.showMessage(response.getMessage(), 'success', true);
           remove(this.relations, relation);
@@ -133,9 +133,10 @@ export class RelationshipsComponent implements OnInit {
           deferred.resolve();
           this.messageService.showError(response.getMessage(), true);
         });
-    } else {
-      deferred.resolve();
-    }
+      })
+      .catch(() => {
+        deferred.resolve();
+      });
   }
 
 }
