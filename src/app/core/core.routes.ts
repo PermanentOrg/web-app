@@ -10,6 +10,7 @@ import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.ser
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
 import { DonateResolveService} from '@core/resolves/donate-resolve.service';
+import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
 
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
@@ -55,7 +56,8 @@ export const routes: Routes = [
       {
         path: 'relationships',
         component: RelationshipsComponent,
-        data: { title: 'Relationships' }
+        data: { title: 'Relationships' },
+        resolve: { relations: RelationshipsResolveService }
       },
       {
         path: 'archive/relationships',
@@ -78,7 +80,8 @@ export const routes: Routes = [
     RootFolderResolveService,
     RecordResolveService,
     ArchivesResolveService,
-    DonateResolveService
+    DonateResolveService,
+    RelationshipsResolveService
   ],
   declarations: []
 })
