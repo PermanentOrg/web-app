@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationVO } from '@models/index';
 import { Deferred } from '@root/vendor/deferred';
@@ -54,8 +54,6 @@ export class RelationshipsComponent implements OnInit {
         value: type.type
       };
     });
-
-    console.log(this.relationOptions);
   }
 
   ngOnInit() {
@@ -77,12 +75,14 @@ export class RelationshipsComponent implements OnInit {
   }
 
   editRelation(relation: RelationVO) {
+    let updatedRelation: RelationVO;
     const deferred = new Deferred();
-    const fields = [
+    const fields: PromptField[] = [
       {
         fieldName: 'relationType',
         placeholder: 'Relationship',
         type: 'select',
+        initialValue: relation.type,
         validators: [Validators.required],
         config: {
           autocomplete: 'off',
@@ -93,9 +93,28 @@ export class RelationshipsComponent implements OnInit {
       }
     ];
 
-    return this.promptService.prompt(fields, `Relationship with ${relation.RelationArchiveVO.fullName}`, deferred.promise)
+    return this.promptService.prompt(
+      fields,
+      `Relationship with ${relation.RelationArchiveVO.fullName}`,
+      deferred.promise,
+      'Save'
+      )
       .then((value) => {
-        console.log(value);
+        updatedRelation = new RelationVO({
+          relationId: relation.relationId,
+          type: value.relationType
+        });
+
+        return this.api.relation.update(updatedRelation);
+      })
+      .then((response: RelationResponse) => {
+        this.messageService.showMessage('Relationship saved successfully.', 'success');
+        relation.type = updatedRelation.type;
+        deferred.resolve();
+      })
+      .catch((response: RelationResponse) => {
+        this.messageService.showError(response.getMessage(), true);
+        deferred.reject();
       });
   }
 
