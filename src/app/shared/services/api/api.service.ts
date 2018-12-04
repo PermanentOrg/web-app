@@ -10,11 +10,12 @@ export class ApiService {
   public account: Repo.AccountRepo;
   public archive: Repo.ArchiveRepo;
   public billing: Repo.BillingRepo;
+  public connector: Repo.ConnectorRepo;
   public folder: Repo.FolderRepo;
   public invite: Repo.InviteRepo;
   public record: Repo.RecordRepo;
+  public relation: Repo.RelationRepo;
   public share: Repo.ShareRepo;
-  public connector: Repo.ConnectorRepo;
 
   constructor(private http: HttpService) {
     this.auth = new Repo.AuthRepo(this.http);
@@ -24,6 +25,7 @@ export class ApiService {
     this.folder = new Repo.FolderRepo(this.http);
     this.invite = new Repo.InviteRepo(this.http);
     this.record = new Repo.RecordRepo(this.http);
+    this.relation = new Repo.RelationRepo(this.http);
     this.share = new Repo.ShareRepo(this.http);
     this.connector = new Repo.ConnectorRepo(this.http);
   }

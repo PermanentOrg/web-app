@@ -47,6 +47,9 @@ export const FORM_ERROR_MESSAGES = {
   confirm: {
     mismatch: 'Passwords must match',
     required: 'Password confirmation required'
+  },
+  generic: {
+    required: 'This field is required'
   }
 };
 
@@ -80,5 +83,9 @@ export function getFormInputError(formInput: FormInputComponent) {
   }
 
   const errorName = Object.keys(control.errors).pop();
-  return FORM_ERROR_MESSAGES[formInput.fieldName][errorName];
+  if (FORM_ERROR_MESSAGES[formInput.fieldName]) {
+    return FORM_ERROR_MESSAGES[formInput.fieldName][errorName];
+  } else {
+    return FORM_ERROR_MESSAGES['generic'][errorName];
+  }
 }

@@ -1,0 +1,23 @@
+{
+  "Results": [
+    {
+      "data": null,
+      "message": [
+        "Relations have been retrieved."
+      ],
+      "status": true,
+      "resultDT": "2018-12-04T22:10:39.000000",
+      "createdDT": null,
+      "updatedDT": null
+    }
+  ],
+  "isSuccessful": true,
+  "actionFailKeys": [],
+  "isSystemUp": true,
+  "systemMessage": "Everything is A-OK",
+  "sessionId": null,
+  "csrf": "606e01fc4f3ff95b6423b8cf9a568e26",
+  "vaultExpirationTime": "2018-12-02T21:11:38.000000",
+  "createdDT": null,
+  "updatedDT": null
+}

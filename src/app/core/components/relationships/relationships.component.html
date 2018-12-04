@@ -1,0 +1,15 @@
+<div class="page-title">Relationships</div>
+<!-- <p>
+  Relationships are between archives only and not between accounts.
+  <br><br>
+  Adding a relationship does not give another user any permission to access or edit this archive.
+</p> -->
+<p *ngIf="relations && relations.length">Tap to edit</p>
+<p *ngIf="!relations || !relations.length">No relationships</p>
+<div class="relations">
+  <pr-archive-small *ngFor="let relation of relations"
+  (click)="onRelationClick(relation)"
+  [archive]="relation.RelationArchiveVO"
+  [relation]="relation.type"
+  ></pr-archive-small>
+</div>

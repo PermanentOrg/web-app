@@ -16,6 +16,28 @@ export class PrConstantsService {
     return this.constants;
   }
 
+  public getRelations() {
+    const relationTypes = [];
+    for (const key in this.constants.relation) {
+      if (key === 'family') {
+        // tslint:disable-next-line:forin
+        for (const familyKey in this.constants.relation.family) {
+          relationTypes.push({
+            type: `relation.family.${familyKey}`,
+            name: this.constants.relation.family[familyKey]
+          });
+        }
+      } else {
+        relationTypes.push({
+          type: `relation.${key}`,
+          name: this.constants.relation[key]
+        });
+      }
+    }
+
+    return relationTypes;
+  }
+
   public translate(translateString: string) {
     const split = translateString.split('.');
     let currentBranch = this.constants;

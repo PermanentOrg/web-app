@@ -80,7 +80,7 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
       }
     ];
 
-    let message = `Switch archive to ?`;
+    let message = `Switch archive to ${archive.fullName}?`;
 
     if (archive.isPending()) {
       message = `Accept and switch to archive ${archive.fullName} as ${this.prConstants.translate(archive.accessRole)}?`;

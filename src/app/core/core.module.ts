@@ -22,6 +22,7 @@ import { ArchiveSelectorComponent } from './components/archive-selector/archive-
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
+import { RelationshipsComponent } from './components/relationships/relationships.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
     ArchiveSelectorComponent,
     FolderPickerComponent,
     DonateComponent,
-    InvitationsComponent
+    InvitationsComponent,
+    RelationshipsComponent
   ],
   providers: [
     DataService,
