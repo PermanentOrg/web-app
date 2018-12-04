@@ -47,6 +47,10 @@ export class RelationResponse extends BaseResponse {
 
   public getRelationVOs() {
     const data = this.getResultsData();
+    if (!data || !data.length || !data[0]) {
+      return null;
+    }
+
     const relations = data.map((result) => {
       return result.map((resultList) => {
         return new RelationVO(resultList.RelationVO);

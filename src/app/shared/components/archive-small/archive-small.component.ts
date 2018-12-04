@@ -24,7 +24,12 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.isCurrent = this.account.getArchive().archiveId === this.archive.archiveId;
+    const currentArchive = this.account.getArchive();
+    if (currentArchive) {
+      this.isCurrent = this.account.getArchive().archiveId === this.archive.archiveId;
+    } else {
+      this.isCurrent = false;
+    }
     this.isPending = this.archive.isPending();
 
     if (this.relation) {
