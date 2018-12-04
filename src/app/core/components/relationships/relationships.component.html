@@ -1,6 +1,8 @@
 <div class="page-title">Relationships</div>
-<div class="page-subheading">Existing</div>
-<pr-archive-small *ngFor="let relation of relations"
+<div class="page-subheading">Tap to edit</div>
+<div class="relations">
+  <pr-archive-small *ngFor="let relation of relations"
   [archive]="relation.RelationArchiveVO"
   [relation]="relation.type"
   ></pr-archive-small>
+</div>

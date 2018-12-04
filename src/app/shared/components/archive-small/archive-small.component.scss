@@ -24,17 +24,20 @@ $thumb-size: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  &.clickable {
-    line-height: 1;
-  }
+  flex: 1 1 auto;
+  line-height: 1.2;
 }
 
 .archive-current {
   font-weight: 400;
+  line-height: 1.5;
 }
 
 .archive-switch, .archive-pending, .archive-subtitle {
   font-weight: 400;
   font-size: 12px;
+}
+
+.archive-edit button {
+  margin: 0px;
 }
