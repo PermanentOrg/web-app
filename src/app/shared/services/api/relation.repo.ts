@@ -12,6 +12,27 @@ export class RelationRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/relation/getAll', data, RelationResponse);
   }
+
+  public update(relationVO: RelationVO) {
+    const data = {
+      RelationVO: {
+        relationId: relationVO.relationId,
+        type: relationVO.type
+      }
+    };
+
+    return this.http.sendRequestPromise('/relation/update', [data], RelationResponse);
+  }
+
+  public delete(relationVO: RelationVO) {
+    const data = {
+      RelationVO: {
+        relationId: relationVO.relationId,
+      }
+    };
+
+    return this.http.sendRequestPromise('/relation/delete', [data], RelationResponse);
+  }
 }
 
 export class RelationResponse extends BaseResponse {
