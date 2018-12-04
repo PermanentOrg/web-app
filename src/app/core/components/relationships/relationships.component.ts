@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationVO } from '@models/index';
+import { Deferred } from '@root/vendor/deferred';
+import { RelationResponse } from '@shared/services/api/index.repo';
+import { remove, cloneDeep } from 'lodash';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 
 const RelationActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -19,6 +24,11 @@ const RelationActions: {[key: string]: PromptButton} = {
   }
 };
 
+interface RelationType {
+  type?: string;
+  name?: string;
+}
+
 @Component({
   selector: 'pr-relationships',
   templateUrl: './relationships.component.html',
@@ -26,6 +36,7 @@ const RelationActions: {[key: string]: PromptButton} = {
 })
 export class RelationshipsComponent implements OnInit {
   relations: RelationVO[];
+  relationOptions: FormInputSelectOption[];
 
   constructor(
     private route: ActivatedRoute,
@@ -33,9 +44,18 @@ export class RelationshipsComponent implements OnInit {
     private api: ApiService,
     private accountService: AccountService,
     private promptService: PromptService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private prConstants: PrConstantsService
   ) {
     this.relations = this.route.snapshot.data.relations;
+    this.relationOptions = this.prConstants.getRelations().map((type) => {
+      return {
+        text: type.name,
+        value: type.type
+      };
+    });
+
+    console.log(this.relationOptions);
   }
 
   ngOnInit() {
@@ -57,12 +77,45 @@ export class RelationshipsComponent implements OnInit {
   }
 
   editRelation(relation: RelationVO) {
+    const deferred = new Deferred();
+    const fields = [
+      {
+        fieldName: 'relationType',
+        placeholder: 'Relationship',
+        type: 'select',
+        validators: [Validators.required],
+        config: {
+          autocomplete: 'off',
+          autocorrect: 'off',
+          autocapitalize: 'off'
+        },
+        selectOptions: this.relationOptions
+      }
+    ];
 
+    return this.promptService.prompt(fields, `Relationship with ${relation.RelationArchiveVO.fullName}`, deferred.promise)
+      .then((value) => {
+        console.log(value);
+      });
   }
 
-  removeRelation(relation: RelationVO) {
-    if (confirm('Are you sure you want to remove this relationship?')) {
-      this.api.relation.delete(relation);
+  async removeRelation(relation: RelationVO) {
+    const deferred = new Deferred();
+    const confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
+    const confirmed = await this.promptService.confirm('Remove', confirmTitle, deferred.promise);
+    if (confirmed) {
+      this.api.relation.delete(relation)
+        .then((response: RelationResponse) => {
+          this.messageService.showMessage(response.getMessage(), 'success', true);
+          remove(this.relations, relation);
+          deferred.resolve();
+        })
+        .catch((response: RelationResponse) => {
+          deferred.resolve();
+          this.messageService.showError(response.getMessage(), true);
+        });
+    } else {
+      deferred.resolve();
     }
   }
 
