@@ -23,6 +23,7 @@ import { FolderPickerComponent } from '@core/components/folder-picker/folder-pic
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
+import { SharingComponent } from './components/sharing/sharing.component';
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import { RelationshipsComponent } from './components/relationships/relationships
     FolderPickerComponent,
     DonateComponent,
     InvitationsComponent,
-    RelationshipsComponent
+    RelationshipsComponent,
+    SharingComponent
   ],
   providers: [
     DataService,
