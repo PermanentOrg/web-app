@@ -24,12 +24,15 @@ import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
 import { SharingComponent } from './components/sharing/sharing.component';
+import { DialogModule } from '../dialog/dialog.module';
+import { Dialog } from '../dialog/dialog.service';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     CoreRoutingModule,
+    DialogModule.forRoot()
   ],
   declarations: [
     MainComponent,
@@ -47,6 +50,9 @@ import { SharingComponent } from './components/sharing/sharing.component';
     RelationshipsComponent,
     SharingComponent
   ],
+  entryComponents: [
+    SharingComponent
+  ],
   providers: [
     DataService,
     FolderViewService,
@@ -55,4 +61,10 @@ import { SharingComponent } from './components/sharing/sharing.component';
     FolderPickerService
   ]
 })
-export class CoreModule { }
+export class CoreModule {
+  constructor(private dialog: Dialog) {
+    dialog.registerComponents([
+      SharingComponent
+    ]);
+  }
+}

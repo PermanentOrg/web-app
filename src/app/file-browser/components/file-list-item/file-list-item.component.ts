@@ -17,6 +17,8 @@ import { FolderPickerOperations } from '@core/components/folder-picker/folder-pi
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { Dialog } from '@root/app/dialog/dialog.service';
+import { SharingComponent } from '@core/components/sharing/sharing.component';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -39,6 +41,10 @@ const ItemActions: {[key: string]: PromptButton} = {
     buttonName: 'delete',
     buttonText: 'Delete',
     class: 'btn-danger'
+  },
+  Share: {
+    buttonName: 'share',
+    buttonText: 'Share'
   },
   Unshare: {
     buttonName: 'delete',
@@ -74,7 +80,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     private prompt: PromptService,
     private edit: EditService,
     private accountService: AccountService,
-    private folderPicker: FolderPickerService
+    private folderPicker: FolderPickerService,
+    private dialog: Dialog
   ) {
   }
 
@@ -152,6 +159,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.canWrite) {
       actionButtons.push(ItemActions.Move);
       actionButtons.push(ItemActions.Rename);
+      actionButtons.push(ItemActions.Share);
       actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
@@ -180,6 +188,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
               .then(() => {
                 actionResolve();
               });
+            break;
+          case 'share':
+            this.dialog.open('SharingComponent');
             break;
         }
       });
