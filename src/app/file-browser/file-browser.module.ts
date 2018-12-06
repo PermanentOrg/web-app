@@ -10,6 +10,7 @@ import { FileListItemComponent } from '@fileBrowser/components/file-list-item/fi
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { VideoComponent } from '@shared/components/video/video.component';
+import { SharingComponent } from '@core/components/sharing/sharing.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { VideoComponent } from '@shared/components/video/video.component';
     FileListItemComponent,
     FileViewerComponent,
     ThumbnailComponent,
-    VideoComponent
+    VideoComponent,
   ]
 })
 export class FileBrowserModule { }

@@ -190,7 +190,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
               });
             break;
           case 'share':
-            this.dialog.open('SharingComponent');
+            actionResolve();
+            this.dialog.open('SharingComponent', { item: this.item });
             break;
         }
       });

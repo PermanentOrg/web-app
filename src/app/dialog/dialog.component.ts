@@ -1,11 +1,14 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding } from '@angular/core';
 import { Dialog } from './dialog.service';
 
 @Component({
   selector: 'pr-dialog',
-  template: '',
+  templateUrl: './dialog.component.html',
+  styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
+  public isVisible = false;
+  @ViewChild('dialogContent', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
 
   constructor(
     public container: ViewContainerRef,
@@ -17,4 +20,11 @@ export class DialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  show() {
+    this.isVisible = true;
+  }
+
+  hide() {
+    this.isVisible = false;
+  }
 }

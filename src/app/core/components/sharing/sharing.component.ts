@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.service';
 
 @Component({
   selector: 'pr-sharing',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SharingComponent implements OnInit {
 
-  constructor() { }
+  constructor(@Inject(DIALOG_DATA) public data: any, private dialogRef: DialogRef) { }
 
   ngOnInit() {
+    console.log(this.data);
+    console.log(this.dialogRef);
   }
 
 }
