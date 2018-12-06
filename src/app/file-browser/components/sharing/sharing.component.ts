@@ -44,6 +44,13 @@ export class SharingComponent implements OnInit {
   }
 
   onShareMemberClick(shareVo: ShareVO) {
+    if (shareVo.accessRole === 'access.role.owner') {
+      return this.messageService.showMessage(
+        `${shareVo.ArchiveVO.fullName} is an Owner on this item and cannot be removed or changed.`,
+        'info'
+      );
+    }
+
     const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
     this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
       .then((value: string) => {
@@ -100,7 +107,9 @@ export class SharingComponent implements OnInit {
         deferred.resolve();
       })
       .catch((response: ShareResponse) => {
-        this.messageService.showError(response.getMessage(), true);
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+        }
         deferred.reject();
       });
   }
