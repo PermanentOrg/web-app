@@ -1,5 +1,6 @@
 import { BaseVO } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
+import { ShareVO } from '@models/share-vo';
 
 export class RecordVO extends BaseVO {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId'];
@@ -91,7 +92,8 @@ export class RecordVO extends BaseVO {
   constructor(voData: any | RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
-    if (initChildren) {
+    if (this.ShareVOs) {
+      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
 
     if (dataStatus) {

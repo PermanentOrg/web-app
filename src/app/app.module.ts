@@ -20,6 +20,8 @@ import { AppRoutingModule } from '@root/app/app.routes';
 
 import { AppComponent } from '@root/app/app.component';
 import { MessageComponent } from '@shared/components/message/message.component';
+import { DialogModule } from './dialog/dialog.module';
+import { Dialog } from './dialog/dialog.service';
 
 @Injectable()
 export class CustomUrlSerializer implements UrlSerializer {
@@ -42,6 +44,8 @@ export class CustomUrlSerializer implements UrlSerializer {
     return this.defaultSerializer.serialize(tree);
   }
 }
+
+
 
 
 @NgModule({
@@ -69,7 +73,11 @@ export class CustomUrlSerializer implements UrlSerializer {
 })
 export class AppModule {
   private routerListener: Subscription;
-  constructor(private title: Title, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private title: Title,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     this.routerListener = this.router.events
     .pipe(filter((event) => {
       return event instanceof NavigationEnd;

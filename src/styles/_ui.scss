@@ -65,3 +65,38 @@ nav .btn {
   padding: 5px 10px;
   font-weight: 500;
 }
+
+.break-all {
+  word-break: break-all;
+}
+
+pr-dialog {
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .dialog-body {
+      flex: 1 1 auto;
+      overflow-y: auto;
+    }
+
+    .dialog-footer {
+      padding: 0px 10px;
+      flex: 0 0 auto;
+      display: flex;
+
+      button {
+        max-width: 100%;
+      }
+    
+      button:not(:first-child) {
+        margin-left: 10px;
+      }
+    
+      button.btn-secondary {
+        flex: 0 0 33.33%
+      }
+    }
+  }
+}

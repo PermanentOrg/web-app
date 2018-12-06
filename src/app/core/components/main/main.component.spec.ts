@@ -23,6 +23,8 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { DialogComponent } from '@root/app/dialog/dialog.component';
+import { Dialog } from '@root/app/dialog/dialog.service';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
@@ -48,10 +50,12 @@ describe('MainComponent', () => {
     config.declarations.push(UploadProgressComponent);
     config.declarations.push(UploadButtonComponent);
     config.declarations.push(FolderPickerComponent);
+    config.declarations.push(DialogComponent);
 
     config.providers.push(AccountService);
     config.providers.push(DataService);
     config.providers.push(FolderPickerService);
+    config.providers.push(Dialog);
 
     await TestBed.configureTestingModule(config).compileComponents();
 

@@ -37,7 +37,7 @@ export const routes: Routes = [
     component: FileListComponent,
     resolve: folderResolve,
     children: fileListChildRoutes
-  }
+  },
 ];
 @NgModule({
   imports: [

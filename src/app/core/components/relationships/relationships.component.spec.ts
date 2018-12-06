@@ -10,6 +10,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { RelationshipService } from '@core/services/relationship/relationship.service';
 
 const defaultRelationData = require('@root/test/responses/relation.getAll.none.success.json');
 
@@ -43,7 +44,7 @@ describe('RelationshipsComponent', () => {
   it('should create with zero relationships', async () => {
     await init();
     expect(component).toBeTruthy();
-    expect(component.relations).toBeFalsy();
+    expect(component.relations.length).toBe(0);
   });
 
   it('should create with multiple relationships', async () => {
