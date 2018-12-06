@@ -23,9 +23,8 @@ import { FolderPickerComponent } from '@core/components/folder-picker/folder-pic
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
-import { SharingComponent } from './components/sharing/sharing.component';
+import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { DialogModule } from '../dialog/dialog.module';
-import { Dialog } from '../dialog/dialog.service';
 
 @NgModule({
   imports: [
@@ -47,11 +46,7 @@ import { Dialog } from '../dialog/dialog.service';
     FolderPickerComponent,
     DonateComponent,
     InvitationsComponent,
-    RelationshipsComponent,
-    SharingComponent
-  ],
-  entryComponents: [
-    SharingComponent
+    RelationshipsComponent
   ],
   providers: [
     DataService,
@@ -62,9 +57,4 @@ import { Dialog } from '../dialog/dialog.service';
   ]
 })
 export class CoreModule {
-  constructor(private dialog: Dialog) {
-    dialog.registerComponents([
-      SharingComponent
-    ]);
-  }
 }

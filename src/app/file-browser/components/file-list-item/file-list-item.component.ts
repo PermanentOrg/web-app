@@ -105,6 +105,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.inGridView = this.folderView === FolderView.Grid;
+
+    if (this.item.position === 1) {
+      this.dialog.open('SharingComponent', { item: this.item });
+    }
   }
 
   ngOnChanges() {

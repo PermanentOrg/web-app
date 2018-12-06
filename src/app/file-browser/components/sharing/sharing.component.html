@@ -1,0 +1,14 @@
+<div class="dialog-content">
+  <div class="dialog-body">
+    <div class="page-title">Sharing</div>
+    <div class="share-item-preview">
+        <div prBgImage [bgSrc]="shareItem.thumbURL200"></div>
+        <div class="name">{{shareItem.displayName}}</div>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary" (click)="cancel()">Save</button>
+  </div>
+</div>
+

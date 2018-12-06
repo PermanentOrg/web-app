@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -10,14 +10,17 @@ import { FileListItemComponent } from '@fileBrowser/components/file-list-item/fi
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { VideoComponent } from '@shared/components/video/video.component';
-import { SharingComponent } from '@core/components/sharing/sharing.component';
+import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
+import { Dialog } from '../dialog/dialog.service';
+import { DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     FileBrowserRoutingModule,
-    SharedModule
+    SharedModule,
+    DialogModule
   ],
   exports: [
     FileListComponent,
@@ -32,6 +35,18 @@ import { SharingComponent } from '@core/components/sharing/sharing.component';
     FileViewerComponent,
     ThumbnailComponent,
     VideoComponent,
+    SharingComponent
+  ],
+  entryComponents: [
+    SharingComponent
   ]
 })
-export class FileBrowserModule { }
+export class FileBrowserModule {
+  private dialogComponents = [
+    SharingComponent
+  ];
+
+  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
+    this.dialog.registerComponents(this.dialogComponents, resolver, true);
+  }
+}

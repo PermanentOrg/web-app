@@ -1,0 +1,27 @@
+@import 'variables';
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.share-item-preview {
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  $preview-height: $file-list-row-height;
+
+  [prBgImage] {
+    height: $preview-height - 10px;
+    width: $preview-height - 10px;
+    flex: 0 0 $preview-height - 10px;
+    margin-right: 5px;
+  }
+
+  .name {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
