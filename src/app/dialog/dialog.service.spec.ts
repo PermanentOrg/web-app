@@ -21,7 +21,7 @@ class MockAppModule {
   }
 }
 
-fdescribe('Dialog', () => {
+describe('Dialog', () => {
   beforeEach(async() => {
     TestBed.configureTestingModule({
       imports: [MockAppModule],
