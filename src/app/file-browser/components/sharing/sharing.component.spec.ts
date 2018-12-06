@@ -11,7 +11,7 @@ import { PromptService } from '@core/services/prompt/prompt.service';
 
 const getSharesData = require('@root/test/responses/share.getShares.success.json');
 
-describe('SharingComponent', () => {
+fdescribe('SharingComponent', () => {
   let component: SharingComponent;
   let fixture: ComponentFixture<SharingComponent>;
   let dialogRef: any;
@@ -70,6 +70,16 @@ describe('SharingComponent', () => {
 
   it('should show a message when an owner is clicked', async () => {
     const shareItem = shares[1];
+    await init(shareItem);
+    expect(component.shareItem).toBe(shareItem);
+    spyOn(messageService, 'showMessage');
+    component.onShareMemberClick(shareItem.ShareVOs[0]);
+    expect(messageService.showMessage).toHaveBeenCalled();
+  });
+
+  fit('should show a message when a non-owner attempts to edit', async () => {
+    const shareItem = cloneDeep(shares[0]);
+    shareItem.accessRole = 'access.role.viewer';
     await init(shareItem);
     expect(component.shareItem).toBe(shareItem);
     spyOn(messageService, 'showMessage');

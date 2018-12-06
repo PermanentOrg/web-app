@@ -44,6 +44,13 @@ export class SharingComponent implements OnInit {
   }
 
   onShareMemberClick(shareVo: ShareVO) {
+    if (this.shareItem.accessRole !== 'access.role.owner') {
+      return this.messageService.showMessage(
+        `You do not have permission to edit share access.`,
+        'danger'
+      );
+    }
+
     if (shareVo.accessRole === 'access.role.owner') {
       return this.messageService.showMessage(
         `${shareVo.ArchiveVO.fullName} is an Owner on this item and cannot be removed or changed.`,
