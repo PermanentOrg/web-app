@@ -13,11 +13,11 @@ export class ShareVO extends BaseVO {
   public type;
   public status;
 
-  private FolderVO: FolderVO;
-  private RecordVO: RecordVO;
-  private ItemVO;
-  private FolderLinkVO;
-  private ArchiveVO: ArchiveVO;
+  public FolderVO: FolderVO;
+  public RecordVO: RecordVO;
+  public ItemVO;
+  public FolderLinkVO;
+  public ArchiveVO: ArchiveVO;
 
   constructor(voData: any) {
     super(voData);

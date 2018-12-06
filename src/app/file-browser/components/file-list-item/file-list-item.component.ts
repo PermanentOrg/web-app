@@ -18,7 +18,6 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Dialog } from '@root/app/dialog/dialog.service';
-import { SharingComponent } from '@core/components/sharing/sharing.component';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
