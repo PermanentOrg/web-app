@@ -73,7 +73,8 @@ pr-dialog {
     height: 100%;
 
     .dialog-body {
-      flex: 1 0;
+      flex: 1 1 auto;
+      overflow-y: auto;
     }
 
     .dialog-footer {

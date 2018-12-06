@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding, ElementRef, AfterViewInit } from '@angular/core';
 import { Dialog } from './dialog.service';
 
 @Component({
@@ -6,9 +6,10 @@ import { Dialog } from './dialog.service';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent implements AfterViewInit {
   public isVisible = false;
   @ViewChild('dialogContent', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
+  @ViewChild('menuWrapper', {read: ElementRef}) menuWrapper: ElementRef;
 
   constructor(
     public container: ViewContainerRef,
@@ -17,7 +18,7 @@ export class DialogComponent implements OnInit {
     this.dialog.registerRootComponent(this);
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
   }
 
   show() {

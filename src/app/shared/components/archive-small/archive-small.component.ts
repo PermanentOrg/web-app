@@ -13,10 +13,12 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() archive: ArchiveVO = null;
   @Input() clickable = false;
   @Input() relation: string;
+  @Input() accessRole: string;
 
   public isCurrent = false;
   public isPending = false;
   public relationDisplay: string;
+  public accessRoleDisplay: string;
 
   constructor(
     private account: AccountService,
@@ -42,6 +44,14 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
         this.relationDisplay = this.prConstants.translate(this.relation);
       } else {
         this.relationDisplay = null;
+      }
+    }
+
+    if (changes.accessRole) {
+      if (this.accessRole) {
+        this.accessRoleDisplay = this.prConstants.translate(this.accessRole);
+      } else {
+        this.accessRoleDisplay = null;
       }
     }
   }

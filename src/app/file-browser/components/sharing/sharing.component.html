@@ -1,9 +1,20 @@
 <div class="dialog-content">
   <div class="dialog-body">
-    <div class="page-title">Sharing</div>
-    <div class="share-item-preview">
+    <div class="page-title">Sharing {{shareItem.displayName}}</div>
+    <!-- <div class="share-item-preview">
         <div prBgImage [bgSrc]="shareItem.thumbURL200"></div>
         <div class="name">{{shareItem.displayName}}</div>
+    </div> -->
+    <!-- <div class="page-subheading">Sharing With</div> -->
+    <div class="share-item-members">
+      <p *ngIf="!shareItem.ShareVOs || !shareItem.ShareVOs.length">
+        This item is not shared with any archives.
+      </p>
+
+      <p></p>
+      <pr-archive-small *ngFor="let shareVO of shareItem.ShareVOs"
+        [archive]="shareVO.ArchiveVO" [accessRole]="shareVO.accessRole">
+      </pr-archive-small>
     </div>
   </div>
   <div class="dialog-footer">

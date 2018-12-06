@@ -9,7 +9,6 @@ import { RecordVO, FolderVO } from '@models/index';
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
-
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
