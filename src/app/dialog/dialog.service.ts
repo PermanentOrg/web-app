@@ -100,6 +100,7 @@ export class Dialog {
 
   close(dialogRef: DialogRef) {
     const id = dialogRef.id;
+    dialogRef.dialogComponent.hide();
     setTimeout(() => {
       this.dialogs[id].destroy();
       delete this.dialogs[id];
