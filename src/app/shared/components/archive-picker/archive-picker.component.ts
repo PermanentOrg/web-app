@@ -25,8 +25,8 @@ export class ArchivePickerComponent implements OnInit {
     this.dialogRef.close(archive);
   }
 
-  close() {
-    this.dialogRef.close();
+  cancel() {
+    this.dialogRef.close(null, true);
   }
 
 }

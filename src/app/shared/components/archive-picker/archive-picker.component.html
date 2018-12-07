@@ -7,7 +7,8 @@
     </p>
     <div class="page-subheading">Relationships</div>
     <div class="relations">
-      <p *ngIf="!relations || !relations.length">No relationships</p>
+      <p *ngIf="!relations">No relationships</p>
+      <p *ngIf="relations && !relations.length">All relationships shared with</p>
       <pr-archive-small
         (click)="chooseArchive(relation.RelationArchiveVO)"
         *ngFor="let relation of relations"
@@ -19,6 +20,6 @@
     <div class="search-results"></div>
   </div>
   <div class="dialog-footer">
-    <button class="btn btn-secondary" (click)="close()">Cancel</button>
+    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
   </div>
 </div>

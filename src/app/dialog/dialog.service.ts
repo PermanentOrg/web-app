@@ -17,8 +17,12 @@ export class DialogRef {
     this.closePromise = this.closeDeferred.promise;
   }
 
-  close(closeData?: any) {
-    this.closeDeferred.resolve(closeData);
+  close(closeData?: any, cancelled?: boolean) {
+    if (!cancelled) {
+      this.closeDeferred.resolve(closeData);
+    } else {
+      this.closeDeferred.reject(closeData);
+    }
     this.dialog.close(this);
   }
 

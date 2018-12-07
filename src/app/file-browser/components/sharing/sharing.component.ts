@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Validators } from '@angular/forms';
 
-import { remove } from 'lodash';
+import { remove, find } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
 import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
@@ -12,7 +12,7 @@ import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 
-import { RecordVO, FolderVO, ShareVO } from '@models/index';
+import { RecordVO, FolderVO, ShareVO, ArchiveVO } from '@models/index';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -88,11 +88,29 @@ export class SharingComponent implements OnInit {
       })
       .then((relations) => {
         this.loadingRelations = false;
+        if (!relations || !relations.length) {
+          console.log('no relations');
+          relations = null;
+        } else {
+          relations = relations.filter((relation) => {
+            return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId});
+          });
+        }
         return this.dialog.open('ArchivePickerComponent', { relations: relations });
       })
-      .then((archive) => {
-        console.log('selected archive?', archive);
+      .catch(() => {
+        console.log('CANCELLED');
+      })
+      .then((archive: ArchiveVO) => {
+        const newShareVo = new ShareVO({
+          accessRole: 'access.role.viewer',
+          archiveId: archive.archiveId,
+          folder_linkId: this.shareItem.folder_linkId
+        });
+        console.log('new share vo', newShareVo);
+        return this.api.share.upsert(newShareVo);
       });
+
 
   }
 
