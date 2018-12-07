@@ -164,6 +164,9 @@ export class SharingComponent implements OnInit {
         }
         this.messageService.showMessage(successMessage, 'success');
         if (newShare) {
+          if (!this.shareItem.ShareVOs) {
+            this.shareItem.ShareVOs = [];
+          }
           this.shareItem.ShareVOs.push(new ShareVO(updatedShareVo));
         } else {
           shareVo.accessRole = updatedShareVo.accessRole;
@@ -181,7 +184,7 @@ export class SharingComponent implements OnInit {
   removeShareVo(shareVO: ShareVO) {
     const deferred = new Deferred();
     const confirmTitle = `Remove ${shareVO.ArchiveVO.fullName} from this share?`;
-    this.promptService.confirm('Remove', confirmTitle, deferred.promise)
+    this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {
         this.api.share.remove(shareVO)
         .then((response: ShareResponse) => {
