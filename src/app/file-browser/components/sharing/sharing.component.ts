@@ -13,7 +13,7 @@ import { remove } from 'lodash';
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
     buttonName: 'edit',
-    buttonText: 'Edit Access Level'
+    buttonText: 'Edit Access'
   },
   Remove: {
     buttonName: 'remove',
