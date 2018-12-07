@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding, ElementRef, AfterViewInit } from '@angular/core';
 import { Dialog } from './dialog.service';
+import { PortalInjector } from '@root/vendor/portal-injector';
 
 @Component({
   selector: 'pr-dialog',
@@ -9,20 +10,18 @@ import { Dialog } from './dialog.service';
 export class DialogComponent implements AfterViewInit {
   public isVisible = false;
   @ViewChild('dialogContent', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
-  @ViewChild('menuWrapper', {read: ElementRef}) menuWrapper: ElementRef;
 
   constructor(
-    public container: ViewContainerRef,
-    private dialog: Dialog
   ) {
-    this.dialog.registerRootComponent(this);
   }
 
   ngAfterViewInit() {
   }
 
   show() {
-    this.isVisible = true;
+    setTimeout(() => {
+      this.isVisible = true;
+    });
   }
 
   hide() {

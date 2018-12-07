@@ -3,9 +3,12 @@ import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory,
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
+import { DialogRootComponent } from './dialog-root.component';
 
 export class DialogRef {
-  componentRef?: ComponentRef<any>;
+  dialogComponentRef?: ComponentRef<DialogComponent>;
+  dialogComponent?: DialogComponent;
+  contentComponentRef?: ComponentRef<any>;
   closeDeferred?: Deferred = new Deferred();
 
   constructor(public id: number, private dialog: Dialog) {
@@ -17,7 +20,7 @@ export class DialogRef {
   }
 
   destroy() {
-    this.componentRef.destroy();
+    this.dialogComponentRef.destroy();
   }
 }
 
@@ -27,11 +30,13 @@ export const DIALOG_DATA = new InjectionToken<any>('DialogData');
   providedIn: 'root'
 })
 export class Dialog {
-  private rootComponent: DialogComponent;
+  private dialogModuleResolver: ComponentFactoryResolver;
+
+  private rootComponent: DialogRootComponent;
   private currentId = 0;
 
-  private registeredComponents: {[token: string]: any} = {};
-  private componentResolvers: {[token: string]: any} = {};
+  public registeredComponents: {[token: string]: any} = {};
+  public componentResolvers: {[token: string]: any} = {};
   private dialogs: {[id: number]: DialogRef} = {};
 
   constructor(
@@ -41,12 +46,17 @@ export class Dialog {
   ) {
   }
 
-  registerRootComponent(component: DialogComponent) {
+  setDialogModuleResolver(resolver: ComponentFactoryResolver) {
+    this.dialogModuleResolver = resolver;
+  }
+
+  registerRootComponent(component: DialogRootComponent) {
     if (this.rootComponent) {
       throw new Error(`Dialog - root dialog component already exists`);
     }
 
     this.rootComponent = component;
+    console.log('Root component registered!', component);
   }
 
   registerComponent(component: any, resolver = this.resolver, allowDupes?: boolean) {
@@ -84,12 +94,12 @@ export class Dialog {
     }
 
     const newDialog = this.createDialog(token, data);
+    newDialog.dialogComponent.show();
     return newDialog.closeDeferred.promise;
   }
 
   close(dialogRef: DialogRef) {
     const id = dialogRef.id;
-    this.rootComponent.hide();
     setTimeout(() => {
       this.dialogs[id].destroy();
       delete this.dialogs[id];
@@ -97,18 +107,24 @@ export class Dialog {
   }
 
   private createDialog(token: string, data: any = {}): DialogRef {
+    // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
+    this.dialogs[dialog.id] = dialog;
+
+    // create new dialog component to wrap custom component
+    const dialogComponentFactory = this.dialogModuleResolver.resolveComponentFactory(DialogComponent);
+    dialog.dialogComponentRef = this.rootComponent.viewContainer.createComponent(dialogComponentFactory, undefined, this.injector);
+    dialog.dialogComponent = dialog.dialogComponentRef.instance;
+
+    // fetch custom component resolve stuff
     const component = this.registeredComponents[token];
     const resolver = this.componentResolvers[token];
 
+    // create custom component inside new dialog component
     const injector = new PortalInjector(this.injector, new WeakMap<any, any>([[DIALOG_DATA, data], [DialogRef, dialog]]));
     const factory: ComponentFactory<any> = resolver.resolveComponentFactory(component);
+    dialog.contentComponentRef = dialog.dialogComponent.viewContainer.createComponent(factory, undefined, injector);
 
-    dialog.componentRef = this.rootComponent.viewContainer.createComponent(factory, undefined, injector),
-
-    this.dialogs[dialog.id] = dialog;
-
-    this.rootComponent.show();
     return dialog;
   }
 }
