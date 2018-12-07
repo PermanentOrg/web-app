@@ -13,7 +13,7 @@ import { DonateResolveService} from '@core/resolves/donate-resolve.service';
 import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
 
 import { SharedModule } from '@shared/shared.module';
-import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
+import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
@@ -34,7 +34,7 @@ export const routes: Routes = [
       { path: 'shares', loadChildren: '@shares/shares.module#SharesModule', data: { title: 'Shares'} },
       {
         path: 'choosearchive',
-        component: ArchiveSelectorComponent,
+        component: ArchiveSwitcherComponent,
         data: { title: 'Choose Archive'},
         resolve: { archives: ArchivesResolveService }
       },

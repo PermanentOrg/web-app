@@ -214,14 +214,14 @@ describe('Multiple Archives Flow', () => {
   });
 
   it('should be logged into default archive', () => {
-    page.goToArchiveSelector();
+    page.goToArchiveSwitcher();
     const currentArchive = element(by.cssContainingText('.current-archive pr-archive-small', 'Current Archive'));
     browser.wait(ExpectedConditions.presenceOf(currentArchive));
     expect(currentArchive.element(by.css('.archive-name')).getText()).toContain(TEST_ARCHIVE_1.name);
   });
 
   it('should have second archive and switch to it', () => {
-    page.goToArchiveSelector();
+    page.goToArchiveSwitcher();
     waitForUpdate();
     const secondArchive = element(by.cssContainingText('.archive-list pr-archive-small', TEST_ARCHIVE_2.name));
     browser.wait(ExpectedConditions.elementToBeClickable(secondArchive));
@@ -237,7 +237,7 @@ describe('Multiple Archives Flow', () => {
   });
 
   it('should switch back to the first archive', () => {
-    page.goToArchiveSelector();
+    page.goToArchiveSwitcher();
     waitForUpdate();
     const firstArchive = element(by.cssContainingText('.archive-list pr-archive-small', TEST_ARCHIVE_1.name));
     browser.wait(ExpectedConditions.elementToBeClickable(firstArchive));

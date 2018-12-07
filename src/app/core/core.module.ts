@@ -18,7 +18,7 @@ import { UploadProgressComponent } from '@core/components/upload-progress/upload
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { PromptComponent } from './components/prompt/prompt.component';
-import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
+import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
@@ -42,7 +42,7 @@ import { DialogModule } from '../dialog/dialog.module';
     UploadProgressComponent,
     UploadButtonComponent,
     PromptComponent,
-    ArchiveSelectorComponent,
+    ArchiveSwitcherComponent,
     FolderPickerComponent,
     DonateComponent,
     InvitationsComponent,
