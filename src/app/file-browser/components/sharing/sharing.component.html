@@ -19,7 +19,7 @@
   </div>
   <div class="dialog-footer">
     <button class="btn btn-secondary" (click)="close()">Done</button>
-    <button class="btn btn-primary" (click)="close()">Add</button>
+    <button class="btn btn-primary" (click)="addShareMember()" [disabled]="loadingRelations">Add</button>
   </div>
 </div>
 

@@ -1,14 +1,18 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.service';
-import { RecordVO, FolderVO, ShareVO } from '@models/index';
-import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
-import { Deferred } from '@root/vendor/deferred';
 import { Validators } from '@angular/forms';
+
+import { remove } from 'lodash';
+import { Deferred } from '@root/vendor/deferred';
+
+import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { remove } from 'lodash';
+import { RelationshipService } from '@core/services/relationship/relationship.service';
+
+import { RecordVO, FolderVO, ShareVO } from '@models/index';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -29,13 +33,17 @@ const ShareActions: {[key: string]: PromptButton} = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
+  public loadingRelations = false;
+
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
+    private dialog: Dialog,
     private promptService: PromptService,
     private prConstants: PrConstantsService,
     private api: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private relationshipService: RelationshipService
   ) {
     this.shareItem = this.data.item as FolderVO | RecordVO;
   }
@@ -71,6 +79,23 @@ export class SharingComponent implements OnInit {
         }
       });
   }
+
+  addShareMember() {
+    this.loadingRelations = true;
+    return this.relationshipService.get()
+      .catch(() => {
+        this.loadingRelations = false;
+      })
+      .then((relations) => {
+        this.loadingRelations = false;
+        return this.dialog.open('ArchivePickerComponent', { relations: relations });
+      })
+      .then((archive) => {
+        console.log('selected archive?', archive);
+      });
+
+  }
+
 
   editShareVo(shareVo: ShareVO) {
     let updatedShareVo: ShareVO;

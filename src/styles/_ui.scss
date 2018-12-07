@@ -94,7 +94,7 @@ pr-dialog {
         margin-left: 10px;
       }
     
-      button.btn-secondary {
+      button.btn-secondary:not(:last-child) {
         flex: 0 0 33.33%
       }
     }

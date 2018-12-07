@@ -1,0 +1,24 @@
+<div class="dialog-content">
+  <div class="dialog-body">
+    <div class="page-title">Choose an Archive</div>
+    <p>
+      Choose from your existing relationships or search by email address to create a relationship and share.
+      <button class="btn btn-primary">Search</button>
+    </p>
+    <div class="page-subheading">Relationships</div>
+    <div class="relations">
+      <p *ngIf="!relations || !relations.length">No relationships</p>
+      <pr-archive-small
+        (click)="chooseArchive(relation.RelationArchiveVO)"
+        *ngFor="let relation of relations"
+        [archive]="relation.RelationArchiveVO"
+        [relation]="relation.type">
+      </pr-archive-small>
+    </div>
+
+    <div class="search-results"></div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="close()">Cancel</button>
+  </div>
+</div>

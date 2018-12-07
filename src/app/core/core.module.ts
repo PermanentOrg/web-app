@@ -23,15 +23,14 @@ import { FolderPickerComponent } from '@core/components/folder-picker/folder-pic
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
-import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
-import { DialogModule } from '../dialog/dialog.module';
+import { DialogModule } from '@root/app/dialog/dialog.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     CoreRoutingModule,
-    DialogModule.forRoot()
+    DialogModule
   ],
   declarations: [
     MainComponent,

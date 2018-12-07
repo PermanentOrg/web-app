@@ -13,6 +13,7 @@ import { VideoComponent } from '@shared/components/video/video.component';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { Dialog } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { ArchivePickerComponent } from '@shared/components/archive-picker/archive-picker.component';
 
 @NgModule({
   imports: [
