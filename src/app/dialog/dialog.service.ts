@@ -9,14 +9,17 @@ export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
   dialogComponent?: DialogComponent;
   contentComponentRef?: ComponentRef<any>;
+
   closeDeferred?: Deferred = new Deferred();
+  closePromise: Promise<any>;
 
   constructor(public id: number, private dialog: Dialog) {
+    this.closePromise = this.closeDeferred.promise;
   }
 
   close(closeData?: any) {
-    this.dialog.close(this);
     this.closeDeferred.resolve(closeData);
+    this.dialog.close(this);
   }
 
   destroy() {
@@ -95,15 +98,17 @@ export class Dialog {
 
     const newDialog = this.createDialog(token, data);
     newDialog.dialogComponent.show();
-    return newDialog.closeDeferred.promise;
+    return newDialog.closePromise;
   }
 
   close(dialogRef: DialogRef) {
-    const id = dialogRef.id;
+    // trigger hide animation
     dialogRef.dialogComponent.hide();
+
+    // timeout for animation to complete before destroy
     setTimeout(() => {
-      this.dialogs[id].destroy();
-      delete this.dialogs[id];
+      dialogRef.destroy();
+      delete this.dialogs[dialogRef.id];
     }, 500);
   }
 
@@ -117,13 +122,13 @@ export class Dialog {
     dialog.dialogComponentRef = this.rootComponent.viewContainer.createComponent(dialogComponentFactory, undefined, this.injector);
     dialog.dialogComponent = dialog.dialogComponentRef.instance;
 
-    // fetch custom component resolve stuff
+    // build custom component factory and setup injector
     const component = this.registeredComponents[token];
     const resolver = this.componentResolvers[token];
-
-    // create custom component inside new dialog component
     const injector = new PortalInjector(this.injector, new WeakMap<any, any>([[DIALOG_DATA, data], [DialogRef, dialog]]));
     const factory: ComponentFactory<any> = resolver.resolveComponentFactory(component);
+
+    // create custom component inside new dialog component
     dialog.contentComponentRef = dialog.dialogComponent.viewContainer.createComponent(factory, undefined, injector);
 
     return dialog;
