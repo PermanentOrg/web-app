@@ -40,6 +40,7 @@ export class Dialog {
 
   public registeredComponents: {[token: string]: any} = {};
   public componentResolvers: {[token: string]: any} = {};
+
   private dialogs: {[id: number]: DialogRef} = {};
 
   constructor(
