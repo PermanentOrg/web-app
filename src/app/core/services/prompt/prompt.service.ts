@@ -79,7 +79,8 @@ export class PromptService {
     const confirmButtons: PromptButton[] = [
       {
         buttonName: 'confirm',
-        buttonText: confirmText || 'OK'
+        buttonText: confirmText || 'OK',
+        class: confirmButtonClass || undefined
       },
       {
         buttonName: 'cancel',
@@ -87,10 +88,6 @@ export class PromptService {
         class: 'btn-secondary'
       }
     ];
-
-    if (confirmButtonClass) {
-      confirmButtons[0].class = confirmButtonClass;
-    }
 
     return this.promptButtons(confirmButtons, title, savePromise)
       .then((value: string) => {

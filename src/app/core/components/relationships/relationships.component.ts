@@ -121,7 +121,7 @@ export class RelationshipsComponent implements OnInit {
   removeRelation(relation: RelationVO) {
     const deferred = new Deferred();
     const confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
-    this.promptService.confirm('Remove', confirmTitle, deferred.promise)
+    this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {
         this.api.relation.delete(relation)
         .then((response: RelationResponse) => {
