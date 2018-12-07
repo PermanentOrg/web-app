@@ -103,12 +103,12 @@ export class SharingComponent implements OnInit {
       })
       .then((archive: ArchiveVO) => {
         const newShareVo = new ShareVO({
+          ArchiveVO: archive,
           accessRole: 'access.role.viewer',
           archiveId: archive.archiveId,
           folder_linkId: this.shareItem.folder_linkId
         });
-        console.log('new share vo', newShareVo);
-        return this.api.share.upsert(newShareVo);
+        return this.editShareVo(newShareVo);
       });
 
 
@@ -139,9 +139,15 @@ export class SharingComponent implements OnInit {
       }
     ];
 
+    const newShare = !shareVo.shareId;
+    let promptTitle = `Edit ${shareVo.ArchiveVO.fullName} access to ${this.shareItem.displayName}`;
+    if (newShare) {
+      promptTitle = `Choose ${shareVo.ArchiveVO.fullName} access to ${this.shareItem.displayName}`;
+    }
+
     return this.promptService.prompt(
       fields,
-      `Edit ${shareVo.ArchiveVO.fullName} access to ${this.shareItem.displayName}`,
+      promptTitle,
       deferred.promise,
       'Save'
       )
@@ -149,11 +155,19 @@ export class SharingComponent implements OnInit {
         updatedShareVo = new ShareVO(shareVo);
         updatedShareVo.accessRole = value.accessRole;
 
-        return this.api.share.update(updatedShareVo);
+        return this.api.share.upsert(updatedShareVo);
       })
       .then((response: ShareResponse) => {
-        this.messageService.showMessage('Share access saved successfully.', 'success');
-        shareVo.accessRole = updatedShareVo.accessRole;
+        let successMessage = 'Share access saved successfully.';
+        if (newShare) {
+          successMessage = `${shareVo.ArchiveVO.fullName} added to share successfully.`;
+        }
+        this.messageService.showMessage(successMessage, 'success');
+        if (newShare) {
+          this.shareItem.ShareVOs.push(new ShareVO(updatedShareVo));
+        } else {
+          shareVo.accessRole = updatedShareVo.accessRole;
+        }
         deferred.resolve();
       })
       .catch((response: ShareResponse) => {
