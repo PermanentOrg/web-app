@@ -99,7 +99,6 @@ export class SharingComponent implements OnInit {
         return this.dialog.open('ArchivePickerComponent', { relations: relations });
       })
       .catch(() => {
-        console.log('CANCELLED');
       })
       .then((archive: ArchiveVO) => {
         const newShareVo = new ShareVO({
