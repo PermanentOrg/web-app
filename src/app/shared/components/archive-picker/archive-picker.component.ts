@@ -2,6 +2,11 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { RelationVO, ArchiveVO } from '@models/index';
 
+export interface ArchivePickerComponentConfig {
+  relations?: RelationVO[];
+  hideRelations?: boolean;
+}
+
 @Component({
   selector: 'pr-archive-picker',
   templateUrl: './archive-picker.component.html',
@@ -13,7 +18,7 @@ export class ArchivePickerComponent implements OnInit {
 
   constructor(
     private dialogRef: DialogRef,
-    @Inject(DIALOG_DATA) public dialogData: any,
+    @Inject(DIALOG_DATA) public dialogData: ArchivePickerComponentConfig,
   ) {
     this.relations = this.dialogData.relations;
   }

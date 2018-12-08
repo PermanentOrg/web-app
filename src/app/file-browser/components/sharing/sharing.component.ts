@@ -13,6 +13,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 
 import { RecordVO, FolderVO, ShareVO, ArchiveVO } from '@models/index';
+import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -88,18 +89,17 @@ export class SharingComponent implements OnInit {
       })
       .then((relations) => {
         this.loadingRelations = false;
-        if (!relations || !relations.length) {
-          console.log('no relations');
-          relations = null;
-        } else {
-          relations = relations.filter((relation) => {
+        const config: ArchivePickerComponentConfig = {};
+
+        if (relations && relations.length) {
+          config.relations = relations.filter((relation) => {
             return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId});
           });
         }
-        return this.dialog.open('ArchivePickerComponent', { relations: relations });
+
+        return this.dialog.open('ArchivePickerComponent', config);
       })
-      .catch(() => {
-      })
+
       .then((archive: ArchiveVO) => {
         const newShareVo = new ShareVO({
           ArchiveVO: archive,
@@ -108,6 +108,8 @@ export class SharingComponent implements OnInit {
           folder_linkId: this.shareItem.folder_linkId
         });
         return this.editShareVo(newShareVo);
+      })
+      .catch(() => {
       });
 
 

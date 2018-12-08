@@ -60,11 +60,10 @@ export class Dialog {
 
   registerRootComponent(component: DialogRootComponent) {
     if (this.rootComponent) {
-      throw new Error(`Dialog - root dialog component already exists`);
+      throw new Error(`Dialog - root dialog component already registered`);
     }
 
     this.rootComponent = component;
-    console.log('Root component registered!', component);
   }
 
   registerComponent(component: any, resolver = this.resolver, allowDupes?: boolean) {
@@ -99,6 +98,10 @@ export class Dialog {
 
     if (!this.registeredComponents[token]) {
       throw new Error(`Dialog - component with name ${token} not found`);
+    }
+
+    if (typeof token !== 'string') {
+      token = token.name;
     }
 
     const newDialog = this.createDialog(token, data);
