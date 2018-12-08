@@ -224,6 +224,7 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.donePromise = null;
     this.doneResolve = null;
     this.doneReject = null;
+    this.waiting = false;
 
     if (this.promptQueue.length) {
       const next = this.promptQueue.shift();

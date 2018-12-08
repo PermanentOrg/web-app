@@ -7,4 +7,5 @@ export * from '@shared/services/api/folder.repo';
 export * from '@shared/services/api/invite.repo';
 export * from '@shared/services/api/record.repo';
 export * from '@shared/services/api/relation.repo';
+export * from '@shared/services/api/search.repo';
 export * from '@shared/services/api/share.repo';
