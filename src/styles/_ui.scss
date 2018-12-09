@@ -12,6 +12,10 @@ button.btn, a.btn {
   }
 }
 
+.mobile-safari .prompt {
+  padding-bottom: $bottom-safe-area-padding;
+}
+
 .pr-auth-form {
   & > div, & > p {
     padding: 10px;
