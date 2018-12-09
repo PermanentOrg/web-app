@@ -12,8 +12,22 @@ button.btn, a.btn {
   }
 }
 
-.mobile-safari .prompt {
-  padding-bottom: $bottom-safe-area-padding;
+// mobile safari menu bar padding
+.mobile-safari:not(.mobile-safari-menu-bar-showing) {
+  .prompt,
+  pr-dialog .dialog-content .dialog-footer {
+    padding-bottom: $bottom-safe-area-padding - 10px;
+  }
+
+  .archive-list-button {
+    padding-bottom: 10px;
+  }
+}
+
+.mobile-safari.mobile-safari-menu-bar-showing {
+  .archive-list-button {
+    padding-bottom: 0px;
+  }
 }
 
 .pr-auth-form {
