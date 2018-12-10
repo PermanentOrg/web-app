@@ -14,6 +14,7 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 
 import { RecordVO, FolderVO, ShareVO, ArchiveVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@core/components/prompt/prompt-fields';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -89,7 +90,9 @@ export class SharingComponent implements OnInit {
       })
       .then((relations) => {
         this.loadingRelations = false;
-        const config: ArchivePickerComponentConfig = {};
+        const config: ArchivePickerComponentConfig = {
+          shareItem: this.shareItem
+        };
 
         if (relations && relations.length) {
           config.relations = relations.filter((relation) => {
@@ -99,7 +102,6 @@ export class SharingComponent implements OnInit {
 
         return this.dialog.open('ArchivePickerComponent', config);
       })
-
       .then((archive: ArchiveVO) => {
         const newShareVo = new ShareVO({
           ArchiveVO: archive,
@@ -120,24 +122,7 @@ export class SharingComponent implements OnInit {
     let updatedShareVo: ShareVO;
     const deferred = new Deferred();
     const fields: PromptField[] = [
-      {
-        fieldName: 'accessRole',
-        placeholder: 'Access Level',
-        type: 'select',
-        initialValue: shareVo.accessRole,
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        },
-        selectOptions: this.prConstants.getAccessRoles().map((role) => {
-          return {
-            value: role.type,
-            text: role.name
-          };
-        })
-      }
+     ACCESS_ROLE_FIELD_INITIAL(shareVo.accessRole)
     ];
 
     const newShare = !shareVo.shareId;

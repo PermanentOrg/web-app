@@ -34,6 +34,31 @@ export function RELATIONSHIP_FIELD_INITIAL(initialValue?: string): PromptField {
   return initialized;
 }
 
+export const ACCESS_ROLE_FIELD: PromptField =  {
+  fieldName: 'accessRole',
+  placeholder: 'Access Level',
+  type: 'select',
+  initialValue: 'access.role.viewer',
+  validators: [Validators.required],
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  selectOptions: prConstants.getAccessRoles().map((role) => {
+    return {
+      value: role.type,
+      text: role.name
+    };
+  })
+};
+
+export function ACCESS_ROLE_FIELD_INITIAL(initialValue: string): PromptField {
+  const initialized = clone(ACCESS_ROLE_FIELD);
+  initialized.initialValue = initialValue;
+  return initialized;
+}
+
 export function INVITATION_FIELDS(initialEmail?: string): PromptField[] {
   const fields: PromptField[] = [
     {

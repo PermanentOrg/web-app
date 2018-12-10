@@ -1,18 +1,21 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
-import { RelationVO, ArchiveVO } from '@models/index';
+import { RelationVO, ArchiveVO, InviteVO, FolderVO, RecordVO } from '@models/index';
 import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
-import { SearchResponse } from '@shared/services/api/index.repo';
+import { SearchResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { Validators } from '@angular/forms';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
-import { INVITATION_FIELDS } from '@core/components/prompt/prompt-fields';
+import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@core/components/prompt/prompt-fields';
+import { AccountService } from '@shared/services/account/account.service';
+import { clone } from 'lodash';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
+  shareItem?: FolderVO | RecordVO;
   hideRelations?: boolean;
 }
 
@@ -32,6 +35,7 @@ export class ArchivePickerComponent implements OnInit {
     @Inject(DIALOG_DATA) public dialogData: ArchivePickerComponentConfig,
     private prompt: PromptService,
     private api: ApiService,
+    private accountService: AccountService,
     private message: MessageService,
     private prConstants: PrConstantsService
   ) {
@@ -80,13 +84,32 @@ export class ArchivePickerComponent implements OnInit {
 
   sendInvite() {
     const deferred = new Deferred();
-    const fields: PromptField[] = INVITATION_FIELDS(this.searchEmail);
+    const fields: PromptField[] = clone(INVITATION_FIELDS(this.searchEmail));
+    fields.push(ACCESS_ROLE_FIELD);
 
     return this.prompt.prompt(fields, 'Send invitation', deferred.promise, 'Send')
       .then((value) => {
+        const invite = new InviteVO({
+          email: value.email,
+          fullName: value.name,
+          byArchiveId: this.accountService.getArchive().archiveId,
+          relationship: value.relationType,
+          accessRole: value.accessRole
+        });
+        if (this.dialogData.shareItem) {
+          return this.api.invite.sendShareInvite([invite], this.dialogData.shareItem);
+        } else {
+          return this.api.invite.send([invite]);
+        }
+      })
+      .then((response: InviteResponse) => {
+        this.message.showMessage('Invite sent succesfully.', 'success');
         deferred.resolve();
-        console.log(value);
         this.cancel();
+      })
+      .catch((response: InviteResponse) => {
+        deferred.resolve();
+        this.message.showError(response.getMessage(), true);
       });
   }
 
