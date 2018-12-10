@@ -23,7 +23,7 @@ button.btn, a.btn {
     padding-bottom: 10px;
   }
 
-  [pr-file-list] {
+  pr-file-list, .right-menu {
     padding-bottom: 40px;
   }
 }
@@ -40,12 +40,12 @@ button.btn, a.btn {
       padding-bottom: calc(var(--safe-area-inset-bottom) + 10px) !important;
     }
 
-    pr-file-list {
+    pr-file-list, .right-menu  {
       padding-bottom: calc(var(--safe-area-inset-bottom) + 40px) !important;
     }
   }
 
-  pr-file-list {
+  pr-file-list, .right-menu  {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
