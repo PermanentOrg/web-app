@@ -9,6 +9,7 @@ import { PromptService, PromptField } from '@core/services/prompt/prompt.service
 
 import { InviteVO, InviteVOData } from '@models/index';
 import { InviteResponse } from '@shared/services/api/index.repo';
+import { INVITATION_FIELDS } from '../prompt/prompt-fields';
 
 @Component({
   selector: 'pr-invitations',
@@ -28,30 +29,7 @@ export class InvitationsComponent {
     let newInvite: InviteVO;
     const deferred = new Deferred();
 
-    const fields: PromptField[] = [
-      {
-        fieldName: 'fullName',
-        placeholder: 'Recipient Name',
-        type: 'text',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      },
-      {
-        fieldName: 'email',
-        placeholder: 'Recipient Email',
-        type: 'email',
-        validators: [Validators.required, Validators.email],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      }
-    ];
+    const fields: PromptField[] = INVITATION_FIELDS();
 
     this.promptService.prompt(fields, 'Send invitation', deferred.promise)
       .then((value: InviteVOData) => {

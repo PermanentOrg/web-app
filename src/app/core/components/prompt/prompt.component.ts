@@ -116,7 +116,6 @@ export class PromptComponent implements OnInit, OnDestroy {
       const firstInput = elem.querySelector('input');
       if (firstInput) {
         firstInput.focus();
-        firstInput.setSelectionRange(0, firstInput.value.length);
       }
     });
 
@@ -224,6 +223,7 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.donePromise = null;
     this.doneResolve = null;
     this.doneReject = null;
+    this.waiting = false;
 
     if (this.promptQueue.length) {
       const next = this.promptQueue.shift();

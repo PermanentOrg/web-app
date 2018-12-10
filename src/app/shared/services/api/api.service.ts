@@ -15,6 +15,7 @@ export class ApiService {
   public invite: Repo.InviteRepo;
   public record: Repo.RecordRepo;
   public relation: Repo.RelationRepo;
+  public search: Repo.SearchRepo;
   public share: Repo.ShareRepo;
 
   constructor(private http: HttpService) {
@@ -26,6 +27,7 @@ export class ApiService {
     this.invite = new Repo.InviteRepo(this.http);
     this.record = new Repo.RecordRepo(this.http);
     this.relation = new Repo.RelationRepo(this.http);
+    this.search = new Repo.SearchRepo(this.http);
     this.share = new Repo.ShareRepo(this.http);
     this.connector = new Repo.ConnectorRepo(this.http);
   }

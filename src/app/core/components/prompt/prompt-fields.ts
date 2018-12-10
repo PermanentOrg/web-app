@@ -1,8 +1,94 @@
 import { PromptField } from '@core/services/prompt/prompt.service';
 import { Validators } from '@angular/forms';
-
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { clone } from 'lodash';
 const expMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
+
+const prConstants: PrConstantsService = new PrConstantsService();
+
+export const RELATION_OPTIONS = prConstants.getRelations().map((type) => {
+  return {
+    text: type.name,
+    value: type.type
+  };
+});
+
+export const RELATIONSHIP_FIELD: PromptField = {
+  fieldName: 'relationType',
+  placeholder: 'Relationship',
+  type: 'select',
+  initialValue: null,
+  validators: [Validators.required],
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  selectOptions: RELATION_OPTIONS
+};
+
+export function RELATIONSHIP_FIELD_INITIAL(initialValue?: string): PromptField {
+  const initialized = clone(RELATIONSHIP_FIELD);
+  initialized.initialValue = initialValue;
+  return initialized;
+}
+
+export const ACCESS_ROLE_FIELD: PromptField =  {
+  fieldName: 'accessRole',
+  placeholder: 'Access Level',
+  type: 'select',
+  initialValue: 'access.role.viewer',
+  validators: [Validators.required],
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  selectOptions: prConstants.getAccessRoles().map((role) => {
+    return {
+      value: role.type,
+      text: role.name
+    };
+  })
+};
+
+export function ACCESS_ROLE_FIELD_INITIAL(initialValue: string): PromptField {
+  const initialized = clone(ACCESS_ROLE_FIELD);
+  initialized.initialValue = initialValue;
+  return initialized;
+}
+
+export function INVITATION_FIELDS(initialEmail?: string): PromptField[] {
+  const fields: PromptField[] = [
+    {
+      fieldName: 'email',
+      initialValue: initialEmail,
+      validators: [Validators.required, Validators.email],
+      placeholder: 'Recipient email',
+      type: 'text',
+      config: {
+        autocapitalize: 'off',
+        autocorrect: 'off',
+        autocomplete: 'off',
+        autoselect: false
+      }
+    },
+    {
+      fieldName: 'name',
+      validators: [Validators.required],
+      placeholder: 'Recipient name',
+      type: 'text',
+      config: {
+        autocapitalize: 'on',
+        autocorrect: 'off',
+        autocomplete: 'off'
+      }
+    },
+    RELATIONSHIP_FIELD,
+  ];
+  return fields;
+}
 
 export const CREDIT_CARD_FIELDS: PromptField[] = [
   {

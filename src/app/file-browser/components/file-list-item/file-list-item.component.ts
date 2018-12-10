@@ -162,7 +162,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.canWrite) {
       actionButtons.push(ItemActions.Move);
       actionButtons.push(ItemActions.Rename);
-      if (this.isInShares) {
+      if (this.isInShares || this.item.accessRole.includes('owner')) {
         actionButtons.push(ItemActions.Share);
       }
       actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);

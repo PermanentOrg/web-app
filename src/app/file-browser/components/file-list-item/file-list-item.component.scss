@@ -76,3 +76,12 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     margin: 0px;
   }
 }
+
+@supports (padding-left: env(safe-area-inset-left)) {
+  :host {
+    .file-list-item {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+  }
+}

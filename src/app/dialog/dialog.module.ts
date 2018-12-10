@@ -1,20 +1,31 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Dialog } from './dialog.service';
+import { Dialog, DialogRef, DIALOG_DATA } from './dialog.service';
 import { DialogComponent } from './dialog.component';
+import { DialogRootComponent } from './dialog-root.component';
+
+export { Dialog, DialogRef, DialogRootComponent, DIALOG_DATA };
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [
+    DialogRootComponent,
+    DialogComponent
+  ],
+  entryComponents: [
     DialogComponent
   ],
   exports: [
-    DialogComponent
+    DialogRootComponent
   ]
 })
 export class DialogModule {
+  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
+    dialog.setDialogModuleResolver(resolver);
+  }
+
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: DialogModule,

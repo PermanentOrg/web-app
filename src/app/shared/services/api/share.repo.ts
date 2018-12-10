@@ -15,6 +15,14 @@ export class ShareRepo extends BaseRepo {
     return this.http.sendRequestPromise('/share/update', [data], ShareResponse);
   }
 
+  public upsert(share: ShareVO) {
+    const data = {
+      ShareVO: share
+    };
+
+    return this.http.sendRequestPromise('/share/upsert', [data], ShareResponse);
+  }
+
   public remove(share: ShareVO) {
     const data = {
       ShareVO: {

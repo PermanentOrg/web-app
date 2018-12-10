@@ -18,11 +18,11 @@ import { FormInputSelectOption } from '@shared/components/form-input/form-input.
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 @Component({
-  selector: 'pr-archive-selector',
-  templateUrl: './archive-selector.component.html',
-  styleUrls: ['./archive-selector.component.scss']
+  selector: 'pr-archive-switcher',
+  templateUrl: './archive-switcher.component.html',
+  styleUrls: ['./archive-switcher.component.scss']
 })
-export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
+export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
   public currentArchive: ArchiveVO;
   public archives: ArchiveVO[];
   constructor(

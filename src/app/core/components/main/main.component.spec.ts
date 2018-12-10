@@ -25,6 +25,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { DialogComponent } from '@root/app/dialog/dialog.component';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { DialogModule } from '@root/app/dialog/dialog.module';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
@@ -39,6 +40,7 @@ describe('MainComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);
+    config.imports.push(DialogModule.forRoot());
 
     config.declarations.push(MainComponent);
     config.declarations.push(NavComponent);
@@ -50,12 +52,10 @@ describe('MainComponent', () => {
     config.declarations.push(UploadProgressComponent);
     config.declarations.push(UploadButtonComponent);
     config.declarations.push(FolderPickerComponent);
-    config.declarations.push(DialogComponent);
 
     config.providers.push(AccountService);
     config.providers.push(DataService);
     config.providers.push(FolderPickerService);
-    config.providers.push(Dialog);
 
     await TestBed.configureTestingModule(config).compileComponents();
 

@@ -4,7 +4,9 @@ export class InviteVO extends BaseVO {
   public email: string;
   public fullName: string;
   public relationship: string;
-  public type = 'type.invite.invite_early_access';
+  public byArchiveId: number;
+  public accessRole: string;
+  public type: string;
 
   constructor(voData: InviteVOData) {
     super(voData);
@@ -16,4 +18,6 @@ export interface InviteVOData {
   fullName?: string;
   relationship?: string;
   type?: string;
+  byArchiveId?: number;
+  accessRole?: string;
 }
