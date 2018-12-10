@@ -6,6 +6,9 @@ import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { Validators } from '@angular/forms';
+import { FormInputSelectOption } from '../form-input/form-input.component';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
@@ -19,6 +22,7 @@ export interface ArchivePickerComponentConfig {
 })
 export class ArchivePickerComponent implements OnInit {
   relations: RelationVO[];
+  relationOptions: FormInputSelectOption[];
   searchResults: ArchiveVO[];
   searchEmail: string;
 
@@ -27,9 +31,16 @@ export class ArchivePickerComponent implements OnInit {
     @Inject(DIALOG_DATA) public dialogData: ArchivePickerComponentConfig,
     private prompt: PromptService,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private prConstants: PrConstantsService
   ) {
     this.relations = this.dialogData.relations;
+    this.relationOptions = this.prConstants.getRelations().map((type) => {
+      return {
+        text: type.name,
+        value: type.type
+      };
+    });
   }
 
   ngOnInit() {
@@ -39,8 +50,9 @@ export class ArchivePickerComponent implements OnInit {
     const deferred = new Deferred();
     const fields: PromptField[] = [{
       fieldName: 'email',
-      placeholder: 'Email to search',
-      type: ' text',
+      validators: [Validators.required, Validators.email],
+      placeholder: 'Email',
+      type: 'text',
       config: {
         autocapitalize: 'off',
         autocorrect: 'off',
@@ -61,6 +73,54 @@ export class ArchivePickerComponent implements OnInit {
       })
       .catch((response: SearchResponse) => {
         deferred.resolve();
+      });
+  }
+
+  sendInvite() {
+    const deferred = new Deferred();
+    const fields: PromptField[] = [
+      {
+        fieldName: 'email',
+        initialValue: this.searchEmail,
+        validators: [Validators.required, Validators.email],
+        placeholder: 'Recipient email',
+        type: 'text',
+        config: {
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          autocomplete: 'off',
+          autoselect: false
+        }
+      },
+      {
+        fieldName: 'name',
+        validators: [Validators.required],
+        placeholder: 'Recipient name',
+        type: 'text',
+        config: {
+          autocapitalize: 'on',
+          autocorrect: 'off',
+          autocomplete: 'off'
+        }
+      },
+      {
+        fieldName: 'relation',
+        placeholder: 'Relationship (optional)',
+        type: 'select',
+        config: {
+          autocomplete: 'off',
+          autocorrect: 'off',
+          autocapitalize: 'off'
+        },
+        selectOptions: this.relationOptions
+      }
+    ];
+
+    return this.prompt.prompt(fields, 'Send invitation', deferred.promise, 'Send')
+      .then((value) => {
+        deferred.resolve();
+        console.log(value);
+        this.cancel();
       });
   }
 

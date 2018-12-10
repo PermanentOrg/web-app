@@ -8,7 +8,11 @@
     <div class="page-subheading" *ngIf="searchResults">
       Results for {{searchEmail}}
     </div>
-    <p *ngIf="searchResults && !searchResults.length">No archives found</p>
+    <p *ngIf="searchResults && !searchResults.length">
+      No archives found.
+      <br>
+      <button class="btn btn-primary" (click)="sendInvite()">Invite to Permanent.org</button>
+    </p>
     <div class="search-results">
       <pr-archive-small
         *ngFor="let result of searchResults"
