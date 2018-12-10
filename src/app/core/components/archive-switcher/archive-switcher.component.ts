@@ -16,6 +16,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { RELATIONSHIP_FIELD } from '../prompt/prompt-fields';
 
 @Component({
   selector: 'pr-archive-switcher',
@@ -62,7 +63,6 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
         },
         0.05
       );
-
   }
 
   archiveClick(archive: ArchiveVO) {
@@ -147,7 +147,8 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
             value: 'type.archive.organization'
           }
         ]
-      }
+      },
+      RELATIONSHIP_FIELD
     ];
 
     this.prompt.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
