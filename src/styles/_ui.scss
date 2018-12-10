@@ -22,20 +22,31 @@ button.btn, a.btn {
   .archive-list-button {
     padding-bottom: 10px;
   }
+
+  [pr-file-list] {
+    padding-bottom: 40px;
+  }
 }
 
-@supports (padding-bottom: constant(safe-area-inset-bottom)) {
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
   .mobile-safari:not(.mobile-safari-menu-bar-showing) {
-    --safe-area-inset-bottom: constant(safe-area-inset-bottom);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
     .prompt,
     pr-dialog .dialog-content .dialog-footer {
       padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
     }
 
     .archive-list-button {
-      padding-bottom: constant(safe-area-inset-bottom);
       padding-bottom: calc(var(--safe-area-inset-bottom) + 10px) !important;
     }
+
+    pr-file-list {
+      padding-bottom: calc(var(--safe-area-inset-bottom) + 40px) !important;
+    }
+  }
+
+  pr-file-list {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
