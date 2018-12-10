@@ -9,6 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { Validators } from '@angular/forms';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { INVITATION_FIELDS } from '@core/components/prompt/prompt-fields';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
@@ -78,43 +79,7 @@ export class ArchivePickerComponent implements OnInit {
 
   sendInvite() {
     const deferred = new Deferred();
-    const fields: PromptField[] = [
-      {
-        fieldName: 'email',
-        initialValue: this.searchEmail,
-        validators: [Validators.required, Validators.email],
-        placeholder: 'Recipient email',
-        type: 'text',
-        config: {
-          autocapitalize: 'off',
-          autocorrect: 'off',
-          autocomplete: 'off',
-          autoselect: false
-        }
-      },
-      {
-        fieldName: 'name',
-        validators: [Validators.required],
-        placeholder: 'Recipient name',
-        type: 'text',
-        config: {
-          autocapitalize: 'on',
-          autocorrect: 'off',
-          autocomplete: 'off'
-        }
-      },
-      {
-        fieldName: 'relation',
-        placeholder: 'Relationship (optional)',
-        type: 'select',
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        },
-        selectOptions: this.relationOptions
-      }
-    ];
+    const fields: PromptField[] = INVITATION_FIELDS(this.searchEmail);
 
     return this.prompt.prompt(fields, 'Send invitation', deferred.promise, 'Send')
       .then((value) => {

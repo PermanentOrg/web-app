@@ -11,6 +11,7 @@ import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, cloneDeep } from 'lodash';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
+import { RELATIONSHIP_FIELD_INITIAL } from '../prompt/prompt-fields';
 
 const RelationActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -77,21 +78,7 @@ export class RelationshipsComponent implements OnInit {
   editRelation(relation: RelationVO) {
     let updatedRelation: RelationVO;
     const deferred = new Deferred();
-    const fields: PromptField[] = [
-      {
-        fieldName: 'relationType',
-        placeholder: 'Relationship',
-        type: 'select',
-        initialValue: relation.type,
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        },
-        selectOptions: this.relationOptions
-      }
-    ];
+    const fields: PromptField[] = [ RELATIONSHIP_FIELD_INITIAL(relation.type) ];
 
     return this.promptService.prompt(
       fields,
