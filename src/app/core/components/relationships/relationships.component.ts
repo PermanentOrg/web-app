@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { RelationVO } from '@models/index';
+import { RelationVO, FolderVO } from '@models/index';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, cloneDeep } from 'lodash';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { RELATIONSHIP_FIELD_INITIAL } from '../prompt/prompt-fields';
+import { DataService } from '@shared/services/data/data.service';
 
 const RelationActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -35,7 +36,7 @@ interface RelationType {
   templateUrl: './relationships.component.html',
   styleUrls: ['./relationships.component.scss']
 })
-export class RelationshipsComponent implements OnInit {
+export class RelationshipsComponent implements OnDestroy {
   relations: RelationVO[];
   relationOptions: FormInputSelectOption[];
 
@@ -44,10 +45,16 @@ export class RelationshipsComponent implements OnInit {
     private fb: FormBuilder,
     private api: ApiService,
     private accountService: AccountService,
+    private dataService: DataService,
     private promptService: PromptService,
     private messageService: MessageService,
     private prConstants: PrConstantsService
   ) {
+    this.dataService.setCurrentFolder(new FolderVO({
+      displayName: 'Relationships',
+      pathAsText: ['Relationships'],
+      type: 'page'
+    }), true);
     this.relations = this.route.snapshot.data.relations;
     this.relationOptions = this.prConstants.getRelations().map((type) => {
       return {
@@ -57,7 +64,8 @@ export class RelationshipsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this.dataService.setCurrentFolder();
   }
 
   onRelationClick(relation: RelationVO) {

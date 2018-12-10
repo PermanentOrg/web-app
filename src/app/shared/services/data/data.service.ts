@@ -39,14 +39,14 @@ export class DataService {
     }
   }
 
-  public setCurrentFolder(folder?: FolderVO) {
+  public setCurrentFolder(folder?: FolderVO, isPage?: boolean) {
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
 
     clearTimeout(this.thumbRefreshTimeout);
     this.thumbRefreshQueue = [];
 
-    if (this.currentFolder) {
+    if (this.currentFolder && !isPage) {
       this.scheduleMissingThumbsCheck();
     }
   }
