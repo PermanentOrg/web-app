@@ -16,13 +16,42 @@ button.btn, a.btn {
 .mobile-safari:not(.mobile-safari-menu-bar-showing) {
   .prompt,
   pr-dialog .dialog-content .dialog-footer {
-    padding-bottom: $bottom-safe-area-padding - 10px;
+    padding-bottom: 30px;
   }
 
   .archive-list-button {
     padding-bottom: 10px;
   }
 }
+
+@supports (padding-bottom: constant(safe-area-inset-bottom)) {
+  .mobile-safari:not(.mobile-safari-menu-bar-showing) {
+    --safe-area-inset-bottom: constant(safe-area-inset-bottom);
+    .prompt,
+    pr-dialog .dialog-content .dialog-footer {
+      padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
+    }
+
+    .archive-list-button {
+      padding-bottom: constant(safe-area-inset-bottom);
+      padding-bottom: calc(var(--safe-area-inset-bottom) + 10px) !important;
+    }
+  }
+}
+
+// @supports (padding-bottom: env(safe-area-inset-bottom)) {
+//   .mobile-safari:not(.mobile-safari-menu-bar-showing) {
+//     --safe-area-inset-bottom: env(safe-area-inset-bottom);
+//     .prompt,
+//     pr-dialog .dialog-content .dialog-footer {
+//       padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
+//     }
+
+//     .archive-list-button {
+//       padding-bottom: calc(var(--safe-area-inset-bottom) + 10px) !important;
+//     }
+//   }
+// }
 
 .mobile-safari.mobile-safari-menu-bar-showing {
   .archive-list-button {

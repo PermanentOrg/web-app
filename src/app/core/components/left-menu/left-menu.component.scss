@@ -35,3 +35,14 @@ $transition-length: $default-transition-length;
     margin-bottom: $input-btn-padding-y * 1.5;
   }
 }
+
+@supports (padding-left: env(safe-area-inset-left)) {
+  .menu.hamburger-menu {
+    --safe-area-inset-left: env(safe-area-inset-left);
+    width: calc(300px + var(--safe-area-inset-left)) !important;
+
+    .menu-header, .menu-item{
+      padding-left: calc(10px + var(--safe-area-inset-left)) !important;
+    }
+  }
+}
