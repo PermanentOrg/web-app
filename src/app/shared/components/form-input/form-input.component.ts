@@ -64,7 +64,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
         inputField.setAttribute('spellcheck', this.config.spellcheck);
       }
 
-      if (this.config.autoselect) {
+      if (this.config.autoselect && this.control.value) {
         inputField.addEventListener('focus', (event) => {
           inputField.setSelectionRange(0, inputField.value.length);
         });

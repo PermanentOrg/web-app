@@ -57,7 +57,8 @@ export class ArchivePickerComponent implements OnInit {
       config: {
         autocapitalize: 'off',
         autocorrect: 'off',
-        autocomplete: 'off'
+        autocomplete: 'off',
+        autoselect: false
       }
     }];
 

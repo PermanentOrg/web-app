@@ -116,7 +116,6 @@ export class PromptComponent implements OnInit, OnDestroy {
       const firstInput = elem.querySelector('input');
       if (firstInput) {
         firstInput.focus();
-        firstInput.setSelectionRange(0, firstInput.value.length);
       }
     });
 
