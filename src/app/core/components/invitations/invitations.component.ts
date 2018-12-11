@@ -7,9 +7,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 
-import { InviteVO, InviteVOData } from '@models/index';
+import { InviteVO, InviteVOData, FolderVO } from '@models/index';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { INVITATION_FIELDS } from '../prompt/prompt-fields';
+import { DataService } from '@shared/services/data/data.service';
 
 @Component({
   selector: 'pr-invitations',
@@ -21,8 +22,14 @@ export class InvitationsComponent {
     private api: ApiService,
     private accountService: AccountService,
     private promptService: PromptService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private dataService: DataService
   ) {
+    this.dataService.setCurrentFolder(new FolderVO({
+      displayName: 'Invitations',
+      pathAsText: ['Invitations'],
+      type: 'page'
+    }), true);
   }
 
   createNewInvitation() {
@@ -43,8 +50,10 @@ export class InvitationsComponent {
         deferred.resolve();
       })
       .catch((response: InviteResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 }

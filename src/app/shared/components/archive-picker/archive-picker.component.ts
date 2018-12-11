@@ -108,8 +108,10 @@ export class ArchivePickerComponent implements OnInit {
         this.cancel();
       })
       .catch((response: InviteResponse) => {
-        deferred.resolve();
-        this.message.showError(response.getMessage(), true);
+        if (response) {
+          deferred.resolve();
+          this.message.showError(response.getMessage(), true);
+        }
       });
   }
 

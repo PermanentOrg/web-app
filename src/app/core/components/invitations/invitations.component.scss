@@ -3,3 +3,7 @@
 p {
   padding: 10px;
 }
+
+:host {
+  @include has-breadcrumbs;
+}

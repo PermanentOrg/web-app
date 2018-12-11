@@ -91,7 +91,7 @@ export class Dialog {
     });
   }
 
-  open(token: any, data: any): Promise<any> {
+  open(token: any, data?: any): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
     }

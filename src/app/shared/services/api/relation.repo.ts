@@ -13,6 +13,17 @@ export class RelationRepo extends BaseRepo {
     return this.http.sendRequestPromise('/relation/getAll', data, RelationResponse);
   }
 
+  public create(relationVO: RelationVO) {
+    const data = {
+      RelationVO: {
+        relationArchiveId: relationVO.relationArchiveId,
+        type: relationVO.type
+      }
+    };
+
+    return this.http.sendRequestPromise('/relation/post', [data], RelationResponse);
+  }
+
   public update(relationVO: RelationVO) {
     const data = {
       RelationVO: {

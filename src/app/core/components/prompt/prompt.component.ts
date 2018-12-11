@@ -144,6 +144,7 @@ export class PromptComponent implements OnInit, OnDestroy {
 
   cancel(event: Event) {
     event.stopPropagation();
+    this.doneReject();
     this.hide(event);
     return false;
   }

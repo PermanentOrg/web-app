@@ -187,8 +187,10 @@ export class DonateComponent {
         deferred.resolve();
       })
       .catch((response: BillingResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 
@@ -209,8 +211,10 @@ export class DonateComponent {
         deferred.resolve();
       })
       .catch((response: AccountResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 
