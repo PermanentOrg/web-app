@@ -103,8 +103,10 @@ export class RightMenuComponent implements OnInit {
             return this.dataService.refreshCurrentFolder();
           })
           .catch((response: FolderResponse) => {
-            this.message.showError(response.getMessage(), true);
-            createReject();
+            if (response) {
+              this.message.showError(response.getMessage(), true);
+              createReject();
+            }
           });
       });
   }

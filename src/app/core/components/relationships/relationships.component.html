@@ -3,6 +3,9 @@
   <br><br>
   Adding a relationship does not give another user any permission to access or edit this archive.
 </p> -->
+<p>
+  <button class="btn btn-primary" (click)="addRelation()">Add relationship</button>
+</p>
 <p *ngIf="!relations || !relations.length">No relationships</p>
 <div class="relations">
   <pr-archive-small *ngFor="let relation of relations"

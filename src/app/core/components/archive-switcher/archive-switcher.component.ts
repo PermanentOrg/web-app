@@ -162,8 +162,10 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
         deferred.resolve();
       })
       .catch((response: ArchiveResponse | BaseResponse) => {
-        this.message.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.message.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 }

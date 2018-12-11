@@ -284,7 +284,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updatePromise, 'Save', 'Cancel')
       .then((values) => {
         this.saveUpdates(values, updateResolve);
-      });
+      })
+      .catch(() => {});
   }
 
   saveUpdates(changes: RecordVOData | FolderVOData, resolve: Function) {

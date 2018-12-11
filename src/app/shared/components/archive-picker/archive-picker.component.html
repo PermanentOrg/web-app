@@ -2,7 +2,8 @@
   <div class="dialog-body">
     <div class="page-title">Choose an Archive</div>
     <p>
-      Choose from your existing relationships or search by email address to create a relationship and share
+      <span *ngIf="dialogData.shareItem">Choose from your existing relationships or search by email address to create a relationship and share</span>
+      <span *ngIf="!dialogData.shareItem">Search by email address to find archives and request a relationship</span>
       <button class="btn btn-primary" (click)="searchByEmail()">Search</button>
     </p>
     <div class="page-subheading" *ngIf="searchResults">
@@ -20,18 +21,19 @@
         [archive]="result">
       </pr-archive-small>
     </div>
-    <div class="page-subheading">Relationships</div>
-    <p *ngIf="!relations">No relationships</p>
-    <p *ngIf="relations && !relations.length">All relationships shared with</p>
-    <div class="relations">
-      <pr-archive-small
-        (click)="chooseArchive(relation.RelationArchiveVO)"
-        *ngFor="let relation of relations"
-        [archive]="relation.RelationArchiveVO"
-        [relation]="relation.type">
-      </pr-archive-small>
+    <div *ngIf="dialogData.shareItem">
+      <div class="page-subheading">Relationships</div>
+      <p *ngIf="!relations">No relationships</p>
+      <p *ngIf="relations && !relations.length">All relationships shared with</p>
+      <div class="relations">
+        <pr-archive-small
+          (click)="chooseArchive(relation.RelationArchiveVO)"
+          *ngFor="let relation of relations"
+          [archive]="relation.RelationArchiveVO"
+          [relation]="relation.type">
+        </pr-archive-small>
+      </div>
     </div>
-
   </div>
   <div class="dialog-footer">
     <button class="btn btn-secondary" (click)="cancel()">Cancel</button>

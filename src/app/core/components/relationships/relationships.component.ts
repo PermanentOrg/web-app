@@ -5,14 +5,16 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { RelationVO, FolderVO } from '@models/index';
+import { RelationVO, FolderVO, ArchiveVO } from '@models/index';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
-import { remove, cloneDeep } from 'lodash';
+import { remove, find } from 'lodash';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { RELATIONSHIP_FIELD_INITIAL } from '../prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
+import { Dialog } from '@root/app/dialog/dialog.module';
+import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 
 const RelationActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -42,13 +44,12 @@ export class RelationshipsComponent implements OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
     private api: ApiService,
-    private accountService: AccountService,
     private dataService: DataService,
     private promptService: PromptService,
     private messageService: MessageService,
-    private prConstants: PrConstantsService
+    private prConstants: PrConstantsService,
+    private dialog: Dialog
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
       displayName: 'Relationships',
@@ -83,8 +84,24 @@ export class RelationshipsComponent implements OnDestroy {
       });
   }
 
+  addRelation() {
+    const newRelation: RelationVO = new RelationVO({});
+    return this.dialog.open('ArchivePickerComponent')
+      .then((archive: ArchiveVO) => {
+        if (find(this.relations, {relationArchiveId: archive.archiveId})) {
+          return this.messageService.showMessage('You already have a relationship with this archive.', 'info');
+        }
+
+        newRelation.relationArchiveId = archive.archiveId;
+        newRelation.RelationArchiveVO = archive;
+        this.relations.push(newRelation);
+        return this.editRelation(newRelation);
+      });
+  }
+
   editRelation(relation: RelationVO) {
     let updatedRelation: RelationVO;
+    const isNewRelation = !relation.relationId;
     const deferred = new Deferred();
     const fields: PromptField[] = [ RELATIONSHIP_FIELD_INITIAL(relation.type) ];
 
@@ -100,16 +117,28 @@ export class RelationshipsComponent implements OnDestroy {
           type: value.relationType
         });
 
-        return this.api.relation.update(updatedRelation);
+        if (updatedRelation.relationId) {
+          return this.api.relation.update(updatedRelation);
+        } else {
+          updatedRelation.relationArchiveId = relation.relationArchiveId;
+          return this.api.relation.create(updatedRelation);
+        }
       })
       .then((response: RelationResponse) => {
         this.messageService.showMessage('Relationship saved successfully.', 'success');
         relation.type = updatedRelation.type;
+        if (isNewRelation) {
+          relation.relationId = response.getRelationVO().relationId;
+        }
         deferred.resolve();
       })
       .catch((response: RelationResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        } else if (isNewRelation) {
+          remove(this.relations, relation);
+        }
       });
   }
 

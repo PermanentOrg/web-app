@@ -50,8 +50,10 @@ export class InvitationsComponent {
         deferred.resolve();
       })
       .catch((response: InviteResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 }
