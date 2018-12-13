@@ -67,6 +67,15 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/archive/updateShare', data, ArchiveResponse);
   }
+
+  public removeMember(member: AccountVO, archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      AccountVO: member,
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/unshare', data, ArchiveResponse);
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {

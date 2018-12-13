@@ -6,7 +6,7 @@ import { PromptService, PromptButton } from '@core/services/prompt/prompt.servic
 import { MessageService } from '@shared/services/message/message.service';
 import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '../prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
-import { clone } from 'lodash';
+import { clone, remove } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
@@ -89,6 +89,23 @@ export class MembersComponent implements OnInit {
   }
 
   removeMember(member: AccountVO) {
+    const deferred = new Deferred();
+    const confirmTitle = `Remove ${member.fullName} from ${this.accountService.getArchive().fullName}?`;
 
+    return this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
+      .then(() => {
+        return this.api.archive.removeMember(member, this.accountService.getArchive());
+      })
+      .then((response: ArchiveResponse) => {
+        this.message.showMessage('Member removed successfully.', 'success');
+        remove(this.members, member);
+        deferred.resolve();
+      })
+      .catch((response: ArchiveResponse) => {
+        deferred.resolve();
+        if (response) {
+          this.message.showError(response.getMessage(), true);
+        }
+      });
   }
 }

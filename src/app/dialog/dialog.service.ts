@@ -66,6 +66,10 @@ export class Dialog {
     this.rootComponent = component;
   }
 
+  unregisterRootComponent(component?: any) {
+    delete this.rootComponent;
+  }
+
   registerComponent(component: any, resolver = this.resolver, allowDupes?: boolean) {
     if (!this.registeredComponents[component.name]) {
       this.registeredComponents[component.name] = component;
