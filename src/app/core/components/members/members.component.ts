@@ -30,6 +30,7 @@ const MemberActions: {[key: string]: PromptButton} = {
 })
 export class MembersComponent implements OnInit {
   members: AccountVO[];
+  canEdit: boolean;
 
   constructor(
     private dataService: DataService,
@@ -46,6 +47,7 @@ export class MembersComponent implements OnInit {
     }), true);
 
     this.members = route.snapshot.data.members;
+    this.canEdit = this.accountService.getArchive().accessRole === 'access.role.owner';
   }
 
   ngOnInit() {

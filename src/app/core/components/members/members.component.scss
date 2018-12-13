@@ -25,6 +25,9 @@ p {
     font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
+    span {
+      font-weight: normal;
+    }
   }
 
   .member-email {
