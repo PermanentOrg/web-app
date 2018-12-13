@@ -4,6 +4,34 @@ p {
   padding: 10px;
 }
 
+.members-list {
+  padding: 0px 10px;
+}
+
+.member {
+  padding-bottom: 10px;
+  display: flex;
+  align-content: center;
+  .member-info {
+    flex: 1 1;
+  }
+
+  .member-button {
+    flex: 0 1 auto;
+  }
+
+  .member-name {
+    font-weight: 600;
+  }
+
+  .member-email {
+  }
+
+  .member-access {
+    font-style: italic;
+  }
+}
+
 :host {
   @include has-breadcrumbs;
 }

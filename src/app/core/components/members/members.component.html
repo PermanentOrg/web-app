@@ -1,14 +1,23 @@
 <p>
   Members of an archive are Permanent.org account holders that have access to edit, curate, contribute, or view this archive.
 </p>
-<div class="members-list" *ngFor="let member of members">
-  <div class="member-name">
-    {{member.fullName}}
-  </div>
-  <div class="member-email">
-    {{member.primaryEmail}}
-  </div>
-  <div class="member-access">
-    {{member.accessRole | prConstants}}
+<div class="members-list">
+  <div class="member" *ngFor="let member of members" (click)="onMemberClick(member)">
+    <div class="member-info">
+      <div class="member-name">
+        {{member.fullName}}
+      </div>
+      <div class="member-email">
+        {{member.primaryEmail}}
+      </div>
+      <div class="member-access">
+        {{member.accessRole | prConstants}}
+      </div>
+    </div>
+    <div class="member-button">
+      <button class="btn btn-primary">
+        Edit
+      </button>
+    </div>
   </div>
 </div>
