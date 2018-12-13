@@ -17,6 +17,8 @@ import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/arch
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
+import { MembersComponent } from './components/members/members.component';
+import { MembersResolveService } from './resolves/members-resolve.service';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -63,6 +65,16 @@ export const routes: Routes = [
         path: 'archive/relationships',
         redirectTo: 'relationships'
       },
+      {
+        path: 'members',
+        component: MembersComponent,
+        data: { title: 'Members' },
+        resolve: { members: MembersResolveService }
+      },
+      {
+        path: 'archive/members',
+        redirectTo: 'members'
+      },
       { path: '**', redirectTo: 'myfiles'}
     ]
   }
@@ -81,7 +93,8 @@ export const routes: Routes = [
     RecordResolveService,
     ArchivesResolveService,
     DonateResolveService,
-    RelationshipsResolveService
+    RelationshipsResolveService,
+    MembersResolveService
   ],
   declarations: []
 })

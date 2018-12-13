@@ -29,16 +29,3 @@ export const BASE_TEST_CONFIG = {
   declarations: [
   ] as any[]
 };
-
-// export {
-//   TestBed,
-//   async,
-//   FormsModule,
-//   ReactiveFormsModule,
-//   RouterTestingModule,
-//   HttpClientModule,
-//   CookieService,
-//   MessageService,
-//   UploadService,
-//   PromptService
-// };

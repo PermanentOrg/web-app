@@ -50,6 +50,14 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/archive/accept', data, ArchiveResponse);
   }
+
+  public getMembers(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/getShares', data, ArchiveResponse);
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {
@@ -71,5 +79,16 @@ export class ArchiveResponse extends BaseResponse {
     });
 
     return flatten(archives);
+  }
+
+  public getAccountVOs() {
+    const data = this.getResultsData();
+    const accounts = data.map((result) => {
+      return result.map((resultList) => {
+        return new AccountVO(resultList.AccountVO);
+      });
+    });
+
+    return flatten(accounts);
   }
 }
