@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, AccountVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
-import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '../prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
@@ -10,6 +10,7 @@ import { clone, remove } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
+import { Validators } from '@angular/forms';
 
 const MemberActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -108,6 +109,30 @@ export class MembersComponent implements OnInit {
         if (response) {
           this.message.showError(response.getMessage(), true);
         }
+      });
+  }
+
+  addMember() {
+    const deferred = new Deferred();
+    const emailField: PromptField = {
+      fieldName: 'email',
+      placeholder: 'Member email',
+      type: 'email',
+      validators: [ Validators.required, Validators.email ],
+      config: {
+        autocapitalize: 'off',
+        autocorrect: 'off',
+        autocomplete: 'off',
+      }
+    };
+    const fields = [ emailField, ACCESS_ROLE_FIELD_INITIAL('access.role.viewer') ];
+
+    return this.promptService.prompt(fields, 'Add member', deferred.promise)
+      .then(() => {
+
+      })
+      .catch((response) => {
+
       });
   }
 }
