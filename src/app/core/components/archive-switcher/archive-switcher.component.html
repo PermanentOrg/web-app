@@ -4,7 +4,10 @@
   </div>
   <div class="archive-list">
     <div class="archive-list-title">Choose archive:</div>
-    <pr-archive-small *ngFor="let archive of archives" [archive]="archive" (click)="archiveClick(archive)"></pr-archive-small>
+    <pr-archive-small *ngFor="let archive of archives"
+      [archive]="archive" [accessRole]="archive.accessRole"
+      (click)="archiveClick(archive)">
+    </pr-archive-small>
     <div *ngIf="!archives.length" class="archives-empty">
       You have no other archives
     </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { Dialog } from './dialog.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { Dialog } from './dialog.service';
   template: '<ng-template #dialogRoot></ng-template>',
   styleUrls: ['./dialog.component.scss']
 })
-export class DialogRootComponent {
+export class DialogRootComponent implements OnDestroy {
   public isVisible = false;
   @ViewChild('dialogRoot', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
 
@@ -15,5 +15,9 @@ export class DialogRootComponent {
     private dialog: Dialog
   ) {
     this.dialog.registerRootComponent(this);
+  }
+
+  ngOnDestroy() {
+    this.dialog.unregisterRootComponent();
   }
 }
