@@ -1,5 +1,8 @@
 <p>
   Members of an archive are Permanent.org account holders that have access to edit, curate, contribute, or view this archive.
+  <button class="btn btn-primary" (click)="addMember()">
+    Add member
+  </button>
 </p>
 <p *ngIf="!members || !members.length">
   No members on this archive.
