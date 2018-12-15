@@ -31,6 +31,7 @@ export class RightMenuComponent implements OnInit {
     useGridView: false,
     useListView: false
   };
+  public hasAllowedActions = false;
 
   constructor(
     private router: Router,
@@ -59,13 +60,18 @@ export class RightMenuComponent implements OnInit {
 
   setAvailableActions() {
     this.allowedActions.createFolder = this.currentFolder
-      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share')) ;
+      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'))
+      && this.currentFolder.accessRole !== 'access.role.viewer';
+
     this.allowedActions.useGridView = !!this.currentFolder
       && this.folderViewService.folderView !== FolderView.Grid
       && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'));
+
     this.allowedActions.useListView = !!this.currentFolder
       && this.folderViewService.folderView !== FolderView.List
       && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'));
+
+    this.hasAllowedActions = this.allowedActions.createFolder || this.allowedActions.useGridView || this.allowedActions.useListView;
   }
 
   hide(event: Event) {
