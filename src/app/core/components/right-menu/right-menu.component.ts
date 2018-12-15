@@ -58,9 +58,14 @@ export class RightMenuComponent implements OnInit {
   }
 
   setAvailableActions() {
-    this.allowedActions.createFolder = this.currentFolder && !this.currentFolder.type.includes('app');
-    this.allowedActions.useGridView = !!this.currentFolder && this.folderViewService.folderView !== FolderView.Grid;
-    this.allowedActions.useListView = !!this.currentFolder && this.folderViewService.folderView !== FolderView.List;
+    this.allowedActions.createFolder = this.currentFolder
+      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share')) ;
+    this.allowedActions.useGridView = !!this.currentFolder
+      && this.folderViewService.folderView !== FolderView.Grid
+      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'));
+    this.allowedActions.useListView = !!this.currentFolder
+      && this.folderViewService.folderView !== FolderView.List
+      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'));
   }
 
   hide(event: Event) {
