@@ -209,15 +209,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   deleteItem(resolve: Function) {
-    return resolve();
-    // return this.edit.deleteItems([this.item])
-    //   .then(() => {
-    //     this.dataService.refreshCurrentFolder();
-    //     resolve();
-    //   })
-    //   .catch(() => {
-    //     resolve();
-    //   });
+    return this.edit.deleteItems([this.item])
+      .then(() => {
+        this.dataService.refreshCurrentFolder();
+        resolve();
+      })
+      .catch(() => {
+        resolve();
+      });
   }
 
   moveItem(destination: FolderVO) {
