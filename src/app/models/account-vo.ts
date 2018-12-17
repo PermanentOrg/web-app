@@ -1,6 +1,8 @@
 import { BaseVO } from '@models/base-vo';
 
 export class AccountVO extends BaseVO {
+  public isCurrent: boolean;
+
   public accountId;
   public primaryEmail;
   public fullName;

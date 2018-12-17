@@ -1,0 +1,41 @@
+<div class="dialog-content">
+  <div class="dialog-body">
+    <div class="page-title">Choose an Archive</div>
+    <p>
+      <span *ngIf="dialogData.shareItem">Choose from your existing relationships or search by email address to create a relationship and share</span>
+      <span *ngIf="!dialogData.shareItem">Search by email address to find archives and request a relationship</span>
+      <button class="btn btn-primary" (click)="searchByEmail()">Search</button>
+    </p>
+    <div class="page-subheading" *ngIf="searchResults">
+      Results for {{searchEmail}}
+    </div>
+    <p *ngIf="searchResults && !searchResults.length">
+      No archives found.
+      <br>
+      <button class="btn btn-primary" (click)="sendInvite()">Invite to Permanent.org</button>
+    </p>
+    <div class="search-results">
+      <pr-archive-small
+        *ngFor="let result of searchResults"
+        (click)="chooseArchive(result)"
+        [archive]="result">
+      </pr-archive-small>
+    </div>
+    <div *ngIf="dialogData.shareItem">
+      <div class="page-subheading">Relationships</div>
+      <p *ngIf="!relations">No relationships</p>
+      <p *ngIf="relations && !relations.length">All relationships shared with</p>
+      <div class="relations">
+        <pr-archive-small
+          (click)="chooseArchive(relation.RelationArchiveVO)"
+          *ngFor="let relation of relations"
+          [archive]="relation.RelationArchiveVO"
+          [relation]="relation.type">
+        </pr-archive-small>
+      </div>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+  </div>
+</div>

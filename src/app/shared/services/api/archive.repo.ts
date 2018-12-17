@@ -50,6 +50,32 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/archive/accept', data, ArchiveResponse);
   }
+
+  public getMembers(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/getShares', data, ArchiveResponse);
+  }
+
+  public updateMember(member: AccountVO, archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      AccountVO: member,
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/updateShare', data, ArchiveResponse);
+  }
+
+  public removeMember(member: AccountVO, archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      AccountVO: member,
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/archive/unshare', data, ArchiveResponse);
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {
@@ -66,10 +92,21 @@ export class ArchiveResponse extends BaseResponse {
     const data = this.getResultsData();
     const archives = data.map((result) => {
       return result.map((resultList) => {
-        return resultList.ArchiveVO;
+        return new ArchiveVO(resultList.ArchiveVO);
       });
     });
 
     return flatten(archives);
+  }
+
+  public getAccountVOs() {
+    const data = this.getResultsData();
+    const accounts = data.map((result) => {
+      return result.map((resultList) => {
+        return new AccountVO(resultList.AccountVO);
+      });
+    });
+
+    return flatten(accounts);
   }
 }

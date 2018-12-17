@@ -9,7 +9,7 @@
     <a class="menu-item" (click)='createNewFolder()' *ngIf="allowedActions.createFolder">
       Create New Folder
     </a>
-    <a class="menu-item" *ngIf="!allowedActions.createFolder">
+    <a class="menu-item" *ngIf="!hasAllowedActions">
       <em>No actions available</em>
     </a>
   </div>

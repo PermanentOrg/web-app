@@ -104,6 +104,7 @@ export class DonateComponent {
     }
 
     this.donationForm.controls['customStorageAmount'].setValue(value, {emitEvent: false});
+    this.extraDonation = this.storageAmount * this.pricePerGb;
   }
 
   checkCustomDonationAmount(value) {
@@ -186,8 +187,10 @@ export class DonateComponent {
         deferred.resolve();
       })
       .catch((response: BillingResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 
@@ -208,8 +211,10 @@ export class DonateComponent {
         deferred.resolve();
       })
       .catch((response: AccountResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 

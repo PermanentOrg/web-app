@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -17,7 +17,7 @@ export class VerifyEmbedComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
     this.verifyForm = fb.group({
-      'token': [],
+      'token': ['', Validators.required],
     });
   }
 

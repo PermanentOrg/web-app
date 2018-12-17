@@ -29,7 +29,7 @@ export class AppPage {
     return browser.wait(ExpectedConditions.urlContains('withme'));
   }
 
-  goToArchiveSelector() {
+  goToArchiveSwitcher() {
     browser.get('/m/choosearchive');
     return browser.wait(ExpectedConditions.urlContains('choosearchive'));
   }

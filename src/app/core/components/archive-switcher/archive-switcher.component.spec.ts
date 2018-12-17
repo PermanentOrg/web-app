@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { ArchiveSelectorComponent } from './archive-selector.component';
+import { ArchiveSwitcherComponent } from './archive-switcher.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
@@ -12,9 +12,9 @@ import { ActivatedRoute } from '@angular/router';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 
-describe('ArchiveSelectorComponent', () => {
-  let component: ArchiveSelectorComponent;
-  let fixture: ComponentFixture<ArchiveSelectorComponent>;
+describe('ArchiveSwitcherComponent', () => {
+  let component: ArchiveSwitcherComponent;
+  let fixture: ComponentFixture<ArchiveSwitcherComponent>;
 
   const archiveResponse = new ArchiveResponse(archiveResponseData);
   const archives = archiveResponse.getArchiveVOs();
@@ -24,7 +24,7 @@ describe('ArchiveSelectorComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);
-    config.declarations.push(ArchiveSelectorComponent);
+    config.declarations.push(ArchiveSwitcherComponent);
 
     config.providers.push({
       provide: ActivatedRoute,
@@ -44,7 +44,7 @@ describe('ArchiveSelectorComponent', () => {
     const accountService = TestBed.get(AccountService) as AccountService;
     accountService.setArchive(currentArchive);
 
-    fixture = TestBed.createComponent(ArchiveSelectorComponent);
+    fixture = TestBed.createComponent(ArchiveSwitcherComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

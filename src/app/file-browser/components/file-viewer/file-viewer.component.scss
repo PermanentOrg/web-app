@@ -29,7 +29,6 @@ $transition-length: 0.35s;
 .file-viewer-close {
   position: absolute;
   top: 0;
-  width: 100%;
   height: $toolbar-height;
   transform: translateY(0);
 
@@ -46,7 +45,8 @@ $transition-length: 0.35s;
 .file-viewer-name {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
   white-space: nowrap;
   height: $toolbar-height;
   line-height: $toolbar-height;
@@ -103,5 +103,27 @@ $transition-length: 0.35s;
 
   &.current {
     z-index: 2;
+  }
+}
+
+@supports (padding-left: env(safe-area-inset-left)) {
+  .file-viewer {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .file-viewer-name {
+    bottom: env(safe-area-inset-bottom);
+  }
+
+  .thumb-target {
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    top: calc(var(--safe-area-inset-top) + 30px);
+    bottom: calc(var(--safe-area-inset-bottom) + 30px);
+    left: env(safe-area-inset-left);
+    right: env(safe-area-inset-right);
   }
 }

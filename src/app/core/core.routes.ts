@@ -10,11 +10,16 @@ import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.ser
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
 import { DonateResolveService} from '@core/resolves/donate-resolve.service';
+import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
 
 import { SharedModule } from '@shared/shared.module';
-import { ArchiveSelectorComponent } from '@core/components/archive-selector/archive-selector.component';
+import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
+import { RelationshipsComponent } from './components/relationships/relationships.component';
+import { MembersComponent } from './components/members/members.component';
+import { MembersResolveService } from './resolves/members-resolve.service';
+
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
@@ -31,7 +36,7 @@ export const routes: Routes = [
       { path: 'shares', loadChildren: '@shares/shares.module#SharesModule', data: { title: 'Shares'} },
       {
         path: 'choosearchive',
-        component: ArchiveSelectorComponent,
+        component: ArchiveSwitcherComponent,
         data: { title: 'Choose Archive'},
         resolve: { archives: ArchivesResolveService }
       },
@@ -50,6 +55,26 @@ export const routes: Routes = [
         path: 'archive/sentInvites',
         redirectTo: 'invitations'
       },
+      {
+        path: 'relationships',
+        component: RelationshipsComponent,
+        data: { title: 'Relationships' },
+        resolve: { relations: RelationshipsResolveService }
+      },
+      {
+        path: 'archive/relationships',
+        redirectTo: 'relationships'
+      },
+      {
+        path: 'members',
+        component: MembersComponent,
+        data: { title: 'Members' },
+        resolve: { members: MembersResolveService }
+      },
+      {
+        path: 'archive/members',
+        redirectTo: 'members'
+      },
       { path: '**', redirectTo: 'myfiles'}
     ]
   }
@@ -67,7 +92,9 @@ export const routes: Routes = [
     RootFolderResolveService,
     RecordResolveService,
     ArchivesResolveService,
-    DonateResolveService
+    DonateResolveService,
+    RelationshipsResolveService,
+    MembersResolveService
   ],
   declarations: []
 })

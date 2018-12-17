@@ -65,6 +65,9 @@ $row-height: 40px;
 .picker-footer {
   padding: 0px 10px;
   display: flex;
+  button {
+    max-width: 100%;
+  }
 
   button:not(:first-child) {
     margin-left: 10px;

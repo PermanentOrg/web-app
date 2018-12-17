@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -7,12 +7,16 @@ import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { TermsComponent } from '@shared/components/terms/terms.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
+import { Dialog } from '../dialog/dialog.service';
+import { DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule
   ],
   exports: [
     CommonModule,
@@ -22,14 +26,27 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
     LogoComponent,
     TermsComponent,
     BgImageSrcDirective,
-    ArchiveSmallComponent
+    ArchiveSmallComponent,
+    ArchivePickerComponent
+  ],
+  entryComponents: [
+    ArchivePickerComponent
   ],
   declarations: [
     FormInputComponent,
     LogoComponent,
     TermsComponent,
     BgImageSrcDirective,
-    ArchiveSmallComponent
+    ArchiveSmallComponent,
+    ArchivePickerComponent
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+  private dialogComponents = [
+    ArchivePickerComponent
+  ];
+
+  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
+    this.dialog.registerComponents(this.dialogComponents, resolver, true);
+  }
+}

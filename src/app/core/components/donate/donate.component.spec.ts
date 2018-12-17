@@ -91,6 +91,32 @@ describe('DonateComponent', () => {
     expect(paymentVO.donationMatchAmount).toEqual(0);
   });
 
+
+  it('should calculate proper addl donation for custom storage amount', () => {
+    const httpMock = TestBed.get(HttpTestingController) as HttpTestingController;
+
+    component.setStorageAmount('custom');
+    component.donationForm.controls['customStorageAmount'].setValue(7);
+    expect(component.storageAmount).toEqual(7);
+    expect(component.extraDonation).toEqual(7 * APP_CONFIG.pricePerGb);
+
+    component.byteForByte = false;
+
+    component.donationStage = DonationStage.Payment;
+
+    expect(component.getTotalDonation()).toEqual(7 * APP_CONFIG.pricePerGb * 2);
+
+    component.onSubmit(component.donationForm.value);
+    const req = httpMock.expectOne(`${environment.apiUrl}/billing/processPayment`);
+    const requestData = req.request.body.RequestVO.data[0];
+    const paymentVO: BillingPaymentVOData = requestData.BillingPaymentVO;
+
+    expect(paymentVO.donationAmount).toEqual(7 * APP_CONFIG.pricePerGb);
+    expect(paymentVO.spaceAmountInGb).toEqual(7);
+    expect(paymentVO.storageAmount).toEqual(7 * APP_CONFIG.pricePerGb);
+    expect(paymentVO.donationMatchAmount).toEqual(0);
+  });
+
   it('should calculate proper donation splits for addl donation with no match', () => {
     const httpMock = TestBed.get(HttpTestingController) as HttpTestingController;
 

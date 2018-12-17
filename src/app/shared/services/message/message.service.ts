@@ -16,15 +16,15 @@ export class MessageService {
     this.component = toRegister;
   }
 
-  public showMessage(message: string, style ?: string, translate ?: boolean, navigateTo ?: string[]) {
+  public showMessage(message: string, style ?: string, translate ?: boolean, navigateTo ?: string[], navigateParams ?: any) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
     }
 
     if (!translate) {
-      this.component.display(message, style, navigateTo);
+      this.component.display(message, style, navigateTo, navigateParams);
     } else {
-      this.component.display(this.constants.translate(message), style, navigateTo);
+      this.component.display(this.constants.translate(message), style, navigateTo, navigateParams);
     }
 
   }

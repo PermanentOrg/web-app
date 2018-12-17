@@ -27,9 +27,10 @@ export class AuthRepo extends BaseRepo {
 
   }
 
-  public verify(email: string, token: string, type: string) {
+  public verify(account: AccountVO, token: string, type: string) {
     const accountVO = new AccountVO({
-      primaryEmail: email
+      primaryEmail: account.primaryEmail,
+      accountId: account.accountId
     });
 
     const authVO = new AuthVO({

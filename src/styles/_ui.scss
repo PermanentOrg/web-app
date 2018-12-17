@@ -12,10 +12,72 @@ button.btn, a.btn {
   }
 }
 
+// mobile safari menu bar padding
+.mobile-safari:not(.mobile-safari-menu-bar-showing) {
+  .prompt,
+  pr-dialog .dialog-content .dialog-footer {
+    padding-bottom: 30px;
+  }
+
+  .archive-list-button {
+    padding-bottom: 10px;
+  }
+
+  pr-file-list, .right-menu {
+    padding-bottom: 40px;
+  }
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-safari:not(.mobile-safari-menu-bar-showing) {
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    .prompt,
+    pr-dialog .dialog-content .dialog-footer {
+      padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
+    }
+
+    .archive-list-button {
+      padding-bottom: calc(var(--safe-area-inset-bottom) + 10px) !important;
+    }
+
+    pr-file-list, .right-menu  {
+      padding-bottom: calc(var(--safe-area-inset-bottom) + 40px) !important;
+    }
+  }
+
+  pr-file-list, .right-menu  {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+// @supports (padding-bottom: env(safe-area-inset-bottom)) {
+//   .mobile-safari:not(.mobile-safari-menu-bar-showing) {
+//     --safe-area-inset-bottom: env(safe-area-inset-bottom);
+//     .prompt,
+//     pr-dialog .dialog-content .dialog-footer {
+//       padding-bottom: calc(var(--safe-area-inset-bottom) + 30px) !important;
+//     }
+
+//     .archive-list-button {
+//       padding-bottom: calc(var(--safe-area-inset-bottom) + 10px) !important;
+//     }
+//   }
+// }
+
+.mobile-safari.mobile-safari-menu-bar-showing {
+  .archive-list-button {
+    padding-bottom: 0px;
+  }
+}
+
 .pr-auth-form {
   & > div, & > p {
     padding: 10px;
   }
+}
+
+.has-breadcrumb {
+  padding-top: 34px;
 }
 
 .block-center {
@@ -59,4 +121,44 @@ nav .btn {
 .page-title {
   padding: 5px 10px;
   font-weight: 600;
+}
+
+.page-subheading {
+  padding: 5px 10px;
+  font-weight: 500;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+pr-dialog {
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .dialog-body {
+      flex: 1 1 auto;
+      overflow-y: auto;
+    }
+
+    .dialog-footer {
+      padding: 0px 10px;
+      flex: 0 0 auto;
+      display: flex;
+
+      button {
+        max-width: 100%;
+      }
+    
+      button:not(:first-child) {
+        margin-left: 10px;
+      }
+    
+      button.btn-secondary:not(:last-child) {
+        flex: 0 0 33.33%
+      }
+    }
+  }
 }

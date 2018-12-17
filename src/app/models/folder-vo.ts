@@ -3,6 +3,7 @@ import { orderBy } from 'lodash';
 import { BaseVO } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
+import { ShareVO } from '@models/share-vo';
 
 export class FolderVO extends BaseVO {
   public isFolder = true;
@@ -72,7 +73,7 @@ export class FolderVO extends BaseVO {
   public AttachmentRecordVOs;
   public hasAttachments;
   public ChildItemVOs;
-  public ShareVOs;
+  public ShareVOs: ShareVO[];
   public AccessVO;
   public AccessVOs;
 
@@ -93,6 +94,10 @@ export class FolderVO extends BaseVO {
           return new RecordVO(item);
         }
       });
+    }
+
+    if (this.ShareVOs) {
+      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
 
     if (dataStatus) {

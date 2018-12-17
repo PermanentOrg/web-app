@@ -17,6 +17,7 @@ import { FolderPickerOperations } from '@core/components/folder-picker/folder-pi
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { Dialog } from '@root/app/dialog/dialog.service';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -39,6 +40,10 @@ const ItemActions: {[key: string]: PromptButton} = {
     buttonName: 'delete',
     buttonText: 'Delete',
     class: 'btn-danger'
+  },
+  Share: {
+    buttonName: 'share',
+    buttonText: 'Share'
   },
   Unshare: {
     buttonName: 'delete',
@@ -74,7 +79,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     private prompt: PromptService,
     private edit: EditService,
     private accountService: AccountService,
-    private folderPicker: FolderPickerService
+    private folderPicker: FolderPickerService,
+    private dialog: Dialog
   ) {
   }
 
@@ -98,6 +104,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.inGridView = this.folderView === FolderView.Grid;
+
+    if (this.item.position === 1) {
+      // this.dialog.open('SharingComponent', { item: this.item });
+    }
   }
 
   ngOnChanges() {
@@ -152,9 +162,16 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.canWrite) {
       actionButtons.push(ItemActions.Move);
       actionButtons.push(ItemActions.Rename);
+      if (this.isInShares || this.item.accessRole.includes('owner')) {
+        actionButtons.push(ItemActions.Share);
+      }
       actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
+      }
+    } else {
+      if (this.isInShares) {
+        actionButtons.push(ItemActions.Share);
       }
     }
 
@@ -180,6 +197,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
               .then(() => {
                 actionResolve();
               });
+            break;
+          case 'share':
+            actionResolve();
+            this.dialog.open('SharingComponent', { item: this.item });
             break;
         }
       });
@@ -254,15 +275,17 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
           autocapitalize: 'off',
           autocorrect: 'off',
           autocomplete: 'off',
-          spellcheck: 'off'
+          spellcheck: 'off',
+          autoselect: true
         }
       }
     ];
 
-    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updatePromise, 'Save', 'Cancel')
+    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updatePromise, 'Rename', 'Cancel')
       .then((values) => {
         this.saveUpdates(values, updateResolve);
-      });
+      })
+      .catch(() => {});
   }
 
   saveUpdates(changes: RecordVOData | FolderVOData, resolve: Function) {

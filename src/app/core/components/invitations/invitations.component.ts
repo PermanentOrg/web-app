@@ -7,8 +7,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 
-import { InviteVO, InviteVOData } from '@models/index';
+import { InviteVO, InviteVOData, FolderVO } from '@models/index';
 import { InviteResponse } from '@shared/services/api/index.repo';
+import { INVITATION_FIELDS } from '../prompt/prompt-fields';
+import { DataService } from '@shared/services/data/data.service';
 
 @Component({
   selector: 'pr-invitations',
@@ -20,38 +22,21 @@ export class InvitationsComponent {
     private api: ApiService,
     private accountService: AccountService,
     private promptService: PromptService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private dataService: DataService
   ) {
+    this.dataService.setCurrentFolder(new FolderVO({
+      displayName: 'Invitations',
+      pathAsText: ['Invitations'],
+      type: 'page'
+    }), true);
   }
 
   createNewInvitation() {
     let newInvite: InviteVO;
     const deferred = new Deferred();
 
-    const fields: PromptField[] = [
-      {
-        fieldName: 'fullName',
-        placeholder: 'Recipient Name',
-        type: 'text',
-        validators: [Validators.required],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      },
-      {
-        fieldName: 'email',
-        placeholder: 'Recipient Email',
-        type: 'email',
-        validators: [Validators.required, Validators.email],
-        config: {
-          autocomplete: 'off',
-          autocorrect: 'off',
-          autocapitalize: 'off'
-        }
-      }
-    ];
+    const fields: PromptField[] = INVITATION_FIELDS();
 
     this.promptService.prompt(fields, 'Send invitation', deferred.promise)
       .then((value: InviteVOData) => {
@@ -65,8 +50,10 @@ export class InvitationsComponent {
         deferred.resolve();
       })
       .catch((response: InviteResponse) => {
-        this.messageService.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 }
