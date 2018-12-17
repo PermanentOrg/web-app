@@ -152,8 +152,21 @@ export class MembersComponent implements OnInit {
   promptForInvite(member: AccountVO) {
     const deferred = new Deferred();
     const title = `No account found for ${member.primaryEmail}. Send invitation?`;
-    this.promptService.confirm('Invite', title, deferred.promise)
-      .then(() => {
+    const fields: PromptField[] = [{
+      fieldName: 'fullName',
+      placeholder: 'Recipient name',
+      validators: [ Validators.required ],
+      type: 'text',
+      config: {
+        autocapitalize: 'on',
+        autocorrect: 'off',
+        autocomplete: 'off',
+      }
+    }];
+
+    this.promptService.prompt(fields, title, deferred.promise, 'Invite')
+      .then((value) => {
+        member.fullName = value.fullName;
         return this.api.invite.sendMemberInvite(member, this.accountService.getArchive());
       })
       .then((response: InviteResponse) => {
