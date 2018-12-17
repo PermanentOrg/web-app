@@ -9,7 +9,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { clone, remove } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { ArchiveResponse } from '@shared/services/api/index.repo';
+import { ArchiveResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
 
 const MemberActions: {[key: string]: PromptButton} = {
@@ -114,8 +114,9 @@ export class MembersComponent implements OnInit {
 
   addMember() {
     const deferred = new Deferred();
+    let member;
     const emailField: PromptField = {
-      fieldName: 'email',
+      fieldName: 'primaryEmail',
       placeholder: 'Member email',
       type: 'email',
       validators: [ Validators.required, Validators.email ],
@@ -128,11 +129,42 @@ export class MembersComponent implements OnInit {
     const fields = [ emailField, ACCESS_ROLE_FIELD_INITIAL('access.role.viewer') ];
 
     return this.promptService.prompt(fields, 'Add member', deferred.promise)
-      .then(() => {
-
+      .then((value) => {
+        member = value;
+        return this.api.archive.addMember(member, this.accountService.getArchive())
+          .then((response: ArchiveResponse) => {
+            this.message.showMessage('Member added successfully.', 'success');
+            deferred.resolve();
+          });
       })
-      .catch((response) => {
+      .catch((response: ArchiveResponse) => {
+        deferred.resolve();
+        if (response) {
+          if (response.getMessage() === 'warning.archive.no_email_found') {
+            this.promptForInvite(member);
+          } else {
+            this.message.showError(response.getMessage(), true);
+          }
+        }
+      });
+  }
 
+  promptForInvite(member: AccountVO) {
+    const deferred = new Deferred();
+    const title = `No account found for ${member.primaryEmail}. Send invitation?`;
+    this.promptService.confirm('Invite', title, deferred.promise)
+      .then(() => {
+        return this.api.invite.sendMemberInvite(member, this.accountService.getArchive());
+      })
+      .then((response: InviteResponse) => {
+        deferred.resolve();
+        this.message.showMessage('Invite sent successfully.', 'success');
+      })
+      .catch((response: InviteResponse) => {
+        deferred.resolve();
+        if (response) {
+          this.message.showError(response.getMessage(), true);
+        }
       });
   }
 }
