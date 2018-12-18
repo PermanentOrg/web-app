@@ -48,7 +48,10 @@ interface RelationType {
   styleUrls: ['./relationships.component.scss']
 })
 export class RelationshipsComponent implements OnDestroy {
-  relations: RelationVO[];
+  relations: RelationVO[] = [];
+  relationRequests: RelationVO[] = [];
+  sentRelationRequests: RelationVO[] = [];
+
   relationOptions: FormInputSelectOption[];
 
   constructor(
@@ -58,6 +61,7 @@ export class RelationshipsComponent implements OnDestroy {
     private promptService: PromptService,
     private messageService: MessageService,
     private prConstants: PrConstantsService,
+    private accountService: AccountService,
     private dialog: Dialog
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
@@ -65,7 +69,18 @@ export class RelationshipsComponent implements OnDestroy {
       pathAsText: ['Relationships'],
       type: 'page'
     }), true);
-    this.relations = this.route.snapshot.data.relations;
+    this.route.snapshot.data.relations.map((relation: RelationVO) => {
+      if (relation.status.includes('ok')) {
+        // existing relationship
+        this.relations.push(relation);
+      } else if (relation.ArchiveVO.archiveId === this.accountService.getArchive().archiveId) {
+        // sent relationship request
+        this.sentRelationRequests.push(relation);
+      } else {
+        // incoming relationship request
+        this.relationRequests.push(relation);
+      }
+    });
     this.relationOptions = this.prConstants.getRelations().map((type) => {
       return {
         text: type.name,
@@ -79,60 +94,77 @@ export class RelationshipsComponent implements OnDestroy {
   }
 
   onRelationClick(relation: RelationVO) {
-    if (relation.status.includes('pending')) {
-      const deferred = new Deferred();
-      this.promptService.prompt(
-        [RELATIONSHIP_FIELD],
-        `Accept relationship with ${relation.ArchiveVO.fullName}?`,
-        deferred.promise,
-        'Accept',
-        'Decline'
-      ).then((value) => {
-        const relationMyVo = new RelationVO({
-          type: value.relationType
-        });
-        return this.api.relation.accept(relation, relationMyVo)
-          .then((response: RelationResponse) => {
-            this.messageService.showMessage('Relationship created successfully.', 'success');
-            const newRelation = response.getRelationVO();
-            relation.relationId = newRelation.relationId;
-            relation.archiveId = newRelation.archiveId;
-            relation.relationArchiveId = newRelation.relationArchiveId;
-            relation.status = newRelation.status;
-            relation.type = newRelation.type;
-
-            const archiveVo = relation.ArchiveVO;
-            const relationArchiveVo = relation.RelationArchiveVO;
-
-            relation.ArchiveVO = relationArchiveVo;
-            relation.RelationArchiveVO = archiveVo;
-
-            deferred.resolve();
-          });
-      })
-      .catch((response: RelationResponse) => {
-        if (response) {
-          deferred.resolve();
-          this.messageService.showError(response.getMessage(), true);
-        } else {
-          deferred.resolve();
-          this.removeRelation(relation);
+    const buttons = [ RelationActions.Edit, RelationActions.Remove ];
+    this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
+      .then((value: string) => {
+        switch (value) {
+          case 'edit':
+            this.editRelation(relation);
+            break;
+          case 'remove':
+            this.removeRelation(relation);
+            break;
         }
+      })
+      .catch(() => {});
+  }
+
+  onSentRelationRequestClick(relation: RelationVO) {
+    const buttons = [ RelationActions.Remove ];
+    this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
+      .then((value: string) => {
+        switch (value) {
+          case 'remove':
+            this.removeRelation(relation);
+            break;
+        }
+      })
+      .catch(() => {});
+  }
+
+  onRelationRequestClick(relation: RelationVO) {
+    const deferred = new Deferred();
+    this.promptService.prompt(
+      [RELATIONSHIP_FIELD],
+      `Accept relationship with ${relation.ArchiveVO.fullName}?`,
+      deferred.promise,
+      'Accept',
+      'Decline'
+    ).then((value) => {
+      const relationMyVo = new RelationVO({
+        type: value.relationType
       });
-    } else {
-      const buttons = [ RelationActions.Edit, RelationActions.Remove ];
-      this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
-        .then((value: string) => {
-          switch (value) {
-            case 'edit':
-              this.editRelation(relation);
-              break;
-            case 'remove':
-              this.removeRelation(relation);
-              break;
-          }
+      return this.api.relation.accept(relation, relationMyVo)
+        .then((response: RelationResponse) => {
+          this.messageService.showMessage('Relationship created successfully.', 'success');
+          const newRelation = response.getRelationVO();
+          relation.relationId = newRelation.relationId;
+          relation.archiveId = newRelation.archiveId;
+          relation.relationArchiveId = newRelation.relationArchiveId;
+          relation.status = newRelation.status;
+          relation.type = newRelation.type;
+
+          const archiveVo = relation.ArchiveVO;
+          const relationArchiveVo = relation.RelationArchiveVO;
+
+          relation.ArchiveVO = relationArchiveVo;
+          relation.RelationArchiveVO = archiveVo;
+
+          remove(this.relationRequests, relation);
+          this.relations.push(relation);
+
+          deferred.resolve();
         });
-    }
+    })
+    .catch((response: RelationResponse) => {
+      if (response) {
+        deferred.resolve();
+        this.messageService.showError(response.getMessage(), true);
+      } else {
+        deferred.resolve();
+        this.removeRelation(relation);
+      }
+    });
   }
 
   addRelation() {
@@ -195,13 +227,22 @@ export class RelationshipsComponent implements OnDestroy {
 
   removeRelation(relation: RelationVO) {
     const deferred = new Deferred();
-    const confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
-    this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
+    let confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
+    let confirmText = 'Remove';
+
+    if (relation.RelationArchiveVO.archiveId === this.accountService.getArchive().archiveId) {
+      confirmTitle = `Decline relationship with ${relation.ArchiveVO.fullName}?`;
+      confirmText = 'Decline';
+    }
+
+    this.promptService.confirm(confirmText, confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {
         this.api.relation.delete(relation)
         .then((response: RelationResponse) => {
           this.messageService.showMessage(response.getMessage(), 'success', true);
           remove(this.relations, relation);
+          remove(this.relationRequests, relation);
+          remove(this.sentRelationRequests, relation);
           deferred.resolve();
         })
         .catch((response: RelationResponse) => {
