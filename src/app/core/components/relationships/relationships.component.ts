@@ -11,7 +11,7 @@ import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { RELATIONSHIP_FIELD_INITIAL } from '../prompt/prompt-fields';
+import { RELATIONSHIP_FIELD_INITIAL, RELATIONSHIP_FIELD } from '../prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
@@ -20,6 +20,15 @@ const RelationActions: {[key: string]: PromptButton} = {
   Edit: {
     buttonName: 'edit',
     buttonText: 'Edit'
+  },
+  Accept: {
+    buttonName: 'accept',
+    buttonText: 'Accept'
+  },
+  Decline: {
+    buttonName: 'decline',
+    buttonText: 'decline',
+    class: 'btn-danger'
   },
   Remove: {
     buttonName: 'remove',
@@ -70,18 +79,60 @@ export class RelationshipsComponent implements OnDestroy {
   }
 
   onRelationClick(relation: RelationVO) {
-    const buttons = [ RelationActions.Edit, RelationActions.Remove ];
-    this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
-      .then((value: string) => {
-        switch (value) {
-          case 'edit':
-            this.editRelation(relation);
-            break;
-          case 'remove':
-            this.removeRelation(relation);
-            break;
+    if (relation.status.includes('pending')) {
+      const deferred = new Deferred();
+      this.promptService.prompt(
+        [RELATIONSHIP_FIELD],
+        `Accept relationship with ${relation.ArchiveVO.fullName}?`,
+        deferred.promise,
+        'Accept',
+        'Decline'
+      ).then((value) => {
+        const relationMyVo = new RelationVO({
+          type: value.relationType
+        });
+        return this.api.relation.accept(relation, relationMyVo)
+          .then((response: RelationResponse) => {
+            this.messageService.showMessage('Relationship created successfully.', 'success');
+            const newRelation = response.getRelationVO();
+            relation.relationId = newRelation.relationId;
+            relation.archiveId = newRelation.archiveId;
+            relation.relationArchiveId = newRelation.relationArchiveId;
+            relation.status = newRelation.status;
+            relation.type = newRelation.type;
+
+            const archiveVo = relation.ArchiveVO;
+            const relationArchiveVo = relation.RelationArchiveVO;
+
+            relation.ArchiveVO = relationArchiveVo;
+            relation.RelationArchiveVO = archiveVo;
+
+            deferred.resolve();
+          });
+      })
+      .catch((response: RelationResponse) => {
+        if (response) {
+          deferred.resolve();
+          this.messageService.showError(response.getMessage(), true);
+        } else {
+          deferred.resolve();
+          this.removeRelation(relation);
         }
       });
+    } else {
+      const buttons = [ RelationActions.Edit, RelationActions.Remove ];
+      this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
+        .then((value: string) => {
+          switch (value) {
+            case 'edit':
+              this.editRelation(relation);
+              break;
+            case 'remove':
+              this.removeRelation(relation);
+              break;
+          }
+        });
+    }
   }
 
   addRelation() {
