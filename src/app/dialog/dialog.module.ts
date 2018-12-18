@@ -1,10 +1,10 @@
 import { NgModule, ModuleWithProviders, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Dialog, DialogRef, DIALOG_DATA } from './dialog.service';
+import { Dialog, DialogRef, DIALOG_DATA, DialogChildComponentData } from './dialog.service';
 import { DialogComponent } from './dialog.component';
 import { DialogRootComponent } from './dialog-root.component';
 
-export { Dialog, DialogRef, DialogRootComponent, DIALOG_DATA };
+export { Dialog, DialogRef, DialogRootComponent, DIALOG_DATA, DialogChildComponentData };
 
 @NgModule({
   imports: [
