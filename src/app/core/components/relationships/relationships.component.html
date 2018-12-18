@@ -10,7 +10,8 @@
 <div class="relations">
   <pr-archive-small *ngFor="let relation of relations"
   (click)="onRelationClick(relation)"
-  [archive]="relation.RelationArchiveVO"
+  [archive]="relation.status.includes('pending') ? relation.ArchiveVO : relation.RelationArchiveVO"
+  [isPending]="relation.status.includes('pending')"
   [relation]="relation.type"
   ></pr-archive-small>
 </div>
