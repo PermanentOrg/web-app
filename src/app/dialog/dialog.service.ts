@@ -5,6 +5,11 @@ import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
 
+export interface DialogChildComponentData {
+  token: string;
+  component: any;
+}
+
 export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
   dialogComponent?: DialogComponent;
@@ -70,18 +75,18 @@ export class Dialog {
     delete this.rootComponent;
   }
 
-  registerComponent(component: any, resolver = this.resolver, allowDupes?: boolean) {
-    if (!this.registeredComponents[component.name]) {
-      this.registeredComponents[component.name] = component;
-      this.componentResolvers[component.name] = resolver;
+  registerComponent(componentData: DialogChildComponentData, resolver = this.resolver, allowDupes?: boolean) {
+    if (!this.registeredComponents[componentData.token]) {
+      this.registeredComponents[componentData.token] = componentData.component;
+      this.componentResolvers[componentData.token] = resolver;
     } else if (!allowDupes) {
-      throw new Error(`Dialog - component with name ${component.name} already registered`);
+      throw new Error(`Dialog - component with token ${componentData.token} already registered`);
     }
   }
 
-  registerComponents(components: any[], resolver?: ComponentFactoryResolver, allowDupes?: boolean) {
-    components.map((component) => {
-      this.registerComponent(component, resolver, allowDupes);
+  registerComponents(components: DialogChildComponentData[], resolver?: ComponentFactoryResolver, allowDupes?: boolean) {
+    components.map((componentData) => {
+      this.registerComponent(componentData, resolver, allowDupes);
     });
   }
 

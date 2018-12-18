@@ -8,7 +8,7 @@ import { LogoComponent } from '@auth/components/logo/logo.component';
 import { TermsComponent } from '@shared/components/terms/terms.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
-import { Dialog } from '../dialog/dialog.service';
+import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
@@ -42,11 +42,14 @@ import { DialogModule } from '../dialog/dialog.module';
   ]
 })
 export class SharedModule {
-  private dialogComponents = [
-    ArchivePickerComponent
+  private dialogComponents: DialogChildComponentData[] = [
+    {
+      token: 'ArchivePickerComponent',
+      component: ArchivePickerComponent
+    }
   ];
 
-  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
-    this.dialog.registerComponents(this.dialogComponents, resolver, true);
+  constructor(private dialog: Dialog, private resolver: ComponentFactoryResolver) {
+    this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
   }
 }
