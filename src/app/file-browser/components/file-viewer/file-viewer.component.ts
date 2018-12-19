@@ -85,9 +85,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.hammer.on('pan', (evt: HammerInput) => {
       this.handlePanEvent(evt);
     });
-    this.hammer.on('tap', (evt: HammerInput) => {
-      this.useMinimalView = !this.useMinimalView;
-    });
+    // this.hammer.on('tap', (evt: HammerInput) => {
+    //   this.useMinimalView = !this.useMinimalView;
+    // });
 
     this.screenWidth = this.touchElement.clientWidth;
     this.offscreenThreshold = this.screenWidth / 2;

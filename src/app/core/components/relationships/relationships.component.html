@@ -1,0 +1,34 @@
+<!-- <p>
+  Relationships are between archives only and not between accounts.
+  <br><br>
+  Adding a relationship does not give another user any permission to access or edit this archive.
+</p> -->
+<p>
+  <button class="btn btn-primary" (click)="addRelation()">Add relationship</button>
+</p>
+<p *ngIf="!relations || !relations.length">No relationships</p>
+<div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
+<div class="relations" *ngIf="sentRelationRequests.length">
+  <pr-archive-small *ngFor="let relation of sentRelationRequests"
+  (click)="onSentRelationRequestClick(relation)"
+  [archive]="relation.RelationArchiveVO"
+  [relation]="relation.type"
+  ></pr-archive-small>
+</div>
+<div class="page-subheading" *ngIf="relationRequests.length">Relationship requests</div>
+<div class="relations" *ngIf="relationRequests.length">
+  <pr-archive-small *ngFor="let relation of relationRequests"
+  (click)="onRelationRequestClick(relation)"
+  [archive]="relation.ArchiveVO"
+  [isPending]="true"
+  [relation]="relation.type"
+  ></pr-archive-small>
+</div>
+<div class="page-subheading">Established relationships</div>
+<div class="relations">
+  <pr-archive-small *ngFor="let relation of relations"
+  (click)="onRelationClick(relation)"
+  [archive]="relation.RelationArchiveVO"
+  [relation]="relation.type"
+  ></pr-archive-small>
+</div>

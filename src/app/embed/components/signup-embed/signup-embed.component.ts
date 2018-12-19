@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
+import { matchControlValidator } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -48,13 +49,17 @@ export class SignupEmbedComponent implements OnInit {
       invitation: [this.inviteCode ? this.inviteCode : '', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
-      passwords: fb.group({
-        password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-        confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
-      }, { validator: [Validators.required, FormUtilities.matchValidator] }),
-      agreed: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      agreed: [false, [Validators.requiredTrue]],
       optIn: [true]
     });
+
+    const confirmPasswordControl = new FormControl('',
+    [
+      Validators.required,
+      matchControlValidator(this.signupForm.controls['password'])
+    ]);
+    this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
   ngOnInit() {
@@ -68,14 +73,14 @@ export class SignupEmbedComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.signUp(
-      formValue.email, formValue.name, formValue.passwords.password, formValue.passwords.confirm,
+      formValue.email, formValue.name, formValue.password, formValue.confirm,
       formValue.agreed, formValue.optIn, null, formValue.invitation
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
           this.router.navigate(['/embed', 'verify']);
         } else {
-          this.accountService.logIn(formValue.email, formValue.passwords.password, true, true)
+          this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
             this.router.navigate(['/embed', 'done'], {queryParams: { inviteCode: this.inviteCode }});
           });

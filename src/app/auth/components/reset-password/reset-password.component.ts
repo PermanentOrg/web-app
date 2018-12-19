@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
@@ -37,20 +37,20 @@ export class ResetPasswordComponent implements OnInit {
     this.resetForm = fb.group(
       {
         password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-        confirm: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]]
       },
-      { validator: [Validators.required, FormUtilities.matchValidator], updateOn: 'blur' });
+      { validator: [Validators.required], updateOn: 'change' }
+    );
 
-    this.resetForm.statusChanges.subscribe(() => this.setErrorMessages());
+    const confirmPasswordControl = new FormControl(
+      '',
+      [Validators.required, FormUtilities.matchControlValidator(this.resetForm.controls['password'])]
+    );
+    this.resetForm.addControl('confirm', confirmPasswordControl);
   }
 
   ngOnInit() {
     this.accountId = Number(this.route.snapshot.params.accountId);
     this.token = this.route.snapshot.params.token;
-  }
-
-  setErrorMessages() {
-    FormUtilities.setFormErrors(this.resetForm, this.formErrors);
   }
 
   onSubmit(formValue: any) {

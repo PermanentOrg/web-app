@@ -16,13 +16,14 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { RELATIONSHIP_FIELD } from '../prompt/prompt-fields';
 
 @Component({
-  selector: 'pr-archive-selector',
-  templateUrl: './archive-selector.component.html',
-  styleUrls: ['./archive-selector.component.scss']
+  selector: 'pr-archive-switcher',
+  templateUrl: './archive-switcher.component.html',
+  styleUrls: ['./archive-switcher.component.scss']
 })
-export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
+export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
   public currentArchive: ArchiveVO;
   public archives: ArchiveVO[];
   constructor(
@@ -62,7 +63,6 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
         },
         0.05
       );
-
   }
 
   archiveClick(archive: ArchiveVO) {
@@ -80,7 +80,7 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
       }
     ];
 
-    let message = `Switch archive to ?`;
+    let message = `Switch archive to ${archive.fullName}?`;
 
     if (archive.isPending()) {
       message = `Accept and switch to archive ${archive.fullName} as ${this.prConstants.translate(archive.accessRole)}?`;
@@ -147,7 +147,8 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
             value: 'type.archive.organization'
           }
         ]
-      }
+      },
+      RELATIONSHIP_FIELD
     ];
 
     this.prompt.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
@@ -161,8 +162,10 @@ export class ArchiveSelectorComponent implements OnInit, AfterViewInit {
         deferred.resolve();
       })
       .catch((response: ArchiveResponse | BaseResponse) => {
-        this.message.showError(response.getMessage(), true);
-        deferred.reject();
+        if (response) {
+          this.message.showError(response.getMessage(), true);
+          deferred.reject();
+        }
       });
   }
 }

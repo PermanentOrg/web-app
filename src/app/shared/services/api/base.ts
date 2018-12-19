@@ -1,5 +1,6 @@
 import { HttpService } from '@shared/services/http/http.service';
 import { SimpleVO } from '@root/app/models';
+import { compact } from 'lodash';
 
 export class BaseResponse {
   public isSuccessful: boolean;
@@ -37,7 +38,7 @@ export class BaseResponse {
   }
 
   public getResultsData(): any[] {
-    return this.Results.map(result => result.data);
+    return compact(this.Results.map(result => result.data));
   }
 
   public getSimpleVO(): SimpleVO {

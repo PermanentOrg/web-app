@@ -1,6 +1,7 @@
 @import 'colors';
 
 $breadcrumb-divider: quote(">");
+$breadcrumb-height: 34px;
 
 $primary: $PR-blue;
 
@@ -18,6 +19,12 @@ $bottom-safe-area-padding: 40px;
 
 $default-transition-length: 0.4s;
 $shadow-color: rgba(black, 0.15);
+
+@mixin has-breadcrumbs {
+  padding-top: 34px;
+  display: block;
+}
+
 
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';

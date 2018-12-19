@@ -23,3 +23,10 @@ nav.navbar {
   margin-top: 9px;
   margin-bottom: 9px;
 }
+
+@supports (padding-left: env(safe-area-inset-left)) {
+  :host {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
