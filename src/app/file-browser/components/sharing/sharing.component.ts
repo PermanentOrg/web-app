@@ -164,7 +164,7 @@ export class SharingComponent implements OnInit {
         if (response) {
           this.messageService.showError(response.getMessage(), true);
         }
-        deferred.reject();
+        deferred.resolve();
       });
   }
 
