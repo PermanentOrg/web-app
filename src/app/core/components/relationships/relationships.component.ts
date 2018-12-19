@@ -179,7 +179,8 @@ export class RelationshipsComponent implements OnDestroy {
         newRelation.RelationArchiveVO = archive;
         this.relations.push(newRelation);
         return this.editRelation(newRelation);
-      });
+      })
+      .catch(() => {});
   }
 
   editRelation(relation: RelationVO) {
