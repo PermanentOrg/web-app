@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PledgeComponent } from './components/pledge/pledge.component';
+import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
 
 
 export const routes: Routes = [
@@ -17,7 +18,8 @@ export const routes: Routes = [
   providers: [
   ],
   declarations: [
-    PledgeComponent
+    PledgeComponent,
+    PhaseProgressComponent
   ]
 })
 export class PledgeRoutingModule { }
