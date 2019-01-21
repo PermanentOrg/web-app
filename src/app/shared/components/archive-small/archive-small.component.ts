@@ -14,9 +14,9 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() clickable = false;
   @Input() relation: string;
   @Input() accessRole: string;
+  @Input() isPending = false;
 
   public isCurrent = false;
-  public isPending = false;
   public relationDisplay: string;
   public accessRoleDisplay: string;
 
@@ -32,7 +32,10 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
     } else {
       this.isCurrent = false;
     }
-    this.isPending = this.archive.isPending();
+
+    if (!this.isPending) {
+      this.isPending = this.archive.isPending();
+    }
 
     if (this.relation) {
     }

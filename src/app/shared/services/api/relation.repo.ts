@@ -35,6 +35,17 @@ export class RelationRepo extends BaseRepo {
     return this.http.sendRequestPromise('/relation/update', [data], RelationResponse);
   }
 
+  public accept(relationVO: RelationVO, relationMyVO: RelationVO) {
+    const data = {
+      RelationVO: {
+        relationId: relationVO.relationId
+      },
+      RelationMyVO: relationMyVO
+    };
+
+    return this.http.sendRequestPromise('/relation/acceptRelation', [data], RelationResponse);
+  }
+
   public delete(relationVO: RelationVO) {
     const data = {
       RelationVO: {

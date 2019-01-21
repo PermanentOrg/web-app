@@ -8,10 +8,13 @@
     <span class="archive-switch" *ngIf="isCurrent && clickable">
       <br>Tap to switch archives
     </span>
-    <span class="archive-pending" *ngIf="isPending">
-      <br>Pending Archive
+    <span class="archive-pending" *ngIf="isPending && !relation">
+      <br>Pending archive
     </span>
-    <span class="archive-subtitle" *ngIf="relation">
+    <span class="archive-pending" *ngIf="isPending && relation">
+      <br>Pending relationship
+    </span>
+    <span class="archive-subtitle" *ngIf="relation && !isPending">
       <br>{{relationDisplay}}
     </span>
     <span class="archive-subtitle" *ngIf="accessRole">

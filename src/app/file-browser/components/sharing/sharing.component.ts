@@ -96,7 +96,8 @@ export class SharingComponent implements OnInit {
 
         if (relations && relations.length) {
           config.relations = relations.filter((relation) => {
-            return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId});
+            return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId})
+              && relation.status === 'status.generic.ok';
           });
         }
 
@@ -163,7 +164,7 @@ export class SharingComponent implements OnInit {
         if (response) {
           this.messageService.showError(response.getMessage(), true);
         }
-        deferred.reject();
+        deferred.resolve();
       });
   }
 
