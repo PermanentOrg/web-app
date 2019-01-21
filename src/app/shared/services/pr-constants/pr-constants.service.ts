@@ -5,6 +5,7 @@ import { access } from 'fs';
 import { orderBy } from 'lodash';
 import { AccessRole } from '@models/access-role.enum';
 
+declare var require: any;
 const SYNC_CONSTANTS = require('../../../../../../files/constants/master_en.json');
 
 @Injectable({
