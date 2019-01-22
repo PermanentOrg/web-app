@@ -8,8 +8,9 @@
   margin-top: 20px;
   width: 100%;
   border-radius: 5px;
-  height: 100px;
+  height: 50px;
   border: 1px solid $PR-purple;
+  overflow: hidden;
 
   .progress-bar-inner {
     background-color: $PR-purple;

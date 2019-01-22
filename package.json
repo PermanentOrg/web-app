@@ -40,6 +40,7 @@
     "ios-inner-height": "^1.1.0",
     "lodash": "^4.17.11",
     "ngx-cookie-service": "^1.0.10",
+    "progressbar.js": "^1.0.1",
     "rxjs": "^6.3.3",
     "zone.js": "^0.8.27"
   },
