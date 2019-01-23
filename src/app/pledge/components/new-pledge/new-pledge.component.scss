@@ -1,0 +1,14 @@
+@import 'variables';
+
+:host {
+  display: block;
+}
+
+.StripeElement--focus {
+  background-color: darken(white, 3%);
+  border-color: $gray-500;
+}
+
+.input-group-vertical {
+  margin: 0px;
+}

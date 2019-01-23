@@ -1,6 +1,38 @@
+@import 'variables';
+
 :host {
-  display: block;
+  display: flex;
   padding: 20px;
+  align-items: center;
+  background-color: $PR-blue;
+}
+
+.progress {
+  flex: 1 1 50%;
+  color: white;
+}
+
+pr-new-pledge {
+  flex: 0 0 360px;
+  margin-left: 20px;
+}
+
+@media screen and (max-width: 767px) {
+  :host {
+    justify-items: normal;
+    flex-wrap: wrap;
+  }
+
+  .progress, pr-new-pledge {
+    flex: 0 0 100%;
+    margin-bottom: 20px;
+  }
+
+  pr-new-pledge {
+    max-width: 400px;
+    margin: 0 auto 10px;
+  }
+
 }
 
 .pledge-progress-header {
@@ -16,6 +48,7 @@
     .detail-heading {
       font-weight: 600;
       font-size: 1.3rem;
+      line-height: 1.1;
     }
   }
 }

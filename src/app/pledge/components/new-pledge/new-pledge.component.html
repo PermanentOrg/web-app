@@ -1,0 +1,7 @@
+<div class="input-group-vertical">
+  <pr-form-input type="email" fieldName="email" placeholder="Email" [control]="pledgeForm.controls['email']"
+    [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+  <pr-form-input fieldName="name" placeholder="Full name" [control]="pledgeForm.controls['name']"
+    [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
+  <div class="input-vertical form-control ng-touched" #card></div>
+</div>

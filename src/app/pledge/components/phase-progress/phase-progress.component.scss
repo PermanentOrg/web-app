@@ -6,14 +6,9 @@
 
 .progress-bar {
   width: 100%;
-  border-radius: 5px;
+  border-radius: 0.25rem;
   height: 20px;
-  border: 1px solid $PR-purple;
+  background: rgba($gray-300, 0.1);
+  border: 0px solid $PR-orange;
   overflow: hidden;
-
-  .progress-bar-inner {
-    background-color: $PR-purple;
-    height: 100%;
-    width: 0%;
-  }
 }

@@ -7,7 +7,7 @@ import ProgressBar from 'progressbar.js';
   styleUrls: ['./phase-progress.component.scss']
 })
 export class PhaseProgressComponent implements OnInit, OnChanges {
-  @Input('progress') progress: number = 0;
+  @Input('progress') progress = 0;
   public innerBar: ProgressBar;
 
   constructor(
@@ -18,8 +18,8 @@ export class PhaseProgressComponent implements OnInit, OnChanges {
     this.innerBar = new ProgressBar.Line(this.elementRef.nativeElement.querySelector('.progress-bar'), {
       strokeWidth: 4,
       easing: 'easeInOut',
-      duration: 1400,
-      color: '#800080',
+      duration: 1500,
+      color: '#FF9933',
       svgStyle: {width: '100%', height: '100%'},
       from: {color: '#FFEA82'},
       to: {color: '#ED6A5A'}
