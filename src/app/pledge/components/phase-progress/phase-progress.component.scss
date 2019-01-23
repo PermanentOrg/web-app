@@ -1,14 +1,13 @@
 @import 'variables';
 
 .phase-progress {
-  padding: 20px;
+  padding: 10px 0px;
 }
 
 .progress-bar {
-  margin-top: 20px;
   width: 100%;
   border-radius: 5px;
-  height: 50px;
+  height: 20px;
   border: 1px solid $PR-purple;
   overflow: hidden;
 

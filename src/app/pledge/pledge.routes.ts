@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PledgeComponent } from './components/pledge/pledge.component';
 import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
+import { CommonModule } from '@angular/common';
 
 
 export const routes: Routes = [
@@ -13,6 +14,7 @@ export const routes: Routes = [
 ];
 @NgModule({
   imports: [
+    CommonModule,
     RouterModule.forChild(routes)
   ],
   providers: [

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ContentChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import ProgressBar from 'progressbar.js';
 
 @Component({
@@ -6,8 +6,8 @@ import ProgressBar from 'progressbar.js';
   templateUrl: './phase-progress.component.html',
   styleUrls: ['./phase-progress.component.scss']
 })
-export class PhaseProgressComponent implements OnInit {
-  public progress = .45;
+export class PhaseProgressComponent implements OnInit, OnChanges {
+  @Input('progress') progress: number = 0;
   public innerBar: ProgressBar;
 
   constructor(
@@ -24,26 +24,17 @@ export class PhaseProgressComponent implements OnInit {
       from: {color: '#FFEA82'},
       to: {color: '#ED6A5A'}
     });
-    setTimeout(() => {
-      this.redrawProgress();
-    });
+    this.redrawProgress();
+  }
 
-    setTimeout(() => {
-      this.progress = 0.55;
-      this.redrawProgress();
-    }, 4000);
+  ngOnChanges(changes: SimpleChanges): void {
+    this.redrawProgress();
   }
 
   redrawProgress() {
-    this.innerBar.animate(this.progress);
-    // TweenLite.to(
-    //   this.innerBar,
-    //   2,
-    //   {
-    //     width: `${this.progress * 100}%`,
-    //     ease: 'Power4.easeOut'
-    //   }
-    // );
+    if(this.innerBar) {
+      this.innerBar.animate(this.progress);
+    }
   }
 
 }

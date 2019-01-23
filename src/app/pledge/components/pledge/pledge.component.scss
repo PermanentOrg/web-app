@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  padding: 20px;
+}
+
+.pledge-progress-header {
+  font-size: 1.6rem;
+}
+
+.pledge-progress-details {
+  display: flex;
+  .pledge-progress-detail {
+    font-size: 1rem;
+    flex: 0 1 8rem;
+
+    .detail-heading {
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+  }
+}
+

@@ -1,1 +1,22 @@
-<pr-phase-progress></pr-phase-progress>
+<div class="pledge-progress-header">
+  <strong>
+    {{ this.currentProgress.totalDollarAmount * 100 / this.currentProgress.goalDollarAmount | number:'1.0-2' }}%
+  </strong>
+   of
+  <strong>
+    {{ this.currentProgress.goalDollarAmount | currency:'USD':'symbol':'1.0-0'}}
+  </strong>
+   reached
+  
+</div>
+<pr-phase-progress [progress]="this.currentProgress.totalDollarAmount/this.currentProgress.goalDollarAmount"></pr-phase-progress>
+<div class="pledge-progress-details">
+  <div class="pledge-progress-detail">
+    <div class="detail-heading">{{this.currentProgress.totalDollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
+    pledged
+  </div>
+  <div class="pledge-progress-detail">
+    <div class="detail-heading">{{this.currentProgress.totalPledges}}</div>
+    contributors
+  </div>
+</div>
