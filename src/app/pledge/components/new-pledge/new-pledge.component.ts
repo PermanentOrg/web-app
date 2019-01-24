@@ -19,8 +19,12 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   public donationSelection: any = 25;
   public donationAmount = 25;
 
+  @ViewChild('customDonationAmount') customDonationInput: ElementRef;
+
   @ViewChild('card') elementsContainer: ElementRef;
   stripeElementsCard: any;
+  cardError: any;
+  cardComplete = false;
 
   constructor(
     private elementRef: ElementRef,
@@ -31,7 +35,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 
     this.pledgeForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
-      donationAmount: ['', [Validators.min]],
+      customDonationAmount: [''],
       name: ['']
     });
   }
@@ -59,6 +63,20 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       }
     }
     this.stripeElementsCard = elements.create('card', options);
+
+    this.stripeElementsCard.addEventListener('change', event => {
+      if(event.error) {
+        this.cardError = event.error.message;
+      } else {
+        this.cardError = null;
+      }
+
+      if(event.complete) {
+        this.cardComplete = true;
+      } else {
+        this.cardComplete = false;
+      }
+    });
   }
 
   bindStripeElements() {
@@ -69,17 +87,32 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     this.donationSelection = amount;
     if(amount !== 'custom') {
       this.donationAmount = parseInt(amount, 10);
+    } else {
+      this.customDonationInput.nativeElement.focus();
     }
   }
 
   async submitPledge(formValue: any) {
-    const pledge: PledgeData = {
-      email: formValue.email,
-      dollarAmount: this.donationAmount,
-      name: formValue.name
-    }
 
     this.waiting = true;
+
+    const stripeResult = await stripe.createToken(this.stripeElementsCard);
+
+    if (stripeResult.error) {
+      this.waiting = false;
+      this.cardError = stripeResult.error.message;
+      return;
+    }
+
+    this.stripeElementsCard.clear();
+
+    const pledge: PledgeData = {
+      email: formValue.email,
+      dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
+      name: formValue.name,
+      stripeToken: stripeResult.token
+    };
+
     await this.db.list('/pledges').push(pledge);
     this.waiting = false;
     this.pledgeForm.patchValue({
@@ -88,10 +121,19 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     });
     this.pledgeForm.reset();
   }
+
+  unfocusOnEnter(event: KeyboardEvent) {
+    if (event.keyCode === 13) {
+      this.customDonationInput.nativeElement.blur();
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
 }
 
 interface PledgeData {
   email: string;
   dollarAmount: number;
   name?: string;
+  stripeToken?: string;
 }
