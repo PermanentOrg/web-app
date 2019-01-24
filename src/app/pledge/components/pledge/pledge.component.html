@@ -9,7 +9,7 @@
     <strong>
       {{ this.currentProgress.goalDollarAmount | currency:'USD':'symbol':'1.0-0'}}
     </strong>
-    reached
+    goal reached
   
   </div>
   <pr-phase-progress [progress]="this.currentProgress.totalDollarAmount/this.currentProgress.goalDollarAmount"></pr-phase-progress>
@@ -25,6 +25,12 @@
       [startVal]="this.previousProgress.totalPledges"
       [endVal]="this.currentProgress.totalPledges" duration="1.5">0</div>
       contributors
+    </div>
+    <div class="pledge-progress-detail">
+      <div class="detail-heading" [countUp]="storageCountUpoptions"
+      [startVal]="this.previousProgress.totalStorageAmount"
+      [endVal]="this.currentProgress.totalStorageAmount" duration="1.5">0</div>
+      storage claimed
     </div>
   </div>
 </div>

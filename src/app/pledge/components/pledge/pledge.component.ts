@@ -6,6 +6,7 @@ export interface ProgressData {
   totalDollarAmount: number;
   goalDollarAmount: number;
   totalPledges: number;
+  totalStorageAmount: number;
 }
 @Component({
   selector: 'pr-pledge',
@@ -17,7 +18,8 @@ export class PledgeComponent implements OnInit {
     activePhase: 1,
     totalDollarAmount: 0,
     goalDollarAmount: 150000,
-    totalPledges: 0
+    totalPledges: 0,
+    totalStorageAmount: 0
   };
 
   public previousProgress: ProgressData = this.currentProgress;
@@ -36,6 +38,14 @@ export class PledgeComponent implements OnInit {
     separator: ',',
     decimal: '.',
     suffix: '%'
+  };
+
+  public storageCountUpoptions = {
+    useEasing: true,
+    useGrouping: true,
+    separator: ',',
+    decimal: '.',
+    suffix: ' GB'
   };
 
   public pledgeCountUpOptions = {

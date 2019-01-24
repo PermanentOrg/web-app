@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 const stripe = window['Stripe']('pk_test_kGSsLxH88lyxBUp9Lluji2Rn');
 const elements = stripe.elements();
@@ -10,19 +11,27 @@ const elements = stripe.elements();
   styleUrls: ['./new-pledge.component.scss']
 })
 export class NewPledgeComponent implements OnInit, AfterViewInit {
+  public waiting: boolean;
   public pledgeForm: FormGroup;
+
+  public donationLevels = [10, 25, 100];
+
+  public donationSelection: any = 25;
+  public donationAmount = 25;
 
   @ViewChild('card') elementsContainer: ElementRef;
   stripeElementsCard: any;
 
   constructor(
     private elementRef: ElementRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private db: AngularFireDatabase
   ) {
     this.initStripeElements();
 
     this.pledgeForm = fb.group({
-      email: [''],
+      email: ['', [Validators.required, Validators.email]],
+      donationAmount: ['', [Validators.min]],
       name: ['']
     });
   }
@@ -56,5 +65,33 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     this.stripeElementsCard.mount(this.elementsContainer.nativeElement);
   }
 
+  chooseDonationAmount(amount: any) {
+    this.donationSelection = amount;
+    if(amount !== 'custom') {
+      this.donationAmount = parseInt(amount, 10);
+    }
+  }
 
+  async submitPledge(formValue: any) {
+    const pledge: PledgeData = {
+      email: formValue.email,
+      dollarAmount: this.donationAmount,
+      name: formValue.name
+    }
+
+    this.waiting = true;
+    await this.db.list('/pledges').push(pledge);
+    this.waiting = false;
+    this.pledgeForm.patchValue({
+      email: null,
+      name: null
+    });
+    this.pledgeForm.reset();
+  }
+}
+
+interface PledgeData {
+  email: string;
+  dollarAmount: number;
+  name?: string;
 }

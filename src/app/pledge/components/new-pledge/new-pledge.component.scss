@@ -4,6 +4,11 @@
   display: block;
 }
 
+form {
+  margin: 0;
+  padding: 0;
+}
+
 .StripeElement--focus {
   background-color: darken(white, 3%);
   border-color: $gray-500;
@@ -11,4 +16,39 @@
 
 .input-group-vertical {
   margin: 0px;
+  border-radius: 0.25rem;
+  background-color: white;
+}
+
+.pledge-buttons {
+  display: flex;
+  overflow: hidden;
+  border-radius: 0.25rem;
+
+  .pledge-button {
+    padding: 0.85rem 0;
+    line-height: 1.5;
+    flex: 1 1 auto;
+    text-align: center;
+    align-items: center;
+    background: $PR-orange;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: $btn-transition;
+
+    &:hover {
+      background: darken($PR-orange, 10%);
+    }
+
+    &.active {
+      background: darken($PR-orange, 7%);
+      box-shadow: $btn-active-box-shadow;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 $btn-focus-width rgba($PR-orange, .5);
+    }
+  }
 }

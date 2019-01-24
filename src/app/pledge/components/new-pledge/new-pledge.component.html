@@ -1,7 +1,19 @@
-<div class="input-group-vertical">
-  <pr-form-input type="email" fieldName="email" placeholder="Email" [control]="pledgeForm.controls['email']"
-    [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-  <pr-form-input fieldName="name" placeholder="Full name" [control]="pledgeForm.controls['name']"
-    [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
-  <div class="input-vertical form-control ng-touched" #card></div>
-</div>
+
+<form (submit)="submitPledge(pledgeForm.value)">
+  <div class="input-group-vertical">
+    <div class="input-vertical pledge-buttons">
+      <div class="pledge-button" *ngFor="let level of donationLevels" [ngClass]="{'active': donationSelection === level}"
+        (click)="chooseDonationAmount(level)">${{level}}</div>
+      <div class="pledge-button" [ngClass]="{'active': donationSelection === 'custom'}"
+        (click)="chooseDonationAmount('custom')">Custom</div>
+    </div>
+    <pr-form-input *ngIf="donationSelection === 'custom'" type="number" fieldName="donationAmount" placeholder="Custom donation amount"
+      [control]="pledgeForm.controls['donationAmount']"></pr-form-input>
+    <pr-form-input type="email" fieldName="email" placeholder="Email" [control]="pledgeForm.controls['email']"
+      [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input fieldName="name" placeholder="Name (optional)" [control]="pledgeForm.controls['name']"
+      [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
+    <div class="input-vertical form-control ng-touched" #card></div>
+  </div>
+  <button class="btn btn-secondary" [disabled]="!pledgeForm.valid || waiting">Complete Pledge</button>
+</form>
