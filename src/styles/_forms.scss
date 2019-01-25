@@ -112,3 +112,13 @@ select.placeholder {
   // display: block;
   // background-color: $gray-200;
 }
+
+.right-align {
+  input {
+    text-align: right;
+  }
+
+  input::placeholder {
+    text-align: left;
+  }
+}

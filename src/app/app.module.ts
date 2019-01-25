@@ -59,7 +59,7 @@ export class CustomUrlSerializer implements UrlSerializer {
   ],
   declarations: [
     AppComponent,
-    MessageComponent
+    MessageComponent,
   ],
   providers: [
     CookieService,
