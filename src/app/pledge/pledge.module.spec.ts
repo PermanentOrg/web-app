@@ -1,13 +1,13 @@
-import { PledgeModule } from './pledge.module';
+// import { PledgeModule } from './pledge.module';
 
-describe('PledgeModule', () => {
-  let pledgeModule: PledgeModule;
+// describe('PledgeModule', () => {
+//   let pledgeModule: PledgeModule;
 
-  beforeEach(() => {
-    pledgeModule = new PledgeModule();
-  });
+//   beforeEach(() => {
+//     pledgeModule = new PledgeModule();
+//   });
 
-  it('should create an instance', () => {
-    expect(pledgeModule).toBeTruthy();
-  });
-});
+//   it('should create an instance', () => {
+//     expect(pledgeModule).toBeTruthy();
+//   });
+// });
