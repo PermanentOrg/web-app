@@ -88,6 +88,11 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     if(amount !== 'custom') {
       this.donationAmount = parseInt(amount, 10);
     } else {
+      if(!this.pledgeForm.value.customDonationAmount) {
+        this.pledgeForm.patchValue({
+          customDonationAmount: this.donationAmount
+        });
+      }
       this.customDonationInput.nativeElement.focus();
     }
   }

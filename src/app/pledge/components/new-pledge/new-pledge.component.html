@@ -19,5 +19,5 @@
   </div>
   <button class="btn btn-secondary"
     [disabled]="!cardComplete || (donationSelection === 'custom' && !pledgeForm.value.customDonationAmount) || !pledgeForm.valid || waiting">
-    Complete Pledge</button>
+    Pledge {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount) | currency:'USD':'symbol':'1.0-0'}}</button>
 </form>
