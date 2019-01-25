@@ -16,6 +16,9 @@ button {
 .StripeElement {
   padding: 0.85rem 0.75rem;
   transition: $input-transition;
+  border: $input-border-width solid $input-border-color;
+  border-top: 0px;
+  border-radius: $input-border-radius;
 }
 
 .StripeElement--focus:not(.ng-invalid) {
