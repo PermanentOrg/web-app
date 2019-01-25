@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { ActivatedRoute } from '@angular/router';
 
 export interface ProgressData {
   activePhase: number;
@@ -14,6 +15,8 @@ export interface ProgressData {
   styleUrls: ['./pledge.component.scss']
 })
 export class PledgeComponent implements OnInit {
+  @HostBinding('class.no-bg') noBackground = false;
+
   public currentProgress: ProgressData = {
     activePhase: 1,
     totalDollarAmount: 0,
@@ -55,8 +58,10 @@ export class PledgeComponent implements OnInit {
     decimal: '.'
   };
 
+
   constructor(
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private route: ActivatedRoute
   ) { 
     db.list('/progress', ref => ref.orderByKey().limitToLast(1)).valueChanges()
       .subscribe((listValue) => {
@@ -65,6 +70,8 @@ export class PledgeComponent implements OnInit {
           this.currentProgress = listValue.pop() as ProgressData;
         }
       });
+    
+    this.noBackground = this.route.snapshot.queryParams.wordpress !== undefined;
   }
 
   ngOnInit() {

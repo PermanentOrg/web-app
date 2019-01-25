@@ -5,7 +5,9 @@
   min-height: 100vh;
   padding: 20px;
   align-items: center;
-  background-color: $PR-blue;
+  &:not(.no-bg) {
+    background-color: $PR-blue;
+  }
 }
 
 .progress {
@@ -19,11 +21,13 @@ pr-new-pledge {
 }
 
 .pledge-progress-header {
-  font-size: 1.6rem;
+  font-size: 2rem;
+  text-shadow: $wordpress-shadow;
 }
 
 .pledge-progress-details {
   display: flex;
+  text-shadow: $wordpress-shadow;
   .pledge-progress-detail {
     font-size: 1rem;
     flex: 0 1 10rem;
