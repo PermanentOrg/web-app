@@ -1,0 +1,19 @@
+[debug] [2019-01-25T23:40:40.097Z] ----------------------------------------------------------------------
+[debug] [2019-01-25T23:40:40.099Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only functions
+[debug] [2019-01-25T23:40:40.099Z] CLI Version:   6.3.0
+[debug] [2019-01-25T23:40:40.099Z] Platform:      darwin
+[debug] [2019-01-25T23:40:40.099Z] Node Version:  v8.11.3
+[debug] [2019-01-25T23:40:40.100Z] Time:          Fri Jan 25 2019 17:40:40 GMT-0600 (CST)
+[debug] [2019-01-25T23:40:40.100Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-01-25T23:40:40.110Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-01-25T23:40:40.110Z] > authorizing via signed-in user
+[debug] [2019-01-25T23:40:40.110Z] [iam] checking project prpledgetest for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2019-01-25T23:40:40.112Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/prpledgetest:testIamPermissions  
+
+[debug] [2019-01-25T23:40:41.051Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'prpledgetest'...
+[info] 
+[info] i  deploying functions
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
