@@ -14,10 +14,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   public waiting: boolean;
   public pledgeForm: FormGroup;
 
-  public donationLevels = [10, 25, 100];
+  public donationLevels = [10, 50, 100];
 
-  public donationSelection: any = 25;
-  public donationAmount = 25;
+  public donationSelection: any = 50;
+  public donationAmount = 50;
 
   @ViewChild('customDonationAmount') customDonationInput: ElementRef;
 
@@ -115,7 +115,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       email: formValue.email,
       dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
       name: formValue.name,
-      stripeToken: stripeResult.token,
+      stripeToken: stripeResult.token.id,
       timestamp: new Date().getTime()
     };
 

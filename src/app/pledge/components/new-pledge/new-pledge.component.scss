@@ -18,7 +18,8 @@ button {
   transition: $input-transition;
   border: $input-border-width solid $input-border-color;
   border-top: 0px;
-  border-radius: $input-border-radius;
+  border-bottom-left-radius: $input-border-radius;
+  border-bottom-right-radius: $input-border-radius;
 }
 
 .StripeElement--focus:not(.ng-invalid) {
