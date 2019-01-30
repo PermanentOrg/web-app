@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, AfterViewInit, HostBinding } from '@angul
 import { AngularFireDatabase } from '@angular/fire/database';
 import { ActivatedRoute } from '@angular/router';
 
+import APP_CONFIG from '@root/app/app.config';
+
 export interface ProgressData {
   activePhase: number;
   totalDollarAmount: number;
@@ -58,6 +60,7 @@ export class PledgeComponent implements OnInit {
     decimal: '.'
   };
 
+  public pricePerGb = APP_CONFIG.pricePerGb;
 
   constructor(
     private db: AngularFireDatabase,

@@ -15,7 +15,7 @@
   color: white;
 }
 
-pr-new-pledge {
+.current-pledge-form {
   flex: 0 0 360px;
   margin-left: 20px;
 }
@@ -50,12 +50,12 @@ pr-new-pledge {
     font-size: 1.2rem;
   }
 
-  .progress, pr-new-pledge {
+  .progress, .current-pledge-form {
     flex: 0 0 100%;
     margin-bottom: 20px;
   }
 
-  pr-new-pledge {
+  .current-pledge-form {
     max-width: 400px;
     margin: 0 auto;
   }

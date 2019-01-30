@@ -1,6 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { Router } from '@angular/router';
+
+import { PledgeService } from '@pledge/services/pledge.service';
+import APP_CONFIG from '@root/app/app.config';
 
 const stripe = window['Stripe']('pk_test_kGSsLxH88lyxBUp9Lluji2Rn');
 const elements = stripe.elements();
@@ -19,6 +22,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   public donationSelection: any = 50;
   public donationAmount = 50;
 
+  public pricePerGb = 10;
+
   @ViewChild('customDonationAmount') customDonationInput: ElementRef;
 
   @ViewChild('card') elementsContainer: ElementRef;
@@ -27,13 +32,13 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   cardComplete = false;
 
   constructor(
-    private elementRef: ElementRef,
     private fb: FormBuilder,
-    private db: AngularFireDatabase
+    private pledgeService: PledgeService,
+    private router: Router
   ) {
     this.initStripeElements();
 
-    this.pledgeForm = fb.group({
+    this.pledgeForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       customDonationAmount: [''],
       name: ['']
@@ -119,13 +124,23 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       timestamp: new Date().getTime()
     };
 
-    await this.db.list('/pledges').push(pledge);
+    await this.pledgeService.createPledge(pledge);
     this.waiting = false;
     this.pledgeForm.patchValue({
       email: null,
       name: null
     });
     this.pledgeForm.reset();
+
+    const storageAmount = Math.floor(pledge.dollarAmount / this.pricePerGb);
+
+
+
+    this.router.navigate(['/pledge', 'claim'], { queryParams: {
+      name: pledge.name,
+      email: pledge.email,
+      storageAmount: Math.floor(pledge.dollarAmount / this.pricePerGb)
+    }});
   }
 
   unfocusOnEnter(event: KeyboardEvent) {
@@ -137,10 +152,11 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   }
 }
 
-interface PledgeData {
+export interface PledgeData {
   email: string;
   dollarAmount: number;
   name?: string;
   stripeToken?: string;
   timestamp?: number;
+  accountId?: number;
 }

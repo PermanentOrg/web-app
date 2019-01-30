@@ -9,6 +9,8 @@ import { CountUpModule } from 'countup.js-angular2';
 import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
+import { PledgeService } from './services/pledge.service';
+import { ClaimStorageLoginComponent } from './components/claim-storage-login/claim-storage-login.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,9 @@ import { NewPledgeComponent } from './components/new-pledge/new-pledge.component
     PledgeRoutingModule,
     CountUpModule
   ],
-  declarations: []
+  providers: [
+    PledgeService
+  ],
+  declarations: [ClaimStorageLoginComponent]
 })
 export class PledgeModule { }
