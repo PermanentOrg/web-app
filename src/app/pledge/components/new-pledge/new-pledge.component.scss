@@ -40,7 +40,6 @@ button {
   border-radius: 0.25rem;
 
 
-
   .pledge-button {
     padding: 0.85rem 0;
     line-height: 1.5;
@@ -86,6 +85,28 @@ button {
       &::-webkit-inner-spin-button,
       &::-webkit-outer-spin-button {
         appearance: none;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 0.5rem 0;
+    }
+
+    @media screen and (max-width: 350px) {
+      input {
+        width: 3em;
+      }
+    }
+
+    @media screen and (max-width: 300px) {
+      input {
+        width: 2em;
+      }
+    }
+
+    @media screen and (max-width: 250px) {
+      input {
+        width: 1.2em;
       }
     }
   }

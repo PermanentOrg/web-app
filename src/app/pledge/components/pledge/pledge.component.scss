@@ -2,7 +2,6 @@
 
 :host {
   display: flex;
-  min-height: 100vh;
   padding: 20px;
   align-items: center;
   &:not(.no-bg) {
@@ -44,6 +43,7 @@
   :host {
     justify-items: normal;
     flex-wrap: wrap;
+    padding: 20px 0px;
   }
 
   .pledge-progress-header {

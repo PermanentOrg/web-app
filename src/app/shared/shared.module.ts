@@ -10,6 +10,7 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { IFrameService } from './services/iframe/iframe.service';
 
 @NgModule({
   imports: [
@@ -38,7 +39,10 @@ import { DialogModule } from '../dialog/dialog.module';
     TermsComponent,
     BgImageSrcDirective,
     ArchiveSmallComponent,
-    ArchivePickerComponent
+    ArchivePickerComponent,
+  ],
+  providers: [
+    IFrameService
   ]
 })
 export class SharedModule {

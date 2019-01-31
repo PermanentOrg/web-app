@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, HostBinding, ElementRef, OnDestroy } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 export interface ProgressData {
   activePhase: number;
@@ -16,7 +17,7 @@ export interface ProgressData {
   templateUrl: './pledge.component.html',
   styleUrls: ['./pledge.component.scss']
 })
-export class PledgeComponent implements OnInit {
+export class PledgeComponent implements OnInit, OnDestroy {
   @HostBinding('class.no-bg') noBackground = false;
 
   public currentProgress: ProgressData = {
@@ -64,7 +65,9 @@ export class PledgeComponent implements OnInit {
 
   constructor(
     private db: AngularFireDatabase,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public iFrame: IFrameService,
+    private elementRef: ElementRef
   ) { 
     db.list('/progress', ref => ref.orderByKey().limitToLast(1)).valueChanges()
       .subscribe((listValue) => {
@@ -78,5 +81,10 @@ export class PledgeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.iFrame.setSizeTarget(this.elementRef.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.iFrame.reset();
   }
 }
