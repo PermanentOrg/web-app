@@ -39,10 +39,13 @@ button {
   overflow: hidden;
   border-radius: 0.25rem;
 
+
+
   .pledge-button {
     padding: 0.85rem 0;
     line-height: 1.5;
     flex: 1 1 auto;
+    flex-wrap: wrap;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,6 +55,14 @@ button {
     cursor: pointer;
     user-select: none;
     transition: $btn-transition;
+
+    span {
+      font-weight: 300;
+      font-size: 80%;
+      flex: 0 0 100%;
+      text-align: center;
+      line-height: 1.2;
+    }
 
     &:hover {
       transition: $btn-transition;

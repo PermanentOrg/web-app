@@ -3,7 +3,10 @@
   <div class="input-group-vertical">
     <div class="input-vertical pledge-buttons">
       <div class="pledge-button" *ngFor="let level of donationLevels" [ngClass]="{'active': donationSelection === level}"
-        (click)="chooseDonationAmount(level)">${{level}}</div>
+        (click)="chooseDonationAmount(level)">
+        ${{level}}
+        <br><span>{{level / 10}} GB</span>
+      </div>
       <div class="pledge-button" [ngClass]="{'active': donationSelection === 'custom'}" (click)="chooseDonationAmount('custom')">
         $<input #customDonationAmount type="number" class="form-control" [formControl]="pledgeForm.controls['customDonationAmount']" min="1" (keydown)="unfocusOnEnter($event)">
       </div>
@@ -19,5 +22,7 @@
   </div>
   <button class="btn btn-secondary"
     [disabled]="!cardComplete || (donationSelection === 'custom' && !pledgeForm.value.customDonationAmount) || !pledgeForm.valid || waiting">
-    Pledge {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount) | currency:'USD':'symbol':'1.0-0'}}</button>
+    Pledge {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount) | currency:'USD':'symbol':'1.0-0'}} 
+    for {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount ) / 10 | number:'1.0-0'}} GB
+  </button>
 </form>
