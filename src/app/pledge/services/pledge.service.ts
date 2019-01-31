@@ -34,14 +34,12 @@ export class PledgeService {
 
     this.currentPledge.on('value', snapshot => {
       merge(this.currentPledgeData, snapshot.val());
-      console.log('updated current pledge data:', this.currentPledgeData);
     });
 
     return this.currentPledge;
   }
 
   async linkAccount(account: AccountVO) {
-    console.log('trying to link account!', account);
     if (!this.currentPledge) {
       throw new Error('PledgeService - no pledge to link to account');
     }
@@ -50,7 +48,7 @@ export class PledgeService {
       throw new Error('PledgeService - pledge already linked to account');
     }
 
-    await this.currentPledge.update({ accountId: account.accountId });
+    return await this.currentPledge.update({ accountId: account.accountId });
   }
 
 

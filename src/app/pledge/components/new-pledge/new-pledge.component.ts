@@ -130,7 +130,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     };
 
     await this.pledgeService.createPledge(pledge);
-    this.waiting = false;
     this.pledgeForm.patchValue({
       email: null,
       name: null
@@ -142,8 +141,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     if (!isLoggedIn) {
       this.router.navigate(['/pledge', 'claim']);
     } else {
+      await this.pledgeService.linkAccount(this.accountService.getAccount());
       this.router.navigate(['/pledge', 'claimlogin']);
     }
+    this.waiting = false;
   }
 
   unfocusOnEnter(event: KeyboardEvent) {
