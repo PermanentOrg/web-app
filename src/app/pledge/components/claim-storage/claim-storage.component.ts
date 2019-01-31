@@ -7,6 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { PledgeService } from '@pledge/services/pledge.service';
 import { PledgeData } from '../new-pledge/new-pledge.component';
+import { ApiService } from '@shared/services/api/api.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -26,16 +27,14 @@ export class ClaimStorageComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private api: ApiService,
     private accountService: AccountService,
     private pledgeService: PledgeService
   ) {
-    if (!pledgeService.currentPledge) {
-      this.router.navigate(['/pledge']);
-      return this;
-    }
-
-    const params = route.snapshot.queryParams;
-
+    // if (!pledgeService.currentPledge) {
+    //   this.router.navigate(['/pledge']);
+    //   return this;
+    // }
     this.pledge = pledgeService.currentPledgeData;
 
     this.signupForm = fb.group({
@@ -59,10 +58,18 @@ export class ClaimStorageComponent implements OnInit {
     ).then(async (response: AccountResponse) => {
         const account = response.getAccountVO();
         await this.pledgeService.linkAccount(account);
-        this.accountService.logIn(formValue.email, formValue.password, true, true)
-          .then(() => {
-            // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-          });
+        await this.accountService.logIn(formValue.email, formValue.password, true, true);
+
+        const billingVo = this.pledgeService.createBillingPaymentVo(account);
+
+        const billingResponse = await this.api.billing.claimPledge(billingVo, this.pledgeService.getPledgeId());
+
+        this.waiting = false;
+
+        if (billingResponse.isSuccessful) {
+          this.router.navigate(['/pledge', 'done']);
+        }
+
       })
       .catch((response: AccountResponse) => {
         // this.message.showError(response.getMessage(), true);

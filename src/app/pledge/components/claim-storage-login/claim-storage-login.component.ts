@@ -48,10 +48,10 @@ export class ClaimStorageLoginComponent implements OnInit {
     });
 
     try {
-      const billingResponse = await this.api.billing.claimPledge(payment, pledgeId)
+      const billingResponse = await this.api.billing.claimPledge(payment, pledgeId);
       this.waiting = false;
       if (billingResponse.isSuccessful) {
-        console.log('pledge claimed?', billingResponse);
+        this.router.navigate(['/pledge', 'done']);
       } else {
         console.error(billingResponse);
       }

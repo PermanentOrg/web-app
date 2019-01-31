@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { PledgeService } from '@pledge/services/pledge.service';
 import APP_CONFIG from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 const stripe = window['Stripe']('pk_test_kGSsLxH88lyxBUp9Lluji2Rn');
 const elements = stripe.elements();
@@ -36,7 +37,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private pledgeService: PledgeService,
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private message: MessageService
   ) {
     this.initStripeElements();
     const account = this.accountService.getAccount();
@@ -136,7 +138,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     });
     this.pledgeForm.reset();
 
-    const storageAmount = Math.floor(pledge.dollarAmount / this.pricePerGb);
+    this.message.showMessage('Pledge complete.', 'success');
+
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
       this.router.navigate(['/pledge', 'claim']);

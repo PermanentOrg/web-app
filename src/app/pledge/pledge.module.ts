@@ -11,6 +11,10 @@ import { environment } from '@root/environments/environment';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
 import { PledgeService } from './services/pledge.service';
 import { ClaimStorageLoginComponent } from './components/claim-storage-login/claim-storage-login.component';
+import { ClaimDoneComponent } from './components/claim-done/claim-done.component';
+import { PledgeComponent } from './components/pledge/pledge.component';
+import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
+import { ClaimStorageComponent } from './components/claim-storage/claim-storage.component';
 
 @NgModule({
   imports: [
@@ -25,6 +29,13 @@ import { ClaimStorageLoginComponent } from './components/claim-storage-login/cla
   providers: [
     PledgeService
   ],
-  declarations: [ClaimStorageLoginComponent]
+  declarations: [
+    PledgeComponent,
+    PhaseProgressComponent,
+    NewPledgeComponent,
+    ClaimStorageComponent,
+    ClaimStorageLoginComponent,
+    ClaimDoneComponent
+  ]
 })
 export class PledgeModule { }

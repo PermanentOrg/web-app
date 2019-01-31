@@ -6,7 +6,7 @@ import { merge } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { PledgeData } from '@pledge/components/new-pledge/new-pledge.component';
-import { AccountVO } from '@models/index';
+import { AccountVO, BillingPaymentVO } from '@models/index';
 
 @Injectable()
 export class PledgeService {
@@ -51,5 +51,15 @@ export class PledgeService {
     return await this.currentPledge.update({ accountId: account.accountId });
   }
 
-
+  createBillingPaymentVo(account: AccountVO) {
+    return new BillingPaymentVO({
+      accountIdThatPaid: account.accountId,
+      refIdToIncrease: account.accountId,
+      donationAmount: 0,
+      donationMatchAmount: 0,
+      storageAmount: this.currentPledgeData.dollarAmount,
+      monetaryAmount: this.currentPledgeData.dollarAmount.toFixed(2),
+      spaceAmountInGb: Math.floor(this.currentPledgeData.dollarAmount / 10)
+    });
+  }
 }
