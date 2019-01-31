@@ -24,7 +24,9 @@ form {
 .input-group-vertical {
   margin-bottom: 10px;
   $transition-length: 0.1s;
-
+  border-radius: 0.25rem;
+  background: white;
+  
   select {
     -webkit-appearance: none;
   }

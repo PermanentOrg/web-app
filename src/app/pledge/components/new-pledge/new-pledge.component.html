@@ -10,7 +10,7 @@
     </div>
     <pr-form-input type="email" fieldName="email" placeholder="Email" [control]="pledgeForm.controls['email']"
       [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-    <pr-form-input fieldName="name" placeholder="Name (optional)" [control]="pledgeForm.controls['name']"
+    <pr-form-input fieldName="name" placeholder="Name" [control]="pledgeForm.controls['name']"
       [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
     <div class="input-vertical ng-touched" [ngClass]="{'ng-invalid': !!cardError}">
         <div #card></div>

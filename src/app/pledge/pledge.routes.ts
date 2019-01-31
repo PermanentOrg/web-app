@@ -10,6 +10,7 @@ import { PledgeComponent } from './components/pledge/pledge.component';
 import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
 import { ClaimStorageComponent } from './components/claim-storage/claim-storage.component';
+import { ClaimStorageLoginComponent } from './components/claim-storage-login/claim-storage-login.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'claim',
         component: ClaimStorageComponent
+      },
+      {
+        path: 'claimlogin',
+        component: ClaimStorageLoginComponent
       }
     ]
   }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { PledgeService } from '@pledge/services/pledge.service';
 import APP_CONFIG from '@root/app/app.config';
+import { AccountService } from '@shared/services/account/account.service';
 
 const stripe = window['Stripe']('pk_test_kGSsLxH88lyxBUp9Lluji2Rn');
 const elements = stripe.elements();
@@ -34,14 +35,16 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private pledgeService: PledgeService,
-    private router: Router
+    private router: Router,
+    private accountService: AccountService
   ) {
     this.initStripeElements();
+    const account = this.accountService.getAccount();
 
     this.pledgeForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [account ? account.primaryEmail : '', [Validators.required, Validators.email]],
       customDonationAmount: [''],
-      name: ['']
+      name: [account ? account.fullName : '', [Validators.required]]
     });
   }
 
@@ -106,7 +109,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 
     this.waiting = true;
 
-    const stripeResult = await stripe.createToken(this.stripeElementsCard);
+    const stripeResult = await stripe.createToken(this.stripeElementsCard, {
+      name: formValue.name
+    });
 
     if (stripeResult.error) {
       this.waiting = false;
@@ -133,14 +138,12 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     this.pledgeForm.reset();
 
     const storageAmount = Math.floor(pledge.dollarAmount / this.pricePerGb);
-
-
-
-    this.router.navigate(['/pledge', 'claim'], { queryParams: {
-      name: pledge.name,
-      email: pledge.email,
-      storageAmount: Math.floor(pledge.dollarAmount / this.pricePerGb)
-    }});
+    const isLoggedIn = await this.accountService.isLoggedIn();
+    if (!isLoggedIn) {
+      this.router.navigate(['/pledge', 'claim']);
+    } else {
+      this.router.navigate(['/pledge', 'claimlogin']);
+    }
   }
 
   unfocusOnEnter(event: KeyboardEvent) {
@@ -159,4 +162,5 @@ export interface PledgeData {
   stripeToken?: string;
   timestamp?: number;
   accountId?: number;
+  claimed?: boolean;
 }

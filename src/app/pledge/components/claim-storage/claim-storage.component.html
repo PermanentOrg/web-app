@@ -1,7 +1,8 @@
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
   <h1 class="form-title">
-    Claim your {{storageAmount}}GB of storage
+    Claim {{pledge.dollarAmount / 10 | number:'1.0-0'}}GB of storage
   </h1>
+  <p>Create a permanent.org account to start using your storage today.</p>
   <div class="input-group-vertical">
     <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
       [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
@@ -26,8 +27,8 @@
         Send me occasional updates via email
       </label>
     </div> -->
-  <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
+  <button type="submit" class="btn btn-secondary" [disabled]="waiting || signupForm.invalid">
     Sign up
   </button>
-  <a [routerLink]="['/auth','login']">Already have an account?</a>
+  <a [routerLink]="['/pledge','claimlogin']">Already have an account?</a>
 </form>
