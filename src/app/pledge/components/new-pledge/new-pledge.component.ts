@@ -138,13 +138,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     });
     this.pledgeForm.reset();
 
-    this.message.showMessage('Pledge complete.', 'success');
-
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
       this.router.navigate(['/pledge', 'claim']);
     } else {
-      await this.pledgeService.linkAccount(this.accountService.getAccount());
       this.router.navigate(['/pledge', 'claimlogin']);
     }
     this.waiting = false;

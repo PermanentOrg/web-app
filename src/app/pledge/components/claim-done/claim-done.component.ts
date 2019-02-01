@@ -9,6 +9,8 @@ import { PledgeService } from '@pledge/services/pledge.service';
   styleUrls: ['./claim-done.component.scss']
 })
 export class ClaimDoneComponent implements OnInit {
+  public storageAmount: number;
+
   constructor(
     private accountService: AccountService,
     private router: Router,
@@ -20,10 +22,12 @@ export class ClaimDoneComponent implements OnInit {
     const loggedIn = await this.accountService.isLoggedIn();
 
     if (!loggedIn && this.pledgeService.currentPledge) {
-      this.router.navigate(['/pledge', 'claim']);
+      return this.router.navigate(['/pledge', 'claim']);
     } else if (!this.pledgeService.currentPledge) {
-      this.router.navigate(['/pledge']);
+      return this.router.navigate(['/pledge']);
     }
+
+    this.storageAmount = Math.floor(this.pledgeService.currentPledgeData.dollarAmount / 10);
   }
 
 }

@@ -40,9 +40,6 @@ import { IFrameService } from './services/iframe/iframe.service';
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
-  ],
-  providers: [
-    IFrameService
   ]
 })
 export class SharedModule {

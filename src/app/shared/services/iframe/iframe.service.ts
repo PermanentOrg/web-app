@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { throttle } from 'lodash';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class IFrameService {
   private sizeTarget: HTMLElement | any;
 
   private boundToResize = false;
+  public resizeOnly = false;
 
   public resizeIFrameThrottled = throttle(() => {
     this.resizeIFrame();

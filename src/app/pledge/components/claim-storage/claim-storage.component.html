@@ -1,8 +1,8 @@
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
   <h1 class="form-title">
-    Claim {{pledge.dollarAmount / 10 | number:'1.0-0'}}GB of storage
+    Thanks for your pledge!
   </h1>
-  <p>Create a permanent.org account to start using your storage today.</p>
+  <p>Create a permanent.org account to claim and start using your {{pledge.dollarAmount / 10 | number:'1.0-0'}}GB of storage today.</p>
   <div class="input-group-vertical">
     <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
       [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
@@ -10,8 +10,6 @@
       [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
     <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
       [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-    <!-- <pr-form-input type="password" fieldName="confirm" placeholder="Confirm password" [control]="signupForm.controls['confirm']"
-      [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off', validateDirty: true}"></pr-form-input> -->
   </div>
   <div class="form-check">
       <input class="form-check-input" type="checkbox" id="terms"
@@ -20,13 +18,6 @@
         I agree with the <a [routerLink]="['/terms']" target="_blank">terms</a> <strong> (required)</strong>
       </label>
     </div>
-    <!-- <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="mailingList"
-        formControlName="optIn">
-      <label class="form-check-label" for="mailingList">
-        Send me occasional updates via email
-      </label>
-    </div> -->
   <button type="submit" class="btn btn-secondary" [disabled]="waiting || signupForm.invalid">
     Sign up
   </button>

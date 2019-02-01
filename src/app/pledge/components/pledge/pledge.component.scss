@@ -4,8 +4,15 @@
   display: flex;
   padding: 20px;
   align-items: center;
+  opacity: 0;
+
   &:not(.no-bg) {
     background-color: $PR-blue;
+  }
+
+  &.visible {
+    opacity: 1;
+    transition: 0.5s opacity ease-in;
   }
 }
 
@@ -17,6 +24,7 @@
 .current-pledge-form {
   flex: 0 0 360px;
   margin-left: 20px;
+  color: white;
 }
 
 .pledge-progress-header {
