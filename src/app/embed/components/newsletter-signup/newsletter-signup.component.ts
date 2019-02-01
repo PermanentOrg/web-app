@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import APP_CONFIG from '@root/app/app.config';
+
+
+
 @Component({
   selector: 'pr-newsletter-signup',
   templateUrl: './newsletter-signup.component.html',
@@ -12,6 +16,7 @@ export class NewsletterSignupComponent implements OnInit {
   mailchimpForm: FormGroup;
   mailchimpError: string;
   mailchimpSent = false;
+  existingMember = false;
 
   waiting = false;
 
@@ -23,6 +28,15 @@ export class NewsletterSignupComponent implements OnInit {
   ) {
     this.mailchimpForm = fb.group({
       email: ['', [ Validators.required, Validators.email ]]
+    });
+
+    this.signupForm = fb.group({
+      invitation: ['permanent archive', [Validators.required]],
+      email: [this.mailchimpForm.value.email || '', [Validators.required, Validators.email]],
+      name: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
+      agreed: [false, [Validators.requiredTrue]],
+      optIn: [true]
     });
   }
 
@@ -39,7 +53,10 @@ export class NewsletterSignupComponent implements OnInit {
     const url = this.mailchimpEndpoint + params.toString().replace('+', '%2B');
     this.http.jsonp(url, 'c').subscribe((response: any) => {
         this.waiting = false;
-        if (response.result === 'error') {
+        if (response.msg.includes('already')) {
+          this.mailchimpSent = true;
+          this.existingMember = true;
+        } else if (response.result === 'error') {
           this.mailchimpError = response.msg;
         } else {
           this.mailchimpError = null;
