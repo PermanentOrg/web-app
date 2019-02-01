@@ -1,6 +1,6 @@
 <form [formGroup]="mailchimpForm" (submit)="onMailchimpSubmit(mailchimpForm.value)" *ngIf="!mailchimpSent">
   <div class="input-group-vertical">
-      <pr-form-input fieldName="email" placeholder="Email" [control]="mailchimpForm.controls['email']"
+      <pr-form-input fieldName="email" placeholder="Your email address" [control]="mailchimpForm.controls['email']"
         [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
   </div>
   <p class="error" [hidden]="!mailchimpError">{{mailchimpError}}</p>
@@ -9,9 +9,13 @@
   </button>
 </form>
 <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="mailchimpSent">
-  <p>
-    Thanks! Now create an account.
+  <p *ngIf="!existingMember">
+    Almost finished! Click the link in the email we just sent you to confirm your subscription.
   </p>
+  <p *ngIf="existingMember">
+    Thanks!
+  </p>
+  <p>Complete signup to create your free account.</p>
   <div class="input-group-vertical">
     <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
       [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
@@ -28,7 +32,7 @@
       </label>
     </div>
   <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
-    Sign up
+    Create a free account
   </button>
   <a href="/app">Already have an account?</a>
 </form>
