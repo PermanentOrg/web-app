@@ -1,0 +1,11 @@
+<form [formGroup]="mailchimpForm" (submit)="onMailchimpSubmit(mailchimpForm.value)" *ngIf="!mailchimpSent">
+    <pr-form-input fieldName="email" placeholder="Email" [control]="mailchimpForm.controls['email']"
+      [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <button class="btn btn-primary">
+      Sign up
+    </button>
+    <p>{{mailchimpError}}</p>
+</form>
+<p *ngIf="mailchimpSent">
+  ya freaking did it!
+</p>

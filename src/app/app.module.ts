@@ -8,7 +8,7 @@ import {
   UrlSerializer,
   UrlTree
 } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -52,6 +52,7 @@ export class CustomUrlSerializer implements UrlSerializer {
     AppRoutingModule,
     RouterModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     BrowserModule,
     DialogModule.forRoot()
   ],

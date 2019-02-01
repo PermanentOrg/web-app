@@ -5,10 +5,11 @@ import { NewPledgeComponent } from './components/new-pledge/new-pledge.component
 import { ClaimStorageComponent } from './components/claim-storage/claim-storage.component';
 import { ClaimStorageLoginComponent } from './components/claim-storage-login/claim-storage-login.component';
 import { ClaimDoneComponent } from './components/claim-done/claim-done.component';
+import { PledgeListComponent } from './components/pledge-list/pledge-list.component';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'pledge',
     component: PledgeComponent,
     children: [
       {
@@ -28,6 +29,14 @@ export const routes: Routes = [
         component: ClaimDoneComponent
       }
     ]
+  },
+  {
+    path: 'pledgeList',
+    component: PledgeListComponent
+  },
+  {
+    path: '',
+    redirectTo: 'pledge'
   }
 ];
 @NgModule({
