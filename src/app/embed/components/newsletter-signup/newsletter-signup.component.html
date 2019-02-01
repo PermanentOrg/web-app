@@ -13,10 +13,10 @@
     Thanks! Now create an account.
   </p>
   <div class="input-group-vertical">
-    <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
-      [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
     <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
       [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
+      [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
     <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
       [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
   </div>
@@ -30,5 +30,5 @@
   <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
     Sign up
   </button>
-  <a [routerLink]="['/embed','login']">Already have an account?</a>
+  <a href="/app">Already have an account?</a>
 </form>

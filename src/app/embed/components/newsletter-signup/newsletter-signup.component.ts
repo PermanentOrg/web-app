@@ -32,7 +32,7 @@ export class NewsletterSignupComponent implements OnInit {
 
     this.signupForm = fb.group({
       invitation: ['permanent archive', [Validators.required]],
-      email: [this.mailchimpForm.value.email || '', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
       agreed: [false, [Validators.requiredTrue]],
@@ -53,6 +53,9 @@ export class NewsletterSignupComponent implements OnInit {
     const url = this.mailchimpEndpoint + params.toString().replace('+', '%2B');
     this.http.jsonp(url, 'c').subscribe((response: any) => {
         this.waiting = false;
+        this.signupForm.patchValue({
+          email: formValue.email
+        });
         if (response.msg.includes('already')) {
           this.mailchimpSent = true;
           this.existingMember = true;
