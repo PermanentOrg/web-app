@@ -48,8 +48,11 @@ export class LeftMenuComponent implements OnInit, OnChanges {
   hide(event: Event) {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
-    event.stopPropagation();
-    return false;
+
+    if (!(event.target as HTMLElement).getAttribute('href')) {
+      event.stopPropagation();
+      return false;
+    }
   }
 
   logOut() {
