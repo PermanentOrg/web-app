@@ -9,6 +9,13 @@ import { CountUpModule } from 'countup.js-angular2';
 import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
+import { PledgeService } from './services/pledge.service';
+import { ClaimStorageLoginComponent } from './components/claim-storage-login/claim-storage-login.component';
+import { ClaimDoneComponent } from './components/claim-done/claim-done.component';
+import { PledgeComponent } from './components/pledge/pledge.component';
+import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
+import { ClaimStorageComponent } from './components/claim-storage/claim-storage.component';
+import { PledgeListComponent } from './components/pledge-list/pledge-list.component';
 
 @NgModule({
   imports: [
@@ -20,6 +27,17 @@ import { NewPledgeComponent } from './components/new-pledge/new-pledge.component
     PledgeRoutingModule,
     CountUpModule
   ],
-  declarations: []
+  providers: [
+    PledgeService
+  ],
+  declarations: [
+    PledgeComponent,
+    PhaseProgressComponent,
+    NewPledgeComponent,
+    ClaimStorageComponent,
+    ClaimStorageLoginComponent,
+    ClaimDoneComponent,
+    PledgeListComponent
+  ]
 })
 export class PledgeModule { }

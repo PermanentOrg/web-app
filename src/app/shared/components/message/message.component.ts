@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 interface Message {
   text: string;
@@ -19,13 +20,17 @@ export class MessageComponent implements OnInit {
   navigateTo: string[];
   navigateParams: any;
   visible: boolean;
-  useFade = !!window.frameElement;
+  useFade = this.iFrame.isIFrame();
   style: string;
   queue: Message[] = [];
 
   private displayTime = 3000;
 
-  constructor(private service: MessageService, private router: Router) {
+  constructor(
+    private service: MessageService,
+    private router: Router,
+    private iFrame: IFrameService
+  ) {
     this.service.registerComponent(this);
   }
 

@@ -1,6 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, HostBinding, ElementRef, OnDestroy } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+
+import APP_CONFIG from '@root/app/app.config';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 export interface ProgressData {
   activePhase: number;
@@ -14,8 +19,9 @@ export interface ProgressData {
   templateUrl: './pledge.component.html',
   styleUrls: ['./pledge.component.scss']
 })
-export class PledgeComponent implements OnInit {
+export class PledgeComponent implements OnInit, OnDestroy {
   @HostBinding('class.no-bg') noBackground = false;
+  @HostBinding('class.visible') visible = false;
 
   public currentProgress: ProgressData = {
     activePhase: 1,
@@ -58,22 +64,33 @@ export class PledgeComponent implements OnInit {
     decimal: '.'
   };
 
+  public pricePerGb = APP_CONFIG.pricePerGb;
 
   constructor(
     private db: AngularFireDatabase,
-    private route: ActivatedRoute
-  ) { 
+    private route: ActivatedRoute,
+    public iFrame: IFrameService,
+    private elementRef: ElementRef,
+    private router: Router
+  ) {
     db.list('/progress', ref => ref.orderByKey().limitToLast(1)).valueChanges()
       .subscribe((listValue) => {
-        if(listValue.length){
+        if (listValue.length) {
           this.previousProgress = this.currentProgress;
           this.currentProgress = listValue.pop() as ProgressData;
         }
       });
-    
     this.noBackground = this.route.snapshot.queryParams.wordpress !== undefined;
   }
 
   ngOnInit() {
+    this.iFrame.setSizeTarget(this.elementRef.nativeElement);
+    setTimeout(() => {
+      this.visible = true;
+    });
+  }
+
+  ngOnDestroy() {
+    this.iFrame.reset();
   }
 }

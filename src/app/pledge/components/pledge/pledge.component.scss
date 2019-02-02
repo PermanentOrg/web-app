@@ -2,11 +2,17 @@
 
 :host {
   display: flex;
-  min-height: 100vh;
   padding: 20px;
   align-items: center;
+  opacity: 0;
+
   &:not(.no-bg) {
     background-color: $PR-blue;
+  }
+
+  &.visible {
+    opacity: 1;
+    transition: 0.5s opacity ease-in;
   }
 }
 
@@ -15,9 +21,10 @@
   color: white;
 }
 
-pr-new-pledge {
+.current-pledge-form {
   flex: 0 0 360px;
   margin-left: 20px;
+  color: white;
 }
 
 .pledge-progress-header {
@@ -44,18 +51,19 @@ pr-new-pledge {
   :host {
     justify-items: normal;
     flex-wrap: wrap;
+    padding: 20px 0px;
   }
 
   .pledge-progress-header {
     font-size: 1.2rem;
   }
 
-  .progress, pr-new-pledge {
+  .progress, .current-pledge-form {
     flex: 0 0 100%;
     margin-bottom: 20px;
   }
 
-  pr-new-pledge {
+  .current-pledge-form {
     max-width: 400px;
     margin: 0 auto;
   }

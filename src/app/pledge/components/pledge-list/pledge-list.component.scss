@@ -1,0 +1,32 @@
+@import 'variables';
+
+:host {
+  color: white;
+  display: block;
+  padding: 60px;
+  background: $PR-blue;
+}
+
+@keyframes new-pledge {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pledge {
+  font-size: 18px;
+  animation: new-pledge 2s ease-in-out;
+  margin-bottom: 10px;
+
+  .amount {
+    font-weight: 700;
+  }
+
+  .name {
+    font-weight: 400;
+  }
+}
+

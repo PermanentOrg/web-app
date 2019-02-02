@@ -1,0 +1,32 @@
+<form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit(loginForm.value)" *ngIf="!loggedIn && !needsMfa">
+  <h1 class="form-title">
+    Log in to Permanent.org to claim your storage
+  </h1>
+  <div class="input-group-vertical">
+    <pr-form-input type="email" fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
+      [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input type="password" fieldName="password" placeholder="Password" [control]="loginForm.controls['password']"
+      [config]="{autocomplete: 'current-password'}"></pr-form-input>
+  </div>
+  <button type="submit" class="btn btn-secondary" [disabled]="waiting || loginForm.invalid">Log in</button>
+  <a [routerLink]="['/pledge','claim']">
+    Need to sign up?
+  </a>
+</form>
+<form [formGroup]="mfaForm" (ngSubmit)="onMfaSubmit(mfaForm.value)" *ngIf="needsMfa">
+  <h1 class="form-title">
+    Verify Access
+  </h1>
+  <p>
+    A verification code has been sent to your email address.
+    <br>
+    <br>
+    Enter it below to continue.
+  </p>
+  <input type="tel" class="form-control" id="token" placeholder="Code"
+    [formControl]="mfaForm.controls['token']"
+    autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <button type="submit" class="btn btn-secondary" [disabled]="waiting">Verify Access</button>
+</form>
+<button class="btn btn-secondary" (click)="claimStorage()" *ngIf="loggedIn" [disabled]="waiting">Claim storage</button>
+<button class="btn btn-danger" *ngIf="loggedIn" (click)="logOut()" [disabled]="waiting">Use a different account</button>

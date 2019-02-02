@@ -18,7 +18,8 @@ button {
   transition: $input-transition;
   border: $input-border-width solid $input-border-color;
   border-top: 0px;
-  border-radius: $input-border-radius;
+  border-bottom-left-radius: $input-border-radius;
+  border-bottom-right-radius: $input-border-radius;
 }
 
 .StripeElement--focus:not(.ng-invalid) {
@@ -38,10 +39,12 @@ button {
   overflow: hidden;
   border-radius: 0.25rem;
 
+
   .pledge-button {
     padding: 0.85rem 0;
     line-height: 1.5;
     flex: 1 1 auto;
+    flex-wrap: wrap;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,6 +54,14 @@ button {
     cursor: pointer;
     user-select: none;
     transition: $btn-transition;
+
+    span {
+      font-weight: 300;
+      font-size: 80%;
+      flex: 0 0 100%;
+      text-align: center;
+      line-height: 1.2;
+    }
 
     &:hover {
       transition: $btn-transition;
@@ -74,6 +85,28 @@ button {
       &::-webkit-inner-spin-button,
       &::-webkit-outer-spin-button {
         appearance: none;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 0.5rem 0;
+    }
+
+    @media screen and (max-width: 350px) {
+      input {
+        width: 3em;
+      }
+    }
+
+    @media screen and (max-width: 300px) {
+      input {
+        width: 2em;
+      }
+    }
+
+    @media screen and (max-width: 250px) {
+      input {
+        width: 1.2em;
       }
     }
   }

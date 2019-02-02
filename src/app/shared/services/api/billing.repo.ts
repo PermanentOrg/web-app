@@ -23,6 +23,18 @@ export class BillingRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/billing/processPayment', data, BillingResponse);
   }
+
+  public claimPledge(billingPaymentVO: BillingPaymentVO, pledgeId: string) {
+    const data = [{
+      BillingPaymentVO: billingPaymentVO,
+      SimpleVO: {
+        key: 'pledgeId',
+        value: pledgeId
+      }
+    }];
+
+    return this.http.sendRequestPromise('/billing/claimPledge', data, BillingResponse);
+  }
 }
 
 export class BillingResponse extends BaseResponse {
