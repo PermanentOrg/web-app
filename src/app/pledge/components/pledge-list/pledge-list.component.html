@@ -1,0 +1,5 @@
+<h3>Pledges</h3>
+<div class="pledge" *ngFor="let pledge of pledges | async">
+  <div class="amount">{{pledge.dollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
+  <div class="name">{{pledge.name}}</div>
+</div>

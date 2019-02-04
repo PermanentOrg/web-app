@@ -8,7 +8,7 @@ import {
   UrlSerializer,
   UrlTree
 } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -21,6 +21,8 @@ import { AppRoutingModule } from '@root/app/app.routes';
 import { AppComponent } from '@root/app/app.component';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { DialogModule } from './dialog/dialog.module';
+
+declare var ga: any;
 
 @Injectable()
 export class CustomUrlSerializer implements UrlSerializer {
@@ -52,6 +54,7 @@ export class CustomUrlSerializer implements UrlSerializer {
     AppRoutingModule,
     RouterModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     BrowserModule,
     DialogModule.forRoot()
   ],
@@ -59,7 +62,7 @@ export class CustomUrlSerializer implements UrlSerializer {
   ],
   declarations: [
     AppComponent,
-    MessageComponent
+    MessageComponent,
   ],
   providers: [
     CookieService,
@@ -95,6 +98,14 @@ export class AppModule {
       } else {
         this.title.setTitle(`${currentTitle} | Permanent.org`);
       }
+
+      if ('ga' in window) {
+        const tracker = ga.getAll()[0];
+        if (tracker) {
+          tracker.send('pageview', { page: location.pathname });
+        }
+      }
+
     });
   }
 }

@@ -1,0 +1,17 @@
+@import 'variables';
+
+.error {
+  color: $danger;
+}
+
+p {
+  color: white;
+}
+
+form {
+  color: white !important;
+
+  a {
+    color: white;
+  }
+}
