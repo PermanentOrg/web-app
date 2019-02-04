@@ -18,8 +18,9 @@ button {
   transition: $input-transition;
   border: $input-border-width solid $input-border-color;
   border-top: 0px;
-  border-bottom-left-radius: $input-border-radius;
-  border-bottom-right-radius: $input-border-radius;
+  border-bottom: 0px;
+  // border-bottom-left-radius: $input-border-radius;
+  // border-bottom-right-radius: $input-border-radius;
 }
 
 .StripeElement--focus:not(.ng-invalid) {
@@ -32,6 +33,10 @@ button {
   border-radius: 0.25rem;
   background-color: white;
   overflow: hidden;
+}
+
+.input-vertical.checkbox {
+  font-size: 85%;
 }
 
 .pledge-buttons {
