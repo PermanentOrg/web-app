@@ -21,6 +21,7 @@ export interface ProgressData {
 })
 export class PledgeComponent implements OnInit, OnDestroy {
   @HostBinding('class.no-bg') noBackground = false;
+  @HostBinding('class.for-light-bg') forLightBg = false;
   @HostBinding('class.visible') visible = false;
 
   public currentProgress: ProgressData = {
@@ -81,6 +82,7 @@ export class PledgeComponent implements OnInit, OnDestroy {
         }
       });
     this.noBackground = this.route.snapshot.queryParams.wordpress !== undefined;
+    this.forLightBg = this.route.snapshot.queryParams.wordpress === 'forLightBg';
   }
 
   ngOnInit() {
