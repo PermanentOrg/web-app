@@ -46,7 +46,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     this.pledgeForm = this.fb.group({
       email: [account ? account.primaryEmail : '', [Validators.required, Validators.email]],
       customDonationAmount: [''],
-      name: [account ? account.fullName : '', [Validators.required]]
+      name: [account ? account.fullName : '', [Validators.required]],
+      anonymous: [false]
     });
   }
 
@@ -128,9 +129,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
       name: formValue.name,
       stripeToken: stripeResult.token.id,
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      anonymous: formValue.anonymous
     };
-
+    
     await this.pledgeService.createPledge(pledge);
     this.pledgeForm.patchValue({
       email: null,
@@ -164,4 +166,5 @@ export interface PledgeData {
   timestamp?: number;
   accountId?: number;
   claimed?: boolean;
+  anonymous?: boolean;
 }
