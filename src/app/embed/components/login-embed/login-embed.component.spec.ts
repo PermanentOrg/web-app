@@ -5,21 +5,21 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { SignupEmbedComponent } from '@embed/components/signup-embed/signup-embed.component';
+import { LoginEmbedComponent } from '@embed/components/login-embed/login-embed.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 
-describe('SignupEmbedComponent', () => {
-  let component: SignupEmbedComponent;
-  let fixture: ComponentFixture<SignupEmbedComponent>;
+fdescribe('LoginEmbedComponent', () => {
+  let component: LoginEmbedComponent;
+  let fixture: ComponentFixture<LoginEmbedComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        SignupEmbedComponent,
+        LoginEmbedComponent,
         FormInputComponent
       ],
       imports: [
@@ -48,7 +48,7 @@ describe('SignupEmbedComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SignupEmbedComponent);
+    fixture = TestBed.createComponent(LoginEmbedComponent);
 
     const accountService = TestBed.get(AccountService) as AccountService;
     accountService.clearAccount();
@@ -62,103 +62,52 @@ describe('SignupEmbedComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fill invite from URL param', () => {
-    expect(component.signupForm.value.invitation).toBe('invite');
-  });
-
-  it('should set error for missing invitation code', () => {
-    component.signupForm.get('invitation').markAsTouched();
-    component.signupForm.patchValue({
-      invitation: '',
-      email: TEST_DATA.user.email,
-      name: TEST_DATA.user.name,
-      password: TEST_DATA.user.password,
-      confirm: TEST_DATA.user.password
-    });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('invitation').errors.required).toBeTruthy();
-  });
-
   it('should set error for missing email', () => {
-    component.signupForm.get('email').markAsTouched();
-    component.signupForm.patchValue({
-      invitation: 'invite',
+    component.loginForm.get('email').markAsTouched();
+    component.loginForm.patchValue({
       email: '',
-      name: TEST_DATA.user.name,
       password: TEST_DATA.user.password,
-      confirm: TEST_DATA.user.password
     });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('email').errors.required).toBeTruthy();
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('email').errors.required).toBeTruthy();
   });
 
   it('should set error for invalid email', () => {
-    component.signupForm.get('email').markAsTouched();
-    component.signupForm.patchValue({
+    component.loginForm.get('email').markAsTouched();
+    component.loginForm.patchValue({
       email: 'lasld;f;aslkj'
     });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('email').errors.email).toBeTruthy();
-  });
-
-  it('should set error for missing name', () => {
-    component.signupForm.get('name').markAsTouched();
-    component.signupForm.patchValue({
-      name: ''
-    });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('name').errors.required).toBeTruthy();
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('email').errors.email).toBeTruthy();
   });
 
   it('should set error for missing password', () => {
-    component.signupForm.get('password').markAsTouched();
-    component.signupForm.get('confirm').markAsTouched();
-    component.signupForm.patchValue({
-      invitation: 'invite',
+    component.loginForm.get('password').markAsTouched();
+    component.loginForm.patchValue({
       email: TEST_DATA.user.email,
-      name: TEST_DATA.user.name,
       password: null,
-      confirm: null
     });
     fixture.whenStable().then(() => {
-      expect(component.signupForm.invalid).toBeTruthy();
-      expect(component.signupForm.get('password').errors.required).toBeTruthy();
-      expect(component.signupForm.get('confirm').errors.required).toBeTruthy();
+      expect(component.loginForm.invalid).toBeTruthy();
+      expect(component.loginForm.get('password').errors.required).toBeTruthy();
     });
   });
 
   it('should set invalid for too short password', () => {
-    component.signupForm.get('password').markAsTouched();
-    component.signupForm.get('confirm').markAsTouched();
-    component.signupForm.patchValue({
-      password: 'ass',
-      confirm: 'ass'
+    component.loginForm.get('password').markAsTouched();
+    component.loginForm.patchValue({
+      password: 'ass'
     });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('password').errors.minlength).toBeTruthy();
-  });
-
-  it('should set invalid for mismatched password', () => {
-    component.signupForm.get('password').markAsTouched();
-    component.signupForm.patchValue({
-      password: 'longenough',
-      confirm: 'longenougher'
-    });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('confirm').errors.mismatch).toBeTruthy();
+    expect(component.loginForm.invalid).toBeTruthy();
+    expect(component.loginForm.get('password').errors.minlength).toBeTruthy();
   });
 
   it('should have no errors when email and password valid', () => {
-    component.signupForm.markAsTouched();
-    component.signupForm.patchValue({
-      optIn: false,
-      agreed: true,
-      name: TEST_DATA.user.name,
-      invitation: 'perm',
+    component.loginForm.markAsTouched();
+    component.loginForm.patchValue({
       email: TEST_DATA.user.email,
       password: TEST_DATA.user.password,
-      confirm: TEST_DATA.user.password
     });
-    expect(component.signupForm.valid).toBeTruthy();
+    expect(component.loginForm.valid).toBeTruthy();
   });
 });

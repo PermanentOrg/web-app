@@ -7,11 +7,11 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
 
 @Component({
-  selector: 'pr-verify',
-  templateUrl: './verify-embed.component.html',
-  styleUrls: ['./verify-embed.component.scss']
+  selector: 'pr-mfa',
+  templateUrl: './mfa-embed.component.html',
+  styleUrls: ['./mfa-embed.component.scss']
 })
-export class VerifyEmbedComponent implements OnInit {
+export class MfaEmbedComponent implements OnInit {
   verifyForm: FormGroup;
   waiting: boolean;
 
@@ -27,15 +27,16 @@ export class VerifyEmbedComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.verifyEmail(formValue.token)
+    this.accountService.verifyMfa(formValue.token)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
       .then((response: ArchiveResponse) => {
         this.waiting = false;
+        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
         this.router.navigate(['/embed', 'done']);
       })
-      .catch((response: ArchiveResponse | AccountResponse) => {
+      .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
         this.message.showError(response.getMessage(), true);
       });

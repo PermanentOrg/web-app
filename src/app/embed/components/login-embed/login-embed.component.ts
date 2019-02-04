@@ -11,26 +11,24 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 
 import * as FormUtilities from '@shared/utilities/forms';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 @Component({
-  selector: 'pr-signup',
-  templateUrl: './signup-embed.component.html',
-  styleUrls: ['./signup-embed.component.scss'],
+  selector: 'pr-login',
+  templateUrl: './login-embed.component.html',
+  styleUrls: ['./login-embed.component.scss'],
   host: {'class': 'pr-auth-form'}
 })
-export class SignupEmbedComponent implements OnInit {
-  signupForm: FormGroup;
+export class LoginEmbedComponent implements OnInit {
+  loginForm: FormGroup;
   waiting: boolean;
   inviteCode: string;
 
   formErrors = {
-    name: false,
-    invitation: false,
     email: false,
-    password: false,
-    confirm: false
+    password: false
   };
 
   constructor(
@@ -38,57 +36,59 @@ export class SignupEmbedComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
-    private message: MessageService
+    private message: MessageService,
+    private iFrame: IFrameService
   ) {
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams.invite) {
       this.inviteCode = queryParams.invite;
     }
 
-    this.signupForm = fb.group({
-      invitation: [this.inviteCode ? this.inviteCode : '', [Validators.required]],
+    this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
-      name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-      agreed: [false, [Validators.requiredTrue]],
-      optIn: [true]
+      rememberMe: [true],
+      keepLoggedIn: [true]
     });
-
-    const confirmPasswordControl = new FormControl('',
-    [
-      Validators.required,
-      matchControlValidator(this.signupForm.controls['password'])
-    ]);
-    this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
   ngOnInit() {
     const currentAccount = this.accountService.getAccount();
     if (currentAccount && currentAccount.primaryEmail) {
-      this.router.navigate(['/embed', 'done'], {queryParams: { existing: true, inviteCode: this.inviteCode }});
+      // this.router.navigate(['/embed', 'done'], {queryParams: { existing: true, inviteCode: this.inviteCode }});
     }
   }
 
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.signUp(
-      formValue.email, formValue.name, formValue.password, formValue.confirm,
-      formValue.agreed, formValue.optIn, null, formValue.invitation
-    ).then((response: AccountResponse) => {
-        const account = response.getAccountVO();
-        if (account.needsVerification()) {
-          this.router.navigate(['/embed', 'verify']);
+    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
+      .then((response: AuthResponse) => {
+        if (response.needsMFA()) {
+          this.router.navigate(['/embed', 'mfa'])
+            .then(() => {
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+            });
+        } else if (response.needsVerification()) {
+          this.router.navigate(['/embed', 'verify'])
+            .then(() => {
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+            });
         } else {
-          this.accountService.logIn(formValue.email, formValue.password, true, true)
-          .then(() => {
-            this.router.navigate(['/embed', 'done'], {queryParams: { inviteCode: this.inviteCode }});
-          });
+          this.iFrame.setParentUrl('/app');
         }
       })
-      .catch((response: AccountResponse) => {
-        this.message.showError(response.getMessage(), true);
+      .catch((response: AuthResponse) => {
         this.waiting = false;
+
+        if (response.messageIncludes('warning.signin.unknown')) {
+          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.loginForm.patchValue({
+            password: ''
+          });
+        } else {
+          this.message.showMessage('Log in failed. Please try again.', 'danger');
+        }
       });
   }
 
