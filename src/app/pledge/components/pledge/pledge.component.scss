@@ -14,6 +14,12 @@
     opacity: 1;
     transition: 0.5s opacity ease-in;
   }
+
+  &.for-light-bg {
+    .progress, .current-pledge-form {
+      color:black;
+    }
+  }
 }
 
 .progress {
@@ -29,12 +35,12 @@
 
 .pledge-progress-header {
   font-size: 2rem;
-  text-shadow: $wordpress-shadow;
+  // text-shadow: $wordpress-shadow;
 }
 
 .pledge-progress-details {
   display: flex;
-  text-shadow: $wordpress-shadow;
+  // text-shadow: $wordpress-shadow;
   .pledge-progress-detail {
     font-size: 1rem;
     flex: 0 1 10rem;
