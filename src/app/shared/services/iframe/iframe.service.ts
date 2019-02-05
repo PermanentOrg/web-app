@@ -51,4 +51,8 @@ export class IFrameService {
     this.boundToResize = false;
     window.removeEventListener('resize', this.resizeIFrameThrottled);
   }
+
+  setParentUrl(targetUrl) {
+    window.parent.location.href = targetUrl;
+  }
 }
