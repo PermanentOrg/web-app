@@ -2,7 +2,7 @@
 
 :host {
   display: block;
-  padding: 20px;
+  padding: 0px;
 }
 
 @keyframes new-pledge {
@@ -18,44 +18,31 @@
   display: table;
   table-layout: fixed;
   width: 100%;
+  padding-top: 85px;
 }
 
 
 .pledge {
-  font-size: 18px;
-  margin-bottom: 10px;
-  display: table-row;
   width: 100%;
+  padding: 10px;
 
-  > * {
-    display: table-cell;
-    padding: 5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: top;
-    word-break: keep-all;
-    word-wrap: none;
-    white-space: nowrap;
+  &.new {
+    animation: new-pledge 2s ease-in;
   }
 
   .amount {
     font-weight: 700;
-    text-align: center;
-    width: 5em;
+    font-size: 120%;
   }
 
   .name {
     font-weight: 400;
-    min-width: 10em;
+    max-width: 100%;
   }
 
-  .location {
-    width: auto;
-  }
-  
-  .date {
-    max-width: 10em;
-    text-align: right;
+  .bottom {
+    color: $gray-700;
+    font-size: 80%;
   }
 }
 
@@ -63,7 +50,9 @@
   display: flex;
   padding: 15px;
   background: $gray-300;
-  
+  width: 100%;
+  position: fixed;
+
   label {
     margin-right: 10px;
     margin-bottom: 0px;

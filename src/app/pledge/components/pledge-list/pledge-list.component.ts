@@ -24,7 +24,7 @@ export class PledgeListComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    const current = (await this.db.database.ref('/publicPledges').limitToLast(20).once('value')).val();
+    const current = (await this.db.database.ref('/publicPledges').limitToLast(100).once('value')).val();
 
     for (const pledgeId in current) {
       if (current.hasOwnProperty(pledgeId)) {
@@ -40,23 +40,27 @@ export class PledgeListComponent implements OnInit, OnDestroy {
     this.newPledgeListener = this.newPledgeRef.on('child_added', snapshot => {
       this.zone.run(() => {
         const newPledge = snapshot.val();
-        this.pledgesByNew.unshift(newPledge);
-        this.pledgesByAmount.push(newPledge);
-        this.sortAmountArray();
-      })
+        this.addPledge(newPledge);
+      });
     });
+  }
+
+  addPledge(newPledge) {
+    newPledge.new = true;
+    this.pledgesByNew.unshift(newPledge);
+    this.pledgesByAmount.push(newPledge);
+    this.sortAmountArray();
   }
 
   sortAmountArray() {
     this.pledgesByAmount.sort((a, b) => b.dollarAmount - a.dollarAmount);
   }
 
-  setSort(array) {
-    this.pledges = array;
+  setSort(event) {
+    this.pledges = this[event.target.value];
   }
 
   ngOnDestroy(): void {
     this.newPledgeRef.off('child_added', this.newPledgeListener);
   }
-
 }
