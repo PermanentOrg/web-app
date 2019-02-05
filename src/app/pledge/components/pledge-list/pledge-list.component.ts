@@ -24,7 +24,7 @@ export class PledgeListComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    const current = (await this.db.database.ref('/publicPledges').limitToLast(100).once('value')).val();
+    const current = (await this.db.database.ref('/publicPledges').limitToLast(20).once('value')).val();
 
     for (const pledgeId in current) {
       if (current.hasOwnProperty(pledgeId)) {
