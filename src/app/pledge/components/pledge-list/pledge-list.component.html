@@ -1,5 +1,15 @@
-<h3>Pledges</h3>
-<div class="pledge" *ngFor="let pledge of pledges | async">
-  <div class="amount">{{pledge.dollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
-  <div class="name">{{pledge.name}}</div>
+<div class="pledge-list-sort">
+  <label>Sort by</label>
+  <div class="pledge-list-sort-option" (click)="setSort(pledgesByNew)"
+    [ngClass]="{'active': pledges === pledgesByNew}">Recent</div>
+  <div class="pledge-list-sort-option" (click)="setSort(pledgesByAmount)"
+    [ngClass]="{'active': pledges === pledgesByAmount}">Amount</div>
+</div>
+<div class="pledge-list">
+  <div class="pledge" *ngFor="let pledge of pledges">
+    <div class="name">{{pledge.name}}</div>
+    <div class="amount">{{pledge.dollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
+    <div class="location">{{pledge.location}}</div>
+    <div class="date">{{pledge.timestamp | date}}</div>
+  </div>
 </div>
