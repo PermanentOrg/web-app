@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { CountUpModule } from 'countup.js-angular2';
+import { TimeAgoPipe } from 'time-ago-pipe';
 import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
@@ -25,7 +26,7 @@ import { PledgeListComponent } from './components/pledge-list/pledge-list.compon
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     PledgeRoutingModule,
-    CountUpModule
+    CountUpModule,
   ],
   providers: [
     PledgeService
@@ -37,7 +38,8 @@ import { PledgeListComponent } from './components/pledge-list/pledge-list.compon
     ClaimStorageComponent,
     ClaimStorageLoginComponent,
     ClaimDoneComponent,
-    PledgeListComponent
+    PledgeListComponent,
+    TimeAgoPipe
   ]
 })
 export class PledgeModule { }

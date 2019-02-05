@@ -43,6 +43,7 @@
     "ngx-cookie-service": "^1.0.10",
     "progressbar.js": "^1.0.1",
     "rxjs": "^6.3.3",
+    "time-ago-pipe": "^1.3.2",
     "zone.js": "^0.8.27"
   },
   "devDependencies": {

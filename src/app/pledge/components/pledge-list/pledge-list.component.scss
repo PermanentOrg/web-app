@@ -18,45 +18,31 @@
   display: table;
   table-layout: fixed;
   width: 100%;
-  padding-top: 55px;
+  padding-top: 85px;
 }
 
 
 .pledge {
-  font-size: 13px;
-  margin-bottom: 10px;
-  display: table-row;
   width: 100%;
+  padding: 10px;
 
-  > * {
-    display: table-cell;
-    padding: 5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: top;
-    word-break: keep-all;
-    word-wrap: none;
-    white-space: nowrap;
+  &.new {
+    animation: new-pledge 2s ease-in;
   }
 
   .amount {
     font-weight: 700;
-    text-align: center;
-    width: 5em;
+    font-size: 120%;
   }
 
   .name {
     font-weight: 400;
-    min-width: 10em;
+    max-width: 100%;
   }
 
-  .location {
-    width: auto;
-  }
-  
-  .date {
-    width: 4em;
-    text-align: right;
+  .bottom {
+    color: $gray-700;
+    font-size: 80%;
   }
 }
 
