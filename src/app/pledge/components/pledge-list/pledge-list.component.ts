@@ -50,6 +50,9 @@ export class PledgeListComponent implements OnInit, OnDestroy {
     this.pledgesByNew.unshift(newPledge);
     this.pledgesByAmount.push(newPledge);
     this.sortAmountArray();
+    setTimeout(() => {
+      newPledge.new = false;
+    }, 5000);
   }
 
   sortAmountArray() {
