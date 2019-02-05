@@ -1,10 +1,8 @@
 @import 'variables';
 
 :host {
-  color: white;
   display: block;
-  padding: 60px;
-  background: $PR-blue;
+  padding: 20px;
 }
 
 @keyframes new-pledge {
@@ -18,7 +16,6 @@
 
 .pledge {
   font-size: 18px;
-  animation: new-pledge 2s ease-in-out;
   margin-bottom: 10px;
 
   .amount {
@@ -30,3 +27,27 @@
   }
 }
 
+.pledge-list-sort {
+  display: flex;
+  padding: 15px 0px;
+   
+  label {
+    margin-right: 10px;
+    margin-bottom: 0px;
+  }
+
+  .pledge-list-sort-option {
+    font-weight: 500;
+    flex: 1 1 auto;
+    text-align: center;
+    cursor: pointer;
+
+    &.active {
+      font-weight: 700;
+    }
+
+    &:not(.active):hover {
+      font-weight: 600;
+    }
+  }
+}

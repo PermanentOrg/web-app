@@ -129,6 +129,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
       name: formValue.name,
       stripeToken: stripeResult.token.id,
+      zip: stripeResult.token.card.address_zip,
       timestamp: new Date().getTime(),
       anonymous: formValue.anonymous
     };
@@ -167,4 +168,6 @@ export interface PledgeData {
   accountId?: number;
   claimed?: boolean;
   anonymous?: boolean;
+  zip?: string;
+  location?: string;
 }

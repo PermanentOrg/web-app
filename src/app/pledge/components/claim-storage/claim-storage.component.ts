@@ -31,10 +31,10 @@ export class ClaimStorageComponent implements OnInit {
     private accountService: AccountService,
     private pledgeService: PledgeService
   ) {
-    // if (!pledgeService.currentPledge) {
-    //   this.router.navigate(['/pledge']);
-    //   return this;
-    // }
+    if (!pledgeService.currentPledge) {
+      this.router.navigate(['/pledge']);
+      return this;
+    }
     this.pledge = pledgeService.currentPledgeData;
 
     this.signupForm = fb.group({
