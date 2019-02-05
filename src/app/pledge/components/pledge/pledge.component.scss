@@ -25,10 +25,12 @@
 .progress {
   flex: 1 1 50%;
   color: white;
+  min-width: 0%;
 }
 
 .current-pledge-form {
   flex: 0 0 360px;
+  min-width: 0%;
   margin-left: 20px;
   color: white;
 }
