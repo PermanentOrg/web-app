@@ -10,6 +10,6 @@
     <div class="name">{{pledge.name}}</div>
     <div class="amount">{{pledge.dollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
     <div class="location">{{pledge.location}}</div>
-    <div class="date">{{pledge.timestamp | date}}</div>
+    <div class="date">{{pledge.timestamp | date:'shortDate'}}</div>
   </div>
 </div>

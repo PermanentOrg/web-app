@@ -2,7 +2,7 @@
 
 :host {
   display: block;
-  padding: 20px;
+  padding: 0px;
 }
 
 @keyframes new-pledge {
@@ -18,11 +18,12 @@
   display: table;
   table-layout: fixed;
   width: 100%;
+  padding-top: 55px;
 }
 
 
 .pledge {
-  font-size: 18px;
+  font-size: 13px;
   margin-bottom: 10px;
   display: table-row;
   width: 100%;
@@ -54,7 +55,8 @@
   }
   
   .date {
-    max-width: 10em;
+    width: 4em;
+    opacity: 0.7;
     text-align: right;
   }
 }
@@ -63,7 +65,10 @@
   display: flex;
   padding: 15px;
   background: $gray-300;
-  
+  width: 100%;
+  position: fixed;
+  font-size: 14px;
+
   label {
     margin-right: 10px;
     margin-bottom: 0px;
