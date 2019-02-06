@@ -31,7 +31,7 @@ export class NewsletterSignupComponent implements OnInit {
     });
 
     this.signupForm = fb.group({
-      invitation: ['permanent archive', [Validators.required]],
+      invitation: [''],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
