@@ -12,7 +12,7 @@ import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 
-fdescribe('LoginEmbedComponent', () => {
+describe('LoginEmbedComponent', () => {
   let component: LoginEmbedComponent;
   let fixture: ComponentFixture<LoginEmbedComponent>;
 
