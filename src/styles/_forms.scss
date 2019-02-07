@@ -26,6 +26,19 @@ form {
   $transition-length: 0.1s;
   border-radius: 0.25rem;
   background: white;
+
+  &.round {
+    border-radius: 1.5rem;
+    .form-control {
+      border-radius: 1.5rem;
+      padding: $input-btn-padding-y + 0.2rem $input-btn-padding-x + 0.2rem;
+    }
+
+    .input-vertical-label {
+      left: $input-btn-padding-x + 0.2rem;
+      top: 0.2rem;
+    }
+  }
   
   select {
     -webkit-appearance: none;
