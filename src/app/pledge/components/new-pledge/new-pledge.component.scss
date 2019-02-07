@@ -116,3 +116,12 @@ button {
     }
   }
 }
+
+.input-vertical.checkbox {
+  img {
+    height: 20px;
+    float: right;
+  }
+
+  overflow: hidden;
+}
