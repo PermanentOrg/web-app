@@ -99,6 +99,10 @@ export class PhaseProgressComponent implements OnInit, OnChanges {
       to: {color: '#ED6A5A'}
     });
     this.redrawProgress();
+
+    setTimeout(() => {
+      this.visible = true;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

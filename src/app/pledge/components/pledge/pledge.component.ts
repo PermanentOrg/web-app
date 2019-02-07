@@ -23,6 +23,9 @@ export class PledgeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.visible = true;
+    });
   }
 
   ngOnDestroy() {
