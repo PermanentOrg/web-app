@@ -25,7 +25,7 @@
         I agree with the <a [routerLink]="['/terms']" target="_blank">terms</a> <strong> (required)</strong>
       </label>
     </div>
-  <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid" (click)="">
+  <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid" (click)="onSignupSubmit(signupForm.value)">
     Create a free account
   </button>
   <a href="/login">Already have an account?</a>
