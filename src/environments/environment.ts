@@ -8,12 +8,12 @@ export const environment = {
   apiUrl: 'https://local.permanent.org/api',
   hmr: false,
   firebase: {
-    apiKey: 'AIzaSyD-J4OOPSluilh9GSvslWtlJsFIoWXES44',
-    authDomain: 'prpledgetest.firebaseapp.com',
-    databaseURL: 'https://prpledgetest.firebaseio.com',
-    projectId: 'prpledgetest',
-    storageBucket: 'prpledgetest.appspot.com',
-    messagingSenderId: '4115520516'
+    apiKey: 'AIzaSyAThS43euMcSjPdDvtB9qM-9-diloP-eHE',
+    authDomain: 'prpledgedev.firebaseapp.com',
+    databaseURL: 'https://prpledgedev.firebaseio.com',
+    projectId: 'prpledgedev',
+    storageBucket: 'prpledgedev.appspot.com',
+    messagingSenderId: '248842011228'
   }
 };
 

@@ -1,5 +1,23 @@
 @import 'variables';
 
+:host {
+  padding: 20px;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+    transition: 0.5s opacity ease-in;
+  }
+
+  &.for-light-bg {
+    color:black;
+  }
+
+  &.for-dark-bg {
+    color: white;
+  }
+}
+
 .phase-progress {
   padding: 10px 0px;
 }
@@ -11,5 +29,53 @@
   background: rgba($gray-300, 0.5);
   border: 0px solid $PR-orange;
   overflow: hidden;
-  // box-shadow: $wordpress-shadow;
+}
+
+.pledge-progress-header {
+  font-size: 2rem;
+}
+
+.pledge-progress-details {
+  display: flex;
+  .pledge-progress-detail {
+    font-size: 1rem;
+    flex: 0 1 10rem;
+
+    .detail-heading {
+      font-weight: 600;
+      font-size: 1.3rem;
+      line-height: 1.1;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  :host {
+    padding: 20px 0px;
+  }
+
+  .pledge-progress-header {
+    font-size: 1.2rem;
+  }
+
+  .pledge-progress-details {
+    flex-wrap: wrap;
+  }
+
+  .pledge-progress-details .pledge-progress-detail {
+    flex: 0 0 100%;
+    line-height: 1.4;
+
+    .detail-heading {
+      font-weight: 600;
+      display: inline-block;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
 }

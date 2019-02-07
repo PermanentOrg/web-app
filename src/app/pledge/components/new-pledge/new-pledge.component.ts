@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -15,14 +15,14 @@ const elements = stripe.elements();
   templateUrl: './new-pledge.component.html',
   styleUrls: ['./new-pledge.component.scss']
 })
-export class NewPledgeComponent implements OnInit, AfterViewInit {
+export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   public waiting: boolean;
   public pledgeForm: FormGroup;
 
-  public donationLevels = [10, 50, 100];
+  public donationLevels = [10, 20, 50];
 
-  public donationSelection: any = 50;
-  public donationAmount = 50;
+  public donationSelection: any = 10;
+  public donationAmount = 10;
 
   public pricePerGb = 10;
 
@@ -32,6 +32,12 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   stripeElementsCard: any;
   cardError: any;
   cardComplete = false;
+
+  postMessageHandler = (event) => {
+    if (event.origin.includes('permanent.org') && event.data.event === 'pledgeClick') {
+      this.onPledgeClick(event.data.data);
+    }
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -48,6 +54,15 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       customDonationAmount: [''],
       name: [account ? account.fullName : '', [Validators.required]],
       anonymous: [false]
+    });
+
+    window.addEventListener('message', this.postMessageHandler);
+  }
+
+  onPledgeClick(amount: number) {
+    this.chooseDonationAmount('custom');
+    this.pledgeForm.patchValue({
+      customDonationAmount: amount
     });
   }
 
@@ -94,6 +109,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
     this.stripeElementsCard.mount(this.elementsContainer.nativeElement);
   }
 
+  getStorageAmount(donationAmount: number) {
+    return Math.floor(donationAmount / this.pricePerGb);
+  }
+
   chooseDonationAmount(amount: any) {
     this.donationSelection = amount;
     if(amount !== 'custom') {
@@ -129,6 +148,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
       name: formValue.name,
       stripeToken: stripeResult.token.id,
+      zip: stripeResult.token.card.address_zip,
       timestamp: new Date().getTime(),
       anonymous: formValue.anonymous
     };
@@ -156,6 +176,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       event.preventDefault();
     }
   }
+
+  ngOnDestroy() {
+    window.removeEventListener('message', this.postMessageHandler);
+  }
 }
 
 export interface PledgeData {
@@ -167,4 +191,6 @@ export interface PledgeData {
   accountId?: number;
   claimed?: boolean;
   anonymous?: boolean;
+  zip?: string;
+  location?: string;
 }

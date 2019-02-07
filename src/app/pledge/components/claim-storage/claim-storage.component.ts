@@ -31,10 +31,10 @@ export class ClaimStorageComponent implements OnInit {
     private accountService: AccountService,
     private pledgeService: PledgeService
   ) {
-    // if (!pledgeService.currentPledge) {
-    //   this.router.navigate(['/pledge']);
-    //   return this;
-    // }
+    if (!pledgeService.currentPledge) {
+      this.router.navigate(['/pledge']);
+      return this;
+    }
     this.pledge = pledgeService.currentPledgeData;
 
     this.signupForm = fb.group({
@@ -54,7 +54,7 @@ export class ClaimStorageComponent implements OnInit {
 
     this.accountService.signUp(
       formValue.email, formValue.name, formValue.password, formValue.password,
-      formValue.agreed, formValue.optIn, null, 'permanent archive'
+      formValue.agreed, formValue.optIn, null, null
     ).then(async (response: AccountResponse) => {
         const account = response.getAccountVO();
         await this.pledgeService.linkAccount(account);

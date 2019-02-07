@@ -1,10 +1,8 @@
 @import 'variables';
 
 :host {
-  color: white;
   display: block;
-  padding: 60px;
-  background: $PR-blue;
+  padding: 0px;
 }
 
 @keyframes new-pledge {
@@ -16,17 +14,63 @@
   }
 }
 
+.pledge-list {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  padding-top: 85px;
+}
+
+
 .pledge {
-  font-size: 18px;
-  animation: new-pledge 2s ease-in-out;
-  margin-bottom: 10px;
+  width: 100%;
+  padding: 10px;
+
+  &.new {
+    animation: new-pledge 2s ease-in;
+  }
 
   .amount {
     font-weight: 700;
+    font-size: 120%;
   }
 
   .name {
     font-weight: 400;
+    max-width: 100%;
+  }
+
+  .bottom {
+    color: $gray-700;
+    font-size: 80%;
   }
 }
 
+.pledge-list-sort {
+  display: flex;
+  padding: 15px;
+  background: $gray-300;
+  width: 100%;
+  position: fixed;
+
+  label {
+    margin-right: 10px;
+    margin-bottom: 0px;
+  }
+
+  .pledge-list-sort-option {
+    font-weight: 500;
+    flex: 0 1 auto;
+    text-align: center;
+    cursor: pointer;
+    padding: 0px 10px;
+
+    &.active {
+      font-weight: 700;
+    }
+
+    &:not(.active):hover {
+      font-weight: 600;
+    }
+  }
+}

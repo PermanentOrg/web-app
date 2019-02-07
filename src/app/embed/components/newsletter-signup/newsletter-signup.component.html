@@ -1,22 +1,16 @@
 <form [formGroup]="mailchimpForm" (submit)="onMailchimpSubmit(mailchimpForm.value)" *ngIf="!mailchimpSent">
-  <div class="input-group-vertical">
+  <div class="input-group-vertical round">
       <pr-form-input fieldName="email" placeholder="Your email address" [control]="mailchimpForm.controls['email']"
         [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
   </div>
   <p class="error" [hidden]="!mailchimpError">{{mailchimpError}}</p>
-  <button class="btn btn-primary" [disabled]="!mailchimpForm.valid || waiting">
+  <button class="btn btn-alternate" [disabled]="!mailchimpForm.valid || waiting">
     Sign up
   </button>
 </form>
 <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="mailchimpSent">
-  <p *ngIf="!existingMember">
-    Almost finished! Click the link in the email we just sent you to confirm your subscription.
-  </p>
-  <p *ngIf="existingMember">
-    Thanks!
-  </p>
   <p>Complete signup to create your free account.</p>
-  <div class="input-group-vertical">
+  <div class="input-group-vertical round">
     <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
       [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
     <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
@@ -31,8 +25,8 @@
         I agree with the <a [routerLink]="['/terms']" target="_blank">terms</a> <strong> (required)</strong>
       </label>
     </div>
-  <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
+  <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid" (click)="onSignupSubmit(signupForm.value)">
     Create a free account
   </button>
-  <a href="/app">Already have an account?</a>
+  <a href="/login">Already have an account?</a>
 </form>

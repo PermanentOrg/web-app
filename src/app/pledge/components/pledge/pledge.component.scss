@@ -2,13 +2,9 @@
 
 :host {
   display: flex;
-  padding: 20px;
-  align-items: center;
+  padding: 0px 0px;
+  justify-content: center;
   opacity: 0;
-
-  &:not(.no-bg) {
-    background-color: $PR-blue;
-  }
 
   &.visible {
     opacity: 1;
@@ -16,82 +12,19 @@
   }
 
   &.for-light-bg {
-    .progress, .current-pledge-form {
+    .current-pledge-form {
       color:black;
     }
   }
-}
 
-.progress {
-  flex: 1 1 50%;
-  color: white;
+  &.for-dark-bg {
+    .current-pledge-form {
+      color: white;
+    }
+  }
 }
 
 .current-pledge-form {
-  flex: 0 0 360px;
-  margin-left: 20px;
-  color: white;
-}
-
-.pledge-progress-header {
-  font-size: 2rem;
-  // text-shadow: $wordpress-shadow;
-}
-
-.pledge-progress-details {
-  display: flex;
-  // text-shadow: $wordpress-shadow;
-  .pledge-progress-detail {
-    font-size: 1rem;
-    flex: 0 1 10rem;
-
-    .detail-heading {
-      font-weight: 600;
-      font-size: 1.3rem;
-      line-height: 1.1;
-    }
-  }
-}
-
-@media screen and (max-width: 767px) {
-  :host {
-    justify-items: normal;
-    flex-wrap: wrap;
-    padding: 20px 0px;
-  }
-
-  .pledge-progress-header {
-    font-size: 1.2rem;
-  }
-
-  .progress, .current-pledge-form {
-    flex: 0 0 100%;
-    margin-bottom: 20px;
-  }
-
-  .current-pledge-form {
-    max-width: 400px;
-    margin: 0 auto;
-  }
-
-  .pledge-progress-details {
-    flex-wrap: wrap;
-  }
-
-  .pledge-progress-details .pledge-progress-detail {
-    flex: 0 0 100%;
-    line-height: 1.4;
-
-    .detail-heading {
-      font-weight: 600;
-      display: inline-block;
-      font-size: 1rem;
-      line-height: 1;
-    }
-
-    &:not(:last-child) {
-      margin-bottom: 10px;
-    }
-  }
-
+  flex: 0 1 360px;
+  min-width: 0%;
 }

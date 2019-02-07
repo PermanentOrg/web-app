@@ -4,14 +4,28 @@
   color: $danger;
 }
 
-p {
-  color: white;
+:host {
+  &.for-dark-bg {
+    p {
+      color: white;
+    }
+    
+    form {
+      color: white !important;
+    
+      a {
+        color: white;
+      }
+    }
+  }
 }
 
-form {
-  color: white !important;
+.input-group-vertical .form-control {
+  border-radius: 1rem;
+}
 
-  a {
-    color: white;
-  }
+.btn-alternate {
+  color: white;
+  font-weight: bold;
+  border-radius: 1.5rem;
 }

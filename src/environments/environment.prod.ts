@@ -4,11 +4,11 @@ export const environment = {
   apiUrl: 'https://www.permanent.org/api',
   hmr: false,
   firebase: {
-    apiKey: 'AIzaSyD-J4OOPSluilh9GSvslWtlJsFIoWXES44',
-    authDomain: 'prpledgetest.firebaseapp.com',
-    databaseURL: 'https://prpledgetest.firebaseio.com',
-    projectId: 'prpledgetest',
-    storageBucket: 'prpledgetest.appspot.com',
-    messagingSenderId: '4115520516'
+    apiKey: 'AIzaSyAcBDvNQWiDogLtq-L9pEkG7M9snK97rKo',
+    authDomain: 'prpledgeprod.firebaseapp.com',
+    databaseURL: 'https://prpledgeprod.firebaseio.com',
+    projectId: 'prpledgeprod',
+    storageBucket: 'prpledgeprod.appspot.com',
+    messagingSenderId: '802935961762'
   }
 };

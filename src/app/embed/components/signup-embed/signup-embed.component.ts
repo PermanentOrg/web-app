@@ -46,7 +46,7 @@ export class SignupEmbedComponent implements OnInit {
     }
 
     this.signupForm = fb.group({
-      invitation: [this.inviteCode ? this.inviteCode : '', [Validators.required]],
+      invitation: [this.inviteCode ? this.inviteCode : ''],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
