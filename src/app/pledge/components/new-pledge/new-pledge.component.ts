@@ -19,10 +19,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   public waiting: boolean;
   public pledgeForm: FormGroup;
 
-  public donationLevels = [10, 50, 100];
+  public donationLevels = [10, 20, 50];
 
-  public donationSelection: any = 50;
-  public donationAmount = 50;
+  public donationSelection: any = 10;
+  public donationAmount = 10;
 
   public pricePerGb = 10;
 
@@ -92,6 +92,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 
   bindStripeElements() {
     this.stripeElementsCard.mount(this.elementsContainer.nativeElement);
+  }
+
+  getStorageAmount(donationAmount: number) {
+    return Math.floor(donationAmount / this.pricePerGb);
   }
 
   chooseDonationAmount(amount: any) {
