@@ -1,5 +1,5 @@
 <form [formGroup]="mailchimpForm" (submit)="onMailchimpSubmit(mailchimpForm.value)" *ngIf="!mailchimpSent">
-  <div class="input-group-vertical">
+  <div class="input-group-vertical round">
       <pr-form-input fieldName="email" placeholder="Your email address" [control]="mailchimpForm.controls['email']"
         [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
   </div>
@@ -9,14 +9,8 @@
   </button>
 </form>
 <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="mailchimpSent">
-  <p *ngIf="!existingMember">
-    Almost finished! Click the link in the email we just sent you to confirm your subscription.
-  </p>
-  <p *ngIf="existingMember">
-    Thanks!
-  </p>
   <p>Complete signup to create your free account.</p>
-  <div class="input-group-vertical">
+  <div class="input-group-vertical round">
     <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
       [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
     <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
