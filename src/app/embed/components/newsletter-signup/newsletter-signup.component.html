@@ -4,7 +4,7 @@
         [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
   </div>
   <p class="error" [hidden]="!mailchimpError">{{mailchimpError}}</p>
-  <button class="btn btn-primary" [disabled]="!mailchimpForm.valid || waiting">
+  <button class="btn btn-alternate" [disabled]="!mailchimpForm.valid || waiting">
     Sign up
   </button>
 </form>
@@ -31,7 +31,7 @@
         I agree with the <a [routerLink]="['/terms']" target="_blank">terms</a> <strong> (required)</strong>
       </label>
     </div>
-  <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
+  <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid">
     Create a free account
   </button>
   <a href="/app">Already have an account?</a>

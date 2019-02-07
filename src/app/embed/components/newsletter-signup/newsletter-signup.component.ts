@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
-
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'pr-newsletter-signup',
@@ -12,6 +11,10 @@ import APP_CONFIG from '@root/app/app.config';
   styleUrls: ['./newsletter-signup.component.scss']
 })
 export class NewsletterSignupComponent implements OnInit {
+  @HostBinding('class.for-light-bg') forLightBg = true;
+  @HostBinding('class.for-dark-bg') forDarkBg = false;
+  @HostBinding('class.visible') visible = false;
+  
   mailchimpEndpoint = 'https://permanent.us12.list-manage.com/subscribe/post-json?u=2948a82c4a163d7ab43a13356&amp;id=487bd863fb&';
   mailchimpForm: FormGroup;
   mailchimpError: string;
@@ -24,6 +27,7 @@ export class NewsletterSignupComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
     this.mailchimpForm = fb.group({
@@ -38,6 +42,9 @@ export class NewsletterSignupComponent implements OnInit {
       agreed: [false, [Validators.requiredTrue]],
       optIn: [true]
     });
+
+    this.forLightBg = this.route.snapshot.queryParams.theme === 'forLightBg';
+    this.forDarkBg = this.route.snapshot.queryParams.theme === 'forDarkBg';
   }
 
   ngOnInit() {
