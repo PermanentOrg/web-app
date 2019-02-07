@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ const elements = stripe.elements();
   templateUrl: './new-pledge.component.html',
   styleUrls: ['./new-pledge.component.scss']
 })
-export class NewPledgeComponent implements OnInit, AfterViewInit {
+export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   public waiting: boolean;
   public pledgeForm: FormGroup;
 
@@ -33,6 +33,12 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   cardError: any;
   cardComplete = false;
 
+  postMessageHandler = (event) => {
+    if (event.origin.includes('permanent.org') && event.data.event === 'pledgeClick') {
+      this.onPledgeClick(event.data.data);
+    }
+  }
+
   constructor(
     private fb: FormBuilder,
     private pledgeService: PledgeService,
@@ -48,6 +54,15 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       customDonationAmount: [''],
       name: [account ? account.fullName : '', [Validators.required]],
       anonymous: [false]
+    });
+
+    window.addEventListener('message', this.postMessageHandler);
+  }
+
+  onPledgeClick(amount: number) {
+    this.chooseDonationAmount('custom');
+    this.pledgeForm.patchValue({
+      customDonationAmount: amount
     });
   }
 
@@ -160,6 +175,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       event.stopPropagation();
       event.preventDefault();
     }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('message', this.postMessageHandler);
   }
 }
 
