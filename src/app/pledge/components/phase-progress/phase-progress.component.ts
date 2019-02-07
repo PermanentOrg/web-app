@@ -19,8 +19,7 @@ export interface ProgressData {
   templateUrl: './phase-progress.component.html',
   styleUrls: ['./phase-progress.component.scss']
 })
-export class PhaseProgressComponent implements OnInit, OnChanges {
-  @Input('progress') progress = 0;
+export class PhaseProgressComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;
   @HostBinding('class.for-dark-bg') forDarkBg = false;
   @HostBinding('class.visible') visible = false;
@@ -78,14 +77,18 @@ export class PhaseProgressComponent implements OnInit, OnChanges {
   ) {
   db.list('/progress', ref => ref.orderByKey().limitToLast(1)).valueChanges()
     .subscribe((listValue) => {
-      if (listValue.length) {
+      if (listValue && listValue.length) {
         this.previousProgress = this.currentProgress;
         this.currentProgress = listValue.pop() as ProgressData;
+        this.redrawProgress();
       }
     });
 
   this.forLightBg = this.route.snapshot.queryParams.theme === 'forLightBg';
   this.forDarkBg = this.route.snapshot.queryParams.theme === 'forDarkBg';
+  setTimeout(() => {
+    this.visible = true;
+  });
   }
 
   ngOnInit() {
@@ -94,24 +97,18 @@ export class PhaseProgressComponent implements OnInit, OnChanges {
       easing: 'easeInOut',
       duration: 1500,
       color: '#FF9933',
-      svgStyle: {width: '100%', height: '100%'},
-      from: {color: '#FFEA82'},
-      to: {color: '#ED6A5A'}
+      svgStyle: {width: '100%', height: '100%'}
     });
-    this.redrawProgress();
-
-    setTimeout(() => {
-      this.visible = true;
-    });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
     this.redrawProgress();
   }
 
   redrawProgress() {
-    if(this.innerBar) {
-      this.innerBar.animate(this.progress);
+    if (this.innerBar) {
+      const percentage = this.currentProgress.totalDollarAmount / this.currentProgress.goalDollarAmount;
+      try {
+        this.innerBar.animate(percentage);
+      } catch (err) {
+      }
     }
   }
 

@@ -2,9 +2,7 @@
 
 :host {
   display: flex;
-  padding: 20px;
-  height: 100vh;
-  align-items: center;
+  padding: 0px 0px;
   justify-content: center;
   opacity: 0;
 
@@ -14,8 +12,14 @@
   }
 
   &.for-light-bg {
-    .progress, .current-pledge-form {
+    .current-pledge-form {
       color:black;
+    }
+  }
+
+  &.for-dark-bg {
+    .current-pledge-form {
+      color: white;
     }
   }
 }
@@ -23,11 +27,4 @@
 .current-pledge-form {
   flex: 0 1 360px;
   min-width: 0%;
-  color: white;
-}
-
-@media screen and (max-width: 767px) {
-  :host {
-    padding: 20px 0px;
-  }
 }
