@@ -3,7 +3,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountService } from '@shared/services/account/account.service';
+import { AccountResponse } from '@shared/services/api/index.repo';
+import { MessageService } from '@shared/services/message/message.service';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 @Component({
   selector: 'pr-newsletter-signup',
@@ -28,7 +32,11 @@ export class NewsletterSignupComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private iFrame: IFrameService,
+    private router: Router,
+    private message: MessageService,
+    private accountService: AccountService
   ) {
     this.mailchimpForm = fb.group({
       email: ['', [ Validators.required, Validators.email ]]
@@ -79,7 +87,22 @@ export class NewsletterSignupComponent implements OnInit {
   }
 
   onSignupSubmit(formValue) {
+    this.waiting = true;
 
+    this.accountService.signUp(
+      formValue.email, formValue.name, formValue.password, formValue.password,
+      formValue.agreed, false, null, null
+    ).then((response: AccountResponse) => {
+        return this.accountService.logIn(formValue.email, formValue.password, true, true)
+          .then(() => {
+            // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+            this.iFrame.setParentUrl('/app');
+          });
+      })
+      .catch((response: AccountResponse) => {
+        this.message.showError(response.getMessage(), true);
+        this.waiting = false;
+      });
   }
 
 }
