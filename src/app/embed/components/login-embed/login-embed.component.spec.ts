@@ -11,6 +11,7 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 describe('LoginEmbedComponent', () => {
   let component: LoginEmbedComponent;
@@ -39,6 +40,13 @@ describe('LoginEmbedComponent', () => {
               queryParams: {
                 invite: 'invite'
               }
+            }
+          }
+        },
+        {
+          provide: IFrameService,
+          useValue: {
+            setParentUrl: function() {
             }
           }
         }
