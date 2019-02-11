@@ -26,6 +26,7 @@ export class NewsletterSignupComponent implements OnInit {
   existingMember = false;
 
   waiting = false;
+  done = false;
 
   signupForm: FormGroup;
 
@@ -47,7 +48,7 @@ export class NewsletterSignupComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
-      agreed: [false, [Validators.requiredTrue]],
+      agreed: [true, [Validators.requiredTrue]],
       optIn: [true]
     });
 
@@ -95,8 +96,8 @@ export class NewsletterSignupComponent implements OnInit {
     ).then((response: AccountResponse) => {
         return this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
+            this.done = true;
             // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-            this.iFrame.setParentUrl('/app');
           });
       })
       .catch((response: AccountResponse) => {
