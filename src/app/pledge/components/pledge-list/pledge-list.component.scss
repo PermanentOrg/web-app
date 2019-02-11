@@ -18,7 +18,11 @@
   display: table;
   table-layout: fixed;
   width: 100%;
-  padding-top: 85px;
+}
+
+.pledge-list-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 85px);
 }
 
 
@@ -51,7 +55,8 @@
   padding: 15px;
   background: $gray-300;
   width: 100%;
-  position: fixed;
+  align-items: center;
+  height: 85px;
 
   label {
     margin-right: 10px;
