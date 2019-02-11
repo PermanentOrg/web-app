@@ -26,6 +26,12 @@
 
 .btn-alternate {
   color: white;
-  font-weight: bold;
+  font-weight: 600;
   border-radius: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+form {
+  text-align: center;
 }
