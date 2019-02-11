@@ -50,13 +50,14 @@ export class LoginEmbedComponent implements OnInit {
       rememberMe: [true],
       keepLoggedIn: [true]
     });
+
+    const currentAccount = this.accountService.getAccount();
+    if (currentAccount && currentAccount.primaryEmail) {
+      this.iFrame.setParentUrl('/app');
+    }
   }
 
   ngOnInit() {
-    const currentAccount = this.accountService.getAccount();
-    if (currentAccount && currentAccount.primaryEmail) {
-      // this.router.navigate(['/embed', 'done'], {queryParams: { existing: true, inviteCode: this.inviteCode }});
-    }
   }
 
   onSubmit(formValue: any) {
