@@ -8,17 +8,20 @@
   left: 0;
   right: 0;
   z-index: 1;
-  background-color: white;
+  background-color: $PR-blue;
 }
 
 nav.navbar {
   padding: 0 0.5rem;
+  color: white;
 }
 
 .navbar-toggler {
   &:focus {
     outline: none;
   }
+
+  border: 0px solid;
 
   margin-top: 9px;
   margin-bottom: 9px;
