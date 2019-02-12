@@ -13,10 +13,16 @@
 
 .breadcrumb {
   display: inline-block;
+  color: white;
+
+  a {
+    color: white;
+  }
 
   .current {
     font-weight: 600;
   }
+
 }
 
 .separator {
