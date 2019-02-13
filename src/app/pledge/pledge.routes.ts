@@ -7,6 +7,8 @@ import { ClaimStorageLoginComponent } from './components/claim-storage-login/cla
 import { ClaimDoneComponent } from './components/claim-done/claim-done.component';
 import { PledgeListComponent } from './components/pledge-list/pledge-list.component';
 import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
+import { PledgeResolveService } from './resolves/pledge-resolve.service';
+import { MissingPledgeComponent } from './components/missing-pledge/missing-pledge.component';
 
 export const routes: Routes = [
   {
@@ -19,7 +21,10 @@ export const routes: Routes = [
       },
       {
         path: 'claim',
-        component: ClaimStorageComponent
+        component: ClaimStorageComponent,
+        resolve: {
+          existingPledge: PledgeResolveService
+        }
       },
       {
         path: 'claimlogin',
@@ -28,6 +33,10 @@ export const routes: Routes = [
       {
         path: 'done',
         component: ClaimDoneComponent
+      },
+      {
+        path: 'missing',
+        component: MissingPledgeComponent
       }
     ]
   },
@@ -49,6 +58,7 @@ export const routes: Routes = [
     RouterModule.forChild(routes),
   ],
   providers: [
+    PledgeResolveService
   ],
   declarations: [
   ]
