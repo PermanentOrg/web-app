@@ -34,7 +34,11 @@ export class ClaimStorageComponent implements OnInit {
     if (!pledgeService.currentPledge) {
       this.router.navigate(['/pledge']);
       return this;
+    } else if (!pledgeService.currentPledgeData.timestamp) {
+      this.router.navigate(['/pledge', 'missing']);
+      return this;
     }
+
     this.pledge = pledgeService.currentPledgeData;
 
     this.signupForm = fb.group({

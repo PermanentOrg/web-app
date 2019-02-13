@@ -1,4 +1,4 @@
-<form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)" *ngIf="!pledge.claimed">
   <h1 class="form-title">
     Thanks for your pledge!
   </h1>
@@ -22,4 +22,13 @@
     Sign up
   </button>
   <a [routerLink]="['/pledge','claimlogin']">Already have an account?</a>
+</form>
+<form *ngIf="pledge.claimed">
+  <h1 class="form-title">
+    The storage for this pledge has been claimed.
+  </h1>
+  <p>
+    If you believe this is an error, please contact us.
+  </p>
+  <a href="/contact-us" class="btn btn-primary">Contact us</a>
 </form>

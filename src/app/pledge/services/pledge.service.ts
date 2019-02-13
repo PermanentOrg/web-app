@@ -39,6 +39,29 @@ export class PledgeService {
     return this.currentPledge;
   }
 
+  async loadPledge(pledgeId: string) {
+    this.currentPledge = await this.db.database.ref(`/pledges/${pledgeId}`);
+    if (!this.currentPledge) {
+      throw new Error('PledgeService - error loading pledge');
+    }
+
+    const pledgeExists = (await this.currentPledge.once('value')).exists();
+
+    if (!pledgeExists) {
+      throw new Error('PledgeService - pledge not found');
+    }
+
+    const pledgeData = (await this.currentPledge.once('value')).val();
+
+    merge(this.currentPledgeData, pledgeData);
+
+    this.currentPledge.on('value', snapshot => {
+      merge(this.currentPledgeData, snapshot.val());
+    });
+
+    return this.currentPledge;
+  }
+
   async linkAccount(account: AccountVO) {
     if (!this.currentPledge) {
       throw new Error('PledgeService - no pledge to link to account');
