@@ -45,7 +45,7 @@ export class LoginEmbedComponent implements OnInit {
     }
 
     this.loginForm = fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [FormUtilities.trimWhitespace, Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       rememberMe: [true],
       keepLoggedIn: [true]

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
-import { matchControlValidator } from '@shared/utilities/forms';
+import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -47,7 +47,7 @@ export class SignupEmbedComponent implements OnInit {
 
     this.signupForm = fb.group({
       invitation: [this.inviteCode ? this.inviteCode : ''],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [trimWhitespace, Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: [false, [Validators.requiredTrue]],
