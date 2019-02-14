@@ -190,10 +190,16 @@ export class AccountService {
       this.cookies.set('rememberMe', email);
     }
 
+    const currentAccount = this.account;
+
     return this.api.auth.logIn(email, password, rememberMe, keepLoggedIn)
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
-          this.setAccount(response.getAccountVO());
+          const newAccount = response.getAccountVO();
+          if (newAccount.accountId === currentAccount.accountId) {
+            newAccount.isNew = currentAccount.isNew;
+          }
+          this.setAccount(newAccount);
           this.setArchive(response.getArchiveVO());
           this.skipSessionCheck = true;
         } else if (response.needsMFA() || response.needsVerification()) {
@@ -282,7 +288,9 @@ export class AccountService {
     return this.api.account.signUp(email, fullName, password, passwordConfirm, agreed, optIn, phone, inviteCode)
       .pipe(map((response: AccountResponse) => {
         if (response.isSuccessful) {
-          this.setAccount(response.getAccountVO());
+          const newAccount = response.getAccountVO();
+          newAccount.isNew = true;
+          this.setAccount(newAccount);
           return response;
         } else {
           throw response;
