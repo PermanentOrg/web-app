@@ -196,7 +196,7 @@ export class AccountService {
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           const newAccount = response.getAccountVO();
-          if (newAccount.accountId === currentAccount.accountId) {
+          if (currentAccount && newAccount.accountId === currentAccount.accountId) {
             newAccount.isNew = currentAccount.isNew;
           }
           this.setAccount(newAccount);
