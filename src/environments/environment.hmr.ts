@@ -8,6 +8,7 @@ export const environment = {
   apiUrl: 'https://local.permanent.org:4200/api',
   uploaderUrl: 'wss://local.permanent.org:4200/uploadsvc',
   hmr: true,
+  stripeKey: 'pk_test_kGSsLxH88lyxBUp9Lluji2Rn',
   firebase: {
     apiKey: 'AIzaSyAThS43euMcSjPdDvtB9qM-9-diloP-eHE',
     authDomain: 'prpledgedev.firebaseapp.com',
