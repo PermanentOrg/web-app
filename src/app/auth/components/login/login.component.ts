@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
+import { trimWhitespace } from '@shared/utilities/forms';
+
 import APP_CONFIG from '@root/app/app.config';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -29,7 +31,7 @@ export class LoginComponent implements OnInit {
     private cookies: CookieService
   ) {
     this.loginForm = fb.group({
-      email: [this.cookies.get('rememberMe'), [Validators.required, Validators.email]],
+      email: [this.cookies.get('rememberMe'), [trimWhitespace, Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       rememberMe: [true],
       keepLoggedIn: [true]

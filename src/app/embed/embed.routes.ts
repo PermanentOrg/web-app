@@ -9,6 +9,7 @@ import { VerifyEmbedComponent } from '@embed/components/verify-embed/verify-embe
 import { NewsletterSignupComponent } from './components/newsletter-signup/newsletter-signup.component';
 import { LoginEmbedComponent } from './components/login-embed/login-embed.component';
 import { MfaEmbedComponent } from './components/mfa-embed/mfa-embed.component';
+import { ForgotPasswordEmbedComponent } from './components/forgot-password-embed/forgot-password-embed.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginEmbedComponent},
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'verify', component: VerifyEmbedComponent },
   { path: 'mfa', component: MfaEmbedComponent },
   { path: 'done', component: DoneEmbedComponent },
+  { path: 'forgot', component: ForgotPasswordEmbedComponent },
   { path: 'newsletterSignup', component: NewsletterSignupComponent },
   { path: '**', redirectTo: 'signup'}
 ];
@@ -30,7 +32,8 @@ export const routes: Routes = [
     DoneEmbedComponent,
     VerifyEmbedComponent,
     MfaEmbedComponent,
-    NewsletterSignupComponent
+    NewsletterSignupComponent,
+    ForgotPasswordEmbedComponent
   ]
 })
 export class EmbedRoutingModule { }

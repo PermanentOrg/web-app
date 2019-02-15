@@ -75,3 +75,10 @@ export function getFormInputError(formInput: FormInputComponent) {
     return FORM_ERROR_MESSAGES['generic'][errorName];
   }
 }
+
+export function trimWhitespace(control: AbstractControl): {[key: string]: boolean} | null {
+  if (control && control.value && control.value.length && (control.value[0] === ' ' || control.value[control.value.length - 1] === ' ')) {
+    control.setValue(control.value.trim());
+  }
+  return null;
+}
