@@ -7,7 +7,9 @@ import APP_CONFIG from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-const stripe = window['Stripe']('pk_test_kGSsLxH88lyxBUp9Lluji2Rn');
+import { environment } from '@root/environments/environment';
+
+const stripe = window['Stripe'](environment.stripeKey);
 const elements = stripe.elements();
 
 @Component({

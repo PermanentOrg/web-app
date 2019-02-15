@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   apiKey: 'Xr$k?fopgA"FdWFoPKmmh6n7',
   apiUrl: 'https://www.permanent.org/api',
+  stripeKey: 'pk_live_ssjpUZtdv9SPpmydHkQLOtxm',
   hmr: false,
   firebase: {
     apiKey: 'AIzaSyAcBDvNQWiDogLtq-L9pEkG7M9snK97rKo',
