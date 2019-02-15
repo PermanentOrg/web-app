@@ -1,0 +1,31 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+  <div class="input-group-vertical">
+    <pr-form-input fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
+      [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="loginForm.controls['password']"
+      [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="rememberMe"
+      formControlName="rememberMe">
+    <label class="form-check-label" for="rememberMe">
+      Remember me
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="keepLoggedIn"
+      formControlName="keepLoggedIn">
+    <label class="form-check-label" for="keepLoggedIn">
+      Keep me logged in
+    </label>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="waiting || loginForm.invalid">
+    Log in
+  </button>
+  <a [routerLink]="['/embed','signup']">
+    Need to sign up?
+  </a>
+  <a [routerLink]="['/embed','forgot']">
+    Forgot password?
+  </a>
+</form>

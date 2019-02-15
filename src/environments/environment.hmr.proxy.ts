@@ -4,4 +4,12 @@ export const environment = {
   apiUrl: 'https://local.permanent.org:4200/api',
   uploaderUrl: 'wss://local.permanent.org:4200/uploadsvc',
   hmr: true,
+  firebase: {
+    apiKey: 'AIzaSyAThS43euMcSjPdDvtB9qM-9-diloP-eHE',
+    authDomain: 'prpledgedev.firebaseapp.com',
+    databaseURL: 'https://prpledgedev.firebaseio.com',
+    projectId: 'prpledgedev',
+    storageBucket: 'prpledgedev.appspot.com',
+    messagingSenderId: '248842011228'
+  }
 };

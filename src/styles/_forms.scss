@@ -24,7 +24,22 @@ form {
 .input-group-vertical {
   margin-bottom: 10px;
   $transition-length: 0.1s;
+  border-radius: 0.25rem;
+  background: white;
 
+  &.round {
+    border-radius: 1.5rem;
+    .form-control {
+      border-radius: 1.5rem;
+      padding: $input-btn-padding-y + 0.2rem $input-btn-padding-x + 0.2rem;
+    }
+
+    .input-vertical-label {
+      left: $input-btn-padding-x + 0.2rem;
+      top: 0.2rem;
+    }
+  }
+  
   select {
     -webkit-appearance: none;
   }
@@ -97,6 +112,16 @@ form {
     left: $input-btn-padding-x;
     color: rgba($body-color, 0.7);
   }
+
+  .input-vertical.checkbox {
+    background: $gray-600;
+    color: white;
+    padding: $input-padding-y / 2 $input-padding-x;
+
+    .form-check {
+      margin: 0;
+    }
+  }
 }
 
 select.placeholder {
@@ -111,4 +136,28 @@ select.placeholder {
   // width: 100%;
   // display: block;
   // background-color: $gray-200;
+}
+
+.right-align {
+  input {
+    text-align: right;
+  }
+
+  input::placeholder {
+    text-align: left;
+  }
+}
+
+.gravity-form {
+  input {
+    padding: 8px;
+    border-radius: 100px;
+    height: 50px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  button, .btn {
+    border-radius: 100px;
+  }
 }

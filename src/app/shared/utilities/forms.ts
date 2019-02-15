@@ -2,20 +2,6 @@ import { FormGroup, FormControl, AbstractControl, ValidationErrors, ValidatorFn 
 import APP_CONFIG from '@root/app/app.config';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
-export function matchValidator(group: FormGroup) {
-  const match = group.controls['password'].value === group.controls['confirm'].value;
-
-  if (match && group.value.confirm) {
-    group.controls['confirm'].setErrors(null);
-    return null;
-  }
-
-  const errors = { mismatch: true };
-  group.controls['confirm'].setErrors(errors);
-
-  return errors;
-}
-
 export function matchControlValidator(controlToMatch: AbstractControl): ValidatorFn {
   return function validator(controlToValidate: AbstractControl): {[key: string]: boolean} | null {
     if (controlToValidate.value && controlToValidate.value.length && controlToMatch.value !== controlToValidate.value) {
@@ -88,4 +74,11 @@ export function getFormInputError(formInput: FormInputComponent) {
   } else {
     return FORM_ERROR_MESSAGES['generic'][errorName];
   }
+}
+
+export function trimWhitespace(control: AbstractControl): {[key: string]: boolean} | null {
+  if (control && control.value && control.value.length && (control.value[0] === ' ' || control.value[control.value.length - 1] === ' ')) {
+    control.setValue(control.value.trim());
+  }
+  return null;
 }

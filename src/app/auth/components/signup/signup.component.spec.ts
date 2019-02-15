@@ -66,18 +66,18 @@ describe('SignupComponent', () => {
     expect(component.signupForm.value.invitation).toBe('invite');
   });
 
-  it('should set error for missing invitation code', () => {
-    component.signupForm.get('invitation').markAsTouched();
-    component.signupForm.patchValue({
-      invitation: '',
-      email: TEST_DATA.user.email,
-      name: TEST_DATA.user.name,
-      password: TEST_DATA.user.password,
-      confirm: TEST_DATA.user.password
-    });
-    expect(component.signupForm.invalid).toBeTruthy();
-    expect(component.signupForm.get('invitation').errors.required).toBeTruthy();
-  });
+  // it('should set error for missing invitation code', () => {
+  //   component.signupForm.get('invitation').markAsTouched();
+  //   component.signupForm.patchValue({
+  //     invitation: '',
+  //     email: TEST_DATA.user.email,
+  //     name: TEST_DATA.user.name,
+  //     password: TEST_DATA.user.password,
+  //     confirm: TEST_DATA.user.password
+  //   });
+  //   expect(component.signupForm.invalid).toBeTruthy();
+  //   expect(component.signupForm.get('invitation').errors.required).toBeTruthy();
+  // });
 
   it('should set error for missing email', () => {
     component.signupForm.get('email').markAsTouched();

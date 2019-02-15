@@ -1,0 +1,30 @@
+@import 'variables';
+
+:host {
+  display: flex;
+  padding: 0px 0px;
+  justify-content: center;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+    transition: 0.5s opacity ease-in;
+  }
+
+  &.for-light-bg {
+    .current-pledge-form {
+      color:black;
+    }
+  }
+
+  &.for-dark-bg {
+    .current-pledge-form {
+      color: white;
+    }
+  }
+}
+
+.current-pledge-form {
+  flex: 0 1 360px;
+  min-width: 0%;
+}

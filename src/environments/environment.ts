@@ -6,7 +6,15 @@ export const environment = {
   production: false,
   apiKey: '`2QOGhZvC.1.VdaoPn;-gIhi',
   apiUrl: 'https://local.permanent.org/api',
-  hmr: false
+  hmr: false,
+  firebase: {
+    apiKey: 'AIzaSyAThS43euMcSjPdDvtB9qM-9-diloP-eHE',
+    authDomain: 'prpledgedev.firebaseapp.com',
+    databaseURL: 'https://prpledgedev.firebaseio.com',
+    projectId: 'prpledgedev',
+    storageBucket: 'prpledgedev.appspot.com',
+    messagingSenderId: '248842011228'
+  }
 };
 
 /*

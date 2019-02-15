@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'doneEmbed', redirectTo: 'embed/done', pathMatch: 'full'  },
   { path: 'auth', loadChildren: '@auth/auth.module#AuthModule' },
   { path: 'embed', loadChildren: '@embed/embed.module#EmbedModule' },
+  { path: 'pledge', loadChildren: '@pledge/pledge.module#PledgeModule'},
   { path: '', loadChildren: '@core/core.module#CoreModule' },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

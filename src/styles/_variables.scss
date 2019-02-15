@@ -4,6 +4,7 @@ $breadcrumb-divider: quote(">");
 $breadcrumb-height: 34px;
 
 $primary: $PR-blue;
+$alternate: $PR-orange;
 
 $navbar-toggler-padding-y: 0px;
 $navbar-toggler-padding-x: 0px;
@@ -19,6 +20,8 @@ $bottom-safe-area-padding: 40px;
 
 $default-transition-length: 0.4s;
 $shadow-color: rgba(black, 0.15);
+
+$wordpress-shadow: 0em 0em 0.65em rgba(0,0,0,0.8);
 
 @mixin has-breadcrumbs {
   padding-top: 34px;

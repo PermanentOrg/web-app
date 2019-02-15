@@ -4,9 +4,8 @@ import { EmbedRoutingModule } from '@embed/embed.routes';
 
 @NgModule({
   imports: [
-    EmbedRoutingModule
+    EmbedRoutingModule,
   ],
-  declarations: [
-  ]
+  declarations: []
 })
 export class EmbedModule { }
