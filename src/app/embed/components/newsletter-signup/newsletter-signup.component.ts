@@ -39,12 +39,14 @@ export class NewsletterSignupComponent implements OnInit {
     private message: MessageService,
     private accountService: AccountService
   ) {
+    const queryParams = route.snapshot.queryParams;
+
     this.mailchimpForm = fb.group({
       email: ['', [ Validators.required, Validators.email ]]
     });
 
     this.signupForm = fb.group({
-      invitation: [''],
+      invitation: [queryParams.inviteCode || null],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
@@ -92,7 +94,7 @@ export class NewsletterSignupComponent implements OnInit {
 
     this.accountService.signUp(
       formValue.email, formValue.name, formValue.password, formValue.password,
-      formValue.agreed, false, null, null
+      formValue.agreed, false, null, formValue.invitation
     ).then((response: AccountResponse) => {
         return this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
