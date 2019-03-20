@@ -8,6 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { environment } from '@root/environments/environment';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 const stripe = window['Stripe'](environment.stripeKey);
 const elements = stripe.elements();
@@ -42,7 +43,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private accountService: AccountService,
     private route: ActivatedRoute,
-    private message: MessageService
+    private message: MessageService,
+    private iframe: IFrameService
   ) {
     this.initStripeElements();
     const account = this.accountService.getAccount();
@@ -63,13 +65,29 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    const params = this.route.snapshot.queryParams;
-    if (params && params.pledgeAmount) {
-      const amount = parseInt(params.pledgeAmount, 10);
-      if (this.donationLevels.includes(amount)) {
-        this.chooseDonationAmount(amount);
+    let pledgeAmount;
+    if (!this.iframe.isIFrame()) {
+      const params = this.route.snapshot.queryParams;
+      if (params) {
+        pledgeAmount = parseInt(params.pledgeAmount, 10);
+      }
+    } else {
+      const url = document.referrer;
+      const split = url.split('?');
+      if (split.length > 1) {
+        const params = split.pop();
+        if (params.includes('amount')) {
+          try {
+            pledgeAmount = parseInt(params.split('=').pop(), 0);
+          } catch (err) { }
+        }
+      }
+    }
+    if (pledgeAmount) {
+      if (this.donationLevels.includes(pledgeAmount)) {
+        this.chooseDonationAmount(pledgeAmount);
       } else {
-        this.donationAmount = amount;
+        this.donationAmount = pledgeAmount;
         this.chooseDonationAmount('custom');
       }
     }
