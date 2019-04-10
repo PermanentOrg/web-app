@@ -99,7 +99,7 @@ export class AppModule {
         this.title.setTitle(`${currentTitle} | Permanent.org`);
       }
 
-      if ('ga' in window) {
+      if ('ga' in window && ga.getAll) {
         const tracker = ga.getAll()[0];
         if (tracker) {
           tracker.send('pageview', { page: location.pathname });
