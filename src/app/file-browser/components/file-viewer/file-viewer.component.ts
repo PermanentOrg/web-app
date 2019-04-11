@@ -4,11 +4,9 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { filter as lodashFilter, findIndex } from 'lodash';
+import { filter, findIndex } from 'lodash';
 
-import { RecordVO, FolderVO} from '@root/app/models';
+import { RecordVO, } from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
 
@@ -61,7 +59,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       this.records = [ this.currentRecord ];
       this.currentIndex = 0;
     } else {
-      this.records = lodashFilter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
+      this.records = filter(this.dataService.currentFolder.ChildItemVOs, 'isRecord') as RecordVO[];
       this.currentIndex = findIndex(this.records, {folder_linkId: resolvedRecord.folder_linkId});
       this.currentRecord = this.records[this.currentIndex];
       if (resolvedRecord !== this.currentRecord) {
