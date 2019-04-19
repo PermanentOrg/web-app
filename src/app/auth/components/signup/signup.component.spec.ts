@@ -12,6 +12,7 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
+import { ApiService } from '@shared/services/api/api.service';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -33,6 +34,7 @@ describe('SignupComponent', () => {
       providers: [
         CookieService,
         MessageService,
+        ApiService,
         {
           provide: ActivatedRoute,
           useValue: {

@@ -44,6 +44,17 @@ export class InviteRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/invite/share', data, InviteResponse);
   }
+
+  public getShareInviteInfo(inviteEmail: string, inviteCode: string, shareItemId: number, shareItemType: 'r' | 'f') {
+    const data = [{
+      primaryEmail: inviteEmail,
+      inviteCode: inviteCode,
+      shid: shareItemId,
+      tp: shareItemType
+    }];
+
+    return this.http.sendRequestPromise('/invite/getShareInviteInfo', data, InviteResponse);
+  }
 }
 
 export class InviteResponse extends BaseResponse {
