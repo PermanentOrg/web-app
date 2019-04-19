@@ -10,10 +10,11 @@ import { LoginComponent } from '@auth/components/login/login.component';
 import { ResetPasswordComponent } from '@auth/components/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 import { TermsComponent } from '@shared/components/terms/terms.component';
+import { ShareInviteResolveService } from './resolves/share-invite-resolve.service';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
-  { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' } },
+  { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' }, resolve: { shareInviteData: ShareInviteResolveService}},
   { path: 'mfa', component: MfaComponent, data: { title: 'Verify'} },
   { path: 'verify', component: VerifyComponent, data: { title: 'Verify'} },
   { path: 'verify/:email/:code', component: VerifyComponent, data: { title: 'Verify'} },
@@ -35,6 +36,9 @@ export const routes: Routes = [
     SignupComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent
+  ],
+  providers: [
+    ShareInviteResolveService
   ]
 })
 export class AuthRoutingModule { }
