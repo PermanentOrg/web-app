@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const routes: Routes = [
   { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
   { path: 'signup', redirectTo: 'auth/signup', pathMatch: 'full'  },
+  { path: 'sharing', redirectTo: 'auth/signup', pathMatch: 'full'  },
   { path: 'mfa', redirectTo: 'auth/mfa', pathMatch: 'full'  },
   { path: 'verify', redirectTo: 'auth/verify', pathMatch: 'full'  },
   { path: 'forgot', redirectTo: 'auth/forgot', pathMatch: 'full'  },

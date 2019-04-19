@@ -8,7 +8,9 @@ import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { AccountResponse } from '@shared/services/api/index.repo';
+import { AccountResponse, InviteResponse } from '@shared/services/api/index.repo';
+import { ApiService } from '@shared/services/api/api.service';
+import { RecordVO, FolderVO, RecordVOData, FolderVOData, AccountVO } from '@models/index';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -22,9 +24,20 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   waiting: boolean;
 
+  showInviteCode = true;
+  isForShareInvite = false;
+
+  shareArchiveNbr: string;
+  shareFolder_linkId: number;
+
+  shareItem: RecordVO | FolderVO;
+  shareFromName: string;
+  shareItemIsRecord = false;
+
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
+    private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     private message: MessageService
@@ -45,6 +58,30 @@ export class SignupComponent implements OnInit {
       inviteCode = window.atob(params.inviteCode);
     }
 
+    if (params.shid && params.tp) {
+      this.isForShareInvite = true;
+      this.showInviteCode = false;
+
+      const responseData = this.route.snapshot.data.shareInviteData;
+
+      if (!responseData) {
+        this.isForShareInvite = false;
+        this.showInviteCode = true;
+      } else {
+        const itemData: RecordVOData | FolderVOData = {
+          archiveNbr: responseData.recArchiveNbr,
+          folder_linkId: responseData.folder_linkId,
+          displayName: responseData.sharedItem,
+          thumbURL500: responseData.sharedThumb
+        };
+
+        this.shareFromName = responseData.ShareArcName;
+
+        this.shareItemIsRecord = params.tp === 'r';
+        this.shareItem = this.shareItemIsRecord ? new RecordVO(itemData) : new FolderVO(itemData);
+      }
+    }
+
     this.signupForm = fb.group({
       invitation: [inviteCode || ''],
       email: [email || '', [trimWhitespace, Validators.required, Validators.email]],
@@ -55,10 +92,10 @@ export class SignupComponent implements OnInit {
     });
 
     const confirmPasswordControl = new FormControl('',
-      [
-        Validators.required,
-        matchControlValidator(this.signupForm.controls['password'])
-      ]);
+    [
+      Validators.required,
+      matchControlValidator(this.signupForm.controls['password'])
+    ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
@@ -80,7 +117,17 @@ export class SignupComponent implements OnInit {
           this.accountService.logIn(formValue.email, formValue.password, true, true)
             .then(() => {
               this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-              this.router.navigate(['/']);
+              if (!this.isForShareInvite) {
+                this.router.navigate(['/']);
+              } else if (this.shareItemIsRecord) {
+                setTimeout(() => {
+                  this.router.navigate(['/shares', 'withme']);
+                }, 500);
+              } else {
+                setTimeout(() => {
+                  this.router.navigate(['/shares', 'withme', this.shareItem.archiveNbr, this.shareItem.folder_linkId]);
+                }, 500);
+              }
             });
         }
       })
