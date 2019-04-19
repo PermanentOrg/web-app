@@ -1,5 +1,7 @@
 {
-    "tslint.autoFixOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
+    },
     "editor.tabSize": 2,
     "scss.includePaths": [
         "src/styles"

@@ -39,7 +39,11 @@ export class IFrameService {
   }
 
   isIFrame() {
-    return !!window.frameElement;
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
   }
 
   getIFrame() {

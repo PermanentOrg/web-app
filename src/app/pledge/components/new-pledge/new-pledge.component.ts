@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { PledgeService } from '@pledge/services/pledge.service';
 import APP_CONFIG from '@root/app/app.config';
@@ -8,6 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { environment } from '@root/environments/environment';
+import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 const stripe = window['Stripe'](environment.stripeKey);
 const elements = stripe.elements();
@@ -35,18 +36,15 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   cardError: any;
   cardComplete = false;
 
-  postMessageHandler = (event) => {
-    if (event.origin.includes('permanent.org') && event.data.event === 'pledgeClick') {
-      this.onPledgeClick(event.data.data);
-    }
-  }
 
   constructor(
     private fb: FormBuilder,
     private pledgeService: PledgeService,
     private router: Router,
     private accountService: AccountService,
-    private message: MessageService
+    private route: ActivatedRoute,
+    private message: MessageService,
+    private iframe: IFrameService
   ) {
     this.initStripeElements();
     const account = this.accountService.getAccount();
@@ -57,8 +55,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       name: [account ? account.fullName : '', [Validators.required]],
       anonymous: [false]
     });
-
-    window.addEventListener('message', this.postMessageHandler);
   }
 
   onPledgeClick(amount: number) {
@@ -69,10 +65,37 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    let pledgeAmount;
+    if (!this.iframe.isIFrame()) {
+      const params = this.route.snapshot.queryParams;
+      if (params) {
+        pledgeAmount = parseInt(params.pledgeAmount, 10);
+      }
+    } else {
+      const url = document.referrer;
+      const split = url.split('?');
+      if (split.length > 1) {
+        const params = split.pop();
+        if (params.includes('amount')) {
+          try {
+            pledgeAmount = parseInt(params.split('=').pop(), 0);
+          } catch (err) { }
+        }
+      }
+    }
+    if (pledgeAmount) {
+      if (this.donationLevels.includes(pledgeAmount)) {
+        this.chooseDonationAmount(pledgeAmount);
+      } else {
+        this.donationAmount = pledgeAmount;
+        this.chooseDonationAmount('custom');
+      }
+    }
   }
 
   ngAfterViewInit() {
     this.bindStripeElements();
+
   }
 
   initStripeElements() {
@@ -89,17 +112,17 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       }
-    }
+    };
     this.stripeElementsCard = elements.create('card', options);
 
     this.stripeElementsCard.addEventListener('change', event => {
-      if(event.error) {
+      if (event.error) {
         this.cardError = event.error.message;
       } else {
         this.cardError = null;
       }
 
-      if(event.complete) {
+      if (event.complete) {
         this.cardComplete = true;
       } else {
         this.cardComplete = false;
@@ -117,10 +140,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   chooseDonationAmount(amount: any) {
     this.donationSelection = amount;
-    if(amount !== 'custom') {
+    if (amount !== 'custom') {
       this.donationAmount = parseInt(amount, 10);
     } else {
-      if(!this.pledgeForm.value.customDonationAmount) {
+      if (!this.pledgeForm.value.customDonationAmount) {
         this.pledgeForm.patchValue({
           customDonationAmount: this.donationAmount
         });
@@ -154,7 +177,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       timestamp: new Date().getTime(),
       anonymous: formValue.anonymous
     };
-    
+
     await this.pledgeService.createPledge(pledge);
     this.pledgeForm.patchValue({
       email: null,
@@ -180,7 +203,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.removeEventListener('message', this.postMessageHandler);
   }
 }
 
