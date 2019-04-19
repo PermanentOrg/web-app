@@ -18,7 +18,7 @@ export class NewsletterSignupComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;
   @HostBinding('class.for-dark-bg') forDarkBg = false;
   @HostBinding('class.visible') visible = false;
-  
+
   mailchimpEndpoint = 'https://permanent.us12.list-manage.com/subscribe/post-json?u=2948a82c4a163d7ab43a13356&amp;id=487bd863fb&';
   mailchimpForm: FormGroup;
   mailchimpError: string;
@@ -39,6 +39,7 @@ export class NewsletterSignupComponent implements OnInit {
     private message: MessageService,
     private accountService: AccountService
   ) {
+
     const queryParams = route.snapshot.queryParams;
 
     this.mailchimpForm = fb.group({
@@ -59,6 +60,9 @@ export class NewsletterSignupComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.accountService.isLoggedIn()) {
+      this.router.navigate(['/embed', 'done']);
+    }
   }
 
   onMailchimpSubmit(formValue) {
