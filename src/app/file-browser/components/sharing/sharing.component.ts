@@ -190,7 +190,7 @@ export class SharingComponent implements OnInit {
   }
 
   close() {
-    // this.dialogRef.close();
+    this.dialogRef.close();
   }
 
 }
