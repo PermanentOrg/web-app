@@ -1,8 +1,10 @@
 image: sandurz/node-git-aws:with-chrome
 
 pipelines:
-  default:
-    - step:
+  pull-requests:
+    dev:
+      - step:
+        image: sandurz/node-git-aws:with-chrome
         caches:
           - node
         script: # Modify the commands below to build your repository.
@@ -15,4 +17,23 @@ pipelines:
           - cd $BITBUCKET_CLONE_DIR
           - npm install
           - npm run test_build
+  branches:
+    dev:
+      - step:
+        image: sandurz/node-git-aws:latest
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+          - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+          - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+          - aws s3 cp s3://permanent-repos/dev/files.tar.gz /data/tmp/files.tar.gz
+          - cd ..
+          - tar -xzf /data/tmp/files.tar.gz
+          - cd $BITBUCKET_CLONE_DIR
+          - npm install
           - npm run build
+          - cd ..
+          - mv build mdot
+          - tar -czvf mdot.tar.gz /mdot/dist
+          - aws s3 cp mdot.tar.gz s3://permanent-repos/dev/mdot.tar.gz 
