@@ -1,4 +1,4 @@
-image: sandurz/node-git-aws:latest
+image: sandurz/node-git-aws:with-chrome
 
 pipelines:
   default:
