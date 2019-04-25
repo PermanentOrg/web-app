@@ -2,7 +2,7 @@ image: sandurz/node-git-aws:with-chrome
 
 pipelines:
   pull-requests:
-    dev:
+    '**':
       - step:
           image: sandurz/node-git-aws:with-chrome
           caches:
