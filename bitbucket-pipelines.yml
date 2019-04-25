@@ -1,21 +1,34 @@
-image: sandurz/node-git-aws:with-chrome
+image: sandurz/node-git-aws:latest
 
 pipelines:
   pull-requests:
     '**':
+      - parallel: 
+        - step:
+            name: Download Files repo
+            script:
+              - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+              - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+              - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+              - aws s3 cp --quiet s3://permanent-repos/dev/files.tar.gz /data/tmp/files.tar.gz
+              - cd ..
+              - tar -xzf /data/tmp/files.tar.gz
+            artifacts:
+              - ../files/**
+        - step:
+            name: NPM install
+            caches:
+              - node
+            script:
+              - npm install
+            artifacts:
+              - node_modules/**
       - step:
+          name: Unit test
           image: sandurz/node-git-aws:with-chrome
           caches:
             - node
           script: # Modify the commands below to build your repository.
-            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-            - aws s3 cp --quiet s3://permanent-repos/dev/files.tar.gz /data/tmp/files.tar.gz
-            - cd ..
-            - tar -xzf /data/tmp/files.tar.gz
-            - cd $BITBUCKET_CLONE_DIR
-            - npm install
             - npm run test_build
   branches:
     dev:
