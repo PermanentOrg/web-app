@@ -85,9 +85,10 @@ export class ArchivePickerComponent implements OnInit {
   sendInvite() {
     const deferred = new Deferred();
     const fields: PromptField[] = clone(INVITATION_FIELDS(this.searchEmail));
+    const forShare = !!this.dialogData.shareItem;
     fields.push(ACCESS_ROLE_FIELD);
 
-    return this.prompt.prompt(fields, 'Send invitation', deferred.promise, 'Send')
+    return this.prompt.prompt(fields, forShare ? 'Invite to share' : 'Send invitation', deferred.promise, 'Send')
       .then((value) => {
         const invite = new InviteVO({
           email: value.email,
