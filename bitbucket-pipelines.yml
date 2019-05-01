@@ -15,6 +15,7 @@ pipelines:
   pull-requests:
     '**':
       - step:
+          name: Unit tests
           image: sandurz/node-git-aws:with-chrome
           caches:
             - node
@@ -31,6 +32,7 @@ pipelines:
   branches:
     dev:
       - step:
+          name: Build and upload to S3
           image: sandurz/node-git-aws:latest
           caches:
             - node
