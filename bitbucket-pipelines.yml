@@ -45,7 +45,7 @@ pipelines:
             - tar -xzf /data/tmp/files.tar.gz
             - cd $BITBUCKET_CLONE_DIR
             - npm install
-            - npm run build
+            - npm run build_dev
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
