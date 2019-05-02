@@ -24,6 +24,7 @@ export class NewsletterSignupComponent implements OnInit {
   mailchimpError: string;
   mailchimpSent = false;
   existingMember = false;
+  existingUser = false;
 
   waiting = false;
   done = false;
@@ -61,7 +62,8 @@ export class NewsletterSignupComponent implements OnInit {
 
   ngOnInit() {
     if (this.accountService.isLoggedIn()) {
-      this.router.navigate(['/embed', 'done']);
+      this.existingUser = true;
+      this.done = true;
     }
   }
 
@@ -93,7 +95,7 @@ export class NewsletterSignupComponent implements OnInit {
         }
       }, error => {
         this.waiting = false;
-        this.mailchimpError = 'Sorry, an error occurred';
+        this.mailchimpSent = true;
       });
   }
 
