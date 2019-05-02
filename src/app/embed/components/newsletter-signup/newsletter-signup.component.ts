@@ -63,6 +63,7 @@ export class NewsletterSignupComponent implements OnInit {
   ngOnInit() {
     if (this.accountService.isLoggedIn()) {
       this.existingUser = true;
+      this.mailchimpSent = true;
       this.done = true;
     }
   }
