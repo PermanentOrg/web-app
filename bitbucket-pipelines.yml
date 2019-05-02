@@ -16,7 +16,7 @@ pipelines:
     '**':
       - step:
           name: Unit tests
-          image: sandurz/node-git-aws:with-chrome
+          image: permanentlegacy/node-git-aws:with-chrome
           caches:
             - node
           script: # Modify the commands below to build your repository.
@@ -30,7 +30,7 @@ pipelines:
     dev:
       - step:
           name: Build and upload to S3
-          image: sandurz/node-git-aws:latest
+          image: permanentlegacy/node-git-aws:latest
           deployment: test
           caches:
             - node
