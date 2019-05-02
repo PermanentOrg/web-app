@@ -66,6 +66,10 @@ export class NewsletterSignupComponent implements OnInit {
   }
 
   onMailchimpSubmit(formValue) {
+    if (this.waiting) {
+      return;
+    }
+
     this.waiting = true;
     this.mailchimpError = null;
     const params = new HttpParams()
@@ -94,6 +98,10 @@ export class NewsletterSignupComponent implements OnInit {
   }
 
   onSignupSubmit(formValue) {
+    if (this.waiting) {
+      return false;
+    }
+
     this.waiting = true;
 
     this.accountService.signUp(
@@ -102,6 +110,7 @@ export class NewsletterSignupComponent implements OnInit {
     ).then((response: AccountResponse) => {
         return this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
+            this.waiting = false;
             this.done = true;
             // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           });
