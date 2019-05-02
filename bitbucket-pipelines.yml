@@ -50,6 +50,7 @@ pipelines:
             - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - aws s3 cp mdot.tar.gz s3://permanent-repos/dev/mdot.tar.gz 
       - step:
+          name: Deploy dev (optional)
           image: mesosphere/aws-cli:latest
           trigger: manual
           script:
