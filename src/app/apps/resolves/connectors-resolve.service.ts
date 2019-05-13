@@ -18,7 +18,8 @@ export class ConnectorsResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     const archiveId = this.accountService.getArchive().archiveId;
     const connectors = [
-      new ConnectorOverviewVO({archiveId: archiveId, type: 'type.connector.facebook'})
+      new ConnectorOverviewVO({archiveId: archiveId, type: 'type.connector.facebook'}),
+      new ConnectorOverviewVO({archiveId: archiveId, type: 'type.connector.familysearch'}),
     ];
 
     return this.api.connector.getOverview(connectors)

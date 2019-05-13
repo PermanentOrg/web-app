@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } 
 import { ActivatedRoute } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
-
+import { StorageService } from '@shared/services/storage/storage.service';
 import { ConnectorOverviewVO, FolderVO } from '@root/app/models';
-import { ConnectorComponent } from '../connector/connector.component';
+import { ConnectorComponent, FAMILYSEARCH_CONNECT_KEY } from '../connector/connector.component';
 import { find } from 'lodash';
 
 @Component({
@@ -18,7 +18,11 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren(ConnectorComponent) connectorComponents: QueryList<ConnectorComponent>;
 
-  constructor(private route: ActivatedRoute, private dataService: DataService) {
+  constructor(
+    private route: ActivatedRoute,
+    private dataService: DataService,
+    private storage: StorageService
+  ) {
     this.appsFolder = this.route.snapshot.data.appsFolder;
     this.connectors = this.route.snapshot.data.connectors;
 
@@ -37,6 +41,14 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy {
         return comp.connector.type === 'type.connector.facebook';
       });
       fbConnectorComponent.connect();
+    }
+
+    if (queryParams.code && this.storage.local.get(FAMILYSEARCH_CONNECT_KEY)) {
+      const connectorComponents = this.connectorComponents.toArray();
+      const fsConnectorComponent = find(connectorComponents, (comp: ConnectorComponent) => {
+        return comp.connector.type === 'type.connector.familysearch';
+      });
+      fsConnectorComponent.authorize(queryParams.code);
     }
   }
 

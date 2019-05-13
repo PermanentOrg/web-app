@@ -1,4 +1,4 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, ConnectorOverviewVO } from '@root/app/models';
+import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, ConnectorOverviewVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -44,6 +44,44 @@ export class ConnectorRepo extends BaseRepo {
     }];
 
     return this.http.sendRequest('/connector/uploadFacebookBulkImport', data, ConnectorResponse);
+  }
+
+  public familysearchConnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/familysearchSetup', data, ConnectorResponse);
+  }
+
+  public familysearchAuthorize(archive: ArchiveVO, code: string) {
+    const simpleVo = new SimpleVO({
+      key: 'oauthCode',
+      value: code
+    });
+
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: simpleVo
+    }];
+
+    return this.http.sendRequest(`/connector/familysearchAuthorize`, data, ConnectorResponse);
+  }
+
+  public familysearchDisconnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/familysearchDisconnect', data, ConnectorResponse);
+  }
+
+  public getFamilysearchUser(archive: ArchiveVO): Promise<any> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchUser', data, ConnectorResponse);
   }
 }
 

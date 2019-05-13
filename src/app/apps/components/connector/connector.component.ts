@@ -13,11 +13,14 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 export enum ConnectorImportType {
   Everything,
   Tagged
 }
+
+export const FAMILYSEARCH_CONNECT_KEY = 'familysearchConnect';
 
 @Component({
   selector: 'pr-connector',
@@ -35,13 +38,16 @@ export class ConnectorComponent implements OnInit {
 
   public waiting: boolean;
 
+  public connectedAccountName: string;
+
   constructor(
     private router: Router,
     private prConstants: PrConstantsService,
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private prompt: PromptService
+    private prompt: PromptService,
+    private storage: StorageService
   ) { }
 
   ngOnInit() {
@@ -52,6 +58,14 @@ export class ConnectorComponent implements OnInit {
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();
+
+    if (this.connected && type === 'familysearch') {
+      this.api.connector.getFamilysearchUser(this.account.getArchive())
+        .then(response => {
+          const user = response.getResultsData()[0][0];
+          this.connectedAccountName = user.displayName;
+        });
+    }
   }
 
   setStatus() {
@@ -75,6 +89,11 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         connectRequest = this.api.connector.facebookConnect(archive);
+        break;
+      case 'type.connector.familysearch':
+        this.storage.local.set('familysearchConnect', true);
+        connectRequest = this.api.connector.familysearchConnect(archive);
+        break;
     }
 
   if (connectRequest) {
@@ -105,6 +124,10 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         disconnectRequest = this.api.connector.facebookDisconnect(archive);
+        break;
+      case 'type.connector.familysearch':
+        disconnectRequest = this.api.connector.familysearchDisconnect(archive);
+        break;
     }
 
     if (disconnectRequest) {
@@ -120,6 +143,38 @@ export class ConnectorComponent implements OnInit {
         .then((connector: ConnectorOverviewVO) => {
           this.connector = connector;
           this.setStatus();
+        })
+        .catch((response: ConnectorResponse) => {
+          this.message.showError(response.getMessage(), true);
+        });
+    }
+  }
+
+  authorize(code: string) {
+    let connectRequest: Observable<any>;
+    const archive = this.account.getArchive();
+
+    this.waiting = true;
+
+    switch (this.connector.type) {
+      case 'type.connector.familysearch':
+        connectRequest = this.api.connector.familysearchAuthorize(archive, code);
+        break;
+    }
+
+  if (connectRequest) {
+      return connectRequest
+        .pipe(map(((response: ConnectorResponse) => {
+          this.waiting = false;
+          if (!response.isSuccessful) {
+            throw response;
+          }
+
+          return response.getConnectorOverviewVO();
+        }))).toPromise()
+        .then((connector: ConnectorOverviewVO) => {
+          this.connector = connector;
+          console.log('authorized?', connector);
         })
         .catch((response: ConnectorResponse) => {
           this.message.showError(response.getMessage(), true);
