@@ -60,16 +60,20 @@ export class ConnectorComponent implements OnInit {
     this.setStatus();
 
     if (this.connected && type === 'familysearch') {
-      this.api.connector.getFamilysearchUser(this.account.getArchive())
-        .then(response => {
-          const user = response.getResultsData()[0][0];
-          this.connectedAccountName = user.displayName;
-        });
+      this.getFamilysearchUser();
     }
   }
 
   setStatus() {
     this.connected = this.connector.status === 'status.connector.connected';
+  }
+
+  getFamilysearchUser() {
+    this.api.connector.getFamilysearchUser(this.account.getArchive())
+    .then(response => {
+      const user = response.getResultsData()[0][0];
+      this.connectedAccountName = user.displayName;
+    });
   }
 
   goToFolder() {
@@ -162,7 +166,7 @@ export class ConnectorComponent implements OnInit {
         break;
     }
 
-  if (connectRequest) {
+    if (connectRequest) {
       return connectRequest
         .pipe(map(((response: ConnectorResponse) => {
           this.waiting = false;
@@ -173,8 +177,10 @@ export class ConnectorComponent implements OnInit {
           return response.getConnectorOverviewVO();
         }))).toPromise()
         .then((connector: ConnectorOverviewVO) => {
-          this.connector = connector;
-          console.log('authorized?', connector);
+          this.connector.update(connector);
+          this.setStatus();
+          this.getFamilysearchUser();
+          this.router.navigate(['/apps'], {queryParams: {}});
         })
         .catch((response: ConnectorResponse) => {
           this.message.showError(response.getMessage(), true);

@@ -48,7 +48,9 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy {
       const fsConnectorComponent = find(connectorComponents, (comp: ConnectorComponent) => {
         return comp.connector.type === 'type.connector.familysearch';
       });
-      fsConnectorComponent.authorize(queryParams.code);
+      setTimeout(() => {
+        fsConnectorComponent.authorize(queryParams.code);
+      });
     }
   }
 
