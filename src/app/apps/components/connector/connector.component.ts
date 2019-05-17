@@ -14,6 +14,7 @@ import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { Dialog } from '@root/app/dialog/dialog.service';
 
 export enum ConnectorImportType {
   Everything,
@@ -47,7 +48,8 @@ export class ConnectorComponent implements OnInit {
     private account: AccountService,
     private message: MessageService,
     private prompt: PromptService,
-    private storage: StorageService
+    private storage: StorageService,
+    private dialog: Dialog
   ) { }
 
   ngOnInit() {
@@ -76,16 +78,25 @@ export class ConnectorComponent implements OnInit {
     });
   }
 
-  getFamilysearchTreeUser() {
+  async startFamilysearchTreeImport() {
+    const data = await this.getFamilysearchTreeData();
+
+    try {
+      await this.dialog.open('FamilySearchImportComponent', data);
+      console.log('complete!');
+    } catch (err) { }
+  }
+
+  async getFamilysearchTreeData() {
     this.waiting = true;
-    this.api.connector.getFamilysearchTreeUser(this.account.getArchive())
-    .then(async response => {
-      const responseData = response.getResultsData()[0][0];
-      const treeResponse = await this.api.connector.getFamilysearchAncestry(this.account.getArchive(), responseData.id);
-      const treeResponseData = treeResponse.getResultsData()[0][0];
-      console.log(treeResponseData.persons);
-      this.waiting = false;
-    });
+    const userResponse = await this.api.connector.getFamilysearchTreeUser(this.account.getArchive());
+    const userResponseData = userResponse.getResultsData()[0][0];
+
+    const treeResponse = await this.api.connector.getFamilysearchAncestry(this.account.getArchive(), userResponseData.id);
+    this.waiting = false;
+
+    const treeResponseData = treeResponse.getResultsData()[0][0];
+    return { currentUserData: userResponseData, treeData: treeResponseData.persons };
   }
 
   goToFolder() {
