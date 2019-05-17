@@ -60,7 +60,7 @@ export class ConnectorComponent implements OnInit {
     this.setStatus();
 
     if (this.connected && type === 'familysearch') {
-      this.getFamilysearchUser();
+      // this.getFamilysearchUser();
     }
   }
 
@@ -73,6 +73,18 @@ export class ConnectorComponent implements OnInit {
     .then(response => {
       const user = response.getResultsData()[0][0];
       this.connectedAccountName = user.displayName;
+    });
+  }
+
+  getFamilysearchTreeUser() {
+    this.waiting = true;
+    this.api.connector.getFamilysearchTreeUser(this.account.getArchive())
+    .then(async response => {
+      const responseData = response.getResultsData()[0][0];
+      const treeResponse = await this.api.connector.getFamilysearchAncestry(this.account.getArchive(), responseData.id);
+      const treeResponseData = treeResponse.getResultsData()[0][0];
+      console.log(treeResponseData.persons);
+      this.waiting = false;
     });
   }
 

@@ -83,6 +83,23 @@ export class ConnectorRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/connector/getFamilysearchUser', data, ConnectorResponse);
   }
+
+  public getFamilysearchTreeUser(archive: ArchiveVO): Promise<any> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchTreeUser', data, ConnectorResponse);
+  }
+
+  public getFamilysearchAncestry(archive: ArchiveVO, personId: string): Promise<any> {
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: new SimpleVO({key: 'personId', value: personId})
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchAncestry', data, ConnectorResponse);
+  }
 }
 
 export class ConnectorResponse extends BaseResponse {
