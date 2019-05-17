@@ -16,7 +16,13 @@ export class MessageService {
     this.component = toRegister;
   }
 
-  public showMessage(message: string, style ?: string, translate ?: boolean, navigateTo ?: string[], navigateParams ?: any) {
+  public showMessage(
+    message: string,
+    style ?: 'success' | 'info' | 'warning' | 'danger',
+    translate ?: boolean,
+    navigateTo ?: string[],
+    navigateParams ?: any
+  ) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
     }

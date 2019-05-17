@@ -3,6 +3,7 @@ import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { filter } from 'lodash';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 interface FamilySearchPersonI {
   id: string;
@@ -35,7 +36,8 @@ export class FamilySearchImportComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
-    private api: ApiService
+    private api: ApiService,
+    private message: MessageService
   ) {
     this.currentUser = data.currentUserData;
     this.familyMembers = filter(data.treeData, person => person.id !== this.currentUser.id);
@@ -64,9 +66,18 @@ export class FamilySearchImportComponent implements OnInit {
 
     this.waiting = true;
 
+    const total = archivesToCreate.length;
+    let importedCount = 0;
+
+    this.message.showMessage(
+      `Starting archive import for ${total} person(s). Do not close this window or refresh your browser.`,
+      'info'
+    );
+
     while (archivesToCreate.length) {
       const archive = archivesToCreate.pop();
       await this.api.archive.create(archive);
+      this.message.showMessage(`Archive for ${archive.fullName} created (${++importedCount} of ${total}).`, 'success');
     }
 
     this.waiting = false;
