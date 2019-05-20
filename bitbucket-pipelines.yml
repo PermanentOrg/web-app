@@ -87,7 +87,7 @@ pipelines:
       - step:
           name: Build and upload to S3
           image: permanentlegacy/node-git-aws:latest
-          deployment: staging
+          deployment: production
           caches:
             - node
           script:
