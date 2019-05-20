@@ -136,7 +136,7 @@ export class SharingComponent implements OnInit {
       fields,
       promptTitle,
       deferred.promise,
-      'Save'
+      'Share'
       )
       .then((value) => {
         updatedShareVo = new ShareVO(shareVo);

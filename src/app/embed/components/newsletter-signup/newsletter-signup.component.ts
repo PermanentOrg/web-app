@@ -24,6 +24,7 @@ export class NewsletterSignupComponent implements OnInit {
   mailchimpError: string;
   mailchimpSent = false;
   existingMember = false;
+  existingUser = false;
 
   waiting = false;
   done = false;
@@ -61,11 +62,17 @@ export class NewsletterSignupComponent implements OnInit {
 
   ngOnInit() {
     if (this.accountService.isLoggedIn()) {
-      this.router.navigate(['/embed', 'done']);
+      this.existingUser = true;
+      this.mailchimpSent = true;
+      this.done = true;
     }
   }
 
   onMailchimpSubmit(formValue) {
+    if (this.waiting) {
+      return;
+    }
+
     this.waiting = true;
     this.mailchimpError = null;
     const params = new HttpParams()
@@ -89,11 +96,15 @@ export class NewsletterSignupComponent implements OnInit {
         }
       }, error => {
         this.waiting = false;
-        this.mailchimpError = 'Sorry, an error occurred';
+        this.mailchimpSent = true;
       });
   }
 
   onSignupSubmit(formValue) {
+    if (this.waiting) {
+      return false;
+    }
+
     this.waiting = true;
 
     this.accountService.signUp(
@@ -102,6 +113,7 @@ export class NewsletterSignupComponent implements OnInit {
     ).then((response: AccountResponse) => {
         return this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
+            this.waiting = false;
             this.done = true;
             // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           });
