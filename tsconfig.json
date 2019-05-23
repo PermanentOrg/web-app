@@ -24,6 +24,7 @@
       "@fileBrowser/*": ["src/app/file-browser/*"],
       "@auth/*": ["src/app/auth/*"],
       "@pledge/*": ["src/app/pledge/*"],
+      "@public/*": ["src/app/public/*"],
       "@embed/*": ["src/app/embed/*"],
       "@models/*": ["src/app/models/*"],
       "@root/*": ["src/*"]

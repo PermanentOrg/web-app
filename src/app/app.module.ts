@@ -1,4 +1,5 @@
 import { NgModule, Injectable } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
 import {
   RouterModule,
   Router,
@@ -46,7 +47,15 @@ export class CustomUrlSerializer implements UrlSerializer {
   }
 }
 
-
+export function getBaseLocation() {
+  if (location.pathname.indexOf('/p/') === 0) {
+    console.log('on /p/?');
+    return '/';
+  } else {
+    console.log('on /m/?');
+    return '/m/';
+  }
+}
 
 
 @NgModule({
@@ -70,6 +79,10 @@ export class CustomUrlSerializer implements UrlSerializer {
     {
       provide: UrlSerializer,
       useClass: CustomUrlSerializer
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: getBaseLocation
     }
   ],
   bootstrap: [AppComponent]
