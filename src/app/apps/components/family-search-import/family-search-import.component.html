@@ -21,7 +21,8 @@
   </div>
   <div class="dialog-footer">
     <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
-    <button class="btn btn-primary" (click)="stage = 'memories'">Next</button>
+    <button class="btn btn-primary" (click)="stage = 'memories'"
+      [disabled]="!getSelectedCount()">Next</button>
   </div>
 </div>
 <div class="dialog-content" *ngIf="stage === 'memories'">
@@ -61,6 +62,21 @@
   <div class="dialog-footer">
     <button class="btn btn-secondary" (click)="cancel()" [disabled]="waiting">Cancel</button>
     <button class="btn btn-primary" (click)="startImport()" [disabled]="waiting">Import Family Tree</button>
+  </div>
+</div>
+<div class="dialog-content" *ngIf="stage === 'importing'">
+  <div class="dialog-body">
+    <div class="page-title">Importing {{getSelectedCount()}} person(s)</div>
+    <p>
+      <span>Do not close your browser your refresh this window.</span>
+    </p>
+    <div *ngIf="showImportSpinner" class="import-spinner">
+      <div class="lds-dual-ring"></div>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="cancel()" [disabled]="waiting">Cancel</button>
+    <button class="btn btn-primary" [disabled]="waiting">Import Family Tree</button>
   </div>
 </div>
     

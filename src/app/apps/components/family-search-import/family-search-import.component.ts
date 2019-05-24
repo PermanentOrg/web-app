@@ -27,11 +27,12 @@ interface FamilyMember {
   styleUrls: ['./family-search-import.component.scss']
 })
 export class FamilySearchImportComponent implements OnInit {
-  public stage = 'people';
+  public stage: 'people' | 'memories' | 'importing' = 'people';
   public importMemories = 'yes';
   public familyMembers: FamilySearchPersonI[] = [];
   public currentUser: FamilySearchPersonI;
   public waiting = false;
+  public showImportSpinner = true;
 
   constructor(
     private dialogRef: DialogRef,
@@ -56,6 +57,7 @@ export class FamilySearchImportComponent implements OnInit {
       return this.cancel();
     }
 
+    this.stage = 'importing';
     const archivesToCreate = selected.map(person => {
       return new ArchiveVO({
         fullName: person.display.name,
@@ -67,21 +69,29 @@ export class FamilySearchImportComponent implements OnInit {
     this.waiting = true;
 
     const total = archivesToCreate.length;
-    let importedCount = 0;
 
     this.message.showMessage(
       `Starting archive import for ${total} person(s). Do not close this window or refresh your browser.`,
       'info'
     );
 
-    while (archivesToCreate.length) {
-      const archive = archivesToCreate.pop();
-      await this.api.archive.create(archive);
-      this.message.showMessage(`Archive for ${archive.fullName} created (${++importedCount} of ${total}).`, 'success');
-    }
+    this.showImportSpinner = true;
+    await this.api.archive.create(archivesToCreate);
+    this.showImportSpinner = false;
+
+    this.message.showMessage(
+      `Import complete. Tap here to view your new archives.`,
+      'success',
+      false,
+      ['/choosearchive']
+    );
 
     this.waiting = false;
     this.dialogRef.close();
+  }
+
+  getSelectedCount() {
+    return this.familyMembers.filter(person => person.isSelected).length;
   }
 
   getRelationshipFromAncestryNumber(ancestryNumber: number) {
