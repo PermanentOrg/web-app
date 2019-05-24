@@ -60,26 +60,19 @@ export class ConnectorComponent implements OnInit {
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();
-
-    if (this.connected && type === 'familysearch') {
-      // this.getFamilysearchUser();
-    }
   }
 
   setStatus() {
     this.connected = this.connector.status === 'status.connector.connected';
   }
 
-  getFamilysearchUser() {
-    this.api.connector.getFamilysearchUser(this.account.getArchive())
-    .then(response => {
-      const user = response.getResultsData()[0][0];
-      this.connectedAccountName = user.displayName;
-    });
-  }
-
   async startFamilysearchTreeImport() {
     const data = await this.getFamilysearchTreeData();
+
+    if (!data) {
+      return;
+    }
+
 
     try {
       await this.dialog.open('FamilySearchImportComponent', data);
@@ -89,14 +82,22 @@ export class ConnectorComponent implements OnInit {
 
   async getFamilysearchTreeData() {
     this.waiting = true;
-    const userResponse = await this.api.connector.getFamilysearchTreeUser(this.account.getArchive());
-    const userResponseData = userResponse.getResultsData()[0][0];
 
-    const treeResponse = await this.api.connector.getFamilysearchAncestry(this.account.getArchive(), userResponseData.id);
-    this.waiting = false;
+    try {
+      const userResponse = await this.api.connector.getFamilysearchTreeUser(this.account.getArchive());
+      const userResponseData = userResponse.getResultsData()[0][0];
 
-    const treeResponseData = treeResponse.getResultsData()[0][0];
-    return { currentUserData: userResponseData, treeData: treeResponseData.persons };
+      const treeResponse = await this.api.connector.getFamilysearchAncestry(this.account.getArchive(), userResponseData.id);
+      this.waiting = false;
+
+      const treeResponseData = treeResponse.getResultsData()[0][0];
+      return { currentUserData: userResponseData, treeData: treeResponseData.persons };
+    } catch (response) {
+      this.waiting = false;
+      this.connector.status = 'status.connector.disconnected';
+      this.setStatus();
+      this.message.showError(response.getMessage());
+    }
   }
 
   goToFolder() {

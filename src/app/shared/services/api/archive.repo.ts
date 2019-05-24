@@ -1,6 +1,6 @@
 import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { flatten } from 'lodash';
+import { flatten, isArray } from 'lodash';
 import { Observable } from 'rxjs';
 
 export class ArchiveRepo extends BaseRepo {
@@ -35,10 +35,14 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise('/archive/change', data, ArchiveResponse);
   }
 
-  public create(archive: ArchiveVO): Promise<ArchiveResponse> {
-    const data = [{
-      ArchiveVO: archive
-    }];
+  public create(archive: ArchiveVO | ArchiveVO[]): Promise<ArchiveResponse> {
+    if (!isArray(archive)) {
+      archive = [archive];
+    }
+
+    const data = archive.map(archiveVo => {
+      return { ArchiveVO: archiveVo };
+    });
 
     return this.http.sendRequestPromise('/archive/post', data, ArchiveResponse);
   }
