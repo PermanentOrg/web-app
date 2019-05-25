@@ -100,6 +100,24 @@ export class ConnectorRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/connector/getFamilysearchAncestry', data, ConnectorResponse);
   }
+
+  public getFamilysearchMemories(archive: ArchiveVO, personId: string): Promise<any> {
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: new SimpleVO({key: 'personId', value: personId})
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchMemories', data, ConnectorResponse);
+  }
+
+  public familysearchMemoryImportRequest(archive: ArchiveVO, personId: string): Promise<any> {
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: new SimpleVO({key: 'personId', value: personId})
+    }];
+
+    return this.http.sendRequestPromise('/connector/familysearchMemoryImportRequest', data, ConnectorResponse);
+  }
 }
 
 export class ConnectorResponse extends BaseResponse {

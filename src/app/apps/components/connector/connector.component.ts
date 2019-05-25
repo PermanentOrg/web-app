@@ -203,7 +203,6 @@ export class ConnectorComponent implements OnInit {
         .then((connector: ConnectorOverviewVO) => {
           this.connector.update(connector);
           this.setStatus();
-          this.getFamilysearchUser();
           this.router.navigate(['/apps'], {queryParams: {}});
         })
         .catch((response: ConnectorResponse) => {

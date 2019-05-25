@@ -4,6 +4,7 @@ import { filter } from 'lodash';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { AccountService } from '@shared/services/account/account.service';
 
 interface FamilySearchPersonI {
   id: string;
@@ -38,7 +39,8 @@ export class FamilySearchImportComponent implements OnInit {
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private account: AccountService
   ) {
     this.currentUser = data.currentUserData;
     this.familyMembers = filter(data.treeData, person => person.id !== this.currentUser.id);
@@ -76,7 +78,16 @@ export class FamilySearchImportComponent implements OnInit {
     );
 
     this.showImportSpinner = true;
-    await this.api.archive.create(archivesToCreate);
+    const response = await this.api.archive.create(archivesToCreate);
+
+    if (this.importMemories === 'yes') {
+      const newArchives = response.getArchiveVOs();
+      for (let index = 0; index < newArchives.length; index++) {
+        const newArchive = newArchives[index];
+        const personId = selected[index].id;
+        const importResponse = await this.api.connector.familysearchMemoryImportRequest(newArchive, personId);
+      }
+    }
     this.showImportSpinner = false;
 
     this.message.showMessage(
