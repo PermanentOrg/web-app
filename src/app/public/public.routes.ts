@@ -8,7 +8,11 @@ export const routes: Routes = [
     path: '',
     component: TestComponent,
   },
-  { path: 'test', component: TestComponent }
+  { path: 'test', component: TestComponent },
+  {
+    path: ':archiveNbr/:folderLinkId',
+    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+  }
 ];
 @NgModule({
   imports: [
