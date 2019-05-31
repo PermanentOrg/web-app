@@ -1,7 +1,16 @@
+:host {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+
+
 pr-thumbnail, pr-video {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  height: 400px;
-  width: auto;
+  width: 100%;
+  flex: 1 0 100%;
 }
