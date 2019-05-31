@@ -1,0 +1,23 @@
+:host {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-banner {
+  flex: 0 0 50px;
+}
+
+.public-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.public-footer {
+  flex: 0 0 50px;
+}

@@ -235,6 +235,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       } else {
         rootUrl = '/shares/byme';
       }
+    } else if (this.router.url.includes('/p/')) {
+      rootUrl = '/p';
     }
 
     if (routeParams.archiveNbr) {

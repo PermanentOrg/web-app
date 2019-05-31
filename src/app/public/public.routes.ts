@@ -2,16 +2,31 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TestComponent } from './components/test/test.component';
+import { PublicItemComponent } from './components/public-item/public-item.component';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
+import { PublicComponent } from './components/public/public.component';
+
+const recordResolve = {
+  currentRecord: RecordResolveService
+};
 
 export const routes: Routes = [
   {
     path: '',
-    component: TestComponent,
+    component: PublicComponent,
     children: [
-      { path: 'test', component: TestComponent },
+      {
+        path: 'record/:recArchiveNbr',
+        resolve: recordResolve,
+        component: PublicItemComponent
+      },
       {
         path: ':archiveNbr/:folderLinkId',
         loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+        data: {
+          noFileListPadding: true
+        }
       }
     ]
   },
@@ -22,6 +37,7 @@ export const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   providers: [
+    // RecordResolveService
   ]
 })
 export class PublicRoutingModule { }
