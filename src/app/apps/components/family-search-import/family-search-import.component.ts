@@ -80,14 +80,22 @@ export class FamilySearchImportComponent implements OnInit {
     this.showImportSpinner = true;
     const response = await this.api.archive.create(archivesToCreate);
 
-    if (this.importMemories === 'yes') {
-      const newArchives = response.getArchiveVOs();
-      for (let index = 0; index < newArchives.length; index++) {
-        const newArchive = newArchives[index];
-        const personId = selected[index].id;
-        const importResponse = await this.api.connector.familysearchMemoryImportRequest(newArchive, personId);
-      }
+    const newArchives = response.getArchiveVOs();
+    const personIds = [];
+    for (let index = 0; index < newArchives.length; index++) {
+      personIds.push(selected[index].id);
     }
+
+    try {
+      await this.api.connector.familysearchFactImportRequest(newArchives, personIds);
+
+      if (this.importMemories === 'yes') {
+        await this.api.connector.familysearchMemoryImportRequest(newArchives, personIds);
+      }
+    } catch (err) {
+      this.message.showError('There was an error importing facts and memories. Please try again later.');
+    }
+
     this.showImportSpinner = false;
 
     this.message.showMessage(
