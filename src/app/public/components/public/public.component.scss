@@ -1,14 +1,16 @@
 @import 'variables';
 
 :host {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  &.for-record {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .public-banner {
@@ -51,6 +53,10 @@
   display: flex;
 }
 
+.public-content-breadcrumbs {
+  background: $gray-700;
+}
+
 .public-footer {
   position: fixed;
   height: 50px;
@@ -58,6 +64,7 @@
   width: 100%;
   background: rgba($gray-900, 0.6);
   color: white;
+  font-weight: bold;
   text-align: center;
   display: flex;
   align-items: center;

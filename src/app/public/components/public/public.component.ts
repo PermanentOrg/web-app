@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'pr-public',
@@ -6,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./public.component.scss']
 })
 export class PublicComponent implements OnInit {
+  @HostBinding('class.for-record') isRecord: boolean;
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute
+  ) {
+    this.isRecord = route.snapshot.firstChild.data.isRecord;
+  }
 
   ngOnInit() {
   }

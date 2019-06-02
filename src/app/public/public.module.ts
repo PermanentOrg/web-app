@@ -12,12 +12,14 @@ import { PublicItemComponent } from './components/public-item/public-item.compon
 import { SharedModule } from '@shared/shared.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
+import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   declarations: [
     TestComponent,
     PublicItemComponent,
-    PublicComponent
+    PublicComponent,
+    BreadcrumbsComponent
   ],
   imports: [
     CommonModule,

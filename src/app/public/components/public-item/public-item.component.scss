@@ -5,12 +5,16 @@
   flex: 1 1 auto;
 }
 
-
+.public-item-name {
+  flex: 0 0 auto;
+  text-align: center;
+  font-weight: bold;
+}
 
 pr-thumbnail, pr-video {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   width: 100%;
-  flex: 1 0 100%;
+  flex: 1 0 auto;
 }

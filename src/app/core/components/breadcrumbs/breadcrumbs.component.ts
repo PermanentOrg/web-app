@@ -78,6 +78,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       rootUrl = '/apps';
     } else if (this.router.routerState.snapshot.url.includes('/shares')) {
       rootUrl = '/shares';
+    } else if  (this.router.url.includes('/p')) {
+      rootUrl = '/p';
     } else {
       rootUrl = '/myfiles';
     }
@@ -86,7 +88,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
+    if (!this.router.url.includes('/p/')) {
+      this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
+    }
 
     for (let i = 1; i < folder.pathAsText.length; i++) {
       this.breadcrumbs.push(new Breadcrumb(

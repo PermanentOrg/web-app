@@ -74,8 +74,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
 
-    console.log(this.noFileListPadding);
-
     this.dataService.setCurrentFolder(this.currentFolder);
 
     // get current app-wide folder view and register for updates

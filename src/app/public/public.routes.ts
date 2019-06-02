@@ -19,7 +19,10 @@ export const routes: Routes = [
       {
         path: 'record/:recArchiveNbr',
         resolve: recordResolve,
-        component: PublicItemComponent
+        component: PublicItemComponent,
+        data: {
+          isRecord: true
+        }
       },
       {
         path: ':archiveNbr/:folderLinkId',

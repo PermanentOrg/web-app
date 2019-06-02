@@ -6,8 +6,11 @@
       </div>
   </div>
 </div>
+<div class="public-content-breadcrumbs">
+  <pr-breadcrumbs *ngIf="!isRecord"></pr-breadcrumbs>
+</div>
 <div class="public-content">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>
 <div class="public-footer">
   Sign Up For Permanent.org

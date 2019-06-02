@@ -14,6 +14,7 @@ export class PublicItemComponent implements OnInit {
 
   constructor(route: ActivatedRoute) {
     this.record = route.snapshot.data.currentRecord;
+    console.log(route.snapshot.data);
   }
 
   ngOnInit() {

@@ -69,6 +69,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   private isInShares: boolean;
   private isInApps: boolean;
+  private isInPublic: boolean;
 
   constructor(
     private dataService: DataService,
@@ -90,8 +91,16 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.allowActions = false;
     }
 
+    if (this.router.routerState.snapshot.url.includes('/p/')) {
+      this.allowActions = false;
+    }
+
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
+    }
+
+    if (this.router.routerState.snapshot.url.includes('/p/')) {
+      this.isInPublic = true;
     }
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
@@ -135,6 +144,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
       rootUrl = '/shares/withme';
+    } else if (this.isInPublic) {
+      rootUrl = '/p';
     } else {
       rootUrl = '/myfiles';
     }
