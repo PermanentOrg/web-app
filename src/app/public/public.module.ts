@@ -15,7 +15,6 @@ import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.c
 
 @NgModule({
   declarations: [
-    TestComponent,
     PublicItemComponent,
     PublicComponent,
     BreadcrumbsComponent
