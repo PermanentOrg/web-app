@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TestComponent } from './components/test/test.component';
 import { PublicItemComponent } from './components/public-item/public-item.component';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
