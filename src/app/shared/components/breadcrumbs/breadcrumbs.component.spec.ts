@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
-import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
+import { BreadcrumbsComponent } from '@shared/components/breadcrumbs/breadcrumbs.component';
 import { DataService } from '@shared/services/data/data.service';
 import { CoreModule } from '@core/core.module';
 import { Router } from '@angular/router';
