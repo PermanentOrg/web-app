@@ -12,7 +12,7 @@ export class PublicComponent implements OnInit {
   constructor(
     private route: ActivatedRoute
   ) {
-    this.isRecord = route.snapshot.firstChild.data.isRecord;
+    this.isRecord = !!route.snapshot.firstChild.firstChild.data.isRecord;
   }
 
   ngOnInit() {

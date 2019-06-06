@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecordVO } from '@models/record-vo';
+import { RecordVO, FolderVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,10 +11,16 @@ export class PublicItemComponent implements OnInit {
   public isVideo = false;
   public showThumbnail = true;
   public record: RecordVO;
+  public folder: FolderVO;
 
   constructor(route: ActivatedRoute) {
-    this.record = route.snapshot.data.currentRecord;
-    console.log(route.snapshot.data);
+    if (route.snapshot.data.publishedItem.recordId) {
+      // record
+      this.record = route.snapshot.data.publishedItem;
+    } else {
+      // folder
+      this.folder = route.snapshot.data.publishedItem;
+    }
   }
 
   ngOnInit() {

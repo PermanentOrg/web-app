@@ -5,30 +5,43 @@ import { PublicItemComponent } from './components/public-item/public-item.compon
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { PublicComponent } from './components/public/public.component';
+import { PublishResolveService } from './resolves/publish-resolve.service';
 
 const recordResolve = {
   currentRecord: RecordResolveService
+};
+
+const publishResolve = {
+  publishedItem: PublishResolveService
 };
 
 export const routes: Routes = [
   {
     path: '',
     component: PublicComponent,
+    data: {
+      isPublic: true
+    },
     children: [
       {
-        path: 'record/:recArchiveNbr',
-        resolve: recordResolve,
-        component: PublicItemComponent,
-        data: {
-          isRecord: true
-        }
-      },
-      {
-        path: ':archiveNbr/:folderLinkId',
-        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-        data: {
-          noFileListPadding: true
-        }
+        path: ':publishUrlToken',
+        children: [
+          {
+            path: '',
+            resolve: publishResolve,
+            component: PublicItemComponent,
+            data: {
+              isRecord: true
+            }
+          },
+          {
+            path: ':archiveNbr/:folderLinkId',
+            loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+            data: {
+              noFileListPadding: true
+            }
+          }
+        ]
       }
     ]
   },
@@ -39,7 +52,7 @@ export const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   providers: [
-    // RecordResolveService
+    PublishResolveService
   ]
 })
 export class PublicRoutingModule { }
