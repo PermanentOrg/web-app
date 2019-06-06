@@ -5,7 +5,6 @@ import { cloneDeep } from 'lodash';
 import * as Testing from '@root/test/testbedConfig';
 
 import { RelationshipsComponent } from './relationships.component';
-import { BreadcrumbsComponent } from '../breadcrumbs/breadcrumbs.component';
 import { DataService } from '@shared/services/data/data.service';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
