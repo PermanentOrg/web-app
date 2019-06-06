@@ -1,0 +1,72 @@
+@import 'variables';
+
+:host {
+  &.for-record {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.public-banner {
+  flex: 0 0 55px;
+  padding: 0px 0.5rem;
+  color: white;
+  background-color: $PR-blue;
+
+  .banner-content {
+    margin: 0 auto;
+    // max-width: 600px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .banner-logo {
+    height: 45px;
+    flex: 0 0 auto;
+
+  }
+
+  .banner-buttons {
+    margin-left: auto;
+    flex: 0 0 auto;
+    display: flex;
+
+    .btn {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: inline;
+      margin-left: 5px;
+    }
+  }
+}
+
+.public-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+}
+
+.public-content-breadcrumbs {
+  background: $gray-700;
+}
+
+.public-footer {
+  position: fixed;
+  height: 50px;
+  bottom: 0px;
+  width: 100%;
+  background: rgba($gray-900, 0.6);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
