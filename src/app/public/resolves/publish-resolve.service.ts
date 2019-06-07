@@ -18,18 +18,16 @@ export class PublishResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     return this.api.publish.getResource(route.params.publishUrlToken)
       .then((response: PublishResponse): RecordVO | any => {
-        console.log(response);
         if (response.getRecordVO()) {
           return response.getRecordVO();
         } else {
           const folder = response.getFolderVO();
-          console.log(folder);
           return this.router.navigate(['/p', route.params.publishUrlToken, folder.archiveNbr, folder.folder_linkId]);
         }
       })
       .catch((response: PublishResponse) => {
-        console.log(response);
-        this.message.showError(response.getMessage(), true);
+        window.location.pathname = '/';
+        // this.message.showError(response.getMessage(), true);
         return Promise.reject(response);
       });
   }
