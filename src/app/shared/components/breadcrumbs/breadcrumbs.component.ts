@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
@@ -46,7 +46,12 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   private scrollElement: Element;
   private folderChangeListener: Subscription;
 
-  constructor(private dataService: DataService, private elementRef: ElementRef, private router: Router) {
+  constructor(
+    private dataService: DataService,
+    private elementRef: ElementRef,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
   }
 
   ngOnInit() {
@@ -79,7 +84,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     } else if (this.router.routerState.snapshot.url.includes('/shares')) {
       rootUrl = '/shares';
     } else if  (this.router.routerState.snapshot.url.includes('/p')) {
-      rootUrl = '/p';
+      rootUrl = `/p/${this.route.firstChild.snapshot.params.publishUrlToken}`;
     } else {
       rootUrl = '/myfiles';
     }

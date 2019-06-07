@@ -5,6 +5,12 @@
   flex: 1 1 auto;
 }
 
+.public-record {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+}
+
 .public-item-name {
   flex: 0 0 auto;
   text-align: center;

@@ -99,7 +99,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.isInApps = true;
     }
 
-    if (this.router.routerState.snapshot.url.includes('/p/')) {
+    if (this.route.snapshot.data.isPublic) {
       this.isInPublic = true;
     }
 
@@ -151,7 +151,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (this.item.isFolder) {
-      this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
+      if (this.isInPublic) {
+        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
+      } else {
+        this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
+      }
     } else if (!this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
       this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {
