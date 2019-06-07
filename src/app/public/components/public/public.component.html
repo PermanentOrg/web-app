@@ -2,7 +2,7 @@
   <div class="banner-content">
       <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
       <div class="banner-buttons">
-        <button class="btn btn-default">Sign Up</button>
+        <button class="btn btn-default" (click)="onSignupClick()">Sign Up</button>
       </div>
   </div>
 </div>
@@ -12,6 +12,12 @@
 <div class="public-content">
   <router-outlet></router-outlet>
 </div>
-<div class="public-footer">
-  Sign Up For Permanent.org
+<div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">
+  <div class="public-footer-close"></div>
+  <span (click)="onSignupClick()">
+      <strong>Try Permanent.org for free</strong> 
+  </span>
+  <div class="public-footer-close" (click)="hideBottomBanner()">
+    ×
+  </div>
 </div>

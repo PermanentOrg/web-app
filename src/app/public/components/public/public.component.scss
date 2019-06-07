@@ -64,9 +64,31 @@
   width: 100%;
   background: rgba($gray-900, 0.6);
   color: white;
-  font-weight: bold;
+  // font-weight: bold;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateY(100%);
+  user-select: none;
+
+  transition: transform 0.4s ease-in;
+
+  &.public-footer-visible {
+    transform: translateY(0);
+  }
+
+  span {
+    flex: 1 1;
+    cursor: pointer;
+    margin: 0 auto;
+    @media screen and (max-width: 420px) {
+      padding: 0.5rem 0;
+    }
+  }
+
+  .public-footer-close {
+    flex: 0 0 3rem;
+    cursor: pointer;
+  }
 }

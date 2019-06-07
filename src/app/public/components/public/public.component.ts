@@ -9,6 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 export class PublicComponent implements OnInit {
   @HostBinding('class.for-record') isRecord: boolean;
 
+  bottomBannerVisible = true;
+
   constructor(
     private route: ActivatedRoute
   ) {
@@ -16,6 +18,14 @@ export class PublicComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  hideBottomBanner() {
+    this.bottomBannerVisible = false;
+  }
+
+  onSignupClick() {
+    window.location.pathname = '/';
   }
 
 }
