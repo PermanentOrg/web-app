@@ -35,7 +35,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   private velocityThreshold = 0.2;
   private screenWidth: number;
   private offscreenThreshold: number;
-
+  private loadingRecord = false;
 
   // UI
   public useMinimalView = false;
@@ -164,37 +164,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
           },
           ease: 'Power4.easeOut',
           onComplete: () => {
-            let targetIndex = this.currentIndex;
-            if (previous) {
-              targetIndex--;
-            } else {
-              targetIndex++;
-            }
-
-            // update current record and fetch surrounding items
-            const targetRecord = this.records[targetIndex];
-
-            this.currentIndex = targetIndex;
-            this.currentRecord = targetRecord;
-
-            this.initRecord();
-
-            this.disableSwipes = false;
-            this.loadQueuedItems();
-
-            if (targetRecord.archiveNbr) {
-              this.navigateToCurrentRecord();
-            } else if (targetRecord.isFetching) {
-              targetRecord.fetched
-                .then(() => {
-                  this.navigateToCurrentRecord();
-                });
-            } else {
-              this.dataService.fetchLeanItems([targetRecord])
-                .then(() => {
-                  this.navigateToCurrentRecord();
-                });
-            }
+            this.incrementCurrentRecord(previous);
           }
         } as any
       );
@@ -211,8 +181,48 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     }
   }
 
+  incrementCurrentRecord(previous = false) {
+    if (this.loadingRecord) {
+      return;
+    }
+    
+    this.loadingRecord = true;
+    let targetIndex = this.currentIndex;
+    if (previous) {
+      targetIndex--;
+    } else {
+      targetIndex++;
+    }
+
+    // update current record and fetch surrounding items
+    const targetRecord = this.records[targetIndex];
+
+    this.currentIndex = targetIndex;
+    this.currentRecord = targetRecord;
+
+    this.initRecord();
+
+    this.disableSwipes = false;
+    this.loadQueuedItems();
+
+    if (targetRecord.archiveNbr) {
+      this.navigateToCurrentRecord();
+    } else if (targetRecord.isFetching) {
+      targetRecord.fetched
+        .then(() => {
+          this.navigateToCurrentRecord();
+        });
+    } else {
+      this.dataService.fetchLeanItems([targetRecord])
+        .then(() => {
+          this.navigateToCurrentRecord();
+        });
+    }
+  }
+
   navigateToCurrentRecord() {
     this.router.navigate(['../', this.currentRecord.archiveNbr], {relativeTo: this.route});
+    this.loadingRecord = false;
   }
 
   loadQueuedItems() {
