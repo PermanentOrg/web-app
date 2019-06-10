@@ -13,11 +13,13 @@
   <router-outlet></router-outlet>
 </div>
 <div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">
-  <div class="public-footer-close"></div>
-  <span (click)="onSignupClick()">
-      <strong>Try Permanent.org for free</strong> 
-  </span>
-  <div class="public-footer-close" (click)="hideBottomBanner()">
-    ×
+  <div class="public-footer-content">
+    <div class="public-footer-close"></div>
+    <span (click)="onSignupClick()">
+        <strong>Try Permanent.org for free</strong> 
+    </span>
+    <div class="public-footer-close" (click)="hideBottomBanner()">
+      ×
+    </div>
   </div>
 </div>

@@ -20,6 +20,14 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   }
 }
 
+:host.grid-view {
+  .public-content & {
+    @media screen and (min-width: 800px) {
+      width: 25%;
+    }
+  }
+}
+
 .file-list-item {
   display: flex;
   align-items: center;
