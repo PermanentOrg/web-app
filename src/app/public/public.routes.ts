@@ -38,7 +38,7 @@ export const routes: Routes = [
             path: ':archiveNbr/:folderLinkId',
             loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
             data: {
-              noFileListPadding: true
+              noFileListPadding: true,
             }
           }
         ]

@@ -1,5 +1,7 @@
 @import 'variables';
 
+$public-max-width: 800px;
+
 :host {
   &.for-record {
     position: absolute;
@@ -14,23 +16,23 @@
 }
 
 .public-banner {
-  flex: 0 0 55px;
+  flex: 0 0 100px;
+  height: 100px;
   padding: 0px 0.5rem;
   color: white;
   background-color: $PR-blue;
 
   .banner-content {
     margin: 0 auto;
-    // max-width: 600px;
+    max-width: $public-max-width;
     display: flex;
     height: 100%;
     align-items: center;
   }
 
   .banner-logo {
-    height: 45px;
     flex: 0 0 auto;
-
+    width: 200px;
   }
 
   .banner-buttons {
@@ -51,10 +53,14 @@
   flex: 1 1 auto;
   overflow-y: auto;
   display: flex;
+  max-width: $public-max-width;
+  margin: 0 auto;
 }
 
 .public-content-breadcrumbs {
   background: $gray-700;
+  max-width: $public-max-width;
+  margin: 0 auto;
 }
 
 .public-footer {
@@ -62,13 +68,9 @@
   height: 50px;
   bottom: 0px;
   width: 100%;
-  background: rgba($gray-900, 0.6);
+  background: rgba($gray-900, 0.75);
   color: white;
   // font-weight: bold;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transform: translateY(100%);
   user-select: none;
 
@@ -76,6 +78,16 @@
 
   &.public-footer-visible {
     transform: translateY(0);
+  }
+
+  .public-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 0 auto;
+    max-width: $public-max-width;
+    text-align: center;
   }
 
   span {

@@ -84,6 +84,45 @@ $transition-length: 0.35s;
   right: 0px;
 }
 
+.file-viewer-control {
+  $button-size: 2rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: $button-size;
+  height: $button-size;
+  border-radius: 50%;
+  background: rgba($gray-500, 0.5);
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 2;
+  color: white;
+  cursor: pointer;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  span {
+    position: relative;
+    top: -2px;
+  }
+
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
+
+
+  &.file-viewer-control-previous {
+    left: 10px;
+  }
+
+  &.file-viewer-control-next {
+    right: 10px;
+  }
+}
+
 .thumb-wrapper {
   position: absolute;
   top: 0px;
