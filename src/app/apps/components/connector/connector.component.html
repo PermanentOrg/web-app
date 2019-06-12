@@ -1,5 +1,6 @@
 <div class="connector-info" (click)="goToFolder()">
   <div prBgImage [bgSrc]="folder.thumbURL200" *ngIf="folder"></div>
+  <div prBgImage bgSrc="assets/img/familysearch/tree_logo.png" *ngIf="!folder && connector.type.includes('familysearch')"></div>
   <div class="name">
     {{connectorName}}
   </div>
@@ -7,9 +8,15 @@
     View Files
   </div>
 </div>
+<!-- <div class="connector-info-more" *ngIf="connector.type.includes('familysearch') && connected">
+  Connected as: <strong>{{connectedAccountName}}</strong>
+</div> -->
 <div class="connector-actions">
   <button class="btn btn-primary" [hidden]="connected" (click)="connect()" [disabled]="waiting">Connect</button>
-  <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting">Import Photos</button>
+  <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting"
+    *ngIf="connector.type.includes('facebook')">Import Photos</button>
+  <button class="btn btn-primary" [hidden]="!connected" (click)="startFamilysearchTreeImport()" [disabled]="waiting"
+    *ngIf="connector.type.includes('familysearch')">Import Family Tree</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
 </div>
 <div class="connector-help">
