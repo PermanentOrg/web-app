@@ -19,9 +19,11 @@ export class FolderViewService {
     }
   }
 
-  setFolderView(folderView: FolderView) {
+  setFolderView(folderView: FolderView, skipSave = false) {
     this.folderView = folderView;
-    this.storage.session.set(VIEW_STORAGE_KEY, folderView);
+    if (!skipSave) {
+      this.storage.session.set(VIEW_STORAGE_KEY, folderView);
+    }
 
     this.viewChange.emit(this.folderView);
   }

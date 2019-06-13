@@ -69,6 +69,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   private isInShares: boolean;
   private isInApps: boolean;
+  private isInPublic: boolean;
 
   constructor(
     private dataService: DataService,
@@ -90,8 +91,16 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.allowActions = false;
     }
 
+    if (this.router.routerState.snapshot.url.includes('/p/')) {
+      this.allowActions = false;
+    }
+
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
+    }
+
+    if (this.route.snapshot.data.isPublic) {
+      this.isInPublic = true;
     }
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
@@ -135,12 +144,18 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
       rootUrl = '/shares/withme';
+    } else if (this.isInPublic) {
+      rootUrl = '/p';
     } else {
       rootUrl = '/myfiles';
     }
 
     if (this.item.isFolder) {
-      this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
+      if (this.isInPublic) {
+        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
+      } else {
+        this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
+      }
     } else if (!this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
       this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {

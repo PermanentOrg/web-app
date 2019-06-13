@@ -49,6 +49,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   folderView = FolderView.List;
   @HostBinding('class.grid-view') inGridView = false;
+  @HostBinding('class.no-padding') noFileListPadding = false;
 
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
@@ -71,6 +72,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(DOCUMENT) private document: any
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
+    this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
 
     this.dataService.setCurrentFolder(this.currentFolder);
 

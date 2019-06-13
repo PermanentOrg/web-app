@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
@@ -6,8 +6,9 @@ import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { AppsRoutingModule } from '@apps/apps.routes';
 import { AppsComponent } from '@apps/components/apps/apps.component';
 import { ConnectorComponent } from '@apps/components/connector/connector.component';
-import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
+import { FamilySearchImportComponent } from '@apps/components/family-search-import/family-search-import.component';
 import { SharedModule } from '@shared/shared.module';
+import { DialogChildComponentData, Dialog, DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   imports: [
@@ -20,8 +21,21 @@ import { SharedModule } from '@shared/shared.module';
   declarations: [
     AppsComponent,
     ConnectorComponent,
+    FamilySearchImportComponent
+  ],
+  entryComponents: [
+    FamilySearchImportComponent
   ],
   providers: [
   ]
 })
-export class AppsModule { }
+export class AppsModule {
+  private dialogComponents: DialogChildComponentData[] = [{
+    token: 'FamilySearchImportComponent',
+    component: FamilySearchImportComponent
+  }];
+
+  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
+    this.dialog.registerComponents(this.dialogComponents, resolver, true);
+  }
+}

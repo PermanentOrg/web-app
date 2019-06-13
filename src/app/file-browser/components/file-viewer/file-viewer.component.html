@@ -13,6 +13,8 @@
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
       </div>
     </div>
+    <div class="file-viewer-control file-viewer-control-previous" (click)="incrementCurrentRecord(true)"><span>&#8249;</span></div>
+    <div class="file-viewer-control file-viewer-control-next" (click)="incrementCurrentRecord()"><span>&#8250;</span></div>
   </div>
   <div class="file-viewer-name">
     {{currentRecord.displayName}}

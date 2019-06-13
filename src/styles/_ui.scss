@@ -167,3 +167,19 @@ pr-dialog {
     }
   }
 }
+
+.btn-wordpress {
+  $size: 34px;
+  background: rgba(white, 0.2);
+  height: $size;
+  border-radius: $size / 2; 
+  color: $PR-orange;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7em;
+
+  &:hover {
+    background: white;
+  }
+}

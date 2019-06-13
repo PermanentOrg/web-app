@@ -13,7 +13,6 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
-import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
@@ -39,7 +38,6 @@ import { PrConstantsPipe } from './pipes/pr-constants.pipe';
     NavComponent,
     LeftMenuComponent,
     RightMenuComponent,
-    BreadcrumbsComponent,
     UploadProgressComponent,
     UploadButtonComponent,
     PromptComponent,

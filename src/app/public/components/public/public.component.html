@@ -1,0 +1,27 @@
+<div class="public-banner">
+  <div class="banner-content">
+      <a href="/">
+        <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
+      </a>
+      <div class="banner-buttons">
+        <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
+      </div>
+  </div>
+</div>
+<div class="public-content-breadcrumbs">
+  <pr-breadcrumbs *ngIf="!isRecord"></pr-breadcrumbs>
+</div>
+<div class="public-content">
+  <router-outlet></router-outlet>
+</div>
+<div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">
+  <div class="public-footer-content">
+    <div class="public-footer-close"></div>
+    <span (click)="onSignupClick()">
+        <strong>Try Permanent.org for free</strong> 
+    </span>
+    <div class="public-footer-close" (click)="hideBottomBanner()">
+      ×
+    </div>
+  </div>
+</div>

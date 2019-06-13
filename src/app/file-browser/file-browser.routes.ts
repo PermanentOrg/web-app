@@ -43,6 +43,8 @@ export const routes: Routes = [
   imports: [
     RouterModule.forChild(routes)
   ],
+  exports: [
+  ],
   providers: [
     FolderResolveService,
     RecordResolveService

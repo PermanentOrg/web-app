@@ -1,0 +1,26 @@
+:host {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.public-record {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+}
+
+.public-item-name {
+  flex: 0 0 auto;
+  text-align: center;
+  font-weight: bold;
+}
+
+pr-thumbnail, pr-video {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  width: 100%;
+  flex: 1 0 auto;
+}

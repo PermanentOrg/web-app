@@ -29,7 +29,9 @@ export class HttpService {
     return this.http
       .post(url, {RequestVO: requestVO})
       .pipe(map((response: any) => {
-        this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
+        if (response) {
+          this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
+        }
         if (responseClass) {
           return new responseClass(response);
         } else {
