@@ -12,17 +12,28 @@
   Connected as: <strong>{{connectedAccountName}}</strong>
 </div> -->
 <div class="connector-actions">
-  <button class="btn btn-primary" [hidden]="connected" (click)="connect()" [disabled]="waiting">Connect</button>
+  <button class="btn btn-primary" [hidden]="connected" (click)="connect()" [disabled]="waiting">
+    {{ connectText || 'Connect' }}
+  </button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting"
     *ngIf="connector.type.includes('facebook')">Import Photos</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="startFamilysearchTreeImport()" [disabled]="waiting"
     *ngIf="connector.type.includes('familysearch')">Import Family Tree</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
+  <button class="btn btn-primary" [hidden]="" (click)="showHelp = !showHelp" [disabled]="waiting">{{ showHelp ? 'Hide Help' : 'Help' }}</button>
 </div>
-<div class="connector-help">
+<div class="connector-help" *ngIf="showHelp">
   <div *ngIf="connector.type.includes('facebook')">
     Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
     <br><br>
     You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
+  </div>
+  <div *ngIf="connector.type.includes('family')">
+    <span *ngIf="connected">
+      Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
+    </span>
+    <span *ngIf="!connected">
+      Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
+    </span>
   </div>
 </div>
