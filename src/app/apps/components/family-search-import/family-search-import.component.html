@@ -2,12 +2,12 @@
   <div class="dialog-body">
     <div class="page-title">Select Person(s) To Import</div>
     <p>
-      <span>Choose members of your family tree to create Permanent Archives for.</span>
+      <span>Choose members of your family tree to create Permanent Archives for:</span>
     </p>
     <div class="family-member" *ngFor="let family of familyMembers">  
-      <div class="select">
+      <div class="select" [ngClass]="{'exists': family.permExists}">
         <label>
-          <input type="checkbox" [(ngModel)]="family.isSelected">
+          <input type="checkbox" [(ngModel)]="family.isSelected" [disabled]="family.permExists">
           <div class="select-active" *ngIf="family.isSelected"></div>
         </label>
       </div>
@@ -15,7 +15,8 @@
         {{family.display.name}} 
       </div>
       <div class="family-birth">
-        <em>{{family.display.lifespan}}</em>
+        <em *ngIf="!family.permExists">{{family.display.lifespan}}</em>
+        <em *ngIf="family.permExists">Imported</em>
       </div>
     </div>
   </div>

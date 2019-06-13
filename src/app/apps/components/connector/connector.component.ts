@@ -41,6 +41,9 @@ export class ConnectorComponent implements OnInit {
 
   public connectedAccountName: string;
 
+  public showHelp = false;
+  public connectText: string = null;
+
   constructor(
     private router: Router,
     private prConstants: PrConstantsService,
@@ -60,6 +63,12 @@ export class ConnectorComponent implements OnInit {
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();
+
+    switch (type) {
+      case 'familysearch':
+        this.connectText = 'Sign In with FamilySearch';
+        break;
+    }
   }
 
   setStatus() {

@@ -14,6 +14,7 @@ interface FamilySearchPersonI {
     ascendancyNumber: number;
   };
   isSelected?: boolean;
+  permExists?: boolean;
 }
 
 interface FamilyMember {

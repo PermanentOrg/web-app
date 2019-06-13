@@ -12,6 +12,10 @@
   }
 }
 
+p {
+  padding: 0px 10px;
+}
+
 .select-options {
   .select-option {
     padding: 0 10px;
@@ -36,6 +40,10 @@
 
   input {
     visibility: hidden;
+  }
+
+  &.exists {
+    opacity: 0;
   }
 
   label {
