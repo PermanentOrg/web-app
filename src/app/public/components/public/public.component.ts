@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'pr-public',
@@ -12,9 +12,16 @@ export class PublicComponent implements OnInit {
   bottomBannerVisible = true;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    this.isRecord = !!route.snapshot.firstChild.firstChild.data.isRecord;
+    this.isRecord = !!route.snapshot.firstChild.firstChild.data.publishedItem.recordId;
+
+    if (!this.isRecord) {
+    const urlToken = route.snapshot.firstChild.firstChild.params.publishUrlToken;
+      const folder = route.snapshot.firstChild.firstChild.data.publishedItem;
+      this.router.navigate(['/p', urlToken, folder.archiveNbr, folder.folder_linkId]);
+    }
   }
 
   ngOnInit() {

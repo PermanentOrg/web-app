@@ -21,8 +21,7 @@ export class PublishResolveService implements Resolve<any> {
         if (response.getRecordVO()) {
           return response.getRecordVO();
         } else {
-          const folder = response.getFolderVO();
-          return this.router.navigate(['/p', route.params.publishUrlToken, folder.archiveNbr, folder.folder_linkId]);
+          return response.getFolderVO();
         }
       })
       .catch((response: PublishResponse) => {
