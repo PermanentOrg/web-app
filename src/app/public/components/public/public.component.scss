@@ -55,6 +55,7 @@ $public-max-width: 800px;
   display: flex;
   max-width: $public-max-width;
   margin: 0 auto;
+  width: 100%;
 }
 
 .public-content-breadcrumbs {
