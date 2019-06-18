@@ -24,7 +24,6 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
 import { RelationshipsComponent } from './components/relationships/relationships.component';
 import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
-import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 
 @NgModule({
   imports: [
@@ -47,7 +46,6 @@ import { PrConstantsPipe } from './pipes/pr-constants.pipe';
     InvitationsComponent,
     RelationshipsComponent,
     MembersComponent,
-    PrConstantsPipe
   ],
   providers: [
     DataService,

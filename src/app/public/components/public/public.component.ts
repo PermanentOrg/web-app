@@ -19,7 +19,6 @@ export class PublicComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-
   }
 
   ngOnInit() {
@@ -27,7 +26,9 @@ export class PublicComponent implements OnInit {
     this.isRecord = !!publishedItem.recordId;
     this.displayName = publishedItem.displayName;
 
-    if (!this.isRecord) {
+    const hasNavigated = !!this.route.snapshot.firstChild.firstChild.firstChild.params.archiveNbr;
+
+    if (!this.isRecord && !hasNavigated) {
       const urlToken = this.route.snapshot.firstChild.firstChild.params.publishUrlToken;
       const folder = this.route.snapshot.firstChild.data.publishedItem;
       this.router.navigate(['/p', urlToken, folder.archiveNbr, folder.folder_linkId]);

@@ -25,8 +25,8 @@ export class PublishResolveService implements Resolve<any> {
         }
       })
       .catch((response: PublishResponse) => {
-        window.location.pathname = '/';
-        // this.message.showError(response.getMessage(), true);
+        // window.location.pathname = '/';
+        this.message.showError(response.getMessage(), true);
         return Promise.reject(response);
       });
   }

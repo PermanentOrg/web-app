@@ -21,4 +21,23 @@
   <div class="file-viewer-name">
     {{currentRecord.displayName}}
   </div>
+  <div class="file-viewer-metadata">
+    <div>
+      <h5>{{currentRecord.displayName}}</h5>
+      <table>
+        <tr>
+          <td>Date</td><td>{{currentRecord.displayDT | date}}</td>
+        </tr>
+        <tr>
+          <td>Uploaded</td><td>{{currentRecord.createdDT | date}}</td>
+        </tr>
+        <tr>
+          <td>Size</td><td>{{currentRecord.size | dsFileSize}}</td>
+        </tr>
+        <tr>
+          <td>Type</td><td>{{currentRecord.type | prConstants | titlecase}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>

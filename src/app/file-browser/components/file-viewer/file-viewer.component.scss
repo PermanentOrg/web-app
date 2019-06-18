@@ -3,6 +3,8 @@
 $toolbar-height: 30px;
 $transition-length: 0.35s;
 
+$metadata-width: 350px;
+
 .file-viewer {
   position: fixed;
   top: 0;
@@ -142,6 +144,39 @@ $transition-length: 0.35s;
 
   &.current {
     z-index: 2;
+  }
+}
+
+.file-viewer-metadata {
+  display: none;
+}
+
+
+// Desktop tweaks
+@media screen and (min-width: 801px) {
+  .thumb-target.thumb-target {
+    right: $metadata-width;
+    overflow: hidden;
+  }
+
+  .file-viewer-metadata {
+    top: $toolbar-height;
+    bottom: $toolbar-height;
+    width: $metadata-width;
+    right: 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+
+    td:first-child {
+      font-weight: bold;
+      padding-right: 5px;
+    }
+  }
+
+  .file-viewer-name {
+    display: none;
   }
 }
 
