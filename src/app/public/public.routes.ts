@@ -25,10 +25,10 @@ export const routes: Routes = [
     children: [
       {
         path: ':publishUrlToken',
+        resolve: publishResolve,
         children: [
           {
             path: '',
-            resolve: publishResolve,
             component: PublicItemComponent
           },
           {

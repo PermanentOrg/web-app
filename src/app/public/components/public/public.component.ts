@@ -15,16 +15,17 @@ export class PublicComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.isRecord = !!route.snapshot.firstChild.firstChild.data.publishedItem.recordId;
 
-    if (!this.isRecord) {
-    const urlToken = route.snapshot.firstChild.firstChild.params.publishUrlToken;
-      const folder = route.snapshot.firstChild.firstChild.data.publishedItem;
-      this.router.navigate(['/p', urlToken, folder.archiveNbr, folder.folder_linkId]);
-    }
   }
 
   ngOnInit() {
+    this.isRecord = !!this.route.snapshot.firstChild.data.publishedItem.recordId;
+
+    if (!this.isRecord) {
+      const urlToken = this.route.snapshot.firstChild.firstChild.params.publishUrlToken;
+      const folder = this.route.snapshot.firstChild.data.publishedItem;
+      this.router.navigate(['/p', urlToken, folder.archiveNbr, folder.folder_linkId]);
+    }
   }
 
   hideBottomBanner() {

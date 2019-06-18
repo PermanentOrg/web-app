@@ -185,14 +185,19 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     if (this.loadingRecord) {
       return;
     }
-    
-    this.loadingRecord = true;
+
     let targetIndex = this.currentIndex;
     if (previous) {
       targetIndex--;
     } else {
       targetIndex++;
     }
+
+    if (!this.records[targetIndex]) {
+      return;
+    }
+
+    this.loadingRecord = true;
 
     // update current record and fetch surrounding items
     const targetRecord = this.records[targetIndex];
