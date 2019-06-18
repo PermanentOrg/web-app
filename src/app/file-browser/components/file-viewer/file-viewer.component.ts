@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2, HostListener} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-
+import { Key } from 'ts-key-enum';
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
 import { filter, findIndex } from 'lodash';
@@ -103,6 +103,19 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   onViewportResize(event) {
     this.screenWidth = this.touchElement.clientWidth;
     this.offscreenThreshold = this.screenWidth / 2;
+  }
+
+  // Keyboard
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event) {
+    switch (event.key) {
+      case Key.ArrowLeft:
+        this.incrementCurrentRecord(true);
+        break;
+      case Key.ArrowRight:
+        this.incrementCurrentRecord();
+        break;
+    }
   }
 
   initRecord() {
