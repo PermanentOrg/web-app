@@ -18,6 +18,8 @@ export class PublicItemComponent implements OnInit {
   public folder: FolderVO;
   public archive: ArchiveVO;
 
+  public pdfUrl = null;
+
   constructor(
     route: ActivatedRoute,
     private sanitizer: DomSanitizer
@@ -34,6 +36,7 @@ export class PublicItemComponent implements OnInit {
 
     this.isVideo = this.record.type.includes('video');
     this.isPdf = this.record.type.includes('pdf');
+    this.pdfUrl = this.getPdfUrl();
   }
 
   ngOnInit() {
