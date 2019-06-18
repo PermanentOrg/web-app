@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2, HostListener} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-
+import { Key } from 'ts-key-enum';
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
 import { filter, findIndex } from 'lodash';
@@ -105,6 +105,19 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.offscreenThreshold = this.screenWidth / 2;
   }
 
+  // Keyboard
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event) {
+    switch (event.key) {
+      case Key.ArrowLeft:
+        this.incrementCurrentRecord(true);
+        break;
+      case Key.ArrowRight:
+        this.incrementCurrentRecord();
+        break;
+    }
+  }
+
   initRecord() {
     this.isVideo = this.currentRecord.type.includes('video');
   }
@@ -185,14 +198,19 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     if (this.loadingRecord) {
       return;
     }
-    
-    this.loadingRecord = true;
+
     let targetIndex = this.currentIndex;
     if (previous) {
       targetIndex--;
     } else {
       targetIndex++;
     }
+
+    if (!this.records[targetIndex]) {
+      return;
+    }
+
+    this.loadingRecord = true;
 
     // update current record and fetch surrounding items
     const targetRecord = this.records[targetIndex];
@@ -223,6 +241,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   navigateToCurrentRecord() {
     this.router.navigate(['../', this.currentRecord.archiveNbr], {relativeTo: this.route});
     this.loadingRecord = false;
+    console.log(this.currentRecord);
   }
 
   loadQueuedItems() {

@@ -7,6 +7,9 @@ export class BaseVO {
 
   public status: string;
 
+  public createdDT: string;
+  public updatedDT: string;
+
   constructor (voData: any) {
     if (voData) {
       for ( const key in voData ) {

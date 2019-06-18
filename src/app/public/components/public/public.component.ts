@@ -1,5 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ArchiveVO } from '@models/index';
 
 @Component({
   selector: 'pr-public',
@@ -11,13 +12,29 @@ export class PublicComponent implements OnInit {
 
   bottomBannerVisible = true;
 
+  public archive: ArchiveVO;
+  public displayName: string;
+
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    this.isRecord = !!route.snapshot.firstChild.firstChild.data.isRecord;
   }
 
   ngOnInit() {
+    const publishedItem = this.route.snapshot.firstChild.data.publishedItem;
+    this.isRecord = !!publishedItem.recordId;
+    this.displayName = publishedItem.displayName;
+
+    const hasNavigated = !!this.route.snapshot.firstChild.firstChild.firstChild.params.archiveNbr;
+
+    if (!this.isRecord && !hasNavigated) {
+      const urlToken = this.route.snapshot.firstChild.firstChild.params.publishUrlToken;
+      const folder = this.route.snapshot.firstChild.data.publishedItem;
+      this.router.navigate(['/p', urlToken, folder.archiveNbr, folder.folder_linkId]);
+    }
+
+    this.archive = this.route.snapshot.firstChild.firstChild.data.archive;
   }
 
   hideBottomBanner() {
