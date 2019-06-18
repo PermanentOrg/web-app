@@ -1,7 +1,7 @@
 <div class="file-viewer" [ngClass]="{'minimal': useMinimalView}">
   <div class="file-viewer-close">
     <a (click)="close()">
-      <span><</span> Back
+      <span>&#8249;</span> Back
     </a>
   </div>
   <div class="thumb-target">
@@ -24,6 +24,7 @@
   <div class="file-viewer-metadata">
     <div>
       <h5>{{currentRecord.displayName}}</h5>
+      <p *ngIf="currentRecord.description">{{currentRecord.description}}</p>
       <table>
         <tr>
           <td>Date</td><td>{{currentRecord.displayDT | date}}</td>

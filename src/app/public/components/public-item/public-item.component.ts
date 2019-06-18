@@ -12,6 +12,7 @@ export class PublicItemComponent implements OnInit {
   public showThumbnail = true;
   public record: RecordVO;
   public folder: FolderVO;
+  public archive: ArchiveVO;
 
   constructor(route: ActivatedRoute) {
     if (route.snapshot.data.publishedItem.recordId) {
@@ -21,6 +22,8 @@ export class PublicItemComponent implements OnInit {
       // folder
       this.folder = route.snapshot.data.publishedItem;
     }
+
+    this.archive = route.snapshot.parent.data.archive;
   }
 
   ngOnInit() {
