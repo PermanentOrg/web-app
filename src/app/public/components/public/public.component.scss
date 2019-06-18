@@ -64,6 +64,22 @@ $public-max-width: 800px;
   margin: 0 auto;
 }
 
+.public-archive {
+  max-width: $public-max-width;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+
+  .public-archive-thumb {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+}
+
 .public-footer {
   position: fixed;
   height: 50px;

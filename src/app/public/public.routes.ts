@@ -6,9 +6,10 @@ import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { PublicComponent } from './components/public/public.component';
 import { PublishResolveService } from './resolves/publish-resolve.service';
+import { PublishArchiveResolveService } from './resolves/publish-archive-resolve.service';
 
-const recordResolve = {
-  currentRecord: RecordResolveService
+const archiveResolve = {
+  archive: PublishArchiveResolveService
 };
 
 const publishResolve = {
@@ -29,14 +30,20 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            component: PublicItemComponent
-          },
-          {
-            path: ':archiveNbr/:folderLinkId',
-            loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-            data: {
-              noFileListPadding: true,
-            }
+            resolve: archiveResolve,
+            children: [
+              {
+                path: '',
+                component: PublicItemComponent
+              },
+              {
+                path: ':archiveNbr/:folderLinkId',
+                loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+                data: {
+                  noFileListPadding: true,
+                }
+              }
+            ]
           }
         ]
       }
@@ -49,7 +56,8 @@ export const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   providers: [
-    PublishResolveService
+    PublishResolveService,
+    PublishArchiveResolveService
   ]
 })
 export class PublicRoutingModule { }

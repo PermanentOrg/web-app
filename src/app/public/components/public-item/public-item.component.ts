@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecordVO, FolderVO } from '@models/index';
+import { RecordVO, FolderVO, ArchiveVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

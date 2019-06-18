@@ -1,5 +1,4 @@
 <div class="public-record" *ngIf="record">
-  <div class="public-item-name">{{record.displayName}}</div> 
   <pr-thumbnail [item]="record" *ngIf="showThumbnail"></pr-thumbnail>
 </div>
 <router-outlet *ngIf="folder"></router-outlet>

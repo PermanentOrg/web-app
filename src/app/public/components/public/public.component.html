@@ -8,6 +8,13 @@
       </div>
   </div>
 </div>
+<div class="public-archive">
+  <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+  <span>
+    <strong>{{displayName}}</strong><br>
+    Shared by {{archive.fullName}}
+  </span>
+</div>
 <div class="public-content-breadcrumbs">
   <pr-breadcrumbs *ngIf="!isRecord"></pr-breadcrumbs>
 </div>
