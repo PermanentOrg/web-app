@@ -24,6 +24,8 @@ export class PublicItemComponent implements OnInit {
     }
 
     this.archive = route.snapshot.parent.data.archive;
+
+    this.isVideo = this.record.type.includes('video');
   }
 
   ngOnInit() {
