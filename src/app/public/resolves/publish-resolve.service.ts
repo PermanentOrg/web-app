@@ -21,13 +21,12 @@ export class PublishResolveService implements Resolve<any> {
         if (response.getRecordVO()) {
           return response.getRecordVO();
         } else {
-          const folder = response.getFolderVO();
-          return this.router.navigate(['/p', route.params.publishUrlToken, folder.archiveNbr, folder.folder_linkId]);
+          return response.getFolderVO();
         }
       })
       .catch((response: PublishResponse) => {
-        window.location.pathname = '/';
-        // this.message.showError(response.getMessage(), true);
+        // window.location.pathname = '/';
+        this.message.showError(response.getMessage(), true);
         return Promise.reject(response);
       });
   }

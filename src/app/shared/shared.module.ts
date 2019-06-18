@@ -13,6 +13,8 @@ import { DialogModule } from '../dialog/dialog.module';
 import { IFrameService } from './services/iframe/iframe.service';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { RouterModule } from '@angular/router';
+import { FileSizePipe } from './pipes/filesize.pipe';
+import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 
 @NgModule({
   imports: [
@@ -32,7 +34,9 @@ import { RouterModule } from '@angular/router';
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    FileSizePipe,
+    PrConstantsPipe
   ],
   entryComponents: [
     ArchivePickerComponent
@@ -44,7 +48,9 @@ import { RouterModule } from '@angular/router';
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    FileSizePipe,
+    PrConstantsPipe
   ]
 })
 export class SharedModule {
