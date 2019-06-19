@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2, HostListener} from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Inject, HostListener} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
-import { filter, findIndex } from 'lodash';
+import { filter, findIndex, find } from 'lodash';
 
 import { RecordVO, } from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -24,7 +25,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public records: RecordVO[];
   public currentIndex: number;
   public isVideo = false;
+  public isPdf = false;
   public showThumbnail = true;
+
+  public documentUrl = null;
 
   // Swiping
   private touchElement: HTMLElement;
@@ -47,7 +51,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private element: ElementRef,
     private dataService: DataService,
     @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2
+    private sanitizer: DomSanitizer
   ) {
     // store current scroll position in file list
     this.bodyScrollTop = window.scrollY;
@@ -120,6 +124,22 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   initRecord() {
     this.isVideo = this.currentRecord.type.includes('video');
+    this.isPdf = this.currentRecord.type.includes('pdf');
+    this.documentUrl = this.getPdfUrl();
+  }
+
+  getPdfUrl() {
+    if (!this.isPdf) {
+      return false;
+    }
+
+    const original = find(this.currentRecord.FileVOs, {format: 'file.format.original'}) as any;
+
+    if (!original) {
+      return false;
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(original.fileURL);
   }
 
   isQueued(indexToCheck: number) {

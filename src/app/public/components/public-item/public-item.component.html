@@ -1,5 +1,9 @@
 <div class="public-record" *ngIf="record">
-  <pr-thumbnail [item]="record" *ngIf="showThumbnail"></pr-thumbnail>
+  <div class="public-record-content">
+    <pr-thumbnail [item]="record" *ngIf="showThumbnail"></pr-thumbnail>
+    <pr-video [item]="record" *ngIf="isVideo"></pr-video>
+    <iframe [src]="pdfUrl" *ngIf="isPdf && pdfUrl"></iframe>
+  </div>
   <div class="public-item-metadata">
     <div>
       <strong>{{record.displayName}}</strong><br>
