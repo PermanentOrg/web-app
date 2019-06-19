@@ -2,7 +2,7 @@
   <div prBgImage [bgSrc]="folder.thumbURL200" *ngIf="folder"></div>
   <div prBgImage bgSrc="assets/img/familysearch/tree_logo.png" *ngIf="!folder && connector.type.includes('familysearch')"></div>
   <div class="name">
-    {{connectorName}}
+    {{connectorName}} <em *ngIf="connector.type.includes('familysearch')">(Beta)</em>
   </div>
   <div class="view-files" *ngIf="hasFiles">
     View Files
@@ -31,9 +31,13 @@
   <div *ngIf="connector.type.includes('family')">
     <span *ngIf="connected">
       Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
+      <br><br>
+      This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
     </span>
     <span *ngIf="!connected">
       Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
+      <br><br>
+      This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
     </span>
   </div>
 </div>
