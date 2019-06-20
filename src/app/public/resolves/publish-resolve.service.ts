@@ -20,14 +20,17 @@ export class PublishResolveService implements Resolve<any> {
       .then((response: PublishResponse): RecordVO | any => {
         if (response.getRecordVO()) {
           return response.getRecordVO();
-        } else {
+        } else if (response.getFolderVO()) {
           return response.getFolderVO();
+        } else {
+          throw response;
         }
       })
       .catch((response: PublishResponse) => {
-        // window.location.pathname = '/';
-        this.message.showError(response.getMessage(), true);
-        return Promise.reject(response);
+        if (response.getMessage) {
+          this.message.showError(response.getMessage(), true);
+        }
+        return this.router.navigate(['p', 'error']);
       });
   }
 }
