@@ -7,6 +7,7 @@ import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-vi
 import { PublicComponent } from './components/public/public.component';
 import { PublishResolveService } from './resolves/publish-resolve.service';
 import { PublishArchiveResolveService } from './resolves/publish-archive-resolve.service';
+import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
@@ -24,6 +25,10 @@ export const routes: Routes = [
       isPublic: true
     },
     children: [
+      {
+        path: 'error',
+        component: ItemNotFoundComponent
+      },
       {
         path: ':publishUrlToken',
         resolve: publishResolve,
