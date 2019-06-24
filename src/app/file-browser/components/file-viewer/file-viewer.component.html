@@ -1,7 +1,7 @@
 <div class="file-viewer" [ngClass]="{'minimal': useMinimalView}">
   <div class="file-viewer-close">
     <a (click)="close()">
-      <span><</span> Back
+      <span>&#8249;</span> Back
     </a>
   </div>
   <div class="thumb-target">
@@ -11,10 +11,35 @@
       <div *ngIf="currentRecord == record" class="full">
         <pr-thumbnail [item]="currentRecord" *ngIf="showThumbnail"></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
+        <iframe [src]="documentUrl" *ngIf="isPdf && documentUrl"></iframe>
       </div>
     </div>
+    <div class="file-viewer-control file-viewer-control-previous" (click)="incrementCurrentRecord(true)"
+      *ngIf="currentIndex > 0"><span>&#8249;</span></div>
+    <div class="file-viewer-control file-viewer-control-next" (click)="incrementCurrentRecord()"
+      *ngIf="currentIndex < records.length - 1"><span>&#8250;</span></div>
   </div>
   <div class="file-viewer-name">
     {{currentRecord.displayName}}
+  </div>
+  <div class="file-viewer-metadata">
+    <div>
+      <h5>{{currentRecord.displayName}}</h5>
+      <p *ngIf="currentRecord.description">{{currentRecord.description}}</p>
+      <table>
+        <tr>
+          <td>Date</td><td>{{currentRecord.displayDT | date}}</td>
+        </tr>
+        <tr>
+          <td>Uploaded</td><td>{{currentRecord.createdDT | date}}</td>
+        </tr>
+        <tr>
+          <td>Size</td><td>{{currentRecord.size | dsFileSize}}</td>
+        </tr>
+        <tr>
+          <td>Type</td><td>{{currentRecord.type | prConstants | titlecase}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>

@@ -1,0 +1,36 @@
+<div class="public-record" *ngIf="record">
+  <div class="public-record-content">
+    <pr-thumbnail [item]="record" *ngIf="showThumbnail"></pr-thumbnail>
+    <pr-video [item]="record" *ngIf="isVideo"></pr-video>
+    <iframe [src]="pdfUrl" *ngIf="isPdf && pdfUrl"></iframe>
+  </div>
+  <div class="public-item-metadata">
+    <div>
+      <strong>{{record.displayName}}</strong><br>
+      <div class="public-archive">
+      <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+      <span>
+        Shared by {{archive.fullName}}
+      </span>
+      </div>
+      <p *ngIf="record.description">{{record.description}}</p>
+      <table>
+        <tr>
+          <td>Date</td><td>{{record.displayDT | date}}</td>
+        </tr>
+        <tr>
+          <td>Uploaded</td><td>{{record.createdDT | date}}</td>
+        </tr>
+        <tr>
+          <td>Size</td><td>{{record.size | dsFileSize}}</td>
+        </tr>
+        <tr>
+          <td>Type</td><td>{{record.type | prConstants | titlecase}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<router-outlet *ngIf="folder"></router-outlet>
+
+<!-- <pr-video [item]="record" *ngIf="isVideo"></pr-video> -->

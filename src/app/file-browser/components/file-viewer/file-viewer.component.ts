@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy, ElementRef, Inject, AfterViewInit, Renderer, Renderer2, HostListener} from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Inject, HostListener} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { Key } from 'ts-key-enum';
 import * as Hammer from 'hammerjs';
 import { TweenMax } from 'gsap';
-import { filter, findIndex } from 'lodash';
+import { filter, findIndex, find } from 'lodash';
 
 import { RecordVO, } from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -24,7 +25,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public records: RecordVO[];
   public currentIndex: number;
   public isVideo = false;
+  public isPdf = false;
   public showThumbnail = true;
+
+  public documentUrl = null;
 
   // Swiping
   private touchElement: HTMLElement;
@@ -35,7 +39,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   private velocityThreshold = 0.2;
   private screenWidth: number;
   private offscreenThreshold: number;
-
+  private loadingRecord = false;
 
   // UI
   public useMinimalView = false;
@@ -47,7 +51,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private element: ElementRef,
     private dataService: DataService,
     @Inject(DOCUMENT) private document: any,
-    private renderer: Renderer2
+    private sanitizer: DomSanitizer
   ) {
     // store current scroll position in file list
     this.bodyScrollTop = window.scrollY;
@@ -105,8 +109,37 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.offscreenThreshold = this.screenWidth / 2;
   }
 
+  // Keyboard
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event) {
+    switch (event.key) {
+      case Key.ArrowLeft:
+        this.incrementCurrentRecord(true);
+        break;
+      case Key.ArrowRight:
+        this.incrementCurrentRecord();
+        break;
+    }
+  }
+
   initRecord() {
     this.isVideo = this.currentRecord.type.includes('video');
+    this.isPdf = this.currentRecord.type.includes('pdf');
+    this.documentUrl = this.getPdfUrl();
+  }
+
+  getPdfUrl() {
+    if (!this.isPdf) {
+      return false;
+    }
+
+    const original = find(this.currentRecord.FileVOs, {format: 'file.format.original'}) as any;
+
+    if (!original) {
+      return false;
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(original.fileURL);
   }
 
   isQueued(indexToCheck: number) {
@@ -164,37 +197,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
           },
           ease: 'Power4.easeOut',
           onComplete: () => {
-            let targetIndex = this.currentIndex;
-            if (previous) {
-              targetIndex--;
-            } else {
-              targetIndex++;
-            }
-
-            // update current record and fetch surrounding items
-            const targetRecord = this.records[targetIndex];
-
-            this.currentIndex = targetIndex;
-            this.currentRecord = targetRecord;
-
-            this.initRecord();
-
-            this.disableSwipes = false;
-            this.loadQueuedItems();
-
-            if (targetRecord.archiveNbr) {
-              this.navigateToCurrentRecord();
-            } else if (targetRecord.isFetching) {
-              targetRecord.fetched
-                .then(() => {
-                  this.navigateToCurrentRecord();
-                });
-            } else {
-              this.dataService.fetchLeanItems([targetRecord])
-                .then(() => {
-                  this.navigateToCurrentRecord();
-                });
-            }
+            this.incrementCurrentRecord(previous);
           }
         } as any
       );
@@ -211,8 +214,54 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     }
   }
 
+  incrementCurrentRecord(previous = false) {
+    if (this.loadingRecord) {
+      return;
+    }
+
+    let targetIndex = this.currentIndex;
+    if (previous) {
+      targetIndex--;
+    } else {
+      targetIndex++;
+    }
+
+    if (!this.records[targetIndex]) {
+      return;
+    }
+
+    this.loadingRecord = true;
+
+    // update current record and fetch surrounding items
+    const targetRecord = this.records[targetIndex];
+
+    this.currentIndex = targetIndex;
+    this.currentRecord = targetRecord;
+
+    this.initRecord();
+
+    this.disableSwipes = false;
+    this.loadQueuedItems();
+
+    if (targetRecord.archiveNbr) {
+      this.navigateToCurrentRecord();
+    } else if (targetRecord.isFetching) {
+      targetRecord.fetched
+        .then(() => {
+          this.navigateToCurrentRecord();
+        });
+    } else {
+      this.dataService.fetchLeanItems([targetRecord])
+        .then(() => {
+          this.navigateToCurrentRecord();
+        });
+    }
+  }
+
   navigateToCurrentRecord() {
     this.router.navigate(['../', this.currentRecord.archiveNbr], {relativeTo: this.route});
+    this.loadingRecord = false;
+    console.log(this.currentRecord);
   }
 
   loadQueuedItems() {
@@ -229,12 +278,14 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     const routeParams = this.route.snapshot.params;
     let rootUrl = '/myfiles';
 
-    if (this.router.url.includes('/shares')) {
-      if (this.router.url.includes('/withme')) {
+    if (this.router.routerState.snapshot.url.includes('/shares')) {
+      if (this.router.routerState.snapshot.url.includes('/withme')) {
         rootUrl = '/shares/withme';
       } else {
         rootUrl = '/shares/byme';
       }
+    } else if (this.router.routerState.snapshot.url.includes('/p/')) {
+      rootUrl = `/p/${this.route.snapshot.params.publishUrlToken}`;
     }
 
     if (routeParams.archiveNbr) {

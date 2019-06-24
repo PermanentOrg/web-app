@@ -1,7 +1,8 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, ConnectorOverviewVO } from '@root/app/models';
+import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, ConnectorOverviewVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { isArray } from 'util';
 
 export class ConnectorRepo extends BaseRepo {
   public getOverview(connectors: ConnectorOverviewVO[]): Observable<ConnectorResponse> {
@@ -44,6 +45,108 @@ export class ConnectorRepo extends BaseRepo {
     }];
 
     return this.http.sendRequest('/connector/uploadFacebookBulkImport', data, ConnectorResponse);
+  }
+
+  public familysearchConnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/familysearchSetup', data, ConnectorResponse);
+  }
+
+  public familysearchAuthorize(archive: ArchiveVO, code: string) {
+    const simpleVo = new SimpleVO({
+      key: 'oauthCode',
+      value: code
+    });
+
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: simpleVo
+    }];
+
+    return this.http.sendRequest(`/connector/familysearchAuthorize`, data, ConnectorResponse);
+  }
+
+  public familysearchDisconnect(archive: ArchiveVO) {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequest('/connector/familysearchDisconnect', data, ConnectorResponse);
+  }
+
+  public getFamilysearchUser(archive: ArchiveVO): Promise<any> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchUser', data, ConnectorResponse);
+  }
+
+  public getFamilysearchTreeUser(archive: ArchiveVO): Promise<any> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchTreeUser', data, ConnectorResponse);
+  }
+
+  public getFamilysearchAncestry(archive: ArchiveVO, personId: string): Promise<any> {
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: new SimpleVO({key: 'personId', value: personId})
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchAncestry', data, ConnectorResponse);
+  }
+
+  public getFamilysearchMemories(archive: ArchiveVO, personId: string): Promise<any> {
+    const data = [{
+      ArchiveVO: archive,
+      SimpleVO: new SimpleVO({key: 'personId', value: personId})
+    }];
+
+    return this.http.sendRequestPromise('/connector/getFamilysearchMemories', data, ConnectorResponse);
+  }
+
+  public familysearchMemoryImportRequest(archive: ArchiveVO | ArchiveVO[], personId: string | string[]): Promise<any> {
+    if (!isArray(archive)) {
+      archive = [ archive ];
+    }
+
+    if (!isArray(personId)) {
+      personId = [ personId ];
+    }
+
+    const data = archive.map((vo, i) => {
+      return {
+        ArchiveVO: vo,
+        SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
+      }
+    });
+
+    return this.http.sendRequestPromise('/connector/familysearchMemoryImportRequest', data, ConnectorResponse);
+  }
+
+  public familysearchFactImportRequest(archive: ArchiveVO | ArchiveVO[], personId: string | string[]): Promise<any> {
+    if (!isArray(archive)) {
+      archive = [ archive ];
+    }
+
+    if (!isArray(personId)) {
+      personId = [ personId ];
+    }
+
+    const data = archive.map((vo, i) => {
+      return {
+        ArchiveVO: vo,
+        SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
+      }
+    });
+
+    return this.http.sendRequestPromise('/connector/familysearchFactImportRequest', data, ConnectorResponse);
   }
 }
 

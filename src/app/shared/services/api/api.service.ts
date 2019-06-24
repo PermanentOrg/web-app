@@ -13,6 +13,7 @@ export class ApiService {
   public connector: Repo.ConnectorRepo;
   public folder: Repo.FolderRepo;
   public invite: Repo.InviteRepo;
+  public publish: Repo.PublishRepo;
   public record: Repo.RecordRepo;
   public relation: Repo.RelationRepo;
   public search: Repo.SearchRepo;
@@ -25,6 +26,7 @@ export class ApiService {
     this.billing = new Repo.BillingRepo(this.http);
     this.folder = new Repo.FolderRepo(this.http);
     this.invite = new Repo.InviteRepo(this.http);
+    this.publish = new Repo.PublishRepo(this.http);
     this.record = new Repo.RecordRepo(this.http);
     this.relation = new Repo.RelationRepo(this.http);
     this.search = new Repo.SearchRepo(this.http);

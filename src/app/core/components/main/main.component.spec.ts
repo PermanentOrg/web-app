@@ -17,7 +17,6 @@ import { MessageComponent } from '@shared/components/message/message.component';
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
-import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
@@ -44,7 +43,6 @@ describe('MainComponent', () => {
 
     config.declarations.push(MainComponent);
     config.declarations.push(NavComponent);
-    config.declarations.push(BreadcrumbsComponent);
     config.declarations.push(PromptComponent);
     config.declarations.push(MessageComponent);
     config.declarations.push(LeftMenuComponent);

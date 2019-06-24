@@ -11,12 +11,17 @@ import { ArchivePickerComponent } from './components/archive-picker/archive-pick
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { IFrameService } from './services/iframe/iframe.service';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { RouterModule } from '@angular/router';
+import { FileSizePipe } from './pipes/filesize.pipe';
+import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     DialogModule
   ],
   exports: [
@@ -28,7 +33,10 @@ import { IFrameService } from './services/iframe/iframe.service';
     TermsComponent,
     BgImageSrcDirective,
     ArchiveSmallComponent,
-    ArchivePickerComponent
+    ArchivePickerComponent,
+    BreadcrumbsComponent,
+    FileSizePipe,
+    PrConstantsPipe
   ],
   entryComponents: [
     ArchivePickerComponent
@@ -40,6 +48,9 @@ import { IFrameService } from './services/iframe/iframe.service';
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
+    BreadcrumbsComponent,
+    FileSizePipe,
+    PrConstantsPipe
   ]
 })
 export class SharedModule {

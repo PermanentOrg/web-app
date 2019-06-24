@@ -13,7 +13,6 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
-import { BreadcrumbsComponent } from '@core/components/breadcrumbs/breadcrumbs.component';
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
@@ -25,7 +24,6 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
 import { RelationshipsComponent } from './components/relationships/relationships.component';
 import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
-import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 
 @NgModule({
   imports: [
@@ -39,7 +37,6 @@ import { PrConstantsPipe } from './pipes/pr-constants.pipe';
     NavComponent,
     LeftMenuComponent,
     RightMenuComponent,
-    BreadcrumbsComponent,
     UploadProgressComponent,
     UploadButtonComponent,
     PromptComponent,
@@ -49,7 +46,6 @@ import { PrConstantsPipe } from './pipes/pr-constants.pipe';
     InvitationsComponent,
     RelationshipsComponent,
     MembersComponent,
-    PrConstantsPipe
   ],
   providers: [
     DataService,
