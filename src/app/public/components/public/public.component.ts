@@ -15,6 +15,8 @@ export class PublicComponent implements OnInit {
   public archive: ArchiveVO;
   public displayName: string;
 
+  public missing = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
@@ -23,6 +25,13 @@ export class PublicComponent implements OnInit {
 
   ngOnInit() {
     const publishedItem = this.route.snapshot.firstChild.data.publishedItem;
+
+    if (!publishedItem) {
+      this.missing = true;
+      return;
+    }
+
+
     this.isRecord = !!publishedItem.recordId;
     this.displayName = publishedItem.displayName;
 
