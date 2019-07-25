@@ -115,6 +115,7 @@ export class NewsletterSignupComponent implements OnInit {
           .then(() => {
             this.waiting = false;
             this.done = true;
+            window.location.assign('/app');
             // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           });
       })
