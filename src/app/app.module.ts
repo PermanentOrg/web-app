@@ -13,7 +13,7 @@ import {
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { filter, tap, skip } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
