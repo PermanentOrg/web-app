@@ -49,10 +49,8 @@ export class CustomUrlSerializer implements UrlSerializer {
 
 export function getBaseLocation() {
   if (location.pathname.indexOf('/p/') === 0) {
-    console.log('on /p/?');
     return '/';
   } else {
-    console.log('on /m/?');
     return '/m/';
   }
 }
@@ -124,13 +122,25 @@ export class AppModule {
         this.title.setTitle(`${currentTitle} | Permanent.org`);
       }
 
-      if ('ga' in window && ga.getAll) {
+      let skipGaPageview = false;
+
+      const gaRouteBlacklist = ['/embed', '/pledge'];
+
+      for (const blacklistRoute of gaRouteBlacklist) {
+        skipGaPageview = this.router.url.includes(blacklistRoute);
+        if (skipGaPageview) {
+          break;
+        }
+      }
+
+
+
+      if ('ga' in window && ga.getAll && !skipGaPageview) {
         const tracker = ga.getAll()[0];
         if (tracker) {
           tracker.send('pageview', { page: location.pathname });
         }
       }
-
     });
   }
 }
