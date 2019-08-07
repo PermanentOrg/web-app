@@ -7,7 +7,7 @@
     {{shareFromName}} has shared <em>{{shareItem.displayName}}</em> with you
   </h1>
   <div class="input-group-vertical">
-    <pr-form-input *ngIf="showInviteCode" fieldName="invitation" placeholder="Invitation code" [control]="signupForm.controls['invitation']" 
+    <pr-form-input *ngIf="showInviteCode" fieldName="invitation" placeholder="Invitation code (optional)" [control]="signupForm.controls['invitation']" 
       [config]="{autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
     <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
       [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
