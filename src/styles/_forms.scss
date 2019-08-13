@@ -28,9 +28,9 @@ form {
   background: white;
 
   &.round {
-    border-radius: 1.5rem;
+    border-radius: 2rem;
     .form-control {
-      border-radius: 1.5rem;
+      border-radius: 2rem;
       padding: $input-btn-padding-y + 0.2rem $input-btn-padding-x + 0.2rem;
     }
 
