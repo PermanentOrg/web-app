@@ -1,0 +1,145 @@
+@import 'variables';
+
+$public-max-width: 800px;
+
+:host {
+  @media screen and (min-width: 769px) {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.public-banner {
+  flex: 0 0 100px;
+  height: 100px;
+  padding: 0px 0.5rem;
+  color: white;
+  background-color: $PR-blue;
+
+  .banner-content {
+    margin: 0 auto;
+    max-width: $public-max-width;
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .banner-logo {
+    flex: 0 0 auto;
+    width: 200px;
+  }
+
+  .banner-buttons {
+    margin-left: auto;
+    flex: 0 0 auto;
+    display: flex;
+
+    .btn {
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+      display: inline;
+      margin-left: 5px;
+    }
+  }
+}
+
+.public-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  max-width: $public-max-width;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.public-content-breadcrumbs {
+  background: $gray-700;
+  max-width: $public-max-width;
+  margin: 0 auto;
+}
+
+.preview-archive {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+
+  .preview-archive-thumb {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
+
+.preview-thumb {
+  height: 500px;
+  width: auto;
+}
+
+.public-footer {
+  position: fixed;
+  height: 50px;
+  bottom: 0px;
+  width: 100%;
+  background: rgba($gray-900, 0.75);
+  color: white;
+  // font-weight: bold;
+  transform: translateY(100%);
+  user-select: none;
+
+  transition: transform 0.4s ease-in;
+
+  &.public-footer-visible {
+    transform: translateY(0);
+  }
+
+  .public-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 0 auto;
+    max-width: $public-max-width;
+    text-align: center;
+  }
+
+  span {
+    flex: 1 1;
+    cursor: pointer;
+    margin: 0 auto;
+    @media screen and (max-width: 420px) {
+      padding: 0.5rem 0;
+    }
+  }
+
+  .public-footer-close {
+    flex: 0 0 3rem;
+    cursor: pointer;
+  }
+}
+
+.share-preview {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+
+  .share-preview-form {
+    flex: 0 1 340px;
+    margin: 10px;
+  }
+}
+
+.share-preview-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}

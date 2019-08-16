@@ -1,22 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
-import { EmbedComponentsModule } from '@embed/embed-components.module';
-import { SignupEmbedComponent } from '@embed/components/signup-embed/signup-embed.component';
-import { LoginEmbedComponent } from '@embed/components/login-embed/login-embed.component';
+import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
+import { PreviewResolveService } from './resolves/preview-resolve.service';
+import { SharedModule } from '@shared/shared.module';
+
+const archiveResolve = {
+  archive: PreviewArchiveResolveService
+};
+
+const previewResolve = {
+  previewItem: PreviewResolveService
+};
+
 
 export const routes: Routes = [
   {
-    path: '',
-    component: SharePreviewComponent,
+    path: ':shareToken',
+    resolve: previewResolve,
     children: [
       {
-        path: 'login',
-        component: LoginEmbedComponent
-      },
-      {
-        path: 'signup',
-        component: SignupEmbedComponent
+        path: '',
+        resolve: archiveResolve,
+        component: SharePreviewComponent,
+        loadChildren: '@embed/embed.module#EmbedModule'
       }
     ]
   },
@@ -25,12 +34,15 @@ export const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    EmbedComponentsModule
+    SharedModule,
+    CommonModule
   ],
   declarations: [
     SharePreviewComponent
   ],
   providers: [
+    PreviewResolveService,
+    PreviewArchiveResolveService
   ]
 })
 export class SharePreviewRoutingModule { }
