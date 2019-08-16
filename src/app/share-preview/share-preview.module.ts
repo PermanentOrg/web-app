@@ -5,7 +5,6 @@ import { SharePreviewRoutingModule } from './share-preview.routes';
 
 @NgModule({
   declarations: [
-    SharePreviewComponent
   ],
   imports: [
     SharePreviewRoutingModule,
