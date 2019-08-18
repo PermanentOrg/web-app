@@ -3,6 +3,8 @@
 $public-max-width: 800px;
 
 :host {
+  display: block;
+
   @media screen and (min-width: 769px) {
     position: absolute;
     top: 0;
@@ -24,7 +26,6 @@ $public-max-width: 800px;
 
   .banner-content {
     margin: 0 auto;
-    max-width: $public-max-width;
     display: flex;
     height: 100%;
     align-items: center;
@@ -49,21 +50,6 @@ $public-max-width: 800px;
   }
 }
 
-.public-content {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  display: flex;
-  max-width: $public-max-width;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.public-content-breadcrumbs {
-  background: $gray-700;
-  max-width: $public-max-width;
-  margin: 0 auto;
-}
-
 .preview-archive {
   margin: 0 auto;
   display: flex;
@@ -81,6 +67,7 @@ $public-max-width: 800px;
 .preview-thumb {
   height: 500px;
   width: auto;
+  margin: 10px;
 }
 
 .public-footer {
@@ -126,13 +113,19 @@ $public-max-width: 800px;
 }
 
 .share-preview {
-  display: flex;
   flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
 
   .share-preview-form {
     flex: 0 1 340px;
     margin: 10px;
+
+    @media screen and (max-width: 768px) {
+      order: 2;
+      flex: 0 0 100%;
+    }
   }
 }
 
@@ -142,4 +135,9 @@ $public-max-width: 800px;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+
+  @media screen and (max-width: 768px) {
+    order: 1;
+    flex: 0 0 100%;
+  }
 }
