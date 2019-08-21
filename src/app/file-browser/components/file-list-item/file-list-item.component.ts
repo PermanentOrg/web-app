@@ -64,6 +64,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class.grid-view') inGridView = false;
 
   public allowActions = true;
+  public allowNavigation = true;
   public isMyItem = true;
   public canWrite = true;
 
@@ -103,6 +104,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.isInPublic = true;
     }
 
+    if (this.route.snapshot.data.noFileListNavigation) {
+      this.allowActions = false;
+      this.allowNavigation = false;
+    }
+
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
@@ -128,6 +134,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   goToItem() {
+    if (!this.allowNavigation) {
+      return false;
+    }
+    
     if (this.item.dataStatus < DataStatus.Lean) {
       if (!this.item.isFetching) {
         this.dataService.fetchLeanItems([this.item]);

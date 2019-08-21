@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ArchiveVO } from '@models/index';
+import { throttle } from 'lodash';
 
 @Component({
   selector: 'pr-share-preview',
@@ -11,25 +12,61 @@ export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
   archive: ArchiveVO = this.route.snapshot.data.archive;
-  displayName: string = this.route.snapshot.data.previewItem.displayName;
-  previewItem: any = this.route.snapshot.data.previewItem;
+  displayName: ArchiveVO = this.route.snapshot.data.previewItem.displayName;
+
+  showCover = false;
+
+  hasScrollTriggered = false;
+
+  scrollHandlerDebounced = throttle(() => { this.scrollCoverToggle(); }, 500);
 
   constructor(
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+
+  }
 
   ngOnInit() {
-    this.router.navigate(['signup'], { relativeTo: this.route });
-
+    // setTimeout(() => {
+    //   this.showCover = true;
+    //   this.hideBottomBanner();
+    // }, 2000);
+    // this.router.navigate(['signup'], { relativeTo: this.route });
   }
 
   hideBottomBanner() {
     this.bottomBannerVisible = false;
   }
 
+  toggleCover() {
+    this.hideBottomBanner();
+    this.showCover = !this.showCover;
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onViewportScroll(event) {
+    this.scrollHandlerDebounced();
+  }
+
+  scrollCoverToggle() {
+    if (!this.hasScrollTriggered) {
+      this.hasScrollTriggered = true;
+      setTimeout(() => {
+        this.hideBottomBanner();
+        this.showCover = true;
+      }, 0);
+    }
+  }
+
   onSignupClick() {
     window.location.pathname = '/';
+  }
+
+  stopPropagation(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    console.log(evt);
   }
 
 }

@@ -6,9 +6,12 @@ import { SharePreviewComponent } from './components/share-preview/share-preview.
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
 import { PreviewResolveService } from './resolves/preview-resolve.service';
 import { SharedModule } from '@shared/shared.module';
+import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
+import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
 
 const archiveResolve = {
-  archive: PreviewArchiveResolveService
+  archive: PreviewArchiveResolveService,
+  currentFolder: PreviewFolderResolveService
 };
 
 const previewResolve = {
@@ -20,12 +23,15 @@ export const routes: Routes = [
   {
     path: ':shareToken',
     resolve: previewResolve,
+    data: {
+      noFileListPadding: true,
+      noFileListNavigation: true
+    },
     children: [
       {
         path: '',
         resolve: archiveResolve,
-        component: SharePreviewComponent,
-        loadChildren: '@embed/embed.module#EmbedModule'
+        component: SharePreviewComponent
       }
     ]
   },
@@ -35,14 +41,16 @@ export const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
     SharedModule,
-    CommonModule
+    CommonModule,
+    FileBrowserComponentsModule
   ],
   declarations: [
     SharePreviewComponent
   ],
   providers: [
     PreviewResolveService,
-    PreviewArchiveResolveService
+    PreviewArchiveResolveService,
+    PreviewFolderResolveService
   ]
 })
 export class SharePreviewRoutingModule { }

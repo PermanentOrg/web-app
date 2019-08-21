@@ -1,11 +1,13 @@
 @import 'variables';
 
-$public-max-width: 800px;
+$share-preview-max-width: 800px;
+$share-preview-banner-height: 100px;
 
 :host {
+  position: relative;
   display: block;
 
-  @media screen and (min-width: 769px) {
+  &.for-record {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -14,18 +16,29 @@ $public-max-width: 800px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+
+    .share-preview-content {
+      max-width: none;
+    }
+
+    @media screen and (min-width: $share-preview-max-width + 1) {
+      .share-preview-archive {
+        display: none;
+      }
+    }
   }
 }
 
-.public-banner {
+.share-preview-banner {
   flex: 0 0 100px;
-  height: 100px;
+  height: $share-preview-banner-height;
   padding: 0px 0.5rem;
   color: white;
   background-color: $PR-blue;
 
   .banner-content {
     margin: 0 auto;
+    max-width: $share-preview-max-width;
     display: flex;
     height: 100%;
     align-items: center;
@@ -36,41 +49,61 @@ $public-max-width: 800px;
     width: 200px;
   }
 
-  .banner-buttons {
-    margin-left: auto;
-    flex: 0 0 auto;
-    display: flex;
 
-    .btn {
-      padding-top: 0.2rem;
-      padding-bottom: 0.2rem;
-      display: inline;
-      margin-left: 5px;
-    }
+}
+
+.banner-buttons, .share-preview-cover-buttons {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: flex;
+
+  .btn {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    display: inline;
+    margin-left: 5px;
   }
 }
 
-.preview-archive {
+.share-preview-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  max-width: $share-preview-max-width;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.share-preview-content-breadcrumbs {
+  background: $gray-700;
+  max-width: $share-preview-max-width;
+  margin: 0 auto;
+}
+
+.share-preview-archive {
+  max-width: $share-preview-max-width;
   margin: 0 auto;
   display: flex;
   align-items: center;
   padding: 10px 0;
 
-  .preview-archive-thumb {
+  .share-preview-archive-thumb {
     height: 50px;
     width: 50px;
     border-radius: 50%;
     margin-right: 10px;
   }
+
+  @media screen and (max-width: $share-preview-max-width) {
+    width: 100%;
+
+    .share-preview-archive-thumb {
+      margin-left: 10px;
+    }
+  }
 }
 
-.preview-thumb {
-  height: 500px;
-  width: auto;
-  margin: 10px;
-}
-
-.public-footer {
+.share-preview-footer {
   position: fixed;
   height: 50px;
   bottom: 0px;
@@ -83,17 +116,17 @@ $public-max-width: 800px;
 
   transition: transform 0.4s ease-in;
 
-  &.public-footer-visible {
+  &.share-preview-footer-visible {
     transform: translateY(0);
   }
 
-  .public-footer-content {
+  .share-preview-footer-content {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     margin: 0 auto;
-    max-width: $public-max-width;
+    max-width: $share-preview-max-width;
     text-align: center;
   }
 
@@ -106,38 +139,67 @@ $public-max-width: 800px;
     }
   }
 
-  .public-footer-close {
+  .share-preview-footer-close {
     flex: 0 0 3rem;
     cursor: pointer;
   }
 }
 
-.share-preview {
-  flex: 1 1 auto;
+.share-preview-cover {
+  $transition-length: 0.5s;
+
+  position: fixed;
+  top: $share-preview-banner-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition:  background-color $transition-length ease-in, top 0s linear $transition-length;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  padding: 20px;
 
-  .share-preview-form {
-    flex: 0 1 340px;
-    margin: 10px;
+  .share-preview-cover-content {
+    transform: translateY(100vh);
+    transition:  transform $transition-length ease-in;
 
-    @media screen and (max-width: 768px) {
-      order: 2;
-      flex: 0 0 100%;
+    border-radius: 2rem;
+    flex: 0 1 500px;
+    padding: 4rem;
+    background-color: $PR-blue;
+    color: white;
+    text-align: center;
+
+  }
+
+  &.from-bottom {
+    align-items: flex-end;
+    padding: 0px;
+
+    .share-preview-cover-content {
+      flex: 1 1 auto;
+      transform: translateY(100%);
+      padding: 40px;
+      border-radius: 0;
     }
   }
-}
 
-.share-preview-content {
-  flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+  &.share-preview-cover-visible {
+    transition:  background-color $transition-length ease-out, top 0s linear 0s;
+    background: rgba(black, 0.75);
+    top: 0;
 
-  @media screen and (max-width: 768px) {
-    order: 1;
-    flex: 0 0 100%;
+    .share-preview-cover-content {
+      transform: translateY(0);
+      transition:  transform $transition-length ease-out;
+    }
+  }
+
+  .share-preview-cover-buttons {
+    margin: 0 auto;
+    display: inline-flex;
+    .btn {
+      // display: block;
+    }
   }
 }

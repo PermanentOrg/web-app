@@ -109,6 +109,7 @@ export class FolderVO extends BaseVO {
 export interface FolderVOData {
   folderId?: any;
   archiveNbr?: any;
+  archiveArchiveNbr?: any;
   archiveId?: any;
   displayName?: any;
   displayDT?: any;

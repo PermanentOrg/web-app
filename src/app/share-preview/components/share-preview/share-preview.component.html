@@ -1,37 +1,46 @@
-<div class="public-banner">
+<div class="share-preview-banner">
   <div class="banner-content">
       <a href="/">
         <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
       </a>
-      <!-- <div class="banner-buttons">
+      <div class="banner-buttons">
         <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
-      </div> -->
+      </div>
   </div>
 </div>
-<div class="share-preview">
-  <div class="share-preview-form">
-    <router-outlet></router-outlet>
-  </div>
-  <div class="share-preview-content">
-    <div class="preview-archive" *ngIf="archive">
-      <div class="preview-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
-      <span>
-        <strong>{{displayName}}</strong><br>
-        Shared by {{archive.fullName}}
-      </span>
+<div class="share-preview-archive" *ngIf="archive">
+  <div class="share-preview-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+  <span>
+    <strong>{{displayName}}</strong><br>
+    Shared by {{archive.fullName}}
+  </span>
+</div>
+<div class="share-preview-content-breadcrumbs">
+  <pr-breadcrumbs *ngIf="!isRecord && !missing"></pr-breadcrumbs>
+</div>
+<div class="share-preview-content">
+  <pr-file-list></pr-file-list>
+</div>
+<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()">
+  <div class="share-preview-cover-content" (click)="stopPropagation($event)">
+    <p>
+      To view this content shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org.
+      <!-- To view <strong>{{displayName}}</strong> shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org. -->
+    </p>
+    <div class="share-preview-cover-buttons" (click)="stopPropagation($event)">
+      <button class="btn btn-wordpress">Sign Up</button>
+      <button class="btn btn-wordpress">Log In</button>
     </div>
-    <div class="preview-thumb" prBgImage [bgSrc]="previewItem.thumbURL500"></div>
-    <strong>Sign up or log in to access this shared item</strong>
   </div>
 </div>
-<!-- <div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">
-  <div class="public-footer-content">
-    <div class="public-footer-close"></div>
+<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': bottomBannerVisible}">
+  <div class="share-preview-footer-content">
+    <div class="share-preview-footer-close"></div>
     <span (click)="onSignupClick()">
         <strong>Try Permanent.org for free</strong> 
     </span>
-    <div class="public-footer-close" (click)="hideBottomBanner()">
+    <div class="share-preview-footer-close" (click)="hideBottomBanner()">
       ×
     </div>
   </div>
-</div> -->
+</div>
