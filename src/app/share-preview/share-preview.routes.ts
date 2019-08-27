@@ -31,7 +31,8 @@ export const routes: Routes = [
       {
         path: '',
         resolve: archiveResolve,
-        component: SharePreviewComponent
+        component: SharePreviewComponent,
+        // loadChildren: '@embed/embed.module#EmbedModule'
       }
     ]
   },

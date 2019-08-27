@@ -202,4 +202,11 @@ $share-preview-banner-height: 100px;
       // display: block;
     }
   }
+
+  .share-preview-cover-form {
+    min-height: 300px;
+    max-width: 400px;
+    margin: 0 auto;
+    border: 1px solid $gray-100;
+  }
 }

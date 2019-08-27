@@ -15,6 +15,7 @@ export class SharePreviewComponent implements OnInit {
   displayName: ArchiveVO = this.route.snapshot.data.previewItem.displayName;
 
   showCover = false;
+  showForm = false;
 
   hasScrollTriggered = false;
 
@@ -32,7 +33,6 @@ export class SharePreviewComponent implements OnInit {
     //   this.showCover = true;
     //   this.hideBottomBanner();
     // }, 2000);
-    // this.router.navigate(['signup'], { relativeTo: this.route });
   }
 
   hideBottomBanner() {
@@ -61,6 +61,16 @@ export class SharePreviewComponent implements OnInit {
 
   onSignupClick() {
     window.location.pathname = '/';
+  }
+
+  showSignupForm() {
+    this.showForm = true;
+    this.router.navigate(['signup'], { relativeTo: this.route });
+  }
+
+  showLoginForm() {
+    this.showForm = true;
+    this.router.navigate(['login'], { relativeTo: this.route });
   }
 
   stopPropagation(evt) {

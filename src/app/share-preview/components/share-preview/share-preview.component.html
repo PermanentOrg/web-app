@@ -21,14 +21,14 @@
 <div class="share-preview-content">
   <pr-file-list></pr-file-list>
 </div>
-<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()">
+<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover, 'share-preview-cover-form': showForm}" (click)="toggleCover()">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p>
       To view this content shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org.
       <!-- To view <strong>{{displayName}}</strong> shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org. -->
     </p>
     <div class="share-preview-cover-buttons" (click)="stopPropagation($event)">
-      <button class="btn btn-wordpress">Sign Up</button>
+      <button class="btn btn-wordpress" (click)="showForm = true;">Sign Up</button>
       <button class="btn btn-wordpress">Log In</button>
     </div>
   </div>
