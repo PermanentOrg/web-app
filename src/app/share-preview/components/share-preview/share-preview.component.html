@@ -33,14 +33,11 @@
     </div>
   </div>
 </div>
-<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': bottomBannerVisible}">
+<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}">
   <div class="share-preview-footer-content">
     <div class="share-preview-footer-close"></div>
-    <span (click)="onSignupClick()">
-        <strong>Try Permanent.org for free</strong> 
+    <span (click)="toggleCover()">
+        <strong>Try Permanent.org for free to view this content</strong> 
     </span>
-    <div class="share-preview-footer-close" (click)="hideBottomBanner()">
-      ×
-    </div>
   </div>
 </div>

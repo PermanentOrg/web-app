@@ -40,7 +40,6 @@ export class SharePreviewComponent implements OnInit {
   }
 
   toggleCover() {
-    this.hideBottomBanner();
     this.showCover = !this.showCover;
   }
 
@@ -53,7 +52,6 @@ export class SharePreviewComponent implements OnInit {
     if (!this.hasScrollTriggered) {
       this.hasScrollTriggered = true;
       setTimeout(() => {
-        this.hideBottomBanner();
         this.showCover = true;
       }, 0);
     }
