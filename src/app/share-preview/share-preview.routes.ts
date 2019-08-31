@@ -32,7 +32,18 @@ export const routes: Routes = [
         path: '',
         resolve: archiveResolve,
         component: SharePreviewComponent,
-        // loadChildren: '@embed/embed.module#EmbedModule'
+        data: {
+          formDarkBg: true
+        },
+        children: [
+          {
+            path: '',
+          },
+          {
+            path: 'action',
+            loadChildren: '@embed/embed.module#EmbedModule'
+          }
+        ]
       }
     ]
   },

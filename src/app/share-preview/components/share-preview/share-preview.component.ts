@@ -58,17 +58,17 @@ export class SharePreviewComponent implements OnInit {
   }
 
   onSignupClick() {
-    window.location.pathname = '/';
+    this.router.navigate(['/auth', 'signup'], {queryParams: { shareToken: this.route.snapshot.params.shareToken }})
+      .then(done => {
+        this.showForm = true;
+      });
   }
 
-  showSignupForm() {
-    this.showForm = true;
-    this.router.navigate(['signup'], { relativeTo: this.route });
-  }
-
-  showLoginForm() {
-    this.showForm = true;
-    this.router.navigate(['login'], { relativeTo: this.route });
+  onLoginClick() {
+    this.router.navigate(['/auth', 'login'], {queryParams: { shareToken: this.route.snapshot.params.shareToken }})
+      .then(done => {
+        this.showForm = true;
+      });
   }
 
   stopPropagation(evt) {
