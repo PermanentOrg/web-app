@@ -39,10 +39,14 @@ export class VideoComponent implements OnInit {
       }, 250);
     });
 
-    const mp4File = find(this.item.FileVOs, {type: 'type.file.video.mp4'}) as any;
+    const convertedFile = find(this.item.FileVOs, {type: 'type.file.video.mp4', format: 'file.format.converted'}) as any;
+    const originalFile = find(this.item.FileVOs, {format: 'file.format.original'}) as any;
 
-    if (mp4File) {
-      this.videoSrc = mp4File.fileURL;
+    if (convertedFile) {
+      this.videoSrc = convertedFile.fileURL;
+      this.isProcessing = false;
+    } else if (originalFile) {
+      this.videoSrc = originalFile.fileURL;
       this.isProcessing = false;
     } else {
       this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
