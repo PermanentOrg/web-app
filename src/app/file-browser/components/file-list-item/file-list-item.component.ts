@@ -219,7 +219,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
             this.api.share.getShareLink(this.item)
               .then((response: ShareResponse) => {
                 actionResolve();
-                this.dialog.open('SharingComponent', { item: this.item });
+                this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
               });
             break;
         }

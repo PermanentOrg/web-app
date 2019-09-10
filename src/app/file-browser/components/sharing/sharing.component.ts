@@ -12,7 +12,7 @@ import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 
-import { RecordVO, FolderVO, ShareVO, ArchiveVO } from '@models/index';
+import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@core/components/prompt/prompt-fields';
 
@@ -35,7 +35,7 @@ const ShareActions: {[key: string]: PromptButton} = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
-  public shareLink: any = null;
+  public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
 
   constructor(
@@ -50,6 +50,8 @@ export class SharingComponent implements OnInit {
   ) {
     this.shareItem = this.data.item as FolderVO | RecordVO;
     this.shareLink = this.data.link;
+
+    console.log(this.data.link, this.shareLink);
   }
 
   ngOnInit() {

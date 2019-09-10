@@ -1,4 +1,4 @@
-import { FolderVO, ArchiveVO, ShareVO, RecordVO } from '@root/app/models';
+import { FolderVO, ArchiveVO, ShareVO, RecordVO, ShareByUrlVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, compact } from 'lodash';
 
@@ -89,5 +89,14 @@ export class ShareResponse extends BaseResponse {
     }
 
     return new ShareVO(data[0][0].ShareVO);
+  }
+
+  public getShareByUrlVO() {
+    const data = this.getResultsData();
+    if (!data || !data.length || !data[0] || !data[0][0].Shareby_urlVO || !data[0][0].Shareby_urlVO.shareby_urlId) {
+      return null;
+    }
+
+    return new ShareByUrlVO(data[0][0].Shareby_urlVO);
   }
 }
