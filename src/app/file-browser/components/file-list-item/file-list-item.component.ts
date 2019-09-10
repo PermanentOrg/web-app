@@ -9,7 +9,7 @@ import { PromptService, PromptButton, PromptField } from '@core/services/prompt/
 import { FolderVO, RecordVO, FolderVOData, RecordVOData } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
-import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo';
+import { RecordResponse, FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -18,6 +18,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -73,6 +74,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private dataService: DataService,
+    private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     public element: ElementRef,
@@ -214,8 +216,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
               });
             break;
           case 'share':
-            actionResolve();
-            this.dialog.open('SharingComponent', { item: this.item });
+            this.api.share.getShareLink(this.item)
+              .then((response: ShareResponse) => {
+                actionResolve();
+                this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
+              });
             break;
         }
       });
