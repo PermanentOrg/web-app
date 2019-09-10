@@ -9,7 +9,7 @@ import { PromptService, PromptButton, PromptField } from '@core/services/prompt/
 import { FolderVO, RecordVO, FolderVOData, RecordVOData } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
-import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo';
+import { RecordResponse, FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -217,7 +217,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
             break;
           case 'share':
             this.api.share.getShareLink(this.item)
-              .then(() => {
+              .then((response: ShareResponse) => {
                 actionResolve();
                 this.dialog.open('SharingComponent', { item: this.item });
               });

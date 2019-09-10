@@ -33,7 +33,7 @@ export class ShareRepo extends BaseRepo {
     return this.http.sendRequestPromise('/share/delete', [data], ShareResponse);
   }
 
-  public generateShareLink(item: RecordVO | FolderVO) {
+  public generateShareLink(item: RecordVO | FolderVO): Promise<ShareResponse> {
     const data: any = {};
 
     if (item.isRecord) {

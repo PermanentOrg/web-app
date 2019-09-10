@@ -35,6 +35,7 @@ const ShareActions: {[key: string]: PromptButton} = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
+  public shareLink: any = null;
   public loadingRelations = false;
 
   constructor(
@@ -48,6 +49,7 @@ export class SharingComponent implements OnInit {
     private relationshipService: RelationshipService
   ) {
     this.shareItem = this.data.item as FolderVO | RecordVO;
+    this.shareLink = this.data.link;
   }
 
   ngOnInit() {
@@ -187,6 +189,14 @@ export class SharingComponent implements OnInit {
       .catch(() => {
         deferred.resolve();
       });
+  }
+
+  async generateShareLink() {
+    const response = await this.api.share.generateShareLink(this.shareItem);
+
+    if (response.isSuccessful) {
+      console.log(response);
+    }
   }
 
   close() {
