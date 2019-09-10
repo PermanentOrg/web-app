@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Router, NavigationStart, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -17,7 +17,7 @@ import { FolderPickerOperations } from '../folder-picker/folder-picker.component
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating: boolean;
   public uploadProgressVisible: boolean;
 
@@ -28,7 +28,8 @@ export class MainComponent implements OnInit, OnDestroy {
     private router: Router,
     private messageService: MessageService,
     private upload: UploadService,
-    private folderPicker: FolderPickerService
+    private route: ActivatedRoute,
+    private prompt: PromptService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -46,7 +47,7 @@ export class MainComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const account = this.accountService.getAccount();
     if (account.emailNeedsVerification() && account.phoneNeedsVerification()) {
       this.messageService.showMessage(
@@ -84,6 +85,34 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
+  }
+
+  ngAfterViewInit() {
+    this.checkShareByUrl();
+  }
+
+  async checkShareByUrl() {
+    // check for share by URL parameter to display Request Access prompt
+    if (this.route.snapshot.queryParams.shareByUrl) {
+      const shareUrlToken = this.route.snapshot.queryParams.shareByUrl;
+
+      const hasAccess = false;
+
+      // hit share/checkLink endpoint to check validity and get share data
+      const shareData = {};
+
+      if (!hasAccess) {
+        const title = `Request access to Item Name shared by Account Name?`;
+        if (await this.prompt.confirm('Request access', title)) {
+          console.log('requesting access');
+
+          // hit api to send request
+          this.messageService.showMessage('Access request sent.');
+        }
+      } else {
+        console.log('redirecting to share, already has access');
+      }
+    }
   }
 
 }
