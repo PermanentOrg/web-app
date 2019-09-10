@@ -1,4 +1,4 @@
-import { FolderVO, ArchiveVO, ShareVO } from '@root/app/models';
+import { FolderVO, ArchiveVO, ShareVO, RecordVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, compact } from 'lodash';
 
@@ -31,6 +31,38 @@ export class ShareRepo extends BaseRepo {
     };
 
     return this.http.sendRequestPromise('/share/delete', [data], ShareResponse);
+  }
+
+  public generateShareLink(item: RecordVO | FolderVO) {
+    const data: any = {};
+
+    if (item.isRecord) {
+      data.RecordVO = {
+        folder_linkId: item.folder_linkId
+      };
+    } else {
+      data.FolderVO = {
+        folder_linkId: item.folder_linkId
+      };
+    }
+
+    return this.http.sendRequestPromise('/share/generateShareLink', [data], ShareResponse);
+  }
+
+  public getShareLink(item: RecordVO | FolderVO) {
+    const data: any = {};
+
+    if (item.isRecord) {
+      data.RecordVO = {
+        folder_linkId: item.folder_linkId
+      };
+    } else {
+      data.FolderVO = {
+        folder_linkId: item.folder_linkId
+      };
+    }
+
+    return this.http.sendRequestPromise('/share/getLink', [data], ShareResponse);
   }
 }
 
