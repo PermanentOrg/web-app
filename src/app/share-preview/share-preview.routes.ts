@@ -8,6 +8,7 @@ import { PreviewResolveService } from './resolves/preview-resolve.service';
 import { SharedModule } from '@shared/shared.module';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
+import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -18,11 +19,15 @@ const previewResolve = {
   previewItem: PreviewResolveService
 };
 
+const shareResolve = {
+  shareByUrlVO: ShareUrlResolveService
+};
+
 
 export const routes: Routes = [
   {
     path: ':shareToken',
-    resolve: previewResolve,
+    resolve: shareResolve,
     data: {
       noFileListPadding: true,
       noFileListNavigation: true
@@ -30,20 +35,20 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        resolve: archiveResolve,
+        // resolve: archiveResolve,
         component: SharePreviewComponent,
         data: {
           formDarkBg: true
         },
-        children: [
-          {
-            path: '',
-          },
-          {
-            path: 'action',
-            loadChildren: '@embed/embed.module#EmbedModule'
-          }
-        ]
+        // children: [
+        //   {
+        //     path: '',
+        //   },
+        //   {
+        //     path: 'action',
+        //     loadChildren: '@embed/embed.module#EmbedModule'
+        //   }
+        // ]
       }
     ]
   },
@@ -62,7 +67,8 @@ export const routes: Routes = [
   providers: [
     PreviewResolveService,
     PreviewArchiveResolveService,
-    PreviewFolderResolveService
+    PreviewFolderResolveService,
+    ShareUrlResolveService
   ]
 })
 export class SharePreviewRoutingModule { }
