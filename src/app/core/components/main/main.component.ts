@@ -11,6 +11,8 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { FolderVO, FolderVOData } from '@root/app/models';
 import { find } from 'lodash';
 import { FolderPickerOperations } from '../folder-picker/folder-picker.component';
+import { ApiService } from '@shared/services/api/api.service';
+import { ShareResponse } from '@shared/services/api/share.repo';
 
 @Component({
   selector: 'pr-main',
@@ -29,7 +31,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     private messageService: MessageService,
     private upload: UploadService,
     private route: ActivatedRoute,
-    private prompt: PromptService
+    private prompt: PromptService,
+    private api: ApiService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -99,15 +102,26 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       const hasAccess = false;
 
       // hit share/checkLink endpoint to check validity and get share data
-      const shareData = {};
+      const checkLinkResponse = await this.api.share.checkShareLink(shareUrlToken);
+
+      console.log(checkLinkResponse);
 
       if (!hasAccess) {
         const title = `Request access to Item Name shared by Account Name?`;
         if (await this.prompt.confirm('Request access', title)) {
           console.log('requesting access');
 
+          try {
+            const requestResponse = await this.api.share.requestShareAccess(shareUrlToken);
+            this.messageService.showMessage('Access request sent.');
+          } catch (err) {
+            if (err.getMessage) {
+              if ((err as ShareResponse).messageIncludesPhrase('share.already_exists')) {
+                this.messageService.showError(`You have already requested access to this item.`);
+              }
+            }
+          }
           // hit api to send request
-          this.messageService.showMessage('Access request sent.');
         }
       } else {
         console.log('redirecting to share, already has access');

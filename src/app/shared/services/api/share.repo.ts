@@ -74,6 +74,16 @@ export class ShareRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/share/checkShareLink', [data], ShareResponse);
   }
+
+  public requestShareAccess(urlToken: string) {
+    const data = {
+      Shareby_urlVO: {
+        urlToken
+      }
+    };
+
+    return this.http.sendRequestPromise('/share/requestShareAccess', [data], ShareResponse);
+  }
 }
 
 export class ShareResponse extends BaseResponse {
