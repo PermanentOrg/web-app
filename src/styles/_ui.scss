@@ -183,3 +183,26 @@ pr-dialog {
     background: white;
   }
 }
+
+.perm-banner {
+  flex: 0 0 100px;
+  height: 100px;
+  padding: 0px 0.5rem;
+  color: white;
+  background-color: $PR-blue;
+
+  .banner-content {
+    margin: 0 auto;
+    max-width: 800px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .banner-logo {
+    flex: 0 0 auto;
+    width: 200px;
+  }
+
+
+}

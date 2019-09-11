@@ -1,0 +1,47 @@
+<div class="share-preview-banner">
+  <div class="banner-content">
+    <a href="/">
+      <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
+    </a>
+    <div class="banner-buttons">
+      <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
+    </div>
+  </div>
+</div>
+<div class="share-preview-archive" *ngIf="archive">
+  <div class="share-preview-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+  <span>
+    <strong>{{displayName}}</strong><br>
+    Shared by {{archive.fullName}}
+  </span>
+</div>
+<div class="share-preview-content-breadcrumbs">
+  <pr-breadcrumbs></pr-breadcrumbs>
+</div>
+<div class="share-preview-content">
+  <pr-file-list></pr-file-list>
+</div>
+<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()">
+  <div class="share-preview-cover-content" (click)="stopPropagation($event)">
+    <p>
+      To view this content shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org.
+      <!-- To view <strong>{{displayName}}</strong> shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org. -->
+    </p>
+    <div class="share-preview-cover-buttons" (click)="stopPropagation($event)">
+      <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
+      <button class="btn btn-wordpress" (click)="onLoginClick()">Log In</button>
+    </div>
+  </div>
+</div>
+<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}">
+  <div class="share-preview-footer-content">
+    <span (click)="toggleCover()">
+        <strong>Try Permanent.org for free to view this content</strong> 
+    </span>
+  </div>
+</div>
+<div class="share-preview-form-wrapper" [ngClass]="{'share-preview-form-visible': showForm}">
+  <div class="share-preview-form">
+    <router-outlet></router-outlet>
+  </div>
+</div>

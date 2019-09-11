@@ -11,6 +11,7 @@ export *  from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { RelationVO } from '@models/relation-vo';
 export { ShareVO } from '@models/share-vo';
+export { ShareByUrlVO } from '@models/shareby-url-vo';
 export { SimpleVO } from '@models/simple-vo';
 
 export { AccessRole } from '@models/access-role';
