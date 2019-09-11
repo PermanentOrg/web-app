@@ -93,7 +93,7 @@ export class ShareResponse extends BaseResponse {
 
   public getShareByUrlVO() {
     const data = this.getResultsData();
-    if (!data || !data.length || !data[0] || !data[0][0].Shareby_urlVO || !data[0][0].Shareby_urlVO.shareby_urlId) {
+    if (!data || !data.length || !data[0] || !data[0][0].Shareby_urlVO || !data[0][0].Shareby_urlVO.shareUrl) {
       return null;
     }
 
