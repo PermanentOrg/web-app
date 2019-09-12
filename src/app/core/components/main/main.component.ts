@@ -13,6 +13,7 @@ import { find } from 'lodash';
 import { FolderPickerOperations } from '../folder-picker/folder-picker.component';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
+import { Deferred } from '@root/vendor/deferred';
 
 @Component({
   selector: 'pr-main',
@@ -102,28 +103,44 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       const hasAccess = false;
 
       // hit share/checkLink endpoint to check validity and get share data
-      const checkLinkResponse: ShareResponse = await this.api.share.checkShareLink(shareUrlToken);
-      const shareByUrlVO = checkLinkResponse.getShareByUrlVO();
-      const shareItem: RecordVO | FolderVO = shareByUrlVO.FolderVO || shareByUrlVO.RecordVO;
-      const shareAccount: AccountVO = shareByUrlVO.AccountVO;
+      try {
+        const checkLinkResponse: ShareResponse = await this.api.share.checkShareLink(shareUrlToken);
 
-      if (!hasAccess) {
-        const title = `Request access to ${shareItem.displayName} shared by ${shareAccount.fullName}?`;
-        if (await this.prompt.confirm('Request access', title)) {
+
+        const shareByUrlVO = checkLinkResponse.getShareByUrlVO();
+        const shareItem: RecordVO | FolderVO = shareByUrlVO.FolderVO || shareByUrlVO.RecordVO;
+        const shareAccount: AccountVO = shareByUrlVO.AccountVO;
+
+        if (!hasAccess) {
+          const title = `Request access to ${shareItem.displayName} shared by ${shareAccount.fullName}?`;
           try {
-            const requestResponse = await this.api.share.requestShareAccess(shareUrlToken);
-            this.messageService.showMessage('Access request sent.');
-          } catch (err) {
-            if (err.getMessage) {
-              if ((err as ShareResponse).messageIncludesPhrase('share.already_exists')) {
-                this.messageService.showError(`You have already requested access to this item.`);
+            const deferred = new Deferred();
+            await this.prompt.confirm('Request access', title, deferred.promise);
+            try {
+              await this.api.share.requestShareAccess(shareUrlToken);
+              deferred.resolve();
+              this.messageService.showMessage('Access request sent.');
+            } catch (err) {
+              deferred.resolve();
+              if (err instanceof ShareResponse) {
+                if (err.messageIncludesPhrase('share.already_exists')) {
+                  this.messageService.showError(`You have already requested access to this item.`);
+                }
               }
             }
+          } finally {
+            // clear query param
+            this.router.navigate(['.'], { relativeTo: this.route, queryParams: { shareByUrl: null },  });
           }
-          // hit api to send request
+        } else {
+          // redirect to share in shares, already has access
         }
-      } else {
-        console.log('redirecting to share, already has access');
+      } catch (err) {
+        if (err instanceof ShareResponse) {
+          // checkLink failed for shareByUrl;
+          this.messageService.showError('Invalid share URL.');
+          this.router.navigate(['.'], { relativeTo: this.route, queryParams: { shareByUrl: null },  });
+        }
       }
     }
   }
