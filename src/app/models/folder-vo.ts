@@ -109,7 +109,7 @@ export class FolderVO extends BaseVO {
   public update (voData: FolderVOData) {
     if (voData) {
       for ( const key in voData ) {
-        if (voData[key] !== undefined && (!isArray(voData[key]) || voData[key].length > 1)) {
+        if (voData[key] !== undefined) {
           this[key] = voData[key];
         }
       }
