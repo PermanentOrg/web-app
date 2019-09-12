@@ -4,7 +4,6 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@a
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { PublishResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
 
@@ -99,25 +98,6 @@ export class PreviewResolveService implements Resolve<any> {
 
       return Promise.resolve(dummyRecordFolder);
     }
-
-
-    return Promise.resolve();
-    // return this.api.publish.getResource(route.params.shareToken)
-    //   .then((response: PublishResponse): RecordVO | any => {
-    //     if (response.getRecordVO()) {
-    //       return response.getRecordVO();
-    //     } else if (response.getFolderVO()) {
-    //       return response.getFolderVO();
-    //     } else {
-    //       throw response;
-    //     }
-    //   })
-    //   .catch((response: PublishResponse) => {
-    //     if (response.getMessage) {
-    //       this.message.showError(response.getMessage(), true);
-    //     }
-    //     return this.router.navigate(['p', 'error']);
-    //   });
   }
 }
 

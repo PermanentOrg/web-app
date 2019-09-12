@@ -8,7 +8,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { FolderVO, FolderVOData } from '@root/app/models';
+import { FolderVO, FolderVOData, ShareByUrlVO, RecordVO, AccountVO } from '@root/app/models';
 import { find } from 'lodash';
 import { FolderPickerOperations } from '../folder-picker/folder-picker.component';
 import { ApiService } from '@shared/services/api/api.service';
@@ -102,15 +102,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       const hasAccess = false;
 
       // hit share/checkLink endpoint to check validity and get share data
-      const checkLinkResponse = await this.api.share.checkShareLink(shareUrlToken);
-
-      console.log(checkLinkResponse);
+      const checkLinkResponse: ShareResponse = await this.api.share.checkShareLink(shareUrlToken);
+      const shareByUrlVO = checkLinkResponse.getShareByUrlVO();
+      const shareItem: RecordVO | FolderVO = shareByUrlVO.FolderVO || shareByUrlVO.RecordVO;
+      const shareAccount: AccountVO = shareByUrlVO.AccountVO;
 
       if (!hasAccess) {
-        const title = `Request access to Item Name shared by Account Name?`;
+        const title = `Request access to ${shareItem.displayName} shared by ${shareAccount.fullName}?`;
         if (await this.prompt.confirm('Request access', title)) {
-          console.log('requesting access');
-
           try {
             const requestResponse = await this.api.share.requestShareAccess(shareUrlToken);
             this.messageService.showMessage('Access request sent.');

@@ -29,7 +29,7 @@ export class ShareUrlResolveService implements Resolve<any> {
         if (response.getMessage) {
           this.message.showError(response.getMessage(), true);
         }
-        return this.router.navigate(['p', 'error']);
+        // return this.router.navigate(['p', 'error']);
       });
   }
 }
