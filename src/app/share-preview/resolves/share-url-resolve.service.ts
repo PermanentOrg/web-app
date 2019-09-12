@@ -23,13 +23,14 @@ export class ShareUrlResolveService implements Resolve<any> {
           const shareVO = shareByUrlVO.ShareVO;
 
           // need to navigate to /app to handle /app and /m redirects automatically
-          if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
+          if (!shareVO) {
+            return shareByUrlVO;
+          } else if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
             return this.router.navigate(['/shares', 'withme']);
           } else if (shareVO.status.includes('ok')) {
             const folder: FolderVO = shareByUrlVO.FolderVO;
             return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
           }
-          return shareByUrlVO;
         } else {
           throw response;
         }
@@ -38,7 +39,7 @@ export class ShareUrlResolveService implements Resolve<any> {
         if (response.getMessage) {
           this.message.showError(response.getMessage(), true);
         }
-        return this.router.navigate(['p', 'error']);
+        // return this.router.navigate(['p', 'error']);
       });
   }
 }

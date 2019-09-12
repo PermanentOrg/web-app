@@ -27,7 +27,6 @@ export class SharePreviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    console.log(route.snapshot.data.shareByUrlVO);
   }
 
   ngOnInit() {
@@ -76,7 +75,6 @@ export class SharePreviewComponent implements OnInit {
   stopPropagation(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    console.log(evt);
   }
 
 }

@@ -54,14 +54,10 @@ const dummyItems = blurredPhotos.map((filename, index) => {
 @Injectable()
 export class PreviewResolveService implements Resolve<any> {
   constructor(
-    private api: ApiService,
-    private message: MessageService,
-    private router: Router
   ) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     const shareByUrlVO = route.parent.data.shareByUrlVO as ShareByUrlVO;
-    console.log(shareByUrlVO);
     if (shareByUrlVO.FolderVO && shareByUrlVO.previewToggle) {
       // if folder and share preview on, just show the folder after setting the dummy path
 
