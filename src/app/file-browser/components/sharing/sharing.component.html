@@ -13,13 +13,19 @@
         <div prBgImage [bgSrc]="shareItem.thumbURL200"></div>
         <div class="name">{{shareItem.displayName}}</div>
     </div> -->
+    <div class="page-subheading" *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')">Share Requests</div>
+    <div class="share-item-members" *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')">
+      <pr-archive-small *ngFor="let shareVo of pendingShares"
+        (click)="onPendingShareClick(shareVo)"
+        [archive]="shareVo.ArchiveVO" [accessRole]="shareVo.accessRole">
+      </pr-archive-small>
+    </div>
     <div class="page-subheading">Sharing With</div>
     <div class="share-item-members">
-      <p *ngIf="!shareItem.ShareVOs || !shareItem.ShareVOs.length">
+      <p *ngIf="!shares.length">
         This item is not shared with any archives
       </p>
-      <p></p>
-      <pr-archive-small *ngFor="let shareVo of shareItem.ShareVOs"
+      <pr-archive-small *ngFor="let shareVo of shares"
         (click)="onShareMemberClick(shareVo)"
         [archive]="shareVo.ArchiveVO" [accessRole]="shareVo.accessRole">
       </pr-archive-small>

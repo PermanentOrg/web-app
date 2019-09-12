@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Validators } from '@angular/forms';
 
-import { remove, find } from 'lodash';
+import { remove, find, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
 import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
@@ -35,6 +34,10 @@ const ShareActions: {[key: string]: PromptButton} = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
+
+  public shares: ShareVO[] = [];
+  public pendingShares: ShareVO[] = [];
+
   public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
 
@@ -51,13 +54,44 @@ export class SharingComponent implements OnInit {
     this.shareItem = this.data.item as FolderVO | RecordVO;
     this.shareLink = this.data.link;
 
-    console.log(this.data.link, this.shareLink);
+    if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
+      [ this.pendingShares, this.shares ] = partition(this.shareItem.ShareVOs, {status: 'status.generic.pending'}) as any;
+    }
   }
 
   ngOnInit() {
   }
 
   onShareMemberClick(shareVo: ShareVO) {
+    if (this.shareItem.accessRole !== 'access.role.owner') {
+      return this.messageService.showMessage(
+        `You do not have permission to edit share access.`,
+        'danger'
+      );
+    }
+
+    if (shareVo.accessRole === 'access.role.owner') {
+      return this.messageService.showMessage(
+        `${shareVo.ArchiveVO.fullName} is an Owner on this item and cannot be removed or changed.`,
+        'info'
+      );
+    }
+
+    const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
+    this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
+      .then((value: string) => {
+        switch (value) {
+          case 'edit':
+            this.editShareVo(shareVo);
+            break;
+          case 'remove':
+            this.removeShareVo(shareVo);
+            break;
+        }
+      });
+  }
+
+  onPendingShareClick(shareVo: ShareVO) {
     if (this.shareItem.accessRole !== 'access.role.owner') {
       return this.messageService.showMessage(
         `You do not have permission to edit share access.`,
