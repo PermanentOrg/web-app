@@ -20,9 +20,12 @@ export class ShareUrlResolveService implements Resolve<any> {
       .then((response: ShareResponse): any => {
         if (response.isSuccessful) {
           const shareByUrlVO = response.getShareByUrlVO();
-          if (shareByUrlVO.ShareVO && shareByUrlVO.RecordVO) {
+          const shareVO = shareByUrlVO.ShareVO;
+
+          // need to navigate to /app to handle /app and /m redirects automatically
+          if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
             return this.router.navigate(['/shares', 'withme']);
-          } else if (shareByUrlVO.ShareVO) {
+          } else if (shareVO.status.includes('ok')) {
             const folder: FolderVO = shareByUrlVO.FolderVO;
             return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
           }

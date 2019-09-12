@@ -100,18 +100,26 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.route.snapshot.queryParams.shareByUrl) {
       const shareUrlToken = this.route.snapshot.queryParams.shareByUrl;
 
-      const hasAccess = false;
+      let hasRequested = false;
+      let hasAccess = false;
 
       // hit share/checkLink endpoint to check validity and get share data
       try {
         const checkLinkResponse: ShareResponse = await this.api.share.checkShareLink(shareUrlToken);
 
-
         const shareByUrlVO = checkLinkResponse.getShareByUrlVO();
+        const shareVO = shareByUrlVO.ShareVO;
         const shareItem: RecordVO | FolderVO = shareByUrlVO.FolderVO || shareByUrlVO.RecordVO;
         const shareAccount: AccountVO = shareByUrlVO.AccountVO;
 
-        if (!hasAccess) {
+        if (shareVO.status.includes('ok')) {
+          hasAccess = true;
+        } else if (shareVO) {
+          hasRequested = true;
+        }
+
+        if (!hasAccess && !hasRequested) {
+          // no access and no request
           const title = `Request access to ${shareItem.displayName} shared by ${shareAccount.fullName}?`;
           try {
             const deferred = new Deferred();
@@ -119,7 +127,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
             try {
               await this.api.share.requestShareAccess(shareUrlToken);
               deferred.resolve();
-              this.messageService.showMessage('Access request sent.');
+              this.messageService.showMessage('Access request sent.', 'success');
             } catch (err) {
               deferred.resolve();
               if (err instanceof ShareResponse) {
@@ -132,8 +140,18 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
             // clear query param
             this.router.navigate(['.'], { relativeTo: this.route, queryParams: { shareByUrl: null },  });
           }
-        } else {
+        } else if (hasRequested) {
+          // show message about having requested already
+          const msg = `You have already requested access to ${shareItem.displayName}. ${shareAccount.fullName} must approve your request.`;
+          this.prompt.confirm('OK', msg);
+          this.router.navigate(['.'], { relativeTo: this.route, queryParams: { shareByUrl: null },  });
+        } else if (hasAccess) {
           // redirect to share in shares, already has access
+          if (shareItem.isRecord) {
+            this.router.navigate(['/shares', 'withme']);
+          } else if (shareItem.isFolder) {
+            this.router.navigate(['/shares', 'withme', shareItem.archiveNbr, shareItem.folder_linkId]);
+          }
         }
       } catch (err) {
         if (err instanceof ShareResponse) {
