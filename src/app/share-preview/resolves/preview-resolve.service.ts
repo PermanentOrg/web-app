@@ -5,7 +5,52 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { PublishResponse, FolderResponse } from '@shared/services/api/index.repo';
-import { RecordVO, ShareByUrlVO, FolderVO } from '@models/index';
+import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models/index';
+import { DataStatus } from '@models/data-status.enum';
+
+// URLs for dummy images
+const blurredPhotos = [
+  'preview-1.jpg',
+  'preview-2.jpg',
+  'preview-3.jpg',
+  'preview-4.jpg',
+  'preview-5.jpg',
+  'preview-6.jpg',
+  'preview-7.jpg',
+  'preview-8.jpg',
+  'preview-9.jpg',
+  'preview-10.jpg',
+  'preview-1.jpg',
+  'preview-2.jpg',
+  'preview-3.jpg',
+  'preview-4.jpg',
+  'preview-5.jpg',
+  'preview-6.jpg',
+  'preview-7.jpg',
+  'preview-8.jpg',
+  'preview-9.jpg',
+  'preview-10.jpg',
+];
+
+const dummyItems = blurredPhotos.map((filename, index) => {
+  const url = `assets/img/preview/${filename}`;
+
+  const data: RecordVOData = {
+    displayName: `Shared Item`,
+    archiveNbr: '0000-0000',
+    folder_linkId: 0,
+    recordId: 0,
+    thumbURL200: url,
+    thumbURL500: url,
+    thumbURL1000: url,
+    type: 'type.record.image'
+  };
+
+  const record = new RecordVO(data);
+  record.dataStatus = DataStatus.Full;
+
+  return record;
+});
 
 @Injectable()
 export class PreviewResolveService implements Resolve<any> {
@@ -17,18 +62,42 @@ export class PreviewResolveService implements Resolve<any> {
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     const shareByUrlVO = route.parent.data.shareByUrlVO as ShareByUrlVO;
+    console.log(shareByUrlVO);
     if (shareByUrlVO.FolderVO && shareByUrlVO.previewToggle) {
-      return shareByUrlVO.FolderVO;
-      // // if folder and share preview on, navigateMin like usual
-      // return this.api.folder.navigate(shareByUrlVO.FolderVO as FolderVO).toPromise()
-      //   .then((response: FolderResponse) => {
-      //     console.log(response);
-      //     return response.getFolderVO(true);
-      //   });
+      // if folder and share preview on, just show the folder after setting the dummy path
+
+      setDummyPathFromDisplayName(shareByUrlVO.FolderVO);
+      return Promise.resolve(shareByUrlVO.FolderVO);
     } else if (shareByUrlVO.FolderVO) {
       // if folder and share preview off, create the dummy folder with preview images
+
+      const dummyFolder = new FolderVO({
+        displayName: shareByUrlVO.FolderVO.displayName,
+        archiveId: shareByUrlVO.FolderVO,
+        type: 'type.folder.share',
+        ChildItemVOs: dummyItems,
+      });
+
+      setDummyPathFromDisplayName(dummyFolder);
+
+      return Promise.resolve(dummyFolder);
     } else {
       // if record, make dummy folder with just the record
+
+      const record = shareByUrlVO.RecordVO as RecordVO;
+      record.dataStatus = DataStatus.Full;
+
+      const dummyRecordFolder = new FolderVO({
+        displayName: record.displayName,
+        archiveId: record,
+        type: 'type.folder.share',
+        ChildItemVOs: [ record ],
+        pathAsText: [ record.displayName ],
+        pathAsArchiveNbr: ['0000-0000'],
+        pathAsFolder_linkId: [0]
+      });
+
+      return Promise.resolve(dummyRecordFolder);
     }
 
 
@@ -50,4 +119,11 @@ export class PreviewResolveService implements Resolve<any> {
     //     return this.router.navigate(['p', 'error']);
     //   });
   }
+}
+
+function setDummyPathFromDisplayName(folder: FolderVO) {
+  folder.pathAsText = [ folder.displayName ];
+  folder.pathAsArchiveNbr = ['0000-0000'];
+  folder.pathAsFolder_linkId = [0];
+  return folder;
 }
