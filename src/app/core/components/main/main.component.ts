@@ -112,9 +112,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         const shareItem: RecordVO | FolderVO = shareByUrlVO.FolderVO || shareByUrlVO.RecordVO;
         const shareAccount: AccountVO = shareByUrlVO.AccountVO;
 
-        if (shareVO.status.includes('ok')) {
+        if (shareVO && shareVO.status.includes('ok')) {
           hasAccess = true;
-        } else if (shareVO) {
+        } else if (shareVO && shareVO.status.includes('pending')) {
           hasRequested = true;
         }
 
@@ -127,7 +127,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
             try {
               await this.api.share.requestShareAccess(shareUrlToken);
               deferred.resolve();
-              this.messageService.showMessage('Access request sent.', 'success');
+              this.messageService.showMessage('Access requested.', 'success');
             } catch (err) {
               deferred.resolve();
               if (err instanceof ShareResponse) {
@@ -154,6 +154,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       } catch (err) {
+        console.error('Error checking link', err);
         if (err instanceof ShareResponse) {
           // checkLink failed for shareByUrl;
           this.messageService.showError('Invalid share URL.');

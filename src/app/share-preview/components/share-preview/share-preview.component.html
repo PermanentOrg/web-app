@@ -4,7 +4,7 @@
       <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
     </a>
     <div class="banner-buttons">
-      <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
+      <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}">Sign Up</button>
     </div>
   </div>
 </div>
@@ -23,20 +23,24 @@
 </div>
 <div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
-    <p>
-      To view this content shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org.
-      <!-- To view <strong>{{displayName}}</strong> shared privately by <strong>{{archive.fullName}}</strong>, sign up or log in to Permanent.org. -->
+    <p *ngIf="!isLoggedIn">
+      To view this content shared privately by <strong>{{account.fullName}}</strong>, sign up or log in to Permanent.org.
+    </p>
+    <p *ngIf="isLoggedIn">
+      To view this content shared privately by <strong>{{account.fullName}}</strong>, request access below.
     </p>
     <div class="share-preview-cover-buttons" (click)="stopPropagation($event)">
-      <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
-      <button class="btn btn-wordpress" (click)="onLoginClick()">Log In</button>
+      <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn">Sign Up</button>
+      <button class="btn btn-wordpress" [routerLink]="['/auth', 'login']" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn">Log In</button>
+      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" *ngIf="isLoggedIn" [disabled]="waiting">Request Access</button>
     </div>
   </div>
 </div>
 <div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}">
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
-        <strong>Try Permanent.org for free to view this content</strong> 
+        <strong *ngIf="!isLoggedIn">Try Permanent.org for free to view this content</strong> 
+        <strong *ngIf="isLoggedIn">Click here to request access to this content</strong> 
     </span>
   </div>
 </div>
