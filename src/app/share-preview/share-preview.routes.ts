@@ -16,7 +16,7 @@ const archiveResolve = {
 };
 
 const previewResolve = {
-  previewItem: PreviewResolveService
+  currentFolder: PreviewResolveService
 };
 
 const shareResolve = {
@@ -35,7 +35,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        // resolve: archiveResolve,
+        resolve: previewResolve,
         component: SharePreviewComponent,
         data: {
           formDarkBg: true

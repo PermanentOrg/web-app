@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO, AccountVO } from '@models/index';
 import { throttle } from 'lodash';
 
 @Component({
@@ -11,8 +11,10 @@ import { throttle } from 'lodash';
 export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
-  archive: ArchiveVO = this.route.snapshot.data.archive;
-  displayName: ArchiveVO = this.route.snapshot.data.previewItem.displayName;
+
+  archive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
+  account: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
+  displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   showCover = false;
   showForm = false;
@@ -23,9 +25,9 @@ export class SharePreviewComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
-
+    console.log(route.snapshot.data.shareByUrlVO);
   }
 
   ngOnInit() {

@@ -139,7 +139,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.allowNavigation) {
       return false;
     }
-    
+
     if (this.item.dataStatus < DataStatus.Lean) {
       if (!this.item.isFetching) {
         this.dataService.fetchLeanItems([this.item]);

@@ -20,9 +20,16 @@ export class ShareUrlResolveService implements Resolve<any> {
       .then((response: ShareResponse) => {
         console.log(response);
         if (response.isSuccessful) {
-          console.log(response.getShareByUrlVO());
+          return response.getShareByUrlVO();
         } else {
+          throw response;
         }
+      })
+      .catch((response: ShareResponse) => {
+        if (response.getMessage) {
+          this.message.showError(response.getMessage(), true);
+        }
+        return this.router.navigate(['p', 'error']);
       });
   }
 }

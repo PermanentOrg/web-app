@@ -1,4 +1,8 @@
 import { BaseVO } from '@models/base-vo';
+import { RecordVO } from './record-vo';
+import { ArchiveVO } from './archive-vo';
+import { AccountVO } from './account-vo';
+import { FolderVO } from './folder-vo';
 
 export class ShareByUrlVO extends BaseVO {
   public shareby_urlId: number;
@@ -13,7 +17,28 @@ export class ShareByUrlVO extends BaseVO {
   public byAccountId: number;
   public byArchiveId: number;
 
+  public ArchiveVO;
+  public AccountVO;
+  public RecordVO;
+  public FolderVO;
+
   constructor(voData: any) {
     super(voData);
+
+    if (this.ArchiveVO) {
+      this.ArchiveVO = new ArchiveVO(this.ArchiveVO);
+    }
+
+    if (this.AccountVO) {
+      this.AccountVO = new AccountVO(this.AccountVO);
+    }
+
+    if (this.RecordVO) {
+      this.RecordVO = new RecordVO(this.RecordVO);
+    }
+
+    if (this.FolderVO) {
+      this.FolderVO = new FolderVO(this.FolderVO);
+    }
   }
 }
