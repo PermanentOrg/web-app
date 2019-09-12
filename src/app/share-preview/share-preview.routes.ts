@@ -39,16 +39,7 @@ export const routes: Routes = [
         component: SharePreviewComponent,
         data: {
           formDarkBg: true
-        },
-        // children: [
-        //   {
-        //     path: '',
-        //   },
-        //   {
-        //     path: 'action',
-        //     loadChildren: '@embed/embed.module#EmbedModule'
-        //   }
-        // ]
+        }
       }
     ]
   },
