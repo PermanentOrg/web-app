@@ -23,7 +23,7 @@ export class ShareUrlResolveService implements Resolve<any> {
           const shareVO = shareByUrlVO.ShareVO;
 
           // need to navigate to /app to handle /app and /m redirects automatically
-          if (!shareVO) {
+          if (!shareVO || shareVO.status.includes('pending')) {
             return shareByUrlVO;
           } else if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
             return this.router.navigate(['/shares', 'withme']);
