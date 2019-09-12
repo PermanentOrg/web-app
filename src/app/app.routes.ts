@@ -20,6 +20,8 @@ const routes: Routes = [
   { path: 'embed', loadChildren: '@embed/embed.module#EmbedModule' },
   { path: 'pledge', loadChildren: '@pledge/pledge.module#PledgeModule'},
   { path: 'p', loadChildren: '@public/public.module#PublicModule'},
+  { path: 'preview', loadChildren: '@share-preview/share-preview.module#SharePreviewModule'},
+  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule'},
   { path: '', loadChildren: '@core/core.module#CoreModule' },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

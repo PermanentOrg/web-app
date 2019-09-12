@@ -2,8 +2,10 @@
   <div class="dialog-body">
     <div class="page-title break-all">{{shareItem.displayName}}</div>
     <div class="page-subheading" *ngIf="shareLink">Share Link</div>
-    <p *ngIf="shareLink">Send this link via text, email, or other message service to invite people to share this content.</p>
-    <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" *ngIf="shareLink">
+    <div class="share-link" *ngIf="shareLink">
+      <p>Send this link via text, email, or other message service to invite people to share this content.</p>
+      <input type="text" class="form-control" readonly [value]="shareLink.shareUrl">
+    </div>
     <button class="btn btn-primary" (click)="generateShareLink()" *ngIf="!shareLink">Get Share Link</button>
     <div class="page-subheading"></div>
 

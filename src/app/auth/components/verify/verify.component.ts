@@ -35,7 +35,7 @@ export class VerifyComponent implements OnInit {
     const account = this.accountService.getAccount();
 
     if (!account) {
-      this.router.navigate(['/auth', 'login']);
+      this.router.navigate(['/auth', 'login'], { queryParamsHandling: 'preserve'});
       return;
     }
 
@@ -74,7 +74,7 @@ export class VerifyComponent implements OnInit {
       this.verifyingPhone = true;
       this.formTitle = 'Verify Phone Number';
     } else if (!this.needsEmail) {
-      this.router.navigate(['/myfiles']);
+      this.router.navigate(['/myfiles'], { queryParamsHandling: 'preserve'});
     }
 
     this.verifyForm = fb.group({
@@ -156,7 +156,7 @@ export class VerifyComponent implements OnInit {
     return this.accountService.switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/'], { queryParamsHandling: 'preserve'});
       });
   }
 

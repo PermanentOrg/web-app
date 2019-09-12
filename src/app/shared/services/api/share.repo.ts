@@ -64,6 +64,26 @@ export class ShareRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/share/getLink', [data], ShareResponse);
   }
+
+  public checkShareLink(urlToken: string) {
+    const data = {
+      Shareby_urlVO: {
+        urlToken
+      }
+    };
+
+    return this.http.sendRequestPromise('/share/checkShareLink', [data], ShareResponse);
+  }
+
+  public requestShareAccess(urlToken: string) {
+    const data = {
+      Shareby_urlVO: {
+        urlToken
+      }
+    };
+
+    return this.http.sendRequestPromise('/share/requestShareAccess', [data], ShareResponse);
+  }
 }
 
 export class ShareResponse extends BaseResponse {
@@ -93,7 +113,7 @@ export class ShareResponse extends BaseResponse {
 
   public getShareByUrlVO() {
     const data = this.getResultsData();
-    if (!data || !data.length || !data[0] || !data[0][0].Shareby_urlVO || !data[0][0].Shareby_urlVO.shareby_urlId) {
+    if (!data || !data.length || !data[0] || !data[0][0].Shareby_urlVO || !data[0][0].Shareby_urlVO.shareUrl) {
       return null;
     }
 

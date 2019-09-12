@@ -197,7 +197,8 @@ export class SharingComponent implements OnInit {
     const response = await this.api.share.generateShareLink(this.shareItem);
 
     if (response.isSuccessful) {
-      console.log(response);
+      console.log(response.getShareByUrlVO());
+      this.shareLink = response.getShareByUrlVO();
     }
   }
 

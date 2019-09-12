@@ -21,7 +21,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 :host.grid-view {
-  .public-content & {
+  .public-content &, .share-preview-content & {
     @media screen and (min-width: 800px) {
       width: 25%;
     }
