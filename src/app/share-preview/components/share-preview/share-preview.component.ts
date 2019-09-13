@@ -83,6 +83,8 @@ export class SharePreviewComponent implements OnInit {
       if (err instanceof ShareResponse) {
         if (err.messageIncludesPhrase('share.already_exists')) {
           this.message.showError(`You have already requested access to this item.`);
+        } else if (err.messageIncludesPhrase('same')) {
+          this.message.showError(`You do not need to request access to your own item.`);
         }
       }
     } finally {
