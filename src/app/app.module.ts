@@ -48,10 +48,10 @@ export class CustomUrlSerializer implements UrlSerializer {
 }
 
 export function getBaseLocation() {
-  if (location.pathname.indexOf('/p/') === 0) {
-    return '/';
-  } else {
+  if ( location.pathname.indexOf('/m/') === 0 ) {
     return '/m/';
+  } else {
+    return '/';
   }
 }
 
