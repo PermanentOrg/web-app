@@ -1,5 +1,4 @@
 import { NgModule, Injectable } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
 import {
   RouterModule,
   Router,
@@ -7,13 +6,12 @@ import {
   ActivatedRoute,
   DefaultUrlSerializer,
   UrlSerializer,
-  UrlTree,
-  NavigationStart
+  UrlTree
 } from '@angular/router';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -23,6 +21,7 @@ import { AppRoutingModule } from '@root/app/app.routes';
 import { AppComponent } from '@root/app/app.component';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { DialogModule } from './dialog/dialog.module';
+import { APP_BASE_HREF } from '@angular/common';
 
 declare var ga: any;
 
@@ -44,14 +43,6 @@ export class CustomUrlSerializer implements UrlSerializer {
   /** Converts a {@link UrlTree} into a url */
   serialize(tree: UrlTree): string {
     return this.defaultSerializer.serialize(tree);
-  }
-}
-
-export function getBaseLocation() {
-  if (location.pathname.indexOf('/p/') === 0) {
-    return '/';
-  } else {
-    return '/m/';
   }
 }
 
@@ -80,7 +71,7 @@ export function getBaseLocation() {
     },
     {
       provide: APP_BASE_HREF,
-      useFactory: getBaseLocation
+      useValue: '/'
     }
   ],
   bootstrap: [AppComponent]
@@ -93,18 +84,6 @@ export class AppModule {
     private route: ActivatedRoute,
   ) {
     this.routerListener = this.router.events
-    .pipe(tap((event) => {
-      if (event instanceof NavigationStart) {
-        const inSlashP = /^\/p\//.test(window.location.pathname);
-        if (event.url.includes('/p/') && !inSlashP) {
-          // redirect to plain /p/ and lose the /m/
-          window.location.pathname = event.url.replace('/m/', '');
-        } else if (!event.url.includes('/p/') && inSlashP) {
-          // redirect to /m/
-          window.location.pathname = '/m' + event.url;
-        }
-      }
-    }))
     .pipe(filter((event) => {
       return event instanceof NavigationEnd;
     })).subscribe((event) => {
@@ -132,7 +111,6 @@ export class AppModule {
           break;
         }
       }
-
 
 
       if ('ga' in window && ga.getAll && !skipGaPageview) {

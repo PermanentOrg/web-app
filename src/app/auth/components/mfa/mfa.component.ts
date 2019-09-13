@@ -34,7 +34,7 @@ export class MfaComponent implements OnInit {
       .then((response: ArchiveResponse) => {
         this.waiting = false;
         this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-        this.router.navigate(['/']);
+        this.router.navigate(['/'], { queryParamsHandling: 'preserve' });
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;

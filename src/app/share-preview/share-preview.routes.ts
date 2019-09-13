@@ -9,6 +9,7 @@ import { SharedModule } from '@shared/shared.module';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
 import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
+import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -26,6 +27,10 @@ const shareResolve = {
 
 export const routes: Routes = [
   {
+    path: 'error',
+    component: ShareNotFoundComponent
+  },
+  {
     path: ':shareToken',
     resolve: shareResolve,
     data: {
@@ -39,16 +44,7 @@ export const routes: Routes = [
         component: SharePreviewComponent,
         data: {
           formDarkBg: true
-        },
-        // children: [
-        //   {
-        //     path: '',
-        //   },
-        //   {
-        //     path: 'action',
-        //     loadChildren: '@embed/embed.module#EmbedModule'
-        //   }
-        // ]
+        }
       }
     ]
   },
@@ -62,7 +58,8 @@ export const routes: Routes = [
     FileBrowserComponentsModule
   ],
   declarations: [
-    SharePreviewComponent
+    SharePreviewComponent,
+    ShareNotFoundComponent
   ],
   providers: [
     PreviewResolveService,

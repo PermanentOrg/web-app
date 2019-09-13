@@ -2,6 +2,10 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ArchiveVO, AccountVO } from '@models/index';
 import { throttle } from 'lodash';
+import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { ShareResponse } from '@shared/services/api/share.repo';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-share-preview',
@@ -16,18 +20,28 @@ export class SharePreviewComponent implements OnInit {
   account: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
+  isLoggedIn = false;
+
   showCover = false;
   showForm = false;
 
+  shareToken: string;
+
   hasScrollTriggered = false;
+
+  waiting = false;
 
   scrollHandlerDebounced = throttle(() => { this.scrollCoverToggle(); }, 500);
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private accountService: AccountService,
+    private api: ApiService,
+    private message: MessageService
   ) {
-    console.log(route.snapshot.data.shareByUrlVO);
+    this.isLoggedIn = this.accountService.isLoggedIn();
+    this.shareToken = this.route.snapshot.params.shareToken;
   }
 
   ngOnInit() {
@@ -59,24 +73,28 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
-  onSignupClick() {
-    this.router.navigate(['/auth', 'signup'], {queryParams: { shareByUrl: this.route.snapshot.params.shareToken }})
-      .then(done => {
-        this.showForm = true;
-      });
-  }
-
-  onLoginClick() {
-    this.router.navigate(['/auth', 'login'], {queryParams: { shareByUrl: this.route.snapshot.params.shareToken }})
-      .then(done => {
-        this.showForm = true;
-      });
+  async onRequestAccessClick() {
+    try {
+      this.waiting = true;
+      await this.api.share.requestShareAccess(this.shareToken);
+      this.message.showMessage(`Access requested. ${this.account.fullName} must approve your request.` , 'success');
+      this.toggleCover();
+    } catch (err) {
+      if (err instanceof ShareResponse) {
+        if (err.messageIncludesPhrase('share.already_exists')) {
+          this.message.showError(`You have already requested access to this item.`);
+        } else if (err.messageIncludesPhrase('same')) {
+          this.message.showError(`You do not need to request access to your own item.`);
+        }
+      }
+    } finally {
+      this.waiting = false;
+    }
   }
 
   stopPropagation(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    console.log(evt);
   }
 
 }

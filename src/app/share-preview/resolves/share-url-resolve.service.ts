@@ -5,7 +5,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveResponse, ShareResponse } from '@shared/services/api/index.repo';
-import { RecordVO, ArchiveVO } from '@models/index';
+import { RecordVO, ArchiveVO, FolderVO } from '@models/index';
 
 @Injectable()
 export class ShareUrlResolveService implements Resolve<any> {
@@ -17,10 +17,20 @@ export class ShareUrlResolveService implements Resolve<any> {
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
     return this.api.share.checkShareLink(route.params.shareToken)
-      .then((response: ShareResponse) => {
-        console.log(response);
+      .then((response: ShareResponse): any => {
         if (response.isSuccessful) {
-          return response.getShareByUrlVO();
+          const shareByUrlVO = response.getShareByUrlVO();
+          const shareVO = shareByUrlVO.ShareVO;
+
+          // need to navigate to /app to handle /app and /m redirects automatically
+          if (!shareVO || shareVO.status.includes('pending')) {
+            return shareByUrlVO;
+          } else if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
+            return this.router.navigate(['/shares', 'withme']);
+          } else if (shareVO.status.includes('ok')) {
+            const folder: FolderVO = shareByUrlVO.FolderVO;
+            return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
+          }
         } else {
           throw response;
         }
@@ -29,7 +39,7 @@ export class ShareUrlResolveService implements Resolve<any> {
         if (response.getMessage) {
           this.message.showError(response.getMessage(), true);
         }
-        // return this.router.navigate(['p', 'error']);
+        return this.router.navigate(['share', 'error']);
       });
   }
 }

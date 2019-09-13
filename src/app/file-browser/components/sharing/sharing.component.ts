@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Validators } from '@angular/forms';
 
-import { remove, find } from 'lodash';
+import { remove, find, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
 import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
@@ -25,6 +24,10 @@ const ShareActions: {[key: string]: PromptButton} = {
     buttonName: 'remove',
     buttonText: 'Remove',
     class: 'btn-danger'
+  },
+  Approve: {
+    buttonName: 'approve',
+    buttonText: 'Approve'
   }
 };
 
@@ -35,6 +38,10 @@ const ShareActions: {[key: string]: PromptButton} = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
+
+  public shares: ShareVO[] = [];
+  public pendingShares: ShareVO[] = [];
+
   public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
 
@@ -51,13 +58,37 @@ export class SharingComponent implements OnInit {
     this.shareItem = this.data.item as FolderVO | RecordVO;
     this.shareLink = this.data.link;
 
-    console.log(this.data.link, this.shareLink);
+    if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
+      [ this.pendingShares, this.shares ] = partition(this.shareItem.ShareVOs, {status: 'status.generic.pending'}) as any;
+    }
   }
 
   ngOnInit() {
   }
 
   onShareMemberClick(shareVo: ShareVO) {
+    if (this.shareItem.accessRole !== 'access.role.owner') {
+      return this.messageService.showMessage(
+        `You do not have permission to approve share requests.`,
+        'danger'
+      );
+    }
+
+    const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
+    this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
+      .then((value: string) => {
+        switch (value) {
+          case 'edit':
+            this.editShareVo(shareVo);
+            break;
+          case 'remove':
+            this.removeShareVo(shareVo);
+            break;
+        }
+      });
+  }
+
+  onPendingShareClick(shareVo: ShareVO) {
     if (this.shareItem.accessRole !== 'access.role.owner') {
       return this.messageService.showMessage(
         `You do not have permission to edit share access.`,
@@ -72,12 +103,12 @@ export class SharingComponent implements OnInit {
       );
     }
 
-    const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
-    this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
+    const buttons = [ ShareActions.Approve, ShareActions.Remove ];
+    this.promptService.promptButtons(buttons, `Sharing request from ${shareVo.ArchiveVO.fullName}`)
       .then((value: string) => {
         switch (value) {
-          case 'edit':
-            this.editShareVo(shareVo);
+          case 'approve':
+            this.approvePendingShareVo(shareVo);
             break;
           case 'remove':
             this.removeShareVo(shareVo);
@@ -159,6 +190,7 @@ export class SharingComponent implements OnInit {
             this.shareItem.ShareVOs = [];
           }
           this.shareItem.ShareVOs.push(new ShareVO(updatedShareVo));
+          this.shares.push(updatedShareVo);
         } else {
           shareVo.accessRole = updatedShareVo.accessRole;
         }
@@ -181,6 +213,7 @@ export class SharingComponent implements OnInit {
         .then((response: ShareResponse) => {
           this.messageService.showMessage(`${shareVO.ArchiveVO.fullName} removed successfully.`, 'success');
           remove(this.shareItem.ShareVOs, shareVO);
+          remove(this.shares, shareVO);
           deferred.resolve();
         })
         .catch((response: ShareResponse) => {
@@ -193,11 +226,28 @@ export class SharingComponent implements OnInit {
       });
   }
 
+  approvePendingShareVo(shareVO: ShareVO) {
+    const deferred = new Deferred();
+
+    shareVO.status = 'status.generic.ok';
+
+    this.api.share.update(shareVO)
+    .then((response: ShareResponse) => {
+      this.messageService.showMessage(`${shareVO.ArchiveVO.fullName} granted access.`, 'success');
+      remove(this.pendingShares, shareVO);
+      this.shares.push(shareVO);
+      deferred.resolve();
+    })
+    .catch((response: ShareResponse) => {
+      deferred.resolve();
+      this.messageService.showError(response.getMessage(), true);
+    });
+  }
+
   async generateShareLink() {
     const response = await this.api.share.generateShareLink(this.shareItem);
 
     if (response.isSuccessful) {
-      console.log(response.getShareByUrlVO());
       this.shareLink = response.getShareByUrlVO();
     }
   }

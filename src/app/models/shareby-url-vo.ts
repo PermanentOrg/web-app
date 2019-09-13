@@ -21,6 +21,7 @@ export class ShareByUrlVO extends BaseVO {
   public AccountVO;
   public RecordVO;
   public FolderVO;
+  public ShareVO;
 
   constructor(voData: any) {
     super(voData);

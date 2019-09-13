@@ -34,7 +34,7 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
     }
 
     if (!this.isPending) {
-      this.isPending = this.archive.isPending();
+      this.isPending = this.archive && this.archive.isPending();
     }
 
     if (this.relation) {
