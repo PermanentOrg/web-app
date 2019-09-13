@@ -4,7 +4,8 @@
     <div class="page-subheading" *ngIf="shareLink">Share Link</div>
     <div class="share-link" *ngIf="shareLink">
       <p>Send this link via text, email, or other message service to invite people to share this content.</p>
-      <input type="text" class="form-control" readonly [value]="shareLink.shareUrl">
+        <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" #shareUrlInput>
+        <button class="btn btn-primary" [disabled]="urlCopied" (click)="copyShareLink()">{{ urlCopied ? 'URL Copied' : 'Copy URL'}}</button>
     </div>
     <button class="btn btn-primary" (click)="generateShareLink()" *ngIf="!shareLink">Get Share Link</button>
     <div class="page-subheading"></div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 
 import { remove, find, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
@@ -44,6 +44,10 @@ export class SharingComponent implements OnInit {
 
   public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
+
+  public urlCopied = false;
+
+  @ViewChild('shareUrlInput') shareUrlInput: ElementRef;
 
   constructor(
     @Inject(DIALOG_DATA) public data: any,
@@ -250,6 +254,18 @@ export class SharingComponent implements OnInit {
     if (response.isSuccessful) {
       this.shareLink = response.getShareByUrlVO();
     }
+  }
+
+  copyShareLink() {
+    const element = this.shareUrlInput.nativeElement as HTMLInputElement;
+    element.select();
+    document.execCommand('copy');
+    element.setSelectionRange(0, 0);
+    element.blur();
+    this.urlCopied = true;
+    setTimeout(() => {
+      this.urlCopied = false;
+    }, 5000);
   }
 
   close() {
