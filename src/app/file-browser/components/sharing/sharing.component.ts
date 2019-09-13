@@ -258,10 +258,32 @@ export class SharingComponent implements OnInit {
 
   copyShareLink() {
     const element = this.shareUrlInput.nativeElement as HTMLInputElement;
-    element.select();
+    const oldContentEditable = element.contentEditable;
+    const oldReadOnly = element.readOnly;
+
+
+    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+      (element as any).contentEditable = true;
+      element.readOnly = false;
+
+      const range = document.createRange();
+      range.selectNodeContents(element);
+
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      element.setSelectionRange(0, 999999999);
+      element.contentEditable = oldContentEditable;
+      element.readOnly = oldReadOnly;
+    } else {
+      element.select();
+    }
+
     document.execCommand('copy');
-    element.setSelectionRange(0, 0);
+
     element.blur();
+
     this.urlCopied = true;
     setTimeout(() => {
       this.urlCopied = false;
