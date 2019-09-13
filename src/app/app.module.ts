@@ -1,5 +1,4 @@
 import { NgModule, Injectable } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
 import {
   RouterModule,
   Router,
@@ -7,13 +6,12 @@ import {
   ActivatedRoute,
   DefaultUrlSerializer,
   UrlSerializer,
-  UrlTree,
-  NavigationStart
+  UrlTree
 } from '@angular/router';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -47,14 +45,6 @@ export class CustomUrlSerializer implements UrlSerializer {
   }
 }
 
-export function getBaseLocation() {
-  if ( location.pathname.indexOf('/m/') === 0 ) {
-    return '/m/';
-  } else {
-    return '/';
-  }
-}
-
 
 @NgModule({
   imports: [
@@ -77,10 +67,6 @@ export function getBaseLocation() {
     {
       provide: UrlSerializer,
       useClass: CustomUrlSerializer
-    },
-    {
-      provide: APP_BASE_HREF,
-      useFactory: getBaseLocation
     }
   ],
   bootstrap: [AppComponent]
@@ -93,18 +79,6 @@ export class AppModule {
     private route: ActivatedRoute,
   ) {
     this.routerListener = this.router.events
-    .pipe(tap((event) => {
-      if (event instanceof NavigationStart) {
-        const inSlashP = /^\/p\//.test(window.location.pathname);
-        if (event.url.includes('/p/') && !inSlashP) {
-          // redirect to plain /p/ and lose the /m/
-          window.location.pathname = event.url.replace('/m/', '');
-        } else if (!event.url.includes('/p/') && inSlashP) {
-          // redirect to /m/
-          window.location.pathname = '/m' + event.url;
-        }
-      }
-    }))
     .pipe(filter((event) => {
       return event instanceof NavigationEnd;
     })).subscribe((event) => {
@@ -132,7 +106,6 @@ export class AppModule {
           break;
         }
       }
-
 
 
       if ('ga' in window && ga.getAll && !skipGaPageview) {

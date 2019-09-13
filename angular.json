@@ -155,7 +155,7 @@
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",
               "deployUrl": "/m/",
-              "baseHref": "/m",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
             },
             "proxy": {
@@ -165,7 +165,7 @@
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy",
               "deployUrl": "/m/",
-              "baseHref": "/m",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.json"
             },
             "proxy_hmr": {
@@ -176,7 +176,7 @@
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_hmr",
               "deployUrl": "/m/",
-              "baseHref": "/m",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.json"
             }
           }
