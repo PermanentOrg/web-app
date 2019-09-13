@@ -28,7 +28,8 @@ const routes: Routes = [
   },
   { path: 'p', loadChildren: '@public/public.module#PublicModule'},
   { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule'},
-  { path: ':path', redirectTo: 'm/:path'}
+  { path: '', redirectTo: 'm', pathMatch: 'full'},
+  { path: ':path', redirectTo: 'm/:path'},
 ];
 
 @NgModule({
