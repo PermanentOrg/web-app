@@ -55,24 +55,39 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.serve.html"
                 }
-              ]
+              ],
+              "deployUrl": "/"
             },
             "proxy": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.proxy.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.serve.html"
                 }
-              ]
+              ],
+              "deployUrl": "/"
             },
             "proxy_hmr": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.proxy.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.serve.html"
                 }
-              ]
+              ],
+              "deployUrl": "/"
             },
             "development": {
               "fileReplacements": [
@@ -158,7 +173,8 @@
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",
-              "deployUrl": "/m/",
+              "deployUrl": "/",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
             },
             "proxy": {
@@ -167,7 +183,8 @@
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy",
-              "deployUrl": "/m/",
+              "deployUrl": "/",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.json"
             },
             "proxy_hmr": {
@@ -177,7 +194,8 @@
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_hmr",
-              "deployUrl": "/m/",
+              "deployUrl": "/",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.json"
             }
           }
