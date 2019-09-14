@@ -178,6 +178,8 @@ pr-dialog {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.7em;
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
     background: white;

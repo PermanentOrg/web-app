@@ -60,9 +60,13 @@ $share-preview-banner-height: 100px;
   .btn {
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
-    display: inline;
     margin-left: 5px;
   }
+}
+
+.btn-wordpress {
+  display: inline-flex;
+  align-items: center;
 }
 
 .share-preview-content {
