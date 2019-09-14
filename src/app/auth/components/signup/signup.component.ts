@@ -117,7 +117,9 @@ export class SignupComponent implements OnInit {
           this.accountService.logIn(formValue.email, formValue.password, true, true)
             .then(() => {
               this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-              if (!this.isForShareInvite) {
+              if (this.route.snapshot.queryParams.shareByUrl) {
+                this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
+              } else if (!this.isForShareInvite) {
                 this.router.navigate(['/']);
               } else if (this.shareItemIsRecord) {
                 setTimeout(() => {
