@@ -10,6 +10,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
@@ -55,6 +56,7 @@ export class SharingComponent implements OnInit {
     private dialog: Dialog,
     private promptService: PromptService,
     private prConstants: PrConstantsService,
+    private device: DeviceService,
     private api: ApiService,
     private messageService: MessageService,
     private relationshipService: RelationshipService
@@ -262,7 +264,7 @@ export class SharingComponent implements OnInit {
     const oldReadOnly = element.readOnly;
 
 
-    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+    if (this.device.isIos()) {
       (element as any).contentEditable = true;
       element.readOnly = false;
 

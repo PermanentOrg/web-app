@@ -4,7 +4,8 @@
       <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
     </a>
     <div class="banner-buttons">
-      <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}">Sign Up</button>
+      <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn" >Sign Up</button>
+      <a class="btn btn-wordpress" *ngIf="isLoggedIn" href="/app">My Account</a>
     </div>
   </div>
 </div>

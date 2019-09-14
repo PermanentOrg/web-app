@@ -156,7 +156,15 @@ export class VerifyComponent implements OnInit {
     return this.accountService.switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.router.navigate(['/'], { queryParamsHandling: 'preserve'});
+
+        if (this.route.snapshot.queryParams.shareByUrl) {
+          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
+            .then(() => {
+              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+            });
+        } else {
+          this.router.navigate(['/']);
+        }
       });
   }
 

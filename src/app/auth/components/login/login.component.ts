@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 import { trimWhitespace } from '@shared/utilities/forms';
@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private accountService: AccountService,
     private router: Router,
+    private route: ActivatedRoute,
     private message: MessageService,
     private cookies: CookieService
   ) {
@@ -55,6 +56,11 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/auth', 'verify'], { queryParamsHandling: 'preserve'})
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+            });
+        } else if (this.route.snapshot.queryParams.shareByUrl) {
+          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
+            .then(() => {
+              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
             });
         } else {
           this.router.navigate(['/'], { queryParamsHandling: 'preserve'})
