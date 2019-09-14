@@ -7,7 +7,7 @@
         <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" #shareUrlInput>
         <button class="btn btn-primary" [disabled]="urlCopied" (click)="copyShareLink()">{{ urlCopied ? 'URL Copied' : 'Copy URL'}}</button>
     </div>
-    <div class="share-link-button">
+    <div class="share-link-button" *ngIf="!shareLink">
       <button class="btn btn-primary" (click)="generateShareLink()">Get Share Link</button>
     </div>
     <div class="page-subheading"></div>
