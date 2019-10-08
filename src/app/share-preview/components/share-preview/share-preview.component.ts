@@ -162,7 +162,8 @@ export class SharePreviewComponent implements OnInit {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
         } else {
-          // all verified, send access request if needed or show public mode
+          this.showCover = false;
+          this.onRequestAccessClick();
         }
       })
       .catch((response: AuthResponse) => {
