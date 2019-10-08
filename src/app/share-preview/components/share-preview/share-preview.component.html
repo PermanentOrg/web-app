@@ -31,28 +31,39 @@
     <p *ngIf="isLoggedIn">
       To view this content shared privately by <strong>{{account.fullName}}</strong>, request access below.
     </p>
-    <div class="share-preview-form-wrapper" *ngIf="showForm">
+    <div class="share-preview-form-wrapper" *ngIf="!isLoggedIn">
       <div class="share-preview-form">
-        <form [formGroup]="authForm" (ngSubmit)="onSignupSubmit(authForm.value)" *ngIf="formType === 0">
+        <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="formType === 0">
           <div class="input-group-vertical">
-            <pr-form-input fieldName="name" placeholder="Full name" [control]="authForm.controls['name']"
+            <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
               [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
-            <pr-form-input fieldName="email" placeholder="Email" [control]="authForm.controls['email']"
+            <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
               [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-            <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="authForm.controls['password']"
+            <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
               [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
           </div>
-          <button type="submit" class="btn btn-alternate" [disabled]="waiting || authForm.invalid">
+          <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid">
             Sign up
           </button>
-          <a>Already have an account?</a>
+          <a (click)="formType = 2;">Already have an account?</a>
+        </form>
+        <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit(loginForm.value)" *ngIf="formType === 2">
+          <div class="input-group-vertical">
+            <pr-form-input fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
+              [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+            <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="loginForm.controls['password']"
+              [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+          </div>
+          <button type="submit" class="btn btn-alternate" [disabled]="waiting || loginForm.invalid">
+            Log in
+          </button>
+          <a (click)="formType = 0;">Need to sign up?</a>
         </form>
       </div>
     </div>
-    <div class="share-preview-cover-buttons" (click)="stopPropagation($event)" *ngIf="!showForm">
+    <div class="share-preview-cover-buttons" (click)="stopPropagation($event)" *ngIf="isLoggedIn" >
       <!-- <button class="btn btn-wordpress" *ngIf="!isLoggedIn" (click)="showForm = true;">Sign Up</button> -->
-      <!-- <button class="btn btn-wordpress" [routerLink]="[{outlets: {'form': ['auth', 'login']}}]" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn">Log In</button> -->
-      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" *ngIf="isLoggedIn" [disabled]="waiting">Request Access</button>
+      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" [disabled]="waiting">Request Access</button>
     </div>
   </div>
 </div>

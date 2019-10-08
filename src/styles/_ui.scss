@@ -186,7 +186,12 @@ pr-dialog {
   }
 }
 
-.btn-alternate, .btn-alternate:disabled {
+.btn-alternate,
+.btn-alternate:disabled,
+.btn-alternate:hover,
+.btn-alternate:active,
+.btn-alternate:focus,
+.btn-alternate:not(:disabled):not(.disabled):active {
   color: white;
 }
 

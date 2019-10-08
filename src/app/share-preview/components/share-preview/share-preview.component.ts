@@ -39,7 +39,8 @@ export class SharePreviewComponent implements OnInit {
   showForm = true;
 
   formType: FormType = 0;
-  authForm: FormGroup;
+  signupForm: FormGroup;
+  loginForm: FormGroup;
 
   shareToken: string;
 
@@ -62,13 +63,18 @@ export class SharePreviewComponent implements OnInit {
 
     const inviteCode = null;
 
-    this.authForm = fb.group({
+    this.signupForm = fb.group({
       invitation: [inviteCode ? inviteCode : ''],
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
       name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: [true ],
       optIn: [true]
+    });
+
+    this.loginForm = fb.group({
+      email: ['', [trimWhitespace, Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
   }
 
@@ -120,6 +126,10 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
+  test() {
+    console.log('hello');
+  }
+
   onSignupSubmit(formValue: any) {
     this.waiting = true;
 
@@ -160,7 +170,7 @@ export class SharePreviewComponent implements OnInit {
 
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password.', 'danger');
-          this.authForm.patchValue({
+          this.loginForm.patchValue({
             password: ''
           });
         } else {
@@ -171,7 +181,6 @@ export class SharePreviewComponent implements OnInit {
 
   stopPropagation(evt) {
     evt.stopPropagation();
-    evt.preventDefault();
   }
 
 }
