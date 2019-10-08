@@ -5,7 +5,7 @@
     </a>
     <div class="banner-buttons">
       <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn" >Sign Up</button>
-      <a class="btn btn-wordpress" *ngIf="isLoggedIn" href="/app">My Account</a>
+      <a class="btn btn-wordpress" *ngIf="isLoggedIn" href="/app">{{ account ? account.primaryEmail : 'My Account' }}</a>
     </div>
   </div>
 </div>
