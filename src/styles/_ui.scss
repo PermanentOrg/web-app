@@ -186,6 +186,10 @@ pr-dialog {
   }
 }
 
+.btn-alternate, .btn-alternate:disabled {
+  color: white;
+}
+
 .perm-banner {
   flex: 0 0 100px;
   height: 100px;

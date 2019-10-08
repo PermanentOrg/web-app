@@ -6,6 +6,19 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+
+import APP_CONFIG from '@root/app/app.config';
+import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
+import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
+
+const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+
+enum FormType {
+  Signup,
+  Invite,
+  Login
+}
 
 @Component({
   selector: 'pr-share-preview',
@@ -23,7 +36,10 @@ export class SharePreviewComponent implements OnInit {
   isLoggedIn = false;
 
   showCover = false;
-  showForm = false;
+  showForm = true;
+
+  formType: FormType = 0;
+  authForm: FormGroup;
 
   shareToken: string;
 
@@ -38,10 +54,22 @@ export class SharePreviewComponent implements OnInit {
     private route: ActivatedRoute,
     private accountService: AccountService,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private fb: FormBuilder
   ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.shareToken = this.route.snapshot.params.shareToken;
+
+    const inviteCode = null;
+
+    this.authForm = fb.group({
+      invitation: [inviteCode ? inviteCode : ''],
+      email: ['', [trimWhitespace, Validators.required, Validators.email]],
+      name: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      agreed: [true ],
+      optIn: [true]
+    });
   }
 
   ngOnInit() {
@@ -90,6 +118,55 @@ export class SharePreviewComponent implements OnInit {
     } finally {
       this.waiting = false;
     }
+  }
+
+  onSignupSubmit(formValue: any) {
+    this.waiting = true;
+
+    this.accountService.signUp(
+      formValue.email, formValue.name, formValue.password, formValue.password,
+      formValue.agreed, formValue.optIn, null, formValue.invitation
+    )
+      .then((response: AccountResponse) => {
+        return this.accountService.logIn(formValue.email, formValue.password, true, true);
+      })
+      .then(() => {
+        // check if invite, send access request if needed, or show preview mode
+        // this.router.navigate(['../', 'done'], {queryParams: { inviteCode: this.inviteCode, relativeTo: this.route }});
+      })
+      .catch((response: AccountResponse) => {
+        this.message.showError(response.getMessage(), true);
+        this.waiting = false;
+      });
+  }
+
+  onLoginSubmit(formValue: any) {
+    this.waiting = true;
+
+    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
+      .then((response: AuthResponse) => {
+        if (response.needsMFA()) {
+          // send to mfa verification
+          this.router.navigate(['/auth', 'mfa'], { queryParamsHandling: 'preserve'})
+            .then(() => {
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+            });
+        } else {
+          // all verified, send access request if needed or show public mode
+        }
+      })
+      .catch((response: AuthResponse) => {
+        this.waiting = false;
+
+        if (response.messageIncludes('warning.signin.unknown')) {
+          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.authForm.patchValue({
+            password: ''
+          });
+        } else {
+          this.message.showMessage('Log in failed. Please try again.', 'danger');
+        }
+      });
   }
 
   stopPropagation(evt) {

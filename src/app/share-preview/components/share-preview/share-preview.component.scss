@@ -204,6 +204,10 @@ $share-preview-banner-height: 100px;
       transform: translateY(100%);
       padding: 40px;
       border-radius: 0;
+
+      @media screen and (max-width: 400px) {
+        padding: 20px;
+      }
     }
   }
 
@@ -227,41 +231,50 @@ $share-preview-banner-height: 100px;
   }
 }
 
-.share-preview-form-wrapper {
-  $transition-length: 0.5;
+  // .share-preview-form {
+  //   flex: 0 1 500px;
+  //   border-radius: 2rem;
+  //   padding: 4rem;
+  //   background-color: white;
+  //   color: white;
+  //   text-align: center;
+  // }
 
-  position: fixed;
-  transform: translateY(100%);
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition:  background-color $transition-length ease-in, top 0s linear $transition-length;
+// .share-preview-form-wrapper {
+//   $transition-length: 0.5;
 
-  .share-preview-form {
-    transform: translateY(100vh);
-    transition:  transform $transition-length ease-in;
-    box-shadow: $box-shadow-sm;
+//   position: fixed;
+//   transform: translateY(100%);
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   transition:  background-color $transition-length ease-in, top 0s linear $transition-length;
 
-    flex: 0 1 500px;
-    border-radius: 2rem;
-    padding: 4rem;
-    background-color: white;
-    color: white;
-    text-align: center;
-  }
+//   .share-preview-form {
+//     transform: translateY(100vh);
+//     transition:  transform $transition-length ease-in;
+//     box-shadow: $box-shadow-sm;
 
-  &.share-preview-form-visible {
-    background: rgba(black, 0.4);
-    transform: translateY(0);
-    flex: 0 1 400px;
+//     flex: 0 1 500px;
+//     border-radius: 2rem;
+//     padding: 4rem;
+//     background-color: white;
+//     color: white;
+//     text-align: center;
+//   }
 
-    .share-preview-form {
-      transform: translateY(0);
-      transition:  transform $transition-length ease-out;
-    }
-  }
-}
+//   &.share-preview-form-visible {
+//     background: rgba(black, 0.4);
+//     transform: translateY(0);
+//     flex: 0 1 400px;
+
+//     .share-preview-form {
+//       transform: translateY(0);
+//       transition:  transform $transition-length ease-out;
+//     }
+//   }
+// }
