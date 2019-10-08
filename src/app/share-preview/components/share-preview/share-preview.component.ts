@@ -143,7 +143,7 @@ export class SharePreviewComponent implements OnInit {
   onLoginSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
+    this.accountService.logIn(formValue.email, formValue.password, true, true)
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
           // send to mfa verification
