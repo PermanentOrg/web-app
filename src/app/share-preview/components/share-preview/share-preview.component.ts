@@ -28,12 +28,12 @@ enum FormType {
 export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
-
   archive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
   account: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   isLoggedIn = false;
+  hasRequested = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('pending');
 
   showCover = false;
   showForm = true;
@@ -83,6 +83,10 @@ export class SharePreviewComponent implements OnInit {
     //   this.showCover = true;
     //   this.hideBottomBanner();
     // }, 2000);
+
+    if (this.route.snapshot.queryParams.sendRequest) {
+      this.onRequestAccessClick();
+    }
   }
 
   hideBottomBanner() {
@@ -112,10 +116,12 @@ export class SharePreviewComponent implements OnInit {
       this.waiting = true;
       await this.api.share.requestShareAccess(this.shareToken);
       this.message.showMessage(`Access requested. ${this.account.fullName} must approve your request.` , 'success');
-      this.toggleCover();
+      this.showCover = false;
+      this.hasRequested = true;
     } catch (err) {
       if (err instanceof ShareResponse) {
         if (err.messageIncludesPhrase('share.already_exists')) {
+          this.hasRequested = true;
           this.message.showError(`You have already requested access to this item.`);
         } else if (err.messageIncludesPhrase('same')) {
           this.message.showError(`You do not need to request access to your own item.`);
@@ -157,11 +163,12 @@ export class SharePreviewComponent implements OnInit {
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
           // send to mfa verification
-          this.router.navigate(['/auth', 'mfa'], { queryParamsHandling: 'preserve'})
+          this.router.navigate(['/auth', 'mfa'], { queryParams: { shareByUrl: this.shareToken }})
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
         } else {
+          // hide cover, send request access
           this.showCover = false;
           this.onRequestAccessClick();
         }
