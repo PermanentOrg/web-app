@@ -25,7 +25,6 @@ export class PublicItemComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {
     console.log(route.snapshot.data);
-    debugger;
     if (route.snapshot.data.publishedItem.recordId) {
       // record
       this.record = route.snapshot.data.publishedItem;

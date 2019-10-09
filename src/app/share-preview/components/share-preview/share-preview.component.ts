@@ -79,7 +79,7 @@ export class SharePreviewComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
 
-    if (this.hasAccess) {
+    if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
       this.router.navigate(['view'], { relativeTo: this.route });
     }
   }

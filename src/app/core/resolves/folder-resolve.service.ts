@@ -20,7 +20,7 @@ export class FolderResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     let targetFolder;
 
-    console.log('folder resolve!');
+    console.log('folder resolve!', route);
 
     if (route.params.archiveNbr && route.params.folderLinkId) {
       targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
