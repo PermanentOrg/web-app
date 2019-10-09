@@ -17,8 +17,8 @@
     Shared by {{shareAccount.fullName}}
   </span>
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
-    <button class="btn btn-primary">Edit</button>
-    <button class="btn btn-primary">Share</button>
+    <button class="btn btn-primary" (click)="onViewShareClick()">{{ canEdit ? 'Edit' : 'View' }} in app</button>
+    <button class="btn btn-primary" *ngIf="canShare" (click)="onShareShareClick()">Share</button>
   </div>
 </div>
 <div class="share-preview-content-breadcrumbs">
