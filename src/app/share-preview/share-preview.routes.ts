@@ -48,6 +48,9 @@ export const routes: Routes = [
         children: [
           {
             path: '',
+            data: {
+              noFileListNavigation: true
+            },
             component: FileListComponent
           },
           {

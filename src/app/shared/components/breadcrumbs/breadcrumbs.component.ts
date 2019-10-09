@@ -78,7 +78,11 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     this.breadcrumbs = [];
 
     const isInSharePreview = this.router.routerState.snapshot.url.includes('/share/');
-    const isInPublic = this.router.routerState.snapshot.url.includes('/shares');
+    const isInSharePreviewView = isInSharePreview && this.router.routerState.snapshot.url.includes('/view');
+    const isInPublic = this.router.routerState.snapshot.url.includes('/p/');
+
+    console.log('inSharePreview', isInSharePreview);
+    console.log('inSharePreviewView', isInSharePreviewView);
 
     let rootUrl;
 
@@ -86,7 +90,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       rootUrl = '/apps';
     } else if (this.router.routerState.snapshot.url.includes('/shares')) {
       rootUrl = '/shares';
-    } else if (isInSharePreview) {
+    } else if (isInSharePreviewView) {
       rootUrl = `/share/${this.route.snapshot.params.shareToken}/view`;
     } else if  (isInPublic) {
       rootUrl = `/p/${this.route.firstChild.snapshot.params.publishUrlToken}`;
@@ -98,15 +102,16 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!isInPublic && !isInSharePreview) {
+    if (!isInPublic && !isInSharePreviewView) {
       this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
     }
 
+    console.log(this.breadcrumbs, folder, folder.pathAsText);
     for (let i = 1; i < folder.pathAsText.length; i++) {
-      if (isInSharePreview && i < 2) {
+      if (isInSharePreviewView && i < 2) {
         continue;
       }
-      
+
       this.breadcrumbs.push(new Breadcrumb(
         rootUrl,
         folder.pathAsText[i],
@@ -114,6 +119,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
         folder.pathAsFolder_linkId[i]
       ));
     }
+
   }
 
   scrollToEnd() {

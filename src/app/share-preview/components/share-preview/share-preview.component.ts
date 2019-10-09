@@ -34,7 +34,7 @@ export class SharePreviewComponent implements OnInit {
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   isLoggedIn = false;
-  hasRequested = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('pending');
+  hasRequested = this.route.snapshot.data.shareByUrlVO.ShareVO;
   hasAccess = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('ok');
 
   showCover = false;
@@ -90,7 +90,7 @@ export class SharePreviewComponent implements OnInit {
     //   this.hideBottomBanner();
     // }, 2000);
 
-    if (this.route.snapshot.queryParams.sendRequest) {
+    if (this.route.snapshot.queryParams.sendRequest && !this.hasRequested) {
       this.onRequestAccessClick();
     }
   }
@@ -185,7 +185,24 @@ export class SharePreviewComponent implements OnInit {
           // hide cover, send request access
           this.isLoggedIn = true;
           this.showCover = false;
-          this.onRequestAccessClick();
+
+          this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
+            .then((linkResponse: ShareResponse): any => {
+              if (linkResponse.isSuccessful) {
+                const shareByUrlVO = linkResponse.getShareByUrlVO();
+                const shareVO = shareByUrlVO.ShareVO;
+                if (shareVO) {
+                  this.hasRequested = true;
+
+                  if (shareVO.status.includes('ok')) {
+                    this.hasAccess = true;
+                    this.router.navigate(['view'], { relativeTo: this.route });
+                  }
+                } else {
+                  this.onRequestAccessClick();
+                }
+              }
+            });
         }
       })
       .catch((response: AuthResponse) => {
