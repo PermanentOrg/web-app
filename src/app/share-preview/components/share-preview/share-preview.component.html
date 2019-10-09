@@ -16,7 +16,7 @@
     <strong>{{displayName}}</strong><br>
     Shared by {{shareAccount.fullName}}
   </span>
-  <div class="share-preview-archive-buttons">
+  <div class="share-preview-archive-buttons" *ngIf="hasAccess">
     <button class="btn btn-primary">Edit</button>
     <button class="btn btn-primary">Share</button>
   </div>
@@ -25,7 +25,8 @@
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
 <div class="share-preview-content">
-  <pr-file-list [allowNavigation]="hasAccess"></pr-file-list>
+  <router-outlet></router-outlet>
+  <!-- <pr-file-list [allowNavigation]="hasAccess"></pr-file-list> -->
 </div>
 <div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">

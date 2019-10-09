@@ -78,6 +78,10 @@ export class SharePreviewComponent implements OnInit {
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
+
+    if (this.hasAccess) {
+      this.router.navigate(['view'], { relativeTo: this.route });
+    }
   }
 
   ngOnInit() {
