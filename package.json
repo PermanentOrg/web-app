@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "serve": "ng serve",
-    "dev": "ng serve --host local.permanent.org --disable-host-check --configuration=hmr",
-    "dev_proxy": "ng serve --host local.permanent.org --disable-host-check --configuration=proxy_hmr",
+    "dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --host local.permanent.org --disable-host-check --configuration=hmr",
+    "dev_proxy": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --host local.permanent.org --disable-host-check --configuration=proxy_hmr",
     "dev_local": "ng serve --base-href /",
     "build": "ng build --aot --build-optimizer --prod",
     "build_local": "ng build --aot --configuration=local",

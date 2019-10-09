@@ -39,11 +39,11 @@ export class MfaComponent implements OnInit {
       })
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
 
         if (this.route.snapshot.queryParams.shareByUrl) {
-          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
+          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl], {queryParams: { sendRequest: true }});
         } else {
+          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           this.router.navigate(['/']);
         }
       })

@@ -278,6 +278,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     const routeParams = this.route.snapshot.params;
     let rootUrl = '/myfiles';
 
+    this.router.navigate(['.'], { relativeTo: this.route.parent});
+    return;
+
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       if (this.router.routerState.snapshot.url.includes('/withme')) {
         rootUrl = '/shares/withme';

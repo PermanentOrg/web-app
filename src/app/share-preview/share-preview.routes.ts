@@ -10,6 +10,7 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
 import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
+import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -35,7 +36,6 @@ export const routes: Routes = [
     resolve: shareResolve,
     data: {
       noFileListPadding: true,
-      noFileListNavigation: true
     },
     children: [
       {
@@ -44,7 +44,20 @@ export const routes: Routes = [
         component: SharePreviewComponent,
         data: {
           formDarkBg: true
-        }
+        },
+        children: [
+          {
+            path: '',
+            data: {
+              noFileListNavigation: true
+            },
+            component: FileListComponent
+          },
+          {
+            path: 'view',
+            loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+          }
+        ]
       }
     ]
   },

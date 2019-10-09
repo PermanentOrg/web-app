@@ -6,6 +6,19 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+
+import APP_CONFIG from '@root/app/app.config';
+import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
+import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
+
+const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+
+enum FormType {
+  Signup,
+  Invite,
+  Login
+}
 
 @Component({
   selector: 'pr-share-preview',
@@ -15,15 +28,21 @@ import { MessageService } from '@shared/services/message/message.service';
 export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
-
-  archive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
-  account: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
+  account: AccountVO = this.accountService.getAccount();
+  shareArchive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
+  shareAccount: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   isLoggedIn = false;
+  hasRequested = this.route.snapshot.data.shareByUrlVO.ShareVO;
+  hasAccess = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('ok');
 
   showCover = false;
-  showForm = false;
+  showForm = true;
+
+  formType: FormType = 0;
+  signupForm: FormGroup;
+  loginForm: FormGroup;
 
   shareToken: string;
 
@@ -38,10 +57,31 @@ export class SharePreviewComponent implements OnInit {
     private route: ActivatedRoute,
     private accountService: AccountService,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private fb: FormBuilder
   ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.shareToken = this.route.snapshot.params.shareToken;
+
+    const inviteCode = null;
+
+    this.signupForm = fb.group({
+      invitation: [inviteCode ? inviteCode : ''],
+      email: ['', [trimWhitespace, Validators.required, Validators.email]],
+      name: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      agreed: [true ],
+      optIn: [true]
+    });
+
+    this.loginForm = fb.group({
+      email: ['', [trimWhitespace, Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+    });
+
+    if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
+      this.router.navigate(['view'], { relativeTo: this.route });
+    }
   }
 
   ngOnInit() {
@@ -49,6 +89,10 @@ export class SharePreviewComponent implements OnInit {
     //   this.showCover = true;
     //   this.hideBottomBanner();
     // }, 2000);
+
+    if (this.route.snapshot.queryParams.sendRequest && !this.hasRequested) {
+      this.onRequestAccessClick();
+    }
   }
 
   hideBottomBanner() {
@@ -77,11 +121,13 @@ export class SharePreviewComponent implements OnInit {
     try {
       this.waiting = true;
       await this.api.share.requestShareAccess(this.shareToken);
-      this.message.showMessage(`Access requested. ${this.account.fullName} must approve your request.` , 'success');
-      this.toggleCover();
+      this.message.showMessage(`Access requested. ${this.shareAccount.fullName} must approve your request.` , 'success');
+      this.showCover = false;
+      this.hasRequested = true;
     } catch (err) {
       if (err instanceof ShareResponse) {
         if (err.messageIncludesPhrase('share.already_exists')) {
+          this.hasRequested = true;
           this.message.showError(`You have already requested access to this item.`);
         } else if (err.messageIncludesPhrase('same')) {
           this.message.showError(`You do not need to request access to your own item.`);
@@ -92,9 +138,89 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
+  test() {
+    console.log('hello');
+  }
+
+  onSignupSubmit(formValue: any) {
+    this.waiting = true;
+
+    this.accountService.signUp(
+      formValue.email, formValue.name, formValue.password, formValue.password,
+      formValue.agreed, formValue.optIn, null, formValue.invitation
+    )
+      .then((response: AccountResponse) => {
+        return this.accountService.logIn(formValue.email, formValue.password, true, true);
+      })
+      .then(() => {
+        // check if invite and show preview mode, or send access request
+        this.account = this.accountService.getAccount();
+        this.isLoggedIn = true;
+
+        const isInvite = false;
+        if (isInvite) {
+          console.log('is invite!');
+        } else {
+          this.onRequestAccessClick();
+        }
+      })
+      .catch((response: AccountResponse) => {
+        this.message.showError(response.getMessage(), true);
+        this.waiting = false;
+      });
+  }
+
+  onLoginSubmit(formValue: any) {
+    this.waiting = true;
+
+    this.accountService.logIn(formValue.email, formValue.password, true, true)
+      .then((response: AuthResponse) => {
+        if (response.needsMFA()) {
+          // send to mfa verification
+          this.router.navigate(['/auth', 'mfa'], { queryParams: { shareByUrl: this.shareToken }})
+            .then(() => {
+              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+            });
+        } else {
+          // hide cover, send request access
+          this.isLoggedIn = true;
+          this.showCover = false;
+
+          this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
+            .then((linkResponse: ShareResponse): any => {
+              if (linkResponse.isSuccessful) {
+                const shareByUrlVO = linkResponse.getShareByUrlVO();
+                const shareVO = shareByUrlVO.ShareVO;
+                if (shareVO) {
+                  this.hasRequested = true;
+
+                  if (shareVO.status.includes('ok')) {
+                    this.hasAccess = true;
+                    this.router.navigate(['view'], { relativeTo: this.route });
+                  }
+                } else {
+                  this.onRequestAccessClick();
+                }
+              }
+            });
+        }
+      })
+      .catch((response: AuthResponse) => {
+        this.waiting = false;
+
+        if (response.messageIncludes('warning.signin.unknown')) {
+          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.loginForm.patchValue({
+            password: ''
+          });
+        } else {
+          this.message.showMessage('Log in failed. Please try again.', 'danger');
+        }
+      });
+  }
+
   stopPropagation(evt) {
     evt.stopPropagation();
-    evt.preventDefault();
   }
 
 }

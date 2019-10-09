@@ -62,16 +62,18 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() item: FolderVO | RecordVO;
   @Input() folderView: FolderView;
 
+  @Input() allowNavigation = true;
+
   @HostBinding('class.grid-view') inGridView = false;
 
   public allowActions = true;
-  public allowNavigation = true;
   public isMyItem = true;
   public canWrite = true;
 
   private isInShares: boolean;
   private isInApps: boolean;
   private isInPublic: boolean;
+  private isInSharePreview: boolean;
 
   constructor(
     private dataService: DataService,
@@ -98,6 +100,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.allowActions = false;
     }
 
+    if (this.router.routerState.snapshot.url.includes('/share/')) {
+      this.allowActions = false;
+      this.isInSharePreview = true;
+    }
+
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
     }
@@ -106,10 +113,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.isInPublic = true;
     }
 
-    if (this.route.snapshot.data.noFileListNavigation) {
-      this.allowActions = false;
-      this.allowNavigation = false;
-    }
+
+    // if (this.route.snapshot.data.noFileListNavigation) {
+    //   this.allowActions = false;
+    //   this.allowNavigation = false;
+    // }
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
@@ -156,6 +164,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
       rootUrl = '/shares/withme';
+    } else if (this.isInSharePreview) {
+      rootUrl = '/share';
     } else if (this.isInPublic) {
       rootUrl = '/p';
     } else {
@@ -165,12 +175,15 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.item.isFolder) {
       if (this.isInPublic) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
+      } if (this.isInSharePreview) {
+        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent});
       } else {
         this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
       }
-    } else if (!this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
+    } else if (!this.isInSharePreview && !this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
       this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {
+      console.log('trying to navigate to child route');
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
   }

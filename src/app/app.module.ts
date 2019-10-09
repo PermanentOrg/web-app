@@ -6,12 +6,13 @@ import {
   ActivatedRoute,
   DefaultUrlSerializer,
   UrlSerializer,
-  UrlTree
+  UrlTree,
+  NavigationStart
 } from '@angular/router';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -85,6 +86,9 @@ export class AppModule {
   ) {
     this.routerListener = this.router.events
     .pipe(filter((event) => {
+      if (event instanceof NavigationStart) {
+        console.log('navigate to url:', event.url);
+      }
       return event instanceof NavigationEnd;
     })).subscribe((event) => {
       let currentRoute = this.route;

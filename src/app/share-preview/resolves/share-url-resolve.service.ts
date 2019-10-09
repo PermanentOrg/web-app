@@ -24,22 +24,23 @@ export class ShareUrlResolveService implements Resolve<any> {
           const shareByUrlVO = response.getShareByUrlVO();
           const shareVO = shareByUrlVO.ShareVO;
 
-          if (!shareVO || shareVO.status.includes('pending')) {
-            return shareByUrlVO;
-          } else if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
-            if (this.device.isMobile()) {
-              return this.router.navigate(['/shares', 'withme']);
-            } else {
-              window.location.assign(`/app/shares/`);
-            }
-          } else if (shareVO.status.includes('ok')) {
-            const folder: FolderVO = shareByUrlVO.FolderVO;
-            if (this.device.isMobile()) {
-              return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
-            } else {
-              window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
-            }
-          }
+          return shareByUrlVO;
+          // if (!shareVO || shareVO.status.includes('pending')) {
+          //   return shareByUrlVO;
+          // } else if (shareVO.status.includes('ok') && shareByUrlVO.RecordVO) {
+          //   if (this.device.isMobile()) {
+          //     return this.router.navigate(['/shares', 'withme']);
+          //   } else {
+          //     window.location.assign(`/app/shares/`);
+          //   }
+          // } else if (shareVO.status.includes('ok')) {
+          //   const folder: FolderVO = shareByUrlVO.FolderVO;
+          //   if (this.device.isMobile()) {
+          //     return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
+          //   } else {
+          //     window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
+          //   }
+          // }
         } else {
           throw response;
         }
