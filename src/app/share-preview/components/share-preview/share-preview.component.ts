@@ -28,12 +28,14 @@ enum FormType {
 export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
-  archive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
-  account: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
+  account: AccountVO = this.accountService.getAccount();
+  shareArchive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
+  shareAccount: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   isLoggedIn = false;
   hasRequested = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('pending');
+  hasAccess = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('ok');
 
   showCover = false;
   showForm = true;
@@ -115,7 +117,7 @@ export class SharePreviewComponent implements OnInit {
     try {
       this.waiting = true;
       await this.api.share.requestShareAccess(this.shareToken);
-      this.message.showMessage(`Access requested. ${this.account.fullName} must approve your request.` , 'success');
+      this.message.showMessage(`Access requested. ${this.shareAccount.fullName} must approve your request.` , 'success');
       this.showCover = false;
       this.hasRequested = true;
     } catch (err) {
@@ -147,8 +149,16 @@ export class SharePreviewComponent implements OnInit {
         return this.accountService.logIn(formValue.email, formValue.password, true, true);
       })
       .then(() => {
-        // check if invite, send access request if needed, or show preview mode
-        // this.router.navigate(['../', 'done'], {queryParams: { inviteCode: this.inviteCode, relativeTo: this.route }});
+        // check if invite and show preview mode, or send access request
+        this.account = this.accountService.getAccount();
+        this.isLoggedIn = true;
+
+        const isInvite = false;
+        if (isInvite) {
+          console.log('is invite!');
+        } else {
+          this.onRequestAccessClick();
+        }
       })
       .catch((response: AccountResponse) => {
         this.message.showError(response.getMessage(), true);
@@ -169,6 +179,7 @@ export class SharePreviewComponent implements OnInit {
             });
         } else {
           // hide cover, send request access
+          this.isLoggedIn = true;
           this.showCover = false;
           this.onRequestAccessClick();
         }

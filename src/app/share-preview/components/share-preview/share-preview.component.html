@@ -5,31 +5,35 @@
     </a>
     <div class="banner-buttons">
       <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn" >Sign Up</button>
-      <a class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" href="/app">{{ account ? account.primaryEmail : 'My Account' }}</a>
+      <a class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" href="/app">{{ account ? shareAccount.primaryEmail : 'My Account' }}</a>
       <a class="btn btn-wordpress banner-button-no-email" *ngIf="isLoggedIn" href="/app">My Account</a>
     </div>
   </div>
 </div>
-<div class="share-preview-archive" *ngIf="archive">
-  <div class="share-preview-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+<div class="share-preview-archive" *ngIf="shareArchive">
+  <div class="share-preview-archive-thumb" prBgImage [bgSrc]="shareArchive.thumbURL200"></div>
   <span>
     <strong>{{displayName}}</strong><br>
-    Shared by {{account.fullName}}
+    Shared by {{shareAccount.fullName}}
   </span>
+  <div class="share-preview-archive-buttons">
+    <button class="btn btn-primary">Edit</button>
+    <button class="btn btn-primary">Share</button>
+  </div>
 </div>
 <div class="share-preview-content-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
 <div class="share-preview-content">
-  <pr-file-list></pr-file-list>
+  <pr-file-list [allowNavigation]="hasAccess"></pr-file-list>
 </div>
-<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()">
+<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p *ngIf="!isLoggedIn">
-      To view this content shared privately by <strong>{{account.fullName}}</strong>, sign up or log in to Permanent.org.
+      To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, sign up or log in to Permanent.org.
     </p>
     <p *ngIf="isLoggedIn">
-      To view this content shared privately by <strong>{{account.fullName}}</strong>, {{ hasRequested ? 'your request must be approved.' : 'request access below.' }}
+      To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, {{ hasRequested ? 'your request must be approved.' : 'request access below.' }}
     </p>
     <div class="share-preview-form-wrapper" *ngIf="!isLoggedIn">
       <div class="share-preview-form">
@@ -67,7 +71,7 @@
     </div>
   </div>
 </div>
-<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}">
+<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}" *ngIf="!hasAccess">
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
         <strong *ngIf="!isLoggedIn">To view this content, sign up or log in here</strong> 

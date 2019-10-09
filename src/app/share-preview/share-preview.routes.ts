@@ -35,7 +35,6 @@ export const routes: Routes = [
     resolve: shareResolve,
     data: {
       noFileListPadding: true,
-      noFileListNavigation: true
     },
     children: [
       {

@@ -109,6 +109,7 @@ $share-preview-banner-height: 100px;
   display: flex;
   align-items: center;
   padding: 10px 0;
+  flex-wrap: nowrap;
 
   .share-preview-archive-thumb {
     height: 50px;
@@ -117,12 +118,37 @@ $share-preview-banner-height: 100px;
     margin-right: 10px;
   }
 
+  .share-preview-archive-buttons {
+    flex: 0 1 auto;
+    display: flex;
+    margin-left: auto;
+    button {
+      display: inline;
+      margin-left: 5px;
+    }
+  }
+
   @media screen and (max-width: $share-preview-max-width) {
     width: 100%;
+
+    flex-wrap: wrap;
 
     .share-preview-archive-thumb {
       margin-left: 10px;
     }
+
+    .share-preview-archive-buttons {
+      flex: 0 0 100%;
+      justify-content: space-evenly;
+      padding: 10px 5px 0px;
+      button {
+        margin: 0px 5px;
+        flex: 0 1 auto;
+      }
+    }
+
+
+
   }
 }
 
