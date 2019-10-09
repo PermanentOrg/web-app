@@ -81,9 +81,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     const isInSharePreviewView = isInSharePreview && this.router.routerState.snapshot.url.includes('/view');
     const isInPublic = this.router.routerState.snapshot.url.includes('/p/');
 
-    console.log('inSharePreview', isInSharePreview);
-    console.log('inSharePreviewView', isInSharePreviewView);
-
     let rootUrl;
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
@@ -106,7 +103,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
     }
 
-    console.log(this.breadcrumbs, folder, folder.pathAsText);
     for (let i = 1; i < folder.pathAsText.length; i++) {
       if (isInSharePreviewView && i < 2) {
         continue;
