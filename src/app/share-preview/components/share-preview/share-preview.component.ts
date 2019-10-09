@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ArchiveVO, AccountVO } from '@models/index';
+import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
 import { throttle } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -11,6 +11,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import APP_CONFIG from '@root/app/app.config';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
+import { DeviceService } from '@shared/services/device/device.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -29,13 +30,16 @@ export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
   account: AccountVO = this.accountService.getAccount();
-  shareArchive: ArchiveVO = this.route.snapshot.data.shareByUrlVO.ArchiveVO;
-  shareAccount: AccountVO = this.route.snapshot.data.shareByUrlVO.AccountVO;
+  shareByUrlVO = this.route.snapshot.data.shareByUrlVO;
+  shareArchive: ArchiveVO = this.shareByUrlVO.ArchiveVO;
+  shareAccount: AccountVO = this.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   isLoggedIn = false;
-  hasRequested = this.route.snapshot.data.shareByUrlVO.ShareVO;
-  hasAccess = this.route.snapshot.data.shareByUrlVO.ShareVO && this.route.snapshot.data.shareByUrlVO.ShareVO.status.includes('ok');
+  hasRequested = !!this.shareByUrlVO.ShareVO;
+  hasAccess = this.hasRequested && this.shareByUrlVO.ShareVO.status.includes('ok');
+  canEdit = this.hasAccess && !this.shareByUrlVO.ShareVO.accessRole.includes('viewer');
+  canShare = this.hasAccess && !this.shareByUrlVO.ShareVO.accessRole.includes('owner');
 
   showCover = false;
   showForm = true;
@@ -58,6 +62,7 @@ export class SharePreviewComponent implements OnInit {
     private accountService: AccountService,
     private api: ApiService,
     private message: MessageService,
+    private device: DeviceService,
     private fb: FormBuilder
   ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
@@ -106,6 +111,41 @@ export class SharePreviewComponent implements OnInit {
   @HostListener('window:scroll', ['$event'])
   onViewportScroll(event) {
     this.scrollHandlerDebounced();
+  }
+
+  onViewShareClick() {
+    if (this.shareByUrlVO.RecordVO) {
+      if (this.device.isMobile()) {
+        return this.router.navigate(['/shares', 'withme']);
+      } else {
+        window.location.assign(`/app/shares/`);
+      }
+    } else {
+      const folder: FolderVO = this.shareByUrlVO.FolderVO;
+      if (this.device.isMobile()) {
+        return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
+      } else {
+        window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
+      }
+    }
+  }
+
+  onShareShareClick() {
+    // needs to open share dialog;
+    if (this.shareByUrlVO.RecordVO) {
+      if (this.device.isMobile()) {
+        return this.router.navigate(['/shares', 'withme']);
+      } else {
+        window.location.assign(`/app/shares/`);
+      }
+    } else {
+      const folder: FolderVO = this.shareByUrlVO.FolderVO;
+      if (this.device.isMobile()) {
+        return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
+      } else {
+        window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
+      }
+    }
   }
 
   scrollCoverToggle() {
