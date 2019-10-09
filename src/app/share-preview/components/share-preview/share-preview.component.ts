@@ -148,6 +148,14 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
+  onMyAccountClick() {
+    if (this.device.isMobile()) {
+      return this.router.navigate(['/myfiles']);
+    } else {
+      window.location.assign(`/app`);
+    }
+  }
+
   scrollCoverToggle() {
     if (!this.hasScrollTriggered) {
       this.hasScrollTriggered = true;
