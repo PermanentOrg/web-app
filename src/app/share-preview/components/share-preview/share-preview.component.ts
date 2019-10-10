@@ -220,8 +220,6 @@ export class SharePreviewComponent implements OnInit {
   onSignupSubmit(formValue: any) {
     this.waiting = true;
 
-    return console.log(formValue);
-
     this.accountService.signUp(
       formValue.email, formValue.name, formValue.password, formValue.password,
       formValue.agreed, formValue.optIn, null, formValue.invitation
@@ -231,12 +229,15 @@ export class SharePreviewComponent implements OnInit {
       })
       .then(() => {
         // check if invite and show preview mode, or send access request
-        this.account = this.accountService.getAccount();
         this.isLoggedIn = true;
 
-        const isInvite = false;
-        if (isInvite) {
-          console.log('is invite!');
+        this.archive = this.accountService.getArchive();
+        this.account = this.accountService.getAccount();
+
+        if (this.isInvite) {
+          this.showCover = false;
+          this.hasAccess = true;
+          this.router.navigate(['view'], { relativeTo: this.route });
         } else {
           this.onRequestAccessClick();
         }
@@ -273,7 +274,7 @@ export class SharePreviewComponent implements OnInit {
             this.canEdit = true;
             this.canShare = true;
             this.router.navigate(['view'], { relativeTo: this.route });
-          } else {
+          } else if (!this.isInvite) {
             this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
             .then((linkResponse: ShareResponse): any => {
               if (linkResponse.isSuccessful) {
@@ -291,6 +292,8 @@ export class SharePreviewComponent implements OnInit {
                 }
               }
             });
+          } else {
+
           }
         }
       })

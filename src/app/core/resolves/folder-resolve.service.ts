@@ -28,7 +28,7 @@ export class FolderResolveService implements Resolve<any> {
       const apps = _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
       targetFolder = new FolderVO(apps);
     } else if (state.url.includes('/share/') ) {
-      const sharedFolder = route.parent.data.shareByUrlVO.FolderVO;
+      const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
       if (sharedFolder) {
         targetFolder = new FolderVO(sharedFolder);
       } else {
