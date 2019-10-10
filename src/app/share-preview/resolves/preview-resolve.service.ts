@@ -68,7 +68,7 @@ export class PreviewResolveService implements Resolve<any> {
 
       const dummyFolder = new FolderVO({
         displayName: shareByUrlVO.FolderVO.displayName,
-        archiveId: shareByUrlVO.FolderVO,
+        archiveId: shareByUrlVO.FolderVO.archiveId,
         type: 'type.folder.share',
         ChildItemVOs: dummyItems,
       });
@@ -84,7 +84,7 @@ export class PreviewResolveService implements Resolve<any> {
 
       const dummyRecordFolder = new FolderVO({
         displayName: record.displayName,
-        archiveId: record,
+        archiveId: record.archiveId,
         type: 'type.folder.share',
         ChildItemVOs: [ record ],
         pathAsText: [ record.displayName ],

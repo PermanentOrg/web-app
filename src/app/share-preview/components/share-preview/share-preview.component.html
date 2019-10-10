@@ -4,9 +4,9 @@
       <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
     </a>
     <div class="banner-buttons">
-      <button class="btn btn-wordpress" [routerLink]="['/auth', 'signup']" [queryParams]="{'shareByUrl': shareToken}" *ngIf="!isLoggedIn" >Sign Up</button>
-      <a class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" href="/app">{{ account ? shareAccount.primaryEmail : 'My Account' }}</a>
-      <a class="btn btn-wordpress banner-button-no-email" *ngIf="isLoggedIn" href="/app">My Account</a>
+      <button class="btn btn-wordpress" (click)="showCover = true;" *ngIf="!isLoggedIn" >Sign Up</button>
+      <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? shareAccount.primaryEmail : 'My Account' }}</button>
+      <button class="btn btn-wordpress banner-button-no-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">My Account</button>
     </div>
   </div>
 </div>
@@ -14,17 +14,18 @@
   <div class="share-preview-archive-thumb" prBgImage [bgSrc]="shareArchive.thumbURL200"></div>
   <span>
     <strong>{{displayName}}</strong><br>
-    Shared by {{shareAccount.fullName}}
+    <!-- From the {{shareArchive.fullName}} archive<br> -->
+    Shared by {{shareAccount.accountId === account.accountId ? 'you' : shareAccount.fullName}}
   </span>
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
-    <button class="btn btn-primary" (click)="onViewShareClick()">{{ canEdit ? 'Edit' : 'View' }} in app</button>
+    <button class="btn btn-primary" (click)="onViewShareClick()">{{ canEdit ? 'Edit' : 'View' }}</button>
     <button class="btn btn-primary" *ngIf="canShare" (click)="onShareShareClick()">Share</button>
   </div>
 </div>
 <div class="share-preview-content-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
-<div class="share-preview-content">
+<div class="share-preview-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
   <!-- <pr-file-list [allowNavigation]="hasAccess"></pr-file-list> -->
 </div>
@@ -50,7 +51,7 @@
           <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid">
             Sign up
           </button>
-          <a (click)="formType = 2;">Already have an account?</a>
+          <a tabindex="0" (click)="formType = 2;">Already have an account?</a>
         </form>
         <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit(loginForm.value)" *ngIf="formType === 2">
           <div class="input-group-vertical">
@@ -62,7 +63,7 @@
           <button type="submit" class="btn btn-alternate" [disabled]="waiting || loginForm.invalid">
             Log in
           </button>
-          <a (click)="formType = 0;">Need to sign up?</a>
+          <a tabindex="0" (click)="formType = 0;">Need to sign up?</a>
         </form>
       </div>
     </div>

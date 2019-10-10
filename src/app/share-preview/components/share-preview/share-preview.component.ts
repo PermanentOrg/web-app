@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
 import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
 import { throttle } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
@@ -12,6 +12,8 @@ import APP_CONFIG from '@root/app/app.config';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -27,13 +29,14 @@ enum FormType {
   styleUrls: ['./share-preview.component.scss']
 })
 export class SharePreviewComponent implements OnInit {
-  bottomBannerVisible = true;
-
   account: AccountVO = this.accountService.getAccount();
+  archive: ArchiveVO = this.accountService.getArchive();
   shareByUrlVO = this.route.snapshot.data.shareByUrlVO;
   shareArchive: ArchiveVO = this.shareByUrlVO.ArchiveVO;
   shareAccount: AccountVO = this.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
+
+  isOriginalOwner = false;
 
   isLoggedIn = false;
   hasRequested = !!this.shareByUrlVO.ShareVO;
@@ -44,6 +47,9 @@ export class SharePreviewComponent implements OnInit {
   showCover = false;
   showForm = true;
 
+  waiting = false;
+  isNavigating = false;
+
   formType: FormType = 0;
   signupForm: FormGroup;
   loginForm: FormGroup;
@@ -51,10 +57,9 @@ export class SharePreviewComponent implements OnInit {
   shareToken: string;
 
   hasScrollTriggered = false;
-
-  waiting = false;
-
   scrollHandlerDebounced = throttle(() => { this.scrollCoverToggle(); }, 500);
+
+  routerListener: Subscription;
 
   constructor(
     private router: Router,
@@ -84,9 +89,30 @@ export class SharePreviewComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
 
+    if (this.archive) {
+      this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+    }
+
+    if (this.isOriginalOwner) {
+      this.hasAccess = true;
+      this.canEdit = true;
+      this.canShare = true;
+    }
+
     if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
       this.router.navigate(['view'], { relativeTo: this.route });
     }
+
+    this.routerListener = this.router.events
+      .pipe(filter((event) => {
+        return event instanceof NavigationStart || event instanceof NavigationEnd;
+      })).subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          this.isNavigating = true;
+        } else if (event instanceof NavigationEnd) {
+          this.isNavigating = false;
+        }
+      });
   }
 
   ngOnInit() {
@@ -98,10 +124,6 @@ export class SharePreviewComponent implements OnInit {
     if (this.route.snapshot.queryParams.sendRequest && !this.hasRequested) {
       this.onRequestAccessClick();
     }
-  }
-
-  hideBottomBanner() {
-    this.bottomBannerVisible = false;
   }
 
   toggleCover() {
@@ -145,6 +167,14 @@ export class SharePreviewComponent implements OnInit {
       } else {
         window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
       }
+    }
+  }
+
+  onMyAccountClick() {
+    if (this.device.isMobile()) {
+      return this.router.navigate(['/myfiles']);
+    } else {
+      window.location.assign(`/app`);
     }
   }
 
@@ -226,7 +256,18 @@ export class SharePreviewComponent implements OnInit {
           this.isLoggedIn = true;
           this.showCover = false;
 
-          this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
+          this.archive = this.accountService.getArchive();
+          this.account = this.accountService.getAccount();
+
+          this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+
+          if (this.isOriginalOwner) {
+            this.hasAccess = true;
+            this.canEdit = true;
+            this.canShare = true;
+            this.router.navigate(['view'], { relativeTo: this.route });
+          } else {
+            this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
             .then((linkResponse: ShareResponse): any => {
               if (linkResponse.isSuccessful) {
                 const shareByUrlVO = linkResponse.getShareByUrlVO();
@@ -243,6 +284,7 @@ export class SharePreviewComponent implements OnInit {
                 }
               }
             });
+          }
         }
       })
       .catch((response: AuthResponse) => {
