@@ -94,7 +94,8 @@ export class SharePreviewComponent implements OnInit {
 
     if (this.isInvite) {
       this.hasAccess = this.sharePreviewVO.status.includes('accepted');
-      this.canEdit = this.sharePreviewVO.ShareVO;
+      this.canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+      this.canShare = this.hasAccess && this.sharePreviewVO.ShareVO.accessRole.includes('owner');
     }
 
     if (this.archive) {
