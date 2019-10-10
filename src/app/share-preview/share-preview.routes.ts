@@ -25,11 +25,17 @@ const shareResolve = {
   shareByUrlVO: ShareUrlResolveService
 };
 
+const shareInviteResolve = {
+  shareByUrlVO: ShareUrlResolveService
+};
 
 export const routes: Routes = [
   {
     path: 'error',
     component: ShareNotFoundComponent
+  },
+  {
+    path: 'invite',
   },
   {
     path: ':shareToken',

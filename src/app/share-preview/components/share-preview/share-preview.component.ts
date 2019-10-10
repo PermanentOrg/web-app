@@ -30,10 +30,13 @@ export class SharePreviewComponent implements OnInit {
   bottomBannerVisible = true;
 
   account: AccountVO = this.accountService.getAccount();
+  archive: ArchiveVO = this.accountService.getArchive();
   shareByUrlVO = this.route.snapshot.data.shareByUrlVO;
   shareArchive: ArchiveVO = this.shareByUrlVO.ArchiveVO;
   shareAccount: AccountVO = this.shareByUrlVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
+
+  isOriginalOwner = false;
 
   isLoggedIn = false;
   hasRequested = !!this.shareByUrlVO.ShareVO;
@@ -83,6 +86,16 @@ export class SharePreviewComponent implements OnInit {
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
+
+    if (this.archive) {
+      this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+    }
+
+    if (this.isOriginalOwner) {
+      this.hasAccess = true;
+      this.canEdit = true;
+      this.canShare = true;
+    }
 
     if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
       this.router.navigate(['view'], { relativeTo: this.route });
@@ -234,7 +247,18 @@ export class SharePreviewComponent implements OnInit {
           this.isLoggedIn = true;
           this.showCover = false;
 
-          this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
+          this.archive = this.accountService.getArchive();
+          this.account = this.accountService.getAccount();
+
+          this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+
+          if (this.isOriginalOwner) {
+            this.hasAccess = true;
+            this.canEdit = true;
+            this.canShare = true;
+            this.router.navigate(['view'], { relativeTo: this.route });
+          } else {
+            this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
             .then((linkResponse: ShareResponse): any => {
               if (linkResponse.isSuccessful) {
                 const shareByUrlVO = linkResponse.getShareByUrlVO();
@@ -251,6 +275,7 @@ export class SharePreviewComponent implements OnInit {
                 }
               }
             });
+          }
         }
       })
       .catch((response: AuthResponse) => {
