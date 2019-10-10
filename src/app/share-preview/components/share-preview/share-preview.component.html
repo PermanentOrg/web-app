@@ -15,7 +15,7 @@
   <span>
     <strong>{{displayName}}</strong><br>
     <!-- From the {{shareArchive.fullName}} archive<br> -->
-    Shared by {{shareAccount.accountId === account.accountId ? 'you' : shareAccount.fullName}}
+    Shared by {{account && shareAccount.accountId === account.accountId ? 'you' : shareAccount.fullName}}
   </span>
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
     <button class="btn btn-primary" (click)="onViewShareClick()">{{ canEdit ? 'Edit' : 'View' }}</button>
@@ -31,14 +31,18 @@
 </div>
 <div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
-    <p *ngIf="!isLoggedIn">
+    <p *ngIf="!isLoggedIn && !isInvite">
       To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, sign up or log in to Permanent.org.
+    </p>
+    <p *ngIf="!isLoggedIn && isInvite">
+      To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, complete signup for <strong>{{sharePreviewVO.email}}</strong> by creating a password
     </p>
     <p *ngIf="isLoggedIn">
       To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, {{ hasRequested ? 'your request must be approved.' : 'request access below.' }}
     </p>
     <div class="share-preview-form-wrapper" *ngIf="!isLoggedIn">
       <div class="share-preview-form">
+        <!-- regular signup form -->
         <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="formType === 0">
           <div class="input-group-vertical">
             <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
@@ -53,6 +57,18 @@
           </button>
           <a tabindex="0" (click)="formType = 2;">Already have an account?</a>
         </form>
+        <!-- short signup for invite form -->
+        <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="formType === 1">
+          <div class="input-group-vertical">
+            <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
+              [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+          </div>
+          <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid">
+            Create password
+          </button>
+          <a tabindex="0" (click)="formType = 2;">Already have an account?</a>
+        </form>
+        <!-- login form -->
         <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit(loginForm.value)" *ngIf="formType === 2">
           <div class="input-group-vertical">
             <pr-form-input fieldName="email" placeholder="Email" [control]="loginForm.controls['email']"
@@ -76,7 +92,8 @@
 <div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}" *ngIf="!hasAccess">
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
-        <strong *ngIf="!isLoggedIn">To view this content, sign up or log in here</strong> 
+        <strong *ngIf="!isLoggedIn && !isInvite">To view this content, sign up or log in here</strong> 
+        <strong *ngIf="!isLoggedIn && isInvite ">To view this content, complete sign up here</strong> 
         <strong *ngIf="isLoggedIn && !hasRequested">To view this content, request access here</strong> 
         <strong *ngIf="isLoggedIn && hasRequested">To view this content, your request must be approved</strong> 
     </span>

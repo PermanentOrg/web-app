@@ -11,6 +11,7 @@ import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.s
 import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
+import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -22,20 +23,48 @@ const previewResolve = {
 };
 
 const shareResolve = {
-  shareByUrlVO: ShareUrlResolveService
+  sharePreviewVO: ShareUrlResolveService
 };
 
 const shareInviteResolve = {
-  shareByUrlVO: ShareUrlResolveService
+  sharePreviewVO: InviteShareResolveService
 };
 
+const sharePreviewChildren = [
+  {
+    path: '',
+    resolve: previewResolve,
+    component: SharePreviewComponent,
+    data: {
+      formDarkBg: true
+    },
+    children: [
+      {
+        path: '',
+        data: {
+          noFileListNavigation: true
+        },
+        component: FileListComponent
+      },
+      {
+        path: 'view',
+        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+      }
+    ]
+  }
+];
 export const routes: Routes = [
   {
     path: 'error',
     component: ShareNotFoundComponent
   },
   {
-    path: 'invite',
+    path: 'invite/:inviteCode',
+    resolve: shareInviteResolve,
+    data: {
+      noFileListPadding: true
+    },
+    children: sharePreviewChildren
   },
   {
     path: ':shareToken',
@@ -43,29 +72,7 @@ export const routes: Routes = [
     data: {
       noFileListPadding: true,
     },
-    children: [
-      {
-        path: '',
-        resolve: previewResolve,
-        component: SharePreviewComponent,
-        data: {
-          formDarkBg: true
-        },
-        children: [
-          {
-            path: '',
-            data: {
-              noFileListNavigation: true
-            },
-            component: FileListComponent
-          },
-          {
-            path: 'view',
-            loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-          }
-        ]
-      }
-    ]
+    children: sharePreviewChildren
   },
 
 ];
@@ -84,7 +91,8 @@ export const routes: Routes = [
     PreviewResolveService,
     PreviewArchiveResolveService,
     PreviewFolderResolveService,
-    ShareUrlResolveService
+    ShareUrlResolveService,
+    InviteShareResolveService
   ]
 })
 export class SharePreviewRoutingModule { }

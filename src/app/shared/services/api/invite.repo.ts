@@ -55,6 +55,15 @@ export class InviteRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/invite/getShareInviteInfo', data, InviteResponse);
   }
+
+
+  public getFullShareInvite(token: string) {
+    const data = [{
+      token
+    }];
+
+    return this.http.sendRequestPromise('/invite/getFullShareInvite', data, InviteResponse);
+  }
 }
 
 export class InviteResponse extends BaseResponse {
