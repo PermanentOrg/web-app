@@ -103,8 +103,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(rootUrl, folder.pathAsText);
-
     if (!isInPublic && !isInSharePreviewView && !isInSharePreviewInviteView) {
       this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
     }

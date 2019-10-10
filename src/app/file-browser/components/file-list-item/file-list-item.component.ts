@@ -193,11 +193,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     const actionButtons: PromptButton[] = [ItemActions.Copy];
 
-    let actionResolve;
-
-    const actionPromise = new Promise((resolve) => {
-      actionResolve = resolve;
-    });
+    const actionDeferred = new Deferred();
 
     if (this.canWrite) {
       actionButtons.push(ItemActions.Move);
@@ -215,33 +211,33 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    this.prompt.promptButtons(actionButtons, this.item.displayName, actionPromise)
+    this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
       .then((value: string) => {
         switch (value) {
           case 'delete':
-            return this.deleteItem(actionResolve);
+            return this.deleteItem(actionDeferred.resolve);
           case 'rename':
-            actionResolve();
+            actionDeferred.resolve();
             this.promptForUpdate();
             break;
           case 'move':
-            actionResolve();
+            actionDeferred.resolve();
             this.openFolderPicker(FolderPickerOperations.Move);
             break;
           case 'copy':
-            actionResolve();
+            actionDeferred.resolve();
             this.openFolderPicker(FolderPickerOperations.Copy);
             break;
           case 'download':
             this.dataService.downloadFile(this.item as RecordVO)
               .then(() => {
-                actionResolve();
+                actionDeferred.resolve();
               });
             break;
           case 'share':
             this.api.share.getShareLink(this.item)
               .then((response: ShareResponse) => {
-                actionResolve();
+                actionDeferred.resolve();
                 this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
               });
             break;

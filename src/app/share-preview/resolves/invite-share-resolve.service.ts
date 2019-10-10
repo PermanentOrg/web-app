@@ -15,13 +15,10 @@ export class InviteShareResolveService implements Resolve<any> {
   ) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
-    console.log('finna resolve');
     return this.api.invite.getFullShareInvite(route.params.inviteCode)
       .then((response: InviteResponse): any => {
         if (response.isSuccessful) {
           const inviteVO = response.getInviteVO();
-
-          console.log(inviteVO);
           return inviteVO;
         } else {
           throw response;
@@ -31,7 +28,7 @@ export class InviteShareResolveService implements Resolve<any> {
         if (response.getMessage) {
           this.message.showError(response.getMessage(), true);
         }
-        // return this.router.navigate(['share', 'error']);
+        return this.router.navigate(['share', 'error']);
       });
   }
 }
