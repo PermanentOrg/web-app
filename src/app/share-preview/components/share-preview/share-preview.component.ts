@@ -29,28 +29,32 @@ enum FormType {
   styleUrls: ['./share-preview.component.scss']
 })
 export class SharePreviewComponent implements OnInit {
+
+  // share data
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
-  shareByUrlVO = this.route.snapshot.data.shareByUrlVO;
-  shareArchive: ArchiveVO = this.shareByUrlVO.ArchiveVO;
-  shareAccount: AccountVO = this.shareByUrlVO.AccountVO;
+  sharePreviewVO = this.route.snapshot.data.sharePreviewVO;
+  shareArchive: ArchiveVO = this.sharePreviewVO.ArchiveVO;
+  shareAccount: AccountVO = this.sharePreviewVO.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
+  // access and permissions
+  isInvite = !!this.sharePreviewVO.inviteId;
   isOriginalOwner = false;
-
   isLoggedIn = false;
-  hasRequested = !!this.shareByUrlVO.ShareVO;
-  hasAccess = this.hasRequested && this.shareByUrlVO.ShareVO.status.includes('ok');
-  canEdit = this.hasAccess && !this.shareByUrlVO.ShareVO.accessRole.includes('viewer');
-  canShare = this.hasAccess && !this.shareByUrlVO.ShareVO.accessRole.includes('owner');
+  hasRequested = !this.isInvite && !!this.sharePreviewVO.ShareVO;
+  hasAccess = !this.isInvite && this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+  canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+  canShare = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
 
+  // component toggles
   showCover = false;
   showForm = true;
 
   waiting = false;
   isNavigating = false;
 
-  formType: FormType = 0;
+  formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
   signupForm: FormGroup;
   loginForm: FormGroup;
 
@@ -70,17 +74,16 @@ export class SharePreviewComponent implements OnInit {
     private device: DeviceService,
     private fb: FormBuilder
   ) {
+    console.log(this.sharePreviewVO, this.shareArchive, this.shareAccount);
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.shareToken = this.route.snapshot.params.shareToken;
 
-    const inviteCode = null;
-
     this.signupForm = fb.group({
-      invitation: [inviteCode ? inviteCode : ''],
-      email: ['', [trimWhitespace, Validators.required, Validators.email]],
-      name: ['', Validators.required],
+      invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
+      email: [this.isInvite ? this.sharePreviewVO.email : '', [trimWhitespace, Validators.required, Validators.email]],
+      name: [this.isInvite ? this.sharePreviewVO.fullName : '', Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
-      agreed: [true ],
+      agreed: [true],
       optIn: [true]
     });
 
@@ -88,6 +91,12 @@ export class SharePreviewComponent implements OnInit {
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
+
+    if (this.isInvite) {
+      this.hasAccess = this.sharePreviewVO.status.includes('accepted');
+      this.canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+      this.canShare = this.hasAccess && this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+    }
 
     if (this.archive) {
       this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
@@ -136,14 +145,14 @@ export class SharePreviewComponent implements OnInit {
   }
 
   onViewShareClick() {
-    if (this.shareByUrlVO.RecordVO) {
+    if (this.sharePreviewVO.RecordVO) {
       if (this.device.isMobile()) {
         return this.router.navigate(['/shares', 'withme']);
       } else {
         window.location.assign(`/app/shares/`);
       }
     } else {
-      const folder: FolderVO = this.shareByUrlVO.FolderVO;
+      const folder: FolderVO = this.sharePreviewVO.FolderVO;
       if (this.device.isMobile()) {
         return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
       } else {
@@ -154,14 +163,14 @@ export class SharePreviewComponent implements OnInit {
 
   onShareShareClick() {
     // needs to open share dialog;
-    if (this.shareByUrlVO.RecordVO) {
+    if (this.sharePreviewVO.RecordVO) {
       if (this.device.isMobile()) {
         return this.router.navigate(['/shares', 'withme']);
       } else {
         window.location.assign(`/app/shares/`);
       }
     } else {
-      const folder: FolderVO = this.shareByUrlVO.FolderVO;
+      const folder: FolderVO = this.sharePreviewVO.FolderVO;
       if (this.device.isMobile()) {
         return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
       } else {
@@ -224,12 +233,15 @@ export class SharePreviewComponent implements OnInit {
       })
       .then(() => {
         // check if invite and show preview mode, or send access request
-        this.account = this.accountService.getAccount();
         this.isLoggedIn = true;
 
-        const isInvite = false;
-        if (isInvite) {
-          console.log('is invite!');
+        this.archive = this.accountService.getArchive();
+        this.account = this.accountService.getAccount();
+
+        if (this.isInvite) {
+          this.showCover = false;
+          this.hasAccess = true;
+          this.router.navigate(['view'], { relativeTo: this.route });
         } else {
           this.onRequestAccessClick();
         }
@@ -266,12 +278,12 @@ export class SharePreviewComponent implements OnInit {
             this.canEdit = true;
             this.canShare = true;
             this.router.navigate(['view'], { relativeTo: this.route });
-          } else {
+          } else if (!this.isInvite) {
             this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
             .then((linkResponse: ShareResponse): any => {
               if (linkResponse.isSuccessful) {
-                const shareByUrlVO = linkResponse.getShareByUrlVO();
-                const shareVO = shareByUrlVO.ShareVO;
+                const sharePreviewVO = linkResponse.getShareByUrlVO();
+                const shareVO = sharePreviewVO.ShareVO;
                 if (shareVO) {
                   this.hasRequested = true;
 
@@ -284,6 +296,8 @@ export class SharePreviewComponent implements OnInit {
                 }
               }
             });
+          } else {
+
           }
         }
       })

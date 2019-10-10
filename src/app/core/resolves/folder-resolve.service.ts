@@ -20,15 +20,13 @@ export class FolderResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
     let targetFolder;
 
-    console.log('folder resolve!', route);
-
     if (route.params.archiveNbr && route.params.folderLinkId) {
       targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
     } else if (state.url === '/apps') {
       const apps = _.find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
       targetFolder = new FolderVO(apps);
     } else if (state.url.includes('/share/') ) {
-      const sharedFolder = route.parent.data.shareByUrlVO.FolderVO;
+      const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
       if (sharedFolder) {
         targetFolder = new FolderVO(sharedFolder);
       } else {

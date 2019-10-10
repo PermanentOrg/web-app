@@ -57,18 +57,18 @@ export class PreviewResolveService implements Resolve<any> {
   ) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
-    const shareByUrlVO = route.parent.data.shareByUrlVO as ShareByUrlVO;
-    if (shareByUrlVO.FolderVO && shareByUrlVO.previewToggle) {
+    const sharePreviewVO = route.parent.data.sharePreviewVO as ShareByUrlVO;
+    if (sharePreviewVO.FolderVO && sharePreviewVO.previewToggle) {
       // if folder and share preview on, just show the folder after setting the dummy path
 
-      setDummyPathFromDisplayName(shareByUrlVO.FolderVO);
-      return Promise.resolve(shareByUrlVO.FolderVO);
-    } else if (shareByUrlVO.FolderVO) {
+      setDummyPathFromDisplayName(sharePreviewVO.FolderVO);
+      return Promise.resolve(sharePreviewVO.FolderVO);
+    } else if (sharePreviewVO.FolderVO) {
       // if folder and share preview off, create the dummy folder with preview images
 
       const dummyFolder = new FolderVO({
-        displayName: shareByUrlVO.FolderVO.displayName,
-        archiveId: shareByUrlVO.FolderVO.archiveId,
+        displayName: sharePreviewVO.FolderVO.displayName,
+        archiveId: sharePreviewVO.FolderVO.archiveId,
         type: 'type.folder.share',
         ChildItemVOs: dummyItems,
       });
@@ -79,7 +79,7 @@ export class PreviewResolveService implements Resolve<any> {
     } else {
       // if record, make dummy folder with just the record
 
-      const record = shareByUrlVO.RecordVO as RecordVO;
+      const record = sharePreviewVO.RecordVO as RecordVO;
       record.dataStatus = DataStatus.Full;
 
       const dummyRecordFolder = new FolderVO({
