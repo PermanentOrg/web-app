@@ -25,7 +25,7 @@
 <div class="share-preview-content-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
-<div class="share-preview-content">
+<div class="share-preview-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
   <!-- <pr-file-list [allowNavigation]="hasAccess"></pr-file-list> -->
 </div>

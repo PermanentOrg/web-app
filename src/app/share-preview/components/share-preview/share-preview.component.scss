@@ -95,6 +95,13 @@ $share-preview-banner-height: 100px;
   max-width: $share-preview-max-width;
   margin: 0 auto;
   width: 100%;
+  opacity: 1;
+  
+  &.navigating {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: 0.1s ease-in opacity;
+  }
 }
 
 .share-preview-content-breadcrumbs {

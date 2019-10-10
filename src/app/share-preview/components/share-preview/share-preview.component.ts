@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
 import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
 import { throttle } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
@@ -12,6 +12,8 @@ import APP_CONFIG from '@root/app/app.config';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -27,8 +29,6 @@ enum FormType {
   styleUrls: ['./share-preview.component.scss']
 })
 export class SharePreviewComponent implements OnInit {
-  bottomBannerVisible = true;
-
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
   shareByUrlVO = this.route.snapshot.data.shareByUrlVO;
@@ -47,6 +47,9 @@ export class SharePreviewComponent implements OnInit {
   showCover = false;
   showForm = true;
 
+  waiting = false;
+  isNavigating = false;
+
   formType: FormType = 0;
   signupForm: FormGroup;
   loginForm: FormGroup;
@@ -54,10 +57,9 @@ export class SharePreviewComponent implements OnInit {
   shareToken: string;
 
   hasScrollTriggered = false;
-
-  waiting = false;
-
   scrollHandlerDebounced = throttle(() => { this.scrollCoverToggle(); }, 500);
+
+  routerListener: Subscription;
 
   constructor(
     private router: Router,
@@ -100,6 +102,17 @@ export class SharePreviewComponent implements OnInit {
     if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
       this.router.navigate(['view'], { relativeTo: this.route });
     }
+
+    this.routerListener = this.router.events
+      .pipe(filter((event) => {
+        return event instanceof NavigationStart || event instanceof NavigationEnd;
+      })).subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          this.isNavigating = true;
+        } else if (event instanceof NavigationEnd) {
+          this.isNavigating = false;
+        }
+      });
   }
 
   ngOnInit() {
@@ -111,10 +124,6 @@ export class SharePreviewComponent implements OnInit {
     if (this.route.snapshot.queryParams.sendRequest && !this.hasRequested) {
       this.onRequestAccessClick();
     }
-  }
-
-  hideBottomBanner() {
-    this.bottomBannerVisible = false;
   }
 
   toggleCover() {
