@@ -5,7 +5,7 @@
     </a>
     <div class="banner-buttons">
       <button class="btn btn-wordpress" (click)="showCover = true;" *ngIf="!isLoggedIn" >Sign Up</button>
-      <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? shareAccount.primaryEmail : 'My Account' }}</button>
+      <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? account.primaryEmail : 'My Account' }}</button>
       <button class="btn btn-wordpress banner-button-no-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">My Account</button>
     </div>
   </div>

@@ -42,8 +42,8 @@ export class SharePreviewComponent implements OnInit {
   isInvite = !!this.sharePreviewVO.inviteId;
   isOriginalOwner = false;
   isLoggedIn = false;
-  hasRequested = !!this.sharePreviewVO.ShareVO;
-  hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+  hasRequested = !this.isInvite && !!this.sharePreviewVO.ShareVO;
+  hasAccess = !this.isInvite && this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
   canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
   canShare = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
 
@@ -78,8 +78,6 @@ export class SharePreviewComponent implements OnInit {
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.shareToken = this.route.snapshot.params.shareToken;
 
-    const inviteCode = null;
-
     this.signupForm = fb.group({
       invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
       email: [this.isInvite ? this.sharePreviewVO.email : '', [trimWhitespace, Validators.required, Validators.email]],
@@ -93,6 +91,11 @@ export class SharePreviewComponent implements OnInit {
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
+
+    if (this.isInvite) {
+      this.hasAccess = this.sharePreviewVO.status.includes('accepted');
+      this.canEdit = this.sharePreviewVO.ShareVO;
+    }
 
     if (this.archive) {
       this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
