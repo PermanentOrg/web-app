@@ -27,18 +27,17 @@
 </div>
 <div class="share-preview-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
-  <!-- <pr-file-list [allowNavigation]="hasAccess"></pr-file-list> -->
 </div>
 <div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p *ngIf="!isLoggedIn && !isInvite">
-      To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, sign up or log in to Permanent.org.
+      To view this content, sign up or log in to Permanent.org.
     </p>
     <p *ngIf="!isLoggedIn && isInvite">
-      To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, complete signup for <strong>{{sharePreviewVO.email}}</strong> by creating a password
+      To view this content, complete signup for <strong>{{sharePreviewVO.email}}</strong> by creating a password
     </p>
     <p *ngIf="isLoggedIn">
-      To view this content shared privately by <strong>{{shareAccount.fullName}}</strong>, {{ hasRequested ? 'your request must be approved.' : 'request access below.' }}
+      To view this content, {{ hasRequested ? 'your request must be approved.' : 'request access below.' }}
     </p>
     <div class="share-preview-form-wrapper" *ngIf="!isLoggedIn">
       <div class="share-preview-form">
