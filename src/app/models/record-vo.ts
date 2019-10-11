@@ -3,7 +3,7 @@ import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 
 export class RecordVO extends BaseVO {
-  public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId'];
+  public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
   public isRecord = true;
   public isFolder = false;
 
