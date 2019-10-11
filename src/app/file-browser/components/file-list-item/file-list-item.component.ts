@@ -300,9 +300,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   promptForUpdate() {
     let updateResolve;
 
-    const updatePromise = new Promise((resolve) => {
-      updateResolve = resolve;
-    });
+    const updateDeferred = new Deferred;
 
     const fields: PromptField[] = [
       {
@@ -320,14 +318,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       }
     ];
 
-    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updatePromise, 'Rename', 'Cancel')
+    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updateDeferred.promise, 'Rename', 'Cancel')
       .then((values) => {
-        this.saveUpdates(values, updateResolve);
+        this.saveUpdates(values, updateDeferred);
       })
       .catch(() => {});
   }
 
-  saveUpdates(changes: RecordVOData | FolderVOData, resolve: Function) {
+  saveUpdates(changes: RecordVOData | FolderVOData, deferred: Deferred) {
     const originalData = {};
     Object.keys(changes)
       .forEach((key) => {
@@ -339,15 +337,15 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       });
 
     if (!Object.keys(changes).length) {
-      return resolve();
+      return deferred.resolve();
     } else {
       this.item.update(changes);
       return this.edit.updateItems([this.item])
         .then(() => {
-          resolve();
+          deferred.resolve();
         })
         .catch((response: RecordResponse | FolderResponse) => {
-          resolve();
+          deferred.reject();
           this.message.showError(response.getMessage(), true);
           this.item.update(originalData);
         });

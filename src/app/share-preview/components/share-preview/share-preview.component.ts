@@ -217,8 +217,12 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
-  test() {
-    console.log('hello');
+  goToView() {
+    // if (this.sharePreviewVO.FolderVO) {
+    //   this.router.navigate(['view'], { relativeTo: this.route });
+    // } else {
+    //   this.router.navigate(['record'], { relativeTo: this.route });
+    // }
   }
 
   onSignupSubmit(formValue: any) {
