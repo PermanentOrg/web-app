@@ -326,10 +326,31 @@ export class SharingComponent implements OnInit {
         deferred.reject();
         if (response.getMessage()) {
           this.messageService.showError(response.getMessage());
-        } 
+        }
       }
     })
     .catch(() => {});
+  }
+
+  async removeShareLink() {
+    const deferred = new Deferred();
+    try {
+      await this.promptService.confirm(
+        'Remove link',
+        'Are you sure you want to remove this link?',
+        deferred.promise,
+        'btn-danger'
+      );
+
+      await this.api.share.removeShareLink(this.shareLink);
+      this.shareLink = null;
+      deferred.resolve();
+    } catch (response) {
+      deferred.resolve();
+      if (response instanceof ShareResponse) {
+        this.messageService.showError(response.getMessage());
+      }
+    }
   }
 
   close() {
