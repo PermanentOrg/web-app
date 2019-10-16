@@ -5,17 +5,14 @@
     <div class="share-link" *ngIf="shareLink">
       <p>Send this link via text, email, or other message service to invite people to share this content.</p>
         <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" #shareUrlInput>
-        <button class="btn btn-primary" [disabled]="urlCopied" (click)="copyShareLink()">{{ urlCopied ? 'URL Copied' : 'Copy URL'}}</button>
+        <button class="btn btn-primary" [disabled]="linkCopied" (click)="copyShareLink()">{{ linkCopied ? 'Link copied' : 'Copy link'}}</button>
+        <button class="btn btn-primary" (click)="manageShareLink()">Manage link</button>
+        <button class="btn btn-danger" (click)="removeShareLink()">Remove link</button>
     </div>
     <div class="share-link-button" *ngIf="!shareLink">
-      <button class="btn btn-primary" (click)="generateShareLink()">Get Share Link</button>
+      <button class="btn btn-primary" (click)="generateShareLink()">Get share link</button>
     </div>
     <div class="page-subheading"></div>
-
-    <!-- <div class="share-item-preview">
-        <div prBgImage [bgSrc]="shareItem.thumbURL200"></div>
-        <div class="name">{{shareItem.displayName}}</div>
-    </div> -->
     <div class="page-subheading" *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')">Share Requests</div>
     <div class="share-item-members" *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')">
       <pr-archive-small *ngFor="let shareVo of pendingShares"

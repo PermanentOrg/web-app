@@ -75,6 +75,22 @@ export class ShareRepo extends BaseRepo {
     return this.http.sendRequestPromise('/share/checkShareLink', [data], ShareResponse);
   }
 
+  public updateShareLink(vo: ShareByUrlVO) {
+    const data = {
+      Shareby_urlVO: vo
+    };
+
+    return this.http.sendRequestPromise('/share/updateShareLink', [data], ShareResponse);
+  }
+
+  public removeShareLink(vo: ShareByUrlVO) {
+    const data = {
+      Shareby_urlVO: vo
+    };
+
+    return this.http.sendRequestPromise('/share/dropShareLink', [data], ShareResponse);
+  }
+  
   public requestShareAccess(urlToken: string) {
     const data = {
       Shareby_urlVO: {
