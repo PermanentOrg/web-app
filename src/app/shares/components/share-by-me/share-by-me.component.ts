@@ -50,7 +50,7 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
     const queryParams = this.route.snapshot.queryParams;
 
     if (queryParams) {
-      if (queryParams.shareArchiveNbr && queryParams.requestToken) {
+      if (queryParams.shareArchiveNbr) {
         const targetShare = find(this.listItemsQuery.toArray(), (share: FileListItemComponent) => {
           return share.item.archiveNbr === queryParams.shareArchiveNbr;
         }) as FileListItemComponent;
@@ -62,8 +62,6 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
           // https://local.permanent.org:4200/m/shares/byme?shareArchiveNbr=064q-00ix&requestToken=85c7622c5b8d635fc517dc055cac08e54e05d014aa186f331e74cfb0f4119419
           // open dialog for share
           targetShare.onActionClick('share', new Deferred());
-
-
         }
       }
     }
