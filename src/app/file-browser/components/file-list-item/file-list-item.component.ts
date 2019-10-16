@@ -130,9 +130,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.inGridView = this.folderView === FolderView.Grid;
 
-    if (this.item.position === 1) {
-      // this.dialog.open('SharingComponent', { item: this.item });
-    }
   }
 
   ngOnChanges() {
@@ -339,7 +336,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (!Object.keys(changes).length) {
       return deferred.resolve();
     } else {
-      this.item.update(changes);
+      (this.item as FolderVO).update(changes);
       return this.edit.updateItems([this.item])
         .then(() => {
           deferred.resolve();
@@ -347,7 +344,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         .catch((response: RecordResponse | FolderResponse) => {
           deferred.reject();
           this.message.showError(response.getMessage(), true);
-          this.item.update(originalData);
+          (this.item as FolderVO).update(originalData);
         });
     }
   }

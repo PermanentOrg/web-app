@@ -13,6 +13,7 @@ export class ShareByUrlVO extends BaseVO {
   public uses: number;
   public maxUses: number;
   public previewToggle;
+  public requestToken: string;
   public expiresDT;
   public byAccountId: number;
   public byArchiveId: number;

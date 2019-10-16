@@ -103,14 +103,14 @@ export class EditService {
         if (folderResponse) {
           folderResponse.getFolderVOs()
             .forEach((updatedItem) => {
-              itemsByLinkId[updatedItem.folder_linkId].update(updatedItem);
+              (itemsByLinkId[updatedItem.folder_linkId] as FolderVO).update(updatedItem);
             });
         }
 
         if (recordResponse) {
           recordResponse.getRecordVOs()
           .forEach((updatedItem) => {
-            itemsByLinkId[updatedItem.folder_linkId].update(updatedItem);
+            (itemsByLinkId[updatedItem.folder_linkId] as RecordVO).update(updatedItem);
           });
         }
       }).catch((results) => {

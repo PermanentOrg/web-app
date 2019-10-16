@@ -100,6 +100,20 @@ export class RecordVO extends BaseVO {
       this.dataStatus = dataStatus;
     }
   }
+
+  public update (voData: RecordVOData | RecordVO): void {
+    if (voData) {
+      for ( const key in voData ) {
+        if (voData[key] !== undefined) {
+          this[key] = voData[key];
+        }
+      }
+    }
+
+    if (this.ShareVOs) {
+      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
+    }
+  }
 }
 
 export interface RecordVOData {

@@ -106,7 +106,7 @@ export class FolderVO extends BaseVO {
     }
   }
 
-  public update (voData: FolderVOData) {
+  public update (voData: FolderVOData | FolderVO): void {
     if (voData) {
       for ( const key in voData ) {
         if (voData[key] !== undefined) {

@@ -104,7 +104,7 @@ export class DataService {
           const item = this.byFolderLinkId[leanItem.folder_linkId];
           if (item) {
             this.byArchiveNbr[leanItem.archiveNbr] = item;
-            item.update(leanItem);
+            (item as FolderVO).update(leanItem);
 
             item.dataStatus = DataStatus.Lean;
             item.isFetching = false;

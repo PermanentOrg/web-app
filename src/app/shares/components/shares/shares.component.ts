@@ -41,6 +41,8 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
     this.sharedWithMe = shares;
+
+    console.log(this.sharedByMe);
   }
 
   ngOnInit() {
