@@ -310,14 +310,19 @@ export class SharingComponent implements OnInit {
       DATE_FIELD('expiresDT', 'Expiration date (optional)', currentDate, new Date())
     ];
 
-    console.log(currentDate);
-
     this.promptService.prompt(fields, title, deferred.promise, 'Save')
     .then(async (result: {previewToggle: 'on' | 'off', expiresDT, maxUses: string}) => {
       const updatedShareVo = new ShareByUrlVO(this.shareLink);
       updatedShareVo.previewToggle = result.previewToggle === 'on' ? 1 : 0;
-      updatedShareVo.maxUses = parseInt(result.maxUses, 10);
-      updatedShareVo.expiresDT = new Date(result.expiresDT).toISOString();
+
+      if (result.maxUses !== undefined) {
+        updatedShareVo.maxUses = parseInt(result.maxUses, 10);
+      }
+
+      if (result.expiresDT) {
+        updatedShareVo.expiresDT = new Date(result.expiresDT).toISOString();
+      }
+
       try {
         const updateResponse = await this.api.share.updateShareLink(updatedShareVo);
         this.shareLink = updateResponse.getShareByUrlVO();
@@ -329,7 +334,12 @@ export class SharingComponent implements OnInit {
         }
       }
     })
-    .catch(() => {});
+    .catch((err) => {
+      if (err instanceof ShareResponse) {
+      } else {
+        console.error(err);
+      }
+    });
   }
 
   async removeShareLink() {

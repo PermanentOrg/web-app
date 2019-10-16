@@ -85,7 +85,6 @@ export class ConnectorComponent implements OnInit {
 
     try {
       await this.dialog.open('FamilySearchImportComponent', data);
-      console.log('complete!');
     } catch (err) { }
   }
 

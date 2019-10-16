@@ -302,7 +302,5 @@ export function DATE_FIELD(
     initial.validators.push(minDateValidator(minValue));
   }
 
-  console.log(initial);
-
   return initial;
 }

@@ -158,7 +158,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       // scroll to show items after change
       const scrollTarget: FileListItemComponent = this.listItems[this.lastItemOffset];
-      console.log(scrollTarget.item.displayName);
       this.document.documentElement.scrollTop = (scrollTarget.element.nativeElement as HTMLElement).offsetTop - NAV_HEIGHT;
       this.scrollHandlerThrottled();
     });

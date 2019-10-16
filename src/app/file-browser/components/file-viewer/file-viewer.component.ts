@@ -261,7 +261,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   navigateToCurrentRecord() {
     this.router.navigate(['../', this.currentRecord.archiveNbr], {relativeTo: this.route});
     this.loadingRecord = false;
-    console.log(this.currentRecord);
   }
 
   loadQueuedItems() {
