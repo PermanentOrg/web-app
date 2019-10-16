@@ -30,6 +30,7 @@
     "@angular/platform-browser": "^7.2.10",
     "@angular/platform-browser-dynamic": "^7.2.10",
     "@angular/router": "^7.2.10",
+    "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "@types/hammerjs": "^2.0.36",
     "@types/lodash": "^4.14.119",
     "binaryjs": "^0.2.1",
