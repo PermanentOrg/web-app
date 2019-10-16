@@ -86,7 +86,15 @@ export class SharingComponent implements OnInit {
       } else if (targetRequest.status.includes('ok')) {
         this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} already approved.`);
       } else {
-        this.approvePendingShareVo(targetRequest);
+        switch (queryParams.requestAction) {
+          case 'approve':
+            this.approvePendingShareVo(targetRequest);
+            break;
+          case 'deny':
+            this.removeShareVo(targetRequest);
+            this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} denied.`);
+            break;
+        }
       }
     }
   }
