@@ -12,6 +12,7 @@ import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -81,7 +82,8 @@ export const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule,
     CommonModule,
-    FileBrowserComponentsModule
+    FileBrowserComponentsModule,
+    NgbModule
   ],
   declarations: [
     SharePreviewComponent,

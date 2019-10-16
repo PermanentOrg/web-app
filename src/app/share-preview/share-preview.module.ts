@@ -8,6 +8,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { MessageService } from '@shared/services/message/message.service';
 import { FormsModule } from '@angular/forms';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     SharePreviewRoutingModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgbTooltipModule
   ],
   providers: [
     DataService,
