@@ -92,7 +92,6 @@ export class SharingComponent implements OnInit {
             break;
           case 'deny':
             this.removeShareVo(targetRequest);
-            this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} denied.`);
             break;
         }
       }
