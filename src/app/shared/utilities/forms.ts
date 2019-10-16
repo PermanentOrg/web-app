@@ -14,6 +14,24 @@ export function matchControlValidator(controlToMatch: AbstractControl): Validato
   };
 }
 
+export function minDateValidator(minDate: string | Date ) {
+  return function validator(controlToValidate: AbstractControl): {[key: string]: boolean} | null {
+    if (!(minDate instanceof Date)) {
+      minDate = new Date(minDate);
+    }
+
+    const currentDate = new Date(controlToValidate.value);
+
+    if (minDate.getTime() >= currentDate.getTime()) {
+      return {
+        min: true
+      };
+    }
+
+    return null;
+  };
+}
+
 export const FORM_ERROR_MESSAGES = {
   email: {
     email: 'Invalid email address',

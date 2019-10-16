@@ -14,7 +14,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 
 import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
-import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@core/components/prompt/prompt-fields';
+import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@core/components/prompt/prompt-fields';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -295,6 +295,26 @@ export class SharingComponent implements OnInit {
     setTimeout(() => {
       this.linkCopied = false;
     }, 5000);
+  }
+
+  manageShareLink() {
+    const deferred = new Deferred();
+    const title = `Manage share link for ${this.shareItem.displayName}`;
+    const fields: PromptField[] = [
+      ON_OFF_FIELD('previewToggle', 'Share preview', this.shareLink.previewToggle ? 'on' : 'off'),
+      NUMBER_FIELD('maxUses', 'Max number of uses (optional)', this.shareLink.maxUses, false),
+      DATE_FIELD('expiresDT', 'Expiration date (optional)', this.shareLink.expiresDT, new Date())
+    ];
+
+    this.promptService.prompt(fields, title)
+    .then((result: {previewToggle: 'on' | 'off', expiresDT, maxUses: string}) => {
+      const updatedShareVo = new ShareByUrlVO(this.shareLink);
+      updatedShareVo.previewToggle = result.previewToggle === 'on' ? 1 : 0;
+      updatedShareVo.maxUses = parseInt(result.maxUses, 10);
+      updatedShareVo.expiresDT = new Date(result.expiresDT).toISOString();
+      console.log(updatedShareVo);
+    })
+    .catch(() => {});
   }
 
   close() {

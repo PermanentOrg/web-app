@@ -2,6 +2,7 @@ import { PromptField } from '@core/services/prompt/prompt.service';
 import { Validators } from '@angular/forms';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { clone } from 'lodash';
+import { minDateValidator } from '@shared/utilities/forms';
 const expMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
@@ -216,3 +217,90 @@ export const ADDRESS_FIELDS: PromptField[] = [
     }
   },
 ];
+
+const ON_OFF_FIELD_DEFAULT: PromptField = {
+  fieldName: 'onOff',
+  placeholder: 'Option on/off',
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  type: 'select',
+  validators: [Validators.required],
+  selectOptions: [
+    {
+      text: 'On',
+      value: 'on'
+    },
+    {
+      text: 'Off',
+      value: 'off'
+    }
+  ]
+};
+
+export function ON_OFF_FIELD(fieldName: string, placeholder: string, initialValue?: string | number) {
+  const initial: PromptField = clone(ON_OFF_FIELD_DEFAULT);
+  initial.fieldName = fieldName;
+  initial.placeholder = placeholder;
+  initial.initialValue = initialValue;
+  return initial;
+}
+
+const NUMBER_FIELD_DEFAULT: PromptField = {
+  fieldName: 'number',
+  placeholder: 'Number',
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  type: 'number',
+  validators: [Validators.required, Validators.min(0)]
+};
+
+export function NUMBER_FIELD(fieldName: string, placeholder: string, initialValue?: number, required = true) {
+  const initial: PromptField = clone(NUMBER_FIELD_DEFAULT);
+  initial.fieldName = fieldName;
+  initial.placeholder = placeholder;
+  initial.initialValue = initialValue;
+  if (!required) {
+    initial.validators = [];
+  }
+  return initial;
+}
+
+const DATE_FIELD_DEFAULT: PromptField = {
+  fieldName: 'date',
+  placeholder: 'Date',
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  type: 'date',
+  validators: []
+};
+
+export function DATE_FIELD(
+  fieldName: string,
+  placeholder: string,
+  initialValue?: string | Date,
+  minValue?: string | Date,
+  required = false
+  ) {
+  const initial: PromptField = clone(DATE_FIELD_DEFAULT);
+  initial.fieldName = fieldName;
+  initial.placeholder = placeholder;
+  initial.initialValue = initialValue;
+  if (required) {
+    initial.validators = [Validators.required];
+  }
+
+  if (minValue) {
+    initial.validators.push(minDateValidator(minValue));
+  }
+
+  return initial;
+}
