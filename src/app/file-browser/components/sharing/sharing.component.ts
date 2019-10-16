@@ -15,6 +15,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@core/components/prompt/prompt-fields';
+import { ActivatedRoute } from '@angular/router';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -59,6 +60,7 @@ export class SharingComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     private dialog: Dialog,
+    private route: ActivatedRoute,
     private promptService: PromptService,
     private prConstants: PrConstantsService,
     private device: DeviceService,
@@ -75,6 +77,18 @@ export class SharingComponent implements OnInit {
   }
 
   ngOnInit() {
+    const queryParams = this.route.snapshot.queryParams;
+
+    if (queryParams.shareArchiveNbr && queryParams.requestToken) {
+      const targetRequest: any = find(this.shareItem.ShareVOs, { requestToken: queryParams.requestToken }) as any;
+      if (!targetRequest) {
+        this.messageService.showError('Share request not found.');
+      } else if (targetRequest.status.includes('ok')) {
+        this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} already approved.`);
+      } else {
+        this.approvePendingShareVo(targetRequest);
+      }
+    }
   }
 
   onShareMemberClick(shareVo: ShareVO) {

@@ -210,38 +210,42 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
       .then((value: string) => {
-        switch (value) {
-          case 'delete':
-            return this.deleteItem(actionDeferred.resolve);
-          case 'rename':
-            actionDeferred.resolve();
-            this.promptForUpdate();
-            break;
-          case 'move':
-            actionDeferred.resolve();
-            this.openFolderPicker(FolderPickerOperations.Move);
-            break;
-          case 'copy':
-            actionDeferred.resolve();
-            this.openFolderPicker(FolderPickerOperations.Copy);
-            break;
-          case 'download':
-            this.dataService.downloadFile(this.item as RecordVO)
-              .then(() => {
-                actionDeferred.resolve();
-              });
-            break;
-          case 'share':
-            this.api.share.getShareLink(this.item)
-              .then((response: ShareResponse) => {
-                actionDeferred.resolve();
-                this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
-              });
-            break;
-        }
+        this.onActionClick(value, actionDeferred);
       });
 
     return false;
+  }
+
+  onActionClick(value: string, actionDeferred: Deferred) {
+    switch (value) {
+      case 'delete':
+        return this.deleteItem(actionDeferred.resolve);
+      case 'rename':
+        actionDeferred.resolve();
+        this.promptForUpdate();
+        break;
+      case 'move':
+        actionDeferred.resolve();
+        this.openFolderPicker(FolderPickerOperations.Move);
+        break;
+      case 'copy':
+        actionDeferred.resolve();
+        this.openFolderPicker(FolderPickerOperations.Copy);
+        break;
+      case 'download':
+        this.dataService.downloadFile(this.item as RecordVO)
+          .then(() => {
+            actionDeferred.resolve();
+          });
+        break;
+      case 'share':
+        this.api.share.getShareLink(this.item)
+          .then((response: ShareResponse) => {
+            actionDeferred.resolve();
+            this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
+          });
+        break;
+    }
   }
 
   deleteItem(resolve: Function) {
