@@ -300,14 +300,21 @@ export class SharingComponent implements OnInit {
   manageShareLink() {
     const deferred = new Deferred();
     const title = `Manage share link for ${this.shareItem.displayName}`;
+    let currentDate = null;
+    if (this.shareLink.expiresDT) {
+      currentDate = new Date(this.shareLink.expiresDT).toISOString().split('T')[0];
+    }
     const fields: PromptField[] = [
       ON_OFF_FIELD('previewToggle', 'Share preview', this.shareLink.previewToggle ? 'on' : 'off'),
       NUMBER_FIELD('maxUses', 'Max number of uses (optional)', this.shareLink.maxUses, false),
-      DATE_FIELD('expiresDT', 'Expiration date (optional)', this.shareLink.expiresDT, new Date())
+      DATE_FIELD('expiresDT', 'Expiration date (optional)', currentDate, new Date())
     ];
+
+    console.log(currentDate);
 
     this.promptService.prompt(fields, title)
     .then((result: {previewToggle: 'on' | 'off', expiresDT, maxUses: string}) => {
+      console.log(result);
       const updatedShareVo = new ShareByUrlVO(this.shareLink);
       updatedShareVo.previewToggle = result.previewToggle === 'on' ? 1 : 0;
       updatedShareVo.maxUses = parseInt(result.maxUses, 10);
