@@ -312,14 +312,22 @@ export class SharingComponent implements OnInit {
 
     console.log(currentDate);
 
-    this.promptService.prompt(fields, title)
-    .then((result: {previewToggle: 'on' | 'off', expiresDT, maxUses: string}) => {
-      console.log(result);
+    this.promptService.prompt(fields, title, deferred.promise, 'Save')
+    .then(async (result: {previewToggle: 'on' | 'off', expiresDT, maxUses: string}) => {
       const updatedShareVo = new ShareByUrlVO(this.shareLink);
       updatedShareVo.previewToggle = result.previewToggle === 'on' ? 1 : 0;
       updatedShareVo.maxUses = parseInt(result.maxUses, 10);
       updatedShareVo.expiresDT = new Date(result.expiresDT).toISOString();
-      console.log(updatedShareVo);
+      try {
+        const updateResponse = await this.api.share.updateShareLink(updatedShareVo);
+        this.shareLink = updateResponse.getShareByUrlVO();
+        deferred.resolve();
+      } catch (response) {
+        deferred.reject();
+        if (response.getMessage()) {
+          this.messageService.showError(response.getMessage());
+        } 
+      }
     })
     .catch(() => {});
   }
