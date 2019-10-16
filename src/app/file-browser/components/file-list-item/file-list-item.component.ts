@@ -130,9 +130,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.inGridView = this.folderView === FolderView.Grid;
 
-    if (this.item.position === 1) {
-      // this.dialog.open('SharingComponent', { item: this.item });
-    }
   }
 
   ngOnChanges() {
@@ -213,38 +210,42 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
       .then((value: string) => {
-        switch (value) {
-          case 'delete':
-            return this.deleteItem(actionDeferred.resolve);
-          case 'rename':
-            actionDeferred.resolve();
-            this.promptForUpdate();
-            break;
-          case 'move':
-            actionDeferred.resolve();
-            this.openFolderPicker(FolderPickerOperations.Move);
-            break;
-          case 'copy':
-            actionDeferred.resolve();
-            this.openFolderPicker(FolderPickerOperations.Copy);
-            break;
-          case 'download':
-            this.dataService.downloadFile(this.item as RecordVO)
-              .then(() => {
-                actionDeferred.resolve();
-              });
-            break;
-          case 'share':
-            this.api.share.getShareLink(this.item)
-              .then((response: ShareResponse) => {
-                actionDeferred.resolve();
-                this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
-              });
-            break;
-        }
+        this.onActionClick(value, actionDeferred);
       });
 
     return false;
+  }
+
+  onActionClick(value: string, actionDeferred: Deferred) {
+    switch (value) {
+      case 'delete':
+        return this.deleteItem(actionDeferred.resolve);
+      case 'rename':
+        actionDeferred.resolve();
+        this.promptForUpdate();
+        break;
+      case 'move':
+        actionDeferred.resolve();
+        this.openFolderPicker(FolderPickerOperations.Move);
+        break;
+      case 'copy':
+        actionDeferred.resolve();
+        this.openFolderPicker(FolderPickerOperations.Copy);
+        break;
+      case 'download':
+        this.dataService.downloadFile(this.item as RecordVO)
+          .then(() => {
+            actionDeferred.resolve();
+          });
+        break;
+      case 'share':
+        this.api.share.getShareLink(this.item)
+          .then((response: ShareResponse) => {
+            actionDeferred.resolve();
+            this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
+          });
+        break;
+    }
   }
 
   deleteItem(resolve: Function) {
@@ -339,7 +340,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (!Object.keys(changes).length) {
       return deferred.resolve();
     } else {
-      this.item.update(changes);
+      (this.item as FolderVO).update(changes);
       return this.edit.updateItems([this.item])
         .then(() => {
           deferred.resolve();
@@ -347,7 +348,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         .catch((response: RecordResponse | FolderResponse) => {
           deferred.reject();
           this.message.showError(response.getMessage(), true);
-          this.item.update(originalData);
+          (this.item as FolderVO).update(originalData);
         });
     }
   }
