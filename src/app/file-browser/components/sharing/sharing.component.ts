@@ -26,6 +26,11 @@ const ShareActions: {[key: string]: PromptButton} = {
     buttonText: 'Remove',
     class: 'btn-danger'
   },
+  Decline: {
+    buttonName: 'remove',
+    buttonText: 'Decline',
+    class: 'btn-danger'
+  },
   Approve: {
     buttonName: 'approve',
     buttonText: 'Approve'
@@ -46,7 +51,7 @@ export class SharingComponent implements OnInit {
   public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
 
-  public urlCopied = false;
+  public linkCopied = false;
 
   @ViewChild('shareUrlInput') shareUrlInput: ElementRef;
 
@@ -82,7 +87,7 @@ export class SharingComponent implements OnInit {
 
     const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
     this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
-      .then((value: string) => {
+      .then((value: 'edit' | 'remove') => {
         switch (value) {
           case 'edit':
             this.editShareVo(shareVo);
@@ -109,9 +114,9 @@ export class SharingComponent implements OnInit {
       );
     }
 
-    const buttons = [ ShareActions.Approve, ShareActions.Remove ];
+    const buttons = [ ShareActions.Approve, ShareActions.Decline ];
     this.promptService.promptButtons(buttons, `Sharing request from ${shareVo.ArchiveVO.fullName}`)
-      .then((value: string) => {
+      .then((value: 'approve' | 'remove') => {
         switch (value) {
           case 'approve':
             this.approvePendingShareVo(shareVo);
@@ -286,9 +291,9 @@ export class SharingComponent implements OnInit {
 
     element.blur();
 
-    this.urlCopied = true;
+    this.linkCopied = true;
     setTimeout(() => {
-      this.urlCopied = false;
+      this.linkCopied = false;
     }, 5000);
   }
 
