@@ -58,9 +58,6 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
         if (!targetShare) {
           this.message.showError('Shared item not found.');
         } else {
-          console.log('got it', targetShare);
-          // https://local.permanent.org:4200/m/shares/byme?shareArchiveNbr=064q-00ix&requestToken=85c7622c5b8d635fc517dc055cac08e54e05d014aa186f331e74cfb0f4119419
-          // open dialog for share
           targetShare.onActionClick('share', new Deferred());
         }
       }
