@@ -1,7 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 
-import { remove, find } from 'lodash';
+import { remove, find, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
 import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
@@ -11,10 +10,14 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
-import { RecordVO, FolderVO, ShareVO, ArchiveVO } from '@models/index';
+import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
-import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@core/components/prompt/prompt-fields';
+import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@core/components/prompt/prompt-fields';
+import { ActivatedRoute } from '@angular/router';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -25,6 +28,15 @@ const ShareActions: {[key: string]: PromptButton} = {
     buttonName: 'remove',
     buttonText: 'Remove',
     class: 'btn-danger'
+  },
+  Decline: {
+    buttonName: 'remove',
+    buttonText: 'Decline',
+    class: 'btn-danger'
+  },
+  Approve: {
+    buttonName: 'approve',
+    buttonText: 'Approve'
   }
 };
 
@@ -35,25 +47,83 @@ const ShareActions: {[key: string]: PromptButton} = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
+
+  public shares: ShareVO[] = [];
+  public pendingShares: ShareVO[] = [];
+
+  public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
+
+  public linkCopied = false;
+
+  @ViewChild('shareUrlInput') shareUrlInput: ElementRef;
 
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     private dialog: Dialog,
+    private route: ActivatedRoute,
     private promptService: PromptService,
     private prConstants: PrConstantsService,
+    private device: DeviceService,
     private api: ApiService,
     private messageService: MessageService,
-    private relationshipService: RelationshipService
+    private relationshipService: RelationshipService,
+    private ga: GoogleAnalyticsService
   ) {
     this.shareItem = this.data.item as FolderVO | RecordVO;
+    this.shareLink = this.data.link;
+
+    if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
+      [ this.pendingShares, this.shares ] = partition(this.shareItem.ShareVOs, {status: 'status.generic.pending'}) as any;
+    }
   }
 
   ngOnInit() {
+    const queryParams = this.route.snapshot.queryParams;
+
+    if (queryParams.shareArchiveNbr && queryParams.requestToken) {
+      const targetRequest: any = find(this.shareItem.ShareVOs, { requestToken: queryParams.requestToken }) as any;
+      if (!targetRequest) {
+        this.messageService.showError('Share request not found.');
+      } else if (targetRequest.status.includes('ok')) {
+        this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} already approved.`);
+      } else {
+        switch (queryParams.requestAction) {
+          case 'approve':
+            this.approvePendingShareVo(targetRequest);
+            break;
+          case 'deny':
+            this.removeShareVo(targetRequest);
+            break;
+        }
+      }
+    }
   }
 
   onShareMemberClick(shareVo: ShareVO) {
+    if (this.shareItem.accessRole !== 'access.role.owner') {
+      return this.messageService.showMessage(
+        `You do not have permission to approve share requests.`,
+        'danger'
+      );
+    }
+
+    const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
+    this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
+      .then((value: 'edit' | 'remove') => {
+        switch (value) {
+          case 'edit':
+            this.editShareVo(shareVo);
+            break;
+          case 'remove':
+            this.removeShareVo(shareVo);
+            break;
+        }
+      });
+  }
+
+  onPendingShareClick(shareVo: ShareVO) {
     if (this.shareItem.accessRole !== 'access.role.owner') {
       return this.messageService.showMessage(
         `You do not have permission to edit share access.`,
@@ -68,12 +138,12 @@ export class SharingComponent implements OnInit {
       );
     }
 
-    const buttons = [ ShareActions.ChangeAccess, ShareActions.Remove ];
-    this.promptService.promptButtons(buttons, `Sharing with ${shareVo.ArchiveVO.fullName}`)
-      .then((value: string) => {
+    const buttons = [ ShareActions.Approve, ShareActions.Decline ];
+    this.promptService.promptButtons(buttons, `Sharing request from ${shareVo.ArchiveVO.fullName}`)
+      .then((value: 'approve' | 'remove') => {
         switch (value) {
-          case 'edit':
-            this.editShareVo(shareVo);
+          case 'approve':
+            this.approvePendingShareVo(shareVo);
             break;
           case 'remove':
             this.removeShareVo(shareVo);
@@ -84,6 +154,7 @@ export class SharingComponent implements OnInit {
 
   addShareMember() {
     this.loadingRelations = true;
+    let isExistingRelation = false;
     return this.relationshipService.get()
       .catch(() => {
         this.loadingRelations = false;
@@ -110,7 +181,17 @@ export class SharingComponent implements OnInit {
           archiveId: archive.archiveId,
           folder_linkId: this.shareItem.folder_linkId
         });
+
+        isExistingRelation = this.relationshipService.hasRelation(archive);
+
         return this.editShareVo(newShareVo);
+      })
+      .then(() => {
+        if (isExistingRelation) {
+          this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
+        } else {
+          this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
+        }
       })
       .catch(() => {
       });
@@ -155,6 +236,7 @@ export class SharingComponent implements OnInit {
             this.shareItem.ShareVOs = [];
           }
           this.shareItem.ShareVOs.push(new ShareVO(updatedShareVo));
+          this.shares.push(updatedShareVo);
         } else {
           shareVo.accessRole = updatedShareVo.accessRole;
         }
@@ -177,6 +259,7 @@ export class SharingComponent implements OnInit {
         .then((response: ShareResponse) => {
           this.messageService.showMessage(`${shareVO.ArchiveVO.fullName} removed successfully.`, 'success');
           remove(this.shareItem.ShareVOs, shareVO);
+          remove(this.shares, shareVO);
           deferred.resolve();
         })
         .catch((response: ShareResponse) => {
@@ -187,6 +270,133 @@ export class SharingComponent implements OnInit {
       .catch(() => {
         deferred.resolve();
       });
+  }
+
+  approvePendingShareVo(shareVO: ShareVO) {
+    const deferred = new Deferred();
+
+    shareVO.status = 'status.generic.ok';
+
+    this.api.share.update(shareVO)
+    .then((response: ShareResponse) => {
+      this.messageService.showMessage(`${shareVO.ArchiveVO.fullName} granted access.`, 'success');
+      remove(this.pendingShares, shareVO);
+      this.shares.push(shareVO);
+      deferred.resolve();
+    })
+    .catch((response: ShareResponse) => {
+      deferred.resolve();
+      this.messageService.showError(response.getMessage(), true);
+    });
+  }
+
+  async generateShareLink() {
+    const response = await this.api.share.generateShareLink(this.shareItem);
+
+    if (response.isSuccessful) {
+      this.shareLink = response.getShareByUrlVO();
+      this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
+    }
+  }
+
+  copyShareLink() {
+    const element = this.shareUrlInput.nativeElement as HTMLInputElement;
+    const oldContentEditable = element.contentEditable;
+    const oldReadOnly = element.readOnly;
+
+
+    if (this.device.isIos()) {
+      (element as any).contentEditable = true;
+      element.readOnly = false;
+
+      const range = document.createRange();
+      range.selectNodeContents(element);
+
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      element.setSelectionRange(0, 999999999);
+      element.contentEditable = oldContentEditable;
+      element.readOnly = oldReadOnly;
+    } else {
+      element.select();
+    }
+
+    document.execCommand('copy');
+
+    element.blur();
+
+    this.linkCopied = true;
+    setTimeout(() => {
+      this.linkCopied = false;
+    }, 5000);
+  }
+
+  manageShareLink() {
+    const deferred = new Deferred();
+    const title = `Manage share link for ${this.shareItem.displayName}`;
+    let currentDate = null;
+    if (this.shareLink.expiresDT) {
+      currentDate = new Date(this.shareLink.expiresDT).toISOString().split('T')[0];
+    }
+    const fields: PromptField[] = [
+      ON_OFF_FIELD('previewToggle', 'Share preview', this.shareLink.previewToggle ? 'on' : 'off'),
+      NUMBER_FIELD('maxUses', 'Max number of uses (optional)', this.shareLink.maxUses, false),
+      DATE_FIELD('expiresDT', 'Expiration date (optional)', currentDate, new Date())
+    ];
+
+    this.promptService.prompt(fields, title, deferred.promise, 'Save')
+    .then(async (result: {previewToggle: 'on' | 'off', expiresDT, maxUses: string}) => {
+      const updatedShareVo = new ShareByUrlVO(this.shareLink);
+      updatedShareVo.previewToggle = result.previewToggle === 'on' ? 1 : 0;
+
+      if (result.maxUses !== undefined) {
+        updatedShareVo.maxUses = parseInt(result.maxUses, 10);
+      }
+
+      if (result.expiresDT) {
+        updatedShareVo.expiresDT = new Date(result.expiresDT).toISOString();
+      }
+
+      try {
+        const updateResponse = await this.api.share.updateShareLink(updatedShareVo);
+        this.shareLink = updateResponse.getShareByUrlVO();
+        deferred.resolve();
+      } catch (response) {
+        deferred.reject();
+        if (response.getMessage()) {
+          this.messageService.showError(response.getMessage());
+        }
+      }
+    })
+    .catch((err) => {
+      if (err instanceof ShareResponse) {
+      } else {
+        console.error(err);
+      }
+    });
+  }
+
+  async removeShareLink() {
+    const deferred = new Deferred();
+    try {
+      await this.promptService.confirm(
+        'Remove link',
+        'Are you sure you want to remove this link?',
+        deferred.promise,
+        'btn-danger'
+      );
+
+      await this.api.share.removeShareLink(this.shareLink);
+      this.shareLink = null;
+      deferred.resolve();
+    } catch (response) {
+      deferred.resolve();
+      if (response instanceof ShareResponse) {
+        this.messageService.showError(response.getMessage());
+      }
+    }
   }
 
   close() {

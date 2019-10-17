@@ -1,12 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { remove } from 'lodash';
+import { remove, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { FolderVO, RecordVO, ArchiveVO } from '@root/app/models';
+import { MessageService } from '@shared/services/message/message.service';
+import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { Deferred } from '@root/vendor/deferred';
 
 @Component({
   selector: 'pr-share-by-me',
@@ -18,10 +21,13 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
   sharedByMe: Array<FolderVO | RecordVO>;
   sharedWithMe: ArchiveVO[];
 
+  @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
+
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private message: MessageService
   ) {
     this.sharesFolder = new FolderVO({
       displayName: 'Shared By Me',
@@ -34,9 +40,28 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
     const currentArchive = remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop() as ArchiveVO;
 
     this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
+
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
+    const queryParams = this.route.snapshot.queryParams;
+
+    if (queryParams) {
+      if (queryParams.shareArchiveNbr) {
+        const targetShare = find(this.listItemsQuery.toArray(), (share: FileListItemComponent) => {
+          return share.item.archiveNbr === queryParams.shareArchiveNbr;
+        }) as FileListItemComponent;
+
+        if (!targetShare) {
+          this.message.showError('Shared item not found.');
+        } else {
+          targetShare.onActionClick('share', new Deferred());
+        }
+      }
+    }
   }
 
   ngOnDestroy() {

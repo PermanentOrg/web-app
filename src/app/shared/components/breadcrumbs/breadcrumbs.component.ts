@@ -77,13 +77,23 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     this.currentFolder = folder;
     this.breadcrumbs = [];
 
+    const isInSharePreview = this.router.routerState.snapshot.url.includes('/share/');
+    const isInShareInvitePreview = this.router.routerState.snapshot.url.includes('/share/invite');
+    const isInSharePreviewView = isInSharePreview && !isInShareInvitePreview && this.router.routerState.snapshot.url.includes('/view');
+    const isInSharePreviewInviteView = isInShareInvitePreview && this.router.routerState.snapshot.url.includes('/view');
+    const isInPublic = this.router.routerState.snapshot.url.includes('/p/');
+
     let rootUrl;
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       rootUrl = '/apps';
     } else if (this.router.routerState.snapshot.url.includes('/shares')) {
       rootUrl = '/shares';
-    } else if  (this.router.routerState.snapshot.url.includes('/p')) {
+    } else if (isInSharePreviewView) {
+      rootUrl = `/share/${this.route.snapshot.params.shareToken}/view`;
+    } else if (isInSharePreviewInviteView) {
+      rootUrl = `/share/invite/${this.route.snapshot.params.inviteCode}/view`;
+    } else if  (isInPublic) {
       rootUrl = `/p/${this.route.firstChild.snapshot.params.publishUrlToken}`;
     } else {
       rootUrl = '/myfiles';
@@ -93,11 +103,15 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.router.routerState.snapshot.url.includes('/p/')) {
+    if (!isInPublic && !isInSharePreviewView && !isInSharePreviewInviteView) {
       this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
     }
 
     for (let i = 1; i < folder.pathAsText.length; i++) {
+      if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 2) {
+        continue;
+      }
+      
       this.breadcrumbs.push(new Breadcrumb(
         rootUrl,
         folder.pathAsText[i],
@@ -105,6 +119,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
         folder.pathAsFolder_linkId[i]
       ));
     }
+
   }
 
   scrollToEnd() {

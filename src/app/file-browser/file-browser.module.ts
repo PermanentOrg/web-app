@@ -14,11 +14,13 @@ import { SharingComponent } from '@fileBrowser/components/sharing/sharing.compon
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { ArchivePickerComponent } from '@shared/components/archive-picker/archive-picker.component';
+import { FileBrowserComponentsModule } from './file-browser-components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
+    FileBrowserComponentsModule,
     FileBrowserRoutingModule,
     SharedModule,
     DialogModule
@@ -29,17 +31,6 @@ import { ArchivePickerComponent } from '@shared/components/archive-picker/archiv
     FileViewerComponent,
     ThumbnailComponent,
     VideoComponent
-  ],
-  declarations: [
-    FileListComponent,
-    FileListItemComponent,
-    FileViewerComponent,
-    ThumbnailComponent,
-    VideoComponent,
-    SharingComponent
-  ],
-  entryComponents: [
-    SharingComponent
   ]
 })
 export class FileBrowserModule {

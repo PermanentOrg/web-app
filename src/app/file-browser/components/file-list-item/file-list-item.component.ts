@@ -9,7 +9,7 @@ import { PromptService, PromptButton, PromptField } from '@core/services/prompt/
 import { FolderVO, RecordVO, FolderVOData, RecordVOData } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
-import { RecordResponse, FolderResponse } from '@shared/services/api/index.repo';
+import { RecordResponse, FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -18,6 +18,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -61,6 +62,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() item: FolderVO | RecordVO;
   @Input() folderView: FolderView;
 
+  @Input() allowNavigation = true;
+
   @HostBinding('class.grid-view') inGridView = false;
 
   public allowActions = true;
@@ -70,9 +73,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   private isInShares: boolean;
   private isInApps: boolean;
   private isInPublic: boolean;
+  private isInSharePreview: boolean;
 
   constructor(
     private dataService: DataService,
+    private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     public element: ElementRef,
@@ -95,6 +100,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.allowActions = false;
     }
 
+    if (this.router.routerState.snapshot.url.includes('/share/')) {
+      this.allowActions = false;
+      this.isInSharePreview = true;
+    }
+
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
     }
@@ -102,6 +112,12 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.route.snapshot.data.isPublic) {
       this.isInPublic = true;
     }
+
+
+    // if (this.route.snapshot.data.noFileListNavigation) {
+    //   this.allowActions = false;
+    //   this.allowNavigation = false;
+    // }
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
@@ -114,9 +130,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.inGridView = this.folderView === FolderView.Grid;
 
-    if (this.item.position === 1) {
-      // this.dialog.open('SharingComponent', { item: this.item });
-    }
   }
 
   ngOnChanges() {
@@ -128,6 +141,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   goToItem() {
+    if (!this.allowNavigation) {
+      return false;
+    }
+
     if (this.item.dataStatus < DataStatus.Lean) {
       if (!this.item.isFetching) {
         this.dataService.fetchLeanItems([this.item]);
@@ -144,6 +161,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
       rootUrl = '/shares/withme';
+    } else if (this.isInSharePreview) {
+      rootUrl = '/share';
     } else if (this.isInPublic) {
       rootUrl = '/p';
     } else {
@@ -153,12 +172,15 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.item.isFolder) {
       if (this.isInPublic) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
+      } if (this.isInSharePreview) {
+        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent});
       } else {
         this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
       }
-    } else if (!this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
+    } else if (!this.isInSharePreview && !this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
       this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {
+      console.log('trying to navigate to child route');
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
   }
@@ -168,11 +190,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     const actionButtons: PromptButton[] = [ItemActions.Copy];
 
-    let actionResolve;
-
-    const actionPromise = new Promise((resolve) => {
-      actionResolve = resolve;
-    });
+    const actionDeferred = new Deferred();
 
     if (this.canWrite) {
       actionButtons.push(ItemActions.Move);
@@ -190,37 +208,44 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    this.prompt.promptButtons(actionButtons, this.item.displayName, actionPromise)
+    this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
       .then((value: string) => {
-        switch (value) {
-          case 'delete':
-            return this.deleteItem(actionResolve);
-          case 'rename':
-            actionResolve();
-            this.promptForUpdate();
-            break;
-          case 'move':
-            actionResolve();
-            this.openFolderPicker(FolderPickerOperations.Move);
-            break;
-          case 'copy':
-            actionResolve();
-            this.openFolderPicker(FolderPickerOperations.Copy);
-            break;
-          case 'download':
-            this.dataService.downloadFile(this.item as RecordVO)
-              .then(() => {
-                actionResolve();
-              });
-            break;
-          case 'share':
-            actionResolve();
-            this.dialog.open('SharingComponent', { item: this.item });
-            break;
-        }
+        this.onActionClick(value, actionDeferred);
       });
 
     return false;
+  }
+
+  onActionClick(value: string, actionDeferred: Deferred) {
+    switch (value) {
+      case 'delete':
+        return this.deleteItem(actionDeferred.resolve);
+      case 'rename':
+        actionDeferred.resolve();
+        this.promptForUpdate();
+        break;
+      case 'move':
+        actionDeferred.resolve();
+        this.openFolderPicker(FolderPickerOperations.Move);
+        break;
+      case 'copy':
+        actionDeferred.resolve();
+        this.openFolderPicker(FolderPickerOperations.Copy);
+        break;
+      case 'download':
+        this.dataService.downloadFile(this.item as RecordVO)
+          .then(() => {
+            actionDeferred.resolve();
+          });
+        break;
+      case 'share':
+        this.api.share.getShareLink(this.item)
+          .then((response: ShareResponse) => {
+            actionDeferred.resolve();
+            this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
+          });
+        break;
+    }
   }
 
   deleteItem(resolve: Function) {
@@ -276,9 +301,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   promptForUpdate() {
     let updateResolve;
 
-    const updatePromise = new Promise((resolve) => {
-      updateResolve = resolve;
-    });
+    const updateDeferred = new Deferred;
 
     const fields: PromptField[] = [
       {
@@ -296,14 +319,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       }
     ];
 
-    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updatePromise, 'Rename', 'Cancel')
+    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updateDeferred.promise, 'Rename', 'Cancel')
       .then((values) => {
-        this.saveUpdates(values, updateResolve);
+        this.saveUpdates(values, updateDeferred);
       })
       .catch(() => {});
   }
 
-  saveUpdates(changes: RecordVOData | FolderVOData, resolve: Function) {
+  saveUpdates(changes: RecordVOData | FolderVOData, deferred: Deferred) {
     const originalData = {};
     Object.keys(changes)
       .forEach((key) => {
@@ -315,17 +338,17 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       });
 
     if (!Object.keys(changes).length) {
-      return resolve();
+      return deferred.resolve();
     } else {
-      this.item.update(changes);
+      (this.item as FolderVO).update(changes);
       return this.edit.updateItems([this.item])
         .then(() => {
-          resolve();
+          deferred.resolve();
         })
         .catch((response: RecordResponse | FolderResponse) => {
-          resolve();
+          deferred.reject();
           this.message.showError(response.getMessage(), true);
-          this.item.update(originalData);
+          (this.item as FolderVO).update(originalData);
         });
     }
   }

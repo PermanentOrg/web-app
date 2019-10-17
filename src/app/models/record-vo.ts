@@ -3,7 +3,7 @@ import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 
 export class RecordVO extends BaseVO {
-  public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId'];
+  public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
   public isRecord = true;
   public isFolder = false;
 
@@ -98,6 +98,20 @@ export class RecordVO extends BaseVO {
 
     if (dataStatus) {
       this.dataStatus = dataStatus;
+    }
+  }
+
+  public update (voData: RecordVOData | RecordVO): void {
+    if (voData) {
+      for ( const key in voData ) {
+        if (voData[key] !== undefined) {
+          this[key] = voData[key];
+        }
+      }
+    }
+
+    if (this.ShareVOs) {
+      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
   }
 }

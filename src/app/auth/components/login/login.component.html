@@ -1,4 +1,3 @@
-<pr-login-logo></pr-login-logo>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
   <h1 class="form-title">
     Log in to Permanent.org
@@ -24,10 +23,10 @@
     </label>
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="waiting || loginForm.invalid">Log in</button>
-  <a [routerLink]="['/auth','signup']">
+  <a [routerLink]="['/auth','signup']" queryParamsHandling="merge">
     Need to sign up?
   </a>
-  <a [routerLink]="['/auth','forgot']">
+  <a [routerLink]="['/auth','forgot']" queryParamsHandling="merge">
     Forgot password?
   </a>
 </form>

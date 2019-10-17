@@ -35,7 +35,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @HostBinding('class.right-align') rightAlign = false;
 
   @Input() config: FormInputConfig;
-  
+
   constructor(private element: ElementRef) { }
 
   ngOnInit() {
@@ -47,12 +47,11 @@ export class FormInputComponent implements OnInit, AfterViewInit {
     if (this.config) {
       this.rightAlign = this.config.textAlign === 'right';
 
-      if(this.config.format) {
+      if (this.config.format) {
         this.control.valueChanges.subscribe((value) => {
           // this.control.setValue('400', {
           //   emitEvent: false,
           // });
-          console.log(value);
         });
       }
 
