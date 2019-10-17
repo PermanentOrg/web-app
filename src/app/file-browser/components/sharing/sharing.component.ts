@@ -188,9 +188,9 @@ export class SharingComponent implements OnInit {
       })
       .then(() => {
         if (isExistingRelation) {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated);
+          this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
         } else {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated);
+          this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
         }
       })
       .catch(() => {
@@ -295,6 +295,7 @@ export class SharingComponent implements OnInit {
 
     if (response.isSuccessful) {
       this.shareLink = response.getShareByUrlVO();
+      this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }
   }
 

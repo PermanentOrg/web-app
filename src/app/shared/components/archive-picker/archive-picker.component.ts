@@ -109,7 +109,7 @@ export class ArchivePickerComponent implements OnInit {
       .then((response: InviteResponse) => {
         this.message.showMessage('Invite sent succesfully.', 'success');
         if (forShare) {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByInvite.initiated);
+          this.ga.sendEvent(EVENTS.SHARE.ShareByInvite.initiated.params);
         }
         deferred.resolve();
         this.cancel();

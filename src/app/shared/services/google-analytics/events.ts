@@ -1,27 +1,27 @@
 export const SHARE_EVENTS = {
   ShareByRelationship: {
-    initiated: { 'key': 'Evt-Sh10', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'Initiated' } },
+    initiated: { 'key': 'Evt-Sh10', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'initiated' } },
     previewed: { 'key': 'Evt-Sh11', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'previewed' } },
     signup: { 'key': 'Evt-Sh12', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'signup' } },
     viewed: { 'key': 'Evt-Sh13', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'viewed' } },
     reshare: { 'key': 'Evt-Sh14', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'reshared' } }
   },
   ShareByInvite: {
-    initiated: { 'key': 'Evt-Sh20', 'params': { hitType: 'event', eventCategory: 'Share by invite', eventAction: 'Initiated' } },
+    initiated: { 'key': 'Evt-Sh20', 'params': { hitType: 'event', eventCategory: 'Share by invite', eventAction: 'initiated' } },
     previewed: { 'key': 'Evt-Sh21', 'params': { hitType: 'event', eventCategory: 'Share by invite', eventAction: 'previewed' } },
     signup: { 'key': 'Evt-Sh22', 'params': { hitType: 'event', eventCategory: 'Share by invite', eventAction: 'signup' } },
     viewed: { 'key': 'Evt-Sh23', 'params': { hitType: 'event', eventCategory: 'Share by invite', eventAction: 'viewed' } },
     reshare: { 'key': 'Evt-Sh24', 'params': { hitType: 'event', eventCategory: 'Share by invite', eventAction: 'reshared' } }
   },
   ShareByAccountNoRel: {
-    initiated: { 'key': 'Evt-Sh30', 'params': { hitType: 'event', eventCategory: 'Share by account no rel', eventAction: 'Initiated' } },
+    initiated: { 'key': 'Evt-Sh30', 'params': { hitType: 'event', eventCategory: 'Share by account no rel', eventAction: 'initiated' } },
     previewed: { 'key': 'Evt-Sh31', 'params': { hitType: 'event', eventCategory: 'Share by account no rel', eventAction: 'previewed' } },
     signup: { 'key': 'Evt-Sh32', 'params': { hitType: 'event', eventCategory: 'Share by account no rel', eventAction: 'signup' } },
     viewed: { 'key': 'Evt-Sh33', 'params': { hitType: 'event', eventCategory: 'Share by account no rel', eventAction: 'viewed' } },
     reshare: { 'key': 'Evt-Sh34', 'params': { hitType: 'event', eventCategory: 'Share by account no rel', eventAction: 'reshared' } }
   },
   ShareByUrl: {
-    initiated: { 'key': 'Evt-Sh40', 'params': { hitType: 'event', eventCategory: 'Share by url', eventAction: 'Initiated' } },
+    initiated: { 'key': 'Evt-Sh40', 'params': { hitType: 'event', eventCategory: 'Share by url', eventAction: 'initiated' } },
     previewed: { 'key': 'Evt-Sh41', 'params': { hitType: 'event', eventCategory: 'Share by url', eventAction: 'previewed' } },
     signup: { 'key': 'Evt-Sh42', 'params': { hitType: 'event', eventCategory: 'Share by url', eventAction: 'signup' } },
     viewed: { 'key': 'Evt-Sh43', 'params': { hitType: 'event', eventCategory: 'Share by url', eventAction: 'viewed' } },

@@ -26,6 +26,8 @@ export class GoogleAnalyticsService {
       this.ga = window['ga'];
     }
 
+    console.log('got ga?', window['ga'], this.ga);
+
     if (!this.ga) {
       return false;
     } else {
@@ -35,6 +37,7 @@ export class GoogleAnalyticsService {
 
   sendEvent(eventData: EventData | any) {
     if (this.checkForGlobal()) {
+      console.log('finna send', eventData);
       this.ga('send', eventData);
     }
   }
