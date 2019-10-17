@@ -34,9 +34,9 @@ export class PublicItemComponent implements OnInit {
 
     this.archive = route.snapshot.parent.data.archive;
 
-    this.isVideo = this.record.type.includes('video');
-    this.isPdf = this.record.type.includes('pdf');
-    this.pdfUrl = this.getPdfUrl();
+    if (this.record) {
+      this.initRecord();
+    }
   }
 
   ngOnInit() {
@@ -58,6 +58,8 @@ export class PublicItemComponent implements OnInit {
 
   initRecord() {
     this.isVideo = this.record.type.includes('video');
+    this.isPdf = this.record.type.includes('pdf');
+    this.pdfUrl = this.getPdfUrl();
   }
 
 }
