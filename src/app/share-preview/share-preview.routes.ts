@@ -12,7 +12,10 @@ import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
+import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PromptComponent } from '@core/components/prompt/prompt.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -32,7 +35,7 @@ const shareInviteResolve = {
 };
 
 const shareRelationshipResolve = {
-  // sharePreviewVO: RelationshipShareResolveService
+  sharePreviewVO: RelationshipShareResolveService
 };
 
 const sharePreviewChildren = [
@@ -72,7 +75,7 @@ export const routes: Routes = [
     children: sharePreviewChildren
   },
   {
-    path: 'view/:archiveNbr',
+    path: 'view/:shareId/:folder_linkId',
     resolve: shareRelationshipResolve,
     data: {
       noFileListPadding: true
@@ -99,14 +102,16 @@ export const routes: Routes = [
   ],
   declarations: [
     SharePreviewComponent,
-    ShareNotFoundComponent
+    ShareNotFoundComponent,
+    PromptComponent
   ],
   providers: [
     PreviewResolveService,
     PreviewArchiveResolveService,
     PreviewFolderResolveService,
     ShareUrlResolveService,
-    InviteShareResolveService
+    InviteShareResolveService,
+    RelationshipShareResolveService
   ]
 })
 export class SharePreviewRoutingModule { }

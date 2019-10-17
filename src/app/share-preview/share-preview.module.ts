@@ -17,7 +17,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     SharePreviewRoutingModule,
     CommonModule,
     FormsModule,
-    NgbTooltipModule
+    NgbTooltipModule,
   ],
   providers: [
     DataService,
