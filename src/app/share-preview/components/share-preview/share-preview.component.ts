@@ -155,10 +155,16 @@ export class SharePreviewComponent implements OnInit {
   sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup') {
     let eventCategory: any;
 
+    const queryParams = this.route.snapshot.queryParams;
+
     if (this.isInvite) {
       eventCategory = EVENTS.SHARE.ShareByInvite;
-    } else {
+    } else if (this.isLinkShare) {
       eventCategory = EVENTS.SHARE.ShareByUrl;
+    } else if (this.isRelationshipShare && queryParams.norel) {
+      eventCategory = EVENTS.SHARE.ShareByAccountNoRel;
+    } else {
+      eventCategory = EVENTS.SHARE.ShareByRelationship;
     }
 
     this.ga.sendEvent(eventCategory[eventAction].params);
