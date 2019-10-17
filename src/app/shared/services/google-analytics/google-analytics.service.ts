@@ -15,20 +15,18 @@ interface EventData {
   providedIn: 'root'
 })
 export class GoogleAnalyticsService {
-  private ga: any;
+  private tracker: any;
 
   constructor() {
     this.checkForGlobal();
   }
 
   private checkForGlobal() {
-    if ('ga' in window && typeof ga === 'function' && !this.ga) {
-      this.ga = window['ga'];
+    if ('ga' in window && ga.getAll && !this.tracker) {
+      this.tracker = ga.getAll()[0];
     }
 
-    console.log('got ga?', window['ga'], this.ga);
-
-    if (!this.ga) {
+    if (!this.tracker) {
       return false;
     } else {
       return true;
@@ -37,8 +35,7 @@ export class GoogleAnalyticsService {
 
   sendEvent(eventData: EventData | any) {
     if (this.checkForGlobal()) {
-      console.log('finna send', eventData);
-      this.ga('send', eventData);
+      this.tracker.send(eventData);
     }
   }
 
