@@ -105,7 +105,7 @@ export class SharingComponent implements OnInit {
   onShareMemberClick(shareVo: ShareVO) {
     if (this.shareItem.accessRole !== 'access.role.owner') {
       return this.messageService.showMessage(
-        `You do not have permission to approve share requests.`,
+        `You do not have permission to edit share access.`,
         'danger'
       );
     }
@@ -127,7 +127,7 @@ export class SharingComponent implements OnInit {
   onPendingShareClick(shareVo: ShareVO) {
     if (this.shareItem.accessRole !== 'access.role.owner') {
       return this.messageService.showMessage(
-        `You do not have permission to edit share access.`,
+        `You do not have permission to approve share requests.`,
         'danger'
       );
     }

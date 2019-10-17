@@ -313,12 +313,7 @@ export class AccountService {
 
   public goToRedirect() {
     if (this.redirectPath) {
-      console.log('going to redirect!', this.redirectPath, this.redirectParams);
-      try {
-        this.router.navigate(this.redirectPath, this.redirectParams);
-      } catch (err) {
-        console.log(err);
-      }
+      this.router.navigate(this.redirectPath, this.redirectParams);
     }
 
     this.clearRedirect();
