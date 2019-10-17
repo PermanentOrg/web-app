@@ -86,7 +86,6 @@ export class ClaimStorageLoginComponent implements OnInit {
         }
       })
       .catch((response: AuthResponse) => {
-        console.log(response);
         this.waiting = false;
 
         if (response.messageIncludes && response.messageIncludes('warning.signin.unknown')) {

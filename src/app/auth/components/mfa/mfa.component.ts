@@ -40,8 +40,8 @@ export class MfaComponent implements OnInit {
       .then((response: ArchiveResponse) => {
         this.waiting = false;
 
-        if (this.route.snapshot.queryParams.shareByUrl) {
-          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl], {queryParams: { sendRequest: true }});
+        if (this.accountService.hasRedirect()) {
+          this.accountService.goToRedirect();
         } else {
           this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           this.router.navigate(['/']);

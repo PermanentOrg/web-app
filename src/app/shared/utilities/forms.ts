@@ -1,6 +1,7 @@
 import { FormGroup, FormControl, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import APP_CONFIG from '@root/app/app.config';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
+import { DeviceService } from '@shared/services/device/device.service';
 
 export function matchControlValidator(controlToMatch: AbstractControl): ValidatorFn {
   return function validator(controlToValidate: AbstractControl): {[key: string]: boolean} | null {
@@ -99,4 +100,32 @@ export function trimWhitespace(control: AbstractControl): {[key: string]: boolea
     control.setValue(control.value.trim());
   }
   return null;
+}
+
+export function copyFromInputElement(element: HTMLInputElement) {
+  const device = new DeviceService();
+  const oldContentEditable = element.contentEditable;
+  const oldReadOnly = element.readOnly;
+
+  if (device.isIos()) {
+    (element as any).contentEditable = true;
+    element.readOnly = false;
+
+    const range = document.createRange();
+    range.selectNodeContents(element);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    element.setSelectionRange(0, 999999999);
+    element.contentEditable = oldContentEditable;
+    element.readOnly = oldReadOnly;
+  } else {
+    element.select();
+  }
+
+  document.execCommand('copy');
+
+  element.blur();
 }

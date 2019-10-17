@@ -16,7 +16,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
-import { RELATIONSHIP_FIELD } from '../prompt/prompt-fields';
+import { RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
 
 @Component({
   selector: 'pr-archive-switcher',

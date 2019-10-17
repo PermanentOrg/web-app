@@ -16,6 +16,7 @@ export interface FormInputConfig {
   validateDirty?: boolean;
   textAlign?: string;
   format?: string;
+  readOnly?: boolean;
 }
 
 @Component({
@@ -87,7 +88,16 @@ export class FormInputComponent implements OnInit, AfterViewInit {
           inputField.setSelectionRange(0, inputField.value.length);
         });
       }
+
+      if (this.config.readOnly) {
+        inputField.setAttribute('readonly', true);
+        inputField.setSelectionRange(0, inputField.value.length);
+      }
     }
+  }
+
+  getElement() {
+    return this.element;
   }
 
 

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validator, ValidationErrors } from '@angular/fo
 
 import { FormInputConfig, FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 
-import { PromptComponent } from '@core/components/prompt/prompt.component';
+import { PromptComponent } from '@shared/components/prompt/prompt.component';
 
 export interface PromptField {
   fieldName: string;
@@ -97,6 +97,10 @@ export class PromptService {
           return Promise.reject(false);
         }
       });
+  }
+
+  getInput(fieldName: string) {
+    return this.component.getInput(fieldName);
   }
 }
 

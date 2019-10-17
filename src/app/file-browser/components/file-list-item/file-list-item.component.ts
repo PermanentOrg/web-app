@@ -180,7 +180,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     } else if (!this.isInSharePreview && !this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
       this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {
-      console.log('trying to navigate to child route');
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
   }
