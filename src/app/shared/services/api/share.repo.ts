@@ -90,7 +90,7 @@ export class ShareRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/share/dropShareLink', [data], ShareResponse);
   }
-  
+
   public requestShareAccess(urlToken: string) {
     const data = {
       Shareby_urlVO: {
@@ -99,6 +99,17 @@ export class ShareRepo extends BaseRepo {
     };
 
     return this.http.sendRequestPromise('/share/requestShareAccess', [data], ShareResponse);
+  }
+
+  public getShareForPreview(shareId, folder_linkId) {
+    const data = {
+      ShareVO: {
+        shareId: parseInt(shareId, 10),
+        folder_linkId: parseInt(folder_linkId, 10)
+      }
+    };
+
+    return this.http.sendRequestPromise('/share/getShareForPreview', [data], ShareResponse);
   }
 }
 
