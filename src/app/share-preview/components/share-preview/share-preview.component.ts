@@ -42,10 +42,13 @@ export class SharePreviewComponent implements OnInit {
 
   // access and permissions
   isInvite = !!this.sharePreviewVO.inviteId;
+  isRelationshipShare = !!this.sharePreviewVO.shareId;
+  isLinkShare = !this.isInvite && !this.isRelationshipShare;
+
   isOriginalOwner = false;
   isLoggedIn = false;
-  hasRequested = !this.isInvite && !!this.sharePreviewVO.ShareVO;
-  hasAccess = !this.isInvite && this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+  hasRequested = this.isLinkShare && !!this.sharePreviewVO.ShareVO;
+  hasAccess = false;
   canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
   canShare = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
 
@@ -77,7 +80,6 @@ export class SharePreviewComponent implements OnInit {
     private fb: FormBuilder,
     private ga: GoogleAnalyticsService
   ) {
-    console.log(this.sharePreviewVO, this.shareArchive, this.shareAccount);
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -99,6 +101,18 @@ export class SharePreviewComponent implements OnInit {
       this.hasAccess = this.sharePreviewVO.status.includes('accepted');
       this.canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
       this.canShare = this.hasAccess && this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+    }
+
+    if (this.isLinkShare) {
+      this.hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+    }
+
+    if (this.isRelationshipShare && this.isLoggedIn) {
+      this.hasAccess = this.sharePreviewVO.archiveId = this.archive.archiveId;
+    }
+
+    if (this.isRelationshipShare) {
+      this.formType = 2;
     }
 
     if (this.archive) {
@@ -129,7 +143,7 @@ export class SharePreviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.route.snapshot.queryParams.sendRequest && !this.hasRequested) {
+    if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
       this.onRequestAccessClick();
     }
 
@@ -232,14 +246,6 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
-  goToView() {
-    // if (this.sharePreviewVO.FolderVO) {
-    //   this.router.navigate(['view'], { relativeTo: this.route });
-    // } else {
-    //   this.router.navigate(['record'], { relativeTo: this.route });
-    // }
-  }
-
   onSignupSubmit(formValue: any) {
     this.waiting = true;
 
@@ -280,7 +286,16 @@ export class SharePreviewComponent implements OnInit {
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
           // send to mfa verification
-          this.router.navigate(['/auth', 'mfa'], { queryParams: { shareByUrl: this.shareToken }})
+          const queryParams = {};
+          if (this.isLinkShare) {
+            this.accountService.setRedirect(['/share', this.shareToken], { queryParams: { requestAccess: true }});
+          } else if (this.isRelationshipShare) {
+            this.accountService.setRedirect(['/share', 'view' , this.sharePreviewVO.shareId, this.sharePreviewVO.folder_linkId, 'view']);
+          } else {
+            this.accountService.setRedirect(['/share', 'invite' , this.sharePreviewVO.token, 'view']);
+          }
+
+          this.router.navigate(['/auth', 'mfa'])
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
@@ -299,7 +314,7 @@ export class SharePreviewComponent implements OnInit {
             this.canEdit = true;
             this.canShare = true;
             this.router.navigate(['view'], { relativeTo: this.route });
-          } else if (!this.isInvite) {
+          } else if (this.isLinkShare) {
             this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
             .then((linkResponse: ShareResponse): any => {
               if (linkResponse.isSuccessful) {

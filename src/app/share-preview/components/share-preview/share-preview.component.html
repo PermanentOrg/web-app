@@ -4,7 +4,7 @@
       <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
     </a>
     <div class="banner-buttons">
-      <button class="btn btn-wordpress" (click)="showCover = true;" *ngIf="!isLoggedIn" >Sign Up</button>
+      <button class="btn btn-wordpress" (click)="showCover = true;" *ngIf="!isLoggedIn" >{{ isRelationshipShare ? 'Log In' : 'Sign Up' }}</button>
       <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? account.primaryEmail : 'My Account' }}</button>
       <button class="btn btn-wordpress banner-button-no-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">My Account</button>
     </div>
@@ -31,11 +31,10 @@
 </div>
 <div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
-    <p *ngIf="!isLoggedIn && !isInvite">
-      To view this content, sign up or log in to Permanent.org.
-    </p>
-    <p *ngIf="!isLoggedIn && isInvite">
-      To view this content, complete signup for <strong>{{sharePreviewVO.email}}</strong> by creating a password
+    <p *ngIf="!isLoggedIn">
+      <span *ngIf="isInvite">To view this content, create account for <strong>{{sharePreviewVO.email}}</strong>.</span>
+      <span *ngIf="isLinkShare">To view this content, sign up or log in to Permanent.org.</span>
+      <span *ngIf="isRelationshipShare">To view this content, log in to Permanent.org.</span>
     </p>
     <p *ngIf="isLoggedIn">
       To view this content, {{ hasRequested ? 'your request must be approved.' : 'request access below.' }}
@@ -64,7 +63,7 @@
               [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
           </div>
           <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid">
-            Create password
+            Create account
           </button>
           <a tabindex="0" (click)="formType = 2;">Already have an account?</a>
         </form>
@@ -79,7 +78,7 @@
           <button type="submit" class="btn btn-alternate" [disabled]="waiting || loginForm.invalid">
             Log in
           </button>
-          <a tabindex="0" (click)="formType = 0;">Need to sign up?</a>
+          <a tabindex="0" (click)="formType = 0;" *ngIf="!isRelationshipShare">Need to sign up?</a>
         </form>
       </div>
     </div>
@@ -92,10 +91,13 @@
 <div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}" *ngIf="!hasAccess">
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
-        <strong *ngIf="!isLoggedIn && !isInvite">To view this content, sign up or log in here</strong> 
-        <strong *ngIf="!isLoggedIn && isInvite ">To view this content, complete sign up here</strong> 
-        <strong *ngIf="isLoggedIn && !hasRequested">To view this content, request access here</strong> 
-        <strong *ngIf="isLoggedIn && hasRequested">To view this content, your request must be approved</strong> 
+      <strong *ngIf="!isLoggedIn">
+        <span *ngIf="isInvite">To view this content, create account here</span>
+        <span *ngIf="isRelationshipShare">To view this content, log in here</span>
+        <span *ngIf="isLinkShare">To view this content, sign up or log in here</span>
+      </strong>
+      <strong *ngIf="isLoggedIn && !hasRequested">To view this content, request access here</strong> 
+      <strong *ngIf="isLoggedIn && hasRequested">To view this content, your request must be approved</strong> 
     </span>
   </div>
 </div>
