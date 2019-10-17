@@ -9,13 +9,16 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
-import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
+import { matchControlValidator, trimWhitespace, copyFromInputElement } from '@shared/utilities/forms';
 import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { READ_ONLY_FIELD } from '@core/components/prompt/prompt-fields';
+import { PromptService } from '@core/services/prompt/prompt.service';
+import { Deferred } from '@root/vendor/deferred';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -78,6 +81,7 @@ export class SharePreviewComponent implements OnInit {
     private message: MessageService,
     private device: DeviceService,
     private fb: FormBuilder,
+    private prompt: PromptService,
     private ga: GoogleAnalyticsService
   ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
@@ -197,20 +201,27 @@ export class SharePreviewComponent implements OnInit {
   }
 
   onShareShareClick() {
-    // needs to open share dialog;
-    if (this.sharePreviewVO.RecordVO) {
+    if (this.isOriginalOwner) {
+      const archiveNbr = this.sharePreviewVO.RecordVO ? this.sharePreviewVO.RecordVO.archiveNbr : this.sharePreviewVO.FolderVO.archiveNbr;
       if (this.device.isMobile()) {
-        return this.router.navigate(['/shares', 'withme']);
+        return this.router.navigate(['/shares', 'byme'], { queryParams: { shareArchiveNbr: archiveNbr }});
       } else {
-        window.location.assign(`/app/shares/`);
+        window.location.assign(`/app/shares?shareArchiveNbr=${archiveNbr}`);
       }
-    } else {
-      const folder: FolderVO = this.sharePreviewVO.FolderVO;
-      if (this.device.isMobile()) {
-        return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
-      } else {
-        window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
-      }
+    } else if (this.isLinkShare) {
+      const fields = [
+        READ_ONLY_FIELD('shareUrl', 'Share link', this.sharePreviewVO.shareUrl)
+      ];
+
+      const deferred = new Deferred();
+
+      this.prompt.prompt(fields, 'Copy share link to share', deferred.promise, 'Copy link')
+      .then(() => {
+        const input = this.prompt.getInput('shareUrl');
+        copyFromInputElement(input);
+        deferred.resolve();
+      })
+      .catch(() => {});
     }
   }
 

@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { PromptService, PromptField, PromptButton, PromptConfig } from '@core/services/prompt/prompt.service';
+import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 const DEFAULT_SAVE_TEXT = 'OK';
 const DEFAULT_CANCEL_TEXT = 'Cancel';
@@ -13,6 +14,8 @@ const DEFAULT_CANCEL_TEXT = 'Cancel';
 })
 export class PromptComponent implements OnInit, OnDestroy {
   @Input() isVisible: boolean;
+
+  @ViewChildren(FormInputComponent) inputQuery: QueryList<FormInputComponent>;
 
   public waiting = false;
   public editForm: FormGroup;
@@ -147,6 +150,15 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.doneReject();
     this.hide(event);
     return false;
+  }
+
+  getInput(fieldName: string) {
+    const component = this.inputQuery.find(input => input.fieldName === fieldName);
+    if (component) {
+      return component.getElement().nativeElement.querySelector('.form-control');
+    } else {
+      return null;
+    }
   }
 
   promptButtons(

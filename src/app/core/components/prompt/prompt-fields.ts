@@ -304,3 +304,24 @@ export function DATE_FIELD(
 
   return initial;
 }
+
+const READ_ONLY_FIELD_DEFAULT: PromptField = {
+  fieldName: 'readOnly',
+  placeholder: 'Read-Only',
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off',
+    readOnly: true
+  },
+  type: 'text',
+  validators: []
+};
+
+export function READ_ONLY_FIELD(fieldName: string, placeholder: string, initialValue?: string) {
+  const initial: PromptField = clone(READ_ONLY_FIELD_DEFAULT);
+  initial.fieldName = fieldName;
+  initial.placeholder = placeholder;
+  initial.initialValue = initialValue;
+  return initial;
+}

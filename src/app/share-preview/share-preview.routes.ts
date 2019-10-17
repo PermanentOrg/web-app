@@ -15,6 +15,7 @@ import { InviteShareResolveService } from './resolves/invite-share-resolve.servi
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PromptComponent } from '@core/components/prompt/prompt.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -101,7 +102,8 @@ export const routes: Routes = [
   ],
   declarations: [
     SharePreviewComponent,
-    ShareNotFoundComponent
+    ShareNotFoundComponent,
+    PromptComponent
   ],
   providers: [
     PreviewResolveService,

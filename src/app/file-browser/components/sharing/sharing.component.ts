@@ -18,6 +18,7 @@ import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/
 import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@core/components/prompt/prompt-fields';
 import { ActivatedRoute } from '@angular/router';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { copyFromInputElement } from '@shared/utilities/forms';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -301,31 +302,8 @@ export class SharingComponent implements OnInit {
 
   copyShareLink() {
     const element = this.shareUrlInput.nativeElement as HTMLInputElement;
-    const oldContentEditable = element.contentEditable;
-    const oldReadOnly = element.readOnly;
 
-
-    if (this.device.isIos()) {
-      (element as any).contentEditable = true;
-      element.readOnly = false;
-
-      const range = document.createRange();
-      range.selectNodeContents(element);
-
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
-
-      element.setSelectionRange(0, 999999999);
-      element.contentEditable = oldContentEditable;
-      element.readOnly = oldReadOnly;
-    } else {
-      element.select();
-    }
-
-    document.execCommand('copy');
-
-    element.blur();
+    copyFromInputElement(element);
 
     this.linkCopied = true;
     setTimeout(() => {

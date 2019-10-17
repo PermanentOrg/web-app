@@ -20,7 +20,7 @@
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
     <button class="btn btn-primary" *ngIf="canEdit">Edit</button>
     <button class="btn btn-primary disabled" *ngIf="!canEdit" ngbTooltip="Your archive has Viewer access to this item and cannot edit." placement="left" [openDelay]="300" >Edit</button>
-    <button class="btn btn-primary" *ngIf="canShare" (click)="onShareShareClick()">Share</button>
+    <button class="btn btn-primary" *ngIf="canShare || isLinkShare" (click)="onShareShareClick()">Share</button>
   </div>
 </div>
 <div class="share-preview-content-breadcrumbs">
@@ -101,3 +101,4 @@
     </span>
   </div>
 </div>
+<pr-prompt></pr-prompt>

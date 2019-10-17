@@ -98,6 +98,10 @@ export class PromptService {
         }
       });
   }
+
+  getInput(fieldName: string) {
+    return this.component.getInput(fieldName);
+  }
 }
 
 
