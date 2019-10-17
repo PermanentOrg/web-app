@@ -13,7 +13,7 @@ import { PromptService, PromptField } from '@core/services/prompt/prompt.service
 import { BillingResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { CREDIT_CARD_FIELDS, ADDRESS_FIELDS } from '@core/components/prompt/prompt-fields';
+import { CREDIT_CARD_FIELDS, ADDRESS_FIELDS } from '@shared/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
 
 const DEFAULT_STORAGE_AMOUNT = 10;

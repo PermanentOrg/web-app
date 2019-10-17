@@ -11,7 +11,7 @@ import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { RELATIONSHIP_FIELD_INITIAL, RELATIONSHIP_FIELD } from '../prompt/prompt-fields';
+import { RELATIONSHIP_FIELD_INITIAL, RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';

@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
-import { READ_ONLY_FIELD } from '@core/components/prompt/prompt-fields';
+import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 
