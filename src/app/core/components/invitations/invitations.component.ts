@@ -9,7 +9,7 @@ import { PromptService, PromptField } from '@core/services/prompt/prompt.service
 
 import { InviteVO, InviteVOData, FolderVO } from '@models/index';
 import { InviteResponse } from '@shared/services/api/index.repo';
-import { INVITATION_FIELDS } from '../prompt/prompt-fields';
+import { INVITATION_FIELDS } from '@shared/components/prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
 
 @Component({

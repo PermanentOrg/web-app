@@ -15,7 +15,7 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 
 import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
-import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@core/components/prompt/prompt-fields';
+import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@shared/components/prompt/prompt-fields';
 import { ActivatedRoute } from '@angular/router';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { copyFromInputElement } from '@shared/utilities/forms';

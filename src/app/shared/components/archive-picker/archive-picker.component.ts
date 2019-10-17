@@ -9,7 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { Validators } from '@angular/forms';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
-import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@core/components/prompt/prompt-fields';
+import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@shared/components/prompt/prompt-fields';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone } from 'lodash';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
