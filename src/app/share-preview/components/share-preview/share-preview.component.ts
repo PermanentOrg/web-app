@@ -156,7 +156,7 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
-  sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup') {
+  sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup' | 'reshare') {
     let eventCategory: any;
 
     const queryParams = this.route.snapshot.queryParams;
@@ -201,6 +201,7 @@ export class SharePreviewComponent implements OnInit {
   }
 
   onShareShareClick() {
+    this.sendGaEvent('reshare');
     if (this.isOriginalOwner) {
       const archiveNbr = this.sharePreviewVO.RecordVO ? this.sharePreviewVO.RecordVO.archiveNbr : this.sharePreviewVO.FolderVO.archiveNbr;
       if (this.device.isMobile()) {
