@@ -14,6 +14,8 @@ import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -72,7 +74,8 @@ export class SharePreviewComponent implements OnInit {
     private api: ApiService,
     private message: MessageService,
     private device: DeviceService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private ga: GoogleAnalyticsService
   ) {
     console.log(this.sharePreviewVO, this.shareArchive, this.shareAccount);
     this.isLoggedIn = this.accountService.isLoggedIn();
@@ -110,6 +113,7 @@ export class SharePreviewComponent implements OnInit {
 
     if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
       this.router.navigate(['view'], { relativeTo: this.route });
+      this.sendGaEvent('viewed');
     }
 
     this.routerListener = this.router.events
@@ -125,14 +129,25 @@ export class SharePreviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    // setTimeout(() => {
-    //   this.showCover = true;
-    //   this.hideBottomBanner();
-    // }, 2000);
-
     if (this.route.snapshot.queryParams.sendRequest && !this.hasRequested) {
       this.onRequestAccessClick();
     }
+
+    if (!this.hasAccess) {
+      this.sendGaEvent('previewed');
+    }
+  }
+
+  sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup') {
+    let eventCategory: any;
+
+    if (this.isInvite) {
+      eventCategory = EVENTS.SHARE.ShareByInvite;
+    } else {
+      eventCategory = EVENTS.SHARE.ShareByUrl;
+    }
+
+    this.ga.sendEvent(eventCategory[eventAction].params);
   }
 
   toggleCover() {
@@ -233,6 +248,7 @@ export class SharePreviewComponent implements OnInit {
       formValue.agreed, formValue.optIn, null, formValue.invitation
     )
       .then((response: AccountResponse) => {
+        this.sendGaEvent('signup');
         return this.accountService.logIn(formValue.email, formValue.password, true, true);
       })
       .then(() => {
@@ -246,6 +262,7 @@ export class SharePreviewComponent implements OnInit {
           this.showCover = false;
           this.hasAccess = true;
           this.router.navigate(['view'], { relativeTo: this.route });
+          this.sendGaEvent('viewed');
         } else {
           this.onRequestAccessClick();
         }
@@ -294,6 +311,7 @@ export class SharePreviewComponent implements OnInit {
                   if (shareVO.status.includes('ok')) {
                     this.hasAccess = true;
                     this.router.navigate(['view'], { relativeTo: this.route });
+                    this.sendGaEvent('viewed');
                   }
                 } else {
                   this.onRequestAccessClick();

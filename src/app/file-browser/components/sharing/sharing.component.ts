@@ -11,11 +11,13 @@ import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
 import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@core/components/prompt/prompt-fields';
 import { ActivatedRoute } from '@angular/router';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -66,7 +68,8 @@ export class SharingComponent implements OnInit {
     private device: DeviceService,
     private api: ApiService,
     private messageService: MessageService,
-    private relationshipService: RelationshipService
+    private relationshipService: RelationshipService,
+    private ga: GoogleAnalyticsService
   ) {
     this.shareItem = this.data.item as FolderVO | RecordVO;
     this.shareLink = this.data.link;
@@ -151,6 +154,7 @@ export class SharingComponent implements OnInit {
 
   addShareMember() {
     this.loadingRelations = true;
+    let isExistingRelation = false;
     return this.relationshipService.get()
       .catch(() => {
         this.loadingRelations = false;
@@ -177,7 +181,17 @@ export class SharingComponent implements OnInit {
           archiveId: archive.archiveId,
           folder_linkId: this.shareItem.folder_linkId
         });
+
+        isExistingRelation = this.relationshipService.hasRelation(archive);
+
         return this.editShareVo(newShareVo);
+      })
+      .then(() => {
+        if (isExistingRelation) {
+          this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
+        } else {
+          this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
+        }
       })
       .catch(() => {
       });
@@ -281,6 +295,7 @@ export class SharingComponent implements OnInit {
 
     if (response.isSuccessful) {
       this.shareLink = response.getShareByUrlVO();
+      this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }
   }
 
