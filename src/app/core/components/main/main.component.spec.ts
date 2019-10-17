@@ -43,7 +43,6 @@ describe('MainComponent', () => {
 
     config.declarations.push(MainComponent);
     config.declarations.push(NavComponent);
-    config.declarations.push(PromptComponent);
     config.declarations.push(MessageComponent);
     config.declarations.push(LeftMenuComponent);
     config.declarations.push(RightMenuComponent);
