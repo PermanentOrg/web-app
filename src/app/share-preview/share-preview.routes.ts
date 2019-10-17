@@ -31,6 +31,10 @@ const shareInviteResolve = {
   sharePreviewVO: InviteShareResolveService
 };
 
+const shareRelationshipResolve = {
+  // sharePreviewVO: RelationshipShareResolveService
+};
+
 const sharePreviewChildren = [
   {
     path: '',
@@ -62,6 +66,14 @@ export const routes: Routes = [
   {
     path: 'invite/:inviteCode',
     resolve: shareInviteResolve,
+    data: {
+      noFileListPadding: true
+    },
+    children: sharePreviewChildren
+  },
+  {
+    path: 'view/:archiveNbr',
+    resolve: shareRelationshipResolve,
     data: {
       noFileListPadding: true
     },
