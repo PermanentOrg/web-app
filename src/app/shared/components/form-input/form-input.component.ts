@@ -44,6 +44,8 @@ export class FormInputComponent implements OnInit, AfterViewInit {
       this.errors = getFormInputError(this);
     });
 
+    console.log('input', this.fieldName, this.control);
+
 
     if (this.config) {
       this.rightAlign = this.config.textAlign === 'right';
@@ -56,6 +58,17 @@ export class FormInputComponent implements OnInit, AfterViewInit {
         });
       }
 
+    }
+  }
+
+  isLabelHidden() {
+    switch (this.type) {
+      case 'number':
+        return this.control.value === '';
+      case 'date':
+        return false;      
+      default:
+        return !this.control.value || !this.control.value.length
     }
   }
 
