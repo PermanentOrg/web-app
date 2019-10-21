@@ -26,8 +26,16 @@ const routes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
-  { path: 'p', loadChildren: '@public/public.module#PublicModule'},
-  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule'},
+  { path: 'p', loadChildren: '@public/public.module#PublicModule', 
+    data: {
+      title: 'Public'
+    }
+  },
+  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule', 
+    data: {
+      title: 'Sharing'
+    }
+  },
   { path: '', redirectTo: 'm', pathMatch: 'full'},
   { path: ':path', redirectTo: 'm/:path'},
 ];
