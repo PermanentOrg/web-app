@@ -55,6 +55,9 @@ const sharePreviewChildren = [
       },
       {
         path: 'view',
+        data: {
+          sharePreviewView: true
+        },
         loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
       }
     ]
