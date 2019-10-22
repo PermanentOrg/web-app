@@ -14,8 +14,8 @@
   <div class="share-preview-archive-thumb" prBgImage [bgSrc]="shareArchive.thumbURL200"></div>
   <span>
     <strong>{{displayName}}</strong><br>
-    <!-- From the {{shareArchive.fullName}} archive<br> -->
-    Shared by {{account && shareAccount.accountId === account.accountId ? 'you' : shareAccount.fullName}}
+    Shared by {{account && shareAccount.accountId === account.accountId ? 'you' : shareAccount.fullName}}<br>
+    <em class="share-preview-archive-name" *ngIf="shareArchive.fullName">From the <strong>{{shareArchive.fullName}}</strong> Archive</em>
   </span>
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
     <button class="btn btn-primary" *ngIf="canEdit">Edit</button>
