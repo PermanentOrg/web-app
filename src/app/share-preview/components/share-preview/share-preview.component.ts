@@ -103,20 +103,23 @@ export class SharePreviewComponent implements OnInit {
 
     if (this.isInvite) {
       this.hasAccess = this.sharePreviewVO.status.includes('accepted');
-      this.canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
-      this.canShare = this.hasAccess && this.sharePreviewVO.ShareVO.accessRole.includes('owner');
     }
 
     if (this.isLinkShare) {
       this.hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
     }
 
-    if (this.isRelationshipShare && this.isLoggedIn) {
-      this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
-      this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
+    if (this.isInvite || this.isLinkShare) {
+      this.canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+      this.canShare = this.hasAccess && this.sharePreviewVO.ShareVO.accessRole.includes('owner');
     }
 
     if (this.isRelationshipShare) {
+      if (this.isLoggedIn) {
+        this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
+        this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
+      }
+
       this.formType = 2;
     }
 
@@ -203,10 +206,10 @@ export class SharePreviewComponent implements OnInit {
 
   onShareShareClick() {
     this.sendGaEvent('reshare');
-    if (this.isOriginalOwner) {
+    if (this.isOriginalOwner || this.canShare) {
       const archiveNbr = this.sharePreviewVO.RecordVO ? this.sharePreviewVO.RecordVO.archiveNbr : this.sharePreviewVO.FolderVO.archiveNbr;
       if (this.device.isMobile()) {
-        return this.router.navigate(['/shares', 'byme'], { queryParams: { shareArchiveNbr: archiveNbr }});
+        return this.router.navigate(['/shares'], { queryParams: { shareArchiveNbr: archiveNbr }});
       } else {
         window.location.assign(`/app/shares?shareArchiveNbr=${archiveNbr}`);
       }
