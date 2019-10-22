@@ -112,7 +112,8 @@ export class SharePreviewComponent implements OnInit {
     }
 
     if (this.isRelationshipShare && this.isLoggedIn) {
-      this.hasAccess = this.sharePreviewVO.archiveId = this.archive.archiveId;
+      this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
+      this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
     }
 
     if (this.isRelationshipShare) {
