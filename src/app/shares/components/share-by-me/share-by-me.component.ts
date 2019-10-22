@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { remove, find } from 'lodash';
 
@@ -21,10 +21,13 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
   sharedByMe: Array<FolderVO | RecordVO>;
   sharedWithMe: ArchiveVO[];
 
+  shareItemFound = false;
+
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private dataService: DataService,
     private accountService: AccountService,
     private message: MessageService
@@ -41,6 +44,20 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
 
     this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
 
+    // check shared with me for item to redirect if needed
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams) {
+      if (queryParams.shareArchiveNbr) {
+        for (const shareArchive of shares) {
+          const targetShare = find(shareArchive.ItemVOs, { archiveNbr: queryParams.shareArchiveNbr });
+          if (targetShare) {
+            this.router.navigate(['shares', 'withme'], { queryParamsHandling: 'preserve' });
+            this.shareItemFound = true;
+          }
+        }
+      }
+    }
+
   }
 
   ngOnInit() {
@@ -55,9 +72,9 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
           return share.item.archiveNbr === queryParams.shareArchiveNbr;
         }) as FileListItemComponent;
 
-        if (!targetShare) {
+        if (!targetShare && !this.shareItemFound) {
           this.message.showError('Shared item not found.');
-        } else {
+        } else if (targetShare) {
           targetShare.onActionClick('share', new Deferred());
         }
       }

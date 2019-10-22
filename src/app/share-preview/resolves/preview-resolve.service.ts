@@ -6,6 +6,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
+import { shuffle } from 'lodash';
 
 // URLs for dummy images
 const blurredPhotos = [
@@ -31,7 +32,7 @@ const blurredPhotos = [
   'preview-10.jpg',
 ];
 
-const dummyItems = blurredPhotos.map((filename, index) => {
+const dummyItems = shuffle(blurredPhotos.map((filename, index) => {
   const url = `assets/img/preview/${filename}`;
 
   const data: RecordVOData = {
@@ -49,7 +50,7 @@ const dummyItems = blurredPhotos.map((filename, index) => {
   record.dataStatus = DataStatus.Full;
 
   return record;
-});
+}));
 
 @Injectable()
 export class PreviewResolveService implements Resolve<any> {
@@ -77,9 +78,17 @@ export class PreviewResolveService implements Resolve<any> {
 
       return Promise.resolve(dummyFolder);
     } else {
-      // if record, make dummy folder with just the record
-
+      // if record and share preview on, make dummy folder with just the record
       const record = sharePreviewVO.RecordVO as RecordVO;
+
+      if (!sharePreviewVO.previewToggle) {
+        const dummy = dummyItems[0];
+        record.thumbURL200 = dummy.thumbURL200;
+        record.thumbURL500 = dummy.thumbURL500;
+        record.thumbURL1000 = dummy.thumbURL1000;
+        record.archiveNbr = dummy.archiveNbr;
+      }
+
       record.dataStatus = DataStatus.Full;
 
       const dummyRecordFolder = new FolderVO({
