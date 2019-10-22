@@ -118,6 +118,13 @@ $share-preview-banner-height: 100px;
   padding: 10px 0;
   flex-wrap: nowrap;
 
+  > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: calc(100% - 70px);
+  }
+
   .share-preview-archive-thumb {
     height: 50px;
     width: 50px;

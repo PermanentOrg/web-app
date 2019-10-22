@@ -31,6 +31,7 @@ export class FolderResolveService implements Resolve<any> {
       targetFolder = new FolderVO(apps);
     } else if (state.url.includes('/share/') ) {
       const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
+      const sharedRecord = route.parent.data.sharePreviewVO.RecordVO;
       if (sharedFolder) {
         targetFolder = new FolderVO(sharedFolder);
       } else {
@@ -38,6 +39,7 @@ export class FolderResolveService implements Resolve<any> {
         folder.pathAsArchiveNbr.unshift('0000-0000', '0000-0000');
         folder.pathAsText.unshift('Shares', 'Record');
         folder.pathAsFolder_linkId.unshift(0, 0);
+        folder.ChildItemVOs = [ sharedRecord ];
         return Promise.resolve(folder);
       }
     } else {
