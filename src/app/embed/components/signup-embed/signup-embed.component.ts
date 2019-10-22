@@ -82,7 +82,7 @@ export class SignupEmbedComponent implements OnInit {
         } else {
           this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
-            this.router.navigate(['../', 'done'], {queryParams: { inviteCode: this.inviteCode, relativeTo: this.route }});
+            this.router.navigate(['../', 'done'], { relativeTo: this.route, queryParams: { inviteCode: this.inviteCode } });
           });
         }
       })
