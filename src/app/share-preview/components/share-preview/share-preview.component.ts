@@ -130,8 +130,8 @@ export class SharePreviewComponent implements OnInit {
       this.canShare = true;
     }
 
-    if (this.hasAccess && !this.router.routerState.snapshot.url.includes('view')) {
-      this.router.navigate(['view'], { relativeTo: this.route });
+    if (this.hasAccess && !this.route.snapshot.firstChild.data.sharePreviewView) {
+      this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
       this.sendGaEvent('viewed');
     }
 
@@ -332,7 +332,7 @@ export class SharePreviewComponent implements OnInit {
             this.hasAccess = true;
             this.canEdit = true;
             this.canShare = true;
-            this.router.navigate(['view'], { relativeTo: this.route });
+            this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
           } else if (this.isLinkShare) {
             this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
             .then((linkResponse: ShareResponse): any => {
@@ -352,8 +352,21 @@ export class SharePreviewComponent implements OnInit {
                 }
               }
             });
-          } else {
+          } else if (this.isRelationshipShare) {
+            const params = this.route.snapshot.params;
+            this.api.share.getShareForPreview(params.shareId, params.folder_linkId)
+              .then((shareResponse: ShareResponse) => {
+                const sharePreviewVO = shareResponse.getShareVO();
+                if (sharePreviewVO) {
+                  this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
+                  this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
 
+                  if (this.hasAccess) {
+                    this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
+                    this.sendGaEvent('viewed');
+                  }
+                }
+              });
           }
         }
       })
