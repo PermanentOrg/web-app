@@ -6,7 +6,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
-import { shuffle } from 'lodash';
+import { shuffle, cloneDeep } from 'lodash';
 
 // URLs for dummy images
 const blurredPhotos = [
@@ -79,18 +79,19 @@ export class PreviewResolveService implements Resolve<any> {
       return Promise.resolve(dummyFolder);
     } else {
       // if record and share preview on, make dummy folder with just the record
-      const record = sharePreviewVO.RecordVO as RecordVO;
+      let record = sharePreviewVO.RecordVO as RecordVO;
+
+      record.dataStatus = DataStatus.Full;
 
       if (!sharePreviewVO.previewToggle) {
         const dummy = dummyItems[0];
+        record = cloneDeep(record);
         record.thumbURL200 = dummy.thumbURL200;
         record.thumbURL500 = dummy.thumbURL500;
         record.thumbURL1000 = dummy.thumbURL1000;
         record.archiveNbr = dummy.archiveNbr;
       }
-
-      record.dataStatus = DataStatus.Full;
-
+      
       const dummyRecordFolder = new FolderVO({
         displayName: record.displayName,
         archiveId: record.archiveId,
