@@ -118,6 +118,7 @@ export class SharePreviewComponent implements OnInit {
       if (this.isLoggedIn) {
         this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
         this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
+        this.canShare = this.hasAccess && this.sharePreviewVO.accessRole.includes('owner');
       }
 
       this.formType = 2;
