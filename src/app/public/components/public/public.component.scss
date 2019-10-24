@@ -53,7 +53,8 @@ $public-max-width: 800px;
     .btn {
       padding-top: 0.2rem;
       padding-bottom: 0.2rem;
-      display: inline;
+      display: inline-flex;
+      align-items: center;
       margin-left: 5px;
     }
   }

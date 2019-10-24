@@ -15,6 +15,7 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
 import { RouterModule } from '@angular/router';
 import { FileSizePipe } from './pipes/filesize.pipe';
 import { PrConstantsPipe } from './pipes/pr-constants.pipe';
+import { PromptComponent } from './components/prompt/prompt.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { PrConstantsPipe } from './pipes/pr-constants.pipe';
     ArchiveSmallComponent,
     ArchivePickerComponent,
     BreadcrumbsComponent,
+    PromptComponent,
     FileSizePipe,
     PrConstantsPipe
   ],
@@ -46,6 +48,7 @@ import { PrConstantsPipe } from './pipes/pr-constants.pipe';
     LogoComponent,
     TermsComponent,
     BgImageSrcDirective,
+    PromptComponent,
     ArchiveSmallComponent,
     ArchivePickerComponent,
     BreadcrumbsComponent,

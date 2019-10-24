@@ -168,6 +168,10 @@ pr-dialog {
   }
 }
 
+a {
+  cursor: pointer;
+}
+
 .btn-wordpress {
   $size: 34px;
   background: rgba(white, 0.2);
@@ -178,8 +182,42 @@ pr-dialog {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.7em;
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
     background: white;
   }
+}
+
+.btn-alternate,
+.btn-alternate:disabled,
+.btn-alternate:hover,
+.btn-alternate:active,
+.btn-alternate:focus,
+.btn-alternate:not(:disabled):not(.disabled):active {
+  color: white;
+}
+
+.perm-banner {
+  flex: 0 0 100px;
+  height: 100px;
+  padding: 0px 0.5rem;
+  color: white;
+  background-color: $PR-blue;
+
+  .banner-content {
+    margin: 0 auto;
+    max-width: 800px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .banner-logo {
+    flex: 0 0 auto;
+    width: 200px;
+  }
+
+
 }

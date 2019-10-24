@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
@@ -15,7 +15,13 @@ export class MfaComponent implements OnInit {
   mfaForm: FormGroup;
   waiting: boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private message: MessageService
+  ) {
     this.mfaForm = fb.group({
       'token': [],
     });
@@ -33,8 +39,13 @@ export class MfaComponent implements OnInit {
       })
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-        this.router.navigate(['/']);
+
+        if (this.accountService.hasRedirect()) {
+          this.accountService.goToRedirect();
+        } else {
+          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+          this.router.navigate(['/']);
+        }
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;

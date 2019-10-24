@@ -4,7 +4,7 @@ import { FolderVO, AccountVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '../prompt/prompt-fields';
+import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@shared/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
 import { clone, remove } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';

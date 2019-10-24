@@ -22,6 +22,9 @@ export class AccountService {
   private rootFolder: FolderVO;
   private skipSessionCheck: boolean;
 
+  private redirectPath: string[] = null;
+  private redirectParams: any = null;
+
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
 
   constructor(
@@ -296,5 +299,27 @@ export class AccountService {
           throw response;
         }
       })).toPromise();
+  }
+
+  public setRedirect(path: string[], params?: any) {
+    this.redirectPath = path;
+    this.redirectParams = params;
+  }
+
+  public clearRedirect() {
+    this.redirectPath = null;
+    this.redirectParams = null;
+  }
+
+  public goToRedirect() {
+    if (this.redirectPath) {
+      this.router.navigate(this.redirectPath, this.redirectParams);
+    }
+
+    this.clearRedirect();
+  }
+
+  public hasRedirect() {
+    return !!this.redirectPath;
   }
 }

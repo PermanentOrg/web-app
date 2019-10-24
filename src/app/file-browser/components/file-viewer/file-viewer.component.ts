@@ -261,7 +261,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   navigateToCurrentRecord() {
     this.router.navigate(['../', this.currentRecord.archiveNbr], {relativeTo: this.route});
     this.loadingRecord = false;
-    console.log(this.currentRecord);
   }
 
   loadQueuedItems() {
@@ -277,6 +276,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   close() {
     const routeParams = this.route.snapshot.params;
     let rootUrl = '/myfiles';
+
+    this.router.navigate(['.'], { relativeTo: this.route.parent});
+    return;
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       if (this.router.routerState.snapshot.url.includes('/withme')) {

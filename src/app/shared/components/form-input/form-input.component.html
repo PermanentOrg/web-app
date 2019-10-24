@@ -1,4 +1,4 @@
-<div class="input-vertical-label" [ngClass]="{'hidden': !control.value || !control.value.length }">
+<div class="input-vertical-label" [ngClass]="{'hidden': isLabelHidden()}">
   {{placeholder}}
 </div>
 <input *ngIf="type !== 'select'" [type]="type" class="form-control" [ngClass]="{'validate-dirty': config && config.validateDirty}"

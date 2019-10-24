@@ -5,6 +5,10 @@
   height: 100%;
 }
 
+.share-link-button {
+  padding: 10px;
+}
+
 .share-item-preview {
   display: flex;
   align-items: center;
@@ -32,4 +36,8 @@
   pr-archive-small {
     margin-bottom: 20px;
   }
+}
+
+.share-link {
+  padding: 0px 10px 10px;
 }

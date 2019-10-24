@@ -47,31 +47,47 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "deployUrl": "/m/"
             },
             "hmr": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.serve.html"
                 }
-              ]
+              ],
+              "deployUrl": "/"
             },
             "proxy": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.proxy.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.serve.html"
                 }
-              ]
+              ],
+              "deployUrl": "/"
             },
             "proxy_hmr": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.proxy.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.serve.html"
                 }
-              ]
+              ],
+              "deployUrl": "/"
             },
             "development": {
               "fileReplacements": [
@@ -84,6 +100,7 @@
                   "with": "src/index.dev.html"
                 }
               ],
+              "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -105,6 +122,7 @@
                   "with": "src/index.prod.html"
                 }
               ],
+              "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -126,6 +144,7 @@
                   "with": "src/index.dev.html"
                 }
               ],
+              "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -154,8 +173,8 @@
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",
-              "deployUrl": "/m/",
-              "baseHref": "/m",
+              "deployUrl": "/",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
             },
             "proxy": {
@@ -164,8 +183,8 @@
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy",
-              "deployUrl": "/m/",
-              "baseHref": "/m",
+              "deployUrl": "/",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.json"
             },
             "proxy_hmr": {
@@ -175,8 +194,8 @@
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_hmr",
-              "deployUrl": "/m/",
-              "baseHref": "/m",
+              "deployUrl": "/",
+              "baseHref": "/",
               "proxyConfig": "proxy.conf.json"
             }
           }

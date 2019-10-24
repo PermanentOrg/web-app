@@ -4,6 +4,7 @@ import { BaseVO } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
+import { isArray } from 'util';
 
 export class FolderVO extends BaseVO {
   public isFolder = true;
@@ -104,11 +105,26 @@ export class FolderVO extends BaseVO {
       this.dataStatus = dataStatus;
     }
   }
+
+  public update (voData: FolderVOData | FolderVO): void {
+    if (voData) {
+      for ( const key in voData ) {
+        if (voData[key] !== undefined) {
+          this[key] = voData[key];
+        }
+      }
+    }
+
+    if (this.ShareVOs) {
+      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
+    }
+  }
 }
 
 export interface FolderVOData {
   folderId?: any;
   archiveNbr?: any;
+  archiveArchiveNbr?: any;
   archiveId?: any;
   displayName?: any;
   displayDT?: any;

@@ -12,6 +12,7 @@ export class ShareVO extends BaseVO {
   public accessRole;
   public type;
   public status;
+  public requestToken: string;
 
   public FolderVO: FolderVO;
   public RecordVO: RecordVO;

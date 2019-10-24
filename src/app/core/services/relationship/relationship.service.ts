@@ -3,6 +3,7 @@ import { RelationVO, ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { RelationResponse } from '@shared/services/api/index.repo';
+import { find } from 'lodash';
 
 
 const REFRESH_THRESHOLD = 2 * 60 * 1000;
@@ -48,6 +49,18 @@ export class RelationshipService {
   clear() {
     this.relations = null;
     this.lastUpdated = null;
+  }
+
+  hasRelation(archive: ArchiveVO) {
+    const matchArchive = find(this.relations, (relation: RelationVO) => {
+      return relation.RelationArchiveVO.archiveId === archive.archiveId;
+    });
+
+    if (matchArchive) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   needsFetch() {

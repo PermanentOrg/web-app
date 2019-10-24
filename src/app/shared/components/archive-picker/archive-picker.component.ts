@@ -9,9 +9,11 @@ import { MessageService } from '@shared/services/message/message.service';
 import { Validators } from '@angular/forms';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
-import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@core/components/prompt/prompt-fields';
+import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@shared/components/prompt/prompt-fields';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone } from 'lodash';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
@@ -37,7 +39,8 @@ export class ArchivePickerComponent implements OnInit {
     private api: ApiService,
     private accountService: AccountService,
     private message: MessageService,
-    private prConstants: PrConstantsService
+    private prConstants: PrConstantsService,
+    private ga: GoogleAnalyticsService
   ) {
     this.relations = this.dialogData.relations;
     this.relationOptions = this.prConstants.getRelations().map((type) => {
@@ -105,6 +108,9 @@ export class ArchivePickerComponent implements OnInit {
       })
       .then((response: InviteResponse) => {
         this.message.showMessage('Invite sent succesfully.', 'success');
+        if (forShare) {
+          this.ga.sendEvent(EVENTS.SHARE.ShareByInvite.initiated.params);
+        }
         deferred.resolve();
         this.cancel();
       })

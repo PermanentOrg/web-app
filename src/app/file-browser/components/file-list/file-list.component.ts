@@ -8,7 +8,8 @@ import {
   ViewChildren,
   HostListener,
   OnDestroy,
-  HostBinding
+  HostBinding,
+  Input
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -51,6 +52,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.grid-view') inGridView = false;
   @HostBinding('class.no-padding') noFileListPadding = false;
 
+  @Input() allowNavigation = true;
+
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
 
@@ -73,6 +76,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
+
+    if (this.route.snapshot.data.noFileListNavigation) {
+      this.allowNavigation = false;
+    }
 
     this.dataService.setCurrentFolder(this.currentFolder);
 
@@ -151,7 +158,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       // scroll to show items after change
       const scrollTarget: FileListItemComponent = this.listItems[this.lastItemOffset];
-      console.log(scrollTarget.item.displayName);
       this.document.documentElement.scrollTop = (scrollTarget.element.nativeElement as HTMLElement).offsetTop - NAV_HEIGHT;
       this.scrollHandlerThrottled();
     });

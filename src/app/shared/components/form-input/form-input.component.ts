@@ -16,6 +16,7 @@ export interface FormInputConfig {
   validateDirty?: boolean;
   textAlign?: string;
   format?: string;
+  readOnly?: boolean;
 }
 
 @Component({
@@ -35,7 +36,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @HostBinding('class.right-align') rightAlign = false;
 
   @Input() config: FormInputConfig;
-  
+
   constructor(private element: ElementRef) { }
 
   ngOnInit() {
@@ -43,19 +44,31 @@ export class FormInputComponent implements OnInit, AfterViewInit {
       this.errors = getFormInputError(this);
     });
 
+    console.log('input', this.fieldName, this.control);
+
 
     if (this.config) {
       this.rightAlign = this.config.textAlign === 'right';
 
-      if(this.config.format) {
+      if (this.config.format) {
         this.control.valueChanges.subscribe((value) => {
           // this.control.setValue('400', {
           //   emitEvent: false,
           // });
-          console.log(value);
         });
       }
 
+    }
+  }
+
+  isLabelHidden() {
+    switch (this.type) {
+      case 'number':
+        return this.control.value === '';
+      case 'date':
+        return false;      
+      default:
+        return !this.control.value || !this.control.value.length
     }
   }
 
@@ -88,7 +101,16 @@ export class FormInputComponent implements OnInit, AfterViewInit {
           inputField.setSelectionRange(0, inputField.value.length);
         });
       }
+
+      if (this.config.readOnly) {
+        inputField.setAttribute('readonly', true);
+        inputField.setSelectionRange(0, inputField.value.length);
+      }
     }
+  }
+
+  getElement() {
+    return this.element;
   }
 
 
