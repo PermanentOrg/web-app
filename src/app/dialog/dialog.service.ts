@@ -17,6 +17,15 @@ export interface DialogChildComponentData {
   component: any;
 }
 
+export interface DialogOptions {
+  height?: 'auto' | 'fullscreen';
+  width?: 'auto' | 'fullscreen' | any;
+}
+
+const DEFAULT_OPTIONS: DialogOptions = {
+  height: 'fullscreen'
+};
+
 export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
   dialogComponent?: DialogComponent;
@@ -107,7 +116,7 @@ export class Dialog {
     });
   }
 
-  open(token: DialogComponentToken | any, data?: any): Promise<any> {
+  open(token: DialogComponentToken | any, data?: any, options = DEFAULT_OPTIONS): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
     }
@@ -120,7 +129,7 @@ export class Dialog {
       token = token.name;
     }
 
-    const newDialog = this.createDialog(token, data);
+    const newDialog = this.createDialog(token, data, options);
     newDialog.dialogComponent.show();
     return newDialog.closePromise;
   }
@@ -136,7 +145,7 @@ export class Dialog {
     }, 500);
   }
 
-  private createDialog(token: string, data: any = {}): DialogRef {
+  private createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;
@@ -145,6 +154,9 @@ export class Dialog {
     const dialogComponentFactory = this.dialogModuleResolver.resolveComponentFactory(DialogComponent);
     dialog.dialogComponentRef = this.rootComponent.viewContainer.createComponent(dialogComponentFactory, undefined, this.injector);
     dialog.dialogComponent = dialog.dialogComponentRef.instance;
+
+    // set dialog options
+    dialog.dialogComponent.setOptions(options);
 
     // build custom component factory and setup injector
     const component = this.registeredComponents[token];

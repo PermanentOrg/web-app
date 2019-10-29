@@ -159,6 +159,8 @@ export class SharePreviewComponent implements OnInit {
     if (!this.hasAccess) {
       this.sendGaEvent('previewed');
     }
+
+    this.accountService.promptForArchiveChange();
   }
 
   sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup' | 'reshare') {

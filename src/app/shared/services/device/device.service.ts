@@ -10,6 +10,10 @@ export class DeviceService {
 
   constructor() { }
 
+  isMobileWidth() {
+    return window.screen.width < 768;
+  }
+
   isMobile() {
     return navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
   }

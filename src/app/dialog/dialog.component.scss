@@ -1,3 +1,5 @@
+@import 'variables';
+
 .menu {
   background: white;
   position: absolute;
@@ -5,4 +7,36 @@
   bottom: 0;
   width: 100%;
   transform: translateY(100%);
+}
+
+.dialog-auto-height {
+  .menu {
+    top: auto;
+    height: auto;
+    box-shadow: $box-shadow-dark;
+  }
+
+  &.menu-wrapper.visible {
+    background-color: $shadow-color-dark;
+  }
+}
+  
+@media screen and (min-width: 768px) {
+
+  .dialog-auto-width {
+    .menu {
+      width: auto;
+      flex: 1 1 auto;
+      box-shadow: $box-shadow-dark;
+    }
+  
+    &.menu-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+  
+    &.menu-wrapper.visible {
+      background-color: $shadow-color-dark;
+    }
+  }
 }

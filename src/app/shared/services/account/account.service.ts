@@ -327,7 +327,7 @@ export class AccountService {
 
   public async promptForArchiveChange() {
     try {
-      return await this.dialog.open('ArchiveSwitcherDialogComponent');
+      await this.dialog.open('ArchiveSwitcherDialogComponent', null, { height: 'auto', width: '400px' });
     } catch (err) {
       return;
     }
