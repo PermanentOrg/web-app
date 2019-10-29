@@ -5,6 +5,13 @@ import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
 
+type DialogComponentToken =
+  'FamilySearchImportComponent' |
+  'ArchivePickerComponent' |
+  'SharingComponent' |
+  'ArchiveSwitcherDialogComponent'
+  ;
+
 export interface DialogChildComponentData {
   token: string;
   component: any;
@@ -100,7 +107,7 @@ export class Dialog {
     });
   }
 
-  open(token: any, data?: any): Promise<any> {
+  open(token: DialogComponentToken | any, data?: any): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
     }

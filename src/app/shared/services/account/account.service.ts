@@ -8,6 +8,7 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
 import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { Router } from '@angular/router';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -31,6 +32,7 @@ export class AccountService {
     private api: ApiService,
     private storage: StorageService,
     private cookies: CookieService,
+    private dialog: Dialog,
     private router: Router
   ) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
@@ -321,5 +323,13 @@ export class AccountService {
 
   public hasRedirect() {
     return !!this.redirectPath;
+  }
+
+  public async promptForArchiveChange() {
+    try {
+      return await this.dialog.open('ArchiveSwitcherDialogComponent');
+    } catch (err) {
+      return;
+    }
   }
 }
