@@ -26,6 +26,8 @@ export class AccountService {
   private redirectPath: string[] = null;
   private redirectParams: any = null;
 
+  private archives: ArchiveVO[] = [];
+
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
 
   constructor(
@@ -64,12 +66,26 @@ export class AccountService {
     this.storage.local.set(ARCHIVE_KEY, this.archive);
   }
 
+  public setArchives(newArchives: ArchiveVO[] = []) {
+    while (this.archives.length) {
+      this.archives.shift();
+    }
+
+    for (const newArchive of newArchives) {
+      this.archives.push(newArchive);
+    }
+  }
+
   public getAccount() {
     return this.account;
   }
 
   public getArchive() {
     return this.archive;
+  }
+
+  public getArchives() {
+    return this.archives;
   }
 
   public getRootFolder() {
@@ -79,6 +95,7 @@ export class AccountService {
   public clearAccount() {
     this.account = undefined;
     this.storage.local.delete(ACCOUNT_KEY);
+    this.setArchives();
   }
 
   public clearArchive() {
@@ -112,6 +129,7 @@ export class AccountService {
         const newAccount = response.getAccountVO();
         this.account.update(newAccount);
         this.storage.local.set(ACCOUNT_KEY, this.account);
+        this.setArchives();
       })
       .catch((response: AccountResponse | any) => {
         this.logOut();
@@ -138,6 +156,15 @@ export class AccountService {
         this.logOut();
         this.clear();
         this.router.navigate(['/login']);
+      });
+  }
+
+  public refreshArchives() {
+    return this.api.archive.getAllArchives(this.account)
+      .then((response: ArchiveResponse) => {
+        const archives = response.getArchiveVOs();
+        this.setArchives(archives);
+        return this.getArchives();
       });
   }
 

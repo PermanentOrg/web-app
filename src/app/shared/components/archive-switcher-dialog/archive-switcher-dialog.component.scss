@@ -1,7 +1,30 @@
 @import 'variables';
 
 :host {
-  background-color: $PR-blue;
   display: flex;
-  color: white;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  flex-wrap: nowrap;
+
+  padding: 20px 20px 0px;
+
+  @media screen and (min-width: 768px) {
+    max-height: 50vh;
+  }
+}
+
+.current-archive, .archive-list-button {
+  flex: 0 1 auto;
+}
+
+.current-archive {
+  margin-bottom: 10px;
+}
+
+.archive-list-wrapper {
+  flex: 1 1 auto;
+  overflow: hidden;
+  overflow-y: auto;
+  margin-bottom: auto;
 }
