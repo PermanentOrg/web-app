@@ -1,5 +1,5 @@
 <div class="current-archive">
-  <pr-archive-small [archive]="currentArchive"></pr-archive-small>
+  <pr-archive-small [archive]="currentArchive" (click)="close()"></pr-archive-small>
 </div>
 <div class="archive-list-wrapper">
   <div class="archive-list" *ngIf="!loadingArchives">
@@ -18,5 +18,6 @@
 </div>
 <div class="archive-list-button">
   <!-- <button class="btn btn-primary" (click)="createArchiveClick()">Create new archive</button> -->
-  <button class="btn btn-primary" [routerLink]="['/']">Back</button>
+  <button class="btn btn-primary" [disabled]="waiting">Use Current Archive</button>
+  <button class="btn btn-danger" [disabled]="waiting" (click)="logOut()">Log Out</button>
 </div>

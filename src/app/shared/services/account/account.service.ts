@@ -29,6 +29,7 @@ export class AccountService {
   private archives: ArchiveVO[] = [];
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
+  public accountChange: EventEmitter<AccountVO> = new EventEmitter();
 
   constructor(
     private api: ApiService,
@@ -193,6 +194,7 @@ export class AccountService {
         const root = response.getFolderVO();
         this.setRootFolder(root);
         this.archiveChange.emit(this.archive);
+        return this.getArchive();
       });
   }
 
@@ -234,6 +236,8 @@ export class AccountService {
           this.setAccount(newAccount);
           this.setArchive(response.getArchiveVO());
           this.skipSessionCheck = true;
+          
+          this.accountChange.emit(this.account);
         } else if (response.needsMFA() || response.needsVerification()) {
           this.setAccount(new AccountVO({primaryEmail: email}));
         } else {
@@ -250,6 +254,8 @@ export class AccountService {
           this.clearAccount();
           this.clearArchive();
           this.clearRootFolder();
+
+          this.accountChange.emit(null);
         }
 
         return response;
@@ -262,6 +268,8 @@ export class AccountService {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
           this.setArchive(response.getArchiveVO());
+
+          this.accountChange.emit(this.account);
           return response;
         } else {
           throw response;
@@ -307,6 +315,7 @@ export class AccountService {
         const archives = response.getArchiveVOs();
         const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
         this.setArchive(new ArchiveVO(defaultArchiveData));
+        this.archiveChange.emit(this.archive);
         return response;
       });
   }
@@ -356,6 +365,7 @@ export class AccountService {
     try {
       await this.dialog.open('ArchiveSwitcherDialogComponent', null, { height: 'auto', width: '400px' });
     } catch (err) {
+      console.error(err);
       return;
     }
   }

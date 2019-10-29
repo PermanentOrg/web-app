@@ -1,6 +1,6 @@
 <div class="menu-wrapper"
   [ngClass]="{'visible': isVisible, 'dialog-auto-height': height === 'auto', 'dialog-auto-width': width !== 'fullscreen'}"
-  #menuWrapper>
+  #menuWrapper (click)="onMenuWrapperClick($event)">
   <div class="menu" [ngStyle]="{'width': width === 'fullscreen' || isMobile() ? '' : width}">
     <ng-template #dialogContent></ng-template>
   </div>

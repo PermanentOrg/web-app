@@ -155,8 +155,9 @@ export class Dialog {
     dialog.dialogComponentRef = this.rootComponent.viewContainer.createComponent(dialogComponentFactory, undefined, this.injector);
     dialog.dialogComponent = dialog.dialogComponentRef.instance;
 
-    // set dialog options
+    // set dialog options and ref
     dialog.dialogComponent.setOptions(options);
+    dialog.dialogComponent.bindDialogRef(dialog);
 
     // build custom component factory and setup injector
     const component = this.registeredComponents[token];

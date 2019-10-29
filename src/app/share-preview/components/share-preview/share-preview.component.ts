@@ -62,6 +62,8 @@ export class SharePreviewComponent implements OnInit {
   waiting = false;
   isNavigating = false;
 
+  archiveConfirmed = false;
+
   formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
   signupForm: FormGroup;
   loginForm: FormGroup;
@@ -84,7 +86,6 @@ export class SharePreviewComponent implements OnInit {
     private prompt: PromptService,
     private ga: GoogleAnalyticsService
   ) {
-    this.isLoggedIn = this.accountService.isLoggedIn();
     this.shareToken = this.route.snapshot.params.shareToken;
 
     this.signupForm = fb.group({
@@ -101,11 +102,61 @@ export class SharePreviewComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
     });
 
+    this.routerListener = this.router.events
+      .pipe(filter((event) => {
+        return event instanceof NavigationStart || event instanceof NavigationEnd;
+      })).subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          this.isNavigating = true;
+        } else if (event instanceof NavigationEnd) {
+          this.isNavigating = false;
+        }
+      });
+
+    this.accountService.archiveChange
+      .subscribe(async archive => {
+        this.archive = archive;
+        await this.reloadSharePreviewData();
+      });
+
+    this.accountService.accountChange
+      .subscribe(account => {
+        this.account = account;
+        this.archive = this.accountService.getArchive();
+        this.checkAccess();
+        this.archiveConfirmed = false;
+      });
+
+    this.checkAccess();
+  }
+
+  async ngOnInit() {
+    if (!this.hasAccess) {
+      this.sendGaEvent('previewed');
+    }
+
+    if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
+      try {
+        await this.accountService.promptForArchiveChange();
+        this.archiveConfirmed = true;
+        await this.reloadSharePreviewData();
+        this.onRequestAccessClick();
+      } catch (err) {
+      }
+    }
+  }
+
+  checkAccess() {
+    this.isLoggedIn = this.accountService.isLoggedIn();
+    this.archive = this.accountService.getArchive();
+    this.account = this.accountService.getAccount();
+
     if (this.isInvite) {
       this.hasAccess = this.sharePreviewVO.status.includes('accepted');
     }
 
     if (this.isLinkShare) {
+      this.hasRequested = !!this.sharePreviewVO.ShareVO;
       this.hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
     }
 
@@ -138,29 +189,25 @@ export class SharePreviewComponent implements OnInit {
       this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
       this.sendGaEvent('viewed');
     }
-
-    this.routerListener = this.router.events
-      .pipe(filter((event) => {
-        return event instanceof NavigationStart || event instanceof NavigationEnd;
-      })).subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          this.isNavigating = true;
-        } else if (event instanceof NavigationEnd) {
-          this.isNavigating = false;
-        }
-      });
   }
 
-  ngOnInit() {
-    if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
-      this.onRequestAccessClick();
+  reloadSharePreviewData() {
+    if (this.isLinkShare) {
+      return this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
+      .then((linkResponse: ShareResponse): any => {
+        if (linkResponse.isSuccessful) {
+          this.sharePreviewVO = linkResponse.getShareByUrlVO();
+          this.checkAccess();
+        }
+      });
+    } else if (this.isRelationshipShare) {
+      const params = this.route.snapshot.params;
+      return this.api.share.getShareForPreview(params.shareId, params.folder_linkId)
+        .then((shareResponse: ShareResponse) => {
+          this.sharePreviewVO = shareResponse.getShareVO();
+          this.checkAccess();
+        });
     }
-
-    if (!this.hasAccess) {
-      this.sendGaEvent('previewed');
-    }
-
-    this.accountService.promptForArchiveChange();
   }
 
   sendGaEvent(eventAction: 'previewed' | 'viewed' | 'signup' | 'reshare') {
@@ -241,6 +288,10 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
+  onArchiveThumbClick() {
+    this.accountService.promptForArchiveChange();
+  }
+
   scrollCoverToggle() {
     if (!this.hasScrollTriggered) {
       this.hasScrollTriggered = true;
@@ -253,6 +304,10 @@ export class SharePreviewComponent implements OnInit {
   async onRequestAccessClick() {
     try {
       this.waiting = true;
+      if (!this.archiveConfirmed) {
+        await this.accountService.promptForArchiveChange();
+        this.archiveConfirmed = true;
+      }
       await this.api.share.requestShareAccess(this.shareToken);
       this.message.showMessage(`Access requested. ${this.shareAccount.fullName} must approve your request.` , 'success');
       this.showCover = false;
@@ -308,7 +363,7 @@ export class SharePreviewComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.logIn(formValue.email, formValue.password, true, true)
-      .then((response: AuthResponse) => {
+      .then(async (response: AuthResponse) => {
         if (response.needsMFA()) {
           // send to mfa verification
           const queryParams = {};
@@ -329,50 +384,12 @@ export class SharePreviewComponent implements OnInit {
           this.isLoggedIn = true;
           this.showCover = false;
 
-          this.archive = this.accountService.getArchive();
-          this.account = this.accountService.getAccount();
+          await this.accountService.promptForArchiveChange();
 
-          this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+          this.checkAccess();
 
-          if (this.isOriginalOwner) {
-            this.hasAccess = true;
-            this.canEdit = true;
-            this.canShare = true;
-            this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
-          } else if (this.isLinkShare) {
-            this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
-            .then((linkResponse: ShareResponse): any => {
-              if (linkResponse.isSuccessful) {
-                const sharePreviewVO = linkResponse.getShareByUrlVO();
-                const shareVO = sharePreviewVO.ShareVO;
-                if (shareVO) {
-                  this.hasRequested = true;
-
-                  if (shareVO.status.includes('ok')) {
-                    this.hasAccess = true;
-                    this.router.navigate(['view'], { relativeTo: this.route });
-                    this.sendGaEvent('viewed');
-                  }
-                } else {
-                  this.onRequestAccessClick();
-                }
-              }
-            });
-          } else if (this.isRelationshipShare) {
-            const params = this.route.snapshot.params;
-            this.api.share.getShareForPreview(params.shareId, params.folder_linkId)
-              .then((shareResponse: ShareResponse) => {
-                const sharePreviewVO = shareResponse.getShareVO();
-                if (sharePreviewVO) {
-                  this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
-                  this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
-
-                  if (this.hasAccess) {
-                    this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
-                    this.sendGaEvent('viewed');
-                  }
-                }
-              });
+          if (this.isLinkShare && !this.hasAccess && !this.hasRequested) {
+            console.log('we gon click the request button now');
           }
         }
       })

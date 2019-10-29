@@ -16,6 +16,8 @@
       top: auto;
       height: auto;
       box-shadow: $box-shadow-dark;
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
     }
 
     &.menu-wrapper.visible {

@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from '../dialog/dialog.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [

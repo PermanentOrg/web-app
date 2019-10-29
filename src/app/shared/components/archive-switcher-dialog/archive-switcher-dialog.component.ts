@@ -14,6 +14,8 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
   public archives: ArchiveVO[] = [];
   public currentArchive: ArchiveVO;
 
+  public waiting = false;
+
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
@@ -31,12 +33,22 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  onArchiveClick(archive: ArchiveVO) {
-    console.log(archive);
+  async onArchiveClick(archive: ArchiveVO) {
+    if (!this.waiting) {
+      await this.account.changeArchive(archive);
+      this.close();
+    }
   }
 
-  select() {
-    this.dialogRef.close(null);
+  async logOut() {
+    this.waiting = true;
+    await this.account.logOut();
+    this.cancel();
+    this.waiting = false;
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 
   cancel() {
