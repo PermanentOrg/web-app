@@ -320,11 +320,17 @@ export class AccountService {
       });
   }
 
-  public signUp(
+  public async signUp(
     email: string, fullName: string, password: string, passwordConfirm: string,
     agreed: boolean, optIn: boolean, phone: string, inviteCode: string
   ) {
     this.skipSessionCheck = false;
+
+    if (this.isLoggedIn()) {
+      try {
+        await this.logOut();
+      } catch (err) {}
+    }
 
     return this.api.account.signUp(email, fullName, password, passwordConfirm, agreed, optIn, phone, inviteCode)
       .pipe(map((response: AccountResponse) => {

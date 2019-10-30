@@ -17,10 +17,6 @@ export class InviteShareResolveService implements Resolve<any> {
   ) { }
 
   async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
-    if (this.account.isLoggedIn()) {
-      await this.account.logOut();
-    }
-
     return this.api.invite.getFullShareInvite(route.params.inviteCode)
       .then((response: InviteResponse): any => {
         if (response.isSuccessful) {
