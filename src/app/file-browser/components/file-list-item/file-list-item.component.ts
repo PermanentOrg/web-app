@@ -172,7 +172,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.item.isFolder) {
       if (this.isInPublic) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
-      } if (this.isInSharePreview) {
+      } else if (this.isInSharePreview) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent});
       } else {
         this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
