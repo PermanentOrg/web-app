@@ -367,11 +367,11 @@ export class AccountService {
     return !!this.redirectPath;
   }
 
-  public async promptForArchiveChange() {
+  public async promptForArchiveChange(promptText = 'Choose archive:') {
     try {
       await this.refreshArchives();
       if (this.archives.length > 1 ) {
-        await this.dialog.open('ArchiveSwitcherDialogComponent',  null, { height: 'auto', width: 'fullscreen' });
+        await this.dialog.open('ArchiveSwitcherDialogComponent',  {promptText}, { height: 'auto', width: 'fullscreen' });
       }
     } catch (err) {
       console.error(err);

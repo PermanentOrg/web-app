@@ -16,6 +16,8 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
 
   public waiting = false;
 
+  public promptText: string;
+
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
@@ -23,6 +25,8 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
   ) {
     this.currentArchive = this.account.getArchive();
     this.archives = this.account.getArchives().filter(archive => archive.archiveId !== this.currentArchive.archiveId);
+
+    this.promptText = data.promptText;
   }
 
   ngOnInit() {

@@ -63,6 +63,7 @@ export class SharePreviewComponent implements OnInit {
   isNavigating = false;
 
   archiveConfirmed = false;
+  chooseArchiveText;
 
   formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
   signupForm: FormGroup;
@@ -127,6 +128,12 @@ export class SharePreviewComponent implements OnInit {
         this.archiveConfirmed = false;
       });
 
+    if (this.isLinkShare) {
+      this.chooseArchiveText = 'Select archive to request access with:';
+    } else if (this.isRelationshipShare) {
+      this.chooseArchiveText = 'Select archive with access to this content:';
+    }
+
     this.checkAccess();
   }
 
@@ -141,14 +148,14 @@ export class SharePreviewComponent implements OnInit {
 
     if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
       try {
-        await this.accountService.promptForArchiveChange();
+        await this.accountService.promptForArchiveChange(this.chooseArchiveText);
         this.archiveConfirmed = true;
         await this.reloadSharePreviewData();
         this.onRequestAccessClick();
       } catch (err) {
       }
     } else if (this.isRelationshipShare && !this.hasAccess && !this.route.snapshot.queryParams.targetArchiveNbr) {
-      await this.accountService.promptForArchiveChange();
+      await this.accountService.promptForArchiveChange(this.chooseArchiveText);
       this.archiveConfirmed = true;
     }
   }
@@ -314,7 +321,7 @@ export class SharePreviewComponent implements OnInit {
     try {
       this.waiting = true;
       if (!this.archiveConfirmed) {
-        await this.accountService.promptForArchiveChange();
+        await this.accountService.promptForArchiveChange(this.chooseArchiveText);
         this.archiveConfirmed = true;
       }
       await this.api.share.requestShareAccess(this.shareToken);
@@ -389,16 +396,22 @@ export class SharePreviewComponent implements OnInit {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
         } else {
-          // hide cover, send request access
+          // hide cover
           this.isLoggedIn = true;
           this.showCover = false;
 
+          // confirm archive with selector
           await this.accountService.promptForArchiveChange();
+          this.archiveConfirmed = true;
 
-          this.checkAccess();
+          // refresh data just in case they have access;
+          await this.reloadSharePreviewData();
 
+          this.waiting = false;
+
+          // hit that request access if they haven't got it
           if (this.isLinkShare && !this.hasAccess && !this.hasRequested) {
-            console.log('we gon click the request button now');
+            this.onRequestAccessClick();
           }
         }
       })
