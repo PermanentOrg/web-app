@@ -363,7 +363,10 @@ export class AccountService {
 
   public async promptForArchiveChange() {
     try {
-      await this.dialog.open('ArchiveSwitcherDialogComponent', null, { height: 'auto', width: 'fullscreen' });
+      await this.refreshArchives();
+      if (this.archives.length > 1 ) {
+        await this.dialog.open('ArchiveSwitcherDialogComponent',  null, { height: 'auto', width: 'fullscreen' });
+      }
     } catch (err) {
       console.error(err);
       return;

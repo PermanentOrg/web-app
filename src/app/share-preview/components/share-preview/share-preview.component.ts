@@ -135,7 +135,9 @@ export class SharePreviewComponent implements OnInit {
       this.sendGaEvent('previewed');
     }
 
-    this.accountService.promptForArchiveChange();
+    if (!this.accountService.isLoggedIn()) {
+      return;
+    }
 
     if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
       try {
@@ -145,6 +147,9 @@ export class SharePreviewComponent implements OnInit {
         this.onRequestAccessClick();
       } catch (err) {
       }
+    } else if (this.isRelationshipShare && !this.hasAccess && !this.route.snapshot.queryParams.targetArchiveNbr) {
+      await this.accountService.promptForArchiveChange();
+      this.archiveConfirmed = true;
     }
   }
 
@@ -190,6 +195,8 @@ export class SharePreviewComponent implements OnInit {
     if (this.hasAccess && !this.route.snapshot.firstChild.data.sharePreviewView) {
       this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
       this.sendGaEvent('viewed');
+    } else if (!this.hasAccess && this.route.snapshot.firstChild.data.sharePreviewView) {
+      this.router.navigate(['.'], { relativeTo: this.route.parent, queryParamsHandling: 'preserve'});
     }
   }
 

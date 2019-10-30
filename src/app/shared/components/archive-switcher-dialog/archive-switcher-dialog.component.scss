@@ -1,11 +1,12 @@
 @import 'variables';
 
+$max-height-mobile: 70vh;
+
 :host {
   width: 100%;
   height: 100%;
-  max-height: 50vh;
+  max-height: $max-height-mobile;
   background-color: $PR-blue;
-  display: block;
   color: white;
   padding: 10px 10px 0px;
   display: flex;
@@ -25,9 +26,11 @@
   flex-wrap: nowrap;
   margin: 0 auto;
   height: 100%;
+  max-height: calc(#{$max-height-mobile} - 10px);
+  max-width: 100%;
 
   @media screen and (min-width: 768px) {
-    max-width: 400px;
+    width: 400px;
   }
 }
 
@@ -36,11 +39,18 @@
 }
 
 .current-archive pr-archive-small {
-  // margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .archive-list-button {
   display: flex;
+  justify-content: space-between;
+  padding: 0px 5px;
+
+  button {
+    flex: 0 1;
+    margin: 5px;
+  }
 }
 
 .archive-list-wrapper {
@@ -48,4 +58,23 @@
   overflow: hidden;
   overflow-y: auto;
   margin-bottom: auto;
+}
+
+.archive-list {
+  min-height: 100px;
+  .lds-dual-ring, .lds-dual-ring:after {
+    width: 45px;
+    height: 45px;
+  }
+
+  pr-archive-small {
+    margin-bottom: 10px;
+  }
+
+  &.switching {
+    pr-archive-small {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
 }

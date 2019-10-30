@@ -10,7 +10,7 @@ import { ArchiveVO } from '@models/index';
   styleUrls: ['./archive-switcher-dialog.component.scss']
 })
 export class ArchiveSwitcherDialogComponent implements OnInit {
-  public loadingArchives = true;
+  public loadingArchives = false;
   public archives: ArchiveVO[] = [];
   public currentArchive: ArchiveVO;
 
@@ -22,12 +22,7 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
     private account: AccountService
   ) {
     this.currentArchive = this.account.getArchive();
-
-    this.account.refreshArchives()
-      .then((archives) => {
-        this.archives = archives.filter(archive => archive.archiveId !== this.currentArchive.archiveId);
-        this.loadingArchives = false;
-      });
+    this.archives = this.account.getArchives().filter(archive => archive.archiveId !== this.currentArchive.archiveId);
   }
 
   ngOnInit() {
@@ -35,8 +30,14 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
 
   async onArchiveClick(archive: ArchiveVO) {
     if (!this.waiting) {
-      await this.account.changeArchive(archive);
-      this.close();
+      this.waiting = true;
+      try {
+        await this.account.changeArchive(archive);
+        this.close();
+      } catch (err) {}
+      finally {
+        this.waiting = false;
+      }
     }
   }
 
