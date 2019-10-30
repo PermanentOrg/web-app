@@ -135,6 +135,8 @@ export class SharePreviewComponent implements OnInit {
       this.sendGaEvent('previewed');
     }
 
+    this.accountService.promptForArchiveChange();
+
     if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
       try {
         await this.accountService.promptForArchiveChange();

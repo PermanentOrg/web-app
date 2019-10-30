@@ -236,7 +236,7 @@ export class AccountService {
           this.setAccount(newAccount);
           this.setArchive(response.getArchiveVO());
           this.skipSessionCheck = true;
-          
+
           this.accountChange.emit(this.account);
         } else if (response.needsMFA() || response.needsVerification()) {
           this.setAccount(new AccountVO({primaryEmail: email}));
@@ -363,7 +363,7 @@ export class AccountService {
 
   public async promptForArchiveChange() {
     try {
-      await this.dialog.open('ArchiveSwitcherDialogComponent', null, { height: 'auto', width: '400px' });
+      await this.dialog.open('ArchiveSwitcherDialogComponent', null, { height: 'auto', width: 'fullscreen' });
     } catch (err) {
       console.error(err);
       return;

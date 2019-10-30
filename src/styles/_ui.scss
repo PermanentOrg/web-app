@@ -172,7 +172,7 @@ a {
   cursor: pointer;
 }
 
-.btn-wordpress {
+.btn-wordpress, .btn-wordpress-alternate {
   $size: 34px;
   background: rgba(white, 0.2);
   height: $size;
@@ -188,7 +188,21 @@ a {
   &:hover {
     background: white;
   }
+
+  &.btn-wordpress-alternate {
+    background: $PR-purple;
+    color: white;
+
+    &:hover {
+      background: $PR-orange;
+    }
+  }
 }
+
+button.btn-wordpress, button.btn-wordpress-alternate {
+  line-height: 0px;
+}
+
 
 .btn-alternate,
 .btn-alternate:disabled,
