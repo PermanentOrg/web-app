@@ -368,14 +368,9 @@ export class AccountService {
   }
 
   public async promptForArchiveChange(promptText = 'Choose archive:') {
-    try {
-      await this.refreshArchives();
-      if (this.archives.length > 1 ) {
-        await this.dialog.open('ArchiveSwitcherDialogComponent',  {promptText}, { height: 'auto', width: 'fullscreen' });
-      }
-    } catch (err) {
-      console.error(err);
-      return;
+    await this.refreshArchives();
+    if (this.archives.length > 1 ) {
+      return this.dialog.open('ArchiveSwitcherDialogComponent',  {promptText}, { height: 'auto', width: 'fullscreen' });
     }
   }
 }

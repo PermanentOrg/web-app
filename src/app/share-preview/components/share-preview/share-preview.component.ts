@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
 import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
 import { throttle } from 'lodash';
@@ -33,7 +33,7 @@ enum FormType {
   templateUrl: './share-preview.component.html',
   styleUrls: ['./share-preview.component.scss']
 })
-export class SharePreviewComponent implements OnInit {
+export class SharePreviewComponent implements OnInit, OnDestroy {
 
   // share data
   account: AccountVO = this.accountService.getAccount();
@@ -75,6 +75,8 @@ export class SharePreviewComponent implements OnInit {
   scrollHandlerDebounced = throttle(() => { this.scrollCoverToggle(); }, 500);
 
   routerListener: Subscription;
+  accountListener: Subscription;
+  archiveListener: Subscription;
 
   constructor(
     private router: Router,
@@ -114,18 +116,23 @@ export class SharePreviewComponent implements OnInit {
         }
       });
 
-    this.accountService.archiveChange
+    this.accountListener = this.accountService.archiveChange
       .subscribe(async archive => {
         this.archive = archive;
         await this.reloadSharePreviewData();
       });
 
-    this.accountService.accountChange
-      .subscribe(account => {
-        this.account = account;
-        this.archive = this.accountService.getArchive();
-        this.checkAccess();
-        this.archiveConfirmed = false;
+    this.archiveListener = this.accountService.accountChange
+      .subscribe(async account => {
+        if (!account) {
+          this.isLoggedIn = false;
+
+          this.archive = this.accountService.getArchive();
+          this.account = this.accountService.getAccount();
+
+          await this.reloadSharePreviewData();
+          this.archiveConfirmed = false;
+        }
       });
 
     if (this.isLinkShare) {
@@ -133,11 +140,11 @@ export class SharePreviewComponent implements OnInit {
     } else if (this.isRelationshipShare) {
       this.chooseArchiveText = 'Select archive with access to this content:';
     }
-
-    this.checkAccess();
   }
 
   async ngOnInit() {
+    this.checkAccess();
+
     if (!this.hasAccess) {
       this.sendGaEvent('previewed');
     }
@@ -155,15 +162,25 @@ export class SharePreviewComponent implements OnInit {
       } catch (err) {
       }
     } else if (this.isRelationshipShare && !this.hasAccess && !this.route.snapshot.queryParams.targetArchiveNbr) {
-      await this.accountService.promptForArchiveChange(this.chooseArchiveText);
-      this.archiveConfirmed = true;
+      try {
+        await this.accountService.promptForArchiveChange(this.chooseArchiveText);
+        this.archiveConfirmed = true;
+      } catch (err) {}
     }
+  }
+
+  ngOnDestroy(): void {
+    this.routerListener.unsubscribe();
+    this.accountListener.unsubscribe();
+    this.archiveListener.unsubscribe();
   }
 
   checkAccess() {
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.archive = this.accountService.getArchive();
     this.account = this.accountService.getAccount();
+    this.shareArchive = this.sharePreviewVO.ArchiveVO;
+    this.shareAccount = this.sharePreviewVO.AccountVO;
 
     if (this.isInvite) {
       this.hasAccess = this.sharePreviewVO.status.includes('accepted');
@@ -191,6 +208,8 @@ export class SharePreviewComponent implements OnInit {
 
     if (this.archive) {
       this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+    } else {
+      this.isOriginalOwner = false;
     }
 
     if (this.isOriginalOwner) {
@@ -200,10 +219,12 @@ export class SharePreviewComponent implements OnInit {
     }
 
     if (this.hasAccess && !this.route.snapshot.firstChild.data.sharePreviewView) {
-      this.router.navigate(['view'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
+      // in preview, but they have access, send to full view
+      this.router.navigate(['view'], { relativeTo: this.route });
       this.sendGaEvent('viewed');
     } else if (!this.hasAccess && this.route.snapshot.firstChild.data.sharePreviewView) {
-      this.router.navigate(['.'], { relativeTo: this.route.parent, queryParamsHandling: 'preserve'});
+      // inside full view, send back to preview
+      this.router.navigate(['.'], { relativeTo: this.route.parent });
     }
   }
 
@@ -304,8 +325,11 @@ export class SharePreviewComponent implements OnInit {
     }
   }
 
-  onArchiveThumbClick() {
-    this.accountService.promptForArchiveChange();
+  async onArchiveThumbClick() {
+    try {
+      await this.accountService.promptForArchiveChange();
+      this.archiveConfirmed = true;
+    } catch (err) {}
   }
 
   scrollCoverToggle() {
@@ -401,7 +425,10 @@ export class SharePreviewComponent implements OnInit {
           this.showCover = false;
 
           // confirm archive with selector
-          await this.accountService.promptForArchiveChange();
+          try {
+            await this.accountService.promptForArchiveChange();
+          } catch (err) {}
+
           this.archiveConfirmed = true;
 
           // refresh data just in case they have access;
