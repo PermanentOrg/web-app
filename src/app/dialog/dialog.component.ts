@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, HostBinding, ElementRef, AfterViewInit } from '@angular/core';
-import { Dialog, DialogOptions, DialogRef } from './dialog.service';
+import { Component, ViewContainerRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { DialogOptions, DialogRef } from './dialog.service';
 import { DeviceService } from '@shared/services/device/device.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class DialogComponent implements AfterViewInit {
   @ViewChild('menuWrapper', {read: ElementRef}) menuWrapperElement: ElementRef;
 
   constructor(
-    private device: DeviceService
+    private device: DeviceService,
   ) {
   }
 
@@ -54,10 +54,6 @@ export class DialogComponent implements AfterViewInit {
     if (event.target === this.menuWrapperElement.nativeElement) {
       this.dialogRef.close(null, true);
     }
-  }
-
-  onMenuWrapperScroll(event) {
-
   }
 
   show() {

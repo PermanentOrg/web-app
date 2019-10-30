@@ -1,9 +1,10 @@
 // tslint:disable-next-line:max-line-length
-import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken } from '@angular/core';
+import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
+import { DOCUMENT } from '@angular/common';
 
 type DialogComponentToken =
   'FamilySearchImportComponent' |
@@ -68,10 +69,13 @@ export class Dialog {
 
   private dialogs: {[id: number]: DialogRef} = {};
 
+  private bodyScrollAllowed = true;
+
   constructor(
     private app: ApplicationRef,
     private resolver: ComponentFactoryResolver,
-    private injector: Injector
+    private injector: Injector,
+    @Inject(DOCUMENT) private document: Document
   ) {
   }
 
@@ -131,6 +135,12 @@ export class Dialog {
 
     const newDialog = this.createDialog(token, data, options);
     newDialog.dialogComponent.show();
+
+    if (this.bodyScrollAllowed) {
+      this.document.body.style.overflow = 'hidden';
+      this.bodyScrollAllowed = false;
+    }
+
     return newDialog.closePromise;
   }
 
@@ -142,6 +152,13 @@ export class Dialog {
     setTimeout(() => {
       dialogRef.destroy();
       delete this.dialogs[dialogRef.id];
+
+      if (Object.keys(this.dialogs).length < 1) {
+        if (!this.bodyScrollAllowed) {
+          this.document.body.style.overflow = '';
+          this.bodyScrollAllowed = true;
+        }
+      }
     }, 500);
   }
 
