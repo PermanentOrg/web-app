@@ -44,9 +44,6 @@ export class FormInputComponent implements OnInit, AfterViewInit {
       this.errors = getFormInputError(this);
     });
 
-    console.log('input', this.fieldName, this.control);
-
-
     if (this.config) {
       this.rightAlign = this.config.textAlign === 'right';
 

@@ -1,14 +1,31 @@
 // tslint:disable-next-line:max-line-length
-import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken } from '@angular/core';
+import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
+import { DOCUMENT } from '@angular/common';
+
+type DialogComponentToken =
+  'FamilySearchImportComponent' |
+  'ArchivePickerComponent' |
+  'SharingComponent' |
+  'ArchiveSwitcherDialogComponent'
+  ;
 
 export interface DialogChildComponentData {
   token: string;
   component: any;
 }
+
+export interface DialogOptions {
+  height?: 'auto' | 'fullscreen';
+  width?: 'auto' | 'fullscreen' | any;
+}
+
+const DEFAULT_OPTIONS: DialogOptions = {
+  height: 'fullscreen'
+};
 
 export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
@@ -52,10 +69,13 @@ export class Dialog {
 
   private dialogs: {[id: number]: DialogRef} = {};
 
+  private bodyScrollAllowed = true;
+
   constructor(
     private app: ApplicationRef,
     private resolver: ComponentFactoryResolver,
-    private injector: Injector
+    private injector: Injector,
+    @Inject(DOCUMENT) private document: Document
   ) {
   }
 
@@ -100,7 +120,7 @@ export class Dialog {
     });
   }
 
-  open(token: any, data?: any): Promise<any> {
+  open(token: DialogComponentToken | any, data?: any, options = DEFAULT_OPTIONS): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
     }
@@ -113,8 +133,14 @@ export class Dialog {
       token = token.name;
     }
 
-    const newDialog = this.createDialog(token, data);
+    const newDialog = this.createDialog(token, data, options);
     newDialog.dialogComponent.show();
+
+    if (this.bodyScrollAllowed) {
+      this.document.body.style.overflow = 'hidden';
+      this.bodyScrollAllowed = false;
+    }
+
     return newDialog.closePromise;
   }
 
@@ -126,10 +152,17 @@ export class Dialog {
     setTimeout(() => {
       dialogRef.destroy();
       delete this.dialogs[dialogRef.id];
+
+      if (Object.keys(this.dialogs).length < 1) {
+        if (!this.bodyScrollAllowed) {
+          this.document.body.style.overflow = '';
+          this.bodyScrollAllowed = true;
+        }
+      }
     }, 500);
   }
 
-  private createDialog(token: string, data: any = {}): DialogRef {
+  private createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;
@@ -138,6 +171,10 @@ export class Dialog {
     const dialogComponentFactory = this.dialogModuleResolver.resolveComponentFactory(DialogComponent);
     dialog.dialogComponentRef = this.rootComponent.viewContainer.createComponent(dialogComponentFactory, undefined, this.injector);
     dialog.dialogComponent = dialog.dialogComponentRef.instance;
+
+    // set dialog options and ref
+    dialog.dialogComponent.setOptions(options);
+    dialog.dialogComponent.bindDialogRef(dialog);
 
     // build custom component factory and setup injector
     const component = this.registeredComponents[token];

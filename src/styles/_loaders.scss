@@ -20,6 +20,21 @@ $dual-ring-size: 95px;
   border-color: $PR-blue transparent $PR-blue transparent;
   animation: lds-dual-ring 1.5s linear infinite;
 }
+
+.lds-dual-ring-purple {
+  &:after {
+    border: 6px solid $PR-purple;
+    border-color: $PR-purple transparent $PR-purple transparent;
+  }
+}
+
+.lds-dual-ring-orange {
+  &:after {
+    border: 6px solid $PR-orange;
+    border-color: $PR-orange transparent $PR-orange transparent;
+  }
+}
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);

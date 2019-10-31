@@ -9,6 +9,8 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { MessageService } from '@shared/services/message/message.service';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { DialogModule } from '../dialog/dialog.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     SharePreviewRoutingModule,
     CommonModule,
     FormsModule,
-    NgbTooltipModule,
+    DialogModule,
+    NgbTooltipModule
   ],
   providers: [
     DataService,
