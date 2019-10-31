@@ -294,7 +294,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   onShareShareClick() {
     this.sendGaEvent('reshare');
-    if (this.isOriginalOwner || this.canShare) {
+    if (!this.isLinkShare && (this.isOriginalOwner || this.canShare)) {
       const archiveNbr = this.sharePreviewVO.RecordVO ? this.sharePreviewVO.RecordVO.archiveNbr : this.sharePreviewVO.FolderVO.archiveNbr;
       if (this.device.isMobile()) {
         return this.router.navigate(['/shares'], { queryParams: { shareArchiveNbr: archiveNbr }});
