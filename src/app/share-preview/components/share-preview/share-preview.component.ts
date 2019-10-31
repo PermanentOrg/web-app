@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
 import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
-import { throttle } from 'lodash';
+import { throttle, find } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
@@ -225,6 +225,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     } else if (!this.hasAccess && this.route.snapshot.firstChild.data.sharePreviewView) {
       // inside full view, send back to preview
       this.router.navigate(['.'], { relativeTo: this.route.parent });
+      this.showCover = false;
     }
   }
 
@@ -423,11 +424,28 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           // hide cover
           this.isLoggedIn = true;
           this.showCover = false;
+          this.loginForm.reset();
 
-          // confirm archive with selector
-          try {
-            await this.accountService.promptForArchiveChange();
-          } catch (err) {}
+
+          // attempt to auto switch archives if link is tagged
+          if (this.route.snapshot.queryParams.targetArchiveNbr) {
+            await this.accountService.refreshArchives();
+            const targetArchiveNbr = this.route.snapshot.queryParams.targetArchiveNbr;
+            const targetArchive = find(this.accountService.getArchives(), {archiveNbr: targetArchiveNbr}) as ArchiveVO;
+            if (targetArchive) {
+              try {
+                await this.accountService.changeArchive(targetArchive);
+                this.archiveConfirmed = true;
+              } catch (err) {}
+            }
+          }
+
+          // confirm archive with selector if autoswitch doesn't work
+          if (!this.archiveConfirmed) {
+            try {
+              await this.accountService.promptForArchiveChange();
+            } catch (err) {}
+          }
 
           this.archiveConfirmed = true;
 
