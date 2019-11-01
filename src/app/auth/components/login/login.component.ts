@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
     this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
+          console.log(this.route.snapshot.queryParams);
           this.router.navigate(['/auth', 'mfa'], { queryParamsHandling: 'preserve'})
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');

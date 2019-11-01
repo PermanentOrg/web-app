@@ -44,7 +44,7 @@ export class MfaComponent implements OnInit {
           this.accountService.goToRedirect();
         } else {
           this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-          this.router.navigate(['/']);
+          this.router.navigate(['/'], { queryParamsHandling: 'preserve' });
         }
       })
       .catch((response: AuthResponse | AccountResponse) => {
