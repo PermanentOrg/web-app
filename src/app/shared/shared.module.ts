@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { FileSizePipe } from './pipes/filesize.pipe';
 import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 import { PromptComponent } from './components/prompt/prompt.component';
+import { ArchiveSwitcherDialogComponent } from './components/archive-switcher-dialog/archive-switcher-dialog.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { PromptComponent } from './components/prompt/prompt.component';
     PrConstantsPipe
   ],
   entryComponents: [
-    ArchivePickerComponent
+    ArchivePickerComponent,
+    ArchiveSwitcherDialogComponent
   ],
   declarations: [
     FormInputComponent,
@@ -53,7 +55,8 @@ import { PromptComponent } from './components/prompt/prompt.component';
     ArchivePickerComponent,
     BreadcrumbsComponent,
     FileSizePipe,
-    PrConstantsPipe
+    PrConstantsPipe,
+    ArchiveSwitcherDialogComponent
   ]
 })
 export class SharedModule {
@@ -61,6 +64,10 @@ export class SharedModule {
     {
       token: 'ArchivePickerComponent',
       component: ArchivePickerComponent
+    },
+    {
+      token: 'ArchiveSwitcherDialogComponent',
+      component: ArchiveSwitcherDialogComponent
     }
   ];
 

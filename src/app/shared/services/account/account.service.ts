@@ -8,6 +8,7 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
 import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { Router } from '@angular/router';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -25,12 +26,16 @@ export class AccountService {
   private redirectPath: string[] = null;
   private redirectParams: any = null;
 
+  private archives: ArchiveVO[] = [];
+
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
+  public accountChange: EventEmitter<AccountVO> = new EventEmitter();
 
   constructor(
     private api: ApiService,
     private storage: StorageService,
     private cookies: CookieService,
+    private dialog: Dialog,
     private router: Router
   ) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
@@ -62,12 +67,26 @@ export class AccountService {
     this.storage.local.set(ARCHIVE_KEY, this.archive);
   }
 
+  public setArchives(newArchives: ArchiveVO[] = []) {
+    while (this.archives.length) {
+      this.archives.shift();
+    }
+
+    for (const newArchive of newArchives) {
+      this.archives.push(newArchive);
+    }
+  }
+
   public getAccount() {
     return this.account;
   }
 
   public getArchive() {
     return this.archive;
+  }
+
+  public getArchives() {
+    return this.archives;
   }
 
   public getRootFolder() {
@@ -77,6 +96,7 @@ export class AccountService {
   public clearAccount() {
     this.account = undefined;
     this.storage.local.delete(ACCOUNT_KEY);
+    this.setArchives();
   }
 
   public clearArchive() {
@@ -110,6 +130,7 @@ export class AccountService {
         const newAccount = response.getAccountVO();
         this.account.update(newAccount);
         this.storage.local.set(ACCOUNT_KEY, this.account);
+        this.setArchives();
       })
       .catch((response: AccountResponse | any) => {
         this.logOut();
@@ -139,6 +160,15 @@ export class AccountService {
       });
   }
 
+  public refreshArchives() {
+    return this.api.archive.getAllArchives(this.account)
+      .then((response: ArchiveResponse) => {
+        const archives = response.getArchiveVOs();
+        this.setArchives(archives);
+        return this.getArchives();
+      });
+  }
+
   public updateAccount(accountChanges: AccountVO) {
     const updated = new AccountVO(this.account);
     updated.update(accountChanges);
@@ -164,6 +194,7 @@ export class AccountService {
         const root = response.getFolderVO();
         this.setRootFolder(root);
         this.archiveChange.emit(this.archive);
+        return this.getArchive();
       });
   }
 
@@ -205,6 +236,8 @@ export class AccountService {
           this.setAccount(newAccount);
           this.setArchive(response.getArchiveVO());
           this.skipSessionCheck = true;
+
+          this.accountChange.emit(this.account);
         } else if (response.needsMFA() || response.needsVerification()) {
           this.setAccount(new AccountVO({primaryEmail: email}));
         } else {
@@ -221,6 +254,8 @@ export class AccountService {
           this.clearAccount();
           this.clearArchive();
           this.clearRootFolder();
+
+          this.accountChange.emit(null);
         }
 
         return response;
@@ -233,6 +268,8 @@ export class AccountService {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
           this.setArchive(response.getArchiveVO());
+
+          this.accountChange.emit(this.account);
           return response;
         } else {
           throw response;
@@ -278,15 +315,22 @@ export class AccountService {
         const archives = response.getArchiveVOs();
         const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
         this.setArchive(new ArchiveVO(defaultArchiveData));
+        this.archiveChange.emit(this.archive);
         return response;
       });
   }
 
-  public signUp(
+  public async signUp(
     email: string, fullName: string, password: string, passwordConfirm: string,
     agreed: boolean, optIn: boolean, phone: string, inviteCode: string
   ) {
     this.skipSessionCheck = false;
+
+    if (this.isLoggedIn()) {
+      try {
+        await this.logOut();
+      } catch (err) {}
+    }
 
     return this.api.account.signUp(email, fullName, password, passwordConfirm, agreed, optIn, phone, inviteCode)
       .pipe(map((response: AccountResponse) => {
@@ -321,5 +365,12 @@ export class AccountService {
 
   public hasRedirect() {
     return !!this.redirectPath;
+  }
+
+  public async promptForArchiveChange(promptText = 'Choose archive:') {
+    await this.refreshArchives();
+    if (this.archives.length > 1 ) {
+      return this.dialog.open('ArchiveSwitcherDialogComponent',  {promptText}, { height: 'auto', width: 'fullscreen' });
+    }
   }
 }

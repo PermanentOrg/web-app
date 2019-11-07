@@ -5,16 +5,18 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { InviteResponse } from '@shared/services/api/index.repo';
+import { AccountService } from '@shared/services/account/account.service';
 
 @Injectable()
 export class InviteShareResolveService implements Resolve<any> {
   constructor(
     private api: ApiService,
+    private account: AccountService,
     private message: MessageService,
     private router: Router
   ) { }
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
+  async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
     return this.api.invite.getFullShareInvite(route.params.inviteCode)
       .then((response: InviteResponse): any => {
         if (response.isSuccessful) {

@@ -86,6 +86,7 @@ export class AppModule {
   ) {
     this.routerListener = this.router.events
     .pipe(filter((event) => {
+      // console.log(event);
       if (event instanceof NavigationStart) {
         // console.log('navigate to url:', event.url);
       }

@@ -54,6 +54,7 @@ $share-preview-banner-height: 100px;
   @media screen and (max-width: 480px) {
     .banner-logo-wrapper {
       flex: 0 1 200px;
+      margin-right: 5px;
     }
   }
 
@@ -75,11 +76,21 @@ $share-preview-banner-height: 100px;
   margin-left: auto;
   flex: 0 0 auto;
   display: flex;
+  align-items: center;
 
   .btn {
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
     margin-left: 5px;
+  }
+
+  .banner-archive-thumb {
+    border-radius: 50%;
+    height: 34px;
+    width: 34px;
+    flex: 0 0 34px;
+    margin-left: 5px;
+    cursor: pointer;
   }
 }
 
