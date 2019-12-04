@@ -12,12 +12,14 @@ import { SharedModule } from '@shared/shared.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
     PublicItemComponent,
     PublicComponent,
     ItemNotFoundComponent,
+    SearchComponent,
   ],
   imports: [
     CommonModule,

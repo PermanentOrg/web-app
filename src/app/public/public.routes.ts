@@ -8,6 +8,7 @@ import { PublicComponent } from './components/public/public.component';
 import { PublishResolveService } from './resolves/publish-resolve.service';
 import { PublishArchiveResolveService } from './resolves/publish-archive-resolve.service';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
+import { SearchComponent } from './components/search/search.component';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
@@ -28,6 +29,10 @@ export const routes: Routes = [
       {
         path: 'error',
         component: ItemNotFoundComponent
+      },
+      {
+        path: 'search',
+        component: SearchComponent
       },
       {
         path: ':publishUrlToken',

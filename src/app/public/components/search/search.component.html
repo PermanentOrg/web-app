@@ -1,0 +1,5 @@
+<h3>Search Test</h3>
+<form [formGroup]="searchForm">
+  <pr-form-input type="text" fieldName="query" placeholder="Search by name" [control]="searchForm.controls['']"
+  [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+</form>
