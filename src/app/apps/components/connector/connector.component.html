@@ -12,29 +12,34 @@
   Connected as: <strong>{{connectedAccountName}}</strong>
 </div> -->
 <div class="connector-actions">
-  <button class="btn btn-primary" [hidden]="connected" (click)="connect()" [disabled]="waiting">
+  <button class="btn btn-primary" [hidden]="connected" (click)="connect()" [disabled]="waiting || connector.type.includes('family')">
     {{ connectText || 'Connect' }}
   </button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting"
     *ngIf="connector.type.includes('facebook')">Import Photos</button>
-  <button class="btn btn-primary" [hidden]="!connected" (click)="startFamilysearchTreeImport()" [disabled]="waiting"
+  <button class="btn btn-primary" [hidden]="!connected" (click)="startFamilysearchTreeImport()" [disabled]="true || waiting"
     *ngIf="connector.type.includes('familysearch')">Import Family Tree</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
-  <button class="btn btn-primary" [hidden]="" (click)="showHelp = !showHelp" [disabled]="waiting">{{ showHelp ? 'Hide Help' : 'Help' }}</button>
+  <button class="btn btn-primary" [hidden]="connector.type.includes('family')" (click)="showHelp = !showHelp" [disabled]="waiting">{{ showHelp ? 'Hide Help' : 'Help' }}</button>
 </div>
-<div class="connector-help" *ngIf="showHelp">
+<div class="connector-help" *ngIf="showHelp || connector.type.includes('family')">
   <div *ngIf="connector.type.includes('facebook')">
     Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
     <br><br>
     You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
   </div>
   <div *ngIf="connector.type.includes('family')">
-    <span *ngIf="connected">
+    <span>
+        FamilySearch integration services are currently undergoing scheduled maintenance. This feature has been temporarily disabled.
+        <br><br>
+        Please check back soon.
+    </span>
+    <span *ngIf="connected && false">
       Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
       <br><br>
       This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
     </span>
-    <span *ngIf="!connected">
+    <span *ngIf="!connected && false">
       Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
       <br><br>
       This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
