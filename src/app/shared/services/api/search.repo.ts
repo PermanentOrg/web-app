@@ -12,6 +12,16 @@ export class SearchRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/search/archiveByEmail', data, SearchResponse);
   }
+
+  public archiveByName(query: string): Promise<SearchResponse> {
+    const data = [{
+      SearchVO: {
+        query
+      }
+    }];
+
+    return this.http.sendRequestPromise('/search/archive', data, SearchResponse);
+  }
 }
 
 export class SearchResponse extends BaseResponse {
