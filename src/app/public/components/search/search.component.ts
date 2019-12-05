@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveVO } from '@models/index';
 import { debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'pr-search',
@@ -16,7 +17,8 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) {
     this.searchForm = this.fb.group({
       'query': [ '', [ Validators.required ]]
@@ -42,6 +44,10 @@ export class SearchComponent implements OnInit {
     } catch (err) {
       console.error('search err', err);
     }
+  }
+
+  onArchiveClick(archive: ArchiveVO) {
+    this.router.navigate(['/p', 'archive', archive.archiveNbr]);
   }
 
 }

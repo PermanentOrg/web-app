@@ -9,9 +9,15 @@ import { PublishResolveService } from './resolves/publish-resolve.service';
 import { PublishArchiveResolveService } from './resolves/publish-archive-resolve.service';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 import { SearchComponent } from './components/search/search.component';
+import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
+import { PublicArchiveResolveService } from './resolves/public-archive-resolve.service';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
+};
+
+const publicArchiveResolve = {
+  archive: PublicArchiveResolveService
 };
 
 const publishResolve = {
@@ -33,6 +39,11 @@ export const routes: Routes = [
       {
         path: 'search',
         component: SearchComponent
+      },
+      {
+        path: 'archive/:archiveNbr',
+        component: PublicArchiveComponent,
+        resolve: publicArchiveResolve
       },
       {
         path: ':publishUrlToken',
@@ -67,7 +78,8 @@ export const routes: Routes = [
   ],
   providers: [
     PublishResolveService,
-    PublishArchiveResolveService
+    PublishArchiveResolveService,
+    PublicArchiveResolveService
   ]
 })
 export class PublicRoutingModule { }
