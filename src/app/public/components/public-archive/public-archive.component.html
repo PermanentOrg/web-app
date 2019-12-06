@@ -1,7 +1,8 @@
 <div class="public-archive" *ngIf="archive">
     <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
     <span>
-      <strong>{{archive.fullName}}</strong><br>
+      <strong>{{archive.fullName || 'Archive Name'}}</strong><br>
+      Public Archive
     </span>
   </div>
 <div class="public-archive-breadcrumbs">
