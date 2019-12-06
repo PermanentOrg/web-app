@@ -11,13 +11,16 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
 import { SearchComponent } from './components/search/search.component';
 import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
 import { PublicArchiveResolveService } from './resolves/public-archive-resolve.service';
+import { PublicRootResolveService } from './resolves/public-root-resolve.service';
+import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
 };
 
 const publicArchiveResolve = {
-  archive: PublicArchiveResolveService
+  archive: PublicArchiveResolveService,
+  publicRoot: PublicRootResolveService
 };
 
 const publishResolve = {
@@ -41,9 +44,14 @@ export const routes: Routes = [
         component: SearchComponent
       },
       {
-        path: 'archive/:archiveNbr',
+        path: 'archive/:publicArchiveNbr',
         component: PublicArchiveComponent,
-        resolve: publicArchiveResolve
+        resolve: publicArchiveResolve,
+        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+        data: {
+          noFileListPadding: true,
+          isPublicArchive: true
+        }
       },
       {
         path: ':publishUrlToken',
@@ -79,7 +87,8 @@ export const routes: Routes = [
   providers: [
     PublishResolveService,
     PublishArchiveResolveService,
-    PublicArchiveResolveService
+    PublicArchiveResolveService,
+    PublicRootResolveService
   ]
 })
 export class PublicRoutingModule { }

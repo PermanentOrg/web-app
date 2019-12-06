@@ -2,6 +2,11 @@
 
 $public-max-width: 800px;
 
+:host {
+  display: block;
+  width: 100%;
+}
+
 .public-archive {
   max-width: $public-max-width;
   margin: 0 auto;
@@ -23,4 +28,10 @@ $public-max-width: 800px;
       margin-left: 10px;
     }
   }
+}
+
+.public-archive-breadcrumbs {
+  background: $gray-700;
+  max-width: $public-max-width;
+  margin: 0 auto;
 }

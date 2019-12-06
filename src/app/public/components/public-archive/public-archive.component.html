@@ -1,9 +1,12 @@
-<p>
-  public-archive works!
-</p>
 <div class="public-archive" *ngIf="archive">
     <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
     <span>
       <strong>{{archive.fullName}}</strong><br>
     </span>
   </div>
+<div class="public-archive-breadcrumbs">
+  <pr-breadcrumbs></pr-breadcrumbs>
+</div>
+<div class="public-archive-content">
+  <router-outlet></router-outlet>
+</div>

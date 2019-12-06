@@ -109,6 +109,16 @@ export class FolderRepo extends BaseRepo {
 
     return this.http.sendRequestPromise('/folder/copy', data, FolderResponse);
   }
+
+  public getPublicRoot(archiveNbr: string) {
+    const data = [{
+      ArchiveVO: {
+        archiveNbr
+      }
+    }];
+
+    return this.http.sendRequestPromise('/folder/getPublicRoot', data, FolderResponse);
+  }
 }
 
 export class FolderResponse extends BaseResponse {

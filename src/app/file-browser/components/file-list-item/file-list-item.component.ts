@@ -73,6 +73,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   private isInShares: boolean;
   private isInApps: boolean;
   private isInPublic: boolean;
+  private isInPublicArchive: boolean;
   private isInSharePreview: boolean;
 
   constructor(
@@ -111,6 +112,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.route.snapshot.data.isPublic) {
       this.isInPublic = true;
+    }
+
+    if (this.route.snapshot.data.isPublicArchive) {
+      this.isInPublicArchive = true;
     }
 
 
@@ -170,9 +175,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (this.item.isFolder) {
-      if (this.isInPublic) {
+      if (this.isInPublic && !this.isInPublicArchive) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
-      } if (this.isInSharePreview) {
+      } if (this.isInSharePreview || this.isInPublicArchive) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent});
       } else {
         this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
