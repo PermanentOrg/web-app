@@ -29,7 +29,15 @@ export const SHARE_EVENTS = {
   }
 };
 
+export const HOMEPAGE_EVENTS = {
+  LandingPage: {
+    subscribe: { 'key': 'Evt-Landing10', 'params': { hitType: 'event', eventCategory: 'Landing page form', eventAction: 'subscribed' } },
+    signup: { 'key': 'Evt-Landing11', 'params': { hitType: 'event', eventCategory: 'Landing page form', eventAction: 'signup' } },
+  }
+};
+
 export const EVENTS = {
-  SHARE: SHARE_EVENTS
+  SHARE: SHARE_EVENTS,
+  HOMEPAGE_EVENTS: HOMEPAGE_EVENTS
 };
 
