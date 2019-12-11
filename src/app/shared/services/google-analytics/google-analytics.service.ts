@@ -35,7 +35,7 @@ export class GoogleAnalyticsService {
 
   sendEvent(eventData: EventData | any) {
     if (this.checkForGlobal()) {
-      this.tracker.send(eventData);
+      this.tracker.send(eventData['params'] ? eventData.params : eventData);
     }
   }
 

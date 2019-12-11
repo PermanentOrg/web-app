@@ -8,6 +8,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 @Component({
   selector: 'pr-newsletter-signup',
@@ -38,7 +40,8 @@ export class NewsletterSignupComponent implements OnInit {
     private iFrame: IFrameService,
     private router: Router,
     private message: MessageService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private ga: GoogleAnalyticsService
   ) {
 
     const queryParams = route.snapshot.queryParams;
@@ -93,6 +96,7 @@ export class NewsletterSignupComponent implements OnInit {
         } else {
           this.mailchimpError = null;
           this.mailchimpSent = true;
+          this.ga.sendEvent(EVENTS.HOMEPAGE_EVENTS.LandingPage.subscribe);
         }
       }, error => {
         this.waiting = false;
@@ -111,6 +115,7 @@ export class NewsletterSignupComponent implements OnInit {
       formValue.email, formValue.name, formValue.password, formValue.password,
       formValue.agreed, false, null, formValue.invitation
     ).then((response: AccountResponse) => {
+        this.ga.sendEvent(EVENTS.HOMEPAGE_EVENTS.LandingPage.signup);
         return this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
             this.waiting = false;
