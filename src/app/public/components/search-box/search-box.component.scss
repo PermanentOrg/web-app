@@ -1,8 +1,19 @@
 @import 'variables';
 
+$min-input-width: 18rem;
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 :host {
   display: flex;
-  position: relative;
   align-items: center;
   margin-left: auto;
 }
@@ -17,12 +28,15 @@ form {
     border-bottom: 1px solid $PR-orange;
     border-radius: 0px;
 
+    padding: 0.25rem 0;
+
     color: white;
   }
 }
 
 .search-box-input {
-  min-width: 13rem;
+  min-width: $min-input-width;
+  position: relative;
 }
 
 .search-box-results {
@@ -33,19 +47,17 @@ form {
   color: $PR-blue;
   background: $PR-orange;
   z-index: 10;
-  padding: 5px;
+  padding: 10px;
 
   box-shadow: $box-shadow-sm;
 
   pr-archive-small:not(:last-child) {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
-
-
 }
 
 .search-box-button {
-  display: flex;
+  display: none;
   align-items: center;
 
   .btn-wordpress {
@@ -57,10 +69,53 @@ form {
     height: 34px;
   }
 
-  svg {
-
-  }
   path {
     fill: $PR-orange;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .search-box-button {
+    display: flex;
+  }
+
+  .search-box-input {
+    display: none;
+  }
+}
+
+:host.search-box-active {
+  background: $PR-blue;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  width: auto;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 5px;
+
+  .search-box-input {
+    display: block;
+    flex: 1 1 auto;
+    margin-right: 5px;
+
+  }
+
+  .search-box-button, 
+  .search-box-input {
+    animation-name: fadein;
+    animation-duration: 0.35s;
+    animation-timing-function: ease;
+  }
+
+  .search-box-results {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    right: 0;
   }
 }

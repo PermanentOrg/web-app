@@ -3,7 +3,7 @@
       <a href="/">
         <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
       </a>
-      <pr-search-box></pr-search-box>
+      <pr-search-box (searchBarFocusChange)="onSearchBarFocusChange($event)"></pr-search-box>
       <div class="banner-buttons">
         <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
       </div>

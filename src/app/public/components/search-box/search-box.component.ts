@@ -1,25 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { trigger, transition, animate, style, state } from '@angular/animations';
 import { of } from 'rxjs';
+
+const ANIMATION_DURATION = 1000;
 
 @Component({
   selector: 'pr-search-box',
   templateUrl: './search-box.component.html',
   styleUrls: ['./search-box.component.scss']
 })
-export class SearchBoxComponent implements OnInit {
+export class SearchBoxComponent implements OnInit, AfterViewInit {
   public searchForm: FormGroup;
 
   public archiveResults: ArchiveVO[];
 
-  public showInput = true;
+  public showInput = false;
+  @HostBinding('class.search-box-active') public searchBoxActive = false;
   public showResults = false;
 
-  constructor(
+  @ViewChild('searchInput') searchInputRef: ElementRef;
+  @Output() searchBarFocusChange = new EventEmitter();
+
+constructor(
     private api: ApiService,
     private fb: FormBuilder,
     private router: Router
@@ -49,7 +56,16 @@ export class SearchBoxComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+  }
 
+  onSearchButtonClick() {
+    this.searchBoxActive = true;
+  }
+
+  onCancelButtonClick() {
+    this.searchBoxActive = false;
+  }
 
   async search(query: string) {
     try {
@@ -62,5 +78,8 @@ export class SearchBoxComponent implements OnInit {
 
   onArchiveClick(archive: ArchiveVO) {
     this.router.navigate(['/p', 'archive', archive.archiveNbr]);
+    this.showResults = false;
+    this.searchForm.reset();
+    this.searchBoxActive = false;
   }
 }

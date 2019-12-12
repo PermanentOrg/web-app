@@ -15,6 +15,8 @@ export class PublicComponent implements OnInit {
   public archive: ArchiveVO;
   public displayName: string;
 
+  public isSearchFocused = false;
+
   public missing = false;
 
   constructor(
@@ -52,6 +54,10 @@ export class PublicComponent implements OnInit {
 
   onSignupClick() {
     window.location.pathname = '/';
+  }
+
+  onSearchBarFocusChange(isFocused: boolean) {
+    this.isSearchFocused = isFocused;
   }
 
 }
