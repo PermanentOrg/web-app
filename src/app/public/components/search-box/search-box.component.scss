@@ -1,0 +1,66 @@
+@import 'variables';
+
+:host {
+  display: flex;
+  position: relative;
+  align-items: center;
+  margin-left: auto;
+}
+
+form {
+  padding: 0;
+
+  input {
+    background: none;
+
+    border: 0px solid;
+    border-bottom: 1px solid $PR-orange;
+    border-radius: 0px;
+
+    color: white;
+  }
+}
+
+.search-box-input {
+  min-width: 13rem;
+}
+
+.search-box-results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  color: $PR-blue;
+  background: $PR-orange;
+  z-index: 10;
+  padding: 5px;
+
+  box-shadow: $box-shadow-sm;
+
+  pr-archive-small:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
+
+}
+
+.search-box-button {
+  display: flex;
+  align-items: center;
+
+  .btn-wordpress {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+  }
+
+  svg {
+
+  }
+  path {
+    fill: $PR-orange;
+  }
+}
