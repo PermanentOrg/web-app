@@ -1,10 +1,10 @@
 <div class="search-box-input">
   <form [formGroup]="searchForm">
-    <input type="text" class="form-control" placeholder="Archive name" formControlName="query"
+    <input type="text" class="form-control" placeholder="Search archives by name" formControlName="query"
     #searchInput>
   </form>
   <div class="search-box-results" *ngIf="showResults">
-    <p *ngIf="!archiveResults.length">No results</p>
+    <p *ngIf="!archiveResults.length">No archives found for <strong>{{searchForm.value.query}}</strong></p>
     <pr-archive-small [archive]="archive" *ngFor="let archive of archiveResults" (click)="onArchiveClick(archive)"></pr-archive-small>
   </div>
 </div>
