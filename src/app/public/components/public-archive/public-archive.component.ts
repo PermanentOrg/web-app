@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { ArchiveVO } from '@models/index';
 
 @Component({
@@ -11,12 +11,18 @@ export class PublicArchiveComponent implements OnInit {
   public archive: ArchiveVO;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    this.archive = this.route.snapshot.data['archive'];
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.ngOnInit();
+      }
+    });
   }
 
   ngOnInit() {
+    this.archive = this.route.snapshot.data['archive'];
   }
 
 }

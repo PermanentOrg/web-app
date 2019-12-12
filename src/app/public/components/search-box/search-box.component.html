@@ -10,5 +10,5 @@
 </div>
 <div class="search-box-results" *ngIf="showResults">
   <p *ngIf="!archiveResults.length">No results</p>
-  <pr-archive-small [archive]="archive" *ngFor="let archive of archiveResults"></pr-archive-small>
+  <pr-archive-small [archive]="archive" *ngFor="let archive of archiveResults" (click)="onArchiveClick(archive)"></pr-archive-small>
 </div>

@@ -51,7 +51,7 @@ export const routes: Routes = [
         data: {
           noFileListPadding: true,
           isPublicArchive: true
-        }
+        },
       },
       {
         path: ':publishUrlToken',
