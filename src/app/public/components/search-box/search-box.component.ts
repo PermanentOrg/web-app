@@ -19,9 +19,10 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   public archiveResults: ArchiveVO[];
 
+  public waiting = false;
   public showInput = false;
-  @HostBinding('class.search-box-active') public searchBoxActive = false;
   public showResults = false;
+  @HostBinding('class.search-box-active') public searchBoxActive = false;
 
   @ViewChild('searchInput') searchInputRef: ElementRef;
   @Output() searchBarFocusChange = new EventEmitter();
@@ -41,12 +42,14 @@ constructor(
       debounceTime(100),
       switchMap((value) => {
         if (value.query && value.query.length > 3) {
+          this.waiting = true;
           return this.api.search.archiveByNameObservable(value.query);
         } else {
           return of(null);
         }
       })
     ).subscribe(response => {
+      this.waiting = false;
       if (response) {
         this.archiveResults = response.getArchiveVOs();
       } else {

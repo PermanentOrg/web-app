@@ -34,9 +34,19 @@ form {
   }
 }
 
+.cancel-button {
+  // font-size: 16px;
+}
+
 .search-box-input {
   min-width: $min-input-width;
   position: relative;
+
+  .fade-ring-loader {
+    position: absolute;
+    top: 9px;
+    right: 0;
+  }
 }
 
 .search-box-results {
