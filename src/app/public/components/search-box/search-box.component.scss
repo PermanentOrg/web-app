@@ -38,6 +38,10 @@ form {
   // font-size: 16px;
 }
 
+.search-box-shadow {
+  display: none;
+}
+
 .search-box-input {
   min-width: $min-input-width;
   position: relative;
@@ -57,7 +61,7 @@ form {
   color: $PR-blue;
   background: $PR-orange;
   z-index: 10;
-  padding: 10px;
+  padding: 0px 10px 10px;
 
   box-shadow: $box-shadow;
 
@@ -67,11 +71,29 @@ form {
   max-height: 400px;
   overflow: hidden;
   overflow-y: auto;
+  
+  p {
+    margin-bottom: 0;
+  }
 
   pr-archive-small:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .search-box-header {
+    font-weight: 700;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    color: $PR-blue;
+    // color: $PR-orange;
+    // background: $PR-purple;
+    letter-spacing: 0.1em;
+    padding: 5px 10px;
+    margin: 0px -10px 10px;
   }
 }
+
+
 
 .search-box-button {
   display: none;
@@ -122,6 +144,7 @@ form {
     right: auto;
   }
 
+
   .search-box-input {
     display: block;
     flex: 1 1 auto;
@@ -148,5 +171,15 @@ form {
     border-radius: 0;
     overflow: hidden;
     overflow-y: auto;
+  }
+
+  .search-box-shadow {
+    position: fixed;
+    display: block;
+    top: 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.3);
   }
 }

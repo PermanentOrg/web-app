@@ -1,3 +1,4 @@
+<div class="search-box-shadow" (click)="onCancelButtonClick()"></div>
 <div class="search-box-input">
   <form [formGroup]="searchForm">
     <input type="text" class="form-control" placeholder="Search archives by name" formControlName="query"
@@ -5,8 +6,9 @@
   </form>
   <div class="fade-ring-loader" *ngIf="waiting"></div>
   <div class="search-box-results" *ngIf="showResults">
+    <div class="search-box-header">Archives</div>
     <p *ngIf="!archiveResults.length">No archives found for <strong>{{searchForm.value.query}}</strong></p>
-    <pr-archive-small [archive]="archive" *ngFor="let archive of archiveResults" (click)="onArchiveClick(archive)"></pr-archive-small>
+    <pr-archive-small [archive]="archive" *ngFor="let archive of archiveResults; trackBy: archiveResultTrackByFn" (click)="onArchiveClick(archive)"></pr-archive-small>
   </div>
 </div>
 <div class="search-box-button">

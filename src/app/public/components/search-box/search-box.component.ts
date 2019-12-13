@@ -62,6 +62,10 @@ constructor(
   ngAfterViewInit() {
   }
 
+  archiveResultTrackByFn(archive: ArchiveVO) {
+    return archive.archiveId;
+  }
+
   onSearchButtonClick() {
     this.searchBoxActive = true;
   }
