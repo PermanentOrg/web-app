@@ -18,12 +18,14 @@ export class ApiService {
   public relation: Repo.RelationRepo;
   public search: Repo.SearchRepo;
   public share: Repo.ShareRepo;
+  public system: Repo.SystemRepo;
 
   constructor(private http: HttpService) {
     this.auth = new Repo.AuthRepo(this.http);
     this.account = new Repo.AccountRepo(this.http);
     this.archive = new Repo.ArchiveRepo(this.http);
     this.billing = new Repo.BillingRepo(this.http);
+    this.connector = new Repo.ConnectorRepo(this.http);
     this.folder = new Repo.FolderRepo(this.http);
     this.invite = new Repo.InviteRepo(this.http);
     this.publish = new Repo.PublishRepo(this.http);
@@ -31,6 +33,6 @@ export class ApiService {
     this.relation = new Repo.RelationRepo(this.http);
     this.search = new Repo.SearchRepo(this.http);
     this.share = new Repo.ShareRepo(this.http);
-    this.connector = new Repo.ConnectorRepo(this.http);
+    this.system = new Repo.SystemRepo(this.http);
   }
 }

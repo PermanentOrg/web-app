@@ -1,4 +1,4 @@
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler, Injector } from '@angular/core';
 import {
   RouterModule,
   Router,
@@ -23,6 +23,7 @@ import { AppComponent } from '@root/app/app.component';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { DialogModule } from './dialog/dialog.module';
 import { APP_BASE_HREF } from '@angular/common';
+import { ApiService } from '@shared/services/api/api.service';
 
 declare var ga: any;
 
@@ -44,6 +45,19 @@ export class CustomUrlSerializer implements UrlSerializer {
   /** Converts a {@link UrlTree} into a url */
   serialize(tree: UrlTree): string {
     return this.defaultSerializer.serialize(tree);
+  }
+}
+
+@Injectable()
+export class PermErrorHandler implements ErrorHandler {
+  constructor(private injector: Injector) { }
+  handleError(error: any) {
+    console.error(error);
+    
+    const api: ApiService = this.injector.get(ApiService);
+    if (api) {
+      api.system.logError(error);
+    }
   }
 }
 
@@ -69,6 +83,10 @@ export class CustomUrlSerializer implements UrlSerializer {
     {
       provide: UrlSerializer,
       useClass: CustomUrlSerializer
+    },
+    {
+      provide: ErrorHandler,
+      useClass: PermErrorHandler
     },
     {
       provide: APP_BASE_HREF,
