@@ -1,13 +1,15 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { ArchiveVO } from '@models/index';
+import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-public',
   templateUrl: './public.component.html',
   styleUrls: ['./public.component.scss']
 })
-export class PublicComponent implements OnInit {
+export class PublicComponent implements OnInit, OnDestroy {
   @HostBinding('class.for-record') isRecord: boolean;
 
   bottomBannerVisible = true;
@@ -16,13 +18,26 @@ export class PublicComponent implements OnInit {
   public displayName: string;
 
   public isSearchFocused = false;
+  public isNavigating = false;
 
   public missing = false;
+
+  routerListener: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router
   ) {
+    this.routerListener = this.router.events
+      .pipe(filter((event) => {
+        return event instanceof NavigationStart || event instanceof NavigationEnd;
+      })).subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          this.isNavigating = true;
+        } else if (event instanceof NavigationEnd) {
+          this.isNavigating = false;
+        }
+      });
   }
 
   ngOnInit() {
@@ -46,6 +61,10 @@ export class PublicComponent implements OnInit {
     }
 
     this.archive = this.route.snapshot.firstChild.firstChild.data.archive;
+  }
+
+  ngOnDestroy() {
+    this.routerListener.unsubscribe();
   }
 
   hideBottomBanner() {

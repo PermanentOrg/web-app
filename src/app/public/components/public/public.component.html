@@ -19,7 +19,7 @@
 <div class="public-content-breadcrumbs">
   <pr-breadcrumbs *ngIf="!isRecord && !missing"></pr-breadcrumbs>
 </div>
-<div class="public-content">
+<div class="public-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
 </div>
 <div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">
