@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
+import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { trigger, transition, animate, style, state } from '@angular/animations';
 import { of } from 'rxjs';
 
 const ANIMATION_DURATION = 1000;
@@ -23,6 +23,8 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   public showInput = false;
   public showResults = false;
   @HostBinding('class.search-box-active') public searchBoxActive = false;
+
+  public activeResultIndex = -1;
 
   @ViewChild('searchInput') searchInputRef: ElementRef;
   @Output() searchBarFocusChange = new EventEmitter();
@@ -55,11 +57,13 @@ constructor(
       } else {
         this.archiveResults = null;
       }
+      this.activeResultIndex = -1;
       this.showResults = this.archiveResults !== null;
     });
   }
 
   ngAfterViewInit() {
+    this.searchInputRef.nativeElement.addEventListener('keydown', evt => this.onSearchInputKeydown(evt));
   }
 
   archiveResultTrackByFn(archive: ArchiveVO) {
@@ -74,6 +78,17 @@ constructor(
     this.searchBoxActive = false;
   }
 
+  onSearchInputKeydown(event: KeyboardEvent) {
+    const isArrow = event.keyCode === UP_ARROW || event.keyCode === DOWN_ARROW;
+    if (isArrow && !this.waiting && this.archiveResults && this.archiveResults.length) {
+      const direction = event.keyCode === DOWN_ARROW ? 1 : -1;
+      const newActiveResultIndex = this.activeResultIndex + direction;
+      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), this.archiveResults.length - 1);
+    } else if (event.keyCode === ENTER) {
+      this.onArchiveClick(this.archiveResults[this.activeResultIndex]);
+    }
+  }
+
   async search(query: string) {
     try {
       const response = await this.api.search.archiveByName(query);
@@ -83,7 +98,7 @@ constructor(
     }
   }
 
-  onArchiveClick(archive: ArchiveVO) {
+  async onArchiveClick(archive: ArchiveVO) {
     this.router.navigate(['/p', 'archive', archive.archiveNbr]);
     this.showResults = false;
     this.searchForm.reset();

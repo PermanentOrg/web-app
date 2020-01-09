@@ -8,7 +8,9 @@
   <div class="search-box-results" *ngIf="showResults">
     <div class="search-box-header">Archives</div>
     <p *ngIf="!archiveResults.length">No archives found for <strong>{{searchForm.value.query}}</strong></p>
-    <pr-archive-small [archive]="archive" *ngFor="let archive of archiveResults; trackBy: archiveResultTrackByFn" (click)="onArchiveClick(archive)"></pr-archive-small>
+    <div class="search-box-result" *ngFor="let archive of archiveResults; let i = index; trackBy: archiveResultTrackByFn"   [ngClass]="{'active': i === activeResultIndex }">
+      <pr-archive-small [archive]="archive" (click)="onArchiveClick(archive)"></pr-archive-small>
+    </div>
   </div>
 </div>
 <div class="search-box-button">
