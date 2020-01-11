@@ -2,17 +2,27 @@
 
 $public-max-width: 800px;
 
+@mixin public-centered {
+  max-width: $public-max-width;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 :host {
   display: block;
   width: 100%;
 }
 
+.public-archive-header {
+  background: $PR-orange;
+}
+
 .public-archive {
-  max-width: $public-max-width;
-  margin: 0 auto;
+  @include public-centered;
+
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 0px;
 
   .public-archive-thumb {
     height: 50px;
@@ -28,10 +38,32 @@ $public-max-width: 800px;
       margin-left: 10px;
     }
   }
+
+}
+
+.public-archive-description {
+  @include public-centered;
+  padding-top: 0.5rem;
+  .public-archive-description-header {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: $font-size-sm;
+  }
+
+  @media screen and (max-width: $public-max-width) {
+    padding: 10px;
+  }
 }
 
 .public-archive-breadcrumbs {
   background: $gray-700;
-  max-width: $public-max-width;
-  margin: 0 auto;
+  @include public-centered;
 }
+
+.public-archive-content {
+  @include public-centered;
+}
+

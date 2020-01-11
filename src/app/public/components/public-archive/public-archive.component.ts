@@ -9,6 +9,7 @@ import { ArchiveVO } from '@models/index';
 })
 export class PublicArchiveComponent implements OnInit {
   public archive: ArchiveVO;
+  public description: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +24,12 @@ export class PublicArchiveComponent implements OnInit {
 
   ngOnInit() {
     this.archive = this.route.snapshot.data['archive'];
+
+    if (this.archive.description) {
+      this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</>';
+    } else {
+      this.description = null;
+    }
   }
 
 }
