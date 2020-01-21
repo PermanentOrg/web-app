@@ -35,7 +35,7 @@
     "@types/lodash": "^4.14.149",
     "binaryjs": "^0.2.1",
     "core-js": "^2.6.11",
-    "countup.js-angular2": "^6.1.1",
+    "countup.js-angular2": "^7.3.0",
     "firebase": "^5.11.1",
     "gsap": "^2.1.3",
     "hammerjs": "^2.0.8",
