@@ -8,6 +8,7 @@ import { PublicComponent } from './components/public/public.component';
 import { PublishResolveService } from './resolves/publish-resolve.service';
 import { PublishArchiveResolveService } from './resolves/publish-archive-resolve.service';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
+import { TimelineViewComponent } from '../views/components/timeline-view/timeline-view.component';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
@@ -18,6 +19,10 @@ const publishResolve = {
 };
 
 export const routes: Routes = [
+  {
+    path: 'timeline',
+    component: TimelineViewComponent
+  },
   {
     path: '',
     component: PublicComponent,

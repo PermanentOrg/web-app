@@ -12,6 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
+import { ViewsModule } from '../views/views.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
     RouterModule,
     PublicRoutingModule,
     SharedModule,
-    FileBrowserModule
+    FileBrowserModule,
+    ViewsModule
   ],
   providers: [
     DataService,
