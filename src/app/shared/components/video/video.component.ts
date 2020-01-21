@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
 import { TweenMax } from 'gsap';
 import { find } from 'lodash';
 
@@ -19,7 +19,7 @@ export class VideoComponent implements OnInit {
   public videoSrc: string;
   public isProcessing: boolean;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer) { }
+  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.videoElem = this.elementRef.nativeElement.querySelector('video');
@@ -27,7 +27,7 @@ export class VideoComponent implements OnInit {
 
     this.videoElem.addEventListener('loadstart', (event) => {
       setTimeout(() => {
-        this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
+        this.renderer.removeClass(this.videoWrapperElem, 'loading');
         TweenMax.from(
           this.videoElem,
           FADE_IN_DURATION,
@@ -49,7 +49,7 @@ export class VideoComponent implements OnInit {
       this.videoSrc = originalFile.fileURL;
       this.isProcessing = false;
     } else {
-      this.renderer.setElementClass(this.videoWrapperElem, 'loading', false);
+      this.renderer.removeClass(this.videoWrapperElem, 'loading');
       this.isProcessing = true;
     }
   }

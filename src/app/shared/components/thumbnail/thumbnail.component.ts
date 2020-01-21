@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer, HostListener, DoCheck, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2 } from '@angular/core';
 
 import { debounce } from 'lodash';
 
@@ -26,7 +26,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private dpiScale = 1;
 
   private debouncedResize;
-  constructor(elementRef: ElementRef, private renderer: Renderer) {
+  constructor(elementRef: ElementRef, private renderer: Renderer2) {
     this.element = elementRef.nativeElement;
     this.debouncedResize = debounce(this.checkElementWidth, 100);
     this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
@@ -90,12 +90,12 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       return;
     }
     if (!imageUrl) {
-      this.renderer.setElementStyle(this.imageElement, 'background-image', ``);
+      this.renderer.setStyle(this.imageElement, 'background-image', ``);
     } else {
       const imageLoader = new Image();
       imageLoader.onload = () => {
         this.thumbLoaded = true;
-        this.renderer.setElementStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
+        this.renderer.setStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
       };
       imageLoader.src = imageUrl;
     }
