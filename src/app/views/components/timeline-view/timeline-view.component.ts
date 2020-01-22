@@ -5,8 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { isNumber } from 'util';
-import { GroupByTimespan, TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan } from './timeline-util';
+import { remove } from 'lodash';
+import { GroupByTimespan, TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Day, Hour } from './timeline-util';
+import { TimelineRecordTemplate, TimelineFolderTemplate, TimelineGroupTemplate } from './timeline-templates';
 
 interface VoDataItem extends DataItem {
   itemVO: FolderVO | RecordVO;
@@ -31,6 +32,17 @@ function getDataItemFromVo(item: ItemVO): DataItem {
   }
 }
 
+interface TimelineBreadcrumb {
+  text: string;
+  type: 'folder' | 'timespan';
+
+  archiveNbr?: string;
+  folder_linkId?: number;
+
+  timespan?: TimelineGroupTimespan;
+  timespanName?: string;
+}
+
 @Component({
   selector: 'pr-timeline-view',
   templateUrl: './timeline-view.component.html',
@@ -42,11 +54,25 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private timeline: Timeline;
 
   private timelineItems: DataSet<DataItem> = new DataSet();
-
   private timelineOptions: TimelineOptions = {
-    minHeight: '300px',
+    height: '100%',
+    template: (item: any, element: HTMLDivElement, data) => {
+      switch ((item as TimelineDataItem).dataType) {
+        case 'record':
+          return TimelineRecordTemplate(item);
+        case 'folder':
+          return TimelineFolderTemplate(item);
+        case 'group':
+          return TimelineGroupTemplate(item);
+      }
+    }
   };
+
+  private animationDuration: 1000;
   private currentTimespan: TimelineGroupTimespan;
+  public breadcrumbs: TimelineBreadcrumb[] = [];
+
+  private timelineRootFolder: FolderVO;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,25 +80,50 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private api: ApiService
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
+
+    this.timelineRootFolder = this.route.snapshot.data.folder;
   }
 
   ngOnInit() {
     this.data.setCurrentFolder(this.route.snapshot.data.folder);
-    this.groupTimelineItems(true);
+    this.onFolderChange();
+    this.data.currentFolderChange.subscribe(() => {
+      this.onFolderChange();
+    });
   }
 
   ngAfterViewInit() {
     this.initTimeline();
+    this.onFolderChange();
+  }
+
+  onFolderChange() {
+    this.setFolderBreadcrumbs();
+    this.groupTimelineItems(true);
   }
 
   ngOnDestroy() {
     this.timeline.destroy();
   }
 
+  setFolderBreadcrumbs() {
+    // folder path
+    this.breadcrumbs = [];
+
+    const folder = this.data.currentFolder;
+    for (let i = 0; i < folder.pathAsFolder_linkId.length; i++) {
+      this.breadcrumbs.push({
+        type: 'folder',
+        text: folder.pathAsText[i],
+        archiveNbr: folder.pathAsArchiveNbr[i],
+        folder_linkId: folder.pathAsFolder_linkId[i]
+      });
+    }
+  }
+
   initTimeline() {
     const container = this.timelineElemRef.nativeElement;
     this.timeline = new Timeline(container, this.timelineItems, this.timelineOptions);
-    console.log(new Date().getTime(), 'timelineview init!');
     this.timeline.on('click', evt => {
       this.onTimelineItemClick(evt);
     });
@@ -89,12 +140,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan);
     this.timelineItems.add(groupResult.groupedItems);
     this.currentTimespan = groupResult.timespan;
-
-    console.log(new Date().getTime(), 'timeline items grouped!');
   }
 
   onTimelineMove() {
-    console.log(new Date().getTime(), 'timelineview changed');
     // const visibleSingleItems = this.timeline.getVisibleItems().filter(id => typeof id === 'number');
     // const items = this.data.getItemsByFolderLinkIds(visibleSingleItems);
     // this.data.fetchLeanItems(items);
@@ -115,15 +163,16 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
           break;
       }
     }
-}
+  }
 
   async onFolderClick(folder: FolderVO) {
     if (folder.isFetching) {
       await folder.fetched;
     }
-    const folderResponse = await this.api.folder.navigate(folder).toPromise();
-    this.data.setCurrentFolder(folderResponse.getFolderVO());
-    this.groupTimelineItems();
+    const folderResponse = await this.api.folder.navigateLean(folder).toPromise();
+    this.data.setCurrentFolder(folderResponse.getFolderVO(true));
+    this.groupTimelineItems(true);
+    this.timeline.fit();
   }
 
   onRecordClick(record: RecordVO) {
@@ -138,7 +187,41 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.groupTimelineItems(false);
-    this.timeline.setWindow(group.start, group.end);
+
+    const itemIdsToFocus = [];
+    this.timelineItems.forEach(item => {
+      if (item.start >= group.groupStart && (item.start <= group.groupEnd) && (!item.end || item.end <= group.groupEnd)) {
+        itemIdsToFocus.push(item.id);
+      }
+    });
+    this.timeline.focus(itemIdsToFocus);
+
+    this.breadcrumbs.push({
+      text: group.groupName,
+      type: 'timespan',
+      timespan: group.groupTimespan,
+      timespanName: group.groupName
+    });
+  }
+
+  onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
+    if (breadcrumb.type === 'folder') {
+      if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
+        this.groupTimelineItems(true);
+        this.setFolderBreadcrumbs();
+        this.timeline.fit();
+      } else {
+        this.onFolderClick(new FolderVO({
+          archiveNbr: breadcrumb.archiveNbr,
+          folder_linkId: breadcrumb.folder_linkId
+        }));
+      }
+    } else {
+      this.currentTimespan = breadcrumb.timespan;
+      remove(this.breadcrumbs, x => x.timespan > breadcrumb.timespan);
+      this.groupTimelineItems();
+      this.timeline.fit();
+    }
   }
 
 }

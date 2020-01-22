@@ -2,6 +2,12 @@ import { DataItem, moment } from 'vis-timeline';
 import { RecordVO, FolderVO, ItemVO } from '@models/index';
 import { groupBy, minBy, maxBy } from 'lodash';
 
+export const Minute = 1000 * 60;
+export const Hour = Minute * 60;
+export const Day = Hour * 24;
+export const Month = Day * 30;
+export const Year = Month * 12;
+
 export type TimelineItemDataType = 'record' | 'folder' | 'group';
 
 export enum TimelineGroupTimespan {
@@ -19,8 +25,9 @@ export interface TimelineDataItem {
 
 export class TimelineItem implements DataItem, TimelineDataItem {
   content: string;
-  start: string | number;
-  end?: string | number;
+  start: number;
+  end?: number;
+  type: 'box';
   dataType: TimelineItemDataType;
   item: ItemVO;
 
@@ -31,7 +38,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
     if (item instanceof FolderVO) {
       this.dataType = 'folder';
-      this.end = new Date(item.displayEndDT).valueOf();
+      // this.end = new Date(item.displayEndDT).valueOf();
     } else {
       this.dataType = 'record';
     }
@@ -40,9 +47,12 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
 export class TimelineGroup implements DataItem, TimelineDataItem {
   content: string;
-  start: string | number;
-  end: string | number;
+  start: number;
+  end: number;
   dataType: TimelineItemDataType = 'group';
+  type?: string;
+  groupStart: number;
+  groupEnd: number;
   groupTimespan: TimelineGroupTimespan;
   groupItems: RecordVO[] = [];
   groupName: string;
@@ -52,8 +62,28 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
     this.groupTimespan = timespan;
     this.groupName = name;
     this.content = name;
-    this.start = new Date(minBy(items, item => item.displayDT).displayDT).valueOf();
-    this.end = new Date(maxBy(items, item => item.displayDT).displayDT).valueOf();
+    this.groupStart = new Date(minBy(items, item => item.displayDT).displayDT).valueOf();
+    this.groupEnd = new Date(maxBy(items, item => item.displayDT).displayDT).valueOf();
+    const diff = this.groupEnd - this.groupStart;
+    let minDiffForRange = 20 * Minute;
+
+    switch (timespan) {
+      case TimelineGroupTimespan.Year:
+        minDiffForRange = 6 * Month;
+        break;
+      case TimelineGroupTimespan.Month:
+        minDiffForRange = 15 * Day;
+        break;
+      case TimelineGroupTimespan.Day:
+        minDiffForRange = 12 * Hour;
+        break;
+    }
+
+    this.start = this.groupStart;
+
+    if (diff >= minDiffForRange) {
+      this.end = this.groupEnd;
+    }
   }
 }
 
@@ -95,8 +125,6 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
 
   if (bestFit) {
     const bestFitTimespan = getBestFitTimespanForItems(items);
-    console.log('given timespan', timespan);
-    console.log('best fit timespan', bestFitTimespan);
     timespan = bestFitTimespan;
   }
 

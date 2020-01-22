@@ -19,6 +19,7 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
 import { RelationshipsComponent } from './components/relationships/relationships.component';
 import { MembersComponent } from './components/members/members.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
+import { LeanFolderResolveService } from './resolves/lean-folder-resolve.service';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
