@@ -4,7 +4,7 @@ import { Validators } from '@angular/forms';
 
 import { remove } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
-import { TweenMax } from 'gsap';
+import { gsap } from 'gsap';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
@@ -54,14 +54,17 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
       const targetElems = document.querySelectorAll('.archive-list pr-archive-small');
-      TweenMax.staggerFrom(
+      console.log('target elems', targetElems);
+      gsap.from(
         targetElems,
-        0.75,
         {
+          duration: 0.75,
           opacity: 0,
-          ease: 'Power4.easeOut'
-        },
-        0.05
+          ease: 'Power4.easeOut',
+          stagger: {
+            amount: 0.5
+          }
+        }
       );
   }
 

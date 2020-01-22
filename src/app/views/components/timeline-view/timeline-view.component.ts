@@ -8,7 +8,7 @@ import { Timeline, DataSet } from 'vis-timeline';
   styleUrls: ['./timeline-view.component.scss']
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit {
-  @ViewChild('timeline') timelineElemRef: ElementRef;
+  @ViewChild('timeline', { static: true }) timelineElemRef: ElementRef;
 
   constructor() { }
 

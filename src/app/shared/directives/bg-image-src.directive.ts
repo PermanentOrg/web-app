@@ -1,5 +1,5 @@
 import { Directive, Input, OnInit, OnChanges, ElementRef, SimpleChanges, Renderer2 } from '@angular/core';
-import { TweenMax } from 'gsap';
+import { gsap } from 'gsap';
 
 const FADE_IN_DURATION = 0.3;
 
@@ -35,7 +35,7 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
       this.renderer.addClass(this.element, 'bg-image-loaded');
       if (this.fadeIn) {
         this.fadeIn = false;
-        TweenMax.from(
+        gsap.from(
           this.element,
           FADE_IN_DURATION,
           {

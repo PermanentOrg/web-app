@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
-import { TweenMax } from 'gsap';
+import { gsap } from 'gsap';
 import { find } from 'lodash';
 
 import { RecordVO } from '@root/app/models';
@@ -28,7 +28,7 @@ export class VideoComponent implements OnInit {
     this.videoElem.addEventListener('loadstart', (event) => {
       setTimeout(() => {
         this.renderer.removeClass(this.videoWrapperElem, 'loading');
-        TweenMax.from(
+        gsap.from(
           this.videoElem,
           FADE_IN_DURATION,
           {

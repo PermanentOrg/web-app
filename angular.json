@@ -34,7 +34,7 @@
             "scripts": [
               "src/vendor/binary.js",
               "node_modules/ios-inner-height/dist/ios-inner-height.min.js",
-              "node_modules/gsap/src/uncompressed/TweenMax.js"
+              "node_modules/gsap/dist/gsap.js"
             ]
           },
           "configurations": {
@@ -223,7 +223,7 @@
             },
             "scripts": [
               "src/vendor/binary.js",
-              "node_modules/gsap/src/uncompressed/TweenMax.js"
+              "node_modules/gsap/dist/gsap.js"
             ],
             "assets": [
               "src/favicon.ico",

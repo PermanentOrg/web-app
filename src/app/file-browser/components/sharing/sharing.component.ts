@@ -57,7 +57,7 @@ export class SharingComponent implements OnInit {
 
   public linkCopied = false;
 
-  @ViewChild('shareUrlInput') shareUrlInput: ElementRef;
+  @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
   constructor(
     @Inject(DIALOG_DATA) public data: any,
