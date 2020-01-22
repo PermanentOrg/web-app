@@ -259,6 +259,12 @@ export class DataService {
     return this.byFolderLinkId[folder_linkId];
   }
 
+  public getItemsByFolderLinkIds(folder_linkIds: (number | string)[]): Array<RecordVO | FolderVO> {
+    return folder_linkIds.map(id => {
+      return this.getItemByFolderLinkId(Number(id));
+    });
+  }
+
   public downloadFile(item: RecordVO): Promise<any> {
     if (item.FileVOs && item.FileVOs.length) {
       downloadOriginalFile(item);

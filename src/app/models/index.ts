@@ -1,3 +1,6 @@
+import { RecordVO } from '@models/record-vo';
+import { FolderVO } from '@models/folder-vo';
+
 export { AccountPasswordVO } from '@models/account-password-vo';
 export { AccountVO } from '@models/account-vo';
 export { ArchiveVO } from '@models/archive-vo';
@@ -15,3 +18,5 @@ export { ShareByUrlVO } from '@models/shareby-url-vo';
 export { SimpleVO } from '@models/simple-vo';
 
 export { AccessRole } from '@models/access-role';
+
+export type ItemVO = RecordVO | FolderVO;

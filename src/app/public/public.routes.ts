@@ -9,6 +9,7 @@ import { PublishResolveService } from './resolves/publish-resolve.service';
 import { PublishArchiveResolveService } from './resolves/publish-archive-resolve.service';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
 import { TimelineViewComponent } from '../views/components/timeline-view/timeline-view.component';
+import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
@@ -21,7 +22,10 @@ const publishResolve = {
 export const routes: Routes = [
   {
     path: 'timeline',
-    component: TimelineViewComponent
+    component: TimelineViewComponent,
+    resolve: {
+      folder: FolderResolveService
+    }
   },
   {
     path: '',
@@ -67,7 +71,7 @@ export const routes: Routes = [
   ],
   providers: [
     PublishResolveService,
-    PublishArchiveResolveService
+    PublishArchiveResolveService,
   ]
 })
 export class PublicRoutingModule { }
