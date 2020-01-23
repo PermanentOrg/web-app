@@ -1,6 +1,7 @@
 import { DataItem, moment } from 'vis-timeline';
 import { RecordVO, FolderVO, ItemVO } from '@models/index';
-import { groupBy, minBy, maxBy } from 'lodash';
+import { groupBy, minBy, maxBy, meanBy } from 'lodash';
+import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 
 export const Minute = 1000 * 60;
 export const Hour = Minute * 60;
@@ -31,6 +32,8 @@ export class TimelineItem implements DataItem, TimelineDataItem {
   type: 'box';
   dataType: TimelineItemDataType;
   item: ItemVO;
+
+  recordType?: string;
 
   constructor(item: ItemVO) {
     this.item = item;
@@ -91,59 +94,15 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
       this.start = this.groupStart;
       this.end = this.groupEnd;
     } else {
-      this.start = (this.groupStart + this.groupEnd ) / 2;
+      this.start = meanBy(this.groupItems, i => new Date(i.displayDT).valueOf());
     }
-  }
-}
-
-function getDateGroupFormatFromTimespan(timespan: TimelineGroupTimespan): string {
-  switch (timespan) {
-    case TimelineGroupTimespan.Year:
-      return 'YYYY';
-    case TimelineGroupTimespan.Month:
-      return 'YYYY-MM';
-    case TimelineGroupTimespan.Day:
-      return 'YYYY-MM-DD';
-    case TimelineGroupTimespan.Hour:
-      return 'YYYY-MM-DD HH';
-  }
-}
-
-function getDisplayDateFormatFromTimespan(timespan: TimelineGroupTimespan): string {
-  switch (timespan) {
-    case TimelineGroupTimespan.Year:
-      return 'YYYY';
-    case TimelineGroupTimespan.Month:
-      return 'MMMM';
-    case TimelineGroupTimespan.Day:
-      return 'Do';
-    case TimelineGroupTimespan.Hour:
-      return 'h A';
-  }
-}
-
-function getBestFitTimespanForItems(items: ItemVO[]): TimelineGroupTimespan {
-  const start = moment(minBy(items, item => item.displayDT).displayDT);
-  const endItem = maxBy(items, item => item.displayEndDT || item.displayDT);
-  const end = moment(endItem.displayEndDT || endItem.displayDT);
-  const diff = end.diff(start);
-  const hours = diff / (1000 * 60 * 60);
-  const days = hours / 24;
-  const months = days / 30;
-  if (months > 20) {
-    return TimelineGroupTimespan.Year;
-  } else if (days > 40) {
-    return TimelineGroupTimespan.Month;
-  } else if (hours > 50) {
-    return TimelineGroupTimespan.Day;
-  } else {
-    return TimelineGroupTimespan.Hour;
   }
 }
 
 export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
+  const minimumGroupCount = 4;
 
   if (bestFit) {
     const bestFitTimespan = getBestFitTimespanForItems(items);
@@ -170,8 +129,8 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
     for (const key in groups) {
       if (groups.hasOwnProperty(key)) {
         const groupItems = groups[key];
-        if (groupItems.length === 1) {
-          timelineItems.push(new TimelineItem(groupItems[0]));
+        if (groupItems.length < minimumGroupCount) {
+          timelineItems.push(...groupItems.map(i => new TimelineItem(i)));
         } else {
           const parts = key.split('.');
           const timelineGroup = new TimelineGroup(groupItems, timespan, parts[1]);
@@ -185,4 +144,73 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
     groupedItems: timelineItems,
     timespan: timespan
   };
+}
+
+export function getBreadcrumbsFromRange(start: number, end: number) {
+  const range = end - start;
+  const mid = moment((start + end) / 2);
+  const path = [];
+
+  if (range <= Year * 1.05) {
+    path.push(mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Year)));
+  }
+
+  if (range <= Month + Day) {
+    path.push(mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Month)));
+  }
+
+  if (range <= Day + Hour) {
+    path.push(mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Day)));
+  }
+
+  if (range <= Hour + 5 * Minute) {
+    path.push(mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Hour)));
+  }
+
+  return path;
+}
+
+function getDateGroupFormatFromTimespan(timespan: TimelineGroupTimespan): string {
+  switch (timespan) {
+    case TimelineGroupTimespan.Year:
+      return 'YYYY';
+    case TimelineGroupTimespan.Month:
+      return 'YYYY-MM';
+    case TimelineGroupTimespan.Day:
+      return 'YYYY-MM-DD';
+    case TimelineGroupTimespan.Hour:
+      return 'YYYY-MM-DD HH';
+  }
+}
+
+function getDisplayDateFormatFromTimespan(timespan: TimelineGroupTimespan): string {
+  switch (timespan) {
+    case TimelineGroupTimespan.Year:
+      return 'YYYY';
+    case TimelineGroupTimespan.Month:
+      return 'MMMM YYYY';
+    case TimelineGroupTimespan.Day:
+      return 'MMMM Do';
+    case TimelineGroupTimespan.Hour:
+      return 'h A';
+  }
+}
+
+function getBestFitTimespanForItems(items: ItemVO[]): TimelineGroupTimespan {
+  const start = moment(minBy(items, item => item.displayDT).displayDT);
+  const endItem = maxBy(items, item => item.displayEndDT || item.displayDT);
+  const end = moment(endItem.displayEndDT || endItem.displayDT);
+  const diff = end.diff(start);
+  const hours = diff / (1000 * 60 * 60);
+  const days = hours / 24;
+  const months = days / 30;
+  if (months > 20) {
+    return TimelineGroupTimespan.Year;
+  } else if (days > 40) {
+    return TimelineGroupTimespan.Month;
+  } else if (hours > 50) {
+    return TimelineGroupTimespan.Day;
+  } else {
+    return TimelineGroupTimespan.Hour;
+  }
 }

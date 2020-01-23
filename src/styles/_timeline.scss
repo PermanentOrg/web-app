@@ -1,0 +1,87 @@
+.timeline {
+  .vis-item {
+    cursor: pointer;
+    
+    border-color: $PR-orange;
+    background-color: lighten($PR-orange, 30%);
+
+    &:nth-of-type(3n) {
+      border-color: $PR-blue;
+      background-color: lighten($PR-blue, 70%);
+    }
+
+    &:nth-of-type(3n + 2) {
+      border-color: $PR-purple;
+      background-color: lighten($PR-purple, 70%);
+    }
+  }
+
+  // .vis-item {
+  //   cursor: pointer;
+  //   border-color: $PR-blue;
+  //   background-color: lighten($PR-blue, 70%);
+  // }
+
+  // .vis-item {
+  //   cursor: pointer;
+  //   border-color: $PR-purple;
+  //   background-color: lighten($PR-purple, 70%);
+  // }
+  
+  .timeline-item {
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 40px;
+      width: auto;
+      margin-right: 5px;
+    }
+  
+    .timeline-thumbnail {
+      height: 40px;
+      width: 40px;
+      flex: 0 0 40px;
+      background-size: contain;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .timeline-group, .timeline-folder, .timeline-record {
+    text-align: left;
+    line-height: 20px;
+  }
+
+  .timeline-group-name, .timeline-folder-name {
+    font-weight: bolder
+  }
+
+  .timeline-record-name {
+    font-weight: 500;
+  }
+
+  .timeline-record-type {
+    text-transform: capitalize;
+    font-weight: 300;
+  }
+
+  .timeline-group-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    max-width: 40px;
+    width: 40px;
+    height: 40px;
+    max-height: 40px;
+    overflow: hidden;
+    margin-right: 5px;
+
+    img {
+      height: 20px;
+      width: 20px;
+      flex: 0 0 20px;
+      margin: 0px;
+    }
+  }
+}

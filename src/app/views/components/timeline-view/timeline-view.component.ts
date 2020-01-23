@@ -5,9 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { remove, find } from 'lodash';
-import { GroupByTimespan, TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Day, Hour, Year, Month } from './timeline-util';
+import { remove, find, throttle } from 'lodash';
+import { GroupByTimespan, TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Day, Hour, Year, Month, getBreadcrumbsFromRange } from './timeline-util';
 import { TimelineRecordTemplate, TimelineFolderTemplate, TimelineGroupTemplate } from './timeline-templates';
+import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 
 interface VoDataItem extends DataItem {
   itemVO: FolderVO | RecordVO;
@@ -96,11 +97,15 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private timelineRootFolder: FolderVO;
 
+  private throttledZoomHandler = throttle((evt) => {
+    this.onTimelineZoom(evt);
+  }, 256);
+
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
     private api: ApiService,
-    private router: Router
+    private router: Router,
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
 
@@ -151,10 +156,14 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       this.onTimelineItemClick(evt);
     });
 
-    this.timeline.on('rangechanged', evt => {
-      if (evt.byUser) {
-        this.onTimelineZoom(evt);
-      }
+    // this.timeline.on('rangechanged', evt => {
+    //   if (evt.byUser) {
+    //     this.onTimelineZoom(evt);
+    //   }
+    // });
+
+    this.timeline.on('rangechange', evt => {
+      this.throttledZoomHandler(evt);
     });
   }
 
@@ -168,8 +177,15 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTimelineZoom(event) {
-    const diff = event.end.getTime() - event.start.getTime();
-    let newTimespan = null;
+    if (!event.byUser) {
+      return;
+    }
+
+    const start = event.start.getTime();
+    const end = event.end.getTime();
+    const diff = end - start;
+    let newTimespan;
+
     if (diff > 2 * Year) {
       newTimespan = TimelineGroupTimespan.Year;
     } else if (diff > 2 * Month) {
@@ -182,10 +198,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       newTimespan = TimelineGroupTimespan.Item;
     }
 
+    console.log(getBreadcrumbsFromRange(start, end));
 
     // only adjust grouping if user zoomed OUT
-
-    if (newTimespan !== null && newTimespan !== this.currentTimespan && newTimespan < this.currentTimespan) {
+    if (newTimespan !== undefined && newTimespan !== this.currentTimespan && newTimespan < this.currentTimespan) {
       this.currentTimespan = newTimespan;
       remove(this.breadcrumbs, x => x.timespan >= this.currentTimespan);
       this.groupTimelineItems(false);
