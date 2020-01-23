@@ -1,13 +1,10 @@
-<div class="timeline-breadcrumbs">
-  <div class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last">
-    <a *ngIf="!last" (click)="onBreadcrumbClick(breadcrumb)">
-      {{breadcrumb.text}}
-    </a>
-    <span class="separator" *ngIf="!last">></span>
-    <span class="current" *ngIf="last">
-      {{breadcrumb.text}}
-    </span>
-  </div>
+
+<pr-timeline-breadcrumbs
+  (breadcrumbClicked)="onBreadcrumbClick($event)"
+  [timelineGroups]="timelineGroups"></pr-timeline-breadcrumbs>
+<div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}"></div>
+<div class="timeline-zoom-controls">
+  <button class="btn btn-primary">zoom in</button>
+  <button class="btn btn-primary">zoom out</button>
 </div>
-<div class="timeline" #timeline [ngClass]="{'navigating': isNavigating}"></div>
 <router-outlet></router-outlet>

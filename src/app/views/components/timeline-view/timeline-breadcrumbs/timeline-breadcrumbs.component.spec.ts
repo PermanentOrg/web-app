@@ -1,20 +1,20 @@
 // import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { TimelineViewComponent } from './timeline-view.component';
+// import { TimelineBreadcrumbsComponent } from './timeline-breadcrumbs.component';
 
-// describe('TimelineViewComponent', () => {
-//   let component: TimelineViewComponent;
-//   let fixture: ComponentFixture<TimelineViewComponent>;
+// describe('TimelineBreadcrumbsComponent', () => {
+//   let component: TimelineBreadcrumbsComponent;
+//   let fixture: ComponentFixture<TimelineBreadcrumbsComponent>;
 
 //   beforeEach(async(() => {
 //     TestBed.configureTestingModule({
-//       declarations: [ TimelineViewComponent ]
+//       declarations: [ TimelineBreadcrumbsComponent ]
 //     })
 //     .compileComponents();
 //   }));
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(TimelineViewComponent);
+//     fixture = TestBed.createComponent(TimelineBreadcrumbsComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });

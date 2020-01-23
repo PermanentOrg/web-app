@@ -1,40 +1,10 @@
 @import 'variables';
 
-$timeline-breadcrumb-height: 50px;
-
-.timeline-breadcrumbs {
-  width: 100%;
-  height: $timeline-breadcrumb-height;
-  overflow-y: hidden;
-  overflow-x: auto;
-  display: flex;
-  align-items: center;
-  padding: 5px 10px;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  user-select: none;
-  background: $gray-700;
-
-  .breadcrumb {
-    display: inline-block;
-    color: white;
-
-    a {
-      color: white;
-    }
-
-    .current {
-      font-weight: 600;
-    }
-
-  }
-
-  .separator {
-    display: inline-block;
-    padding: 0px 6px 0px 4px;
-    opacity: 0.5;
-  }
+:host {
+  position: relative;
+  display: block;
 }
+
 
 .timeline {
   min-height: calc(100vh - #{$timeline-breadcrumb-height});
@@ -47,3 +17,8 @@ $timeline-breadcrumb-height: 50px;
   }
 }
 
+.timeline-zoom-controls {
+  position: fixed;
+  top: $timeline-breadcrumb-height;
+  left: 0;
+}

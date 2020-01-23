@@ -102,7 +102,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
-  const minimumGroupCount = 4;
+  const minimumGroupCount = 2;
 
   if (bestFit) {
     const bestFitTimespan = getBestFitTimespanForItems(items);
@@ -146,7 +146,22 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
   };
 }
 
-export function getBreadcrumbsFromRange(start: number, end: number) {
+export function GetTimespanFromRange(start: number, end: number) {
+  const diff = end - start;
+  if (diff > 20 * Month) {
+    return TimelineGroupTimespan.Year;
+  } else if (diff > 40 * Day) {
+    return TimelineGroupTimespan.Month;
+  } else if (diff > 50 * Hour) {
+    return TimelineGroupTimespan.Day;
+  } else if (diff > 90 * Minute) {
+    return TimelineGroupTimespan.Hour;
+  } else {
+    return TimelineGroupTimespan.Item;
+  }
+}
+
+export function GetBreadcrumbsFromRange(start: number, end: number) {
   const range = end - start;
   const mid = moment((start + end) / 2);
   const path = [];
@@ -197,20 +212,9 @@ function getDisplayDateFormatFromTimespan(timespan: TimelineGroupTimespan): stri
 }
 
 function getBestFitTimespanForItems(items: ItemVO[]): TimelineGroupTimespan {
-  const start = moment(minBy(items, item => item.displayDT).displayDT);
+  const start = moment(minBy(items, item => item.displayDT).displayDT).valueOf();
   const endItem = maxBy(items, item => item.displayEndDT || item.displayDT);
-  const end = moment(endItem.displayEndDT || endItem.displayDT);
-  const diff = end.diff(start);
-  const hours = diff / (1000 * 60 * 60);
-  const days = hours / 24;
-  const months = days / 30;
-  if (months > 20) {
-    return TimelineGroupTimespan.Year;
-  } else if (days > 40) {
-    return TimelineGroupTimespan.Month;
-  } else if (hours > 50) {
-    return TimelineGroupTimespan.Day;
-  } else {
-    return TimelineGroupTimespan.Hour;
-  }
+  const end = moment(endItem.displayEndDT || endItem.displayDT).valueOf();
+
+  return GetTimespanFromRange(start, end);
 }
