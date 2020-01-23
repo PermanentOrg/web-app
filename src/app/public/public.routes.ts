@@ -20,13 +20,22 @@ const publishResolve = {
   publishedItem: PublishResolveService
 };
 
+const recordResolve = {
+  currentRecord: RecordResolveService
+};
+
 export const routes: Routes = [
   {
     path: 'timeline',
     component: TimelineViewComponent,
     resolve: {
       folder: LeanFolderResolveService
-    }
+    },
+    children: [{
+      path: 'record/:recArchiveNbr',
+      component: FileViewerComponent,
+      resolve: recordResolve,
+    }]
   },
   {
     path: '',

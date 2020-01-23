@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [TimelineViewComponent],
@@ -8,7 +9,8 @@ import { TimelineViewComponent } from './components/timeline-view/timeline-view.
     TimelineViewComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
 export class ViewsModule { }

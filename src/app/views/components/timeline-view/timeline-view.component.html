@@ -9,4 +9,5 @@
     </span>
   </div>
 </div>
-<div class="timeline" #timeline></div>
+<div class="timeline" #timeline [ngClass]="{'navigating': isNavigating}"></div>
+<router-outlet></router-outlet>

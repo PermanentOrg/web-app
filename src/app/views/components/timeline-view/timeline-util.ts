@@ -14,7 +14,8 @@ export enum TimelineGroupTimespan {
   Year,
   Month,
   Day,
-  Hour
+  Hour,
+  Item
 }
 
 // type TimelineGroupTimespan = 'year' | 'month' | 'day' | 'hour';
@@ -38,7 +39,10 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
     if (item instanceof FolderVO) {
       this.dataType = 'folder';
-      // this.end = new Date(item.displayEndDT).valueOf();
+      const end = new Date(item.displayEndDT).valueOf();
+      if (end - this.start > 6 * Month) {
+        this.end = end;
+      }
     } else {
       this.dataType = 'record';
     }
@@ -55,10 +59,12 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
   groupEnd: number;
   groupTimespan: TimelineGroupTimespan;
   groupItems: RecordVO[] = [];
+  previewThumbs: string[] = [];
   groupName: string;
 
   constructor(items: RecordVO[], timespan: TimelineGroupTimespan, name: string) {
     this.groupItems = items;
+    this.previewThumbs = items.slice(0, 4).map(i => i.thumbURL200);
     this.groupTimespan = timespan;
     this.groupName = name;
     this.content = name;
@@ -66,28 +72,31 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
     this.groupEnd = new Date(maxBy(items, item => item.displayDT).displayDT).valueOf();
     const diff = this.groupEnd - this.groupStart;
     let minDiffForRange = 20 * Minute;
+    let neverRange = true;
 
     switch (timespan) {
       case TimelineGroupTimespan.Year:
-        minDiffForRange = 6 * Month;
+        neverRange = true;
         break;
       case TimelineGroupTimespan.Month:
-        minDiffForRange = 15 * Day;
+        minDiffForRange = 10 * Day;
         break;
       case TimelineGroupTimespan.Day:
         minDiffForRange = 12 * Hour;
         break;
     }
 
-    this.start = this.groupStart;
 
-    if (diff >= minDiffForRange) {
+    if (diff >= minDiffForRange && !neverRange) {
+      this.start = this.groupStart;
       this.end = this.groupEnd;
+    } else {
+      this.start = (this.groupStart + this.groupEnd ) / 2;
     }
   }
 }
 
-function getDateFormatFromTimespan(timespan: TimelineGroupTimespan): string {
+function getDateGroupFormatFromTimespan(timespan: TimelineGroupTimespan): string {
   switch (timespan) {
     case TimelineGroupTimespan.Year:
       return 'YYYY';
@@ -97,6 +106,19 @@ function getDateFormatFromTimespan(timespan: TimelineGroupTimespan): string {
       return 'YYYY-MM-DD';
     case TimelineGroupTimespan.Hour:
       return 'YYYY-MM-DD HH';
+  }
+}
+
+function getDisplayDateFormatFromTimespan(timespan: TimelineGroupTimespan): string {
+  switch (timespan) {
+    case TimelineGroupTimespan.Year:
+      return 'YYYY';
+    case TimelineGroupTimespan.Month:
+      return 'MMMM';
+    case TimelineGroupTimespan.Day:
+      return 'Do';
+    case TimelineGroupTimespan.Hour:
+      return 'h A';
   }
 }
 
@@ -136,20 +158,26 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
     }
   }
 
-  const groups = groupBy(records, record => {
-    return moment(record.displayDT).format(getDateFormatFromTimespan(timespan));
-  });
+  if (timespan === TimelineGroupTimespan.Item) {
+    timelineItems.push(...records.map(r => new TimelineItem(r)));
+  } else {
+    const groups = groupBy(records, record => {
+      const groupFormat = getDateGroupFormatFromTimespan(timespan);
+      const displayFormat = getDisplayDateFormatFromTimespan(timespan);
+      return moment(record.displayDT).format(`${groupFormat}[.]${displayFormat}`);
+    });
 
-  for (const key in groups) {
-    if (groups.hasOwnProperty(key)) {
-      const groupItems = groups[key];
-      if (groupItems.length === 1) {
-        timelineItems.push(new TimelineItem(groupItems[0]));
-      } else {
-        const timelineGroup = new TimelineGroup(groupItems, timespan, key);
-        timelineItems.push(timelineGroup);
+    for (const key in groups) {
+      if (groups.hasOwnProperty(key)) {
+        const groupItems = groups[key];
+        if (groupItems.length === 1) {
+          timelineItems.push(new TimelineItem(groupItems[0]));
+        } else {
+          const parts = key.split('.');
+          const timelineGroup = new TimelineGroup(groupItems, timespan, parts[1]);
+          timelineItems.push(timelineGroup);
+        }
       }
-
     }
   }
 
