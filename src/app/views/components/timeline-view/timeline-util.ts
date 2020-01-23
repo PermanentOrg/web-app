@@ -1,7 +1,6 @@
-import { DataItem, moment } from 'vis-timeline';
+import { DataItem, moment } from '@permanent.org/vis-timeline';
 import { RecordVO, FolderVO, ItemVO } from '@models/index';
 import { groupBy, minBy, maxBy, meanBy } from 'lodash';
-import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 
 export const Minute = 1000 * 60;
 export const Hour = Minute * 60;
@@ -19,14 +18,26 @@ export enum TimelineGroupTimespan {
   Item
 }
 
-// type TimelineGroupTimespan = 'year' | 'month' | 'day' | 'hour';
-
 export interface TimelineDataItem {
   dataType: TimelineItemDataType;
 }
 
+const TimelineItemClasses = [
+  'timeline-perm-orange',
+  'timeline-perm-blue',
+  'timeline-perm-purple',
+];
+
+let timelineItemClassCounter = 0;
+
+function getAlternatingTimelineItemClass() {
+  // return TimelineItemClasses[Math.floor(Math.random() * TimelineItemClasses.length)];
+  return TimelineItemClasses[timelineItemClassCounter++ % TimelineItemClasses.length];
+}
+
 export class TimelineItem implements DataItem, TimelineDataItem {
   content: string;
+  className: string;
   start: number;
   end?: number;
   type: 'box';
@@ -38,6 +49,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
   constructor(item: ItemVO) {
     this.item = item;
     this.content = item.displayName;
+    this.className = getAlternatingTimelineItemClass();
     this.start = new Date(item.displayDT).valueOf();
 
     if (item instanceof FolderVO) {
@@ -54,6 +66,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
 export class TimelineGroup implements DataItem, TimelineDataItem {
   content: string;
+  className: string;
   start: number;
   end: number;
   dataType: TimelineItemDataType = 'group';
@@ -71,6 +84,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
     this.groupTimespan = timespan;
     this.groupName = name;
     this.content = name;
+    this.className = getAlternatingTimelineItemClass();
     this.groupStart = new Date(minBy(items, item => item.displayDT).displayDT).valueOf();
     this.groupEnd = new Date(maxBy(items, item => item.displayDT).displayDT).valueOf();
     const diff = this.groupEnd - this.groupStart;

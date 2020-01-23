@@ -2,15 +2,17 @@
   .vis-item {
     cursor: pointer;
     
-    border-color: $PR-orange;
-    background-color: lighten($PR-orange, 30%);
+    &.timeline-perm-orange {
+      border-color: $PR-orange;
+      background-color: lighten($PR-orange, 30%);
+    }
 
-    &:nth-of-type(3n) {
+    &.timeline-perm-blue {
       border-color: $PR-blue;
       background-color: lighten($PR-blue, 70%);
     }
 
-    &:nth-of-type(3n + 2) {
+    &.timeline-perm-purple {
       border-color: $PR-purple;
       background-color: lighten($PR-purple, 70%);
     }

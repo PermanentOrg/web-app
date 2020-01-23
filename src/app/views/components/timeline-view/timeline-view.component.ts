@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 
-import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from 'vis-timeline';
+import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '@permanent.org/vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
@@ -46,6 +46,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     showCurrentTime: false,
     height: '100%',
     selectable: false,
+    orientation: {
+      axis: 'bottom',
+      item: 'center'
+    },
     format: {
       minorLabels: {
         minute: 'h:mm A',
@@ -80,7 +84,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
-
     this.timelineRootFolder = this.route.snapshot.data.folder;
   }
 
