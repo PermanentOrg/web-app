@@ -211,7 +211,7 @@ function getDisplayDateFormatFromTimespan(timespan: TimelineGroupTimespan): stri
   }
 }
 
-function getBestFitTimespanForItems(items: ItemVO[]): TimelineGroupTimespan {
+export function getBestFitTimespanForItems(items: ItemVO[]): TimelineGroupTimespan {
   const start = moment(minBy(items, item => item.displayDT).displayDT).valueOf();
   const endItem = maxBy(items, item => item.displayEndDT || item.displayDT);
   const end = moment(endItem.displayEndDT || endItem.displayDT).valueOf();

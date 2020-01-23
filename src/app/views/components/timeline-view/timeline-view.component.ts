@@ -6,7 +6,9 @@ import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { remove, find, throttle, minBy, maxBy } from 'lodash';
-import { GroupByTimespan, TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Year, GetBreadcrumbsFromRange, GetTimespanFromRange } from './timeline-util';
+import {  TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Year,
+  GroupByTimespan, GetTimespanFromRange, getBestFitTimespanForItems
+} from './timeline-util';
 import { TimelineRecordTemplate, TimelineFolderTemplate, TimelineGroupTemplate } from './timeline-templates';
 import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 import { Subscription } from 'rxjs';
@@ -132,13 +134,18 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       this.timelineItems.remove(this.timelineItems.getIds());
     }
 
-    if (this.timelineGroups.has(this.currentTimespan)) {
-      this.timelineItems.add(this.timelineGroups.get(this.currentTimespan));
+    let timespan = this.currentTimespan;
+    if (bestFitTimespan) {
+      timespan = getBestFitTimespanForItems(this.data.currentFolder.ChildItemVOs);
+    }
+
+    if (this.timelineGroups.has(timespan)) {
+      this.timelineItems.add(this.timelineGroups.get(timespan));
     } else {
       const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan);
-      this.timelineItems.add(groupResult.groupedItems);
       this.currentTimespan = groupResult.timespan;
-      this.timelineGroups.set(this.currentTimespan, groupResult.groupedItems);
+      this.timelineItems.add(groupResult.groupedItems);
+      this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
     }
   }
 
@@ -225,6 +232,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
         this.groupTimelineItems(true);
         this.timeline.fit();
+        this.breadcrumbs.setTimeBreadcrumbs();
       } else {
         this.onFolderClick(new FolderVO({
           archiveNbr: breadcrumb.archiveNbr,
@@ -236,6 +244,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const group = find(groups, (g: TimelineGroup | TimelineItem) => {
         return g.dataType === 'group' && g.content === breadcrumb.text ;
       });
+      console.log(breadcrumb, group);
       this.onGroupClick(group as TimelineGroup);
       // this.breadcrumbs.onGroupClick(group);
       // this.currentTimespan = breadcrumb.timespan + 1;
