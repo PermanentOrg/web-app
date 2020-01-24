@@ -4,6 +4,7 @@ import { TimelineGroupTimespan, GetTimespanFromRange, GroupByTimespan, TimelineG
 import { Subscription } from 'rxjs';
 import { DataItem } from '@permanent.org/vis-timeline';
 import { debounce, minBy, remove } from 'lodash';
+import { Router, ActivatedRoute } from '@angular/router';
 
 export interface TimelineBreadcrumb {
   text: string;
@@ -37,7 +38,9 @@ export class TimelineBreadcrumbsComponent implements OnInit, AfterViewInit, OnDe
   @ViewChild('scrollElem', { static: true }) scrollElem: ElementRef;
 
   constructor(
-    private data: DataService
+    private data: DataService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
     this.dataServiceSubscription = this.data.currentFolderChange.subscribe(folder => {
       this.setFolderBreadcrumbs();
@@ -126,7 +129,12 @@ export class TimelineBreadcrumbsComponent implements OnInit, AfterViewInit, OnDe
   }
 
   onBreadcrumbClick(clickedBreadcrumb: TimelineBreadcrumb) {
-    this.breadcrumbClicked.emit(clickedBreadcrumb);
+    if (clickedBreadcrumb === this.breadcrumbs[0]) {
+      const publicArchiveNbr = this.activatedRoute.snapshot.params.publicArchiveNbr;
+      this.router.navigate(['p', 'archive', publicArchiveNbr]);
+    } else {
+      this.breadcrumbClicked.emit(clickedBreadcrumb);
+    }
   }
 
   getBestMatchGroupForTimespan(time: number, timespan: TimelineGroupTimespan, allowItems = false) {

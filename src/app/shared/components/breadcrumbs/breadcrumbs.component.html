@@ -1,4 +1,4 @@
-<div class="breadcrumbs" [hidden]="!currentFolder || !breadcrumbs || !breadcrumbs.length">
+<div class="breadcrumbs" [hidden]="areBreadcrumbsHidden() || !currentFolder || !breadcrumbs || !breadcrumbs.length">
   <div class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last">
     <a [routerLink]="[breadcrumb.routerPath]" *ngIf="!last">
       {{breadcrumb.text}}

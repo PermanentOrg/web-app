@@ -71,6 +71,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     });
   }
 
+  areBreadcrumbsHidden() {
+    return !this.dataService.showBreadcrumbs;
+  }
+
   ngOnDestroy() {
     this.folderChangeListener.unsubscribe();
   }

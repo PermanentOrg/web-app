@@ -75,6 +75,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   private isInPublic: boolean;
   private isInPublicArchive: boolean;
   private isInSharePreview: boolean;
+  private checkFolderView: boolean;
 
   constructor(
     private dataService: DataService,
@@ -118,6 +119,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.isInPublicArchive = true;
     }
 
+    if (this.route.snapshot.data.checkFolderViewOnNavigate) {
+      this.checkFolderView = true;
+    }
 
     // if (this.route.snapshot.data.noFileListNavigation) {
     //   this.allowActions = false;
@@ -175,7 +179,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (this.item.isFolder) {
-      if (this.isInPublic && !this.isInPublicArchive) {
+      if (this.checkFolderView && this.isFolderViewSet()) {
+        this.router.navigate([rootUrl, 'view', this.getFolderViewUrl(), this.item.archiveNbr, this.item.folder_linkId]);
+      } else if (this.isInPublic && !this.isInPublicArchive) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
       } if (this.isInSharePreview || this.isInPublicArchive) {
         this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent});
@@ -186,6 +192,28 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
+    }
+  }
+
+  isFolderViewSet() {
+    if (!this.item.isFolder) {
+      return false;
+    }
+
+    switch (this.item.view) {
+      case FolderView.Timeline:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  getFolderViewUrl() {
+    switch (this.item.view) {
+      case FolderView.Timeline:
+        return 'timeline';
+      default:
+        return false;
     }
   }
 

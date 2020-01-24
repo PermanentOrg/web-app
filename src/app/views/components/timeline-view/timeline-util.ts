@@ -31,7 +31,6 @@ const TimelineItemClasses = [
 let timelineItemClassCounter = 0;
 
 function getAlternatingTimelineItemClass() {
-  // return TimelineItemClasses[Math.floor(Math.random() * TimelineItemClasses.length)];
   return TimelineItemClasses[timelineItemClassCounter++ % TimelineItemClasses.length];
 }
 

@@ -26,7 +26,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   public activeResultIndex = -1;
 
-  @ViewChild('searchInput') searchInputRef: ElementRef;
+  @ViewChild('searchInput', { static: true }) searchInputRef: ElementRef;
   @Output() searchBarFocusChange = new EventEmitter();
 
 constructor(

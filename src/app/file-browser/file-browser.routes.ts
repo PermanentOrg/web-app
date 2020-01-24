@@ -7,8 +7,6 @@ import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 
-
-
 const folderResolve = {
   currentFolder: FolderResolveService
 };
@@ -38,10 +36,14 @@ export const routes: Routes = [
     resolve: folderResolve,
     children: fileListChildRoutes
   },
+  {
+    path: 'view',
+    loadChildren: '@root/app/views/views.module#ViewsModule'
+  }
 ];
 @NgModule({
   imports: [
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
   exports: [
   ],

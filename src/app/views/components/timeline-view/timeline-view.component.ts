@@ -36,7 +36,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
   public timeline: Timeline;
-  private timelineRootFolder: FolderVO;
   private currentTimespan: TimelineGroupTimespan;
   public timelineGroups = new Map<TimelineGroupTimespan, DataItem[]>();
   private timelineItems: DataSet<DataItem> = new DataSet();
@@ -82,13 +81,14 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private data: DataService,
     private api: ApiService,
     private router: Router,
+    private elementRef: ElementRef
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
-    this.timelineRootFolder = this.route.snapshot.data.folder;
+    this.data.showBreadcrumbs = false;
   }
 
   ngOnInit() {
-    this.data.setCurrentFolder(this.route.snapshot.data.folder);
+    this.data.setCurrentFolder(this.route.snapshot.data.currentFolder);
     this.onFolderChange();
     this.dataServiceSubscription = this.data.currentFolderChange.subscribe(() => {
       this.onFolderChange();
@@ -99,11 +99,14 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.initTimeline();
     this.setMaxZoom();
+
+    const elem = this.elementRef.nativeElement as HTMLDivElement;
   }
 
   ngOnDestroy() {
     this.timeline.destroy();
     this.dataServiceSubscription.unsubscribe();
+    this.data.showBreadcrumbs = true;
   }
 
   onFolderChange() {

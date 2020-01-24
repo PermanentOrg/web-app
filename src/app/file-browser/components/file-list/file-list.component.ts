@@ -51,6 +51,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   folderView = FolderView.List;
   @HostBinding('class.grid-view') inGridView = false;
   @HostBinding('class.no-padding') noFileListPadding = false;
+  @HostBinding('class.file-list-centered') fileListCentered = false;
 
   @Input() allowNavigation = true;
 
@@ -76,6 +77,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
+    this.fileListCentered = this.route.snapshot.data.fileListCentered;
 
     if (this.route.snapshot.data.noFileListNavigation) {
       this.allowNavigation = false;

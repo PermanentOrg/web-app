@@ -12,13 +12,14 @@ import { VideoComponent } from '@shared/components/video/video.component';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { FolderViewComponent } from './components/folder-view/folder-view.component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     SharedModule,
-    DialogModule
+    DialogModule,
   ],
   exports: [
     FileListComponent,
@@ -31,6 +32,7 @@ import { DialogModule } from '../dialog/dialog.module';
     FileListComponent,
     FileListItemComponent,
     FileViewerComponent,
+    FolderViewComponent,
     ThumbnailComponent,
     VideoComponent,
     SharingComponent

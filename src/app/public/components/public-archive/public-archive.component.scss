@@ -1,13 +1,5 @@
 @import 'variables';
 
-$public-max-width: 800px;
-
-@mixin public-centered {
-  max-width: $public-max-width;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 :host {
   display: block;
   width: 100%;
@@ -64,6 +56,5 @@ $public-max-width: 800px;
 }
 
 .public-archive-content {
-  @include public-centered;
 }
 

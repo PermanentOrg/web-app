@@ -13,7 +13,6 @@ import { VideoComponent } from '@shared/components/video/video.component';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
-import { ArchivePickerComponent } from '@shared/components/archive-picker/archive-picker.component';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
 
 @NgModule({
@@ -23,7 +22,7 @@ import { FileBrowserComponentsModule } from './file-browser-components.module';
     FileBrowserComponentsModule,
     FileBrowserRoutingModule,
     SharedModule,
-    DialogModule
+    DialogModule,
   ],
   exports: [
     FileListComponent,

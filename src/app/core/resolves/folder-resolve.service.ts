@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { find, cloneDeep } from 'lodash';
@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 
 import { FolderVO } from '@root/app/models';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 
 @Injectable()
 export class FolderResolveService implements Resolve<any> {
@@ -17,6 +18,7 @@ export class FolderResolveService implements Resolve<any> {
   constructor(
     private api: ApiService,
     private accountService: AccountService,
+    private activatedRoute: ActivatedRoute,
     private message: MessageService,
     private router: Router
   ) { }
@@ -56,8 +58,23 @@ export class FolderResolveService implements Resolve<any> {
           throw response;
         }
 
-        return response.getFolderVO(true);
+        const folder = response.getFolderVO(true);
+        console.log(folder.view, route.url, this.activatedRoute.snapshot.url);
+
+        if (folder.view === FolderView.Timeline && route.data.folderView !== FolderView.Timeline) {
+          return this.router.navigate([
+            'p',
+            'archive',
+            route.params.publicArchiveNbr,
+            'view',
+            'timeline',
+            route.params.archiveNbr,
+            route.params.folderLinkId
+          ]);
+        }
+        return folder;
       }))).toPromise().catch((response: FolderResponse) => {
+        console.error(response);
         this.message.showError(response.getMessage(), true);
         if (targetFolder.type.includes('root')) {
           this.accountService.logOut()

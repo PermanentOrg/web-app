@@ -20,6 +20,10 @@ export class PublicArchiveComponent implements OnInit {
         this.ngOnInit();
       }
     });
+
+    this.route.data.subscribe(data => {
+      console.log('hide breadcrumbs?', data.hideBreadcrumbs);
+    });
   }
 
   ngOnInit() {
@@ -31,5 +35,4 @@ export class PublicArchiveComponent implements OnInit {
       this.description = null;
     }
   }
-
 }

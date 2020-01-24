@@ -1,5 +1,5 @@
 <div class="timeline-breadcrumbs" #scrollElem>
-  <div class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last">
+  <div class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last;">
     <a *ngIf="!last" (click)="onBreadcrumbClick(breadcrumb)">
       {{breadcrumb.text}}
     </a>

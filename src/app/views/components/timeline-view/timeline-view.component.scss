@@ -7,8 +7,9 @@
 
 
 .timeline {
-  min-height: calc(100vh - #{$timeline-breadcrumb-height});
-  height: calc(100vh - #{$timeline-breadcrumb-height});
+  $minus: $timeline-breadcrumb-height + $public-banner-height + $public-archive-header-height;
+  min-height: calc(100vh - #{$minus});
+  height: calc(100vh - #{$minus});
   width: 100%;
 
   &.navigating {

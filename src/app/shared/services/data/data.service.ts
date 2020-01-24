@@ -15,6 +15,9 @@ export class DataService {
   public currentFolder: FolderVO;
   public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
+
+  public showBreadcrumbs = true;
+
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
