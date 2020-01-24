@@ -1,0 +1,25 @@
+@import 'variables';
+
+:host {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+
+.timeline {
+  position: absolute !important;
+  top: $timeline-breadcrumb-height;
+  bottom: 0;
+  width: 100%;
+
+  &.navigating {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.timeline-zoom-controls {
+  position: fixed;
+  top: $timeline-breadcrumb-height;
+  left: 0;
+}

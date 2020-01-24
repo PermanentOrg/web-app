@@ -1,16 +1,22 @@
 @import 'variables';
 
-$public-max-width: 800px;
-
-@mixin public-centered {
-  max-width: $public-max-width;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 :host {
   display: block;
   width: 100%;
+
+  &.container-vertical-flex {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: calc(100vh - #{$public-banner-height});
+
+    .public-archive-content {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+  }
 }
 
 .public-archive-header {
@@ -63,7 +69,6 @@ $public-max-width: 800px;
   @include public-centered;
 }
 
-.public-archive-content {
-  @include public-centered;
-}
+
+
 

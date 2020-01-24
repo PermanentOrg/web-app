@@ -15,6 +15,10 @@ export class DataService {
   public currentFolder: FolderVO;
   public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
+
+  public showBreadcrumbs = true;
+  public showPublicArchiveDescription = true;
+
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
@@ -257,6 +261,12 @@ export class DataService {
 
   public getItemByFolderLinkId(folder_linkId: number): RecordVO | FolderVO {
     return this.byFolderLinkId[folder_linkId];
+  }
+
+  public getItemsByFolderLinkIds(folder_linkIds: (number | string)[]): Array<RecordVO | FolderVO> {
+    return folder_linkIds.map(id => {
+      return this.getItemByFolderLinkId(Number(id));
+    });
   }
 
   public downloadFile(item: RecordVO): Promise<any> {

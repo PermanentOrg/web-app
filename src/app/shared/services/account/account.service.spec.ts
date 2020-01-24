@@ -52,7 +52,7 @@ describe('AccountService', () => {
   });
 
   it('should log in to an account', () => {
-    service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
+    const result = service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
         const responseArchive = response.getArchiveVO();
         const responseAccount = response.getAccountVO();
@@ -73,12 +73,14 @@ describe('AccountService', () => {
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush(expected);
+
+    return result;
   });
 
   it('should detect need to verify MFA after login', () => {
     const expected = require('@root/test/responses/auth.login.verifyMfa.json');
 
-    service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
+    const result = service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
         expect(response.isSuccessful).toBeFalsy();
 
@@ -87,6 +89,8 @@ describe('AccountService', () => {
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush(expected);
+
+    return result;
   });
 
   it('should verify MFA', () => {
@@ -94,7 +98,7 @@ describe('AccountService', () => {
 
     service.setAccount(new AccountVO(TEST_DATA.account));
 
-    service.verifyMfa('1111')
+    const result = service.verifyMfa('1111')
       .then((response: AuthResponse) => {
         expect(response.isSuccessful).toBeTruthy();
 
@@ -103,12 +107,14 @@ describe('AccountService', () => {
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
     req.flush(expected);
+
+    return result;
   });
 
   it('should detect need to verify email after login', () => {
     const expected = require('@root/test/responses/auth.login.verifyEmail.json');
 
-    service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
+    const result = service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
       .then((response: AuthResponse) => {
         expect(response.isSuccessful).toBeFalsy();
         expect(response.needsVerification()).toBeTruthy();
@@ -116,14 +122,16 @@ describe('AccountService', () => {
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush(expected);
+
+    return result;
   });
 
   it('should log out of an account', () => {
     service.setAccount(new AccountVO(TEST_DATA.account));
     service.setArchive(new ArchiveVO(TEST_DATA.archive));
 
-    service.logOut()
-      .then((response: AuthResponse) => {
+    const result = service.logOut()
+       .then((response: AuthResponse) => {
           expect(response.isSuccessful).toBeTruthy();
 
           expect(service.getAccount()).toBeUndefined();
@@ -131,9 +139,10 @@ describe('AccountService', () => {
       });
 
     const expected = new AuthResponse({isSuccessful: true});
-
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/logout`);
     req.flush(expected);
+
+    return result;
   });
 
   it('should sign up for an account', () => {

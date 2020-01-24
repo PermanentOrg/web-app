@@ -1,0 +1,35 @@
+@import 'variables';
+
+.timeline-breadcrumbs {
+  width: 100%;
+  height: $timeline-breadcrumb-height;
+  overflow-y: hidden;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  user-select: none;
+  background: $gray-700;
+
+  .breadcrumb {
+    display: inline-block;
+    color: white;
+
+    a {
+      color: white;
+    }
+
+    .current {
+      font-weight: 600;
+      margin-right: 10px;
+    }
+  }
+
+  .separator {
+    display: inline-block;
+    padding: 0px 6px 0px 4px;
+    opacity: 0.5;
+  }
+}

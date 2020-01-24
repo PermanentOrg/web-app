@@ -1,0 +1,4 @@
+<ng-container [ngSwitch]="currentView" *ngIf="currentView">
+  <!-- <pr-timeline-view *ngSwitchCase="'folder.view.timeline'"></pr-timeline-view> -->
+  <pr-file-list *ngSwitchDefault></pr-file-list>
+</ng-container>

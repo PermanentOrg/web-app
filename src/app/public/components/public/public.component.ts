@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 export class PublicComponent implements OnInit, OnDestroy {
   @HostBinding('class.for-record') isRecord: boolean;
 
-  bottomBannerVisible = true;
+  bottomBannerVisible = false;
 
   public archive: ArchiveVO;
   public displayName: string;

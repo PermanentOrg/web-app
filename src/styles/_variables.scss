@@ -2,6 +2,7 @@
 
 $breadcrumb-divider: quote(">");
 $breadcrumb-height: 34px;
+$timeline-breadcrumb-height: $breadcrumb-height;
 
 $primary: $PR-blue;
 $alternate: $PR-orange;
@@ -25,6 +26,17 @@ $shadow-color-dark: rgba(black, 0.45);
 $wordpress-shadow: 0em 0em 0.65em rgba(0,0,0,0.8);
 
 $metadata-width: 350px;
+
+$public-max-width: 800px;
+$public-banner-height: 100px;
+$public-archive-header-height: 70px;
+
+
+@mixin public-centered {
+  max-width: $public-max-width;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 @mixin has-breadcrumbs {
   padding-top: 34px;

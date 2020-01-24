@@ -41,10 +41,10 @@ export class DonateComponent {
   public storageOptions = [1, 3, 5, 10, 25];
   public storageAmount = DEFAULT_STORAGE_AMOUNT;
   public pricePerGb: number = APP_CONFIG.pricePerGb;
-  @ViewChild('customStorageAmount') customStorageInput: ElementRef;
+  @ViewChild('customStorageAmount', { static: true }) customStorageInput: ElementRef;
 
   public extraDonation = APP_CONFIG.pricePerGb * DEFAULT_STORAGE_AMOUNT;
-  @ViewChild('customDonationAmount') customDonationInput: ElementRef;
+  @ViewChild('customDonationAmount', { static: true }) customDonationInput: ElementRef;
 
   public byteForByte = false;
 

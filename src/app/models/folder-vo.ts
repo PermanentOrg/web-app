@@ -5,6 +5,13 @@ import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { isArray } from 'util';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+
+export type FolderViewType =
+  'folder.view.grid' |
+  'folder.view.list' |
+  'folder.view.timeline'
+  ;
 
 export class FolderVO extends BaseVO {
   public isFolder = true;
@@ -30,7 +37,7 @@ export class FolderVO extends BaseVO {
   public sort;
   public locnId;
   public timeZoneId;
-  public view;
+  public view: FolderView;
   public viewProperty;
   public thumbArchiveNbr;
   public imageRatio;

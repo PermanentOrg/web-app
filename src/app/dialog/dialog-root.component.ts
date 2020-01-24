@@ -8,7 +8,7 @@ import { Dialog } from './dialog.service';
 })
 export class DialogRootComponent implements OnDestroy {
   public isVisible = false;
-  @ViewChild('dialogRoot', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
+  @ViewChild('dialogRoot', { read: ViewContainerRef, static: true }) viewContainer: ViewContainerRef;
 
   constructor(
     public container: ViewContainerRef,

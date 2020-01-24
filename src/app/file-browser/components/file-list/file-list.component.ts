@@ -17,7 +17,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { throttle, debounce } from 'lodash';
-import { TweenMax } from 'gsap';
+import { gsap } from 'gsap';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService } from '@shared/services/data/data.service';
@@ -51,6 +51,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   folderView = FolderView.List;
   @HostBinding('class.grid-view') inGridView = false;
   @HostBinding('class.no-padding') noFileListPadding = false;
+  @HostBinding('class.file-list-centered') fileListCentered = false;
 
   @Input() allowNavigation = true;
 
@@ -76,6 +77,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
+    this.fileListCentered = this.route.snapshot.data.fileListCentered;
 
     if (this.route.snapshot.data.noFileListNavigation) {
       this.allowNavigation = false;
@@ -210,14 +212,17 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (animate) {
       const targetElems = this.listItems.slice(0, count).map((item) => item.element.nativeElement);
-      TweenMax.staggerFrom(
+      gsap.from(
         targetElems,
         0.25,
         {
+          duration: 0.25,
           opacity: 0,
-          ease: 'Power4.easeOut'
+          ease: 'Power4.easeOut',
+          stagger: {
+            amount: 0.015
+          }
         },
-        0.015
       );
     }
 

@@ -50,7 +50,9 @@ export const routes: Routes = [
         loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
         data: {
           noFileListPadding: true,
-          isPublicArchive: true
+          fileListCentered: true,
+          isPublicArchive: true,
+          checkFolderViewOnNavigate: true
         },
       },
       {

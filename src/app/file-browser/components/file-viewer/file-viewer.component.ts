@@ -3,7 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
 import * as Hammer from 'hammerjs';
-import { TweenMax } from 'gsap';
+import { gsap } from 'gsap';
 import { filter, findIndex, find } from 'lodash';
 
 import { RecordVO, } from '@root/app/models';
@@ -161,7 +161,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
     if (!evt.isFinal) {
       // follow pointer for panning
-      TweenMax.set(
+      gsap.set(
         queuedThumbs,
         {
           x: (index, target) => {
@@ -171,10 +171,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       );
     } else if (!(fastEnough || farEnough) || !canNavigate) {
       // reset to center, not fast enough or far enough
-      TweenMax.to(
+      gsap.to(
         queuedThumbs,
-        0.5,
         {
+          duration: 0.5,
           x: (index, target) => {
             return getOrder(target) * this.screenWidth;
           },
@@ -188,10 +188,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         offset = -1;
       }
       this.disableSwipes = true;
-      TweenMax.to(
+      gsap.to(
         queuedThumbs,
-        0.5,
         {
+          duration: 0.5,
           x: (index, target) => {
             return (getOrder(target) + offset) * this.screenWidth;
           },

@@ -1,5 +1,5 @@
-import { Directive, Input, OnInit, OnChanges, ElementRef, Renderer, SimpleChanges } from '@angular/core';
-import { TweenMax } from 'gsap';
+import { Directive, Input, OnInit, OnChanges, ElementRef, SimpleChanges, Renderer2 } from '@angular/core';
+import { gsap } from 'gsap';
 
 const FADE_IN_DURATION = 0.3;
 
@@ -13,7 +13,7 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
   private element: Element;
   private fadeIn = false;
 
-  constructor(element: ElementRef, private renderer: Renderer) {
+  constructor(element: ElementRef, private renderer: Renderer2) {
     this.element = element.nativeElement;
   }
 
@@ -31,11 +31,11 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
   loadBgImage() {
     const bgImage = new Image();
     bgImage.onload = () => {
-      this.renderer.setElementStyle(this.element, 'background-image', `url(${this.bgSrc})`);
-      this.renderer.setElementClass(this.element, 'bg-image-loaded', true);
+      this.renderer.setStyle(this.element, 'background-image', `url(${this.bgSrc})`);
+      this.renderer.addClass(this.element, 'bg-image-loaded');
       if (this.fadeIn) {
         this.fadeIn = false;
-        TweenMax.from(
+        gsap.from(
           this.element,
           FADE_IN_DURATION,
           {
@@ -50,13 +50,13 @@ export class BgImageSrcDirective implements OnInit, OnChanges {
 
   setBgImage(changes?: SimpleChanges) {
     if (!this.bgSrc) {
-      this.renderer.setElementStyle(this.element, 'background-image', '');
-      this.renderer.setElementClass(this.element, 'bg-image-loaded', false);
+      this.renderer.setStyle(this.element, 'background-image', '');
+      this.renderer.removeClass(this.element, 'bg-image-loaded');
     } else {
       this.loadBgImage();
     }
 
-    this.renderer.setElementClass(this.element, 'bg-image-cover', this.cover);
+    this.cover ? this.renderer.addClass(this.element, 'bg-image-cover') : this.renderer.removeClass(this.element, 'bg-image-cover');
   }
 
 }

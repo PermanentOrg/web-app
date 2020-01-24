@@ -26,8 +26,8 @@ $public-max-width: 800px;
 }
 
 .public-banner {
-  flex: 0 0 100px;
-  height: 100px;
+  flex: 0 0 $public-banner-height;
+  height: $public-banner-height;
   padding: 0px 0.5rem;
   color: white;
   background-color: $PR-blue;

@@ -1,4 +1,5 @@
 export enum FolderView {
-  List,
-  Grid
+  List = 'folder.view.list',
+  Grid = 'folder.view.grid',
+  Timeline = 'folder.view.timeline'
 }

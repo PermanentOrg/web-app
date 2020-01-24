@@ -29,9 +29,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public pricePerGb = 10;
 
-  @ViewChild('customDonationAmount') customDonationInput: ElementRef;
+  @ViewChild('customDonationAmount', { static: true }) customDonationInput: ElementRef;
 
-  @ViewChild('card') elementsContainer: ElementRef;
+  @ViewChild('card', { static: true }) elementsContainer: ElementRef;
   stripeElementsCard: any;
   cardError: any;
   cardComplete = false;

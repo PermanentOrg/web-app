@@ -14,8 +14,8 @@ export class DialogComponent implements AfterViewInit {
 
   private dialogRef: DialogRef;
 
-  @ViewChild('dialogContent', {read: ViewContainerRef}) viewContainer: ViewContainerRef;
-  @ViewChild('menuWrapper', {read: ElementRef}) menuWrapperElement: ElementRef;
+  @ViewChild('dialogContent', { read: ViewContainerRef, static: true }) viewContainer: ViewContainerRef;
+  @ViewChild('menuWrapper', { read: ElementRef, static: true }) menuWrapperElement: ElementRef;
 
   constructor(
     private device: DeviceService,
