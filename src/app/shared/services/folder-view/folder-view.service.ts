@@ -12,6 +12,9 @@ export class FolderViewService {
 
   viewChange: EventEmitter<FolderView> = new EventEmitter<FolderView>();
 
+  containerFlex = false;
+  containerFlexChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   constructor(private storage: StorageService) {
     const storedView = storage.session.get(VIEW_STORAGE_KEY);
     switch (storedView) {
@@ -23,6 +26,10 @@ export class FolderViewService {
       default:
         this.folderView = FolderView.Grid;
     }
+
+    this.containerFlexChange.subscribe(v => {
+      this.containerFlex = v;
+    });
   }
 
   setFolderView(folderView: FolderView, skipSave = false) {

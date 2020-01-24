@@ -17,6 +17,7 @@ export class DataService {
 
 
   public showBreadcrumbs = true;
+  public showPublicArchiveDescription = true;
 
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 

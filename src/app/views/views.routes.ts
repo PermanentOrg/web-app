@@ -19,6 +19,7 @@ export const routes: Routes = [
     path: 'timeline',
     data: {
       folderView: 'folder.view.timeline',
+      containerVerticalFlex: true,
       hideBreadcrumbs: true
     },
     children: [{

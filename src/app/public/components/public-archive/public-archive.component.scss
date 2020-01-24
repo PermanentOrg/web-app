@@ -3,6 +3,20 @@
 :host {
   display: block;
   width: 100%;
+
+  &.container-vertical-flex {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: calc(100vh - #{$public-banner-height});
+
+    .public-archive-content {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+  }
 }
 
 .public-archive-header {
@@ -55,6 +69,6 @@
   @include public-centered;
 }
 
-.public-archive-content {
-}
+
+
 

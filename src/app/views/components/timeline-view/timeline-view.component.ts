@@ -13,6 +13,7 @@ import { TimelineRecordTemplate, TimelineFolderTemplate, TimelineGroupTemplate }
 import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 import { Subscription } from 'rxjs';
 import { TimelineBreadcrumbsComponent, TimelineBreadcrumb } from './timeline-breadcrumbs/timeline-breadcrumbs.component';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
 interface VoDataItem extends DataItem {
   itemVO: FolderVO | RecordVO;
@@ -81,10 +82,13 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private data: DataService,
     private api: ApiService,
     private router: Router,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private fvService: FolderViewService
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
     this.data.showBreadcrumbs = false;
+    this.data.showPublicArchiveDescription = false;
+    this.fvService.containerFlexChange.emit(true);
   }
 
   ngOnInit() {
@@ -101,12 +105,15 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.setMaxZoom();
 
     const elem = this.elementRef.nativeElement as HTMLDivElement;
+    console.log(elem.offsetHeight);
   }
 
   ngOnDestroy() {
     this.timeline.destroy();
     this.dataServiceSubscription.unsubscribe();
     this.data.showBreadcrumbs = true;
+    this.data.showPublicArchiveDescription = true;
+    this.fvService.containerFlexChange.emit(false);
   }
 
   onFolderChange() {

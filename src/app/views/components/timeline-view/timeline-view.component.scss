@@ -2,14 +2,14 @@
 
 :host {
   position: relative;
-  display: block;
+  flex: 1 1 auto;
 }
 
 
 .timeline {
-  $minus: $timeline-breadcrumb-height + $public-banner-height + $public-archive-header-height;
-  min-height: calc(100vh - #{$minus});
-  height: calc(100vh - #{$minus});
+  position: absolute !important;
+  top: $timeline-breadcrumb-height;
+  bottom: 0;
   width: 100%;
 
   &.navigating {
