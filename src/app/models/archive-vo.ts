@@ -27,6 +27,7 @@ export class ArchiveVO extends BaseVO {
   public thumbURL500;
   public thumbURL1000;
   public thumbURL2000;
+  public type;
 
   constructor(voData: any) {
     super(voData);
