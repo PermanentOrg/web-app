@@ -54,7 +54,6 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
       const targetElems = document.querySelectorAll('.archive-list pr-archive-small');
-      console.log('target elems', targetElems);
       gsap.from(
         targetElems,
         {
