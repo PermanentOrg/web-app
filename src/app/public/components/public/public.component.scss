@@ -46,7 +46,7 @@ $public-max-width: 800px;
   }
 
   .banner-buttons {
-    margin-left: auto;
+    margin-left: 5px;
     flex: 0 0 auto;
     display: flex;
 
@@ -64,9 +64,15 @@ $public-max-width: 800px;
   flex: 1 1 auto;
   overflow-y: auto;
   display: flex;
-  max-width: $public-max-width;
-  margin: 0 auto;
+  // max-width: $public-max-width;
+  // margin: 0 auto;
   width: 100%;
+
+  &.navigating {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: 0.1s ease-in opacity;
+  }
 }
 
 .public-content-breadcrumbs {
@@ -137,5 +143,14 @@ $public-max-width: 800px;
   .public-footer-close {
     flex: 0 0 3rem;
     cursor: pointer;
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  .search-bar-focused {
+    & > a, .banner-buttons {
+      display: none;
+    }
   }
 }

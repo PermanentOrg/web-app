@@ -22,6 +22,7 @@ export class ArchiveVO extends BaseVO {
   public ItemVOs;
   public birthDay;
   public company;
+  public description;
   public thumbURL200;
   public thumbURL500;
   public thumbURL1000;

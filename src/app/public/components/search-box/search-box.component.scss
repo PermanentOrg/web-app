@@ -1,0 +1,195 @@
+@import 'variables';
+
+$min-input-width: 18rem;
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+:host {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+form {
+  padding: 0;
+
+  input {
+    background: none;
+
+    border: 0px solid;
+    border-bottom: 1px solid $PR-orange;
+    border-radius: 0px;
+
+    padding: 0.25rem 0;
+
+    color: white;
+  }
+}
+
+.cancel-button {
+  // font-size: 16px;
+}
+
+.search-box-shadow {
+  display: none;
+}
+
+.search-box-input {
+  min-width: $min-input-width;
+  position: relative;
+
+  .fade-ring-loader {
+    position: absolute;
+    top: 9px;
+    right: 0;
+  }
+}
+
+.search-box-results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  color: $PR-blue;
+  background: $PR-orange;
+  z-index: 10;
+  padding: 0px 10px 10px;
+
+  box-shadow: $box-shadow;
+
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+
+  max-height: 400px;
+  overflow: hidden;
+  overflow-y: auto;
+  
+  p {
+    margin-bottom: 0;
+  }
+
+  .search-box-result {
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 5px 10px;
+
+    &.active, &:hover {
+      background: darken($PR-orange, 7%);
+    }
+  }
+
+  .search-box-result:last-child {
+    margin-bottom: -10px;
+  }
+
+  .search-box-header {
+    font-weight: 700;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    color: $PR-blue;
+    // color: $PR-orange;
+    // background: $PR-purple;
+    letter-spacing: 0.1em;
+    padding: 5px 10px;
+    margin: 0px -10px 5px;
+  }
+}
+
+
+
+.search-box-button {
+  display: none;
+  align-items: center;
+
+  .btn-wordpress {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+  }
+
+  path {
+    fill: $PR-orange;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .search-box-button {
+    display: flex;
+  }
+
+  .search-box-input {
+    display: none;
+  }
+}
+
+:host.search-box-active {
+  background: $PR-blue;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  width: auto;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 5px;
+
+  @media screen and (min-width: 801px) {
+    width: 800px;
+    margin: 0 auto;
+    left: auto;
+    right: auto;
+  }
+
+
+  .search-box-input {
+    display: block;
+    flex: 1 1 auto;
+    margin-right: 5px;
+  }
+
+  .search-box-button {
+    display: flex;
+  }
+
+  .search-box-button, 
+  .search-box-input {
+    animation-name: fadein;
+    animation-duration: 0.35s;
+    animation-timing-function: ease;
+  }
+
+  .search-box-results {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 100px);
+    border-radius: 0;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  .search-box-shadow {
+    position: fixed;
+    display: block;
+    top: 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0, 0.3);
+  }
+}

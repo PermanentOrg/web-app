@@ -1,0 +1,19 @@
+<div class="public-archive-header">
+  <div class="public-archive" *ngIf="archive">
+    <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+    <span>
+      <strong>{{archive.fullName || 'Archive Name'}}</strong><br>
+      Public Archive
+    </span>
+  </div>
+</div>
+<div class="public-archive-description" *ngIf="description">
+  <div class="public-archive-description-header">About this archive</div>
+  <p [innerHTML]="description"></p>
+</div>
+<div class="public-archive-breadcrumbs">
+  <pr-breadcrumbs></pr-breadcrumbs>
+</div>
+<div class="public-archive-content">
+  <router-outlet></router-outlet>
+</div>

@@ -42,7 +42,10 @@ export class FolderResolveService implements Resolve<any> {
         folder.ChildItemVOs = [ sharedRecord ];
         return Promise.resolve(folder);
       }
-    } else {
+    } else if (state.url.includes('/p/archive/')) {
+      const publicRoot = route.parent.data.publicRoot;
+      targetFolder = new FolderVO(publicRoot);
+    } else  {
       const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
       targetFolder = new FolderVO(myFiles);
     }

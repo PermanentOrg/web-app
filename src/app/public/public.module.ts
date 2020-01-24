@@ -12,21 +12,25 @@ import { SharedModule } from '@shared/shared.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
-import { ViewsModule } from '../views/views.module';
+import { SearchComponent } from './components/search/search.component';
+import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
+import { SearchBoxComponent } from './components/search-box/search-box.component';
 
 @NgModule({
   declarations: [
     PublicItemComponent,
     PublicComponent,
     ItemNotFoundComponent,
+    SearchComponent,
+    PublicArchiveComponent,
+    SearchBoxComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     PublicRoutingModule,
     SharedModule,
-    FileBrowserModule,
-    ViewsModule
+    FileBrowserModule
   ],
   providers: [
     DataService,
