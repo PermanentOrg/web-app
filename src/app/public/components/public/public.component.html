@@ -3,6 +3,7 @@
       <a href="/">
         <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
       </a>
+      <pr-search-box (searchBarFocusChange)="onSearchBarFocusChange($event)"></pr-search-box>
       <div class="banner-buttons">
         <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
       </div>
@@ -18,7 +19,7 @@
 <div class="public-content-breadcrumbs">
   <pr-breadcrumbs *ngIf="!isRecord && !missing"></pr-breadcrumbs>
 </div>
-<div class="public-content">
+<div class="public-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
 </div>
 <div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">

@@ -1,0 +1,22 @@
+import { Injectable } from '@angular/core';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+
+import { ApiService } from '@shared/services/api/api.service';
+
+import { FolderResponse } from '@shared/services/api/index.repo';
+import { FolderVO } from '@models/index';
+
+@Injectable()
+export class PublicRootResolveService implements Resolve<any> {
+  constructor(
+    private api: ApiService,
+  ) { }
+
+  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
+    const archiveNbr = route.params.publicArchiveNbr;
+    return this.api.folder.getPublicRoot(archiveNbr)
+      .then((response: FolderResponse): FolderVO => {
+        return response.getFolderVO();
+      });
+  }
+}
