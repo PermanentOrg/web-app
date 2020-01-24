@@ -1,11 +1,13 @@
 import { compile } from 'handlebars';
 
+const imageHeight = 40;
+
 export const TimelineLineTemplate = `
 <div class="timeline-line"></div>
 `;
 export const TimelineRecordTemplate = compile(`
 <div class="timeline-item timeline-record">
-  <img src={{item.thumbURL200}}>
+  <img src={{item.thumbURL200}} style="width:{{imageWidth}}">
   <div>
     <div class="timeline-record-name">{{item.displayName}}</div>
   </div>
@@ -14,7 +16,7 @@ export const TimelineRecordTemplate = compile(`
 
 export const TimelineFolderTemplate = compile(`
 <div class="timeline-item timeline-folder">
-  <img src={{item.thumbURL200}}>
+  <img src={{item.thumbURL200}} style="width:{{imageWidth}}">
   <div>
     <div class="timeline-folder-name">{{item.displayName}}</div>
     {{#if item.FolderSizeVO}}

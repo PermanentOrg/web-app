@@ -34,6 +34,7 @@ function getAlternatingTimelineItemClass() {
   return TimelineItemClasses[timelineItemClassCounter++ % TimelineItemClasses.length];
 }
 
+const imageHeight = 40;
 export class TimelineItem implements DataItem, TimelineDataItem {
   content: string;
   className: string;
@@ -44,6 +45,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
   item: ItemVO;
 
   recordType?: string;
+  imageWidth?: string;
 
   constructor(item: ItemVO) {
     this.item = item;
@@ -53,12 +55,14 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
     if (item instanceof FolderVO) {
       this.dataType = 'folder';
+      this.imageWidth = `${imageHeight}px`;
       const end = new Date(item.displayEndDT).valueOf();
       if (end - this.start > 6 * Month) {
         this.end = end;
       }
     } else {
       this.dataType = 'record';
+      this.imageWidth = `${imageHeight * (1 / item.imageRatio)}px`;
     }
   }
 }
