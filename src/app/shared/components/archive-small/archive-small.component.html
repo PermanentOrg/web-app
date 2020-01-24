@@ -1,5 +1,5 @@
 <div class="archive">
-  <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+  <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"></div>
   <div class="archive-name" [ngClass]="{'clickable': clickable}">
     <span class="archive-current" *ngIf="isCurrent && !clickable">
       Current Archive<br>
