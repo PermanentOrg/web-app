@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 
 import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '@permanent.org/vis-timeline';
+// import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
@@ -14,6 +15,7 @@ import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 import { Subscription } from 'rxjs';
 import { TimelineBreadcrumbsComponent, TimelineBreadcrumb } from './timeline-breadcrumbs/timeline-breadcrumbs.component';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 interface VoDataItem extends DataItem {
   itemVO: FolderVO | RecordVO;
@@ -49,6 +51,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     zoomMin: Minute * 1,
     zoomMax: Year * 50,
     showCurrentTime: false,
+    pixelMargin: this.device.isMobileWidth() ? 10 : 100,
     height: '100%',
     selectable: false,
     zoomable: false,
@@ -89,7 +92,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private api: ApiService,
     private router: Router,
     private elementRef: ElementRef,
-    private fvService: FolderViewService
+    private fvService: FolderViewService,
+    private device: DeviceService
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
     this.data.showBreadcrumbs = false;
@@ -108,7 +112,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.initTimeline();
     this.setMaxZoom();
-    this.focusItemsWithBuffer(this.timelineItems.getIds(), false);
+    this.timeline.fit();
+    // this.focusItemsWithBuffer(this.timelineItems.getIds(), false);
 
     const elem = this.elementRef.nativeElement as HTMLDivElement;
   }
@@ -123,10 +128,12 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFolderChange() {
     this.timelineGroups.clear();
+    console.log('trigger group from folder change');
     this.groupTimelineItems(true, false);
     if (this.timeline) {
       this.setMaxZoom();
-      this.focusItemsWithBuffer(this.timelineItems.getIds());
+      this.timeline.fit();
+      // this.focusItemsWithBuffer(this.timelineItems.getIds());
     }
   }
 
@@ -156,6 +163,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   groupTimelineItems(bestFitTimespan = false, keepFolders = true) {
+    console.log('start group');
     if (this.timelineItems.length) {
       let ids = this.timelineItems.getIds();
       if (keepFolders) {
@@ -256,10 +264,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (firstItemBefore) {
       const newMidpoint = firstItemBefore.start as number - 10;
-      const newStart = newMidpoint - (midpoint - start);
-      const newEnd = newMidpoint + (end - midpoint);
-
-      this.timeline.setWindow(newStart, newEnd);
+      this.timeline.moveTo(newMidpoint);
     } else {
       this.hasPrev = false;
     }
@@ -286,10 +291,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (firstItemAfter) {
       const newMidpoint = firstItemAfter.start as number + 10;
-      const newStart = newMidpoint - (midpoint - start);
-      const newEnd = newMidpoint + (end - midpoint);
-
-      this.timeline.setWindow(newStart, newEnd);
+      this.timeline.moveTo(newMidpoint);
     } else {
       this.hasPrev = false;
     }
@@ -304,6 +306,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (newTimespan !== undefined && newTimespan !== this.currentTimespan) {
       this.currentTimespan = newTimespan;
+      console.log('trigger group from zoom');
       this.groupTimelineItems(false);
     }
 
@@ -373,7 +376,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (breadcrumb.type === 'folder') {
       if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
         this.groupTimelineItems(true, false);
-        this.focusItemsWithBuffer(this.timelineItems.getIds());
+        this.timeline.fit();
+        // this.focusItemsWithBuffer(this.timelineItems.getIds());
         this.breadcrumbs.setTimeBreadcrumbs();
       } else {
         this.onFolderClick(new FolderVO({

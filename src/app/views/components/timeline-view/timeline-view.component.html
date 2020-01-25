@@ -4,9 +4,16 @@
   [timelineGroups]="timelineGroups"></pr-timeline-breadcrumbs>
 <div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}"></div>
 <div class="timeline-zoom-controls">
-  <button class="btn btn-primary" (click)="onZoomInClick()">zoom in</button>
-  <button class="btn btn-primary" (click)="onZoomOutClick()">zoom out</button>
+  <div class="control-row">
+    <button (click)="onZoomInClick()">+</button>
+  </div>
+  <div class="control-row">
+    <button (click)="onPrevClick()">‹</button>
+    <button (click)="onNextClick()">›</button>
+  </div>
+  <div class="control-row">
+    <button (click)="onZoomOutClick()">-</button>
+
+  </div>
 </div>
-<button class="btn btn-primary timeline-item-control" (click)="onPrevClick()">prev</button>
-<button class="btn btn-primary timeline-item-control timeline-item-control-right" (click)="onNextClick()">next</button>
 <router-outlet></router-outlet>
