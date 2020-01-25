@@ -109,14 +109,29 @@ export class TimelineBreadcrumbsComponent implements OnInit, AfterViewInit, OnDe
     remove(this.breadcrumbs, b => b.type === 'timespan');
     if (group) {
       const midpoint = group.groupEnd ? (group.groupStart + group.groupEnd) / 2 : group.groupStart;
+      const groups: TimelineGroup[] = [];
       let timespan = TimelineGroupTimespan.Year;
       while (timespan < group.groupTimespan) {
         const bestMatch = this.getBestMatchGroupForTimespan(midpoint, timespan, true);
         if (bestMatch.dataType === 'group') {
-          this.breadcrumbs.push(this.getBreadcrumbFromGroup(bestMatch));
+          groups.push(bestMatch);
         }
         timespan++;
       }
+
+      const bestFitGroups = [];
+      let lastGroupSize = 0;
+
+      // find only groups needed in breadcrumbs
+      for (let i = groups.length - 1; i >= 0; i--) {
+        const x = groups[i];
+        if (x.groupItems.length > lastGroupSize && x.groupItems.length > group.groupItems.length) {
+          lastGroupSize = x.groupItems.length;
+          bestFitGroups.unshift(x);
+        }
+      }
+      
+      this.breadcrumbs.push(...bestFitGroups.map(g => this.getBreadcrumbFromGroup(g)));
       this.breadcrumbs.push(this.getBreadcrumbFromGroup(group));
     }
   }

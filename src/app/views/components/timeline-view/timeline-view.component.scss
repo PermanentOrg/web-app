@@ -19,7 +19,26 @@
 }
 
 .timeline-zoom-controls {
-  position: fixed;
+  position: absolute;
   top: $timeline-breadcrumb-height;
   left: 0;
+  opacity: 0.7;
 }
+
+.timeline-item-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+  display: inline-block;
+  width: 40px;
+  margin: 0;
+  
+  &:not(.timeline-item-control-right) {
+    left: 10px;
+  }
+  &.timeline-item-control-right {
+    right: 10px;
+  }
+}
+

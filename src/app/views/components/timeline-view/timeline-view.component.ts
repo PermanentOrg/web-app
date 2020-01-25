@@ -21,6 +21,8 @@ interface VoDataItem extends DataItem {
 
 type ItemVO = RecordVO | FolderVO;
 
+const ZOOM_PERCENTAGE = 1;
+
 @Component({
   selector: 'pr-timeline-view',
   templateUrl: './timeline-view.component.html',
@@ -34,6 +36,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }, 256);
   private dataServiceSubscription: Subscription;
 
+  public hasPrev = true;
+  public hasNext = true;
+
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
   public timeline: Timeline;
@@ -46,6 +51,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     showCurrentTime: false,
     height: '100%',
     selectable: false,
+    zoomable: false,
     orientation: {
       axis: 'bottom',
       item: 'center'
@@ -131,6 +137,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.timeline.on('rangechange', evt => {
       this.throttledZoomHandler(evt);
     });
+
+    this.timeline.on('rangechanged', evt => {
+      this.throttledZoomHandler(evt);
+      this.breadcrumbs.debouncedZoomHandler(evt);
+    });
   }
 
   setMaxZoom() {
@@ -162,11 +173,105 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onTimelineZoom(event) {
-    if (!event.byUser) {
-      return;
+  focusItemsWithBuffer(ids: string[]) {
+    if (ids.length === 1) {
+      return this.timeline.focus(ids);
     }
 
+    let start = null;
+    let end = null;
+    for (const id of ids) {
+      const item = this.timelineItems.get(id);
+      const s = item.start;
+      const e = 'end' in item ? item.end : item.start;
+
+      if (start === null || s < start) {
+        start = s;
+      }
+
+      if (end === null || e > end) {
+        end = e;
+      }
+    }
+
+    const bufferSize = 0.1;
+    const range = end - start;
+    start -= bufferSize * range;
+    end += bufferSize * range;
+
+    this.timeline.setWindow(start, end);
+  }
+
+  onZoomInClick() {
+    this.timeline.zoomIn(ZOOM_PERCENTAGE);
+  }
+
+  onZoomOutClick() {
+    this.timeline.zoomOut(ZOOM_PERCENTAGE);
+  }
+
+  onPrevClick() {
+    const range = this.timeline.getWindow();
+    const start = range.start.valueOf();
+    const end = range.end.valueOf();
+    const minDiff = (end - start) * 0.5;
+    const midpoint = (end + start) / 2;
+    const midpointWithMinDiff = midpoint - minDiff;
+
+    let firstItemBefore: DataItem;
+    this.timelineItems.forEach(i => {
+      if (i.start < midpointWithMinDiff) {
+        if (!firstItemBefore) {
+          firstItemBefore = i;
+        } else if (firstItemBefore.start < i.start) {
+          firstItemBefore = i;
+        }
+      }
+    });
+
+    if (firstItemBefore) {
+      const newMidpoint = firstItemBefore.start as number - 10;
+      const newStart = newMidpoint - (midpoint - start);
+      const newEnd = newMidpoint + (end - midpoint);
+
+      this.timeline.setWindow(newStart, newEnd);
+    } else {
+      this.hasPrev = false;
+    }
+  }
+
+  onNextClick() {
+    const range = this.timeline.getWindow();
+    const start = range.start.valueOf();
+    const end = range.end.valueOf();
+    const minDiff = (end - start) * 0.5;
+    const midpoint = (end + start) / 2;
+    const midpointWithMinDiff = midpoint + minDiff;
+
+    let firstItemAfter: DataItem;
+    this.timelineItems.forEach(i => {
+      if (i.start > midpointWithMinDiff) {
+        if (!firstItemAfter) {
+          firstItemAfter = i;
+        } else if (firstItemAfter.start > i.start) {
+          firstItemAfter = i;
+        }
+      }
+    });
+
+    if (firstItemAfter) {
+      const newMidpoint = firstItemAfter.start as number + 10;
+      const newStart = newMidpoint - (midpoint - start);
+      const newEnd = newMidpoint + (end - midpoint);
+
+      this.timeline.setWindow(newStart, newEnd);
+    } else {
+      this.hasPrev = false;
+    }
+
+  }
+
+  onTimelineZoom(event) {
     this.breadcrumbs.debouncedZoomHandler(event);
 
     const start = event.start.getTime();
@@ -174,10 +279,13 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const newTimespan = GetTimespanFromRange(start, end);
 
     // only adjust grouping if user zoomed OUT
-    if (newTimespan !== undefined && newTimespan !== this.currentTimespan && newTimespan < this.currentTimespan) {
+    if (newTimespan !== undefined && newTimespan !== this.currentTimespan) {
       this.currentTimespan = newTimespan;
       this.groupTimelineItems(false);
     }
+
+    this.hasNext = true;
+    this.hasPrev = true;
   }
 
   onTimelineItemClick(event: TimelineEventPropertiesResult & {isCluster: boolean}) {
@@ -227,7 +335,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   focusItemsInRange(start: number, end: number) {
-    this.timeline.focus(this.findItemsInRange(start, end));
+    this.focusItemsWithBuffer(this.findItemsInRange(start, end));
   }
 
   onGroupClick(group: TimelineGroup) {
