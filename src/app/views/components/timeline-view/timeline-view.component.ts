@@ -32,7 +32,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating = false;
 
   private throttledZoomHandler = throttle((evt) => {
-    this.onTimelineZoom(evt);
+    this.onTimelineZoom();
   }, 256);
   private dataServiceSubscription: Subscription;
 
@@ -102,16 +102,15 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.onFolderChange();
     this.dataServiceSubscription = this.data.currentFolderChange.subscribe(() => {
       this.onFolderChange();
-      this.setMaxZoom();
     });
   }
 
   ngAfterViewInit() {
     this.initTimeline();
     this.setMaxZoom();
+    this.focusItemsWithBuffer(this.timelineItems.getIds(), false);
 
     const elem = this.elementRef.nativeElement as HTMLDivElement;
-    console.log(elem.offsetHeight);
   }
 
   ngOnDestroy() {
@@ -124,7 +123,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFolderChange() {
     this.timelineGroups.clear();
-    this.groupTimelineItems(true);
+    this.groupTimelineItems(true, false);
+    if (this.timeline) {
+      this.setMaxZoom();
+      this.focusItemsWithBuffer(this.timelineItems.getIds());
+    }
   }
 
   initTimeline() {
@@ -134,12 +137,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       this.onTimelineItemClick(evt);
     });
 
-    this.timeline.on('rangechange', evt => {
-      this.throttledZoomHandler(evt);
-    });
-
     this.timeline.on('rangechanged', evt => {
-      this.throttledZoomHandler(evt);
       this.breadcrumbs.debouncedZoomHandler(evt);
     });
   }
@@ -149,13 +147,24 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const start = range.min.valueOf();
     const end = range.max.valueOf();
     const diff = end - start;
+    const buffer = diff * 0.5;
 
-    this.timeline.setOptions({zoomMax: 1.05 * diff});
+    this.timeline.setOptions({
+      min: start - buffer,
+      max: end + buffer,
+    });
   }
 
-  groupTimelineItems(bestFitTimespan = false) {
+  groupTimelineItems(bestFitTimespan = false, keepFolders = true) {
     if (this.timelineItems.length) {
-      this.timelineItems.remove(this.timelineItems.getIds());
+      let ids = this.timelineItems.getIds();
+      if (keepFolders) {
+        ids = ids.filter(id => {
+          const item: any = this.timelineItems.get(id);
+          return (item as TimelineDataItem).dataType !== 'folder';
+        });
+      }
+      this.timelineItems.remove(ids);
     }
 
     let timespan = this.currentTimespan;
@@ -163,17 +172,25 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       timespan = getBestFitTimespanForItems(this.data.currentFolder.ChildItemVOs);
     }
 
+    let itemsToAdd: any[];
+
     if (this.timelineGroups.has(timespan)) {
-      this.timelineItems.add(this.timelineGroups.get(timespan));
+      itemsToAdd = this.timelineGroups.get(timespan);
     } else {
       const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan);
       this.currentTimespan = groupResult.timespan;
-      this.timelineItems.add(groupResult.groupedItems);
       this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
+      itemsToAdd = groupResult.groupedItems;
     }
+
+    if (keepFolders) {
+      itemsToAdd = itemsToAdd.filter((x: TimelineDataItem) => x.dataType !== 'folder');
+    }
+
+    this.timelineItems.add(itemsToAdd);
   }
 
-  focusItemsWithBuffer(ids: string[]) {
+  focusItemsWithBuffer(ids: (string | number)[], animate = true) {
     if (ids.length === 1) {
       return this.timeline.focus(ids);
     }
@@ -199,15 +216,23 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     start -= bufferSize * range;
     end += bufferSize * range;
 
-    this.timeline.setWindow(start, end);
+    if (animate) {
+      this.timeline.setWindow(start, end);
+    } else {
+      this.timeline.setWindow(start, end, {animation: false});
+    }
   }
 
   onZoomInClick() {
-    this.timeline.zoomIn(ZOOM_PERCENTAGE);
+    this.timeline.zoomIn(ZOOM_PERCENTAGE, null, () => {
+      this.onTimelineZoom();
+    });
   }
 
   onZoomOutClick() {
-    this.timeline.zoomOut(ZOOM_PERCENTAGE);
+    this.timeline.zoomOut(ZOOM_PERCENTAGE, null, () => {
+      this.onTimelineZoom();
+    });
   }
 
   onPrevClick() {
@@ -271,14 +296,12 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  onTimelineZoom(event) {
-    this.breadcrumbs.debouncedZoomHandler(event);
-
-    const start = event.start.getTime();
-    const end = event.end.getTime();
+  onTimelineZoom() {
+    const range = this.timeline.getWindow();
+    const start = range.start.valueOf();
+    const end = range.end.valueOf();
     const newTimespan = GetTimespanFromRange(start, end);
 
-    // only adjust grouping if user zoomed OUT
     if (newTimespan !== undefined && newTimespan !== this.currentTimespan) {
       this.currentTimespan = newTimespan;
       this.groupTimelineItems(false);
@@ -312,8 +335,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     const folderResponse = await this.api.folder.navigateLean(folder).toPromise();
     this.data.setCurrentFolder(folderResponse.getFolderVO(true));
-    this.groupTimelineItems(true);
-    this.timeline.fit();
     this.isNavigating = false;
   }
 
@@ -351,8 +372,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
     if (breadcrumb.type === 'folder') {
       if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
-        this.groupTimelineItems(true);
-        this.timeline.fit();
+        this.groupTimelineItems(true, false);
+        this.focusItemsWithBuffer(this.timelineItems.getIds());
         this.breadcrumbs.setTimeBreadcrumbs();
       } else {
         this.onFolderClick(new FolderVO({
@@ -365,12 +386,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const group = find(groups, (g: TimelineGroup | TimelineItem) => {
         return g.dataType === 'group' && g.content === breadcrumb.text ;
       });
-      console.log(breadcrumb, group);
       this.onGroupClick(group as TimelineGroup);
-      // this.breadcrumbs.onGroupClick(group);
-      // this.currentTimespan = breadcrumb.timespan + 1;
-      // this.groupTimelineItems(false);
-      // this.focusItemsInRange(breadcrumb.timespanStart, breadcrumb.timespanEnd);
     }
   }
 
