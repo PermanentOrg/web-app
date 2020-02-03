@@ -184,16 +184,21 @@ $share-preview-banner-height: 100px;
 
 .share-preview-footer {
   position: fixed;
-  height: 50px;
+  min-height: 80px;
+  height: auto;
   bottom: 0px;
   width: 100%;
-  background: rgba($gray-900, 0.75);
+  background: rgba($gray-900, 0.85);
   color: white;
-  // font-weight: bold;
+  display: flex;
+  align-items: center;
   transform: translateY(100%);
   user-select: none;
-
   transition: transform 0.4s ease-in;
+
+  @media screen and (max-width: 420px) {
+    min-height: 50px;
+  }
 
   &.share-preview-footer-visible {
     transform: translateY(0);
