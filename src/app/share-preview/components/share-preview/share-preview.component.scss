@@ -249,6 +249,10 @@ $share-preview-banner-height: 100px;
     color: white;
     text-align: center;
 
+    @media screen and (min-width: 768px) {
+      min-height: 45vh;
+    }
+
   }
 
   &.from-bottom {
