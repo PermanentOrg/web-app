@@ -184,7 +184,7 @@ $share-preview-banner-height: 100px;
 
 .share-preview-footer {
   position: fixed;
-  min-height: 80px;
+  min-height: 100px;
   height: auto;
   bottom: 0px;
   width: 100%;
@@ -195,9 +195,10 @@ $share-preview-banner-height: 100px;
   transform: translateY(100%);
   user-select: none;
   transition: transform 0.4s ease-in;
+  padding: 10px;
 
   @media screen and (max-width: 420px) {
-    min-height: 50px;
+    min-height: 75px;
   }
 
   &.share-preview-footer-visible {
@@ -212,6 +213,26 @@ $share-preview-banner-height: 100px;
     margin: 0 auto;
     max-width: $share-preview-max-width;
     text-align: center;
+
+    button {
+      font-weight: bold;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-evenly;
+      button:first-child {
+        margin-right: 5px;
+      }
+
+      button:last-child {
+        margin-left: 5px;
+      }
+
+      button {
+        max-width: 200px;
+      }
+    }
   }
 
   span {

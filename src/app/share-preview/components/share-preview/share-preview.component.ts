@@ -137,6 +137,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     if (this.isLinkShare) {
       this.chooseArchiveText = 'Select archive to request access with:';
+      // if (!this.hasAccess) {
+      //   this.showCover = true;
+      // }
     } else if (this.isRelationshipShare) {
       this.chooseArchiveText = 'Select archive with access to this content:';
     }
