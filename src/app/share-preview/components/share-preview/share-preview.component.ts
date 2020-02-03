@@ -93,8 +93,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     this.signupForm = fb.group({
       invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
-      email: [this.isInvite ? this.sharePreviewVO.email : '', [trimWhitespace, Validators.required, Validators.email]],
-      name: [this.isInvite ? this.sharePreviewVO.fullName : '', Validators.required],
+      email: [this.sharePreviewVO.email, [trimWhitespace, Validators.required, Validators.email]],
+      name: [this.sharePreviewVO.fullName, Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: [true],
       optIn: [true]

@@ -33,7 +33,7 @@
 <div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p *ngIf="!isLoggedIn">
-      <span *ngIf="isInvite">To view or edit this content, create account for <strong>{{sharePreviewVO.email}}</strong>.</span>
+      <span *ngIf="isInvite">To view or edit this content, create account.</span>
       <span *ngIf="isLinkShare">To view or edit this content, sign up or log in to Permanent.org.</span>
       <span *ngIf="isRelationshipShare">To view or edit this content, log in to Permanent.org.</span>
     </p>
@@ -61,6 +61,10 @@
         <!-- short signup for invite form -->
         <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="formType === 1">
           <div class="input-group-vertical">
+            <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
+            [config]="{readOnly: true}"></pr-form-input>
+            <pr-form-input type="text" fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
+              [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
             <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
               [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
           </div>
