@@ -69,9 +69,8 @@
               [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
           </div>
           <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid">
-            Create account
+            Sign up
           </button>
-          <a tabindex="0" (click)="formType = 2;">Already have an account?</a>
         </form>
         <!-- login form -->
         <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit(loginForm.value)" *ngIf="formType === 2">
