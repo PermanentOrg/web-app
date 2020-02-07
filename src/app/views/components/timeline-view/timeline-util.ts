@@ -119,7 +119,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
-  const minimumGroupCount = 2;
+  const minimumGroupCount = 6;
 
   if (bestFit) {
     const bestFitTimespan = getBestFitTimespanForItems(items);

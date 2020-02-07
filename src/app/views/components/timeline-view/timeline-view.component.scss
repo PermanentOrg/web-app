@@ -19,7 +19,33 @@
 }
 
 .timeline-zoom-controls {
-  position: fixed;
+  position: absolute;
   top: $timeline-breadcrumb-height;
   left: 0;
+  opacity: 0.7;
+  margin: 0;
+  width: 150px;
+
+  .control-row {
+    padding: $btn-padding-y / 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      opacity: 0.7;
+      display: inline-block;
+      flex: 0 0 40px;
+      width: 40px;
+      margin: 0 auto;
+    }
+  }
 }
+
+
+
+.timeline-item-control {
+
+  margin: 0;
+}
+

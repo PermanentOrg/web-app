@@ -3,8 +3,17 @@
   (breadcrumbClicked)="onBreadcrumbClick($event)"
   [timelineGroups]="timelineGroups"></pr-timeline-breadcrumbs>
 <div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}"></div>
-<!-- <div class="timeline-zoom-controls">
-  <button class="btn btn-primary">zoom in</button>
-  <button class="btn btn-primary">zoom out</button>
-</div> -->
+<div class="timeline-zoom-controls">
+  <div class="control-row">
+    <button (click)="onZoomInClick()">+</button>
+  </div>
+  <div class="control-row">
+    <button (click)="onPrevClick()">‹</button>
+    <button (click)="onNextClick()">›</button>
+  </div>
+  <div class="control-row">
+    <button (click)="onZoomOutClick()">-</button>
+
+  </div>
+</div>
 <router-outlet></router-outlet>
