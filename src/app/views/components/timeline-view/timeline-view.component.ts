@@ -383,6 +383,7 @@ if (!event.isCluster && !this.isNavigating) {
   }
 
   onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
+    this.showFolderDetails = false;
     if (breadcrumb.type === 'folder') {
       if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
         this.groupTimelineItems(true, false);
