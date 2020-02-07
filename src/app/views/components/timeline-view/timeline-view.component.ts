@@ -139,6 +139,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFolderChange() {
     this.timelineGroups.clear();
+    this.timelineRootFolder = this.data.currentFolder;
     this.groupTimelineItems(true, false);
     if (this.timeline) {
       this.setMaxZoom();

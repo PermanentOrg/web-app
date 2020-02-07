@@ -53,12 +53,13 @@
   z-index: 10;
 
   transform: translateY(0);
+  transition:  transform $default-transition-length ease-in;
 
   &.showing-details {
     transform: translateY(calc((100% - #{$timeline-folder-info-height}) * -1));
+    transition-timing-function: ease-out;
   }
 
-  transition:  transform $default-transition-length / 2 ease-in;
 
   .timeline-folder-info-content {
     height: $timeline-folder-info-height;
@@ -76,8 +77,9 @@
   }
 
   .timeline-folder-info-details {
+
     max-width: $public-max-width;
-    padding: 10px 5px;
+    padding: 10px 5px 0px;
     margin: 0 auto;
 
     > div {
@@ -87,6 +89,10 @@
 
     > p {
       font-size: small;
+      max-height: calc(50vh - #{$timeline-folder-info-height} - 30px);
+      overflow-y: auto;
+      margin-bottom: 0px;
+      padding-bottom: 10px;
     }
   }
 
