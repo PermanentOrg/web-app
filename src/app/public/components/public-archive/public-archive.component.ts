@@ -13,6 +13,9 @@ import { DataService } from '@shared/services/data/data.service';
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   public archive: ArchiveVO;
   public description: string;
+  public get cta() {
+    return this.data.publicCta;
+  }
 
   containerFlexSubscription: Subscription;
   @HostBinding('class.container-vertical-flex') containerVerticalFlex: boolean;
@@ -52,5 +55,14 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   showDescription() {
     return this.data.showPublicArchiveDescription;
+  }
+
+  onCtaClick() {
+    switch (this.cta) {
+      case 'timeline':
+        const queryParams = { cta: 'timeline' };
+        this.router.navigate(['/auth', 'signup'], { queryParams });
+        break;
+    }
   }
 }

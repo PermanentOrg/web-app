@@ -5,6 +5,9 @@
       <strong>The {{archive.fullName || 'Archive Name'}} Archive</strong><br>
       {{archive.type | prConstants}}
     </span>
+    <div class="public-archive-cta" *ngIf="cta">
+      <button class="btn btn-primary" (click)="onCtaClick()">Make your own</button>
+    </div>
   </div>
 </div>
 <div class="public-archive-description" *ngIf="description && showDescription()">

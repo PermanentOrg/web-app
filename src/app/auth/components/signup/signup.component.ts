@@ -11,6 +11,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AccountResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { ApiService } from '@shared/services/api/api.service';
 import { RecordVO, FolderVO, RecordVOData, FolderVOData, AccountVO } from '@models/index';
+import { DeviceService } from '@shared/services/device/device.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -40,7 +41,8 @@ export class SignupComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private message: MessageService
+    private message: MessageService,
+    private device: DeviceService
   ) {
     const params = route.snapshot.queryParams;
 
@@ -119,6 +121,12 @@ export class SignupComponent implements OnInit {
               this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
               if (this.route.snapshot.queryParams.shareByUrl) {
                 this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
+              } else if (this.route.snapshot.queryParams.cta === 'timeline') {
+                if (this.device.isMobile()) {
+                  this.router.navigate(['/myfiles'], { queryParams: { cta: 'timeline' }});
+                } else {
+                  window.location.assign(`/app/myfiles?cta=timeline`);
+                }
               } else if (!this.isForShareInvite) {
                 this.router.navigate(['/']);
               } else if (this.shareItemIsRecord) {

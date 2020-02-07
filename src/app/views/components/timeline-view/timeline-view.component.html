@@ -20,7 +20,7 @@
     <span class="timeline-folder-info-name">{{timelineRootFolder.displayName}}</span>
     <a class="timeline-folder-details-button" *ngIf="timelineRootFolder.description" (click)="toggleFolderDetails()">{{showFolderDetails ? 'Hide details' : 'Click for details'}}</a>
     <span class="timeline-folder-info-date">
-      {{timelineRootFolder.displayDT | date:'shortDate'}} to {{timelineRootFolder.displayEndDT | date:'shortDate'}}
+      {{timelineRootFolder.displayDT | date:'shortDate'}}{{timelineRootFolder.displayEndDT  ? ' to ' : ''}}{{timelineRootFolder.displayEndDT | date:'shortDate'}}
     </span>
   </div>
   <div class="timeline-folder-info-details" *ngIf="timelineRootFolder.description">

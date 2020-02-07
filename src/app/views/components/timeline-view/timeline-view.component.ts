@@ -71,6 +71,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         week: 'Do'
       },
       majorLabels: {
+        second: 'MMMM Do, h:mm A',
         minute: 'MMMM Do, h:mm A',
         hour: 'MMMM Do, h A',
         weekday: 'MMMM Do, YYYY',
@@ -101,6 +102,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currentTimespan = TimelineGroupTimespan.Year;
     this.data.showBreadcrumbs = false;
     this.data.showPublicArchiveDescription = false;
+    this.data.publicCta = 'timeline';
     this.fvService.containerFlexChange.emit(true);
   }
 
@@ -116,7 +118,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initTimeline();
     this.setMaxZoom();
     this.timeline.fit();
-    // this.focusItemsWithBuffer(this.timelineItems.getIds(), false);
 
     const elem = this.elementRef.nativeElement as HTMLDivElement;
   }
@@ -126,6 +127,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataServiceSubscription.unsubscribe();
     this.data.showBreadcrumbs = true;
     this.data.showPublicArchiveDescription = true;
+    this.data.publicCta = null;
     this.fvService.containerFlexChange.emit(false);
   }
 
@@ -388,7 +390,6 @@ if (!event.isCluster && !this.isNavigating) {
       if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
         this.groupTimelineItems(true, false);
         this.timeline.fit();
-        // this.focusItemsWithBuffer(this.timelineItems.getIds());
         this.breadcrumbs.setTimeBreadcrumbs();
       } else {
         this.onFolderClick(new FolderVO({
