@@ -1,9 +1,5 @@
 @import 'colors';
 
-$breadcrumb-divider: quote(">");
-$breadcrumb-height: 34px;
-$timeline-breadcrumb-height: $breadcrumb-height;
-
 $primary: $PR-blue;
 $alternate: $PR-orange;
 
@@ -31,6 +27,10 @@ $public-max-width: 800px;
 $public-banner-height: 100px;
 $public-archive-header-height: 70px;
 
+$breadcrumb-divider: quote(">");
+$breadcrumb-height: 34px;
+$timeline-breadcrumb-height: $breadcrumb-height;
+$timeline-folder-info-height: 50px;
 
 @mixin public-centered {
   max-width: $public-max-width;

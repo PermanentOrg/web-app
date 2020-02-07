@@ -41,6 +41,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public hasPrev = true;
   public hasNext = true;
 
+  public timelineRootFolder: FolderVO = this.route.snapshot.data.currentFolder;
+  public showFolderDetails = false;
+
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
   public timeline: Timeline;
@@ -126,14 +129,20 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fvService.containerFlexChange.emit(false);
   }
 
+  toggleFolderDetails() {
+    if (this.timelineRootFolder.description) {
+      this.showFolderDetails = !this.showFolderDetails;
+    } else {
+      this.showFolderDetails = false;
+    }
+  }
+
   onFolderChange() {
     this.timelineGroups.clear();
-    console.log('trigger group from folder change');
     this.groupTimelineItems(true, false);
     if (this.timeline) {
       this.setMaxZoom();
       this.timeline.fit();
-      // this.focusItemsWithBuffer(this.timelineItems.getIds());
     }
   }
 
@@ -315,7 +324,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTimelineItemClick(event: TimelineEventPropertiesResult & {isCluster: boolean}) {
-    if (!event.isCluster && !this.isNavigating) {
+if (!event.isCluster && !this.isNavigating) {
       const timelineItem: any = this.timelineItems.get(event.item);
       switch ((timelineItem as TimelineDataItem).dataType) {
         case 'folder':

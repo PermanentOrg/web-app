@@ -2,8 +2,8 @@
 <pr-timeline-breadcrumbs
   (breadcrumbClicked)="onBreadcrumbClick($event)"
   [timelineGroups]="timelineGroups"></pr-timeline-breadcrumbs>
-<div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}"></div>
-<div class="timeline-zoom-controls">
+<div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}" (click)="showFolderDetails = false;"></div>
+<div class="timeline-zoom-controls" (click)="showFolderDetails = false;">
   <div class="control-row">
     <button (click)="onZoomInClick()">+</button>
   </div>
@@ -13,7 +13,19 @@
   </div>
   <div class="control-row">
     <button (click)="onZoomOutClick()">-</button>
-
+  </div>
+</div>
+<div class="timeline-folder-info" [ngClass]="{'showing-details': showFolderDetails}">
+  <div class="timeline-folder-info-content">
+    <span class="timeline-folder-info-name">{{timelineRootFolder.displayName}}</span>
+    <a class="timeline-folder-details-button" *ngIf="timelineRootFolder.description" (click)="toggleFolderDetails()">{{showFolderDetails ? 'Hide details' : 'Click for details'}}</a>
+    <span class="timeline-folder-info-date">
+      {{timelineRootFolder.displayDT | date:'shortDate'}} to {{timelineRootFolder.displayEndDT | date:'shortDate'}}
+    </span>
+  </div>
+  <div class="timeline-folder-info-details" *ngIf="timelineRootFolder.description">
+    <div>About this timeline</div>
+    <p [innerHTML]="timelineRootFolder.description"></p>
   </div>
 </div>
 <router-outlet></router-outlet>

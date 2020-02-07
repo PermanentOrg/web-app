@@ -3,13 +3,14 @@
 :host {
   position: relative;
   flex: 1 1 auto;
+  overflow: hidden;
 }
 
 
 .timeline {
   position: absolute !important;
   top: $timeline-breadcrumb-height;
-  bottom: 0;
+  bottom: $timeline-folder-info-height;
   width: 100%;
 
   &.navigating {
@@ -40,6 +41,70 @@
       margin: 0 auto;
     }
   }
+}
+
+.timeline-folder-info {
+  background-color: $PR-purple;
+  color: white;
+
+  position: absolute;
+  top: calc(100% - #{$timeline-folder-info-height});
+  width: 100%;
+  z-index: 10;
+
+  transform: translateY(0);
+
+  &.showing-details {
+    transform: translateY(calc((100% - #{$timeline-folder-info-height}) * -1));
+  }
+
+  transition:  transform $default-transition-length / 2 ease-in;
+
+  .timeline-folder-info-content {
+    height: $timeline-folder-info-height;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: $public-max-width;
+    margin: 0 auto;
+
+    a {
+      font-size: small;
+    }
+
+  }
+
+  .timeline-folder-info-details {
+    max-width: $public-max-width;
+    padding: 10px 5px;
+    margin: 0 auto;
+
+    > div {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    > p {
+      font-size: small;
+    }
+  }
+
+  .timeline-folder-info-name {
+    font-weight: bold;
+  }
+
+  .timeline-folder-info-date {
+    font-size: small;
+
+    &:nth-child(3) {
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+  }
+
+
 }
 
 
