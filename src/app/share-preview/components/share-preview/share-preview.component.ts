@@ -93,8 +93,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     this.signupForm = fb.group({
       invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
-      email: [this.isInvite ? this.sharePreviewVO.email : '', [trimWhitespace, Validators.required, Validators.email]],
-      name: [this.isInvite ? this.sharePreviewVO.fullName : '', Validators.required],
+      email: [this.sharePreviewVO.email, [trimWhitespace, Validators.required, Validators.email]],
+      name: [this.sharePreviewVO.fullName, Validators.required],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
       agreed: [true],
       optIn: [true]
@@ -137,6 +137,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     if (this.isLinkShare) {
       this.chooseArchiveText = 'Select archive to request access with:';
+      // if (!this.hasAccess) {
+      //   this.showCover = true;
+      // }
     } else if (this.isRelationshipShare) {
       this.chooseArchiveText = 'Select archive with access to this content:';
     }
