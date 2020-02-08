@@ -44,7 +44,7 @@
 }
 
 .timeline-folder-info {
-  background-color: $PR-purple;
+  background-color: $gray-700;
   color: white;
 
   position: absolute;
@@ -63,7 +63,7 @@
 
   .timeline-folder-info-content {
     height: $timeline-folder-info-height;
-    padding: 0px 5px;
+    padding: 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -79,7 +79,7 @@
   .timeline-folder-info-details {
 
     max-width: $public-max-width;
-    padding: 10px 5px 0px;
+    padding: 10px 0px 0px;
     margin: 0 auto;
 
     > div {
@@ -93,6 +93,15 @@
       overflow-y: auto;
       margin-bottom: 0px;
       padding-bottom: 10px;
+    }
+
+
+  }
+
+  @media screen and (max-width: $public-max-width) {
+    .timeline-folder-info-details, .timeline-folder-info-content {
+      padding-left: 5px;
+      padding-right: 5px;
     }
   }
 
