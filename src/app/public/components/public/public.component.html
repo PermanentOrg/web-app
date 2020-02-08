@@ -5,15 +5,17 @@
       </a>
       <pr-search-box (searchBarFocusChange)="onSearchBarFocusChange($event)"></pr-search-box>
       <div class="banner-buttons">
-        <button class="btn btn-wordpress" (click)="onSignupClick()">Sign Up</button>
+        <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="archive" (click)="onArchiveThumbClick()"></div>
+        <button class="btn btn-wordpress" (click)="onSignupClick()" *ngIf="!isLoggedIn">Sign Up</button>
+        <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? account.primaryEmail : 'My Account' }}</button>
       </div>
   </div>
 </div>
-<div class="public-archive" *ngIf="archive">
-  <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
+<div class="public-archive" *ngIf="publishArchive">
+  <div class="public-archive-thumb" prBgImage [bgSrc]="publishArchive.thumbURL200"></div>
   <span>
     <strong>{{displayName}}</strong><br>
-    Shared by {{archive.fullName}}
+    Shared by {{publishArchive.fullName}}
   </span>
 </div>
 <div class="public-content-breadcrumbs">

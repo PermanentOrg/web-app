@@ -65,13 +65,17 @@ export const routes: Routes = [
             children: [
               {
                 path: '',
-                component: PublicItemComponent
+                component: PublicItemComponent,
+                data: {
+                  fileListCentered: true,
+                }
               },
               {
                 path: ':archiveNbr/:folderLinkId',
                 loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
                 data: {
                   noFileListPadding: true,
+                  fileListCentered: true,
                 }
               }
             ]

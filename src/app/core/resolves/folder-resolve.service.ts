@@ -59,18 +59,19 @@ export class FolderResolveService implements Resolve<any> {
         }
 
         const folder = response.getFolderVO(true);
-        console.log(folder.view, route.url, this.activatedRoute.snapshot.url);
 
         if (folder.view === FolderView.Timeline && route.data.folderView !== FolderView.Timeline) {
-          return this.router.navigate([
-            'p',
-            'archive',
-            route.params.publicArchiveNbr,
-            'view',
-            'timeline',
-            route.params.archiveNbr,
-            route.params.folderLinkId
-          ]);
+          if (route.params.publicArchiveNbr) {
+            return this.router.navigate([
+              'p',
+              'archive',
+              route.params.publicArchiveNbr,
+              'view',
+              'timeline',
+              route.params.archiveNbr,
+              route.params.folderLinkId
+            ]);
+          }
         }
         return folder;
       }))).toPromise().catch((response: FolderResponse) => {
