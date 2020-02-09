@@ -58,29 +58,6 @@ export const routes: Routes = [
       {
         path: ':publishUrlToken',
         resolve: publishResolve,
-        children: [
-          {
-            path: '',
-            resolve: archiveResolve,
-            children: [
-              {
-                path: '',
-                component: PublicItemComponent,
-                data: {
-                  fileListCentered: true,
-                }
-              },
-              {
-                path: ':archiveNbr/:folderLinkId',
-                loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-                data: {
-                  noFileListPadding: true,
-                  fileListCentered: true,
-                }
-              }
-            ]
-          }
-        ]
       }
     ]
   },
