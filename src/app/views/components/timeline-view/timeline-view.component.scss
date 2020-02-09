@@ -36,9 +36,14 @@
     button {
       opacity: 0.7;
       display: inline-block;
+      cursor: pointer;
       flex: 0 0 40px;
       width: 40px;
       margin: 0 auto;
+
+      &:hover {
+        opacity: 0.95;
+      }
     }
   }
 }
