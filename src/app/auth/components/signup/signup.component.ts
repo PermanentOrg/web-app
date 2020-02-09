@@ -123,9 +123,9 @@ export class SignupComponent implements OnInit {
                 this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
               } else if (this.route.snapshot.queryParams.cta === 'timeline') {
                 if (this.device.isMobile()) {
-                  this.router.navigate(['/myfiles'], { queryParams: { cta: 'timeline' }});
+                  this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
                 } else {
-                  window.location.assign(`/app/myfiles?cta=timeline`);
+                  window.location.assign(`/app/public?cta=timeline`);
                 }
               } else if (!this.isForShareInvite) {
                 this.router.navigate(['/']);

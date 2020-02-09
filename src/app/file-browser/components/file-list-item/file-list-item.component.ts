@@ -174,6 +174,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       rootUrl = '/share';
     } else if (this.isInPublic) {
       rootUrl = '/p';
+    } else if (this.router.routerState.snapshot.url.includes('/public')) {
+      rootUrl = '/public';
     } else {
       rootUrl = '/myfiles';
     }
