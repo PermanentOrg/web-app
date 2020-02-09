@@ -64,8 +64,6 @@ $public-max-width: 800px;
   flex: 1 1 auto;
   overflow-y: auto;
   display: flex;
-  // max-width: $public-max-width;
-  // margin: 0 auto;
   width: 100%;
 
   &.navigating {

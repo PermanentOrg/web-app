@@ -65,4 +65,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         break;
     }
   }
+
+  onArchiveThumbClick() {
+    this.router.navigate(['/p', 'archive', this.archive.archiveNbr]);
+  }
 }

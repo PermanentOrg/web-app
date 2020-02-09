@@ -1,6 +1,7 @@
 <div class="public-archive-header">
   <div class="public-archive" *ngIf="archive">
-    <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"></div>
+    <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"
+    (click)="onArchiveThumbClick()"></div>
     <span>
       <strong>The {{archive.fullName || 'Archive Name'}} Archive</strong><br>
       {{archive.type | prConstants}}

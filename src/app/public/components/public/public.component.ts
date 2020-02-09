@@ -42,7 +42,6 @@ export class PublicComponent implements OnInit, OnDestroy {
           this.isNavigating = true;
         } else if (event instanceof NavigationEnd) {
           this.isNavigating = false;
-          this.ngOnInit();
         }
       });
   }
