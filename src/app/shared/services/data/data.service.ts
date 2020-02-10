@@ -15,9 +15,9 @@ export class DataService {
   public currentFolder: FolderVO;
   public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
-
   public showBreadcrumbs = true;
   public showPublicArchiveDescription = true;
+  public publicCta: 'timeline';
 
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 

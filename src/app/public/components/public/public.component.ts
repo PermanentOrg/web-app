@@ -1,8 +1,9 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO, AccountVO } from '@models/index';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
   selector: 'pr-public',
@@ -14,7 +15,11 @@ export class PublicComponent implements OnInit, OnDestroy {
 
   bottomBannerVisible = false;
 
-  public archive: ArchiveVO;
+  public account: AccountVO = this.accountService.getAccount();
+  public archive: ArchiveVO = this.accountService.getArchive();
+  public isLoggedIn = this.accountService.isLoggedIn;
+
+  public publishArchive: ArchiveVO;
   public displayName: string;
 
   public isSearchFocused = false;
@@ -26,6 +31,7 @@ export class PublicComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private accountService: AccountService,
     private router: Router
   ) {
     this.routerListener = this.router.events
@@ -45,9 +51,9 @@ export class PublicComponent implements OnInit, OnDestroy {
 
     if (!publishedItem) {
       this.missing = true;
+      this.publishArchive = null;
       return;
     }
-
 
     this.isRecord = !!publishedItem.recordId;
     this.displayName = publishedItem.displayName;
@@ -60,7 +66,7 @@ export class PublicComponent implements OnInit, OnDestroy {
       this.router.navigate(['/p', urlToken, folder.archiveNbr, folder.folder_linkId]);
     }
 
-    this.archive = this.route.snapshot.firstChild.firstChild.data.archive;
+    this.publishArchive = this.route.snapshot.firstChild.firstChild.data.archive;
   }
 
   ngOnDestroy() {
@@ -73,6 +79,14 @@ export class PublicComponent implements OnInit, OnDestroy {
 
   onSignupClick() {
     window.location.pathname = '/';
+  }
+
+  onArchiveThumbClick() {
+
+  }
+
+  onMyAccountClick() {
+
   }
 
   onSearchBarFocusChange(isFocused: boolean) {

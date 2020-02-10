@@ -33,6 +33,7 @@ export const routes: Routes = [
     resolve: rootFolderResolve,
     children: [
       { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
+      { path: 'public', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'Public'} },
       { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
       { path: 'shares', loadChildren: '@shares/shares.module#SharesModule', data: { title: 'Shares'} },
       {

@@ -47,10 +47,16 @@ export class FolderResolveService implements Resolve<any> {
     } else if (state.url.includes('/p/archive/')) {
       const publicRoot = route.parent.data.publicRoot;
       targetFolder = new FolderVO(publicRoot);
+    } else if (state.url.includes('/public')) {
+      const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.public'});
+      console.log(this.accountService.getRootFolder().ChildItemVOs, publicRoot);
+      targetFolder = new FolderVO(publicRoot);
     } else  {
       const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
       targetFolder = new FolderVO(myFiles);
     }
+
+    console.log(targetFolder);
 
     return this.api.folder.navigate(targetFolder)
       .pipe(map(((response: FolderResponse) => {
@@ -59,18 +65,19 @@ export class FolderResolveService implements Resolve<any> {
         }
 
         const folder = response.getFolderVO(true);
-        console.log(folder.view, route.url, this.activatedRoute.snapshot.url);
 
         if (folder.view === FolderView.Timeline && route.data.folderView !== FolderView.Timeline) {
-          return this.router.navigate([
-            'p',
-            'archive',
-            route.params.publicArchiveNbr,
-            'view',
-            'timeline',
-            route.params.archiveNbr,
-            route.params.folderLinkId
-          ]);
+          if (route.params.publicArchiveNbr) {
+            return this.router.navigate([
+              'p',
+              'archive',
+              route.params.publicArchiveNbr,
+              'view',
+              'timeline',
+              route.params.archiveNbr,
+              route.params.folderLinkId
+            ]);
+          }
         }
         return folder;
       }))).toPromise().catch((response: FolderResponse) => {

@@ -41,6 +41,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public hasPrev = true;
   public hasNext = true;
 
+  public timelineRootFolder: FolderVO = this.route.snapshot.data.currentFolder;
+  public showFolderDetails = false;
+
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
   public timeline: Timeline;
@@ -68,6 +71,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         week: 'Do'
       },
       majorLabels: {
+        second: 'MMMM Do, h:mm A',
         minute: 'MMMM Do, h:mm A',
         hour: 'MMMM Do, h A',
         weekday: 'MMMM Do, YYYY',
@@ -98,6 +102,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currentTimespan = TimelineGroupTimespan.Year;
     this.data.showBreadcrumbs = false;
     this.data.showPublicArchiveDescription = false;
+    this.data.publicCta = 'timeline';
     this.fvService.containerFlexChange.emit(true);
   }
 
@@ -113,7 +118,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initTimeline();
     this.setMaxZoom();
     this.timeline.fit();
-    // this.focusItemsWithBuffer(this.timelineItems.getIds(), false);
 
     const elem = this.elementRef.nativeElement as HTMLDivElement;
   }
@@ -123,17 +127,25 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataServiceSubscription.unsubscribe();
     this.data.showBreadcrumbs = true;
     this.data.showPublicArchiveDescription = true;
+    this.data.publicCta = null;
     this.fvService.containerFlexChange.emit(false);
+  }
+
+  toggleFolderDetails() {
+    if (this.timelineRootFolder.description) {
+      this.showFolderDetails = !this.showFolderDetails;
+    } else {
+      this.showFolderDetails = false;
+    }
   }
 
   onFolderChange() {
     this.timelineGroups.clear();
-    console.log('trigger group from folder change');
+    this.timelineRootFolder = this.data.currentFolder;
     this.groupTimelineItems(true, false);
     if (this.timeline) {
       this.setMaxZoom();
       this.timeline.fit();
-      // this.focusItemsWithBuffer(this.timelineItems.getIds());
     }
   }
 
@@ -315,7 +327,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTimelineItemClick(event: TimelineEventPropertiesResult & {isCluster: boolean}) {
-    if (!event.isCluster && !this.isNavigating) {
+if (!event.isCluster && !this.isNavigating) {
       const timelineItem: any = this.timelineItems.get(event.item);
       switch ((timelineItem as TimelineDataItem).dataType) {
         case 'folder':
@@ -373,11 +385,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
+    this.showFolderDetails = false;
     if (breadcrumb.type === 'folder') {
       if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
         this.groupTimelineItems(true, false);
         this.timeline.fit();
-        // this.focusItemsWithBuffer(this.timelineItems.getIds());
         this.breadcrumbs.setTimeBreadcrumbs();
       } else {
         this.onFolderClick(new FolderVO({

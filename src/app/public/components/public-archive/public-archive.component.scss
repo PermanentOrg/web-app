@@ -35,6 +35,16 @@
     width: 50px;
     border-radius: 50%;
     margin-right: 10px;
+    cursor: pointer;
+    flex: 0 0 50px;
+  }
+
+  .public-archive-cta {
+    margin-left: auto;
+    
+    button {
+      margin: 0px;
+    }
   }
 
   @media screen and (max-width: $public-max-width) {
@@ -42,6 +52,10 @@
 
     .public-archive-thumb {
       margin-left: 10px;
+    }
+
+    .public-archive-cta {
+      margin-right: 10px;
     }
   }
 

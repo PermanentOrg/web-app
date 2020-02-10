@@ -28,7 +28,8 @@ export class UploadButtonComponent implements OnInit {
       this.hidden = true;
     } else {
       this.hidden = this.currentFolder.type.includes('app')
-        || this.currentFolder.type === 'type.folder.root.share';
+        || this.currentFolder.type === 'type.folder.root.share'
+        || this.currentFolder.type === 'type.folder.root.public';
     }
   }
 

@@ -26,6 +26,8 @@ class Breadcrumb {
     switch (displayText) {
       case 'My Files':
         return ['/myfiles'];
+      case 'Public':
+        return ['/public'];
       case 'Apps':
         return ['/apps'];
       case 'Shares':
@@ -108,9 +110,13 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}`;
     } else if  (isInPublic) {
       rootUrl = `/p/${this.route.firstChild.snapshot.params.publishUrlToken}`;
+    } else if (this.router.routerState.snapshot.url.includes('/public')) {
+      rootUrl = '/public';
     } else {
       rootUrl = '/myfiles';
     }
+
+    console.log(rootUrl, this.router.routerState.snapshot.url);
 
     if (!folder) {
       return;

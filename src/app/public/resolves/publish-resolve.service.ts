@@ -18,10 +18,29 @@ export class PublishResolveService implements Resolve<any> {
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     return this.api.publish.getResource(route.params.publishUrlToken)
       .then((response: PublishResponse): RecordVO | any => {
-        if (response.getRecordVO()) {
-          return response.getRecordVO();
-        } else if (response.getFolderVO()) {
-          return response.getFolderVO();
+        const item = response.getRecordVO() || response.getFolderVO();
+
+        if (item) {
+          const publicArchiveNbr = `${item.archiveNbr.split('-')[0]}-0000`;
+          const destination: any[] = [
+            '/p',
+            'archive',
+            publicArchiveNbr
+          ];
+
+          if (item.isRecord) {
+            destination.push(
+              'record',
+              item.archiveNbr,
+            );
+          } else {
+            destination.push(
+              item.archiveNbr,
+              item.folder_linkId
+            );
+          }
+
+          return this.router.navigate(destination);
         } else {
           throw response;
         }
