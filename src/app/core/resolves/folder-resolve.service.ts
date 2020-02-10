@@ -49,14 +49,11 @@ export class FolderResolveService implements Resolve<any> {
       targetFolder = new FolderVO(publicRoot);
     } else if (state.url.includes('/public')) {
       const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.public'});
-      console.log(this.accountService.getRootFolder().ChildItemVOs, publicRoot);
       targetFolder = new FolderVO(publicRoot);
     } else  {
       const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
       targetFolder = new FolderVO(myFiles);
     }
-
-    console.log(targetFolder);
 
     return this.api.folder.navigate(targetFolder)
       .pipe(map(((response: FolderResponse) => {

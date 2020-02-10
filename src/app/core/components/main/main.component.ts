@@ -14,6 +14,7 @@ import { FolderPickerOperations } from '../folder-picker/folder-picker.component
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { Deferred } from '@root/vendor/deferred';
+import { FolderResponse } from '@shared/services/api/index.repo';
 
 @Component({
   selector: 'pr-main',
@@ -85,6 +86,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
     }
+    this.checkCta();
+
   }
 
   ngOnDestroy() {
@@ -93,6 +96,31 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.checkShareByUrl();
+  }
+
+  async checkCta() {
+    const cta = this.route.snapshot.queryParams.cta;
+
+    switch (cta) {
+      case 'timeline':
+        this.startTimelineOnboarding();
+        break;
+    }
+  }
+
+  async startTimelineOnboarding() {
+    try {
+      const firstScreenTemplate = `
+      <p>A Permanent timeline is the best way for others to experience your story as it unfolded in time.</p>
+      <p>In just two steps, you will create a public, interactive timeline that anyone can find and see online using an easy-to-share link.</p>
+      `;
+
+      await this.prompt.confirm('Get started', 'Create your new timeline', null, null, firstScreenTemplate);
+    } catch (err) {
+      if (err instanceof FolderResponse) {
+
+      }
+    }
   }
 
   async checkShareByUrl() {

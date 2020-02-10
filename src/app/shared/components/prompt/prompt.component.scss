@@ -43,3 +43,9 @@ $transition-length: 0.25s;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.prompt-template {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px 10px 0px;
+}

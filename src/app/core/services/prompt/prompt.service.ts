@@ -26,6 +26,7 @@ export interface PromptConfig {
   form?: FormGroup;
   fields?: PromptField[];
   buttons?: PromptButton[];
+  template?: string;
   title: string;
   savePromise?: Promise<any>;
   saveText?: string;
@@ -67,15 +68,15 @@ export class PromptService {
     return this.component.prompt(this.fb.group(formConfig), fields, title, savePromise, saveText, cancelText);
   }
 
-  promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>) {
+  promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>, template?: string) {
     if (!this.component) {
       throw new Error('PromptService - Missing prompt component');
     }
 
-    return this.component.promptButtons(buttons, title, savePromise);
+    return this.component.promptButtons(buttons, title, savePromise, null, null, null, template);
   }
 
-  confirm(confirmText: string = 'OK', title: string, savePromise?: Promise<any>, confirmButtonClass?: string) {
+  confirm(confirmText: string = 'OK', title: string, savePromise?: Promise<any>, confirmButtonClass?: string, template?: string) {
     const confirmButtons: PromptButton[] = [
       {
         buttonName: 'confirm',
@@ -89,7 +90,7 @@ export class PromptService {
       }
     ];
 
-    return this.promptButtons(confirmButtons, title, savePromise)
+    return this.promptButtons(confirmButtons, title, savePromise, template)
       .then((value: string) => {
         if (value === 'confirm') {
           return Promise.resolve(true);

@@ -4,6 +4,7 @@ import { ArchiveVO, AccountVO } from '@models/index';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 @Component({
   selector: 'pr-public',
@@ -32,7 +33,8 @@ export class PublicComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private accountService: AccountService,
-    private router: Router
+    private router: Router,
+    private device: DeviceService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -82,11 +84,15 @@ export class PublicComponent implements OnInit, OnDestroy {
   }
 
   onArchiveThumbClick() {
-
+    if (this.device.isMobile()) {
+      this.router.navigate(['/m', 'myfiles']);
+    } else {
+      window.location.assign(`/app/myfiles`);
+    }
   }
 
   onMyAccountClick() {
-
+    this.onArchiveThumbClick();
   }
 
   onSearchBarFocusChange(isFocused: boolean) {
