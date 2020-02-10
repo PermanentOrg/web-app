@@ -55,7 +55,7 @@
   position: absolute;
   top: calc(100% - #{$timeline-folder-info-height});
   width: 100%;
-  z-index: 10;
+  z-index: 2;
 
   transform: translateY(0);
   transition:  transform $default-transition-length ease-in;

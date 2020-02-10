@@ -4,6 +4,8 @@ import { ArchiveVO } from '@models/index';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-public-archive',
@@ -13,6 +15,8 @@ import { DataService } from '@shared/services/data/data.service';
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   public archive: ArchiveVO;
   public description: string;
+  public isMobile = this.device.isMobileWidth();
+
   public get cta() {
     return this.data.publicCta;
   }
@@ -24,7 +28,9 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private folderView: FolderViewService,
-    private data: DataService
+    private data: DataService,
+    private device: DeviceService,
+    private prompt: PromptService
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -62,6 +68,18 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
       case 'timeline':
         const queryParams = { cta: 'timeline' };
         this.router.navigate(['/auth', 'signup'], { queryParams });
+        break;
+    }
+  }
+
+  async onCtaClickMobile() {
+    switch (this.cta) {
+      case 'timeline':
+        try {
+          if (await this.prompt.confirm('Continue', 'Create your own timeline?')) {
+            this.onCtaClick();
+          }
+        } catch (err) { }
         break;
     }
   }
