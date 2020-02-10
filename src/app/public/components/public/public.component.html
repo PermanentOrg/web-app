@@ -5,9 +5,9 @@
       </a>
       <pr-search-box (searchBarFocusChange)="onSearchBarFocusChange($event)"></pr-search-box>
       <div class="banner-buttons">
-        <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="archive" (click)="onArchiveThumbClick()"></div>
+        <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="isLoggedIn" (click)="onArchiveThumbClick()"></div>
         <button class="btn btn-wordpress" (click)="onSignupClick()" *ngIf="!isLoggedIn">Sign Up</button>
-        <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? account.primaryEmail : 'My Account' }}</button>
+        <!-- <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? account.primaryEmail : 'My Account' }}</button> -->
       </div>
   </div>
 </div>
