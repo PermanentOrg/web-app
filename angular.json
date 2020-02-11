@@ -101,6 +101,7 @@
                   "with": "src/index.dev.html"
                 }
               ],
+              "index": "src/index/dev/index.html",
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
@@ -123,6 +124,7 @@
                   "with": "src/index.prod.html"
                 }
               ],
+              "index": "src/index/prod/index.html",
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
@@ -145,6 +147,7 @@
                   "with": "src/index.dev.html"
                 }
               ],
+              "index": "src/index/staging/index.html",
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
