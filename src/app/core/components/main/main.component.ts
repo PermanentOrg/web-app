@@ -148,7 +148,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const folderCreate = new Deferred();
 
-      const promptData = await this.prompt.prompt(
+      const promptData: any = await this.prompt.prompt(
         secondScreenFields, 'Name your new timeline', folderCreate.promise, 'Continue', null, secondScreenTemplate
       );
 
@@ -156,6 +156,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       const folder = new FolderVO({
         displayName: promptData.displayName,
         description: promptData.description,
+        view: 'folder.view.timeline',
         parentFolder_linkId: publicRoot.folder_linkId
       });
       const response = await this.api.folder.post([folder]);

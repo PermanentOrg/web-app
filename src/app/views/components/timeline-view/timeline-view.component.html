@@ -5,14 +5,14 @@
 <div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}" (click)="showFolderDetails = false;"></div>
 <div class="timeline-zoom-controls" (click)="showFolderDetails = false;">
   <div class="control-row">
-    <button (click)="onZoomInClick()">+</button>
+    <button class="btn" (click)="onZoomInClick()">+</button>
   </div>
   <div class="control-row">
-    <button (click)="onPrevClick()">‹</button>
-    <button (click)="onNextClick()">›</button>
+    <button class="btn" (click)="onPrevClick()">‹</button>
+    <button class="btn" (click)="onNextClick()">›</button>
   </div>
   <div class="control-row">
-    <button (click)="onZoomOutClick()">-</button>
+    <button class="btn" (click)="onZoomOutClick()">-</button>
   </div>
 </div>
 <div class="timeline-folder-info" [ngClass]="{'showing-details': showFolderDetails}">
