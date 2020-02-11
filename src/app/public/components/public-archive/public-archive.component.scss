@@ -39,9 +39,12 @@
     flex: 0 0 50px;
   }
 
+  .public-archive-name {
+    margin-right: auto;
+  }
+
   .public-archive-cta {
-    margin-left: auto;
-    
+    margin-left: 10px;
     button {
       margin: 0px;
     }

@@ -34,6 +34,7 @@ export const PUBLISH_EVENTS = {
     initiated: { 'key': 'Evt-Pu40', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'initiated' } },
     getLink: { 'key': 'Evt-Pu41', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'get link' } },
     viewed: { 'key': 'Evt-Pu42', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'viewed' } },
+    reshare: { 'key': 'Evt-Pu422', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'reshared' } },
     signup: { 'key': 'Evt-Pu423', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'signup' } },
   }
 };

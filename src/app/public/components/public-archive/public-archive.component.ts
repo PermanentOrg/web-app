@@ -81,13 +81,14 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   }
 
   onShareClick() {
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.reshare.params);
     const fields = [
       READ_ONLY_FIELD('publicLink', 'Public link', window.location.href)
     ];
 
     const deferred = new Deferred();
 
-    this.prompt.prompt(fields, 'Copy public link', deferred.promise, 'Copy link')
+    this.prompt.prompt(fields, 'Share public link', deferred.promise, 'Copy link')
     .then(() => {
       const input = this.prompt.getInput('publicLink');
       copyFromInputElement(input);
