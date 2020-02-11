@@ -102,6 +102,8 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.cancelText = cancelText || DEFAULT_CANCEL_TEXT;
     this.template = template;
 
+    console.log(this.template, template);
+
     this.editForm = form;
     this.fields = fields;
 

@@ -54,7 +54,7 @@ export class PromptService {
     this.component = null;
   }
 
-  prompt(fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string) {
+  prompt(fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string, template?: string) {
     if (!this.component) {
       throw new Error('PromptService - Missing prompt component');
     }
@@ -65,7 +65,7 @@ export class PromptService {
       formConfig[field.fieldName] = [field.initialValue || '', field.validators || []];
     }
 
-    return this.component.prompt(this.fb.group(formConfig), fields, title, savePromise, saveText, cancelText);
+    return this.component.prompt(this.fb.group(formConfig), fields, title, savePromise, saveText, cancelText, null, null, null, template);
   }
 
   promptButtons(buttons: PromptButton[], title: string, savePromise?: Promise<any>, template?: string) {

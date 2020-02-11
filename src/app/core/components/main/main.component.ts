@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { FolderVO, FolderVOData, ShareByUrlVO, RecordVO, AccountVO } from '@root/app/models';
 import { find } from 'lodash';
@@ -15,6 +15,10 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderResponse } from '@shared/services/api/index.repo';
+import { Validators } from '@angular/forms';
+import { DataService } from '@shared/services/data/data.service';
+import { UploadSessionStatus } from '@core/services/upload/uploader';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-main',
@@ -34,7 +38,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     private upload: UploadService,
     private route: ActivatedRoute,
     private prompt: PromptService,
-    private api: ApiService
+    private api: ApiService,
+    private dialog: Dialog
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -116,6 +121,58 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       `;
 
       await this.prompt.confirm('Get started', 'Create your new timeline', null, null, firstScreenTemplate);
+
+      const secondScreenTemplate = `
+      <p>Give your timeline a name and an optional description so viewers can better understand what they see.</p>
+      `;
+
+      const secondScreenFields: PromptField[] = [
+        {
+          fieldName: 'displayName',
+          placeholder: 'Name',
+          validators: [ Validators.required ],
+          config: {
+            autocorrect: 'on',
+            spellcheck: 'on'
+          }
+        },
+        {
+          fieldName: 'description',
+          placeholder: 'Description (optional)',
+          config: {
+            autocorrect: 'on',
+            spellcheck: 'on'
+          }
+        }
+      ];
+
+      const folderCreate = new Deferred();
+
+      const promptData = await this.prompt.prompt(
+        secondScreenFields, 'Name your new timeline', folderCreate.promise, 'Continue', null, secondScreenTemplate
+      );
+
+      const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
+      const folder = new FolderVO({
+        displayName: promptData.displayName,
+        description: promptData.description,
+        parentFolder_linkId: publicRoot.folder_linkId
+      });
+      const response = await this.api.folder.post([folder]);
+      const newFolder = response.getFolderVO();
+      folderCreate.resolve();
+      await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
+      await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto'});
+
+      // this.upload.promptForFiles();
+      // const uploadListener = this.upload.uploader.uploadSessionStatus.subscribe((status: UploadSessionStatus) => {
+      //   if (status === UploadSessionStatus.Done) {
+      //     this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder });
+      //     uploadListener.unsubscribe();
+      //   } else if (status > UploadSessionStatus.Done) {
+      //     uploadListener.unsubscribe();
+      //   }
+      // });
     } catch (err) {
       if (err instanceof FolderResponse) {
 

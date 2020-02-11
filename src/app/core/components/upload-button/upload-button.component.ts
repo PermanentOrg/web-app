@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
@@ -8,8 +8,9 @@ import { FolderVO } from '@root/app/models';
   templateUrl: './upload-button.component.html',
   styleUrls: ['./upload-button.component.scss']
 })
-export class UploadButtonComponent implements OnInit {
+export class UploadButtonComponent implements OnInit, OnDestroy {
   private files: File[];
+  @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
   public currentFolder: FolderVO;
   public hidden: boolean;
 
@@ -18,9 +19,19 @@ export class UploadButtonComponent implements OnInit {
       this.currentFolder = currentFolder;
       this.checkCurrentFolder();
     });
+
+    this.upload.registerButtonComponent(this);
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.upload.deregisterButtonComponent();
+  }
+
+  promptForFiles() {
+    this.fileInput.nativeElement.click();
   }
 
   checkCurrentFolder() {

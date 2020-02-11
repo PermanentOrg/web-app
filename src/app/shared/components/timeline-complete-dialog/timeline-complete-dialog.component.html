@@ -1,0 +1,17 @@
+<div class="dialog-content">
+  <div class="dialog-body">
+    <div class="page-title break-all">Your timeline is ready</div>
+    <p>You will find your timeline in the Public section of this archive.</p>
+    <p>Enhance your timeline by adding names, descriptions, and dates to your files and folders.</p>
+    <p>View and share your timeline using the link below.</p>
+    <div class="share-link" *ngIf="folder">
+        <input type="text" class="form-control" readonly [value]="publicLink" #publicLinkInput>
+        <button class="btn btn-primary" [disabled]="linkCopied" (click)="copyPublicLink()">{{ linkCopied ? 'Link copied' : 'Copy link'}}</button>
+        <a class="btn btn-primary" [href]="publicLink">View on web</a>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="close()">Done</button>
+  </div>
+</div>
+
