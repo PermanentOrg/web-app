@@ -18,7 +18,8 @@
 <div class="timeline-folder-info" [ngClass]="{'showing-details': showFolderDetails}">
   <div class="timeline-folder-info-content">
     <span class="timeline-folder-info-name">{{timelineRootFolder.displayName}}</span>
-    <a class="timeline-folder-details-button" *ngIf="timelineRootFolder.description" (click)="toggleFolderDetails()">{{showFolderDetails ? 'Hide details' : 'Click for details'}}</a>
+    <a class="timeline-folder-details-button" *ngIf="timelineRootFolder.description && timelineRootFolder.ChildItemVOs.length" (click)="toggleFolderDetails()">{{showFolderDetails ? 'Hide details' : 'Click for details'}}</a>
+    <span class="timeline-folder-details-button" *ngIf="!timelineRootFolder.ChildItemVOs.length" (click)="toggleFolderDetails()">This folder is empty</span>
     <span class="timeline-folder-info-date">
       {{timelineRootFolder.displayDT | date:'shortDate'}}{{timelineRootFolder.displayEndDT  ? ' to ' : ''}}{{timelineRootFolder.displayEndDT | date:'shortDate'}}
     </span>

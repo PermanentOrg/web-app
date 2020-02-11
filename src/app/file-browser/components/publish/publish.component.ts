@@ -7,6 +7,8 @@ import { find } from 'lodash';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 @Component({
   selector: 'pr-publish',
@@ -28,6 +30,7 @@ export class PublishComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     private account: AccountService,
+    private ga: GoogleAnalyticsService,
     private api: ApiService,
     private messageService: MessageService,
     private accountService: AccountService,
@@ -48,6 +51,8 @@ export class PublishComponent implements OnInit {
     if (this.sourceItem.type.includes('public')) {
       return;
     }
+
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated);
 
     this.waiting = true;
     try {
@@ -70,6 +75,8 @@ export class PublishComponent implements OnInit {
   }
 
   copyPublicLink() {
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink);
+
     const element = this.publicLinkInput.nativeElement as HTMLInputElement;
 
     copyFromInputElement(element);

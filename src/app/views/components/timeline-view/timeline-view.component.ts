@@ -163,6 +163,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setMaxZoom() {
     const range = this.timeline.getItemRange();
+    if (!range || !range.min || !range.max) {
+      return;
+    }
+
     const start = range.min.valueOf();
     const end = range.max.valueOf();
     const diff = end - start;

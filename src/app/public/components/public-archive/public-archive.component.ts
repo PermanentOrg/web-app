@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 @Component({
   selector: 'pr-public-archive',
@@ -30,7 +32,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private folderView: FolderViewService,
     private data: DataService,
     private device: DeviceService,
-    private prompt: PromptService
+    private prompt: PromptService,
+    private ga: GoogleAnalyticsService
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -47,6 +50,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.archive = this.route.snapshot.data['archive'];
+
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed);
 
     if (this.archive.description) {
       this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</>';
