@@ -11,6 +11,7 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
 import { copyFromInputElement } from '@shared/utilities/forms';
+import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 
 @Component({
   selector: 'pr-public-archive',
@@ -36,7 +37,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private data: DataService,
     private device: DeviceService,
     private prompt: PromptService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    private linkPipe: PublicLinkPipe
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -82,8 +84,10 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   onShareClick() {
     this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.reshare.params);
+
+    const url = this.linkPipe.transform(this.data.currentFolder);
     const fields = [
-      READ_ONLY_FIELD('publicLink', 'Public link', window.location.href)
+      READ_ONLY_FIELD('publicLink', 'Public link', url)
     ];
 
     const deferred = new Deferred();
