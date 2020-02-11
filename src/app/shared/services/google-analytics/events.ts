@@ -38,9 +38,6 @@ export const PUBLISH_EVENTS = {
   }
 };
 
-export const UPLOAD_EVENTS = {
-};
-
 export const EVENTS = {
   SHARE: SHARE_EVENTS,
   PUBLISH: PUBLISH_EVENTS
