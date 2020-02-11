@@ -41,9 +41,13 @@ export class RecordRepo extends BaseRepo {
   }
 
   public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
-    const data = recordVOs.map((recordVO) => {
+    const data = recordVOs.map((vo) => {
       return {
-        RecordVO: new RecordVO(recordVO)
+        RecordVO: new RecordVO({
+          recordId: vo.recordId,
+          archiveNbr: vo.archiveNbr,
+          displayName: vo.displayName
+        })
       };
     });
 
