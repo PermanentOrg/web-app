@@ -6,6 +6,9 @@
       <strong>The {{archive.fullName || 'Archive Name'}} Archive</strong><br>
       {{archive.type | prConstants}}
     </span>
+    <div class="public-archive-cta" *ngIf="!cta">
+      <button class="btn btn-primary" (click)="onShareClick()">Share</button>
+    </div>
     <div class="public-archive-cta" *ngIf="cta">
       <button class="btn btn-primary" (click)="onCtaClick()" *ngIf="!isMobile">Create a new timeline</button>
       <button class="btn btn-primary mobile-only" (click)="onCtaClickMobile()" *ngIf="isMobile">Create</button>

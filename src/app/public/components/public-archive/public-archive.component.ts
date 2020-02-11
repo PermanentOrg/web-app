@@ -8,6 +8,9 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
+import { Deferred } from '@root/vendor/deferred';
+import { copyFromInputElement } from '@shared/utilities/forms';
 
 @Component({
   selector: 'pr-public-archive',
@@ -75,6 +78,24 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         this.router.navigate(['/auth', 'signup'], { queryParams });
         break;
     }
+  }
+
+  onShareClick() {
+    const fields = [
+      READ_ONLY_FIELD('publicLink', 'Public link', window.location.href)
+    ];
+
+    const deferred = new Deferred();
+
+    this.prompt.prompt(fields, 'Copy public link', deferred.promise, 'Copy link')
+    .then(() => {
+      const input = this.prompt.getInput('publicLink');
+      copyFromInputElement(input);
+      deferred.resolve();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   }
 
   async onCtaClickMobile() {
