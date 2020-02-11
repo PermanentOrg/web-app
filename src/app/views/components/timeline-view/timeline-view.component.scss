@@ -40,7 +40,8 @@
       flex: 0 0 40px;
       width: 40px;
       margin: 0 auto;
-      padding: 0px;
+      padding: 5px;
+      border: 1px solid $gray-500;
 
       &:hover {
         opacity: 0.95;
