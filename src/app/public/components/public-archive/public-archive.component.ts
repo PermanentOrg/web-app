@@ -12,6 +12,7 @@ import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
+import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
   selector: 'pr-public-archive',
@@ -31,6 +32,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   @HostBinding('class.container-vertical-flex') containerVerticalFlex: boolean;
 
   constructor(
+    private account: AccountService,
     private route: ActivatedRoute,
     private router: Router,
     private folderView: FolderViewService,
@@ -77,7 +79,15 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     switch (this.cta) {
       case 'timeline':
         const queryParams = { cta: 'timeline', eventCategory: 'Publish by url' };
-        this.router.navigate(['/auth', 'signup'], { queryParams });
+        if (this.account.isLoggedIn()) {
+          if (this.device.isMobile()) {
+            this.router.navigate(['/public'], { queryParams });
+          } else {
+            window.location.assign('/app/public?cta=timeline');
+          }
+        } else {
+          this.router.navigate(['/auth', 'signup'], { queryParams });
+        }
         break;
     }
   }
