@@ -51,7 +51,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.archive = this.route.snapshot.data['archive'];
 
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed);
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
 
     if (this.archive.description) {
       this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</>';

@@ -52,7 +52,7 @@ export class PublishComponent implements OnInit {
       return;
     }
 
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated);
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated.params);
 
     this.waiting = true;
     try {
@@ -75,7 +75,7 @@ export class PublishComponent implements OnInit {
   }
 
   copyPublicLink() {
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink);
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink.params);
 
     const element = this.publicLinkInput.nativeElement as HTMLInputElement;
 
