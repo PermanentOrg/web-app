@@ -4,6 +4,8 @@ import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
 
+import { orderBy } from 'lodash';
+
 @Component({
   selector: 'pr-archive-switcher-dialog',
   templateUrl: './archive-switcher-dialog.component.html',
@@ -23,8 +25,7 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private account: AccountService
   ) {
-    this.currentArchive = this.account.getArchive();
-    this.archives = this.account.getArchives().filter(archive => archive.archiveId !== this.currentArchive.archiveId);
+    this.archives = orderBy(this.account.getArchives(), 'fullName');
 
     this.promptText = data.promptText;
   }
