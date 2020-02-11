@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-upload-button',
@@ -14,7 +15,11 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
   public currentFolder: FolderVO;
   public hidden: boolean;
 
-  constructor(private upload: UploadService, private dataService: DataService) {
+  constructor(
+    private upload: UploadService,
+    private dataService: DataService,
+    private prompt: PromptService
+  ) {
     this.dataService.currentFolderChange.subscribe((currentFolder) => {
       this.currentFolder = currentFolder;
       this.checkCurrentFolder();
@@ -45,10 +50,17 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileChange(event) {
+  async onFileChange(event) {
     this.files = Array.from(event.target.files);
     if (this.currentFolder) {
-      this.upload.uploadFiles(this.currentFolder, this.files);
+      if (this.currentFolder.type.includes('public')) {
+        try {
+          await this.prompt.confirm('Upload to public', 'This is a public folder. Are you sure you want to upload here?');
+          this.upload.uploadFiles(this.currentFolder, this.files);
+        } catch (err) {}
+      } else {
+        this.upload.uploadFiles(this.currentFolder, this.files);
+      }
     }
   }
 }
