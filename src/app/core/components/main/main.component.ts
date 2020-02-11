@@ -162,18 +162,20 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       const newFolder = response.getFolderVO();
       folderCreate.resolve();
       await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
-      await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto'});
 
-      // this.upload.promptForFiles();
-      // const uploadListener = this.upload.uploader.uploadSessionStatus.subscribe((status: UploadSessionStatus) => {
-      //   if (status === UploadSessionStatus.Done) {
-      //     this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder });
-      //     uploadListener.unsubscribe();
-      //   } else if (status > UploadSessionStatus.Done) {
-      //     uploadListener.unsubscribe();
-      //   }
-      // });
+      this.upload.promptForFiles();
+      const uploadListener = this.upload.uploader.uploadSessionStatus.subscribe(async (status: UploadSessionStatus) => {
+        if (status === UploadSessionStatus.Done) {
+          try {
+            await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto' });
+          } catch (err) { }
+          uploadListener.unsubscribe();
+        } else if (status > UploadSessionStatus.Done) {
+          uploadListener.unsubscribe();
+        }
+      });
     } catch (err) {
+      console.error(err);
       if (err instanceof FolderResponse) {
 
       }

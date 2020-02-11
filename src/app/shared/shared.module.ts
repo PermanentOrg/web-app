@@ -64,6 +64,9 @@ import { PublicLinkPipe } from './pipes/public-link.pipe';
     PublicLinkPipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent
+  ],
+  providers: [
+    PublicLinkPipe
   ]
 })
 export class SharedModule {
