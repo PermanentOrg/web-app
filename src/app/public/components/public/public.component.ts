@@ -18,7 +18,7 @@ export class PublicComponent implements OnInit, OnDestroy {
 
   public account: AccountVO = this.accountService.getAccount();
   public archive: ArchiveVO = this.accountService.getArchive();
-  public isLoggedIn = this.accountService.isLoggedIn;
+  public isLoggedIn = this.accountService.isLoggedIn();
 
   public publishArchive: ArchiveVO;
   public displayName: string;
@@ -80,7 +80,7 @@ export class PublicComponent implements OnInit, OnDestroy {
   }
 
   onSignupClick() {
-    window.location.pathname = '/';
+    this.router.navigate(['/auth', 'signup'], { queryParams: { eventCategory: 'Publish by url'}});
   }
 
   onArchiveThumbClick() {

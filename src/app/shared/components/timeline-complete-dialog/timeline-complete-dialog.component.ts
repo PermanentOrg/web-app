@@ -3,6 +3,8 @@ import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { FolderVO } from '@models/index';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
+import { EVENTS } from '@shared/services/google-analytics/events';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
 @Component({
   selector: 'pr-timeline-complete-dialog',
@@ -19,6 +21,7 @@ export class TimelineCompleteDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     private linkPipe: PublicLinkPipe,
+    private ga: GoogleAnalyticsService,
     @Inject(DIALOG_DATA) public data: any,
   ) {
     this.folder = this.data.folder;
@@ -29,6 +32,8 @@ export class TimelineCompleteDialogComponent implements OnInit {
   }
 
   copyPublicLink() {
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink.params);
+
     const element = this.publicLinkInput.nativeElement as HTMLInputElement;
 
     copyFromInputElement(element);

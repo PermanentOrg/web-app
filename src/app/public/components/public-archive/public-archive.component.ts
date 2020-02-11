@@ -71,7 +71,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   onCtaClick() {
     switch (this.cta) {
       case 'timeline':
-        const queryParams = { cta: 'timeline' };
+        const queryParams = { cta: 'timeline', eventCategory: 'Publish by url' };
         this.router.navigate(['/auth', 'signup'], { queryParams });
         break;
     }

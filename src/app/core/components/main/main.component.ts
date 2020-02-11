@@ -19,6 +19,8 @@ import { Validators } from '@angular/forms';
 import { DataService } from '@shared/services/data/data.service';
 import { UploadSessionStatus } from '@core/services/upload/uploader';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 @Component({
   selector: 'pr-main',
@@ -39,7 +41,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private prompt: PromptService,
     private api: ApiService,
-    private dialog: Dialog
+    private dialog: Dialog,
+    private ga: GoogleAnalyticsService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -160,6 +163,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         parentFolder_linkId: publicRoot.folder_linkId
       });
       const response = await this.api.folder.post([folder]);
+
+      this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated.params);
       const newFolder = response.getFolderVO();
       folderCreate.resolve();
       await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
