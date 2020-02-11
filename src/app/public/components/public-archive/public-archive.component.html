@@ -2,10 +2,13 @@
   <div class="public-archive" *ngIf="archive">
     <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"
     (click)="onArchiveThumbClick()"></div>
-    <span>
+    <span class="public-archive-name">
       <strong>The {{archive.fullName || 'Archive Name'}} Archive</strong><br>
       {{archive.type | prConstants}}
     </span>
+    <div class="public-archive-cta" *ngIf="!cta || !isMobile">
+      <button class="btn btn-primary" (click)="onShareClick()">Share</button>
+    </div>
     <div class="public-archive-cta" *ngIf="cta">
       <button class="btn btn-primary" (click)="onCtaClick()" *ngIf="!isMobile">Create a new timeline</button>
       <button class="btn btn-primary mobile-only" (click)="onCtaClickMobile()" *ngIf="isMobile">Create</button>
