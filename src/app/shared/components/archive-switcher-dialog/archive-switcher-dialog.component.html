@@ -1,8 +1,8 @@
 <div class="archive-switcher-wrapper">
-  <div class="current-archive">
+  <!-- <div class="current-archive">
     <pr-archive-small [archive]="currentArchive" (click)="close()"></pr-archive-small>
     <div class="archive-list-title"><strong>{{promptText}}</strong></div>
-  </div>
+  </div> -->
   <div class="archive-list-wrapper">
     <div class="archive-list" *ngIf="!loadingArchives" [ngClass]="{'switching': waiting}">
       <pr-archive-small *ngFor="let archive of archives"

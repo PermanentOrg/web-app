@@ -25,6 +25,7 @@ export class PromptComponent implements OnInit, OnDestroy {
 
   public editButtons: PromptButton[];
 
+  public template: string;
   public saveText = DEFAULT_SAVE_TEXT;
   public cancelText = DEFAULT_CANCEL_TEXT;
 
@@ -67,7 +68,8 @@ export class PromptComponent implements OnInit, OnDestroy {
     cancelText?: string,
     donePromise?: Promise<any>,
     doneResolve?: Function,
-    doneReject?: Function
+    doneReject?: Function,
+    template?: string
   ) {
     if (this.donePromise) {
       let newDoneReject, newDoneResolve;
@@ -95,8 +97,12 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.title = title;
     this.savePromise = savePromise;
 
+    this.template = template;
     this.saveText = saveText || DEFAULT_SAVE_TEXT;
     this.cancelText = cancelText || DEFAULT_CANCEL_TEXT;
+    this.template = template;
+
+    console.log(this.template, template);
 
     this.editForm = form;
     this.fields = fields;
@@ -167,7 +173,8 @@ export class PromptComponent implements OnInit, OnDestroy {
     savePromise?: Promise<any>,
     donePromise?: Promise<any>,
     doneResolve?: Function,
-    doneReject?: Function
+    doneReject?: Function,
+    template?: string
   ) {
     if (this.donePromise) {
       let newDoneReject, newDoneResolve;
@@ -183,7 +190,8 @@ export class PromptComponent implements OnInit, OnDestroy {
         savePromise: savePromise,
         donePromise: newDonePromise,
         doneResolve: newDoneResolve,
-        doneReject: newDoneReject
+        doneReject: newDoneReject,
+        template: template
       });
 
       return newDonePromise;
@@ -191,6 +199,7 @@ export class PromptComponent implements OnInit, OnDestroy {
 
     this.editButtons = buttons;
     this.title = title;
+    this.template = template;
     this.savePromise = savePromise;
 
     if (!donePromise) {
@@ -236,6 +245,7 @@ export class PromptComponent implements OnInit, OnDestroy {
     this.donePromise = null;
     this.doneResolve = null;
     this.doneReject = null;
+    this.template =  null;
     this.waiting = false;
 
     if (this.promptQueue.length) {
@@ -250,7 +260,8 @@ export class PromptComponent implements OnInit, OnDestroy {
           next.cancelText,
           next.donePromise,
           next.doneResolve,
-          next.doneReject
+          next.doneReject,
+          next.template
         );
       } else if (next.buttons) {
         this.promptButtons(
@@ -259,7 +270,8 @@ export class PromptComponent implements OnInit, OnDestroy {
           next.savePromise,
           next.donePromise,
           next.doneResolve,
-          next.doneReject
+          next.doneReject,
+          next.template
         );
       }
     }

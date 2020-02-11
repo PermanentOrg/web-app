@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
 
-import { remove } from 'lodash';
+import { remove, orderBy } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 import { gsap } from 'gsap';
 
@@ -38,9 +38,9 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     this.currentArchive = accountService.getArchive();
 
     const archivesData = this.route.snapshot.data['archives'] || [];
-    const archives = archivesData.map((archiveData) => {
+    const archives = orderBy(archivesData.map((archiveData) => {
       return new ArchiveVO(archiveData);
-    });
+    }), 'fullName');
     const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;
 
     this.currentArchive.update(currentArchiveFetched);

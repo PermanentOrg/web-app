@@ -13,6 +13,7 @@ import { FolderVO } from '@root/app/models';
 import { Uploader, UploadSessionStatus } from './uploader';
 import { UploadItem } from '@core/services/upload/uploadItem';
 import { RecordResponse } from '@shared/services/api/index.repo';
+import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ import { RecordResponse } from '@shared/services/api/index.repo';
 export class UploadService {
   public uploader: Uploader = new Uploader(this.api, this.message);
   public component: UploadProgressComponent;
+  public buttonComponent: UploadButtonComponent;
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
 
   private debouncedRefresh: Function;
@@ -38,8 +40,22 @@ export class UploadService {
     });
   }
 
+  registerButtonComponent(component: UploadButtonComponent) {
+    this.buttonComponent = component;
+  }
+
+  deregisterButtonComponent() {
+    this.buttonComponent = null;
+  }
+
   registerComponent(component: UploadProgressComponent) {
     this.component = component;
+  }
+
+  promptForFiles() {
+    if (this.buttonComponent) {
+      this.buttonComponent.promptForFiles();
+    }
   }
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {

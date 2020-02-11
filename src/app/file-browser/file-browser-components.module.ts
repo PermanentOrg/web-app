@@ -13,6 +13,7 @@ import { SharingComponent } from '@fileBrowser/components/sharing/sharing.compon
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
+import { PublishComponent } from './components/publish/publish.component';
 
 @NgModule({
   imports: [
@@ -35,17 +36,25 @@ import { FolderViewComponent } from './components/folder-view/folder-view.compon
     FolderViewComponent,
     ThumbnailComponent,
     VideoComponent,
-    SharingComponent
+    SharingComponent,
+    PublishComponent
   ],
   entryComponents: [
-    SharingComponent
+    SharingComponent,
+    PublishComponent
   ]
 })
 export class FileBrowserComponentsModule {
-  private dialogComponents: DialogChildComponentData[] = [{
-    token: 'SharingComponent',
-    component: SharingComponent
-  }];
+  private dialogComponents: DialogChildComponentData[] = [
+    {
+      token: 'SharingComponent',
+      component: SharingComponent
+    },
+    {
+      token: 'PublishComponent',
+      component: PublishComponent
+    }
+  ];
 
   constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
     this.dialog.registerComponents(this.dialogComponents, resolver, true);

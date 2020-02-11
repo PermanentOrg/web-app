@@ -106,7 +106,7 @@ export class AppModule {
     .pipe(filter((event) => {
       // console.log(event);
       if (event instanceof NavigationStart) {
-        console.log('navigate to url:', event.url);
+        // console.log('navigate to url:', event.url);
       }
       return event instanceof NavigationEnd;
     })).subscribe((event) => {

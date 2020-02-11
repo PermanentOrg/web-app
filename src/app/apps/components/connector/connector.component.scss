@@ -9,6 +9,11 @@ $info-height: $file-list-row-height;
   // margin-bottom: 10px;
 }
 
+.view-files {
+  cursor: pointer;
+  user-select: none;
+}
+
 .connector-info {
   display: flex;
   align-items: center;

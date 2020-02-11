@@ -10,6 +10,7 @@ import APP_CONFIG from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private message: MessageService,
-    private cookies: CookieService
+    private cookies: CookieService,
+    private device: DeviceService
   ) {
     this.loginForm = fb.group({
       email: [this.cookies.get('rememberMe'), [trimWhitespace, Validators.required, Validators.email]],
@@ -62,6 +64,12 @@ export class LoginComponent implements OnInit {
             .then(() => {
               this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
             });
+        } else if (this.route.snapshot.queryParams.cta === 'timeline') {
+          if (this.device.isMobile()) {
+            this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
+          } else {
+            window.location.assign(`/app/public?cta=timeline`);
+          }
         } else {
           this.router.navigate(['/'], { queryParamsHandling: 'preserve'})
             .then(() => {

@@ -50,8 +50,24 @@ const ItemActions: {[key: string]: PromptButton} = {
     buttonName: 'delete',
     buttonText: 'Remove',
     class: 'btn-danger'
+  },
+  Publish: {
+    buttonName: 'publish',
+    buttonText: 'Publish',
+  },
+  GetLink: {
+    buttonName: 'publish',
+    buttonText: 'Get link'
   }
 };
+
+type ActionType = 'delete' |
+  'rename' |
+  'share' |
+  'publish' |
+  'download' |
+  'copy' |
+  'move';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -73,6 +89,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   private isInShares: boolean;
   private isInApps: boolean;
   private isInPublic: boolean;
+  private isInMyPublic: boolean;
   private isInPublicArchive: boolean;
   private isInSharePreview: boolean;
   private checkFolderView: boolean;
@@ -109,6 +126,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
+    }
+
+    if (this.router.routerState.snapshot.url.includes('/public')) {
+      this.isInMyPublic = true;
     }
 
     if (this.route.snapshot.data.isPublic) {
@@ -233,6 +254,15 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         actionButtons.push(ItemActions.Share);
       }
       actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
+
+      if (!this.isInShares) {
+        if (this.isInMyPublic) {
+          actionButtons.push(ItemActions.GetLink);
+        } else if (this.item.accessRole.includes('owner')) {
+          actionButtons.push(ItemActions.Publish);
+        }
+      }
+
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
       }
@@ -243,14 +273,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
-      .then((value: string) => {
+      .then((value: ActionType) => {
         this.onActionClick(value, actionDeferred);
       });
 
     return false;
   }
 
-  onActionClick(value: string, actionDeferred: Deferred) {
+  onActionClick(value: ActionType, actionDeferred: Deferred) {
     switch (value) {
       case 'delete':
         return this.deleteItem(actionDeferred.resolve);
@@ -278,6 +308,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
             actionDeferred.resolve();
             this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
           });
+        break;
+      case 'publish':
+        actionDeferred.resolve();
+        this.dialog.open('PublishComponent', { item: this.item }, { height: 'auto' });
         break;
     }
   }

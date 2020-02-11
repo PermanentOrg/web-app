@@ -4,10 +4,9 @@
       <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
     </a>
     <div class="banner-buttons">
-      <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="archive" (click)="onArchiveThumbClick()"></div>
+      <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="archive" (click)="onArchiveThumbClick()" [cover]="true"></div>
       <button class="btn btn-wordpress" (click)="showCover = true;" *ngIf="!isLoggedIn" >{{ isRelationshipShare ? 'Log In' : 'Sign Up' }}</button>
-      <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">{{ account ? account.primaryEmail : 'My Account' }}</button>
-      <button class="btn btn-wordpress banner-button-no-email" *ngIf="isLoggedIn" (click)="onMyAccountClick()">My Account</button>
+      <button class="btn btn-wordpress" *ngIf="isLoggedIn" (click)="onMyAccountClick()">My Archive</button>
     </div>
   </div>
 </div>

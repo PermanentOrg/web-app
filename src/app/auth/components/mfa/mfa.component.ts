@@ -4,6 +4,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '@shared/services/message/message.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 @Component({
   selector: 'pr-mfa',
@@ -20,7 +21,8 @@ export class MfaComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
-    private message: MessageService
+    private message: MessageService,
+    private device: DeviceService
   ) {
     this.mfaForm = fb.group({
       'token': [],
@@ -42,6 +44,12 @@ export class MfaComponent implements OnInit {
 
         if (this.accountService.hasRedirect()) {
           this.accountService.goToRedirect();
+        } else if (this.route.snapshot.queryParams.cta === 'timeline') {
+          if (this.device.isMobile()) {
+            this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
+          } else {
+            window.location.assign(`/app/public?cta=timeline`);
+          }
         } else {
           this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           this.router.navigate(['/'], { queryParamsHandling: 'preserve' });

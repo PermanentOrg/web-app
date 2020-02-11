@@ -124,10 +124,24 @@ export class ConnectorRepo extends BaseRepo {
       return {
         ArchiveVO: vo,
         SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
-      }
+      };
     });
 
     return this.http.sendRequestPromise('/connector/familysearchMemoryImportRequest', data, ConnectorResponse);
+  }
+
+  public familysearchMemorySyncRequest(archive: ArchiveVO | ArchiveVO[]): Promise<any> {
+    if (!isArray(archive)) {
+      archive = [ archive ];
+    }
+
+    const data = archive.map(vo => {
+      return {
+        ArchiveVO: vo,
+      };
+    });
+
+    return this.http.sendRequestPromise('/connector/familysearchMemorySyncRequest', data, ConnectorResponse);
   }
 
   public familysearchFactImportRequest(archive: ArchiveVO | ArchiveVO[], personId: string | string[]): Promise<any> {
@@ -143,7 +157,7 @@ export class ConnectorRepo extends BaseRepo {
       return {
         ArchiveVO: vo,
         SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
-      }
+      };
     });
 
     return this.http.sendRequestPromise('/connector/familysearchFactImportRequest', data, ConnectorResponse);

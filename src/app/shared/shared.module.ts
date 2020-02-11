@@ -17,6 +17,8 @@ import { FileSizePipe } from './pipes/filesize.pipe';
 import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 import { PromptComponent } from './components/prompt/prompt.component';
 import { ArchiveSwitcherDialogComponent } from './components/archive-switcher-dialog/archive-switcher-dialog.component';
+import { TimelineCompleteDialogComponent } from './components/timeline-complete-dialog/timeline-complete-dialog.component';
+import { PublicLinkPipe } from './pipes/public-link.pipe';
 
 @NgModule({
   imports: [
@@ -36,14 +38,17 @@ import { ArchiveSwitcherDialogComponent } from './components/archive-switcher-di
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
+    TimelineCompleteDialogComponent,
     BreadcrumbsComponent,
     PromptComponent,
     FileSizePipe,
-    PrConstantsPipe
+    PrConstantsPipe,
+    PublicLinkPipe,
   ],
   entryComponents: [
     ArchivePickerComponent,
-    ArchiveSwitcherDialogComponent
+    ArchiveSwitcherDialogComponent,
+    TimelineCompleteDialogComponent
   ],
   declarations: [
     FormInputComponent,
@@ -56,7 +61,12 @@ import { ArchiveSwitcherDialogComponent } from './components/archive-switcher-di
     BreadcrumbsComponent,
     FileSizePipe,
     PrConstantsPipe,
-    ArchiveSwitcherDialogComponent
+    PublicLinkPipe,
+    ArchiveSwitcherDialogComponent,
+    TimelineCompleteDialogComponent
+  ],
+  providers: [
+    PublicLinkPipe
   ]
 })
 export class SharedModule {
@@ -68,6 +78,10 @@ export class SharedModule {
     {
       token: 'ArchiveSwitcherDialogComponent',
       component: ArchiveSwitcherDialogComponent
+    },
+    {
+      token: 'TimelineCompleteDialogComponent',
+      component: TimelineCompleteDialogComponent
     }
   ];
 

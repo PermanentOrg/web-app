@@ -1,0 +1,19 @@
+<div class="dialog-content">
+  <div class="dialog-body">
+    <div class="page-title break-all">Publish {{sourceItem.displayName}}</div>
+    <div class="public-link" *ngIf="publicLink">
+      <p>This item can be viewed by anyone using the link provided</p>
+        <input type="text" class="form-control" readonly [value]="publicLink" #publicLinkInput>
+        <button class="btn btn-primary" [disabled]="linkCopied" (click)="copyPublicLink()">{{ linkCopied ? 'Link copied' : 'Copy link'}}</button>
+        <a class="btn btn-primary" [href]="publicLink" target="_blank">View on web</a>
+    </div>
+    <div class="public-link-button" *ngIf="!publicItem || !publicLink">
+      <p>Create a publicly viewable copy of this item in your Public folder and get a public link to share with anyone.</p>
+      <button class="btn btn-primary" (click)="publishItem()" [disabled]="waiting">Publish</button>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="close()">Done</button>
+  </div>
+</div>
+

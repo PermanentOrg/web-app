@@ -5,7 +5,7 @@
       </a>
       <pr-search-box (searchBarFocusChange)="onSearchBarFocusChange($event)"></pr-search-box>
       <div class="banner-buttons">
-        <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="isLoggedIn && archive" (click)="onArchiveThumbClick()"></div>
+        <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="isLoggedIn && archive" (click)="onArchiveThumbClick()" [cover]="true"></div>
         <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn && !archive" (click)="onMyAccountClick()">My Archive</button>
         <button class="btn btn-wordpress" (click)="onSignupClick()" *ngIf="!isLoggedIn">Sign Up</button>
       </div>

@@ -29,7 +29,17 @@ export const SHARE_EVENTS = {
   }
 };
 
+export const PUBLISH_EVENTS = {
+  PublishByUrl: {
+    initiated: { 'key': 'Evt-Pu40', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'initiated' } },
+    getLink: { 'key': 'Evt-Pu41', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'get link' } },
+    viewed: { 'key': 'Evt-Pu42', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'viewed' } },
+    signup: { 'key': 'Evt-Pu423', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'signup' } },
+  }
+};
+
 export const EVENTS = {
-  SHARE: SHARE_EVENTS
+  SHARE: SHARE_EVENTS,
+  PUBLISH: PUBLISH_EVENTS
 };
 

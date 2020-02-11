@@ -7,11 +7,13 @@ export interface FormInputSelectOption {
   value: string | number;
 }
 
+type AttrOnOff = 'on' | 'off';
+
 export interface FormInputConfig {
-  autocorrect?: string;
+  autocorrect?: AttrOnOff;
   autocomplete?: string;
-  autocapitalize?: string;
-  spellcheck?: string;
+  autocapitalize?: AttrOnOff;
+  spellcheck?: AttrOnOff;
   autoselect?: boolean;
   validateDirty?: boolean;
   textAlign?: string;
@@ -63,9 +65,9 @@ export class FormInputComponent implements OnInit, AfterViewInit {
       case 'number':
         return this.control.value === '';
       case 'date':
-        return false;      
+        return false;
       default:
-        return !this.control.value || !this.control.value.length
+        return !this.control.value || !this.control.value.length;
     }
   }
 
