@@ -19,6 +19,7 @@ import { PromptComponent } from './components/prompt/prompt.component';
 import { ArchiveSwitcherDialogComponent } from './components/archive-switcher-dialog/archive-switcher-dialog.component';
 import { TimelineCompleteDialogComponent } from './components/timeline-complete-dialog/timeline-complete-dialog.component';
 import { PublicLinkPipe } from './pipes/public-link.pipe';
+import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { PublicLinkPipe } from './pipes/public-link.pipe';
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
+    ShareActionLabelPipe
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -62,6 +64,7 @@ import { PublicLinkPipe } from './pipes/public-link.pipe';
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
+    ShareActionLabelPipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent
   ],
