@@ -10,6 +10,7 @@ import { FolderVO } from '@models/index';
 export class PublicRootResolveService implements Resolve<any> {
   constructor(
     private api: ApiService,
+    private router: Router
   ) { }
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
@@ -17,6 +18,10 @@ export class PublicRootResolveService implements Resolve<any> {
     return this.api.folder.getPublicRoot(archiveNbr)
       .then((response: FolderResponse): FolderVO => {
         return response.getFolderVO();
+      }).catch((response: any) => {
+        if (response instanceof FolderResponse) {
+          return this.router.navigate(['/p', 'error']);
+        }
       });
   }
 }
