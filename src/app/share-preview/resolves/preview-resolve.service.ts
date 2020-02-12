@@ -59,7 +59,11 @@ export class PreviewResolveService implements Resolve<any> {
 
   resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     const sharePreviewVO = route.parent.data.sharePreviewVO as ShareByUrlVO;
-    if (sharePreviewVO.FolderVO && ( sharePreviewVO.previewToggle || (sharePreviewVO.ShareVO && sharePreviewVO.ShareVO.previewToggle))) {
+    const showPreview = sharePreviewVO.previewToggle
+      || (sharePreviewVO.ShareVO && sharePreviewVO.ShareVO.previewToggle)
+      || route.params.inviteCode;
+
+    if (sharePreviewVO.FolderVO && showPreview) {
       // if folder and share preview on, just show the folder after setting the dummy path
 
       setDummyPathFromDisplayName(sharePreviewVO.FolderVO);
