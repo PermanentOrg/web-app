@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'pr-item-not-found',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ItemNotFoundComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      window.location.assign('/');
+    }, 5000);
   }
 
 }
