@@ -85,7 +85,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     let message = `Switch archive to ${archive.fullName}?`;
 
     if (archive.isPending()) {
-      message = `Accept and switch to archive ${archive.fullName} as ${this.prConstants.translate(archive.accessRole)}?`;
+      message = `You have been invited to collaborate on the ${archive.fullName} archive. Accept ${this.prConstants.translate(archive.accessRole)} access and switch?`;
     }
 
     this.prompt.promptButtons(buttons, message, deferred.promise)
