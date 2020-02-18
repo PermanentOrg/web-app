@@ -72,6 +72,9 @@ constructor(
 
   onSearchButtonClick() {
     this.searchBoxActive = true;
+    setTimeout(() => {
+      this.searchInputRef.nativeElement.focus();
+    });
   }
 
   onCancelButtonClick() {
