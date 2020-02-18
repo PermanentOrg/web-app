@@ -94,7 +94,6 @@ export class PublishComponent implements OnInit {
     this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink.params);
 
     const element = this.publicLinkInput.nativeElement as HTMLInputElement;
-
     copyFromInputElement(element);
 
     this.linkCopied = true;
