@@ -18,6 +18,7 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
   shareItem?: FolderVO | RecordVO;
+  hideAccessRoleOnInvite?: boolean;
   hideRelations?: boolean;
 }
 
@@ -29,6 +30,7 @@ export interface ArchivePickerComponentConfig {
 export class ArchivePickerComponent implements OnInit {
   relations: RelationVO[];
   relationOptions: FormInputSelectOption[];
+  hideAccessRoleOnInvite = false;
   searchResults: ArchiveVO[];
   searchEmail: string;
 
@@ -43,6 +45,7 @@ export class ArchivePickerComponent implements OnInit {
     private ga: GoogleAnalyticsService
   ) {
     this.relations = this.dialogData.relations;
+    this.hideAccessRoleOnInvite = this.dialogData.hideAccessRoleOnInvite;
     this.relationOptions = this.prConstants.getRelations().map((type) => {
       return {
         text: type.name,
@@ -89,7 +92,10 @@ export class ArchivePickerComponent implements OnInit {
     const deferred = new Deferred();
     const fields: PromptField[] = clone(INVITATION_FIELDS(this.searchEmail));
     const forShare = !!this.dialogData.shareItem;
-    fields.push(ACCESS_ROLE_FIELD);
+
+    if (!this.hideAccessRoleOnInvite) {
+      fields.push(ACCESS_ROLE_FIELD);
+    }
 
     return this.prompt.prompt(fields, forShare ? 'Invite to share' : 'Send invitation', deferred.promise, 'Send')
       .then((value) => {
