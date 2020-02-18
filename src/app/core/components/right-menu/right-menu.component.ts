@@ -33,6 +33,8 @@ export class RightMenuComponent implements OnInit {
   };
   public hasAllowedActions = false;
 
+  public folderViews = FolderView;
+
   constructor(
     private router: Router,
     private message: MessageService,

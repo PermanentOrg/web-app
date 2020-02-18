@@ -1,9 +1,9 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu right-menu">
-    <a class="menu-item" (click)='setFolderView("folder.view.list")' *ngIf="allowedActions.useListView">
+    <a class="menu-item" (click)='setFolderView(folderViews.List)' *ngIf="allowedActions.useListView">
       Switch to List View
     </a>
-    <a class="menu-item" (click)='setFolderView("folder.view.grid")' *ngIf="allowedActions.useGridView">
+    <a class="menu-item" (click)='setFolderView(folderViews.Grid)' *ngIf="allowedActions.useGridView">
       Switch to Grid View
     </a>
     <a class="menu-item" (click)='createNewFolder()' *ngIf="allowedActions.createFolder">
