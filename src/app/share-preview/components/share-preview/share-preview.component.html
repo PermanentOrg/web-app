@@ -19,7 +19,7 @@
   </span>
   <div class="share-preview-archive-buttons" *ngIf="hasAccess">
     <button class="btn btn-primary"  (click)="onViewShareClick()">
-      {{sharePreviewVO.ShareVO.accessRole | shareActionLabel}}
+      {{(sharePreviewVO.ShareVO ? sharePreviewVO.ShareVO.accessRole : 'access.role.owner') | shareActionLabel}}
     </button>
     <button class="btn btn-primary" *ngIf="canShare || isLinkShare" (click)="onShareShareClick()">Share</button>
   </div>
