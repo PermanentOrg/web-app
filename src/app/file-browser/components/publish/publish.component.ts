@@ -3,12 +3,13 @@ import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models/in
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { find } from 'lodash';
+import { find, maxBy } from 'lodash';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { FolderResponse } from '@shared/services/api/index.repo';
 
 @Component({
   selector: 'pr-publish',
@@ -59,7 +60,22 @@ export class PublishComponent implements OnInit {
       const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
       if (this.sourceItem instanceof FolderVO) {
         const response = await this.api.folder.copy([this.sourceItem], publicRoot);
-        this.publicItem = response.getFolderVO();
+        let tries = 0;
+        while (!this.publicItem && tries++ < 10) {
+          const publicRootResponse = await this.api.folder.navigateLean(publicRoot).toPromise() as FolderResponse;
+          const publicRootFull = publicRootResponse.getFolderVO(true);
+          const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(i => i instanceof FolderVO);
+          const latest = maxBy(publicFolders, folder => folder.updatedDT);
+          if (latest && latest.displayName === this.sourceItem.displayName) {
+            this.publicItem = latest;
+          } else {
+            await new Promise(r => setTimeout(() => r(), 1000));
+          }
+        }
+
+        if (!this.publicItem) {
+          this.publicItem = this.sourceItem;
+        }
       } else {
         const response = await this.api.record.copy([this.sourceItem], publicRoot);
         this.publicItem = response.getRecordVO();
