@@ -169,7 +169,11 @@ export class RelationshipsComponent implements OnDestroy {
 
   addRelation() {
     const newRelation: RelationVO = new RelationVO({});
-    return this.dialog.open('ArchivePickerComponent')
+    const config: ArchivePickerComponentConfig = {
+      hideAccessRoleOnInvite: true
+    };
+
+    return this.dialog.open('ArchivePickerComponent', config)
       .then((archive: ArchiveVO) => {
         if (find(this.relations, {relationArchiveId: archive.archiveId})) {
           return this.messageService.showMessage('You already have a relationship with this archive.', 'info');
