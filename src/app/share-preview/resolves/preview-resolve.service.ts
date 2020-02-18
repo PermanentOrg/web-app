@@ -61,7 +61,8 @@ export class PreviewResolveService implements Resolve<any> {
     const sharePreviewVO = route.parent.data.sharePreviewVO as ShareByUrlVO;
     const showPreview = sharePreviewVO.previewToggle
       || (sharePreviewVO.ShareVO && sharePreviewVO.ShareVO.previewToggle)
-      || route.params.inviteCode;
+      || !!route.params.inviteCode
+      || !!route.params.shareId;
 
     if (sharePreviewVO.FolderVO && showPreview) {
       // if folder and share preview on, just show the folder after setting the dummy path
@@ -87,7 +88,7 @@ export class PreviewResolveService implements Resolve<any> {
 
       record.dataStatus = DataStatus.Full;
 
-      if (!sharePreviewVO.previewToggle) {
+      if (!sharePreviewVO.previewToggle && !showPreview) {
         const dummy = dummyItems[0];
         record = cloneDeep(record);
         record.thumbURL200 = dummy.thumbURL200;
