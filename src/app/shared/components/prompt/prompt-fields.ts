@@ -3,6 +3,8 @@ import { Validators } from '@angular/forms';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { clone } from 'lodash';
 import { minDateValidator } from '@shared/utilities/forms';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { FormInputSelectOption } from '../form-input/form-input.component';
 const expMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
@@ -14,6 +16,21 @@ export const RELATION_OPTIONS = prConstants.getRelations().map((type) => {
     value: type.type
   };
 });
+
+export const FOLDER_VIEW_OPTIONS: FormInputSelectOption[] = [
+  {
+    text: 'Timeline',
+    value: FolderView.Timeline
+  },
+  {
+    text: 'Grid',
+    value: FolderView.Grid
+  },
+  {
+    text: 'List',
+    value: FolderView.List
+  }
+];
 
 export const RELATIONSHIP_FIELD: PromptField = {
   fieldName: 'relationType',
@@ -31,6 +48,26 @@ export const RELATIONSHIP_FIELD: PromptField = {
 
 export function RELATIONSHIP_FIELD_INITIAL(initialValue?: string): PromptField {
   const initialized = clone(RELATIONSHIP_FIELD);
+  initialized.initialValue = initialValue;
+  return initialized;
+}
+
+export const FOLDER_VIEW_FIELD: PromptField = {
+  fieldName: 'view',
+  placeholder: 'Folder view',
+  type: 'select',
+  initialValue: null,
+  validators: [Validators.required],
+  config: {
+    autocapitalize: 'off',
+    autocomplete: 'off',
+    autocorrect: 'off'
+  },
+  selectOptions: FOLDER_VIEW_OPTIONS
+};
+
+export function FOLDER_VIEW_FIELD_INIIAL(initialValue?: string): PromptField {
+  const initialized = clone(FOLDER_VIEW_FIELD);
   initialized.initialValue = initialValue;
   return initialized;
 }

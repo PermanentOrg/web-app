@@ -5,11 +5,13 @@ import { FormInputConfig, FormInputSelectOption } from '@shared/components/form-
 
 import { PromptComponent } from '@shared/components/prompt/prompt.component';
 
+export * from '@shared/components/prompt/prompt-fields';
+
 export interface PromptField {
   fieldName: string;
   placeholder: string;
   initialValue?: any;
-  type?: string;
+  type?: 'text' | 'tel' | 'select' | 'number' | 'email' | 'date';
   selectOptions?: FormInputSelectOption[];
   config ?: FormInputConfig;
   validators ?: ValidationErrors[];
