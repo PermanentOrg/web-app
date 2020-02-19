@@ -62,7 +62,7 @@ export class RightMenuComponent implements OnInit {
 
   setAvailableActions() {
     this.allowedActions.createFolder = this.currentFolder
-      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share') || this.currentFolder.type.includes('root.public'))
+      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'))
       && this.currentFolder.accessRole !== 'access.role.viewer';
 
     this.allowedActions.useGridView = !!this.currentFolder
