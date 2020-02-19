@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, RouterState } from '@angular/router';
 import { clone, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
-import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@core/services/prompt/prompt.service';
 
 import { FolderVO, RecordVO, FolderVOData, RecordVOData } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -58,6 +58,10 @@ const ItemActions: {[key: string]: PromptButton} = {
   GetLink: {
     buttonName: 'publish',
     buttonText: 'Get link'
+  },
+  SetFolderView: {
+    buttonName: 'setFolderView',
+    buttonText: 'Set folder view'
   }
 };
 
@@ -67,7 +71,8 @@ type ActionType = 'delete' |
   'publish' |
   'download' |
   'copy' |
-  'move';
+  'move' |
+  'setFolderView';
 
 @Component({
   selector: 'pr-file-list-item',
@@ -258,6 +263,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       if (!this.isInShares) {
         if (this.isInMyPublic) {
           actionButtons.push(ItemActions.GetLink);
+
+          if (this.item.isFolder) {
+            actionButtons.push(ItemActions.SetFolderView);
+          }
         } else if (this.item.accessRole.includes('owner')) {
           actionButtons.push(ItemActions.Publish);
         }
@@ -313,6 +322,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         actionDeferred.resolve();
         this.dialog.open('PublishComponent', { item: this.item }, { height: 'auto' });
         break;
+      case 'setFolderView':
+        actionDeferred.resolve();
+        this.promptForFolderView();
+        break;
     }
   }
 
@@ -367,8 +380,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   promptForUpdate() {
-    let updateResolve;
-
     const updateDeferred = new Deferred;
 
     const fields: PromptField[] = [
@@ -388,6 +399,18 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     ];
 
     this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updateDeferred.promise, 'Rename', 'Cancel')
+      .then((values) => {
+        this.saveUpdates(values, updateDeferred);
+      })
+      .catch(() => {});
+  }
+
+  promptForFolderView() {
+    const updateDeferred = new Deferred;
+
+    const fields = [ FOLDER_VIEW_FIELD_INIIAL(this.item.view) ];
+
+    this.prompt.prompt(fields, `Set folder view for "${this.item.displayName}"`, updateDeferred.promise, 'Save', 'Cancel')
       .then((values) => {
         this.saveUpdates(values, updateDeferred);
       })
