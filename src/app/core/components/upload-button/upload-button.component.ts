@@ -3,6 +3,8 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
 import { PromptService } from '@core/services/prompt/prompt.service';
+import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { EVENTS } from '@shared/services/google-analytics/events';
 
 @Component({
   selector: 'pr-upload-button',
@@ -18,7 +20,8 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
   constructor(
     private upload: UploadService,
     private dataService: DataService,
-    private prompt: PromptService
+    private prompt: PromptService,
+    private ga: GoogleAnalyticsService
   ) {
     this.dataService.currentFolderChange.subscribe((currentFolder) => {
       this.currentFolder = currentFolder;
@@ -45,8 +48,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
     } else {
       this.hidden =
         (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder')
-        || this.currentFolder.type === 'type.folder.root.share'
-        || this.currentFolder.type === 'type.folder.root.public';
+        || this.currentFolder.type === 'type.folder.root.share';
     }
   }
 
@@ -56,6 +58,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
       if (this.currentFolder.type.includes('public')) {
         try {
           await this.prompt.confirm('Upload to public', 'This is a public folder. Are you sure you want to upload here?');
+          this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.uploaded.params);
           this.upload.uploadFiles(this.currentFolder, this.files);
         } catch (err) {}
       } else {
