@@ -45,8 +45,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
     } else {
       this.hidden =
         (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder')
-        || this.currentFolder.type === 'type.folder.root.share'
-        || this.currentFolder.type === 'type.folder.root.public';
+        || this.currentFolder.type === 'type.folder.root.share';
     }
   }
 
