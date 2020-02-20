@@ -116,8 +116,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       rootUrl = '/myfiles';
     }
 
-    console.log(rootUrl, this.router.routerState.snapshot.url);
-
     if (!folder) {
       return;
     }

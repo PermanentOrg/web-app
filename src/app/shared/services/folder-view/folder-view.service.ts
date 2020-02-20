@@ -24,7 +24,7 @@ export class FolderViewService {
         this.folderView = storedView;
         break;
       default:
-        this.folderView = FolderView.Grid;
+        this.folderView = FolderView.List;
     }
 
     this.containerFlexChange.subscribe(v => {

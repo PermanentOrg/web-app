@@ -17,22 +17,26 @@ export class RecordResolveService implements Resolve<any> {
 
   constructor(private api: ApiService, private dataService: DataService, private message: MessageService) { }
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
+  async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<RecordVO> {
     const localItem = this.dataService.getItemByArchiveNbr(route.params.recArchiveNbr);
 
-    if (localItem) {
-      return Promise.resolve(localItem);
-    }
-
-    return this.api.record.get([new RecordVO({archiveNbr: route.params.recArchiveNbr})])
-      .then((response: RecordResponse) => {
+    try {
+      if (localItem && localItem.dataStatus === DataStatus.Full) {
+        return Promise.resolve(localItem as RecordVO);
+      } else if (localItem) {
+        await this.dataService.fetchFullItems([localItem]);
+        return localItem as RecordVO;
+      } else {
+        const response = await this.api.record.get([new RecordVO({archiveNbr: route.params.recArchiveNbr})]);
         const record = response.getRecordVO();
         record.dataStatus = DataStatus.Full;
         return record;
-      })
-      .catch((response: RecordResponse) => {
-        this.message.showError(response.getMessage(), true);
-        return Promise.reject(response);
-      });
+      }
+    } catch (err) {
+      if (err instanceof RecordResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+      throw err;
+    }
   }
 }

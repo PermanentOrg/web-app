@@ -8,9 +8,6 @@ export const TimelineLineTemplate = `
 export const TimelineRecordTemplate = compile(`
 <div class="timeline-item timeline-record">
   <img src={{item.thumbURL200}} style="width:{{imageWidth}}">
-  <div>
-    <div class="timeline-record-name">{{item.displayName}}</div>
-  </div>
 </div>
 `);
 

@@ -330,7 +330,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTimelineItemClick(event: TimelineEventPropertiesResult & {isCluster: boolean}) {
-if (!event.isCluster && !this.isNavigating) {
+    if (!event.isCluster && !this.isNavigating) {
       const timelineItem: any = this.timelineItems.get(event.item);
       switch ((timelineItem as TimelineDataItem).dataType) {
         case 'folder':

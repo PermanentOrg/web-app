@@ -62,7 +62,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
       }
     } else {
       this.dataType = 'record';
-      this.imageWidth = `${imageHeight * (1 / item.imageRatio)}px`;
+      this.imageWidth = `${imageHeight * (item.imageRatio ? 1 / item.imageRatio : 1)}px`;
     }
   }
 }
