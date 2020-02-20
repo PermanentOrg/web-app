@@ -25,10 +25,6 @@ export const FOLDER_VIEW_OPTIONS: FormInputSelectOption[] = [
   {
     text: 'Grid',
     value: FolderView.Grid
-  },
-  {
-    text: 'List',
-    value: FolderView.List
   }
 ];
 
