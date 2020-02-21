@@ -20,6 +20,7 @@ import { ArchiveSwitcherDialogComponent } from './components/archive-switcher-di
 import { TimelineCompleteDialogComponent } from './components/timeline-complete-dialog/timeline-complete-dialog.component';
 import { PublicLinkPipe } from './pipes/public-link.pipe';
 import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
+import { NewlineTextPipe } from './pipes/newline-text.pipe';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
-    ShareActionLabelPipe
+    ShareActionLabelPipe,
+    NewlineTextPipe
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -66,7 +68,8 @@ import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
     PublicLinkPipe,
     ShareActionLabelPipe,
     ArchiveSwitcherDialogComponent,
-    TimelineCompleteDialogComponent
+    TimelineCompleteDialogComponent,
+    NewlineTextPipe
   ],
   providers: [
     PublicLinkPipe

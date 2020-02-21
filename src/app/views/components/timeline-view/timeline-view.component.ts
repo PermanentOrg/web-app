@@ -104,10 +104,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data.showPublicArchiveDescription = false;
     this.data.publicCta = 'timeline';
     this.fvService.containerFlexChange.emit(true);
+    this.data.setCurrentFolder(this.route.snapshot.data.currentFolder);
   }
 
   ngOnInit() {
-    this.data.setCurrentFolder(this.route.snapshot.data.currentFolder);
     this.onFolderChange();
     this.dataServiceSubscription = this.data.currentFolderChange.subscribe(() => {
       this.onFolderChange();

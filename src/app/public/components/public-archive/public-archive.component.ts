@@ -13,6 +13,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 
 @Component({
   selector: 'pr-public-archive',
@@ -22,6 +23,8 @@ import { AccountService } from '@shared/services/account/account.service';
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   public archive: ArchiveVO;
   public description: string;
+  public isArchiveRoot = false;
+  public showFolderDescription = false;
   public isMobile = this.device.isMobileWidth();
 
   public get cta() {
@@ -58,10 +61,13 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.archive = this.route.snapshot.data['archive'];
 
+    this.isArchiveRoot = !!this.data.currentFolder.type.includes('root');
+    this.showFolderDescription = !this.isArchiveRoot && this.data.currentFolder.view !== FolderView.Timeline;
+
     this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
 
-    if (this.archive.description) {
-      this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</>';
+    if (this.archive.description && this.isArchiveRoot) {
+      this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
     } else {
       this.description = null;
     }
@@ -69,10 +75,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.containerFlexSubscription.unsubscribe();
-  }
-
-  showDescription() {
-    return this.data.showPublicArchiveDescription;
   }
 
   onCtaClick() {

@@ -15,7 +15,7 @@
     </div>
   </div>
 </div>
-<div class="public-archive-description" *ngIf="description && showDescription()">
+<div class="public-archive-description" *ngIf="isArchiveRoot && description">
   <div class="public-archive-description-header">About this archive</div>
   <p [innerHTML]="description"></p>
 </div>

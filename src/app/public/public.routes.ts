@@ -52,7 +52,8 @@ export const routes: Routes = [
           noFileListPadding: true,
           fileListCentered: true,
           isPublicArchive: true,
-          checkFolderViewOnNavigate: true
+          checkFolderViewOnNavigate: true,
+          showFolderDescription: true
         },
       },
       {
