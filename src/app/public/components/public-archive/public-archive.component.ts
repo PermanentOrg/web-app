@@ -22,6 +22,7 @@ import { AccountService } from '@shared/services/account/account.service';
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   public archive: ArchiveVO;
   public description: string;
+  public showArchiveDescription = false;
   public isMobile = this.device.isMobileWidth();
 
   public get cta() {
@@ -58,9 +59,15 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.archive = this.route.snapshot.data['archive'];
 
+    if (this.data.currentFolder.type.includes('root')) {
+      this.showArchiveDescription = true;
+    } else {
+      this.showArchiveDescription = false;
+    }
+
     this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
 
-    if (this.archive.description) {
+    if (this.archive.description && this.showArchiveDescription) {
       this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</>';
     } else {
       this.description = null;
