@@ -72,7 +72,7 @@ constructor(
 
   onSearchButtonClick() {
     this.searchBoxActive = true;
-    setTimeout(() => {
+    window.requestAnimationFrame(() => {
       this.searchInputRef.nativeElement.focus();
     });
   }
