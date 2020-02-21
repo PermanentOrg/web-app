@@ -1,4 +1,4 @@
-<pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder">folder description</pr-folder-description>
+<pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
 <pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs"
   [item]="item"
   [folderView]="folderView"
