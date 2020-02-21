@@ -52,6 +52,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.grid-view') inGridView = false;
   @HostBinding('class.no-padding') noFileListPadding = false;
   @HostBinding('class.file-list-centered') fileListCentered = false;
+  showFolderDescription = false;
+  isRootFolder = false;
 
   @Input() allowNavigation = true;
 
@@ -135,6 +137,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.dataService.setCurrentFolder(this.currentFolder);
+    this.isRootFolder = this.currentFolder.type.includes('root');
+    this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 
     this.itemsFetchedCount = 0;
     this.reinit = true;

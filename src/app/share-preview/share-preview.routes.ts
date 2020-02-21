@@ -44,13 +44,14 @@ const sharePreviewChildren = [
     resolve: previewResolve,
     component: SharePreviewComponent,
     data: {
-      formDarkBg: true
+      formDarkBg: true,
+      showFolderDescription: true
     },
     children: [
       {
         path: '',
         data: {
-          noFileListNavigation: true
+          noFileListNavigation: true,
         },
         component: FileListComponent
       },
