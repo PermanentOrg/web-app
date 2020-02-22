@@ -103,14 +103,17 @@ export class PhaseProgressComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.innerBar = new ProgressBar.Line(this.elementRef.nativeElement.querySelector('.progress-bar'), {
-      strokeWidth: 4,
-      easing: 'easeInOut',
-      duration: 1500,
-      color: '#FF9933',
-      svgStyle: {width: '100%', height: '100%'}
-    });
-    this.redrawProgress();
+    try {
+      this.innerBar = new ProgressBar.Line(this.elementRef.nativeElement.querySelector('.progress-bar'), {
+        strokeWidth: 4,
+        easing: 'easeInOut',
+        duration: 1500,
+        offset: 0,
+        color: '#FF9933',
+        svgStyle: {width: '100%', height: '100%'}
+      });
+      this.redrawProgress();
+    } catch (err) {}
   }
 
   redrawProgress() {
