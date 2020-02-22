@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
+import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleChanges, HostBinding, AfterViewInit } from '@angular/core';
 import ProgressBar from 'progressbar.js';
 
 import APP_CONFIG from '@root/app/app.config';
@@ -41,7 +41,8 @@ export class PhaseProgressComponent implements OnInit {
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    prefix: '$'
+    prefix: '$',
+    startValue: 0
   };
 
   public percentCountUpOptions = {
@@ -49,22 +50,25 @@ export class PhaseProgressComponent implements OnInit {
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    suffix: '%'
+    suffix: '%',
+    startValue: 0
   };
 
-  public storageCountUpoptions = {
+  public storageCountUpOptions = {
     useEasing: true,
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    suffix: ' GB'
+    suffix: ' GB',
+    startValue: 0
   };
 
   public pledgeCountUpOptions = {
     useEasing: true,
     useGrouping: true,
     separator: ',',
-    decimal: '.'
+    decimal: '.',
+    startValue: 0
   };
 
   public pricePerGb = APP_CONFIG.pricePerGb;
@@ -89,6 +93,13 @@ export class PhaseProgressComponent implements OnInit {
   setTimeout(() => {
     this.visible = true;
   });
+  }
+
+  updateCountUpOptions() {
+    this.dollarCountUpOptions.startValue = this.previousProgress.totalDollarAmount;
+    this.pledgeCountUpOptions.startValue = this.previousProgress.totalPledges;
+    this.storageCountUpOptions.startValue = this.previousProgress.totalStorageAmount;
+    this.percentCountUpOptions.startValue = 100 * this.previousProgress.totalDollarAmount / this.previousProgress.goalDollarAmount;
   }
 
   ngOnInit() {

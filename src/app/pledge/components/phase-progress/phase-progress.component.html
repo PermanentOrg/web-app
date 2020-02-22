@@ -1,7 +1,6 @@
-<!-- <div class="pledge-progress-header">
-  <strong [countUp]="percentCountUpOptions" decimals="1" duration="1.5"
-  [startVal]="100*this.previousProgress.totalDollarAmount/this.previousProgress.goalDollarAmount"
-  [endVal]="100*this.currentProgress.totalDollarAmount/this.currentProgress.goalDollarAmount" duration="1.5">
+<div class="pledge-progress-header">
+  <strong [options]="percentCountUpOptions" decimals="1" duration="1.5"
+  [countUp]="100*this.currentProgress.totalDollarAmount/this.currentProgress.goalDollarAmount" duration="1.5">
     0%
   </strong>
   of
@@ -17,21 +16,18 @@
 </div>
 <div class="pledge-progress-details">
   <div class="pledge-progress-detail">
-    <div class="detail-heading" [countUp]="dollarCountUpOptions"
-      [startVal]="this.previousProgress.totalDollarAmount"
-      [endVal]="this.currentProgress.totalDollarAmount" duration="1.5">$0</div>
+    <div class="detail-heading" [options]="dollarCountUpOptions"
+      [countUp]="this.currentProgress.totalDollarAmount" duration="1.5">$0</div>
     pledged
   </div>
   <div class="pledge-progress-detail">
-    <div class="detail-heading" [countUp]="pledgeCountUpOptions"
-    [startVal]="this.previousProgress.totalPledges"
-    [endVal]="this.currentProgress.totalPledges" duration="1.5">0</div>
+    <div class="detail-heading" [options]="pledgeCountUpOptions"
+    [countUp]="this.currentProgress.totalPledges" duration="1.5">0</div>
     contributors
   </div>
   <div class="pledge-progress-detail">
-    <div class="detail-heading" [countUp]="storageCountUpoptions"
-    [startVal]="this.previousProgress.totalStorageAmount"
-    [endVal]="this.currentProgress.totalStorageAmount" duration="1.5">0</div>
+    <div class="detail-heading" [options]="storageCountUpOptions"
+    [countUp]="this.currentProgress.totalStorageAmount" duration="1.5">0</div>
     storage claimed
   </div>
-</div> -->
+</div>
