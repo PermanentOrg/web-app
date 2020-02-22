@@ -1,6 +1,7 @@
 import { DataItem, moment } from '@permanent.org/vis-timeline';
 import { RecordVO, FolderVO, ItemVO } from '@models/index';
 import { groupBy, minBy, maxBy, meanBy } from 'lodash';
+import { isMobileWidth } from '@shared/services/device/device.service';
 
 export const Minute = 1000 * 60;
 export const Hour = Minute * 60;
@@ -34,7 +35,39 @@ function getAlternatingTimelineItemClass() {
   return TimelineItemClasses[timelineItemClassCounter++ % TimelineItemClasses.length];
 }
 
+function getEvenSpreadItems(items: any[], count = 4) {
+  const length = items.length;
+  const last = length - 1;
+  const spread = [];
+  if (!items.length) {
+    return spread;
+  }
+
+  if (items.length <= 4) {
+    return items;
+  }
+
+  spread.push(items[0]);
+
+  const middleCount = count - 2;
+  const middleLength = length - 2;
+  const step = length / (count - 1);
+
+  let current = 0;
+  for (let x = 1; x <= middleCount; x++) {
+    current = current + step;
+    const rounded = Math.round(current);
+    spread.push(items[rounded]);
+  }
+
+  spread.push(items[last]);
+
+  return spread;
+}
+
 const imageHeight = 40;
+const recordImageHeight = 100;
+
 export class TimelineItem implements DataItem, TimelineDataItem {
   content: string;
   className: string;
@@ -46,6 +79,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
 
   recordType?: string;
   imageWidth?: string;
+  imageHeight?: string;
 
   constructor(item: ItemVO) {
     this.item = item;
@@ -62,7 +96,9 @@ export class TimelineItem implements DataItem, TimelineDataItem {
       }
     } else {
       this.dataType = 'record';
-      this.imageWidth = `${imageHeight * (item.imageRatio ? 1 / item.imageRatio : 1)}px`;
+      const height = isMobileWidth() ? imageHeight : recordImageHeight;
+      this.imageHeight = `${height}px`;
+      this.imageWidth = `${height * (item.imageRatio ? 1 / Number(item.imageRatio) : 1)}px`;
     }
   }
 }
@@ -83,7 +119,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 
   constructor(items: RecordVO[], timespan: TimelineGroupTimespan, name: string) {
     this.groupItems = items;
-    this.previewThumbs = items.slice(0, 4).map(i => i.thumbURL200);
+    this.previewThumbs = getEvenSpreadItems(items.map(i => i.thumbURL200));
     this.groupTimespan = timespan;
     this.groupName = name;
     this.content = name;
@@ -119,7 +155,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
-  const minimumGroupCount = 6;
+  let minimumGroupCount = 4;
 
   if (bestFit) {
     const bestFitTimespan = getBestFitTimespanForItems(items);

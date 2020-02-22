@@ -1,13 +1,11 @@
 import { compile } from 'handlebars';
 
-const imageHeight = 40;
-
 export const TimelineLineTemplate = `
 <div class="timeline-line"></div>
 `;
 export const TimelineRecordTemplate = compile(`
 <div class="timeline-item timeline-record">
-  <img src={{item.thumbURL200}} style="width:{{imageWidth}}">
+  <img src={{item.thumbURL200}} style="width:{{imageWidth}}" height="{{imageHeight}}" width="{{imageWidth}}">
 </div>
 `);
 
@@ -27,7 +25,7 @@ export const TimelineGroupTemplate = compile(`
 <div class="timeline-item timeline-group">
   <div class="timeline-group-preview">
     {{#each previewThumbs}}
-      <img src={{this}}>
+      <div style="background-image: url({{this}})"></div>
     {{/each}}
   </div>
   <div>
