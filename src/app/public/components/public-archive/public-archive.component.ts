@@ -32,6 +32,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   }
 
   containerFlexSubscription: Subscription;
+  currentFolderSubscription: Subscription;
   @HostBinding('class.container-vertical-flex') containerVerticalFlex: boolean;
 
   constructor(
@@ -45,36 +46,51 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private ga: GoogleAnalyticsService,
     private linkPipe: PublicLinkPipe
   ) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.ngOnInit();
-      }
-    });
+
+    this.checkArchive();
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
 
     this.containerVerticalFlex = this.folderView.containerFlex;
 
     this.containerFlexSubscription = this.folderView.containerFlexChange.subscribe(x => {
       this.containerVerticalFlex = x;
     });
+
+    this.currentFolderSubscription = this.data.currentFolderChange.subscribe(folder => {
+      this.checkFolder();
+    });
   }
 
   ngOnInit() {
-    this.archive = this.route.snapshot.data['archive'];
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
+        this.checkArchive();
+      }
+    });
+  }
 
-    this.isArchiveRoot = !!this.data.currentFolder.type.includes('root');
-    this.showFolderDescription = !this.isArchiveRoot && this.data.currentFolder.view !== FolderView.Timeline;
+  checkArchive() {
+    if (!this.archive || this.archive.archiveNbr !== this.route.snapshot.data['archive'].archiveNbr) {
+      this.archive = this.route.snapshot.data['archive'];
+      if (this.archive.description) {
+        this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
+      } else {
+        this.description = null;
+      }
+    }
+  }
 
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
-
-    if (this.archive.description && this.isArchiveRoot) {
-      this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
-    } else {
-      this.description = null;
+  checkFolder() {
+    if (this.data.currentFolder) {
+      this.isArchiveRoot = !!this.data.currentFolder.type.includes('root');
+      this.showFolderDescription = !this.isArchiveRoot && this.data.currentFolder.view !== FolderView.Timeline;
     }
   }
 
   ngOnDestroy() {
     this.containerFlexSubscription.unsubscribe();
+    this.currentFolderSubscription.unsubscribe();
   }
 
   onCtaClick() {
