@@ -25,6 +25,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   public description: string;
   public isArchiveRoot = false;
   public showFolderDescription = false;
+  public archiveDescriptionHidden = false;
   public isMobile = this.device.isMobileWidth();
 
   public get cta() {
