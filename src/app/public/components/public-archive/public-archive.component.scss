@@ -70,6 +70,14 @@
   .public-archive-description-header {
     font-weight: 500;
     margin-bottom: 0.5rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+      user-select: none;
+    }
   }
 
   p {

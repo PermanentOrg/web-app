@@ -48,10 +48,10 @@ export class TimelineBreadcrumbsComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnInit() {
+    this.setFolderBreadcrumbs();
   }
 
   ngAfterViewInit() {
-    this.setFolderBreadcrumbs();
   }
 
   ngOnDestroy() {

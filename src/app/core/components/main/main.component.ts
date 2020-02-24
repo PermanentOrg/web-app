@@ -160,6 +160,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         displayName: promptData.displayName,
         description: promptData.description,
         view: 'folder.view.timeline',
+        sort: 'sort.display_date_asc',
         parentFolder_linkId: publicRoot.folder_linkId
       });
       const response = await this.api.folder.post([folder]);

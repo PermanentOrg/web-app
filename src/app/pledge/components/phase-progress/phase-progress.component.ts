@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
+import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleChanges, HostBinding, AfterViewInit } from '@angular/core';
 import ProgressBar from 'progressbar.js';
 
 import APP_CONFIG from '@root/app/app.config';
@@ -41,7 +41,8 @@ export class PhaseProgressComponent implements OnInit {
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    prefix: '$'
+    prefix: '$',
+    startValue: 0
   };
 
   public percentCountUpOptions = {
@@ -49,22 +50,25 @@ export class PhaseProgressComponent implements OnInit {
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    suffix: '%'
+    suffix: '%',
+    startValue: 0
   };
 
-  public storageCountUpoptions = {
+  public storageCountUpOptions = {
     useEasing: true,
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    suffix: ' GB'
+    suffix: ' GB',
+    startValue: 0
   };
 
   public pledgeCountUpOptions = {
     useEasing: true,
     useGrouping: true,
     separator: ',',
-    decimal: '.'
+    decimal: '.',
+    startValue: 0
   };
 
   public pricePerGb = APP_CONFIG.pricePerGb;
@@ -91,15 +95,25 @@ export class PhaseProgressComponent implements OnInit {
   });
   }
 
+  updateCountUpOptions() {
+    this.dollarCountUpOptions.startValue = this.previousProgress.totalDollarAmount;
+    this.pledgeCountUpOptions.startValue = this.previousProgress.totalPledges;
+    this.storageCountUpOptions.startValue = this.previousProgress.totalStorageAmount;
+    this.percentCountUpOptions.startValue = 100 * this.previousProgress.totalDollarAmount / this.previousProgress.goalDollarAmount;
+  }
+
   ngOnInit() {
-    this.innerBar = new ProgressBar.Line(this.elementRef.nativeElement.querySelector('.progress-bar'), {
-      strokeWidth: 4,
-      easing: 'easeInOut',
-      duration: 1500,
-      color: '#FF9933',
-      svgStyle: {width: '100%', height: '100%'}
-    });
-    this.redrawProgress();
+    try {
+      this.innerBar = new ProgressBar.Line(this.elementRef.nativeElement.querySelector('.progress-bar'), {
+        strokeWidth: 4,
+        easing: 'easeInOut',
+        duration: 1500,
+        offset: 0,
+        color: '#FF9933',
+        svgStyle: {width: '100%', height: '100%'}
+      });
+      this.redrawProgress();
+    } catch (err) {}
   }
 
   redrawProgress() {

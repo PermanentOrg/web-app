@@ -16,8 +16,11 @@
   </div>
 </div>
 <div class="public-archive-description" *ngIf="isArchiveRoot && description">
-  <div class="public-archive-description-header">About this archive</div>
-  <p [innerHTML]="description"></p>
+  <div class="public-archive-description-header">
+    <span>About this archive</span>
+    <small><a (click)="archiveDescriptionHidden = !archiveDescriptionHidden">{{archiveDescriptionHidden ? 'Show' : 'Hide'}} details</a></small>
+  </div>
+  <p [innerHTML]="description" *ngIf="!archiveDescriptionHidden"></p>
 </div>
 <div class="public-archive-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>

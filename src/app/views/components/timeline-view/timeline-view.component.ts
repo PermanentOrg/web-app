@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, HostListener } from '@angular/core';
 
 import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '@permanent.org/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { remove, find, throttle, minBy, maxBy } from 'lodash';
+import { remove, find, throttle, minBy, maxBy, debounce } from 'lodash';
 import {  TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Year,
   GroupByTimespan, GetTimespanFromRange, getBestFitTimespanForItems
 } from './timeline-util';
@@ -36,6 +36,12 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private throttledZoomHandler = throttle((evt) => {
     this.onTimelineZoom();
   }, 256);
+  private debouncedResizeHandler = debounce(() => {
+    this.groupTimelineItems(true);
+    setTimeout(() => {
+      this.timeline.redraw();
+    });
+  }, 250);
   private dataServiceSubscription: Subscription;
 
   public hasPrev = true;
@@ -129,6 +135,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data.showPublicArchiveDescription = true;
     this.data.publicCta = null;
     this.fvService.containerFlexChange.emit(false);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onViewportResize(event) {
+    this.debouncedResizeHandler();
   }
 
   toggleFolderDetails() {
@@ -375,6 +386,13 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   focusItemsInRange(start: number, end: number) {
     this.focusItemsWithBuffer(this.findItemsInRange(start, end));
+  }
+
+  findOnscreenItemIds() {
+    const range = this.timeline.getWindow();
+    const start = range.start.valueOf();
+    const end = range.end.valueOf();
+    return this.findItemsInRange(start, end);
   }
 
   onGroupClick(group: TimelineGroup) {

@@ -1,4 +1,8 @@
 .timeline {
+  $image-height: 40px;
+  $record-image-height: 100px;
+  $record-preview-height: 40px;
+
   .vis-item {
     cursor: pointer;
     
@@ -88,11 +92,37 @@
     overflow: hidden;
     margin-right: 5px;
 
-    img {
+    img, > div {
       height: 20px;
       width: 20px;
       flex: 0 0 20px;
       margin: 0px;
+      background-size: cover;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .timeline-record {
+      height: $record-image-height;
+      img {
+        height: $record-image-height;
+      }
+    }
+
+    .timeline-group-preview {
+      max-width: $record-preview-height * 2;
+      width: $record-preview-height * 2;
+      height: $record-preview-height * 2;
+      max-height: $record-preview-height * 2;
+
+      img, > div {
+        height: $record-preview-height;
+        width: $record-preview-height;
+        flex: 0 0 $record-preview-height;
+        margin: 0px;
+      }
     }
   }
 }
