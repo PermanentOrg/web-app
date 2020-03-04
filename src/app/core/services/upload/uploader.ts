@@ -113,6 +113,7 @@ export class Uploader {
 
   onSocketError() {
     this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
+    this.cleanUpFiles();
     this.socketClient = null;
   }
 
@@ -252,6 +253,10 @@ export class Uploader {
 
       this.closeSocketConnection();
       this.uploadSessionStatus.emit(UploadSessionStatus.Done);
+
+      if (this.errorQueue.length) {
+        this.cleanUpFiles();
+      }
     }
   }
 
@@ -289,7 +294,6 @@ export class Uploader {
 
   async cleanUpFiles() {
     if (!this.errorQueue.length) {
-      this.uploadSessionStatus.emit(UploadSessionStatus.Done);
       return Promise.resolve();
     }
 
