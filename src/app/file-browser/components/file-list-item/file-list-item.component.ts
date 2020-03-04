@@ -19,6 +19,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { checkMinimumAccess, AccessRole } from '@models/access-role';
 
 const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -89,7 +90,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   public allowActions = true;
   public isMyItem = true;
-  public canWrite = true;
+  public canEdit = true;
 
   private isInShares: boolean;
   private isInApps: boolean;
@@ -159,8 +160,12 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
     }
 
-    if (this.item.accessRole === 'access.role.viewer' || this.item.accessRole === 'access.role.contributor') {
-      this.canWrite = false;
+    if (!checkMinimumAccess(this.item.accessRole, AccessRole.Editor) || !this.accountService.isLoggedIn) {
+      this.canEdit = false;
+    }
+
+    if (this.accountService.isLoggedIn && !checkMinimumAccess(this.accountService.getArchive().accessRole, AccessRole.Editor) ) {
+      this.canEdit = false;
     }
 
     this.inGridView = this.folderView === FolderView.Grid;
@@ -248,17 +253,17 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   showActions(event: Event) {
     event.stopPropagation();
 
-    const actionButtons: PromptButton[] = [ItemActions.Copy];
+    const actionButtons: PromptButton[] = [];
 
     const actionDeferred = new Deferred();
 
-    if (this.canWrite) {
+    if (this.canEdit) {
+      actionButtons.push(ItemActions.Copy);
       actionButtons.push(ItemActions.Move);
       actionButtons.push(ItemActions.Rename);
       if (this.isInShares || (this.item.accessRole.includes('owner') && !this.isInMyPublic)) {
         actionButtons.push(ItemActions.Share);
       }
-      actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
 
       if (!this.isInShares) {
         if (this.isInMyPublic) {
@@ -275,16 +280,24 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
       }
-    } else {
-      if (this.isInShares) {
-        actionButtons.push(ItemActions.Share);
-      }
+
+      actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
     }
 
-    this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
+    if (actionButtons.length) {
+      this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
       .then((value: ActionType) => {
         this.onActionClick(value, actionDeferred);
+      })
+      .catch(err => {
       });
+    } else {
+      try {
+        this.prompt.confirm('OK', this.item.displayName, null, null, `<p>No actions available</p>`);
+      } catch (err) { }
+    }
+
+
 
     return false;
   }
