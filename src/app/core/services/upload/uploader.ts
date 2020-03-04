@@ -286,4 +286,22 @@ export class Uploader {
         this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
       });
   }
+
+  async cleanUpFiles() {
+    if (!this.errorQueue.length) {
+      this.uploadSessionStatus.emit(UploadSessionStatus.Done);
+      return Promise.resolve();
+    }
+
+
+    let hasMeta: UploadItem[], needsMeta: UploadItem[];
+
+    // grab files from error queue and reset it
+    [ hasMeta , needsMeta ] = partition(this.errorQueue, (item: UploadItem) => item.RecordVO.recordId);
+    this.errorQueue = [];
+
+    // delete RecordVOs created during postmeta but with failed uploads
+    const recordVosToDelete = hasMeta.map(i => i.RecordVO);
+    await this.api.record.delete(recordVosToDelete);
+  }
 }

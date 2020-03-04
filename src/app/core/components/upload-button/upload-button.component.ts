@@ -5,6 +5,8 @@ import { FolderVO } from '@root/app/models';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
   selector: 'pr-upload-button',
@@ -19,6 +21,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
 
   constructor(
     private upload: UploadService,
+    private account: AccountService,
     private dataService: DataService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService
@@ -47,7 +50,9 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
       this.hidden = true;
     } else {
       this.hidden =
-        (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder')
+        !checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
+        || !checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor)
+        || (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder')
         || this.currentFolder.type === 'type.folder.root.share';
     }
   }

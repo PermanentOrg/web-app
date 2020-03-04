@@ -1,6 +1,7 @@
 import { BaseVO } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
+import { AccessRoleType } from './access-role';
 
 export class RecordVO extends BaseVO {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
@@ -58,7 +59,7 @@ export class RecordVO extends BaseVO {
   public folder_linkId: number;
   public parentFolderId: number;
   public position;
-  public accessRole;
+  public accessRole: AccessRoleType;
   public folderArchiveId: number;
   public folder_linkType;
 

@@ -6,6 +6,7 @@ import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { isArray } from 'util';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { AccessRoleType } from './access-role';
 
 export type FolderViewType =
   'folder.view.grid' |
@@ -56,7 +57,7 @@ export class FolderVO extends BaseVO {
   public parentFolderId;
   public folder_linkType;
   public FolderLinkVOs;
-  public accessRole;
+  public accessRole: AccessRoleType;
   public position;
   public shareDT;
 

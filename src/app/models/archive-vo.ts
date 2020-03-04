@@ -2,6 +2,7 @@ import { BaseVO } from '@models/base-vo';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
+import { AccessRoleType } from './access-role';
 
 export class ArchiveVO extends BaseVO {
   public archiveId;
@@ -9,7 +10,7 @@ export class ArchiveVO extends BaseVO {
   public ChildFolderVOs;
   public FolderSizeVOs;
   public RecordVOs;
-  public accessRole;
+  public accessRole: AccessRoleType;
   public fullName;
   public spaceTotal;
   public spaceLeft;

@@ -72,6 +72,14 @@ export class UploadService {
       });
   }
 
+  async cleanUpFiles() {
+    try {
+      await this.uploader.cleanUpFiles();
+    } catch (err) {
+      this.handleUploaderError(err);
+    }
+  }
+
   handleUploaderError(response: any) {
     if (response && typeof response.getMessage === 'function') {
       if (response.messageIncludesPhrase('no_space_left')) {
