@@ -37,6 +37,7 @@ export class UploadProgressComponent implements OnInit {
           this.upload.dismissProgress();
           break;
         case UploadSessionStatus.ConnectionError:
+          this.upload.dismissProgress();
           break;
       }
     });
@@ -60,6 +61,11 @@ export class UploadProgressComponent implements OnInit {
 
   tryAgain() {
     this.upload.retryFiles();
+  }
+
+  cleanUp() {
+    this.upload.cleanUpFiles();
+    this.dismiss();
   }
 
   getProgressTransform() {

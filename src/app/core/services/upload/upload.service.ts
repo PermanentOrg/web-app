@@ -14,6 +14,7 @@ import { Uploader, UploadSessionStatus } from './uploader';
 import { UploadItem } from '@core/services/upload/uploadItem';
 import { RecordResponse } from '@shared/services/api/index.repo';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
+import { Subscription } from 'rxjs';
 
 
 @Injectable({
@@ -35,6 +36,12 @@ export class UploadService {
     this.uploader.fileUploadComplete.subscribe((item: UploadItem) => {
       const parentFolderId = item.parentFolder.folderId;
       if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
+        this.debouncedRefresh();
+      }
+    });
+
+    this.uploader.uploadSessionStatus.subscribe(status => {
+      if (status === UploadSessionStatus.Done) {
         this.debouncedRefresh();
       }
     });
@@ -70,6 +77,14 @@ export class UploadService {
       .catch((response: any) => {
         this.handleUploaderError(response);
       });
+  }
+
+  async cleanUpFiles() {
+    try {
+      await this.uploader.cleanUpFiles();
+    } catch (err) {
+      this.handleUploaderError(err);
+    }
   }
 
   handleUploaderError(response: any) {

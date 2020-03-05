@@ -3,8 +3,10 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
-import { FolderVO } from '@models/index';
+import { FolderVO, ArchiveVO } from '@models/index';
 import { DataService } from '@shared/services/data/data.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('RightMenuComponent', () => {
   let component: RightMenuComponent;
@@ -13,6 +15,19 @@ describe('RightMenuComponent', () => {
 
   beforeEach(async(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+    const mockAccountService = {
+      getArchive: function() {
+        return new ArchiveVO({
+          accessRole: 'access.role.owner'
+        });
+      }
+    };
+
+    config.providers.push({
+      provide: AccountService,
+      useValue: mockAccountService
+    });
+
     config.declarations.push(RightMenuComponent);
 
     TestBed.configureTestingModule(config).compileComponents();

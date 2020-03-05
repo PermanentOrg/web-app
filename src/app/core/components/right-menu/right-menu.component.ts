@@ -13,6 +13,8 @@ import { Validators, FormBuilder } from '@angular/forms';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { checkMinimumAccess, AccessRole } from '@models/access-role';
 
 @Component({
   selector: 'pr-right-menu',
@@ -36,12 +38,10 @@ export class RightMenuComponent implements OnInit {
   public folderViews = FolderView;
 
   constructor(
-    private router: Router,
     private message: MessageService,
     private edit: EditService,
     private dataService: DataService,
-    private api: ApiService,
-    private fb: FormBuilder,
+    private account: AccountService,
     private prompt: PromptService,
     private folderViewService: FolderViewService
   ) {
@@ -63,7 +63,8 @@ export class RightMenuComponent implements OnInit {
   setAvailableActions() {
     this.allowedActions.createFolder = this.currentFolder
       && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'))
-      && this.currentFolder.accessRole !== 'access.role.viewer';
+      && checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
+      && checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor);
 
     this.allowedActions.useGridView = !!this.currentFolder
       && this.folderViewService.folderView !== FolderView.Grid

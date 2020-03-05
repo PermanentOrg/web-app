@@ -119,11 +119,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // register for folder update events
     this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
-      if (folder.folderId === this.currentFolder.folderId) {
+      // if (folder.folderId === this.currentFolder.folderId) {
         setTimeout(() => {
           this.refreshView();
         }, 100);
-      }
+      // }
     });
   }
 

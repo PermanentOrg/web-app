@@ -68,6 +68,10 @@ export const routes: Routes = [
         redirectTo: 'relationships'
       },
       {
+        path: 'relationship_request/:email',
+        redirectTo: 'relationships'
+      },
+      {
         path: 'members',
         component: MembersComponent,
         data: { title: 'Members' },

@@ -25,9 +25,6 @@
       <span *ngIf="fileCount.completed">{{fileCount.completed}} uploaded, </span>
       <span *ngIf="fileCount.completed < fileCount.total">{{fileCount.total - fileCount.completed}} skipped</span>
     </div>
-    <div class="actions">
-      <button class="btn btn-primary" (click)="tryAgain()">Try again</button>
-    </div>
   </div>
   <div *ngIf="status === 5" class="upload">
     <div class="message">Your account does not have enough storage</div>

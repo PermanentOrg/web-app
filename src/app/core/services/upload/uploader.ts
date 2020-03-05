@@ -113,6 +113,7 @@ export class Uploader {
 
   onSocketError() {
     this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
+    this.cleanUpFiles();
     this.socketClient = null;
   }
 
@@ -252,6 +253,10 @@ export class Uploader {
 
       this.closeSocketConnection();
       this.uploadSessionStatus.emit(UploadSessionStatus.Done);
+
+      if (this.errorQueue.length) {
+        this.cleanUpFiles();
+      }
     }
   }
 
@@ -285,5 +290,22 @@ export class Uploader {
         this.uploadNextFromQueue();
         this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
       });
+  }
+
+  async cleanUpFiles() {
+    if (!this.errorQueue.length) {
+      return Promise.resolve();
+    }
+
+
+    let hasMeta: UploadItem[], needsMeta: UploadItem[];
+
+    // grab files from error queue and reset it
+    [ hasMeta , needsMeta ] = partition(this.errorQueue, (item: UploadItem) => item.RecordVO.recordId);
+    this.errorQueue = [];
+
+    // delete RecordVOs created during postmeta but with failed uploads
+    const recordVosToDelete = hasMeta.map(i => i.RecordVO);
+    await this.api.record.delete(recordVosToDelete);
   }
 }
