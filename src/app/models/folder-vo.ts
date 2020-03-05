@@ -161,7 +161,7 @@ export interface FolderVOData {
   parentFolderId?: any;
   folder_linkType?: any;
   FolderLinkVOs?: any;
-  accessRole?: any;
+  accessRole?: AccessRoleType;
   position?: any;
   shareDT?: any;
   pathAsFolder_linkId?: number[];

@@ -38,13 +38,10 @@ export class RightMenuComponent implements OnInit {
   public folderViews = FolderView;
 
   constructor(
-    private router: Router,
     private message: MessageService,
     private edit: EditService,
     private dataService: DataService,
     private account: AccountService,
-    private api: ApiService,
-    private fb: FormBuilder,
     private prompt: PromptService,
     private folderViewService: FolderViewService
   ) {

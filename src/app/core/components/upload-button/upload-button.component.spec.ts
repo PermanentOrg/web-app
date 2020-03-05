@@ -4,23 +4,30 @@ import { cloneDeep  } from 'lodash';
 
 import { UploadButtonComponent } from './upload-button.component';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO } from '@root/app/models';
+import { FolderVO, ArchiveVO } from '@root/app/models';
+import { AccountService } from '@shared/services/account/account.service';
 
 describe('UploadButtonComponent', () => {
   let component: UploadButtonComponent;
   let fixture: ComponentFixture<UploadButtonComponent>;
 
   let dataService: DataService;
+  let accountService: AccountService;
 
   beforeEach(async(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(UploadButtonComponent);
     const providers = config.providers as any[];
     providers.push(DataService);
+    providers.push(AccountService);
     TestBed.configureTestingModule(config).compileComponents();
   }));
 
   beforeEach(() => {
+    accountService = TestBed.get(AccountService);
+    accountService.setArchive(new ArchiveVO({
+      accessRole: 'access.role.owner'
+    }));
     dataService = TestBed.get(DataService);
 
     fixture = TestBed.createComponent(UploadButtonComponent);
@@ -37,25 +44,30 @@ describe('UploadButtonComponent', () => {
     expect(button.hidden).toBeTruthy();
   });
 
-  it('should be visible when current folder is not an apps folder', () => {
+  it('should be visible when current folder is not an apps folder', async () => {
     dataService.setCurrentFolder(new FolderVO({
-      type: 'type.folder.private'
+      type: 'type.folder.private',
+      accessRole: 'access.role.owner'
     }));
-    fixture.whenStable().then(() => {
-      expect(component.hidden).toBeFalsy();
-    });
+    await fixture.whenStable();
+    expect(component.hidden).toBeFalsy();
   });
 
-  it('should be hidden when current folder is an apps folder', () => {
+  it('should be hidden when current folder is an apps folder', async () => {
     dataService.setCurrentFolder(new FolderVO({
+      accessRole: 'access.role.owner',
       type: 'type.folder.app'
     }));
-    fixture.whenStable().then(() => {
-      expect(component.hidden).toBeTruthy();
-    });
+    await fixture.whenStable();
+    expect(component.hidden).toBeTruthy();
   });
 
-  it('should be hidden when current folder does not have write access', () => {
-
+  it('should be hidden when current folder does not have write access', async () => {
+    dataService.setCurrentFolder(new FolderVO({
+      type: 'type.folder.private',
+      accessRole: 'access.role.viewer'
+    }));
+    await fixture.whenStable();
+    expect(component.hidden).toBeTruthy();
   });
 });
