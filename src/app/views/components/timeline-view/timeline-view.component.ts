@@ -206,7 +206,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  groupTimelineItems(bestFitTimespan = false, keepFolders = true, ) {
+  groupTimelineItems(bestFitTimespan = false, keepFolders = true) {
     if (this.timelineItems.length) {
       let ids = this.timelineItems.getIds();
       if (keepFolders) {
