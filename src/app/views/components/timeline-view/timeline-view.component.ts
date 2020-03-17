@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, HostListener } from '@angular/core';
 
-import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '@permanent.org/vis-timeline';
+import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem, moment } from '@permanent.org/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FolderVO, RecordVO } from '@models/index';
+import { FolderVO, RecordVO, TimezoneVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { remove, find, throttle, minBy, maxBy, debounce } from 'lodash';
+import { remove, find, throttle, minBy, maxBy, debounce, countBy } from 'lodash';
 import {  TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Year,
   GroupByTimespan, GetTimespanFromRange, getBestFitTimespanForItems
 } from './timeline-util';
@@ -49,6 +49,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public timelineRootFolder: FolderVO = this.route.snapshot.data.currentFolder;
   public showFolderDetails = false;
+
+  public displayTimezoneOffset: string;
 
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
@@ -152,6 +154,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFolderChange() {
     this.timelineGroups.clear();
+    this.findBestTimezone();
     this.timelineRootFolder = this.data.currentFolder;
     this.groupTimelineItems(true, false);
     if (this.timeline) {
@@ -172,6 +175,20 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  findBestTimezone() {
+    const counts = countBy(this.data.currentFolder.ChildItemVOs, i => i.TimezoneVO ? (i.TimezoneVO as TimezoneVO).stdOffset : '+0:00');
+    const offsets = Object.keys(counts);
+    const mostCommonOffset = moment().utcOffset(maxBy(offsets, o => counts[o])).utcOffset();
+    const momentConstructor = date => {
+      return moment(date).utcOffset(mostCommonOffset);
+    };
+    if (this.timeline) {
+      this.timeline.setOptions({ moment: momentConstructor });
+    } else {
+      this.timelineOptions.moment = momentConstructor;
+    }
+  }
+
   setMaxZoom() {
     const range = this.timeline.getItemRange();
     if (!range || !range.min || !range.max) {
@@ -189,7 +206,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  groupTimelineItems(bestFitTimespan = false, keepFolders = true) {
+  groupTimelineItems(bestFitTimespan = false, keepFolders = true, ) {
     if (this.timelineItems.length) {
       let ids = this.timelineItems.getIds();
       if (keepFolders) {

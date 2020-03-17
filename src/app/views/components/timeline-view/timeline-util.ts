@@ -85,12 +85,12 @@ export class TimelineItem implements DataItem, TimelineDataItem {
     this.item = item;
     this.content = item.displayName;
     this.className = getAlternatingTimelineItemClass();
-    this.start = new Date(item.displayDT).valueOf();
+    this.start = moment.utc(item.displayDT).valueOf();
 
     if (item instanceof FolderVO) {
       this.dataType = 'folder';
       this.imageWidth = `${imageHeight}px`;
-      const end = new Date(item.displayEndDT).valueOf();
+      const end = moment.utc(item.displayEndDT).valueOf();
       if (end - this.start > 6 * Month) {
         this.end = end;
       }
@@ -124,8 +124,8 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
     this.groupName = name;
     this.content = name;
     this.className = getAlternatingTimelineItemClass();
-    this.groupStart = new Date(minBy(items, item => item.displayDT).displayDT).valueOf();
-    this.groupEnd = new Date(maxBy(items, item => item.displayDT).displayDT).valueOf();
+    this.groupStart = moment.utc(minBy(items, item => item.displayDT).displayDT).valueOf();
+    this.groupEnd = moment.utc(maxBy(items, item => item.displayDT).displayDT).valueOf();
     const diff = this.groupEnd - this.groupStart;
     let minDiffForRange = 20 * Minute;
     let neverRange = true;
@@ -176,7 +176,7 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
     const groups = groupBy(records, record => {
       const groupFormat = getDateGroupFormatFromTimespan(timespan);
       const displayFormat = getDisplayDateFormatFromTimespan(timespan);
-      return moment(record.displayDT).format(`${groupFormat}[.]${displayFormat}`);
+      return moment.utc(record.displayDT).format(`${groupFormat}[.]${displayFormat}`);
     });
 
     for (const key in groups) {
@@ -216,7 +216,7 @@ export function GetTimespanFromRange(start: number, end: number) {
 
 export function GetBreadcrumbsFromRange(start: number, end: number) {
   const range = end - start;
-  const mid = moment((start + end) / 2);
+  const mid = moment.utc((start + end) / 2);
   const path = [];
 
   if (range <= Year * 1.05) {
@@ -269,9 +269,9 @@ export function getBestFitTimespanForItems(items: ItemVO[]): TimelineGroupTimesp
     return TimelineGroupTimespan.Year;
   }
 
-  const start = moment(minBy(items, item => item.displayDT).displayDT).valueOf();
+  const start = moment.utc(minBy(items, item => item.displayDT).displayDT).valueOf();
   const endItem = maxBy(items, item => item.displayEndDT || item.displayDT);
-  const end = moment(endItem.displayEndDT || endItem.displayDT).valueOf();
+  const end = moment.utc(endItem.displayEndDT || endItem.displayDT).valueOf();
 
   return GetTimespanFromRange(start, end);
 }
