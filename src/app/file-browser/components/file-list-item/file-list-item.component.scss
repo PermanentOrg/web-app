@@ -72,6 +72,13 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   }
 }
 
+.multi-select {
+  margin-right: 0.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
 [prBgImage] {
   height: $row-height - 10px;
   width: $row-height - 10px;
@@ -91,5 +98,40 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
       padding-left: env(safe-area-inset-left);
       padding-right: env(safe-area-inset-right);
     }
+  }
+}
+
+$multi-select-radius: 30px;
+
+.select {
+  height: $multi-select-radius;
+  width: $multi-select-radius;
+  border-radius: 50%;
+  border: 1px solid $gray-300;
+
+  input {
+    visibility: hidden;
+  }
+
+  &.exists {
+    opacity: 0;
+  }
+
+  label {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .select-active {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: $PR-blue;
+    transform: translate(-50%, -50%);
   }
 }

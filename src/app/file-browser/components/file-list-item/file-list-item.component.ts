@@ -85,6 +85,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() folderView: FolderView;
 
   @Input() allowNavigation = true;
+  @Input() multiSelect = false;
+
+  public isMultiSelected =  false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -181,7 +184,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   goToItem() {
-    if (!this.allowNavigation) {
+    if (!this.allowNavigation || this.multiSelect) {
       return false;
     }
 
@@ -340,6 +343,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         this.promptForFolderView();
         break;
     }
+  }
+
+  preventDefault(event: Event) {
+    event.stopPropagation();
   }
 
   deleteItem(resolve: Function) {

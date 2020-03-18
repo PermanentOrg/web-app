@@ -69,6 +69,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   private lastItemOffset: number;
   private currentScrollTop: number;
 
+  isMultiSelectEnabled = false;
+  isMultiSelectEnabledSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -125,6 +128,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 100);
       // }
     });
+
+    this.isMultiSelectEnabledSubscription = this.dataService.multiSelectChange.subscribe(enabled => {
+      this.isMultiSelectEnabled = enabled;
+    });
   }
 
   refreshView() {
@@ -156,6 +163,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.dataService.setCurrentFolder();
     this.routeListener.unsubscribe();
+    this.isMultiSelectEnabledSubscription.unsubscribe();
   }
 
   setFolderView(folderView: FolderView) {

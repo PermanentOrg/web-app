@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { partition, remove, find } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderVO, RecordVO } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
@@ -21,10 +21,15 @@ export class DataService {
 
   public folderUpdate: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
 
+  public multiSelectEnabled = false;
+  public multiSelectChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
   private byArchiveNbr: {[key: string]: FolderVO | RecordVO} = {};
   private thumbRefreshQueue: Array<FolderVO | RecordVO> = [];
   private thumbRefreshTimeout;
+
+  public multiSelectItems: Map<number, ItemVO> = new Map();
 
   constructor(private api: ApiService) {
   }
@@ -290,5 +295,10 @@ export class DataService {
     function getOriginalFile(fileItem: RecordVO) {
       return find(fileItem.FileVOs, {format: 'file.format.original'});
     }
+  }
+
+  public setMultiSelect(enabled: boolean) {
+    this.multiSelectEnabled = enabled;
+    this.multiSelectChange.emit(enabled);
   }
 }
