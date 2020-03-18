@@ -164,7 +164,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.canEdit = false;
     }
 
-    if (this.accountService.isLoggedIn && !checkMinimumAccess(this.accountService.getArchive().accessRole, AccessRole.Editor) ) {
+    if (this.accountService.isLoggedIn() && !checkMinimumAccess(this.accountService.getArchive().accessRole, AccessRole.Editor) ) {
       this.canEdit = false;
     }
 
