@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, Hos
 import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem, moment } from '@permanent.org/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FolderVO, RecordVO, TimezoneVO } from '@models/index';
+import { FolderVO, RecordVO, TimezoneVO, TimezoneVOData } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { remove, find, throttle, minBy, maxBy, debounce, countBy } from 'lodash';
@@ -51,6 +51,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public showFolderDetails = false;
 
   public displayTimezoneOffset: string;
+  public currentTimezone: TimezoneVOData;
+  public timezones: Map<number, TimezoneVOData> = new Map();
 
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
@@ -176,16 +178,24 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   findBestTimezone() {
-    const counts = countBy(this.data.currentFolder.ChildItemVOs, i => i.TimezoneVO ? (i.TimezoneVO as TimezoneVO).stdOffset : '+0:00');
-    const offsets = Object.keys(counts);
-    const mostCommonOffset = moment().utcOffset(maxBy(offsets, o => counts[o])).utcOffset();
-    const momentConstructor = date => {
-      return moment(date).utcOffset(mostCommonOffset);
-    };
-    if (this.timeline) {
-      this.timeline.setOptions({ moment: momentConstructor });
+    const counts = countBy(
+      this.data.currentFolder.ChildItemVOs.filter(i => i.TimezoneVO),
+      (i: ItemVO) => {
+        const id = i.TimezoneVO.timeZoneId;
+        if (!this.timezones.has(id)) {
+          this.timezones.set(id, i.TimezoneVO);
+        }
+        return id;
+      }
+    );
+
+    const ids = Object.keys(counts);
+
+    if (!ids.length) {
+      this.currentTimezone = null;
     } else {
-      this.timelineOptions.moment = momentConstructor;
+      const mostCommonId = Number(maxBy(ids, o => counts[o]));
+      this.currentTimezone = this.timezones.get(mostCommonId);
     }
   }
 

@@ -7,6 +7,7 @@ import { ShareVO } from '@models/share-vo';
 import { isArray } from 'util';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRoleType } from './access-role';
+import { TimezoneVOData } from './timezone-vo';
 
 export type FolderViewType =
   'folder.view.grid' |
@@ -74,7 +75,7 @@ export class FolderVO extends BaseVO {
   public ChildFolderVOs;
   public RecordVOs;
   public LocnVO;
-  public TimezoneVO;
+  public TimezoneVO: TimezoneVOData;
   public DirectiveVOs;
   public TagVOs;
   public SharedArchiveVOs;
