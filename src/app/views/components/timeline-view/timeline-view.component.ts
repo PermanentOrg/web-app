@@ -25,6 +25,8 @@ type ItemVO = RecordVO | FolderVO;
 
 const ZOOM_PERCENTAGE = 1;
 
+const DEFAULT_MAJOR_MINUTE_LABEL = 'MMMM Do, h:mm A';
+const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 @Component({
   selector: 'pr-timeline-view',
   templateUrl: './timeline-view.component.html',
@@ -81,8 +83,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         week: 'Do'
       },
       majorLabels: {
-        second: 'MMMM Do, h:mm A',
-        minute: 'MMMM Do, h:mm A',
+        second: DEFAULT_MAJOR_MINUTE_LABEL,
+        minute: DEFAULT_MAJOR_MINUTE_LABEL,
         hour: 'MMMM Do, h A',
         weekday: 'MMMM Do, YYYY',
         day: 'MMMM Do, YYYY',
@@ -197,6 +199,37 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       const mostCommonId = Number(maxBy(ids, o => counts[o]));
       this.currentTimezone = this.timezones.get(mostCommonId);
     }
+
+    const setMajorTimeLabel = (timezone: TimezoneVOData) => {
+      let hourLabel = DEFAULT_MAJOR_HOUR_LABEL;
+      let minuteLabel = DEFAULT_MAJOR_MINUTE_LABEL;
+      if (timezone) {
+      const split = timezone.stdAbbrev.split('');
+      split.unshift('');
+      const abbrev = split.join('\\');
+      minuteLabel = `${minuteLabel} ${abbrev}`;
+      hourLabel = `${hourLabel} ${abbrev}`;
+      }
+      if (this.timeline) {
+        const options: TimelineOptions = {
+          format: {
+            majorLabels: {
+              minute: minuteLabel,
+              second: minuteLabel,
+              hour: hourLabel
+            }
+          }
+        };
+
+        this.timeline.setOptions(options);
+      } else {
+        (this.timelineOptions.format.majorLabels as any).minute = minuteLabel;
+        (this.timelineOptions.format.majorLabels as any).second = minuteLabel;
+        (this.timelineOptions.format.majorLabels as any).hour = hourLabel;
+      }
+    };
+
+    setMajorTimeLabel(this.currentTimezone);
   }
 
   setMaxZoom() {
