@@ -1,5 +1,5 @@
 import { DataItem, moment } from '@permanent.org/vis-timeline';
-import { RecordVO, FolderVO, ItemVO } from '@models/index';
+import { RecordVO, FolderVO, ItemVO, TimezoneVOData } from '@models/index';
 import { groupBy, minBy, maxBy, meanBy } from 'lodash';
 import { isMobileWidth } from '@shared/services/device/device.service';
 
@@ -81,16 +81,16 @@ export class TimelineItem implements DataItem, TimelineDataItem {
   imageWidth?: string;
   imageHeight?: string;
 
-  constructor(item: ItemVO) {
+  constructor(item: ItemVO, timezone: TimezoneVOData = null) {
     this.item = item;
     this.content = item.displayName;
     this.className = getAlternatingTimelineItemClass();
-    this.start = moment.utc(item.displayDT).valueOf();
+    this.start = getTimezoneDateFromDisplayDate(item.displayDT, timezone).valueOf();
 
     if (item instanceof FolderVO) {
       this.dataType = 'folder';
       this.imageWidth = `${imageHeight}px`;
-      const end = moment.utc(item.displayEndDT).valueOf();
+      const end = getTimezoneDateFromDisplayDate(item.displayEndDT, timezone).valueOf();
       if (end - this.start > 6 * Month) {
         this.end = end;
       }
@@ -117,7 +117,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
   previewThumbs: string[] = [];
   groupName: string;
 
-  constructor(items: RecordVO[], timespan: TimelineGroupTimespan, name: string) {
+  constructor(items: RecordVO[], timespan: TimelineGroupTimespan, name: string, timezone: TimezoneVOData = null) {
     this.groupItems = items;
     this.previewThumbs = getEvenSpreadItems(items.map(i => i.thumbURL200));
     this.groupTimespan = timespan;
@@ -144,15 +144,34 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 
 
     if (diff >= minDiffForRange && !neverRange) {
-      this.start = this.groupStart;
-      this.end = this.groupEnd;
+      this.start = getTimezoneDateFromDisplayDate(this.groupStart, timezone).valueOf();
+      this.end = getTimezoneDateFromDisplayDate(this.groupEnd, timezone).valueOf();
+
     } else {
-      this.start = meanBy(this.groupItems, i => new Date(i.displayDT).valueOf());
+      this.start = getTimezoneDateFromDisplayDate(meanBy(this.groupItems, i => new Date(i.displayDT).valueOf()), timezone).valueOf();
     }
   }
 }
 
-export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false) {
+function getTimezoneDateFromDisplayDate(displayDate: string | number, timezone: TimezoneVOData = null) {
+  const m = moment.utc(displayDate);
+  if (!timezone) {
+    return m;
+  }
+
+  let offset;
+
+  if (m.isDST()) {
+    offset = timezone.dstOffset;
+  } else {
+    offset = timezone.stdOffset;
+  }
+
+  const offsetMinutes = moment().utcOffset(offset).utcOffset();
+  return m.add(offsetMinutes, 'minutes');
+}
+
+export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false, timezone: TimezoneVOData = null) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
   const minimumGroupCount = 5;
@@ -176,7 +195,8 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
     const groups = groupBy(records, record => {
       const groupFormat = getDateGroupFormatFromTimespan(timespan);
       const displayFormat = getDisplayDateFormatFromTimespan(timespan);
-      return moment.utc(record.displayDT).format(`${groupFormat}[.]${displayFormat}`);
+      const date = getTimezoneDateFromDisplayDate(record.displayDT, timezone);
+      return date.format(`${groupFormat}[.]${displayFormat}`);
     });
 
     for (const key in groups) {

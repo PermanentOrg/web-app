@@ -238,7 +238,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.timelineGroups.has(timespan)) {
       itemsToAdd = this.timelineGroups.get(timespan);
     } else {
-      const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan);
+      const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan, this.currentTimezone);
       this.currentTimespan = groupResult.timespan;
       this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
       itemsToAdd = groupResult.groupedItems;
