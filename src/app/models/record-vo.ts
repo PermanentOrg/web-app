@@ -2,6 +2,7 @@ import { BaseVO } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
+import { TimezoneVOData } from './timezone-vo';
 
 export class RecordVO extends BaseVO {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
@@ -73,7 +74,7 @@ export class RecordVO extends BaseVO {
 
   // Other stuff
   public LocnVO;
-  public TimezoneVO;
+  public TimezoneVO: TimezoneVOData;
   public FileVOs;
   public DirectiveVOs;
   public TagVOs;
