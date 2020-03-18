@@ -113,17 +113,6 @@ export class EditService {
             (itemsByLinkId[updatedItem.folder_linkId] as RecordVO).update(updatedItem);
           });
         }
-      }).catch((results) => {
-        let folderResponse: FolderResponse;
-        let recordResponse: RecordResponse;
-
-        [folderResponse, recordResponse] =  results;
-
-        if (folderResponse && !folderResponse.isSuccessful) {
-          return Promise.reject(folderResponse);
-        } else if (recordResponse) {
-          return Promise.reject(recordResponse);
-        }
       });
   }
 

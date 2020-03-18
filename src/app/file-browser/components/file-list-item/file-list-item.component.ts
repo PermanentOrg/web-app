@@ -444,15 +444,17 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (!Object.keys(changes).length) {
       return deferred.resolve();
     } else {
-      (this.item as FolderVO).update(changes);
+      this.item.update(changes);
       return this.edit.updateItems([this.item])
         .then(() => {
           deferred.resolve();
         })
         .catch((response: RecordResponse | FolderResponse) => {
           deferred.reject();
-          this.message.showError(response.getMessage(), true);
-          (this.item as FolderVO).update(originalData);
+          this.item.update(originalData);
+          if (response.getMessage) {
+            this.message.showError(response.getMessage(), true);
+          }
         });
     }
   }
