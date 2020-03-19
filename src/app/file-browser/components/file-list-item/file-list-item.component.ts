@@ -21,7 +21,7 @@ import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 
-const ItemActions: {[key: string]: PromptButton} = {
+export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
     buttonName: 'rename',
     buttonText: 'Rename',
