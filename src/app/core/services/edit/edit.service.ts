@@ -112,6 +112,7 @@ export class EditService {
       switch (value) {
         case 'delete':
           await this.deleteItems(items);
+          this.dataService.refreshCurrentFolder();
           actionDeferred.resolve();
           break;
         case 'move':
@@ -129,7 +130,7 @@ export class EditService {
       if (err instanceof FolderResponse || err instanceof RecordResponse) {
         this.message.showError(err.getMessage(), true);
       }
-      actionDeferred.reject();
+      actionDeferred.resolve();
     }
 
   }
@@ -293,7 +294,7 @@ export class EditService {
     return Promise.all(promises);
   }
 
-  openFolderPicker(items: ItemVO[], operation: FolderPickerOperations, folderLinkIdsToFilter: number[] = null) {
+  openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
