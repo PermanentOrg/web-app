@@ -300,6 +300,12 @@ export class DataService {
   public setMultiSelect(enabled: boolean) {
     this.multiSelectEnabled = enabled;
     this.multiSelectChange.emit(enabled);
+
+    if (!this.multiSelectEnabled) {
+      setTimeout(() => {
+        this.multiSelectItems.clear();
+      }, 500);
+    }
   }
 
   public setItemMultiSelectStatus(item: ItemVO, selected: boolean) {

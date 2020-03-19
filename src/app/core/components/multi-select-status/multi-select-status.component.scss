@@ -11,9 +11,14 @@
   background-color: $PR-orange;
   color: white;
   transition:  transform $default-transition-length ease-in;
+  padding: 0px 10px;
 
   &.visible {
     transform: translateY(0);
     transition: transform $default-transition-length ease-out;
   }
+}
+
+.actions {
+  margin-left: auto;
 }

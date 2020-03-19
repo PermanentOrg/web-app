@@ -177,6 +177,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.inGridView = this.folderView === FolderView.Grid;
+
+    if (!this.multiSelect) {
+      this.isMultiSelected = false;
+    }
   }
 
   ngOnDestroy() {

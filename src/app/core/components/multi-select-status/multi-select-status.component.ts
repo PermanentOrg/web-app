@@ -30,4 +30,11 @@ export class MultiSelectStatusComponent implements OnInit, OnDestroy {
     this.isMultiSelectEnabledSubscription.unsubscribe();
   }
 
+  onDoneClick() {
+    const items: ItemVO[] = [];
+    this.multiSelectItems.forEach(i => items.push(i));
+    this.data.setMultiSelect(false);
+    console.log(items);
+  }
+
 }
