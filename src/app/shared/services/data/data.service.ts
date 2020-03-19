@@ -301,4 +301,12 @@ export class DataService {
     this.multiSelectEnabled = enabled;
     this.multiSelectChange.emit(enabled);
   }
+
+  public setItemMultiSelectStatus(item: ItemVO, selected: boolean) {
+    if (selected) {
+      this.multiSelectItems.set(item.folder_linkId, item);
+    } else {
+      this.multiSelectItems.delete(item.folder_linkId);
+    }
+  }
 }

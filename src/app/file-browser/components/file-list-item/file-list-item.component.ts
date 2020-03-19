@@ -466,5 +466,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  onMultiSelectChange() {
+    this.dataService.setItemMultiSelectStatus(this.item, this.isMultiSelected);
+  }
+
 
 }

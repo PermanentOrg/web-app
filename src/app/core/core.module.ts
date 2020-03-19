@@ -24,6 +24,7 @@ import { RelationshipsComponent } from './components/relationships/relationships
 import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
+import { EditService } from './services/edit/edit.service';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { MultiSelectStatusComponent } from './components/multi-select-status/mul
     DataService,
     FolderViewService,
     UploadService,
-    PromptService
+    PromptService,
+    EditService
   ]
 })
 export class CoreModule {

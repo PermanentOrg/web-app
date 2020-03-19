@@ -70,9 +70,7 @@ export type ActionType = 'delete' |
   'move' |
   'setFolderView';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EditService {
 
   constructor(

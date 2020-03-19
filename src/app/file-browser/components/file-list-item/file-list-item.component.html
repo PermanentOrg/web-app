@@ -12,7 +12,7 @@
   <div class="multi-select" *ngIf="allowActions && multiSelect">
     <div class="select" (click)="$event.stopPropagation()">
       <label>
-        <input type="checkbox" [(ngModel)]="isMultiSelected">
+        <input type="checkbox" [(ngModel)]="isMultiSelected" (ngModelChange)="onMultiSelectChange()">
         <div class="select-active" *ngIf="isMultiSelected"></div>
       </label>
     </div>
