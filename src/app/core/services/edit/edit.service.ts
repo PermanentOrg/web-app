@@ -122,6 +122,8 @@ export class EditService {
           actionDeferred.resolve();
           this.openFolderPicker(items, FolderPickerOperations.Copy);
           break;
+        default:
+          actionDeferred.resolve();
       }
     } catch (err) {
       if (err instanceof FolderResponse || err instanceof RecordResponse) {
