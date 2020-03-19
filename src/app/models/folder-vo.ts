@@ -82,7 +82,7 @@ export class FolderVO extends BaseVO {
   public FolderSizeVO;
   public AttachmentRecordVOs;
   public hasAttachments;
-  public ChildItemVOs;
+  public ChildItemVOs: any;
   public ShareVOs: ShareVO[];
   public AccessVO;
   public AccessVOs;

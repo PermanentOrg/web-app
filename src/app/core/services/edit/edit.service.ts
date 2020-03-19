@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter  } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { partition, remove, find } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -293,12 +293,20 @@ export class EditService {
     return Promise.all(promises);
   }
 
-  openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {
+  openFolderPicker(items: ItemVO[], operation: FolderPickerOperations, folderLinkIdsToFilter: number[] = null) {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
 
-    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise)
+    const filterFolderLinkIds = [];
+
+    for (const item of items) {
+      if (item.isFolder) {
+        filterFolderLinkIds.push(item.folder_linkId);
+      }
+    }
+
+    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise, filterFolderLinkIds)
       .then((destination: FolderVO) => {
         switch (operation) {
           case FolderPickerOperations.Copy:
