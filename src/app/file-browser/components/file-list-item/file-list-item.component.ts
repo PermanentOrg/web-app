@@ -188,8 +188,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   goToItem() {
-    if (!this.allowNavigation || this.multiSelect) {
+    if (!this.allowNavigation) {
       return false;
+    }
+
+    if (this.multiSelect) {
+      this.isMultiSelected = !this.isMultiSelected;
+      this.onMultiSelectChange();
+      return;
     }
 
     if (this.item.dataStatus < DataStatus.Lean) {

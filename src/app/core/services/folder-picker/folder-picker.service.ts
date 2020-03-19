@@ -25,7 +25,7 @@ export class FolderPickerService {
   chooseFolder(
     startingFolder: FolderVO,
     operation: FolderPickerOperations,
-    savePromise?: Promise<any>, 
+    savePromise?: Promise<any>,
     filterFolderLinkIds: number[] = null
   ) {
     if (!this.component) {
