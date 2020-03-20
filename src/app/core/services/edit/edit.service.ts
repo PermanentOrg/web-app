@@ -128,8 +128,9 @@ export class EditService {
         case 'download':
           actionDeferred.resolve();
           if (items.length === 1) {
-            if (items[0] instanceof RecordVO) {
-              this.dataService.downloadFile(items[0]);
+            const item = items[0];
+            if (item instanceof RecordVO) {
+              this.dataService.downloadFile(item);
             }
           }
           break;
