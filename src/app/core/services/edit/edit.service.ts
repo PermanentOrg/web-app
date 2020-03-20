@@ -9,12 +9,13 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderVO, RecordVO, ItemVO, FolderVOData } from '@root/app/models';
 
-import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
+import { FolderResponse, RecordResponse, ShareResponse } from '@shared/services/api/index.repo';
 import { PromptButton, PromptService } from '../prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { Dialog } from '@root/app/dialog/dialog.service';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -79,7 +80,8 @@ export class EditService {
     private folderPicker: FolderPickerService,
     private dataService: DataService,
     private prompt: PromptService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private dialog: Dialog
   ) { }
 
   promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
@@ -122,6 +124,24 @@ export class EditService {
         case 'copy':
           actionDeferred.resolve();
           this.openFolderPicker(items, FolderPickerOperations.Copy);
+          break;
+        case 'download':
+          actionDeferred.resolve();
+          if (items.length === 1) {
+            const item = items[0];
+            if (item instanceof RecordVO) {
+              this.dataService.downloadFile(item);
+            }
+          }
+          break;
+        case 'publish':
+          actionDeferred.resolve();
+          this.dialog.open('PublishComponent', { item: items[0] }, { height: 'auto' });
+          break;
+        case 'share':
+          const response: ShareResponse = await this.api.share.getShareLink(items[0]);
+          actionDeferred.resolve();
+          this.dialog.open('SharingComponent', { item: items[0], link: response.getShareByUrlVO() });
           break;
         default:
           actionDeferred.resolve();
@@ -319,9 +339,8 @@ export class EditService {
       .then(() => {
         setTimeout(() => {
           deferred.resolve();
-          // tslint:disable-next-line:max-line-length
-          // const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
-          // this.message.showMessage(msg, 'success');
+          const msg = `${items.length} item(s) ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
+          this.message.showMessage(msg, 'success');
           if (operation === FolderPickerOperations.Move) {
             this.dataService.refreshCurrentFolder();
           }
