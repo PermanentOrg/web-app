@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from '../dialog/dialog.module';
 import { SharedModule } from '@shared/shared.module';
+import { EditService } from '@core/services/edit/edit.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SharedModule } from '@shared/shared.module';
     DataService,
     FolderViewService,
     PromptService,
-    FolderPickerService
+    FolderPickerService,
+    EditService
   ]
 })
 export class SharePreviewModule {
