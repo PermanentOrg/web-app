@@ -1,25 +1,139 @@
 import { Injectable, EventEmitter  } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { partition, remove } from 'lodash';
+import { map, filter } from 'rxjs/operators';
+import { partition, remove, find } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { FolderVO, RecordVO } from '@root/app/models';
-
-import { DataStatus } from '@models/data-status.enum';
+import { FolderVO, RecordVO, ItemVO, FolderVOData } from '@root/app/models';
 
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
-import { promise } from 'protractor';
+import { PromptButton, PromptService } from '../prompt/prompt.service';
+import { Deferred } from '@root/vendor/deferred';
+import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
+import { FolderPickerService } from '../folder-picker/folder-picker.service';
+import { AccountService } from '@shared/services/account/account.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+export const ItemActions: {[key: string]: PromptButton} = {
+  Rename: {
+    buttonName: 'rename',
+    buttonText: 'Rename',
+  },
+  Copy: {
+    buttonName: 'copy',
+    buttonText: 'Copy',
+  },
+  Move: {
+    buttonName: 'move',
+    buttonText: 'Move',
+  },
+  Download: {
+    buttonName: 'download',
+    buttonText: 'Download'
+  },
+  Delete: {
+    buttonName: 'delete',
+    buttonText: 'Delete',
+    class: 'btn-danger'
+  },
+  Share: {
+    buttonName: 'share',
+    buttonText: 'Share'
+  },
+  Unshare: {
+    buttonName: 'delete',
+    buttonText: 'Remove',
+    class: 'btn-danger'
+  },
+  Publish: {
+    buttonName: 'publish',
+    buttonText: 'Publish',
+  },
+  GetLink: {
+    buttonName: 'publish',
+    buttonText: 'Get link'
+  },
+  SetFolderView: {
+    buttonName: 'setFolderView',
+    buttonText: 'Set folder view'
+  }
+};
+
+export type ActionType = 'delete' |
+  'rename' |
+  'share' |
+  'publish' |
+  'download' |
+  'copy' |
+  'move' |
+  'setFolderView';
+
+@Injectable()
 export class EditService {
 
-  constructor(private api: ApiService, private message: MessageService) { }
+  constructor(
+    private api: ApiService,
+    private message: MessageService,
+    private folderPicker: FolderPickerService,
+    private dataService: DataService,
+    private prompt: PromptService,
+    private accountService: AccountService
+  ) { }
+
+  promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
+    const actionDeferred = new Deferred();
+
+    let title;
+
+    if (items.length > 1 ) {
+      title = `${items.length} items selected`;
+    } else {
+      title = items[0].displayName;
+    }
+
+    if (actions.length) {
+      this.prompt.promptButtons(actions, title, actionDeferred.promise)
+      .then((value: ActionType) => {
+        this.handleAction(items, value, actionDeferred);
+      })
+      .catch(err => {
+      });
+    } else {
+      try {
+        this.prompt.confirm('OK', title, null, null, `<p>No actions available</p>`);
+      } catch (err) { }
+    }
+  }
+
+  async handleAction(items: ItemVO[], value: ActionType, actionDeferred: Deferred) {
+    try {
+      switch (value) {
+        case 'delete':
+          await this.deleteItems(items);
+          this.dataService.refreshCurrentFolder();
+          actionDeferred.resolve();
+          break;
+        case 'move':
+          actionDeferred.resolve();
+          this.openFolderPicker(items, FolderPickerOperations.Move);
+          break;
+        case 'copy':
+          actionDeferred.resolve();
+          this.openFolderPicker(items, FolderPickerOperations.Copy);
+          break;
+        default:
+          actionDeferred.resolve();
+      }
+    } catch (err) {
+      if (err instanceof FolderResponse || err instanceof RecordResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+      actionDeferred.resolve();
+    }
+
+  }
 
   createFolder(folderName: string, parentFolder: FolderVO): Promise<FolderVO | FolderResponse>   {
     const newFolder = new FolderVO({
@@ -61,7 +175,7 @@ export class EditService {
     return Promise.all(promises)
       .then((results) => {
         let folderResponse, recordResponse;
-        [folderResponse, recordResponse] =  results;
+        [folderResponse, recordResponse] = results;
       });
   }
 
@@ -112,17 +226,6 @@ export class EditService {
           .forEach((updatedItem) => {
             (itemsByLinkId[updatedItem.folder_linkId] as RecordVO).update(updatedItem);
           });
-        }
-      }).catch((results) => {
-        let folderResponse: FolderResponse;
-        let recordResponse: RecordResponse;
-
-        [folderResponse, recordResponse] =  results;
-
-        if (folderResponse && !folderResponse.isSuccessful) {
-          return Promise.reject(folderResponse);
-        } else if (recordResponse) {
-          return Promise.reject(recordResponse);
         }
       });
   }
@@ -189,5 +292,44 @@ export class EditService {
     }
 
     return Promise.all(promises);
+  }
+
+  openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {
+    const deferred = new Deferred();
+    const rootFolder = this.accountService.getRootFolder();
+    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
+
+    const filterFolderLinkIds = [];
+
+    for (const item of items) {
+      if (item.isFolder) {
+        filterFolderLinkIds.push(item.folder_linkId);
+      }
+    }
+
+    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise, filterFolderLinkIds)
+      .then((destination: FolderVO) => {
+        switch (operation) {
+          case FolderPickerOperations.Copy:
+            return this.copyItems(items, destination);
+          case FolderPickerOperations.Move:
+            return this.moveItems(items, destination);
+        }
+      })
+      .then(() => {
+        setTimeout(() => {
+          deferred.resolve();
+          // tslint:disable-next-line:max-line-length
+          // const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
+          // this.message.showMessage(msg, 'success');
+          if (operation === FolderPickerOperations.Move) {
+            this.dataService.refreshCurrentFolder();
+          }
+        }, 500);
+      })
+      .catch((response: FolderResponse | RecordResponse) => {
+        deferred.reject();
+        this.message.showError(response.getMessage(), true);
+      });
   }
 }

@@ -21,7 +21,7 @@ import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 
-const ItemActions: {[key: string]: PromptButton} = {
+export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
     buttonName: 'rename',
     buttonText: 'Rename',
@@ -85,6 +85,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() folderView: FolderView;
 
   @Input() allowNavigation = true;
+  @Input() multiSelect = false;
+
+  public isMultiSelected =  false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -164,7 +167,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.canEdit = false;
     }
 
-    if (this.accountService.isLoggedIn && !checkMinimumAccess(this.accountService.getArchive().accessRole, AccessRole.Editor) ) {
+    if (this.accountService.isLoggedIn() && !checkMinimumAccess(this.accountService.getArchive().accessRole, AccessRole.Editor) ) {
       this.canEdit = false;
     }
 
@@ -174,6 +177,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.inGridView = this.folderView === FolderView.Grid;
+
+    if (!this.multiSelect) {
+      this.isMultiSelected = false;
+    }
   }
 
   ngOnDestroy() {
@@ -183,6 +190,12 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   goToItem() {
     if (!this.allowNavigation) {
       return false;
+    }
+
+    if (this.multiSelect) {
+      this.isMultiSelected = !this.isMultiSelected;
+      this.onMultiSelectChange();
+      return;
     }
 
     if (this.item.dataStatus < DataStatus.Lean) {
@@ -342,6 +355,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  preventDefault(event: Event) {
+    event.stopPropagation();
+  }
+
   deleteItem(resolve: Function) {
     return this.edit.deleteItems([this.item])
       .then(() => {
@@ -444,17 +461,23 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (!Object.keys(changes).length) {
       return deferred.resolve();
     } else {
-      (this.item as FolderVO).update(changes);
+      this.item.update(changes);
       return this.edit.updateItems([this.item])
         .then(() => {
           deferred.resolve();
         })
         .catch((response: RecordResponse | FolderResponse) => {
           deferred.reject();
-          this.message.showError(response.getMessage(), true);
-          (this.item as FolderVO).update(originalData);
+          this.item.update(originalData);
+          if (response.getMessage) {
+            this.message.showError(response.getMessage(), true);
+          }
         });
     }
+  }
+
+  onMultiSelectChange() {
+    this.dataService.setItemMultiSelectStatus(this.item, this.isMultiSelected);
   }
 
 

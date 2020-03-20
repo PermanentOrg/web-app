@@ -4,9 +4,17 @@
   <div class="name">
     {{item.displayName}}
   </div>
-  <div class="actions" *ngIf="allowActions">
+  <div class="actions" *ngIf="allowActions && !multiSelect">
     <button class="right-menu-toggler" (click)="showActions($event)">
       <span class="right-menu-toggler-icon right-menu-toggler-icon-dark"></span>
     </button>
+  </div>
+  <div class="multi-select" *ngIf="allowActions && multiSelect">
+    <div class="select" (click)="$event.stopPropagation()">
+      <label>
+        <input type="checkbox" [(ngModel)]="isMultiSelected" (ngModelChange)="onMultiSelectChange()">
+        <div class="select-active" *ngIf="isMultiSelected"></div>
+      </label>
+    </div>
   </div>
 </div>

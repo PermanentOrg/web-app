@@ -25,6 +25,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 import { DialogComponent } from '@root/app/dialog/dialog.component';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { DialogModule } from '@root/app/dialog/dialog.module';
+import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-status.component';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
@@ -49,6 +50,7 @@ describe('MainComponent', () => {
     config.declarations.push(UploadProgressComponent);
     config.declarations.push(UploadButtonComponent);
     config.declarations.push(FolderPickerComponent);
+    config.declarations.push(MultiSelectStatusComponent);
 
     config.providers.push(AccountService);
     config.providers.push(DataService);

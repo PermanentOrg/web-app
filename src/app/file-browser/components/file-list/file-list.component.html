@@ -2,6 +2,7 @@
 <pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs"
   [item]="item"
   [folderView]="folderView"
+  [multiSelect]="isMultiSelectEnabled"
   [allowNavigation]="allowNavigation"></pr-file-list-item>
 <div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
   This folder is empty

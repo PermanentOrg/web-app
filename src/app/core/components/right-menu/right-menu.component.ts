@@ -15,6 +15,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-right-menu',
@@ -25,11 +26,15 @@ export class RightMenuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  isMultiSelectEnabled = false;
+  isMultiSelectEnabledSubscription: Subscription;
+
   public accountName: string;
 
   public currentFolder: FolderVO;
   public allowedActions = {
     createFolder: false,
+    multiSelect: false,
     useGridView: false,
     useListView: false
   };
@@ -53,6 +58,10 @@ export class RightMenuComponent implements OnInit {
     this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
       this.setAvailableActions();
     });
+
+    this.isMultiSelectEnabledSubscription = this.dataService.multiSelectChange.subscribe(isEnabled => {
+      this.isMultiSelectEnabled = isEnabled;
+    });
   }
 
   ngOnInit() {
@@ -61,6 +70,11 @@ export class RightMenuComponent implements OnInit {
   }
 
   setAvailableActions() {
+    this.allowedActions.multiSelect = this.currentFolder
+      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'))
+      && checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
+      && checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor);
+
     this.allowedActions.createFolder = this.currentFolder
       && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'))
       && checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
@@ -86,6 +100,14 @@ export class RightMenuComponent implements OnInit {
 
   setFolderView(folderView: FolderView) {
     this.folderViewService.setFolderView(folderView);
+  }
+
+  startMultiSelect() {
+    this.dataService.setMultiSelect(true);
+  }
+
+  endMultiSelect() {
+    this.dataService.setMultiSelect(false);
   }
 
   createNewFolder() {

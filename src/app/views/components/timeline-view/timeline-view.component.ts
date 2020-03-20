@@ -1,12 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, HostListener } from '@angular/core';
 
-import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '@permanent.org/vis-timeline';
+import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem, moment } from '@permanent.org/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FolderVO, RecordVO } from '@models/index';
+import { FolderVO, RecordVO, TimezoneVO, TimezoneVOData } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { remove, find, throttle, minBy, maxBy, debounce } from 'lodash';
+import { remove, find, throttle, minBy, maxBy, debounce, countBy } from 'lodash';
 import {  TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Year,
   GroupByTimespan, GetTimespanFromRange, getBestFitTimespanForItems
 } from './timeline-util';
@@ -25,6 +25,8 @@ type ItemVO = RecordVO | FolderVO;
 
 const ZOOM_PERCENTAGE = 1;
 
+const DEFAULT_MAJOR_MINUTE_LABEL = 'MMMM Do, h:mm A';
+const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 @Component({
   selector: 'pr-timeline-view',
   templateUrl: './timeline-view.component.html',
@@ -49,6 +51,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public timelineRootFolder: FolderVO = this.route.snapshot.data.currentFolder;
   public showFolderDetails = false;
+
+  public displayTimezoneOffset: string;
+  public currentTimezone: TimezoneVOData;
+  public timezones: Map<number, TimezoneVOData> = new Map();
 
   @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
@@ -77,8 +83,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         week: 'Do'
       },
       majorLabels: {
-        second: 'MMMM Do, h:mm A',
-        minute: 'MMMM Do, h:mm A',
+        second: DEFAULT_MAJOR_MINUTE_LABEL,
+        minute: DEFAULT_MAJOR_MINUTE_LABEL,
         hour: 'MMMM Do, h A',
         weekday: 'MMMM Do, YYYY',
         day: 'MMMM Do, YYYY',
@@ -152,6 +158,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFolderChange() {
     this.timelineGroups.clear();
+    this.findBestTimezone();
     this.timelineRootFolder = this.data.currentFolder;
     this.groupTimelineItems(true, false);
     if (this.timeline) {
@@ -170,6 +177,59 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.timeline.on('rangechanged', evt => {
       this.breadcrumbs.debouncedZoomHandler(evt);
     });
+  }
+
+  findBestTimezone() {
+    const counts = countBy(
+      this.data.currentFolder.ChildItemVOs.filter(i => i.TimezoneVO),
+      (i: ItemVO) => {
+        const id = i.TimezoneVO.timeZoneId;
+        if (!this.timezones.has(id)) {
+          this.timezones.set(id, i.TimezoneVO);
+        }
+        return id;
+      }
+    );
+
+    const ids = Object.keys(counts);
+
+    if (!ids.length) {
+      this.currentTimezone = null;
+    } else {
+      const mostCommonId = Number(maxBy(ids, o => counts[o]));
+      this.currentTimezone = this.timezones.get(mostCommonId);
+    }
+
+    const setMajorTimeLabel = (timezone: TimezoneVOData) => {
+      let hourLabel = DEFAULT_MAJOR_HOUR_LABEL;
+      let minuteLabel = DEFAULT_MAJOR_MINUTE_LABEL;
+      if (timezone) {
+      const split = timezone.stdAbbrev.split('');
+      split.unshift('');
+      const abbrev = split.join('\\');
+      minuteLabel = `${minuteLabel} ${abbrev}`;
+      hourLabel = `${hourLabel} ${abbrev}`;
+      }
+      if (this.timeline) {
+        const options: TimelineOptions = {
+          format: {
+            majorLabels: {
+              minute: minuteLabel,
+              second: minuteLabel,
+              hour: hourLabel
+            }
+          }
+        };
+
+        this.timeline.setOptions(options);
+      } else {
+        (this.timelineOptions.format.majorLabels as any).minute = minuteLabel;
+        (this.timelineOptions.format.majorLabels as any).second = minuteLabel;
+        (this.timelineOptions.format.majorLabels as any).hour = hourLabel;
+      }
+    };
+
+    setMajorTimeLabel(this.currentTimezone);
   }
 
   setMaxZoom() {
@@ -211,7 +271,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.timelineGroups.has(timespan)) {
       itemsToAdd = this.timelineGroups.get(timespan);
     } else {
-      const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan);
+      const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan, this.currentTimezone);
       this.currentTimespan = groupResult.timespan;
       this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
       itemsToAdd = groupResult.groupedItems;

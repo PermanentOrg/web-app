@@ -17,7 +17,7 @@
   &.visible {
     left: 0;
     right: 0;
-    background-color: $shadow-color;
+    background-color: $shadow-color-dark;
     visibility: visible;
     transition:  background-color $default-transition-length ease-out;
 

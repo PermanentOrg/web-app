@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { FolderPickerComponent, FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderVO } from '@root/app/models';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FolderPickerService {
   private component: FolderPickerComponent;
 
@@ -20,11 +22,16 @@ export class FolderPickerService {
     this.component = null;
   }
 
-  chooseFolder(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>) {
+  chooseFolder(
+    startingFolder: FolderVO,
+    operation: FolderPickerOperations,
+    savePromise?: Promise<any>,
+    filterFolderLinkIds: number[] = null
+  ) {
     if (!this.component) {
       throw new Error('FolderPickerService - Folder picker component missing');
     }
 
-    return this.component.show(startingFolder, operation, savePromise);
+    return this.component.show(startingFolder, operation, savePromise, filterFolderLinkIds);
   }
 }
