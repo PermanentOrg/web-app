@@ -64,7 +64,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private timelineItems: DataSet<DataItem> = new DataSet();
   private timelineOptions: TimelineOptions = {
     zoomMin: Minute * 1,
-    zoomMax: Year * 50,
     showCurrentTime: false,
     pixelMargin: this.device.isMobileWidth() ? 10 : 100,
     height: '100%',
@@ -242,6 +241,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const end = range.max.valueOf();
     const diff = end - start;
     const buffer = diff * 0.5;
+
+    console.log(new Date(start - buffer), new Date(end + buffer));
 
     this.timeline.setOptions({
       min: start - buffer,
