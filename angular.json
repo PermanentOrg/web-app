@@ -136,6 +136,29 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
+            "ots_test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testots.ts"
+                },
+                {
+                  "replace": "src/index.html",
+                  "with": "src/index.dev.html"
+                }
+              ],
+              "index": "src/index/staging/index.html",
+              "deployUrl": "/m/",
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
             "staging": {
               "fileReplacements": [
                 {
