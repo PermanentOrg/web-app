@@ -12,6 +12,8 @@ export const Year = Month * 12;
 export type TimelineItemDataType = 'record' | 'folder' | 'group';
 
 export enum TimelineGroupTimespan {
+  Century,
+  Decade,
   Year,
   Month,
   Day,
@@ -196,7 +198,20 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
       const groupFormat = getDateGroupFormatFromTimespan(timespan);
       const displayFormat = getDisplayDateFormatFromTimespan(timespan);
       const date = getTimezoneDateFromDisplayDate(record.displayDT, timezone);
+      if (timespan >= TimelineGroupTimespan.Year) {
       return date.format(`${groupFormat}[.]${displayFormat}`);
+      } else {
+        let group = date.format('YYYY');
+        switch (timespan) {
+          case TimelineGroupTimespan.Decade:
+            group = `${group.substr(0, 3)}0`;
+            break;
+          case TimelineGroupTimespan.Century:
+            group = `${group.substr(0, 2)}00`;
+            break;
+        }
+        return `${group}.${group}s`;
+      }
     });
 
     for (const key in groups) {
@@ -221,7 +236,11 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
 
 export function GetTimespanFromRange(start: number, end: number) {
   const diff = end - start;
-  if (diff > 20 * Month) {
+  if (diff > 30 * Year) {
+    return TimelineGroupTimespan.Century;
+  } else if (diff > 12 * Year) {
+    return TimelineGroupTimespan.Decade;
+  } else if (diff > 20 * Month) {
     return TimelineGroupTimespan.Year;
   } else if (diff > 40 * Day) {
     return TimelineGroupTimespan.Month;
@@ -274,6 +293,8 @@ function getDateGroupFormatFromTimespan(timespan: TimelineGroupTimespan): string
 function getDisplayDateFormatFromTimespan(timespan: TimelineGroupTimespan): string {
   switch (timespan) {
     case TimelineGroupTimespan.Year:
+    case TimelineGroupTimespan.Decade:
+    case TimelineGroupTimespan.Century:
       return 'YYYY';
     case TimelineGroupTimespan.Month:
       return 'MMMM YYYY';
