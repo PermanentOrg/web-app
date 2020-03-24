@@ -11,6 +11,7 @@
     "build_local": "ng build --aot --configuration=local",
     "build_dev": "ng build --aot --build-optimizer --configuration=development",
     "build_staging": "ng build --aot --build-optimizer --configuration=staging",
+    "build_ots": "ng build --aot --build-optimizer --configuration=ots_test",
     "test": "ng test --source-map=false",
     "test_build": "ng test --source-map=false --watch=false --browsers chrome_headless_no_sandbox",
     "lint": "ng lint",
