@@ -9,7 +9,7 @@ export class PublishRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/publish/getResource', data, PublishResponse);
+    return this.http.sendRequestPromise<PublishResponse>('/publish/getResource', data, PublishResponse);
   }
 }
 
