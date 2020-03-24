@@ -15,7 +15,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/record/get', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>('/record/get', data, RecordResponse);
   }
 
   public getLean(recordVOs: RecordVO[], whitelist ?: string[]): Promise<RecordResponse> {
@@ -27,7 +27,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/record/getLean', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>('/record/getLean', data, RecordResponse);
   }
 
   public postMeta(recordVOs: RecordVO[]): Observable<RecordResponse> {
@@ -37,7 +37,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequest('/record/postMetaBatch', data, RecordResponse);
+    return this.http.sendRequest<RecordResponse>('/record/postMetaBatch', data, RecordResponse);
   }
 
   public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
@@ -51,7 +51,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/record/update', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>('/record/update', data, RecordResponse);
   }
 
   public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
@@ -61,7 +61,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/record/delete', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>('/record/delete', data, RecordResponse);
   }
 
   public move(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
@@ -74,7 +74,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/record/move', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>('/record/move', data, RecordResponse);
   }
 
   public copy(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
@@ -87,7 +87,7 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/record/copy', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>('/record/copy', data, RecordResponse);
   }
 }
 

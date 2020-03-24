@@ -22,7 +22,7 @@ export class HttpService {
     this.defaultResponseClass = BaseResponse;
   }
 
-  public sendRequest(endpoint: string, data = [{}], responseClass ?: any): Observable<any> {
+  public sendRequest<T = BaseResponse>(endpoint: string, data = [{}], responseClass ?: any): Observable<T> {
     const requestVO = new RequestVO(API_KEY, this.storage.session.get(CSRF_KEY), data);
     const url = API_URL + endpoint;
 
@@ -40,7 +40,7 @@ export class HttpService {
       }));
   }
 
-  public sendRequestPromise(endpoint: string, data = [{}], responseClass ?: any): Promise<any> {
+  public sendRequestPromise<T = BaseResponse>(endpoint: string, data = [{}], responseClass ?: any): Promise<T> {
     return this.sendRequest(endpoint, data, responseClass)
       .pipe(map((response: any | BaseResponse) => {
         if (!response.isSuccessful) {

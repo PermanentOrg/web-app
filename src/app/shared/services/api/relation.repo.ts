@@ -10,7 +10,7 @@ export class RelationRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/relation/getAll', data, RelationResponse);
+    return this.http.sendRequestPromise<RelationResponse>('/relation/getAll', data, RelationResponse);
   }
 
   public create(relationVO: RelationVO) {
@@ -21,7 +21,7 @@ export class RelationRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/relation/post', [data], RelationResponse);
+    return this.http.sendRequestPromise<RelationResponse>('/relation/post', [data], RelationResponse);
   }
 
   public update(relationVO: RelationVO) {
@@ -32,7 +32,7 @@ export class RelationRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/relation/update', [data], RelationResponse);
+    return this.http.sendRequestPromise<RelationResponse>('/relation/update', [data], RelationResponse);
   }
 
   public accept(relationVO: RelationVO, relationMyVO: RelationVO) {
@@ -43,7 +43,7 @@ export class RelationRepo extends BaseRepo {
       RelationMyVO: relationMyVO
     };
 
-    return this.http.sendRequestPromise('/relation/acceptRelation', [data], RelationResponse);
+    return this.http.sendRequestPromise<RelationResponse>('/relation/acceptRelation', [data], RelationResponse);
   }
 
   public delete(relationVO: RelationVO) {
@@ -53,7 +53,7 @@ export class RelationRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/relation/delete', [data], RelationResponse);
+    return this.http.sendRequestPromise<RelationResponse>('/relation/delete', [data], RelationResponse);
   }
 }
 

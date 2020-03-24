@@ -10,7 +10,7 @@ export class InviteRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/invite/inviteSend', data, InviteResponse);
+    return this.http.sendRequestPromise<InviteResponse>('/invite/inviteSend', data, InviteResponse);
   }
 
   public sendMemberInvite(member: AccountVO, archive: ArchiveVO): Promise<InviteResponse> {
@@ -24,7 +24,7 @@ export class InviteRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/invite/byEmailAddress', data, InviteResponse);
+    return this.http.sendRequestPromise<InviteResponse>('/invite/byEmailAddress', data, InviteResponse);
   }
 
   public sendShareInvite(invites: InviteVO[], itemToShare: FolderVO | RecordVO): Promise<InviteResponse> {
@@ -42,7 +42,7 @@ export class InviteRepo extends BaseRepo {
       return vos;
     });
 
-    return this.http.sendRequestPromise('/invite/share', data, InviteResponse);
+    return this.http.sendRequestPromise<InviteResponse>('/invite/share', data, InviteResponse);
   }
 
   public getShareInviteInfo(inviteEmail: string, inviteCode: string, shareItemId: number, shareItemType: 'r' | 'f') {
@@ -53,7 +53,7 @@ export class InviteRepo extends BaseRepo {
       tp: shareItemType
     }];
 
-    return this.http.sendRequestPromise('/invite/getShareInviteInfo', data, InviteResponse);
+    return this.http.sendRequestPromise<InviteResponse>('/invite/getShareInviteInfo', data, InviteResponse);
   }
 
 
@@ -62,7 +62,7 @@ export class InviteRepo extends BaseRepo {
       token
     }];
 
-    return this.http.sendRequestPromise('/invite/getFullShareInvite', data, InviteResponse);
+    return this.http.sendRequestPromise<InviteResponse>('/invite/getFullShareInvite', data, InviteResponse);
   }
 }
 

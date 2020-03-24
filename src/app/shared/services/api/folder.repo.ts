@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 export class FolderRepo extends BaseRepo {
   public getRoot(): Promise<FolderResponse> {
-    return this.http.sendRequestPromise('/folder/getRoot', [], FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/getRoot', [], FolderResponse);
   }
 
   public get(folderVOs: FolderVO[]): Promise<FolderResponse> {
@@ -19,7 +19,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/get', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/get', data, FolderResponse);
   }
 
   public getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
@@ -33,7 +33,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/getWithChildren', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/getWithChildren', data, FolderResponse);
   }
 
   public navigate(folderVO: FolderVO): Observable<FolderResponse> {
@@ -41,7 +41,7 @@ export class FolderRepo extends BaseRepo {
       FolderVO: new FolderVO(folderVO)
     }];
 
-    return this.http.sendRequest('/folder/navigateMin', data, FolderResponse);
+    return this.http.sendRequest<FolderResponse>('/folder/navigateMin', data, FolderResponse);
   }
 
   public navigateLean(folderVO: FolderVO): Observable<FolderResponse> {
@@ -49,7 +49,7 @@ export class FolderRepo extends BaseRepo {
       FolderVO: new FolderVO(folderVO)
     }];
 
-    return this.http.sendRequest('/folder/navigateLean', data, FolderResponse);
+    return this.http.sendRequest<FolderResponse>('/folder/navigateLean', data, FolderResponse);
   }
 
 
@@ -60,7 +60,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequest('/folder/getLeanItems', data, FolderResponse);
+    return this.http.sendRequest<FolderResponse>('/folder/getLeanItems', data, FolderResponse);
   }
 
   public post(folderVOs: FolderVO[]): Promise<FolderResponse> {
@@ -70,7 +70,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/post', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/post', data, FolderResponse);
   }
 
   public update(folderVOs: FolderVO[]): Promise<FolderResponse> {
@@ -80,7 +80,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/update', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/update', data, FolderResponse);
   }
 
   public delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
@@ -90,7 +90,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/delete', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/delete', data, FolderResponse);
   }
 
   public move(folderVOs: FolderVO[], destination: FolderVO): Promise<FolderResponse> {
@@ -103,7 +103,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/move', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/move', data, FolderResponse);
   }
 
   public copy(folderVOs: FolderVO[], destination: FolderVO): Promise<FolderResponse> {
@@ -116,7 +116,7 @@ export class FolderRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/folder/copy', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/copy', data, FolderResponse);
   }
 
   public getPublicRoot(archiveNbr: string) {
@@ -126,7 +126,7 @@ export class FolderRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/folder/getPublicRoot', data, FolderResponse);
+    return this.http.sendRequestPromise<FolderResponse>('/folder/getPublicRoot', data, FolderResponse);
   }
 }
 

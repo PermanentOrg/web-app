@@ -11,6 +11,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
+import { AccessRoleType } from '@models/access-role';
 
 const MemberActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -73,7 +74,7 @@ export class MembersComponent implements OnInit {
     const deferred = new Deferred();
     const fields = [ ACCESS_ROLE_FIELD_INITIAL(member.accessRole) ];
     return this.promptService.prompt(fields, `Edit access for ${member.fullName}`, deferred.promise)
-      .then((value: {accessRole: string}) => {
+      .then((value: {accessRole: AccessRoleType}) => {
         const updatedMember = clone(member);
         updatedMember.accessRole = value.accessRole;
         return this.api.archive.updateMember(updatedMember, this.accountService.getArchive());
@@ -112,9 +113,9 @@ export class MembersComponent implements OnInit {
       });
   }
 
-  addMember() {
+  async addMember() {
     const deferred = new Deferred();
-    let member;
+    let member: AccountVO;
     const emailField: PromptField = {
       fieldName: 'primaryEmail',
       placeholder: 'Member email',
@@ -128,25 +129,28 @@ export class MembersComponent implements OnInit {
     };
     const fields = [ emailField, ACCESS_ROLE_FIELD_INITIAL('access.role.viewer') ];
 
-    return this.promptService.prompt(fields, 'Add member', deferred.promise)
-      .then((value) => {
-        member = value;
-        return this.api.archive.addMember(member, this.accountService.getArchive())
-          .then((response: ArchiveResponse) => {
-            this.message.showMessage('Member added successfully.', 'success');
-            deferred.resolve();
-          });
-      })
-      .catch((response: ArchiveResponse) => {
-        deferred.resolve();
-        if (response) {
-          if (response.getMessage() === 'warning.archive.no_email_found') {
-            this.promptForInvite(member);
-          } else {
-            this.message.showError(response.getMessage(), true);
-          }
-        }
-      });
+    const value = await this.promptService.prompt(fields, 'Add member', deferred.promise);
+    member = value as AccountVO;
+
+    if (member.accessRole === 'access.role.owner') {
+      await this.api.archive.addMember(member, this.accountService.getArchive());
+      this.message.showMessage('Member added successfully.', 'success');
+      deferred.resolve();
+    } else {
+      await this.api.archive.addMember(member, this.accountService.getArchive());
+      this.message.showMessage('Member added successfully.', 'success');
+      deferred.resolve();
+    }
+      // catch( {
+      //   deferred.resolve();
+      //   if (response) {
+      //     if (response.getMessage() === 'warning.archive.no_email_found') {
+      //       this.promptForInvite(member);
+      //     } else {
+      //       this.message.showError(response.getMessage(), true);
+      //     }
+      //   }
+      // });
   }
 
   promptForInvite(member: AccountVO) {

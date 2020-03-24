@@ -19,11 +19,11 @@ export class AuthRepo extends BaseRepo {
       password: password
     });
 
-    return this.http.sendRequest('/auth/login', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AuthResponse);
+    return this.http.sendRequest<AuthResponse>('/auth/login', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AuthResponse);
   }
 
   public logOut() {
-    return this.http.sendRequest('/auth/logout');
+    return this.http.sendRequest<AuthResponse>('/auth/logout');
 
   }
 
@@ -38,7 +38,7 @@ export class AuthRepo extends BaseRepo {
       type: type
     });
 
-    return this.http.sendRequest('/auth/verify', [{AccountVO: accountVO, AuthVO: authVO}], AuthResponse);
+    return this.http.sendRequest<AuthResponse>('/auth/verify', [{AccountVO: accountVO, AuthVO: authVO}], AuthResponse);
   }
 
   public forgotPassword(email: string) {
@@ -46,7 +46,7 @@ export class AuthRepo extends BaseRepo {
       primaryEmail: email
     });
 
-    return this.http.sendRequest('/auth/sendEmailForgotPassword', [{AccountVO: accountVO}], AuthResponse);
+    return this.http.sendRequest<AuthResponse>('/auth/sendEmailForgotPassword', [{AccountVO: accountVO}], AuthResponse);
   }
 
   public changePassword(accountId: number, token: string, password: string, passwordConfirm: string) {
@@ -57,7 +57,7 @@ export class AuthRepo extends BaseRepo {
       passwordverify: passwordConfirm
     };
 
-    return this.http.sendRequest('/auth/resetPassword', [data], AuthResponse);
+    return this.http.sendRequest<AuthResponse>('/auth/resetPassword', [data], AuthResponse);
   }
 
   public resendEmailVerification(accountVO: AccountVO) {
@@ -66,7 +66,7 @@ export class AuthRepo extends BaseRepo {
       accountId: accountVO.accountId
     };
 
-    return this.http.sendRequestPromise('/auth/resendMailCreatedAccount', [account], AuthResponse);
+    return this.http.sendRequestPromise<AuthResponse>('/auth/resendMailCreatedAccount', [account], AuthResponse);
   }
 
   public resendPhoneVerification(accountVO: AccountVO) {
@@ -75,7 +75,7 @@ export class AuthRepo extends BaseRepo {
       accountId: accountVO.accountId
     };
 
-    return this.http.sendRequestPromise('/auth/resendTextCreatedAccount', [account], AuthResponse);
+    return this.http.sendRequestPromise<AuthResponse>('/auth/resendTextCreatedAccount', [account], AuthResponse);
   }
 
 }

@@ -8,7 +8,7 @@ export class AccountRepo extends BaseRepo {
       accountId: accountVO.accountId
     };
 
-    return this.http.sendRequestPromise('/account/get', [account], AccountResponse);
+    return this.http.sendRequestPromise<AccountResponse>('/account/get', [account], AccountResponse);
   }
 
   public signUp(
@@ -29,7 +29,7 @@ export class AccountRepo extends BaseRepo {
       passwordVerify: passwordConfirm
     });
 
-    return this.http.sendRequest('/account/post', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AccountResponse);
+    return this.http.sendRequest<AccountResponse>('/account/post', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AccountResponse);
 
   }
 
@@ -38,7 +38,7 @@ export class AccountRepo extends BaseRepo {
       AccountVO: accountVO
     }];
 
-    return this.http.sendRequestPromise('/account/update', data, AccountResponse);
+    return this.http.sendRequestPromise<AccountResponse>('/account/update', data, AccountResponse);
   }
 }
 
