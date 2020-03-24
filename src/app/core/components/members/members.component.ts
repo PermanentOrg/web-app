@@ -56,7 +56,11 @@ export class MembersComponent implements OnInit {
   }
 
   onMemberClick(member: AccountVO) {
-    const buttons = [ MemberActions.Edit, MemberActions.Remove ];
+    const buttons = [];
+    if (member.accessRole !== 'access.role.owner' ) {
+      buttons.push(MemberActions.Edit);
+    }
+    buttons.push(MemberActions.Remove);
     this.promptService.promptButtons(buttons, `Member access for ${member.fullName}`)
       .then((value: string) => {
         switch (value) {
@@ -70,26 +74,33 @@ export class MembersComponent implements OnInit {
       });
   }
 
-  editMember(member: AccountVO) {
+  async editMember(member: AccountVO) {
     const deferred = new Deferred();
     const fields = [ ACCESS_ROLE_FIELD_INITIAL(member.accessRole) ];
-    return this.promptService.prompt(fields, `Edit access for ${member.fullName}`, deferred.promise)
-      .then((value: {accessRole: AccessRoleType}) => {
-        const updatedMember = clone(member);
-        updatedMember.accessRole = value.accessRole;
-        return this.api.archive.updateMember(updatedMember, this.accountService.getArchive());
-      })
-      .then((response: ArchiveResponse) => {
+    const value: any = await this.promptService.prompt(fields, `Edit access for ${member.fullName}`, deferred.promise);
+    const updatedMember = clone(member);
+    updatedMember.accessRole = value.accessRole as AccessRoleType;
+    try {
+      if (updatedMember.accessRole === 'access.role.owner') {
+        deferred.resolve();
+        await this.confirmOwnershipTransfer();
+        const response = await this.api.archive.transferOwnership(updatedMember, this.accountService.getArchive());
+        this.message.showMessage('Ownership transfer request sent.', 'success');
+        const account = response.getAccountVOs().pop();
+        member.accessRole = updatedMember.accessRole;
+        member.status = account.status;
+      } else {
+        const response = await this.api.archive.updateMember(updatedMember, this.accountService.getArchive());
         this.message.showMessage('Member access saved successfully.', 'success');
-        member.accessRole = response.getAccountVOs().pop().accessRole;
+        member.accessRole = updatedMember.accessRole;
         deferred.resolve();
-      })
-      .catch((response: ArchiveResponse) => {
-        deferred.resolve();
-        if (response) {
-          this.message.showError(response.getMessage(), true);
-        }
-      });
+      }
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+      deferred.resolve();
+    }
   }
 
   removeMember(member: AccountVO) {
@@ -132,25 +143,35 @@ export class MembersComponent implements OnInit {
     const value = await this.promptService.prompt(fields, 'Add member', deferred.promise);
     member = value as AccountVO;
 
-    if (member.accessRole === 'access.role.owner') {
-      await this.api.archive.addMember(member, this.accountService.getArchive());
-      this.message.showMessage('Member added successfully.', 'success');
-      deferred.resolve();
-    } else {
-      await this.api.archive.addMember(member, this.accountService.getArchive());
-      this.message.showMessage('Member added successfully.', 'success');
+    try {
+      let response: ArchiveResponse;
+      if (member.accessRole === 'access.role.owner') {
+        deferred.resolve();
+        await this.confirmOwnershipTransfer();
+        response = await this.api.archive.transferOwnership(member, this.accountService.getArchive());
+        this.message.showMessage('Ownership transfer request sent.', 'success');
+      } else {
+        response = await this.api.archive.addMember(member, this.accountService.getArchive());
+        this.message.showMessage('Member added successfully.', 'success');
+        deferred.resolve();
+      }
+      const account = response.getAccountVOs().pop();
+      account.accessRole = member.accessRole;
+      this.members.push(account);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        if (err.getMessage() === 'warning.archive.no_email_found') {
+          this.promptForInvite(member);
+        } else {
+          this.message.showError(err.getMessage(), true);
+        }
+      }
       deferred.resolve();
     }
-      // catch( {
-      //   deferred.resolve();
-      //   if (response) {
-      //     if (response.getMessage() === 'warning.archive.no_email_found') {
-      //       this.promptForInvite(member);
-      //     } else {
-      //       this.message.showError(response.getMessage(), true);
-      //     }
-      //   }
-      // });
+  }
+
+  confirmOwnershipTransfer() {
+    return this.promptService.confirm('Transfer ownership', 'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Curator');
   }
 
   promptForInvite(member: AccountVO) {
@@ -169,7 +190,7 @@ export class MembersComponent implements OnInit {
     }];
 
     this.promptService.prompt(fields, title, deferred.promise, 'Invite')
-      .then((value) => {
+      .then((value: any) => {
         member.fullName = value.fullName;
         return this.api.invite.sendMemberInvite(member, this.accountService.getArchive());
       })
