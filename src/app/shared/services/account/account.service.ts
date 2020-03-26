@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, min } from 'rxjs/operators';
 import { find } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -9,6 +9,8 @@ import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
 import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { Router } from '@angular/router';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { AccessRole } from '@models/access-role.enum';
+import { AccessRoleType, checkMinimumAccess } from '@models/access-role';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -318,6 +320,14 @@ export class AccountService {
         this.archiveChange.emit(this.archive);
         return response;
       });
+  }
+
+  public checkMinimumAccess(itemAccessRole: AccessRoleType, minimumAccess: AccessRole) {
+    return this.checkMinimumArchiveAccess(minimumAccess) && checkMinimumAccess(itemAccessRole, minimumAccess);
+  }
+
+  public checkMinimumArchiveAccess(minimumAccess: AccessRole) {
+    return this.archive && this.isLoggedIn() && checkMinimumAccess(this.archive.accessRole, minimumAccess);
   }
 
   public async signUp(

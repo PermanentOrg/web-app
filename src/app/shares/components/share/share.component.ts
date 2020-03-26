@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import { ArchiveVO } from '@root/app/models';
+import { Component, OnInit, Input, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { ArchiveVO, FolderVO, RecordVO } from '@root/app/models/index';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { ActivatedRoute } from '@angular/router';
-import { find } from 'lodash';
+import { find, remove } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
 @Component({
@@ -10,7 +10,7 @@ import { Deferred } from '@root/vendor/deferred';
   templateUrl: './share.component.html',
   styleUrls: ['./share.component.scss']
 })
-export class ShareComponent implements OnInit {
+export class ShareComponent implements OnInit, AfterViewInit {
   @Input() archive: ArchiveVO;
 
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
@@ -36,6 +36,12 @@ export class ShareComponent implements OnInit {
           targetShare.onActionClick('share', new Deferred());
         }
       }
+    }
+  }
+
+  onShareDeleted(item: FolderVO | RecordVO) {
+    if (this.archive && this.archive.ItemVOs) {
+      remove(this.archive.ItemVOs, item);
     }
   }
 

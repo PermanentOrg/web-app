@@ -1,5 +1,5 @@
 <div class="shares-empty-message" *ngIf="!sharedByMe.length">
   You haven't shared any content with anyone
 </div>
-<pr-file-list-item [item]="share" *ngFor="let share of sharedByMe"></pr-file-list-item>
+<pr-file-list-item [item]="share" [isShareRoot]="true" *ngFor="let share of sharedByMe"></pr-file-list-item>
 <router-outlet></router-outlet>

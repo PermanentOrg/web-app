@@ -26,7 +26,9 @@ export class ShareRepo extends BaseRepo {
   public remove(share: ShareVO) {
     const data = {
       ShareVO: {
-        shareId: share.shareId
+        shareId: share.shareId,
+        folder_linkId: share.folder_linkId,
+        archiveId: share.archiveId
       }
     };
 
