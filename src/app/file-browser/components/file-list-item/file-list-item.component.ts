@@ -409,7 +409,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  promptForUpdate() {
+  async promptForUpdate() {
     const updateDeferred = new Deferred;
 
     const fields: PromptField[] = [
@@ -428,11 +428,15 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       }
     ];
 
-    this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updateDeferred.promise, 'Rename', 'Cancel')
-      .then((values) => {
-        this.saveUpdates(values, updateDeferred);
-      })
-      .catch(() => {});
+
+    try {
+      const values = await this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updateDeferred.promise, 'Rename', 'Cancel');
+      this.saveUpdates(values, updateDeferred);
+    } catch (err) {
+      if (err) {
+        throw err;
+      }
+    }
   }
 
   promptForFolderView() {
