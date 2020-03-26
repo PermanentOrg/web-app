@@ -71,9 +71,16 @@ export class EditService {
 
     const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
 
+    const recordsByRecordId: Map<number, RecordVO> = new Map();
+
     items.forEach((item) => {
       item.isFolder ? folders.push(item) : records.push(item);
       itemsByLinkId[item.folder_linkId] = item;
+      if (item instanceof RecordVO) {
+        if (item.recordId) {
+          recordsByRecordId.set(item.recordId, item);
+        }
+      }
     });
 
     const promises: Array<Promise<any>> = [];
@@ -110,7 +117,8 @@ export class EditService {
         if (recordResponse) {
           recordResponse.getRecordVOs()
           .forEach((updatedItem) => {
-            (itemsByLinkId[updatedItem.folder_linkId] as RecordVO).update(updatedItem);
+            const record = (itemsByLinkId[updatedItem.folder_linkId] as RecordVO) || recordsByRecordId.get(updatedItem.recordId);
+            record.update(updatedItem);
           });
         }
       });
