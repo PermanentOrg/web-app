@@ -305,7 +305,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    if (!this.isShareRoot && isAtLeastCurator && !this.isMyItem) {
+    if (!this.isShareRoot && isAtLeastCurator) {
       actionButtons.push(ItemActions.Delete);
     } else if (this.isShareRoot && !this.isMyItem && this.accountService.checkMinimumArchiveAccess(AccessRole.Curator)) {
       actionButtons.push(ItemActions.Unshare);
