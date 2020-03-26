@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
@@ -6,7 +6,7 @@ import { clone, find } from 'lodash';
 import { DataService } from '@shared/services/data/data.service';
 import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@core/services/prompt/prompt.service';
 
-import { FolderVO, RecordVO, FolderVOData, RecordVOData } from '@root/app/models';
+import { FolderVO, RecordVO, FolderVOData, RecordVOData, ShareVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { RecordResponse, FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
@@ -48,7 +48,7 @@ const ItemActions: {[key: string]: PromptButton} = {
     buttonText: 'Share'
   },
   Unshare: {
-    buttonName: 'delete',
+    buttonName: 'unshare',
     buttonText: 'Remove',
     class: 'btn-danger'
   },
@@ -69,6 +69,7 @@ const ItemActions: {[key: string]: PromptButton} = {
 type ActionType = 'delete' |
   'rename' |
   'share' |
+  'unshare' |
   'publish' |
   'download' |
   'copy' |
@@ -85,8 +86,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() folderView: FolderView;
 
   @Input() allowNavigation = true;
+  @Input() isShareRoot = false;
 
   @HostBinding('class.grid-view') inGridView = false;
+
+  @Output() itemUnshared = new EventEmitter<FolderVO | RecordVO>();
 
   public allowActions = true;
   public isMyItem = true;
@@ -160,11 +164,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
     }
 
-    if (!checkMinimumAccess(this.item.accessRole, AccessRole.Editor) || !this.accountService.isLoggedIn) {
-      this.canEdit = false;
-    }
-
-    if (this.accountService.isLoggedIn() && !checkMinimumAccess(this.accountService.getArchive().accessRole, AccessRole.Editor) ) {
+    if (!this.accountService.checkMinimumAccess(this.item.accessRole, AccessRole.Editor)) {
       this.canEdit = false;
     }
 
@@ -257,11 +257,21 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     const actionDeferred = new Deferred();
 
+    const isAtLeastCurator = this.accountService.checkMinimumAccess(this.item.accessRole, AccessRole.Curator);
+    const isOwner = this.accountService.checkMinimumAccess(this.item.accessRole, AccessRole.Owner);
+
     if (this.canEdit) {
-      actionButtons.push(ItemActions.Copy);
-      actionButtons.push(ItemActions.Move);
       actionButtons.push(ItemActions.Rename);
-      if (this.isInShares || (this.item.accessRole.includes('owner') && !this.isInMyPublic)) {
+
+      if (isAtLeastCurator) {
+        actionButtons.push(ItemActions.Copy);
+
+        if (!this.isShareRoot) {
+          actionButtons.push(ItemActions.Move);
+        }
+      }
+
+      if (isOwner && !this.isInMyPublic) {
         actionButtons.push(ItemActions.Share);
       }
 
@@ -280,8 +290,12 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
       }
+    }
 
-      actionButtons.push(this.isInShares ? ItemActions.Unshare : ItemActions.Delete);
+    if (!this.isShareRoot && isAtLeastCurator && !this.isMyItem) {
+      actionButtons.push(ItemActions.Delete);
+    } else if (this.isShareRoot && !this.isMyItem && this.accountService.checkMinimumArchiveAccess(AccessRole.Curator)) {
+      actionButtons.push(ItemActions.Unshare);
     }
 
     if (actionButtons.length) {
@@ -302,7 +316,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     return false;
   }
 
-  onActionClick(value: ActionType, actionDeferred: Deferred) {
+  async onActionClick(value: ActionType, actionDeferred: Deferred) {
     switch (value) {
       case 'delete':
         return this.deleteItem(actionDeferred.resolve);
@@ -330,6 +344,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
             actionDeferred.resolve();
             this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
           });
+        break;
+      case 'unshare':
+        await this.unshareItem();
+        actionDeferred.resolve();
         break;
       case 'publish':
         actionDeferred.resolve();
@@ -359,6 +377,16 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   copyItem(destination: FolderVO) {
     return this.edit.copyItems([this.item], destination);
+  }
+
+  async unshareItem() {
+    const shareVO = new ShareVO({
+      folder_linkId: this.item.folder_linkId,
+      archiveId: this.accountService.getArchive().archiveId
+    });
+    await this.api.share.remove(shareVO);
+    this.message.showMessage('Item removed from shares.', 'success');
+    this.itemUnshared.emit(this.item);
   }
 
   openFolderPicker(operation: FolderPickerOperations) {

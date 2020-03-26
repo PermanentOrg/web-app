@@ -52,6 +52,10 @@ export class BaseVO {
     }
 
     delete clone.cleanParams;
+    delete clone.isRecord;
+    delete clone.isFolder;
+    delete clone.isFetching;
+    delete clone.dataStatus;
     return clone;
   }
 }
