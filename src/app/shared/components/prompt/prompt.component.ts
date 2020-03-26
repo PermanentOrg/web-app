@@ -124,7 +124,7 @@ export class PromptComponent implements OnInit, OnDestroy {
       if (firstInput) {
         firstInput.focus();
       }
-    });
+    }, 32);
 
     return this.donePromise;
   }
@@ -211,7 +211,9 @@ export class PromptComponent implements OnInit, OnDestroy {
       this.doneReject = doneReject;
     }
 
-    this.isVisible = true;
+    setTimeout(() => {
+      this.isVisible = true;
+    });
 
     return this.donePromise;
   }
