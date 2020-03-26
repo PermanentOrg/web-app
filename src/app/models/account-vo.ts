@@ -1,4 +1,5 @@
 import { BaseVO } from '@models/base-vo';
+import { AccessRoleType } from './access-role';
 
 export class AccountVO extends BaseVO {
   public isCurrent: boolean;
@@ -27,7 +28,7 @@ export class AccountVO extends BaseVO {
   public inviteCode;
   public rememberMe;
   public keepLoggedIn;
-  public accessRole;
+  public accessRole: AccessRoleType;
   public spaceTotal;
   public spaceLeft;
   public fileTotal;

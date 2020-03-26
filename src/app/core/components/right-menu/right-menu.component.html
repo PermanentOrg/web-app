@@ -9,6 +9,15 @@
     <a class="menu-item" (click)='createNewFolder()' *ngIf="allowedActions.createFolder">
       Create New Folder
     </a>
+    <a class="menu-item" (click)='showFolderActions()' *ngIf="allowedActions.folderActions">
+      View Folder Actions
+    </a>
+    <a class="menu-item" (click)='startMultiSelect()' *ngIf="allowedActions.multiSelect && !isMultiSelectEnabled">
+      Select Multiple Items
+    </a>
+    <a class="menu-item" (click)='endMultiSelect()' *ngIf="allowedActions.multiSelect && isMultiSelectEnabled">
+      Cancel Select Items
+    </a>
     <a class="menu-item" *ngIf="!hasAllowedActions">
       <em>No actions available</em>
     </a>

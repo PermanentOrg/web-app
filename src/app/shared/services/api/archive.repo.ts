@@ -14,7 +14,7 @@ export class ArchiveRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/archive/get', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/get', data, ArchiveResponse);
   }
 
   public getByArchiveNbr(archiveNbrs: string[]): Promise<ArchiveResponse> {
@@ -26,7 +26,7 @@ export class ArchiveRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise('/archive/getByArchiveNbr', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/getByArchiveNbr', data, ArchiveResponse);
   }
 
   public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
@@ -36,7 +36,7 @@ export class ArchiveRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/archive/getAllArchives', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/getAllArchives', data, ArchiveResponse);
   }
 
   public change(archive: ArchiveVO): Promise<ArchiveResponse> {
@@ -44,7 +44,7 @@ export class ArchiveRepo extends BaseRepo {
       ArchiveVO: archive
     }];
 
-    return this.http.sendRequestPromise('/archive/change', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/change', data, ArchiveResponse);
   }
 
   public create(archive: ArchiveVO | ArchiveVO[]): Promise<ArchiveResponse> {
@@ -56,7 +56,7 @@ export class ArchiveRepo extends BaseRepo {
       return { ArchiveVO: archiveVo };
     });
 
-    return this.http.sendRequestPromise('/archive/post', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/post', data, ArchiveResponse);
   }
 
   public accept(archive: ArchiveVO): Promise<ArchiveResponse> {
@@ -64,7 +64,7 @@ export class ArchiveRepo extends BaseRepo {
       ArchiveVO: archive
     }];
 
-    return this.http.sendRequestPromise('/archive/accept', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/accept', data, ArchiveResponse);
   }
 
   public getMembers(archive: ArchiveVO): Promise<ArchiveResponse> {
@@ -72,7 +72,7 @@ export class ArchiveRepo extends BaseRepo {
       ArchiveVO: archive
     }];
 
-    return this.http.sendRequestPromise('/archive/getShares', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/getShares', data, ArchiveResponse);
   }
 
   public addMember(member: AccountVO, archive: ArchiveVO): Promise<ArchiveResponse> {
@@ -81,7 +81,16 @@ export class ArchiveRepo extends BaseRepo {
       ArchiveVO: archive
     }];
 
-    return this.http.sendRequestPromise('/archive/share', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/share', data, ArchiveResponse);
+  }
+
+  public transferOwnership(member: AccountVO, archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      AccountVO: member,
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/transferOwnership', data, ArchiveResponse);
   }
 
   public updateMember(member: AccountVO, archive: ArchiveVO): Promise<ArchiveResponse> {
@@ -99,7 +108,7 @@ export class ArchiveRepo extends BaseRepo {
       ArchiveVO: archive
     }];
 
-    return this.http.sendRequestPromise('/archive/unshare', data, ArchiveResponse);
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/unshare', data, ArchiveResponse);
   }
 }
 

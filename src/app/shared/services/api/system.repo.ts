@@ -14,7 +14,7 @@ export class SystemResponse extends BaseResponse {
 }
 
 export class SystemRepo extends BaseRepo {
-  public logError(error: Error): Promise<SystemResponse> {
+  public logError(error: Error) {
     const vo: SystemExceptionVO = {
       errorType: 'M-dot UI Error',
       errorCode: 0,
@@ -27,7 +27,7 @@ export class SystemRepo extends BaseRepo {
       SystemExceptionVO: vo
     }];
 
-    return this.http.sendRequestPromise('/system/logError', data, SystemResponse);
+    return this.http.sendRequestPromise<SystemResponse>('/system/logError', data, SystemResponse);
   }
 }
 

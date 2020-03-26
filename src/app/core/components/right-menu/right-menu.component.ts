@@ -10,11 +10,12 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FolderResponse} from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
 import { Validators, FormBuilder } from '@angular/forms';
-import { EditService } from '@core/services/edit/edit.service';
+import { EditService, ItemActions } from '@core/services/edit/edit.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-right-menu',
@@ -25,11 +26,16 @@ export class RightMenuComponent implements OnInit {
   @Input() isVisible: boolean;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  isMultiSelectEnabled = false;
+  isMultiSelectEnabledSubscription: Subscription;
+
   public accountName: string;
 
   public currentFolder: FolderVO;
   public allowedActions = {
     createFolder: false,
+    folderActions: false,
+    multiSelect: false,
     useGridView: false,
     useListView: false
   };
@@ -53,6 +59,10 @@ export class RightMenuComponent implements OnInit {
     this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
       this.setAvailableActions();
     });
+
+    this.isMultiSelectEnabledSubscription = this.dataService.multiSelectChange.subscribe(isEnabled => {
+      this.isMultiSelectEnabled = isEnabled;
+    });
   }
 
   ngOnInit() {
@@ -61,18 +71,32 @@ export class RightMenuComponent implements OnInit {
   }
 
   setAvailableActions() {
+    if (!this.currentFolder) {
+      this.allowedActions.createFolder = false;
+      this.allowedActions.multiSelect = false;
+      this.allowedActions.folderActions = false;
+      this.allowedActions.useGridView = false;
+      this.allowedActions.useListView = false;
+      this.hasAllowedActions = false;
+      return false;
+    }
+
+    const isSpecialFolder = this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share');
+
     this.allowedActions.createFolder = this.currentFolder
-      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'))
+      && !isSpecialFolder
       && checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
       && checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor);
+    this.allowedActions.multiSelect = this.allowedActions.createFolder;
+    this.allowedActions.folderActions = this.allowedActions.createFolder && !this.currentFolder.type.includes('root');
 
     this.allowedActions.useGridView = !!this.currentFolder
       && this.folderViewService.folderView !== FolderView.Grid
-      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'));
+      && !isSpecialFolder;
 
     this.allowedActions.useListView = !!this.currentFolder
       && this.folderViewService.folderView !== FolderView.List
-      && !(this.currentFolder.type.includes('app') || this.currentFolder.type.includes('root.share'));
+      && !isSpecialFolder;
 
     this.hasAllowedActions = this.allowedActions.createFolder || this.allowedActions.useGridView || this.allowedActions.useListView;
   }
@@ -86,6 +110,14 @@ export class RightMenuComponent implements OnInit {
 
   setFolderView(folderView: FolderView) {
     this.folderViewService.setFolderView(folderView);
+  }
+
+  startMultiSelect() {
+    this.dataService.setMultiSelect(true);
+  }
+
+  endMultiSelect() {
+    this.dataService.setMultiSelect(false);
   }
 
   createNewFolder() {
@@ -109,7 +141,7 @@ export class RightMenuComponent implements OnInit {
     });
 
     return this.prompt.prompt(fields, 'Create New Folder', createPromise, 'Create Folder')
-      .then((value) => {
+      .then((value: any) => {
         this.edit.createFolder(value.folderName, this.currentFolder)
           .then((folder: FolderVO) => {
             this.message.showMessage(`Folder "${value.folderName}" has been created`, 'success');
@@ -123,5 +155,22 @@ export class RightMenuComponent implements OnInit {
             }
           });
       });
+  }
+
+  showFolderActions() {
+    const isPublic = this.dataService.currentFolder.type.includes('public');
+
+    const actions = [];
+
+    if (!isPublic) {
+      actions.push(ItemActions.Share);
+      actions.push(ItemActions.Publish);
+    } else {
+      actions.push(ItemActions.GetLink);
+    }
+
+    // actions.push(ItemActions.Download);
+
+    this.edit.promptForAction([this.dataService.currentFolder], actions);
   }
 }

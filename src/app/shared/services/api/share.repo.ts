@@ -3,8 +3,8 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, compact } from 'lodash';
 
 export class ShareRepo extends BaseRepo {
-  public getShares(): Promise<ShareResponse> {
-    return this.http.sendRequestPromise('/share/getShares', [], ShareResponse);
+  public getShares() {
+    return this.http.sendRequestPromise<ShareResponse>('/share/getShares', [], ShareResponse);
   }
 
   public update(share: ShareVO) {
@@ -12,7 +12,7 @@ export class ShareRepo extends BaseRepo {
       ShareVO: share
     };
 
-    return this.http.sendRequestPromise('/share/update', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/update', [data], ShareResponse);
   }
 
   public upsert(share: ShareVO) {
@@ -20,7 +20,7 @@ export class ShareRepo extends BaseRepo {
       ShareVO: share
     };
 
-    return this.http.sendRequestPromise('/share/upsert', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/upsert', [data], ShareResponse);
   }
 
   public remove(share: ShareVO) {
@@ -32,10 +32,10 @@ export class ShareRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/share/delete', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/delete', [data], ShareResponse);
   }
 
-  public generateShareLink(item: RecordVO | FolderVO): Promise<ShareResponse> {
+  public generateShareLink(item: RecordVO | FolderVO) {
     const data: any = {};
 
     if (item.isRecord) {
@@ -48,7 +48,7 @@ export class ShareRepo extends BaseRepo {
       };
     }
 
-    return this.http.sendRequestPromise('/share/generateShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/generateShareLink', [data], ShareResponse);
   }
 
   public getShareLink(item: RecordVO | FolderVO) {
@@ -64,7 +64,7 @@ export class ShareRepo extends BaseRepo {
       };
     }
 
-    return this.http.sendRequestPromise('/share/getLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/getLink', [data], ShareResponse);
   }
 
   public checkShareLink(urlToken: string) {
@@ -74,7 +74,7 @@ export class ShareRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/share/checkShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/checkShareLink', [data], ShareResponse);
   }
 
   public updateShareLink(vo: ShareByUrlVO) {
@@ -82,7 +82,7 @@ export class ShareRepo extends BaseRepo {
       Shareby_urlVO: vo
     };
 
-    return this.http.sendRequestPromise('/share/updateShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/updateShareLink', [data], ShareResponse);
   }
 
   public removeShareLink(vo: ShareByUrlVO) {
@@ -90,7 +90,7 @@ export class ShareRepo extends BaseRepo {
       Shareby_urlVO: vo
     };
 
-    return this.http.sendRequestPromise('/share/dropShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/dropShareLink', [data], ShareResponse);
   }
 
   public requestShareAccess(urlToken: string) {
@@ -100,7 +100,7 @@ export class ShareRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/share/requestShareAccess', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/requestShareAccess', [data], ShareResponse);
   }
 
   public getShareForPreview(shareId, folder_linkId) {
@@ -111,7 +111,7 @@ export class ShareRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendRequestPromise('/share/getShareForPreview', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/getShareForPreview', [data], ShareResponse);
   }
 }
 

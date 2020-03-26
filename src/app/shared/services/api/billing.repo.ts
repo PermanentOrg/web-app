@@ -12,7 +12,7 @@ export class BillingRepo extends BaseRepo {
       BillingCardVO: billingCardVO
     }];
 
-    return this.http.sendRequestPromise('/billing/addCard', data, BillingResponse);
+    return this.http.sendRequestPromise<BillingResponse>('/billing/addCard', data, BillingResponse);
   }
 
   public processPayment(billingCardVO: BillingCardVO, billingPaymentVO: BillingPaymentVO) {
@@ -21,7 +21,7 @@ export class BillingRepo extends BaseRepo {
       BillingPaymentVO: billingPaymentVO
     }];
 
-    return this.http.sendRequestPromise('/billing/processPayment', data, BillingResponse);
+    return this.http.sendRequestPromise<BillingResponse>('/billing/processPayment', data, BillingResponse);
   }
 
   public claimPledge(billingPaymentVO: BillingPaymentVO, pledgeId: string) {
@@ -33,7 +33,7 @@ export class BillingRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/billing/claimPledge', data, BillingResponse);
+    return this.http.sendRequestPromise<BillingResponse>('/billing/claimPledge', data, BillingResponse);
   }
 }
 

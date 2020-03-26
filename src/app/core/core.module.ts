@@ -23,6 +23,8 @@ import { InvitationsComponent } from './components/invitations/invitations.compo
 import { RelationshipsComponent } from './components/relationships/relationships.component';
 import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
+import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
+import { EditService } from './services/edit/edit.service';
 
 @NgModule({
   imports: [
@@ -44,13 +46,14 @@ import { MembersComponent } from './components/members/members.component';
     InvitationsComponent,
     RelationshipsComponent,
     MembersComponent,
+    MultiSelectStatusComponent,
   ],
   providers: [
     DataService,
     FolderViewService,
     UploadService,
     PromptService,
-    FolderPickerService
+    EditService
   ]
 })
 export class CoreModule {

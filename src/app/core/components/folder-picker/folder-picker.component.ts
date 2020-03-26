@@ -6,7 +6,7 @@ import { Deferred } from '@root/vendor/deferred';
 
 import { DataService } from '@shared/services/data/data.service';
 
-import { FolderVO } from '@root/app/models';
+import { FolderVO, ItemVO } from '@root/app/models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
@@ -33,6 +33,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public saving: boolean;
   public isRootFolder = true;
 
+  public filterFolderLinkIds: number[];
+
   constructor(
     private dataService: DataService,
     private api: ApiService,
@@ -44,11 +46,13 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  show(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>) {
+  show(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>, filterFolderLinkIds: number[] = null) {
     this.visible = true;
     this.operation = operation;
 
     this.savePromise = savePromise;
+
+    this.filterFolderLinkIds = filterFolderLinkIds;
 
     switch (operation) {
       case FolderPickerOperations.Move:
@@ -88,6 +92,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
         this.currentFolder = response.getFolderVO(true);
         this.isRootFolder = this.currentFolder.type.includes('root');
         remove(this.currentFolder.ChildItemVOs, 'isRecord');
+        if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
+          remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
+        }
       });
   }
 

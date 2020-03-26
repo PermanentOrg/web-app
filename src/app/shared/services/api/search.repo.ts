@@ -11,7 +11,7 @@ export class SearchRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/search/archiveByEmail', data, SearchResponse);
+    return this.http.sendRequestPromise<SearchResponse>('/search/archiveByEmail', data, SearchResponse);
   }
 
   public archiveByName(query: string): Promise<SearchResponse> {
@@ -21,7 +21,7 @@ export class SearchRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequestPromise('/search/archive', data, SearchResponse);
+    return this.http.sendRequestPromise<SearchResponse>('/search/archive', data, SearchResponse);
   }
 
   public archiveByNameObservable(query: string): Observable<SearchResponse> {
@@ -31,7 +31,7 @@ export class SearchRepo extends BaseRepo {
       }
     }];
 
-    return this.http.sendRequest('/search/archive', data, SearchResponse);
+    return this.http.sendRequest<SearchResponse>('/search/archive', data, SearchResponse);
   }
 }
 
