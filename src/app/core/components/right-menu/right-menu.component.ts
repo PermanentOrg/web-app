@@ -162,14 +162,12 @@ export class RightMenuComponent implements OnInit {
 
     const actions = [];
 
-    if (!isPublic) {
+    if (!isPublic && this.account.checkMinimumAccess(this.dataService.currentFolder.accessRole, AccessRole.Owner)) {
       actions.push(ItemActions.Share);
       actions.push(ItemActions.Publish);
-    } else {
+    } else if (isPublic) {
       actions.push(ItemActions.GetLink);
     }
-
-    // actions.push(ItemActions.Download);
 
     this.edit.promptForAction([this.dataService.currentFolder], actions);
   }
