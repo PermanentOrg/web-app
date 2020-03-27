@@ -21,6 +21,8 @@ interface VoDataItem extends DataItem {
   itemVO: FolderVO | RecordVO;
 }
 
+type TimelineItemAny = TimelineItem | TimelineGroup;
+
 type ItemVO = RecordVO | FolderVO;
 
 const ZOOM_PERCENTAGE = 1;
@@ -287,7 +289,12 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   focusItemsWithBuffer(ids: (string | number)[], animate = true) {
     if (ids.length === 1) {
-      return this.timeline.focus(ids);
+      const item = this.timelineItems.get(ids[0]) as DataItem & TimelineDataItem;
+      if (item.dataType !== 'group') {
+        return this.timeline.focus(ids);
+      } else {
+        this.onGroupClick(item as TimelineGroup);
+      }
     }
 
     let start = null;
