@@ -295,7 +295,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
           if (this.item.isFolder) {
             actionButtons.push(ItemActions.SetFolderView);
           }
-        } else if (this.item.accessRole.includes('owner')) {
+        } else if (isOwner) {
           actionButtons.push(ItemActions.Publish);
         }
       }
