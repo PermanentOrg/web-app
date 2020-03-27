@@ -176,7 +176,7 @@ function getTimezoneDateFromDisplayDate(displayDate: string | number, timezone: 
 export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan, bestFit = false, timezone: TimezoneVOData = null) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
-  const minimumGroupCount = 5;
+  const minimumGroupCount = 20;
 
   if (bestFit) {
     const bestFitTimespan = getBestFitTimespanForItems(items);
@@ -236,9 +236,9 @@ export function GroupByTimespan(items: ItemVO[], timespan: TimelineGroupTimespan
 
 export function GetTimespanFromRange(start: number, end: number) {
   const diff = end - start;
-  if (diff > 30 * Year) {
+  if (diff > 160 * Year) {
     return TimelineGroupTimespan.Century;
-  } else if (diff > 12 * Year) {
+  } else if (diff > 20 * Year) {
     return TimelineGroupTimespan.Decade;
   } else if (diff > 20 * Month) {
     return TimelineGroupTimespan.Year;
