@@ -221,9 +221,11 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       this.canShare = true;
     }
 
-    if (this.hasAccess && !this.route.snapshot.firstChild.data.sharePreviewView) {
-      // in preview, but they have access, send to full view
-      this.router.navigate(['view'], { relativeTo: this.route });
+    if (this.hasAccess) {
+      if ( !this.route.snapshot.firstChild.data.sharePreviewView) {
+        // in preview, but they have access, send to full view
+        this.router.navigate(['view'], { relativeTo: this.route });
+      }
       this.sendGaEvent('viewed');
     } else if (!this.hasAccess && this.route.snapshot.firstChild.data.sharePreviewView) {
       // inside full view, send back to preview
@@ -414,7 +416,10 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           if (this.isLinkShare) {
             this.accountService.setRedirect(['/share', this.shareToken], { queryParams: { requestAccess: true }});
           } else if (this.isRelationshipShare) {
-            this.accountService.setRedirect(['/share', 'view' , this.sharePreviewVO.shareId, this.sharePreviewVO.folder_linkId, 'view']);
+            this.accountService.setRedirect(
+              ['/share', 'view' , this.sharePreviewVO.shareId, this.sharePreviewVO.folder_linkId, 'view'],
+              { queryParamsHandling: 'preserve' }
+            );
           } else {
             this.accountService.setRedirect(['/share', 'invite' , this.sharePreviewVO.token, 'view']);
           }
