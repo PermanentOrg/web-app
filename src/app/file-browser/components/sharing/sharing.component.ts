@@ -260,6 +260,7 @@ export class SharingComponent implements OnInit {
         .then((response: ShareResponse) => {
           this.messageService.showMessage(`${shareVO.ArchiveVO.fullName} removed successfully.`, 'success');
           remove(this.shareItem.ShareVOs, shareVO);
+          remove(this.pendingShares, shareVO);
           remove(this.shares, shareVO);
           deferred.resolve();
         })
