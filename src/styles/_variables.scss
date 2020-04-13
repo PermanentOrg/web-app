@@ -32,6 +32,13 @@ $breadcrumb-height: 34px;
 $timeline-breadcrumb-height: $breadcrumb-height;
 $timeline-folder-info-height: 50px;
 
+$left-menu-width: 300px;
+$navbar-height: 84px;
+
+$tablet: 768px;
+$tablet-horizontal: 900px;
+$desktop: 1200px;
+
 @mixin public-centered {
   max-width: $public-max-width;
   margin-left: auto;
@@ -46,3 +53,4 @@ $timeline-folder-info-height: 50px;
 
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
+@import 'utilities';

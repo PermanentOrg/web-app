@@ -7,10 +7,12 @@ $transition-length: $default-transition-length;
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 300px;
+  width: $left-menu-width;
   max-width: 80%;
   transform: translateX(-100%);
   overflow: auto;
+  background-color: $PR-blue;
+  color: white;
 
   .menu-item {
     padding: $input-btn-padding-y * 1.5 10px;
@@ -19,21 +21,47 @@ $transition-length: $default-transition-length;
     cursor: pointer;
     user-select: none;
     display: block;
+    color: white;
+    font-weight: 500;
 
     &.active {
-      font-weight: 600;
+      font-weight: 700;
     }
   }
 
   .menu-header {
-    padding: 10px;
     strong {
       display: block;
     }
     box-shadow: $box-shadow-sm;
     border-bottom: 1px solid $gray-300;
     margin-bottom: $input-btn-padding-y * 1.5;
+    display: flex;
+    align-items: center;
+    height: $navbar-height;
   }
+
+}
+
+
+@include after($tablet-horizontal) {
+  .hamburger-menu {
+    // transform: translateX(0);
+    visibility: visible;
+    top: $navbar-height;
+  
+    .menu-header {
+      border-bottom: 0px solid;
+    }
+  }
+
+  .menu-wrapper.visible {
+    left: 0;
+    right: 0;
+    visibility: hidden;
+  }
+
+
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {

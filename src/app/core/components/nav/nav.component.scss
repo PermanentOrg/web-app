@@ -9,6 +9,10 @@
   right: 0;
   z-index: 1;
   background-color: $PR-blue;
+
+  @include after($tablet-horizontal) {
+    left: $left-menu-width;
+  }
 }
 
 nav.navbar {

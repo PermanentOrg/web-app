@@ -1,3 +1,5 @@
+@import 'variables';
+
 .main-content {
   padding-top: 50px;
   opacity: 1;
@@ -10,5 +12,9 @@
 
   &.uploading {
     padding-bottom: 80px;
+  }
+
+  @include after($tablet-horizontal) {
+    padding-left: $left-menu-width;
   }
 }
