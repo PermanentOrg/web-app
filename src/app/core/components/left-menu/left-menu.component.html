@@ -1,30 +1,33 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
+    <div class="menu-branding">
+      <img src="assets/img/logo/sideways_logo.png" alt="">
+    </div>
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
-    <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/myfiles']" [class.active]="checkMenuItemActive('/myfiles')">
       My Files
     </a>
-    <a class="menu-item" [routerLink]="['/shares/byme']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/shares/byme']" [class.active]="checkMenuItemActive('/shares/byme')">
       Shared By Me
     </a>
-    <a class="menu-item" [routerLink]="['/shares/withme']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/shares/withme']" [class.active]="checkMenuItemActive('/shares/withme')">
       Shared With Me
     </a>
-    <a class="menu-item" [routerLink]="['/public']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/public']" [class.active]="checkMenuItemActive('/public')">
       Public
     </a>
-    <a class="menu-item" [routerLink]="['/apps']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
       Apps
     </a>
-    <a class="menu-item" [routerLink]="['/relationships']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
       Relationships
     </a>
-    <a class="menu-item" [routerLink]="['/members']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
       Members
     </a>
-    <a class="menu-item" [routerLink]="['/invitations']" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/invitations']" [class.active]="checkMenuItemActive('/invitations')">
       Invitations
     </a>
     <a class="menu-item" href="/add-storage">

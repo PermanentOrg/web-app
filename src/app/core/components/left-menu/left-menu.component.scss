@@ -24,21 +24,33 @@ $transition-length: $default-transition-length;
     color: white;
     font-weight: 500;
 
+    transition: background-color $transition-length / 4 ease-in;
+
+    &:hover {
+      background-color: lighten($PR-blue, 4%);
+      text-decoration: none;
+      transition: none;
+    }
+
     &.active {
-      font-weight: 700;
+      font-weight: 600;
+      background-color: lighten($PR-blue, 7%);
+      transition: none;
     }
   }
 
   .menu-header {
+    padding: 10px;
     strong {
       display: block;
     }
-    box-shadow: $box-shadow-sm;
-    border-bottom: 1px solid $gray-300;
-    margin-bottom: $input-btn-padding-y * 1.5;
-    display: flex;
-    align-items: center;
-    height: $navbar-height;
+    // box-shadow: $box-shadow-sm;
+    // border-bottom: 1px solid $gray-300;
+    // margin-bottom: $input-btn-padding-y * 1.5;
+  }
+
+  .menu-branding {
+    display: none;
   }
 
 }
@@ -48,10 +60,22 @@ $transition-length: $default-transition-length;
   .hamburger-menu {
     // transform: translateX(0);
     visibility: visible;
-    top: $navbar-height;
   
     .menu-header {
       border-bottom: 0px solid;
+      box-shadow: none;
+      margin-bottom: 0px;
+    }
+
+    .menu-branding {
+      padding-left: 10px;
+      height: $navbar-height-desktop;
+      display: flex;
+      align-items: center;
+      img {
+        height: $navbar-height-desktop / 3;
+      }
+      // box-shadow: $box-shadow;
     }
   }
 
@@ -67,7 +91,7 @@ $transition-length: $default-transition-length;
 @supports (padding-left: env(safe-area-inset-left)) {
   .menu.hamburger-menu {
     --safe-area-inset-left: env(safe-area-inset-left);
-    width: calc(300px + var(--safe-area-inset-left)) !important;
+    width: calc(#{$left-menu-width} + var(--safe-area-inset-left)) !important;
 
     .menu-header, .menu-item{
       padding-left: calc(10px + var(--safe-area-inset-left)) !important;

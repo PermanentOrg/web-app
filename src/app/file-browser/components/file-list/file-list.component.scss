@@ -1,8 +1,7 @@
 @import 'variables';
 
 :host {
-  display: block;
-  padding-top: 34px;
+  @include has-breadcrumbs;
   width: 100%;
   &.grid-view {
     // background-color: $gray-100;

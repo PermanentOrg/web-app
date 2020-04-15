@@ -1,7 +1,7 @@
 @import 'variables';
 
 .main-content {
-  padding-top: 50px;
+  padding-top: $navbar-total-height;
   opacity: 1;
 
   &.navigating {
@@ -15,6 +15,13 @@
   }
 
   @include after($tablet-horizontal) {
-    padding-left: $left-menu-width;
+    padding: 0;
+    position: fixed;
+    top: $navbar-total-height-desktop;
+    bottom: 0;
+    left: $left-menu-width;
+    right: 0;
+    overflow: hidden;
+    overflow-y: auto;
   }
 }

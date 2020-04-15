@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark">
+<nav class="navbar navbar-dark nav-mobile">
   <button class="navbar-toggler" type="button" (click)="showHamburgerMenu()">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,7 +7,11 @@
     <span class="right-menu-toggler-icon"></span>
   </button>
 </nav>
-<pr-breadcrumbs></pr-breadcrumbs>
+<nav class="navbar navbar-dark nav-desktop">
+  desktop!
+</nav>
+
+<pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
 <pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>
 <pr-right-menu [(isVisible)]="rightMenuVisible"></pr-right-menu>
 <pr-multi-select-status></pr-multi-select-status>

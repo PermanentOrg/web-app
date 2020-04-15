@@ -8,19 +8,40 @@
   left: 0;
   right: 0;
   z-index: 1;
-  background-color: $PR-blue;
+  background-color: $white;
+  box-shadow: $box-shadow-sm;
 
   @include after($tablet-horizontal) {
     left: $left-menu-width;
+    // background-color: $gray-700;
   }
 }
 
 nav.navbar {
   padding: 0 0.5rem;
   color: white;
-  height: 50px;
+  height: $navbar-height;
   align-items: center;
+  background-color: $PR-blue;
+
+  &.nav-desktop {
+    display: none;
+    height: $navbar-height-desktop;
+  }
+
+  @include after($tablet-horizontal) {
+    &.nav-mobile {
+      display: none;
+    }
+
+    &.nav-desktop {
+      display: flex;
+    }
+    // background-color: $PR-blue;
+  }
 }
+
+
 
 .navbar-toggler {
   &:focus {

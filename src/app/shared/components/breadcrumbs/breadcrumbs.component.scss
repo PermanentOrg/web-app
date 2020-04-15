@@ -31,6 +31,12 @@
 
 }
 
+.breadcrumbs-dark-text {
+  .breadcrumb, a {
+    color: $body-color;
+  }
+}
+
 .separator {
   display: inline-block;
   padding: 0px 6px 0px 4px;
