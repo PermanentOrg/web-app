@@ -44,7 +44,6 @@ nav.navbar {
 .nav-second-row {
   display: flex;
   align-items: center;
-  min-height: $breadcrumb-height-desktop;
   pr-breadcrumbs {
     flex: 1 1 auto;
   }
@@ -61,7 +60,7 @@ nav.navbar {
   }
 
   @include after($tablet-horizontal) {
-    padding: 10px 0;
+    min-height: $breadcrumb-height-desktop;
 
     .sidebar-align {
       display: flex;
