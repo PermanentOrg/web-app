@@ -3,6 +3,7 @@
 .main-content {
   padding-top: $navbar-total-height;
   opacity: 1;
+  z-index: 1;
 
   &.navigating {
     opacity: 0.5;

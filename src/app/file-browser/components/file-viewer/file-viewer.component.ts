@@ -10,6 +10,7 @@ import { RecordVO, } from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DIALOG_DATA } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-file-viewer',

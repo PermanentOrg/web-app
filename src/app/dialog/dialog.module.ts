@@ -12,7 +12,7 @@ export { Dialog, DialogRef, DialogRootComponent, DIALOG_DATA, DialogChildCompone
   ],
   declarations: [
     DialogRootComponent,
-    DialogComponent
+    DialogComponent,
   ],
   entryComponents: [
     DialogComponent

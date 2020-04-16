@@ -1,16 +1,22 @@
+$menu-ease: $tweaked-ease;
+$menu-open-ease: ease-out;
+$menu-close-ease: ease-in;
+$menu-transition-length: 0.45s;
+
+
 .menu-wrapper {
   position: fixed;
   top: 0;
   bottom: 0;
   width: 100%;
   background-color: rgba(black, 0);
-  transition: background-color $default-transition-length ease-out, visibility 0s linear $default-transition-length;
+  transition: background-color $menu-transition-length $menu-open-ease, visibility 0s linear $menu-transition-length;
   visibility: hidden;
   z-index: 5;
   
   .menu {
     position: absolute;
-    transition:  transform $default-transition-length ease-in;
+    transition:  transform $menu-transition-length $menu-close-ease;
     background-color: white;
   }
 
@@ -19,11 +25,11 @@
     right: 0;
     background-color: $shadow-color-dark;
     visibility: visible;
-    transition:  background-color $default-transition-length ease-out;
+    transition:  background-color $menu-transition-length $menu-open-ease;
 
     .menu {
       transform: translate(0, 0);
-      transition: transform $default-transition-length ease-out;
+      transition: transform $menu-transition-length $menu-open-ease;
     }
   }
 }

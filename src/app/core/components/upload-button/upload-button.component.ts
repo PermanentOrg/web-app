@@ -16,7 +16,7 @@ import { AccountService } from '@shared/services/account/account.service';
 export class UploadButtonComponent implements OnInit, OnDestroy {
   private files: File[];
   @Input() fullWidth: boolean;
-  
+
   @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
   public currentFolder: FolderVO;
   public hidden: boolean;

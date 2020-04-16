@@ -28,6 +28,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
+import { slideUpAnimation, fadeAnimation } from '@shared/animations';
 
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT_LIST_VIEW = 51;
@@ -42,7 +43,8 @@ const SCROLL_VELOCITY_THRESHOLD = 4;
 @Component({
   selector: 'pr-file-list',
   templateUrl: './file-list.component.html',
-  styleUrls: ['./file-list.component.scss']
+  styleUrls: ['./file-list.component.scss'],
+  animations: [ slideUpAnimation, fadeAnimation ]
 })
 export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
