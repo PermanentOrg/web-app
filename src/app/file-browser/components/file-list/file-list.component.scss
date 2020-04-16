@@ -20,6 +20,23 @@
   &.file-list-centered {
     @include public-centered;
   }
+
+  pr-sidebar {
+    display: none;
+  }
+
+  @include after($tablet-horizontal) {
+    &.show-sidebar {
+      width: calc(100% - #{$sidebar-width});
+      height: calc(100vh - #{$navbar-total-height-desktop});
+      overflow-x: visible;
+      overflow-y: auto;
+
+      pr-sidebar {
+        display: block;
+      }
+    }
+  }
 }
 
 .empty-message {

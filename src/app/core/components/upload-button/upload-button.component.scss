@@ -1,3 +1,15 @@
 .btn-alternate {
   color: white;
+  margin-bottom: 0;
 }
+
+:host.full-width {
+  display: block;
+  width: 100%;
+  flex: 1 1 100%;
+
+  label {
+    width: 100%;
+  }
+}
+

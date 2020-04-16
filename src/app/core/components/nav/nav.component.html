@@ -10,8 +10,12 @@
 <nav class="navbar navbar-dark nav-desktop">
   desktop!
 </nav>
-
-<pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
+<div class="nav-second-row">
+  <pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
+  <div class="sidebar-align">
+    <pr-upload-button class="full-width"></pr-upload-button>
+  </div>
+</div>
 <pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>
 <pr-right-menu [(isVisible)]="rightMenuVisible"></pr-right-menu>
 <pr-multi-select-status></pr-multi-select-status>

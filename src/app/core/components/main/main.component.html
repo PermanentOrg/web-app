@@ -1,5 +1,5 @@
 <pr-nav></pr-nav>
-<div class="main-content" [ngClass]="{'navigating': isNavigating, 'uploading': uploadProgressVisible}">
+<div class="main-content" [ngClass]="{'navigating': isNavigating, 'uploading': uploadProgressVisible}" #mainContent>
   <router-outlet></router-outlet>
 </div>
 <pr-upload-progress></pr-upload-progress>

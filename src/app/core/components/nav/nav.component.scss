@@ -41,7 +41,34 @@ nav.navbar {
   }
 }
 
+.nav-second-row {
+  display: flex;
+  align-items: center;
+  min-height: $breadcrumb-height-desktop;
+  pr-breadcrumbs {
+    flex: 1 1 auto;
+  }
 
+  .sidebar-align {
+    flex: 0 0 $sidebar-width;
+    display: none;
+    padding: 0px 10px;
+    
+    .btn {
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+
+  @include after($tablet-horizontal) {
+    padding: 10px 0;
+
+    .sidebar-align {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
 
 .navbar-toggler {
   &:focus {

@@ -56,7 +56,7 @@ import { RouterModule } from '@angular/router';
     FolderViewService,
     UploadService,
     PromptService,
-    EditService
+    EditService,
   ]
 })
 export class CoreModule {

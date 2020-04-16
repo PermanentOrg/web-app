@@ -26,6 +26,8 @@ import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { ScrollService } from '@shared/services/scroll/scroll.service';
 
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT_LIST_VIEW = 51;
@@ -42,7 +44,7 @@ const SCROLL_VELOCITY_THRESHOLD = 4;
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss']
 })
-export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
 
   currentFolder: FolderVO;
@@ -51,9 +53,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   folderView = FolderView.List;
   @HostBinding('class.grid-view') inGridView = false;
   @HostBinding('class.no-padding') noFileListPadding = false;
+  @HostBinding('class.show-sidebar') showSidebar = false;
   @HostBinding('class.file-list-centered') fileListCentered = false;
   showFolderDescription = false;
   isRootFolder = false;
+
 
   @Input() allowNavigation = true;
 
@@ -65,12 +69,15 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   private reinit = false;
   private inFileView = false;
 
-  private lastScrollTop: number;
+  private lastScrollTop = 0;
   private lastItemOffset: number;
-  private currentScrollTop: number;
+  private currentScrollTop = 0;
+  private currentScrollElement;
 
   isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
+
+  subscriptions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -78,11 +85,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private elementRef: ElementRef,
     private folderViewService: FolderViewService,
-    @Inject(DOCUMENT) private document: any
+    @Inject(DOCUMENT) private document: any,
+    private scroll: ScrollService
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
+    this.showSidebar = this.route.snapshot.data.showSidebar;
 
     if (this.route.snapshot.data.noFileListNavigation) {
       this.allowNavigation = false;
@@ -102,8 +111,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollHandlerThrottled = throttle(this.loadVisibleItems.bind(this), SCROLL_THROTTLE);
 
     // register for navigation events to reinit page on folder changes
-    if (!this.routeListener) {
-      this.routeListener = this.router.events
+    this.subscriptions.push(this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))
       .subscribe((event: NavigationEnd) => {
         if (event.url.includes('record')) {
@@ -117,21 +125,26 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!event.url.includes('record') && this.inFileView) {
           this.inFileView = false;
         }
-      });
-    }
+      }));
 
     // register for folder update events
-    this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
+    this.subscriptions.push(this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
       // if (folder.folderId === this.currentFolder.folderId) {
         setTimeout(() => {
           this.refreshView();
         }, 100);
       // }
-    });
+    }));
 
-    this.isMultiSelectEnabledSubscription = this.dataService.multiSelectChange.subscribe(enabled => {
+    // register for multi select events
+    this.subscriptions.push(this.dataService.multiSelectChange.subscribe(enabled => {
       this.isMultiSelectEnabled = enabled;
-    });
+    }));
+
+    // register for non-body scroll events
+    this.subscriptions.push(this.scroll.getScrolls().subscribe(event => {
+      this.onViewportScroll(event);
+    }));
   }
 
   refreshView() {
@@ -162,8 +175,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.dataService.setCurrentFolder();
-    this.routeListener.unsubscribe();
-    this.isMultiSelectEnabledSubscription.unsubscribe();
+    unsubscribeAll(this.subscriptions);
   }
 
   setFolderView(folderView: FolderView) {
@@ -178,9 +190,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('window:scroll', ['$event'])
-  onViewportScroll(event) {
+  onViewportScroll(event: Event) {
     this.lastScrollTop = this.currentScrollTop;
-    this.currentScrollTop = this.document.documentElement.scrollTop || this.document.body.scrollTop;
+    if (event) {
+      const target = event.currentTarget;
+      this.currentScrollTop = target === window ? this.document.documentElement.scrollTop : (target as HTMLElement).scrollTop;
+    }
+
     const scrollVelocity = (this.lastScrollTop - this.currentScrollTop) / SCROLL_TIMING;
     if (Math.abs(scrollVelocity) < SCROLL_VELOCITY_THRESHOLD) {
       // use throttled handler if scrolling slowly
@@ -205,7 +221,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy {
     const viewportHeight = totalHeight - NAV_HEIGHT;
     const listWidth = (this.elementRef.nativeElement as HTMLElement).clientWidth;
 
-    const top = this.document.documentElement.scrollTop || this.document.body.scrollTop;
+    const top = this.currentScrollTop || 0;
 
     let offset, count, itemHeight;
     let itemsPerRow = 1;
