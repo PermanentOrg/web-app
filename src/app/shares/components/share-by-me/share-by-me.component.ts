@@ -10,11 +10,13 @@ import { FolderVO, RecordVO, ArchiveVO } from '@root/app/models';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { Deferred } from '@root/vendor/deferred';
+import { slideUpAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-share-by-me',
   templateUrl: './share-by-me.component.html',
-  styleUrls: ['./share-by-me.component.scss']
+  styleUrls: ['./share-by-me.component.scss'],
+  animations: [ slideUpAnimation ]
 })
 export class ShareByMeComponent implements OnInit, OnDestroy {
   sharesFolder: FolderVO;

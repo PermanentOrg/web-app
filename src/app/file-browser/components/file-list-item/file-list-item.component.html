@@ -1,4 +1,4 @@
-<div class="file-list-item" (click)="goToItem()" [ngClass]="{'grid-view': inGridView}"> 
+<div class="file-list-item" (click)="onItemClick()" [ngClass]="{'grid-view': inGridView, 'selected': !multiSelect && isMultiSelected}"> 
   <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">

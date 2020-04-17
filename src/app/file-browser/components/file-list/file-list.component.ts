@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { UP_ARROW, DOWN_ARROW, CONTROL, META, SHIFT } from '@angular/cdk/keycodes';
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -59,7 +60,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   @HostBinding('class.file-list-centered') fileListCentered = false;
   showFolderDescription = false;
   isRootFolder = false;
-
 
   @Input() allowNavigation = true;
 
@@ -213,6 +213,26 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   onViewportResize(event) {
     this.scrollHandlerDebounced();
   }
+
+  // @HostListener('window:keydown.control', ['$event'])
+  // @HostListener('window:keydown.meta', ['$event'])
+  // onCtrlKeydown(event: KeyboardEvent) {
+  //   if ((event.target as HTMLElement).localName === 'body') {
+  //     if (!this.dataService.multiSelectEnabled) {
+  //       this.dataService.multiSelectChange.emit(true);
+  //     }
+  //   }
+  // }
+
+  // @HostListener('window:keyup.control', ['$event'])
+  // @HostListener('window:keyup.meta', ['$event'])
+  // onCtrlKeyup(event: KeyboardEvent) {
+  //   if ((event.target as HTMLElement).localName === 'body') {
+  //     if (this.dataService.multiSelectEnabled) {
+  //       this.dataService.multiSelectChange.emit(false);
+  //     }
+  //   }
+  // }
 
   loadVisibleItems(animate ?: boolean) {
     if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {

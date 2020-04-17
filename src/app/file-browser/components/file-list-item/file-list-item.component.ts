@@ -20,6 +20,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { DeviceService } from '@shared/services/device/device.service';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -114,7 +115,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     private edit: EditService,
     private accountService: AccountService,
     private folderPicker: FolderPickerService,
-    private dialog: Dialog
+    private dialog: Dialog,
+    private device: DeviceService
   ) {
   }
 
@@ -187,6 +189,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     this.dataService.deregisterItem(this.item);
   }
 
+  onItemClick() {
+    if (this.device.isMobileWidth()) {
+      this.goToItem();
+    } else {
+      this.onItemSingleClick();
+    }
+  }
+
   goToItem() {
     if (!this.allowNavigation) {
       return false;
@@ -239,6 +249,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
+  }
+
+  onItemSingleClick() {
+    this.isMultiSelected = !this.isMultiSelected;
+    this.onMultiSelectChange();
   }
 
   isFolderViewSet() {
