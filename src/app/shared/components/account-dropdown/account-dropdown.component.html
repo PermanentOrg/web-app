@@ -1,1 +1,7 @@
-<button class="btn btn-wordpress" *ngIf="account">{{this.account.primaryEmail}}</button>
+<button class="btn btn-wordpress" *ngIf="account">
+  <span>{{this.account.primaryEmail}}</span>
+  <span>&#9660;</span>
+</button>
+<div class="account-dropdown-menu">
+  
+</div>
