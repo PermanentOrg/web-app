@@ -197,6 +197,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  onItemDoubleClick() {
+    this.goToItem();
+  }
+
   goToItem() {
     if (!this.allowNavigation) {
       return false;

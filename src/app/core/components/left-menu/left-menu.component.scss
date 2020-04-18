@@ -65,6 +65,9 @@ $transition-length: $default-transition-length;
       border-bottom: 0px solid;
       box-shadow: none;
       margin-bottom: 0px;
+      height: $breadcrumb-height-desktop;
+      display: flex;
+      align-items: center;
     }
 
     .menu-branding {

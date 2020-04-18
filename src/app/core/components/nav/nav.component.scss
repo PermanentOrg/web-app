@@ -69,6 +69,12 @@ nav.navbar {
   }
 }
 
+.nav-desktop {
+  pr-account-dropdown {
+    margin-left: auto;
+  }
+}
+
 .navbar-toggler {
   &:focus {
     outline: none;
