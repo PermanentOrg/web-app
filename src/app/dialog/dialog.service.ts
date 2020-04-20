@@ -162,7 +162,7 @@ export class Dialog {
     }, 500);
   }
 
-  private createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
+  public createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;

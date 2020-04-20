@@ -1,0 +1,9 @@
+@import 'variables';
+
+:host {
+  position: fixed;
+  right: 0;
+  width: $sidebar-width;
+  top: $navbar-total-height-desktop;
+  bottom: 0;
+}

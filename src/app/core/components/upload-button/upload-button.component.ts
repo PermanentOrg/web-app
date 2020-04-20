@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
@@ -15,6 +15,8 @@ import { AccountService } from '@shared/services/account/account.service';
 })
 export class UploadButtonComponent implements OnInit, OnDestroy {
   private files: File[];
+  @Input() fullWidth: boolean;
+
   @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
   public currentFolder: FolderVO;
   public hidden: boolean;

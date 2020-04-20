@@ -8,14 +8,71 @@
   left: 0;
   right: 0;
   z-index: 1;
-  background-color: $PR-blue;
+  background-color: $white;
+  box-shadow: $box-shadow-sm;
+
+  @include after($tablet-horizontal) {
+    left: $left-menu-width;
+    // background-color: $gray-700;
+  }
 }
 
 nav.navbar {
   padding: 0 0.5rem;
   color: white;
-  height: 50px;
+  height: $navbar-height;
   align-items: center;
+  background-color: $PR-blue;
+
+  &.nav-desktop {
+    display: none;
+    height: $navbar-height-desktop;
+  }
+
+  @include after($tablet-horizontal) {
+    &.nav-mobile {
+      display: none;
+    }
+
+    &.nav-desktop {
+      display: flex;
+    }
+    // background-color: $PR-blue;
+  }
+}
+
+.nav-second-row {
+  display: flex;
+  align-items: center;
+  pr-breadcrumbs {
+    flex: 1 1 auto;
+  }
+
+  .sidebar-align {
+    flex: 0 0 $sidebar-width;
+    display: none;
+    padding: 0px 10px;
+    
+    .btn {
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+
+  @include after($tablet-horizontal) {
+    min-height: $breadcrumb-height-desktop;
+
+    .sidebar-align {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+.nav-desktop {
+  pr-account-dropdown {
+    margin-left: auto;
+  }
 }
 
 .navbar-toggler {

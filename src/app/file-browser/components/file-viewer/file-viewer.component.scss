@@ -2,6 +2,7 @@
 
 $toolbar-height: 30px;
 $transition-length: 0.35s;
+$button-size: 2rem;
 
 .file-viewer {
   position: fixed;
@@ -31,6 +32,8 @@ $transition-length: 0.35s;
   top: 0;
   height: $toolbar-height;
   transform: translateY(0);
+  display: flex;
+  align-items: center;
 
   a {
     line-height: $toolbar-height;
@@ -39,6 +42,18 @@ $transition-length: 0.35s;
     > span {
       opacity: 0.5;
     }
+  }
+
+  button.close {
+    border-radius: 50%;
+    background-color: $gray-500;
+    width: $button-size;
+    height: $button-size;
+    line-height: $button-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
   }
 }
 
@@ -94,7 +109,6 @@ $transition-length: 0.35s;
 }
 
 .file-viewer-control {
-  $button-size: 2rem;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

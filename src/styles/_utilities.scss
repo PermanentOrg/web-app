@@ -1,0 +1,23 @@
+@mixin after($min-width) {
+  @media screen and (min-width: $min-width) {
+    @content;
+  }
+}
+
+@mixin until($max-width) {
+  @media screen and (max-width: $max-width - 1) {
+    @content;
+  }
+}
+
+@mixin fullscreen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.fullscreen {
+  @include fullscreen();
+}

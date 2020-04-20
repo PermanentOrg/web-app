@@ -1,11 +1,11 @@
 @import 'variables';
 
-$transition-length: 0.25s;
+$transition-length: 0.4s;
 
 .menu-wrapper.visible {
   .prompt {
     transform: translateY(0);
-    transition: transform $transition-length ease-out;
+    // transition: transform $transition-length ease-out;
   }
 }
 
@@ -14,7 +14,7 @@ $transition-length: 0.25s;
   right: 0;
   bottom: 0;
   transform: translateY(100%);
-  transition:  transform $transition-length ease-in;
+  // transition:  transform $transition-length ease-in;
   max-height: 80%;
   overflow-y: auto;
   webkit-overflow-scrolling: touch;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -46,6 +46,8 @@ class Breadcrumb {
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
   public currentFolder;
   public breadcrumbs;
+
+  @Input() darkText = false;
 
   private scrollElement: Element;
   private folderChangeListener: Subscription;

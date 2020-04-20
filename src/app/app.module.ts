@@ -11,6 +11,7 @@ import {
 } from '@angular/router';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 
@@ -53,7 +54,7 @@ export class PermErrorHandler implements ErrorHandler {
   constructor(private injector: Injector) { }
   handleError(error: any) {
     console.error(error);
-    
+
     const api: ApiService = this.injector.get(ApiService);
     if (api) {
       api.system.logError(error);
@@ -69,6 +70,7 @@ export class PermErrorHandler implements ErrorHandler {
     HttpClientModule,
     HttpClientJsonpModule,
     BrowserModule,
+    BrowserAnimationsModule,
     DialogModule.forRoot()
   ],
   exports: [

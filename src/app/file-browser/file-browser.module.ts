@@ -32,13 +32,4 @@ import { FileBrowserComponentsModule } from './file-browser-components.module';
     VideoComponent
   ]
 })
-export class FileBrowserModule {
-  private dialogComponents: DialogChildComponentData[] = [{
-    token: 'SharingComponent',
-    component: SharingComponent
-  }];
-
-  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
-    this.dialog.registerComponents(this.dialogComponents, resolver, true);
-  }
-}
+export class FileBrowserModule { }

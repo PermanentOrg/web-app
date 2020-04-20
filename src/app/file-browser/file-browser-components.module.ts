@@ -15,6 +15,7 @@ import { DialogModule } from '../dialog/dialog.module';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
 import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { FolderDescriptionComponent } from './components/folder-description/fold
     VideoComponent,
     SharingComponent,
     PublishComponent,
-    FolderDescriptionComponent
+    FolderDescriptionComponent,
+    SidebarComponent
   ],
   entryComponents: [
     SharingComponent,

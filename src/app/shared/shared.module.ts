@@ -21,6 +21,7 @@ import { TimelineCompleteDialogComponent } from './components/timeline-complete-
 import { PublicLinkPipe } from './pipes/public-link.pipe';
 import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
 import { NewlineTextPipe } from './pipes/newline-text.pipe';
+import { AccountDropdownComponent } from './components/account-dropdown/account-dropdown.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { NewlineTextPipe } from './pipes/newline-text.pipe';
     PrConstantsPipe,
     PublicLinkPipe,
     ShareActionLabelPipe,
-    NewlineTextPipe
+    NewlineTextPipe,
+    AccountDropdownComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -69,7 +71,8 @@ import { NewlineTextPipe } from './pipes/newline-text.pipe';
     ShareActionLabelPipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
-    NewlineTextPipe
+    NewlineTextPipe,
+    AccountDropdownComponent
   ],
   providers: [
     PublicLinkPipe

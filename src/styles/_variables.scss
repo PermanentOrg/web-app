@@ -15,7 +15,7 @@ $file-list-row-height: 50px;
 
 $bottom-safe-area-padding: 40px;
 
-$default-transition-length: 0.4s;
+$default-transition-length: 0.5s;
 $shadow-color: rgba(black, 0.15);
 $shadow-color-dark: rgba(black, 0.45);
 
@@ -29,8 +29,24 @@ $public-archive-header-height: 70px;
 
 $breadcrumb-divider: quote(">");
 $breadcrumb-height: 34px;
+$breadcrumb-height-desktop: 60px;
 $timeline-breadcrumb-height: $breadcrumb-height;
 $timeline-folder-info-height: 50px;
+
+$left-menu-width: 250px;
+$navbar-height: 50px;
+$navbar-height-desktop: 75px;
+$navbar-total-height: $navbar-height + $breadcrumb-height;
+$navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-desktop;
+
+$sidebar-width: 250px;
+
+$tablet: 768px;
+$tablet-horizontal: 900px;
+$desktop: 1200px;
+
+$taylor-ease: cubic-bezier(.77, 0, .175, 1);
+$tweaked-ease: cubic-bezier(.63,.01,.3,1);
 
 @mixin public-centered {
   max-width: $public-max-width;
@@ -39,10 +55,11 @@ $timeline-folder-info-height: 50px;
 }
 
 @mixin has-breadcrumbs {
-  padding-top: 34px;
+  // padding-top: 34px;
   display: block;
 }
 
 
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
+@import 'utilities';

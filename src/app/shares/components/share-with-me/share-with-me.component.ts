@@ -9,11 +9,13 @@ import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO } from '@root/app/mo
 import { AccountService } from '@shared/services/account/account.service';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
+import { slideUpAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-share-with-me',
   templateUrl: './share-with-me.component.html',
-  styleUrls: ['./share-with-me.component.scss']
+  styleUrls: ['./share-with-me.component.scss'],
+  animations: [ slideUpAnimation ]
 })
 export class ShareWithMeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;

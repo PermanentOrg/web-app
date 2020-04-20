@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -21,6 +21,7 @@ import { UploadSessionStatus } from '@core/services/upload/uploader';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { ScrollService } from '@shared/services/scroll/scroll.service';
 
 @Component({
   selector: 'pr-main',
@@ -32,6 +33,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   public uploadProgressVisible: boolean;
 
   private routerListener: Subscription;
+  @ViewChild('mainContent', { static: true }) mainContentElement: ElementRef;
 
   constructor(
     private accountService: AccountService,
@@ -42,7 +44,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     private prompt: PromptService,
     private api: ApiService,
     private dialog: Dialog,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    private scroll: ScrollService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -104,6 +107,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.checkShareByUrl();
+    // (this.mainContentElement.nativeElement as HTMLElement).addEventListener('scroll', event => {
+    //   // this.scroll.scrollEvent(event);
+    // });
   }
 
   async checkCta() {
