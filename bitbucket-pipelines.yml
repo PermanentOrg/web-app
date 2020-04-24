@@ -71,6 +71,7 @@ pipelines:
           script:
             - cd /data/www
             - git clone git@bitbucket.org:permanent-org/files.git
+            - git clone git@bitbucket.org:permanent-org/deploy.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install
@@ -83,7 +84,7 @@ pipelines:
             - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
             - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - aws s3 cp mdot-responsive.tar.gz s3://permanent-repos/dev/mdot-responsive.tar.gz 
-            - ssh ubuntu@dev1.permanent.org 'bash -s' < /deploy/scripts/mdot/deploy-responsive-dev.sh
+            - ssh ubuntu@dev1.permanent.org 'bash -s' < deploy/scripts/mdot/deploy-responsive-dev.sh
     release/staging:
       - step:
           name: Build and upload to S3
