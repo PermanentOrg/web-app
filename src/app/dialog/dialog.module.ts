@@ -26,7 +26,7 @@ export class DialogModule {
     dialog.setDialogModuleResolver(resolver);
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<DialogModule> {
     return {
       ngModule: DialogModule,
       providers: [ Dialog ],

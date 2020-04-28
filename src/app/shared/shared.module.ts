@@ -22,6 +22,7 @@ import { PublicLinkPipe } from './pipes/public-link.pipe';
 import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
 import { NewlineTextPipe } from './pipes/newline-text.pipe';
 import { AccountDropdownComponent } from './components/account-dropdown/account-dropdown.component';
+import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { AccountDropdownComponent } from './components/account-dropdown/account-
     PublicLinkPipe,
     ShareActionLabelPipe,
     NewlineTextPipe,
+    TimeAgoV9Pipe,
     AccountDropdownComponent
   ],
   entryComponents: [
@@ -72,6 +74,7 @@ import { AccountDropdownComponent } from './components/account-dropdown/account-
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
     NewlineTextPipe,
+    TimeAgoV9Pipe,
     AccountDropdownComponent
   ],
   providers: [

@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { CountUpModule } from 'countup.js-angular2';
-import { TimeAgoPipe } from 'time-ago-pipe';
 import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
@@ -41,7 +40,6 @@ import { MissingPledgeComponent } from './components/missing-pledge/missing-pled
     ClaimDoneComponent,
     PledgeListComponent,
     MissingPledgeComponent,
-    TimeAgoPipe,
   ]
 })
 export class PledgeModule { }
