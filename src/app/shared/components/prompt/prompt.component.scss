@@ -18,6 +18,27 @@ $transition-length: 0.4s;
   max-height: 80%;
   overflow-y: auto;
   webkit-overflow-scrolling: touch;
+
+
+}
+
+@include after($tablet-horizontal) {
+  .menu-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .prompt {
+    border-radius: $border-radius;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    height: auto;
+  }
 }
 
 

@@ -17,6 +17,26 @@ $row-height: 40px;
   flex-direction: column;
 }
 
+@include after($tablet-horizontal) {
+  .menu-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .folder-picker {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    height: 500px;
+    max-height: calc(100vh - #{4 * $picker-margin});
+  }
+}
+
+
 .visible .folder-picker{
   transition: transform $transition-length ease-out;
 }
