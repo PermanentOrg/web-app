@@ -7,6 +7,19 @@
   bottom: 0;
   width: 100%;
   transform: translateY(100%);
+
+  @include after($tablet-horizontal) {
+    @include positionReset;
+    width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+.menu-wrapper {
+  @include after($tablet-horizontal) {
+    @include flexCenter
+  }
 }
 
 .dialog-auto-height {
