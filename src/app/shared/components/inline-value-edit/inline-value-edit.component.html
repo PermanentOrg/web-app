@@ -1,8 +1,14 @@
 <ng-container [ngSwitch]="type" *ngIf="type">
   <ng-container *ngSwitchCase="'text'">
+    <input type="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" (blur)="onBlur()" #input>
     <div class="inline-value-display inline-value-text form-control" (click)="startEdit()">
       {{displayValue}}
     </div>
-    <input type="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" (blur)="onBlur()" (click)="startEdit()" #input>
+  </ng-container>
+  <ng-container *ngSwitchCase="'textarea'">
+    <textarea class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" (blur)="onBlur()" #input></textarea>
+    <div class="inline-value-display inline-value-textarea form-control" (click)="startEdit()">
+      {{displayValue}}
+    </div>
   </ng-container>
 </ng-container>

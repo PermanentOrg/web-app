@@ -25,6 +25,7 @@ export class InlineValueEditComponent implements OnInit {
   }
 
   startEdit() {
+    console.log('start edit?');
     this.editValue = this.displayValue;
     this.isEditing = true;
     this.focusInput();
