@@ -1,0 +1,24 @@
+@import 'variables';
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.inline-value-display {
+  width: 100%;
+  padding: 0px;
+}
+
+input {
+  position: absolute;
+  top: 0px;
+  left: -5px;
+  right: -5px;
+  bottom: 0px;
+  opacity: 0.25;
+
+  &.is-editing {
+    opacity: 1;
+  }
+}

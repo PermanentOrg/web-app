@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
@@ -116,9 +116,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     public element: ElementRef,
     private message: MessageService,
     private prompt: PromptService,
-    private edit: EditService,
+    @Optional() private edit: EditService,
     private accountService: AccountService,
-    private folderPicker: FolderPickerService,
+    @Optional() private folderPicker: FolderPickerService,
     private dialog: Dialog,
     private device: DeviceService
   ) {
@@ -426,6 +426,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   openFolderPicker(operation: FolderPickerOperations) {
+    if (!this.folderPicker) {
+      return false;
+    }
+
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);

@@ -23,6 +23,7 @@ import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
 import { NewlineTextPipe } from './pipes/newline-text.pipe';
 import { AccountDropdownComponent } from './components/account-dropdown/account-dropdown.component';
 import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
+import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
     ShareActionLabelPipe,
     NewlineTextPipe,
     TimeAgoV9Pipe,
-    AccountDropdownComponent
+    AccountDropdownComponent,
+    InlineValueEditComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -75,7 +77,8 @@ import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
     TimelineCompleteDialogComponent,
     NewlineTextPipe,
     TimeAgoV9Pipe,
-    AccountDropdownComponent
+    AccountDropdownComponent,
+    InlineValueEditComponent
   ],
   providers: [
     PublicLinkPipe

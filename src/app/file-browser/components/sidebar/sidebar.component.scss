@@ -7,3 +7,11 @@
   top: $navbar-total-height-desktop;
   bottom: 0;
 }
+
+.sidebar-item {
+  padding: 5px 10px;
+  label {
+    font-weight: 700;
+    margin-bottom: 0px;
+  }
+}

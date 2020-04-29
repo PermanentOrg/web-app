@@ -54,6 +54,7 @@ import { RouterModule } from '@angular/router';
   providers: [
     DataService,
     FolderViewService,
+    FolderPickerService,
     UploadService,
     PromptService,
     EditService,
