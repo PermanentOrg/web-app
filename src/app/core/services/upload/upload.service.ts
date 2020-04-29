@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
 import { debounce } from 'lodash';
 
@@ -15,12 +15,11 @@ import { UploadItem } from '@core/services/upload/uploadItem';
 import { RecordResponse } from '@shared/services/api/index.repo';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 
 
-@Injectable({
-  providedIn: 'root'
-})
-export class UploadService {
+@Injectable()
+export class UploadService implements HasSubscriptions, OnDestroy {
   public uploader: Uploader = new Uploader(this.api, this.message);
   public component: UploadProgressComponent;
   public buttonComponent: UploadButtonComponent;
@@ -28,23 +27,30 @@ export class UploadService {
 
   private debouncedRefresh: Function;
 
+  subscriptions: Subscription[] = [];
+
   constructor(private api: ApiService, private message: MessageService, private dataService: DataService) {
     this.debouncedRefresh = debounce(() => {
       this.dataService.refreshCurrentFolder();
     }, 750);
 
-    this.uploader.fileUploadComplete.subscribe((item: UploadItem) => {
+    this.subscriptions.push(this.uploader.fileUploadComplete.subscribe((item: UploadItem) => {
       const parentFolderId = item.parentFolder.folderId;
       if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
         this.debouncedRefresh();
       }
-    });
+    }));
 
-    this.uploader.uploadSessionStatus.subscribe(status => {
+    this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
       if (status === UploadSessionStatus.Done) {
         this.debouncedRefresh();
       }
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    unsubscribeAll(this.subscriptions);
+    this.uploader.closeSocketConnection();
   }
 
   registerButtonComponent(component: UploadButtonComponent) {
