@@ -14,4 +14,10 @@
   bottom: 0;
   left: 0;
   right: 0;
+  opacity: 1;
+
+  &.image-loading {
+    opacity: 0.5;
+    transition: opacity 0.25s $tweaked-ease;
+  }
 }

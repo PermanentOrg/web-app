@@ -11,6 +11,8 @@ type ValueType = string | number | Date;
 export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayValue: ValueType;
   @Input() type: InlineValueEditType = 'text';
+  @Input() emptyMessage: string;
+  @Input() loading = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
   @ViewChild('input') inputElementRef: ElementRef;

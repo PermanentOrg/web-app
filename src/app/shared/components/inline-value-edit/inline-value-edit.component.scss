@@ -24,6 +24,42 @@ $inline-padding-y: 0.25rem;
   cursor: pointer;
 }
 
+.inline-value-placeholder {
+  position: absolute;
+  padding: $inline-padding-y $inline-padding-x;
+  left: -1 * $inline-padding-x;
+  right: -1 * $inline-padding-x;
+  top: 0;
+  bottom: 0;
+
+  .placeholder-line {
+    height: 1.5rem;
+    width: 95%;
+    position: relative;
+
+    &:after {
+      content: '';
+      background-color: $gray-200;
+      position: absolute;
+      top: 4px;
+      bottom: 2px;
+      width: 100%;
+    }
+
+    &.two-thirds {
+      &:after {
+        width: 66.66%;
+      }
+    }
+
+    &.three-quarters {
+      &:after {
+        width: 75%;
+      }
+    }
+  }
+}
+
 .inline-value-text {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -31,8 +67,12 @@ $inline-padding-y: 0.25rem;
 }
 
 .inline-value-textarea {
-  min-height: 10rem;
+  min-height: 6 * 1.5rem;
   white-space: pre-wrap;
+
+  &.showing-empty-message {
+    font-style: oblique;
+  }
 }
 
 div.form-control {

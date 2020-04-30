@@ -104,11 +104,12 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
       return;
     }
     if (!imageUrl) {
-      this.renderer.setStyle(this.imageElement, 'background-image', ``);
+      this.renderer.addClass(this.imageElement, 'image-loading');
     } else {
       const imageLoader = new Image();
       imageLoader.onload = () => {
         this.thumbLoaded = true;
+        this.renderer.removeClass(this.imageElement, 'image-loading');
         this.renderer.setStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
       };
       imageLoader.src = imageUrl;

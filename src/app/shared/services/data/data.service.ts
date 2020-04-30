@@ -371,11 +371,10 @@ export class DataService {
     }
 
     this.selectedItemsSubject.next(this.selectedItems);
-    this.fetchSelectedItems();
   }
 
   fetchSelectedItems() {
-    this.fetchFullItems(Array.from(this.selectedItems.keys()));
+    return this.fetchFullItems(Array.from(this.selectedItems.keys()));
   }
 
   selectItemsBetween(item1: ItemVO, item2: ItemVO) {

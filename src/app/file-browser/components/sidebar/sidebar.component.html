@@ -15,7 +15,11 @@
   </div>
   <div class="sidebar-item">
     <label>Description</label>
-    <pr-inline-value-edit [displayValue]="selectedItem.description" type='textarea'></pr-inline-value-edit>
+    <pr-inline-value-edit
+    [displayValue]="selectedItem.description"
+    [loading]="isLoading"
+    emptyMessage="Click to add description"
+    type='textarea'></pr-inline-value-edit>
   </div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">

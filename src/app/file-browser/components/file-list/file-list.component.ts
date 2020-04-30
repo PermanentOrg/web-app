@@ -241,6 +241,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.dataService.onSelectEvent(selectEvent);
   }
 
+  @HostListener('window:keydown', ['$event'])
+  onWindowKeydown(event: KeyboardEvent) {
+    if (event.target === this.document.body && !this.router.url.includes('record')) {
+      console.log('ok to go');
+    }
+  }
+
   loadVisibleItems(animate ?: boolean) {
     if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {
       return;
