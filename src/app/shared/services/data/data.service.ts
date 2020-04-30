@@ -76,6 +76,8 @@ export class DataService {
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
 
+    this.clearSelectedItems();
+
     clearTimeout(this.thumbRefreshTimeout);
     this.thumbRefreshQueue = [];
 
@@ -326,7 +328,6 @@ export class DataService {
   }
 
   public onSelectEvent(selectEvent: SelectEvent) {
-    console.log(selectEvent);
     switch (selectEvent.type) {
       case 'click':
         switch (selectEvent.modifierKey) {
@@ -370,8 +371,12 @@ export class DataService {
     }
 
     this.selectedItemsSubject.next(this.selectedItems);
+    this.fetchSelectedItems();
   }
 
+  fetchSelectedItems() {
+    this.fetchFullItems(Array.from(this.selectedItems.keys()));
+  }
 
   selectItemsBetween(item1: ItemVO, item2: ItemVO) {
     const items = this.currentFolder.ChildItemVOs;

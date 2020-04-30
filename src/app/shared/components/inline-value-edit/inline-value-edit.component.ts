@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea';
 
@@ -8,7 +8,7 @@ type ValueType = string | number | Date;
   templateUrl: './inline-value-edit.component.html',
   styleUrls: ['./inline-value-edit.component.scss']
 })
-export class InlineValueEditComponent implements OnInit {
+export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayValue: ValueType;
   @Input() type: InlineValueEditType = 'text';
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
@@ -22,6 +22,10 @@ export class InlineValueEditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.displayValue);
   }
 
   startEdit() {
