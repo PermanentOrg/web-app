@@ -79,6 +79,8 @@ type ActionType = 'delete' |
   'move' |
   'setFolderView';
 
+const DOUBLE_CLICK_TIMEOUT = 100;
+
 @Component({
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
@@ -111,6 +113,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   private isInPublicArchive: boolean;
   private isInSharePreview: boolean;
   private checkFolderView: boolean;
+
+  private singleClickTimeout: NodeJS.Timeout;
 
   constructor(
     private dataService: DataService,
@@ -202,6 +206,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onItemDoubleClick() {
+    if (this.singleClickTimeout) {
+      clearTimeout(this.singleClickTimeout);
+      this.singleClickTimeout = null;
+    }
+
     this.goToItem();
   }
 
@@ -260,10 +269,12 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onItemSingleClick(event: MouseEvent) {
-    this.itemClicked.emit({
-      item: this.item,
-      event
-    });
+    this.singleClickTimeout = setTimeout(() => {
+      this.itemClicked.emit({
+        item: this.item,
+        event
+      });
+    }, DOUBLE_CLICK_TIMEOUT);
   }
 
   isFolderViewSet() {

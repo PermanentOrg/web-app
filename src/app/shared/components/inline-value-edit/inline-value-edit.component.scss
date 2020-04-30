@@ -24,8 +24,15 @@ $inline-padding-y: 0.25rem;
   cursor: pointer;
 }
 
+.inline-value-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .inline-value-textarea {
   min-height: 10rem;
+  white-space: pre-wrap;
 }
 
 div.form-control {

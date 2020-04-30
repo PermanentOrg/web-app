@@ -38,6 +38,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   &.selected {
     background-color: rgba($PR-orange, 0.2);
   }
+  
   &.grid-view {
     background-color: white;
     flex-wrap: wrap;

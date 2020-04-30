@@ -4,9 +4,14 @@
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')">Sharing</div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
+  <div class="sidebar-item" *ngIf="selectedItem">
+    <div class="sidebar-thumbnail">
+      <pr-thumbnail [item]="selectedItem"></pr-thumbnail>
+    </div>
+  </div>
   <div class="sidebar-item">
     <label>Name</label>
-    <pr-inline-value-edit [displayValue]="selectedItem.displayName"></pr-inline-value-edit>
+    <pr-inline-value-edit [displayValue]="selectedItem.displayName" type='text'></pr-inline-value-edit>
   </div>
   <div class="sidebar-item">
     <label>Description</label>

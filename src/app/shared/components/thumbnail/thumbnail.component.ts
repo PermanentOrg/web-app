@@ -3,6 +3,7 @@ import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges,
 import { debounce } from 'lodash';
 
 import { FolderVO, RecordVO } from '@root/app/models';
+import { DataStatus } from '@models/data-status.enum';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
@@ -11,7 +12,7 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss']
 })
-export class ThumbnailComponent implements OnInit, OnChanges {
+export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   @Input() item: FolderVO | RecordVO;
 
   thumbLoaded = false;
@@ -25,6 +26,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private currentThumbUrl: string;
   private dpiScale = 1;
 
+  private lastItemDataStatus: DataStatus;
+
   private debouncedResize;
   constructor(elementRef: ElementRef, private renderer: Renderer2) {
     this.element = elementRef.nativeElement;
@@ -37,14 +40,25 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     this.placeholderElement = this.element.querySelector('.pr-thumbnail-placeholder');
     this.setImageBg(this.item.thumbURL200);
     this.checkElementWidth();
+    this.lastItemDataStatus = this.item.dataStatus;
   }
 
   ngOnChanges() {
-    // console.log('on changes?', this.item.displayName);
-    // this.setImageBg(this.item.thumbURL200);
-    // this.currentThumbWidth = 200;
-    // this.targetThumbWidth = 200;
-    // this.checkElementWidth();
+    this.resetImage();
+  }
+
+  ngDoCheck() {
+    if (this.item.dataStatus !== this.lastItemDataStatus) {
+      this.resetImage();
+    }
+  }
+
+  resetImage() {
+    this.setImageBg(this.item.thumbURL200);
+    this.currentThumbWidth = 200;
+    this.targetThumbWidth = 200;
+    this.checkElementWidth();
+    this.lastItemDataStatus = this.item.dataStatus;
   }
 
   @HostListener('window:resize', [])
