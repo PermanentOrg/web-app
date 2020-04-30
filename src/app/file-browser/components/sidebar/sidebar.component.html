@@ -4,23 +4,33 @@
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')">Sharing</div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
-  <div class="sidebar-item" *ngIf="selectedItem">
-    <div class="sidebar-thumbnail">
-      <pr-thumbnail [item]="selectedItem"></pr-thumbnail>
+  <ng-container *ngIf="selectedItem">
+    <div class="sidebar-item" *ngIf="selectedItem">
+      <div class="sidebar-thumbnail">
+        <pr-thumbnail [item]="selectedItem"></pr-thumbnail>
+      </div>
     </div>
-  </div>
-  <div class="sidebar-item">
-    <label>Name</label>
-    <pr-inline-value-edit [displayValue]="selectedItem.displayName" type='text'></pr-inline-value-edit>
-  </div>
-  <div class="sidebar-item">
-    <label>Description</label>
-    <pr-inline-value-edit
-    [displayValue]="selectedItem.description"
-    [loading]="isLoading"
-    emptyMessage="Click to add description"
-    type='textarea'></pr-inline-value-edit>
-  </div>
+    <div class="sidebar-item">
+      <label>Name</label>
+      <pr-inline-value-edit [displayValue]="selectedItem.displayName" type='text'></pr-inline-value-edit>
+    </div>
+    <div class="sidebar-item">
+      <label>Description</label>
+      <pr-inline-value-edit
+      [displayValue]="selectedItem.description"
+      [loading]="isLoading"
+      emptyMessage="Click to add description"
+      type='textarea'></pr-inline-value-edit>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedItems">
+    <div class="sidebar-item">
+      <label>Multiple items</label>
+      <div class="sidebar-item-content">
+        {{selectedItems.length}} items selected
+      </div>
+    </div>
+  </ng-container>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">
   <div class="sidebar-item">

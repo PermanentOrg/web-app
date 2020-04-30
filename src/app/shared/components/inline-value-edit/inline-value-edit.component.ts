@@ -27,11 +27,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.displayValue);
   }
 
   startEdit() {
-    console.log('start edit?');
     this.editValue = this.displayValue;
     this.isEditing = true;
     this.focusInput();

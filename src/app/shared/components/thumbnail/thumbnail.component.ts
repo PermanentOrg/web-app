@@ -103,6 +103,7 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
     if (!this.imageElement) {
       return;
     }
+
     if (!imageUrl) {
       this.renderer.addClass(this.imageElement, 'image-loading');
     } else {

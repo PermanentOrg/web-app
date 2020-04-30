@@ -53,9 +53,6 @@ export class DataService {
   private lastManualSelectItem: ItemVO;
 
   constructor(private api: ApiService) {
-    this.selectedItemsSubject.asObservable().subscribe(selectedItems => {
-      console.log(selectedItems.keys());
-    });
   }
 
   public registerItem(item: FolderVO | RecordVO) {
@@ -342,6 +339,21 @@ export class DataService {
         }
         break;
       case 'key':
+        const items = this.currentFolder.ChildItemVOs;
+        const index = this.lastManualSelectItem ? findIndex(items, this.lastManualSelectItem) : 0;
+        let newIndex = index + (selectEvent.direction === 'up' ? -1 : 1);
+        newIndex = Math.max(0, newIndex);
+        newIndex = Math.min(items.length - 1, newIndex);
+        const newItem = items[newIndex];
+
+        this.lastManualSelectItem = newItem;
+
+        if (!selectEvent.modifierKey) {
+          this.selectItemSingle(newItem);
+        } else {
+          this.selectItemSingle(newItem, false);
+        }
+
         break;
     }
   }

@@ -21,7 +21,7 @@ import { throttle, debounce } from 'lodash';
 import { gsap } from 'gsap';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
-import { DataService, SelectClickEvent, SelectedItemsMap } from '@shared/services/data/data.service';
+import { DataService, SelectClickEvent, SelectedItemsMap, SelectKeyEvent } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -244,7 +244,20 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   @HostListener('window:keydown', ['$event'])
   onWindowKeydown(event: KeyboardEvent) {
     if (event.target === this.document.body && !this.router.url.includes('record')) {
-      console.log('ok to go');
+      if (event.keyCode === UP_ARROW || event.keyCode === DOWN_ARROW) {
+        event.preventDefault();
+        const selectEvent: SelectKeyEvent = {
+          type: 'key',
+          direction: event.keyCode === UP_ARROW ? 'up' : 'down'
+        };
+
+        if (event.shiftKey) {
+          selectEvent.modifierKey = 'shift';
+        }
+
+        this.dataService.onSelectEvent(selectEvent);
+      }
+
     }
   }
 
