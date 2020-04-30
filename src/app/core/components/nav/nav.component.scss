@@ -13,6 +13,8 @@
 
   @include after($tablet-horizontal) {
     left: $left-menu-width;
+    box-shadow: none;
+
     // background-color: $gray-700;
   }
 }
@@ -61,7 +63,8 @@ nav.navbar {
 
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
-
+    border-bottom: 1px solid $gray-300;
+    box-shadow: none;
     .sidebar-align {
       display: flex;
       justify-content: center;

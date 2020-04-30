@@ -31,5 +31,8 @@
       "@models/*": ["src/app/models/*"],
       "@root/*": ["src/*"]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true
   }
 }

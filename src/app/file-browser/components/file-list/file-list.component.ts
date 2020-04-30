@@ -21,7 +21,7 @@ import { throttle, debounce } from 'lodash';
 import { gsap } from 'gsap';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
-import { DataService } from '@shared/services/data/data.service';
+import { DataService, SelectClickEvent, SelectedItemsMap } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -30,6 +30,11 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
 import { slideUpAnimation, fadeAnimation } from '@shared/animations';
+
+export interface ItemClickEvent {
+  event: MouseEvent;
+  item: RecordVO | FolderVO;
+}
 
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT_LIST_VIEW = 51;
@@ -78,6 +83,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
+
+  selectedItems: SelectedItemsMap = new Map();
 
   subscriptions: Subscription[] = [];
 
@@ -141,6 +148,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     // register for multi select events
     this.subscriptions.push(this.dataService.multiSelectChange.subscribe(enabled => {
       this.isMultiSelectEnabled = enabled;
+    }));
+
+    // register for select events
+    this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
+      this.selectedItems = selectedItems;
     }));
 
     // register for non-body scroll events
@@ -214,25 +226,20 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.scrollHandlerDebounced();
   }
 
-  // @HostListener('window:keydown.control', ['$event'])
-  // @HostListener('window:keydown.meta', ['$event'])
-  // onCtrlKeydown(event: KeyboardEvent) {
-  //   if ((event.target as HTMLElement).localName === 'body') {
-  //     if (!this.dataService.multiSelectEnabled) {
-  //       this.dataService.multiSelectChange.emit(true);
-  //     }
-  //   }
-  // }
+  onItemClick(itemClick: ItemClickEvent) {
+    const selectEvent: SelectClickEvent = {
+      type: 'click',
+      item: itemClick.item,
+    };
 
-  // @HostListener('window:keyup.control', ['$event'])
-  // @HostListener('window:keyup.meta', ['$event'])
-  // onCtrlKeyup(event: KeyboardEvent) {
-  //   if ((event.target as HTMLElement).localName === 'body') {
-  //     if (this.dataService.multiSelectEnabled) {
-  //       this.dataService.multiSelectChange.emit(false);
-  //     }
-  //   }
-  // }
+    if (itemClick.event.shiftKey) {
+      selectEvent.modifierKey = 'shift';
+    } else if (itemClick.event.metaKey || itemClick.event.ctrlKey) {
+      selectEvent.modifierKey = 'ctrl';
+    }
+
+    this.dataService.onSelectEvent(selectEvent);
+  }
 
   loadVisibleItems(animate ?: boolean) {
     if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {

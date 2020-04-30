@@ -24,6 +24,14 @@ $inline-padding-y: 0.25rem;
   cursor: pointer;
 }
 
+.inline-value-textarea {
+  min-height: 10rem;
+}
+
+div.form-control {
+  color: $body-color;
+}
+
 .form-control {
   padding: $inline-padding-y $inline-padding-x;
 }

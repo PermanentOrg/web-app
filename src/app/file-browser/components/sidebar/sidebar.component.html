@@ -1,12 +1,31 @@
-<div class="sidebar-tab">
-  <div class="sidebar-heading">
-    <div class="sidebar-item">
-      <label>Name</label>
-      <pr-inline-value-edit [displayValue]="'Test DisplayName'"></pr-inline-value-edit>
+<div class="sidebar-tabs">
+  <div class="sidebar-tab" [class.active]="currentTab === 'info'" (click)="setCurrentTab('info')">Info</div>
+  <div class="sidebar-tab" [class.active]="currentTab === 'details'" (click)="setCurrentTab('details')">Details</div>
+  <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')">Sharing</div>
+</div>
+<div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
+  <div class="sidebar-item">
+    <label>Name</label>
+    <pr-inline-value-edit [displayValue]="'Test DisplayName'"></pr-inline-value-edit>
+  </div>
+  <div class="sidebar-item">
+    <label>Description</label>
+    <pr-inline-value-edit [displayValue]="'This is a long string. Or it better be anyway. Time to edit a description...wow oh wow!'" type='textarea'></pr-inline-value-edit>
+  </div>
+</div>
+<div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">
+  <div class="sidebar-item">
+    <label>Details</label>
+    <div class="sidebar-item-content">
+      Details of some kind
     </div>
-    <div class="sidebar-item">
-      <label>Description</label>
-      <pr-inline-value-edit [displayValue]="'This is a long string. Or it better be anyway. Time to edit a description...wow oh wow!'" type='textarea'></pr-inline-value-edit>
+  </div>
+</div>
+<div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
+  <div class="sidebar-item">
+    <label>Shared With</label>
+    <div class="sidebar-item-content">
+      Some shared archives?
     </div>
   </div>
 </div>

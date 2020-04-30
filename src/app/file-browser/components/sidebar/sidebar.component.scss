@@ -1,17 +1,57 @@
 @import 'variables';
 
+$sidebar-border: 1px solid $gray-300;
+
 :host {
   position: fixed;
   right: 0;
   width: $sidebar-width;
   top: $navbar-total-height-desktop;
   bottom: 0;
+  border-left: $sidebar-border;
+}
+
+.sidebar-tabs {
+  display: flex;
+
+  .sidebar-tab {
+    flex: 1 1 auto;
+    text-align: center;
+    border-bottom: $sidebar-border;
+    user-select: none;
+
+    &:not(:last-child) {
+      border-right: $sidebar-border;
+    }
+
+
+    &:not(.active) {
+      cursor: pointer;
+      &:hover {
+        background-color: $gray-100;
+      }
+    }
+
+    &.active {
+      font-weight: 500;
+      color: $body-color;
+      border-bottom: 1px solid rgba($gray-300, 0);
+    }
+  }
+}
+
+.sidebar-tab-content {
+  padding-top: 5px;
 }
 
 .sidebar-item {
   padding: 5px 10px;
   label {
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 0px;
+  }
+
+  .sidebar-item-content {
+    padding: 0.25rem 0;
   }
 }

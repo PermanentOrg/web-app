@@ -1,14 +1,31 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { partition, remove, find } from 'lodash';
+import { partition, remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 const THUMBNAIL_REFRESH_INTERVAL = 7500;
+
+export type SelectedItemsMap = Map<ItemVO, boolean>;
+
+export interface SelectKeyEvent {
+  type: 'key';
+  direction: 'up' | 'down';
+  modifierKey?: 'ctrl' | 'shift';
+}
+
+export interface SelectClickEvent {
+  type: 'click';
+  item: RecordVO | FolderVO;
+  modifierKey?: 'ctrl' | 'shift';
+}
+
+export type SelectEvent = SelectClickEvent | SelectKeyEvent;
 
 @Injectable()
 export class DataService {
@@ -31,7 +48,14 @@ export class DataService {
 
   public multiSelectItems: Map<number, ItemVO> = new Map();
 
+  private selectedItems: SelectedItemsMap = new Map();
+  private selectedItemsSubject: Subject<SelectedItemsMap> = new Subject();
+  private lastManualSelectItem: ItemVO;
+
   constructor(private api: ApiService) {
+    this.selectedItemsSubject.asObservable().subscribe(selectedItems => {
+      console.log(selectedItems.keys());
+    });
   }
 
   public registerItem(item: FolderVO | RecordVO) {
@@ -295,6 +319,75 @@ export class DataService {
     function getOriginalFile(fileItem: RecordVO) {
       return find(fileItem.FileVOs, {format: 'file.format.original'});
     }
+  }
+
+  public selectedItems$() {
+    return this.selectedItemsSubject.asObservable();
+  }
+
+  public onSelectEvent(selectEvent: SelectEvent) {
+    console.log(selectEvent);
+    switch (selectEvent.type) {
+      case 'click':
+        switch (selectEvent.modifierKey) {
+          case 'ctrl':
+            this.selectItemSingle(selectEvent.item, false);
+            break;
+          case 'shift':
+            this.selectItemsBetween(this.lastManualSelectItem, selectEvent.item);
+            break;
+          default:
+            this.selectItemSingle(selectEvent.item);
+        }
+        break;
+      case 'key':
+        break;
+    }
+  }
+
+  clearSelectedItems() {
+    this.selectedItems.clear();
+    this.selectedItemsSubject.next(this.selectedItems);
+  }
+
+  selectItemSingle(item: ItemVO, replace = true) {
+    if (replace) {
+      this.lastManualSelectItem = item;
+    }
+
+    if (this.selectedItems.has(item)) {
+      if (this.selectedItems.size > 1 && replace) {
+        this.selectedItems.clear();
+        this.selectedItems.set(item, true);
+      } else if (replace) {
+        this.selectedItems.clear();
+      }
+    } else {
+      if (replace) {
+        this.selectedItems.clear();
+      }
+      this.selectedItems.set(item, true);
+    }
+
+    this.selectedItemsSubject.next(this.selectedItems);
+  }
+
+
+  selectItemsBetween(item1: ItemVO, item2: ItemVO) {
+    const items = this.currentFolder.ChildItemVOs;
+    const item1Index = item1 ? findIndex(items, item1) : 0;
+    const item2Index = findIndex(items, item2);
+
+    this.selectedItems.clear();
+
+    let current = Math.min(item1Index, item2Index);
+    const end = Math.max(item1Index, item2Index);
+
+    while (current <= end) {
+      this.selectedItems.set(items[current++], true);
+    }
+
+    this.selectedItemsSubject.next(this.selectedItems);
   }
 
   public setMultiSelect(enabled: boolean) {

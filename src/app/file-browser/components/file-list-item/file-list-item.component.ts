@@ -22,6 +22,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
 
+import { ItemClickEvent } from '../file-list/file-list.component';
+
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
     buttonName: 'rename',
@@ -89,12 +91,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() allowNavigation = true;
   @Input() isShareRoot = false;
   @Input() multiSelect = false;
+  @Input() isSelected = false;
 
   public isMultiSelected =  false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
   @Output() itemUnshared = new EventEmitter<FolderVO | RecordVO>();
+  @Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
   public allowActions = true;
   public isMyItem = true;
@@ -189,11 +193,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     this.dataService.deregisterItem(this.item);
   }
 
-  onItemClick() {
+  onItemClick(event: MouseEvent) {
     if (this.device.isMobileWidth()) {
       this.goToItem();
     } else {
-      this.onItemSingleClick();
+      this.onItemSingleClick(event);
     }
   }
 
@@ -255,9 +259,11 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  onItemSingleClick() {
-    this.isMultiSelected = !this.isMultiSelected;
-    this.onMultiSelectChange();
+  onItemSingleClick(event: MouseEvent) {
+    this.itemClicked.emit({
+      item: this.item,
+      event
+    });
   }
 
   isFolderViewSet() {

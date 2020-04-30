@@ -34,6 +34,10 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   border-bottom: 1px solid $gray-300;
   cursor: pointer;
   user-select: none;
+
+  &.selected {
+    background-color: rgba($PR-orange, 0.2);
+  }
   &.grid-view {
     background-color: white;
     flex-wrap: wrap;
