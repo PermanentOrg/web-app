@@ -29,14 +29,25 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 .file-list-item {
+
+  $bg-transition-length: 0.075s;
+
   display: flex;
   align-items: center;
   border-bottom: 1px solid $gray-300;
   cursor: pointer;
   user-select: none;
+  transition: background-color $bg-transition-length ease-in;
+  background-color: rgba(white, 0);
 
   &.selected {
     background-color: rgba($PR-orange, 0.2);
+    transition: background-color 0s;
+  }
+
+  &:hover:not(.selected) {
+    background-color: rgba($gray-100, 1);
+    transition: background-color 0s;
   }
   
   &.grid-view {
