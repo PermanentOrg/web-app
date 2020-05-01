@@ -7,7 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { FolderVO, RecordVO, ItemVO, FolderVOData } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData } from '@root/app/models';
 
 import { FolderResponse, RecordResponse, ShareResponse } from '@shared/services/api/index.repo';
 import { PromptButton, PromptService } from '../prompt/prompt.service';
@@ -244,15 +244,21 @@ export class EditService {
         if (folderResponse) {
           folderResponse.getFolderVOs()
             .forEach((updatedItem) => {
-              (itemsByLinkId[updatedItem.folder_linkId] as FolderVO).update(updatedItem);
+              const newData: FolderVOData = {
+                updatedDT: updatedItem.updatedDT
+              };
+              (itemsByLinkId[updatedItem.folder_linkId] as FolderVO).update(newData);
             });
         }
 
         if (recordResponse) {
           recordResponse.getRecordVOs()
           .forEach((updatedItem) => {
+            const newData: RecordVOData = {
+              updatedDT: updatedItem.updatedDT
+            };
             const record = (itemsByLinkId[updatedItem.folder_linkId] as RecordVO) || recordsByRecordId.get(updatedItem.recordId);
-            record.update(updatedItem);
+            record.update(newData);
           });
         }
       });

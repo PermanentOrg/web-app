@@ -1,4 +1,4 @@
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, BaseVOData } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
@@ -118,7 +118,7 @@ export class RecordVO extends BaseVO {
   }
 }
 
-export interface RecordVOData {
+export interface RecordVOData extends BaseVOData {
   recordId?: any;
   archiveId?: any;
   archiveNbr?: any;

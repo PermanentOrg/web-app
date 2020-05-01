@@ -59,3 +59,8 @@ export class BaseVO {
     return clone;
   }
 }
+
+export interface BaseVOData {
+  createdDT?: string;
+  updatedDT?: string;
+}

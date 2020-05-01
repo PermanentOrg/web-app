@@ -36,7 +36,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   endEdit() {
-    this.doneEditing.emit(this.editValue);
+    if (this.displayValue !== this.editValue) {
+      this.doneEditing.emit(this.editValue);
+    }
     this.isEditing = false;
   }
 

@@ -1,6 +1,6 @@
 import { orderBy } from 'lodash';
 
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, BaseVOData } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
@@ -130,7 +130,7 @@ export class FolderVO extends BaseVO {
   }
 }
 
-export interface FolderVOData {
+export interface FolderVOData extends BaseVOData {
   folderId?: any;
   archiveNbr?: any;
   archiveArchiveNbr?: any;
