@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { some } from 'lodash';
 import { ItemVO } from '@models/index';
 import { DataStatus } from '@models/data-status.enum';
+import { EditService } from '@core/services/edit/edit.service';
+import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 
 type SidebarTab =  'info' | 'details' | 'sharing';
 @Component({
@@ -23,7 +25,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   isLoading = false;
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    private editService: EditService
   ) {
     this.subscriptions.push(
       this.dataService.selectedItems$().subscribe(async selectedItems => {
@@ -41,8 +44,10 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
         if (this.selectedItem !== this.dataService.currentFolder) {
           const items = this.selectedItems || [this.selectedItem];
           this.isLoading = some(items, i => i.dataStatus < DataStatus.Lean);
-          await this.dataService.fetchLeanItems(items);
-          this.isLoading = false;
+          if (this.isLoading) {
+            await this.dataService.fetchLeanItems(items);
+            this.isLoading = false;
+          }
         }
       })
     );
@@ -57,6 +62,24 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
   setCurrentTab(tab: SidebarTab) {
     this.currentTab = tab;
+  }
+
+  async onFinishEditing(property: string, value: string) {
+    if (this.selectedItem) {
+      const originalValue = this.selectedItem[property];
+      const newData: any = {};
+      newData[property] = value;
+      try {
+        this.selectedItem.update(newData);
+        await this.editService.updateItems([this.selectedItem]);
+      } catch (err) {
+        if (err instanceof FolderResponse || err instanceof RecordResponse ) {
+          const revertData: any = {};
+          revertData[property] = originalValue;
+          this.selectedItem.update(revertData);
+        }
+      }
+    }
   }
 
 }

@@ -12,13 +12,17 @@
     </div>
     <div class="sidebar-item">
       <label>Name</label>
-      <pr-inline-value-edit [displayValue]="selectedItem.displayName" type='text'></pr-inline-value-edit>
+      <pr-inline-value-edit
+        [displayValue]="selectedItem.displayName"
+        (doneEditing)="onFinishEditing('displayName', $event)"
+        type='text'></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Description</label>
       <pr-inline-value-edit
       [displayValue]="selectedItem.description"
       [loading]="isLoading"
+      (doneEditing)="onFinishEditing('description', $event)"
       emptyMessage="Click to add description"
       type='textarea'></pr-inline-value-edit>
     </div>

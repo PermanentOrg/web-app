@@ -71,7 +71,7 @@ $inline-padding-y: 0.25rem;
   white-space: pre-wrap;
 
   &.showing-empty-message {
-    font-style: oblique;
+    color: $text-muted;
   }
 }
 
