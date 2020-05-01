@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -18,7 +18,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public archiveName: string;
   public archive: ArchiveVO;
 
-  private hamburgerMenuDiv: HTMLElement;
+  @ViewChild('scroll') scrollElementRef: ElementRef;
 
   private subscriptions: Subscription[] = [];
   private currentUrl: string;
@@ -49,12 +49,17 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.hamburgerMenuDiv = (this.elementRef.nativeElement as HTMLElement).querySelector('.hamburger-menu');
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.isVisible.currentValue && !changes.isVisible.previousValue) {
-      this.hamburgerMenuDiv.scrollTop = 0;
+      this.resetScroll();
+    }
+  }
+
+  resetScroll() {
+    if (this.scrollElementRef) {
+      (this.scrollElementRef.nativeElement as HTMLElement).scrollTo(0, 0);
     }
   }
 
@@ -84,7 +89,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   checkMenuItemActive(urlSegment: string) {
     if (!this.urlMatches.has(urlSegment)) {
-      this.urlMatches.set(urlSegment, this.currentUrl.includes(urlSegment))
+      this.urlMatches.set(urlSegment, this.currentUrl.includes(urlSegment));
     }
 
     return this.urlMatches.get(urlSegment);

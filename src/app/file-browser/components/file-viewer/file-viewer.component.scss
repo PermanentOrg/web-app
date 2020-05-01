@@ -3,6 +3,15 @@
 $toolbar-height: 30px;
 $transition-length: 0.35s;
 $button-size: 2rem;
+:host {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: block;
+}
 
 .file-viewer {
   position: fixed;
@@ -11,7 +20,11 @@ $button-size: 2rem;
   left: 0;
   right: 0;
   background-color: white;
-  z-index: 10;
+
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 
   &.minimal {
     background-color: black;

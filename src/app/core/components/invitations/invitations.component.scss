@@ -6,4 +6,5 @@ p {
 
 :host {
   @include has-breadcrumbs;
+  @include mainContentScrollDesktop;
 }

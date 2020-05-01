@@ -35,6 +35,10 @@
       pr-sidebar {
         display: block;
       }
+
+      .file-list-scroll {
+        @include mainContentScrollDesktop;
+      }
     }
   }
 }

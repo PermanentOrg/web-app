@@ -1,15 +1,17 @@
-<pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
-<pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs"
-  [item]="item"
-  [folderView]="folderView"
-  [multiSelect]="isMultiSelectEnabled"
-  [allowNavigation]="allowNavigation"
-  [isSelected]="selectedItems.has(item)"
-  (itemClicked)="onItemClick($event)"></pr-file-list-item>
-<div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
-  This folder is empty
+<div class="file-list-scroll" (scroll)="onViewportScroll($event)">
+  <pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
+  <pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs"
+    [item]="item"
+    [folderView]="folderView"
+    [multiSelect]="isMultiSelectEnabled"
+    [allowNavigation]="allowNavigation"
+    [isSelected]="selectedItems.has(item)"
+    (itemClicked)="onItemClick($event)"></pr-file-list-item>
+  <div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
+    This folder is empty
+  </div>
 </div>
-<pr-sidebar></pr-sidebar>
+<pr-sidebar *ngIf="showSidebar"></pr-sidebar>
 <div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
   <router-outlet #o="outlet"></router-outlet>
 </div>

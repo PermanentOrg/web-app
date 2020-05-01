@@ -1,3 +1,6 @@
-// :host {
-//   @include has-breadcrumbs;
-// }
+@import 'variables';
+
+:host {
+  display: block;
+  @include mainContentScrollDesktop;
+}

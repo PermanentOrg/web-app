@@ -6,7 +6,7 @@
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
-    <div class="menu-scroll">
+    <div class="menu-scroll" #scroll>
       <a class="menu-item" [routerLink]="['/myfiles']" [class.active]="checkMenuItemActive('/myfiles')">
         My Files
       </a>

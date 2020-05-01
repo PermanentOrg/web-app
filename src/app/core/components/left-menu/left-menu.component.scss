@@ -10,8 +10,6 @@ $transition-length: $default-transition-length;
   width: $left-menu-width;
   max-width: 80%;
   transform: translateX(-100%);
-  overflow: hidden;
-  overflow-y: auto;
   background-color: $PR-blue;
   color: white;
   max-height: 100vh;
@@ -55,6 +53,13 @@ $transition-length: $default-transition-length;
     display: none;
   }
 
+
+  .menu-scroll {
+    max-height: 100vh;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
 }
 
 
@@ -74,8 +79,6 @@ $transition-length: $default-transition-length;
 
     .menu-scroll {
       max-height: calc(100vh - #{$navbar-total-height-desktop});
-      overflow: hidden;
-      overflow-y: auto;
     }
 
     .menu-branding {

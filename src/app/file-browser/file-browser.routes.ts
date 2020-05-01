@@ -19,7 +19,7 @@ const fileListChildRoutes = [
   {
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,
-    resolve: recordResolve,
+    resolve: recordResolve
   }
 ];
 
