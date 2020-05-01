@@ -15,7 +15,7 @@ export type SelectedItemsMap = Map<ItemVO, boolean>;
 
 export interface SelectKeyEvent {
   type: 'key';
-  direction: 'up' | 'down';
+  key?: 'up' | 'down' | 'a';
   modifierKey?: 'ctrl' | 'shift';
 }
 
@@ -340,30 +340,36 @@ export class DataService {
         }
         break;
       case 'key':
-        const items = this.currentFolder.ChildItemVOs;
-        const index = this.lastManualSelectItem ? findIndex(items, this.lastManualSelectItem) : 0;
-        if (!selectEvent.modifierKey) {
-          let newIndex = index + (selectEvent.direction === 'up' ? -1 : 1);
-          newIndex = Math.max(0, newIndex);
-          newIndex = Math.min(items.length - 1, newIndex);
-          const newItem = items[newIndex];
-          if (newItem !== this.lastManualSelectItem) {
-            this.selectItemSingle(newItem);
-          }
-        } else {
-          if (!this.lastArrowSelectItem) {
-            this.lastArrowSelectItem = this.lastManualSelectItem;
-          }
-          const indexEnd = this.lastArrowSelectItem ? findIndex(items, this.lastArrowSelectItem) : 0;
-          let newIndex = indexEnd + (selectEvent.direction === 'up' ? -1 : 1);
-          newIndex = Math.max(0, newIndex);
-          newIndex = Math.min(items.length - 1, newIndex);
-          const newItem = items[newIndex];
-          this.selectItemsBetweenIndicies(index, newIndex);
-          this.lastArrowSelectItem = newItem;
+        switch (selectEvent.key) {
+          case 'up':
+          case 'down':
+            const items = this.currentFolder.ChildItemVOs;
+            const index = this.lastManualSelectItem ? findIndex(items, this.lastManualSelectItem) : 0;
+            if (!selectEvent.modifierKey) {
+              let newIndex = index + (selectEvent.key === 'up' ? -1 : 1);
+              newIndex = Math.max(0, newIndex);
+              newIndex = Math.min(items.length - 1, newIndex);
+              const newItem = items[newIndex];
+              if (newItem !== this.lastManualSelectItem) {
+                this.selectItemSingle(newItem);
+              }
+            } else {
+              if (!this.lastArrowSelectItem) {
+                this.lastArrowSelectItem = this.lastManualSelectItem;
+              }
+              const indexEnd = this.lastArrowSelectItem ? findIndex(items, this.lastArrowSelectItem) : 0;
+              let newIndex = indexEnd + (selectEvent.key === 'up' ? -1 : 1);
+              newIndex = Math.max(0, newIndex);
+              newIndex = Math.min(items.length - 1, newIndex);
+              const newItem = items[newIndex];
+              this.selectItemsBetweenIndicies(index, newIndex);
+              this.lastArrowSelectItem = newItem;
+            }
+            break;
+          case 'a':
+            this.selectItemsBetweenIndicies(0, this.currentFolder.ChildItemVOs.length - 1);
+            break;
         }
-
-
         break;
     }
   }

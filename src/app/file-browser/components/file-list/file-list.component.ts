@@ -243,12 +243,12 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   @HostListener('window:keydown', ['$event'])
   onWindowKeydown(event: KeyboardEvent) {
-    if (event.target === this.document.body && !this.router.url.includes('record')) {
+    if (this.checkKeyEvent(event)) {
       if (event.keyCode === UP_ARROW || event.keyCode === DOWN_ARROW) {
         event.preventDefault();
         const selectEvent: SelectKeyEvent = {
           type: 'key',
-          direction: event.keyCode === UP_ARROW ? 'up' : 'down'
+          key: event.keyCode === UP_ARROW ? 'up' : 'down'
         };
 
         if (event.shiftKey) {
@@ -259,6 +259,25 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       }
 
     }
+  }
+
+  @HostListener('window:keydown.control.a', ['$event'])
+  @HostListener('window:keydown.meta.a', ['$event'])
+  onSelectAllKeypress(event: KeyboardEvent) {
+    if (this.checkKeyEvent(event)) {
+      event.preventDefault();
+      const selectEvent: SelectKeyEvent = {
+        type: 'key',
+        key: 'a',
+        modifierKey: 'ctrl'
+      };
+
+      this.dataService.onSelectEvent(selectEvent);
+    }
+  }
+
+  checkKeyEvent(event: KeyboardEvent) {
+    return event.target === this.document.body && !this.router.url.includes('record');
   }
 
   loadVisibleItems(animate ?: boolean) {
