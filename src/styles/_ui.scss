@@ -261,3 +261,22 @@ button.btn-wordpress, button.btn-wordpress-alternate {
     width: 200px;
   }
 }
+
+.drag-service-cursor {
+  position: absolute;
+  opacity: 0;
+  padding-left: 5px;
+  z-index: 100;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+
+  background-color: rgba(white, 0.5);
+
+  .drag-service-cursor-item {
+  }
+
+  .drag-service-cursor-action {
+    font-weight: 500;
+  }
+}

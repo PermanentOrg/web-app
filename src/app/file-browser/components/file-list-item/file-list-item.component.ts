@@ -85,6 +85,7 @@ type ActionType = 'delete' |
   'setFolderView';
 
 const DOUBLE_CLICK_TIMEOUT = 100;
+const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 15;
 
 @Component({
@@ -124,6 +125,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   private checkFolderView: boolean;
 
   private singleClickTimeout: NodeJS.Timeout;
+  private mouseDownDragTimeout: NodeJS.Timeout;
 
   subscriptions: Subscription[] = [];
 
@@ -256,39 +258,50 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   }
 
   onItemMouseDown(mouseDownEvent: MouseEvent) {
-    const targetTypes: DragTargetType[] = ['folder'];
-
-    // if (this.item.isRecord) {
-    //   targetTypes.push('record');
-    // }
-
-    let isDragging = false;
-    const mouseUpHandler = (mouseUpEvent: MouseEvent) => {
-      this.drag.dispatch({
-        type: 'end',
-        srcComponent: this,
-        event: mouseUpEvent,
-        targetTypes
-      });
-      this.document.removeEventListener('mouseup', mouseUpHandler);
+    const preDragMouseUpHandler = (mouseUpEvent: MouseEvent) => {
+      clearTimeout(this.mouseDownDragTimeout);
+      console.log('too short! cancelled timeout');
     };
-    const mouseMoveHandler = (mouseMoveEvent: MouseEvent) => {
-      if (!isDragging) {
-        isDragging = Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) > DRAG_MIN_Y;
-        if (isDragging) {
-          this.drag.dispatch({
-            type: 'start',
-            srcComponent: this,
-            event: mouseMoveEvent,
-            targetTypes
-          });
+
+    this.document.addEventListener('mouseup', preDragMouseUpHandler);
+
+    this.mouseDownDragTimeout = setTimeout(() => {
+      console.log('long enough! starting to look for drag!');
+      this.document.removeEventListener('mouseup', preDragMouseUpHandler);
+      const targetTypes: DragTargetType[] = ['folder'];
+
+      // if (this.item.isRecord) {
+      //   targetTypes.push('record');
+      // }
+
+      let isDragging = false;
+      const mouseUpHandler = (mouseUpEvent: MouseEvent) => {
+        this.drag.dispatch({
+          type: 'end',
+          srcComponent: this,
+          event: mouseUpEvent,
+          targetTypes
+        });
+        this.document.removeEventListener('mouseup', mouseUpHandler);
+      };
+      const mouseMoveHandler = (mouseMoveEvent: MouseEvent) => {
+        if (!isDragging) {
+          isDragging = Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) > DRAG_MIN_Y;
+          if (isDragging) {
+            this.drag.dispatch({
+              type: 'start',
+              srcComponent: this,
+              event: mouseMoveEvent,
+              targetTypes
+            });
+          }
+        } else {
+          this.document.addEventListener('mouseup', mouseUpHandler);
+          this.document.removeEventListener('mousemove', mouseMoveHandler);
         }
-      } else {
-        this.document.addEventListener('mouseup', mouseUpHandler);
-        this.document.removeEventListener('mousemove', mouseMoveHandler);
-      }
-    };
-    this.document.addEventListener('mousemove', mouseMoveHandler);
+      };
+      this.document.addEventListener('mousemove', mouseMoveHandler);
+    }, MOUSE_DOWN_DRAG_TIMEOUT);
   }
 
   onItemMouseEnterLeave(event: MouseEvent, enter = true) {

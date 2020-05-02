@@ -7,7 +7,7 @@ import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 const THUMBNAIL_REFRESH_INTERVAL = 7500;
 
@@ -49,7 +49,7 @@ export class DataService {
   public multiSelectItems: Map<number, ItemVO> = new Map();
 
   private selectedItems: SelectedItemsMap = new Map();
-  private selectedItemsSubject: Subject<SelectedItemsMap> = new Subject();
+  private selectedItemsSubject: BehaviorSubject<SelectedItemsMap> = new BehaviorSubject(this.selectedItems);
   private lastManualSelectItem: ItemVO;
   private lastArrowSelectItem: ItemVO;
 
@@ -323,6 +323,10 @@ export class DataService {
 
   public selectedItems$() {
     return this.selectedItemsSubject.asObservable();
+  }
+
+  public getSelectedItems() {
+    return this.selectedItemsSubject.value;
   }
 
   public onSelectEvent(selectEvent: SelectEvent) {
