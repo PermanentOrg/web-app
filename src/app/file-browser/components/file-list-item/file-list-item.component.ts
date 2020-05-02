@@ -23,10 +23,11 @@ import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
 
 import { ItemClickEvent } from '../file-list/file-list.component';
-import { DragService, DragServiceEvent, DragTargetType, DragTargetDroppable, DraggableComponent } from '@shared/services/drag/drag.service';
+import { DragService, DragServiceEvent, DragTargetType, DraggableComponent, DragTargetDroppableComponent } from '@shared/services/drag/drag.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
+import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -91,7 +92,8 @@ const DRAG_MIN_Y = 15;
   templateUrl: './file-list-item.component.html',
   styleUrls: ['./file-list-item.component.scss']
 })
-export class FileListItemComponent implements OnInit, OnChanges, OnDestroy, HasSubscriptions, DraggableComponent {
+export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
+  HasSubscriptions, DraggableComponent, DragTargetDroppableComponent {
   @Input() item: FolderVO | RecordVO;
   @Input() folderView: FolderView;
 
@@ -102,7 +104,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy, HasS
 
   public isMultiSelected =  false;
   public isDragTarget = false;
-  public isCurrentDragTarget = false;
+  public isDropTarget = false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -216,10 +218,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy, HasS
     unsubscribeAll(this.subscriptions);
   }
 
-  onDrop(dropTarget: DragTargetDroppable) {
+  onDrop(dropTarget: DragTargetDroppableComponent) {
+    console.log('DROPPED ON:', dropTarget);
     if (dropTarget instanceof FileListItemComponent) {
       console.log('MOVE:', this.item.displayName);
       console.log('TO:', dropTarget.item.displayName);
+    } else if (dropTarget instanceof BreadcrumbComponent) {
+      console.log('MOVE:', this.item.displayName);
+      console.log('TO:', dropTarget.breadcrumb.text);
     }
   }
 
@@ -242,7 +248,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy, HasS
         }
 
         if (!start) {
-          this.isCurrentDragTarget = false;
+          this.isDropTarget = false;
         }
 
         break;
@@ -298,7 +304,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy, HasS
         srcComponent: this,
         event
       });
-      this.isCurrentDragTarget = enter;
+      this.isDropTarget = enter;
     }
   }
 

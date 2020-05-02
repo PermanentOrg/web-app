@@ -17,9 +17,13 @@
   align-items: center;
 }
 
-.breadcrumb {
+pr-breadcrumb {
   display: inline-block;
   color: white;
+
+  @include after($tablet-horizontal) {
+    padding: 0.25rem 0;
+  }
 
   a {
     color: white;
@@ -29,16 +33,24 @@
     font-weight: 600;
   }
 
-}
+  .separator {
+    display: inline-block;
+    padding: 0px 6px 0px 4px;
+    opacity: 0.5;
+  }
 
-.breadcrumbs-dark-text {
-  .breadcrumb, a {
-    color: $body-color;
+  &.drag-target {
+    &:hover {
+      a {
+        color: $PR-purple;
+        text-decoration: none;
+      }
+    }
   }
 }
 
-.separator {
-  display: inline-block;
-  padding: 0px 6px 0px 4px;
-  opacity: 0.5;
+.breadcrumbs-dark-text {
+  pr-breadcrumb, a {
+    color: $body-color;
+  }
 }

@@ -24,6 +24,7 @@ import { NewlineTextPipe } from './pipes/newline-text.pipe';
 import { AccountDropdownComponent } from './components/account-dropdown/account-dropdown.component';
 import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
 import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
+import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { InlineValueEditComponent } from './components/inline-value-edit/inline-
     ArchiveSmallComponent,
     ArchivePickerComponent,
     TimelineCompleteDialogComponent,
+    BreadcrumbComponent,
     BreadcrumbsComponent,
     PromptComponent,
     FileSizePipe,
@@ -68,6 +70,7 @@ import { InlineValueEditComponent } from './components/inline-value-edit/inline-
     PromptComponent,
     ArchiveSmallComponent,
     ArchivePickerComponent,
+    BreadcrumbComponent,
     BreadcrumbsComponent,
     FileSizePipe,
     PrConstantsPipe,

@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
 
 export type DragTargetType = 'folder' | 'record';
 
 export interface DraggableComponent {
-  onDrop(dropTarget: DragTargetDroppable);
+  onDrop(dropTarget: DragTargetDroppableComponent);
 }
-export type DragTargetDroppable = FileListItemComponent;
+
+export interface DragTargetDroppableComponent {
+  isDragTarget?: boolean;
+  isDropTarget?: boolean;
+  onDragServiceEvent(dragEvent: DragServiceEvent);
+  onMouseEnterLeave?(event: MouseEvent);
+}
 
 export interface DragServiceStartEndEvent {
   type: 'start' | 'end';
@@ -19,7 +26,7 @@ export interface DragServiceStartEndEvent {
 export interface DragServiceEnterLeaveEvent {
   type: 'enter' | 'leave';
   event: MouseEvent;
-  srcComponent: DragTargetDroppable;
+  srcComponent: DragTargetDroppableComponent;
 }
 
 export type DragServiceEvent = DragServiceStartEndEvent | DragServiceEnterLeaveEvent;
@@ -29,7 +36,7 @@ export type DragServiceEvent = DragServiceStartEndEvent | DragServiceEnterLeaveE
 export class DragService {
   private subject = new Subject<DragServiceEvent>();
 
-  private currentTarget: DragTargetDroppable;
+  private currentTarget: DragTargetDroppableComponent;
 
   constructor() { }
 
@@ -43,8 +50,9 @@ export class DragService {
         break;
     }
     this.subject.next(dragEvent);
+    console.log('DISPATCH:', dragEvent);
 
-    if (dragEvent.type === 'end') {
+    if (dragEvent.type === 'end' && this.currentTarget) {
       dragEvent.srcComponent.onDrop(this.currentTarget);
     }
   }

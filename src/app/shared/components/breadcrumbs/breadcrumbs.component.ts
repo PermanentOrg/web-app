@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
 
-class Breadcrumb {
+export class Breadcrumb {
   public routerPath: string;
   constructor(rootUrl: string, public text: string, archiveNbr?: string, folder_linkId?: number, rootUrlOnly = false) {
 
@@ -41,7 +41,8 @@ class Breadcrumb {
 @Component({
   selector: 'pr-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: ['./breadcrumbs.component.scss']
+  styleUrls: ['./breadcrumbs.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
   public currentFolder;
