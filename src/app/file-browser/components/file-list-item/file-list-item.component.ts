@@ -86,7 +86,7 @@ type ActionType = 'delete' |
 
 const DOUBLE_CLICK_TIMEOUT = 100;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
-const DRAG_MIN_Y = 15;
+const DRAG_MIN_Y = 5;
 
 @Component({
   selector: 'pr-file-list-item',
@@ -269,7 +269,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   }
 
   onItemMouseDown(mouseDownEvent: MouseEvent) {
-    // mouseDownEvent.preventDefault();
+    mouseDownEvent.preventDefault();
     const preDragMouseUpHandler = (mouseUpEvent: MouseEvent) => {
       clearTimeout(this.mouseDownDragTimeout);
     };
@@ -298,7 +298,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
         });
       };
       const mouseMoveHandler = (mouseMoveEvent: MouseEvent) => {
-        // mouseMoveEvent.preventDefault();
+        mouseMoveEvent.preventDefault();
         if (!isDragging) {
           isDragging = Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) > DRAG_MIN_Y;
           if (isDragging) {
@@ -333,7 +333,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
       });
       this.isDropTarget = enter;
     }
-    console.log('mouseenterleave', this.item.displayName, this.isDragTarget, this.isDropTarget, this.isDragging);
   }
 
   onItemClick(event: MouseEvent) {

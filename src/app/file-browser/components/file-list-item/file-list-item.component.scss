@@ -40,7 +40,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   transition: background-color $bg-transition-length ease-in;
   background-color: rgba(white, 0);
 
-  &.selected {
+  &.selected, &.selected:hover {
     background-color: rgba($PR-orange, 0.2);
     transition: background-color 0s;
   }
@@ -49,15 +49,16 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     transition: background-color 0s;
   }
 
-  &:hover:not(.selected), &:hover:not(.dragging) {
+  &:hover {
     background-color: rgba($gray-100, 1);
   }
 
-  &:hover.drag-target {
+  &.drop-target, &.drop-target:hover {
+    transition: background-color 0s;
     background-color: rgba($PR-purple, 0.3);
   }
 
-  &.dragging {
+  &.dragging, &.dragging:hover {
     opacity: 0.5;
     transition: opacity $bg-transition-length ease-in;
   }

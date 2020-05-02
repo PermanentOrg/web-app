@@ -7,7 +7,10 @@
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
     <div class="menu-scroll" #scroll>
-      <a class="menu-item" [routerLink]="['/myfiles']" [class.active]="checkMenuItemActive('/myfiles')">
+      <a class="menu-item"
+      [routerLink]="['/myfiles']"
+      [class.active]="checkMenuItemActive('/myfiles')"
+      [prDragTargetRouterLink]>
         My Files
       </a>
       <a class="menu-item" [routerLink]="['/shares/byme']" [class.active]="checkMenuItemActive('/shares/byme')">
@@ -16,7 +19,10 @@
       <a class="menu-item" [routerLink]="['/shares/withme']" [class.active]="checkMenuItemActive('/shares/withme')">
         Shared With Me
       </a>
-      <a class="menu-item" [routerLink]="['/public']" [class.active]="checkMenuItemActive('/public')">
+      <a class="menu-item"
+        [routerLink]="['/public']"
+        [class.active]="checkMenuItemActive('/public')"
+        [prDragTargetRouterLink]>
         Public
       </a>
       <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">

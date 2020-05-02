@@ -37,6 +37,10 @@ $transition-length: $default-transition-length;
       background-color: lighten($PR-blue, 7%);
       transition: none;
     }
+
+    &.drop-target, &.drop-target:hover {
+      background-color: $PR-purple;
+    }
   }
 
   .menu-header {

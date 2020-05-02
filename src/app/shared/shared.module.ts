@@ -25,6 +25,7 @@ import { AccountDropdownComponent } from './components/account-dropdown/account-
 import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
 import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
 import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
+import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
     NewlineTextPipe,
     TimeAgoV9Pipe,
     AccountDropdownComponent,
-    InlineValueEditComponent
+    InlineValueEditComponent,
+    DragTargetRouterLinkDirective
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -81,7 +83,8 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
     NewlineTextPipe,
     TimeAgoV9Pipe,
     AccountDropdownComponent,
-    InlineValueEditComponent
+    InlineValueEditComponent,
+    DragTargetRouterLinkDirective
   ],
   providers: [
     PublicLinkPipe
