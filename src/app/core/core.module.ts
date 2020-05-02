@@ -27,6 +27,7 @@ import { MultiSelectStatusComponent } from './components/multi-select-status/mul
 import { EditService } from './services/edit/edit.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { DragService } from '@shared/services/drag/drag.service';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { RouterModule } from '@angular/router';
     UploadService,
     PromptService,
     EditService,
+    DragService
   ]
 })
 export class CoreModule {

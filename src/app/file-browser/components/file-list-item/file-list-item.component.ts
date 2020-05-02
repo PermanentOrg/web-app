@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional, Inject } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
@@ -23,6 +23,10 @@ import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
 
 import { ItemClickEvent } from '../file-list/file-list.component';
+import { DragService, DragServiceEvent, DragTargetType } from '@shared/services/drag/drag.service';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { Subscription } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -80,13 +84,14 @@ type ActionType = 'delete' |
   'setFolderView';
 
 const DOUBLE_CLICK_TIMEOUT = 100;
+const MOUSEDOWN_SELECT_TIMEOUT = 500;
 
 @Component({
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
   styleUrls: ['./file-list-item.component.scss']
 })
-export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
+export class FileListItemComponent implements OnInit, OnChanges, OnDestroy, HasSubscriptions {
   @Input() item: FolderVO | RecordVO;
   @Input() folderView: FolderView;
 
@@ -96,6 +101,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isSelected = false;
 
   public isMultiSelected =  false;
+  public isDragTarget = false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -116,6 +122,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   private singleClickTimeout: NodeJS.Timeout;
 
+  subscriptions: Subscription[] = [];
+
   constructor(
     private dataService: DataService,
     private api: ApiService,
@@ -128,7 +136,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     private accountService: AccountService,
     @Optional() private folderPicker: FolderPickerService,
     private dialog: Dialog,
-    private device: DeviceService
+    private device: DeviceService,
+    @Optional() private drag: DragService,
+    @Inject(DOCUMENT) private document: Document
   ) {
   }
 
@@ -183,6 +193,15 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.inGridView = this.folderView === FolderView.Grid;
 
+    this.subscriptions.push(
+      this.drag.events().subscribe(dragEvent => {
+        if (dragEvent.srcComponent === this) {
+          return;
+        }
+
+        this.setDragTargetStatus(dragEvent);
+      })
+    );
   }
 
   ngOnChanges() {
@@ -195,6 +214,86 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.dataService.deregisterItem(this.item);
+    unsubscribeAll(this.subscriptions);
+  }
+
+  setDragTargetStatus(dragEvent: DragServiceEvent) {
+    const start = dragEvent.type === 'start';
+
+    if (this.item.isRecord && dragEvent.targetTypes.includes('record')) {
+      this.isDragTarget = start;
+    }
+
+    if (this.item.isFolder && dragEvent.targetTypes.includes('folder')) {
+      this.isDragTarget = start;
+    }
+  }
+
+  onItemMouseDown(mouseDownEvent: MouseEvent) {
+    const targetTypes: DragTargetType[] = ['folder'];
+
+    if (this.item.isRecord) {
+      targetTypes.push('record');
+    }
+
+    if (!this.isSelected) {
+      return;
+    }
+
+    let isDragging = false;
+    const mouseUpHandler = (mouseUpEvent: MouseEvent) => {
+      this.drag.dispatch({
+        type: 'end',
+        srcComponent: this,
+        event: mouseUpEvent,
+        targetTypes
+      });
+      this.document.removeEventListener('mouseup', mouseUpHandler);
+      this.document.removeEventListener('mousemove', mouseMoveHandler);
+    };
+    const mouseMoveHandler = (mouseMoveEvent: MouseEvent) => {
+      if (!isDragging) {
+        isDragging = Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) > 20;
+        if (isDragging) {
+          this.drag.dispatch({
+            type: 'start',
+            srcComponent: this,
+            event: mouseMoveEvent,
+            targetTypes
+          });
+        }
+      } else {
+        this.document.addEventListener('mouseup', mouseUpHandler);
+      }
+    };
+    this.document.addEventListener('mousemove', mouseMoveHandler);
+  }
+
+  onItemDragStartEnd(event: MouseEvent, start = true) {
+    const targetTypes: DragTargetType[] = ['folder'];
+
+    if (this.item.isRecord) {
+      targetTypes.push('record');
+    }
+
+    const dragEvent: DragServiceEvent = {
+      type: start ? 'start' : 'end',
+      srcComponent: this,
+      event,
+      targetTypes
+    };
+
+    this.drag.dispatch(dragEvent);
+  }
+
+  onItemDragEnterLeave(event: MouseEvent, enter = true) {
+    if (this.isDragTarget) {
+      if (enter) {
+        console.log('drag enter', this.item.displayName);
+      } else {
+        console.log('drag leave', this.item.displayName);
+      }
+    }
   }
 
   onItemClick(event: MouseEvent) {

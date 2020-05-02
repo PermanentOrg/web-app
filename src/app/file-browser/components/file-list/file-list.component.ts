@@ -30,6 +30,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
 import { slideUpAnimation, fadeAnimation } from '@shared/animations';
+import { DragService } from '@shared/services/drag/drag.service';
 
 export interface ItemClickEvent {
   event: MouseEvent;
@@ -95,7 +96,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private elementRef: ElementRef,
     private folderViewService: FolderViewService,
     @Inject(DOCUMENT) private document: any,
-    private scroll: ScrollService
+    private drag: DragService
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -153,11 +154,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     // register for select events
     this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
       this.selectedItems = selectedItems;
-    }));
-
-    // register for non-body scroll events
-    this.subscriptions.push(this.scroll.getScrolls().subscribe(event => {
-      this.onViewportScroll(event);
     }));
   }
 

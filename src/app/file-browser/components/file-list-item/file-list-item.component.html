@@ -1,4 +1,9 @@
-<div class="file-list-item" (click)="onItemClick($event)" (dblclick)="onItemDoubleClick()" [ngClass]="{'grid-view': inGridView, 'selected': isSelected}"> 
+<div class="file-list-item"
+  (click)="onItemClick($event)"
+  (dblclick)="onItemDoubleClick()"
+  [ngClass]="{'grid-view': inGridView, 'selected': isSelected}"
+  (mousedown)="onItemMouseDown($event)"
+  (pointerenter)="onItemDragEnterLeave($event)" (pointerleave)="onItemDragEnterLeave($event, false)"> 
   <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">
