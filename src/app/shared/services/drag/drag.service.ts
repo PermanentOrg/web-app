@@ -7,6 +7,7 @@ import { DOCUMENT } from '@angular/common';
 import { DataService } from '../data/data.service';
 import gsap from 'gsap';
 import { DeviceService } from '../device/device.service';
+import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 
 export type DragTargetType = 'folder' | 'record';
 
@@ -92,12 +93,14 @@ export class DragService {
     this.createDragCursor(dragEvent.event);
     this.updateItemLabelText();
     this.document.addEventListener('mousemove', this.mouseMoveHandler);
+    this.renderer.addClass(this.document.body, 'dragging');
   }
 
   onDragEnd(dragEvent: DragServiceStartEndEvent) {
     this.document.removeEventListener('mousemove', this.mouseMoveHandler);
     this.destroyDragCursor();
     this.dragSrc = null;
+    this.renderer.removeClass(this.document.body, 'dragging');
   }
 
   onDragEnter(dragEvent: DragServiceEnterLeaveEvent) {
@@ -188,13 +191,17 @@ export class DragService {
       this.actionLabelElement.innerText = '';
       return;
     }
+    let label = '';
     if (this.dragSrc instanceof FileListItemComponent) {
       if (this.dropTarget instanceof FileListItemComponent) {
-        this.actionLabelElement.innerText = `Move to ${this.dropTarget.item.displayName}`;
+        label = `Move to ${this.dropTarget.item.displayName}`;
       } else if (this.dropTarget instanceof BreadcrumbComponent) {
-        this.actionLabelElement.innerText = `Move to ${this.dropTarget.breadcrumb.text}`;
+        label = `Move to ${this.dropTarget.breadcrumb.text}`;
+      } else if (this.dropTarget instanceof DragTargetRouterLinkDirective) {
+        label = `Move to ${this.dropTarget.linkText}`;
       }
     }
+    this.actionLabelElement.innerText = label;
   }
 
   events() {

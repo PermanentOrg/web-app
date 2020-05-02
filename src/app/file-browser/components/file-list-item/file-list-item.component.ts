@@ -28,6 +28,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
+import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -227,6 +228,9 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
     } else if (dropTarget instanceof BreadcrumbComponent) {
       console.log('MOVE:', this.item.displayName);
       console.log('TO:', dropTarget.breadcrumb.text);
+    } else if (dropTarget instanceof DragTargetRouterLinkDirective) {
+      console.log('MOVE:', this.item.displayName);
+      console.log('TO:', dropTarget.linkText);
     }
   }
 

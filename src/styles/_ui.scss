@@ -262,6 +262,18 @@ button.btn-wordpress, button.btn-wordpress-alternate {
   }
 }
 
+// DRAGGING RELATED
+
+body.dragging {
+  *:not(.drag-target) {
+    cursor: no-drop !important;
+  }
+
+  *.drag-target, .drag-target * {
+    cursor: pointer !important;
+  }
+}
+
 .drag-service-cursor {
   position: absolute;
   opacity: 0;
@@ -313,6 +325,4 @@ button.btn-wordpress, button.btn-wordpress-alternate {
       bottom: 0rem;
     }
   }
-
-
 }

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, HostBinding, HostListener, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, HostBinding, HostListener, OnDestroy, AfterViewInit } from '@angular/core';
 import { DragService, DragTargetDroppableComponent, DragServiceEvent } from '@shared/services/drag/drag.service';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -7,16 +7,15 @@ import { DataService } from '@shared/services/data/data.service';
 @Directive({
   selector: '[prDragTargetRouterLink]'
 })
-export class DragTargetRouterLinkDirective implements DragTargetDroppableComponent, OnDestroy {
+export class DragTargetRouterLinkDirective implements DragTargetDroppableComponent, OnDestroy, AfterViewInit {
   private nativeElement: HTMLElement;
+  private dragSubscription: Subscription;
 
   @HostBinding('class.drag-target') public isDragTarget = false;
   @HostBinding('class.drop-target') public isDropTarget = false;
 
   @Input() routerLink: string;
-
-  private dragSubscription: Subscription;
-
+  linkText: string;
   constructor (
     private element: ElementRef,
     private drag: DragService,
@@ -26,6 +25,10 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
     this.dragSubscription = this.drag.events().subscribe(dragEvent => {
       this.onDragServiceEvent(dragEvent);
     });
+  }
+
+  ngAfterViewInit() {
+    this.linkText = this.nativeElement.innerText;
   }
 
   ngOnDestroy() {
@@ -66,8 +69,6 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
         return false;
       }
     }
-
-    console.log(folder.type, this.routerLink);
 
     return true;
   }
