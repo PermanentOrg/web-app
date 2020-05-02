@@ -40,7 +40,7 @@ pr-breadcrumb {
   }
 
   &.drag-target {
-    &:hover {
+    &.drop-target {
       a {
         color: $PR-purple;
         text-decoration: none;

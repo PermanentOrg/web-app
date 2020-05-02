@@ -1,9 +1,12 @@
 import { Injectable, Inject, Renderer2, RendererFactory2 } from '@angular/core';
 import { Subject } from 'rxjs';
+import { throttle } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
 import { DOCUMENT } from '@angular/common';
 import { DataService } from '../data/data.service';
+import gsap from 'gsap';
+import { DeviceService } from '../device/device.service';
 
 export type DragTargetType = 'folder' | 'record';
 
@@ -51,18 +54,14 @@ export class DragService {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private dataService: DataService,
-    rendererFactory: RendererFactory2
+    rendererFactory: RendererFactory2,
+    deviceService: DeviceService
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
-    this.mouseMoveHandler = (event: MouseEvent) => {
-      this.renderer.setStyle(
-        this.dragCursorElement,
-        'transform',
-        `translate(${event.clientX + DRAG_CURSOR_OFFSET_X}px, ${event.clientY}px)`
-      );
-      this.renderer.setStyle(this.dragCursorElement, 'opacity', `0.6`);
-    };
+    this.mouseMoveHandler = throttle((event: MouseEvent) => {
+      this.setCursorPosition(event);
+    }, 8);
   }
 
   dispatch(dragEvent: DragServiceEvent) {
@@ -90,7 +89,7 @@ export class DragService {
 
   onDragStart(dragEvent: DragServiceStartEndEvent) {
     this.dragSrc = dragEvent.srcComponent;
-    this.createDragCursor();
+    this.createDragCursor(dragEvent.event);
     this.updateItemLabelText();
     this.document.addEventListener('mousemove', this.mouseMoveHandler);
   }
@@ -112,13 +111,12 @@ export class DragService {
   }
 
   onMouseMove(event: MouseEvent) {
-
   }
 
-  createDragCursor() {
-    const parent = this.renderer.createElement('div');
-    const actionLabel = this.renderer.createElement('div');
-    const itemLabel = this.renderer.createElement('div');
+  createDragCursor(event: MouseEvent) {
+    const parent = this.renderer.createElement('div') as HTMLElement;
+    const actionLabel = this.renderer.createElement('div') as HTMLElement;
+    const itemLabel = this.renderer.createElement('div') as HTMLElement;
 
     this.renderer.addClass(parent, 'drag-service-cursor');
     this.renderer.addClass(itemLabel, 'drag-service-cursor-item');
@@ -128,9 +126,36 @@ export class DragService {
     this.renderer.appendChild(parent, actionLabel);
     this.renderer.appendChild(this.document.body, parent);
 
+
     this.dragCursorElement = parent;
     this.actionLabelElement = actionLabel;
     this.itemsLabelElement = itemLabel;
+
+    this.setCursorPosition(event);
+
+    if (this.dragSrc instanceof FileListItemComponent) {
+      this.renderer.addClass(this.dragCursorElement, 'for-file-list-item');
+    }
+
+    setTimeout(() => {
+      this.renderer.addClass(this.dragCursorElement, 'active');
+      if (this.dragSrc instanceof FileListItemComponent) {
+        const width = (this.dragSrc.element.nativeElement as HTMLElement).clientWidth;
+        gsap.from(this.dragCursorElement, { width, duration: 0.25 });
+      }
+    });
+  }
+
+  setCursorPosition(event: MouseEvent) {
+    const width = this.dragCursorElement.clientWidth;
+    const height = this.dragCursorElement.clientHeight;
+    const targetX = event.clientX - (width / 2);
+    const targetY = event.clientY - 5;
+    this.renderer.setStyle(
+      this.dragCursorElement,
+      'transform',
+      `translate(${targetX}px, ${targetY}px)`
+    );
   }
 
   destroyDragCursor() {

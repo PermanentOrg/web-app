@@ -265,18 +265,54 @@ button.btn-wordpress, button.btn-wordpress-alternate {
 .drag-service-cursor {
   position: absolute;
   opacity: 0;
-  padding-left: 5px;
+  padding: 0.25rem;
   z-index: 100;
   pointer-events: none;
   top: 0;
   left: 0;
+  border-radius: $border-radius;
+  background-color: rgba($PR-orange, 0.9);
 
-  background-color: rgba(white, 0.5);
-
+  &.active {
+    transition: opacity 0.25s $tweaked-ease;
+    opacity: 1;
+    // $blur-size: 10px;
+    // backdrop-filter: blur($blur-size);
+    // -webkit-backdrop-filter: blur($blur-size);
+  }
+  
   .drag-service-cursor-item {
+    font-weight: 700;
   }
 
   .drag-service-cursor-action {
     font-weight: 500;
   }
+
+  &.for-file-list-item {
+    height: $file-list-row-height * 1.25;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 20rem;
+    max-width: calc($file-list-width-desktop / 2);
+
+    transform-origin: 50% 50%;
+
+    .drag-service-cursor-item, .drag-service-cursor-action {
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .drag-service-cursor-action {
+      font-size: $font-size-sm;
+      position: absolute;
+      bottom: 0rem;
+    }
+  }
+
+
 }

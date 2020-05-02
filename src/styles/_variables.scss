@@ -41,6 +41,8 @@ $navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-deskto
 
 $sidebar-width: 300px;
 
+$file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
+
 $tablet: 768px;
 $tablet-horizontal: 900px;
 $desktop: 1200px;
