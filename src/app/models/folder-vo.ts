@@ -14,6 +14,14 @@ export type FolderViewType =
   'folder.view.list' |
   'folder.view.timeline'
   ;
+export type SortType =
+  'sort.display_date_asc' |
+  'sort.display_date_desc' |
+  'sort.alphabetical_asc' |
+  'sort.alphabetical_desc' |
+  'sort.type_asc' |
+  'sort.type_desc'
+  ;
 
 export class FolderVO extends BaseVO {
   public isFolder = true;
@@ -36,7 +44,7 @@ export class FolderVO extends BaseVO {
   public note;
   public description;
   public special;
-  public sort;
+  public sort: SortType;
   public locnId;
   public timeZoneId;
   public view: FolderView;

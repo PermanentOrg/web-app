@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { partition, remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData, SortType } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
@@ -243,7 +243,7 @@ export class DataService {
     });
   }
 
-  public refreshCurrentFolder() {
+  public refreshCurrentFolder(sortOnly = false) {
     return this.api.folder.navigate(this.currentFolder)
       .pipe(map(((response: FolderResponse) => {
         if (!response.isSuccessful) {
@@ -253,16 +253,12 @@ export class DataService {
         return response.getFolderVO(true);
       }))).toPromise()
       .then((updatedFolder: FolderVO) => {
-        this.updateChildItems(this.currentFolder, updatedFolder);
-        // this.currentFolder.update(folder);
+        this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
         this.folderUpdate.emit(this.currentFolder);
-      })
-      .catch((error) => {
-        console.error(error);
       });
   }
 
-  public updateChildItems(folder1: FolderVO, folder2: FolderVO) {
+  public updateChildItems(folder1: FolderVO, folder2: FolderVO, sortOnly = false) {
     if (!folder2.ChildItemVOs || !folder2.ChildItemVOs.length) {
       folder1.ChildItemVOs = folder2.ChildItemVOs;
     }
@@ -283,16 +279,18 @@ export class DataService {
     for (const item of original) {
       originalItemsById.set(item.folder_linkId, item);
 
-      if (updatedItemsById.has(item.folder_linkId)) {
-        const updatedItem = updatedItemsById.get(item.folder_linkId);
-        const dataToUpdate: FolderVOData | RecordVOData = {
-          updatedDT: updatedItem.updatedDT,
-        };
-        item.update(dataToUpdate);
-      } else {
-        if (this.selectedItems.has(item)) {
-          this.selectedItems.delete(item);
-          this.selectedItemsSubject.next(this.selectedItems);
+      if (!sortOnly) {
+        if (updatedItemsById.has(item.folder_linkId)) {
+          const updatedItem = updatedItemsById.get(item.folder_linkId);
+          const dataToUpdate: FolderVOData | RecordVOData = {
+            updatedDT: updatedItem.updatedDT,
+          };
+          item.update(dataToUpdate);
+        } else {
+          if (this.selectedItems.has(item)) {
+            this.selectedItems.delete(item);
+            this.selectedItemsSubject.next(this.selectedItems);
+          }
         }
       }
     }
@@ -433,6 +431,8 @@ export class DataService {
         this.selectedItems.set(item, true);
       } else if (replace) {
         this.selectedItems.clear();
+      } else {
+        this.selectedItems.delete(item);
       }
     } else {
       if (replace) {

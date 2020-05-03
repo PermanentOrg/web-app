@@ -77,3 +77,20 @@ export const fadeAnimation = trigger('fadeAnimation', [
     )
   ])
 ]);
+
+export const ngIfFadeInAnimation = trigger('ngIfFadeInAnimation', [
+  transition(
+    ':enter',
+    [
+      style({ opacity: 0 }),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 1 }))
+    ]
+  ),
+  transition(
+    ':leave',
+    [
+      style({ opacity: 1 }),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 0 }))
+    ]
+  )
+]);

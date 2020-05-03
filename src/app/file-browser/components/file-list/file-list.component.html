@@ -1,5 +1,7 @@
-<pr-file-list-controls *ngIf="showSidebar"></pr-file-list-controls>
-<div class="file-list-scroll" (scroll)="onViewportScroll($event)" (mousemove)="onViewportMouseMove($event)" #scroll>
+<pr-file-list-controls [hidden]="!showSidebar" #controls></pr-file-list-controls>
+<div class="file-list-scroll"
+  (scroll)="onViewportScroll($event)" (mousemove)="onViewportMouseMove($event)" 
+  [class.is-sorting]="controls?.isSorting$ | async" #scroll>
   <pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
   <pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs"
     [item]="item"
@@ -13,7 +15,8 @@
   </div>
 </div>
 <pr-sidebar *ngIf="showSidebar"></pr-sidebar>
-<div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
+<div [@slideUpAnimation]="device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''">
   <router-outlet #o="outlet"></router-outlet>
 </div>
+
 

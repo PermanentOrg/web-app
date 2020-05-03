@@ -93,6 +93,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
 
+  isSorting = false;
+
   selectedItems: SelectedItemsMap = new Map();
 
   subscriptions: Subscription[] = [];
@@ -104,7 +106,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private elementRef: ElementRef,
     private folderViewService: FolderViewService,
     @Inject(DOCUMENT) private document: any,
-    @Optional() private drag: DragService
+    @Optional() private drag: DragService,
+    public device: DeviceService
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -299,6 +302,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     }
 
     this.dataService.onSelectEvent(selectEvent);
+  }
+
+  onSort(isSorting: boolean) {
+    this.isSorting = isSorting;
   }
 
   @HostListener('window:keydown', ['$event'])

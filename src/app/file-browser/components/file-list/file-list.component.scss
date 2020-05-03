@@ -25,6 +25,18 @@
     display: none;
   }
 
+  .file-list-scroll {
+    opacity: 1;
+    
+    &.is-sorting {
+      opacity: 0.5;
+      cursor: wait;
+      * {
+        pointer-events: none;
+      }
+    }
+  }
+
   @include after($tablet-horizontal) {
     &.show-sidebar {
       width: calc(100% - #{$sidebar-width});

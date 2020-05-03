@@ -1,11 +1,22 @@
-<div class="file-list-header">
+<div class="file-list-header" [ngClass]="{'is-sort-changed': isSortChanged(), 'is-sorting': isSorting, 'is-saving-sort': isSavingSort}">
   <div class="name" [class.active-sort]="currentSort === 'name'" [class.sort-desc]="sortDesc">
-    Name
+    <span class="col-title" (click)="onSortClick('name')">Name</span>
+    <span class="save-sort" (click)="saveSort()">Save</span>
   </div>
   <div class="type" [class.active-sort]="currentSort === 'type'" [class.sort-desc]="sortDesc">
-    Type
+    <span class="col-title" (click)="onSortClick('type')">Type</span>
+    <span class="save-sort" (click)="saveSort()">Save</span>
   </div>
   <div class="date" [class.active-sort]="currentSort === 'date'" [class.sort-desc]="sortDesc">
-    Date
+    <span class="col-title" (click)="onSortClick('date')">Date</span>
+    <span class="save-sort" (click)="saveSort()">Save</span>
   </div>
+</div>
+<div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>
+  <div class="file-list-control" [class.disabled]="!can.delete">Delete</div>
+  <div class="file-list-control" [class.disabled]="!can.copy">Copy</div>
+  <div class="file-list-control" [class.disabled]="!can.move">Move</div>
+  <div class="file-list-control" [class.disabled]="!can.share">Share</div>
+  <div class="file-list-control" [class.disabled]="!can.publish">Publish</div>
+  <div class="file-list-control" [class.disabled]="!can.download">Download</div>
 </div>

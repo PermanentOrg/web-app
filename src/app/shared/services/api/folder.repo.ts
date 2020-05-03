@@ -128,6 +128,19 @@ export class FolderRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<FolderResponse>('/folder/getPublicRoot', data, FolderResponse);
   }
+
+  public sort(folderVOs: FolderVO[]): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: new FolderVO({
+          folder_linkId: folderVO.folder_linkId,
+          sort: folderVO.sort
+        })
+      };
+    });
+
+    return this.http.sendRequestPromise<FolderResponse>('/folder/sort', data, FolderResponse);
+  }
 }
 
 export class FolderResponse extends BaseResponse {

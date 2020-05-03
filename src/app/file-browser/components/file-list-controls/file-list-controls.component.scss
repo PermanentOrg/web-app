@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   border-bottom: $file-list-border;
+  position: relative;
 
   @include until($tablet-horizontal) {
     display: none;
@@ -22,32 +23,72 @@
   font-size: $font-size-sm;
 
   > * {
-    cursor: pointer;
-    font-weight: 700;
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    align-items: baseline;
 
-    &::after {
+    .col-title {
+      cursor: pointer;
+    }
+
+    .col-title::after {
       content: '\25BC';
       font-size: $sort-arrow-size;
       padding-left: $sort-arrow-size;
       position: relative;
       top: -$sort-arrow-size / 4;
-      opacity: 0.5
+      opacity: 0.5;
     }
 
-    &:hover::after {
+    .col-title:hover::after {
       opacity: 0.75;
+    }
+
+    .save-sort {
+      display: none;
+      opacity: 0.5;
+      cursor: pointer;
+      font-size: 0.85em;
+      padding-left: $sort-arrow-size;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
   
   .active-sort {
-    &::after {
+    .col-title::after {
       opacity: 1;
     }
 
-    &.sort-desc::after {
+    &.sort-desc .col-title::after {
       content: '\25B2';
     }
   }
+
+  &.is-sort-changed {
+    .active-sort {
+      .save-sort {
+        display: initial;
+      }
+    }
+  }
+
+  &.is-sorting {
+    .col-title {
+      cursor: wait;
+    }
+  }
+
+  &.is-saving-sort {
+    .save-sort {
+      cursor: wait;
+      opacity: 0.5;
+    }
+  }
+
 
   .name {
     flex: 1 1 auto;
@@ -61,15 +102,36 @@
   .date {
     flex: 0 0 $file-list-date-col-width;
   }
+}
 
-  // .sort-direction {
-  //   font-size: 0.5em;
+.file-list-controls {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  font-size: $font-size-sm;
+  padding-left: 20px;
 
-  // }
+  .file-list-control {
+    margin-right: 20px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    padding: 0.25em;
+    opacity: 0.85;
 
-  // .sort-desc {
-  //   .sort-direction::after {
-  //     content: '\25B2';
-  //   }
-  // }
+    &.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    &:hover:not(.disabled) {
+      // color: darken($body-color, 15%);
+      opacity: 1;
+    }
+  }
 }
