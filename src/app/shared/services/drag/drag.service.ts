@@ -143,7 +143,7 @@ export class DragService {
       this.renderer.addClass(this.dragCursorElement, 'for-file-list-item');
     }
 
-    gsap.from(this.dragCursorElement, { opacity: 0 , duration: 0.25 });
+    gsap.from(this.dragCursorElement, { opacity: 0 , duration: 0.125 });
   }
 
   private setCursorPosition(event: MouseEvent) {

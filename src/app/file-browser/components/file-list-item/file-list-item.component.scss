@@ -72,8 +72,12 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     border-top: 1px solid $gray-300;
     box-shadow: $box-shadow-sm;
   }
+}
 
-
+.name, .type, .date {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .name {
@@ -88,6 +92,31 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     bottom: 0px;
     left: $grid-info-section-margin;
     right: $action-button-height;
+  }
+}
+
+.type, .date {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+
+  .grid-view & {
+    display: none;
+  }
+}
+
+@include after($tablet-horizontal) {
+  .type, .date {
+    display: initial;
+  }
+
+  .type {
+    flex: 0 0 $file-list-type-col-width;
+  }
+
+  .date {
+    flex: 0 0 $file-list-date-col-width;
   }
 }
 
@@ -118,6 +147,12 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     width: 100%;
     padding-top: 100%;
     margin: 0px;
+  }
+}
+
+@include after($tablet-horizontal) {
+  .actions {
+    display: none;
   }
 }
 

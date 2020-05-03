@@ -23,6 +23,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   subscriptions: Subscription[] = [];
 
   isLoading = false;
+  isRootFolder = false;
 
   constructor(
     private dataService: DataService,
@@ -49,6 +50,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
             this.isLoading = false;
           }
         }
+
+        this.isRootFolder = this.selectedItem?.type.includes('root');
       })
     );
   }

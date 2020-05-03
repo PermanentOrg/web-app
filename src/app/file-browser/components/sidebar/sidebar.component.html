@@ -4,7 +4,7 @@
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')">Sharing</div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
-  <ng-container *ngIf="selectedItem">
+  <ng-container *ngIf="selectedItem && !isRootFolder">
     <div class="sidebar-item" *ngIf="selectedItem">
       <div class="sidebar-thumbnail">
         <pr-thumbnail [item]="selectedItem"></pr-thumbnail>
@@ -32,6 +32,14 @@
       <label>Multiple items</label>
       <div class="sidebar-item-content">
         {{selectedItems.length}} items selected
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedItem && isRootFolder">
+    <div class="sidebar-item">
+      <label>{{selectedItem.displayName}}</label>
+      <div class="sidebar-item-content">
+        Select a file to view details
       </div>
     </div>
   </ng-container>

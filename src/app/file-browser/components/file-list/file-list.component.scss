@@ -29,8 +29,6 @@
     &.show-sidebar {
       width: calc(100% - #{$sidebar-width});
       height: calc(100vh - #{$navbar-total-height-desktop});
-      overflow-x: visible;
-      overflow-y: auto;
 
       pr-sidebar {
         display: block;
@@ -38,6 +36,7 @@
 
       .file-list-scroll {
         @include mainContentScrollDesktop;
+        max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
       }
     }
   }

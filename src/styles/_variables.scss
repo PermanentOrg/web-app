@@ -11,7 +11,6 @@ $input-transition: border-color .15s ease-in-out, background-color .15s ease-in-
 
 $max-form-width: 400px;
 
-$file-list-row-height: 50px;
 
 $bottom-safe-area-padding: 40px;
 
@@ -40,8 +39,15 @@ $navbar-total-height: $navbar-height + $breadcrumb-height;
 $navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-desktop;
 
 $sidebar-width: 300px;
+$sidebar-tab-height: 30px;
 
+$file-list-border: 1px solid $gray-300;
 $file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
+$file-list-row-height: 50px;
+$file-list-controls-height: $sidebar-tab-height;
+$file-list-thumb-col-width: $file-list-row-height;
+$file-list-type-col-width: 8rem;
+$file-list-date-col-width: 10rem;
 
 $tablet: 768px;
 $tablet-horizontal: 900px;

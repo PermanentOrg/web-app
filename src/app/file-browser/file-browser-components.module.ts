@@ -16,6 +16,7 @@ import { FolderViewComponent } from './components/folder-view/folder-view.compon
 import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { FileListControlsComponent } from './components/file-list-controls/file-list-controls.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   declarations: [
     FileListComponent,
     FileListItemComponent,
+    FileListControlsComponent,
     FileViewerComponent,
     FolderViewComponent,
     ThumbnailComponent,

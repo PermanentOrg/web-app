@@ -1,0 +1,34 @@
+@import 'variables';
+
+:host {
+  display: block;
+  height: $file-list-controls-height;
+  display: flex;
+  align-items: center;
+  border-bottom: $file-list-border;
+
+  @include until($tablet-horizontal) {
+    display: none;
+  }
+}
+
+.file-list-header {
+  flex: 1 1 100%;
+  padding-left: $file-list-thumb-col-width;
+  display: flex;
+  align-items: center;
+
+  font-size: $font-size-sm;
+
+  .name {
+    flex: 1 1 auto;
+  }
+
+  .type {
+    flex: 0 0 $file-list-type-col-width;
+  }
+
+  .date {
+    flex: 0 0 $file-list-date-col-width;
+  }
+}
