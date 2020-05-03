@@ -58,7 +58,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     background-color: rgba($PR-purple, 0.3);
   }
 
-  &.dragging, &.dragging:hover {
+  &.dragging, &.dragging:hover, &.disabled, &.disabled:hover {
     opacity: 0.5;
     transition: opacity $bg-transition-length ease-in;
   }

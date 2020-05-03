@@ -141,9 +141,9 @@ export class DragService {
 
     if (this.dragSrc instanceof FileListItemComponent) {
       this.renderer.addClass(this.dragCursorElement, 'for-file-list-item');
-      const width = (this.dragSrc.element.nativeElement as HTMLElement).clientWidth;
-      gsap.from(this.dragCursorElement, { width, opacity: 0 , duration: 0.25 });
     }
+
+    gsap.from(this.dragCursorElement, { opacity: 0 , duration: 0.25 });
   }
 
   private setCursorPosition(event: MouseEvent) {

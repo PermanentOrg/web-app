@@ -94,7 +94,7 @@ export class FolderVO extends BaseVO {
   constructor(voData: FolderVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
-    this.ChildItemVOs = orderBy(this.ChildItemVOs, 'position');
+    // this.ChildItemVOs = orderBy(this.ChildItemVOs, 'position');
 
     if (initChildren) {
       this.ChildItemVOs = this.ChildItemVOs.map((item) => {

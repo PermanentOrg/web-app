@@ -87,7 +87,7 @@ type ActionType = 'delete' |
 
 const DOUBLE_CLICK_TIMEOUT = 100;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
-const DRAG_MIN_Y = 5;
+const DRAG_MIN_Y = 1;
 
 @Component({
   selector: 'pr-file-list-item',
@@ -108,6 +108,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   public isDragTarget = false;
   public isDropTarget = false;
   public isDragging = false;
+  public isDisabled =  false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -249,6 +250,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
     }
 
     if (destination) {
+      this.isDisabled = true;
       const selectedItems = this.dataService.getSelectedItems();
       const srcItemSelected = selectedItems.has(this.item);
       const multipleItemsSelected = selectedItems.size > 1;
@@ -271,6 +273,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
         await this.edit.moveItems(itemsToMove, destination);
         await this.dataService.refreshCurrentFolder();
       } catch (err) {
+        this.isDisabled = false;
         if (err instanceof RecordResponse || err instanceof FolderResponse) {
           this.message.showError(err.getMessage());
         }
