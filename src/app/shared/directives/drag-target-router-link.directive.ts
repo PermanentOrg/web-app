@@ -14,12 +14,12 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
   @HostBinding('class.drag-target') public isDragTarget = false;
   @HostBinding('class.drop-target') public isDropTarget = false;
 
-  @Input() routerLink: string;
+  @Input() routerLink: string[];
   linkText: string;
   constructor (
     private element: ElementRef,
     private drag: DragService,
-    private data: DataService
+    private data: DataService,
   ) {
     this.nativeElement = this.element.nativeElement;
     this.dragSubscription = this.drag.events().subscribe(dragEvent => {
@@ -46,6 +46,7 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
             }
           } else {
             this.isDragTarget = false;
+            this.isDropTarget = false;
           }
         }
     }
@@ -93,5 +94,12 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
     }
   }
 
+  getFolderTypeFromLink() {
+    if (this.routerLink.includes('/myfiles')) {
+      return 'type.folder.root.private';
+    } else if (this.routerLink.includes('/public')) {
+      return 'type.folder.root.public';
+    }
+  }
 
 }

@@ -122,6 +122,14 @@ export class AccountService {
     this.clearRootFolder();
   }
 
+  public getPrivateRoot() {
+    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.private'});
+  }
+
+  public getPublicRoot() {
+    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.public'});
+  }
+
   public refreshAccount() {
     return this.api.account.get(this.account)
       .then((response: AccountResponse) => {

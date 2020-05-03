@@ -8,7 +8,7 @@ import { FolderVO } from '@root/app/models';
 
 export class Breadcrumb {
   public routerPath: string;
-  constructor(rootUrl: string, public text: string, archiveNbr?: string, folder_linkId?: number, rootUrlOnly = false) {
+  constructor(rootUrl: string, public text: string, public archiveNbr?: string, public folder_linkId?: number, rootUrlOnly = false) {
 
     if (rootUrlOnly) {
       this.routerPath = rootUrl;

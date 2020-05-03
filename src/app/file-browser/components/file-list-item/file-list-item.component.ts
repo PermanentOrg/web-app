@@ -6,7 +6,7 @@ import { clone, find } from 'lodash';
 import { DataService } from '@shared/services/data/data.service';
 import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@core/services/prompt/prompt.service';
 
-import { FolderVO, RecordVO, FolderVOData, RecordVOData, ShareVO } from '@root/app/models';
+import { FolderVO, RecordVO, FolderVOData, RecordVOData, ShareVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { RecordResponse, FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
@@ -220,17 +220,60 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
     unsubscribeAll(this.subscriptions);
   }
 
-  onDrop(dropTarget: DragTargetDroppableComponent) {
-    console.log('DROPPED ON:', dropTarget);
+  async onDrop(dropTarget: DragTargetDroppableComponent) {
+    let destination: FolderVO;
+
     if (dropTarget instanceof FileListItemComponent) {
-      console.log('MOVE:', this.item.displayName);
-      console.log('TO:', dropTarget.item.displayName);
+      destination = dropTarget.item as FolderVO;
     } else if (dropTarget instanceof BreadcrumbComponent) {
-      console.log('MOVE:', this.item.displayName);
-      console.log('TO:', dropTarget.breadcrumb.text);
+      if (dropTarget.breadcrumb.folder_linkId) {
+        destination = new FolderVO({
+          folder_linkId: dropTarget.breadcrumb.folder_linkId,
+          archiveNbr: dropTarget.breadcrumb.archiveNbr,
+          displayName: dropTarget.breadcrumb.text
+        });
+      } else {
+        switch (dropTarget.breadcrumb.routerPath) {
+          case '/myfiles':
+            destination = this.accountService.getPrivateRoot();
+            break;
+          case '/public':
+            destination = this.accountService.getPublicRoot();
+            break;
+        }
+      }
     } else if (dropTarget instanceof DragTargetRouterLinkDirective) {
-      console.log('MOVE:', this.item.displayName);
-      console.log('TO:', dropTarget.linkText);
+      const type = dropTarget.getFolderTypeFromLink();
+      const root = this.accountService.getRootFolder();
+      destination = find(root.ChildItemVOs, { type });
+    }
+
+    if (destination) {
+      const selectedItems = this.dataService.getSelectedItems();
+      const srcItemSelected = selectedItems.has(this.item);
+      const multipleItemsSelected = selectedItems.size > 1;
+      let itemsToMove: ItemVO[];
+      let itemText: string;
+
+      if (multipleItemsSelected && srcItemSelected) {
+        itemsToMove = Array.from(selectedItems.keys());
+        itemText = `${selectedItems.size} items`;
+      } else {
+        itemsToMove = [ this.item ];
+        itemText = this.item.displayName;
+      }
+
+      try {
+        await this.prompt.confirm(
+          'Move',
+          `Move ${itemText} to ${destination.displayName}?`,
+        );
+        await this.edit.moveItems(itemsToMove, destination);
+      } catch (err) {
+        if (err instanceof RecordResponse || err instanceof FolderResponse) {
+          this.message.showError(err.getMessage());
+        }
+      }
     }
   }
 

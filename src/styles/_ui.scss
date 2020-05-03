@@ -266,7 +266,7 @@ button.btn-wordpress, button.btn-wordpress-alternate {
 
 body.dragging {
   overflow-y: hidden;
-  
+
   *:not(.drag-target) {
     cursor: no-drop !important;
   }
@@ -278,7 +278,7 @@ body.dragging {
 
 .drag-service-cursor {
   position: absolute;
-  opacity: 0;
+  opacity: 1;
   padding: 0.25rem;
   z-index: 100;
   pointer-events: none;
@@ -286,7 +286,6 @@ body.dragging {
   left: 0;
   border-radius: $border-radius;
   background-color: rgba($PR-orange, 0.9);
-  transition: opacity 0.25s $tweaked-ease;
 
   &.active {
     opacity: 1;

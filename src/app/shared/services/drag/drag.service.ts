@@ -8,6 +8,7 @@ import { DataService } from '../data/data.service';
 import gsap from 'gsap';
 import { DeviceService } from '../device/device.service';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
+import { PromptService } from '@core/services/prompt/prompt.service';
 
 export type DragTargetType = 'folder' | 'record';
 
@@ -140,15 +141,9 @@ export class DragService {
 
     if (this.dragSrc instanceof FileListItemComponent) {
       this.renderer.addClass(this.dragCursorElement, 'for-file-list-item');
+      const width = (this.dragSrc.element.nativeElement as HTMLElement).clientWidth;
+      gsap.from(this.dragCursorElement, { width, opacity: 0 , duration: 0.25 });
     }
-
-    setTimeout(() => {
-      this.renderer.addClass(this.dragCursorElement, 'active');
-      if (this.dragSrc instanceof FileListItemComponent) {
-        const width = (this.dragSrc.element.nativeElement as HTMLElement).clientWidth;
-        gsap.from(this.dragCursorElement, { width, duration: 0.25 });
-      }
-    });
   }
 
   private setCursorPosition(event: MouseEvent) {
@@ -166,20 +161,15 @@ export class DragService {
   private destroyDragCursor() {
     const didDrop = !!this.dropTarget;
     const cursor = this.dragCursorElement;
-    const duration = 0.125;
-    if (!didDrop) {
-      gsap.to(cursor, { duration, opacity: 0 });
-    } else {
-      gsap.to(cursor, { duration, opacity: 0, scale: 0 });
-    }
-    setTimeout(() => {
+    const destroy = () => {
       this.renderer.removeChild(cursor.parentNode, cursor);
-    }, 500);
-  }
+    };
 
-  private updateDragCursorLabels() {
-    if (this.dragSrc) {
-
+    const duration = 1 / 6;
+    if (!didDrop) {
+      gsap.to(cursor, { duration, opacity: 0, ease: 'ease', onComplete: destroy });
+    } else {
+      gsap.to(cursor, { duration, rotate: -5, opacity: 0, scale: 0.5, ease: 'ease', onComplete: destroy});
     }
   }
 
