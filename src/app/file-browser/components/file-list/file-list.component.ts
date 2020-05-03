@@ -147,11 +147,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
     // register for folder update events
     this.subscriptions.push(this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
-      // if (folder.folderId === this.currentFolder.folderId) {
-        setTimeout(() => {
-          this.refreshView();
-        }, 100);
-      // }
+      setTimeout(() => {
+        this.loadVisibleItems();
+      });
     }));
 
     // register for multi select events

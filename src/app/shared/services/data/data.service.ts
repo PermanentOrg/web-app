@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { partition, remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
@@ -252,13 +252,56 @@ export class DataService {
 
         return response.getFolderVO(true);
       }))).toPromise()
-      .then((folder: FolderVO) => {
-        this.currentFolder.update(folder);
+      .then((updatedFolder: FolderVO) => {
+        this.updateChildItems(this.currentFolder, updatedFolder);
+        // this.currentFolder.update(folder);
         this.folderUpdate.emit(this.currentFolder);
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  public updateChildItems(folder1: FolderVO, folder2: FolderVO) {
+    if (!folder2.ChildItemVOs || !folder2.ChildItemVOs.length) {
+      folder1.ChildItemVOs = folder2.ChildItemVOs;
+    }
+
+    const original = folder1.ChildItemVOs as ItemVO[];
+    const updated = folder2.ChildItemVOs as ItemVO[];
+
+    const originalItemsById = new Map<number, ItemVO>();
+    const updatedItemsById = new Map<number, ItemVO>();
+
+    const updatedOrderedIds: number[] = [];
+
+    for (const item of updated) {
+      updatedItemsById.set(item.folder_linkId, item);
+      updatedOrderedIds.push(item.folder_linkId);
+    }
+
+    for (const item of original) {
+      originalItemsById.set(item.folder_linkId, item);
+
+      if (updatedItemsById.has(item.folder_linkId)) {
+        const updatedItem = updatedItemsById.get(item.folder_linkId);
+        const dataToUpdate: FolderVOData | RecordVOData = {
+          updatedDT: updatedItem.updatedDT,
+        };
+        item.update(dataToUpdate);
+      } else {
+        if (this.selectedItems.has(item)) {
+          this.selectedItems.delete(item);
+          this.selectedItemsSubject.next(this.selectedItems);
+        }
+      }
+    }
+
+    const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map(id => {
+      return originalItemsById.has(id) ? originalItemsById.get(id) : updatedItemsById.get(id);
+    });
+
+    folder1.ChildItemVOs = finalUpdatedItems;
   }
 
   public checkMissingThumbs() {

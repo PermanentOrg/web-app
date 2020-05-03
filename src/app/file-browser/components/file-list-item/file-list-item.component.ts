@@ -269,6 +269,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
           `Move ${itemText} to ${destination.displayName}?`,
         );
         await this.edit.moveItems(itemsToMove, destination);
+        await this.dataService.refreshCurrentFolder();
       } catch (err) {
         if (err instanceof RecordResponse || err instanceof FolderResponse) {
           this.message.showError(err.getMessage());
