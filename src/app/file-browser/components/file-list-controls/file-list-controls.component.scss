@@ -23,6 +23,7 @@
 
   > * {
     cursor: pointer;
+    font-weight: 700;
 
     &::after {
       content: '\25BC';
@@ -50,6 +51,7 @@
 
   .name {
     flex: 1 1 auto;
+    max-width: $file-list-name-col-max-width;
   }
 
   .type {

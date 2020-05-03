@@ -29,6 +29,7 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
 
   ngAfterViewInit() {
     this.linkText = this.nativeElement.innerText;
+    console.log(this.linkText);
   }
 
   ngOnDestroy() {

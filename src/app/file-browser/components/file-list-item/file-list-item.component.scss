@@ -111,6 +111,11 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     display: initial;
   }
 
+  .name {
+    max-width: $file-list-name-col-max-width;
+    padding-right: 0.5rem;
+  }
+
   .type {
     flex: 0 0 $file-list-type-col-width;
   }
