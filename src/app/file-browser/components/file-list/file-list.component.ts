@@ -9,7 +9,9 @@ import {
   HostListener,
   OnDestroy,
   HostBinding,
-  Input
+  Input,
+  Optional,
+  ViewChild
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -31,6 +33,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 import { ScrollService } from '@shared/services/scroll/scroll.service';
 import { slideUpAnimation, fadeAnimation } from '@shared/animations';
 import { DragService } from '@shared/services/drag/drag.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 export interface ItemClickEvent {
   event: MouseEvent;
@@ -47,6 +50,8 @@ const SCROLL_THROTTLE = 500;
 const SCROLL_TIMING = 16;
 const SCROLL_VELOCITY_THRESHOLD = 4;
 
+const DRAG_SCROLL_THRESHOLD = 100; // px from top or bottom
+const DRAG_SCROLL_STEP = 20;
 @Component({
   selector: 'pr-file-list',
   templateUrl: './file-list.component.html',
@@ -71,6 +76,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   private scrollHandlerDebounced: Function;
   private scrollHandlerThrottled: Function;
+  private mouseMoveHandlerThrottled: Function;
 
   private itemsFetchedCount: number;
   private routeListener: Subscription;
@@ -80,7 +86,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   private lastScrollTop = 0;
   private lastItemOffset: number;
   private currentScrollTop = 0;
-  private currentScrollElement;
+  @ViewChild('scroll') private scrollElement: ElementRef;
+
+  private isDraggingInProgress = false;
 
   isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
@@ -96,7 +104,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private elementRef: ElementRef,
     private folderViewService: FolderViewService,
     @Inject(DOCUMENT) private document: any,
-    private drag: DragService
+    @Optional() private drag: DragService
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -155,6 +163,24 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
       this.selectedItems = selectedItems;
     }));
+
+    // register for drag events to scroll if needed
+    if (this.drag) {
+      this.subscriptions.push(
+        this.drag.events().subscribe(dragEvent => {
+          switch (dragEvent.type) {
+            case 'start':
+            case 'end':
+              this.isDraggingInProgress = dragEvent.type === 'start';
+              break;
+          }
+        })
+      );
+
+      this.mouseMoveHandlerThrottled = throttle((event: MouseEvent) => {
+        this.checkDragScrolling(event);
+      }, 64);
+    }
   }
 
   refreshView() {
@@ -220,6 +246,46 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   @HostListener('window:resize', ['$event'])
   onViewportResize(event) {
     this.scrollHandlerDebounced();
+  }
+
+  onViewportMouseMove(event: MouseEvent) {
+    if (this.isDraggingInProgress && this.mouseMoveHandlerThrottled) {
+      this.mouseMoveHandlerThrottled(event);
+    }
+  }
+
+  checkDragScrolling(event: MouseEvent) {
+    const scrollElem = (this.scrollElement.nativeElement) as HTMLElement;
+    const bounds = scrollElem.getBoundingClientRect();
+    const top = bounds.top;
+    const bottom = top + bounds.height;
+    const currentScrollTop = scrollElem.scrollTop;
+    const currentScrollHeight = scrollElem.scrollHeight;
+    const maxScrollTop = currentScrollHeight - bounds.height;
+
+    if (top < event.clientY && event.clientY < (top + DRAG_SCROLL_THRESHOLD)) {
+      if (currentScrollTop > 0) {
+        let step = DRAG_SCROLL_STEP;
+        if (event.clientY < (top + (DRAG_SCROLL_THRESHOLD / 2 ))) {
+          step = step * 3;
+        }
+        scrollElem.scrollBy({left: 0, top: -step, behavior: 'smooth'});
+        if (scrollElem.scrollTop > 0) {
+          this.mouseMoveHandlerThrottled(event);
+        }
+      }
+    } else if (bottom > event.clientY && event.clientY > (bottom - DRAG_SCROLL_THRESHOLD)) {
+      if (currentScrollTop < maxScrollTop) {
+        let step = DRAG_SCROLL_STEP;
+        if (event.clientY > (maxScrollTop - (DRAG_SCROLL_THRESHOLD / 2 ))) {
+          step = step * 3;
+        }
+        scrollElem.scrollBy({left: 0, top: step, behavior: 'smooth'});
+        if (scrollElem.scrollTop < maxScrollTop) {
+          this.mouseMoveHandlerThrottled(event);
+        }
+      }
+    }
   }
 
   onItemClick(itemClick: ItemClickEvent) {

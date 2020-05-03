@@ -265,6 +265,8 @@ button.btn-wordpress, button.btn-wordpress-alternate {
 // DRAGGING RELATED
 
 body.dragging {
+  overflow-y: hidden;
+  
   *:not(.drag-target) {
     cursor: no-drop !important;
   }
@@ -284,9 +286,9 @@ body.dragging {
   left: 0;
   border-radius: $border-radius;
   background-color: rgba($PR-orange, 0.9);
+  transition: opacity 0.25s $tweaked-ease;
 
   &.active {
-    transition: opacity 0.25s $tweaked-ease;
     opacity: 1;
     // $blur-size: 10px;
     // backdrop-filter: blur($blur-size);
@@ -308,12 +310,10 @@ body.dragging {
     justify-content: center;
 
     min-width: 15rem;
-    max-width: 20rem;
-
-    transform-origin: 50% 50%;
+    // transform-origin: 50% 50%;
 
     .drag-service-cursor-item, .drag-service-cursor-action {
-      max-width: 100%;
+      max-width: $file-list-width-desktop / 3;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -322,7 +322,7 @@ body.dragging {
     .drag-service-cursor-action {
       font-size: $font-size-sm;
       position: absolute;
-      bottom: 0rem;
+      bottom: 0.25rem;
     }
   }
 }

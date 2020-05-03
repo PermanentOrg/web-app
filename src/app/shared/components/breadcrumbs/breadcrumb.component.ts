@@ -31,6 +31,9 @@ export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDest
       case 'end':
         if (!this.last && dragEvent.targetTypes.includes('folder')) {
           this.isDragTarget = dragEvent.type === 'start';
+          if (!this.isDragTarget) {
+            this.isDropTarget = false;
+          }
         }
     }
   }

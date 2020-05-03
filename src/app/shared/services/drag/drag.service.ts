@@ -85,10 +85,15 @@ export class DragService {
 
     if (dragEvent.type === 'end' && this.dropTarget) {
       dragEvent.srcComponent.onDrop(this.dropTarget);
+      this.dropTarget = null;
     }
   }
 
-  onDragStart(dragEvent: DragServiceStartEndEvent) {
+  events() {
+    return this.subject.asObservable();
+  }
+
+  private onDragStart(dragEvent: DragServiceStartEndEvent) {
     this.dragSrc = dragEvent.srcComponent;
     this.createDragCursor(dragEvent.event);
     this.updateItemLabelText();
@@ -96,27 +101,24 @@ export class DragService {
     this.renderer.addClass(this.document.body, 'dragging');
   }
 
-  onDragEnd(dragEvent: DragServiceStartEndEvent) {
+  private onDragEnd(dragEvent: DragServiceStartEndEvent) {
     this.document.removeEventListener('mousemove', this.mouseMoveHandler);
     this.destroyDragCursor();
     this.dragSrc = null;
     this.renderer.removeClass(this.document.body, 'dragging');
   }
 
-  onDragEnter(dragEvent: DragServiceEnterLeaveEvent) {
+  private onDragEnter(dragEvent: DragServiceEnterLeaveEvent) {
     this.dropTarget = dragEvent.srcComponent;
     this.updateActionLabelText();
   }
 
-  onDragLeave(dragEvent: DragServiceEnterLeaveEvent) {
+  private onDragLeave(dragEvent: DragServiceEnterLeaveEvent) {
     this.dropTarget = null;
     this.updateActionLabelText();
   }
 
-  onMouseMove(event: MouseEvent) {
-  }
-
-  createDragCursor(event: MouseEvent) {
+  private createDragCursor(event: MouseEvent) {
     const parent = this.renderer.createElement('div') as HTMLElement;
     const actionLabel = this.renderer.createElement('div') as HTMLElement;
     const itemLabel = this.renderer.createElement('div') as HTMLElement;
@@ -149,7 +151,7 @@ export class DragService {
     });
   }
 
-  setCursorPosition(event: MouseEvent) {
+  private setCursorPosition(event: MouseEvent) {
     const width = this.dragCursorElement.clientWidth;
     const height = this.dragCursorElement.clientHeight;
     const targetX = event.clientX - (width / 2);
@@ -161,17 +163,27 @@ export class DragService {
     );
   }
 
-  destroyDragCursor() {
-    this.renderer.removeChild(this.dragCursorElement.parentNode, this.dragCursorElement);
+  private destroyDragCursor() {
+    const didDrop = !!this.dropTarget;
+    const cursor = this.dragCursorElement;
+    const duration = 0.125;
+    if (!didDrop) {
+      gsap.to(cursor, { duration, opacity: 0 });
+    } else {
+      gsap.to(cursor, { duration, opacity: 0, scale: 0 });
+    }
+    setTimeout(() => {
+      this.renderer.removeChild(cursor.parentNode, cursor);
+    }, 500);
   }
 
-  updateDragCursorLabels() {
+  private updateDragCursorLabels() {
     if (this.dragSrc) {
 
     }
   }
 
-  updateItemLabelText() {
+  private updateItemLabelText() {
     if (this.dragSrc instanceof FileListItemComponent) {
       const srcItem = this.dragSrc.item;
       const selectedItems = this.dataService.getSelectedItems();
@@ -186,7 +198,7 @@ export class DragService {
     }
   }
 
-  updateActionLabelText() {
+  private updateActionLabelText() {
     if (!this.dropTarget) {
       this.actionLabelElement.innerText = '';
       return;
@@ -202,9 +214,5 @@ export class DragService {
       }
     }
     this.actionLabelElement.innerText = label;
-  }
-
-  events() {
-    return this.subject.asObservable();
   }
 }
