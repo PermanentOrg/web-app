@@ -13,12 +13,40 @@
 }
 
 .file-list-header {
+  $sort-arrow-size: 0.5em;
   flex: 1 1 100%;
   padding-left: $file-list-thumb-col-width;
   display: flex;
   align-items: center;
 
   font-size: $font-size-sm;
+
+  > * {
+    cursor: pointer;
+
+    &::after {
+      content: '\25BC';
+      font-size: $sort-arrow-size;
+      padding-left: $sort-arrow-size;
+      position: relative;
+      top: -$sort-arrow-size / 4;
+      opacity: 0.5
+    }
+
+    &:hover::after {
+      opacity: 0.75;
+    }
+  }
+  
+  .active-sort {
+    &::after {
+      opacity: 1;
+    }
+
+    &.sort-desc::after {
+      content: '\25B2';
+    }
+  }
 
   .name {
     flex: 1 1 auto;
@@ -31,4 +59,15 @@
   .date {
     flex: 0 0 $file-list-date-col-width;
   }
+
+  // .sort-direction {
+  //   font-size: 0.5em;
+
+  // }
+
+  // .sort-desc {
+  //   .sort-direction::after {
+  //     content: '\25B2';
+  //   }
+  // }
 }

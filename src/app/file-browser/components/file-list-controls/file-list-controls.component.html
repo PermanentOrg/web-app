@@ -1,5 +1,11 @@
 <div class="file-list-header">
-  <div class="name">Name</div>
-  <div class="type">Type</div>
-  <div class="date">Date</div>
+  <div class="name" [class.active-sort]="currentSort === 'name'" [class.sort-desc]="sortDesc">
+    Name
+  </div>
+  <div class="type" [class.active-sort]="currentSort === 'type'" [class.sort-desc]="sortDesc">
+    Type
+  </div>
+  <div class="date" [class.active-sort]="currentSort === 'date'" [class.sort-desc]="sortDesc">
+    Date
+  </div>
 </div>
