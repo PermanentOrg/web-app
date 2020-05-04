@@ -19,13 +19,13 @@ import { UP_ARROW, DOWN_ARROW, CONTROL, META, SHIFT } from '@angular/cdk/keycode
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { throttle, debounce } from 'lodash';
+import { throttle, debounce, find } from 'lodash';
 import { gsap } from 'gsap';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService, SelectClickEvent, SelectedItemsMap, SelectKeyEvent } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
-import { RecordVO } from '@root/app/models';
+import { RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
@@ -36,7 +36,7 @@ import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
 
 export interface ItemClickEvent {
-  event: MouseEvent;
+  event?: MouseEvent;
   item: RecordVO | FolderVO;
 }
 
@@ -131,6 +131,12 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.scrollHandlerDebounced = debounce(this.loadVisibleItems.bind(this), SCROLL_DEBOUNCE);
     this.scrollHandlerThrottled = throttle(this.loadVisibleItems.bind(this), SCROLL_THROTTLE);
 
+    this.registerRouterEventHandlers();
+    this.registerDataServiceHandlers();
+    this.registerDataServiceHandlers();
+  }
+
+  registerRouterEventHandlers() {
     // register for navigation events to reinit page on folder changes
     this.subscriptions.push(this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))
@@ -147,7 +153,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
           this.inFileView = false;
         }
       }));
+  }
 
+  registerDataServiceHandlers() {
     // register for folder update events
     this.subscriptions.push(this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
       setTimeout(() => {
@@ -165,6 +173,17 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       this.selectedItems = selectedItems;
     }));
 
+    // register for 'show item' events
+    this.subscriptions.push(
+      this.dataService.itemToShow$().subscribe(item => {
+        setTimeout(() => {
+          this.scrollToItem(item);
+        });
+      }
+    ));
+  }
+
+  registerDragServiceHandlers() {
     // register for drag events to scroll if needed
     if (this.drag) {
       this.subscriptions.push(
@@ -226,6 +245,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     });
   }
 
+  getScrollElement(): HTMLElement {
+    return (this.device.isMobileWidth() ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
+  }
+
   @HostListener('window:scroll', ['$event'])
   onViewportScroll(event: Event) {
     this.lastScrollTop = this.currentScrollTop;
@@ -252,6 +275,15 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   onViewportMouseMove(event: MouseEvent) {
     if (this.isDraggingInProgress && this.mouseMoveHandlerThrottled) {
       this.mouseMoveHandlerThrottled(event);
+    }
+  }
+
+  scrollToItem(item: ItemVO) {
+    const folder_linkId = item.folder_linkId;
+    const listItem = find(this.listItemsQuery.toArray(), x => x.item.folder_linkId === folder_linkId);
+    if (listItem) {
+      const itemElem = listItem.element.nativeElement as HTMLElement;
+      itemElem.scrollIntoView({behavior: 'smooth', block: 'center'});
     }
   }
 
@@ -295,9 +327,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       item: itemClick.item,
     };
 
-    if (itemClick.event.shiftKey) {
+    if (itemClick.event?.shiftKey) {
       selectEvent.modifierKey = 'shift';
-    } else if (itemClick.event.metaKey || itemClick.event.ctrlKey) {
+    } else if (itemClick.event?.metaKey || itemClick.event?.ctrlKey) {
       selectEvent.modifierKey = 'ctrl';
     }
 

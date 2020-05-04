@@ -53,6 +53,8 @@ export class DataService {
   private lastManualSelectItem: ItemVO;
   private lastArrowSelectItem: ItemVO;
 
+  private showItemSubject = new Subject<ItemVO>();
+
   constructor(private api: ApiService) {
   }
 
@@ -505,5 +507,13 @@ export class DataService {
     } else {
       this.multiSelectItems.delete(item.folder_linkId);
     }
+  }
+
+  public showItem(item: ItemVO) {
+    this.showItemSubject.next(item);
+  }
+
+  public itemToShow$() {
+    return this.showItemSubject.asObservable();
   }
 }

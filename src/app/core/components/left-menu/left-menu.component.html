@@ -37,10 +37,10 @@
       <a class="menu-item" [routerLink]="['/invitations']" [class.active]="checkMenuItemActive('/invitations')">
         Invitations
       </a>
-      <a class="menu-item" href="/add-storage">
+      <a class="menu-item hide-desktop" href="/add-storage">
         Add Storage
       </a>
-      <a class="menu-item" (click)='logOut()'>
+      <a class="menu-item hide-desktop" (click)='logOut()'>
         Log Out
       </a>
     </div>

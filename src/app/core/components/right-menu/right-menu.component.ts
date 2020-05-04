@@ -143,10 +143,11 @@ export class RightMenuComponent implements OnInit {
     return this.prompt.prompt(fields, 'Create New Folder', createPromise, 'Create Folder')
       .then((value: any) => {
         this.edit.createFolder(value.folderName, this.currentFolder)
-          .then((folder: FolderVO) => {
+          .then(async (folder: FolderVO) => {
             this.message.showMessage(`Folder "${value.folderName}" has been created`, 'success');
             createResolve();
-            return this.dataService.refreshCurrentFolder();
+            await this.dataService.refreshCurrentFolder();
+            this.dataService.showItem(folder);
           })
           .catch((response: FolderResponse) => {
             if (response) {

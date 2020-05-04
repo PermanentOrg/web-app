@@ -32,6 +32,10 @@ button {
     color: white;
     font-weight: 500;
     text-align: right;
+
+    &:hover {
+      background-color: darken($PR-orange, 7%);
+    }
   }
 
   border-bottom-left-radius: $border-radius-sm;

@@ -43,3 +43,9 @@
     overflow-y: auto;
   }
 }
+
+.hide-desktop {
+  @include after($tablet-horizontal) {
+    display: none !important;
+  }
+}
