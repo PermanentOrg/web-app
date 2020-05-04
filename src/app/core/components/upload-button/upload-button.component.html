@@ -1,4 +1,5 @@
-<label class="btn btn-alternate" [hidden]="!currentFolder || hidden" [class.full-width]="fullWidth">
+<label class="btn btn-alternate"
+  [hidden]="!currentFolder || hidden" [class.full-width]="fullWidth">
   Upload
   <input id="uploadFiles" type="file" (change)="onFileChange($event)" multiple="multiple" hidden #fileInput>
 </label>

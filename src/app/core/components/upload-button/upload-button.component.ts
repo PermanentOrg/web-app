@@ -7,13 +7,17 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { AccountService } from '@shared/services/account/account.service';
+import { DragService, DragTargetDroppableComponent, DragServiceEvent } from '@shared/services/drag/drag.service';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { Subscription } from 'rxjs';
+import { MainComponent } from '../main/main.component';
 
 @Component({
   selector: 'pr-upload-button',
   templateUrl: './upload-button.component.html',
   styleUrls: ['./upload-button.component.scss']
 })
-export class UploadButtonComponent implements OnInit, OnDestroy {
+export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscriptions {
   private files: File[];
   @Input() fullWidth: boolean;
 
@@ -21,17 +25,25 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
   public currentFolder: FolderVO;
   public hidden: boolean;
 
+  isDragTarget: boolean;
+  isDropTarget: boolean;
+
+  subscriptions: Subscription[] = [];
+
   constructor(
     private upload: UploadService,
     private account: AccountService,
     private dataService: DataService,
     private prompt: PromptService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    private drag: DragService
   ) {
-    this.dataService.currentFolderChange.subscribe((currentFolder) => {
-      this.currentFolder = currentFolder;
-      this.checkCurrentFolder();
-    });
+    this.subscriptions.push(
+      this.dataService.currentFolderChange.subscribe((currentFolder) => {
+        this.currentFolder = currentFolder;
+        this.checkCurrentFolder();
+      })
+    );
 
     this.upload.registerButtonComponent(this);
   }
@@ -40,7 +52,8 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.upload.deregisterButtonComponent();
+    this.upload.deregisterButtonComponent(this);
+    unsubscribeAll(this.subscriptions);
   }
 
   promptForFiles() {
@@ -72,5 +85,9 @@ export class UploadButtonComponent implements OnInit, OnDestroy {
         this.upload.uploadFiles(this.currentFolder, this.files);
       }
     }
+  }
+
+  onDragServiceEvent(dragEvent: DragServiceEvent) {
+
   }
 }

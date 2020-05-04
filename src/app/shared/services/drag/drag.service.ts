@@ -14,7 +14,7 @@ import { MainComponent } from '@core/components/main/main.component';
 export type DragTargetType = 'folder' | 'record';
 
 export interface DraggableComponent {
-  onDrop(dropTarget: DragTargetDroppableComponent);
+  onDrop(dropTarget: DragTargetDroppableComponent, dragEvent?: DragServiceEvent);
 }
 
 export interface DragTargetDroppableComponent {
@@ -44,14 +44,18 @@ const DRAG_CURSOR_OFFSET_X = 15;
 export class DragService {
   private subject = new Subject<DragServiceEvent>();
 
-  private current;
   private dragSrc: DraggableComponent;
   private dropTarget: DragTargetDroppableComponent;
 
+  private hasFiles = false;
+
   private mouseMoveHandler: (MouseEvent) => any;
+  private dropHandler: (DragEvent) => any;
   private dragCursorElement: HTMLElement;
   private actionLabelElement: HTMLElement;
   private itemsLabelElement: HTMLElement;
+  private screenOutlineElement: HTMLElement;
+
   private renderer: Renderer2;
 
   constructor(
@@ -65,6 +69,18 @@ export class DragService {
     this.mouseMoveHandler = throttle((event: MouseEvent) => {
       this.setCursorPosition(event);
     }, 8);
+
+    this.dropHandler = (event: DragEvent) => {
+      event.stopPropagation();
+      event.preventDefault();
+      this.dispatch({
+        type: 'end',
+        targetTypes: ['folder'],
+        srcComponent: this.dragSrc,
+        event: event
+      });
+      console.log(this);
+    };
   }
 
   dispatch(dragEvent: DragServiceEvent, delay = 0) {
@@ -92,8 +108,8 @@ export class DragService {
     this.subject.next(dragEvent);
     console.log('DISPATCH:', dragEvent);
 
-    if (dragEvent.type === 'end' && this.dropTarget) {
-      dragEvent.srcComponent.onDrop(this.dropTarget);
+    if (dragEvent.type === 'end' && (this.dropTarget || this.dragSrc instanceof MainComponent) ) {
+      dragEvent.srcComponent.onDrop(this.dropTarget, dragEvent);
       this.dropTarget = null;
     }
   }
@@ -102,12 +118,23 @@ export class DragService {
     return this.subject.asObservable();
   }
 
+  private cancelEvent(e: Event) {
+    e.preventDefault();
+  }
+
   private onDragStart(dragEvent: DragServiceStartEndEvent) {
     this.dragSrc = dragEvent.srcComponent;
     this.createDragCursor(dragEvent.event);
     this.updateItemLabelText(dragEvent.event);
     this.document.addEventListener('mousemove', this.mouseMoveHandler);
     this.renderer.addClass(this.document.body, 'dragging');
+    this.hasFiles = dragEvent.srcComponent instanceof MainComponent;
+    if (this.hasFiles) {
+      this.document.addEventListener('drop', this.dropHandler);
+      this.document.addEventListener('dragover', this.cancelEvent);
+      this.document.addEventListener('dragenter', this.cancelEvent);
+      this.createOutline();
+    }
   }
 
   private onDragEnd(dragEvent: DragServiceStartEndEvent) {
@@ -115,6 +142,12 @@ export class DragService {
     this.destroyDragCursor();
     this.dragSrc = null;
     this.renderer.removeClass(this.document.body, 'dragging');
+    if (this.hasFiles) {
+      this.document.removeEventListener('drop', this.dropHandler);
+      this.document.removeEventListener('dragover', this.cancelEvent);
+      this.document.removeEventListener('dragenter', this.cancelEvent);
+      this.destroyOutline();
+    }
   }
 
   private onDragEnter(dragEvent: DragServiceEnterLeaveEvent) {
@@ -125,6 +158,23 @@ export class DragService {
   private onDragLeave(dragEvent: DragServiceEnterLeaveEvent) {
     this.dropTarget = null;
     this.updateActionLabelText();
+  }
+
+  private createOutline() {
+    this.screenOutlineElement = this.renderer.createElement('div') as HTMLElement;
+    this.renderer.addClass(this.screenOutlineElement, 'drag-service-screen-outline');
+    this.renderer.appendChild(this.document.body, this.screenOutlineElement);
+    gsap.from(this.screenOutlineElement, { opacity: 0 , duration: 0.125 });
+  }
+
+  private destroyOutline() {
+    const outline = this.screenOutlineElement;
+    const duration = 1 / 6;
+    const destroy = () => {
+      this.renderer.removeChild(outline.parentNode, outline);
+    };
+
+    gsap.to(outline, { duration, opacity: 0, ease: 'ease', onComplete: destroy });
   }
 
   private createDragCursor(event: MouseEvent) {
@@ -220,8 +270,7 @@ export class DragService {
         label = `Move to ${this.dropTarget.linkText}`;
       }
     } else if (this.dragSrc instanceof MainComponent) {
-      console.log(!!this.dropTarget);
-      if (!this.dropTarget) {
+      if (this.dropTarget instanceof MainComponent) {
         label = `Upload to ${this.dataService.currentFolder.displayName}`;
       } else if (this.dropTarget instanceof FileListItemComponent) {
         label = `Upload to ${this.dropTarget.item.displayName}`;

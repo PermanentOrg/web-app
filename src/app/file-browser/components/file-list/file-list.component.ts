@@ -34,6 +34,7 @@ import { ScrollService } from '@shared/services/scroll/scroll.service';
 import { slideUpAnimation, fadeAnimation } from '@shared/animations';
 import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { MainComponent } from '@core/components/main/main.component';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -89,11 +90,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   @ViewChild('scroll') private scrollElement: ElementRef;
 
   private isDraggingInProgress = false;
+  isDraggingFile = false;
 
   isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
 
   isSorting = false;
+
 
   selectedItems: SelectedItemsMap = new Map();
 
@@ -188,12 +191,16 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     if (this.drag) {
       this.subscriptions.push(
         this.drag.events().subscribe(dragEvent => {
-          switch (dragEvent.type) {
-            case 'start':
-            case 'end':
-              this.isDraggingInProgress = dragEvent.type === 'start';
-              break;
-          }
+            switch (dragEvent.type) {
+              case 'start':
+              case 'end':
+                // if (!(dragEvent.srcComponent instanceof MainComponent)) {
+                  this.isDraggingInProgress = dragEvent.type === 'start';
+                // } else {
+                //   this.isDraggingFile = dragEvent.type === 'start';
+                // }
+                break;
+            }
         })
       );
 

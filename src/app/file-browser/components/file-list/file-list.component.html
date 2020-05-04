@@ -15,6 +15,9 @@
   </div>
 </div>
 <pr-sidebar *ngIf="showSidebar"></pr-sidebar>
+<div class="file-list-drag-target" [class.active]="isDraggingFile">
+  Drop files to upload to {{currentFolder.displayName}}
+</div>
 <div [@slideUpAnimation]="device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''">
   <router-outlet #o="outlet"></router-outlet>
 </div>

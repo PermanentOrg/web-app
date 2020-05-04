@@ -276,6 +276,8 @@ body.dragging {
   }
 }
 
+$drag-outline-border: 5px;
+
 .drag-service-cursor {
   position: absolute;
   opacity: 1;
@@ -329,9 +331,13 @@ body.dragging {
 
   &.for-file-upload {
     position: fixed;
-    top: 0;
+    top: $drag-outline-border;
     left: 50%;
     transform: translateX(-50%);
+    background-color: $PR-orange;
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 
     .drag-service-cursor-item, .drag-service-cursor-action {
       text-align: center;
@@ -344,4 +350,16 @@ body.dragging {
     }
     
   }
+}
+
+.drag-service-screen-outline {
+  border: $drag-outline-border solid $PR-orange;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  opacity: 1;
+  pointer-events: none;
 }

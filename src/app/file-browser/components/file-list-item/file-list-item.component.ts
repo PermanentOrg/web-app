@@ -371,7 +371,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
 
   onItemMouseEnterLeave(event: MouseEvent, enter = true) {
     if (this.isDragTarget) {
-      console.log(event.type, event.target);
       let type;
       if (enter) {
         type = 'enter';

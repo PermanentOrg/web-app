@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
-import { debounce } from 'lodash';
+import { debounce, remove } from 'lodash';
 
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 
@@ -22,7 +22,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 export class UploadService implements HasSubscriptions, OnDestroy {
   public uploader: Uploader = new Uploader(this.api, this.message);
   public component: UploadProgressComponent;
-  public buttonComponent: UploadButtonComponent;
+  public buttonComponents: UploadButtonComponent[] = [];
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
 
   private debouncedRefresh: Function;
@@ -54,11 +54,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   registerButtonComponent(component: UploadButtonComponent) {
-    this.buttonComponent = component;
+    this.buttonComponents.push(component);
   }
 
-  deregisterButtonComponent() {
-    this.buttonComponent = null;
+  deregisterButtonComponent(component: UploadButtonComponent) {
+    remove(this.buttonComponents, component);
   }
 
   registerComponent(component: UploadProgressComponent) {
@@ -66,8 +66,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   promptForFiles() {
-    if (this.buttonComponent) {
-      this.buttonComponent.promptForFiles();
+    if (this.buttonComponents.length) {
+      this.buttonComponents[0].promptForFiles();
     }
   }
 

@@ -22,7 +22,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
-import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent } from '@shared/services/drag/drag.service';
+import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent, DragServiceEvent } from '@shared/services/drag/drag.service';
 
 @Component({
   selector: 'pr-main',
@@ -303,8 +303,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
 
 
   // on file drop
-  onDrop(dropTarget: DragTargetDroppableComponent) {
-
+  onDrop(dropTarget: DragTargetDroppableComponent, dragEvent: DragServiceEvent) {
+    const files = (dragEvent.event as DragEvent).dataTransfer.files;
+    console.log('DROP TARGET:', dropTarget);
+    console.log('FILES:', files);
+    this.isDraggingFile = false;
   }
 
 }
