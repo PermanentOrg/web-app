@@ -15,6 +15,8 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
 
   public subscriptions: Subscription[] = [];
 
+  public showMenu = false;
+
   constructor(
     private accountService: AccountService
   ) { }
@@ -32,6 +34,10 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
+  }
+
+  onLogoutClick() {
+    this.accountService.logOut();
   }
 
 }
