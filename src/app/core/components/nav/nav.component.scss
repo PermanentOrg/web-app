@@ -68,6 +68,9 @@ nav.navbar {
     .sidebar-align {
       display: flex;
       justify-content: center;
+      > *:not(:last-child) {
+        margin-right: 10px;
+      }
     }
   }
 }

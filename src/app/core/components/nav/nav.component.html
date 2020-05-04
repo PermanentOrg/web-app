@@ -14,8 +14,9 @@
   <pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
   <div class="sidebar-align">
     <pr-upload-button class="full-width"></pr-upload-button>
+    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()">New folder</button>
   </div>
 </div>
 <pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>
-<pr-right-menu [(isVisible)]="rightMenuVisible"></pr-right-menu>
+<pr-right-menu [(isVisible)]="rightMenuVisible" #rightMenu></pr-right-menu>
 <pr-multi-select-status></pr-multi-select-status>
