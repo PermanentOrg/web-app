@@ -26,6 +26,7 @@ import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
 import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
 import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
+import { FileDragRootComponent } from './components/file-drag-root/file-drag-root.component';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { DragTargetRouterLinkDirective } from './directives/drag-target-router-l
     TimeAgoV9Pipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
-    DragTargetRouterLinkDirective
+    DragTargetRouterLinkDirective,
+    FileDragRootComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -84,7 +86,8 @@ import { DragTargetRouterLinkDirective } from './directives/drag-target-router-l
     TimeAgoV9Pipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
-    DragTargetRouterLinkDirective
+    DragTargetRouterLinkDirective,
+    FileDragRootComponent
   ],
   providers: [
     PublicLinkPipe

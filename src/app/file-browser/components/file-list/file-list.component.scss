@@ -49,7 +49,9 @@
       .file-list-scroll {
         overflow: hidden;
         overflow-y: auto;
+        height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
         max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+        padding-bottom: $file-list-row-height * 1;
       }
     }
   }

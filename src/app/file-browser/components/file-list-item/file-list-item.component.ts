@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional, Inject } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional, Inject, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
@@ -371,6 +371,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
 
   onItemMouseEnterLeave(event: MouseEvent, enter = true) {
     if (this.isDragTarget) {
+      console.log(event.type, event.target);
       let type;
       if (enter) {
         type = 'enter';
@@ -381,7 +382,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
         type,
         srcComponent: this,
         event
-      });
+      }, event.type === 'dragenter' ? 1 : 0);
       this.isDropTarget = enter;
     }
   }

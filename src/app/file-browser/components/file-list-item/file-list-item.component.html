@@ -3,7 +3,8 @@
   (dblclick)="onItemDoubleClick()"
   [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': isDisabled }"
   (mousedown)="onItemMouseDown($event)"
-  (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"> 
+  (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
+  (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"> 
   <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">

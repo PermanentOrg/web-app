@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -22,15 +22,18 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
+import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent } from '@shared/services/drag/drag.service';
 
 @Component({
   selector: 'pr-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy, DraggableComponent {
   public isNavigating: boolean;
   public uploadProgressVisible: boolean;
+
+  public isDraggingFile: boolean;
 
   private routerListener: Subscription;
   @ViewChild('mainContent', { static: true }) mainContentElement: ElementRef;
@@ -45,7 +48,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private ga: GoogleAnalyticsService,
-    private scroll: ScrollService
+    private drag: DragService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -264,6 +267,44 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
+  }
+
+  // handle all file drag events
+  @HostListener('dragenter', ['$event'])
+  onDragEnter(event: DragEvent) {
+    if (!this.isDraggingFile) {
+      this.isDraggingFile = true;
+      const dragEvent: DragServiceStartEndEvent = {
+        type: 'start',
+        targetTypes: ['folder'],
+        srcComponent: this,
+        event: event
+      };
+
+      this.drag.dispatch(dragEvent);
+    }
+  }
+
+  // handle all file drag events
+  @HostListener('dragleave', ['$event'])
+  onDragLeave(event: DragEvent) {
+    if (this.isDraggingFile && event.screenX === 0 && event.clientX === 0) {
+      const dragEvent: DragServiceStartEndEvent = {
+        type: 'end',
+        targetTypes: ['folder'],
+        srcComponent: this,
+        event: event
+      };
+
+      this.drag.dispatch(dragEvent);
+      this.isDraggingFile = false;
+    }
+  }
+
+
+  // on file drop
+  onDrop(dropTarget: DragTargetDroppableComponent) {
+
   }
 
 }

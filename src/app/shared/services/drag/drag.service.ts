@@ -9,6 +9,7 @@ import gsap from 'gsap';
 import { DeviceService } from '../device/device.service';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 import { PromptService } from '@core/services/prompt/prompt.service';
+import { MainComponent } from '@core/components/main/main.component';
 
 export type DragTargetType = 'folder' | 'record';
 
@@ -26,13 +27,13 @@ export interface DragTargetDroppableComponent {
 export interface DragServiceStartEndEvent {
   type: 'start' | 'end';
   targetTypes: DragTargetType[];
-  event: MouseEvent;
+  event: MouseEvent | DragEvent;
   srcComponent: DraggableComponent;
 }
 
 export interface DragServiceEnterLeaveEvent {
   type: 'enter' | 'leave';
-  event: MouseEvent;
+  event: MouseEvent | DragEvent;
   srcComponent: DragTargetDroppableComponent;
 }
 
@@ -66,7 +67,13 @@ export class DragService {
     }, 8);
   }
 
-  dispatch(dragEvent: DragServiceEvent) {
+  dispatch(dragEvent: DragServiceEvent, delay = 0) {
+    if (delay) {
+      return setTimeout(() => {
+        this.dispatch(dragEvent);
+      }, delay);
+    }
+
     switch (dragEvent.type) {
       case 'start':
         this.onDragStart(dragEvent);
@@ -81,8 +88,9 @@ export class DragService {
         this.onDragLeave(dragEvent);
         break;
     }
+
     this.subject.next(dragEvent);
-    // console.log('DISPATCH:', dragEvent);
+    console.log('DISPATCH:', dragEvent);
 
     if (dragEvent.type === 'end' && this.dropTarget) {
       dragEvent.srcComponent.onDrop(this.dropTarget);
@@ -97,7 +105,7 @@ export class DragService {
   private onDragStart(dragEvent: DragServiceStartEndEvent) {
     this.dragSrc = dragEvent.srcComponent;
     this.createDragCursor(dragEvent.event);
-    this.updateItemLabelText();
+    this.updateItemLabelText(dragEvent.event);
     this.document.addEventListener('mousemove', this.mouseMoveHandler);
     this.renderer.addClass(this.document.body, 'dragging');
   }
@@ -141,21 +149,26 @@ export class DragService {
 
     if (this.dragSrc instanceof FileListItemComponent) {
       this.renderer.addClass(this.dragCursorElement, 'for-file-list-item');
+    } else if (this.dragSrc instanceof MainComponent) {
+      this.renderer.addClass(this.dragCursorElement, 'for-file-upload');
     }
+
 
     gsap.from(this.dragCursorElement, { opacity: 0 , duration: 0.125 });
   }
 
   private setCursorPosition(event: MouseEvent) {
-    const width = this.dragCursorElement.clientWidth;
-    const height = this.dragCursorElement.clientHeight;
-    const targetX = event.clientX - (width / 2);
-    const targetY = event.clientY - 5;
-    this.renderer.setStyle(
-      this.dragCursorElement,
-      'transform',
-      `translate(${targetX}px, ${targetY}px)`
-    );
+    if (!(this.dragSrc instanceof MainComponent)) {
+      const width = this.dragCursorElement.clientWidth;
+      const height = this.dragCursorElement.clientHeight;
+      const targetX = event.clientX - (width / 2);
+      const targetY = event.clientY - 5;
+      this.renderer.setStyle(
+        this.dragCursorElement,
+        'transform',
+        `translate(${targetX}px, ${targetY}px)`
+      );
+    }
   }
 
   private destroyDragCursor() {
@@ -173,7 +186,8 @@ export class DragService {
     }
   }
 
-  private updateItemLabelText() {
+  private updateItemLabelText(event: DragEvent | MouseEvent) {
+    let label = '';
     if (this.dragSrc instanceof FileListItemComponent) {
       const srcItem = this.dragSrc.item;
       const selectedItems = this.dataService.getSelectedItems();
@@ -181,26 +195,36 @@ export class DragService {
       const multipleItemsSelected = selectedItems.size > 1;
 
       if (multipleItemsSelected && srcItemSelected) {
-        this.itemsLabelElement.innerText = `${selectedItems.size} items`;
+        label = `${selectedItems.size} items`;
       } else {
-        this.itemsLabelElement.innerText = srcItem.displayName;
+        label = srcItem.displayName;
       }
+    } else if (this.dragSrc instanceof MainComponent) {
+      label = 'Drop files to upload';
     }
+
+    this.itemsLabelElement.innerText = label;
   }
 
   private updateActionLabelText() {
-    if (!this.dropTarget) {
-      this.actionLabelElement.innerText = '';
-      return;
-    }
+
     let label = '';
     if (this.dragSrc instanceof FileListItemComponent) {
-      if (this.dropTarget instanceof FileListItemComponent) {
+      if (!this.dropTarget) {
+        label = '';
+      } else if (this.dropTarget instanceof FileListItemComponent) {
         label = `Move to ${this.dropTarget.item.displayName}`;
       } else if (this.dropTarget instanceof BreadcrumbComponent) {
         label = `Move to ${this.dropTarget.breadcrumb.text}`;
       } else if (this.dropTarget instanceof DragTargetRouterLinkDirective) {
         label = `Move to ${this.dropTarget.linkText}`;
+      }
+    } else if (this.dragSrc instanceof MainComponent) {
+      console.log(!!this.dropTarget);
+      if (!this.dropTarget) {
+        label = `Upload to ${this.dataService.currentFolder.displayName}`;
+      } else if (this.dropTarget instanceof FileListItemComponent) {
+        label = `Upload to ${this.dropTarget.item.displayName}`;
       }
     }
     this.actionLabelElement.innerText = label;
