@@ -39,6 +39,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
   isSavingSort = false;
   isSorting = false;
+  canSaveSort = false;
 
   can: FileListActions = {
     delete: false,
@@ -67,6 +68,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
         this.setAvailableActions();
       })
     );
+
+    this.canSaveSort = this.account.checkMinimumAccess(this.data.currentFolder.accessRole, AccessRole.Curator);
   }
 
   ngOnInit(): void {
