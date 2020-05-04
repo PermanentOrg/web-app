@@ -46,7 +46,8 @@ export class RecordRepo extends BaseRepo {
         RecordVO: new RecordVO({
           recordId: vo.recordId,
           archiveNbr: vo.archiveNbr,
-          displayName: vo.displayName
+          displayName: vo.displayName,
+          description: vo.description
         })
       };
     });
