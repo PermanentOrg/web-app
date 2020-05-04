@@ -244,8 +244,11 @@ export class DataService {
   }
 
   public refreshCurrentFolder(sortOnly = false) {
+    const start = Date.now();
+    let afterApi, end;
     return this.api.folder.navigate(this.currentFolder)
       .pipe(map(((response: FolderResponse) => {
+        afterApi = Date.now();
         if (!response.isSuccessful) {
           throw response;
         }
@@ -255,6 +258,9 @@ export class DataService {
       .then((updatedFolder: FolderVO) => {
         this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
         this.folderUpdate.emit(this.currentFolder);
+        end = Date.now();
+
+        console.log('API TIME', afterApi - start, 'JS TIME', end - afterApi);
       });
   }
 
@@ -271,15 +277,25 @@ export class DataService {
 
     const updatedOrderedIds: number[] = [];
 
-    for (const item of updated) {
-      updatedItemsById.set(item.folder_linkId, item);
-      updatedOrderedIds.push(item.folder_linkId);
-    }
+    if (sortOnly) {
+      for (const item of original) {
+        originalItemsById.set(item.folder_linkId, item);
+      }
 
-    for (const item of original) {
-      originalItemsById.set(item.folder_linkId, item);
+      const sortedItems: ItemVO[] = updated.map(item => {
+        return originalItemsById.get(item.folder_linkId);
+      });
 
-      if (!sortOnly) {
+      folder1.ChildItemVOs = sortedItems;
+    } else {
+      for (const item of updated) {
+        updatedItemsById.set(item.folder_linkId, item);
+        updatedOrderedIds.push(item.folder_linkId);
+      }
+
+      for (const item of original) {
+        originalItemsById.set(item.folder_linkId, item);
+
         if (updatedItemsById.has(item.folder_linkId)) {
           const updatedItem = updatedItemsById.get(item.folder_linkId);
           const dataToUpdate: FolderVOData | RecordVOData = {
@@ -293,13 +309,13 @@ export class DataService {
           }
         }
       }
+
+      const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map(id => {
+        return originalItemsById.has(id) ? originalItemsById.get(id) : updatedItemsById.get(id);
+      });
+
+      folder1.ChildItemVOs = finalUpdatedItems;
     }
-
-    const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map(id => {
-      return originalItemsById.has(id) ? originalItemsById.get(id) : updatedItemsById.get(id);
-    });
-
-    folder1.ChildItemVOs = finalUpdatedItems;
   }
 
   public checkMissingThumbs() {
