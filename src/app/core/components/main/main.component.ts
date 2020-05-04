@@ -29,11 +29,12 @@ import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServ
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit, OnDestroy, DraggableComponent {
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy, DraggableComponent, DragTargetDroppableComponent {
   public isNavigating: boolean;
   public uploadProgressVisible: boolean;
 
   public isDraggingFile: boolean;
+  public isDragTarget: boolean;
 
   private routerListener: Subscription;
   @ViewChild('mainContent', { static: true }) mainContentElement: ElementRef;
@@ -48,7 +49,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
     private api: ApiService,
     private dialog: Dialog,
     private ga: GoogleAnalyticsService,
-    private drag: DragService
+    private drag: DragService,
+    private data: DataService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -305,9 +307,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
   // on file drop
   onDrop(dropTarget: DragTargetDroppableComponent, dragEvent: DragServiceEvent) {
     const files = (dragEvent.event as DragEvent).dataTransfer.files;
+    this.isDraggingFile = false;
     console.log('DROP TARGET:', dropTarget);
     console.log('FILES:', files);
-    this.isDraggingFile = false;
+    if (dropTarget === this) {
+      this.upload.uploadFiles(this.data.currentFolder, Array.from(files));
+    }
   }
-
 }

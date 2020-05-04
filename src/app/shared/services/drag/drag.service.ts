@@ -20,7 +20,7 @@ export interface DraggableComponent {
 export interface DragTargetDroppableComponent {
   isDragTarget?: boolean;
   isDropTarget?: boolean;
-  onDragServiceEvent(dragEvent: DragServiceEvent);
+  onDragServiceEvent?(dragEvent: DragServiceEvent);
   onMouseEnterLeave?(event: MouseEvent);
 }
 
@@ -79,7 +79,6 @@ export class DragService {
         srcComponent: this.dragSrc,
         event: event
       });
-      console.log(this);
     };
   }
 
@@ -106,7 +105,7 @@ export class DragService {
     }
 
     this.subject.next(dragEvent);
-    console.log('DISPATCH:', dragEvent);
+    console.log('DISPATCH:', dragEvent, this.dragSrc);
 
     if (dragEvent.type === 'end' && (this.dropTarget || this.dragSrc instanceof MainComponent) ) {
       dragEvent.srcComponent.onDrop(this.dropTarget, dragEvent);
