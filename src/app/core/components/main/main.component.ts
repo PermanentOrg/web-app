@@ -308,10 +308,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
   onDrop(dropTarget: DragTargetDroppableComponent, dragEvent: DragServiceEvent) {
     const files = (dragEvent.event as DragEvent).dataTransfer.files;
     this.isDraggingFile = false;
-    console.log('DROP TARGET:', dropTarget);
-    console.log('FILES:', files);
-    if (dropTarget === this) {
-      this.upload.uploadFiles(this.data.currentFolder, Array.from(files));
+    let targetFolder: FolderVO;
+
+    if (!dropTarget) {
+      targetFolder = this.data.currentFolder;
+    } else {
+      targetFolder = this.drag.getDestinationFromDropTarget(dropTarget);
     }
+
+    this.upload.uploadFiles(targetFolder, Array.from(files));
   }
 }

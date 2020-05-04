@@ -262,7 +262,7 @@ export class DataService {
         this.folderUpdate.emit(this.currentFolder);
         end = Date.now();
 
-        console.log('API TIME', afterApi - start, 'JS TIME', end - afterApi);
+        // console.log('API TIME', afterApi - start, 'JS TIME', end - afterApi);
       });
   }
 

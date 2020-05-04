@@ -1,6 +1,6 @@
 import { Injectable, Inject, Renderer2, RendererFactory2 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { throttle } from 'lodash';
+import { throttle, find } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
 import { DOCUMENT } from '@angular/common';
@@ -10,6 +10,8 @@ import { DeviceService } from '../device/device.service';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { MainComponent } from '@core/components/main/main.component';
+import { FolderVO } from '@models/index';
+import { AccountService } from '../account/account.service';
 
 export type DragTargetType = 'folder' | 'record';
 
@@ -61,6 +63,7 @@ export class DragService {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private dataService: DataService,
+    private accountService: AccountService,
     rendererFactory: RendererFactory2,
     deviceService: DeviceService
   ) {
@@ -105,9 +108,9 @@ export class DragService {
     }
 
     this.subject.next(dragEvent);
-    console.log('DISPATCH:', dragEvent, this.dragSrc);
+    // console.log('DISPATCH:', dragEvent, this.dragSrc);
 
-    if (dragEvent.type === 'end' && (this.dropTarget || this.dragSrc instanceof MainComponent) ) {
+    if (dragEvent.type === 'end' && (this.dropTarget || this.hasFiles) ) {
       dragEvent.srcComponent.onDrop(this.dropTarget, dragEvent);
       this.dropTarget = null;
     }
@@ -125,6 +128,7 @@ export class DragService {
     this.dragSrc = dragEvent.srcComponent;
     this.createDragCursor(dragEvent.event);
     this.updateItemLabelText(dragEvent.event);
+    this.updateActionLabelText();
     this.document.addEventListener('mousemove', this.mouseMoveHandler);
     this.renderer.addClass(this.document.body, 'dragging');
     this.hasFiles = dragEvent.srcComponent instanceof MainComponent;
@@ -202,7 +206,6 @@ export class DragService {
       this.renderer.addClass(this.dragCursorElement, 'for-file-upload');
     }
 
-
     gsap.from(this.dragCursorElement, { opacity: 0 , duration: 0.125 });
   }
 
@@ -228,7 +231,7 @@ export class DragService {
     };
 
     const duration = 1 / 6;
-    if (!didDrop) {
+    if (!didDrop || this.hasFiles) {
       gsap.to(cursor, { duration, opacity: 0, ease: 'ease', onComplete: destroy });
     } else {
       gsap.to(cursor, { duration, rotate: -5, opacity: 0, scale: 0.5, ease: 'ease', onComplete: destroy});
@@ -256,7 +259,6 @@ export class DragService {
   }
 
   private updateActionLabelText() {
-
     let label = '';
     if (this.dragSrc instanceof FileListItemComponent) {
       if (!this.dropTarget) {
@@ -269,12 +271,43 @@ export class DragService {
         label = `Move to ${this.dropTarget.linkText}`;
       }
     } else if (this.dragSrc instanceof MainComponent) {
-      if (this.dropTarget instanceof MainComponent) {
+      if (!this.dropTarget) {
         label = `Upload to ${this.dataService.currentFolder.displayName}`;
       } else if (this.dropTarget instanceof FileListItemComponent) {
         label = `Upload to ${this.dropTarget.item.displayName}`;
       }
     }
     this.actionLabelElement.innerText = label;
+  }
+
+  public getDestinationFromDropTarget(dropTarget: DragTargetDroppableComponent) {
+    let destination: FolderVO;
+
+    if (dropTarget instanceof FileListItemComponent) {
+      destination = dropTarget.item as FolderVO;
+    } else if (dropTarget instanceof BreadcrumbComponent) {
+      if (dropTarget.breadcrumb.folder_linkId) {
+        destination = new FolderVO({
+          folder_linkId: dropTarget.breadcrumb.folder_linkId,
+          archiveNbr: dropTarget.breadcrumb.archiveNbr,
+          displayName: dropTarget.breadcrumb.text
+        });
+      } else {
+        switch (dropTarget.breadcrumb.routerPath) {
+          case '/myfiles':
+            destination = this.accountService.getPrivateRoot();
+            break;
+          case '/public':
+            destination = this.accountService.getPublicRoot();
+            break;
+        }
+      }
+    } else if (dropTarget instanceof DragTargetRouterLinkDirective) {
+      const type = dropTarget.getFolderTypeFromLink();
+      const root = this.accountService.getRootFolder();
+      destination = find(root.ChildItemVOs, { type });
+    }
+
+    return destination;
   }
 }

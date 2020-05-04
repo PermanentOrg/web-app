@@ -222,32 +222,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   }
 
   async onDrop(dropTarget: DragTargetDroppableComponent) {
-    let destination: FolderVO;
-
-    if (dropTarget instanceof FileListItemComponent) {
-      destination = dropTarget.item as FolderVO;
-    } else if (dropTarget instanceof BreadcrumbComponent) {
-      if (dropTarget.breadcrumb.folder_linkId) {
-        destination = new FolderVO({
-          folder_linkId: dropTarget.breadcrumb.folder_linkId,
-          archiveNbr: dropTarget.breadcrumb.archiveNbr,
-          displayName: dropTarget.breadcrumb.text
-        });
-      } else {
-        switch (dropTarget.breadcrumb.routerPath) {
-          case '/myfiles':
-            destination = this.accountService.getPrivateRoot();
-            break;
-          case '/public':
-            destination = this.accountService.getPublicRoot();
-            break;
-        }
-      }
-    } else if (dropTarget instanceof DragTargetRouterLinkDirective) {
-      const type = dropTarget.getFolderTypeFromLink();
-      const root = this.accountService.getRootFolder();
-      destination = find(root.ChildItemVOs, { type });
-    }
+    const destination = this.drag.getDestinationFromDropTarget(dropTarget);
 
     if (destination) {
       this.isDisabled = true;
