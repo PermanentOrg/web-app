@@ -309,10 +309,11 @@ body.dragging {
     justify-content: center;
 
     min-width: 15rem;
+    max-width: $file-list-width-desktop / 3;
     // transform-origin: 50% 50%;
 
     .drag-service-cursor-item, .drag-service-cursor-action {
-      max-width: $file-list-width-desktop / 3;
+      max-width: 100%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -322,6 +323,7 @@ body.dragging {
       font-size: $font-size-sm;
       position: absolute;
       bottom: 0.125rem;
+      max-width: 100%
     }
   }
 

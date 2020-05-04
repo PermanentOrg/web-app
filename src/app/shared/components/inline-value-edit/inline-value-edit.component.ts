@@ -13,6 +13,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() type: InlineValueEditType = 'text';
   @Input() emptyMessage: string;
   @Input() loading = false;
+  @Input() itemId: any;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
   @ViewChild('input') inputElementRef: ElementRef;
@@ -27,6 +28,11 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.itemId) {
+      if (changes.itemId.currentValue !== changes.itemId.previousValue) {
+        this.isEditing = false;
+      }
+    }
   }
 
   startEdit() {
