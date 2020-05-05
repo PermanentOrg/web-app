@@ -1,8 +1,8 @@
 $menu-ease: $tweaked-ease;
-$menu-open-ease: ease-out;
-$menu-close-ease: ease-in;
+$menu-open-ease: $menu-ease;
+$menu-close-ease: $menu-ease;
 $menu-transition-length: 0.45s;
-$menu-transition-length-desktop: 0.3s;
+$menu-transition-length-desktop: 0.45s;
 
 .menu-wrapper {
   position: fixed;
