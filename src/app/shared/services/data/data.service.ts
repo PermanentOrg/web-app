@@ -8,6 +8,8 @@ import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
 import { Subject, BehaviorSubject } from 'rxjs';
+import debug from 'debug';
+import { debugSubscribable } from '@shared/utilities/debug';
 
 const THUMBNAIL_REFRESH_INTERVAL = 7500;
 
@@ -55,7 +57,12 @@ export class DataService {
 
   private showItemSubject = new Subject<ItemVO>();
 
+  private debug = debug('service:dataService');
+
   constructor(private api: ApiService) {
+    debugSubscribable('currentFolderChange', this.debug, this.currentFolderChange);
+    debugSubscribable('folderUpdate', this.debug, this.folderUpdate);
+    debugSubscribable('selectedItems', this.debug, this.selectedItems$());
   }
 
   public registerItem(item: FolderVO | RecordVO) {
@@ -73,6 +80,10 @@ export class DataService {
   }
 
   public setCurrentFolder(folder?: FolderVO, isPage?: boolean) {
+    if (folder === this.currentFolder) {
+      return;
+    }
+    
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
 
@@ -87,6 +98,8 @@ export class DataService {
   }
 
   public fetchLeanItems(items: Array<FolderVO | RecordVO>, currentFolder ?: FolderVO): Promise<number> {
+    this.debug('fetchLeanItems %d items requested', items.length);
+
     const itemResolves = [];
     const itemRejects = [];
     let handleItemRegistration = false;
@@ -121,6 +134,7 @@ export class DataService {
     });
 
     if (!folder.ChildItemVOs.length) {
+      this.debug('fetchLeanItems all items already fetching');
       return Promise.resolve(0);
     }
 
@@ -158,6 +172,8 @@ export class DataService {
           });
         }
 
+        this.debug('fetchLeanItems %d items fetched', leanItems.length);
+
         return Promise.resolve(leanItems.length);
       })
       .catch((response) => {
@@ -170,6 +186,8 @@ export class DataService {
   }
 
   public fetchFullItems(items: Array<FolderVO | RecordVO>, withChildren?: boolean) {
+    this.debug('fetchFullItems %d items requested', items.length);
+
     const itemResolves = [];
     const itemRejects = [];
 
@@ -234,6 +252,8 @@ export class DataService {
         resolve();
       });
 
+      this.debug('fetchFullItems %d items fetched', items.length);
+
       return Promise.resolve(true);
     })
     .catch((response) => {
@@ -246,11 +266,12 @@ export class DataService {
   }
 
   public refreshCurrentFolder(sortOnly = false) {
-    const start = Date.now();
-    let afterApi, end;
+    this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
+
     return this.api.folder.navigate(this.currentFolder)
       .pipe(map(((response: FolderResponse) => {
-        afterApi = Date.now();
+        this.debug('refreshCurrentFolder data fetched', sortOnly);
+
         if (!response.isSuccessful) {
           throw response;
         }
@@ -259,16 +280,18 @@ export class DataService {
       }))).toPromise()
       .then((updatedFolder: FolderVO) => {
         this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
+        this.debug('refreshCurrentFolder done', sortOnly);
         this.folderUpdate.emit(this.currentFolder);
-        end = Date.now();
-
-        // console.log('API TIME', afterApi - start, 'JS TIME', end - afterApi);
       });
   }
 
   public updateChildItems(folder1: FolderVO, folder2: FolderVO, sortOnly = false) {
+    this.debug('updateChildItems (sortOnly = %o)', sortOnly);
+
     if (!folder2.ChildItemVOs || !folder2.ChildItemVOs.length) {
       folder1.ChildItemVOs = folder2.ChildItemVOs;
+      this.debug('updateChildItems done no child items', sortOnly);
+      return;
     }
 
     const original = folder1.ChildItemVOs as ItemVO[];
@@ -318,6 +341,8 @@ export class DataService {
 
       folder1.ChildItemVOs = finalUpdatedItems;
     }
+
+    this.debug('updateChildItems done %d items', folder1.ChildItemVOs.length);
   }
 
   public checkMissingThumbs() {

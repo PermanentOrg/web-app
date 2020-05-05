@@ -434,13 +434,15 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
         return !item.isFetching && item.dataStatus < DataStatus.Lean;
       });
 
-    this.dataService.fetchLeanItems(itemsToFetch)
+    if (itemsToFetch.length) {
+      this.dataService.fetchLeanItems(itemsToFetch)
       .then((fetchedCount: number) => {
         this.itemsFetchedCount += fetchedCount;
       })
       .catch((response) => {
         console.error(response);
       });
+    }
   }
 
 }

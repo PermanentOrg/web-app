@@ -15,7 +15,8 @@ export const environment = {
     projectId: 'prpledgedev',
     storageBucket: 'prpledgedev.appspot.com',
     messagingSenderId: '248842011228'
-  }
+  },
+  debug: false
 };
 
 /*

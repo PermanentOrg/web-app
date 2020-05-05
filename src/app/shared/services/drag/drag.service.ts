@@ -12,6 +12,8 @@ import { PromptService } from '@core/services/prompt/prompt.service';
 import { MainComponent } from '@core/components/main/main.component';
 import { FolderVO } from '@models/index';
 import { AccountService } from '../account/account.service';
+import debug from 'debug';
+import { debugSubscribable } from '@shared/utilities/debug';
 
 export type DragTargetType = 'folder' | 'record';
 
@@ -60,6 +62,8 @@ export class DragService {
 
   private renderer: Renderer2;
 
+  private debug = debug('service:drag');
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private dataService: DataService,
@@ -83,6 +87,8 @@ export class DragService {
         event: event
       });
     };
+
+    debugSubscribable('events', this.debug, this.subject);
   }
 
   dispatch(dragEvent: DragServiceEvent, delay = 0) {
@@ -108,7 +114,6 @@ export class DragService {
     }
 
     this.subject.next(dragEvent);
-    // console.log('DISPATCH:', dragEvent, this.dragSrc);
 
     if (dragEvent.type === 'end' && (this.dropTarget || this.hasFiles) ) {
       dragEvent.srcComponent.onDrop(this.dropTarget, dragEvent);

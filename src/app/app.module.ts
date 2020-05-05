@@ -14,6 +14,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
+import debug from 'debug';
 
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -25,6 +26,7 @@ import { MessageComponent } from '@shared/components/message/message.component';
 import { DialogModule } from './dialog/dialog.module';
 import { APP_BASE_HREF } from '@angular/common';
 import { ApiService } from '@shared/services/api/api.service';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 declare var ga: any;
 
@@ -99,52 +101,64 @@ export class PermErrorHandler implements ErrorHandler {
 })
 export class AppModule {
   private routerListener: Subscription;
+  private routerDebug = debug('router:navigation');
   constructor(
     private title: Title,
     private router: Router,
     private route: ActivatedRoute,
+    private storage: StorageService
   ) {
+
+    // router events for title and GA pageviews
     this.routerListener = this.router.events
-    .pipe(filter((event) => {
-      // console.log(event);
-      if (event instanceof NavigationStart) {
-        // console.log('navigate to url:', event.url);
-      }
-      return event instanceof NavigationEnd;
-    })).subscribe((event) => {
-      let currentRoute = this.route;
-      let currentTitle;
-      while (currentRoute.firstChild) {
-        currentRoute = currentRoute.firstChild;
-        if (currentRoute.snapshot.data.title) {
-          currentTitle = currentRoute.snapshot.data.title;
+      .pipe(filter((event) => {
+        if (event instanceof NavigationStart) {
+          this.routerDebug('navigate to URL %s', event.url);
         }
-      }
-      if (!currentTitle) {
-        this.title.setTitle(`Permanent.org`);
-      } else {
-        this.title.setTitle(`${currentTitle} | Permanent.org`);
-      }
-
-      let skipGaPageview = false;
-
-      const gaRouteBlacklist = ['/embed', '/pledge'];
-
-      for (const blacklistRoute of gaRouteBlacklist) {
-        skipGaPageview = this.router.url.includes(blacklistRoute);
-        if (skipGaPageview) {
-          break;
+        return event instanceof NavigationEnd;
+      })).subscribe((event) => {
+        let currentRoute = this.route;
+        let currentTitle;
+        while (currentRoute.firstChild) {
+          currentRoute = currentRoute.firstChild;
+          if (currentRoute.snapshot.data.title) {
+            currentTitle = currentRoute.snapshot.data.title;
+          }
         }
-      }
-
-
-      if ('ga' in window && ga.getAll && !skipGaPageview) {
-        const tracker = ga.getAll()[0];
-        if (tracker) {
-          tracker.send('pageview', { page: location.pathname });
+        if (!currentTitle) {
+          this.title.setTitle(`Permanent.org`);
+        } else {
+          this.title.setTitle(`${currentTitle} | Permanent.org`);
         }
+
+        let skipGaPageview = false;
+
+        const gaRouteBlacklist = ['/embed', '/pledge'];
+
+        for (const blacklistRoute of gaRouteBlacklist) {
+          skipGaPageview = this.router.url.includes(blacklistRoute);
+          if (skipGaPageview) {
+            break;
+          }
+        }
+
+
+        if ('ga' in window && ga.getAll && !skipGaPageview) {
+          const tracker = ga.getAll()[0];
+          if (tracker) {
+            tracker.send('pageview', { page: location.pathname });
+          }
+        }
+      });
+
+    if (!this.storage.local.get('debug')) {
+      this.storage.local.set('debug', '*,-sockjs-client:*');
+    } else {
+      const current = this.storage.local.get('debug');
+      if (!current.includes('-sockjs-client:') && !current.includes('sockjs-client:')) {
+        this.storage.local.set('debug', current + '-sockjs-client:*');
       }
-    });
+    }
   }
 }
 
