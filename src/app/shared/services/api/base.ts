@@ -1,5 +1,5 @@
 import { HttpService } from '@shared/services/http/http.service';
-import { SimpleVO } from '@root/app/models';
+import { SimpleVO, ResponseMessageType } from '@root/app/models';
 import { compact } from 'lodash';
 
 export class BaseResponse {
@@ -25,12 +25,12 @@ export class BaseResponse {
     this.csrf = response.csrf;
   }
 
-  public getMessage(): string {
+  public getMessage() {
     if (!this.Results.length) {
       return '';
     }
 
-    return this.Results[0].message[0];
+    return this.Results[0].message[0] as ResponseMessageType;
   }
 
   public getResults(): any[] {

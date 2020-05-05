@@ -102,6 +102,11 @@ export class PromptService {
       });
   }
 
+  confirmBoolean(confirmText: string = 'OK', title: string, savePromise?: Promise<any>, confirmButtonClass?: string, template?: string) {
+    return this.confirm(confirmText, title, savePromise, confirmButtonClass, template)
+      .catch(err => Promise.resolve(false));
+  }
+
   getInput(fieldName: string) {
     return this.component.getInput(fieldName);
   }

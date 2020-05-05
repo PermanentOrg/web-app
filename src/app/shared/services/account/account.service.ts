@@ -123,11 +123,11 @@ export class AccountService {
   }
 
   public getPrivateRoot() {
-    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.private'});
+    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.private'}) as FolderVO;
   }
 
   public getPublicRoot() {
-    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.public'});
+    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
   }
 
   public refreshAccount() {

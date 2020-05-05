@@ -16,6 +16,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { Subscription } from 'rxjs';
+import { BaseResponse } from '@shared/services/api/base';
 
 @Component({
   selector: 'pr-right-menu',
@@ -145,14 +146,16 @@ export class RightMenuComponent implements OnInit {
         this.edit.createFolder(value.folderName, this.currentFolder)
           .then(async (folder: FolderVO) => {
             this.message.showMessage(`Folder "${value.folderName}" has been created`, 'success');
-            createResolve();
             await this.dataService.refreshCurrentFolder();
+            createResolve();
             this.dataService.showItem(folder);
           })
-          .catch((response: FolderResponse) => {
-            if (response) {
-              this.message.showError(response.getMessage(), true);
+          .catch((err) => {
+            if (err instanceof BaseResponse) {
+              this.message.showError(err.getMessage(), true);
               createReject();
+            } else {
+              console.error(err);
             }
           });
       });

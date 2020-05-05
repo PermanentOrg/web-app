@@ -7,9 +7,13 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ItemVO, AccessRole, SortType, FolderVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
 import { fadeAnimation, ngIfFadeInAnimation } from '@shared/animations';
-import { FolderResponse } from '@shared/services/api/index.repo';
+import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { PromptService } from '@core/services/prompt/prompt.service';
+import { BaseResponse } from '@shared/services/api/base';
+import { MessageService } from '@shared/services/message/message.service';
+import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 
 
 interface FileListActions {
@@ -60,6 +64,9 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
   constructor(
     private data: DataService,
+    private prompt: PromptService,
+    private edit: EditService,
+    private message: MessageService,
     private account: AccountService,
     private api: ApiService
   ) {
@@ -200,6 +207,27 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     } finally {
       this.isSavingSort = false;
     }
+  }
+
+  async onDeleteClick() {
+    const itemLabel = this.selectedItems.length > 1 ? `${this.selectedItems.length} items` : this.selectedItems[0].displayName;
+      if (await this.prompt.confirmBoolean('Delete', `Are you sure you want to delete ${itemLabel}?`)) {
+        try {
+          this.edit.deleteItems(this.selectedItems);
+        } catch (err) {
+          if (err instanceof BaseResponse) {
+            this.message.showError(err.getMessage(), true);
+          }
+        }
+      }
+  }
+
+  async onMoveClick() {
+    this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Move);
+  }
+
+  async onCopyClick() {
+    this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Copy);
   }
 
 }

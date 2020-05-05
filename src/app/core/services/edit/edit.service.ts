@@ -167,9 +167,11 @@ export class EditService {
       });
   }
 
-  deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
+  async deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
     let folders: FolderVO[];
     let records: RecordVO[];
+
+    items.forEach(i => i.isPendingAction = true);
 
     [ folders, records ] = partition(items, 'isFolder') as any[];
 
@@ -191,11 +193,15 @@ export class EditService {
       promises.push(Promise.resolve());
     }
 
-    return Promise.all(promises)
-      .then((results) => {
-        let folderResponse, recordResponse;
-        [folderResponse, recordResponse] = results;
-      });
+    try {
+      const results = await Promise.all(promises);
+      let folderResponse, recordResponse;
+      [folderResponse, recordResponse] = results;
+      this.dataService.hideItemsInCurrentFolder(items);
+    } catch (err) {
+      items.forEach(i => i.isPendingAction = false);
+      throw err;
+    }
   }
 
   updateItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
@@ -293,7 +299,15 @@ export class EditService {
       promises.push(Promise.resolve());
     }
 
-    return Promise.all(promises);
+    return Promise.all(promises)
+      .then(results => {
+        this.dataService.hideItemsInCurrentFolder(items);
+        return results;
+      })
+      .catch(err => {
+        items.forEach(item => item.isPendingAction = false);
+        throw err;
+      });
   }
 
   copyItems(items: any[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {

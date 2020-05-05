@@ -4,6 +4,7 @@ import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData } from './folder-vo';
+import { RecordType, FolderLinkType } from './vo-types';
 
 export class RecordVO extends BaseVO implements ChildItemData {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
@@ -14,6 +15,7 @@ export class RecordVO extends BaseVO implements ChildItemData {
   public fetched: Promise<boolean>;
 
   public isPendingAction = false;
+  public isNewlyCreated = false;
 
   public dataStatus = DataStatus.Placeholder;
 
@@ -41,7 +43,7 @@ export class RecordVO extends BaseVO implements ChildItemData {
   public encryption;
   public metaToken;
   public refArchiveNbr;
-  public type;
+  public type: RecordType;
 
   // Thumbnails
   public thumbStatus;
@@ -65,7 +67,7 @@ export class RecordVO extends BaseVO implements ChildItemData {
   public position;
   public accessRole: AccessRoleType;
   public folderArchiveId: number;
-  public folder_linkType;
+  public folder_linkType: FolderLinkType;
 
   // For the iParentFolderVO
   public pathAsFolder_linkId;

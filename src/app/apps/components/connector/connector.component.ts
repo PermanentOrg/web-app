@@ -59,7 +59,7 @@ export class ConnectorComponent implements OnInit {
     const type = this.connector.type.split('.').pop();
     this.folder = _.find(this.appsFolder.ChildItemVOs, {special: `${type}.root.folder`}) as FolderVO;
     if (this.folder) {
-      this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
+      this.hasFiles = this.folder.ChildItemVOs?.length > 0;
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();

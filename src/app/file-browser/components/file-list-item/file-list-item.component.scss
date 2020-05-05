@@ -39,6 +39,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   user-select: none;
   transition: background-color $bg-transition-length ease-in;
   background-color: rgba(white, 0);
+  overflow-y: hidden;
 
   &.selected, &.selected:hover {
     background-color: rgba($PR-orange, 0.2);

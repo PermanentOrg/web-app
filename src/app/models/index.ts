@@ -1,6 +1,8 @@
 import { RecordVO } from '@models/record-vo';
 import { FolderVO } from '@models/folder-vo';
 
+export * from '@models/vo-types';
+
 export { AccountPasswordVO } from '@models/account-password-vo';
 export { AccountVO } from '@models/account-vo';
 export { ArchiveVO } from '@models/archive-vo';

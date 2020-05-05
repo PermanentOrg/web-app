@@ -310,7 +310,7 @@ export class DragService {
     } else if (dropTarget instanceof DragTargetRouterLinkDirective) {
       const type = dropTarget.getFolderTypeFromLink();
       const root = this.accountService.getRootFolder();
-      destination = find(root.ChildItemVOs, { type });
+      destination = find(root.ChildItemVOs, { type }) as FolderVO;
     }
 
     return destination;

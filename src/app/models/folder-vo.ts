@@ -1,13 +1,12 @@
-import { orderBy } from 'lodash';
-
 import { BaseVO, BaseVOData } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
-import { isArray } from 'util';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
+import { ItemVO } from '.';
+import { FolderType, SortType, FolderLinkType } from './vo-types';
 
 export interface ChildItemData {
   isFolder: boolean;
@@ -15,24 +14,11 @@ export interface ChildItemData {
 
   isFetching: boolean;
   fetched: Promise<boolean>;
+  dataStatus: DataStatus;
 
   isPendingAction: boolean;
-  dataStatus: DataStatus;
+  isNewlyCreated: boolean;
 }
-
-export type FolderViewType =
-  'folder.view.grid' |
-  'folder.view.list' |
-  'folder.view.timeline'
-  ;
-export type SortType =
-  'sort.display_date_asc' |
-  'sort.display_date_desc' |
-  'sort.alphabetical_asc' |
-  'sort.alphabetical_desc' |
-  'sort.type_asc' |
-  'sort.type_desc'
-  ;
 
 export class FolderVO extends BaseVO implements ChildItemData {
   public isFolder = true;
@@ -40,10 +26,10 @@ export class FolderVO extends BaseVO implements ChildItemData {
 
   public isFetching = false;
   public fetched: Promise<boolean>;
+  public dataStatus = DataStatus.Placeholder;
 
   public isPendingAction = false;
-
-  public dataStatus = DataStatus.Placeholder;
+  public isNewlyCreated = false;
 
   public folderId;
   public archiveNbr;
@@ -64,7 +50,7 @@ export class FolderVO extends BaseVO implements ChildItemData {
   public viewProperty;
   public thumbArchiveNbr;
   public imageRatio;
-  public type;
+  public type: FolderType;
 
   // Thumbnails
   public thumbStatus;
@@ -77,7 +63,7 @@ export class FolderVO extends BaseVO implements ChildItemData {
   public status;
   public publicDT;
   public parentFolderId;
-  public folder_linkType;
+  public folder_linkType: FolderLinkType;
   public FolderLinkVOs;
   public accessRole: AccessRoleType;
   public position;
@@ -103,7 +89,7 @@ export class FolderVO extends BaseVO implements ChildItemData {
   public FolderSizeVO;
   public AttachmentRecordVOs;
   public hasAttachments;
-  public ChildItemVOs: any;
+  public ChildItemVOs: ItemVO[];
   public ShareVOs: ShareVO[];
   public AccessVO;
   public AccessVOs;
@@ -115,10 +101,8 @@ export class FolderVO extends BaseVO implements ChildItemData {
   constructor(voData: FolderVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
-    // this.ChildItemVOs = orderBy(this.ChildItemVOs, 'position');
-
     if (initChildren) {
-      this.ChildItemVOs = this.ChildItemVOs.map((item) => {
+      this.ChildItemVOs = this.ChildItemVOs.map((item: any) => {
         if (item.folderId) {
           return new FolderVO(item, false);
         } else {

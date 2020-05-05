@@ -11,9 +11,9 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
 
-const THUMBNAIL_REFRESH_INTERVAL = 7500;
+const THUMBNAIL_REFRESH_INTERVAL = 3000;
 
-export type SelectedItemsMap = Map<ItemVO, boolean>;
+export type SelectedItemsMap = Map<ItemVO, true>;
 
 export interface SelectKeyEvent {
   type: 'key';
@@ -97,6 +97,27 @@ export class DataService {
     }
   }
 
+  public hideItemsInCurrentFolder(items: Array<ItemVO>) {
+    this.debug('hideItemsInCurrentFolder %d requested', items.length);
+    const itemsInFolder = items.filter(i => i.parentFolder_linkId === this.currentFolder.folder_linkId);
+
+    if (!itemsInFolder.length) {
+      this.debug('hideItemsInCurrentFolder no items match current folder', items.length);
+      return;
+    }
+
+    const itemsMap = new Map<ItemVO, true>();
+    for (const item of itemsInFolder) {
+      itemsMap.set(item, true);
+      this.selectedItems.delete(item);
+    }
+
+    this.selectedItemsSubject.next(this.selectedItems);
+
+    remove(this.currentFolder.ChildItemVOs, x => itemsMap.has(x));
+    this.debug('hideItemsInCurrentFolder %d removed', itemsInFolder.length);
+  }
+
   public fetchLeanItems(items: Array<ItemVO>, currentFolder ?: FolderVO): Promise<number> {
     this.debug('fetchLeanItems %d items requested', items.length);
 
@@ -161,7 +182,7 @@ export class DataService {
             item.fetched = null;
 
             if (!item.thumbURL200 && item.parentFolderId === this.currentFolder.folderId) {
-              this.debug('thumbRefreshQueue push %d', item.archiveNbr);
+              this.debug('thumbRefreshQueue push %s', item.archiveNbr);
               this.thumbRefreshQueue.push(item);
             }
           }
@@ -179,10 +200,12 @@ export class DataService {
       })
       .catch((response) => {
         itemRejects.map((reject, index) => {
+          items[index].isFetching = false;
           items[index].fetched = null;
           reject();
         });
         console.error(response);
+        return 0;
       });
   }
 
@@ -337,7 +360,12 @@ export class DataService {
       }
 
       const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map(id => {
-        return originalItemsById.has(id) ? originalItemsById.get(id) : updatedItemsById.get(id);
+        const isNew = !originalItemsById.has(id);
+        const item = !isNew ? originalItemsById.get(id) : updatedItemsById.get(id);
+        if (isNew) {
+          item.isNewlyCreated = true;
+        }
+        return item;
       });
 
       folder1.ChildItemVOs = finalUpdatedItems;

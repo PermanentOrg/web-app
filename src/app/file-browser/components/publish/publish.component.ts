@@ -68,7 +68,7 @@ export class PublishComponent implements OnInit {
         while (!this.publicItem && tries++ < 10) {
           const publicRootResponse = await this.api.folder.navigateLean(publicRoot).toPromise() as FolderResponse;
           const publicRootFull = publicRootResponse.getFolderVO(true);
-          const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(i => i instanceof FolderVO);
+          const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(i => i instanceof FolderVO) as FolderVO[];
           const latest = maxBy(publicFolders, folder => folder.updatedDT);
           if (latest && latest.displayName === this.sourceItem.displayName) {
             this.publicItem = latest;

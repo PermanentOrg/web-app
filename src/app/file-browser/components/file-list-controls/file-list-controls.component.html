@@ -17,9 +17,9 @@
   </div>
 </div>
 <div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>
-  <div class="file-list-control" [class.disabled]="!can.delete">Delete</div>
-  <div class="file-list-control" [class.disabled]="!can.copy">Copy</div>
-  <div class="file-list-control" [class.disabled]="!can.move">Move</div>
+  <div class="file-list-control" [class.disabled]="!can.delete" (click)="onDeleteClick()">Delete</div>
+  <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()">Copy</div>
+  <div class="file-list-control" [class.disabled]="!can.move" (click)="onMoveClick()">Move</div>
   <div class="file-list-control" [class.disabled]="!can.share">Share</div>
   <div class="file-list-control" [class.disabled]="!can.publish">Publish</div>
   <div class="file-list-control" [class.disabled]="!can.download">Download</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
@@ -94,7 +94,7 @@ const DRAG_MIN_Y = 1;
   templateUrl: './file-list-item.component.html',
   styleUrls: ['./file-list-item.component.scss']
 })
-export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
+export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy,
   HasSubscriptions, DraggableComponent, DragTargetDroppableComponent {
   @Input() item: ItemVO;
   @Input() folderView: FolderView;
@@ -212,6 +212,14 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
     }
   }
 
+  ngAfterViewInit() {
+    if (this.item.isNewlyCreated) {
+      setTimeout(() => {
+        this.item.isNewlyCreated = false;
+      });
+    }
+  }
+
   ngOnChanges() {
     this.inGridView = this.folderView === FolderView.Grid;
 
@@ -250,7 +258,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
           `Move ${itemText} to ${destination.displayName}?`,
         );
         await this.edit.moveItems(itemsToMove, destination);
-        await this.dataService.refreshCurrentFolder();
       } catch (err) {
         this.isDisabled = false;
         if (err instanceof RecordResponse || err instanceof FolderResponse) {

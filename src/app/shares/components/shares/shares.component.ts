@@ -5,7 +5,7 @@ import { find, remove } from 'lodash';
 import { TweenLite, ScrollToPlugin } from 'gsap/all';
 import { DataService } from '@shared/services/data/data.service';
 
-import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ShareVO } from '@root/app/models';
+import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ShareVO, ItemVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';

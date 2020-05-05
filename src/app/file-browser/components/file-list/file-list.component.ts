@@ -31,7 +31,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
-import { slideUpAnimation, fadeAnimation } from '@shared/animations';
+import { slideUpAnimation, fadeAnimation, ngIfScaleAnimation } from '@shared/animations';
 import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { MainComponent } from '@core/components/main/main.component';
@@ -57,7 +57,7 @@ const DRAG_SCROLL_STEP = 20;
   selector: 'pr-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
-  animations: [ slideUpAnimation, fadeAnimation ]
+  animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimation ]
 })
 export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
@@ -163,7 +163,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.subscriptions.push(this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
       setTimeout(() => {
         this.loadVisibleItems();
-      });
+      }, 500);
     }));
 
     // register for multi select events

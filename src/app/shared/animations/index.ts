@@ -94,3 +94,22 @@ export const ngIfFadeInAnimation = trigger('ngIfFadeInAnimation', [
     ]
   )
 ]);
+
+export const ngIfScaleAnimation = trigger('ngIfScaleAnimation', [
+  transition(
+    ':enter',
+    [
+      style({ height: '0px', opacity: 0 }),
+      animate(`125ms ${TWEAKED}`, style({ height: '*' })),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
+    ]
+  ),
+  transition(
+    ':leave',
+    [
+      style({ height: '*', opacity: '*' }),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
+      animate(`125ms ${TWEAKED}`, style({ height: '0px' }))
+    ]
+  )
+]);
