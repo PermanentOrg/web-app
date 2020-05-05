@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, Input } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription, Subject } from 'rxjs';
@@ -33,6 +33,9 @@ type FileListColumn = 'name' | 'date' | 'type';
 })
 export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscriptions {
   public isSorting$ = new Subject<boolean>();
+
+  @Input() allowSort = true;
+  @Input() showAccess = false;
 
   currentSort: FileListColumn;
   sortDesc = false;

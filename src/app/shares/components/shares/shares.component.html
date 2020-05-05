@@ -1,15 +1,11 @@
-<div class="shares-heading">
-  Shared By Me
+<pr-file-list-controls [allowSort]="false" [showAccess]="true"></pr-file-list-controls>
+<div class="file-list-scroll">
+  <div class="shares-heading">Shared By Me</div>
+  <pr-share-by-me></pr-share-by-me>
+  <div class="shares-heading">Shared With Me</div>
+  <pr-share-with-me></pr-share-with-me>
 </div>
-<div class="shares-empty-message" *ngIf="!sharedByMe.length">
-  You haven't shared any content with anyone
+<pr-sidebar></pr-sidebar>
+<div [@slideUpAnimation]="(device.isMobileWidth() && o.isActivated) ? o.activatedRoute : ''">
+  <router-outlet #o="outlet"></router-outlet>
 </div>
-<pr-file-list-item [item]="share" *ngFor="let share of sharedByMe"></pr-file-list-item>
-<div class="shares-heading">
-  Shared With Me
-</div>
-<pr-share [archive]="archive" *ngFor="let archive of sharedWithMe"></pr-share>
-<div class="shares-empty-message" *ngIf="!sharedWithMe.length">
-  You haven't had any content shared with you
-</div>
-<router-outlet></router-outlet>

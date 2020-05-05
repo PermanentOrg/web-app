@@ -30,7 +30,9 @@ import { FileListControlsComponent } from './components/file-list-controls/file-
     FileListItemComponent,
     FileViewerComponent,
     ThumbnailComponent,
-    VideoComponent
+    VideoComponent,
+    SidebarComponent,
+    FileListControlsComponent
   ],
   declarations: [
     FileListComponent,

@@ -161,6 +161,7 @@ export class DataService {
             item.fetched = null;
 
             if (!item.thumbURL200 && item.parentFolderId === this.currentFolder.folderId) {
+              this.debug('thumbRefreshQueue push %d', item.archiveNbr);
               this.thumbRefreshQueue.push(item);
             }
           }
@@ -356,6 +357,7 @@ export class DataService {
 
     const itemsToCheck = this.thumbRefreshQueue;
     this.thumbRefreshQueue = [];
+    this.debug('checkMissingThumbs %d items', itemsToCheck.length);
     this.fetchLeanItems(itemsToCheck)
       .then(() => {
         this.scheduleMissingThumbsCheck();

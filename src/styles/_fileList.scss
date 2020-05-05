@@ -1,0 +1,22 @@
+@include after($tablet-horizontal) {
+  pr-sidebar {
+    display: none;
+  }
+  
+  .show-sidebar {
+    width: calc(100% - #{$sidebar-width});
+    height: calc(100vh - #{$navbar-total-height-desktop});
+
+    pr-sidebar {
+      display: block;
+    }
+
+    .file-list-scroll {
+      overflow: hidden;
+      overflow-y: auto;
+      height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+      max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+      padding-bottom: $file-list-row-height * 1;
+    }
+  }
+}

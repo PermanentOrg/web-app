@@ -2,10 +2,10 @@
 
 :host {
   @include has-breadcrumbs;
-  width: 100%;
   &.grid-view {
     // background-color: $gray-100;
-    &:after {
+
+    .file-list-scroll:after {
       content: "";
       display: table;
       clear: both;
@@ -21,10 +21,6 @@
     @include public-centered;
   }
 
-  pr-sidebar {
-    display: none;
-  }
-
   .file-list-scroll {
     opacity: 1;
     
@@ -33,25 +29,6 @@
       cursor: wait;
       * {
         pointer-events: none;
-      }
-    }
-  }
-
-  @include after($tablet-horizontal) {
-    &.show-sidebar {
-      width: calc(100% - #{$sidebar-width});
-      height: calc(100vh - #{$navbar-total-height-desktop});
-
-      pr-sidebar {
-        display: block;
-      }
-
-      .file-list-scroll {
-        overflow: hidden;
-        overflow-y: auto;
-        height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
-        max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
-        padding-bottom: $file-list-row-height * 1;
       }
     }
   }

@@ -2,16 +2,16 @@
 
 :host {
   @include has-breadcrumbs;
+  @include mainContentScrollDesktop;
 }
 
 .shares-heading {
   text-align: center;
-  padding: 20px 0px;
-  font-weight: 600;
+  padding: 10px;
+  font-weight: 500;
   border-bottom: 1px solid $gray-300;
-}
 
-.shares-empty-message {
-  text-align: center;
-  padding: 20px 0px;
+  @include desktop {
+      text-align: left;
+  }
 }

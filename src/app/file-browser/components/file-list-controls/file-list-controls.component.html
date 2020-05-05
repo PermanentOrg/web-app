@@ -1,4 +1,5 @@
-<div class="file-list-header" [ngClass]="{'is-sort-changed': isSortChanged(), 'is-sorting': isSorting, 'is-saving-sort': isSavingSort}">
+<div class="file-list-header"
+  [ngClass]="{'is-sort-changed': isSortChanged(), 'is-sorting': isSorting, 'is-saving-sort': isSavingSort, 'hide-sort': !allowSort}">
   <div class="name" [class.active-sort]="currentSort === 'name'" [class.sort-desc]="sortDesc">
     <span class="col-title" (click)="onSortClick('name')">Name</span>
     <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
@@ -7,9 +8,12 @@
     <span class="col-title" (click)="onSortClick('type')">Type</span>
     <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
   </div>
-  <div class="date" [class.active-sort]="currentSort === 'date'" [class.sort-desc]="sortDesc">
+  <div class="date" *ngIf="!showAccess" [class.active-sort]="currentSort === 'date'" [class.sort-desc]="sortDesc">
     <span class="col-title" (click)="onSortClick('date')">Date</span>
     <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
+  </div>
+  <div class="access" *ngIf="showAccess">
+    <span class="col-title">Access</span>
   </div>
 </div>
 <div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>

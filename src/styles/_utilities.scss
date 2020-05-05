@@ -10,6 +10,12 @@
   }
 }
 
+@mixin desktop {
+  @include after($tablet-horizontal) {
+    @content;
+  }
+}
+
 @mixin fullscreen {
   position: fixed;
   top: 0;

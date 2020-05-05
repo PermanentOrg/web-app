@@ -127,6 +127,10 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   .date {
     flex: 0 0 $file-list-date-col-width;
   }
+
+  .access {
+    flex: 0 0 $file-list-access-col-width;
+  }
 }
 
 .actions {
@@ -159,9 +163,9 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   }
 }
 
-@include after($tablet-horizontal) {
+@include desktop {
   .actions {
-    display: none;
+    // display: none;
   }
 }
 

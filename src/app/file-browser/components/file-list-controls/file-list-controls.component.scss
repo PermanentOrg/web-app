@@ -45,6 +45,13 @@
       opacity: 0.75;
     }
 
+    .col-title:only-child {
+      pointer-events: none;
+      &::after {
+        display: none;
+      }
+    }
+
     .save-sort {
       display: none;
       opacity: 0.5;
@@ -57,7 +64,7 @@
       }
     }
   }
-  
+
   .active-sort {
     .col-title::after {
       opacity: 1;
@@ -73,6 +80,17 @@
       .save-sort {
         display: initial;
       }
+    }
+  }
+
+  &.hide-sort {
+    *::after, .save-sort {
+      display: none;
+    }
+
+    .col-title {
+      cursor: initial;
+      pointer-events: none;
     }
   }
 
@@ -101,6 +119,10 @@
 
   .date {
     flex: 0 0 $file-list-date-col-width;
+  }
+
+  .access {
+    flex: 0 0 $file-list-access-col-width;
   }
 }
 

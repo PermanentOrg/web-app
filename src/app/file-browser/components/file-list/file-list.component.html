@@ -8,7 +8,8 @@
     [folderView]="folderView"
     [multiSelect]="isMultiSelectEnabled"
     [allowNavigation]="allowNavigation"
-    [isSelected]="selectedItems.has(item)"
+    [isSelected]="showSidebar ? selectedItems.has(item) : false"
+    [canSelect]="showSidebar"
     (itemClicked)="onItemClick($event)"></pr-file-list-item>
   <div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
     This folder is empty

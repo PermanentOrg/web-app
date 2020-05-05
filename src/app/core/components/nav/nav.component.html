@@ -14,7 +14,7 @@
   <pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
   <div class="sidebar-align">
     <pr-upload-button class="full-width"></pr-upload-button>
-    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()">New folder</button>
+    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" *ngIf="rightMenu.allowedActions.createFolder">New folder</button>
   </div>
 </div>
 <pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>

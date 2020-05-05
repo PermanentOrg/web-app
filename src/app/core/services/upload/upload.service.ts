@@ -16,7 +16,7 @@ import { RecordResponse } from '@shared/services/api/index.repo';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
-
+import debug from 'debug';
 
 @Injectable()
 export class UploadService implements HasSubscriptions, OnDestroy {
@@ -30,6 +30,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   private itemsQueuedByParentFolderId = new Map<number, number>();
 
   subscriptions: Subscription[] = [];
+
+  private debug = debug('service:upload');
 
   constructor(private api: ApiService, private message: MessageService, private dataService: DataService) {
     this.debouncedRefresh = debounce(() => {
@@ -50,11 +52,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       }
     }));
 
-    this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
-      if (status === UploadSessionStatus.Done) {
-        this.debouncedRefresh();
-      }
-    }));
+    // this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
+    //   if (status === UploadSessionStatus.Done) {
+    //     this.debouncedRefresh();
+    //   }
+    // }));
   }
 
   ngOnDestroy() {
@@ -81,6 +83,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {
+    this.debug('uploadFiles %d files to folder %o', files.length, parentFolder);
     let currentCount = 0;
     if (this.itemsQueuedByParentFolderId.has(parentFolder.folderId)) {
       currentCount = this.itemsQueuedByParentFolderId.get(parentFolder.folderId);

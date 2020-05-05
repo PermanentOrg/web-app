@@ -24,9 +24,10 @@ import { AppRoutingModule } from '@root/app/app.routes';
 import { AppComponent } from '@root/app/app.component';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { DialogModule } from './dialog/dialog.module';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { environment } from '@root/environments/environment';
 
 declare var ga: any;
 
@@ -72,6 +73,7 @@ export class PermErrorHandler implements ErrorHandler {
     HttpClientModule,
     HttpClientJsonpModule,
     BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     DialogModule.forRoot()
   ],
@@ -108,15 +110,27 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService
   ) {
+    if (environment.debug) {
+      if (!this.storage.local.get('debug')) {
+        this.storage.local.set('debug', '*,-sockjs-client:*');
+      } else {
+        const current = this.storage.local.get('debug');
+        if (!current.includes('-sockjs-client:') && !current.includes('sockjs-client:')) {
+          this.storage.local.set('debug', current + '-sockjs-client:*');
+        }
+      }
+    }
 
     // router events for title and GA pageviews
     this.routerListener = this.router.events
       .pipe(filter((event) => {
         if (event instanceof NavigationStart) {
-          this.routerDebug('navigate to URL %s', event.url);
+          this.routerDebug('start navigate %s', event.url);
         }
         return event instanceof NavigationEnd;
       })).subscribe((event) => {
+        this.routerDebug('end navigate %s', this.router.url);
+
         let currentRoute = this.route;
         let currentTitle;
         while (currentRoute.firstChild) {
@@ -150,15 +164,6 @@ export class AppModule {
           }
         }
       });
-
-    if (!this.storage.local.get('debug')) {
-      this.storage.local.set('debug', '*,-sockjs-client:*');
-    } else {
-      const current = this.storage.local.get('debug');
-      if (!current.includes('-sockjs-client:') && !current.includes('sockjs-client:')) {
-        this.storage.local.set('debug', current + '-sockjs-client:*');
-      }
-    }
   }
 }
 

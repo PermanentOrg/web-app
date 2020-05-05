@@ -1,13 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, Input, HostListener, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, Input, HostListener, HostBinding, Optional } from '@angular/core';
 import { Breadcrumb } from './breadcrumbs.component';
 import { DragTargetDroppableComponent, DragServiceEvent, DragService } from '@shared/services/drag/drag.service';
 import { Subscription } from 'rxjs';
+import debug from 'debug';
 
 @Component({
   selector: 'pr-breadcrumb',
   templateUrl: './breadcrumb.component.html'
 })
-export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDestroy {
+export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDestroy, OnInit {
   @Input() breadcrumb: Breadcrumb;
   @Input() last: boolean;
 
@@ -15,14 +16,24 @@ export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDest
   @HostBinding('class.drop-target') public isDropTarget = false;
 
   private dragSubscription: Subscription;
-  constructor( private drag: DragService ) {
-    this.dragSubscription = this.drag.events().subscribe(dragEvent => {
-      this.onDragServiceEvent(dragEvent);
-    });
+  private debug = debug('component:breadcrumb');
+  constructor(@Optional() private drag: DragService ) {
+    if (this.drag) {
+      this.dragSubscription = this.drag.events().subscribe(dragEvent => {
+        this.onDragServiceEvent(dragEvent);
+      });
+    }
+
+  }
+
+  ngOnInit() {
+    this.debug('created %o', this.breadcrumb);
   }
 
   ngOnDestroy() {
-    this.dragSubscription.unsubscribe();
+    if (this.dragSubscription) {
+      this.dragSubscription.unsubscribe();
+    }
   }
 
   onDragServiceEvent(dragEvent: DragServiceEvent) {

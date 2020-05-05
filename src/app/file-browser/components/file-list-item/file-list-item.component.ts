@@ -103,6 +103,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   @Input() isShareRoot = false;
   @Input() multiSelect = false;
   @Input() isSelected = false;
+  @Input() showAccess = false;
+  @Input() canSelect = true;
 
   public isMultiSelected =  false;
   public isDragTarget = false;
@@ -201,11 +203,13 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
 
     this.inGridView = this.folderView === FolderView.Grid;
 
-    this.subscriptions.push(
-      this.drag.events().subscribe(dragEvent => {
-        this.onDragServiceEvent(dragEvent);
-      })
-    );
+    if (this.drag) {
+      this.subscriptions.push(
+        this.drag.events().subscribe(dragEvent => {
+          this.onDragServiceEvent(dragEvent);
+        })
+      );
+    }
   }
 
   ngOnChanges() {
@@ -295,6 +299,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   }
 
   onItemMouseDown(mouseDownEvent: MouseEvent) {
+    if (this.isShareRoot || this.isInApps) {
+      return;
+    }
+
     mouseDownEvent.preventDefault();
     const preDragMouseUpHandler = (mouseUpEvent: MouseEvent) => {
       clearTimeout(this.mouseDownDragTimeout);
@@ -362,7 +370,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   }
 
   onItemClick(event: MouseEvent) {
-    if (this.device.isMobileWidth()) {
+    if (this.device.isMobileWidth() || !this.canSelect) {
       this.goToItem();
     } else {
       this.onItemSingleClick(event);
@@ -404,7 +412,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
     if (this.isInApps) {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
-      rootUrl = '/shares/withme';
+      rootUrl = '/shares';
     } else if (this.isInSharePreview) {
       rootUrl = '/share';
     } else if (this.isInPublic) {
@@ -426,7 +434,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
         this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
       }
     } else if (!this.isInSharePreview && !this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
-      this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
+      this.router.navigate(['/shares/record', this.item.archiveNbr]);
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }

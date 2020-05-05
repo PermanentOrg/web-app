@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
+import debug from 'debug';
 
 export class Breadcrumb {
   public routerPath: string;
@@ -14,9 +15,6 @@ export class Breadcrumb {
       this.routerPath = rootUrl;
     } else if (!archiveNbr && !folder_linkId) {
       this.routerPath = this.getSpecialRouterPath(text).join('/');
-      if (text === 'Shares') {
-        this.text = 'Shared With Me';
-      }
     } else {
       this.routerPath = [rootUrl, archiveNbr, folder_linkId].join('/');
     }
@@ -31,7 +29,7 @@ export class Breadcrumb {
       case 'Apps':
         return ['/apps'];
       case 'Shares':
-        return ['/shares/withme'];
+        return ['/shares'];
       default:
         return ['/'];
     }
@@ -53,6 +51,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   private scrollElement: Element;
   private folderChangeListener: Subscription;
 
+  private debug = debug('component:breadcrumbs');
   constructor(
     private dataService: DataService,
     private elementRef: ElementRef,
@@ -120,6 +119,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     }
 
     if (!folder) {
+      this.debug('no folder');
       return;
     }
 
@@ -132,9 +132,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     }
 
     for (let i = 1; i < folder.pathAsText.length; i++) {
-      // if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 2) {
-      //   continue;
-      // }
+      if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 2) {
+        continue;
+      }
 
       this.breadcrumbs.push(new Breadcrumb(
         rootUrl,
@@ -144,6 +144,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       ));
     }
 
+    this.debug('breadcrumbs %o', this.breadcrumbs);
   }
 
   scrollToEnd() {

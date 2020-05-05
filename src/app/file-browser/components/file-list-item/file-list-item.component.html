@@ -13,8 +13,11 @@
   <div class="type">
     {{item.type | prConstants | titlecase }}
   </div>
-  <div class="date">
+  <div class="date" *ngIf="!showAccess">
     {{item.displayDT | date:'yyyy-MM-dd'}}
+  </div>
+  <div class="access" *ngIf="showAccess">
+    {{item.accessRole | prConstants | titlecase}}
   </div>
   <div class="actions" *ngIf="allowActions">
     <button class="right-menu-toggler" (click)="showActions($event)">

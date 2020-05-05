@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, Inject, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { find, remove } from 'lodash';
@@ -10,6 +10,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
 import { MessageService } from '@shared/services/message/message.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 @Component({
   selector: 'pr-shares',
@@ -23,11 +24,14 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
   sharedByMe: Array<FolderVO | RecordVO>;
   sharedWithMe: ArchiveVO[];
 
+  @HostBinding('class.show-sidebar') showSidebar = true;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
     private accountService: AccountService,
+    public device: DeviceService,
     @Inject(DOCUMENT) private document: any
   ) {
     this.sharesFolder = new FolderVO({
@@ -36,14 +40,6 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
       type: 'type.folder.root.share'
     });
     this.dataService.setCurrentFolder(this.sharesFolder);
-
-    const shares = this.route.snapshot.data.shares as ArchiveVO[];
-    const currentArchive = remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop() as ArchiveVO;
-
-    this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
-    this.sharedWithMe = shares;
-
-    console.log(this.sharedByMe);
   }
 
   ngOnInit() {
@@ -51,14 +47,14 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (this.route.snapshot.params) {
-      const archiveNbr = this.route.snapshot.params.archiveNbr;
+      const archiveNbr = this.route.snapshot.params.shareArchiveNbr;
       if (archiveNbr) {
         const targetShare = find(this.shareComponents.toArray(), (share: ShareComponent) => {
           return share.archive.archiveNbr === archiveNbr;
         }) as ShareComponent;
 
         if (targetShare) {
-          window.scrollTo(0, targetShare.element.nativeElement.offsetTop - 100);
+          (targetShare.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start' });
         }
       }
     }

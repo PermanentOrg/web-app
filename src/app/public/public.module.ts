@@ -15,6 +15,7 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
 import { SearchComponent } from './components/search/search.component';
 import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [

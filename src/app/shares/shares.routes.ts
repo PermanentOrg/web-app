@@ -12,70 +12,36 @@ const sharesRootResolve = {
   shares: SharesResolveService
 };
 
+const shareRootChildren = [
+  {
+    path: 'record/:recArchiveNbr',
+    component: FileViewerComponent,
+    data: {
+      singleFile: true
+    },
+    resolve: {
+      currentRecord: RecordResolveService
+    }
+  }
+];
+
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'byme',
-    pathMatch: 'full'
+    component: SharesComponent,
+    resolve: sharesRootResolve,
+    children: shareRootChildren
+  },
+  {
+    path: ':shareArchiveNbr',
+    component: SharesComponent,
+    resolve: sharesRootResolve,
+    children: shareRootChildren
   },
   {
     path: ':archiveNbr/:folderLinkId',
-    redirectTo: 'withme/:archiveNbr/:folderLinkId',
-    pathMatch: 'full'
-  },
-  {
-    path: 'record/:recArchiveNbr',
-    redirectTo: 'withme/record/:recArchiveNbr',
-    pathMatch: 'full'
-  },
-  {
-    path: 'byme',
-    component: ShareByMeComponent,
-    resolve: sharesRootResolve,
-    children: [
-      {
-        path: 'record/:recArchiveNbr',
-        component: FileViewerComponent,
-        data: {
-          singleFile: true
-        },
-        resolve: {
-          currentRecord: RecordResolveService
-        }
-      }
-    ]
-  },
-  {
-    path: 'withme',
-    component: ShareWithMeComponent,
-    resolve: sharesRootResolve,
-    children: [
-      {
-        path: 'record/:recArchiveNbr',
-        component: FileViewerComponent,
-        data: {
-          singleFile: true
-        },
-        resolve: {
-          currentRecord: RecordResolveService
-        }
-      }
-    ]
-  },
-  {
-    path: ':archiveNbr',
-    redirectTo: 'withme/:archiveNbr',
-    pathMatch: 'full'
-  },
-  {
-    path: 'withme/:archiveNbr',
-    component: ShareWithMeComponent,
-    resolve: sharesRootResolve,
-  },
-  {
-    path: 'withme/:archiveNbr/:folderLinkId',
     loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'
-  },
+  }
 ];
 @NgModule({
   imports: [

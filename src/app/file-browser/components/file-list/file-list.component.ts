@@ -194,11 +194,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
             switch (dragEvent.type) {
               case 'start':
               case 'end':
-                // if (!(dragEvent.srcComponent instanceof MainComponent)) {
-                  this.isDraggingInProgress = dragEvent.type === 'start';
-                // } else {
-                //   this.isDraggingFile = dragEvent.type === 'start';
-                // }
+                this.isDraggingInProgress = dragEvent.type === 'start';
                 break;
             }
         })
@@ -219,6 +215,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   ngOnInit() {
     this.currentFolder = this.route.snapshot.data.currentFolder;
+    this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);
     this.isRootFolder = this.currentFolder.type.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
@@ -233,7 +230,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     }
 
     this.loadVisibleItems(true);
-    this.document.documentElement.scrollTop = 0;
+    this.getScrollElement().scrollTo(0, 0);
   }
 
   ngOnDestroy() {
@@ -247,13 +244,14 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     setTimeout(() => {
       // scroll to show items after change
       const scrollTarget: FileListItemComponent = this.listItems[this.lastItemOffset];
-      this.document.documentElement.scrollTop = (scrollTarget.element.nativeElement as HTMLElement).offsetTop - NAV_HEIGHT;
+      (scrollTarget.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
       this.scrollHandlerThrottled();
     });
   }
 
   getScrollElement(): HTMLElement {
-    return (this.device.isMobileWidth() ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
+    return ((this.device.isMobileWidth() || !this.showSidebar)
+    ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -329,6 +327,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   onItemClick(itemClick: ItemClickEvent) {
+    if (!this.showSidebar) {
+      return;
+    }
+
     const selectEvent: SelectClickEvent = {
       type: 'click',
       item: itemClick.item,
