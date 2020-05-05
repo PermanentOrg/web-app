@@ -4,7 +4,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 import { Subscription, Subject } from 'rxjs';
 import { min } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
-import { ItemVO, AccessRole, SortType, FolderVO } from '@models/index';
+import { ItemVO, AccessRole, SortType, FolderVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
 import { fadeAnimation, ngIfFadeInAnimation } from '@shared/animations';
 import { FolderResponse } from '@shared/services/api/index.repo';

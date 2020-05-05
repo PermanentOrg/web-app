@@ -152,7 +152,6 @@ export class EditService {
       }
       actionDeferred.resolve();
     }
-
   }
 
   createFolder(folderName: string, parentFolder: FolderVO): Promise<FolderVO | FolderResponse>   {
@@ -203,7 +202,7 @@ export class EditService {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
-    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+    const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     const recordsByRecordId: Map<number, RecordVO> = new Map();
 
@@ -264,15 +263,16 @@ export class EditService {
       });
   }
 
-  moveItems(items: any[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
+  moveItems(items: ItemVO[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
-    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+    const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     items.forEach((item) => {
-      item.isFolder ? folders.push(item) : records.push(item);
+      item instanceof FolderVO ? folders.push(item) : records.push(item);
       itemsByLinkId[item.folder_linkId] = item;
+      item.isPendingAction = true;
     });
 
     const promises: Array<Promise<any>> = [];
@@ -300,7 +300,7 @@ export class EditService {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
-    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+    const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     items.forEach((item) => {
       item.isFolder ? folders.push(item) : records.push(item);

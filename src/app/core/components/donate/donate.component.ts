@@ -5,7 +5,7 @@ import { find } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 
-import { AccountVO, BillingCardVO, BillingPaymentVO, BillingPaymentVOData } from '@models/index';
+import { AccountVO, BillingCardVO, BillingPaymentVO, BillingPaymentVOData } from '@models';
 
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';

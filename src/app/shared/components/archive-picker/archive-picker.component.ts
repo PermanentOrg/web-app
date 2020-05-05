@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
-import { RelationVO, ArchiveVO, InviteVO, FolderVO, RecordVO } from '@models/index';
+import { RelationVO, ArchiveVO, InviteVO, FolderVO, RecordVO } from '@models';
 import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
 import { SearchResponse, InviteResponse } from '@shared/services/api/index.repo';
@@ -17,7 +17,7 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
-  shareItem?: FolderVO | RecordVO;
+  shareItem?: ItemVO;
   hideAccessRoleOnInvite?: boolean;
   hideRelations?: boolean;
 }

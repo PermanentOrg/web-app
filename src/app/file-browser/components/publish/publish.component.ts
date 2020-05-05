@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
-import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models/index';
+import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -10,6 +10,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { FolderResponse } from '@shared/services/api/index.repo';
+import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'pr-publish',
@@ -35,7 +37,9 @@ export class PublishComponent implements OnInit {
     private api: ApiService,
     private messageService: MessageService,
     private accountService: AccountService,
-    private linkPipe: PublicLinkPipe
+    private router: Router,
+    private linkPipe: PublicLinkPipe,
+    private routePipe: PublicRoutePipe
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 
@@ -100,6 +104,11 @@ export class PublishComponent implements OnInit {
     setTimeout(() => {
       this.linkCopied = false;
     }, 5000);
+  }
+
+  onViewOnWebClick() {
+    this.close();
+    this.router.navigate(this.routePipe.transform(this.publicItem || this.sourceItem));
   }
 
   close() {

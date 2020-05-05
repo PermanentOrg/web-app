@@ -96,7 +96,7 @@ const DRAG_MIN_Y = 1;
 })
 export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
   HasSubscriptions, DraggableComponent, DragTargetDroppableComponent {
-  @Input() item: FolderVO | RecordVO;
+  @Input() item: ItemVO;
   @Input() folderView: FolderView;
 
   @Input() allowNavigation = true;
@@ -114,7 +114,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy,
 
   @HostBinding('class.grid-view') inGridView = false;
 
-  @Output() itemUnshared = new EventEmitter<FolderVO | RecordVO>();
+  @Output() itemUnshared = new EventEmitter<ItemVO>();
   @Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
   public allowActions = true;

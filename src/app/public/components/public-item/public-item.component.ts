@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecordVO, FolderVO, ArchiveVO } from '@models/index';
+import { RecordVO, FolderVO, ArchiveVO } from '@models';
 import { ActivatedRoute } from '@angular/router';
 import { find } from 'lodash';
 import { DomSanitizer } from '@angular/platform-browser';

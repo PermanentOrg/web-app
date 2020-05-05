@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { Subscription } from 'rxjs';
-import { ItemVO } from '@models/index';
+import { ItemVO } from '@models';
 import { EditService, ItemActions } from '@core/services/edit/edit.service';
 import { PromptButton } from '@core/services/prompt/prompt.service';
 

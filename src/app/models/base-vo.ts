@@ -55,6 +55,8 @@ export class BaseVO {
     delete clone.isRecord;
     delete clone.isFolder;
     delete clone.isFetching;
+    delete clone.fetched;
+    delete clone.isPendingAction;
     delete clone.dataStatus;
     return clone;
   }

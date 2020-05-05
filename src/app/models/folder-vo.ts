@@ -9,6 +9,17 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 
+export interface ChildItemData {
+  isFolder: boolean;
+  isRecord: boolean;
+
+  isFetching: boolean;
+  fetched: Promise<boolean>;
+
+  isPendingAction: boolean;
+  dataStatus: DataStatus;
+}
+
 export type FolderViewType =
   'folder.view.grid' |
   'folder.view.list' |
@@ -23,12 +34,14 @@ export type SortType =
   'sort.type_desc'
   ;
 
-export class FolderVO extends BaseVO {
+export class FolderVO extends BaseVO implements ChildItemData {
   public isFolder = true;
   public isRecord = false;
 
   public isFetching = false;
   public fetched: Promise<boolean>;
+
+  public isPendingAction = false;
 
   public dataStatus = DataStatus.Placeholder;
 

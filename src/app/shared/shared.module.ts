@@ -27,6 +27,7 @@ import { InlineValueEditComponent } from './components/inline-value-edit/inline-
 import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { FileDragRootComponent } from './components/file-drag-root/file-drag-root.component';
+import { PublicRoutePipe } from './pipes/public-route.pipe';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { FileDragRootComponent } from './components/file-drag-root/file-drag-roo
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
+    PublicRoutePipe,
     ShareActionLabelPipe,
     NewlineTextPipe,
     TimeAgoV9Pipe,
@@ -79,6 +81,7 @@ import { FileDragRootComponent } from './components/file-drag-root/file-drag-roo
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
+    PublicRoutePipe,
     ShareActionLabelPipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
@@ -90,7 +93,8 @@ import { FileDragRootComponent } from './components/file-drag-root/file-drag-roo
     FileDragRootComponent
   ],
   providers: [
-    PublicLinkPipe
+    PublicLinkPipe,
+    PublicRoutePipe,
   ]
 })
 export class SharedModule {

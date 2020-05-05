@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { ArchiveVO, AccountVO } from '@models/index';
+import { ArchiveVO, AccountVO } from '@models';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
@@ -84,11 +84,7 @@ export class PublicComponent implements OnInit, OnDestroy {
   }
 
   onArchiveThumbClick() {
-    if (this.device.isMobile()) {
-      this.router.navigate(['/m', 'myfiles']);
-    } else {
-      window.location.assign(`/app/myfiles`);
-    }
+    this.router.navigate(['/app', 'myfiles']);
   }
 
   onMyAccountClick() {

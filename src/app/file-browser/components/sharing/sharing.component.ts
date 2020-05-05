@@ -13,7 +13,7 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
-import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
+import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO, ItemVO } from '@models';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@shared/components/prompt/prompt-fields';
 import { ActivatedRoute } from '@angular/router';
@@ -72,7 +72,7 @@ export class SharingComponent implements OnInit {
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService
   ) {
-    this.shareItem = this.data.item as FolderVO | RecordVO;
+    this.shareItem = this.data.item as ItemVO;
     this.shareLink = this.data.link;
 
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {

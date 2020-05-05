@@ -5,7 +5,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { RelationVO, FolderVO, ArchiveVO } from '@models/index';
+import { RelationVO, FolderVO, ArchiveVO } from '@models';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';

@@ -3,14 +3,17 @@ import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
+import { ChildItemData } from './folder-vo';
 
-export class RecordVO extends BaseVO {
+export class RecordVO extends BaseVO implements ChildItemData {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
   public isRecord = true;
   public isFolder = false;
 
   public isFetching = false;
   public fetched: Promise<boolean>;
+
+  public isPendingAction = false;
 
   public dataStatus = DataStatus.Placeholder;
 

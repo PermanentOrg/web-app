@@ -5,7 +5,7 @@ import { find, filter } from 'lodash';
 import { TweenLite, ScrollToPlugin } from 'gsap/all';
 import { DataService } from '@shared/services/data/data.service';
 
-import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO } from '@root/app/models';
+import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ItemVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
@@ -21,7 +21,7 @@ export class ShareWithMeComponent implements OnInit, OnDestroy {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
 
   sharesFolder: FolderVO;
-  sharedByMe: Array<FolderVO | RecordVO>;
+  sharedByMe: Array<ItemVO>;
   sharedWithMe: ArchiveVO[];
 
   constructor(

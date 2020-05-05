@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { AccountVO, ArchiveVO } from '@models/index';
+import { AccountVO, ArchiveVO } from '@models';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';

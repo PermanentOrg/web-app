@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';

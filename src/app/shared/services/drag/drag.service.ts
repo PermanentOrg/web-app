@@ -10,7 +10,7 @@ import { DeviceService } from '../device/device.service';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 import { PromptService } from '@core/services/prompt/prompt.service';
 import { MainComponent } from '@core/components/main/main.component';
-import { FolderVO } from '@models/index';
+import { FolderVO } from '@models';
 import { AccountService } from '../account/account.service';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';

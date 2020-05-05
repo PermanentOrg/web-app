@@ -10,7 +10,7 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { ApiService } from '@shared/services/api/api.service';
-import { RecordVO, FolderVO, RecordVOData, FolderVOData, AccountVO } from '@models/index';
+import { RecordVO, FolderVO, RecordVOData, FolderVOData, AccountVO } from '@models';
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 

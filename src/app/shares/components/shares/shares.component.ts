@@ -21,7 +21,7 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
 
   sharesFolder: FolderVO;
-  sharedByMe: Array<FolderVO | RecordVO>;
+  sharedByMe: Array<ItemVO>;
   sharedWithMe: ArchiveVO[];
 
   @HostBinding('class.show-sidebar') showSidebar = true;

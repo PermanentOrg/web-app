@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
-import { ArchiveVO, AccountVO, FolderVO } from '@models/index';
+import { ArchiveVO, AccountVO, FolderVO } from '@models';
 import { throttle, find } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -324,11 +324,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   }
 
   onMyAccountClick() {
-    if (this.device.isMobile()) {
-      return this.router.navigate(['/myfiles']);
-    } else {
-      window.location.assign(`/app`);
-    }
+    return this.router.navigate(['/app', 'myfiles']);
   }
 
   async onArchiveThumbClick() {

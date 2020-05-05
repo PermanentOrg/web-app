@@ -5,7 +5,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveResponse } from '@shared/services/api/index.repo';
-import { RecordVO, ArchiveVO } from '@models/index';
+import { RecordVO, ArchiveVO } from '@models';
 
 @Injectable()
 export class PreviewArchiveResolveService implements Resolve<any> {

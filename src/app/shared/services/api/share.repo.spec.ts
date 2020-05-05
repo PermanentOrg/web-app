@@ -43,7 +43,7 @@ describe('ShareRepo', () => {
     repo.getShares()
       .then((response: ShareResponse) => {
         const shareArchive = response.getShareArchiveVOs()[0] as ArchiveVO;
-        shareArchive.ItemVOs.forEach((item: FolderVO | RecordVO) => {
+        shareArchive.ItemVOs.forEach((item: ItemVO) => {
           if (item.type.includes('folder')) {
             expect(item.isFolder).toBeTruthy();
           } else {

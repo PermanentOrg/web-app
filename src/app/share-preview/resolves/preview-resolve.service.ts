@@ -4,7 +4,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@a
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models/index';
+import { RecordVO, ShareByUrlVO, FolderVO, RecordVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { shuffle, cloneDeep } from 'lodash';
 

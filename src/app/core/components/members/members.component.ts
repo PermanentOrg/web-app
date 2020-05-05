@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, AccountVO } from '@models/index';
+import { FolderVO, AccountVO } from '@models';
 import { ActivatedRoute } from '@angular/router';
 import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';

@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
-    path: 'm',
+    path: 'app',
     children: [
       { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
       { path: 'signup', redirectTo: 'auth/signup', pathMatch: 'full'  },
@@ -26,18 +26,19 @@ const routes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
-  { path: 'p', loadChildren: '@public/public.module#PublicModule', 
+  { path: 'p', loadChildren: '@public/public.module#PublicModule',
     data: {
       title: 'Public'
     }
   },
-  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule', 
+  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule',
     data: {
       title: 'Sharing'
     }
   },
-  { path: '', redirectTo: 'm', pathMatch: 'full'},
-  { path: ':path', redirectTo: 'm/:path'},
+  { path: '', redirectTo: 'app', pathMatch: 'full'},
+  { path: 'm', redirectTo: 'app', pathMatch: 'full'},
+  { path: ':path', redirectTo: 'app/:path'},
 ];
 
 @NgModule({

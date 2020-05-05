@@ -6,7 +6,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 
 @Injectable()
 export class RootFolderResolveService implements Resolve<any> {

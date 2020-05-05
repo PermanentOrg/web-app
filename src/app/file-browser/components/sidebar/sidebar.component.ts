@@ -3,7 +3,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { some } from 'lodash';
-import { ItemVO } from '@models/index';
+import { ItemVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';

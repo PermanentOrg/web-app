@@ -432,7 +432,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
     const itemsToFetch = this.currentFolder.ChildItemVOs
       .slice(offset, offset + count)
-      .filter((item: FolderVO | RecordVO) => {
+      .filter((item: ItemVO) => {
         return !item.isFetching && item.dataStatus < DataStatus.Lean;
       });
 

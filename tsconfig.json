@@ -29,6 +29,7 @@
       "@share-preview/*": ["src/app/share-preview/*"],
       "@embed/*": ["src/app/embed/*"],
       "@models/*": ["src/app/models/*"],
+      "@models": ["src/app/models"],
       "@root/*": ["src/*"]
     }
   },

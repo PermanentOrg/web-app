@@ -43,9 +43,9 @@ export class DataService {
   public multiSelectEnabled = false;
   public multiSelectChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
-  private byArchiveNbr: {[key: string]: FolderVO | RecordVO} = {};
-  private thumbRefreshQueue: Array<FolderVO | RecordVO> = [];
+  private byFolderLinkId: {[key: number]: ItemVO} = {};
+  private byArchiveNbr: {[key: string]: ItemVO} = {};
+  private thumbRefreshQueue: Array<ItemVO> = [];
   private thumbRefreshTimeout;
 
   public multiSelectItems: Map<number, ItemVO> = new Map();
@@ -65,14 +65,14 @@ export class DataService {
     debugSubscribable('selectedItems', this.debug, this.selectedItems$());
   }
 
-  public registerItem(item: FolderVO | RecordVO) {
+  public registerItem(item: ItemVO) {
     this.byFolderLinkId[item.folder_linkId] = item;
     if (item.archiveNbr) {
       this.byArchiveNbr[item.archiveNbr] = item;
     }
   }
 
-  public deregisterItem(item: FolderVO | RecordVO) {
+  public deregisterItem(item: ItemVO) {
     delete this.byFolderLinkId[item.folder_linkId];
     if (item.archiveNbr) {
       delete this.byArchiveNbr[item.archiveNbr];
@@ -83,7 +83,7 @@ export class DataService {
     if (folder === this.currentFolder) {
       return;
     }
-    
+
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
 
@@ -97,7 +97,7 @@ export class DataService {
     }
   }
 
-  public fetchLeanItems(items: Array<FolderVO | RecordVO>, currentFolder ?: FolderVO): Promise<number> {
+  public fetchLeanItems(items: Array<ItemVO>, currentFolder ?: FolderVO): Promise<number> {
     this.debug('fetchLeanItems %d items requested', items.length);
 
     const itemResolves = [];
@@ -186,7 +186,7 @@ export class DataService {
       });
   }
 
-  public fetchFullItems(items: Array<FolderVO | RecordVO>, withChildren?: boolean) {
+  public fetchFullItems(items: Array<ItemVO>, withChildren?: boolean) {
     this.debug('fetchFullItems %d items requested', items.length);
 
     const itemResolves = [];

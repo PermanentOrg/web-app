@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges,
 
 import { debounce } from 'lodash';
 
-import { FolderVO, RecordVO } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
@@ -13,7 +13,7 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
   styleUrls: ['./thumbnail.component.scss']
 })
 export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
-  @Input() item: FolderVO | RecordVO;
+  @Input() item: ItemVO;
 
   thumbLoaded = false;
 

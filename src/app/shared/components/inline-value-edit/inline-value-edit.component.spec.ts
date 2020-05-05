@@ -4,7 +4,7 @@ import { InlineValueEditComponent } from './inline-value-edit.component';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-fdescribe('InlineValueEditComponent', () => {
+describe('InlineValueEditComponent', () => {
   let component: InlineValueEditComponent;
   let fixture: ComponentFixture<InlineValueEditComponent>;
 

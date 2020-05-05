@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FolderVO } from '@models/index';
+import { FolderVO } from '@models';
 
 @Component({
   selector: 'pr-folder-description',

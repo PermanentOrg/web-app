@@ -6,7 +6,7 @@ import { merge } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { PledgeData } from '@pledge/components/new-pledge/new-pledge.component';
-import { AccountVO, BillingPaymentVO } from '@models/index';
+import { AccountVO, BillingPaymentVO } from '@models';
 
 @Injectable()
 export class PledgeService {
