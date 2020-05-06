@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, HostListener, Optional } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -49,7 +49,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
     private api: ApiService,
     private dialog: Dialog,
     private ga: GoogleAnalyticsService,
-    private drag: DragService,
+    @Optional() private drag: DragService,
     private data: DataService
   ) {
     this.routerListener = this.router.events

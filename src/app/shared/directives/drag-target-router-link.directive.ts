@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, HostBinding, HostListener, OnDestroy, AfterViewInit } from '@angular/core';
+import { Directive, ElementRef, Input, HostBinding, HostListener, OnDestroy, AfterViewInit, Optional } from '@angular/core';
 import { DragService, DragTargetDroppableComponent, DragServiceEvent } from '@shared/services/drag/drag.service';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,13 +18,16 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
   linkText: string;
   constructor (
     private element: ElementRef,
-    private drag: DragService,
+    @Optional() private drag: DragService,
     private data: DataService,
   ) {
     this.nativeElement = this.element.nativeElement;
-    this.dragSubscription = this.drag.events().subscribe(dragEvent => {
-      this.onDragServiceEvent(dragEvent);
-    });
+    if (this.drag) {
+      this.dragSubscription = this.drag.events().subscribe(dragEvent => {
+        this.onDragServiceEvent(dragEvent);
+      });
+    }
+
   }
 
   ngAfterViewInit() {
@@ -32,7 +35,9 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
   }
 
   ngOnDestroy() {
-    this.dragSubscription.unsubscribe();
+    if (this.dragSubscription) {
+      this.dragSubscription.unsubscribe();
+    }
   }
 
   onDragServiceEvent(dragEvent: DragServiceEvent) {

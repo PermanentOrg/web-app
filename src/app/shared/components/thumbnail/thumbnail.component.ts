@@ -87,7 +87,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
       }
     }
 
-    console.log(elemSize, targetWidth);
 
     this.targetThumbWidth = targetWidth;
     this.checkItemThumbs();

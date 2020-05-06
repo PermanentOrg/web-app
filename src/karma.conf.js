@@ -11,6 +11,7 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-junit-reporter'),
       require('karma-coverage-istanbul-reporter'),
+      require('karma-spec-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
@@ -23,11 +24,15 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml', 'junit'],
+    reporters: ['kjhtml', 'junit', 'spec'],
     junitReporter: {
       outputDir: require('path').join(__dirname, '../test-reports'), // results will be saved as $outputDir/$browserName.xml
       suite: '', // suite will become the package name attribute in xml testsuite element
       useBrowserName: false, // add browser name to report and classes names
+    },
+    specReporter: {
+      suppressSkipped: true,
+      showSpecTiming: true
     },
     port: 9876,
     colors: true,

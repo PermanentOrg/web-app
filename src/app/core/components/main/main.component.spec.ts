@@ -29,7 +29,7 @@ import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
-describe('MainComponent', () => {
+fdescribe('MainComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
 
@@ -59,12 +59,12 @@ describe('MainComponent', () => {
     await TestBed.configureTestingModule(config).compileComponents();
 
     const authResponse = new AuthResponse(authResponseData);
-    accountService = TestBed.get(AccountService);
+    accountService = TestBed.inject(AccountService);
 
     accountService.setAccount(authResponse.getAccountVO());
     accountService.setArchive(authResponse.getArchiveVO());
 
-    messageService = TestBed.get(MessageService);
+    messageService = TestBed.inject(MessageService);
     spyOn(messageService, 'showMessage');
 
     fixture = TestBed.createComponent(MainComponent);

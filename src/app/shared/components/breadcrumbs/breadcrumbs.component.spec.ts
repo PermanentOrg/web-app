@@ -32,7 +32,7 @@ describe('BreadcrumbsComponent', () => {
 
     await TestBed.configureTestingModule(config).compileComponents();
 
-    dataService = TestBed.get(DataService);
+    dataService = TestBed.inject(DataService);
     fixture = TestBed.createComponent(BreadcrumbsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -77,7 +77,7 @@ describe('BreadcrumbsComponent', () => {
       pathAsText: ['My Files', 'Test Folder Parent', 'Test Folder'],
       pathAsFolder_linkId: [1, 2, 3]
     });
-    (TestBed.get(DataService) as DataService).setCurrentFolder(testFolder);
+    TestBed.inject(DataService).setCurrentFolder(testFolder);
     expect(component.breadcrumbs[0].routerPath).toEqual('/myfiles');
     expect(component.breadcrumbs[1].routerPath).toContain('/myfiles');
   });
@@ -89,21 +89,21 @@ describe('BreadcrumbsComponent', () => {
       pathAsText: ['Apps', 'Facebook', 'Everything'],
       pathAsFolder_linkId: [1, 2, 3]
     });
-    (TestBed.get(DataService) as DataService).setCurrentFolder(testFolder);
+    TestBed.inject(DataService).setCurrentFolder(testFolder);
     expect(component.breadcrumbs[0].routerPath).toEqual('/apps');
     expect(component.breadcrumbs[1].routerPath).toContain('/apps');
   });
 
   it('should link to Shares for folders in Shares', async () => {
-    await init('/shares/withme');
+    await init('/shares');
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['Shares', 'Archive Name', 'Shared Folder'],
       pathAsFolder_linkId: [1, 2, 3]
     });
-    (TestBed.get(DataService) as DataService).setCurrentFolder(testFolder);
-    expect(component.breadcrumbs[0].routerPath).toEqual('/shares/withme');
-    expect(component.breadcrumbs[0].text).toEqual('Shared With Me');
+    TestBed.inject(DataService).setCurrentFolder(testFolder);
+    expect(component.breadcrumbs[0].routerPath).toEqual('/shares');
+    expect(component.breadcrumbs[0].text).toEqual('Shares');
     expect(component.breadcrumbs[1].routerPath).toContain('/shares/test2');
   });
 });

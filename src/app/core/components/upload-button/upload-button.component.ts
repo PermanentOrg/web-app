@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Optional } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
@@ -35,8 +35,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     private account: AccountService,
     private dataService: DataService,
     private prompt: PromptService,
-    private ga: GoogleAnalyticsService,
-    private drag: DragService
+    private ga: GoogleAnalyticsService
   ) {
     this.subscriptions.push(
       this.dataService.currentFolderChange.subscribe((currentFolder) => {
