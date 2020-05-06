@@ -130,12 +130,22 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 .actions {
-  margin-right: 0.5rem;
+  .right-menu-toggler {
+    padding: 0px 0.5rem;
+    height: $file-list-row-height;
+  }
+
   .grid-view & {
     position: absolute;
-    bottom: $grid-info-section-margin;
+    bottom: 0px;
     right: 0px;
     margin: 0px;
+    padding: 0px;
+
+    .right-menu-toggler {
+      padding: 0px;
+      height: $grid-info-section-height;
+    }
   }
 }
 

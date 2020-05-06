@@ -108,6 +108,9 @@ nav .btn {
   border: 1px solid transparent;
   border-radius: 0.25rem;
   cursor: pointer;
+  height: $navbar-height;
+  display: flex;
+  align-items: center;
   &:focus {
     outline: none;
     text-decoration: none;
