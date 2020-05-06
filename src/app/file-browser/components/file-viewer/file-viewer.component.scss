@@ -11,7 +11,15 @@ $button-size: 2rem;
   right: 0;
   z-index: 1;
   display: block;
+
+  @include until($tablet-horizontal) {
+    // animation-name: $slide-up-animation;
+    // animation-timing-function: $tweaked-ease;
+    // animation-duration: 750ms;
+  }
 }
+
+
 
 .file-viewer {
   position: fixed;
