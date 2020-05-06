@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
-    path: 'app',
+    path: 'm',
     children: [
       { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
       { path: 'signup', redirectTo: 'auth/signup', pathMatch: 'full'  },
@@ -36,9 +36,9 @@ const routes: Routes = [
       title: 'Sharing'
     }
   },
-  { path: '', redirectTo: 'app', pathMatch: 'full'},
-  { path: 'm', redirectTo: 'app', pathMatch: 'full'},
-  { path: ':path', redirectTo: 'app/:path'},
+  { path: '', redirectTo: 'm', pathMatch: 'full'},
+  { path: 'app', redirectTo: 'm', pathMatch: 'full'},
+  { path: ':path', redirectTo: 'm/:path'},
 ];
 
 @NgModule({
