@@ -104,33 +104,28 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: none;
 
   .grid-view & {
     display: none;
   }
 }
 
-@include after($tablet-horizontal) {
-  .type, .date {
-    display: initial;
-  }
+.type {
+  @include file-list-col-type;
+}
 
+.date {
+  @include file-list-col-date;
+}
+
+.access {
+  @include file-list-col-access;
+}
+
+@include after($tablet-horizontal) {
   .name {
     max-width: $file-list-name-col-max-width;
     padding-right: 0.5rem;
-  }
-
-  .type {
-    flex: 0 0 $file-list-type-col-width;
-  }
-
-  .date {
-    flex: 0 0 $file-list-date-col-width;
-  }
-
-  .access {
-    flex: 0 0 $file-list-access-col-width;
   }
 }
 
@@ -166,7 +161,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 
 @include desktop {
   .actions {
-    // display: none;
+    display: none;
   }
 }
 

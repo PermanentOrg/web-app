@@ -114,15 +114,15 @@
   }
 
   .type {
-    flex: 0 0 $file-list-type-col-width;
+    @include file-list-col-type;
   }
 
   .date {
-    flex: 0 0 $file-list-date-col-width;
+    @include file-list-col-date;
   }
 
   .access {
-    flex: 0 0 $file-list-access-col-width;
+    @include file-list-col-access;
   }
 }
 

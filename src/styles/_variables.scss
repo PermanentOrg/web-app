@@ -69,6 +69,32 @@ $tweaked-ease: cubic-bezier(.63,.01,.3,1);
   display: block;
 }
 
+@mixin file-list-col-type {
+  width: $file-list-type-col-width;
+  flex: 0 0 $file-list-type-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+@mixin file-list-col-access {
+  width: $file-list-access-col-width;
+  flex: 0 0 $file-list-access-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+@mixin file-list-col-date {
+  width: $file-list-date-col-width;
+  flex: 0 0 $file-list-date-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
 
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
