@@ -26,12 +26,6 @@ const TAYLOR = 'cubic-bezier(.77, 0, .175, 1)';
 const TWEAKED = 'cubic-bezier(.63,.01,.3,1)';
 export const slideUpAnimation = trigger('slideUpAnimation', [
   transition('* => *', [
-    query(':enter',
-      [
-        style({ ...FULLSCREEN, transform: 'translateY(100vh)', })
-      ],
-      { optional: true }
-    ),
     query(
       ':leave',
       [
