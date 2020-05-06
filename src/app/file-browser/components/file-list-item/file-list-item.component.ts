@@ -87,7 +87,7 @@ type ActionType = 'delete' |
 
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
-const DOUBLE_CLICK_TIMEOUT_IOS = 1000;
+const DOUBLE_CLICK_TIMEOUT_IOS = 1500;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 1;
 
@@ -450,7 +450,11 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     }
   }
 
-  onItemSingleClick(event: MouseEvent) {
+  onItemSingleClick(event: MouseEvent | TouchEvent) {
+    if (event.type === 'touchend') {
+      event.preventDefault();
+    }
+
     if (this.isDragging) {
       return;
     }
@@ -464,13 +468,13 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     this.singleClickTimeout = setTimeout(() => {
       this.itemClicked.emit({
         item: this.item,
-        event
+        event: event as MouseEvent
       });
     }, SINGLE_CLICK_DELAY);
 
     setTimeout(() => {
       this.waitingForDoubleClick = false;
-    }, this.device.isIos() ? DOUBLE_CLICK_TIMEOUT_IOS : DOUBLE_CLICK_TIMEOUT);
+    }, DOUBLE_CLICK_TIMEOUT);
   }
 
   isFolderViewSet() {

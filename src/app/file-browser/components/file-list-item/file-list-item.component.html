@@ -1,7 +1,7 @@
 <div class="file-list-item"
   (click)="onItemClick($event)"
   [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction }"
-  (mousedown)="onItemMouseDown($event)"
+  (mousedown)="onItemMouseDown($event)" (touchend)="onItemClick($event)"
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"> 
   <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>

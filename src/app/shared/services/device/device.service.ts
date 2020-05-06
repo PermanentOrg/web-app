@@ -19,10 +19,10 @@ export class DeviceService {
   }
 
   isMobile() {
-    return navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
+    return !!navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
   }
 
   isIos() {
-    return navigator.userAgent.match(IOS_USER_AGENT_MATCH);
+    return !!navigator.userAgent.match(IOS_USER_AGENT_MATCH);
   }
 }
