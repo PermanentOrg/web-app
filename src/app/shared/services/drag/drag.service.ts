@@ -69,7 +69,6 @@ export class DragService {
     private dataService: DataService,
     private accountService: AccountService,
     rendererFactory: RendererFactory2,
-    deviceService: DeviceService
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 

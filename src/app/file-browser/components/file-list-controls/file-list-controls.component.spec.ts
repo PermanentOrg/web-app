@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileListControlsComponent } from './file-list-controls.component';
+import { BASE_TEST_CONFIG } from '@root/test/testbedConfig';
 
 describe('FileListControlsComponent', () => {
   let component: FileListControlsComponent;
@@ -8,7 +9,9 @@ describe('FileListControlsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FileListControlsComponent ]
+      imports: [ BASE_TEST_CONFIG.imports ],
+      declarations: [ FileListControlsComponent ],
+      providers: [ BASE_TEST_CONFIG.providers ]
     })
     .compileComponents();
   }));

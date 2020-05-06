@@ -37,7 +37,6 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
     const shares = this.route.snapshot.data.shares as ArchiveVO[];
     const currentArchiveId = this.accountService.getArchive().archiveId;
     const currentShareArchive = find(shares, { archiveId: currentArchiveId });
-    console.log(shares, currentArchiveId, currentShareArchive);
     this.sharedByMe = currentShareArchive ? currentShareArchive.ItemVOs : [];
   }
 

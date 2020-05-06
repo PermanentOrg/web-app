@@ -10,6 +10,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -25,6 +26,7 @@ export const BASE_TEST_CONFIG = {
     PromptService,
     DataService,
     FolderViewService,
+    FolderPickerService,
     PrConstantsService,
     EditService
   ] as any[],

@@ -71,7 +71,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     private api: ApiService
   ) {
     this.getSortFromCurrentFolder();
-    this.initialSortType = this.data.currentFolder.sort;
+    this.initialSortType = this.data.currentFolder?.sort;
     this.subscriptions.push(
       this.data.selectedItems$().subscribe(items => {
         this.selectedItems = Array.from(items.keys());
@@ -79,7 +79,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       })
     );
 
-    this.canSaveSort = this.account.checkMinimumAccess(this.data.currentFolder.accessRole, AccessRole.Curator);
+    this.canSaveSort = this.account.checkMinimumAccess(this.data.currentFolder?.accessRole, AccessRole.Curator);
   }
 
   ngOnInit(): void {
@@ -128,7 +128,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   getSortFromCurrentFolder() {
-    const sort = this.data.currentFolder.sort;
+    const sort = this.data.currentFolder?.sort;
     if (!sort || sort.includes('alpha')) {
       this.currentSort = 'name';
     } else if (sort.includes('type')) {
@@ -166,7 +166,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   isSortChanged() {
-    return this.initialSortType !== this.data.currentFolder.sort;
+    return this.initialSortType !== this.data.currentFolder?.sort;
   }
 
   async setSort(sort: SortType) {

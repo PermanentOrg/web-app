@@ -29,7 +29,7 @@ import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
-fdescribe('MainComponent', () => {
+describe('MainComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
 
