@@ -38,9 +38,11 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   ngOnInit() {
     this.imageElement = this.element.querySelector('.pr-thumbnail-image');
     this.placeholderElement = this.element.querySelector('.pr-thumbnail-placeholder');
-    this.setImageBg(this.item.thumbURL200);
-    this.checkElementWidth();
-    this.lastItemDataStatus = this.item.dataStatus;
+    if (this.item) {
+      this.setImageBg(this.item.thumbURL200);
+      this.checkElementWidth();
+      this.lastItemDataStatus = this.item.dataStatus;
+    }
   }
 
   ngOnChanges() {
@@ -68,7 +70,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   checkElementWidth() {
     const elemSize = this.element.clientWidth * this.dpiScale;
-
     if (elemSize <= this.currentThumbWidth) {
       return;
     }
@@ -85,6 +86,8 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
         break;
       }
     }
+
+    console.log(elemSize, targetWidth);
 
     this.targetThumbWidth = targetWidth;
     this.checkItemThumbs();

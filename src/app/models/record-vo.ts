@@ -96,7 +96,7 @@ export class RecordVO extends BaseVO implements ChildItemData {
   public ShareVOs;
   public AccessVO;
 
-  constructor(voData: any | RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(voData: RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
     if (this.ShareVOs) {

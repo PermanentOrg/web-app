@@ -5,7 +5,7 @@ import { environment } from '@root/environments/environment';
 import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
 import { HttpService, Observable } from '@shared/services/http/http.service';
 import { ShareRepo, ShareResponse } from '@shared/services/api/share.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO, FolderVO, RecordVO, ItemVO } from '@root/app/models';
 
 describe('ShareRepo', () => {
   let repo: ShareRepo;

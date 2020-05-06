@@ -14,5 +14,17 @@
         "webpack:/*": "${webRoot}/*" 
       }
     },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Unit Tests",
+      "address": "localhost",
+      "port": 9333,
+      "sourceMaps": true,
+      "webRoot": "${workspaceFolder}",
+      "pathMapping": {
+        "/_karma_webpack_": "${workspaceFolder}"
+      }
+    },
   ]
 }

@@ -1,7 +1,7 @@
 import { PublicRoutePipe } from './public-route.pipe';
 import { FolderVO, RecordVO } from '@models';
 
-fdescribe('PublicRoutePipe', () => {
+describe('PublicRoutePipe', () => {
   it('create an instance', () => {
     const pipe = new PublicRoutePipe();
     expect(pipe).toBeTruthy();

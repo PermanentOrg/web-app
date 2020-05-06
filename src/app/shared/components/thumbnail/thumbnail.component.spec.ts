@@ -1,25 +1,104 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
+import { RecordVO } from '@models';
+import { DataStatus } from '@models/data-status.enum';
+import { Component, ViewChild } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
-xdescribe('ThumbnailComponent', () => {
+const baseImageUrl = 'https://via.placeholder.com';
+
+const image200 = `${baseImageUrl}/200`;
+const image500 = `${baseImageUrl}/500`;
+const image1000 = `${baseImageUrl}/1000`;
+const image2000 = `${baseImageUrl}/2000`;
+
+const minItem = new RecordVO({}, false, DataStatus.Placeholder);
+const leanItem = new RecordVO({ thumbURL200: image200 }, false, DataStatus.Lean);
+const fullItem = new RecordVO({ thumbURL200: image200, thumbURL500: image500, thumbURL1000: image1000 }, false, DataStatus.Full);
+
+@Component({
+  selector: `pr-test-host-component`,
+  template: `<pr-thumbnail [item]='item' [ngStyle]="{'height': size, 'width': size, 'max-width': size}" style="display: block; width: 200px; height: 200px;"></pr-thumbnail>`
+})
+class TestHostComponent {
+  @ViewChild(ThumbnailComponent) public component: ThumbnailComponent;
+  public item: RecordVO = minItem;
+  public size = '200px';
+}
+
+fdescribe('ThumbnailComponent', () => {
   let component: ThumbnailComponent;
-  let fixture: ComponentFixture<ThumbnailComponent>;
+  let hostComponent: TestHostComponent;
 
+  let fixture: ComponentFixture<TestHostComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ThumbnailComponent ]
+      declarations: [ ThumbnailComponent, TestHostComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ThumbnailComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    hostComponent = fixture.componentInstance;
     fixture.detectChanges();
+    component = hostComponent.component;
   });
 
-  it('should create', () => {
+  it('should create host component', () => {
+    expect(hostComponent).toBeTruthy();
     expect(component).toBeTruthy();
+  });
+
+  it('should use image 200 if item is lean', async () => {
+    hostComponent.item.update(leanItem);
+    hostComponent.item.dataStatus = leanItem.dataStatus;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    if (component['dpiScale'] === 1) {
+      expect(component['targetThumbWidth']).toEqual(200);
+    } else {
+      expect(component['targetThumbWidth']).toEqual(500);
+    }
+    expect(component['currentThumbUrl']).toEqual(image200);
+  });
+
+  it('should use image 200 for all DPIs at width 100', async () => {
+    hostComponent.size = '100px';
+    hostComponent.item.update(fullItem);
+    hostComponent.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(component['targetThumbWidth']).toEqual(200);
+    expect(component['currentThumbUrl']).toEqual(image200);
+  });
+
+  it('should use image 200 (low DPIE) or image 500 (low DPI) for all DPIs at width 200', async () => {
+    hostComponent.item.update(fullItem);
+    hostComponent.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    if (component['dpiScale'] === 1) {
+      expect(component['targetThumbWidth']).toEqual(200);
+      expect(component['currentThumbUrl']).toEqual(image200);
+    } else {
+      expect(component['targetThumbWidth']).toEqual(500);
+      expect(component['currentThumbUrl']).toEqual(image500);
+    }
+  });
+
+  it('should use image 500 (low DPI) or image 1000 (high DPI) for width 500', async () => {
+    hostComponent.item.update(fullItem);
+    hostComponent.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    if (component['dpiScale'] === 1) {
+      expect(component['targetThumbWidth']).toEqual(200);
+      expect(component['currentThumbUrl']).toEqual(image200);
+    } else {
+      expect(component['targetThumbWidth']).toEqual(500);
+      expect(component['currentThumbUrl']).toEqual(image500);
+    }
   });
 });
