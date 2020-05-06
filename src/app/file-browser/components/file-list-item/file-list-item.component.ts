@@ -134,6 +134,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   private singleClickTimeout: NodeJS.Timeout;
   private mouseDownDragTimeout: NodeJS.Timeout;
   private waitingForDoubleClick = false;
+  private touchStartEvent: TouchEvent;
 
   subscriptions: Subscription[] = [];
 
@@ -451,10 +452,6 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   }
 
   onItemSingleClick(event: MouseEvent | TouchEvent) {
-    if (event.type === 'touchend') {
-      event.preventDefault();
-    }
-
     if (this.isDragging) {
       return;
     }
@@ -475,6 +472,32 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     setTimeout(() => {
       this.waitingForDoubleClick = false;
     }, DOUBLE_CLICK_TIMEOUT);
+  }
+
+  onItemTouchStart(event) {
+    this.touchStartEvent = event;
+  }
+
+  onItemTouchEnd(event) {
+    if (!this.touchStartEvent) {
+      return;
+    }
+
+    // don't trigger click from scroll...
+    const startX = this.touchStartEvent.touches.item(0).clientX;
+    const endX = (event as TouchEvent).changedTouches.item(0).clientX;
+    const startY = this.touchStartEvent.touches.item(0).clientY;
+    const endY = (event as TouchEvent).changedTouches.item(0).clientY;
+    const distance = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2));
+
+    if (distance > 15) {
+      return;
+    }
+
+    event.preventDefault();
+    this.touchStartEvent = null;
+
+    this.onItemClick(event);
   }
 
   isFolderViewSet() {
