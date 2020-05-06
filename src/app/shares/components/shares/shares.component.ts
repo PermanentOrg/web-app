@@ -11,11 +11,13 @@ import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
 import { MessageService } from '@shared/services/message/message.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { slideUpAnimation, fadeAnimation, ngIfScaleAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-shares',
   templateUrl: './shares.component.html',
-  styleUrls: ['./shares.component.scss']
+  styleUrls: ['./shares.component.scss'],
+  animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimation ]
 })
 export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;

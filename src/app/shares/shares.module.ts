@@ -17,7 +17,7 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
     SharedModule,
     RouterModule,
     AppsRoutingModule,
-    FileBrowserComponentsModule
+    FileBrowserComponentsModule,
   ],
   declarations: [
     SharesComponent,

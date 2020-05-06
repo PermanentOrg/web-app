@@ -31,13 +31,13 @@ export interface DragTargetDroppableComponent {
 export interface DragServiceStartEndEvent {
   type: 'start' | 'end';
   targetTypes: DragTargetType[];
-  event: MouseEvent | DragEvent;
+  event: MouseEvent | any;
   srcComponent: DraggableComponent;
 }
 
 export interface DragServiceEnterLeaveEvent {
   type: 'enter' | 'leave';
-  event: MouseEvent | DragEvent;
+  event: MouseEvent | any;
   srcComponent: DragTargetDroppableComponent;
 }
 
@@ -53,8 +53,8 @@ export class DragService {
 
   private hasFiles = false;
 
-  private mouseMoveHandler: (MouseEvent) => any;
-  private dropHandler: (DragEvent) => any;
+  private mouseMoveHandler: (e: MouseEvent) => any;
+  private dropHandler: (e: any) => any;
   private dragCursorElement: HTMLElement;
   private actionLabelElement: HTMLElement;
   private itemsLabelElement: HTMLElement;
@@ -77,7 +77,7 @@ export class DragService {
       this.setCursorPosition(event);
     }, 8);
 
-    this.dropHandler = (event: DragEvent) => {
+    this.dropHandler = (event: any) => {
       event.stopPropagation();
       event.preventDefault();
       this.dispatch({
@@ -243,7 +243,7 @@ export class DragService {
     }
   }
 
-  private updateItemLabelText(event: DragEvent | MouseEvent) {
+  private updateItemLabelText(event: any | MouseEvent) {
     let label = '';
     if (this.dragSrc instanceof FileListItemComponent) {
       const srcItem = this.dragSrc.item;

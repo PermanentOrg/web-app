@@ -10,7 +10,6 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
-import { IFrameService } from './services/iframe/iframe.service';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { RouterModule } from '@angular/router';
 import { FileSizePipe } from './pipes/filesize.pipe';
@@ -26,7 +25,6 @@ import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
 import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
 import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
-import { FileDragRootComponent } from './components/file-drag-root/file-drag-root.component';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 
 @NgModule({
@@ -60,8 +58,7 @@ import { PublicRoutePipe } from './pipes/public-route.pipe';
     TimeAgoV9Pipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
-    DragTargetRouterLinkDirective,
-    FileDragRootComponent
+    DragTargetRouterLinkDirective
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -89,8 +86,7 @@ import { PublicRoutePipe } from './pipes/public-route.pipe';
     TimeAgoV9Pipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
-    DragTargetRouterLinkDirective,
-    FileDragRootComponent
+    DragTargetRouterLinkDirective
   ],
   providers: [
     PublicLinkPipe,

@@ -273,7 +273,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
 
   // handle all file drag events
   @HostListener('dragenter', ['$event'])
-  onDragEnter(event: DragEvent) {
+  onDragEnter(event: any) {
     if (!this.isDraggingFile) {
       this.isDraggingFile = true;
       const dragEvent: DragServiceStartEndEvent = {
@@ -289,7 +289,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
 
   // handle all file drag events
   @HostListener('dragleave', ['$event'])
-  onDragLeave(event: DragEvent) {
+  onDragLeave(event: any) {
     if (this.isDraggingFile && event.screenX === 0 && event.clientX === 0) {
       const dragEvent: DragServiceStartEndEvent = {
         type: 'end',

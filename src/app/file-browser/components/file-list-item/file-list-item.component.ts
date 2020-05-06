@@ -85,7 +85,8 @@ type ActionType = 'delete' |
   'move' |
   'setFolderView';
 
-const DOUBLE_CLICK_TIMEOUT = 100;
+const SINGLE_CLICK_DELAY = 100;
+const DOUBLE_CLICK_TIMEOUT = 350;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 1;
 
@@ -131,6 +132,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
   private singleClickTimeout: NodeJS.Timeout;
   private mouseDownDragTimeout: NodeJS.Timeout;
+  private waitingForDoubleClick = false;
 
   subscriptions: Subscription[] = [];
 
@@ -452,11 +454,21 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       return;
     }
 
+    if (this.waitingForDoubleClick) {
+      this.waitingForDoubleClick = false;
+      return this.onItemDoubleClick();
+    }
+
+    this.waitingForDoubleClick = true;
     this.singleClickTimeout = setTimeout(() => {
       this.itemClicked.emit({
         item: this.item,
         event
       });
+    }, SINGLE_CLICK_DELAY);
+
+    setTimeout(() => {
+      this.waitingForDoubleClick = false;
     }, DOUBLE_CLICK_TIMEOUT);
   }
 
