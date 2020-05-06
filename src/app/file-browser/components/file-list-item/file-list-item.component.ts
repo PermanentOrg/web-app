@@ -483,6 +483,11 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       return;
     }
 
+    if ((event.target as HTMLElement).classList.contains('right-menu-toggler-icon')) {
+      this.touchStartEvent = null;
+      return;
+    }
+
     // don't trigger click from scroll...
     const startX = this.touchStartEvent.touches.item(0).clientX;
     const endX = (event as TouchEvent).changedTouches.item(0).clientX;
@@ -523,6 +528,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   }
 
   showActions(event: Event) {
+    event.preventDefault();
     event.stopPropagation();
 
     const actionButtons: PromptButton[] = [];
