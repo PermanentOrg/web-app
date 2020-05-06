@@ -87,6 +87,7 @@ type ActionType = 'delete' |
 
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
+const DOUBLE_CLICK_TIMEOUT_IOS = 1000;
 const MOUSE_DOWN_DRAG_TIMEOUT = 500;
 const DRAG_MIN_Y = 1;
 
@@ -469,7 +470,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
     setTimeout(() => {
       this.waitingForDoubleClick = false;
-    }, DOUBLE_CLICK_TIMEOUT);
+    }, this.device.isIos() ? DOUBLE_CLICK_TIMEOUT_IOS : DOUBLE_CLICK_TIMEOUT);
   }
 
   isFolderViewSet() {
