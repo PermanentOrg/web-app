@@ -210,6 +210,10 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   async onDeleteClick() {
+    if (!this.can.delete) {
+      return;
+    }
+
     const itemLabel = this.selectedItems.length > 1 ? `${this.selectedItems.length} items` : this.selectedItems[0].displayName;
       if (await this.prompt.confirmBoolean('Delete', `Are you sure you want to delete ${itemLabel}?`)) {
         try {
@@ -223,11 +227,34 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   async onMoveClick() {
+    if (!this.can.move) {
+      return;
+    }
     this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Move);
   }
 
   async onCopyClick() {
+    if (!this.can.copy) {
+      return;
+    }
+
     this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Copy);
+  }
+
+  onShareClick() {
+    if (!this.can.share) {
+      return;
+    }
+
+    this.edit.openShareDialog(this.selectedItems[0]);
+  }
+
+  onPublishClick() {
+    if (!this.can.publish) {
+      return;
+    }
+    
+    this.edit.openPublishDialog(this.selectedItems[0]);
   }
 
 }

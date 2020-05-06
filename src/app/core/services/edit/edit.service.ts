@@ -342,6 +342,15 @@ export class EditService {
     return Promise.all(promises);
   }
 
+  async openShareDialog(item: ItemVO) {
+    const response = await this.api.share.getShareLink(item);
+    this.dialog.open('SharingComponent', { item, link: response.getShareByUrlVO() });
+  }
+
+  async openPublishDialog(item: ItemVO) {
+    this.dialog.open('PublishComponent', { item }, { height: 'auto' });
+  }
+
   openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();

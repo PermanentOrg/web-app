@@ -86,7 +86,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 .name {
-  flex: 1 1 auto;
+  @include file-list-col-name;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -120,13 +120,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 
 .access {
   @include file-list-col-access;
-}
-
-@include after($tablet-horizontal) {
-  .name {
-    max-width: $file-list-name-col-max-width;
-    padding-right: 0.5rem;
-  }
 }
 
 .actions {

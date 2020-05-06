@@ -29,16 +29,16 @@
     <i class="ion-md-folder"></i>
     <span>Move</span>
   </div>
-  <div class="file-list-control" [class.disabled]="!can.share">
+  <div class="file-list-control" [class.disabled]="!can.share" (click)="onShareClick()">
     <i class="ion-md-share"></i>
     <span>Share</span>
   </div>
-  <div class="file-list-control" [class.disabled]="!can.publish">
+  <div class="file-list-control" [class.disabled]="!can.publish" (click)="onPublishClick()">
     <i class="ion-md-globe"></i>
     <span>Publish</span>
   </div>
-  <div class="file-list-control" [class.disabled]="!can.download">
+  <!-- <div class="file-list-control" [class.disabled]="!can.download">
     <i class="ion-md-cloud-download"></i>
     <span>Download</span>
-  </div>
+  </div> -->
 </div>

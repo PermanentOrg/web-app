@@ -2,7 +2,7 @@ $menu-ease: $tweaked-ease;
 $menu-open-ease: $menu-ease;
 $menu-close-ease: $menu-ease;
 $menu-transition-length: 0.45s;
-$menu-transition-length-desktop: 0.45s;
+$menu-transition-length-desktop: 0.5s;
 
 .menu-wrapper {
   position: fixed;
@@ -43,6 +43,7 @@ $menu-transition-length-desktop: 0.45s;
       transition:  background-color $menu-transition-length-desktop $menu-open-ease;
 
       .menu {
+        opacity: 1;
         transition: transform $menu-transition-length-desktop $menu-open-ease, opacity $menu-transition-length-desktop $menu-open-ease;
       }
     }

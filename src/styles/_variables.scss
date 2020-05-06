@@ -47,13 +47,15 @@ $file-list-row-height: 50px;
 $file-list-controls-height: $sidebar-tab-height;
 $file-list-thumb-col-width: $file-list-row-height;
 $file-list-type-col-width: 8rem;
+$file-list-access-col-width: $file-list-type-col-width;
 $file-list-date-col-width: 10rem;
-$file-list-access-col-width: 8rem;
-$file-list-name-col-max-width: 30rem;
+$file-list-name-col-width: 30rem;
 
 $tablet: 768px;
 $tablet-horizontal: 900px;
 $desktop: 1200px;
+
+$scrollbar-margin: 18px;
 
 $taylor-ease: cubic-bezier(.77, 0, .175, 1);
 $tweaked-ease: cubic-bezier(.63,.01,.3,1);
@@ -69,6 +71,16 @@ $slide-up-animation: slideUp;
 @mixin has-breadcrumbs {
   // padding-top: 34px;
   display: block;
+}
+
+@mixin file-list-col-name {
+  flex: 1 1 $file-list-name-col-width;
+
+  @include after($desktop) {
+    padding-right: 0.5rem;
+    flex-grow: 0;
+    flex-basis: calc(100% - #{$scrollbar-margin + $file-list-row-height} - #{$file-list-type-col-width + $file-list-date-col-width});
+  }
 }
 
 @mixin file-list-col-type {
