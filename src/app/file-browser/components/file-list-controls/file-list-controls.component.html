@@ -17,10 +17,28 @@
   </div>
 </div>
 <div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>
-  <div class="file-list-control" [class.disabled]="!can.delete" (click)="onDeleteClick()">Delete</div>
-  <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()">Copy</div>
-  <div class="file-list-control" [class.disabled]="!can.move" (click)="onMoveClick()">Move</div>
-  <div class="file-list-control" [class.disabled]="!can.share">Share</div>
-  <div class="file-list-control" [class.disabled]="!can.publish">Publish</div>
-  <div class="file-list-control" [class.disabled]="!can.download">Download</div>
+  <div class="file-list-control" [class.disabled]="!can.delete" (click)="onDeleteClick()">
+    <i class="ion-md-trash"></i>
+    <span>Delete</span>
+  </div>
+  <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()">
+    <i class="ion-md-copy"></i>
+    <span>Copy</span>
+  </div>
+  <div class="file-list-control" [class.disabled]="!can.move" (click)="onMoveClick()">
+    <i class="ion-md-folder"></i>
+    <span>Move</span>
+  </div>
+  <div class="file-list-control" [class.disabled]="!can.share">
+    <i class="ion-md-share"></i>
+    <span>Share</span>
+  </div>
+  <div class="file-list-control" [class.disabled]="!can.publish">
+    <i class="ion-md-globe"></i>
+    <span>Publish</span>
+  </div>
+  <div class="file-list-control" [class.disabled]="!can.download">
+    <i class="ion-md-cloud-download"></i>
+    <span>Download</span>
+  </div>
 </div>

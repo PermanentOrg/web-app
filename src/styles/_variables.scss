@@ -98,6 +98,9 @@ $slide-up-animation: slideUp;
   }
 }
 
+$ionicons-font-path: '/assets/fonts/';
+
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
 @import 'utilities';
+
