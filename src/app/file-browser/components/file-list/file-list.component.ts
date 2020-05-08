@@ -49,6 +49,7 @@ const NAV_HEIGHT = 84;
 const ITEM_HEIGHT_LIST_VIEW = 51;
 
 const ITEM_MAX_WIDTH_GRID_VIEW = 200;
+const ITEM_MAX_WIDTH_GRID_VIEW_SIDEBAR = 175;
 
 const SCROLL_DEBOUNCE = 150;
 const SCROLL_THROTTLE = 500;
@@ -409,7 +410,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     if (this.folderView === FolderView.List) {
       itemHeight = ITEM_HEIGHT_LIST_VIEW;
     } else {
-      itemsPerRow = Math.max(Math.floor(listWidth / ITEM_MAX_WIDTH_GRID_VIEW), 2);
+      const max = this.showSidebar ? ITEM_MAX_WIDTH_GRID_VIEW_SIDEBAR : ITEM_MAX_WIDTH_GRID_VIEW;
+      itemsPerRow = Math.max(Math.floor(listWidth / max), 2);
       itemHeight = this.listItems[0] ? this.listItems[0].element.nativeElement.clientHeight : ITEM_HEIGHT_LIST_VIEW;
     }
 

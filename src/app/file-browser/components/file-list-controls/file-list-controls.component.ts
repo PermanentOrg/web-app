@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, Optional } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, Optional, HostListener } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription, Subject } from 'rxjs';
@@ -16,6 +16,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { isKeyEventFromBody } from '@shared/utilities/events';
+import debug from 'debug';
 
 
 interface FileListActions {
@@ -71,6 +73,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
   initialSortType: SortType;
 
+  private debug = debug('component:fileListControls');
   constructor(
     private data: DataService,
     private prompt: PromptService,
@@ -104,6 +107,14 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
+  }
+
+  @HostListener('window:keydown.delete', ['$event'])
+  onWindowKeydownDelete(event: KeyboardEvent) {
+    if (isKeyEventFromBody(event) && this.selectedItems.length) {
+      this.debug('keyboard shortcut delete');
+      this.onDeleteClick();
+    }
   }
 
   setAvailableActions() {

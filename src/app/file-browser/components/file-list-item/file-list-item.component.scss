@@ -2,7 +2,7 @@
 
 $row-height: $file-list-row-height;
 $max-grid-width: 200px;
-$max-grid-width-sidebar: 200px;
+$max-grid-width-sidebar: 175px;
 $action-button-height: 32px;
 $grid-info-section-margin: 5px;
 $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin;
@@ -50,6 +50,16 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   background-color: rgba(white, 0);
   overflow-y: hidden;
 
+  &.grid-view {
+    background-color: white;
+    flex-wrap: wrap;
+    padding-bottom: $grid-info-section-height;
+    position: relative;
+    border-right: 1px solid $gray-300;
+    border-top: 1px solid $gray-300;
+    box-shadow: $box-shadow-sm;
+  }
+
   &.selected, &.selected:hover {
     background-color: rgba($PR-orange, 0.2);
     transition: background-color 0s;
@@ -71,16 +81,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   &.dragging, &.dragging:hover, &.disabled, &.disabled:hover {
     opacity: 0.5;
     transition: opacity $bg-transition-length ease-in;
-  }
-
-  &.grid-view {
-    background-color: white;
-    flex-wrap: wrap;
-    padding-bottom: $grid-info-section-height;
-    position: relative;
-    border-right: 1px solid $gray-300;
-    border-top: 1px solid $gray-300;
-    box-shadow: $box-shadow-sm;
   }
 
   &.drag-target * {

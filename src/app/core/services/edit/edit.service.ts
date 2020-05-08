@@ -71,8 +71,16 @@ export type ActionType = 'delete' |
   'move' |
   'setFolderView';
 
+type EditServiceClipboardOperation = 'copy' | 'move';
+
+interface EditServiceClipboard {
+  items: ItemVO[];
+  operation: EditServiceClipboardOperation;
+}
+
 @Injectable()
 export class EditService {
+  private clipboard: EditServiceClipboard;
 
   constructor(
     private api: ApiService,
@@ -83,6 +91,16 @@ export class EditService {
     private accountService: AccountService,
     private dialog: Dialog
   ) { }
+
+  sendToClipboard(items: ItemVO[], operation: EditServiceClipboardOperation) {
+    this.clipboard = {
+      items,
+      operation
+    };
+  }
+
+  executeClipboard() {
+  }
 
   promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
     const actionDeferred = new Deferred();

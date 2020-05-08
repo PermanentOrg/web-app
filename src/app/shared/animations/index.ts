@@ -95,17 +95,17 @@ export const ngIfScaleAnimation = trigger('ngIfScaleAnimation', [
   transition(
     ':enter',
     [
-      style({ height: '0px', opacity: 0 }),
-      animate(`125ms ${TWEAKED}`, style({ height: '*' })),
+      style({ height: '0px', width: '0px', opacity: 0 }),
+      animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
       animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
     ]
   ),
   transition(
     ':leave',
     [
-      style({ height: '*', opacity: '*' }),
+      style({ height: '*', width: '*', opacity: '*' }),
       animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
-      animate(`125ms ${TWEAKED}`, style({ height: '0px' }))
+      animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' }))
     ]
   )
 ]);
