@@ -102,7 +102,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   isSorting = false;
 
 
-  selectedItems: SelectedItemsMap = new Map();
+  selectedItems: SelectedItemsMap = new Set();
 
   subscriptions: Subscription[] = [];
 

@@ -13,7 +13,7 @@ import { debugSubscribable } from '@shared/utilities/debug';
 
 const THUMBNAIL_REFRESH_INTERVAL = 3000;
 
-export type SelectedItemsMap = Map<ItemVO, true>;
+export type SelectedItemsMap = Set<ItemVO>;
 
 export interface SelectKeyEvent {
   type: 'key';
@@ -50,7 +50,7 @@ export class DataService {
 
   public multiSelectItems: Map<number, ItemVO> = new Map();
 
-  private selectedItems: SelectedItemsMap = new Map();
+  private selectedItems: SelectedItemsMap = new Set();
   private selectedItemsSubject: BehaviorSubject<SelectedItemsMap> = new BehaviorSubject(this.selectedItems);
   private lastManualSelectItem: ItemVO;
   private lastArrowSelectItem: ItemVO;
@@ -501,7 +501,7 @@ export class DataService {
     if (this.selectedItems.has(item)) {
       if (this.selectedItems.size > 1 && replace) {
         this.selectedItems.clear();
-        this.selectedItems.set(item, true);
+        this.selectedItems.add(item);
       } else if (replace) {
         this.selectedItems.clear();
       } else {
@@ -512,7 +512,7 @@ export class DataService {
         this.selectedItems.clear();
         this.lastManualSelectItem = this.lastArrowSelectItem = item;
       }
-      this.selectedItems.set(item, true);
+      this.selectedItems.add(item);
     }
 
     this.selectedItemsSubject.next(this.selectedItems);
@@ -531,7 +531,7 @@ export class DataService {
     const end = Math.max(item1Index, item2Index);
 
     while (current <= end) {
-      this.selectedItems.set(items[current++], true);
+      this.selectedItems.add(items[current++]);
     }
 
     this.selectedItemsSubject.next(this.selectedItems);

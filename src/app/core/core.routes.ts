@@ -20,12 +20,13 @@ import { RelationshipsComponent } from './components/relationships/relationships
 import { MembersComponent } from './components/members/members.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
 import { LeanFolderResolveService } from './resolves/lean-folder-resolve.service';
+import { RoutesWithData } from '../app.routes';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
 
-export const routes: Routes = [
+export const routes: RoutesWithData = [
   { path: '',
     component: MainComponent,
     canActivate: [ AuthGuard ],
@@ -35,7 +36,7 @@ export const routes: Routes = [
       {
         path: 'myfiles',
         loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
-        data: { title: 'My Files', showSidebar: true }
+        data: { title: 'My Files', showSidebar: true, showFolderViewToggle: true }
       },
       {
         path: 'public',
@@ -47,7 +48,7 @@ export const routes: Routes = [
         loadChildren: '@apps/apps.module#AppsModule',
         data: { title: 'Apps', showSidebar: true }
       },
-      { 
+      {
         path: 'shares',
         loadChildren: '@shares/shares.module#SharesModule',
         data: { title: 'Shares', showSidebar: true }

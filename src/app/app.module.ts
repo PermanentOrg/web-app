@@ -65,7 +65,6 @@ export class PermErrorHandler implements ErrorHandler {
   }
 }
 
-
 @NgModule({
   imports: [
     AppRoutingModule,

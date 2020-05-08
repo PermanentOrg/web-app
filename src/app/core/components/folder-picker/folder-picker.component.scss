@@ -65,6 +65,10 @@ $row-height: 40px;
 .picker-header {
   padding: 10px;
   display: flex;
+
+  > * {
+    user-select: none;
+  }
 }
 
 .picker-folder-name {

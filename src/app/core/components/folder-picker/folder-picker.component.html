@@ -2,7 +2,7 @@
   <div class="menu folder-picker">
     <div class="picker-header">
       <div class="picker-back" *ngIf="!isRootFolder" (click)="goToParentFolder()">
-        < Back
+        <i class="ion-md-arrow-dropleft"></i> Back
       </div>
       <div class="picker-folder-name">
         {{currentFolder ? currentFolder.displayName : 'Loading...'}}

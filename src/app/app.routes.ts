@@ -1,10 +1,30 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-const routes: Routes = [
+export interface RouteData {
+  title?: string;
+
+  showSidebar?: boolean;
+  showFolderViewToggle?: boolean;
+  showFolderDescription?: boolean;
+
+  checkFolderViewOnNavigate?: boolean;
+  noFileListPadding?: boolean;
+  fileListCentered?: boolean;
+  isPublicArchive?: boolean;
+}
+
+export interface RouteWithData extends Route {
+  data?: RouteData;
+  children?: RoutesWithData;
+}
+
+export type RoutesWithData = RouteWithData[];
+
+const routes: RoutesWithData = [
   {
     path: 'm',
     children: [

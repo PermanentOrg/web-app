@@ -14,6 +14,8 @@ import { PromptService } from '@core/services/prompt/prompt.service';
 import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
 
 interface FileListActions {
@@ -40,6 +42,13 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
   @Input() allowSort = true;
   @Input() showAccess = false;
+
+  currentFolderView: FolderView;
+  views = {
+    list: FolderView.List,
+    grid: FolderView.Grid,
+    timeline: FolderView.Timeline
+  };
 
   currentSort: FileListColumn;
   sortDesc = false;
@@ -68,18 +77,26 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     @Optional() private edit: EditService,
     private message: MessageService,
     private account: AccountService,
-    private api: ApiService
+    private api: ApiService,
+    private folderView: FolderViewService
   ) {
     this.getSortFromCurrentFolder();
     this.initialSortType = this.data.currentFolder?.sort;
     this.subscriptions.push(
       this.data.selectedItems$().subscribe(items => {
-        this.selectedItems = Array.from(items.keys());
+        this.selectedItems = Array.from(items);
         this.setAvailableActions();
       })
     );
 
     this.canSaveSort = this.account.checkMinimumAccess(this.data.currentFolder?.accessRole, AccessRole.Curator);
+
+    this.currentFolderView = this.folderView.folderView;
+    this.subscriptions.push(
+      this.folderView.viewChange.subscribe(view => {
+        this.currentFolderView = view;
+      })
+    );
   }
 
   ngOnInit(): void {
