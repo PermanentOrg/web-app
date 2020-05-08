@@ -12,6 +12,7 @@
 </nav>
 <div class="nav-second-row">
   <pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
+  <pr-folder-view-toggle></pr-folder-view-toggle>
   <div class="sidebar-align">
     <pr-upload-button class="full-width"></pr-upload-button>
     <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" *ngIf="rightMenu.allowedActions.createFolder">New folder</button>

@@ -26,6 +26,7 @@ import { InlineValueEditComponent } from './components/inline-value-edit/inline-
 import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
+import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { PublicRoutePipe } from './pipes/public-route.pipe';
     TimeAgoV9Pipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
-    DragTargetRouterLinkDirective
+    DragTargetRouterLinkDirective,
+    FolderViewToggleComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -86,7 +88,8 @@ import { PublicRoutePipe } from './pipes/public-route.pipe';
     TimeAgoV9Pipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
-    DragTargetRouterLinkDirective
+    DragTargetRouterLinkDirective,
+    FolderViewToggleComponent
   ],
   providers: [
     PublicLinkPipe,

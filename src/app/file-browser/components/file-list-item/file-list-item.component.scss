@@ -2,6 +2,7 @@
 
 $row-height: $file-list-row-height;
 $max-grid-width: 200px;
+$max-grid-width-sidebar: 150px;
 $action-button-height: 32px;
 $grid-info-section-margin: 5px;
 $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin;
@@ -24,6 +25,14 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   .public-content &, .share-preview-content & {
     @media screen and (min-width: 800px) {
       width: 25%;
+    }
+  }
+
+  .show-sidebar & {
+    @for $i from 2 through 10 {
+      @media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1){
+        width: 100% / $i;
+      }
     }
   }
 }

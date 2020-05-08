@@ -61,6 +61,11 @@ nav.navbar {
     }
   }
 
+  pr-folder-view-toggle {
+    flex: 0 0 auto;
+    display: none;
+  }
+
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
     border-bottom: 1px solid $gray-300;
@@ -71,6 +76,11 @@ nav.navbar {
       > *:not(:last-child) {
         margin-right: 10px;
       }
+    }
+
+    pr-folder-view-toggle {
+      display: flex;
+      align-items: center;
     }
   }
 }

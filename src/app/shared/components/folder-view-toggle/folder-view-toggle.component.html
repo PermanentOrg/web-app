@@ -1,0 +1,5 @@
+<button class="btn btn-small" *ngFor="let view of folderViews"
+  [class.active]="view.folderView === currentFolderView"
+  (click)="onFolderViewClick(view)">
+  <i [class]="view.iconClass"></i>
+</button>
