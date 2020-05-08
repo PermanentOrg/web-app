@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, Optional } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription, Subject } from 'rxjs';
@@ -65,7 +65,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   constructor(
     private data: DataService,
     private prompt: PromptService,
-    private edit: EditService,
+    @Optional() private edit: EditService,
     private message: MessageService,
     private account: AccountService,
     private api: ApiService
@@ -92,7 +92,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   setAvailableActions() {
     this.setAllActions(false);
 
-    if (!this.selectedItems.length) {
+    if (!this.selectedItems.length || !this.edit) {
       return this.setAllActions(false);
     }
 
@@ -210,7 +210,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   async onDeleteClick() {
-    if (!this.can.delete) {
+    if (!this.can.delete || !this.edit) {
       return;
     }
 
@@ -227,14 +227,14 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   async onMoveClick() {
-    if (!this.can.move) {
+    if (!this.can.move || !this.edit) {
       return;
     }
     this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Move);
   }
 
   async onCopyClick() {
-    if (!this.can.copy) {
+    if (!this.can.copy || !this.edit) {
       return;
     }
 
@@ -242,7 +242,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   onShareClick() {
-    if (!this.can.share) {
+    if (!this.can.share || !this.edit) {
       return;
     }
 
@@ -250,10 +250,10 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   onPublishClick() {
-    if (!this.can.publish) {
+    if (!this.can.publish || !this.edit) {
       return;
     }
-    
+
     this.edit.openPublishDialog(this.selectedItems[0]);
   }
 

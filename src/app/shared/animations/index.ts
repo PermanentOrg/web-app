@@ -24,13 +24,15 @@ const EASE_OUT_SINE = 'cubic-bezier(0.61, 1, 0.88, 1)';
 
 const TAYLOR = 'cubic-bezier(.77, 0, .175, 1)';
 const TWEAKED = 'cubic-bezier(.63,.01,.3,1)';
+const slideUpAnimationLength = 500;
+
 export const slideUpAnimation = trigger('slideUpAnimation', [
   transition('* => *', [
     query(
       ':leave',
       [
         style({ ...FULLSCREEN, transform: 'translateY(0)' }),
-        animate(`${animationLength}ms ${TWEAKED}`,
+        animate(`${slideUpAnimationLength}ms ${TWEAKED}`,
           style({ ...FULLSCREEN, transform: 'translateY(100vh)' })
         )
       ],
@@ -40,7 +42,7 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
       ':enter',
       [
         style({ ...FULLSCREEN, transform: 'translateY(100vh)' }),
-        animate(`${animationLength}ms ${TWEAKED}`,
+        animate(`${slideUpAnimationLength}ms ${TWEAKED}`,
           style({ ...FULLSCREEN, transform: 'translateY(0)' })
         )
       ],
