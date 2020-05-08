@@ -113,7 +113,7 @@ $slide-up-animation: slideUp;
   }
 }
 
-$ionicons-font-path: '/assets/fonts/';
+$ionicons-font-path: 'https://unpkg.com/ionicons@4.6.3/dist/fonts';
 
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
