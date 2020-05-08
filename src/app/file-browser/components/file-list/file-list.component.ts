@@ -41,6 +41,10 @@ export interface ItemClickEvent {
   item: RecordVO | FolderVO;
 }
 
+export interface FileListItemParent {
+  onItemClick(itemClick: ItemClickEvent);
+}
+
 const NAV_HEIGHT = 84;
 const ITEM_HEIGHT_LIST_VIEW = 51;
 
@@ -59,7 +63,7 @@ const DRAG_SCROLL_STEP = 20;
   styleUrls: ['./file-list.component.scss'],
   animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimation ]
 })
-export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions {
+export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions, FileListItemParent {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
 
   currentFolder: FolderVO;

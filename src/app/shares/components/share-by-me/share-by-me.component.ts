@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { find } from 'lodash';
 
-import { DataService } from '@shared/services/data/data.service';
+import { DataService, SelectClickEvent } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { FolderVO, RecordVO, ArchiveVO, ItemVO } from '@root/app/models';
@@ -11,6 +11,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { Deferred } from '@root/vendor/deferred';
 import { slideUpAnimation } from '@shared/animations';
+import { ItemClickEvent, FileListItemParent } from '@fileBrowser/components/file-list/file-list.component';
 
 @Component({
   selector: 'pr-share-by-me',
@@ -18,7 +19,7 @@ import { slideUpAnimation } from '@shared/animations';
   styleUrls: ['./share-by-me.component.scss'],
   animations: [ slideUpAnimation ]
 })
-export class ShareByMeComponent implements OnInit, OnDestroy {
+export class ShareByMeComponent implements OnInit, OnDestroy, FileListItemParent {
   sharesFolder: FolderVO;
   sharedByMe: Array<ItemVO>;
   sharedWithMe: ArchiveVO[];
@@ -44,6 +45,21 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+  }
+
+  onItemClick(itemClick: ItemClickEvent) {
+    const selectEvent: SelectClickEvent = {
+      type: 'click',
+      item: itemClick.item,
+    };
+
+    if (itemClick.event?.shiftKey) {
+      selectEvent.modifierKey = 'shift';
+    } else if (itemClick.event?.metaKey || itemClick.event?.ctrlKey) {
+      selectEvent.modifierKey = 'ctrl';
+    }
+
+    this.dataService.onSelectEvent(selectEvent);
   }
 
 }
