@@ -2,23 +2,26 @@ pr-sidebar {
   transform: translateX(100%);
 }
 
-@include after($tablet-horizontal) {
-  .show-sidebar {
-    width: calc(100% - #{$sidebar-width});
-    height: calc(100vh - #{$navbar-total-height-desktop});
+pr-file-list {
+  width: 100%;
+  @include after($tablet-horizontal) {
+    &.show-sidebar {
+      width: calc(100% - #{$sidebar-width});
+      height: calc(100vh - #{$navbar-total-height-desktop});
 
-    pr-sidebar {
-      display: block;
-      transform: translateX(0);
-      transition: transform $menu-transition-length-desktop $tweaked-ease;
-    }
+      pr-sidebar {
+        display: block;
+        transform: translateX(0);
+        transition: transform $menu-transition-length-desktop $tweaked-ease;
+      }
 
-    .file-list-scroll {
-      overflow: hidden;
-      overflow-y: auto;
-      height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
-      max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
-      padding-bottom: $file-list-row-height * 1;
+      .file-list-scroll {
+        overflow: hidden;
+        overflow-y: auto;
+        height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+        max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+        padding-bottom: $file-list-row-height * 1;
+      }
     }
   }
 }
