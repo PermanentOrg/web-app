@@ -39,19 +39,19 @@ const routes: RoutesWithData = [
       { path: 'signupEmbed', redirectTo: 'embed/signup', pathMatch: 'full'  },
       { path: 'verifyEmbed', redirectTo: 'embed/verify', pathMatch: 'full'  },
       { path: 'doneEmbed', redirectTo: 'embed/done', pathMatch: 'full'  },
-      { path: 'auth', loadChildren: '@auth/auth.module#AuthModule' },
-      { path: 'embed', loadChildren: '@embed/embed.module#EmbedModule' },
-      { path: 'pledge', loadChildren: '@pledge/pledge.module#PledgeModule'},
-      { path: '', loadChildren: '@core/core.module#CoreModule' },
+      { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+      { path: 'embed', loadChildren: () => import('./embed/embed.module').then(m => m.EmbedModule) },
+      { path: 'pledge', loadChildren: () => import('./pledge/pledge.module').then(m => m.PledgeModule)},
+      { path: '', loadChildren: () => import('./core/core.module').then(m => m.CoreModule) },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
-  { path: 'p', loadChildren: '@public/public.module#PublicModule',
+  { path: 'p', loadChildren: () => import('./public/public.module').then(m => m.PublicModule),
     data: {
       title: 'Public'
     }
   },
-  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule',
+  { path: 'share', loadChildren: () => import('./share-preview/share-preview.module').then(m => m.SharePreviewModule),
     data: {
       title: 'Sharing'
     }

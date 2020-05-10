@@ -15,6 +15,9 @@ import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
 
+
+export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule);
+
 @NgModule({
   imports: [
     CommonModule,

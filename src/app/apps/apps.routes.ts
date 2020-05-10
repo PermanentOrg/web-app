@@ -7,6 +7,7 @@ import { AppsGuard } from '@core/guards/apps.guard';
 import { AppsComponent } from '@apps/components/apps/apps.component';
 import { AppsFolderResolveService } from '@apps/resolves/apps-folder-resolve.service';
 
+import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 
 const appsRootResolve = {
   appsFolder: AppsFolderResolveService,
@@ -21,7 +22,7 @@ export const routes: Routes = [
   },
   {
     path: ':archiveNbr/:folderLinkId',
-    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+    loadChildren: LazyLoadFileBrowserSibling,
     canActivate: [ AppsGuard ],
     canActivateChild: [ AppsGuard ],
   },

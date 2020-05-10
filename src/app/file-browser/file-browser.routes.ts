@@ -38,7 +38,7 @@ export const routes: Routes = [
   },
   {
     path: 'view',
-    loadChildren: '@root/app/views/views.module#ViewsModule'
+    loadChildren: () => import('../views/views.module').then(m => m.ViewsModule)
   }
 ];
 @NgModule({

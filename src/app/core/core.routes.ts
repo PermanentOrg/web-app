@@ -35,22 +35,22 @@ export const routes: RoutesWithData = [
     children: [
       {
         path: 'myfiles',
-        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+        loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule),
         data: { title: 'My Files', showSidebar: true, showFolderViewToggle: true }
       },
       {
         path: 'public',
-        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+        loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule),
         data: { title: 'Public', showSidebar: true }
       },
       {
         path: 'apps',
-        loadChildren: '@apps/apps.module#AppsModule',
+        loadChildren: () => import('../apps/apps.module').then(m => m.AppsModule),
         data: { title: 'Apps', showSidebar: true }
       },
       {
         path: 'shares',
-        loadChildren: '@shares/shares.module#SharesModule',
+        loadChildren: () => import('../shares/shares.module').then(m => m.SharesModule),
         data: { title: 'Shares', showSidebar: true }
       },
       {
