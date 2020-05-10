@@ -66,8 +66,8 @@ pipelines:
           name: Build and upload to S3
           image: permanentlegacy/node-git-aws:latest
           deployment: demo
-          # caches:
-          #   - node
+          caches:
+            - node
           script:
             - cd /data/www
             - git clone git@bitbucket.org:permanent-org/files.git
