@@ -57,10 +57,13 @@ export class GlobalSearchBarComponent implements OnInit {
     }
 
     const isArrow = event.keyCode === UP_ARROW || event.keyCode === DOWN_ARROW;
+    const isEnter = event.keyCode === ENTER;
+
     const localLength = this.localResults?.length || 0;
     const globalLength = 0;
+    const totalLength = localLength + globalLength;
 
-    if (!isArrow && event.keyCode !== ENTER) {
+    if (!(isArrow  || isEnter) || !totalLength) {
       return;
     }
 
@@ -69,20 +72,21 @@ export class GlobalSearchBarComponent implements OnInit {
       const newActiveResultIndex = this.activeResultIndex + direction;
       this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), localLength + globalLength - 1);
     } else if (event.keyCode === ENTER) {
-      console.log(event, this.activeResultIndex, this.localResults);
-      if (-1 < this.activeResultIndex && this.activeResultIndex < this.localResults?.length) {
-        // local result
-        const item = this.localResults[this.activeResultIndex];
-        console.log(item);
-        this.onLocalResultClick(this.localResults[this.activeResultIndex]);
-      } else if (this.activeResultIndex < this.globalResults?.length ) {
-        // global result
-      }
-      this.reset();
-      setTimeout(() => {
-        (this.inputElementRef.nativeElement as HTMLInputElement).blur();
-      }, 100);
+      this.onInputEnter();
     }
+  }
+
+  onInputEnter() {
+    if (-1 < this.activeResultIndex && this.activeResultIndex < this.localResults?.length) {
+      // local result
+      this.onLocalResultClick(this.localResults[this.activeResultIndex]);
+    } else if (this.activeResultIndex < this.globalResults?.length ) {
+      // global result
+    }
+    this.reset();
+    setTimeout(() => {
+      (this.inputElementRef.nativeElement as HTMLInputElement).blur();
+    }, 100);
   }
 
   isSelectedResult(list: ResultsListType, listIndex: number) {
