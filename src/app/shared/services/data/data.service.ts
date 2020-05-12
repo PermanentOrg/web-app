@@ -63,6 +63,7 @@ export class DataService {
     debugSubscribable('currentFolderChange', this.debug, this.currentFolderChange);
     debugSubscribable('folderUpdate', this.debug, this.folderUpdate);
     debugSubscribable('selectedItems', this.debug, this.selectedItems$());
+    debugSubscribable('showItem', this.debug, this.itemToShow$());
   }
 
   public registerItem(item: ItemVO) {
@@ -564,8 +565,12 @@ export class DataService {
     }
   }
 
-  public showItem(item: ItemVO) {
+  public showItem(item: ItemVO, select = false) {
     this.showItemSubject.next(item);
+    if (select) {
+      this.clearSelectedItems();
+      this.selectItemSingle(item, true);
+    }
   }
 
   public itemToShow$() {

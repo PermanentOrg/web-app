@@ -19,17 +19,20 @@ export class SearchService {
     });
   }
 
-  getResultsInCurrentFolder(searchTerm: string): ItemVO[] {
-    const results = this.fuse.search(searchTerm);
+  getResultsInCurrentFolder(searchTerm: string, limit?: number): ItemVO[] {
+    let results = this.fuse.search(searchTerm);
 
-    console.log(results);
+    if (limit) {
+      results = results.slice(0, limit);
+    }
+
     return results.map(i => {
       return i.item;
     });
   }
 
   indexCurrentFolder() {
-    if (this.data.currentFolder) {
+    if (this.data.currentFolder?.ChildItemVOs) {
       this.fuse.setCollection(this.data.currentFolder.ChildItemVOs);
     } else {
       this.fuse.setCollection([]);

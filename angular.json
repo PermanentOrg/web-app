@@ -200,7 +200,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mdot:build"
+            "browserTarget": "mdot:build",
+            "aot": true
           },
           "configurations": {
             "production": {
@@ -210,6 +211,7 @@
               "host": "local.permanent.org",
               "ssl": true,
               "hmr": true,
+              "aot": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",
@@ -230,7 +232,9 @@
             "proxy_hmr": {
               "host": "local.permanent.org",
               "ssl": true,
-              "hmr": true,
+              "hmr": false,
+              "aot": false,
+              "liveReload": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_hmr",

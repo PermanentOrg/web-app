@@ -35,6 +35,7 @@ import { slideUpAnimation, fadeAnimation, ngIfScaleAnimation } from '@shared/ani
 import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { MainComponent } from '@core/components/main/main.component';
+import debug from 'debug';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -102,10 +103,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   isSorting = false;
 
-
   selectedItems: SelectedItemsMap = new Set();
 
   subscriptions: Subscription[] = [];
+
+  private debug = debug('component:fileList');
 
   constructor(
     private route: ActivatedRoute,
@@ -184,6 +186,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     // register for 'show item' events
     this.subscriptions.push(
       this.dataService.itemToShow$().subscribe(item => {
+        this.debug('scroll item event %o', item);
         setTimeout(() => {
           this.scrollToItem(item);
         });
@@ -212,6 +215,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   refreshView() {
+    unsubscribeAll(this.subscriptions);
     this.ngOnInit();
     setTimeout(() => {
       this.ngAfterViewInit();
@@ -289,6 +293,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   scrollToItem(item: ItemVO) {
+    this.debug('scroll to item %o', item);
     const folder_linkId = item.folder_linkId;
     const listItem = find(this.listItemsQuery.toArray(), x => x.item.folder_linkId === folder_linkId);
     if (listItem) {

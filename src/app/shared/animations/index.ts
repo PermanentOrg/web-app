@@ -109,3 +109,13 @@ export const ngIfScaleAnimation = trigger('ngIfScaleAnimation', [
     ]
   )
 ]);
+
+export const ngIfScaleHeightEnterAnimation = trigger('ngIfScaleHeightEnterAnimation', [
+  transition(
+    ':enter',
+    [
+      style({ height: '0px', opacity: 0 }),
+      animate(`125ms ${TWEAKED}`, style({ height: '*', opacity: 1 })),
+    ]
+  )
+]);
