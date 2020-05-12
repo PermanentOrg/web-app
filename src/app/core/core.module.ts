@@ -28,6 +28,7 @@ import { EditService } from './services/edit/edit.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
+import { SearchModule } from '@search/search.module';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { DragService } from '@shared/services/drag/drag.service';
     SharedModule,
     CoreRoutingModule,
     RouterModule,
-    DialogModule
+    DialogModule,
+    SearchModule
   ],
   declarations: [
     MainComponent,

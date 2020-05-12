@@ -28,6 +28,8 @@
       "@public/*": ["src/app/public/*"],
       "@share-preview/*": ["src/app/share-preview/*"],
       "@embed/*": ["src/app/embed/*"],
+      "@search/*": ["src/app/search/*"],
+      "@search": ["src/app/search"],
       "@models/*": ["src/app/models/*"],
       "@models": ["src/app/models"],
       "@root/*": ["src/*"]
