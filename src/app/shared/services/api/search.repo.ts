@@ -1,4 +1,4 @@
-import { ArchiveVO } from '@root/app/models';
+import { ArchiveVO, RecordVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
@@ -33,6 +33,16 @@ export class SearchRepo extends BaseRepo {
 
     return this.http.sendRequest<SearchResponse>('/search/archive', data, SearchResponse);
   }
+
+  public recordByNameObservable(query: string): Observable<SearchResponse> {
+    const data = [{
+      SearchVO: {
+        query
+      }
+    }];
+
+    return this.http.sendRequest<SearchResponse>('/search/record', data, SearchResponse);
+  }
 }
 
 export class SearchResponse extends BaseResponse {
@@ -50,5 +60,17 @@ export class SearchResponse extends BaseResponse {
     });
 
     return flatten(archives);
+  }
+
+  public getRecordVOs(initChildren?: boolean) {
+    const data = this.getResultsData();
+    
+    if (!data.length) {
+      return [];
+    }
+
+    return data[0].map((result) => {
+      return new RecordVO(result.RecordVO, initChildren);
+    });
   }
 }

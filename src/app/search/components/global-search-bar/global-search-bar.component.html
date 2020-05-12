@@ -1,15 +1,31 @@
 <div class="screen-cover" *ngIf="showResults || isFocused"></div>
-<input type="text" placeholder="Search this archive" #searchInput
-  [(ngModel)]="searchTerm" (ngModelChange)="onInputChange(searchTerm)"
+<input type="text" placeholder="Search this archive" #searchInput [formControl]="formControl"
   (blur)="onInputBlur()" (focus)="isFocused = true;" (keydown)="onInputKeydown($event)">
 <i class="ion-md-search"></i>
 <div class="search-results" *ngIf="showResults">
-  <div class="search-result-group">
+  <div class="search-result-group" *ngIf="localResults?.length">
     <div class="search-result-group-title">In this folder</div>
+    <div class="search-result empty" *ngIf="localResults?.length === 0" >No results</div>
     <div class="search-result" *ngFor="let result of localResults; let i = index" (click)="onLocalResultClick(result)"
       [class.selected]="isSelectedResult('local', i)">
       <div class="name">{{result.displayName}}</div>
       <div class="type">{{result.type | prConstants | titlecase}}</div>
     </div>
+  </div>
+  <div class="search-result-group" *ngIf="waiting || globalResults">
+    <div class="search-result-group-title">
+      <span>Everywhere</span>
+      <div class="fade-ring-loader" *ngIf="waiting"></div>
+    </div>
+    <div *ngIf="serverError">There was an error</div>
+    <div class="search-result empty" *ngIf="globalResults?.length === 0">No results</div>
+    <ng-container *ngIf="globalResults?.length">
+      <div class="search-result" *ngFor="let result of globalResults; let i = index" (click)="onLocalResultClick(result)"
+      [class.selected]="isSelectedResult('local', i)">
+        <div class="name">{{result.displayName}}</div>
+        <div class="type">{{result.type | prConstants | titlecase}}</div>
+      </div>
+    </ng-container>
+
   </div>
 </div>

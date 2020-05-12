@@ -3,11 +3,14 @@ import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { ItemVO } from '@models';
 import Fuse from 'fuse.js';
+import { Observable } from 'rxjs';
+import { SearchResponse } from '@shared/services/api/index.repo';
 
 @Injectable()
 export class SearchService {
   private fuseOptions: Fuse.IFuseOptions<ItemVO> = {
-    keys: ['displayName']
+    keys: ['displayName'],
+    threshold: 0.1
   };
   private fuse = new Fuse([], this.fuseOptions);
   constructor(
@@ -29,6 +32,10 @@ export class SearchService {
     return results.map(i => {
       return i.item;
     });
+  }
+
+  getResultsInCurrentArchive(searchTerm: string, limit?: number): Observable<SearchResponse> {
+    return this.api.search.recordByNameObservable(searchTerm);
   }
 
   indexCurrentFolder() {

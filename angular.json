@@ -210,8 +210,8 @@
             "hmr": {
               "host": "local.permanent.org",
               "ssl": true,
-              "hmr": true,
-              "aot": true,
+              "hmr": false,
+              "aot": false,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",

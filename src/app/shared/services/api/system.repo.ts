@@ -18,9 +18,9 @@ export class SystemRepo extends BaseRepo {
     const vo: SystemExceptionVO = {
       errorType: 'M-dot UI Error',
       errorCode: 0,
-      thrownBy: error.stack.substr(0, 128),
+      thrownBy: error.stack?.substr(0, 128),
       caughtBy: '',
-      detail: error.stack.substr(0, 2000)
+      detail: error.stack?.substr(0, 2000)
     };
 
     const data = [{
