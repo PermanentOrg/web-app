@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding, Inject, Inject } from '@angular/core';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -6,6 +6,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 const ANIMATION_DURATION = 1000;
 

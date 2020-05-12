@@ -1,6 +1,6 @@
 <div class="screen-cover" *ngIf="showResults || isFocused"></div>
 <input type="text" placeholder="Search this archive" #searchInput [formControl]="formControl"
-  (blur)="onInputBlur()" (focus)="isFocused = true;" (keydown)="onInputKeydown($event)">
+  (blur)="onInputBlur()" (focus)="onInputFocus()" (keydown)="onInputKeydown($event)">
 <i class="ion-md-search"></i>
 <div class="search-results" *ngIf="showResults">
   <div class="search-result-group" *ngIf="localResults?.length">
@@ -17,6 +17,7 @@
       <span>Everywhere else</span>
       <div class="fade-ring-loader" *ngIf="waiting"></div>
     </div>
+    <div class="search-result empty" *ngIf="waiting && !globalResults">Searching...</div>
     <div *ngIf="serverError">There was an error</div>
     <!-- <div class="search-result" *ngIf="waiting && (!globalResults || !globalResults.length)"><em>Searching...</em></div> -->
     <div class="search-result empty" *ngIf="globalResults?.length === 0">No results</div>

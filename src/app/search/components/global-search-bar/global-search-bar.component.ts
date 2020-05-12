@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostBinding, Inject } from '@angular/core';
 import { SearchService } from '@search/services/search.service';
 import { ItemVO, RecordVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
@@ -8,6 +8,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { pipe, of } from 'rxjs';
 import { tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { SearchResponse } from '@shared/services/api/index.repo';
+import { DOCUMENT } from '@angular/common';
 const LOCAL_RESULTS_LIMIT = 5;
 
 type ResultsListType = 'local' | 'global';
@@ -43,6 +44,7 @@ export class GlobalSearchBarComponent implements OnInit {
     private searchService: SearchService,
     private data: DataService,
     private fb: FormBuilder,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.formControl = this.fb.control('');
     this.initFormHandler();
@@ -95,8 +97,12 @@ export class GlobalSearchBarComponent implements OnInit {
     });
   }
 
-  onGlobalResults(response: SearchResponse) {
-
+  setBodyClass() {
+    if (this.isFocused) {
+      this.document.documentElement.classList.add('global-search-active');
+    } else {
+      this.document.documentElement.classList.remove('global-search-active');
+    }
   }
 
   onInputChange(term: string) {
@@ -108,11 +114,17 @@ export class GlobalSearchBarComponent implements OnInit {
     }
   }
 
+  onInputFocus() {
+    this.isFocused = true;
+    this.setBodyClass();
+  }
+
   onInputBlur() {
     this.isFocused = false;
     setTimeout(() => {
       this.reset();
-    }, 100);
+      this.setBodyClass();
+  }, 100);
   }
 
   onInputKeydown(event: KeyboardEvent) {

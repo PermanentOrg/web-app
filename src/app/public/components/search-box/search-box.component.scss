@@ -16,6 +16,8 @@ $min-input-width: 18rem;
   display: flex;
   align-items: center;
   margin-left: auto;
+  position: fixed;
+  z-index: 10;
 }
 
 form {
