@@ -1,4 +1,4 @@
-import { ArchiveVO, RecordVO } from '@root/app/models';
+import { ArchiveVO, RecordVO, FolderVO, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
@@ -34,14 +34,26 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>('/search/archive', data, SearchResponse);
   }
 
-  public recordByNameObservable(query: string): Observable<SearchResponse> {
+  public recordByNameObservable(query: string, limit?: number): Observable<SearchResponse> {
     const data = [{
       SearchVO: {
-        query
+        query,
+        numberOfResults: limit
       }
     }];
 
     return this.http.sendRequest<SearchResponse>('/search/record', data, SearchResponse);
+  }
+
+  public itemsByNameObservable(query: string, limit?: number): Observable<SearchResponse> {
+    const data = [{
+      SearchVO: {
+        query,
+        numberOfResults: limit
+      }
+    }];
+
+    return this.http.sendRequest<SearchResponse>('/search/folderAndRecord', data, SearchResponse);
   }
 }
 
@@ -62,9 +74,27 @@ export class SearchResponse extends BaseResponse {
     return flatten(archives);
   }
 
+  public getItemVOs(initChildren?: boolean): ItemVO[] {
+    const data = this.getResultsData();
+
+    if (!data.length) {
+      return [];
+    }
+
+    const searchVO = data[0][0].SearchVO;
+
+    return searchVO.ChildItemVOs.map(i => {
+      if (i.recordId) {
+        return new RecordVO(i, initChildren);
+      } else {
+        return new FolderVO(i, initChildren);
+      }
+    });
+  }
+
   public getRecordVOs(initChildren?: boolean) {
     const data = this.getResultsData();
-    
+
     if (!data.length) {
       return [];
     }

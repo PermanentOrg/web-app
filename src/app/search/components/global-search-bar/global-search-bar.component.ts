@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostBinding } from '@angular/core';
 import { SearchService } from '@search/services/search.service';
-import { ItemVO } from '@models';
+import { ItemVO, RecordVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ngIfScaleHeightEnterAnimation } from '@shared/animations';
@@ -23,6 +23,10 @@ export class GlobalSearchBarComponent implements OnInit {
 
   public localResults: ItemVO[];
   public globalResults: ItemVO[];
+
+  public localResultsByArchiveNbr: Set<string> = new Set();
+  public localResultsByRecordId: Set<string> = new Set();
+  public localResultsByFolderId: Set<string> = new Set();
 
   public waiting = false;
   public serverError = false;
@@ -60,7 +64,7 @@ export class GlobalSearchBarComponent implements OnInit {
         if (term) {
           if (term.length > 0) {
             this.waiting = true;
-            return this.searchService.getResultsInCurrentArchive(term)
+            return this.searchService.getResultsInCurrentArchive(term, 10)
               .pipe(catchError(err => {
                 return of(err);
               }));
@@ -73,7 +77,13 @@ export class GlobalSearchBarComponent implements OnInit {
       this.waiting = false;
       if (response) {
         if (response instanceof SearchResponse && response.isSuccessful) {
-          this.globalResults = response.getRecordVOs();
+          this.globalResults = response.getItemVOs().filter(i => {
+            if (i instanceof RecordVO) {
+              return !this.localResultsByRecordId.has(i.recordId);
+            } else {
+              return !this.localResultsByFolderId.has(i.folderId) && this.data.currentFolder.folderId !== i.folderId;
+            }
+          });
         } else {
           this.globalResults = [];
         }
@@ -158,12 +168,23 @@ export class GlobalSearchBarComponent implements OnInit {
   reset() {
     this.showResults = false;
     this.localResults = null;
+    this.localResultsByFolderId.clear();
+    this.localResultsByRecordId.clear();
     this.globalResults = null;
     this.activeResultIndex = -1;
   }
 
   updateLocalResults(term: string) {
+    this.localResultsByFolderId.clear();
+    this.localResultsByRecordId.clear();
     this.localResults = this.searchService.getResultsInCurrentFolder(term, LOCAL_RESULTS_LIMIT);
+    for (const result of this.localResults) {
+      if (result instanceof RecordVO) {
+        this.localResultsByRecordId.add(result.recordId);
+      } else {
+        this.localResultsByFolderId.add(result.folderId);
+      }
+    }
     this.showResults = true;
   }
 

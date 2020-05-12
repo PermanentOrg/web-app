@@ -35,7 +35,7 @@ export class SearchService {
   }
 
   getResultsInCurrentArchive(searchTerm: string, limit?: number): Observable<SearchResponse> {
-    return this.api.search.recordByNameObservable(searchTerm);
+    return this.api.search.itemsByNameObservable(searchTerm, limit);
   }
 
   indexCurrentFolder() {

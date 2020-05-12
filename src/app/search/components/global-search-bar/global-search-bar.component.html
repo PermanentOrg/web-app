@@ -14,10 +14,11 @@
   </div>
   <div class="search-result-group" *ngIf="waiting || globalResults">
     <div class="search-result-group-title">
-      <span>Everywhere</span>
+      <span>Everywhere else</span>
       <div class="fade-ring-loader" *ngIf="waiting"></div>
     </div>
     <div *ngIf="serverError">There was an error</div>
+    <!-- <div class="search-result" *ngIf="waiting && (!globalResults || !globalResults.length)"><em>Searching...</em></div> -->
     <div class="search-result empty" *ngIf="globalResults?.length === 0">No results</div>
     <ng-container *ngIf="globalResults?.length">
       <div class="search-result" *ngFor="let result of globalResults; let i = index" (click)="onLocalResultClick(result)"
