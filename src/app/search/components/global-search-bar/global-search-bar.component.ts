@@ -127,12 +127,19 @@ export class GlobalSearchBarComponent implements OnInit {
     this.setBodyClass();
   }
 
-  onInputBlur() {
+  onCoverClick() {
     this.isFocused = false;
-    setTimeout(() => {
-      this.reset();
-      this.setBodyClass();
-  }, 100);
+    this.reset();
+    this.setBodyClass();
+  }
+
+  onInputBlur(event) {
+    console.log(event);
+    // this.isFocused = false;
+    // setTimeout(() => {
+    //   this.reset();
+    //   this.setBodyClass();
+    // }, 100);
   }
 
   onInputKeydown(event: KeyboardEvent) {
@@ -214,6 +221,7 @@ export class GlobalSearchBarComponent implements OnInit {
 
   onLocalResultClick(item: ItemVO) {
     this.data.showItem(item, true);
+    this.onCoverClick();
   }
 
   onGlobalResultClick(item: ItemVO) {
@@ -239,6 +247,8 @@ export class GlobalSearchBarComponent implements OnInit {
     if (routerPath) {
       this.router.navigate(routerPath, { queryParams: { showItem: item.folder_linkId }});
     }
+
+    this.onCoverClick();
   }
 
 }

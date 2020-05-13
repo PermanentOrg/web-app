@@ -115,6 +115,14 @@ $result-padding-y: 0.25rem;
       cursor: initial;
     }
 
+    .thumbnail {
+      $size: 1.25em;
+      flex: 0 0 $size;
+      height: $size;
+      background-size: contain;
+      margin-right: $result-padding-x;
+    }
+
     .name {
       flex: 1 1 auto;
       margin-right: auto;
@@ -124,9 +132,12 @@ $result-padding-y: 0.25rem;
     }
 
     .location, .type {
-      flex: 0 1 6rem;
+      flex: 0 2 6rem;
       margin-left: $result-padding-x;
       font-size: $font-size-sm;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .type {

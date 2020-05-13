@@ -1,6 +1,6 @@
-<div class="screen-cover" *ngIf="showResults || isFocused"></div>
+<div class="screen-cover" *ngIf="showResults || isFocused" (click)="onCoverClick()"></div>
 <input type="text" placeholder="Search this archive" #searchInput [formControl]="formControl"
-  (blur)="onInputBlur()" (focus)="onInputFocus()" (keydown)="onInputKeydown($event)">
+  (blur)="onInputBlur($event)" (focus)="onInputFocus()" (keydown)="onInputKeydown($event)">
 <i class="ion-md-search"></i>
 <div class="search-results" *ngIf="showResults">
   <div class="search-result-group" *ngIf="localResults?.length">
@@ -8,6 +8,7 @@
     <div class="search-result empty" *ngIf="localResults?.length === 0" >No results</div>
     <div class="search-result" *ngFor="let result of localResults; let i = index; trackBy: resultTrackByFn" (click)="onLocalResultClick(result)"
       [class.selected]="isSelectedResult('local', i)">
+      <div class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
       <div class="name">{{result.displayName}}</div>
       <div class="type">{{result.type | prConstants | titlecase}}</div>
     </div>
@@ -21,6 +22,7 @@
     <ng-container *ngIf="globalResults?.length">
       <div class="search-result" *ngFor="let result of globalResults; let i = index; trackBy: resultTrackByFn" (click)="onGlobalResultClick(result)"
       [class.selected]="isSelectedResult('global', i)">
+        <div class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
         <div class="name">{{result.displayName}}</div>
         <div class="location">
           <i class="ion-md-folder"></i>
