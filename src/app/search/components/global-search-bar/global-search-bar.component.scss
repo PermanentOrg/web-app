@@ -86,9 +86,9 @@ $result-padding-y: 0.25rem;
   border-bottom-right-radius: $border-radius;
   box-shadow: $box-shadow;
   
-  .search-result-group:not(:last-child) {
-    margin-bottom: 0.5rem;
-  }
+  // .search-result-group:not(:last-child) {
+  //   margin-bottom: 0.5rem;
+  // }
 
   .search-result-group-title {
     font-weight: 600;
@@ -98,6 +98,7 @@ $result-padding-y: 0.25rem;
     align-items: center;
     justify-content: flex-start;
     user-select: none;
+    background-color: darken($PR-orange, $darken-percent + 3%);
   }
 
   .search-result {
