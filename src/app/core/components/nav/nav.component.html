@@ -16,7 +16,9 @@
   <pr-folder-view-toggle></pr-folder-view-toggle>
   <div class="sidebar-align">
     <pr-upload-button class="full-width"></pr-upload-button>
-    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" *ngIf="rightMenu.allowedActions.createFolder">New folder</button>
+    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" *ngIf="rightMenu.allowedActions.createFolder">
+      <i class="ion-md-folder"></i>New folder
+    </button>
   </div>
 </div>
 <pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>

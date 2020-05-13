@@ -1,6 +1,16 @@
+@import 'variables';
+
+$padding-x: $navbar-button-icon-padding;
+
 .btn-alternate {
   color: white;
   margin-bottom: 0;
+  padding-left: $padding-x;
+  padding-right: $padding-x;
+
+  i {
+    margin-right: $padding-x;
+  }
 }
 
 :host.full-width {

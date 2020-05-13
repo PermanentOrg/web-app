@@ -62,8 +62,11 @@ nav.navbar {
     padding: 0px 10px;
     
     .btn {
-      padding-top: 7px;
-      padding-bottom: 7px;
+      padding: 7px $navbar-button-icon-padding;
+      
+      i {
+        margin-right: $navbar-button-icon-padding;
+      }
     }
   }
 
