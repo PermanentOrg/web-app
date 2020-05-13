@@ -101,6 +101,10 @@ export class GlobalSearchBarComponent implements OnInit {
     });
   }
 
+  resultTrackByFn(item: ItemVO) {
+    return item.folder_linkId;
+  }
+
   setBodyClass() {
     if (this.isFocused) {
       this.document.documentElement.classList.add('global-search-active');

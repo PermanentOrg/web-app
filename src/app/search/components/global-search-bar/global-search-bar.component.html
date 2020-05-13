@@ -6,7 +6,7 @@
   <div class="search-result-group" *ngIf="localResults?.length">
     <div class="search-result-group-title">In this folder</div>
     <div class="search-result empty" *ngIf="localResults?.length === 0" >No results</div>
-    <div class="search-result" *ngFor="let result of localResults; let i = index" (click)="onLocalResultClick(result)"
+    <div class="search-result" *ngFor="let result of localResults; let i = index; trackBy: resultTrackByFn" (click)="onLocalResultClick(result)"
       [class.selected]="isSelectedResult('local', i)">
       <div class="name">{{result.displayName}}</div>
       <div class="type">{{result.type | prConstants | titlecase}}</div>
@@ -19,7 +19,7 @@
     </div>
     <div class="search-result empty" *ngIf="globalResults?.length === 0">No results</div>
     <ng-container *ngIf="globalResults?.length">
-      <div class="search-result" *ngFor="let result of globalResults; let i = index" (click)="onGlobalResultClick(result)"
+      <div class="search-result" *ngFor="let result of globalResults; let i = index; trackBy: resultTrackByFn" (click)="onGlobalResultClick(result)"
       [class.selected]="isSelectedResult('global', i)">
         <div class="name">{{result.displayName}}</div>
         <div class="location">
