@@ -62,7 +62,8 @@
                   "with": "src/index.serve.html"
                 }
               ],
-              "deployUrl": "/"
+              "deployUrl": "/",
+              "tsConfig": "src/tsconfig.serve.json"
             },
             "proxy": {
               "fileReplacements": [
@@ -75,7 +76,8 @@
                   "with": "src/index.serve.html"
                 }
               ],
-              "deployUrl": "/"
+              "deployUrl": "/",
+              "tsConfig": "src/tsconfig.serve.json"
             },
             "proxy_hmr": {
               "fileReplacements": [
@@ -88,7 +90,8 @@
                   "with": "src/index.serve.html"
                 }
               ],
-              "deployUrl": "/"
+              "deployUrl": "/",
+              "tsConfig": "src/tsconfig.serve.json"
             },
             "proxy_hmr_prod": {
               "fileReplacements": [
@@ -232,7 +235,7 @@
             "proxy_hmr": {
               "host": "local.permanent.org",
               "ssl": true,
-              "hmr": false,
+              "hmr": true,
               "aot": false,
               "liveReload": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
