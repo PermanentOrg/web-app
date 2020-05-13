@@ -22,6 +22,10 @@
       <div class="search-result" *ngFor="let result of globalResults; let i = index" (click)="onGlobalResultClick(result)"
       [class.selected]="isSelectedResult('global', i)">
         <div class="name">{{result.displayName}}</div>
+        <div class="location">
+          <i class="ion-md-folder"></i>
+          {{result.parentDisplayName}}
+        </div>
         <div class="type">{{result.type | prConstants | titlecase}}</div>
       </div>
     </ng-container>

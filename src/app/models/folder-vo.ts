@@ -8,6 +8,10 @@ import { TimezoneVOData } from './timezone-vo';
 import { ItemVO } from '.';
 import { FolderType, SortType, FolderLinkType } from './vo-types';
 
+export interface HasParentFolder {
+  parentDisplayName?: string;
+}
+
 export interface ChildItemData {
   isFolder: boolean;
   isRecord: boolean;
@@ -20,7 +24,7 @@ export interface ChildItemData {
   isNewlyCreated: boolean;
 }
 
-export class FolderVO extends BaseVO implements ChildItemData {
+export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
   public isFolder = true;
   public isRecord = false;
 
@@ -76,6 +80,7 @@ export class FolderVO extends BaseVO implements ChildItemData {
   public parentFolder_linkId: number;
   public ParentFolderVOs;
   public parentArchiveNbr;
+  public parentDisplayName: string;
   public pathAsArchiveNbr: string[];
 
   // Children
@@ -176,6 +181,7 @@ export interface FolderVOData extends BaseVOData {
   parentFolder_linkId?: number;
   ParentFolderVOs?: any;
   parentArchiveNbr?: any;
+  parentDisplayName?: string;
   pathAsArchiveNbr?: string[];
   ChildFolderVOs?: any;
   RecordVOs?: any;

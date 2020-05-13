@@ -3,10 +3,10 @@ import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
-import { ChildItemData } from './folder-vo';
+import { ChildItemData, HasParentFolder } from './folder-vo';
 import { RecordType, FolderLinkType } from './vo-types';
 
-export class RecordVO extends BaseVO implements ChildItemData {
+export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
   public isRecord = true;
   public isFolder = false;
@@ -74,7 +74,8 @@ export class RecordVO extends BaseVO implements ChildItemData {
   public pathAsText;
   public parentFolder_linkId;
   public ParentFolderVOs;
-  public parentArchiveNbr;
+  public parentArchiveNbr: string;
+  public parentDisplayName: string;
   public pathAsArchiveNbr;
 
   // Other stuff
@@ -169,6 +170,7 @@ export interface RecordVOData extends BaseVOData {
   parentFolder_linkId?: any;
   ParentFolderVOs?: any;
   parentArchiveNbr?: any;
+  parentDisplayName?: string;
   pathAsArchiveNbr?: any;
   LocnVO?: any;
   TimezoneVO?: any;
