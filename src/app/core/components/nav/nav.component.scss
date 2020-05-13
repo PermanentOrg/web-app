@@ -43,6 +43,7 @@ nav.navbar {
 
     &.nav-desktop {
       display: flex;
+      flex-wrap: nowrap;
     }
     // background-color: $PR-blue;
   }
@@ -95,7 +96,7 @@ nav.navbar {
     flex: 0 1 40rem;
   }
   pr-account-dropdown {
-    margin-left: auto;
+    margin-left: 10px;
   }
 }
 
