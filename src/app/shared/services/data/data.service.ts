@@ -56,6 +56,7 @@ export class DataService {
   private lastArrowSelectItem: ItemVO;
 
   private showItemSubject = new Subject<ItemVO>();
+  private itemToShowAfterNavigate: ItemVO;
 
   private debug = debug('service:dataService');
 
@@ -575,5 +576,16 @@ export class DataService {
 
   public itemToShow$() {
     return this.showItemSubject.asObservable();
+  }
+
+  public showItemAfterNavigate(item: ItemVO) {
+    this.debug('got item to show after navigate %o', item);
+    this.itemToShowAfterNavigate = item;
+  }
+
+  public getItemToShowAfterNavigate() {
+    const item = this.itemToShowAfterNavigate;
+    this.itemToShowAfterNavigate = null;
+    return item;
   }
 }

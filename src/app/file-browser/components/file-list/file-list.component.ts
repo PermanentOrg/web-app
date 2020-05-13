@@ -13,7 +13,7 @@ import {
   Optional,
   ViewChild
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { UP_ARROW, DOWN_ARROW, CONTROL, META, SHIFT } from '@angular/cdk/keycodes';
 
@@ -115,6 +115,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private router: Router,
     private elementRef: ElementRef,
     private folderViewService: FolderViewService,
+    private location: Location,
     @Inject(DOCUMENT) private document: any,
     @Optional() private drag: DragService,
     public device: DeviceService
@@ -240,6 +241,20 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
     this.loadVisibleItems(true);
     this.getScrollElement().scrollTo(0, 0);
+
+    const queryParams = this.route.snapshot.queryParamMap;
+    if (queryParams.has('showItem')) {
+      const folder_linkId = Number(queryParams.get('showItem'));
+      this.location.replaceState(this.router.url.split('?')[0]);
+      const item = find(this.currentFolder.ChildItemVOs, { folder_linkId });
+      this.scrollToItem(item);
+      setTimeout(() => {
+        this.dataService.onSelectEvent({
+          type: 'click',
+          item
+        });
+      });
+    }
   }
 
   ngOnDestroy() {

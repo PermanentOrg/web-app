@@ -9,6 +9,8 @@ import { pipe, of } from 'rxjs';
 import { tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { DOCUMENT } from '@angular/common';
+import { AccountService } from '@shared/services/account/account.service';
+import { Router } from '@angular/router';
 const LOCAL_RESULTS_LIMIT = 5;
 
 type ResultsListType = 'local' | 'global';
@@ -44,6 +46,8 @@ export class GlobalSearchBarComponent implements OnInit {
     private searchService: SearchService,
     private data: DataService,
     private fb: FormBuilder,
+    private account: AccountService,
+    private router: Router,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.formControl = this.fb.control('');
@@ -136,28 +140,31 @@ export class GlobalSearchBarComponent implements OnInit {
     const isEnter = event.keyCode === ENTER;
 
     const localLength = this.localResults?.length || 0;
-    const globalLength = 0;
+    const globalLength = this.globalResults?.length || 0;
     const totalLength = localLength + globalLength;
 
     if (!(isArrow  || isEnter) || !totalLength) {
       return;
     }
 
-    if (isArrow && this.localResults?.length) {
+    if (isArrow) {
       const direction = event.keyCode === DOWN_ARROW ? 1 : -1;
       const newActiveResultIndex = this.activeResultIndex + direction;
-      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), localLength + globalLength - 1);
+      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), totalLength - 1);
     } else if (event.keyCode === ENTER) {
       this.onInputEnter();
     }
   }
 
   onInputEnter() {
-    if (-1 < this.activeResultIndex && this.activeResultIndex < this.localResults?.length) {
-      // local result
+    const localLength = this.localResults?.length || 0;
+    const globalLength = this.globalResults?.length || 0;
+    const totalLength = localLength + globalLength;
+
+    if (-1 < this.activeResultIndex && this.activeResultIndex < localLength) {
       this.onLocalResultClick(this.localResults[this.activeResultIndex]);
-    } else if (this.activeResultIndex < this.globalResults?.length ) {
-      // global result
+    } else if (localLength <= this.activeResultIndex && this.activeResultIndex < totalLength ) {
+      this.onGlobalResultClick(this.globalResults[this.activeResultIndex - localLength]);
     }
     this.reset();
     setTimeout(() => {
@@ -184,6 +191,7 @@ export class GlobalSearchBarComponent implements OnInit {
     this.localResultsByRecordId.clear();
     this.globalResults = null;
     this.activeResultIndex = -1;
+    this.formControl.setValue('', { emitEvent: false });
   }
 
   updateLocalResults(term: string) {
@@ -202,6 +210,31 @@ export class GlobalSearchBarComponent implements OnInit {
 
   onLocalResultClick(item: ItemVO) {
     this.data.showItem(item, true);
+  }
+
+  onGlobalResultClick(item: ItemVO) {
+    const publicRoot = this.account.getPublicRoot();
+    const privateRoot = this.account.getPrivateRoot();
+
+    let routerPath: any[];
+
+    if (item.folder_linkType === 'type.folder_link.public') {
+      if (item.parentArchiveNbr === publicRoot.archiveNbr) {
+        routerPath = ['/m', 'public'];
+      } else {
+        routerPath = ['/m', 'public', item.parentArchiveNbr, item.parentFolder_linkId];
+      }
+    } else if (item.folder_linkType === 'type.folder_link.private') {
+      if (item.parentArchiveNbr === privateRoot.archiveNbr) {
+        routerPath = ['/m', 'myfiles'];
+      } else {
+        routerPath = ['/m', 'myfiles', item.parentArchiveNbr, item.parentFolder_linkId];
+      }
+    }
+
+    if (routerPath) {
+      this.router.navigate(routerPath, { queryParams: { showItem: item.folder_linkId }});
+    }
   }
 
 }
