@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { ngIfScaleAnimation } from '@shared/animations';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea';
 
@@ -6,7 +7,8 @@ type ValueType = string | number | Date;
 @Component({
   selector: 'pr-inline-value-edit',
   templateUrl: './inline-value-edit.component.html',
-  styleUrls: ['./inline-value-edit.component.scss']
+  styleUrls: ['./inline-value-edit.component.scss'],
+  animations: [ ngIfScaleAnimation ]
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayValue: ValueType;
@@ -41,6 +43,20 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     this.focusInput();
   }
 
+  save() {
+    if (this.displayValue !== this.editValue) {
+      this.doneEditing.emit(this.editValue);
+    }
+    this.isEditing = false;
+    this.blurInput();
+  }
+
+  cancel() {
+    this.editValue = this.displayValue;
+    this.isEditing = false;
+    this.blurInput();
+  }
+
   endEdit() {
     if (this.displayValue !== this.editValue) {
       this.doneEditing.emit(this.editValue);
@@ -49,10 +65,14 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   onBlur() {
-    this.endEdit();
+    // this.endEdit();
   }
 
   focusInput() {
     (this.inputElementRef.nativeElement as HTMLInputElement).focus();
+  }
+
+  blurInput() {
+    (this.inputElementRef.nativeElement as HTMLInputElement).blur();
   }
 }

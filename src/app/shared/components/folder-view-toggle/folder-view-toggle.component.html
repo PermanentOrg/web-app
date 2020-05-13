@@ -1,5 +1,5 @@
 <ng-container *ngIf="showToggle">
-  <button class="btn btn-small" *ngFor="let view of folderViews"
+  <button class="btn btn-sm" *ngFor="let view of folderViews"
     [class.active]="view.folderView === currentFolderView"
     (click)="onFolderViewClick(view)">
     <i [class]="view.iconClass"></i>

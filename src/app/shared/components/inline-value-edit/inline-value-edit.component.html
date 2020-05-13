@@ -1,22 +1,34 @@
 <ng-container [ngSwitch]="type" *ngIf="type">
   <ng-container *ngSwitchCase="'text'">
-    <input type="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" (blur)="onBlur()" #input>
-    <div class="inline-value-display inline-value-text form-control" (click)="startEdit()">
-      {{displayValue}}
+    <div class="inline-value-container">
+      <input type="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input>
+      <div class="inline-value-display inline-value-text form-control" (click)="startEdit()">
+        {{displayValue}}
+      </div>
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'textarea'">
-    <textarea class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" (blur)="onBlur()" #input></textarea>
-    <div class="inline-value-display inline-value-textarea form-control"
-      (click)="startEdit()"
-      [innerHTML]="!loading ? displayValue || emptyMessage : ''"
-      [class.showing-empty-message]="!loading && !displayValue && emptyMessage"></div>
-    <div class="inline-value-placeholder" [hidden]="!loading || displayValue">
-      <div class="placeholder-line two-thirds"></div>
-      <div class="placeholder-line"></div>
-      <div class="placeholder-line three-quarters"></div>
-      <div class="placeholder-line two-thirds"></div>
-      <div class="placeholder-line"></div>
+    <div class="inline-value-container">
+      <textarea class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input></textarea>
+      <div class="inline-value-display inline-value-textarea form-control"
+        (click)="startEdit()"
+        [innerHTML]="!loading ? displayValue || emptyMessage : ''"
+        [class.showing-empty-message]="!loading && !displayValue && emptyMessage"></div>
+      <div class="inline-value-placeholder" [hidden]="!loading || displayValue">
+        <div class="placeholder-line two-thirds"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line three-quarters"></div>
+        <div class="placeholder-line two-thirds"></div>
+        <div class="placeholder-line"></div>
+      </div>
     </div>
   </ng-container>
+  <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
+    <button class="btn btn-primary btn-sm" (click)="save()">
+      Save
+    </button>
+    <button class="btn btn-secondary btn-sm" (click)="cancel()">
+      Cancel
+    </button>
+  </div>
 </ng-container>

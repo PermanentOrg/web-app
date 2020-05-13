@@ -366,3 +366,18 @@ $drag-outline-border: 5px;
   opacity: 1;
   pointer-events: none;
 }
+
+pr-inline-value-edit {
+  .input-group {
+    input {
+      &:focus {
+        // box-shadow: none;;
+      }
+    }
+    button {
+      padding-top: 0px;
+      padding-bottom: 0px;
+      margin: 0;
+    }
+  }
+}
