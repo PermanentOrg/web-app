@@ -29,12 +29,21 @@
       type='textarea'></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
-      <label>Date</label>
+      <label>{{selectedItem.isFolder ? 'Start Date' : 'Date'}}</label>
       <pr-inline-value-edit
         [displayValue]="selectedItem.displayDT"
         [item]="selectedItem"
         [itemId]="selectedItem.folder_linkId"
         (doneEditing)="onFinishEditing('displayDT', $event)"
+        type='date'></pr-inline-value-edit>
+    </div>
+    <div class="sidebar-item" *ngIf="selectedItem.isFolder">
+      <label>End Date</label>
+      <pr-inline-value-edit
+        [displayValue]="selectedItem.displayEndDT"
+        [item]="selectedItem"
+        [itemId]="selectedItem.folder_linkId"
+        (doneEditing)="onFinishEditing('displayEndDT', $event)"
         type='date'></pr-inline-value-edit>
     </div>
   </ng-container>

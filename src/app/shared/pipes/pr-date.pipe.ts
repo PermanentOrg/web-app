@@ -30,23 +30,31 @@ export class PrDatePipe implements PipeTransform {
   constructor(
   ) { }
 
-  transform(dtString: string | number, timezoneVO?: TimezoneVOData): any {
+  transform(dtString: string | number, timezoneVO?: TimezoneVOData, part?: 'date' | 'time'): any {
     if (!dtString) {
       return;
     }
 
     const dt = moment.utc(dtString);
 
+    let outputDt: moment.Moment;
+    let abbrev = '';
+
     if (!timezoneVO) {
-      return moment.utc(dtString).local().format(MOMENT_DATE_FORMAT.full);
+      outputDt = moment.utc(dtString).local();
+    } else {
+      const isDST = dt.clone().local().isDST();
+      abbrev = isDST ? timezoneVO.dstAbbrev : timezoneVO.stdAbbrev;
+      outputDt = getOffsetMomentFromDTString(dtString as string);
     }
 
-    const isDST = dt.clone().local().isDST();
-
-    const abbrev = isDST ? timezoneVO.dstAbbrev : timezoneVO.stdAbbrev;
-
-    const dtWithTz = getOffsetMomentFromDTString(dtString as string);
-
-    return dtWithTz.format(MOMENT_DATE_FORMAT.full + ` [${abbrev}]`);
+    switch (part) {
+      case 'date':
+        return outputDt.format(MOMENT_DATE_FORMAT.date);
+      case 'time':
+        return outputDt.format(MOMENT_DATE_FORMAT.time + ` [${abbrev}]`);
+      default:
+        return outputDt.format(MOMENT_DATE_FORMAT.full + ` [${abbrev}]`);
+    }
   }
 }

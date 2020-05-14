@@ -9,13 +9,14 @@
   <div class="name">
     {{item.displayName}}
   </div>
-  <div class="type">
+  <div class="type" *ngIf="!inGridView">
     {{item.type | prConstants | titlecase }}
   </div>
-  <div class="date" *ngIf="!showAccess">
-    {{item.displayDT | prDate: item.TimezoneVO }}
+  <div class="date" *ngIf="!showAccess && !inGridView">
+    <div class="date-top">{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
+    <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
   </div>
-  <div class="access" *ngIf="showAccess">
+  <div class="access" *ngIf="showAccess && !inGridView">
     {{item.accessRole | prConstants | titlecase}}
   </div>
   <div class="actions" *ngIf="allowActions">

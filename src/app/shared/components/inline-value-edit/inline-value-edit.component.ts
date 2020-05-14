@@ -3,11 +3,11 @@ import { ngIfScaleAnimation } from '@shared/animations';
 import { NgbDate, NgbTimeStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from '@permanent.org/vis-timeline';
 import { ItemVO } from '@models';
-import { applyTimezoneOffset, getUtcMomentFromDTString, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
+import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea';
 
-type ValueType = string | number | Date;
+type ValueType = string | number;
 @Component({
   selector: 'pr-inline-value-edit',
   templateUrl: './inline-value-edit.component.html',

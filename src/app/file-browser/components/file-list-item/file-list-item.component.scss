@@ -125,6 +125,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 
 .date {
   @include file-list-col-date;
+  font-size: $font-size-sm;
 }
 
 .access {
