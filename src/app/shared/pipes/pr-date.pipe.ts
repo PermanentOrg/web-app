@@ -43,7 +43,7 @@ export class PrDatePipe implements PipeTransform {
 
     const abbrev = isDST ? timezoneVO.dstAbbrev : timezoneVO.stdAbbrev;
 
-    const dtWithTz = getOffsetMomentFromDTString(dtString);;
+    const dtWithTz = getOffsetMomentFromDTString(dtString);
 
     return dtWithTz.format(MOMENT_DATE_FORMAT.full + ` [${abbrev}]`);
   }
