@@ -30,20 +30,22 @@ export class PrDatePipe implements PipeTransform {
   constructor(
   ) { }
 
-  transform(dtString: string, timezoneVO?: TimezoneVOData): any {
+  transform(dtString: string | number, timezoneVO?: TimezoneVOData): any {
+    if (!dtString) {
+      return;
+    }
+
     const dt = moment.utc(dtString);
 
     if (!timezoneVO) {
-      return moment.utc(dtString).local();
+      return moment.utc(dtString).local().format(MOMENT_DATE_FORMAT.full);
     }
 
     const isDST = dt.clone().local().isDST();
 
-    const offset = isDST ? timezoneVO.dstOffset : timezoneVO.stdOffset;
-
     const abbrev = isDST ? timezoneVO.dstAbbrev : timezoneVO.stdAbbrev;
 
-    const dtWithTz = getOffsetMomentFromDTString(dtString);
+    const dtWithTz = getOffsetMomentFromDTString(dtString as string);
 
     return dtWithTz.format(MOMENT_DATE_FORMAT.full + ` [${abbrev}]`);
   }
