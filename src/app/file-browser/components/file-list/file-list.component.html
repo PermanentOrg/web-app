@@ -4,7 +4,7 @@
   [class.is-sorting]="controls?.isSorting$ | async" #scroll>
   <pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
   <pr-file-list-item *ngFor="let item of currentFolder.ChildItemVOs"
-    @ngIfScaleAnimation [@.disabled]="!item.isPendingAction && !item.isNewlyCreated"
+    [@ngIfScaleAnimationDynamic]="(item.isPendingAction || item.isNewlyCreated) ? 'animate' : 'static'"
     [item]="item"
     [folderView]="folderView"
     [multiSelect]="isMultiSelectEnabled"

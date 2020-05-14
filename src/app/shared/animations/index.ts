@@ -91,6 +91,23 @@ export const ngIfFadeInAnimation = trigger('ngIfFadeInAnimation', [
   )
 ]);
 
+export const ngIfFadeInAnimationSlow = trigger('ngIfFadeInAnimationSlow', [
+  transition(
+    ':enter',
+    [
+      style({ opacity: 0 }),
+      animate(`1000ms ${TWEAKED}`, style({ opacity: '*' }))
+    ]
+  ),
+  transition(
+    ':leave',
+    [
+      style({ opacity: 1 }),
+      animate(`1000ms ${TWEAKED}`, style({ opacity: '*' }))
+    ]
+  )
+]);
+
 export const ngIfScaleAnimation = trigger('ngIfScaleAnimation', [
   transition(
     ':enter',
@@ -102,6 +119,25 @@ export const ngIfScaleAnimation = trigger('ngIfScaleAnimation', [
   ),
   transition(
     ':leave',
+    [
+      style({ height: '*', width: '*', opacity: '*' }),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
+      animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' }))
+    ]
+  )
+]);
+
+export const ngIfScaleAnimationDynamic = trigger('ngIfScaleAnimationDynamic', [
+  transition(
+    'void => animate',
+    [
+      style({ height: '0px', width: '0px', opacity: 0 }),
+      animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
+    ]
+  ),
+  transition(
+    'animate => void',
     [
       style({ height: '*', width: '*', opacity: '*' }),
       animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),

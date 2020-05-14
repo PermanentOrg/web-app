@@ -12,7 +12,7 @@
   <div class="type" *ngIf="!inGridView">
     {{item.type | prConstants | titlecase }}
   </div>
-  <div class="date" *ngIf="!showAccess && !inGridView">
+  <div class="date" *ngIf="!showAccess && item.dataStatus > 0" @ngIfFadeInAnimation>
     <div class="date-top">{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
     <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
   </div>

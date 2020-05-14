@@ -30,11 +30,9 @@ import { DataStatus } from '@models/data-status.enum';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
-import { ScrollService } from '@shared/services/scroll/scroll.service';
-import { slideUpAnimation, fadeAnimation, ngIfScaleAnimation } from '@shared/animations';
+import { slideUpAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { MainComponent } from '@core/components/main/main.component';
 import debug from 'debug';
 
 export interface ItemClickEvent {
@@ -63,7 +61,7 @@ const DRAG_SCROLL_STEP = 20;
   selector: 'pr-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
-  animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimation ]
+  animations: [ slideUpAnimation, ngIfScaleAnimationDynamic ]
 })
 export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions, FileListItemParent {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
@@ -216,7 +214,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   refreshView() {
-    unsubscribeAll(this.subscriptions);
     this.ngOnInit();
     setTimeout(() => {
       this.ngAfterViewInit();

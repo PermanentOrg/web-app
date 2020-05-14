@@ -27,8 +27,7 @@ import { DragService, DragServiceEvent, DragTargetType, DraggableComponent, Drag
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
-import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
-import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
+import { ngIfFadeInAnimation } from '@shared/animations';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -94,7 +93,8 @@ const DRAG_MIN_Y = 1;
 @Component({
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
-  styleUrls: ['./file-list-item.component.scss']
+  styleUrls: ['./file-list-item.component.scss'],
+  animations: [ ngIfFadeInAnimation ]
 })
 export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy,
   HasSubscriptions, DraggableComponent, DragTargetDroppableComponent {
