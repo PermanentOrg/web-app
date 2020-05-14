@@ -7,6 +7,7 @@ import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ItemVO } from '.';
 import { FolderType, SortType, FolderLinkType } from './vo-types';
+import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export interface HasParentFolder {
   parentDisplayName?: string;
@@ -123,6 +124,15 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
     if (dataStatus) {
       this.dataStatus = dataStatus;
     }
+
+    this.formatDates();
+  }
+
+  private formatDates() {
+    this.displayDT = formatDateISOString(this.displayDT);
+    this.displayEndDT = formatDateISOString(this.displayEndDT);
+    this.derivedDT = formatDateISOString(this.derivedDT);
+    this.derivedEndDT = formatDateISOString(this.derivedEndDT);
   }
 
   public update (voData: FolderVOData | FolderVO): void {
@@ -137,6 +147,8 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
     if (this.ShareVOs) {
       this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
+
+    this.formatDates();
   }
 }
 

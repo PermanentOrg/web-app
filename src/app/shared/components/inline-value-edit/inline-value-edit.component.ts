@@ -3,6 +3,7 @@ import { ngIfScaleAnimation } from '@shared/animations';
 import { NgbDate, NgbTimeStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from '@permanent.org/vis-timeline';
 import { ItemVO } from '@models';
+import { applyTimezoneOffset, getUtcMomentFromDTString, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea';
 
@@ -78,43 +79,37 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     this.blurInput();
   }
 
-  endEdit() {
-    if (this.displayValue !== this.editValue) {
-      this.doneEditing.emit(this.editValue);
-    }
-    this.isEditing = false;
-  }
-
-  onBlur() {
-    // this.endEdit();
-  }
-
   setNgbDateAndTime() {
     const date = moment.utc(this.editValue);
+    applyTimezoneOffset(date, this.item?.TimezoneVO);
     this.ngbDate = NgbDate.from({
-      year: date.year(),
-      month: date.month() + 1,
-      day: date.date()
+      year: momentFormatNum(date, 'YYYY'),
+      month: momentFormatNum(date, 'M'),
+      day: momentFormatNum(date, 'D')
     });
     this.ngbTime = {
-      hour: date.hours(),
-      minute: date.minutes(),
-      second: date.seconds()
+      hour: momentFormatNum(date, 'H'),
+      minute: momentFormatNum(date, 'm'),
+      second: momentFormatNum(date, 's')
     };
   }
 
   onDateChange(date: NgbDate) {
-    const currentDateTime = moment.utc(this.editValue);
-    const dateString = `${date.year}-${date.month}-${date.day}`;
-    const newDate = moment.utc(dateString);
-    newDate.hours(currentDateTime.hours()).minutes(currentDateTime.minutes()).seconds(currentDateTime.seconds());
-    this.editValue = newDate.toISOString();
+    const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
+    const currentTime = currentOffset.format('HH:mm:ss');
+    const tzOffset = currentOffset.format('Z');
+    const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}T${currentTime}${tzOffset}`;
+    const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
+    this.editValue = newOffset.toISOString();
   }
 
   onTimeChange(time: NgbTimeStruct) {
-    const currentDateTime = moment.utc(this.editValue);
-    currentDateTime.hours(time.hour).minutes(time.minute).seconds(time.second);
-    this.editValue = currentDateTime.toISOString();
+    const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
+    const currentDate = currentOffset.format('YYYY-MM-DD');
+    const tzOffset = currentOffset.format('Z');
+    const newOffsetString = `${currentDate}T${zeroPad(time.hour, 2)}:${zeroPad(time.minute, 2)}:${zeroPad(time.second, 2)}${tzOffset}`;
+    const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
+    this.editValue = newOffset.toISOString();
   }
 
   focusInput() {

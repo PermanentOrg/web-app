@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TimezoneVOData } from '@models';
 import { DatePipe } from '@angular/common';
 import { moment } from '@permanent.org/vis-timeline';
+import { checkOffsetFormat, getOffsetMomentFromDTString } from '@shared/utilities/dateTime';
 
 export const MOMENT_DATE_FORMAT = {
   full: 'YYYY-MM-DD hh:mm A',
@@ -27,20 +28,23 @@ export const NG_DATE_FORMAT = {
 export class PrDatePipe implements PipeTransform {
 
   constructor(
-    private datePipe: DatePipe
   ) { }
 
   transform(dtString: string, timezoneVO?: TimezoneVOData): any {
+    const dt = moment.utc(dtString);
+
     if (!timezoneVO) {
-      return this.datePipe.transform(dtString, NG_DATE_FORMAT.full);
+      return moment.utc(dtString).local();
     }
 
-    const isDST = moment.utc(dtString).isDST();
-    let offset = isDST ? timezoneVO.dstOffset : timezoneVO.stdOffset;
-    offset = offset.replace(':', '');
+    const isDST = dt.clone().local().isDST();
+
+    const offset = isDST ? timezoneVO.dstOffset : timezoneVO.stdOffset;
 
     const abbrev = isDST ? timezoneVO.dstAbbrev : timezoneVO.stdAbbrev;
 
-    return this.datePipe.transform(dtString, NG_DATE_FORMAT.full, offset) + ` ${abbrev}`;
+    const dtWithTz = getOffsetMomentFromDTString(dtString);;
+
+    return dtWithTz.format(MOMENT_DATE_FORMAT.full + ` [${abbrev}]`);
   }
 }

@@ -1,5 +1,7 @@
 import { RecordVOData } from '@models/record-vo';
 import { FolderVOData } from '@models/folder-vo';
+import { moment } from '@permanent.org/vis-timeline';
+import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export class BaseVO {
   public dataWhitelist: string[];
@@ -18,6 +20,9 @@ export class BaseVO {
         }
       }
     }
+
+    // this.createdDT = formatDateISOString(this.createdDT);
+    // this.updatedDT = formatDateISOString(this.updatedDT);
   }
 
   public update (voData: any | RecordVOData | FolderVOData) {

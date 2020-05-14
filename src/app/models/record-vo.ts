@@ -5,6 +5,7 @@ import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
 import { RecordType, FolderLinkType } from './vo-types';
+import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
@@ -107,6 +108,15 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
     if (dataStatus) {
       this.dataStatus = dataStatus;
     }
+
+    this.formatDates();
+  }
+
+  private formatDates() {
+    this.displayDT = formatDateISOString(this.displayDT);
+    this.displayEndDT = formatDateISOString(this.displayEndDT);
+    this.derivedDT = formatDateISOString(this.derivedDT);
+    this.derivedEndDT = formatDateISOString(this.derivedEndDT);
   }
 
   public update (voData: RecordVOData | RecordVO): void {
