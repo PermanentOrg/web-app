@@ -13,7 +13,7 @@
     {{item.type | prConstants | titlecase }}
   </div>
   <div class="date" *ngIf="!showAccess">
-    {{item.displayDT | date:'yyyy-MM-dd'}}
+    {{item.displayDT | prDate: item.TimezoneVO }}
   </div>
   <div class="access" *ngIf="showAccess">
     {{item.accessRole | prConstants | titlecase}}

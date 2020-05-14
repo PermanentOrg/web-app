@@ -1,5 +1,5 @@
 import { NgModule, ComponentFactoryResolver } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
@@ -27,6 +27,8 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
+import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { PrDatePipe } from './pipes/pr-date.pipe';
 
 @NgModule({
   imports: [
@@ -34,7 +36,9 @@ import { FolderViewToggleComponent } from './components/folder-view-toggle/folde
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    DialogModule
+    DialogModule,
+    NgbDatepickerModule,
+    NgbTimepickerModule
   ],
   exports: [
     CommonModule,
@@ -55,6 +59,7 @@ import { FolderViewToggleComponent } from './components/folder-view-toggle/folde
     PublicLinkPipe,
     PublicRoutePipe,
     ShareActionLabelPipe,
+    PrDatePipe,
     NewlineTextPipe,
     TimeAgoV9Pipe,
     AccountDropdownComponent,
@@ -82,6 +87,7 @@ import { FolderViewToggleComponent } from './components/folder-view-toggle/folde
     PublicLinkPipe,
     PublicRoutePipe,
     ShareActionLabelPipe,
+    PrDatePipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
     NewlineTextPipe,
@@ -94,6 +100,7 @@ import { FolderViewToggleComponent } from './components/folder-view-toggle/folde
   providers: [
     PublicLinkPipe,
     PublicRoutePipe,
+    DatePipe
   ]
 })
 export class SharedModule {
@@ -112,7 +119,18 @@ export class SharedModule {
     }
   ];
 
-  constructor(private dialog: Dialog, private resolver: ComponentFactoryResolver) {
+  constructor(
+    private dialog: Dialog,
+    private resolver: ComponentFactoryResolver,
+    private datePickerConfig: NgbDatepickerConfig,
+    private timePickerConfig: NgbTimepickerConfig
+  ) {
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+
+    this.datePickerConfig.showWeekdays = false;
+
+    this.timePickerConfig.spinners = false;
+    this.timePickerConfig.seconds = true;
+    this.timePickerConfig.meridian = true;
   }
 }

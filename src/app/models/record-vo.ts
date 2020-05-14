@@ -173,7 +173,7 @@ export interface RecordVOData extends BaseVOData {
   parentDisplayName?: string;
   pathAsArchiveNbr?: any;
   LocnVO?: any;
-  TimezoneVO?: any;
+  TimezoneVO?: TimezoneVOData;
   FileVOs?: any;
   DirectiveVOs?: any;
   TagVOs?: any;

@@ -10,6 +10,15 @@ $inline-padding-y: 0.25rem;
 
 .inline-value-container {
   position: relative;
+
+  &.inline-value-date {
+    display: flex;
+    justify-content: center;
+
+    ngb-datepicker {
+      flex: 1 1 auto;
+    }
+  }
 }
 
 .inline-value-display {

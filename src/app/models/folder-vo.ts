@@ -186,7 +186,7 @@ export interface FolderVOData extends BaseVOData {
   ChildFolderVOs?: any;
   RecordVOs?: any;
   LocnVO?: any;
-  TimezoneVO?: any;
+  TimezoneVO?: TimezoneVOData;
   DirectiveVOs?: any;
   TagVOs?: any;
   SharedArchiveVOs?: any;

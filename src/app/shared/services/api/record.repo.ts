@@ -1,4 +1,4 @@
-import { RecordVO, FolderVO } from '@root/app/models';
+import { RecordVO, FolderVO, RecordVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -41,14 +41,18 @@ export class RecordRepo extends BaseRepo {
   }
 
   public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
+    const whitelist: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'displayName', 'description', 'displayDT'];
+
     const data = recordVOs.map((vo) => {
+      const updateData: RecordVOData = {};
+      for (const prop of whitelist) {
+        if (vo[prop] !== undefined) {
+          updateData[prop] = vo[prop];
+        }
+      }
+
       return {
-        RecordVO: new RecordVO({
-          recordId: vo.recordId,
-          archiveNbr: vo.archiveNbr,
-          displayName: vo.displayName,
-          description: vo.description
-        })
+        RecordVO: new RecordVO(updateData)
       };
     });
 

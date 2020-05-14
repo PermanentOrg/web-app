@@ -1,4 +1,4 @@
-import { FolderVO } from '@root/app/models';
+import { FolderVO, FolderVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -74,9 +74,18 @@ export class FolderRepo extends BaseRepo {
   }
 
   public update(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const data = folderVOs.map((folderVO) => {
+    const whitelist: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'displayName', 'description', 'displayDT', 'displayEndDT', 'view'];
+
+    const data = folderVOs.map((vo) => {
+      const updateData: FolderVOData = {};
+      for (const prop of whitelist) {
+        if (vo[prop] !== undefined) {
+          updateData[prop] = vo[prop];
+        }
+      }
+
       return {
-        FolderVO: new FolderVO(folderVO)
+        FolderVO: new FolderVO(updateData)
       };
     });
 

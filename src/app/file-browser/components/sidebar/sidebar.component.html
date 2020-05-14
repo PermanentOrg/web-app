@@ -28,6 +28,15 @@
       emptyMessage="Click to add description"
       type='textarea'></pr-inline-value-edit>
     </div>
+    <div class="sidebar-item">
+      <label>Date</label>
+      <pr-inline-value-edit
+        [displayValue]="selectedItem.displayDT"
+        [item]="selectedItem"
+        [itemId]="selectedItem.folder_linkId"
+        (doneEditing)="onFinishEditing('displayDT', $event)"
+        type='date'></pr-inline-value-edit>
+    </div>
   </ng-container>
   <ng-container *ngIf="selectedItems">
     <div class="sidebar-item">

@@ -67,11 +67,13 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     this.currentTab = tab;
   }
 
-  async onFinishEditing(property: string, value: string) {
+  async onFinishEditing(property: keyof ItemVO, value: string) {
     if (this.selectedItem) {
       const originalValue = this.selectedItem[property];
       const newData: any = {};
       newData[property] = value;
+
+      console.log(newData);
       try {
         this.selectedItem.update(newData);
         await this.editService.updateItems([this.selectedItem]);

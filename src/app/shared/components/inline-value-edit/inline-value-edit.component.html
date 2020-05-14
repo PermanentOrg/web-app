@@ -23,6 +23,20 @@
       </div>
     </div>
   </ng-container>
+  <ng-container *ngSwitchCase="'date'">
+    <div class="inline-value-container inline-value-date">
+      <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing">
+        {{displayValue | prDate:item?.TimezoneVO }}
+      </div>
+      <ngb-datepicker #datePicker [hidden]="!isEditing" [startDate]="ngbDate"
+        (dateSelect)="onDateChange($event)" [footerTemplate]="timePicker"></ngb-datepicker>
+      <ng-template #timePicker>
+        <div class="datepicker-footer">
+          <ngb-timepicker [(ngModel)]="ngbTime" (ngModelChange)="onTimeChange($event)"></ngb-timepicker>
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
   <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
     <button class="btn btn-primary btn-sm" (click)="save()">
       Save

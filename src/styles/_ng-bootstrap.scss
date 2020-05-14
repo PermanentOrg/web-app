@@ -1,0 +1,53 @@
+ngb-datepicker {
+  .ngb-dp-header {
+    background-color: $PR-orange;
+    padding: 0.25rem 0;
+    align-items: center;
+
+    button.btn {
+      margin: 0;
+    }
+  }
+
+  .ngb-dp-month {
+    flex: 1 1 auto;
+
+    .ngb-dp-week {
+      justify-content: space-evenly;
+    }
+
+    .ngb-dp-weekday, .ngb-dp-day {
+      // flex: 1 1 auto;
+    }
+  }
+
+  .datepicker-footer {
+    display: flex;
+    justify-content: center;
+    background: $gray-300;
+    padding: $input-padding-y-sm 0;
+    border-top: 1px solid $gray-300;
+  }
+}
+
+ngb-timepicker {
+  .ngb-tp-input-container, .ngb-tp-meridian {
+    input, button {
+      padding: $input-padding-y-sm / 2 $input-padding-x-sm / 2;
+    }
+
+    button {
+      margin: 0;
+      background: white;
+      border-color: $input-border-color
+    }
+  }
+
+  .ngb-tp-input-container {
+    flex-basis: 2rem;
+  }
+
+  .ngb-tp {
+    justify-content: center;
+  }
+}
