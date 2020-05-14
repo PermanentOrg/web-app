@@ -30,7 +30,7 @@ export class PrDatePipe implements PipeTransform {
     private datePipe: DatePipe
   ) { }
 
-  transform(dtString: string, timezoneVO?: TimezoneVOData): any {
+  transform(dtString: string | number, timezoneVO?: TimezoneVOData): any {
     if (!timezoneVO) {
       return this.datePipe.transform(dtString, NG_DATE_FORMAT.full);
     }
