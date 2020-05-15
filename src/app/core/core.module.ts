@@ -29,6 +29,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
+import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { SearchModule } from '@search/search.module';
     RelationshipsComponent,
     MembersComponent,
     MultiSelectStatusComponent,
+    AccountSettingsComponent,
   ],
   providers: [
     DataService,
