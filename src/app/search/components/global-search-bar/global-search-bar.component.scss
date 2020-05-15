@@ -33,7 +33,7 @@ input {
   // border-bottom: 1px solid $PR-orange;
   border-radius: $border-radius;
 
-  padding: $input-padding * 1.5 $input-padding;
+  padding: $input-padding $input-padding;
   padding-left: $icon-width + 2 * $input-padding;
 
   color: white;
