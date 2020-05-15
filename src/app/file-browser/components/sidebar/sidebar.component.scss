@@ -58,7 +58,9 @@ $sidebar-thumb-height: 200px;
   }
 
   .sidebar-item-content {
-    padding: 0.25rem 0;
+    $padding-y: 0.25rem;
+    padding: $padding-y 0;
+    min-height: $line-height-base * 1rem + (2 * $padding-y);
   }
 }
 

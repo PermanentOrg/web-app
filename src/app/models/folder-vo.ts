@@ -92,7 +92,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
   public DirectiveVOs;
   public TagVOs;
   public SharedArchiveVOs;
-  public FolderSizeVO;
+  public FolderSizeVO: FolderSizeVOData;
   public AttachmentRecordVOs;
   public hasAttachments;
   public ChildItemVOs: ItemVO[];
@@ -202,7 +202,7 @@ export interface FolderVOData extends BaseVOData {
   DirectiveVOs?: any;
   TagVOs?: any;
   SharedArchiveVOs?: any;
-  FolderSizeVO?: any;
+  FolderSizeVO?: FolderSizeVOData;
   AttachmentRecordVOs?: any;
   hasAttachments?: any;
   ChildItemVOs?: any;
@@ -211,4 +211,72 @@ export interface FolderVOData extends BaseVOData {
   AccessVOs?: any;
   posStart?: any;
   posLimit?: any;
+}
+
+export interface FolderSizeVOData {
+  folder_sizeId;
+  folder_linkId;
+  archiveId;
+  folderId;
+  parentFolder_linkId;
+  parentFolderId;
+
+  myFileSizeShallow;
+  myFileSizeDeep;
+
+  myFolderCountShallow;
+  myFolderCountDeep;
+
+  myRecordCountShallow;
+  myRecordCountDeep;
+
+  myAudioCountShallow;
+  myAudioCountDeep;
+
+  myDocumentCountShallow;
+  myDocumentCountDeep;
+
+  myExperienceCountShallow;
+  myExperienceCountDeep;
+
+  myImageCountShallow;
+  myImageCountDeep;
+
+  myVideoCountShallow;
+  myVideoCountDeep;
+
+  allFileSizeShallow;
+  allFileSizeDeep;
+
+  allFolderCountShallow;
+  allFolderCountDeep;
+
+  allRecordCountShallow;
+  allRecordCountDeep;
+
+  allAudioCountShallow;
+  allAudioCountDeep;
+
+  allDocumentCountShallow;
+  allDocumentCountDeep;
+
+  allExperienceCountShallow;
+  allExperienceCountDeep;
+
+  allImageCountShallow;
+  allImageCountDeep;
+
+  allVideoCountShallow;
+  allVideoCountDeep;
+
+  lastExecuteDT;
+  lastExecuteReason;
+  nextExecuteDT;
+
+  displayName;
+  description;
+
+  type;
+  status;
+  position;
 }

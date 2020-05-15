@@ -3,7 +3,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { some } from 'lodash';
-import { ItemVO } from '@models';
+import { ItemVO, FolderVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
@@ -44,9 +44,9 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
         if (this.selectedItem !== this.dataService.currentFolder) {
           const items = this.selectedItems || [this.selectedItem];
-          this.isLoading = some(items, i => i.dataStatus < DataStatus.Lean);
+          this.isLoading = some(items, i => i.dataStatus < DataStatus.Full);
           if (this.isLoading) {
-            await this.dataService.fetchLeanItems(items);
+            await this.dataService.fetchFullItems(items);
             this.isLoading = false;
           }
         }
@@ -72,8 +72,6 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
       const originalValue = this.selectedItem[property];
       const newData: any = {};
       newData[property] = value;
-
-      console.log(newData);
       try {
         this.selectedItem.update(newData);
         await this.editService.updateItems([this.selectedItem]);
@@ -83,6 +81,25 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           revertData[property] = originalValue;
           this.selectedItem.update(revertData);
         }
+      }
+    }
+  }
+
+  getFolderContentsCount() {
+    if (this.selectedItem instanceof FolderVO && this.selectedItem.FolderSizeVO) {
+      const fileCount = this.selectedItem.FolderSizeVO.allRecordCountShallow;
+      const folderCount = this.selectedItem.FolderSizeVO.allFolderCountShallow;
+      const fileLabel = fileCount > 1 ? 'files' : 'file';
+      const folderLabel = folderCount > 1 ? 'folders' : 'folder';
+
+      if (fileCount && folderCount) {
+        return `${folderCount} ${folderLabel} and ${fileCount} ${fileLabel}`;
+      } else if (fileCount) {
+        return `${fileCount} ${fileLabel}`;
+      } else if (folderCount) {
+        return `${folderCount} ${folderLabel}`;
+      } else {
+        return 'Empty';
       }
     }
   }

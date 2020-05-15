@@ -29,6 +29,8 @@ import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
 import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
+import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
+import { FolderContentsPipe } from './pipes/folder-contents.pipe';
 
 @NgModule({
   imports: [
@@ -62,6 +64,9 @@ import { PrDatePipe } from './pipes/pr-date.pipe';
     PrDatePipe,
     NewlineTextPipe,
     TimeAgoV9Pipe,
+    FolderCastPipe,
+    RecordCastPipe,
+    FolderContentsPipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,
@@ -92,6 +97,9 @@ import { PrDatePipe } from './pipes/pr-date.pipe';
     TimelineCompleteDialogComponent,
     NewlineTextPipe,
     TimeAgoV9Pipe,
+    FolderCastPipe,
+    RecordCastPipe,
+    FolderContentsPipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,

@@ -29,7 +29,7 @@
       type='textarea'></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
-      <label>{{selectedItem.isFolder ? 'Start Date' : 'Date'}}</label>
+      <label>{{selectedItem.isFolder ? 'Start date' : 'Date'}}</label>
       <pr-inline-value-edit
         [displayValue]="selectedItem.displayDT"
         [item]="selectedItem"
@@ -38,7 +38,7 @@
         type='date'></pr-inline-value-edit>
     </div>
     <div class="sidebar-item" *ngIf="selectedItem.isFolder">
-      <label>End Date</label>
+      <label>End date</label>
       <pr-inline-value-edit
         [displayValue]="selectedItem.displayEndDT"
         [item]="selectedItem"
@@ -65,12 +65,48 @@
   </ng-container>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">
-  <div class="sidebar-item">
-    <label>Details</label>
-    <div class="sidebar-item-content">
-      Details of some kind
+  <ng-container *ngIf="selectedItem && !isRootFolder">
+    <div class="sidebar-item">
+      <label>{{selectedItem.isRecord ? 'Uploaded' : 'Created'}}</label>
+      <div class="sidebar-item-content">
+        {{selectedItem.createdDT | prDate}}
+      </div>
     </div>
-  </div>
+    <div class="sidebar-item">
+      <label>Last modified</label>
+      <div class="sidebar-item-content">
+        {{selectedItem.updatedDT | prDate}}
+      </div>
+    </div>
+    <ng-container *ngIf="selectedItem.isRecord">
+      <div class="sidebar-item">
+        <label>Size</label>
+        <div class="sidebar-item-content">
+          {{(selectedItem | asRecord).size| dsFileSize}}
+        </div>
+      </div>
+      <div class="sidebar-item">
+        <label>File created</label>
+        <div class="sidebar-item-content">
+          {{(selectedItem | asRecord).derivedCreatedDT | prDate}}
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="selectedItem.isFolder">
+      <div class="sidebar-item">
+        <label>Size</label>
+        <div class="sidebar-item-content">
+          {{(selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep | dsFileSize}}
+        </div>
+      </div>
+      <div class="sidebar-item">
+        <label>Contents</label>
+        <div class="sidebar-item-content">
+          {{(selectedItem | asFolder).FolderSizeVO | folderContents}}
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
   <div class="sidebar-item">
