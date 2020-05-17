@@ -132,3 +132,17 @@ div.form-control {
     width: auto;
   }
 }
+
+:host.horizontal-controls {
+  display: flex;
+  align-items: center;
+
+  .inline-value-container {
+    flex: 1 0 100%;
+  }
+
+  .inline-value-controls {
+    flex: 0 0 auto;
+    margin-top: 0;
+  }
+}

@@ -21,6 +21,8 @@ import { MembersComponent } from './components/members/members.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
 import { LeanFolderResolveService } from './resolves/lean-folder-resolve.service';
 import { RoutesWithData } from '../app.routes';
+import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
+import { AccountResolveService } from './resolves/account-resolve.service';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -98,6 +100,12 @@ export const routes: RoutesWithData = [
         path: 'archive/members',
         redirectTo: 'members'
       },
+      {
+        path: 'account',
+        component: AccountSettingsComponent,
+        data: { title: 'Account'},
+        resolve: { account: AccountResolveService }
+      },
       { path: '**', redirectTo: 'myfiles'}
     ]
   }
@@ -117,7 +125,8 @@ export const routes: RoutesWithData = [
     ArchivesResolveService,
     DonateResolveService,
     RelationshipsResolveService,
-    MembersResolveService
+    MembersResolveService,
+    AccountResolveService
   ],
   declarations: []
 })

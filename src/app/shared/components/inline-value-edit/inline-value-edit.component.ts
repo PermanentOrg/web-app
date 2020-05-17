@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges, HostBinding } from '@angular/core';
 import { ngIfScaleAnimation } from '@shared/animations';
 import { NgbDate, NgbTimeStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from '@permanent.org/vis-timeline';
@@ -21,6 +21,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() loading = false;
   @Input() itemId: any;
   @Input() item: ItemVO;
+  @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
   @ViewChild('input') inputElementRef: ElementRef;
