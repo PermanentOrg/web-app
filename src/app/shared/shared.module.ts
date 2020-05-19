@@ -32,6 +32,7 @@ import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
 import { StaticMapComponent } from './components/static-map/static-map.component';
+import { PrLocationPipe } from './pipes/pr-location.pipe';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { StaticMapComponent } from './components/static-map/static-map.component
     FolderCastPipe,
     RecordCastPipe,
     FolderContentsPipe,
+    PrLocationPipe,
     AccountDropdownComponent,
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,
@@ -95,6 +97,7 @@ import { StaticMapComponent } from './components/static-map/static-map.component
     PublicRoutePipe,
     ShareActionLabelPipe,
     PrDatePipe,
+    PrLocationPipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
     NewlineTextPipe,

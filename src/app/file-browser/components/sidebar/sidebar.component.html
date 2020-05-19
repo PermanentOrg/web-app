@@ -48,6 +48,7 @@
     </div>
     <div class="sidebar-item">
       <label>Location</label>
+      <div>{{(selectedItem.LocnVO | prLocation)?.full}}</div>
       <pr-static-map [locations]="selectedItem.LocnVO"></pr-static-map>
     </div>
   </ng-container>
