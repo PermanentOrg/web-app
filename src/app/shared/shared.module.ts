@@ -31,6 +31,7 @@ import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimep
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
+import { StaticMapComponent } from './components/static-map/static-map.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { FolderContentsPipe } from './pipes/folder-contents.pipe';
     AccountDropdownComponent,
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,
-    FolderViewToggleComponent
+    FolderViewToggleComponent,
+    StaticMapComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -103,7 +105,8 @@ import { FolderContentsPipe } from './pipes/folder-contents.pipe';
     AccountDropdownComponent,
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,
-    FolderViewToggleComponent
+    FolderViewToggleComponent,
+    StaticMapComponent
   ],
   providers: [
     PublicLinkPipe,

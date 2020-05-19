@@ -12,6 +12,7 @@ export * from '@models/billing-payment-vo';
 export { ConnectorOverviewVO } from '@models/connector-overview-vo';
 export * from '@models/folder-vo';
 export * from '@models/invite-vo';
+export * from './locn-vo';
 export *  from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { RelationVO } from '@models/relation-vo';

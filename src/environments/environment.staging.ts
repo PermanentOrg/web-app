@@ -12,5 +12,8 @@ export const environment = {
     storageBucket: 'prpledgestaging.appspot.com',
     messagingSenderId: '311870668048'
   },
+  google: {
+    apiKey: 'AIzaSyC6JvFpTpreKFl_1HvWk9pSERh9xbLdTlg'
+  },
   debug: false
 };

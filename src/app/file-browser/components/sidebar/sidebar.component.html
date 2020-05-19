@@ -46,6 +46,10 @@
         (doneEditing)="onFinishEditing('displayEndDT', $event)"
         type='date'></pr-inline-value-edit>
     </div>
+    <div class="sidebar-item">
+      <label>Location</label>
+      <pr-static-map [locations]="selectedItem.LocnVO"></pr-static-map>
+    </div>
   </ng-container>
   <ng-container *ngIf="selectedItems">
     <div class="sidebar-item">
