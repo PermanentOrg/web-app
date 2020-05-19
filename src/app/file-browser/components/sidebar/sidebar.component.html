@@ -34,6 +34,7 @@
         [displayValue]="selectedItem.displayDT"
         [item]="selectedItem"
         [itemId]="selectedItem.folder_linkId"
+        emptyMessage="Click to add date"
         (doneEditing)="onFinishEditing('displayDT', $event)"
         type='date'></pr-inline-value-edit>
     </div>
@@ -43,6 +44,7 @@
         [displayValue]="selectedItem.displayEndDT"
         [item]="selectedItem"
         [itemId]="selectedItem.folder_linkId"
+        emptyMessage="Click to add date"
         (doneEditing)="onFinishEditing('displayEndDT', $event)"
         type='date'></pr-inline-value-edit>
     </div>

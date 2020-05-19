@@ -67,6 +67,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   save() {
+    console.log(this.editValue);
     if (this.displayValue !== this.editValue) {
       this.doneEditing.emit(this.editValue);
     }
@@ -81,6 +82,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   setNgbDateAndTime() {
+    if (!this.editValue) {
+      this.editValue = moment.utc().toISOString();
+    }
     const date = moment.utc(this.editValue);
     applyTimezoneOffset(date, this.item?.TimezoneVO);
     this.ngbDate = NgbDate.from({

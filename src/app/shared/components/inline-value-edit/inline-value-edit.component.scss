@@ -77,6 +77,10 @@ $inline-padding-y: 0.25rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &.showing-empty-message {
+    color: $text-muted;
+  }
 }
 
 .inline-value-textarea {

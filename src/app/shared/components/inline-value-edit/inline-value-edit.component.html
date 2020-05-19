@@ -25,8 +25,9 @@
   </ng-container>
   <ng-container *ngSwitchCase="'date'">
     <div class="inline-value-container inline-value-date">
-      <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing">
-        {{displayValue | prDate:item?.TimezoneVO }}
+      <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing"
+      [class.showing-empty-message]="!displayValue && emptyMessage">
+        {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : emptyMessage }}
       </div>
       <ngb-datepicker #datePicker [hidden]="!isEditing" [startDate]="ngbDate"
         (dateSelect)="onDateChange($event)" [footerTemplate]="timePicker"></ngb-datepicker>

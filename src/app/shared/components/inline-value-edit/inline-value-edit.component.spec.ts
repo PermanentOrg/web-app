@@ -8,7 +8,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { moment } from '@permanent.org/vis-timeline';
 import { RecordVO, TimezoneVOData, RecordVOData } from '@models';
-import { getOffsetMomentFromDTString, formatDateISOString, getUtcMomentFromDTString, momentFormatNum } from '@shared/utilities/dateTime';
+import { getOffsetMomentFromDTString, formatDateISOString, getUtcMomentFromDTString, momentFormatNum, applyTimezoneOffset } from '@shared/utilities/dateTime';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('InlineValueEditComponent', () => {
@@ -131,6 +131,53 @@ describe('InlineValueEditComponent', () => {
 
     const offset = getOffsetMomentFromDTString(record.displayDT, record.TimezoneVO);
 
+    expect(component.ngbDate).toBeDefined();
+    expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
+    expect(component.ngbTime).toBeDefined();
+    expect(component.ngbTime.hour).toBe(momentFormatNum(offset, 'H'));
+  });
+
+  it('should default to current date and time based on timezone', () => {
+    const voData: RecordVOData = {
+      displayDT: null,
+      TimezoneVO: {
+        dstAbbrev: 'PDT',
+        dstOffset: '-07:00',
+        stdAbbrev: 'PST',
+        stdOffset: '-08:00',
+      }
+    };
+    const record = new RecordVO(voData);
+    component.item = record;
+    component.displayValue = record.displayDT;
+    component.type = 'date';
+    fixture.detectChanges();
+
+    const nowUtc = moment.utc();
+
+    const offset = applyTimezoneOffset(nowUtc, record.TimezoneVO);
+
+    component.startEdit();
+    expect(component.ngbDate).toBeDefined();
+    expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
+    expect(component.ngbTime).toBeDefined();
+    expect(component.ngbTime.hour).toBe(momentFormatNum(offset, 'H'));
+  });
+
+  it('should default to current date and time in local timezone when missing timezone', () => {
+    const voData: RecordVOData = {
+      displayDT: null,
+    };
+
+    const record = new RecordVO(voData);
+    component.item = record;
+    component.displayValue = record.displayDT;
+    component.type = 'date';
+    fixture.detectChanges();
+
+    const offset = moment.utc().local();
+
+    component.startEdit();
     expect(component.ngbDate).toBeDefined();
     expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
     expect(component.ngbTime).toBeDefined();
