@@ -1,15 +1,21 @@
-import { Component, OnInit, Input, OnDestroy, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, DoCheck, HostBinding, ElementRef } from '@angular/core';
 import { TagsService } from '@core/services/tags/tags.service';
-import { ItemVO, TagVOData } from '@models';
+import { ItemVO, TagVOData, TagLinkVOData, FolderVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { Subject, Subscription } from 'rxjs';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { DataStatus } from '@models/data-status.enum';
+import { ApiService } from '@shared/services/api/api.service';
+import { TagResponse } from '@shared/services/api/tag.repo';
+import { BaseResponse } from '@shared/services/api/base';
+import { MessageService } from '@shared/services/message/message.service';
+import { ngIfScaleAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-edit-tags',
   templateUrl: './edit-tags.component.html',
-  styleUrls: ['./edit-tags.component.scss']
+  styleUrls: ['./edit-tags.component.scss'],
+  animations: [ ngIfScaleAnimation ]
 })
 export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscriptions {
   @Input() item: ItemVO;
@@ -19,6 +25,10 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
   public isEditing = false;
 
+  @HostBinding('class.is-waiting') public waiting = false;
+
+  public newTagName: string;
+
   subscriptions: Subscription[] = [];
 
   private lastDataStatus: DataStatus;
@@ -26,7 +36,10 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
   constructor(
     private tagsService: TagsService,
-    private dataService: DataService
+    private message: MessageService,
+    private api: ApiService,
+    private dataService: DataService,
+    private elementRef: ElementRef
   ) {
     this.allTags = tagsService.getTags();
 
@@ -57,9 +70,44 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
     }
   }
 
+  async onInputEnter(newTagName: string) {
+    const tag: TagVOData = { name: newTagName };
+    await this.onTagClick(tag);
+    this.newTagName = null;
+  }
+
+  async onTagClick(tag: TagVOData) {
+    const tagLink: TagLinkVOData = {};
+    if (this.item instanceof FolderVO) {
+      tagLink.refTable = 'folder';
+      tagLink.refId = this.item.folderId;
+    } else {
+      tagLink.refTable = 'record';
+      tagLink.refId = this.item.recordId;
+    }
+
+    this.waiting = true;
+    try {
+      if (tag.tagId && this.itemTagsById.has(tag.tagId)) {
+        await this.api.tag.delete(tag, tagLink);
+      } else {
+        await this.api.tag.create(tag, tagLink);
+      }
+      await this.dataService.fetchFullItems([this.item]);
+    } catch (err) {
+      if (err instanceof BaseResponse) {
+        this.message.showError('There was a problem saving tags for this item.');
+      }
+    } finally {
+      this.checkItemTags();
+      this.waiting = false;
+    }
+  }
+
   startEditing() {
     this.checkItemTags();
     this.isEditing = true;
+    (this.elementRef.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
   }
 
   endEditing() {

@@ -2,7 +2,72 @@
 
 :host {
   display: block;
+
+  &.is-waiting {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
+
+.new-tag {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  position: relative;
+  z-index: 1;
+  padding: 0.5rem 0.75rem;
+}
+
+.edit-tags {
+  border: 1px solid $input-border-color;
+  border-top: 0px solid;
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
 .edit-tag {
-  // padding: 0.5rem;
+  padding: 0.5rem;
+  $multi-select-radius: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: $gray-100;
+
+    &:not(.is-selected) {
+      .select-active {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &:not(:first-child) {
+    border-top: 1px solid $input-border-color;
+  }
+
+  .select {
+    flex: 0 0 $multi-select-radius;
+    height: $multi-select-radius;
+    border-radius: 50%;
+    border: 1px solid $input-border-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+  }
+
+  .select-active {
+    height: $multi-select-radius * (2/3);
+    width: $multi-select-radius * (2/3);
+    border-radius: 50%;
+    background: $PR-blue;
+    opacity: 0;
+  }
+
+  &.is-selected {
+    .select-active {
+      opacity: 1;
+    }
+  }
 }

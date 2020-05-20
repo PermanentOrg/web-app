@@ -367,48 +367,17 @@ $drag-outline-border: 5px;
   pointer-events: none;
 }
 
-.edit-tag {
-  padding: 0.5rem;
-  $multi-select-radius: 20px;
+.inline-value-controls {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
 
-  .select {
-    flex: 0 0 $multi-select-radius;
-    height: $multi-select-radius;
-    border-radius: 50%;
-    border: 1px solid $gray-300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 0.5rem;
-
-    input {
-      visibility: hidden;
-    }
-
-    &.exists {
-      opacity: 0;
-    }
-
-    label {
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    .select-active {
-      height: $multi-select-radius * (2/3);
-      width: $multi-select-radius * (2/3);
-      border-radius: 50%;
-      background: $PR-blue;
-    }
+  button {
+    flex: 0 0 auto;
+    margin: 0;
+    margin-left: 0.5rem;
+    font-size: $font-size-sm;
+    width: auto;
   }
-}
-
-.edit-tags {
-  border: 1px solid $gray-300;
-  border-top: 0px solid;
 }
 

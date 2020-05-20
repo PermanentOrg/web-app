@@ -123,20 +123,6 @@ div.form-control {
   }
 }
 
-.inline-value-controls {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
-
-  button {
-    flex: 0 0 auto;
-    margin: 0;
-    margin-left: 0.5rem;
-    font-size: $font-size-sm;
-    width: auto;
-  }
-}
-
 :host.horizontal-controls {
   display: flex;
   align-items: center;
