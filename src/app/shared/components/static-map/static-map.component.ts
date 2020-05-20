@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { LocnVOData } from '@models';
+import { LocnVOData, ItemVO } from '@models';
 import { environment } from '@root/environments/environment';
 import { compact } from 'lodash';
 
@@ -13,7 +13,9 @@ const BASE_URL = `https://maps.googleapis.com/maps/api/staticmap?key=${environme
 export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
   private dpiScale = 1;
 
-  @Input() locations: LocnVOData | LocnVOData[];
+  @Input() item: ItemVO;
+  @Input() items: ItemVO[];
+  @Input() location: LocnVOData;
 
   public imageUrl: string;
 
@@ -39,11 +41,16 @@ export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
   buildUrl() {
     let locations: LocnVOData[];
 
-    if (!Array.isArray(this.locations)) {
-      locations = [ this.locations ];
+    if (this.item) {
+      locations = [ this.item.LocnVO ];
+    } else if (this.items) {
+      locations = this.items.map(i => i.LocnVO);
+    } else if (this.location) {
+      locations = [ this.location ];
     }
 
     locations = compact(locations);
+
     if (!locations.length) {
       return this.imageUrl = null;
     }

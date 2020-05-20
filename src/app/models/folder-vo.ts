@@ -9,6 +9,7 @@ import { ItemVO } from '.';
 import { FolderType, SortType, FolderLinkType } from './vo-types';
 import { formatDateISOString } from '@shared/utilities/dateTime';
 import { LocnVOData } from './locn-vo';
+import { TagVOData } from './tag-vo';
 
 export interface HasParentFolder {
   parentDisplayName?: string;
@@ -91,7 +92,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
   public LocnVO: LocnVOData;
   public TimezoneVO: TimezoneVOData;
   public DirectiveVOs;
-  public TagVOs;
+  public TagVOs: TagVOData[];
   public SharedArchiveVOs;
   public FolderSizeVO: FolderSizeVOData;
   public AttachmentRecordVOs;

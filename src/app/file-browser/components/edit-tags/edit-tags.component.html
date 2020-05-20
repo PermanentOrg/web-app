@@ -1,0 +1,12 @@
+<pr-tags [tags]="item.TagVOs" (click)="startEditing()"></pr-tags>
+<div class="edit-tags" [hidden]="!isEditing">
+  <div class="edit-tag" *ngFor="let tag of allTags" [class.is-selected]="itemTagsById.has(tag.tagId)">
+    <div class="select">
+      <div class="select-active" *ngIf="itemTagsById.has(tag.tagId)"></div>
+    </div>
+    <div class="tag-name">
+      {{tag.name}}
+    </div>
+  </div>
+</div>
+

@@ -62,6 +62,10 @@ $sidebar-thumb-height: 200px;
     padding: $padding-y 0;
     min-height: $line-height-base * 1rem + (2 * $padding-y);
   }
+
+  .sidebar-item-content-empty {
+    color: $text-muted;
+  }
 }
 
 .sidebar-thumbnail pr-thumbnail {

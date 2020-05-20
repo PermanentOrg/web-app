@@ -17,6 +17,7 @@ import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FileListControlsComponent } from './components/file-list-controls/file-list-controls.component';
+import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { FileListControlsComponent } from './components/file-list-controls/file-
     ThumbnailComponent,
     VideoComponent,
     SidebarComponent,
-    FileListControlsComponent
+    FileListControlsComponent,
+    EditTagsComponent
   ],
   declarations: [
     FileListComponent,
@@ -45,7 +47,8 @@ import { FileListControlsComponent } from './components/file-list-controls/file-
     SharingComponent,
     PublishComponent,
     FolderDescriptionComponent,
-    SidebarComponent
+    SidebarComponent,
+    EditTagsComponent
   ],
   entryComponents: [
     SharingComponent,

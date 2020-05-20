@@ -25,7 +25,6 @@ import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
-import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
@@ -54,7 +53,7 @@ import { AccountSettingsComponent } from './components/account-settings/account-
     RelationshipsComponent,
     MembersComponent,
     MultiSelectStatusComponent,
-    AccountSettingsComponent,
+    AccountSettingsComponent
   ],
   providers: [
     DataService,

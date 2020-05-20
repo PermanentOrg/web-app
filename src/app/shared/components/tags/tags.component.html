@@ -1,0 +1,4 @@
+<ng-container *ngIf="tags?.length">
+  <div class="tag" *ngFor="let tag of tags">{{tag.name}}</div>
+</ng-container>
+<div class="empty" *ngIf="!tags?.length">No tags</div>

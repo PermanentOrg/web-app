@@ -29,6 +29,12 @@
       type='textarea'></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
+      <label>Tags</label>
+      <div class="sidebar-item-content">
+        <pr-edit-tags [item]="selectedItem"></pr-edit-tags>
+      </div>
+    </div>
+    <div class="sidebar-item">
       <label>{{selectedItem.isFolder ? 'Start date' : 'Date'}}</label>
       <pr-inline-value-edit
         [displayValue]="selectedItem.displayDT"
@@ -50,9 +56,15 @@
     </div>
     <div class="sidebar-item">
       <label>Location</label>
-      <div>{{(selectedItem.LocnVO | prLocation)?.full}}</div>
-      <pr-static-map [locations]="selectedItem.LocnVO"></pr-static-map>
+      <div class="sidebar-item-content">
+        <span *ngIf="selectedItem.LocnVO">{{(selectedItem.LocnVO | prLocation)?.full}}</span>
+        <span *ngIf="!selectedItem.LocnVO" class="sidebar-item-content-empty">Click to set location</span>
+      </div>
+      <div class="sidebar-item-content">
+        <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
+      </div>
     </div>
+
   </ng-container>
   <ng-container *ngIf="selectedItems">
     <div class="sidebar-item">

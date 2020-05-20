@@ -33,6 +33,7 @@ import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
 import { StaticMapComponent } from './components/static-map/static-map.component';
 import { PrLocationPipe } from './pipes/pr-location.pipe';
+import { TagsComponent } from './components/tags/tags.component';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { PrLocationPipe } from './pipes/pr-location.pipe';
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,
     FolderViewToggleComponent,
-    StaticMapComponent
+    StaticMapComponent,
+    TagsComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -109,7 +111,8 @@ import { PrLocationPipe } from './pipes/pr-location.pipe';
     InlineValueEditComponent,
     DragTargetRouterLinkDirective,
     FolderViewToggleComponent,
-    StaticMapComponent
+    StaticMapComponent,
+    TagsComponent
   ],
   providers: [
     PublicLinkPipe,

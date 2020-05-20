@@ -7,6 +7,7 @@ import { ChildItemData, HasParentFolder } from './folder-vo';
 import { RecordType, FolderLinkType } from './vo-types';
 import { formatDateISOString } from '@shared/utilities/dateTime';
 import { LocnVOData } from './locn-vo';
+import { TagVOData } from './tag-vo';
 
 export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
@@ -85,7 +86,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public TimezoneVO: TimezoneVOData;
   public FileVOs;
   public DirectiveVOs;
-  public TagVOs;
+  public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs;
   public saveAs;

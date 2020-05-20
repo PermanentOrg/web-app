@@ -10,6 +10,7 @@ import { EventEmitter } from '@angular/core';
 import { Subject, BehaviorSubject } from 'rxjs';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
+import { TagsService } from '@core/services/tags/tags.service';
 
 const THUMBNAIL_REFRESH_INTERVAL = 3000;
 
@@ -60,7 +61,10 @@ export class DataService {
 
   private debug = debug('service:dataService');
 
-  constructor(private api: ApiService) {
+  constructor(
+    private api: ApiService,
+    private tags: TagsService
+  ) {
     debugSubscribable('currentFolderChange', this.debug, this.currentFolderChange);
     debugSubscribable('folderUpdate', this.debug, this.folderUpdate);
     debugSubscribable('selectedItems', this.debug, this.selectedItems$());
@@ -265,11 +269,13 @@ export class DataService {
       for (let i = 0; i < records.length; i++) {
         records[i].update(fullRecords[i]);
         records[i].dataStatus = DataStatus.Full;
+        this.tags.checkTagsOnItem(records[i]);
       }
 
       for (let i = 0; i < folders.length; i++) {
         folders[i].update(fullFolders[i]);
         folders[i].dataStatus = DataStatus.Full;
+        this.tags.checkTagsOnItem(folders[i]);
       }
 
       itemResolves.map((resolve, index) => {
