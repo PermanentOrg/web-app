@@ -11,3 +11,4 @@ export * from '@shared/services/api/relation.repo';
 export * from '@shared/services/api/search.repo';
 export * from '@shared/services/api/share.repo';
 export * from '@shared/services/api/system.repo';
+export * from '@shared/services/api/tag.repo';

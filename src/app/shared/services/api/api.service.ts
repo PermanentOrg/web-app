@@ -19,6 +19,7 @@ export class ApiService {
   public search: Repo.SearchRepo;
   public share: Repo.ShareRepo;
   public system: Repo.SystemRepo;
+  public tag: Repo.TagRepo;
 
   constructor(private http: HttpService) {
     this.auth = new Repo.AuthRepo(this.http);
@@ -34,5 +35,6 @@ export class ApiService {
     this.search = new Repo.SearchRepo(this.http);
     this.share = new Repo.ShareRepo(this.http);
     this.system = new Repo.SystemRepo(this.http);
+    this.tag = new Repo.TagRepo(this.http);
   }
 }

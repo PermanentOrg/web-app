@@ -6,6 +6,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { orderBy } from 'lodash';
 import { Subject } from 'rxjs';
 import { debugSubscribable } from '@shared/utilities/debug';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +16,14 @@ export class TagsService {
   private tagsSubject: Subject<TagVOData[]> = new Subject();
   private debug = debug('service:tagsService');
   constructor(
-    private account: AccountService
+    private account: AccountService,
+    private api: ApiService
   ) {
     this.refreshTags();
 
     this.account.archiveChange.subscribe(() => {
       this.resetTags();
+      this.refreshTags();
     });
 
     debugSubscribable('getTags', this.debug, this.getTags$());
@@ -32,8 +35,13 @@ export class TagsService {
     this.refreshTags();
   }
 
-  refreshTags() {
-
+  async refreshTags() {
+    const response = await this.api.tag.getTagsByArchive(this.account.getArchive());
+    const tags = response.getTagVOs();
+    for (const tag of tags) {
+      this.tags.set(tag.tagId, tag);
+    }
+    this.debug('got %d tags for archive', this.tags.size);
   }
 
   checkTagsOnItem(item: ItemVO) {
