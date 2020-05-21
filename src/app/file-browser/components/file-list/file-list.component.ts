@@ -185,7 +185,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     // register for 'show item' events
     this.subscriptions.push(
       this.dataService.itemToShow$().subscribe(item => {
-        this.debug('scroll item event %o', item);
         setTimeout(() => {
           this.scrollToItem(item);
         });

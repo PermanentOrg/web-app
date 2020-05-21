@@ -1,6 +1,6 @@
 <div class="screen-cover" *ngIf="showResults || isFocused" (click)="onCoverClick()"></div>
 <input type="text" placeholder="Search this archive" #searchInput [formControl]="formControl"
-  (blur)="onInputBlur($event)" (focus)="onInputFocus()" (keydown)="onInputKeydown($event)">
+  (focus)="onInputFocus()" (keydown)="onInputKeydown($event)">
 <i class="ion-md-search"></i>
 <div class="search-results" *ngIf="showResults">
   <div class="search-result-group" *ngIf="tagResults?.length">

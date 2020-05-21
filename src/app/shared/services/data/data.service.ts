@@ -577,7 +577,8 @@ export class DataService {
     this.showItemSubject.next(item);
     if (select) {
       this.clearSelectedItems();
-      this.selectItemSingle(item, true);
+      this.selectItemSingle(this.byFolderLinkId[item.folder_linkId], true);
+      this.debug('selected item %o', item);
     }
   }
 

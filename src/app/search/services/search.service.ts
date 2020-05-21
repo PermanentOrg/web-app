@@ -38,6 +38,10 @@ export class SearchService {
   }
 
   getResultsInCurrentFolder(searchTerm: string, limit?: number): ItemVO[] {
+    if (!searchTerm) {
+      return [];
+    }
+    
     let results = this.fuse.search(searchTerm);
 
     if (limit) {
@@ -93,6 +97,10 @@ export class SearchService {
   }
 
   getTagResults(searchTerm: string, limit?: number) {
+    if (!searchTerm) {
+      return [];
+    }
+
     let results = this.tagsFuse.search(searchTerm);
 
     if (limit) {

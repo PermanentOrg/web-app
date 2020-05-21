@@ -65,11 +65,9 @@ export class GlobalSearchBarComponent implements OnInit {
         return this.searchService.parseSearchTerm(term);
       }),
       tap(([term, tags]) => {
-        if (term) {
-          this.showResults = true;
-          this.updateLocalResults(term as string);
-          this.updateTagsResults(term as string, tags);
-        }
+        this.showResults = true;
+        this.updateLocalResults(term as string, tags);
+        this.updateTagsResults(term as string, tags);
       }),
       debounceTime(100),
       switchMap(([term, tags]) => {
@@ -101,7 +99,7 @@ export class GlobalSearchBarComponent implements OnInit {
         this.reset();
       }
     }, err => {
-
+      console.error('Error from search bar:', err);
     });
   }
 
@@ -117,15 +115,6 @@ export class GlobalSearchBarComponent implements OnInit {
     }
   }
 
-  onInputChange(term: string) {
-    if (term) {
-      this.showResults = true;
-      this.updateLocalResults(term);
-    } else {
-      this.reset();
-    }
-  }
-
   onInputFocus() {
     this.isFocused = true;
     this.setBodyClass();
@@ -135,15 +124,6 @@ export class GlobalSearchBarComponent implements OnInit {
     this.isFocused = false;
     this.reset();
     this.setBodyClass();
-  }
-
-  onInputBlur(event) {
-    console.log(event);
-    // this.isFocused = false;
-    // setTimeout(() => {
-    //   this.reset();
-    //   this.setBodyClass();
-    // }, 100);
   }
 
   onInputKeydown(event: KeyboardEvent) {
@@ -209,28 +189,24 @@ export class GlobalSearchBarComponent implements OnInit {
     this.formControl.setValue('', { emitEvent: false });
   }
 
-  updateLocalResults(term: string) {
+  updateLocalResults(term: string, tags: TagVOData[]) {
     this.localResultsByFolderId.clear();
     this.localResultsByRecordId.clear();
-    if (this.hasTagCommand(term)) {
-      this.localResults = [];
-      this.showResults = true;
-      return;
-    }
 
-    this.localResults = this.searchService.getResultsInCurrentFolder(term, LOCAL_RESULTS_LIMIT);
-    for (const result of this.localResults) {
-      if (result instanceof RecordVO) {
-        this.localResultsByRecordId.add(result.recordId);
-      } else {
-        this.localResultsByFolderId.add(result.folderId);
+    if (!tags?.length) {
+      this.localResults = this.searchService.getResultsInCurrentFolder(term, LOCAL_RESULTS_LIMIT);
+      for (const result of this.localResults) {
+        if (result instanceof RecordVO) {
+          this.localResultsByRecordId.add(result.recordId);
+        } else {
+          this.localResultsByFolderId.add(result.folderId);
+        }
       }
+    } else {
+      this.localResults = [];
     }
-    this.showResults = true;
-  }
 
-  hasTagCommand(term: string) {
-    return term.includes('tag:');
+    this.showResults = true;
   }
 
   updateTagsResults(term: string, selectedTags: TagVOData[]) {
@@ -262,6 +238,11 @@ export class GlobalSearchBarComponent implements OnInit {
   }
 
   onGlobalResultClick(item: ItemVO) {
+    if (item.parentFolder_linkId === this.data.currentFolder.folder_linkId) {
+      console.log('local item in global results!');
+      return this.onLocalResultClick(item);
+    }
+
     const publicRoot = this.account.getPublicRoot();
     const privateRoot = this.account.getPrivateRoot();
 
