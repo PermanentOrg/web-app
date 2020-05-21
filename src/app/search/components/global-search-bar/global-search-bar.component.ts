@@ -86,10 +86,19 @@ export class GlobalSearchBarComponent implements OnInit {
       if (response) {
         if (response instanceof SearchResponse && response.isSuccessful) {
           this.globalResults = response.getItemVOs().filter(i => {
+            let showShouldInGlobal = false;
+            const inCurrentFolder = i.parentFolder_linkId === this.data.currentFolder.folder_linkId;
             if (i instanceof RecordVO) {
-              return !this.localResultsByRecordId.has(i.recordId);
+              showShouldInGlobal = !this.localResultsByRecordId.has(i.recordId);
             } else {
-              return !this.localResultsByFolderId.has(i.folderId) && this.data.currentFolder.folderId !== i.folderId;
+              showShouldInGlobal = !this.localResultsByFolderId.has(i.folderId) && this.data.currentFolder.folderId !== i.folderId;
+            }
+
+            if (showShouldInGlobal && inCurrentFolder) {
+              this.localResults.push(i);
+              return false;
+            } else {
+              return showShouldInGlobal;
             }
           });
         } else {
