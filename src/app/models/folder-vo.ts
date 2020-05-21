@@ -137,9 +137,13 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
     this.derivedEndDT = formatDateISOString(this.derivedEndDT);
   }
 
-  public update (voData: FolderVOData | FolderVO): void {
+  public update (voData: FolderVOData | FolderVO, keepChildItems = false): void {
     if (voData) {
       for ( const key in voData ) {
+        if (keepChildItems && key === 'ChildItemVOs') {
+          continue;
+        }
+
         if (voData[key] !== undefined) {
           this[key] = voData[key];
         }

@@ -3,9 +3,14 @@
   (blur)="onInputBlur($event)" (focus)="onInputFocus()" (keydown)="onInputKeydown($event)">
 <i class="ion-md-search"></i>
 <div class="search-results" *ngIf="showResults">
+  <div class="search-result-group" *ngIf="tagResults?.length">
+    <div class="search-result-group-title">Tags</div>
+    <div class="search-result-tags">
+      <div class="tag" *ngFor="let tag of tagResults" (click)="onTagResultClick(tag)">{{tag.name}}</div>
+    </div>
+  </div>
   <div class="search-result-group" *ngIf="localResults?.length">
     <div class="search-result-group-title">In this folder</div>
-    <div class="search-result empty" *ngIf="localResults?.length === 0" >No results</div>
     <div class="search-result" *ngFor="let result of localResults; let i = index; trackBy: resultTrackByFn" (click)="onLocalResultClick(result)"
       [class.selected]="isSelectedResult('local', i)">
       <div class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
@@ -15,7 +20,7 @@
   </div>
   <div class="search-result-group" *ngIf="waiting || globalResults">
     <div class="search-result-group-title">
-      <span>Everywhere else</span>
+      <span>{{localResults?.length ? 'Everywhere else' : 'Everywhere'}}</span>
       <div class="fade-ring-loader" *ngIf="waiting"></div>
     </div>
     <div class="search-result empty" *ngIf="globalResults?.length === 0">No results</div>

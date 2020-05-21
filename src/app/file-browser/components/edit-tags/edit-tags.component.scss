@@ -22,6 +22,8 @@
   border-top: 0px solid;
   max-height: 10rem;
   overflow-y: auto;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
 
   @include until($tablet-horizontal) {
     max-height: 30vh;

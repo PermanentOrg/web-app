@@ -273,8 +273,9 @@ export class DataService {
       }
 
       for (let i = 0; i < folders.length; i++) {
-        folders[i].update(fullFolders[i]);
-        folders[i].dataStatus = DataStatus.Full;
+        const folder = folders[i] as FolderVO;
+        folder.update(fullFolders[i] as FolderVOData, folders[i] === this.currentFolder);
+        folder.dataStatus = DataStatus.Full;
         this.tags.checkTagsOnItem(folders[i]);
       }
 

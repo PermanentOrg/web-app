@@ -41,6 +41,7 @@ export class TagsService {
     for (const tag of tags) {
       this.tags.set(tag.tagId, tag);
     }
+    this.tagsSubject.next(this.getTags());
     this.debug('got %d tags for archive', this.tags.size);
   }
 

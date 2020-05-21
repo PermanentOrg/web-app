@@ -167,6 +167,26 @@ $result-padding-y: 0.25rem;
     //   font-size: $font-size-sm;
     // }
   }
+
+  .search-result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    padding: $result-padding-y * 2 $result-padding-x;
+    padding-bottom: $result-padding-y * 2 - 0.25rem;
+    .tag {
+      padding: 0.25rem 0.5rem;
+      border-radius: $border-radius;
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+      background: rgba($PR-purple, 0.2);
+      user-select: none;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba($PR-purple, 0.4);
+      }
+    }
+  }
 }
 
 .fade-ring-loader {

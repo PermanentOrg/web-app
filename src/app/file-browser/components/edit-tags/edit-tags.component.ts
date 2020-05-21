@@ -61,7 +61,6 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
   }
 
   async ngOnInit() {
-    await this.dataService.fetchFullItems([this.item]);
     this.checkItemTags();
     this.lastDataStatus = this.item?.dataStatus;
     this.lastFolderLinkId = this.item?.folder_linkId;

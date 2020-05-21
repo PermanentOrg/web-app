@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostBinding, Inject } from '@angular/core';
 import { SearchService } from '@search/services/search.service';
-import { ItemVO, RecordVO } from '@models';
+import { ItemVO, RecordVO, TagVOData } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ngIfScaleHeightEnterAnimation } from '@shared/animations';
@@ -13,7 +13,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 const LOCAL_RESULTS_LIMIT = 5;
 
-type ResultsListType = 'local' | 'global';
+type ResultsListType = 'local' | 'global' | 'tag';
 
 @Component({
   selector: 'pr-global-search-bar',
@@ -26,6 +26,7 @@ export class GlobalSearchBarComponent implements OnInit {
 
   public localResults: ItemVO[];
   public globalResults: ItemVO[];
+  public tagResults: TagVOData[];
 
   public localResultsByArchiveNbr: Set<string> = new Set();
   public localResultsByRecordId: Set<string> = new Set();
@@ -63,6 +64,7 @@ export class GlobalSearchBarComponent implements OnInit {
         if (term) {
           this.showResults = true;
           this.updateLocalResults(term as string);
+          this.updateTagsResults(term as string);
         }
       }),
       debounceTime(100),
@@ -208,6 +210,12 @@ export class GlobalSearchBarComponent implements OnInit {
   updateLocalResults(term: string) {
     this.localResultsByFolderId.clear();
     this.localResultsByRecordId.clear();
+    if (this.hasTagCommand(term)) {
+      this.localResults = [];
+      this.showResults = true;
+      return;
+    }
+
     this.localResults = this.searchService.getResultsInCurrentFolder(term, LOCAL_RESULTS_LIMIT);
     for (const result of this.localResults) {
       if (result instanceof RecordVO) {
@@ -219,9 +227,26 @@ export class GlobalSearchBarComponent implements OnInit {
     this.showResults = true;
   }
 
+  hasTagCommand(term: string) {
+    return term.includes('tag:');
+  }
+
+  updateTagsResults(term: string) {
+    if (this.hasTagCommand(term)) {
+      this.tagResults = [];
+    } else {
+      this.tagResults = this.searchService.getTagResults(term);
+    }
+  }
+
   onLocalResultClick(item: ItemVO) {
     this.data.showItem(item, true);
     this.onCoverClick();
+  }
+
+  onTagResultClick(tag: TagVOData) {
+    const tagParam = `tag:"${tag.name}"`;
+    this.formControl.setValue(tagParam);
   }
 
   onGlobalResultClick(item: ItemVO) {
