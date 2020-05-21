@@ -3,7 +3,7 @@ import { TagVOData } from '@models/tag-vo';
 import debug from 'debug';
 import { ItemVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
-import { orderBy } from 'lodash';
+import { orderBy, find } from 'lodash';
 import { Subject } from 'rxjs';
 import { debugSubscribable } from '@shared/utilities/debug';
 import { ApiService } from '@shared/services/api/api.service';
@@ -63,6 +63,11 @@ export class TagsService {
     if (hasNew) {
       this.tagsSubject.next(this.getTags());
     }
+  }
+
+  getTagByName(name: string) {
+    const tags = this.getTags();
+    return find(tags, { name });
   }
 
   getTags() {

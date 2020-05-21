@@ -6,6 +6,8 @@ import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { TagsService } from '@core/services/tags/tags.service';
+import { query } from '@angular/animations';
+import { compact } from 'lodash';
 
 @Injectable()
 export class SearchService {
@@ -47,8 +49,47 @@ export class SearchService {
     });
   }
 
-  getResultsInCurrentArchive(searchTerm: string, limit?: number): Observable<SearchResponse> {
-    return this.api.search.itemsByNameObservable(searchTerm, limit);
+  parseSearchTerm(termString: string): [string, TagVOData[]] {
+    const splitByTerm = new RegExp(/\s(?=(?:[^"]+(["])[^"]+\1)*[^"]*$)/g);
+    const getTagName = new RegExp(/"(.+)"/g);
+    let queryString: string;
+    const parsedTags: TagVOData[] = [];
+
+    try {
+      if (termString.match(/tag:"(.*)"/)) {
+        const queryParts = [];
+        const parts = termString.split(splitByTerm).filter(x => x && x !== '"');
+        for (const part of parts) {
+          if (part.includes('tag:')) {
+            const tagNames = part.match(getTagName) || [];
+            for (const tagName of tagNames) {
+              if (tagName) {
+                const name = tagName.replace(/"/g, '');
+                const tag = this.tags.getTagByName(name);
+                if (tag) {
+                  parsedTags.push(tag);
+                }
+              }
+            }
+          } else {
+            queryParts.push(part);
+          }
+        }
+        if (queryParts.length) {
+          queryString = queryParts.join(' ');
+        }
+      } else {
+        queryString = termString;
+      }
+    } catch (err) {
+      console.error('Parsing error!', err);
+    }
+
+    return [ queryString, parsedTags ];
+  }
+
+  getResultsInCurrentArchive(searchTerm: string, tags: TagVOData[], limit?: number): Observable<SearchResponse> {
+    return this.api.search.itemsByNameObservable(searchTerm, tags, limit);
   }
 
   getTagResults(searchTerm: string, limit?: number) {
@@ -59,7 +100,7 @@ export class SearchService {
     }
 
     return results.map(i => {
-      return i.item;
+      return i.item as TagVOData;
     });
   }
 

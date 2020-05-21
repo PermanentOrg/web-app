@@ -1,4 +1,4 @@
-import { ArchiveVO, RecordVO, FolderVO, ItemVO } from '@root/app/models';
+import { ArchiveVO, RecordVO, FolderVO, ItemVO, TagVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
@@ -45,15 +45,16 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>('/search/record', data, SearchResponse);
   }
 
-  public itemsByNameObservable(query: string, limit?: number): Observable<SearchResponse> {
-    const data = [{
+  public itemsByNameObservable(query: string, tags: TagVOData[] = [], limit?: number): Observable<SearchResponse> {
+    const data = {
       SearchVO: {
         query,
+        TagVOs: tags,
         numberOfResults: limit
       }
-    }];
+    };
 
-    return this.http.sendRequest<SearchResponse>('/search/folderAndRecord', data, SearchResponse);
+    return this.http.sendRequest<SearchResponse>('/search/folderAndRecord', [data], SearchResponse);
   }
 }
 

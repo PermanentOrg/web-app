@@ -6,11 +6,12 @@ import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ngIfScaleHeightEnterAnimation } from '@shared/animations';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { pipe, of } from 'rxjs';
-import { tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
+import { tap, debounceTime, switchMap, catchError, map } from 'rxjs/operators';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { DOCUMENT } from '@angular/common';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
+import { remove } from 'lodash';
 const LOCAL_RESULTS_LIMIT = 5;
 
 type ResultsListType = 'local' | 'global' | 'tag';
@@ -60,23 +61,24 @@ export class GlobalSearchBarComponent implements OnInit {
 
   initFormHandler() {
     this.formControl.valueChanges.pipe(
-      tap(term => {
+      map(term => {
+        return this.searchService.parseSearchTerm(term);
+      }),
+      tap(([term, tags]) => {
         if (term) {
           this.showResults = true;
           this.updateLocalResults(term as string);
-          this.updateTagsResults(term as string);
+          this.updateTagsResults(term as string, tags);
         }
       }),
       debounceTime(100),
-      switchMap(term => {
-        if (term) {
-          if (term.length > 0) {
-            this.waiting = true;
-            return this.searchService.getResultsInCurrentArchive(term, 10)
-              .pipe(catchError(err => {
-                return of(err);
-              }));
-          }
+      switchMap(([term, tags]) => {
+        if (term?.length || tags?.length) {
+          this.waiting = true;
+          return this.searchService.getResultsInCurrentArchive(term, tags, 10)
+            .pipe(catchError(err => {
+              return of(err);
+            }));
         } else {
           return of(null);
         }
@@ -231,12 +233,10 @@ export class GlobalSearchBarComponent implements OnInit {
     return term.includes('tag:');
   }
 
-  updateTagsResults(term: string) {
-    if (this.hasTagCommand(term)) {
-      this.tagResults = [];
-    } else {
-      this.tagResults = this.searchService.getTagResults(term);
-    }
+  updateTagsResults(term: string, selectedTags: TagVOData[]) {
+    const termMatches = this.searchService.getTagResults(term);
+    const selectedNames = selectedTags.map(t => t.name);
+    this.tagResults = termMatches.filter(i => !selectedNames.includes(i.name));
   }
 
   onLocalResultClick(item: ItemVO) {
@@ -245,8 +245,20 @@ export class GlobalSearchBarComponent implements OnInit {
   }
 
   onTagResultClick(tag: TagVOData) {
-    const tagParam = `tag:"${tag.name}"`;
-    this.formControl.setValue(tagParam);
+    let searchTerm: string;
+    let tags: TagVOData[];
+
+    [ searchTerm, tags]  = this.searchService.parseSearchTerm(this.formControl.value);
+
+    // replace any text query with existing tags + clicked tag
+    tags.push(tag);
+    const tagString = tags.map(t => `tag:"${t.name}"`).join(' ') + ' ';
+    this.formControl.setValue(tagString);
+    if (this.tagResults) {
+      remove(this.tagResults, tag);
+    }
+
+    (this.inputElementRef.nativeElement as HTMLInputElement).focus();
   }
 
   onGlobalResultClick(item: ItemVO) {
