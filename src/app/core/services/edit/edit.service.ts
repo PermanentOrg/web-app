@@ -59,6 +59,10 @@ export const ItemActions: {[key: string]: PromptButton} = {
   SetFolderView: {
     buttonName: 'setFolderView',
     buttonText: 'Set folder view'
+  },
+  Tags: {
+    buttonName: 'tags',
+    buttonText: 'Tags'
   }
 };
 
@@ -69,7 +73,9 @@ export type ActionType = 'delete' |
   'download' |
   'copy' |
   'move' |
-  'setFolderView';
+  'setFolderView' |
+  'tags'
+  ;
 
 type EditServiceClipboardOperation = 'copy' | 'move';
 
@@ -367,6 +373,10 @@ export class EditService {
 
   async openPublishDialog(item: ItemVO) {
     this.dialog.open('PublishComponent', { item }, { height: 'auto' });
+  }
+
+  async openTagsDialog(item: ItemVO) {
+    this.dialog.open('EditTagsComponent', { item }, { height: 'auto' });
   }
 
   openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {

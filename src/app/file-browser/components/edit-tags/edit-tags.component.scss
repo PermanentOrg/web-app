@@ -22,6 +22,10 @@
   border-top: 0px solid;
   max-height: 10rem;
   overflow-y: auto;
+
+  @include until($tablet-horizontal) {
+    max-height: 30vh;
+  }
 }
 
 .edit-tag {
@@ -70,4 +74,8 @@
       opacity: 1;
     }
   }
+}
+
+.edit-tags-dialog-body {
+  padding: 0px 10px;
 }

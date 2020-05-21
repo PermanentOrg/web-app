@@ -5,6 +5,12 @@ button.btn, a.btn {
   max-width: $max-form-width;
 }
 
+.input-group {
+  button.btn, a.btn {
+    margin: 0;
+  }
+}
+
 .alert-wrapper {
   max-width: $max-form-width + 100px;
   .alert {

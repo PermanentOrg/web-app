@@ -52,7 +52,8 @@ import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
   ],
   entryComponents: [
     SharingComponent,
-    PublishComponent
+    PublishComponent,
+    EditTagsComponent
   ]
 })
 export class FileBrowserComponentsModule {
@@ -64,6 +65,10 @@ export class FileBrowserComponentsModule {
     {
       token: 'PublishComponent',
       component: PublishComponent
+    },
+    {
+      token: 'EditTagsComponent',
+      component: EditTagsComponent
     }
   ];
 

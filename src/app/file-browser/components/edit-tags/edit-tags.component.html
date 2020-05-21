@@ -1,19 +1,55 @@
-<pr-tags [tags]="item.TagVOs" (click)="startEditing()" [canEdit]="true" [animate]="isEditing"></pr-tags>
-<input type="text" class="new-tag form-control" placeholder="Add new tag" *ngIf="isEditing" @ngIfScaleAnimation
-  [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)">
-<div class="edit-tags" *ngIf="isEditing" @ngIfScaleAnimation>
-  <div class="edit-tag" *ngFor="let tag of allTags" [class.is-selected]="itemTagsById.has(tag.tagId)"
-  (click)="onTagClick(tag)">
-    <div class="select">
-      <div class="select-active"></div>
-    </div>
-    <div class="tag-name">
-      {{tag.name}}
+<ng-container *ngIf="!isDialog">
+  <pr-tags [tags]="item.TagVOs" (click)="startEditing()"
+    [canEdit]="true" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
+  <input type="text" class="new-tag form-control" placeholder="Add new tag" *ngIf="isEditing" @ngIfScaleAnimation
+    [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)">
+  <div class="edit-tags" *ngIf="isEditing" @ngIfScaleAnimation>
+    <div class="edit-tag" *ngFor="let tag of allTags" [class.is-selected]="itemTagsById.has(tag.tagId)"
+    (click)="onTagClick(tag)">
+      <div class="select">
+        <div class="select-active"></div>
+      </div>
+      <div class="tag-name">
+        {{tag.name}}
+      </div>
     </div>
   </div>
-</div>
-<div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-  <button class="btn btn-primary btn-sm" (click)="endEditing()">
-    Done
-  </button>
-</div>
+  <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
+    <button class="btn btn-primary btn-sm" (click)="endEditing()">
+      Done
+    </button>
+  </div>
+</ng-container>
+<ng-container *ngIf="isDialog">
+  <div class="dialog-content">
+    <div class="dialog-body">
+      <div class="page-title break-all">{{item.displayName}}</div>
+      <div class="edit-tags-dialog-body">
+        <pr-tags [tags]="item.TagVOs" (click)="startEditing()"
+          [canEdit]="true" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
+        <div class="input-group">
+          <input type="text" class="new-tag form-control" placeholder="Add new tag" *ngIf="isEditing" @ngIfScaleAnimation
+            [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)">
+          <div class="input-group-append">
+            <button class="btn btn-primary" (click)="onInputEnter(newTagName)">Save</button>
+          </div>
+        </div>
+        <div class="edit-tags" *ngIf="isEditing" @ngIfScaleAnimation>
+          <div class="edit-tag" *ngFor="let tag of allTags" [class.is-selected]="itemTagsById.has(tag.tagId)"
+          (click)="onTagClick(tag)">
+            <div class="select">
+              <div class="select-active"></div>
+            </div>
+            <div class="tag-name">
+              {{tag.name}}
+            </div>
+          </div>
+        </div>
+    </div>
+
+    </div>
+    <div class="dialog-footer">
+      <button class="btn btn-secondary" (click)="close()">Done</button>
+    </div>
+  </div>
+</ng-container>

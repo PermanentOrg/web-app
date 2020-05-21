@@ -71,6 +71,10 @@ export const ItemActions: {[key: string]: PromptButton} = {
   SetFolderView: {
     buttonName: 'setFolderView',
     buttonText: 'Set folder view'
+  },
+  Tags: {
+    buttonName: 'tags',
+    buttonText: 'Tags'
   }
 };
 
@@ -82,7 +86,9 @@ type ActionType = 'delete' |
   'download' |
   'copy' |
   'move' |
-  'setFolderView';
+  'setFolderView' |
+  'tags'
+  ;
 
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
@@ -565,6 +571,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
         }
       }
 
+      actionButtons.push(ItemActions.Tags);
+
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
       }
@@ -588,8 +596,6 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
         this.prompt.confirm('OK', this.item.displayName, null, null, `<p>No actions available</p>`);
       } catch (err) { }
     }
-
-
 
     return false;
   }
@@ -630,6 +636,10 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       case 'publish':
         actionDeferred.resolve();
         this.dialog.open('PublishComponent', { item: this.item }, { height: 'auto' });
+        break;
+      case 'tags':
+        actionDeferred.resolve();
+        this.dialog.open('EditTagsComponent', { item: this.item }, { height: 'auto' });
         break;
       case 'setFolderView':
         actionDeferred.resolve();

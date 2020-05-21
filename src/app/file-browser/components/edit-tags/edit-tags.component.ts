@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, OnChanges, DoCheck, HostBinding, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, DoCheck, HostBinding, ElementRef, Optional, Inject } from '@angular/core';
 import { TagsService } from '@core/services/tags/tags.service';
 import { ItemVO, TagVOData, TagLinkVOData, FolderVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
@@ -10,6 +10,7 @@ import { TagResponse } from '@shared/services/api/tag.repo';
 import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { ngIfScaleAnimation } from '@shared/animations';
+import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-edit-tags',
@@ -25,6 +26,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
   public isEditing = false;
 
+  @HostBinding('class.is-dialog') public isDialog = false;
   @HostBinding('class.is-waiting') public waiting = false;
 
   public newTagName: string;
@@ -35,6 +37,8 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
   private lastFolderLinkId: number;
 
   constructor(
+    @Optional() @Inject(DIALOG_DATA) public dialogData: any,
+    @Optional() private dialogRef: DialogRef,
     private tagsService: TagsService,
     private message: MessageService,
     private api: ApiService,
@@ -48,6 +52,12 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
         this.allTags = tags;
       })
     );
+
+    if (this.dialogData) {
+      this.isDialog = true;
+      this.item = this.dialogData.item;
+      this.startEditing();
+    }
   }
 
   async ngOnInit() {
@@ -129,11 +139,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
     }
   }
 
-  addTagToItem(tag: TagVOData) {
+  close() {
+    this.dialogRef.close();
   }
-
-  removeTagFromItem(tag: TagVOData) {
-
-  }
-
 }

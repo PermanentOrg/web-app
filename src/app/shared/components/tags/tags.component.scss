@@ -4,6 +4,7 @@
   display: flex;
   flex-wrap: wrap;
   height: auto;
+  min-height: 1.5rem + 0.75rem;
 
   .tag {
     padding: 0.25rem 0.5rem;
@@ -13,8 +14,15 @@
     background: rgba($PR-purple, 0.2);
     user-select: none;
   }
+
+  @include until($tablet-horizontal) {
+    max-height: 25vh;
+    overflow-y: auto;
+  }
 }
 
 .empty {
   color: $text-muted;
+  padding: 0.25rem 0rem;
+  margin-bottom: 0.25rem;
 }
