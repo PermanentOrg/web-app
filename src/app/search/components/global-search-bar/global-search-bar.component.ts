@@ -101,7 +101,7 @@ export class GlobalSearchBarComponent implements OnInit {
     });
   }
 
-  resultTrackByFn(item: ItemVO) {
+  resultTrackByFn(index, item: ItemVO) {
     return item.folder_linkId;
   }
 

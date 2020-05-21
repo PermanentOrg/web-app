@@ -66,7 +66,7 @@ constructor(
     this.searchInputRef.nativeElement.addEventListener('keydown', evt => this.onSearchInputKeydown(evt));
   }
 
-  archiveResultTrackByFn(archive: ArchiveVO) {
+  archiveResultTrackByFn(index, archive: ArchiveVO) {
     return archive.archiveId;
   }
 
