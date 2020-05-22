@@ -48,7 +48,7 @@
         <tr>
           <td>Location</td>
           <td>
-            <!-- <pr-static-map [location]="currentRecord.LocnVO" *ngIf="currentRecord.LocnVO"></pr-static-map> -->
+            <pr-static-map [location]="currentRecord.LocnVO" *ngIf="currentRecord.LocnVO"></pr-static-map>
             <span *ngIf="currentRecord.LocnVO">{{(currentRecord.LocnVO | prLocation)?.full}}</span>
             <span *ngIf="!currentRecord.LocnVO">No location</span>
           </td>

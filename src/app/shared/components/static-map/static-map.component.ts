@@ -28,11 +28,12 @@ export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.buildUrl();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.buildUrl();
+    setTimeout(() => {
+      this.buildUrl();
+    });
   }
 
   ngAfterViewInit() {
