@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone } from '@angular/core';
 
 import { debounce } from 'lodash';
+import debug from 'debug';
 
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -19,7 +20,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   private element: Element;
   private imageElement: Element;
-  private placeholderElement: Element;
 
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
@@ -29,30 +29,37 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   private lastItemDataStatus: DataStatus;
 
   private debouncedResize;
-  constructor(elementRef: ElementRef, private renderer: Renderer2) {
+  private debug = debug('component:thumbnail');
+
+  constructor(
+    elementRef: ElementRef,
+    private renderer: Renderer2,
+    private zone: NgZone
+  ) {
     this.element = elementRef.nativeElement;
     this.debouncedResize = debounce(this.checkElementWidth, 100);
     this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
   }
 
   ngOnInit() {
-    this.imageElement = this.element.querySelector('.pr-thumbnail-image');
-    this.placeholderElement = this.element.querySelector('.pr-thumbnail-placeholder');
-    if (this.item) {
-      this.setImageBg(this.item.thumbURL200);
-      this.checkElementWidth();
-      this.lastItemDataStatus = this.item.dataStatus;
-    }
   }
 
   ngOnChanges() {
+    if (!this.imageElement) {
+      this.getImageElement();
+    }
     this.resetImage();
   }
 
   ngDoCheck() {
     if (this.item.dataStatus !== this.lastItemDataStatus) {
+      this.debug('change detection from data status');
       this.resetImage();
     }
+  }
+
+  getImageElement() {
+    this.imageElement = this.element.querySelector('.pr-thumbnail-image');
   }
 
   resetImage() {
@@ -100,21 +107,20 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
     }
   }
 
+
+
   setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;
-    if (!this.imageElement) {
-      return;
-    }
 
     if (!imageUrl) {
       this.renderer.addClass(this.imageElement, 'image-loading');
     } else {
       const imageLoader = new Image();
-      const targetArchiveNbr = this.item.archiveNbr;
+      const targetFolderLinkId = this.item.folder_linkId;
       imageLoader.onload = () => {
         this.thumbLoaded = true;
         this.renderer.removeClass(this.imageElement, 'image-loading');
-        if (this.item.archiveNbr === targetArchiveNbr) {
+        if (this.item.folder_linkId === targetFolderLinkId) {
           this.renderer.setStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
         }
       };

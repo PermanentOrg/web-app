@@ -13,9 +13,25 @@ const image500 = `${baseImageUrl}/500`;
 const image1000 = `${baseImageUrl}/1000`;
 const image2000 = `${baseImageUrl}/2000`;
 
-const minItem = new RecordVO({}, false, DataStatus.Placeholder);
-const leanItem = new RecordVO({ thumbURL200: image200 }, false, DataStatus.Lean);
-const fullItem = new RecordVO({ thumbURL200: image200, thumbURL500: image500, thumbURL1000: image1000 }, false, DataStatus.Full);
+function addParam(url, param) {
+  return `${url}?text=${param}`;
+}
+
+const minItem = new RecordVO({ folder_linkId: 1 }, false, DataStatus.Placeholder);
+const leanItem = new RecordVO({folder_linkId: 1, thumbURL200: image200 }, false, DataStatus.Lean);
+const fullItem = new RecordVO(
+  { folder_linkId: 1, thumbURL200: image200, thumbURL500: image500, thumbURL1000: image1000 },
+  false,
+  DataStatus.Full
+  );
+
+const minItem2 = new RecordVO({folder_linkId: 2 }, false, DataStatus.Placeholder);
+const leanItem2 = new RecordVO({ folder_linkId: 2, thumbURL200: addParam(image200, 'item2') }, false, DataStatus.Lean);
+const fullItem2 = new RecordVO(
+  { folder_linkId: 2, thumbURL200: addParam(image200, 'item2'), thumbURL500: addParam(image500, 'item2'), thumbURL1000: addParam(image500, 'item2') },
+  false,
+  DataStatus.Full
+  );
 
 @Component({
   selector: `pr-test-host-component`,
@@ -109,5 +125,20 @@ describe('ThumbnailComponent', () => {
     fixture.detectChanges();
     expect(component['targetThumbWidth']).toEqual(500);
     expect(component['currentThumbUrl']).toEqual(image500);
+  });
+
+  it('should use reset when changing records', async () => {
+    component['dpiScale'] = 2;
+
+    hostComponent.item.update(fullItem);
+    hostComponent.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+    expect(component['targetThumbWidth']).toEqual(500);
+    expect(component['currentThumbUrl']).toEqual(image500);
+
+    hostComponent.item = fullItem2;
+    fixture.detectChanges();
+    expect(component['targetThumbWidth']).toEqual(500);
+    expect(component['currentThumbUrl']).toEqual(fullItem2.thumbURL500);
   });
 });
