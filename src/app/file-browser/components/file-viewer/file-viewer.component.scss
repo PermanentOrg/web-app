@@ -222,6 +222,31 @@ $button-size: 2rem;
   }
 }
 
+.file-viewer-metadata {
+  td {
+    padding: 5px 0;
+    vertical-align: top;
+
+    &:first-child {
+      padding-right: 5px;
+    }
+  }
+  .metadata-item {
+    padding: 5px 10px;
+    label {
+      font-weight: 600;
+      margin-bottom: 0px;
+    }
+  
+    .metadata-item-content {
+      $padding-y: 0.25rem;
+      padding: $padding-y 0;
+      min-height: $line-height-base * 1rem + (2 * $padding-y);
+    }
+  }
+
+}
+
 @supports (padding-left: env(safe-area-inset-left)) {
   .file-viewer {
     padding-top: env(safe-area-inset-top);

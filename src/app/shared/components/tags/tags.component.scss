@@ -1,16 +1,25 @@
 @import 'variables';
-
+$gutter-size: 0.25rem;
 :host {
   display: flex;
   flex-wrap: wrap;
   height: auto;
-  min-height: 1.5rem + 0.75rem;
+  margin-bottom: -$gutter-size;
+
+  &.can-edit {
+    min-height: 1.5rem + 0.75rem;
+    
+    .empty {
+      color: $text-muted;
+      padding: 0.25rem 0rem;
+    }
+  }
 
   .tag {
     padding: 0.25rem 0.5rem;
     border-radius: $border-radius;
-    margin-right: 0.25rem;
-    margin-bottom: 0.25rem;
+    margin-right: $gutter-size;
+    margin-bottom: $gutter-size;
     background: rgba($PR-purple, 0.2);
     user-select: none;
   }
@@ -22,7 +31,8 @@
 }
 
 .empty {
-  color: $text-muted;
-  padding: 0.25rem 0rem;
   margin-bottom: 0.25rem;
 }
+
+
+

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostBinding } from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import { orderBy } from 'lodash';
 import { ngIfScaleAnimationDynamic } from '@shared/animations';
@@ -11,7 +11,7 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
 })
 export class TagsComponent implements OnInit, OnChanges {
   @Input() tags: TagVOData[];
-  @Input() canEdit: boolean;
+  @HostBinding('class.can-edit') @Input() canEdit: boolean;
   @Input() isEditing = false;
   @Input() animate = false;
 
