@@ -41,7 +41,7 @@ export class RecordRepo extends BaseRepo {
   }
 
   public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
-    const whitelist: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'displayName', 'description', 'displayDT'];
+    const whitelist: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'displayName', 'description', 'displayDT', 'locnId'];
 
     const data = recordVOs.map((vo) => {
       const updateData: RecordVOData = {};

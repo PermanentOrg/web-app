@@ -60,4 +60,10 @@
       background-color: $shadow-color-dark;
     }
   }
+
+  .dialog-auto-height {
+    .menu {
+      border-radius: $border-radius;
+    }
+  }
 }

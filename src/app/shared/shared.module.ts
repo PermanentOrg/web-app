@@ -117,6 +117,7 @@ import { TagsComponent } from './components/tags/tags.component';
   providers: [
     PublicLinkPipe,
     PublicRoutePipe,
+    PrLocationPipe,
     DatePipe
   ]
 })

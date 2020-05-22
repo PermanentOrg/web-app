@@ -1,6 +1,13 @@
-import { Component, OnInit, Input, Optional, Inject, ElementRef, AfterViewInit } from '@angular/core';
-import { ItemVO, ArchiveVO } from '@models';
+import { Component, OnInit, Input, Optional, Inject, ElementRef, AfterViewInit, ViewChild, HostListener, NgZone } from '@angular/core';
+import { ItemVO, ArchiveVO, LocnVOData } from '@models';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
+import { MapInfoWindow, GoogleMap } from '@angular/google-maps';
+import { ApiService } from '@shared/services/api/api.service';
+import { ngIfFadeInAnimation } from '@shared/animations';
+import { find } from 'lodash';
+import { PrLocationPipe, LocnPipeOutput } from '@shared/pipes/pr-location.pipe';
+import { MessageService } from '@shared/services/message/message.service';
+import { EditService } from '@core/services/edit/edit.service';
 
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER: google.maps.LatLngLiteral = {
@@ -11,7 +18,8 @@ const DEFAULT_CENTER: google.maps.LatLngLiteral = {
 @Component({
   selector: 'pr-location-picker',
   templateUrl: './location-picker.component.html',
-  styleUrls: ['./location-picker.component.scss']
+  styleUrls: ['./location-picker.component.scss'],
+  animations: [ ngIfFadeInAnimation ]
 })
 export class LocationPickerComponent implements OnInit, AfterViewInit {
   @Input() item: ItemVO;
@@ -31,33 +39,161 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
   height: string;
   width: string;
 
+  currentLocation: LocnVOData;
+  currentLocationLatLng: google.maps.LatLng;
+  currentLocationDisplay: LocnPipeOutput;
+
+  hasChanged = false;
+  saving = false;
+
+  @ViewChild(GoogleMap) map: GoogleMap;
+  @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow;
+  @ViewChild('mapWrapper') mapWrapperRef: ElementRef;
+  @ViewChild('autocompleteInput') autocompleteInputRef: ElementRef;
+  autocomplete: google.maps.places.Autocomplete;
+
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
     @Optional() private dialogRef: DialogRef,
-    private elementRef: ElementRef
+    private api: ApiService,
+    private locationPipe: PrLocationPipe,
+    private zone: NgZone,
+    private message: MessageService,
+    private editService: EditService
   ) {
     if (this.dialogData) {
       this.item = this.dialogData.item;
       this.archive = this.dialogData.archive;
     }
-
   }
 
+
   ngOnInit(): void {
+    this.checkItemLocation();
   }
 
   ngAfterViewInit() {
+    this.initAutocomplete();
     setTimeout(() => {
       this.setMapDimensions();
     });
   }
 
+  initAutocomplete() {
+    this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInputRef.nativeElement);
+    this.autocomplete.setFields(['name', 'formatted_address', 'address_components', 'geometry']);
+    this.autocomplete.addListener('place_changed', () => {
+      this.zone.run(() => {
+        this.onAutocompletePlaceSelect();
+      });
+    });
+  }
+
+  @HostListener('window:resize', ['$event'])
   setMapDimensions() {
-    const height = (this.elementRef.nativeElement as HTMLElement).clientHeight;
-    const width = (this.elementRef.nativeElement as HTMLElement).clientWidth;
+    const height = (this.mapWrapperRef.nativeElement as HTMLElement).clientHeight;
+    const width = (this.mapWrapperRef.nativeElement as HTMLElement).clientWidth;
 
     this.height = `${height}px`;
     this.width = `${width}px`;
   }
 
+  checkItemLocation() {
+    if (this.item.LocnVO) {
+      this.setCurrentLocation(this.item.LocnVO);
+    }
+  }
+
+  async setCurrentLocationToLatLng(latLng: google.maps.LatLng) {
+    this.currentLocation = null;
+    const response = await this.api.locn.geomapLatLng(latLng.lat(), latLng.lng());
+    if (response.isSuccessful) {
+      this.setCurrentLocation(response.getLocnVO(), true);
+      this.hasChanged = true;
+    } else {
+      console.error('Error looking this up!');
+    }
+  }
+
+  setCurrentLocation(locn: LocnVOData, pan = false ) {
+    this.currentLocation = locn;
+    this.currentLocationLatLng = new google.maps.LatLng({lat: Number(locn.latitude), lng: Number(locn.longitude)});
+    this.currentLocationDisplay = this.locationPipe.transform(locn);
+    if (!pan) {
+      this.center = this.currentLocationLatLng;
+    } else {
+      this.map.panTo(this.currentLocationLatLng);
+    }
+  }
+
+  async save() {
+    if (!this.hasChanged) {
+      this.cancel();
+    } else {
+      this.saving = true;
+      try {
+        if (!this.currentLocation.locnId) {
+          const locnResponse = await this.api.locn.create(this.currentLocation);
+          this.currentLocation = locnResponse.getLocnVO();
+        }
+        console.log(this.item);
+        this.item.update({locnId: this.currentLocation.locnId});
+        await this.editService.updateItems([this.item]);
+        this.item.LocnVO = this.currentLocation;
+        this.dialogRef.close();
+        this.message.showMessage('Location saved.', 'success');
+      } catch (err) {
+        console.error(err);
+        this.message.showError('There was a problem saving the location.');
+     } finally {
+       this.saving = false;
+     }
+    }
+  }
+
+  cancel() {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
+  }
+
+  onMapClick(event: google.maps.MouseEvent) {
+    this.setCurrentLocationToLatLng(event.latLng);
+  }
+
+  onAutocompletePlaceSelect() {
+    const place = this.autocomplete.getPlace();
+    const locnForPlace = this.createLocnFromPlace(place);
+    this.setCurrentLocation(locnForPlace, true);
+    this.hasChanged = true;
+  }
+
+  createLocnFromPlace(place: google.maps.places.PlaceResult) {
+    const addr = place.address_components;
+    const locn: LocnVOData = {
+      latitude: place.geometry.location.lat(),
+      longitude: place.geometry.location.lng(),
+      streetNumber: getComponentName(addr, 'street_number'),
+      streetName: getComponentName(addr, 'route'),
+      postalCode: getComponentName(addr, 'postal_code'),
+      locality: getComponentName(addr, 'locality'),
+      adminOneName: getComponentName(addr, 'administrative_area_level_1'),
+      adminOneCode: getComponentName(addr, 'administrative_area_level_1', true),
+      adminTwoName: getComponentName(addr, 'administrative_area_level_2'),
+      adminTwoCode: getComponentName(addr, 'administrative_area_level_2', true),
+      country: getComponentName(addr, 'country'),
+      countryCode: getComponentName(addr, 'country', true)
+    };
+
+    if (!place.name.includes(locn.streetNumber)) {
+      locn.displayName = place.name;
+    }
+
+    return locn;
+
+    function getComponentName(address_components: google.maps.GeocoderAddressComponent[], type, getShortName = true) {
+      const component = find(address_components, c => c.types.includes(type));
+      return component ? component[getShortName ? 'short_name' : 'long_name'] : null;
+    }
+  }
 }

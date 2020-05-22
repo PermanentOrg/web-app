@@ -118,7 +118,7 @@ export class EditService {
       const script = document.createElement('script');
       const callbackName = '__gmapsLoaded';
       const apiKey = environment.google.apiKey;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}&libraries=places`;
       script.defer = true;
       script.async = true;
 
@@ -278,6 +278,7 @@ export class EditService {
     const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     const recordsByRecordId: Map<number, RecordVO> = new Map();
+    const foldersByFolderId: Map<number, FolderVO> = new Map();
 
     items.forEach((item) => {
       item.isFolder ? folders.push(item) : records.push(item);
@@ -286,8 +287,14 @@ export class EditService {
         if (item.recordId) {
           recordsByRecordId.set(item.recordId, item);
         }
+      } else {
+        if (item.folderId) {
+          foldersByFolderId.set(item.folderId, item);
+        }
       }
     });
+
+    console.log(itemsByLinkId, items);
 
     const promises: Array<Promise<any>> = [];
 
@@ -319,7 +326,8 @@ export class EditService {
               const newData: FolderVOData = {
                 updatedDT: updatedItem.updatedDT
               };
-              (itemsByLinkId[updatedItem.folder_linkId] as FolderVO).update(newData);
+              const folder = (itemsByLinkId[updatedItem.folder_linkId] as FolderVO) || foldersByFolderId.get(updatedItem.folderId);
+              folder.update(newData);
             });
         }
 
@@ -423,7 +431,7 @@ export class EditService {
   }
 
   async openLocationDialog(item: ItemVO) {
-    this.dialog.open('LocationPickerComponent', { item }, { height: 'auto' } );
+    this.dialog.open('LocationPickerComponent', { item }, { height: 'auto', width: '600px' } );
   }
 
   openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {

@@ -74,7 +74,7 @@ export class FolderRepo extends BaseRepo {
   }
 
   public update(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const whitelist: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'displayName', 'description', 'displayDT', 'displayEndDT', 'view'];
+    const whitelist: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'displayName', 'description', 'displayDT', 'displayEndDT', 'view', 'locnId'];
 
     const data = folderVOs.map((vo) => {
       const updateData: FolderVOData = {};
