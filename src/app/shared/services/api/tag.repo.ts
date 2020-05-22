@@ -46,6 +46,10 @@ export class TagResponse extends BaseResponse {
   public getTagVOs(): TagVOData[] {
     const data = this.getResultsData();
 
+    if (!data[0]) {
+      return [];
+    }
+
     return data[0].map((result) => {
       return result.TagVO as TagVOData;
     });

@@ -1,9 +1,14 @@
 <ng-container *ngIf="!isDialog">
   <pr-tags [tags]="item.TagVOs" (click)="startEditing()"
     [canEdit]="true" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
-  <input type="text" class="new-tag form-control" placeholder="Add new tag" *ngIf="isEditing" @ngIfScaleAnimation
-    [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)">
-  <div class="edit-tags" *ngIf="isEditing" @ngIfScaleAnimation>
+  <div class="input-group" *ngIf="isEditing" @ngIfScaleAnimation [class.has-tags]="allTags?.length">
+    <input type="text" class="new-tag form-control" placeholder="Add new tag"
+      [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)">
+    <div class="input-group-append">
+      <button class="btn btn-primary" (click)="endEditing()">Done</button>
+    </div>
+  </div>
+  <div class="edit-tags" *ngIf="isEditing && allTags?.length" @ngIfScaleAnimation>
     <div class="edit-tag" *ngFor="let tag of allTags" [class.is-selected]="itemTagsById.has(tag.tagId)"
     (click)="onTagClick(tag)">
       <div class="select">
@@ -14,11 +19,11 @@
       </div>
     </div>
   </div>
-  <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
+  <!-- <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
     <button class="btn btn-primary btn-sm" (click)="endEditing()">
       Done
     </button>
-  </div>
+  </div> -->
 </ng-container>
 <ng-container *ngIf="isDialog">
   <div class="dialog-content">

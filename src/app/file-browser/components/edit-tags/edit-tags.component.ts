@@ -121,6 +121,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
   endEditing() {
     this.isEditing = false;
+    this.newTagName = null;
   }
 
   checkItemTags() {

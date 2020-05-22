@@ -1,5 +1,5 @@
+<div class="empty" *ngIf="!tags?.length">{{ canEdit && !isEditing ? 'Click to add tags' : 'No tags'}}</div>
 <ng-container *ngIf="tags?.length">
   <div class="tag" *ngFor="let tag of orderedTags; trackBy: tagTrackByFn"
   [@ngIfScaleAnimationDynamic]="animate ? 'animate' : 'static'">{{tag.name}}</div>
 </ng-container>
-<div class="empty" *ngIf="!tags?.length">{{ canEdit && !isEditing ? 'Click to add tags' : 'No tags'}}</div>
