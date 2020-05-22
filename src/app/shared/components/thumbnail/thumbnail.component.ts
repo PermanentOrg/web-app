@@ -15,6 +15,7 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
 })
 export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   @Input() item: ItemVO;
+  @Input() maxWidth;
 
   thumbLoaded = false;
 
@@ -77,15 +78,16 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   checkElementWidth() {
     const elemSize = this.element.clientWidth * this.dpiScale;
-    if (elemSize <= this.currentThumbWidth) {
+    const checkSize = this.maxWidth ? Math.min(this.maxWidth, elemSize) : elemSize;
+    if (checkSize <= this.currentThumbWidth) {
       return;
     }
     let targetWidth;
 
     for (const size of THUMB_SIZES) {
-      if (elemSize <= size) {
+      if (checkSize <= size) {
         targetWidth = size;
-      } else if (elemSize >= THUMB_SIZES[THUMB_SIZES.length - 1]) {
+      } else if (checkSize >= THUMB_SIZES[THUMB_SIZES.length - 1]) {
         targetWidth = THUMB_SIZES[THUMB_SIZES.length - 1];
       }
 
