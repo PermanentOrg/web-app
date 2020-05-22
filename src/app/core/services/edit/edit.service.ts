@@ -271,7 +271,7 @@ export class EditService {
     }
   }
 
-  updateItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
+  updateItems(items: any[], whitelist?: (keyof ItemVO)[]): Promise<FolderResponse | RecordResponse | any>   {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
@@ -294,13 +294,11 @@ export class EditService {
       }
     });
 
-    console.log(itemsByLinkId, items);
-
     const promises: Array<Promise<any>> = [];
 
     if (folders.length) {
       promises.push(
-        this.api.folder.update(folders)
+        this.api.folder.update(folders, whitelist)
       );
     } else {
       promises.push(Promise.resolve());
@@ -308,7 +306,7 @@ export class EditService {
 
     if (records.length) {
       promises.push(
-        this.api.record.update(records)
+        this.api.record.update(records, whitelist)
       );
     } else {
       promises.push(Promise.resolve());
@@ -326,6 +324,11 @@ export class EditService {
               const newData: FolderVOData = {
                 updatedDT: updatedItem.updatedDT
               };
+
+              if (updatedItem.TimezoneVO) {
+                newData.TimezoneVO = updatedItem.TimezoneVO;
+              }
+
               const folder = (itemsByLinkId[updatedItem.folder_linkId] as FolderVO) || foldersByFolderId.get(updatedItem.folderId);
               folder.update(newData);
             });
@@ -337,6 +340,11 @@ export class EditService {
             const newData: RecordVOData = {
               updatedDT: updatedItem.updatedDT
             };
+
+            if (updatedItem.TimezoneVO) {
+              newData.TimezoneVO = updatedItem.TimezoneVO;
+            }
+
             const record = (itemsByLinkId[updatedItem.folder_linkId] as RecordVO) || recordsByRecordId.get(updatedItem.recordId);
             record.update(newData);
           });

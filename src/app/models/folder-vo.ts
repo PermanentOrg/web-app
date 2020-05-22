@@ -144,7 +144,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
           continue;
         }
 
-        if (voData[key] !== undefined) {
+        if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
       }

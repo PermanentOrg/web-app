@@ -3,6 +3,9 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+const MIN_WHITELIST: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'folder_linkId'];
+const DEFAULT_WHITELIST: (keyof FolderVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT', 'displayEndDT', 'view'];
+
 export class FolderRepo extends BaseRepo {
   public getRoot(): Promise<FolderResponse> {
     return this.http.sendRequestPromise<FolderResponse>('/folder/getRoot', [], FolderResponse);
@@ -73,8 +76,10 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>('/folder/post', data, FolderResponse);
   }
 
-  public update(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const whitelist: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'displayName', 'description', 'displayDT', 'displayEndDT', 'view', 'locnId'];
+  public update(folderVOs: FolderVO[], whitelist = DEFAULT_WHITELIST): Promise<FolderResponse> {
+    if (whitelist !== DEFAULT_WHITELIST) {
+      whitelist = [...whitelist, ...MIN_WHITELIST];
+    }
 
     const data = folderVOs.map((vo) => {
       const updateData: FolderVOData = {};

@@ -124,7 +124,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public update (voData: RecordVOData | RecordVO): void {
     if (voData) {
       for ( const key in voData ) {
-        if (voData[key] !== undefined) {
+        if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
       }

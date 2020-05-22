@@ -3,6 +3,9 @@ import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+const MIN_WHITELIST: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'folder_linkId'];
+const DEFAULT_WHITELIST: (keyof RecordVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT'];
+
 export class RecordRepo extends BaseRepo {
   public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
@@ -40,8 +43,10 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequest<RecordResponse>('/record/postMetaBatch', data, RecordResponse);
   }
 
-  public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
-    const whitelist: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'displayName', 'description', 'displayDT', 'locnId'];
+  public update(recordVOs: RecordVO[], whitelist = DEFAULT_WHITELIST): Promise<RecordResponse> {
+    if (whitelist !== DEFAULT_WHITELIST) {
+      whitelist = [...whitelist, ...MIN_WHITELIST];
+    }
 
     const data = recordVOs.map((vo) => {
       const updateData: RecordVOData = {};

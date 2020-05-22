@@ -132,14 +132,9 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     } else {
       this.saving = true;
       try {
-        if (!this.currentLocation.locnId) {
-          const locnResponse = await this.api.locn.create(this.currentLocation);
-          this.currentLocation = locnResponse.getLocnVO();
-        }
-        console.log(this.item);
-        this.item.update({locnId: this.currentLocation.locnId});
-        await this.editService.updateItems([this.item]);
-        this.item.LocnVO = this.currentLocation;
+        this.item.update({LocnVO: this.currentLocation});
+        await this.editService.updateItems([this.item], ['LocnVO']);
+        // this.item.LocnVO = this.currentLocation;
         this.dialogRef.close();
         this.message.showMessage('Location saved.', 'success');
       } catch (err) {

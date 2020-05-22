@@ -54,7 +54,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   ngDoCheck() {
     if (this.item.dataStatus !== this.lastItemDataStatus) {
-      this.debug('change detection from data status');
       this.resetImage();
     }
   }
