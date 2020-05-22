@@ -56,11 +56,11 @@
     </div>
     <div class="sidebar-item">
       <label>Location</label>
-      <div class="sidebar-item-content">
+      <div class="sidebar-item-content" (click)="onLocationClick()">
         <span *ngIf="selectedItem.LocnVO">{{(selectedItem.LocnVO | prLocation)?.full}}</span>
         <span *ngIf="!selectedItem.LocnVO" class="sidebar-item-content-empty">Click to set location</span>
       </div>
-      <div class="sidebar-item-content">
+      <div class="sidebar-item-content" (click)="onLocationClick()">
         <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
       </div>
     </div>

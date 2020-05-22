@@ -1,6 +1,7 @@
 import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { SharedModule } from '@shared/shared.module';
 
@@ -18,6 +19,7 @@ import { FolderDescriptionComponent } from './components/folder-description/fold
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FileListControlsComponent } from './components/file-list-controls/file-list-controls.component';
 import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
+import { LocationPickerComponent } from './components/location-picker/location-picker.component';
 
 @NgModule({
   imports: [
@@ -25,6 +27,7 @@ import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
     RouterModule,
     SharedModule,
     DialogModule,
+    GoogleMapsModule
   ],
   exports: [
     FileListComponent,
@@ -34,7 +37,8 @@ import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
     VideoComponent,
     SidebarComponent,
     FileListControlsComponent,
-    EditTagsComponent
+    EditTagsComponent,
+    LocationPickerComponent
   ],
   declarations: [
     FileListComponent,
@@ -48,12 +52,14 @@ import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
     PublishComponent,
     FolderDescriptionComponent,
     SidebarComponent,
-    EditTagsComponent
+    EditTagsComponent,
+    LocationPickerComponent
   ],
   entryComponents: [
     SharingComponent,
     PublishComponent,
-    EditTagsComponent
+    EditTagsComponent,
+    LocationPickerComponent
   ]
 })
 export class FileBrowserComponentsModule {
@@ -69,6 +75,10 @@ export class FileBrowserComponentsModule {
     {
       token: 'EditTagsComponent',
       component: EditTagsComponent
+    },
+    {
+      token: 'LocationPickerComponent',
+      component: LocationPickerComponent
     }
   ];
 

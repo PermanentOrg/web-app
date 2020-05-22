@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter  } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 import { partition, remove, find } from 'lodash';
+import { environment } from '@root/environments/environment';
+import debug from 'debug';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -88,6 +88,11 @@ interface EditServiceClipboard {
 export class EditService {
   private clipboard: EditServiceClipboard;
 
+  private isGoogleMapsApiLoaded = false;
+  private googleMapsLoadedDeferred: Deferred;
+
+  private debug = debug('service:editService');
+
   constructor(
     private api: ApiService,
     private message: MessageService,
@@ -96,7 +101,45 @@ export class EditService {
     private prompt: PromptService,
     private accountService: AccountService,
     private dialog: Dialog
-  ) { }
+  ) {
+    this.loadGoogleMapsApi();
+  }
+
+  loadGoogleMapsApi() {
+    if (window['google']?.maps) {
+      this.debug('Google Maps API already loaded, skipping');
+      this.isGoogleMapsApiLoaded = true;
+      return;
+    }
+
+    if (!this.isGoogleMapsApiLoaded) {
+      this.googleMapsLoadedDeferred = new Deferred();
+
+      const script = document.createElement('script');
+      const callbackName = '__gmapsLoaded';
+      const apiKey = environment.google.apiKey;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}`;
+      script.defer = true;
+      script.async = true;
+
+
+      window[callbackName] = () => {
+        this.isGoogleMapsApiLoaded = true;
+        this.googleMapsLoadedDeferred.resolve();
+        this.debug('Google Maps API loaded');
+      };
+
+      document.head.appendChild(script);
+    }
+  }
+
+  waitForGoogleMapsApi() {
+    if (this.isGoogleMapsApiLoaded) {
+      return Promise.resolve();
+    } else {
+      return this.googleMapsLoadedDeferred.promise;
+    }
+  }
 
   sendToClipboard(items: ItemVO[], operation: EditServiceClipboardOperation) {
     this.clipboard = {
@@ -377,6 +420,10 @@ export class EditService {
 
   async openTagsDialog(item: ItemVO) {
     this.dialog.open('EditTagsComponent', { item }, { height: 'auto' });
+  }
+
+  async openLocationDialog(item: ItemVO) {
+    this.dialog.open('LocationPickerComponent', { item }, { height: 'auto' } );
   }
 
   openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {

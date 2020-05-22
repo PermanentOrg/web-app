@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -10,8 +10,6 @@ import { FileListItemComponent } from '@fileBrowser/components/file-list-item/fi
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { VideoComponent } from '@shared/components/video/video.component';
-import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
-import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
 
@@ -35,4 +33,5 @@ export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-bro
     VideoComponent
   ]
 })
-export class FileBrowserModule { }
+export class FileBrowserModule {
+}

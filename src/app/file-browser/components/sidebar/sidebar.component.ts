@@ -85,6 +85,10 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     }
   }
 
+  onLocationClick() {
+    this.editService.openLocationDialog(this.selectedItem);
+  }
+
   getFolderContentsCount() {
     if (this.selectedItem instanceof FolderVO && this.selectedItem.FolderSizeVO) {
       const fileCount = this.selectedItem.FolderSizeVO.allRecordCountShallow;
