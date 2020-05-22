@@ -74,7 +74,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
       newData[property] = value;
       try {
         this.selectedItem.update(newData);
-        await this.editService.updateItems([this.selectedItem]);
+        await this.editService.updateItems([this.selectedItem], [property]);
       } catch (err) {
         if (err instanceof FolderResponse || err instanceof RecordResponse ) {
           const revertData: any = {};
