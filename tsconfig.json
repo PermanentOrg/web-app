@@ -36,6 +36,6 @@
     }
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true
+    "fullTemplateTypeCheck": false
   }
 }
