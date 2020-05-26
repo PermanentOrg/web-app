@@ -4,7 +4,7 @@ import { FolderVO } from '@models/folder-vo';
 export * from '@models/vo-types';
 
 export { AccountPasswordVO } from '@models/account-password-vo';
-export { AccountVO } from '@models/account-vo';
+export { AccountVO, NotificationPreferencesI } from '@models/account-vo';
 export { ArchiveVO } from '@models/archive-vo';
 export { AuthVO } from '@models/auth-vo';
 export { BillingCardVO } from '@models/billing-card-vo';

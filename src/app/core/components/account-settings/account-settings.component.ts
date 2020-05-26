@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, AccountVO } from '@models';
+import { FolderVO, AccountVO, NotificationPreferencesI } from '@models';
+import { cloneDeep } from 'lodash';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-account-settings',
@@ -10,9 +12,11 @@ import { FolderVO, AccountVO } from '@models';
 })
 export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
+  public preferences: NotificationPreferencesI;
   constructor(
     private accountService: AccountService,
-    private dataService: DataService
+    private dataService: DataService,
+    private api: ApiService
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
       displayName: 'Account',
@@ -21,9 +25,18 @@ export class AccountSettingsComponent implements OnInit {
     }), true);
 
     this.account = this.accountService.getAccount();
+    this.preferences = cloneDeep(this.account.notificationPreferences);
+    console.log(this.preferences);
   }
 
   ngOnInit(): void {
+  }
+
+  async onPreferenceChange(path: string[], value: boolean) {
+    const response = await this.api.account.updateNotificationPreference(path.join('.'), value);
+    if (response.isSuccessful) {
+
+    }
   }
 
 }

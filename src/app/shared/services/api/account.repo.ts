@@ -1,4 +1,4 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO } from '@root/app/models';
+import { AccountVO, AccountPasswordVO, ArchiveVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { Observable } from 'rxjs';
 
@@ -39,6 +39,14 @@ export class AccountRepo extends BaseRepo {
     }];
 
     return this.http.sendRequestPromise<AccountResponse>('/account/update', data, AccountResponse);
+  }
+
+  public updateNotificationPreference(preferencePath: string, value: boolean) {
+    const data = [{
+      SimpleVO: new SimpleVO({key: preferencePath, value})
+    }];
+
+    return this.http.sendRequestPromise<AccountResponse>('/account/updatePreference', data, AccountResponse);
   }
 }
 
