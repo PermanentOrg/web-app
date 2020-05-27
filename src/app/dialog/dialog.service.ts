@@ -5,6 +5,7 @@ import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
 import { DOCUMENT } from '@angular/common';
+import debug from 'debug';
 
 type DialogComponentToken =
   'FamilySearchImportComponent' |
@@ -26,6 +27,7 @@ export interface DialogOptions {
 const DEFAULT_OPTIONS: DialogOptions = {
   height: 'fullscreen'
 };
+
 
 export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
@@ -71,6 +73,8 @@ export class Dialog {
 
   private bodyScrollAllowed = true;
 
+  private debug = debug('service:dialogService');
+
   constructor(
     private app: ApplicationRef,
     private resolver: ComponentFactoryResolver,
@@ -99,6 +103,7 @@ export class Dialog {
     if (!this.registeredComponents[componentData.token]) {
       this.registeredComponents[componentData.token] = componentData.component;
       this.componentResolvers[componentData.token] = resolver;
+      this.debug('register component %s', componentData.token);
     } else if (!allowDupes) {
       throw new Error(`Dialog - component with token ${componentData.token} already registered`);
     }
@@ -135,6 +140,8 @@ export class Dialog {
 
     const newDialog = this.createDialog(token, data, options);
     newDialog.dialogComponent.show();
+
+    this.debug('open dialog %s %o %o', token, data, options);
 
     if (this.bodyScrollAllowed) {
       this.document.body.style.overflow = 'hidden';
