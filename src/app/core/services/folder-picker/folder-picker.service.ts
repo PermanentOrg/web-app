@@ -16,7 +16,7 @@ export class FolderPickerService {
     this.component = toRegister;
   }
 
-  deregisterComponent() {
+  unregisterComponent() {
     this.component = null;
   }
 

@@ -4,7 +4,7 @@ import { PublicRoutingModule } from './public.routes';
 import { RouterModule } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { } from '@core/services/folder-picker/folder-picker.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { PublicItemComponent } from './components/public-item/public-item.component';
@@ -35,8 +35,7 @@ import { BrowserModule } from '@angular/platform-browser';
   ],
   providers: [
     DataService,
-    FolderViewService,
-    PromptService
+    FolderViewService
   ]
 })
 export class PublicModule {

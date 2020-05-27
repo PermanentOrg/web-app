@@ -5,7 +5,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 
 import { InviteVO, InviteVOData, FolderVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';

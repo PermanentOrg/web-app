@@ -5,7 +5,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';

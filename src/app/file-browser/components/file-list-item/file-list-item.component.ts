@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, RouterState } from '@angular/router';
 import { clone, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
-import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@shared/services/prompt/prompt.service';
 
 import { FolderVO, RecordVO, FolderVOData, RecordVOData, ShareVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -239,7 +239,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   }
 
   ngOnDestroy() {
-    this.dataService.deregisterItem(this.item);
+    this.dataService.unregisterItem(this.item);
     unsubscribeAll(this.subscriptions);
   }
 

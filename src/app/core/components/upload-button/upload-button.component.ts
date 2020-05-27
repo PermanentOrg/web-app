@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Optional } 
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
@@ -51,7 +51,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
   }
 
   ngOnDestroy() {
-    this.upload.deregisterButtonComponent(this);
+    this.upload.unregisterButtonComponent(this);
     unsubscribeAll(this.subscriptions);
   }
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharePreviewRoutingModule } from './share-preview.routes';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -21,8 +21,7 @@ import { DialogModule } from '../dialog/dialog.module';
   ],
   providers: [
     DataService,
-    FolderViewService,
-    PromptService
+    FolderViewService
   ]
 })
 export class SharePreviewModule {

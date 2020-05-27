@@ -10,7 +10,7 @@ import { fadeAnimation, ngIfFadeInAnimation } from '@shared/animations';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';

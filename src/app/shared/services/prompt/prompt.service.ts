@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validator, ValidationErrors } from '@angular/forms';
+import debug from 'debug';
 
 import { FormInputConfig, FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 
@@ -38,11 +39,16 @@ export interface PromptConfig {
   doneReject?: Function;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PromptService {
   private component: PromptComponent;
+  private debug = debug('service:promptService');
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+    this.debug('created');
+  }
 
   registerComponent(toRegister: PromptComponent) {
     if (this.component) {
@@ -50,10 +56,12 @@ export class PromptService {
     }
 
     this.component = toRegister;
+    this.debug('component registered');
   }
 
-  deregisterComponent() {
+  unregisterComponent() {
     this.component = null;
+    this.debug('component unregistered');
   }
 
   prompt(fields: PromptField[], title: string, savePromise?: Promise<any>, saveText?: string, cancelText?: string, template?: string) {

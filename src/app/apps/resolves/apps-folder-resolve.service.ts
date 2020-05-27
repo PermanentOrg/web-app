@@ -59,7 +59,7 @@ export class AppsFolderResolveService implements Resolve<any> {
     return this.dataService.fetchFullItems(appsFolder.ChildItemVOs, true)
     .then(() => {
       appsFolder.ChildItemVOs.forEach((item) => {
-        this.dataService.deregisterItem(item);
+        this.dataService.unregisterItem(item);
       });
       return appsFolder;
     });

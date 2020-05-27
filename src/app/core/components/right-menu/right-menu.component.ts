@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderResponse} from '@shared/services/api/index.repo';

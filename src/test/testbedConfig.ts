@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';

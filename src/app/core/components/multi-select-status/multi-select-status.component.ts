@@ -3,7 +3,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { Subscription } from 'rxjs';
 import { ItemVO } from '@models';
 import { EditService, ItemActions } from '@core/services/edit/edit.service';
-import { PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptButton } from '@shared/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-multi-select-status',

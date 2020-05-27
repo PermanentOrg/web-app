@@ -1,4 +1,4 @@
-import { PromptField } from '@core/services/prompt/prompt.service';
+import { PromptField } from '@shared/services/prompt/prompt.service';
 import { Validators } from '@angular/forms';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { clone } from 'lodash';

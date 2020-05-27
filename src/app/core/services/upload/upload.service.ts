@@ -68,7 +68,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     this.buttonComponents.push(component);
   }
 
-  deregisterButtonComponent(component: UploadButtonComponent) {
+  unregisterButtonComponent(component: UploadButtonComponent) {
     remove(this.buttonComponents, component);
   }
 

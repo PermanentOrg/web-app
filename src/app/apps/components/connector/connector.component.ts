@@ -12,7 +12,7 @@ import { ConnectorOverviewVO, FolderVO, SimpleVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton } from '@shared/services/prompt/prompt.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
 

@@ -7,7 +7,7 @@
 // import { ShareResponse } from '@shared/services/api/share.repo';
 // import { SharedModule } from '@shared/shared.module';
 // import { MessageService } from '@shared/services/message/message.service';
-// import { PromptService } from '@core/services/prompt/prompt.service';
+// import { PromptService } from '@shared/services/prompt/prompt.service';
 
 // const getSharesData = require('@root/test/responses/share.getShares.success.json');
 

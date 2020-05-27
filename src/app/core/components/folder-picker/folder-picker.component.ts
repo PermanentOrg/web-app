@@ -142,6 +142,6 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.folderPickerService.deregisterComponent();
+    this.folderPickerService.unregisterComponent();
   }
 }

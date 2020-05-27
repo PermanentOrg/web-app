@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationVO, FolderVO, ArchiveVO } from '@models';
 import { Deferred } from '@root/vendor/deferred';

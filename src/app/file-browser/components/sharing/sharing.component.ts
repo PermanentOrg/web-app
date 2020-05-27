@@ -3,7 +3,7 @@ import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core'
 import { remove, find, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
-import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptButton, PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -197,6 +197,7 @@ export class SharingComponent implements OnInit {
         });
     } catch (err) {
       this.loadingRelations = false;
+      console.error(err);
     }
   }
 

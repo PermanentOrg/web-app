@@ -78,7 +78,7 @@ export class DataService {
     }
   }
 
-  public deregisterItem(item: ItemVO) {
+  public unregisterItem(item: ItemVO) {
     delete this.byFolderLinkId[item.folder_linkId];
     if (item.archiveNbr) {
       delete this.byArchiveNbr[item.archiveNbr];
@@ -196,7 +196,7 @@ export class DataService {
 
         if (handleItemRegistration) {
           items.map(item => {
-            this.deregisterItem(item);
+            this.unregisterItem(item);
           });
         }
 

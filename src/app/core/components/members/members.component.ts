@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, AccountVO } from '@models';
 import { ActivatedRoute } from '@angular/router';
-import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@shared/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';

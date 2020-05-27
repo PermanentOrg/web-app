@@ -8,7 +8,7 @@ import { DataService } from '../data/data.service';
 import gsap from 'gsap';
 import { DeviceService } from '../device/device.service';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { MainComponent } from '@core/components/main/main.component';
 import { FolderVO } from '@models';
 import { AccountService } from '../account/account.service';

@@ -10,7 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData } from '@root/app/models';
 
 import { FolderResponse, RecordResponse, ShareResponse } from '@shared/services/api/index.repo';
-import { PromptButton, PromptService } from '../prompt/prompt.service';
+import { PromptButton, PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
