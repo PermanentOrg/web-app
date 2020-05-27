@@ -24,7 +24,7 @@ pipelines:
             - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run test_build
   branches:
     dev:
@@ -39,7 +39,7 @@ pipelines:
             - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build_dev
             - cd ..
             - mkdir mdot
@@ -74,7 +74,7 @@ pipelines:
             - git clone git@bitbucket.org:permanent-org/deploy.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build_dev
             - cd ..
             - mkdir mdot-responsive
@@ -97,7 +97,7 @@ pipelines:
             - git clone -b release/staging --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build_staging
             - cd ..
             - mkdir mdot
@@ -119,7 +119,7 @@ pipelines:
             - git clone -b release/production --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build
             - cd ..
             - mkdir mdot
