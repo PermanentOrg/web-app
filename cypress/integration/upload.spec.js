@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
-import * as helpers from '../../helpers/index';
-const accounts = require('../../fixtures/accounts.json');
+import * as helpers from '../helpers/index';
+const accounts = require('../fixtures/accounts.json');
 
 describe.skip('Upload', () => {
   it('uploads one file successfully', () => {

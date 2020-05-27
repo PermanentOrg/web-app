@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
 
-import * as helpers from '../../helpers/index';
-const viewports = require('../../fixtures/constants.json').viewports;
-const accounts = require('../../fixtures/accounts.json');
+import * as helpers from '../helpers/index';
+const viewports = require('../fixtures/constants.json').viewports;
+const accounts = require('../fixtures/accounts.json');
 
 let itemsCreated = [];
 
@@ -16,20 +16,12 @@ describe('File Management', () => {
       cy.viewport(...viewports.desktop.params);
     });
 
-    it('creates a new folder', () => {
+    it('creates and deletes a new folder', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
       const folderName = Date.now();
       helpers.fileList.createFolder(folderName);
-      itemsCreated.push(folderName);
-    });
-
-    it('deletes a new folder', () => {
-      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      cy.url().should('contain', 'myfiles');
-      const folderName = Date.now();
-      helpers.fileList.createFolder(folderName);
-      helpers.fileList.deleteItemItem(folderName);
+      helpers.fileList.deleteItem(folderName);
     });
   
     it('renames a folder', () => {
@@ -43,10 +35,10 @@ describe('File Management', () => {
       cy.focused().type(`{selectall}${newName}`);
       cy.get('.inline-value-controls').contains('Save').click();
       helpers.fileList.itemExists(newName);
-      itemsCreated.push(newName);
+      helpers.fileList.deleteItem(newName, true);
     });
 
-    it.only('sets the description on a folder', () => {
+    it('sets the description on a folder', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
       const folderName = Date.now();
@@ -56,43 +48,23 @@ describe('File Management', () => {
       cy.get('pr-sidebar').contains('Description').siblings('pr-inline-value-edit').click();
       cy.focused().type(`{selectall}${description}`);
       cy.get('.inline-value-controls').contains('Save').click();
-      itemsCreated.push(folderName);
       cy.get('pr-sidebar').contains('.inline-value-display', description).should('exist');
-    });
-
-    after(() => {
-      cy.clearCookies();
-      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      cy.url().should('contain', 'myfiles');
-      for (const folderName of itemsCreated) {
-        helpers.fileList.deleteItemItem(folderName); 
-      }
+      helpers.fileList.deleteItem(folderName, true);
     });
   });
 
   context(viewports.mobile.name, () => {
-    before(() => {
-      itemsCreated = [];
-    });
-
     beforeEach(() => {
       cy.viewport(...viewports.mobile.params);
     });
 
-    it('creates a new folder', () => {
+    it('creates and deletes a new folder', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
       const folderName = Date.now();
       helpers.fileList.createFolderMobile(folderName);
-      itemsCreated.push(folderName);
-    });
+      helpers.fileList.deleteItemMobile(folderName);
 
-    it('deletes a folder', () => {
-      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      cy.url().should('contain', 'myfiles');
-      const folderName = Date.now();
-      helpers.fileList.createFolderMobile(folderName);
-      helpers.fileList.deleteItemItemMobile(folderName);
     });
 
     it('renames a folder', () => {
@@ -100,21 +72,12 @@ describe('File Management', () => {
       cy.url().should('contain', 'myfiles');
       const folderName = Date.now();
       helpers.fileList.createFolderMobile(folderName);
-      helpers.clickItemActionMobile(folderName, 'Rename');
+      helpers.fileList.clickItemActionMobile(folderName, 'Rename');
       const secondFolderName = `rename${folderName}`;
-      helpers.typeIntoPromptField('#displayName', secondFolderName);
-      helpers.clickPromptButton('Rename');
+      helpers.prompt.typeIntoPromptField('#displayName', secondFolderName);
+      helpers.prompt.clickPromptFieldButton('Rename');
       helpers.fileList.itemExists(secondFolderName);
-      itemsCreated.push(secondFolderName);
-    });
-
-    after(() => {
-      cy.clearCookies();
-      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      cy.url().should('contain', 'myfiles');
-      for (const folderName of itemsCreated) {
-        helpers.fileList.deleteItemItemMobile(folderName); 
-      }
+      helpers.fileList.deleteItemMobile(secondFolderName);
     });
   })
 });

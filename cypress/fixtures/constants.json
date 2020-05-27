@@ -9,7 +9,7 @@
     },
     "mobile": {
       "name": "iPhone 6",
-      "params": "iphone-6"
+      "params": ["iphone-6"]
     }
   }
 }

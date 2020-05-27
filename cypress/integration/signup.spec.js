@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
-import * as helpers from '../../helpers/index';
-const accounts = require('../../fixtures/accounts.json');
+import * as helpers from '../helpers/index';
+const accounts = require('../fixtures/accounts.json');
 
 describe('Signup', () => {
   it.skip('signs up successfully', () => {

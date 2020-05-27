@@ -1,9 +1,9 @@
 /// <reference types="Cypress" />
 import { MailSlurp } from 'mailslurp-client';
 import promisify from 'cypress-promise'
-import * as helpers from '../../helpers/index';
-const accounts = require('../../fixtures/accounts.json');
-const apiKeys = require('../../fixtures/constants.json').apiKey;
+import * as helpers from '../helpers/index';
+const accounts = require('../fixtures/accounts.json');
+const apiKeys = require('../fixtures/constants.json').apiKey;
 const mailslurp = new MailSlurp({apiKey: apiKeys.mailslurp});
 
 describe('Login', () => {

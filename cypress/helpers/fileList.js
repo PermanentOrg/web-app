@@ -27,12 +27,18 @@ export function clickItem(itemName, clickOnly) {
   }
 }
 
+export function doubleClickItem(itemName) {
+  cy.get('pr-file-list').contains(itemName).parent().dblclick();
+}
+
 export function itemExists(folderName) {
   cy.get('pr-file-list').contains(folderName).should('exist');
 }
 
-export function deleteItem(item) {
-  cy.get('pr-file-list').contains(item).parent().click();
+export function deleteItem(item, alreadySelected) {
+  if (!alreadySelected) {
+    cy.get('pr-file-list').contains(item).parent().click();
+  }
   clickItemAction('Delete');
   cy.get('#confirm').contains('Delete').click();
   cy.get('pr-file-list').contains(item).should('not.exist');
