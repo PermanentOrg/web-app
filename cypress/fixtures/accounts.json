@@ -1,0 +1,13 @@
+{
+  "testAccount": {
+    "name": "Test Account",
+    "email": "tstr@permanent.org",
+    "password": "Abc123!!!!"
+  },
+  "mailslurpDev": {
+    "name": "Mailslurp Dev",
+    "email": "7f96fb52-8b87-4747-b79d-058b96aa7c7a@mailslurp.com",
+    "password": "Abc123!!!!",
+    "inboxId": "7f96fb52-8b87-4747-b79d-058b96aa7c7a"
+  }
+}
