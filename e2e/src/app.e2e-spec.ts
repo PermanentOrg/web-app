@@ -98,7 +98,7 @@ describe('File Navigation Flow', () => {
       initialCount = count;
       element(by.css('nav .right-menu-toggler')).click();
       browser.sleep(HAMBURGER_MENU_DELAY);
-      element(by.linkText('Create New Folder')).click();
+      element(by.linkText('Create new folder')).click();
       browser.sleep(HAMBURGER_MENU_DELAY);
       element(by.id('folderName')).sendKeys(newFolderName);
       element(by.buttonText('Create Folder')).click();

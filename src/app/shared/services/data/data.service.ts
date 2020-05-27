@@ -49,12 +49,12 @@ export class DataService {
   private thumbRefreshQueue: Array<ItemVO> = [];
   private thumbRefreshTimeout;
 
-  public multiSelectItems: Map<number, ItemVO> = new Map();
+  public multiclickItems: Map<number, ItemVO> = new Map();
 
   private selectedItems: SelectedItemsMap = new Set();
   private selectedItemsSubject: BehaviorSubject<SelectedItemsMap> = new BehaviorSubject(this.selectedItems);
-  private lastManualSelectItem: ItemVO;
-  private lastArrowSelectItem: ItemVO;
+  private lastManualclickItem: ItemVO;
+  private lastArrowclickItem: ItemVO;
 
   private showItemSubject = new Subject<ItemVO>();
   private itemToShowAfterNavigate: ItemVO;
@@ -457,13 +457,13 @@ export class DataService {
       case 'click':
         switch (selectEvent.modifierKey) {
           case 'ctrl':
-            this.selectItemSingle(selectEvent.item, false);
+            this.clickItemSingle(selectEvent.item, false);
             break;
           case 'shift':
-            this.selectItemsBetweenItems(this.lastManualSelectItem, selectEvent.item);
+            this.clickItemsBetweenItems(this.lastManualclickItem, selectEvent.item);
             break;
           default:
-            this.selectItemSingle(selectEvent.item);
+            this.clickItemSingle(selectEvent.item);
         }
         break;
       case 'key':
@@ -471,30 +471,30 @@ export class DataService {
           case 'up':
           case 'down':
             const items = this.currentFolder.ChildItemVOs;
-            const index = this.lastManualSelectItem ? findIndex(items, this.lastManualSelectItem) : 0;
+            const index = this.lastManualclickItem ? findIndex(items, this.lastManualclickItem) : 0;
             if (!selectEvent.modifierKey) {
               let newIndex = index + (selectEvent.key === 'up' ? -1 : 1);
               newIndex = Math.max(0, newIndex);
               newIndex = Math.min(items.length - 1, newIndex);
               const newItem = items[newIndex];
-              if (newItem !== this.lastManualSelectItem) {
-                this.selectItemSingle(newItem);
+              if (newItem !== this.lastManualclickItem) {
+                this.clickItemSingle(newItem);
               }
             } else {
-              if (!this.lastArrowSelectItem) {
-                this.lastArrowSelectItem = this.lastManualSelectItem;
+              if (!this.lastArrowclickItem) {
+                this.lastArrowclickItem = this.lastManualclickItem;
               }
-              const indexEnd = this.lastArrowSelectItem ? findIndex(items, this.lastArrowSelectItem) : 0;
+              const indexEnd = this.lastArrowclickItem ? findIndex(items, this.lastArrowclickItem) : 0;
               let newIndex = indexEnd + (selectEvent.key === 'up' ? -1 : 1);
               newIndex = Math.max(0, newIndex);
               newIndex = Math.min(items.length - 1, newIndex);
               const newItem = items[newIndex];
-              this.selectItemsBetweenIndicies(index, newIndex);
-              this.lastArrowSelectItem = newItem;
+              this.clickItemsBetweenIndicies(index, newIndex);
+              this.lastArrowclickItem = newItem;
             }
             break;
           case 'a':
-            this.selectItemsBetweenIndicies(0, this.currentFolder.ChildItemVOs.length - 1);
+            this.clickItemsBetweenIndicies(0, this.currentFolder.ChildItemVOs.length - 1);
             break;
         }
         break;
@@ -506,7 +506,7 @@ export class DataService {
     this.selectedItemsSubject.next(this.selectedItems);
   }
 
-  selectItemSingle(item: ItemVO, replace = true) {
+  clickItemSingle(item: ItemVO, replace = true) {
     if (this.selectedItems.has(item)) {
       if (this.selectedItems.size > 1 && replace) {
         this.selectedItems.clear();
@@ -519,7 +519,7 @@ export class DataService {
     } else {
       if (replace) {
         this.selectedItems.clear();
-        this.lastManualSelectItem = this.lastArrowSelectItem = item;
+        this.lastManualclickItem = this.lastArrowclickItem = item;
       }
       this.selectedItems.add(item);
     }
@@ -531,7 +531,7 @@ export class DataService {
     return this.fetchFullItems(Array.from(this.selectedItems.keys()));
   }
 
-  selectItemsBetweenIndicies(item1Index: number, item2Index: number) {
+  clickItemsBetweenIndicies(item1Index: number, item2Index: number) {
     const items = this.currentFolder.ChildItemVOs;
 
     this.selectedItems.clear();
@@ -546,12 +546,12 @@ export class DataService {
     this.selectedItemsSubject.next(this.selectedItems);
   }
 
-  selectItemsBetweenItems(item1: ItemVO, item2: ItemVO) {
+  clickItemsBetweenItems(item1: ItemVO, item2: ItemVO) {
     const items = this.currentFolder.ChildItemVOs;
     const item1Index = item1 ? findIndex(items, item1) : 0;
     const item2Index = findIndex(items, item2);
 
-    this.selectItemsBetweenIndicies(item1Index, item2Index);
+    this.clickItemsBetweenIndicies(item1Index, item2Index);
   }
 
   public setMultiSelect(enabled: boolean) {
@@ -560,16 +560,16 @@ export class DataService {
 
     if (!this.multiSelectEnabled) {
       setTimeout(() => {
-        this.multiSelectItems.clear();
+        this.multiclickItems.clear();
       }, 500);
     }
   }
 
   public setItemMultiSelectStatus(item: ItemVO, selected: boolean) {
     if (selected) {
-      this.multiSelectItems.set(item.folder_linkId, item);
+      this.multiclickItems.set(item.folder_linkId, item);
     } else {
-      this.multiSelectItems.delete(item.folder_linkId);
+      this.multiclickItems.delete(item.folder_linkId);
     }
   }
 
@@ -577,7 +577,7 @@ export class DataService {
     this.showItemSubject.next(item);
     if (select) {
       this.clearSelectedItems();
-      this.selectItemSingle(this.byFolderLinkId[item.folder_linkId], true);
+      this.clickItemSingle(this.byFolderLinkId[item.folder_linkId], true);
       this.debug('selected item %o', item);
     }
   }
