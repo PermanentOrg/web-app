@@ -3,20 +3,20 @@
 export function createFolder(folderName) {
   cy.get('.sidebar-align > .btn-primary').should('contain.text', 'New folder').click();
   cy.get('.prompt').should('be.visible');
-  cy.get('.prompt-title').should('contain.text', 'Create New Folder');
+  cy.get('.prompt-title').should('contain.text', 'Create new folder');
 
   cy.get('#folderName').type(folderName);
-  cy.get('.prompt-field-buttons > .btn').contains('Create Folder').click();
+  cy.get('.prompt-field-buttons > .btn').contains('Create folder').click();
   cy.get('pr-file-list').contains(folderName).should('exist');
 }
 
 export function createFolderMobile(folderName) {
   cy.get('.nav-mobile > .right-menu-toggler').click();
-  cy.get('pr-right-menu').contains('Create New Folder').click();
+  cy.get('pr-right-menu').contains('Create new folder').click();
   cy.get('.prompt').should('be.visible');
-  cy.get('.prompt-title').should('contain.text', 'Create New Folder');
+  cy.get('.prompt-title').should('contain.text', 'Create new folder');
   cy.get('#folderName').type(folderName);
-  cy.get('.prompt-field-buttons').contains('Create Folder').click();
+  cy.get('.prompt-field-buttons').contains('Create folder').click();
   cy.get('pr-file-list').contains(folderName).should('exist');
 }
 

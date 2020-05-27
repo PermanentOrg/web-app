@@ -153,51 +153,51 @@ export class SharingComponent implements OnInit {
       });
   }
 
-  addShareMember() {
+  async addShareMember() {
     this.loadingRelations = true;
     let isExistingRelation = false;
-    return this.relationshipService.get()
-      .catch(() => {
-        this.loadingRelations = false;
-      })
-      .then((relations) => {
-        this.loadingRelations = false;
-        const config: ArchivePickerComponentConfig = {
-          shareItem: this.shareItem
-        };
+    try {
+      const relations = await this.relationshipService.get();
+      this.loadingRelations = false;
+      const config: ArchivePickerComponentConfig = {
+        shareItem: this.shareItem
+      };
 
-        if (relations && relations.length) {
-          config.relations = relations.filter((relation) => {
-            return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId})
-              && relation.status === 'status.generic.ok';
-          });
-        }
-
-        return this.dialog.open('ArchivePickerComponent', config);
-      })
-      .then((archive: ArchiveVO) => {
-        const newShareVo = new ShareVO({
-          ArchiveVO: archive,
-          accessRole: 'access.role.viewer',
-          archiveId: archive.archiveId,
-          folder_linkId: this.shareItem.folder_linkId
+      if (relations && relations.length) {
+        config.relations = relations.filter((relation) => {
+          return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId})
+            && relation.status === 'status.generic.ok';
         });
+      }
 
-        isExistingRelation = this.relationshipService.hasRelation(archive);
+      return this.dialog.open('ArchivePickerComponent', config)
+        .then((archive: ArchiveVO) => {
+          const newShareVo = new ShareVO({
+            ArchiveVO: archive,
+            accessRole: 'access.role.viewer',
+            archiveId: archive.archiveId,
+            folder_linkId: this.shareItem.folder_linkId
+          });
 
-        return this.editShareVo(newShareVo);
-      })
-      .then(() => {
-        if (isExistingRelation) {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
-        } else {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
-        }
-      })
-      .catch(() => {
-      });
+          isExistingRelation = this.relationshipService.hasRelation(archive);
 
-
+          return this.editShareVo(newShareVo);
+        })
+        .then(() => {
+          if (isExistingRelation) {
+            this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
+          } else {
+            this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            console.error('Error in archive picker', err);
+          }
+        });
+    } catch (err) {
+      this.loadingRelations = false;
+    }
   }
 
 

@@ -24,9 +24,12 @@ describe.only('Relationship sharing', () => {
       helpers.fileList.createFolder(folderName);
       helpers.fileList.clickItem(folderName);
       helpers.fileList.clickItemAction('Share');
-      cy.contains('pr-sharing button', 'Add').click({force: true});
+      cy.wait(5000);
+      cy.get('pr-sharing').should('be.visible');
+      cy.contains('button', 'Add').click();
+      cy.wait(5000);
       cy.get('pr-archive-picker').should('be.visible');
-      cy.get('pr-archive-small').contains(archives.shareWithArchive).click();
+      // cy.get('pr-archive-small').contains(archives.shareWithArchive).click();
     });
   })
 });
