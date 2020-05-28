@@ -140,7 +140,9 @@
   <div class="sidebar-item">
     <label>Shared With</label>
     <div class="sidebar-item-content">
-      Some shared archives?
+      <div class="shared-with-archive" *ngFor="let share of selectedItem.ShareVOs">
+        The {{share.ArchiveVO.fullName}} Archive
+      </div>
     </div>
   </div>
 </div>

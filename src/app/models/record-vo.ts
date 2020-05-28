@@ -98,7 +98,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public fileDurationInSecs;
   public batchNbr;
   public RecordExifVO;
-  public ShareVOs;
+  public ShareVOs: ShareVO[];
   public AccessVO;
 
   constructor(voData: RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
