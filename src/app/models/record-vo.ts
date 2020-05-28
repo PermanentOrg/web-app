@@ -174,7 +174,7 @@ export interface RecordVOData extends BaseVOData {
   folder_linkId?: number;
   parentFolderId?: number;
   position?: any;
-  accessRole?: any;
+  accessRole?: AccessRoleType;
   folderArchiveId?: number;
   folder_linkType?: any;
   pathAsFolder_linkId?: any;

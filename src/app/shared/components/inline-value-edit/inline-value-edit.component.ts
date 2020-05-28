@@ -2,8 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { ngIfScaleAnimation } from '@shared/animations';
 import { NgbDate, NgbTimeStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from '@permanent.org/vis-timeline';
-import { ItemVO } from '@models';
+import { ItemVO, ArchiveVO } from '@models';
 import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
+import { AccountService } from '@shared/services/account/account.service';
+import { checkMinimumAccess, AccessRole } from '@models/access-role';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea';
 
@@ -21,6 +23,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() loading = false;
   @Input() itemId: any;
   @Input() item: ItemVO;
+  @Input() currentArchive: ArchiveVO;
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
@@ -47,7 +50,20 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     }
   }
 
+  checkAccess() {
+    if (!this.item || !this.currentArchive) {
+      return true;
+    }
+
+    return checkMinimumAccess(this.currentArchive.accessRole, AccessRole.Editor)
+      && checkMinimumAccess(this.item.accessRole, AccessRole.Editor);
+  }
+
   startEdit() {
+    if (!this.checkAccess()) {
+      return false;
+    }
+
     if (this.type === 'date') {
       this.editValue = moment.utc(this.displayValue).toISOString();
       this.setNgbDateAndTime();
