@@ -11,6 +11,8 @@ export interface RouteData {
   showFolderViewToggle?: boolean;
   showFolderDescription?: boolean;
 
+  singleFile?: boolean;
+
   checkFolderViewOnNavigate?: boolean;
   noFileListPadding?: boolean;
   fileListCentered?: boolean;

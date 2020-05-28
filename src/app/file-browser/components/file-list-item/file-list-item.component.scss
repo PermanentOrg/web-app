@@ -132,6 +132,22 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   @include file-list-col-access;
 }
 
+.shared-by {
+  @include file-list-col-shared-by;
+  display: flex;
+  align-items: center;
+
+  $thumb-size: $row-height - 20px;
+
+  .archive-thumb {
+    width: $thumb-size;
+    height: $thumb-size;
+    flex: 0 0 $thumb-size;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
+
 .actions {
   .right-menu-toggler {
     padding: 0px 0.5rem;

@@ -9,12 +9,18 @@
   <div class="name">
     {{item.displayName}}
   </div>
-  <div class="type" *ngIf="!inGridView">
+  <div class="type" *ngIf="!showAccess && !inGridView">
     {{item.type | prConstants | titlecase }}
   </div>
   <div class="date" *ngIf="!showAccess && item.dataStatus > 0" @ngIfFadeInAnimation>
     <div class="date-top">{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
     <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
+  </div>
+  <div class="shared-by" *ngIf="showAccess && !inGridView">
+    <ng-container *ngIf="item.ArchiveVOs[0]">
+      <div class="archive-thumb" prBgImage [bgSrc]="item.ArchiveVOs[0].thumbURL200" [cover]="true"></div>
+      <span>The {{item.ArchiveVOs[0]?.fullName}} Archive</span>
+    </ng-container>
   </div>
   <div class="access" *ngIf="showAccess && !inGridView">
     {{item.accessRole | prConstants | titlecase}}

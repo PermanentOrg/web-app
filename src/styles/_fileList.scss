@@ -2,7 +2,7 @@ pr-sidebar {
   transform: translateX(100%);
 }
 
-pr-file-list {
+pr-file-list, pr-shares {
   width: 100%;
   @include after($tablet-horizontal) {
     &.show-sidebar {

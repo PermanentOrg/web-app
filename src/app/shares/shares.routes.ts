@@ -7,12 +7,13 @@ import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-vi
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ShareByMeComponent } from '@shares/components/share-by-me/share-by-me.component';
 import { ShareWithMeComponent } from '@shares/components/share-with-me/share-with-me.component';
+import { RoutesWithData } from '../app.routes';
 
 const sharesRootResolve = {
   shares: SharesResolveService
 };
 
-const shareRootChildren = [
+const shareRootChildren: RoutesWithData = [
   {
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,
@@ -25,18 +26,15 @@ const shareRootChildren = [
   }
 ];
 
-export const routes: Routes = [
+export const routes: RoutesWithData = [
   {
     path: '',
     component: SharesComponent,
     resolve: sharesRootResolve,
-    children: shareRootChildren
-  },
-  {
-    path: ':shareArchiveNbr',
-    component: SharesComponent,
-    resolve: sharesRootResolve,
-    children: shareRootChildren
+    children: shareRootChildren,
+    data: {
+      showSidebar: true
+    }
   },
   {
     path: ':archiveNbr/:folderLinkId',

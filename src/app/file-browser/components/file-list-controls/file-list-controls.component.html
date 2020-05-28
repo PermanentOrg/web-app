@@ -6,13 +6,16 @@
         <span class="col-title" (click)="onSortClick('name')">Name</span>
         <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
       </div>
-      <div class="type" [class.active-sort]="currentSort === 'type'" [class.sort-desc]="sortDesc">
+      <div class="type" *ngIf="!showAccess" [class.active-sort]="currentSort === 'type'" [class.sort-desc]="sortDesc">
         <span class="col-title" (click)="onSortClick('type')">Type</span>
         <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
       </div>
       <div class="date" *ngIf="!showAccess" [class.active-sort]="currentSort === 'date'" [class.sort-desc]="sortDesc">
         <span class="col-title" (click)="onSortClick('date')">Date</span>
         <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
+      </div>
+      <div class="shared-by" *ngIf="showAccess">
+        <span class="col-title">Shared by</span>
       </div>
       <div class="access" *ngIf="showAccess">
         <span class="col-title">Access</span>

@@ -124,6 +124,10 @@
     @include file-list-col-access;
   }
 
+  .shared-by {
+    @include file-list-col-shared-by;
+  }
+
   .single-col-sort {
     padding: 0 10px;
   }

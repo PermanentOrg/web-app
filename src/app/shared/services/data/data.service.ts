@@ -14,7 +14,7 @@ import { TagsService } from '@core/services/tags/tags.service';
 
 const THUMBNAIL_REFRESH_INTERVAL = 3000;
 
-export type SelectedItemsMap = Set<ItemVO>;
+export type SelectedItemsSet = Set<ItemVO>;
 
 export interface SelectKeyEvent {
   type: 'key';
@@ -51,8 +51,8 @@ export class DataService {
 
   public multiclickItems: Map<number, ItemVO> = new Map();
 
-  private selectedItems: SelectedItemsMap = new Set();
-  private selectedItemsSubject: BehaviorSubject<SelectedItemsMap> = new BehaviorSubject(this.selectedItems);
+  private selectedItems: SelectedItemsSet = new Set();
+  private selectedItemsSubject: BehaviorSubject<SelectedItemsSet> = new BehaviorSubject(this.selectedItems);
   private lastManualclickItem: ItemVO;
   private lastArrowclickItem: ItemVO;
 

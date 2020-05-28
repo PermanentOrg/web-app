@@ -5,7 +5,7 @@ import { ShareVO } from '@models/share-vo';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
-import { ItemVO } from '.';
+import { ItemVO, ArchiveVO } from '.';
 import { FolderType, SortType, FolderLinkType } from './vo-types';
 import { formatDateISOString } from '@shared/utilities/dateTime';
 import { LocnVOData } from './locn-vo';
@@ -99,6 +99,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
   public hasAttachments;
   public ChildItemVOs: ItemVO[];
   public ShareVOs: ShareVO[];
+  public ArchiveVOs: ArchiveVO[];
   public AccessVO;
   public AccessVOs;
 
@@ -208,6 +209,7 @@ export interface FolderVOData extends BaseVOData {
   DirectiveVOs?: any;
   TagVOs?: any;
   SharedArchiveVOs?: any;
+  ArchiveVOs?: ArchiveVO[];
   FolderSizeVO?: FolderSizeVOData;
   AttachmentRecordVOs?: any;
   hasAttachments?: any;

@@ -23,7 +23,7 @@ import { throttle, debounce, find } from 'lodash';
 import { gsap } from 'gsap';
 
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
-import { DataService, SelectClickEvent, SelectedItemsMap, SelectKeyEvent } from '@shared/services/data/data.service';
+import { DataService, SelectClickEvent, SelectedItemsSet, SelectKeyEvent } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
@@ -101,7 +101,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   isSorting = false;
 
-  selectedItems: SelectedItemsMap = new Set();
+  selectedItems: SelectedItemsSet = new Set();
 
   subscriptions: Subscription[] = [];
 
@@ -142,7 +142,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
     this.registerRouterEventHandlers();
     this.registerDataServiceHandlers();
-    this.registerDataServiceHandlers();
+    this.registerDragServiceHandlers();
   }
 
   registerRouterEventHandlers() {
