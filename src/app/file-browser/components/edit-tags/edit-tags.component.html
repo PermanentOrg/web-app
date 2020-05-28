@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isDialog">
-  <pr-tags [tags]="item.TagVOs" (click)="startEditing()"
-    [canEdit]="true" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
+  <pr-tags [tags]="item.TagVOs" (click)="startEditing()" [readOnly]="false" [class.clickable]="canEdit && !isEditing"
+    [canEdit]="canEdit" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
   <div class="input-group" *ngIf="isEditing" @ngIfScaleAnimation [class.has-tags]="allTags?.length">
     <input type="text" class="new-tag form-control" placeholder="Add new tag"
       [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)">

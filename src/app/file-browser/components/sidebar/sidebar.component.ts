@@ -3,10 +3,11 @@ import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { some } from 'lodash';
-import { ItemVO, FolderVO } from '@models';
+import { ItemVO, FolderVO, ArchiveVO, AccessRole } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
+import { AccountService } from '@shared/services/account/account.service';
 
 type SidebarTab =  'info' | 'details' | 'sharing';
 @Component({
@@ -16,7 +17,6 @@ type SidebarTab =  'info' | 'details' | 'sharing';
 })
 export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   currentTab: SidebarTab = 'info';
-
   selectedItem: ItemVO = this.dataService.currentFolder;
   selectedItems: ItemVO[];
 
@@ -25,10 +25,17 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   isLoading = false;
   isRootFolder = false;
 
+  currentArchive: ArchiveVO;
+
+  canEdit: boolean;
+
   constructor(
     private dataService: DataService,
-    private editService: EditService
+    private editService: EditService,
+    private accountService: AccountService
   ) {
+    this.currentArchive = this.accountService.getArchive();
+
     this.subscriptions.push(
       this.dataService.selectedItems$().subscribe(async selectedItems => {
         if (!selectedItems.size) {
@@ -51,6 +58,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           }
         }
 
+        this.checkCanEdit();
+
         this.isRootFolder = this.selectedItem?.type.includes('root');
       })
     );
@@ -61,6 +70,13 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
+  }
+
+  checkCanEdit() {
+    const items = this.selectedItems || [this.selectedItem];
+    const viewOnly = some(items, i => i.accessRole === 'access.role.viewer' || i.accessRole === 'access.role.contributor');
+
+    this.canEdit = !viewOnly && this.accountService.checkMinimumArchiveAccess(AccessRole.Editor);
   }
 
   setCurrentTab(tab: SidebarTab) {
@@ -86,7 +102,9 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   }
 
   onLocationClick() {
-    this.editService.openLocationDialog(this.selectedItem);
+    if (this.canEdit) {
+      this.editService.openLocationDialog(this.selectedItem);
+    }
   }
 
   getFolderContentsCount() {

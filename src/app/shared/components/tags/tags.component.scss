@@ -8,7 +8,9 @@ $gutter-size: 0.25rem;
 
   &.can-edit {
     min-height: 1.5rem + 0.75rem;
-    
+  }
+
+  &:not(.read-only) {
     .empty {
       color: $text-muted;
       padding: 0.25rem 0rem;

@@ -39,6 +39,13 @@ describe('Relationship Sharing', () => {
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
       cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+
+      helpers.fileList.itemSelectedInSidebar(folderName);
+      const disabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
+      for (const field of disabledFields) {
+        helpers.elements.sidebarFieldByName(field).find('.can-edit').should('not.exist');
+      }
+
       helpers.fileList.clickItem('subfolder 1');
       const disabledActions = ['Delete', 'Copy', 'Move', 'Share', 'Publish'];
       for (const action of disabledActions) {
@@ -48,7 +55,7 @@ describe('Relationship Sharing', () => {
       helpers.elements.newFolderButton().should('be.disabled');
     });
 
-    it('should share a folder with another archive as contributor', () => {
+    it.only('should share a folder with another archive as contributor', () => {
       helpers.sharing.createAndShareFolder(folderName, archives.shareWithArchive, 'access.role.contributor');
       itemsCreated.push(folderName);
 
@@ -65,6 +72,13 @@ describe('Relationship Sharing', () => {
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
       cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+
+      helpers.fileList.itemSelectedInSidebar(folderName);
+      const disabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
+      for (const field of disabledFields) {
+        helpers.elements.sidebarFieldByName(field).find('.can-edit').should('not.exist');
+      }
+
       helpers.fileList.clickItem('subfolder 1');
       const disabledActions = ['Delete', 'Copy', 'Move', 'Share', 'Publish'];
       for (const action of disabledActions) {
@@ -72,6 +86,7 @@ describe('Relationship Sharing', () => {
       }
       helpers.elements.desktopUploadButton().should('not.have.class', 'disabled');
       helpers.elements.newFolderButton().should('not.be.disabled');
+
     });
 
     it('should share a folder with another archive as editor', () => {
@@ -91,6 +106,13 @@ describe('Relationship Sharing', () => {
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
       cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+      
+      helpers.fileList.itemSelectedInSidebar(folderName);
+      const enabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
+      for (const field of enabledFields) {
+        helpers.elements.sidebarFieldByName(field).find('.can-edit').should('exist');
+      }
+
       helpers.fileList.clickItem('subfolder 1');
       const disabledActions = ['Delete', 'Copy', 'Move', 'Share', 'Publish'];
       for (const action of disabledActions) {
@@ -118,6 +140,13 @@ describe('Relationship Sharing', () => {
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
       cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+
+      helpers.fileList.itemSelectedInSidebar(folderName);
+      const enabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
+      for (const field of enabledFields) {
+        helpers.elements.sidebarFieldByName(field).find('.can-edit').should('exist');
+      }
+
       helpers.fileList.clickItem('subfolder 1');
       const enabledActions = ['Delete', 'Copy', 'Move'];
       for (const action of enabledActions) {
@@ -133,7 +162,7 @@ describe('Relationship Sharing', () => {
       helpers.elements.newFolderButton().should('not.be.disabled');
     });
 
-    it.only('should share a folder with another archive as owner', () => {
+    it('should share a folder with another archive as owner', () => {
       helpers.sharing.createAndShareFolder(folderName, archives.shareWithArchive, 'access.role.owner');
       itemsCreated.push(folderName);
 
@@ -150,6 +179,13 @@ describe('Relationship Sharing', () => {
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
       cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+
+      helpers.fileList.itemSelectedInSidebar(folderName);
+      const enabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
+      for (const field of enabledFields) {
+        helpers.elements.sidebarFieldByName(field).find('.can-edit').should('exist');
+      }
+
       helpers.fileList.clickItem('subfolder 1');
       const enabledActions = ['Delete', 'Copy', 'Move', 'Share', 'Publish'];
       for (const action of enabledActions) {

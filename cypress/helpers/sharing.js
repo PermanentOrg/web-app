@@ -3,9 +3,9 @@ import * as prompt from './prompt';
 
 export function shareExists(shareName, accessLevel) {
   if (!accessLevel) {
-    cy.get('pr-file-list-item').children().should('contain', shareName);
+    cy.contains('.file-list-item', shareName).should('exist');
   } else {
-    cy.get('pr-file-list-item').children().should('contain', shareName).and('contain', accessLevel);
+    cy.contains('.file-list-item', shareName).should('contain', accessLevel);
   }
 }
 

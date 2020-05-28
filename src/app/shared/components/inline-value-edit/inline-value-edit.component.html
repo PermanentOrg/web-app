@@ -1,18 +1,18 @@
 <ng-container [ngSwitch]="type" *ngIf="type">
   <ng-container *ngSwitchCase="'text'">
-    <div class="inline-value-container">
+    <div class="inline-value-container" [class.can-edit]="canEdit">
       <input type="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input>
       <div class="inline-value-display inline-value-text form-control" (click)="startEdit()">
-        {{displayValue}}
+        {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)}}
       </div>
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'textarea'">
-    <div class="inline-value-container">
+    <div class="inline-value-container" [class.can-edit]="canEdit">
       <textarea class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input></textarea>
       <div class="inline-value-display inline-value-textarea form-control"
         (click)="startEdit()"
-        [innerHTML]="!loading ? displayValue || emptyMessage : ''"
+        [innerHTML]="!loading ? displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) : ''"
         [class.showing-empty-message]="!loading && !displayValue && emptyMessage"></div>
       <div class="inline-value-placeholder" [hidden]="!loading || displayValue">
         <div class="placeholder-line two-thirds"></div>
@@ -24,10 +24,10 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'date'">
-    <div class="inline-value-container inline-value-date">
+    <div class="inline-value-container inline-value-date" [class.can-edit]="canEdit">
       <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing"
       [class.showing-empty-message]="!displayValue && emptyMessage">
-        {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : emptyMessage }}
+        {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : (!canEdit ? readOnlyEmptyMessage : emptyMessage) }}
       </div>
       <ngb-datepicker #datePicker [hidden]="!isEditing" [startDate]="ngbDate"
         (dateSelect)="onDateChange($event)" [footerTemplate]="timePicker"></ngb-datepicker>

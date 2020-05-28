@@ -20,10 +20,11 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayValue: ValueType;
   @Input() type: InlineValueEditType = 'text';
   @Input() emptyMessage: string;
+  @Input() readOnlyEmptyMessage: string;
   @Input() loading = false;
   @Input() itemId: any;
   @Input() item: ItemVO;
-  @Input() currentArchive: ArchiveVO;
+  @Input() canEdit = true;
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
@@ -50,17 +51,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     }
   }
 
-  checkAccess() {
-    if (!this.item || !this.currentArchive) {
-      return true;
-    }
-
-    return checkMinimumAccess(this.currentArchive.accessRole, AccessRole.Editor)
-      && checkMinimumAccess(this.item.accessRole, AccessRole.Editor);
-  }
-
   startEdit() {
-    if (!this.checkAccess()) {
+    if (!this.canEdit) {
       return false;
     }
 
@@ -83,7 +75,6 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   save() {
-    console.log(this.editValue);
     if (this.displayValue !== this.editValue) {
       this.doneEditing.emit(this.editValue);
     }

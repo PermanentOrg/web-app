@@ -29,6 +29,10 @@ export function clickItem(itemName, clickOnly) {
   }
 }
 
+export function itemSelectedInSidebar(itemName) {
+  cy.get('pr-sidebar').contains(itemName).should('exist');
+}
+
 export function doubleClickItem(itemName) {
   cy.contains('.file-list-item', itemName).dblclick();
 }

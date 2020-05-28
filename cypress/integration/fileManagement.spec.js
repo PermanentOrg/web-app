@@ -24,13 +24,14 @@ describe('File Management', () => {
       helpers.fileList.deleteItem(folderName);
     });
   
-    it('renames a folder', () => {
+    it.only('renames a folder', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
       const folderName = Date.now();
       const newName = `rename${folderName}`;
       helpers.fileList.createFolder(folderName);
       helpers.fileList.clickItem(folderName);
+      helpers.elements.sidebarFieldByName('Name').find('.can-edit').should('exist');
       cy.get('pr-sidebar').contains('Name').siblings('pr-inline-value-edit').click();
       cy.focused().type(`{selectall}${newName}`);
       cy.get('.inline-value-controls').contains('Save').click();

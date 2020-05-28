@@ -20,6 +20,7 @@ import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 })
 export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscriptions {
   @Input() item: ItemVO;
+  @HostBinding('class.can-edit') @Input() canEdit: boolean;
   public allTags: TagVOData[];
 
   public itemTagsById: Set<number> = new Set();
@@ -114,6 +115,10 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
   }
 
   startEditing() {
+    if (!this.canEdit) {
+      return false;
+    }
+
     this.checkItemTags();
     this.isEditing = true;
     (this.elementRef.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});

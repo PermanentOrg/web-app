@@ -94,77 +94,13 @@ describe('InlineValueEditComponent', () => {
     expect(component.isEditing).toBeFalsy();
   });
 
-  fit('should not allow editing for viewer item access with owner archive access', async () => {
-    const record = new RecordVO({
-      accessRole: 'access.role.viewer'
-    });
-
-    const archive = new ArchiveVO({});
-    archive.accessRole = 'access.role.owner';
-
-    component.type = 'text';
-    component.item = record;
-    component.currentArchive = archive;
+  fit('should not allow editing if canEdit is false', async () => {
+    component.canEdit = false;
 
     fixture.detectChanges();
     component.startEdit();
     expect(component.isEditing).toBeFalsy();
   });
-
-  fit('should not allow editing for owner item access with viewer archive access', async () => {
-    const record = new RecordVO({
-      accessRole: 'access.role.owner'
-    });
-
-    const archive = new ArchiveVO({});
-    archive.accessRole = 'access.role.viewer';
-    fixture.detectChanges();
-
-    component.type = 'text';
-    component.item = record;
-    component.currentArchive = archive;
-
-    fixture.detectChanges();
-    component.startEdit();
-    expect(component.isEditing).toBeFalsy();
-  });
-
-
-  fit('should allow editing for owner item access with owner archive access', async () => {
-    const record = new RecordVO({
-      accessRole: 'access.role.owner'
-    });
-
-    const archive = new ArchiveVO({});
-    archive.accessRole = 'access.role.owner';
-
-    component.type = 'text';
-    component.item = record;
-    component.currentArchive = archive;
-
-    fixture.detectChanges();
-    component.startEdit();
-    expect(component.isEditing).toBeTruthy();
-  });
-
-  fit('should allow editing for editor item access with editor archive access', async () => {
-    const record = new RecordVO({
-      accessRole: 'access.role.editor'
-    });
-
-    const archive = new ArchiveVO({});
-    archive.accessRole = 'access.role.editor';
-
-    component.type = 'text';
-    component.item = record;
-    component.currentArchive = archive;
-
-    fixture.detectChanges();
-    component.startEdit();
-    expect(component.isEditing).toBeTruthy();
-  });
-
-
 
   it('should set initial date and time based on local time with no timezone passed', () => {
     const displayDT = formatDateISOString('2017-05-13T16:36:29.000000');
