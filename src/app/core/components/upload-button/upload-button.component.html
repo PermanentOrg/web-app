@@ -1,5 +1,5 @@
 <label class="btn btn-alternate"
-  [hidden]="!currentFolder || hidden" [class.full-width]="fullWidth">
+  [hidden]="!currentFolder || hidden" [class.full-width]="fullWidth" [class.disabled]="disabled">
   <i class="ion-md-cloud-upload"></i>Upload
   <input id="uploadFiles" type="file" (change)="onFileChange($event)" multiple="multiple" hidden #fileInput>
 </label>

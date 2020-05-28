@@ -11,6 +11,10 @@ $padding-x: $navbar-button-icon-padding;
   i {
     margin-right: $padding-x;
   }
+
+  &.disabled {
+    pointer-events: none;
+  }
 }
 
 :host.full-width {

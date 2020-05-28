@@ -16,7 +16,8 @@
   <pr-folder-view-toggle></pr-folder-view-toggle>
   <div class="sidebar-align">
     <pr-upload-button class="full-width"></pr-upload-button>
-    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" *ngIf="rightMenu.allowedActions.createFolder">
+    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" [disabled]="!rightMenu.allowedActions.createFolder"
+      *ngIf="rightMenu.currentFolder?.type !== 'type.folder.root.share'">
       <i class="ion-md-folder"></i>New folder
     </button>
   </div>

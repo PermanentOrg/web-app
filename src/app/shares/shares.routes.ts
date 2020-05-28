@@ -40,7 +40,7 @@ export const routes: Routes = [
   },
   {
     path: ':archiveNbr/:folderLinkId',
-    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'
+    loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule)
   }
 ];
 @NgModule({

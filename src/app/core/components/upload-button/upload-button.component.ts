@@ -24,6 +24,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
   @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
   public currentFolder: FolderVO;
   public hidden: boolean;
+  public disabled: boolean;
 
   isDragTarget: boolean;
   isDropTarget: boolean;
@@ -63,11 +64,11 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     if (!this.currentFolder) {
       this.hidden = true;
     } else {
-      this.hidden =
+      this.hidden = this.currentFolder.type === 'type.folder.root.share';
+      this.disabled =
         !checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
         || !checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor)
-        || (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder')
-        || this.currentFolder.type === 'type.folder.root.share';
+        || (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder');
     }
   }
 
