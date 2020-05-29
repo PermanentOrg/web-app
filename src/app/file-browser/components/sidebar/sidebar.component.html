@@ -1,7 +1,9 @@
 <div class="sidebar-tabs">
   <div class="sidebar-tab" [class.active]="currentTab === 'info'" (click)="setCurrentTab('info')">Info</div>
-  <div class="sidebar-tab" [class.active]="currentTab === 'details'" (click)="setCurrentTab('details')">Details</div>
-  <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')">Sharing</div>
+  <!-- <div class="sidebar-tab" [class.active]="currentTab === 'details'" (click)="setCurrentTab('details')"
+    [class.disabled]="isRootFolder">Details</div> -->
+  <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')"
+    [class.disabled]="isRootFolder">Sharing</div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
   <ng-container *ngIf="selectedItem && !isRootFolder">
@@ -73,7 +75,50 @@
         <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
       </div>
     </div>
-
+    <div class="sidebar-item">
+      <div class="sidebar-item-content">
+        <div class="sidebar-detail">
+          <label>{{selectedItem.isRecord ? 'Uploaded' : 'Created'}}</label>
+          <div class="sidebar-detail-content">
+            {{selectedItem.createdDT | prDate}}
+          </div>
+        </div>
+        <div class="sidebar-detail">
+          <label>Last modified</label>
+          <div class="sidebar-detail-content">
+            {{selectedItem.updatedDT | prDate}}
+          </div>
+        </div>
+        <ng-container *ngIf="selectedItem.isRecord">
+          <div class="sidebar-detail">
+            <label>Size</label>
+            <div class="sidebar-detail-content">
+              {{(selectedItem | asRecord).size| dsFileSize}}
+            </div>
+          </div>
+          <div class="sidebar-detail">
+            <label>File created</label>
+            <div class="sidebar-detail-content">
+              {{(selectedItem | asRecord).derivedCreatedDT | prDate}}
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="selectedItem.isFolder">
+          <div class="sidebar-detail">
+            <label>Size</label>
+            <div class="sidebar-detail-content">
+              {{(selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep | dsFileSize}}
+            </div>
+          </div>
+          <div class="sidebar-detail">
+            <label>Contents</label>
+            <div class="sidebar-detail-content">
+              {{(selectedItem | asFolder).FolderSizeVO | folderContents}}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </ng-container>
   <ng-container *ngIf="selectedItems">
     <div class="sidebar-item">
@@ -92,7 +137,7 @@
     </div>
   </ng-container>
 </div>
-<div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">
+<!-- <div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">
   <ng-container *ngIf="selectedItem && !isRootFolder">
     <div class="sidebar-item">
       <label>{{selectedItem.isRecord ? 'Uploaded' : 'Created'}}</label>
@@ -135,14 +180,24 @@
       </div>
     </ng-container>
   </ng-container>
-</div>
+</div> -->
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
   <div class="sidebar-item">
-    <label>Shared With</label>
-    <div class="sidebar-item-content">
+    <button class="btn btn-primary">{{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}</button>
+  </div>
+  <div class="sidebar-item">
+    <!-- <label>Shared with</label> -->
+    <div class="sidebar-item-content" *ngIf="selectedItem.ShareVOs?.length">
       <div class="shared-with-archive" *ngFor="let share of selectedItem.ShareVOs">
-        The {{share.ArchiveVO.fullName}} Archive
+        <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+        <div class="archive-info">
+          <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
+          <div class="archive-role">Access: {{share.accessRole | prConstants | titlecase}}</div>
+        </div>
       </div>
     </div>
+    <!-- <div class="sidebar-item-content" *ngIf="!selectedItem.ShareVOs?.length">
+      This item is not shared
+    </div> -->
   </div>
 </div>

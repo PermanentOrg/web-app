@@ -28,8 +28,7 @@ $sidebar-thumb-height: 200px;
       border-right: $sidebar-border;
     }
 
-
-    &:not(.active) {
+    &:not(.active):not(.disabled)  {
       cursor: pointer;
       &:hover {
         background-color: $gray-100;
@@ -40,6 +39,11 @@ $sidebar-thumb-height: 200px;
       font-weight: 600;
       color: $body-color;
       border-bottom: 1px solid rgba($gray-300, 0);
+    }
+
+    &.disabled {
+      color: $text-muted;
+      cursor: not-allowed;
     }
   }
 }
@@ -72,7 +76,49 @@ $sidebar-thumb-height: 200px;
   }
 }
 
+.sidebar-detail {
+  font-size: $font-size-sm;
+}
+
 .sidebar-thumbnail pr-thumbnail {
   width: 100%;
   height: $sidebar-thumb-height;
+}
+
+.shared-with-archive {
+  display: flex;
+  align-items: center;
+  $thumb-size: 30px;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  .archive-thumb {
+    width: $thumb-size;
+    height: $thumb-size;
+    flex: 0 0 $thumb-size;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .archive-info {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .archive-name {
+      max-width: 100%;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .archive-role {
+      font-size: $font-size-sm;
+      line-height: 1;
+    }
+  }
 }

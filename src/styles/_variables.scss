@@ -52,9 +52,10 @@ $file-list-controls-height: $sidebar-tab-height;
 $file-list-thumb-col-width: $file-list-row-height;
 $file-list-type-col-width: 8rem;
 $file-list-access-col-width: $file-list-type-col-width;
-$file-list-date-col-width: 15rem;
+$file-list-date-col-width: 8rem;
 $file-list-name-col-width: 30rem;
 $file-list-shared-by-col-width: 20rem;
+$file-list-shared-icon-col-width: 2rem;
 
 
 $phone: 450px;
@@ -128,6 +129,18 @@ $slide-up-animation: slideUp;
     display: none;
   }
 }
+
+@mixin file-list-col-shared-icon {
+  min-width: $file-list-shared-icon-col-width;
+  width: $file-list-shared-icon-col-width;
+  flex: 0 0 $file-list-shared-icon-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+
 
 $ionicons-font-path: 'https://unpkg.com/ionicons@4.6.3/dist/fonts';
 

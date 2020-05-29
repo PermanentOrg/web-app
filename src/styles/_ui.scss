@@ -386,3 +386,9 @@ $drag-outline-border: 5px;
     width: auto;
   }
 }
+
+.sidebar-detail {
+  font-size: $font-size-sm;
+  display: flex;
+  justify-content: space-between;
+}

@@ -6,6 +6,7 @@
         <span class="col-title" (click)="onSortClick('name')">Name</span>
         <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
       </div>
+      <!-- <div class="shared-icon" *ngIf="!showAccess"></div> -->
       <div class="type" *ngIf="!showAccess" [class.active-sort]="currentSort === 'type'" [class.sort-desc]="sortDesc">
         <span class="col-title" (click)="onSortClick('type')">Type</span>
         <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>

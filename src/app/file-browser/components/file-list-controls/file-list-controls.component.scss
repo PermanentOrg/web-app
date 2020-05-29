@@ -128,6 +128,10 @@
     @include file-list-col-shared-by;
   }
 
+  .shared-icon {
+    @include file-list-col-shared-icon;
+  }
+
   .single-col-sort {
     padding: 0 10px;
   }

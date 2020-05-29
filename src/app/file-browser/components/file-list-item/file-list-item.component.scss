@@ -96,9 +96,8 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 
 .name {
   @include file-list-col-name;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+  display: flex;
   .grid-view & {
     line-height: $grid-info-section-height;
     height: $grid-info-section-height;
@@ -106,6 +105,18 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     bottom: 0px;
     left: $grid-info-section-margin;
     right: $action-button-height;
+  }
+
+  span {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  i {
+    flex: 0 0 auto;
+    margin-left: 10px;
   }
 }
 
@@ -117,6 +128,10 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   .grid-view & {
     display: none;
   }
+}
+
+.shared-icon {
+  @include file-list-col-shared-icon;
 }
 
 .type {
@@ -191,6 +206,10 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 @include desktop {
   .actions {
     display: none;
+  }
+
+  .grid-view .name {
+    right: 5px;
   }
 }
 
