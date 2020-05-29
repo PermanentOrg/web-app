@@ -183,7 +183,9 @@
 </div> -->
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
   <div class="sidebar-item">
-    <button class="btn btn-primary">{{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}</button>
+    <button class="btn btn-primary" [disabled]="!canShare" (click)="onShareClick()">
+      {{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}
+    </button>
   </div>
   <div class="sidebar-item">
     <!-- <label>Shared with</label> -->

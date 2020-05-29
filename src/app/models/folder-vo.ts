@@ -100,6 +100,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
   public ChildItemVOs: ItemVO[];
   public ShareVOs: ShareVO[];
   public ArchiveVOs: ArchiveVO[];
+  public ShareArchiveVO: ArchiveVO;
   public AccessVO;
   public AccessVOs;
 
@@ -210,6 +211,7 @@ export interface FolderVOData extends BaseVOData {
   TagVOs?: any;
   SharedArchiveVOs?: any;
   ArchiveVOs?: ArchiveVO[];
+  ShareArchiveVO?: ArchiveVO;
   FolderSizeVO?: FolderSizeVOData;
   AttachmentRecordVOs?: any;
   hasAttachments?: any;

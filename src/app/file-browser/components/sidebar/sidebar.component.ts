@@ -28,6 +28,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   currentArchive: ArchiveVO;
 
   canEdit: boolean;
+  canShare: boolean;
 
   constructor(
     private dataService: DataService,
@@ -58,7 +59,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           }
         }
 
-        this.checkCanEdit();
+        this.checkPermissions();
 
         this.isRootFolder = this.selectedItem?.type.includes('root');
       })
@@ -72,11 +73,17 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     unsubscribeAll(this.subscriptions);
   }
 
-  checkCanEdit() {
+  checkPermissions() {
     const items = this.selectedItems || [this.selectedItem];
     const viewOnly = some(items, i => i.accessRole === 'access.role.viewer' || i.accessRole === 'access.role.contributor');
 
     this.canEdit = !viewOnly && this.accountService.checkMinimumArchiveAccess(AccessRole.Editor);
+
+    if (items.length !== 1) {
+      this.canShare = false;
+    } else {
+      this.canShare = this.isRootFolder || this.accountService.checkMinimumAccess(this.selectedItem.accessRole, AccessRole.Owner);
+    }
   }
 
   setCurrentTab(tab: SidebarTab) {
@@ -105,6 +112,10 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     if (this.canEdit) {
       this.editService.openLocationDialog(this.selectedItem);
     }
+  }
+
+  onShareClick() {
+    this.editService.openShareDialog(this.selectedItem);
   }
 
   getFolderContentsCount() {

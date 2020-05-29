@@ -90,6 +90,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs: ArchiveVO[];
+  public ShareArchiveVO: ArchiveVO;
   public saveAs;
   public AttachmentRecordVOs;
   public isAttachment;
@@ -192,6 +193,7 @@ export interface RecordVOData extends BaseVOData {
   TagVOs?: any;
   TextDataVOs?: any;
   ArchiveVOs?: ArchiveVO[];
+  ShareArchiveVO?: ArchiveVO;
   saveAs?: any;
   AttachmentRecordVOs?: any;
   isAttachment?: any;

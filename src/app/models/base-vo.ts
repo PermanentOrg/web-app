@@ -64,6 +64,7 @@ export class BaseVO {
     delete clone.fetched;
     delete clone.isPendingAction;
     delete clone.dataStatus;
+    delete clone.ShareArchiveVO;
     return clone;
   }
 }

@@ -18,9 +18,9 @@
     <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
   </div>
   <div class="shared-by" *ngIf="showAccess && !inGridView">
-    <ng-container *ngIf="item.ArchiveVOs[0]">
-      <div class="archive-thumb" prBgImage [bgSrc]="item.ArchiveVOs[0].thumbURL200" [cover]="true"></div>
-      <span>The {{item.ArchiveVOs[0]?.fullName}} Archive</span>
+    <ng-container *ngIf="item.ShareArchiveVO">
+      <div class="archive-thumb" prBgImage [bgSrc]="item.ShareArchiveVO.thumbURL200" [cover]="true"></div>
+      <span>The {{item.ShareArchiveVO?.fullName}} Archive</span>
     </ng-container>
   </div>
   <div class="access" *ngIf="showAccess && !inGridView">

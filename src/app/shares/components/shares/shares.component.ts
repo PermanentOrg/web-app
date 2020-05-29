@@ -46,7 +46,7 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
     const shareArchives = this.route.snapshot.data.shares as ArchiveVO[] || [];
     for (const archive of shareArchives) {
       for (const item of archive.ItemVOs) {
-        item.ArchiveVOs = [ archive ];
+        item.ShareArchiveVO = archive;
         this.shareItems.push(item);
       }
     }
