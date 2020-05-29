@@ -7,8 +7,18 @@
   <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">
-    <span>{{item.displayName}}</span>
-    <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation></i>
+    <div class="first-row">
+      <span>{{item.displayName}}</span>
+      <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation></i>
+    </div>
+    <div class="second-row">
+      <span *ngIf="!showAccess || !item.ShareArchiveVO">
+        {{item.displayDT | prDate: item.TimezoneVO: 'full' }}
+      </span>
+      <span *ngIf="showAccess || item.ShareArchiveVO">
+        Shared by The {{item.ShareArchiveVO?.fullName}} Archive
+      </span>
+    </div>
   </div>
   <div class="type" *ngIf="!showAccess && !inGridView">
     {{item.type | prConstants | titlecase }}

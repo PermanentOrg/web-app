@@ -97,7 +97,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 .name {
   @include file-list-col-name;
 
-  display: flex;
   .grid-view & {
     line-height: $grid-info-section-height;
     height: $grid-info-section-height;
@@ -107,16 +106,34 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     right: $action-button-height;
   }
 
-  span {
-    flex: 1 1 auto;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  > div {
+    display: flex;
+    line-height: 1.25;
+
+    span {
+      flex: 1 1 auto;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
+
+
 
   i {
     flex: 0 0 auto;
     margin-left: 10px;
+  }
+
+  .second-row {
+    font-size: $font-size-sm;
+    color: $text-muted;
+  }
+
+  @include after($tablet-horizontal) {
+    .second-row {
+      display: none;
+    }
   }
 }
 
