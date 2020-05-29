@@ -1,0 +1,18 @@
+@import 'variables';
+
+:host {
+  display: block;
+  padding: 10px;
+  font-size: $font-size-sm;
+  line-height: 1;
+  position: absolute;
+  bottom: 0;
+
+  @include until($tablet-horizontal) {
+    display: none;
+  }
+}
+
+.btn {
+  width: auto;
+}

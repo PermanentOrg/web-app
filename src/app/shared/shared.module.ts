@@ -34,6 +34,7 @@ import { FolderContentsPipe } from './pipes/folder-contents.pipe';
 import { StaticMapComponent } from './components/static-map/static-map.component';
 import { PrLocationPipe } from './pipes/pr-location.pipe';
 import { TagsComponent } from './components/tags/tags.component';
+import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.component';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { TagsComponent } from './components/tags/tags.component';
     DragTargetRouterLinkDirective,
     FolderViewToggleComponent,
     StaticMapComponent,
-    TagsComponent
+    TagsComponent,
+    BetaToggleComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -112,7 +114,8 @@ import { TagsComponent } from './components/tags/tags.component';
     DragTargetRouterLinkDirective,
     FolderViewToggleComponent,
     StaticMapComponent,
-    TagsComponent
+    TagsComponent,
+    BetaToggleComponent
   ],
   providers: [
     PublicLinkPipe,
