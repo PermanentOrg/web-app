@@ -4,6 +4,7 @@ $transition-length: 0.33s;
 $delay-length: 3s;
 
 $progress-bar-height: 2px;
+$progress-bar-height-desktop: 4px;
 
 :host {
   position: fixed;
@@ -30,10 +31,14 @@ $progress-bar-height: 2px;
   transform: scaleX(1);
   transform-origin: left;
   transition: transform 0.05s linear;
+
+  @include after($tablet-horizontal) {
+    height: $progress-bar-height-desktop;
+  }
 }
 
 .current-file {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   padding-right: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -54,10 +59,12 @@ $progress-bar-height: 2px;
   margin-left: auto;
 }
 
+$easing: $tweaked-ease;
+
 .upload-wrapper {
   padding: 10px 10px;
   transform: translateY(0);
-  transition: transform $transition-length ease-in $delay-length, visibility 0s linear $delay-length + $transition-length;
+  transition: transform $transition-length $tweaked-ease $delay-length, opacity $transition-length $tweaked-ease $delay-length, visibility 0s linear $delay-length + $transition-length;
   border-top: 1px $gray-500 solid;
   display: block;
   margin: 0 auto;
@@ -67,7 +74,7 @@ $progress-bar-height: 2px;
   
   &.visible {
     transform: translateY(-100%);
-    transition: transform $transition-length ease-out, visibility 0s linear  0s;
+    transition: transform $transition-length $easing, opacity $transition-length $easing, visibility 0s linear  0s;
     visibility: visible;
   }
 }
@@ -78,6 +85,31 @@ $progress-bar-height: 2px;
 
   &.visible {
     opacity: 1;
-    transition: transform 0s, opacity $transition-length ease-out, visibility 0s linear  0s;
+    transition: transform 0s, opacity $transition-length $easing, visibility 0s linear  0s;
+  }
+}
+
+@include after($tablet-horizontal) {
+  $screen-padding: 1rem;
+
+  :host {
+    bottom: $screen-padding;
+    right: $screen-padding;
+    left: initial;
+    width: 25rem;
+  }
+
+  .upload-wrapper {
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    border: 1px solid $gray-300;
+    box-shadow: $box-shadow;
+    user-select: none;
+    opacity: 0;
+    transform: translateY(#{$screen-padding});
+
+    &.visible {
+      opacity: 1;
+    }
   }
 }

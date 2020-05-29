@@ -78,6 +78,8 @@ $sidebar-thumb-height: 200px;
 
 .sidebar-detail {
   font-size: $font-size-sm;
+  display: flex;
+  justify-content: space-between;
 }
 
 .sidebar-thumbnail pr-thumbnail {
