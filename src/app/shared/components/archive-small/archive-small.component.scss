@@ -2,11 +2,13 @@
 :host {
   display: block;
   cursor: pointer;
+  max-width: 100%;
 }
 
 .archive {
   display: flex;
   align-items: center;
+  max-width: 100%;
 }
 
 $thumb-size: 50px;

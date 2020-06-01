@@ -182,24 +182,26 @@
   </ng-container>
 </div> -->
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
-  <div class="sidebar-item">
-    <button class="btn btn-primary" [disabled]="!canShare" (click)="onShareClick()">
-      {{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}
-    </button>
-  </div>
-  <div class="sidebar-item">
-    <!-- <label>Shared with</label> -->
-    <div class="sidebar-item-content" *ngIf="selectedItem.ShareVOs?.length">
-      <div class="shared-with-archive" *ngFor="let share of selectedItem.ShareVOs">
-        <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
-        <div class="archive-info">
-          <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
-          <div class="archive-role">Access: {{share.accessRole | prConstants | titlecase}}</div>
+  <ng-container *ngIf="selectedItem">
+    <div class="sidebar-item">
+      <button class="btn btn-primary" [disabled]="!canShare" (click)="onShareClick()">
+        {{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}
+      </button>
+    </div>
+    <div class="sidebar-item">
+      <!-- <label>Shared with</label> -->
+      <div class="sidebar-item-content" *ngIf="selectedItem.ShareVOs?.length">
+        <div class="shared-with-archive" *ngFor="let share of selectedItem.ShareVOs">
+          <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+          <div class="archive-info">
+            <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
+            <div class="archive-role">Access: {{share.accessRole | prConstants | titlecase}}</div>
+          </div>
         </div>
       </div>
+      <!-- <div class="sidebar-item-content" *ngIf="!selectedItem.ShareVOs?.length">
+        This item is not shared
+      </div> -->
     </div>
-    <!-- <div class="sidebar-item-content" *ngIf="!selectedItem.ShareVOs?.length">
-      This item is not shared
-    </div> -->
-  </div>
+  </ng-container>
 </div>

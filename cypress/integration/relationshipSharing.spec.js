@@ -55,7 +55,7 @@ describe('Relationship Sharing', () => {
       helpers.elements.newFolderButton().should('be.disabled');
     });
 
-    it.only('should share a folder with another archive as contributor', () => {
+    it('should share a folder with another archive as contributor', () => {
       helpers.sharing.createAndShareFolder(folderName, archives.shareWithArchive, 'access.role.contributor');
       itemsCreated.push(folderName);
 

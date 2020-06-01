@@ -49,6 +49,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   transition: background-color $bg-transition-length ease-in;
   background-color: rgba(white, 0);
   overflow-y: hidden;
+  min-height: $row-height;
 
   &.grid-view {
     background-color: white;
@@ -97,15 +98,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 .name {
   @include file-list-col-name;
 
-  .grid-view & {
-    line-height: $grid-info-section-height;
-    height: $grid-info-section-height;
-    position: absolute;
-    bottom: 0px;
-    left: $grid-info-section-margin;
-    right: $action-button-height;
-  }
-
   > div {
     display: flex;
     line-height: 1.25;
@@ -131,6 +123,21 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   }
 
   @include after($tablet-horizontal) {
+    .second-row {
+      display: none;
+    }
+  }
+
+  .grid-view & {
+    line-height: $grid-info-section-height;
+    height: $grid-info-section-height;
+    position: absolute;
+    bottom: 0px;
+    left: $grid-info-section-margin;
+    right: $action-button-height;
+    display: flex;
+    align-items: center;
+
     .second-row {
       display: none;
     }
@@ -207,7 +214,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   align-items: center;
 }
 
-[prBgImage] {
+[prBgImage], .file-list-item-folder-icon {
   height: $row-height - 10px;
   width: $row-height - 10px;
   flex: 0 0 $row-height - 10px;
@@ -217,6 +224,27 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     width: 100%;
     padding-top: 100%;
     margin: 0px;
+    border-bottom: 1px solid $gray-300;
+  }
+}
+
+.file-list-item-folder-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F7C985;
+  font-size: 2.6rem;
+
+  .grid-view & {
+    position: relative;
+    font-size: 8rem;
+    > i {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+    }
   }
 }
 

@@ -24,7 +24,7 @@ describe('File Management', () => {
       helpers.fileList.deleteItem(folderName);
     });
   
-    it.only('renames a folder', () => {
+    it('renames a folder', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
       const folderName = Date.now();

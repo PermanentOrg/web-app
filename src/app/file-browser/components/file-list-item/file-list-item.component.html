@@ -4,7 +4,12 @@
   (mousedown)="onItemMouseDown($event)" (touchstart)="onItemTouchStart($event)" (touchend)="onItemTouchEnd($event)"
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"> 
-  <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
+  <ng-container [ngSwitch]="item.isFolder">
+    <div class="file-list-item-folder-icon" *ngSwitchCase="true">
+      <i class="ion-md-folder"></i>
+    </div>
+    <div *ngSwitchCase="false" prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
+  </ng-container>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">
     <div class="first-row">
@@ -12,8 +17,8 @@
       <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation></i>
     </div>
     <div class="second-row">
-      <span *ngIf="!showAccess || !item.ShareArchiveVO">
-        {{item.displayDT | prDate: item.TimezoneVO: 'full' }}
+      <span *ngIf="(!showAccess || !item.ShareArchiveVO)">
+        {{item.displayDT | prDate: item.TimezoneVO: 'date' }} <span *ngIf="item.dataStatus > 0" @ngIfFadeInAnimation>{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</span>
       </span>
       <span *ngIf="showAccess || item.ShareArchiveVO">
         Shared by The {{item.ShareArchiveVO?.fullName}} Archive

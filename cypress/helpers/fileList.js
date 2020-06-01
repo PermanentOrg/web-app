@@ -9,7 +9,7 @@ export function createFolder(folderName) {
 
   cy.get('#folderName').type(folderName);
   cy.get('.prompt-field-buttons > .btn').contains('Create folder').click();
-  cy.contains('.file-list-item', folderName).should('exist');
+  cy.contains('.file-list-item', folderName, {timeout: 10000}).should('exist');
 }
 
 export function createFolderMobile(folderName) {
@@ -19,7 +19,7 @@ export function createFolderMobile(folderName) {
   cy.get('.prompt-title').should('contain.text', 'Create new folder');
   cy.get('#folderName').type(folderName);
   cy.get('.prompt-field-buttons').contains('Create folder').click();
-  cy.contains('.file-list-item', folderName).should('exist');
+  cy.contains('.file-list-item', folderName, {timeout: 10000}).should('exist');
 }
 
 export function clickItem(itemName, clickOnly) {
@@ -38,7 +38,7 @@ export function doubleClickItem(itemName) {
 }
 
 export function itemExists(itemName) {
-  cy.contains('.file-list-item', itemName).should('exist');
+  cy.contains('.file-list-item', itemName, {timeout: 10000}).should('exist');
 }
 
 export function deleteItem(item, alreadySelected) {
