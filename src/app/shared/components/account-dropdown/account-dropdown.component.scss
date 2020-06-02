@@ -10,7 +10,7 @@ button span:last-child {
 
 button {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 
   &.active {
     background-color: white;
@@ -23,7 +23,7 @@ button {
   top: calc(100% - 17px);
   padding-top: 17px;
   background-color: $PR-orange;
-  z-index: 0;
+  z-index: 1;
   box-shadow: $box-shadow;
 
   > a {
@@ -35,6 +35,7 @@ button {
 
     &:hover {
       background-color: darken($PR-orange, 7%);
+      text-decoration: none;
     }
   }
 

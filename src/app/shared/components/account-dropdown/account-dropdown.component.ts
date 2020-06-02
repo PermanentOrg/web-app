@@ -4,7 +4,7 @@ import { AccountVO, ArchiveVO } from '@models';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 
 @Component({
   selector: 'pr-account-dropdown',
@@ -28,12 +28,23 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
   ngOnInit() {
     this.account = this.accountService.getAccount();
     this.archive = this.accountService.getArchive();
-    this.subscriptions.push(this.accountService.accountChange.subscribe(account => {
-      this.account = account;
-    }));
-    this.subscriptions.push(this.accountService.archiveChange.subscribe(archive => {
-      this.archive = archive;
-    }));
+    this.subscriptions.push(
+      this.accountService.accountChange.subscribe(account => {
+        this.account = account;
+      })
+    );
+    this.subscriptions.push(
+      this.accountService.archiveChange.subscribe(archive => {
+        this.archive = archive;
+      })
+    );
+    this.subscriptions.push(
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationStart) {
+          this.showMenu = false;
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
