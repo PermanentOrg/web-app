@@ -1,11 +1,12 @@
 // tslint:disable-next-line:max-line-length
-import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject } from '@angular/core';
+import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
 import { DOCUMENT } from '@angular/common';
 import debug from 'debug';
+import { PortalOutlet } from '@angular/cdk/portal';
 
 type DialogComponentToken =
   'FamilySearchImportComponent' |
@@ -66,6 +67,8 @@ export class Dialog {
   private rootComponent: DialogRootComponent;
   private currentId = 0;
 
+  public portalOutlet: PortalOutlet;
+
   public registeredComponents: {[token: string]: any} = {};
   public componentResolvers: {[token: string]: any} = {};
 
@@ -123,6 +126,24 @@ export class Dialog {
     components.map((component) => {
       this.unregisterComponent(component);
     });
+  }
+
+  registerPortalOutlet(outlet: PortalOutlet) {
+    if (this.portalOutlet) {
+      throw new Error(`Dialog - portal outlet already registered. Make sure to unregister when destroying.`);
+    }
+
+    this.portalOutlet = outlet;
+    this.debug('portal outlet registered %o', outlet);
+  }
+
+  unregisterPortalOutlet(outlet: PortalOutlet) {
+    if (this.portalOutlet !== outlet) {
+      throw new Error(`Dialog - attempting to unregister incorrect portal outlet`);
+    }
+
+    this.portalOutlet = null;
+    this.debug('portal outlet unregistered %o', outlet);
   }
 
   open(token: DialogComponentToken | any, data?: any, options = DEFAULT_OPTIONS): Promise<any> {

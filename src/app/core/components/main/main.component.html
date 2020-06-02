@@ -1,8 +1,12 @@
-<pr-nav></pr-nav>
-<div class="main-content" [ngClass]="{'navigating': isNavigating, 'uploading': uploadProgressVisible}" #mainContent>
-  <router-outlet></router-outlet>
+<pr-left-menu [(isVisible)]="nav.hambugerMenuVisible"></pr-left-menu>
+<div class="right-panel">
+  <pr-nav #nav></pr-nav>
+  <div class="main-content" [ngClass]="{'navigating': isNavigating, 'uploading': uploadProgressVisible}" #mainContent>
+    <router-outlet></router-outlet>
+  </div>
 </div>
 <pr-upload-progress></pr-upload-progress>
 <pr-folder-picker></pr-folder-picker>
 <pr-dialog-root></pr-dialog-root>
 <pr-prompt></pr-prompt>
+<ng-template cdkPortalOutlet></ng-template>

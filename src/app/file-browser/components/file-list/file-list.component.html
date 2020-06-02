@@ -17,7 +17,7 @@
     (itemClicked)="onItemClick($event)"></pr-file-list-item>
 </div>
 <pr-sidebar *ngIf="showSidebar"></pr-sidebar>
-<div [@slideUpAnimation]="device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''">
+<div [@slideUpAnimation]="device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''" *cdkPortal>
   <router-outlet #o="outlet"></router-outlet>
 </div>
 

@@ -22,7 +22,7 @@ $transition-length: $default-transition-length;
     user-select: none;
     display: block;
     color: white;
-    font-weight: 500;
+    font-weight: 700;
 
     transition: background-color $transition-length / 4 ease-in;
 
@@ -69,6 +69,10 @@ $transition-length: $default-transition-length;
     }
   }
 
+  .menu-header-desktop {
+    display: none;
+  }
+
   .menu-branding {
     display: none;
   }
@@ -83,17 +87,35 @@ $transition-length: $default-transition-length;
 
 
 @include after($tablet-horizontal) {
+
   .hamburger-menu {
     // transform: translateX(0);
     visibility: visible;
   
     .menu-header {
-      border-bottom: 0px solid;
-      box-shadow: none;
-      margin-bottom: 0px;
-      height: $breadcrumb-height-desktop;
-      display: flex;
-      align-items: center;
+      display: none;
+    }
+
+    .menu-header-desktop {
+      display: block;
+      padding: 1rem 0;
+      $thumb-size: $left-menu-width * 0.5;
+      cursor: pointer;
+      outline: none !important;
+
+      .archive-thumb {
+        width: $thumb-size;
+        height: $thumb-size;
+        border-radius: 50%;
+        margin: 0px auto 0.5rem;
+      }
+      
+      .archive-name {
+        font-size: $font-size-sm;
+        text-align: center;
+        padding: 0.5rem;
+        font-weight: bold;
+      }
     }
 
     .menu-scroll {
@@ -117,8 +139,6 @@ $transition-length: $default-transition-length;
     right: 0;
     visibility: hidden;
   }
-
-
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {

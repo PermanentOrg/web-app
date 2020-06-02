@@ -34,9 +34,11 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
       this.archive = this.accountService.getArchive();
     }
 
-    this.accountService.archiveChange.subscribe((archive: ArchiveVO) => {
-      this.archive = archive;
-    });
+    this.subscriptions.push(
+      this.accountService.archiveChange.subscribe((archive: ArchiveVO) => {
+        this.archive = archive;
+      })
+    );
 
     this.subscriptions.push(
       this.router.events.subscribe(event => {

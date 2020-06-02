@@ -18,6 +18,7 @@ $thumb-size: 50px;
   height: $thumb-size;
   border-radius: 50%;
   margin-right: 10px;
+  flex: 0 0 $thumb-size;
 }
 
 .archive-name {

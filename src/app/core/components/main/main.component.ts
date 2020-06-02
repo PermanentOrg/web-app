@@ -23,6 +23,7 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { ScrollService } from '@shared/services/scroll/scroll.service';
 import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent, DragServiceEvent } from '@shared/services/drag/drag.service';
+import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 
 @Component({
   selector: 'pr-main',
@@ -37,7 +38,8 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
   public isDragTarget: boolean;
 
   private routerListener: Subscription;
-  @ViewChild('mainContent', { static: true }) mainContentElement: ElementRef;
+  @ViewChild('mainContent') mainContentElement: ElementRef;
+  @ViewChild(CdkPortalOutlet) portalOutlet: PortalOutlet;
 
   constructor(
     private accountService: AccountService,
@@ -107,14 +109,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
   }
 
   ngOnDestroy() {
-
+    this.dialog.unregisterPortalOutlet(this.portalOutlet);
   }
 
   ngAfterViewInit() {
     this.checkShareByUrl();
-    // (this.mainContentElement.nativeElement as HTMLElement).addEventListener('scroll', event => {
-    //   // this.scroll.scrollEvent(event);
-    // });
+
+    // register portal outlet with dialog service
+    this.dialog.registerPortalOutlet(this.portalOutlet);
   }
 
   async checkCta() {

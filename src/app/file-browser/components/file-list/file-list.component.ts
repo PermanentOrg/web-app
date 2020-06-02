@@ -34,6 +34,8 @@ import { slideUpAnimation, ngIfScaleAnimationDynamic } from '@shared/animations'
 import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import debug from 'debug';
+import { CdkPortal } from '@angular/cdk/portal';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -93,6 +95,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   private currentScrollTop = 0;
   @ViewChild('scroll') private scrollElement: ElementRef;
 
+  @ViewChild(CdkPortal) portal: CdkPortal;
+
   private isDraggingInProgress = false;
   isDraggingFile = false;
 
@@ -112,6 +116,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private dataService: DataService,
     private router: Router,
     private elementRef: ElementRef,
+    private dialog: Dialog,
     private folderViewService: FolderViewService,
     private location: Location,
     @Inject(DOCUMENT) private document: any,
@@ -219,6 +224,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     }, 1);
   }
 
+  attachToPortal() {
+    setTimeout(() => {
+      this.dialog.portalOutlet.detach();
+      this.dialog.portalOutlet.attach(this.portal);
+    });
+  }
+
   ngOnInit() {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.showSidebar = this.route.snapshot.data.showSidebar;
@@ -231,6 +243,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   ngAfterViewInit() {
+    this.attachToPortal();
+
     if (this.listItemsQuery) {
       this.listItems = this.listItemsQuery.toArray();
     }
@@ -254,6 +268,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   ngOnDestroy() {
+    this.dialog.portalOutlet.detach();
     this.dataService.setCurrentFolder();
     unsubscribeAll(this.subscriptions);
   }
