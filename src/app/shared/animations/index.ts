@@ -160,7 +160,7 @@ export const ngIfSlideInAnimation = trigger('ngIfSlideInAnimation', [
   transition(
     ':enter',
     [
-      style({ transform: 'translateX(-100%)' }),
+      style({ transform: 'translateX(calc(-100% - 20px))' }),
       animate(`250ms ${TWEAKED}`, style({ transform: '*'}))
     ]
   ),
@@ -168,7 +168,7 @@ export const ngIfSlideInAnimation = trigger('ngIfSlideInAnimation', [
     ':leave',
     [
       style({ transform: '*' }),
-      animate(`250ms ${TWEAKED}`, style({ transform: 'translateX(-100%)'})),
+      animate(`250ms ${TWEAKED}`, style({ transform: 'translateX(calc(-100% - 20px))'})),
     ]
   )
 ]);

@@ -6,13 +6,24 @@
   top: $navbar-height-desktop;
   bottom: 0;
   left: 100%;
-  width: 100%;
+  width: 300px;
   z-index: 0;
-  background: green;
+  background: white;
   box-shadow: $box-shadow;
+  transform: translateX(-100%);
+  transition: transform 0.25s $tweaked-ease;
+  padding: 1rem 0.5rem;
+
+  &.visible {
+    transform: translateX(0%);
+  }
 
   @include desktop {
     display: block;
+  }
+
+  pr-archive-small {
+    margin-bottom: 1rem;
   }
 }
 

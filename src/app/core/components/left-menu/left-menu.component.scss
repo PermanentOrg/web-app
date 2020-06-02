@@ -142,12 +142,12 @@ $active-indicator-color: lighten($active-color, 7%);
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        background-color: $PR-blue;
         transition: background-color $transition-length / 4 ease-in;
 
         &:hover {
           background-color: $hover-color;
-          box-shadow: $box-shadow;
-          transition: none;
+          transition: background-color 0s;
         }
       }
 

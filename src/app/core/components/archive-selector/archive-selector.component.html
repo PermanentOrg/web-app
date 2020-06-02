@@ -1,1 +1,3 @@
-<p>archive selector!</p>
+<pr-archive-small *ngFor="let archive of archives"
+  [archive]="archive" [accessRole]="archive.accessRole"
+  (click)="archiveClick(archive)"></pr-archive-small>

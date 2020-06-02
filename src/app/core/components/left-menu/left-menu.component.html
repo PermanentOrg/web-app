@@ -11,9 +11,10 @@
         <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
         <div class="archive-name">The {{archive.fullName}} Archive</div>
       </div>
-      <div class="archive-selector-indicator" (click)="showArchiveSelector = !showArchiveSelector">
-        <i class="ion-md-arrow-dropright"></i>
-      </div>
+      <!-- <div class="archive-selector-indicator" (click)="showArchiveSelector = !showArchiveSelector">
+        <i class="ion-md-arrow-dropright" [hidden]="showArchiveSelector"></i>
+        <i class="ion-md-arrow-dropleft" [hidden]="!showArchiveSelector"></i>
+      </div> -->
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item"
@@ -60,4 +61,4 @@
     <pr-beta-toggle></pr-beta-toggle>
   </div>
 </div>
-<pr-archive-selector *ngIf="showArchiveSelector" [@ngIfSlideInAnimation]></pr-archive-selector>
+<!-- <pr-archive-selector [visible]="showArchiveSelector" [@ngIfSlideInAnimation]></pr-archive-selector> -->

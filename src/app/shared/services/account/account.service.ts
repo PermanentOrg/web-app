@@ -57,6 +57,8 @@ export class AccountService {
     if (cachedRoot) {
       this.setRootFolder(new FolderVO(cachedRoot));
     }
+
+    this.refreshArchives();
   }
 
   public setAccount(newAccount: AccountVO) {
