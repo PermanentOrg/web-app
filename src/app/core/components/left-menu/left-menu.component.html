@@ -6,9 +6,14 @@
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
-    <div class="menu-header-desktop" [routerLink]="['/choosearchive']">
-      <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
-      <div class="archive-name">The {{archive.fullName}} Archive</div>
+    <div class="menu-header-desktop">
+      <div class="archive" [routerLink]="['/choosearchive']">
+        <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
+        <div class="archive-name">The {{archive.fullName}} Archive</div>
+      </div>
+      <div class="archive-selector-indicator" (click)="showArchiveSelector = !showArchiveSelector">
+        <i class="ion-md-arrow-dropright"></i>
+      </div>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item"
@@ -55,3 +60,4 @@
     <pr-beta-toggle></pr-beta-toggle>
   </div>
 </div>
+<pr-archive-selector [visible]="showArchiveSelector"></pr-archive-selector>

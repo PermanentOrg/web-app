@@ -23,7 +23,8 @@ export type FolderType =
   'type.folder.private' |
   'type.folder.public' |
   'type.folder.share' |
-  'type.folder.vault'
+  'type.folder.vault' |
+  'page'
 ;
 
 export type FolderLinkType =

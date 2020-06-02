@@ -15,6 +15,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isVisible = false;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  public showArchiveSelector: false;
   public archiveName: string;
   public archive: ArchiveVO;
 

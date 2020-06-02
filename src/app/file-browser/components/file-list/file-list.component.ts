@@ -225,10 +225,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   attachToPortal() {
-    setTimeout(() => {
-      this.dialog.portalOutlet.detach();
-      this.dialog.portalOutlet.attach(this.portal);
-    });
+    // setTimeout(() => {
+    //   this.dialog.portalOutlet.detach();
+    //   this.dialog.portalOutlet.attach(this.portal);
+    // });
   }
 
   ngOnInit() {
@@ -243,8 +243,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   ngAfterViewInit() {
-    this.attachToPortal();
-
     if (this.listItemsQuery) {
       this.listItems = this.listItemsQuery.toArray();
     }
@@ -268,7 +266,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   ngOnDestroy() {
-    this.dialog.portalOutlet.detach();
     this.dataService.setCurrentFolder();
     unsubscribeAll(this.subscriptions);
   }

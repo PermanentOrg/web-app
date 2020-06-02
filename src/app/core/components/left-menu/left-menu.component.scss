@@ -2,6 +2,13 @@
 
 $transition-length: $default-transition-length;
 
+$hover-color: lighten($PR-blue, 4%);
+$active-color: lighten($PR-blue, 7%);
+$active-indicator-color: lighten($active-color, 7%);
+
+:host {
+  z-index: $z-index-nav + 1;
+}
 
 .hamburger-menu {
   position: absolute;
@@ -32,13 +39,13 @@ $transition-length: $default-transition-length;
     }
 
     &:hover {
-      background-color: lighten($PR-blue, 4%);
+      background-color: $hover-color;
       text-decoration: none;
       transition: none;
     }
 
     &.active {
-      background-color: lighten($PR-blue, 7%);
+      background-color: $active-color;
       transition: none;
       position: relative;
     }
@@ -50,7 +57,7 @@ $transition-length: $default-transition-length;
       bottom: 0;
       right: 0;
       width: 10px;
-      background-color: lighten(lighten($PR-blue, 7%), 7%);
+      background-color: $active-indicator-color;
       box-shadow: $box-shadow;
       animation-name: slideIn;
       animation-duration: 0.25s;
@@ -87,9 +94,14 @@ $transition-length: $default-transition-length;
 
 
 @include after($tablet-horizontal) {
+  :host {
+    display: block;
+    flex: 0 0 $left-menu-width;
+    position: relative;
+  }
 
   .hamburger-menu {
-    // transform: translateX(0);
+    transform: translateX(0);
     visibility: visible;
   
     .menu-header {
@@ -97,11 +109,18 @@ $transition-length: $default-transition-length;
     }
 
     .menu-header-desktop {
-      display: block;
-      padding: 1rem 0;
+      display: flex;
+      padding: 0;
       $thumb-size: $left-menu-width * 0.5;
-      cursor: pointer;
+      position: relative;
       outline: none !important;
+
+      .archive {
+        flex: 1 1 auto;
+        padding: 1rem 0;
+        outline: none !important;
+        cursor: pointer;
+      }
 
       .archive-thumb {
         width: $thumb-size;
@@ -116,6 +135,22 @@ $transition-length: $default-transition-length;
         padding: 0.5rem;
         font-weight: bold;
       }
+
+      .archive-selector-indicator {
+        flex: 0 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color $transition-length / 4 ease-in;
+
+        &:hover {
+          background-color: $hover-color;
+          box-shadow: $box-shadow;
+          transition: none;
+        }
+      }
+
     }
 
     .menu-scroll {

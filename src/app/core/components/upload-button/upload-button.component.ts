@@ -64,7 +64,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     if (!this.currentFolder) {
       this.hidden = true;
     } else {
-      this.hidden = this.currentFolder.type === 'type.folder.root.share';
+      this.hidden = this.currentFolder.type === 'type.folder.root.share' || this.currentFolder.type === 'page';
       this.disabled =
         !checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
         || !checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor)

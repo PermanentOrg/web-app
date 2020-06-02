@@ -109,14 +109,10 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
   }
 
   ngOnDestroy() {
-    this.dialog.unregisterPortalOutlet(this.portalOutlet);
   }
 
   ngAfterViewInit() {
     this.checkShareByUrl();
-
-    // register portal outlet with dialog service
-    this.dialog.registerPortalOutlet(this.portalOutlet);
   }
 
   async checkCta() {

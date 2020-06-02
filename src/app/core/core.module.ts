@@ -29,6 +29,7 @@ import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
+import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 
 @NgModule({
   imports: [
@@ -53,7 +54,8 @@ import { AccountSettingsComponent } from './components/account-settings/account-
     RelationshipsComponent,
     MembersComponent,
     MultiSelectStatusComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    ArchiveSelectorComponent
   ],
   providers: [
     DataService,

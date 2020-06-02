@@ -1,0 +1,20 @@
+@import 'variables';
+
+:host {
+  display: none;
+  position: absolute;
+  top: $navbar-height-desktop;
+  bottom: 0;
+  width: 100%;
+  z-index: 0;
+  background: green;
+
+  &.visible {
+    transform: translateX(100%);
+  }
+
+  @include desktop {
+    display: block;
+  }
+}
+
