@@ -11,27 +11,34 @@
       [routerLink]="['/myfiles']"
       [class.active]="checkMenuItemActive('/myfiles')"
       prDragTargetRouterLink>
+        <i class="ion-md-folder"></i>
         My Files
       </a>
       <a class="menu-item" [routerLink]="['/shares']" [class.active]="checkMenuItemActive('/shares')">
+        <i class="ion-md-share"></i>
         Shares
       </a>
       <a class="menu-item"
         [routerLink]="['/public']"
         [class.active]="checkMenuItemActive('/public')"
         prDragTargetRouterLink>
+      <i class="ion-md-globe"></i>
         Public
       </a>
       <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
+        <i class="ion-md-swap"></i>
         Apps
       </a>
       <a class="menu-item" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
+        <i class="ion-md-people"></i>
         Relationships
       </a>
       <a class="menu-item" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
+        <i class="ion-md-person-add"></i>
         Members
       </a>
       <a class="menu-item" [routerLink]="['/invitations']" [class.active]="checkMenuItemActive('/invitations')">
+        <i class="ion-md-person-add"></i>
         Invitations
       </a>
       <a class="menu-item hide-desktop" href="/add-storage">

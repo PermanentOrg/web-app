@@ -43,8 +43,10 @@ export class Breadcrumb {
   encapsulation: ViewEncapsulation.None
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
-  public currentFolder;
+  public currentFolder: FolderVO;
   public breadcrumbs;
+
+  public showingShareArchives = false;
 
   @Input() darkText = false;
 

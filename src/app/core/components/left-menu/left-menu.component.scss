@@ -26,6 +26,11 @@ $transition-length: $default-transition-length;
 
     transition: background-color $transition-length / 4 ease-in;
 
+    i {
+      width: 1rem;
+      display: inline-block;
+    }
+
     &:hover {
       background-color: lighten($PR-blue, 4%);
       text-decoration: none;
@@ -33,9 +38,23 @@ $transition-length: $default-transition-length;
     }
 
     &.active {
-      font-weight: 600;
       background-color: lighten($PR-blue, 7%);
       transition: none;
+      position: relative;
+    }
+
+    &.active:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      background-color: lighten(lighten($PR-blue, 7%), 7%);
+      box-shadow: $box-shadow;
+      animation-name: slideIn;
+      animation-duration: 0.25s;
+      animation-timing-function: $tweaked-ease;
     }
 
     &.drop-target, &.drop-target:hover {
@@ -48,9 +67,6 @@ $transition-length: $default-transition-length;
     strong {
       display: block;
     }
-    // box-shadow: $box-shadow-sm;
-    // border-bottom: 1px solid $gray-300;
-    // margin-bottom: $input-btn-padding-y * 1.5;
   }
 
   .menu-branding {
@@ -63,7 +79,6 @@ $transition-length: $default-transition-length;
     overflow: hidden;
     overflow-y: auto;
   }
-
 }
 
 
