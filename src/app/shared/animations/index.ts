@@ -155,3 +155,20 @@ export const ngIfScaleHeightEnterAnimation = trigger('ngIfScaleHeightEnterAnimat
     ]
   )
 ]);
+
+export const ngIfSlideInAnimation = trigger('ngIfSlideInAnimation', [
+  transition(
+    ':enter',
+    [
+      style({ transform: 'translateX(-100%)' }),
+      animate(`250ms ${TWEAKED}`, style({ transform: '*'}))
+    ]
+  ),
+  transition(
+    ':leave',
+    [
+      style({ transform: '*' }),
+      animate(`250ms ${TWEAKED}`, style({ transform: 'translateX(-100%)'})),
+    ]
+  )
+]);

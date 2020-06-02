@@ -60,4 +60,4 @@
     <pr-beta-toggle></pr-beta-toggle>
   </div>
 </div>
-<pr-archive-selector [visible]="showArchiveSelector"></pr-archive-selector>
+<pr-archive-selector *ngIf="showArchiveSelector" [@ngIfSlideInAnimation]></pr-archive-selector>

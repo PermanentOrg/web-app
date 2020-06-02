@@ -5,11 +5,13 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveVO } from '@root/app/models';
 import { Subscription } from 'rxjs';
+import { ngIfSlideInAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-left-menu',
   templateUrl: './left-menu.component.html',
-  styleUrls: ['./left-menu.component.scss']
+  styleUrls: ['./left-menu.component.scss'],
+  animations: [ ngIfSlideInAnimation ]
 })
 export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isVisible = false;
