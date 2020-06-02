@@ -43,8 +43,9 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
     public device: DeviceService,
     @Inject(DOCUMENT) private document: any
   ) {
+    const currentArchive = this.accountService.getArchive();
     const shareArchives = this.route.snapshot.data.shares as ArchiveVO[] || [];
-    for (const archive of shareArchives) {
+    for (const archive of shareArchives.filter(a => a.archiveId !== currentArchive.archiveId)) {
       for (const item of archive.ItemVOs) {
         item.ShareArchiveVO = archive;
         this.shareItems.push(item);
