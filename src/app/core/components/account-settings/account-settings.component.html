@@ -30,11 +30,11 @@
 <div class="settings-group" *ngIf="preferences.emailPreference">
   <div class="settings-group-title">Email Preferences</div>
   <div class="settings-item" *ngFor="let feature of account.notificationPreferences.emailPreference | keyvalue">
-    <label>{{feature.key}}</label>
+    <label>{{feature.key | titlecase}}</label>
     <div class="form-check" *ngFor="let type of feature.value | keyvalue">
       <input type="checkbox" class="form-check-input"
         [(ngModel)]="preferences.emailPreference[feature.key][type.key]" (ngModelChange)="onPreferenceChange(['emailPreference', feature.key, type.key], $event)">
-      <label for="" class="form-check-label">{{type.key}}</label>
+      <label for="" class="form-check-label">{{type.key | titlecase}}</label>
     </div>
   </div>
 </div>
