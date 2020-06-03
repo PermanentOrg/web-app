@@ -20,7 +20,7 @@
     <span>About this archive</span>
     <small><a (click)="archiveDescriptionHidden = !archiveDescriptionHidden">{{archiveDescriptionHidden ? 'Show' : 'Hide'}} details</a></small>
   </div>
-  <p [innerHTML]="description" *ngIf="!archiveDescriptionHidden"></p>
+  <div class="public-archive-description-contents" [innerHTML]="description" [@collapseAnimation]="archiveDescriptionHidden ? 'closed' : 'open'"></div>
 </div>
 <div class="public-archive-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>

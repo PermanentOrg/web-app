@@ -3,7 +3,8 @@ import {
   animate,
   transition,
   style,
-  query
+  query,
+  state
 } from '@angular/animations';
 
 const animationLength = 750;
@@ -142,6 +143,28 @@ export const ngIfScaleAnimationDynamic = trigger('ngIfScaleAnimationDynamic', [
       style({ height: '*', width: '*', opacity: '*' }),
       animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
       animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' }))
+    ]
+  )
+]);
+
+export const collapseAnimation = trigger('collapseAnimation', [
+  state('closed',
+    style({ height: '0px', display: 'none', overflow: 'hidden'})
+  ),
+  transition(
+    'closed => open',
+    [
+      style({ height: '0px', opacity: 0, display: 'block' }),
+      animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
+    ]
+  ),
+  transition(
+    'open => closed',
+    [
+      style({ height: '*', opacity: '*' }),
+      animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
+      animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
     ]
   )
 ]);

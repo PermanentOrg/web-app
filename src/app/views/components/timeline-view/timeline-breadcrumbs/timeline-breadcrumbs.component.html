@@ -3,7 +3,9 @@
     <a *ngIf="!last" (click)="onBreadcrumbClick(breadcrumb)">
       {{breadcrumb.text}}
     </a>
-    <span class="separator" *ngIf="!last">></span>
+    <span class="separator" *ngIf="!last">
+      <i class="ion-md-arrow-dropright"></i>
+    </span>
     <span class="current" *ngIf="last">
       {{breadcrumb.text}}
     </span>

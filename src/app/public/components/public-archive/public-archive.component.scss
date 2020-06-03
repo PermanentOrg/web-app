@@ -84,6 +84,11 @@
     font-size: $font-size-sm;
   }
 
+  .public-archive-description-contents {
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+
   @media screen and (max-width: $public-max-width) {
     padding: 10px;
   }
