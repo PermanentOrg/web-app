@@ -2,11 +2,17 @@
   <pr-breadcrumb class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last" [breadcrumb]="breadcrumb" [last]="last">
   </pr-breadcrumb>
   <div class="breadcrumb-shares" *ngIf="currentFolder?.ShareVOs?.length">
-    <i class="ion-md-people" (click)="showingShareArchives = !showingShareArchives"></i>
-    <div class="breadcrumb-shares-archives" *ngIf="showingShareArchives">
-      <div *ngFor="let shareVo of currentFolder.ShareVOs">
-        {{shareVo.ArchiveVO.fullName}}
-      </div>
-    </div>
+    <i class="ion-md-people" (click)="showingShareArchives = !showingShareArchives"
+      [ngbTooltip]="sharesList"></i>
+    <ng-template #sharesList>
+      <ng-container [ngPlural]="currentFolder?.ShareVOs?.length">
+        Shared with 
+        <ng-template ngPluralCase="=0">no one</ng-template>
+        <ng-template ngPluralCase="=1">the {{currentFolder?.ShareVOs[0].ArchiveVO.fullName}} Archive</ng-template>
+        <ng-template ngPluralCase="=2">the {{currentFolder?.ShareVOs[0].ArchiveVO.fullName}} Archive and 1 other</ng-template>
+        <ng-template ngPluralCase="other">the {{currentFolder?.ShareVOs[0].ArchiveVO.fullName}} Archive and {{currentFolder?.ShareVOs.length - 2}} others</ng-template>
+      </ng-container>
+    </ng-template>
+    
   </div>
 </div>
