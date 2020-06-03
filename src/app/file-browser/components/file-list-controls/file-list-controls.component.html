@@ -29,10 +29,24 @@
       </div>
     </ng-container>
     <ng-container *ngSwitchDefault>
-      <div class="single-col-sort active-sort" [class.sort-desc]="sortDesc">
-        <span class="col-title">Sorted by {{currentSort}}</span>
-        <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
+      <div ngbDropdown #dropdown="ngbDropdown">
+        <div class="single-col-sort active-sort" [class.sort-desc]="sortDesc" ngbDropdownToggle
+          [ngbTooltip]="'fileList.sort.singleCol' | prTooltip">
+          <span>Sorted by {{currentSort}} ({{sortDesc ? 'descending' : 'ascending'}})</span>
+          <div ngbDropdownMenu (click)="dropdown.close()">
+            <div class="single-col-sort-option" (click)="onSortClick('name')">
+              Sort by name {{!sortDesc && currentSort === 'name' ? '(descending)' : '(ascending)'}}
+            </div>
+            <div class="single-col-sort-option" (click)="onSortClick('type')">
+              Sort by type {{!sortDesc && currentSort === 'type' ? '(descending)' : '(ascending)'}}
+            </div>
+            <div class="single-col-sort-option" (click)="onSortClick('date')">
+              Sort by date {{!sortDesc && currentSort === 'date' ? '(descending)' : '(ascending)'}}
+            </div>
+          </div>
+        </div>
       </div>
+      <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
     </ng-container>
   </ng-container>
 

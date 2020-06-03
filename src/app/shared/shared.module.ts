@@ -27,7 +27,7 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
-import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
@@ -46,7 +46,8 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
     DialogModule,
     NgbDatepickerModule,
     NgbTimepickerModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    NgbDropdownModule
   ],
   exports: [
     CommonModule,
@@ -82,7 +83,8 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
     TagsComponent,
     BetaToggleComponent,
     TooltipsPipe,
-    NgbTooltipModule
+    NgbTooltipModule,
+    NgbDropdownModule
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -150,7 +152,8 @@ export class SharedModule {
     private resolver: ComponentFactoryResolver,
     private datePickerConfig: NgbDatepickerConfig,
     private timePickerConfig: NgbTimepickerConfig,
-    private tooltipConfig: NgbTooltipConfig
+    private tooltipConfig: NgbTooltipConfig,
+    private dropdownConfig: NgbDropdownConfig
   ) {
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
