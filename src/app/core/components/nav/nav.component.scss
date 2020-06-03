@@ -61,6 +61,10 @@ nav.navbar {
     flex: 0 0 $sidebar-width;
     display: none;
     padding: 0px 10px;
+
+    > * {
+      flex: 1 1 50%;
+    }
     
     .btn {
       padding: 7px $navbar-button-icon-padding;

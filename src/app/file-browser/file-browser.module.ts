@@ -12,6 +12,7 @@ import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.compo
 import { VideoComponent } from '@shared/components/video/video.component';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule);
@@ -24,6 +25,7 @@ export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-bro
     FileBrowserRoutingModule,
     SharedModule,
     DialogModule,
+    NgbTooltipModule
   ],
   exports: [
     FileListComponent,

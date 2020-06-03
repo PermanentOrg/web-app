@@ -16,10 +16,12 @@
   <pr-folder-view-toggle></pr-folder-view-toggle>
   <div class="sidebar-align">
     <pr-upload-button class="full-width" #uploadButton></pr-upload-button>
-    <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" [disabled]="!rightMenu.allowedActions.createFolder" [hidden]="uploadButton.hidden"
+    <div [ngbTooltip]="(rightMenu.allowedActions.createFolder ? 'fileList.actions.newFolder.enabled' : 'fileList.actions.newFolder.disabled') | prTooltip">
+      <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" [disabled]="!rightMenu.allowedActions.createFolder" [hidden]="uploadButton.hidden"
       *ngIf="rightMenu.currentFolder?.type !== 'type.folder.root.share'">
       <i class="ion-md-folder"></i>New folder
-    </button>
+      </button>
+    </div>
   </div>
 </div>
 <pr-right-menu [(isVisible)]="rightMenuVisible" #rightMenu></pr-right-menu>

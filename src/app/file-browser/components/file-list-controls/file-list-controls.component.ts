@@ -285,4 +285,26 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     this.edit.openPublishDialog(this.selectedItems[0]);
   }
 
+  getTooltipConstantForAction(action: keyof FileListActions) {
+    const basePath = 'fileList.actions';
+    const actionAllowed = this.can[action];
+    const multiSelected = this.selectedItems?.length > 1;
+    if (actionAllowed) {
+      return `${basePath}.${action}.enabled`;
+    } else if (multiSelected && (action === 'share' || action === 'publish')) {
+      return `${basePath}.${action}.disabledMulti`;
+    } else {
+      return `${basePath}.${action}.disabled`;
+    }
+  }
+
+  getTooltipConstantForSort(column: FileListColumn) {
+    let direction = 'asc';
+    if (this.currentSort === column && !this.sortDesc) {
+      direction = 'desc';
+    }
+
+    return `fileList.sort.${column}.${direction}`;
+  }
+
 }

@@ -12,6 +12,7 @@ import { map } from 'rxjs/operators';
 interface FolderViewToggleOption {
   iconClass: 'ion-md-list' | 'ion-md-grid';
   folderView: FolderView;
+  tooltip?: string;
 }
 
 @Component({
@@ -24,11 +25,13 @@ export class FolderViewToggleComponent implements OnInit, OnDestroy, HasSubscrip
   folderViews: FolderViewToggleOption[] = [
     {
       iconClass: 'ion-md-list',
-      folderView: FolderView.List
+      folderView: FolderView.List,
+      tooltip: 'fileList.viewToggle.list'
     },
     {
       iconClass: 'ion-md-grid',
-      folderView: FolderView.Grid
+      folderView: FolderView.Grid,
+      tooltip: 'fileList.viewToggle.grid'
     },
   ];
 

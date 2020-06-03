@@ -3,7 +3,9 @@
 button {
   padding-left: 10px;
   padding-right: 10px;
-
+  background: none;
+  font-size: $font-size-lg;
+  
   i {
     opacity: 0.5;
     transition: opacity 0.125s $tweaked-ease;

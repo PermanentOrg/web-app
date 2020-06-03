@@ -27,7 +27,7 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
-import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
@@ -35,6 +35,7 @@ import { StaticMapComponent } from './components/static-map/static-map.component
 import { PrLocationPipe } from './pipes/pr-location.pipe';
 import { TagsComponent } from './components/tags/tags.component';
 import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.component';
+import { TooltipsPipe } from './pipes/tooltips.pipe';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.compon
     RouterModule,
     DialogModule,
     NgbDatepickerModule,
-    NgbTimepickerModule
+    NgbTimepickerModule,
+    NgbTooltipModule
   ],
   exports: [
     CommonModule,
@@ -78,7 +80,9 @@ import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.compon
     FolderViewToggleComponent,
     StaticMapComponent,
     TagsComponent,
-    BetaToggleComponent
+    BetaToggleComponent,
+    TooltipsPipe,
+    NgbTooltipModule
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -115,7 +119,8 @@ import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.compon
     FolderViewToggleComponent,
     StaticMapComponent,
     TagsComponent,
-    BetaToggleComponent
+    BetaToggleComponent,
+    TooltipsPipe,
   ],
   providers: [
     PublicLinkPipe,
@@ -144,7 +149,8 @@ export class SharedModule {
     private dialog: Dialog,
     private resolver: ComponentFactoryResolver,
     private datePickerConfig: NgbDatepickerConfig,
-    private timePickerConfig: NgbTimepickerConfig
+    private timePickerConfig: NgbTimepickerConfig,
+    private tooltipConfig: NgbTooltipConfig
   ) {
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
@@ -153,5 +159,9 @@ export class SharedModule {
     this.timePickerConfig.spinners = false;
     this.timePickerConfig.seconds = true;
     this.timePickerConfig.meridian = true;
+
+    this.tooltipConfig.openDelay = 500;
+    this.tooltipConfig.container = 'body';
+    this.tooltipConfig.tooltipClass = 'pr-tooltip';
   }
 }

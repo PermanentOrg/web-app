@@ -1,5 +1,6 @@
 <label class="btn btn-alternate"
-  [hidden]="!currentFolder || hidden" [class.full-width]="fullWidth" [class.disabled]="disabled">
+  [hidden]="!currentFolder || hidden" [class.full-width]="fullWidth" [class.disabled]="disabled"
+  [ngbTooltip]="(disabled ? 'fileList.actions.upload.disabled' : 'fileList.actions.upload.enabled') | prTooltip">
   <i class="ion-md-cloud-upload"></i>Upload
-  <input id="uploadFiles" type="file" (change)="onFileChange($event)" multiple="multiple" hidden #fileInput>
+  <input id="uploadFiles" type="file" (change)="onFileChange($event)" multiple="multiple" hidden #fileInput [disabled]="disabled">
 </label>

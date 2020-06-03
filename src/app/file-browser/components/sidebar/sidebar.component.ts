@@ -49,6 +49,14 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           this.selectedItem = null;
           this.selectedItems = Array.from(selectedItems.keys());
         }
+        
+        this.checkPermissions();
+
+        this.isRootFolder = this.selectedItem?.type.includes('root');
+
+        if (this.isRootFolder) {
+          this.setCurrentTab('info');
+        }
 
         if (this.selectedItem !== this.dataService.currentFolder) {
           const items = this.selectedItems || [this.selectedItem];
@@ -58,10 +66,6 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
             this.isLoading = false;
           }
         }
-
-        this.checkPermissions();
-
-        this.isRootFolder = this.selectedItem?.type.includes('root');
       })
     );
   }
@@ -87,6 +91,10 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   }
 
   setCurrentTab(tab: SidebarTab) {
+    if (tab === 'sharing' && this.isRootFolder) {
+      return;
+    }
+
     this.currentTab = tab;
   }
 

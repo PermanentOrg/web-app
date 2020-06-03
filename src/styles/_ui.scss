@@ -386,3 +386,9 @@ $drag-outline-border: 5px;
     width: auto;
   }
 }
+
+.pr-tooltip {
+  animation-name: fadein;
+  animation-duration: 125ms;
+  animation-timing-function: $tweaked-ease;
+}
