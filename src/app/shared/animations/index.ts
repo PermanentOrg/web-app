@@ -147,27 +147,30 @@ export const ngIfScaleAnimationDynamic = trigger('ngIfScaleAnimationDynamic', [
   )
 ]);
 
-export const collapseAnimation = trigger('collapseAnimation', [
-  state('closed',
-    style({ height: '0px', display: 'none', overflow: 'hidden'})
-  ),
-  transition(
-    'closed => open',
-    [
-      style({ height: '0px', opacity: 0, display: 'block' }),
-      animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
-    ]
-  ),
-  transition(
-    'open => closed',
-    [
-      style({ height: '*', opacity: '*' }),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
-      animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
-    ]
-  )
-]);
+export function collapseAnimationCustom(ms: number) {
+  return trigger('collapseAnimation', [
+    state('closed',
+      style({ height: '0px', display: 'none', overflow: 'hidden'})
+    ),
+    transition(
+      'closed => open',
+      [
+        style({ height: '0px', opacity: 0, display: 'block' }),
+        animate(`${ms}ms ${TWEAKED}`, style({ height: '*', width: '*' })),
+        animate(`${ms}ms ${TWEAKED}`, style({ opacity: 1 })),
+      ]
+    ),
+    transition(
+      'open => closed',
+      [
+        style({ height: '*', opacity: '*' }),
+        animate(`${ms}ms ${TWEAKED}`, style({ opacity: 0 })),
+        animate(`${ms}ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
+      ]
+    )
+  ]);
+}
+export const collapseAnimation = collapseAnimationCustom(125);
 
 export const ngIfScaleHeightEnterAnimation = trigger('ngIfScaleHeightEnterAnimation', [
   transition(

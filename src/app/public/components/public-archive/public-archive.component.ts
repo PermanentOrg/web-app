@@ -14,13 +14,13 @@ import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
-import { collapseAnimation } from '@shared/animations';
+import { collapseAnimationCustom } from '@shared/animations';
 
 @Component({
   selector: 'pr-public-archive',
   templateUrl: './public-archive.component.html',
   styleUrls: ['./public-archive.component.scss'],
-  animations: [ collapseAnimation ]
+  animations: [ collapseAnimationCustom(250) ]
 })
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   public archive: ArchiveVO;
