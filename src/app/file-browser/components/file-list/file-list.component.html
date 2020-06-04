@@ -1,6 +1,6 @@
 <pr-file-list-controls [hidden]="!showSidebar" #controls></pr-file-list-controls>
 <div class="file-list-scroll"
-  (scroll)="onViewportScroll($event)" (mousemove)="onViewportMouseMove($event)" 
+  (scroll)="onViewportScroll($event)"
   [class.is-sorting]="controls?.isSorting$ | async" #scroll>
   <pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
   <div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">

@@ -1,4 +1,4 @@
-import { Injectable, Inject, Renderer2, RendererFactory2 } from '@angular/core';
+import { Injectable, Inject, Renderer2, RendererFactory2, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 import { throttle, find } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
@@ -69,6 +69,7 @@ export class DragService {
     private dataService: DataService,
     private accountService: AccountService,
     rendererFactory: RendererFactory2,
+    private ngZone: NgZone
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
@@ -133,7 +134,9 @@ export class DragService {
     this.createDragCursor(dragEvent.event);
     this.updateItemLabelText(dragEvent.event);
     this.updateActionLabelText();
-    this.document.addEventListener('mousemove', this.mouseMoveHandler);
+    this.ngZone.runOutsideAngular(() => {
+      this.document.addEventListener('mousemove', this.mouseMoveHandler);
+    });
     this.renderer.addClass(this.document.body, 'dragging');
     this.hasFiles = dragEvent.srcComponent instanceof MainComponent;
     if (this.hasFiles) {

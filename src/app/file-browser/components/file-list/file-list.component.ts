@@ -11,7 +11,9 @@ import {
   HostBinding,
   Input,
   Optional,
-  ViewChild
+  ViewChild,
+  NgZone,
+  Renderer2
 } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -110,6 +112,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   subscriptions: Subscription[] = [];
 
   private debug = debug('component:fileList');
+  private unlistenMouseMove: Function;
 
   constructor(
     private route: ActivatedRoute,
@@ -121,7 +124,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private location: Location,
     @Inject(DOCUMENT) private document: any,
     @Optional() private drag: DragService,
-    public device: DeviceService
+    private renderer: Renderer2,
+    public device: DeviceService,
+    private ngZone: NgZone
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -217,6 +222,18 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     }
   }
 
+  registerMouseMoveHandler() {
+    if (!this.unlistenMouseMove) {
+      this.ngZone.runOutsideAngular(() => {
+        this.unlistenMouseMove = this.renderer.listen(
+          this.scrollElement.nativeElement,
+          'mousemove',
+          () => this.mouseMoveHandlerThrottled()
+        );
+      });
+    }
+  }
+
   refreshView() {
     this.ngOnInit();
     setTimeout(() => {
@@ -247,6 +264,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       this.listItems = this.listItemsQuery.toArray();
     }
 
+    this.registerMouseMoveHandler();
+
     this.loadVisibleItems(true);
     this.getScrollElement().scrollTo(0, 0);
 
@@ -268,6 +287,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   ngOnDestroy() {
     this.dataService.setCurrentFolder();
     unsubscribeAll(this.subscriptions);
+    if (this.unlistenMouseMove) {
+      this.unlistenMouseMove();
+    }
   }
 
   setFolderView(folderView: FolderView) {
