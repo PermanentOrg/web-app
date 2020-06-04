@@ -1,4 +1,21 @@
-export const SHARE_EVENTS = {
+import { EventParams } from './google-analytics.service';
+
+interface KeyedEventDict {
+  key: string;
+  params: EventParams;
+}
+
+interface NestedEventDict {
+  [key: string]: {
+    [key: string]: KeyedEventDict
+  };
+}
+
+interface SimpleEventDict {
+  [key: string]: EventParams;
+}
+
+export const SHARE_EVENTS: NestedEventDict = {
   ShareByRelationship: {
     initiated: { 'key': 'Evt-Sh10', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'initiated' } },
     previewed: { 'key': 'Evt-Sh11', 'params': { hitType: 'event', eventCategory: 'Share by relationship', eventAction: 'previewed' } },
@@ -29,7 +46,7 @@ export const SHARE_EVENTS = {
   }
 };
 
-export const PUBLISH_EVENTS = {
+export const PUBLISH_EVENTS: NestedEventDict = {
   PublishByUrl: {
     initiated: { 'key': 'Evt-Pu40', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'initiated' } },
     getLink: { 'key': 'Evt-Pu41', 'params': { hitType: 'event', eventCategory: 'Publish by url', eventAction: 'get link' } },
@@ -40,8 +57,22 @@ export const PUBLISH_EVENTS = {
   }
 };
 
+export const BETA_EVENTS = {
+  optIn: {
+    hitType: 'event',
+    eventCategory: 'Beta UI',
+    eventAction: 'Opt in'
+  },
+  optOut: {
+    hitType: 'event',
+    eventCategory: 'Beta UI',
+    eventAction: 'Opt out'
+  }
+};
+
 export const EVENTS = {
   SHARE: SHARE_EVENTS,
-  PUBLISH: PUBLISH_EVENTS
+  PUBLISH: PUBLISH_EVENTS,
+  BETA: BETA_EVENTS
 };
 

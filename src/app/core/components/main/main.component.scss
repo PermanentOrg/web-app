@@ -38,6 +38,7 @@
 
   .main-panel {
     flex: 1 1 auto;
+    max-width: calc(100% - #{$left-menu-width});
     display: flex;
     flex-direction: column;
   }
