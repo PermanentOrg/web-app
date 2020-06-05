@@ -1,4 +1,4 @@
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, BaseVOData } from '@models/base-vo';
 import { AccessRoleType } from './access-role';
 
 
@@ -16,6 +16,42 @@ interface NotificationPreference {
   relationships?: NotificationTypes;
   share?: NotificationTypes;
   system?: NotificationTypes;
+}
+
+export interface AccountVOData extends BaseVOData {
+  accountId?: number;
+  primaryEmail?: string;
+  fullName?: string;
+  address?: string;
+  address2?: string;
+  country?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  primaryPhone?: string;
+  defaultArchiveId?: any;
+  level?: string;
+  apiToken?: any;
+  facebookAccountId?: any;
+  googleAccountId?: any;
+  status?: any;
+  type?: any;
+  agreed?: any;
+  optIn?: any;
+  emailArray?: any;
+  inviteCode?: any;
+  rememberMe?: any;
+  keepLoggedIn?: any;
+  accessRole?: AccessRoleType;
+  spaceTotal?: any;
+  spaceLeft?: any;
+  fileTotal?: any;
+  fileLeft?: any;
+  changePrimaryEmail?: any;
+  changePrimaryPhone?: any;
+  emailStatus?: any;
+  phoneStatus?: any;
+  notificationPreferences?: NotificationPreferencesI;
 }
 
 export interface NotificationPreferencesI {
@@ -62,7 +98,7 @@ export class AccountVO extends BaseVO {
   public phoneStatus;
   public notificationPreferences: NotificationPreferencesI;
 
-  constructor(voData) {
+  constructor(voData: AccountVOData) {
     super(voData);
 
     if (this.notificationPreferences && typeof this.notificationPreferences === 'string') {

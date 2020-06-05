@@ -158,6 +158,11 @@ export class SharedModule {
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
     this.datePickerConfig.showWeekdays = false;
+    this.datePickerConfig.minDate = {
+      year: 1,
+      day: 1,
+      month: 1
+    };
 
     this.timePickerConfig.spinners = false;
     this.timePickerConfig.seconds = true;

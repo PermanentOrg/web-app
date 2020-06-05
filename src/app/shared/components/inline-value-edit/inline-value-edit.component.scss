@@ -8,6 +8,12 @@ $inline-padding-y: 0.25rem;
   position: relative;
 }
 
+form {
+  padding: 0px;
+  margin: 0;
+  max-width: none;
+}
+
 .inline-value-container {
   position: relative;
 
@@ -29,6 +35,10 @@ $inline-padding-y: 0.25rem;
   margin-right: -1 * $inline-padding-x;
   position: relative;
   border-color: rgba($input-border-color, 0);
+
+  &.is-editing {
+    opacity: 0;
+  }
 }
 
 .inline-value-placeholder {
@@ -136,6 +146,10 @@ div.form-control {
 :host.horizontal-controls {
   display: flex;
   align-items: center;
+  form {
+    display: flex;
+    align-items: center;
+  }
 
   .inline-value-container {
     flex: 1 0 100%;
@@ -144,5 +158,14 @@ div.form-control {
   .inline-value-controls {
     flex: 0 0 auto;
     margin-top: 0;
+  }
+}
+
+input, select, textarea {
+  &.ng-invalid {
+    &.ng-touched, &.ng-dirty {
+      background-color: rgba($danger, 0.2);
+      border-color: $danger !important;
+    }
   }
 }

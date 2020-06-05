@@ -18,6 +18,7 @@
         [displayValue]="selectedItem.displayName"
         [itemId]="selectedItem.folder_linkId"
         [canEdit]="canEdit"
+        [required]="true"
         (doneEditing)="onFinishEditing('displayName', $event)"
         emptyMessage="Click to add name"
         readOnlyEmptyMessage="No name"

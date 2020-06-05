@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges, HostBinding } from '@angular/core';
-import { ngIfScaleAnimation } from '@shared/animations';
+import { ngIfScaleAnimation, collapseAnimation } from '@shared/animations';
 import { NgbDate, NgbTimeStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from '@permanent.org/vis-timeline';
 import { ItemVO, ArchiveVO } from '@models';
 import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { ENTER } from '@angular/cdk/keycodes';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea';
 
@@ -14,7 +15,7 @@ type ValueType = string | number;
   selector: 'pr-inline-value-edit',
   templateUrl: './inline-value-edit.component.html',
   styleUrls: ['./inline-value-edit.component.scss'],
-  animations: [ ngIfScaleAnimation ]
+  animations: [ ngIfScaleAnimation, collapseAnimation ]
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayValue: ValueType;
@@ -25,6 +26,11 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() itemId: any;
   @Input() item: ItemVO;
   @Input() canEdit = true;
+  @Input() required = false;
+  @Input() minLength = false;
+  @Input() maxLength = false;
+  @Input() email = false;
+  @Input() noScroll = false;
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
@@ -69,9 +75,11 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     this.isEditing = true;
     this.focusInput();
 
-    setTimeout(() => {
-      (this.elementRef.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start'});
-    });
+    if (!this.noScroll) {
+      setTimeout(() => {
+        (this.elementRef.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start'});
+      });
+    }
   }
 
   save() {
@@ -133,6 +141,12 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   blurInput() {
     if (this.inputElementRef) {
       (this.inputElementRef.nativeElement as HTMLInputElement).blur();
+    }
+  }
+
+  onTextInputKeydown(event: KeyboardEvent) {
+    if (event.keyCode === ENTER) {
+      this.save();
     }
   }
 }
