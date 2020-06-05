@@ -23,6 +23,8 @@ import { LeanFolderResolveService } from './resolves/lean-folder-resolve.service
 import { RoutesWithData } from '../app.routes';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
 import { AccountResolveService } from './resolves/account-resolve.service';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -49,6 +51,12 @@ export const routes: RoutesWithData = [
         path: 'apps',
         loadChildren: () => import('../apps/apps.module').then(m => m.AppsModule),
         data: { title: 'Apps', showSidebar: true }
+      },
+      {
+        path: 'profile',
+        component: ProfileEditComponent,
+        data: { title: 'Profile'},
+        resolve: { profileItems: ProfileItemsResolveService }
       },
       {
         path: 'shares',
@@ -126,7 +134,8 @@ export const routes: RoutesWithData = [
     DonateResolveService,
     RelationshipsResolveService,
     MembersResolveService,
-    AccountResolveService
+    AccountResolveService,
+    ProfileItemsResolveService
   ],
   declarations: []
 })

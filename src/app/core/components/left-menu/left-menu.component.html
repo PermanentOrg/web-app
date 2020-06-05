@@ -32,8 +32,14 @@
         [routerLink]="['/public']"
         [class.active]="checkMenuItemActive('/public')"
         prDragTargetRouterLink>
-      <i class="ion-md-globe"></i>
+        <i class="ion-md-globe"></i>
         Public
+      </a>
+      <a class="menu-item"
+        [routerLink]="['/profile']"
+        [class.active]="checkMenuItemActive('/profile')">
+        <i class="ion-md-contact"></i>
+        Profile
       </a>
       <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
         <i class="ion-md-swap"></i>

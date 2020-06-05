@@ -30,6 +30,7 @@ import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { ArchiveSelectorComponent } from './components/archive-selector/archive-
     MembersComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
-    ArchiveSelectorComponent
+    ArchiveSelectorComponent,
+    ProfileEditComponent
   ],
   providers: [
     DataService,

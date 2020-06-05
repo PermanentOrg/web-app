@@ -1,0 +1,27 @@
+<div class="profile-group">
+  <div class="profile-item">
+    <label>Archive Name</label>
+    <div class="profile-item-content">
+      <pr-inline-value-edit
+        [displayValue]="profileItems['profile.basic'][0].string1"
+        [horizontalControls]="false"
+        [required]="true"
+        [noScroll]="true"
+        [canEdit]="canEdit"
+        [minLength]="1"
+        (doneEditing)="onSaveStringProfileItem('profile.basic', 'string1', $event)"></pr-inline-value-edit>
+    </div>
+  </div>
+  <div class="profile-item">
+    <label>Archive Description</label>
+    <div class="profile-item-content">
+      <pr-inline-value-edit
+      [displayValue]="profileItems['profile.description'][0].textData1"
+      [canEdit]="canEdit"
+      (doneEditing)="onSaveStringProfileItem('profile.description', 'textData1', $event)"
+      emptyMessage="Click to add description"
+      readOnlyEmptyMessage="No description"
+      type='textarea'></pr-inline-value-edit>
+    </div>
+  </div>
+</div>

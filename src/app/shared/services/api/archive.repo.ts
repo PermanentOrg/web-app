@@ -2,6 +2,7 @@ import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/model
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
 import { Observable } from 'rxjs';
+import { ProfileItemVOData } from '@models/profile-item-vo';
 
 export class ArchiveRepo extends BaseRepo {
   public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
@@ -110,6 +111,16 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<ArchiveResponse>('/archive/unshare', data, ArchiveResponse);
   }
+
+  public getAllProfileItems(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      Profile_itemVO: {
+        archiveId: archive.archiveId
+      }
+    }];
+
+    return this.http.sendRequestPromise<ArchiveResponse>('/profile_item/getAllByArchiveId', data, ArchiveResponse);
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {
@@ -142,5 +153,14 @@ export class ArchiveResponse extends BaseResponse {
     });
 
     return flatten(accounts);
+  }
+
+  public getProfileItemVOs() {
+    const data = flatten(this.getResultsData());
+    const profileItems = data.map((result) => {
+      return result.Profile_itemVO;
+    });
+
+    return profileItems as ProfileItemVOData[];
   }
 }
