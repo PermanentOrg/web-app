@@ -25,6 +25,7 @@ import { AccountSettingsComponent } from './components/account-settings/account-
 import { AccountResolveService } from './resolves/account-resolve.service';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
+import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -113,6 +114,11 @@ export const routes: RoutesWithData = [
         component: AccountSettingsComponent,
         data: { title: 'Account'},
         resolve: { account: AccountResolveService }
+      },
+      {
+        path: 'search',
+        component: GlobalSearchResultsComponent,
+        data: { title: 'Search' }
       },
       { path: '**', redirectTo: 'myfiles'}
     ]

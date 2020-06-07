@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO } from '@models';
+import { FolderVO, ArchiveVO } from '@models';
 import { ProfileItemVOData, FieldNameUI } from '@models/profile-item-vo';
 import { ActivatedRoute } from '@angular/router';
 import { groupBy } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role.enum';
+import { UploadService } from '@core/services/upload/upload.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -41,6 +44,7 @@ type ProfileItemsDictionary = {
   styleUrls: ['./profile-edit.component.scss']
 })
 export class ProfileEditComponent implements OnInit {
+  archive: ArchiveVO;
   profileItems: ProfileItemsDictionary;
 
   canEdit: boolean;
@@ -48,7 +52,10 @@ export class ProfileEditComponent implements OnInit {
   constructor(
     private data: DataService,
     private account: AccountService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private upload: UploadService,
+    private prompt: PromptService,
+    private folderPicker: FolderPickerService
   ) {
     this.data.setCurrentFolder(
       new FolderVO({
@@ -58,6 +65,7 @@ export class ProfileEditComponent implements OnInit {
       })
     );
 
+    this.archive = this.account.getArchive();
     const profileItems = this.route.snapshot.data.profileItems as ProfileItemVOData[];
     this.profileItems = groupBy(profileItems, 'fieldNameUI') as ProfileItemsDictionary;
 
@@ -73,5 +81,16 @@ export class ProfileEditComponent implements OnInit {
 
   onSaveIntProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsIntDataCol, value: number) {
     console.log(fieldName, value);
+  }
+
+  onProfilePictureClick() {
+    const privateRoot = this.account.getPrivateRoot();
+    try {
+      this.folderPicker.chooseRecord(privateRoot);
+    } catch (err) {
+    }
+  }
+
+  promptForExistingPicture() {
   }
 }

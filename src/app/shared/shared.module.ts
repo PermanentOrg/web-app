@@ -21,7 +21,6 @@ import { PublicLinkPipe } from './pipes/public-link.pipe';
 import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
 import { NewlineTextPipe } from './pipes/newline-text.pipe';
 import { AccountDropdownComponent } from './components/account-dropdown/account-dropdown.component';
-import { TimeAgoV9Pipe } from './pipes/time-ago.pipe';
 import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
 import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
@@ -70,7 +69,6 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
     ShareActionLabelPipe,
     PrDatePipe,
     NewlineTextPipe,
-    TimeAgoV9Pipe,
     FolderCastPipe,
     RecordCastPipe,
     FolderContentsPipe,
@@ -111,7 +109,6 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
     NewlineTextPipe,
-    TimeAgoV9Pipe,
     FolderCastPipe,
     RecordCastPipe,
     FolderContentsPipe,

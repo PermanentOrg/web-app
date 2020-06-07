@@ -1,6 +1,7 @@
-<form novalidate>
-  <ng-container [ngSwitch]="type" *ngIf="type">
-    <ng-container *ngSwitchCase="'text'">
+
+<ng-container [ngSwitch]="type" *ngIf="type">
+  <ng-container *ngSwitchCase="'text'">
+    <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <input type="text" name="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"
           [required]="required" [email]="email" [minLength]="minLength">
@@ -16,8 +17,10 @@
           Cancel
         </button>
       </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="'textarea'">
+    </form>
+  </ng-container>
+  <ng-container *ngSwitchCase="'textarea'">
+    <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <textarea name="textarea" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"></textarea>
         <div class="inline-value-display inline-value-textarea form-control"
@@ -41,32 +44,32 @@
           Cancel
         </button>
       </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="'date'">
-      <div class="inline-value-container inline-value-date" [class.can-edit]="canEdit">
-        <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing"
-        [class.showing-empty-message]="!displayValue && emptyMessage">
-          {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : (!canEdit ? readOnlyEmptyMessage : emptyMessage) }}
-        </div>
-        <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
-          (dateSelect)="onDateChange($event)" [footerTemplate]="timePicker"></ngb-datepicker>
-        <ng-template #timePicker>
-          <div class="datepicker-footer">
-            <ngb-timepicker [(ngModel)]="ngbTime" (ngModelChange)="onTimeChange($event)"></ngb-timepicker>
-          </div>
-        </ng-template>
-      </div>
-      <ng-container *ngTemplateOutlet="inlineControls"></ng-container>
-    </ng-container>
-    <ng-template #inlineControls>
-      <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-        <button class="btn btn-primary btn-sm" (click)="save()" type="submit">
-          Save
-        </button>
-        <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
-          Cancel
-        </button>
-      </div>
-    </ng-template>
+    </form>
   </ng-container>
-</form>
+  <ng-container *ngSwitchCase="'date'">
+    <div class="inline-value-container inline-value-date" [class.can-edit]="canEdit">
+      <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing"
+      [class.showing-empty-message]="!displayValue && emptyMessage">
+        {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : (!canEdit ? readOnlyEmptyMessage : emptyMessage) }}
+      </div>
+      <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
+        (dateSelect)="onDateChange($event)" [footerTemplate]="timePicker"></ngb-datepicker>
+      <ng-template #timePicker>
+        <div class="datepicker-footer">
+          <ngb-timepicker [(ngModel)]="ngbTime" (ngModelChange)="onTimeChange($event)"></ngb-timepicker>
+        </div>
+      </ng-template>
+    </div>
+    <ng-container *ngTemplateOutlet="inlineControls"></ng-container>
+  </ng-container>
+  <ng-template #inlineControls>
+    <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
+      <button class="btn btn-primary btn-sm" (click)="save()" type="submit">
+        Save
+      </button>
+      <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+        Cancel
+      </button>
+    </div>
+  </ng-template>
+</ng-container>

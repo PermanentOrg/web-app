@@ -28,6 +28,31 @@ p {
   }
 }
 
+.profile-picture {
+  $profile-picture-size: 200px;
+  height: $profile-picture-size;
+  width: $profile-picture-size;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  i {
+    color: white;
+    opacity: 0.5;
+    font-size: 2rem;
+    transition: opacity 125ms $tweaked-ease;
+  }
+
+  &:hover {
+    i {
+      opacity: 0.7;
+      transition: opacity 0ms;
+    }
+  }
+}
+
 
 .profile-item {
   padding: 5px $profile-padding-x;

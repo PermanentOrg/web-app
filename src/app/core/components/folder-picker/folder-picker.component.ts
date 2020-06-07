@@ -13,7 +13,8 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 
 export enum FolderPickerOperations {
   Move = 1,
-  Copy
+  Copy,
+  ChooseRecord
 }
 
 @Component({
@@ -32,6 +33,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public waiting: boolean;
   public saving: boolean;
   public isRootFolder = true;
+  public allowRecords = false;
 
   public filterFolderLinkIds: number[];
 
@@ -46,9 +48,16 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  show(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>, filterFolderLinkIds: number[] = null) {
+  show(
+    startingFolder: FolderVO,
+    operation: FolderPickerOperations,
+    savePromise?: Promise<any>,
+    filterFolderLinkIds: number[] = null,
+    allowRecords = false
+  ) {
     this.visible = true;
     this.operation = operation;
+    this.allowRecords = allowRecords;
 
     this.savePromise = savePromise;
 
@@ -91,7 +100,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
         this.waiting = false;
         this.currentFolder = response.getFolderVO(true);
         this.isRootFolder = this.currentFolder.type.includes('root');
-        remove(this.currentFolder.ChildItemVOs, 'isRecord');
+        if (!this.allowRecords) {
+          remove(this.currentFolder.ChildItemVOs, 'isRecord');
+        }
         if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
           remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
         }

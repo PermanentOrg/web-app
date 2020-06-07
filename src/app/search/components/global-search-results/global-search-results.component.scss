@@ -1,0 +1,43 @@
+@import 'variables';
+
+:host {
+  @include has-breadcrumbs;
+  @include mainContentScrollDesktop;
+}
+
+$icon-width: 1rem;
+$input-padding: 0.5rem;
+
+input {
+  width: 100%;
+  background: rgba(white, 0.2);
+
+  border: 1px solid transparent;
+  // border-bottom: 1px solid $PR-orange;
+  border-radius: $border-radius;
+
+  padding: $input-padding $input-padding;
+  padding-left: $icon-width + 2 * $input-padding;
+
+  color: white;
+  z-index: 11;
+  position: relative;
+
+  &::placeholder {
+    color: rgba(white, 0.5);
+  }
+
+  &:focus {
+    transition: border-color 0.25s $tweaked-ease;
+    border-color: $PR-orange;
+    background-color: none;
+    outline: none;
+    // box-shadow: $box-shadow;
+  }
+}
+
+i.ion-md-search {
+  position: absolute;
+  left: $input-padding;
+  opacity: 0.5;
+}

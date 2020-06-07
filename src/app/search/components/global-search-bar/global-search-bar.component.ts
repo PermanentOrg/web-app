@@ -87,11 +87,11 @@ export class GlobalSearchBarComponent implements OnInit {
         if (response instanceof SearchResponse && response.isSuccessful) {
           this.globalResults = response.getItemVOs().filter(i => {
             let showShouldInGlobal = false;
-            const inCurrentFolder = i.parentFolder_linkId === this.data.currentFolder.folder_linkId;
+            const inCurrentFolder = i.parentFolder_linkId === this.data.currentFolder?.folder_linkId;
             if (i instanceof RecordVO) {
               showShouldInGlobal = !this.localResultsByRecordId.has(i.recordId);
             } else {
-              showShouldInGlobal = !this.localResultsByFolderId.has(i.folderId) && this.data.currentFolder.folderId !== i.folderId;
+              showShouldInGlobal = !this.localResultsByFolderId.has(i.folderId) && this.data.currentFolder?.folderId !== i.folderId;
             }
 
             if (showShouldInGlobal && inCurrentFolder) {
@@ -247,8 +247,7 @@ export class GlobalSearchBarComponent implements OnInit {
   }
 
   onGlobalResultClick(item: ItemVO) {
-    if (item.parentFolder_linkId === this.data.currentFolder.folder_linkId) {
-      console.log('local item in global results!');
+    if (item.parentFolder_linkId === this.data.currentFolder?.folder_linkId) {
       return this.onLocalResultClick(item);
     }
 

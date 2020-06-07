@@ -32,4 +32,14 @@ export class FolderPickerService {
 
     return this.component.show(startingFolder, operation, savePromise, filterFolderLinkIds);
   }
+
+  chooseRecord(
+    startingFolder: FolderVO,
+  ) {
+    if (!this.component) {
+      throw new Error('FolderPickerService - Folder picker component missing');
+    }
+
+    return this.component.show(startingFolder, FolderPickerOperations.ChooseRecord, null, null, true);
+  }
 }

@@ -39,7 +39,7 @@ import { MissingPledgeComponent } from './components/missing-pledge/missing-pled
     ClaimStorageLoginComponent,
     ClaimDoneComponent,
     PledgeListComponent,
-    MissingPledgeComponent,
+    MissingPledgeComponent
   ]
 })
 export class PledgeModule { }
