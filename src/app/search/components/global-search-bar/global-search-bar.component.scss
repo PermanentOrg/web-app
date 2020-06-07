@@ -90,7 +90,7 @@ $result-padding-y: 0.25rem;
   //   margin-bottom: 0.5rem;
   // }
 
-  .search-result-group-title {
+  .search-result-group-title, .search-results-all {
     font-weight: 600;
     font-size: $font-size-sm;
     padding: $result-padding-y $result-padding-x;
@@ -99,6 +99,11 @@ $result-padding-y: 0.25rem;
     justify-content: flex-start;
     user-select: none;
     background-color: darken($PR-orange, $darken-percent + 3%);
+  }
+
+  .search-results-all {
+    justify-content: flex-end;
+    cursor: pointer;
   }
 
   .search-result {

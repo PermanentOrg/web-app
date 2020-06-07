@@ -100,7 +100,7 @@ export class GlobalSearchBarComponent implements OnInit {
             } else {
               return showShouldInGlobal;
             }
-          });
+          }).slice(0, (2 * LOCAL_RESULTS_LIMIT) - (this.localResults?.length || 0));
         } else {
           this.globalResults = [];
         }
@@ -274,6 +274,11 @@ export class GlobalSearchBarComponent implements OnInit {
       this.router.navigate(routerPath, { queryParams: { showItem: item.folder_linkId }});
     }
 
+    this.onCoverClick();
+  }
+
+  onAllResultsClick() {
+    this.router.navigate(['/m', 'search'], { queryParams: { query: this.formControl.value } });
     this.onCoverClick();
   }
 
