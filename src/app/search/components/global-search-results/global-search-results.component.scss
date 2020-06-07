@@ -3,41 +3,106 @@
 :host {
   @include has-breadcrumbs;
   @include mainContentScrollDesktop;
+
+  padding: 10px;
 }
 
 $icon-width: 1rem;
 $input-padding: 0.5rem;
 
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 input {
-  width: 100%;
-  background: rgba(white, 0.2);
-
-  border: 1px solid transparent;
-  // border-bottom: 1px solid $PR-orange;
-  border-radius: $border-radius;
-
   padding: $input-padding $input-padding;
   padding-left: $icon-width + 2 * $input-padding;
 
-  color: white;
-  z-index: 11;
-  position: relative;
-
-  &::placeholder {
-    color: rgba(white, 0.5);
-  }
-
-  &:focus {
-    transition: border-color 0.25s $tweaked-ease;
-    border-color: $PR-orange;
-    background-color: none;
-    outline: none;
-    // box-shadow: $box-shadow;
-  }
+  max-width: 30rem;
 }
 
 i.ion-md-search {
   position: absolute;
   left: $input-padding;
   opacity: 0.5;
+}
+
+.tag-results {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+  .tag {
+    padding: 0.25rem 0.5rem;
+    border-radius: $border-radius;
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+    background: rgba($PR-purple, 0.2);
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($PR-purple, 0.4);
+    }
+  }
+}
+
+.results-title {
+  font-weight: bold;
+}
+
+.result-group {
+  margin-bottom: 1rem;
+
+  > label {
+    font-weight: bold;
+    margin-bottom: 0rem;
+  }
+
+  .result-count {
+    font-size: $font-size-sm;
+  }
+}
+
+.item-result-list {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  display: flex;
+  padding: 0.5rem 0;
+  overflow-x: auto;
+}
+$result-width: 150px;
+$result-gutter: 1rem;
+
+.item-result {
+  flex: 0 0 $result-width;
+  width: $result-width;
+  margin-right: $result-gutter;
+  border-radius: $border-radius;
+  border: 1px solid $gray-300;
+  cursor: pointer;
+
+  .item-thumb {
+    height: $result-width;
+    width: $result-width;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      color: #F7C985;
+      font-size: 2.6rem;
+    }
+  }
+
+  .item-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.5rem;
+    border-top: 1px solid $gray-300;
+  }
 }

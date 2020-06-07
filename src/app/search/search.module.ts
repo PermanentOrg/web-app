@@ -5,6 +5,7 @@ import { SharedModule } from '@shared/shared.module';
 import { GlobalSearchBarComponent } from './components/global-search-bar/global-search-bar.component';
 import { GlobalSearchResultsComponent } from './components/global-search-results/global-search-results.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 
 @NgModule({
   declarations: [GlobalSearchBarComponent, GlobalSearchResultsComponent],

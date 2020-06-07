@@ -26,6 +26,7 @@ import { AccountResolveService } from './resolves/account-resolve.service';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
 import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
+import { TagsResolveService } from './resolves/tags.resolve.service';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -118,7 +119,8 @@ export const routes: RoutesWithData = [
       {
         path: 'search',
         component: GlobalSearchResultsComponent,
-        data: { title: 'Search' }
+        data: { title: 'Search' },
+        resolve: { tags: TagsResolveService }
       },
       { path: '**', redirectTo: 'myfiles'}
     ]
@@ -141,7 +143,8 @@ export const routes: RoutesWithData = [
     RelationshipsResolveService,
     MembersResolveService,
     AccountResolveService,
-    ProfileItemsResolveService
+    ProfileItemsResolveService,
+    TagsResolveService
   ],
   declarations: []
 })

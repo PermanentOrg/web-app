@@ -1,1 +1,46 @@
-<input type="text" placeholder="Search this archive" #searchInput [formControl]="formControl">
+<div class="search-box">
+  <input type="text" class="form-control" placeholder="Search this archive" #searchInput [formControl]="formControl">
+  <i class="ion-md-search"></i>
+</div>
+<div class="results">
+  <!-- <div class="results-title">
+    Results for "{{formControl.value}}"
+  </div> -->
+  <div class="result-group" *ngIf="tagResults?.length">
+    <label>Tags</label>
+    <div class="tag-results">
+      <div class="tag" *ngFor="let tag of tagResults"
+        (click)="onTagResultClick(tag)">
+        {{tag.name}}
+      </div>
+    </div>
+  </div>
+  <div class="result-group" *ngIf="folderResults?.length">
+    <label>Folders</label>
+    <div class="result-count">{{folderResults.length}} results</div>
+    <div class="item-result-list">
+      <div class="item-result" *ngFor="let folder of folderResults; trackBy: resultTrackByFn"
+      (click)="onItemResultClick(folder)">
+        <div class="item-thumb">
+          <i class="ion-md-folder"></i>
+        </div>
+        <div class="item-name">
+          {{folder.displayName}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="result-group" *ngIf="recordResults?.length">
+    <label>Files</label>
+    <div class="result-count">{{recordResults.length}} results</div>
+    <div class="item-result-list">
+      <div class="item-result" *ngFor="let record of recordResults; trackBy: resultTrackByFn"
+        (click)="onItemResultClick(record)">
+        <div class="item-thumb" prBgImage [bgSrc]="record.thumbURL200" [cover]="true"></div>
+        <div class="item-name">
+          {{record.displayName}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
