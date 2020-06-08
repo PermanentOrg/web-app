@@ -9,11 +9,13 @@ import { SearchResponse } from '@shared/services/api/index.repo';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { remove } from 'lodash';
+import { ngIfFadeInAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-global-search-results',
   templateUrl: './global-search-results.component.html',
-  styleUrls: ['./global-search-results.component.scss']
+  styleUrls: ['./global-search-results.component.scss'],
+  animations: [ ngIfFadeInAnimation ]
 })
 export class GlobalSearchResultsComponent implements OnInit {
   @ViewChild('searchInput') inputElementRef: ElementRef;
@@ -89,7 +91,7 @@ export class GlobalSearchResultsComponent implements OnInit {
         this.showResults = true;
         this.updateTagsResults(term as string, tags);
       }),
-      debounceTime(25),
+      debounceTime(50),
       switchMap(([term, tags]) => {
         if (term?.length || tags?.length) {
           this.waiting = true;

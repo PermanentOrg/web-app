@@ -165,7 +165,9 @@ export class GlobalSearchBarComponent implements OnInit {
     const globalLength = this.globalResults?.length || 0;
     const totalLength = localLength + globalLength;
 
-    if (-1 < this.activeResultIndex && this.activeResultIndex < localLength) {
+    if (this.activeResultIndex === -1) {
+      this.onAllResultsClick();
+    } else if (-1 < this.activeResultIndex && this.activeResultIndex < localLength) {
       this.onLocalResultClick(this.localResults[this.activeResultIndex]);
     } else if (localLength <= this.activeResultIndex && this.activeResultIndex < totalLength ) {
       this.onGlobalResultClick(this.globalResults[this.activeResultIndex - localLength]);

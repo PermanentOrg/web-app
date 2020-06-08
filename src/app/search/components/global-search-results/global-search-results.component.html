@@ -1,6 +1,7 @@
 <div class="search-box">
   <input type="text" class="form-control" placeholder="Search this archive" #searchInput [formControl]="formControl">
   <i class="ion-md-search"></i>
+  <div class="fade-ring-loader" *ngIf="waiting" @ngIfFadeInAnimation></div>
 </div>
 <div class="results">
   <!-- <div class="results-title">
@@ -15,30 +16,39 @@
       </div>
     </div>
   </div>
-  <div class="result-group" *ngIf="folderResults?.length">
+  <div class="result-group" *ngIf="waiting || folderResults">
     <label>Folders</label>
-    <div class="result-count">{{folderResults.length}} results</div>
+    <div class="result-count" *ngIf="folderResults">{{folderResults.length || 'No'}} results</div>
+    <div class="result-count" *ngIf="!folderResults">Searching...</div>
     <div class="item-result-list">
       <div class="item-result" *ngFor="let folder of folderResults; trackBy: resultTrackByFn"
       (click)="onItemResultClick(folder)">
         <div class="item-thumb">
           <i class="ion-md-folder"></i>
         </div>
-        <div class="item-name">
-          {{folder.displayName}}
+        <div class="item-info">
+          <div class="item-name">{{folder.displayName}}</div>
+          <div class="item-parent-folder">
+            <i class="ion-md-folder"></i>
+            {{folder.parentDisplayName}}</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="result-group" *ngIf="recordResults?.length">
+  <div class="result-group" *ngIf="waiting || recordResults">
     <label>Files</label>
-    <div class="result-count">{{recordResults.length}} results</div>
+    <div class="result-count" *ngIf="recordResults">{{recordResults.length || 'No'}} results</div>
+    <div class="result-count" *ngIf="!recordResults">Searching...</div>
     <div class="item-result-list">
       <div class="item-result" *ngFor="let record of recordResults; trackBy: resultTrackByFn"
         (click)="onItemResultClick(record)">
         <div class="item-thumb" prBgImage [bgSrc]="record.thumbURL200" [cover]="true"></div>
-        <div class="item-name">
-          {{record.displayName}}
+        <div class="item-info">
+          <div class="item-name">{{record.displayName}}</div>
+          <div class="item-parent-folder">
+            <i class="ion-md-folder"></i>
+            {{record.parentDisplayName}}
+          </div>
         </div>
       </div>
     </div>
