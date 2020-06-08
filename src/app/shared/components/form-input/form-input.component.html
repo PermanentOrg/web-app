@@ -5,13 +5,11 @@
   [id]="fieldName" [name]="fieldName" [placeholder]="placeholder" [formControl]="control">
 <select *ngIf="type === 'select'" class="form-control input-vertical" [ngClass]="{'placeholder': !control.value }"
   [id]="fieldName" [name]="fieldName" [formControl]="control">
-  <option disabled selected hidden>
-    {{placeholder}}
-  </option>
   <option *ngFor="let option of selectOptions" [value]="option.value">
     {{option.text}}
   </option>
 </select>
+<div class="input-vertical-select-placeholder" *ngIf="type === 'select' && !control.value">{{placeholder}}</div>
 <div class="input-vertical-error" [ngClass]="{'hidden': !errors }">
   {{errors}}
 </div>

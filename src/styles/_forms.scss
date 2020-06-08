@@ -113,6 +113,15 @@ form {
     color: rgba($body-color, 0.7);
   }
 
+  .input-vertical-select-placeholder {
+    color: $gray-600;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: $input-padding-x;
+  }
+
   .input-vertical.checkbox {
     background: $gray-600;
     color: white;
