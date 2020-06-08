@@ -35,6 +35,7 @@ import { PrLocationPipe } from './pipes/pr-location.pipe';
 import { TagsComponent } from './components/tags/tags.component';
 import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.component';
 import { TooltipsPipe } from './pipes/tooltips.pipe';
+import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
     BetaToggleComponent,
     TooltipsPipe,
     NgbTooltipModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    PublicViewLinkPipe
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -120,6 +122,7 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
     TagsComponent,
     BetaToggleComponent,
     TooltipsPipe,
+    PublicViewLinkPipe
   ],
   providers: [
     PublicLinkPipe,

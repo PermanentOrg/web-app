@@ -18,13 +18,4 @@ export class SidebarViewOptionComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  onLaunchClick() {
-    const baseUrl = environment.apiUrl.replace('/api', '');
-    const rootArchive = this.folder.archiveNbr.split('-')[0] + '-0000';
-    const base = `${baseUrl}/p/archive/${rootArchive}`;
-    const folderView = this.folderView.split('.').pop();
-    // const url = `${base}/${item.archiveNbr}/${item.folder_linkId}`;
-  }
-
 }
