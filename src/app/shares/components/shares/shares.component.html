@@ -5,7 +5,11 @@
   [canSelect]="true"
   [isSelected]="selectedItems.has(item)"
   (itemClicked)="onItemClick($event)"
+  [@ngIfScaleAnimationDynamic]="item.isPendingAction ? 'animate' : 'static'"
   ></pr-file-list-item>
+  <div class="empty-message" *ngIf="!shareItems?.length">
+    This archive has no shared items
+  </div>
   <!-- <div class="shares-heading">Shared By Me</div>
   <pr-share-by-me></pr-share-by-me>
   <div class="shares-heading">Shared With Me</div>

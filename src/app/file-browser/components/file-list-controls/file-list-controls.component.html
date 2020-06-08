@@ -21,11 +21,11 @@
         <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort"
           [ngbTooltip]="'fileList.sort.save' | prTooltip">Save</span>
       </div>
-      <div class="shared-by" *ngIf="showAccess">
-        <span class="col-title">Shared by</span>
-      </div>
       <div class="access" *ngIf="showAccess">
         <span class="col-title">Access</span>
+      </div>
+      <div class="shared-by" *ngIf="showAccess">
+        <span class="col-title">Shared by</span>
       </div>
     </ng-container>
     <ng-container *ngSwitchDefault>
@@ -52,11 +52,16 @@
 
 </div>
 <div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>
-  <div class="file-list-control" [class.disabled]="!can.delete" (click)="onDeleteClick()"
+  <div class="file-list-control" *ngIf="!isShareRoot" [class.disabled]="!can.delete" (click)="onDeleteClick()"
     [ngbTooltip]="getTooltipConstantForAction('delete') | prTooltip">
     <i class="ion-md-trash"></i>
     <span>Delete</span>
   </div>
+  <div class="file-list-control" *ngIf="isShareRoot" [class.disabled]="!can.unshare" (click)="onUnshareClick()"
+  [ngbTooltip]="getTooltipConstantForAction('unshare') | prTooltip">
+  <i class="ion-md-trash"></i>
+  <span>Unshare</span>
+</div>
   <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()"
     [ngbTooltip]="getTooltipConstantForAction('copy') | prTooltip">
     <i class="ion-md-copy"></i>

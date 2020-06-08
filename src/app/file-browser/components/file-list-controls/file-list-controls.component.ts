@@ -27,6 +27,7 @@ interface FileListActions {
   share: boolean;
   publish: boolean;
   download: boolean;
+  unshare: boolean;
 }
 
 type FileListColumn = 'name' | 'date' | 'type';
@@ -55,6 +56,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   currentSort: FileListColumn;
   sortDesc = false;
 
+  isShareRoot = false;
+
   isSavingSort = false;
   isSorting = false;
   canSaveSort = false;
@@ -65,7 +68,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     move: false,
     share: false,
     publish: false,
-    download: false
+    download: false,
+    unshare: false
   };
 
   subscriptions: Subscription[] = [];
@@ -118,6 +122,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   setAvailableActions() {
+    this.isShareRoot = this.data.currentFolder.type === 'type.folder.root.share';
     this.setAllActions(false);
 
     if (!this.selectedItems.length || !this.edit) {
@@ -133,14 +138,28 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
     switch (minimumAccess) {
       case AccessRole.Viewer:
-        return this.can.download = true;
-      case AccessRole.Curator:
-        return this.setMultipleActions(['delete', 'copy', 'move'], true);
-      case AccessRole.Owner:
-        if (isSingleItem) {
-          return this.setAllActions(true);
+      case AccessRole.Editor:
+      case AccessRole.Contributor:
+        if (this.isShareRoot && isSingleItem) {
+          return this.setMultipleActions(['unshare', 'download'], true);
         } else {
-          return this.setMultipleActions(['delete', 'copy', 'move', 'download'], true);
+          return this.can.download = true;
+        }
+      case AccessRole.Curator:
+        if (this.isShareRoot && isSingleItem) {
+          return this.setMultipleActions(['unshare', 'copy', 'move'], true);
+        } else {
+          return this.setMultipleActions(['delete', 'copy', 'move'], true);
+        }
+      case AccessRole.Owner:
+        if (this.isShareRoot && isSingleItem) {
+          return this.setMultipleActions(['unshare', 'copy', 'move', 'download'], true);
+        } else {
+          if (isSingleItem) {
+            return this.setAllActions(true);
+          } else {
+            return this.setMultipleActions(['delete', 'copy', 'move', 'download'], true);
+          }
         }
     }
   }
@@ -243,15 +262,31 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     }
 
     const itemLabel = this.selectedItems.length > 1 ? `${this.selectedItems.length} items` : this.selectedItems[0].displayName;
-      if (await this.prompt.confirmBoolean('Delete', `Are you sure you want to delete ${itemLabel}?`)) {
-        try {
-          this.edit.deleteItems(this.selectedItems);
-        } catch (err) {
-          if (err instanceof BaseResponse) {
-            this.message.showError(err.getMessage(), true);
-          }
+    if (await this.prompt.confirmBoolean('Delete', `Are you sure you want to delete ${itemLabel}?`)) {
+      try {
+        this.edit.deleteItems(this.selectedItems);
+      } catch (err) {
+        if (err instanceof BaseResponse) {
+          this.message.showError(err.getMessage(), true);
         }
       }
+    }
+  }
+
+  async onUnshareClick() {
+    if (!this.can.unshare || !this.edit || this.selectedItems.length !== 1) {
+      return;
+    }
+
+    if (await this.prompt.confirmBoolean('Unshare', `Are you sure you remove this from your shared items?`)) {
+      try {
+        this.edit.unshareItem(this.selectedItems[0]);
+      } catch (err) {
+        if (err instanceof BaseResponse) {
+          this.message.showError(err.getMessage(), true);
+        }
+      }
+    }
   }
 
   async onMoveClick() {

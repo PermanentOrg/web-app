@@ -5,6 +5,10 @@ export const TOOLTIPS = {
         enabled: 'Delete selected item(s)',
         disabled: 'You do not have permission to delete'
       },
+      unshare: {
+        enabled: 'Remove the current archive from this share',
+        disabled: 'You do not have permission to unshare'
+      },
       copy: {
         enabled: 'Copy selected item(s)',
         disabled: 'You do not have permission to copy'

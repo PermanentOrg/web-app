@@ -7,7 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData, ShareVO } from '@root/app/models';
 
 import { FolderResponse, RecordResponse, ShareResponse } from '@shared/services/api/index.repo';
 import { PromptButton, PromptService } from '@shared/services/prompt/prompt.service';
@@ -234,7 +234,7 @@ export class EditService {
       });
   }
 
-  async deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
+  async deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any> {
     let folders: FolderVO[];
     let records: RecordVO[];
 
@@ -269,6 +269,16 @@ export class EditService {
       items.forEach(i => i.isPendingAction = false);
       throw err;
     }
+  }
+
+  async unshareItem(item: ItemVO) {
+    const shareVO = new ShareVO({
+      folder_linkId: item.folder_linkId,
+      archiveId: this.accountService.getArchive().archiveId
+    });
+
+    await this.api.share.remove(shareVO);
+    this.dataService.itemUnshared(item);
   }
 
   updateItems(items: any[], whitelist?: (keyof ItemVO)[]): Promise<FolderResponse | RecordResponse | any>   {

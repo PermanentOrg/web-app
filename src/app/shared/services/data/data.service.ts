@@ -59,6 +59,8 @@ export class DataService {
   private showItemSubject = new Subject<ItemVO>();
   private itemToShowAfterNavigate: ItemVO;
 
+  private unsharedItemSubject = new Subject<ItemVO>();
+
   private debug = debug('service:dataService');
 
   constructor(
@@ -584,6 +586,15 @@ export class DataService {
 
   public itemToShow$() {
     return this.showItemSubject.asObservable();
+  }
+
+  public unsharedItem$() {
+    return this.unsharedItemSubject.asObservable();
+  }
+
+  public itemUnshared(item: ItemVO) {
+    this.clearSelectedItems();
+    this.unsharedItemSubject.next(item);
   }
 
   public showItemAfterNavigate(item: ItemVO) {

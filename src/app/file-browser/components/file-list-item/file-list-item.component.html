@@ -32,14 +32,14 @@
     <div class="date-top">{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
     <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
   </div>
+  <div class="access" *ngIf="showAccess && !inGridView">
+    {{item.accessRole | prConstants | titlecase}}
+  </div>
   <div class="shared-by" *ngIf="showAccess && !inGridView">
     <ng-container *ngIf="item.ShareArchiveVO">
       <div class="archive-thumb" prBgImage [bgSrc]="item.ShareArchiveVO.thumbURL200" [cover]="true"></div>
       <span>The {{item.ShareArchiveVO?.fullName}} Archive</span>
     </ng-container>
-  </div>
-  <div class="access" *ngIf="showAccess && !inGridView">
-    {{item.accessRole | prConstants | titlecase}}
   </div>
   <div class="actions" *ngIf="allowActions">
     <button class="right-menu-toggler" (click)="showActions($event)">

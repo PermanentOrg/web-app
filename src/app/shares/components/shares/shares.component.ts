@@ -11,7 +11,7 @@ import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
 import { MessageService } from '@shared/services/message/message.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { slideUpAnimation, fadeAnimation, ngIfScaleAnimation } from '@shared/animations';
+import { slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import { FileListItemParent, ItemClickEvent } from '@fileBrowser/components/file-list/file-list.component';
 import { Subscription } from 'rxjs';
 import debug from 'debug';
@@ -21,7 +21,7 @@ import { unsubscribeAll, HasSubscriptions } from '@shared/utilities/hasSubscript
   selector: 'pr-shares',
   templateUrl: './shares.component.html',
   styleUrls: ['./shares.component.scss'],
-  animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimation ]
+  animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic ]
 })
 export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileListItemParent, HasSubscriptions {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
@@ -67,6 +67,12 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
   registerDataServiceHandlers() {
     this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
       this.selectedItems = selectedItems;
+    }));
+
+    this.subscriptions.push(this.dataService.unsharedItem$().subscribe(item => {
+      item.isPendingAction = true;
+      this.dataService.clearSelectedItems();
+      remove(this.shareItems, item);
     }));
   }
 
