@@ -9,7 +9,9 @@
     {{option.text}}
   </option>
 </select>
-<div class="input-vertical-select-placeholder" *ngIf="type === 'select' && !control.value">{{placeholder}}</div>
+<div class="input-vertical-select-placeholder" *ngIf="type === 'select'" [class.selected]="control.value">
+  {{getOptionTextFromValue(control.value) || placeholder}}
+</div>
 <div class="input-vertical-error" [ngClass]="{'hidden': !errors }">
   {{errors}}
 </div>
