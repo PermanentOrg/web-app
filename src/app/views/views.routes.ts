@@ -29,12 +29,20 @@ export const routes: Routes = [
       containerVerticalFlex: true,
       hideBreadcrumbs: true
     },
-    children: [{
-      path: ':archiveNbr/:folderLinkId',
-      component: TimelineViewComponent,
-      resolve: leanFolderResolve,
-      children: fileListChildRoutes
-    }],
+    children: [
+      {
+        path: '',
+        component: TimelineViewComponent,
+        resolve: leanFolderResolve,
+        children: fileListChildRoutes
+      },
+      {
+        path: ':archiveNbr/:folderLinkId',
+        component: TimelineViewComponent,
+        resolve: leanFolderResolve,
+        children: fileListChildRoutes
+      }
+    ],
   },
   {
     path: 'grid',
@@ -43,12 +51,20 @@ export const routes: Routes = [
       containerVerticalFlex: false,
       hideBreadcrumbs: false
     },
-    children: [{
+    children: [
+      {
+        path: '',
+        component: FileListComponent,
+        resolve: folderResolve,
+        children: fileListChildRoutes
+      },
+      {
       path: ':archiveNbr/:folderLinkId',
       component: FileListComponent,
       resolve: folderResolve,
       children: fileListChildRoutes
-    }],
+      }
+    ],
   }
 ];
 @NgModule({

@@ -95,6 +95,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     const isInSharePreviewInviteView = isInShareInvitePreview && this.router.routerState.snapshot.url.includes('/view');
     const isInPublicArchive = this.router.routerState.snapshot.url.includes('/p/archive');
     const isInPublic = this.router.routerState.snapshot.url.includes('/p/');
+    const isInFolderView = this.router.routerState.snapshot.url.includes('/view/');
 
     const showRootBreadcrumb = !isInPublic &&
                               !isInSharePreviewView &&
@@ -111,7 +112,13 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     } else if (isInSharePreviewInviteView) {
       rootUrl = `/share/invite/${this.route.snapshot.params.inviteCode}/view`;
     } else if (isInPublicArchive) {
-      rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}`;
+      if (isInFolderView) {
+        const folderViewEx = /\/view\/([a-z]*)/;
+        const folderViewName = folderViewEx.exec(this.router.routerState.snapshot.url)[1];
+        rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}/view/${folderViewName}`;
+      } else {
+        rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}`;
+      }
     } else if  (isInPublic) {
       rootUrl = `/p/${this.route.firstChild.snapshot.params.publishUrlToken}`;
     } else if (this.router.routerState.snapshot.url.includes('/public')) {

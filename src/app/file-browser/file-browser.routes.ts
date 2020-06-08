@@ -31,14 +31,14 @@ export const routes: Routes = [
     children: fileListChildRoutes
   },
   {
+    path: 'view',
+    loadChildren: () => import('../views/views.module').then(m => m.ViewsModule)
+  },
+  {
     path: ':archiveNbr/:folderLinkId',
     component: FileListComponent,
     resolve: folderResolve,
     children: fileListChildRoutes
-  },
-  {
-    path: 'view',
-    loadChildren: () => import('../views/views.module').then(m => m.ViewsModule)
   }
 ];
 @NgModule({
