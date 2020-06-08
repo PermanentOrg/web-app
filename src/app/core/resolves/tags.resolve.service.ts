@@ -9,7 +9,8 @@ export class TagsResolveService implements Resolve<any> {
 
   constructor(private tags: TagsService) { }
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
-    return this.tags.refreshTags();
+  async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
+    await this.tags.refreshTags();
+    console.log('done tags?');
   }
 }

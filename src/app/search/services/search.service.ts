@@ -33,6 +33,7 @@ export class SearchService {
     });
 
     this.tags.getTags$().subscribe(newTags => {
+      console.log('got new tags', newTags);
       this.indexTags(newTags);
     });
   }
@@ -41,7 +42,7 @@ export class SearchService {
     if (!searchTerm) {
       return [];
     }
-    
+
     let results = this.fuse.search(searchTerm);
 
     if (limit) {
@@ -121,6 +122,7 @@ export class SearchService {
   }
 
   indexTags(tags: TagVOData[]) {
+    console.log('indexing tags', tags);
     if (!tags?.length) {
       this.tagsFuse.setCollection([]);
     } else {

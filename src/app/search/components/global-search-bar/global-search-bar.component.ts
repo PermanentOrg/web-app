@@ -95,7 +95,7 @@ export class GlobalSearchBarComponent implements OnInit {
             }
 
             if (showShouldInGlobal && inCurrentFolder) {
-              this.localResults.push(i);
+              this.localResults?.push(i);
               return false;
             } else {
               return showShouldInGlobal;

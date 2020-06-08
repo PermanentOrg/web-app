@@ -16,10 +16,33 @@
       </div>
     </div>
   </div>
-  <div class="result-group" *ngIf="waiting || recordResults">
+  <div class="result-loading" *ngIf="waiting && !(recordResults || folderResults)">
+    <div class="fade-ring-loader"></div>
+  </div>
+  <div class="result-group" *ngIf="itemResults" @ngIfFadeInAnimation>
+    <label>{{itemResults.length || 'No'}} results</label>
+    <div class="item-result-list no-scroll">
+      <div class="item-result-wrapper" *ngFor="let item of itemResults; trackBy: resultTrackByFn">
+        <div class="item-result"
+        (click)="onItemResultClick(item)">
+          <div class="item-thumb" prBgImage [bgSrc]="item.thumbURL200" [cover]="true" *ngIf="item.isRecord"></div>
+          <div class="item-thumb" *ngIf="item.isFolder">
+            <i class="ion-md-folder"></i>
+          </div>
+          <div class="item-info">
+            <div class="item-name">{{item.displayName}}</div>
+            <div class="item-parent-folder">
+              <i class="ion-md-folder"></i>
+              {{item.parentDisplayName}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="result-group" *ngIf="recordResults?.length" @ngIfFadeInAnimation>
     <label>Files</label>
-    <div class="result-count" *ngIf="recordResults">{{recordResults.length || 'No'}} results</div>
-    <div class="result-count" *ngIf="!recordResults">Searching...</div>
+    <div class="result-count">{{recordResults.length || 'No'}} results</div>
     <div class="item-result-list">
       <div class="item-result" *ngFor="let record of recordResults; trackBy: resultTrackByFn"
         (click)="onItemResultClick(record)">
@@ -34,10 +57,9 @@
       </div>
     </div>
   </div>
-  <div class="result-group" *ngIf="waiting || folderResults">
+  <div class="result-group" *ngIf="folderResults?.length" @ngIfFadeInAnimation>
     <label>Folders</label>
-    <div class="result-count" *ngIf="folderResults">{{folderResults.length || 'No'}} results</div>
-    <div class="result-count" *ngIf="!folderResults">Searching...</div>
+    <div class="result-count">{{folderResults.length || 'No'}} results</div>
     <div class="item-result-list">
       <div class="item-result" *ngFor="let folder of folderResults; trackBy: resultTrackByFn"
       (click)="onItemResultClick(folder)">
@@ -52,5 +74,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

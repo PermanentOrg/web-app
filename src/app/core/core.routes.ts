@@ -120,7 +120,7 @@ export const routes: RoutesWithData = [
         path: 'search',
         component: GlobalSearchResultsComponent,
         data: { title: 'Search' },
-        resolve: { tags: TagsResolveService }
+        resolve: { loadTags: TagsResolveService }
       },
       { path: '**', redirectTo: 'myfiles'}
     ]

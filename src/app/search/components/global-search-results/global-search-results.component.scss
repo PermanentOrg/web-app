@@ -21,9 +21,17 @@ $input-padding: 0.5rem;
     position: absolute;
     right: $input-padding;
 
-    &::after {
-      background: white;
-    }
+
+  }
+}
+
+.fade-ring-loader {
+  &::after {
+    background: white;
+  }
+
+  &::before {
+    background: $PR-blue;
   }
 }
 
@@ -83,6 +91,18 @@ $result-width: 125px;
 $result-width-desktop: 175px;
 $result-gutter: 1rem;
 
+.result-loading {
+  .fade-ring-loader {
+    width: $result-width;
+    height: $result-width;
+
+    &::after {
+      width: 90%;
+      height: 90%;
+    }
+  }
+}
+
 .item-result-list {
   white-space: nowrap;
   flex-wrap: nowrap;
@@ -107,7 +127,7 @@ $result-gutter: 1rem;
 
   .item-thumb {
     height: $result-width;
-    width: $result-width;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,7 +144,7 @@ $result-gutter: 1rem;
 
     .item-thumb {
       height: $result-width-desktop;
-      width: $result-width-desktop;
+      width: 100%;
 
       i {
         font-size: 3rem;
@@ -152,6 +172,46 @@ $result-gutter: 1rem;
     .item-parent-folder {
       font-size: $font-size-sm;
       line-height: 1.2;
+    }
+  }
+}
+
+.item-result-list.no-scroll {
+  $gutter: 10px;
+
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 0 $gutter / 2;
+
+  .item-result-wrapper {
+    flex: 0 0 auto;
+    width: 50%;
+    margin: 0;
+    padding: $gutter / 2;
+  }
+
+  .item-result {
+    margin: 0;
+    width: 100%;
+  }
+
+  $max-grid-width: 150px;
+
+  @for $i from 2 through 6 {
+    @media screen and (min-width: ($i * $max-grid-width) + 1) and (max-width: $tablet-horizontal){
+      .item-result-wrapper {
+        width: 100% / $i;
+      }
+    }
+  }
+
+  @for $i from 3 through 10 {
+    @media screen and (min-width: ($i * $max-grid-width) + $left-menu-width + 1){
+      .item-result-wrapper {
+        width: 100% / $i;
+      }
     }
   }
 }

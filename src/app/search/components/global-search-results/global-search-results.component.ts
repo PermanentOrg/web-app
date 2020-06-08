@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { remove } from 'lodash';
 import { ngIfFadeInAnimation } from '@shared/animations';
+import { TagsService } from '@core/services/tags/tags.service';
 
 @Component({
   selector: 'pr-global-search-results',
@@ -25,6 +26,7 @@ export class GlobalSearchResultsComponent implements OnInit {
   showResults = false;
 
   tagResults: TagVOData[];
+  itemResults: ItemVO[];
   folderResults: FolderVO[];
   recordResults: RecordVO[];
 
@@ -34,7 +36,8 @@ export class GlobalSearchResultsComponent implements OnInit {
     private searchService: SearchService,
     private router: Router,
     private account: AccountService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private tags: TagsService
   ) {
     this.data.setCurrentFolder(new FolderVO({
       displayName: 'Search',
@@ -51,7 +54,9 @@ export class GlobalSearchResultsComponent implements OnInit {
     const initQuery = this.getQueryFromParams();
 
     if (initQuery) {
-      this.formControl.setValue(initQuery, {emitEvent: true});
+      setTimeout(() => {
+        this.formControl.setValue(initQuery, {emitEvent: true});
+      });
     }
   }
 
@@ -119,9 +124,11 @@ export class GlobalSearchResultsComponent implements OnInit {
             }
           });
 
+          this.itemResults = response.getItemVOs();
           this.recordResults = records;
           this.folderResults = folders;
         } else {
+          this.itemResults = [];
           this.recordResults = [];
           this.folderResults = [];
         }
@@ -138,6 +145,7 @@ export class GlobalSearchResultsComponent implements OnInit {
   }
 
   updateTagsResults(term: string, selectedTags: TagVOData[]) {
+    console.log(term);
     const termMatches = this.searchService.getTagResults(term);
     const selectedNames = selectedTags.map(t => t.name);
     this.tagResults = termMatches.filter(i => !selectedNames.includes(i.name));
@@ -145,6 +153,7 @@ export class GlobalSearchResultsComponent implements OnInit {
 
   reset() {
     this.tagResults = null;
+    this.itemResults = null;
     this.folderResults = null;
     this.recordResults = null;
   }
