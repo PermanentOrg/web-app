@@ -17,6 +17,12 @@
       </div> -->
     </div>
     <div class="menu-scroll" #scroll>
+      <a class="menu-item hide-desktop"
+      [routerLink]="['/search']"
+      [class.active]="checkMenuItemActive('/search')">
+        <i class="ion-md-search"></i>
+        Search
+      </a>
       <a class="menu-item"
       [routerLink]="['/myfiles']"
       [class.active]="checkMenuItemActive('/myfiles')"
