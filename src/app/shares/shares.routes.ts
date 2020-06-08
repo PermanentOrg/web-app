@@ -37,6 +37,10 @@ export const routes: RoutesWithData = [
     }
   },
   {
+    path: ':archiveNbr',
+    redirectTo: ''
+  },
+  {
     path: ':archiveNbr/:folderLinkId',
     loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule)
   }

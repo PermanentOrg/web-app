@@ -30,7 +30,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() minLength = false;
   @Input() maxLength = false;
   @Input() email = false;
-  @Input() noScroll = false;
+  @Input() noScroll = true;
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
