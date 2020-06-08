@@ -3,9 +3,15 @@
   <!-- <div class="sidebar-tab" [class.active]="currentTab === 'details'" (click)="setCurrentTab('details')"
     [class.disabled]="isRootFolder">Details</div> -->
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')"
-    [class.disabled]="isRootFolder || isPublicItem">Sharing</div>
+    [class.disabled]="isRootFolder || isPublicItem"
+    [ngbTooltip]="isPublicItem ? ('sidebar.share.disabled.public' | prTooltip) : null">
+    Sharing
+  </div>
   <div class="sidebar-tab" [class.active]="currentTab === 'views'" (click)="setCurrentTab('views')"
-    [class.disabled]="!canUseViews">Views</div>
+    [class.disabled]="!canUseViews"
+    [ngbTooltip]="(!isPublicItem || selectedItem?.isRecord) ? ('sidebar.views.disabled.public' | prTooltip) : null">
+    Views
+  </div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
   <ng-container *ngIf="selectedItem && !isRootFolder">
@@ -140,54 +146,11 @@
     </div>
   </ng-container>
 </div>
-<!-- <div class="sidebar-tab-content" [hidden]="currentTab !== 'details'">
-  <ng-container *ngIf="selectedItem && !isRootFolder">
-    <div class="sidebar-item">
-      <label>{{selectedItem.isRecord ? 'Uploaded' : 'Created'}}</label>
-      <div class="sidebar-item-content">
-        {{selectedItem.createdDT | prDate}}
-      </div>
-    </div>
-    <div class="sidebar-item">
-      <label>Last modified</label>
-      <div class="sidebar-item-content">
-        {{selectedItem.updatedDT | prDate}}
-      </div>
-    </div>
-    <ng-container *ngIf="selectedItem.isRecord">
-      <div class="sidebar-item">
-        <label>Size</label>
-        <div class="sidebar-item-content">
-          {{(selectedItem | asRecord).size| dsFileSize}}
-        </div>
-      </div>
-      <div class="sidebar-item">
-        <label>File created</label>
-        <div class="sidebar-item-content">
-          {{(selectedItem | asRecord).derivedCreatedDT | prDate}}
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="selectedItem.isFolder">
-      <div class="sidebar-item">
-        <label>Size</label>
-        <div class="sidebar-item-content">
-          {{(selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep | dsFileSize}}
-        </div>
-      </div>
-      <div class="sidebar-item">
-        <label>Contents</label>
-        <div class="sidebar-item-content">
-          {{(selectedItem | asFolder).FolderSizeVO | folderContents}}
-        </div>
-      </div>
-    </ng-container>
-  </ng-container>
-</div> -->
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
   <ng-container *ngIf="selectedItem">
     <div class="sidebar-item">
-      <button class="btn btn-primary" [disabled]="!canShare" (click)="onShareClick()">
+      <button class="btn btn-primary" [disabled]="!canShare" (click)="onShareClick()"
+        [ngbTooltip]="canShare ? null : ((isPublicItem ? 'sidebar.share.disabled.public':'sidebar.share.disabled.access')|prTooltip)">
         {{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}
       </button>
     </div>

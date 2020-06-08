@@ -52,12 +52,29 @@ export const TOOLTIPS = {
       save: 'Save current sort as default for this folder',
       singleCol: 'Choose sort for this folder'
     },
+    col: {
+      access: 'This archive\'s access level to a shared item',
+      archive: 'The archive that shared the item'
+    },
     viewToggle: {
       list: 'Switch to list view',
       grid: 'Switch to grid view'
     },
     icons: {
       share: 'This item is shared'
+    },
+  },
+  sidebar: {
+    share: {
+      disabled: {
+        public: 'Items in Public cannot be shared',
+        access: 'You do not have permission to manage this share'
+      },
+    },
+    views: {
+      disabled: {
+        public: 'Views can currently only be applied folders in Public'
+      }
     }
   }
 };

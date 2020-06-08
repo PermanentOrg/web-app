@@ -22,10 +22,10 @@
           [ngbTooltip]="'fileList.sort.save' | prTooltip">Save</span>
       </div>
       <div class="access" *ngIf="showAccess">
-        <span class="col-title">Access</span>
+        <span class="col-title" [ngbTooltip]="'fileList.col.access' | prTooltip">Access</span>
       </div>
       <div class="shared-by" *ngIf="showAccess">
-        <span class="col-title">Shared by</span>
+        <span class="col-title" [ngbTooltip]="'fileList.col.archive' | prTooltip">Shared by</span>
       </div>
     </ng-container>
     <ng-container *ngSwitchDefault>

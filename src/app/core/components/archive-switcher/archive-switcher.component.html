@@ -3,7 +3,7 @@
     <pr-archive-small [archive]="currentArchive"></pr-archive-small>
   </div> -->
   <div class="archive-list">
-    <div class="archive-list-title">Switch to:</div>
+    <div class="archive-list-title">Select archive to switch to:</div>
     <pr-archive-small *ngFor="let archive of archives"
       [archive]="archive" [accessRole]="archive.accessRole"
       (click)="archiveClick(archive)">

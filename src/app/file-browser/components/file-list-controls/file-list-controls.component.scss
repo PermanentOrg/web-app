@@ -29,6 +29,7 @@
 
     .col-title {
       cursor: pointer;
+      user-select: none;
     }
 
     .col-title::after {
@@ -45,7 +46,7 @@
     }
 
     .col-title:only-child {
-      pointer-events: none;
+      cursor: auto;
       &::after {
         display: none;
       }
@@ -89,8 +90,7 @@
     }
 
     .col-title {
-      cursor: initial;
-      pointer-events: none;
+      cursor: auto;
     }
   }
 

@@ -52,10 +52,10 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           this.selectedItems = Array.from(selectedItems.keys());
         }
 
-        this.checkPermissions();
-
         this.isRootFolder = this.selectedItem?.type.includes('root');
         this.isPublicItem = this.selectedItem?.type.includes('public');
+
+        this.checkPermissions();
 
         this.canUseViews = !this.isRootFolder && this.isPublicItem && this.selectedItem && this.selectedItem.isFolder;
 
@@ -102,7 +102,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   }
 
   setCurrentTab(tab: SidebarTab) {
-    if (tab === 'sharing' && this.isRootFolder) {
+    if (tab === 'sharing' && (this.isRootFolder || this.isPublicItem)){
       return;
     }
 

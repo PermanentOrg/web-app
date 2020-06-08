@@ -254,6 +254,10 @@ button.btn-wordpress, button.btn-wordpress-alternate {
   }
 }
 
+.btn[disabled] {
+  cursor: not-allowed;
+}
+
 .perm-banner {
   flex: 0 0 100px;
   height: 100px;
