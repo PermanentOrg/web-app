@@ -63,7 +63,7 @@ export class FolderResolveService implements Resolve<any> {
 
         const folder = response.getFolderVO(true);
 
-        if (folder.view === FolderView.Timeline && route.data.folderView !== FolderView.Timeline) {
+        if (folder.view === FolderView.Timeline && !route.data.folderView) {
           if (route.params.publicArchiveNbr) {
             return this.router.navigate([
               'p',
