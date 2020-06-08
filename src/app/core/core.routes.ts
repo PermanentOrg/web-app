@@ -113,7 +113,7 @@ export const routes: RoutesWithData = [
       {
         path: 'account',
         component: AccountSettingsComponent,
-        data: { title: 'Account'},
+        data: { title: 'Account Settings'},
         resolve: { account: AccountResolveService }
       },
       {

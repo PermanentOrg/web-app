@@ -22,8 +22,8 @@ export class AccountSettingsComponent implements OnInit {
     private message: MessageService
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
-      displayName: 'Account',
-      pathAsText: ['Account'],
+      displayName: 'Account Settings',
+      pathAsText: ['Account Settings'],
       type: 'page'
     }), true);
 
