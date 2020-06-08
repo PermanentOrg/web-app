@@ -24,7 +24,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
   isLoading = false;
   isRootFolder = false;
-  isPublicFolder = false;
+  isPublicItem = false;
 
   currentArchive: ArchiveVO;
 
@@ -55,9 +55,9 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
         this.checkPermissions();
 
         this.isRootFolder = this.selectedItem?.type.includes('root');
-        this.isPublicFolder = this.selectedItem?.type.includes('public');
+        this.isPublicItem = this.selectedItem?.type.includes('public');
 
-        this.canUseViews = !this.isRootFolder && this.isPublicFolder && this.selectedItem && this.selectedItem.isFolder;
+        this.canUseViews = !this.isRootFolder && this.isPublicItem && this.selectedItem && this.selectedItem.isFolder;
 
         if (this.isRootFolder) {
           this.setCurrentTab('info');
@@ -95,8 +95,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     if (items.length !== 1) {
       this.canShare = false;
     } else {
-      this.canShare = this.isRootFolder ||
-        this.isPublicFolder ||
+      this.canShare = !this.isPublicItem &&
+        !this.isRootFolder &&
         this.accountService.checkMinimumAccess(this.selectedItem.accessRole, AccessRole.Owner);
     }
   }

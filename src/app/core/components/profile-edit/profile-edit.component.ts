@@ -9,6 +9,7 @@ import { AccessRole } from '@models/access-role.enum';
 import { UploadService } from '@core/services/upload/upload.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -34,6 +35,8 @@ type ProfileItemsIntDataCol =
 'text_dataId2'
 ;
 
+type ProfileItemsDataCol = ProfileItemsStringDataCol | ProfileItemsIntDataCol;
+
 type ProfileItemsDictionary = {
   [Field in FieldNameUI]: ProfileItemVOData[]
 };
@@ -53,6 +56,7 @@ export class ProfileEditComponent implements OnInit {
     private data: DataService,
     private account: AccountService,
     private route: ActivatedRoute,
+    private api: ApiService,
     private upload: UploadService,
     private prompt: PromptService,
     private folderPicker: FolderPickerService
@@ -75,8 +79,39 @@ export class ProfileEditComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSaveStringProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsStringDataCol, value: string) {
-    console.log(fieldName, value);
+  async onSaveStringProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsStringDataCol, value: string) {
+    let profileItem = this.profileItems[fieldName]?.[0];
+    let isNew = false;
+
+    if (!profileItem) {
+      const type = fieldName.replace('profile.', 'profile_item.');
+      profileItem = {
+        fieldNameUI: fieldName,
+        archiveId: this.archive.archiveId,
+        type
+      };
+      isNew = true;
+    }
+
+    const originalValue = profileItem[dataCol];
+    profileItem[dataCol] = value;
+
+    try {
+      if (isNew) {
+        this.profileItems[fieldName] = [ profileItem ];
+      }
+      const response = await this.api.archive.addUpdateProfileItem(profileItem);
+      if (isNew) {
+        const newProfileItem = response.getProfileItemVOs()[0];
+        profileItem.profile_itemId = newProfileItem.profile_itemId;
+      }
+    } catch (err) {
+      if (!isNew) {
+        profileItem[dataCol] = originalValue;
+      } else {
+        this.profileItems[fieldName] = null;
+      }
+    }
   }
 
   onSaveIntProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsIntDataCol, value: number) {

@@ -28,37 +28,37 @@ type ProfileItemType =
   ;
 
 export interface ProfileItemVOData extends BaseVOData {
-  profile_itemId: number;
-  archiveId: number;
-  fieldNameUI: FieldNameUI;
-  string1: string;
-  string2: string;
-  string3: string;
-  int1: number;
-  int2: number;
-  int3: number;
-  datetime1: string;
-  datetime2: string;
-  day1: string;
-  day2: string;
-  locnId1: number;
-  locnId2: number;
-  text_dataId1: number;
-  text_dataId2: number;
-  otherId1: number;
-  otherId2: number;
-  archiveArchiveNbr: string;
-  recordArchiveNbr: string;
-  folderArchiveNbr: string;
-  isVisible: 0 | 1;
-  publicDT;
+  profile_itemId?: number;
+  archiveId?: number;
+  fieldNameUI?: FieldNameUI;
+  string1?: string;
+  string2?: string;
+  string3?: string;
+  int1?: number;
+  int2?: number;
+  int3?: number;
+  datetime1?: string;
+  datetime2?: string;
+  day1?: string;
+  day2?: string;
+  locnId1?: number;
+  locnId2?: number;
+  text_dataId1?: number;
+  text_dataId2?: number;
+  otherId1?: number;
+  otherId2?: number;
+  archiveArchiveNbr?: string;
+  recordArchiveNbr?: string;
+  folderArchiveNbr?: string;
+  isVisible?: 0 | 1;
+  publicDT?: string;
 
-  type: ProfileItemType;
+  type?: ProfileItemType | string;
 
-  LocnVOs: LocnVOData[];
-  TimezoneVO: TimezoneVOData;
-  textData1: string;
-  textData2: string;
+  LocnVOs?: LocnVOData[];
+  TimezoneVO?: TimezoneVOData;
+  textData1?: string;
+  textData2?: string;
 
-  archiveNbr:  string;
+  archiveNbr?:  string;
 }

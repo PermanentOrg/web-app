@@ -10,7 +10,7 @@
     <label>Archive Name</label>
     <div class="profile-item-content">
       <pr-inline-value-edit
-        [displayValue]="profileItems['profile.basic'][0].string1"
+        [displayValue]="profileItems['profile.basic'] && profileItems['profile.basic'][0].string1"
         [horizontalControls]="false"
         [required]="true"
         [noScroll]="true"
@@ -19,11 +19,11 @@
         (doneEditing)="onSaveStringProfileItem('profile.basic', 'string1', $event)"></pr-inline-value-edit>
     </div>
   </div>
-  <div class="profile-item">
+  <div class="profile-item profile-item-large">
     <label>Archive Description</label>
     <div class="profile-item-content">
       <pr-inline-value-edit
-      [displayValue]="profileItems['profile.description'][0].textData1"
+      [displayValue]="profileItems['profile.description'] && profileItems['profile.description'][0].textData1"
       [canEdit]="canEdit"
       (doneEditing)="onSaveStringProfileItem('profile.description', 'textData1', $event)"
       emptyMessage="Click to add description"

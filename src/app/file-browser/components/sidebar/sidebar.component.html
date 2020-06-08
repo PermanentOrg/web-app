@@ -3,7 +3,7 @@
   <!-- <div class="sidebar-tab" [class.active]="currentTab === 'details'" (click)="setCurrentTab('details')"
     [class.disabled]="isRootFolder">Details</div> -->
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')"
-    [class.disabled]="isRootFolder">Sharing</div>
+    [class.disabled]="isRootFolder || isPublicItem">Sharing</div>
   <div class="sidebar-tab" [class.active]="currentTab === 'views'" (click)="setCurrentTab('views')"
     [class.disabled]="!canUseViews">Views</div>
 </div>
