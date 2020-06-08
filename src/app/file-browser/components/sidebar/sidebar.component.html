@@ -4,6 +4,8 @@
     [class.disabled]="isRootFolder">Details</div> -->
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')"
     [class.disabled]="isRootFolder">Sharing</div>
+  <div class="sidebar-tab" [class.active]="currentTab === 'views'" (click)="setCurrentTab('views')"
+    [class.disabled]="!canUseViews">Views</div>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'info'">
   <ng-container *ngIf="selectedItem && !isRootFolder">
@@ -205,4 +207,12 @@
       </div> -->
     </div>
   </ng-container>
+</div>
+<div class="sidebar-tab-content" [hidden]="currentTab !== 'views'">
+  <div class="sidebar-item">
+    <pr-sidebar-view-option [folderView]="'folder.view.grid'" [folder]="selectedItem | asFolder"></pr-sidebar-view-option>
+  </div>
+  <div class="sidebar-item">
+    <pr-sidebar-view-option [folderView]="'folder.view.timeline'" [folder]="selectedItem | asFolder"></pr-sidebar-view-option>
+  </div>
 </div>

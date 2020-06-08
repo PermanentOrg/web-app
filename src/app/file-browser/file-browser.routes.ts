@@ -15,7 +15,7 @@ const recordResolve = {
   currentRecord: RecordResolveService
 };
 
-const fileListChildRoutes = [
+export const fileListChildRoutes = [
   {
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,

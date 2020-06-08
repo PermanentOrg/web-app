@@ -9,7 +9,7 @@ import { EditService } from '@core/services/edit/edit.service';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 
-type SidebarTab =  'info' | 'details' | 'sharing';
+type SidebarTab =  'info' | 'details' | 'sharing' | 'views';
 @Component({
   selector: 'pr-sidebar',
   templateUrl: './sidebar.component.html',
@@ -24,11 +24,13 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
   isLoading = false;
   isRootFolder = false;
+  isPublicFolder = false;
 
   currentArchive: ArchiveVO;
 
   canEdit: boolean;
   canShare: boolean;
+  canUseViews: boolean;
 
   constructor(
     private dataService: DataService,
@@ -49,12 +51,19 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           this.selectedItem = null;
           this.selectedItems = Array.from(selectedItems.keys());
         }
-        
+
         this.checkPermissions();
 
         this.isRootFolder = this.selectedItem?.type.includes('root');
+        this.isPublicFolder = this.selectedItem?.type.includes('public');
+
+        this.canUseViews = !this.isRootFolder && this.isPublicFolder && this.selectedItem && this.selectedItem.isFolder;
 
         if (this.isRootFolder) {
+          this.setCurrentTab('info');
+        }
+
+        if (!this.canUseViews && this.currentTab === 'views') {
           this.setCurrentTab('info');
         }
 

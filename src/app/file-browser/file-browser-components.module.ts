@@ -20,6 +20,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FileListControlsComponent } from './components/file-list-controls/file-list-controls.component';
 import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from './components/location-picker/location-picker.component';
+import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
 
 @NgModule({
   imports: [
@@ -53,7 +54,8 @@ import { LocationPickerComponent } from './components/location-picker/location-p
     FolderDescriptionComponent,
     SidebarComponent,
     EditTagsComponent,
-    LocationPickerComponent
+    LocationPickerComponent,
+    SidebarViewOptionComponent
   ],
   entryComponents: [
     SharingComponent,

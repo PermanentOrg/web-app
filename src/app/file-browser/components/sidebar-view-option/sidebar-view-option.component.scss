@@ -1,0 +1,26 @@
+@import 'variables';
+
+:host {
+  display: block;
+}
+
+.view-name {
+  font-weight: bold;
+}
+
+.view-preview {
+  width: 100%;
+  padding-top: 66%;
+  background-color: $gray-300;
+  content: ' ';
+  margin-bottom: 0.5rem;
+}
+
+.view-actions {
+  display: flex;
+  margin-bottom: 0.5rem;
+
+  button {
+    margin: 0;
+  }
+}
