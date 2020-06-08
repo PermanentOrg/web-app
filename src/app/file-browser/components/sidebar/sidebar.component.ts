@@ -95,12 +95,18 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     if (items.length !== 1) {
       this.canShare = false;
     } else {
-      this.canShare = this.isRootFolder || this.accountService.checkMinimumAccess(this.selectedItem.accessRole, AccessRole.Owner);
+      this.canShare = this.isRootFolder ||
+        this.isPublicFolder ||
+        this.accountService.checkMinimumAccess(this.selectedItem.accessRole, AccessRole.Owner);
     }
   }
 
   setCurrentTab(tab: SidebarTab) {
     if (tab === 'sharing' && this.isRootFolder) {
+      return;
+    }
+
+    if (tab === 'views' && !this.canUseViews) {
       return;
     }
 
