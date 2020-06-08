@@ -228,7 +228,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
         this.unlistenMouseMove = this.renderer.listen(
           this.scrollElement.nativeElement,
           'mousemove',
-          () => this.mouseMoveHandlerThrottled()
+          (event) => this.onViewportMouseMove(event)
         );
       });
     }
