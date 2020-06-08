@@ -51,6 +51,9 @@ export const TOOLTIPS = {
     viewToggle: {
       list: 'Switch to list view',
       grid: 'Switch to grid view'
+    },
+    icons: {
+      share: 'This item is shared'
     }
   }
 };

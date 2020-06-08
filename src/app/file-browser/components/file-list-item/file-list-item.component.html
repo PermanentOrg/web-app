@@ -14,7 +14,7 @@
   <div class="name">
     <div class="first-row">
       <span>{{item.displayName}}</span>
-      <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation></i>
+      <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation [ngbTooltip]="'fileList.icons.share' | prTooltip"></i>
     </div>
     <div class="second-row">
       <span *ngIf="(!showAccess || !item.ShareArchiveVO)">

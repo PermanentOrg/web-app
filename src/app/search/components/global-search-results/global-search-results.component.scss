@@ -92,6 +92,7 @@ $result-width-desktop: 175px;
 $result-gutter: 1rem;
 
 .result-loading {
+  padding-top: 2rem;
   .fade-ring-loader {
     width: $result-width;
     height: $result-width;
@@ -197,6 +198,22 @@ $result-gutter: 1rem;
     width: 100%;
   }
 
+  .item-thumb {
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+    height: auto;
+  
+    i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0 auto;
+      color: #F7C985;
+      font-size: 2.6rem;
+    }
+  }
+
   $max-grid-width: 150px;
 
   @for $i from 2 through 6 {
@@ -208,7 +225,7 @@ $result-gutter: 1rem;
   }
 
   @for $i from 3 through 10 {
-    @media screen and (min-width: ($i * $max-grid-width) + $left-menu-width + 1){
+    @media screen and (min-width: ($i * $result-width-desktop) + $left-menu-width + 1){
       .item-result-wrapper {
         width: 100% / $i;
       }

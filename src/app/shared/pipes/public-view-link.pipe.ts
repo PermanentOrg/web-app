@@ -13,6 +13,10 @@ export class PublicViewLinkPipe implements PipeTransform {
   ) { }
 
   transform(folder: FolderVO, view: FolderViewType): any {
+    if (!folder.archiveNbr) {
+      return baseUrl;
+    }
+    
     const rootArchive = folder.archiveNbr.split('-')[0] + '-0000';
     const base = `${baseUrl}/p/archive/${rootArchive}`;
     const folderView = view.split('.').pop();

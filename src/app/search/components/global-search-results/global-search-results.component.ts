@@ -1,16 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, TagVOData, RecordVO, ItemVO } from '@models';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { SearchService } from '@search/services/search.service';
 import { map, tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { remove } from 'lodash';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { TagsService } from '@core/services/tags/tags.service';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 
 @Component({
   selector: 'pr-global-search-results',
@@ -18,7 +19,7 @@ import { TagsService } from '@core/services/tags/tags.service';
   styleUrls: ['./global-search-results.component.scss'],
   animations: [ ngIfFadeInAnimation ]
 })
-export class GlobalSearchResultsComponent implements OnInit {
+export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubscriptions {
   @ViewChild('searchInput') inputElementRef: ElementRef;
   public formControl: FormControl;
 
@@ -30,6 +31,7 @@ export class GlobalSearchResultsComponent implements OnInit {
   folderResults: FolderVO[];
   recordResults: RecordVO[];
 
+  subscriptions: Subscription[] = [];
   constructor(
     private data: DataService,
     private fb: FormBuilder,
@@ -48,6 +50,17 @@ export class GlobalSearchResultsComponent implements OnInit {
     this.formControl = this.fb.control('');
 
     this.initFormHandler();
+
+    this.subscriptions.push(
+      this.route.queryParamMap.subscribe(params => {
+        if (params.has('query')) {
+          const newQuery = params.get('query')?.trim();
+          if (newQuery !== this.formControl.value) {
+            this.formControl.setValue(newQuery, {emitEvent: true});
+          }
+        }
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -58,6 +71,10 @@ export class GlobalSearchResultsComponent implements OnInit {
         this.formControl.setValue(initQuery, {emitEvent: true});
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    unsubscribeAll(this.subscriptions);
   }
 
   getQueryFromParams() {
@@ -77,14 +94,18 @@ export class GlobalSearchResultsComponent implements OnInit {
       params.query = query.trim();
     }
 
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams: params,
-        queryParamsHandling: 'merge'
-      }
-    );
+    if (params.query === this.route.snapshot.queryParamMap.get('query')) {
+      return;
+    } else {
+      this.router.navigate(
+        [],
+        {
+          relativeTo: this.route,
+          queryParams: params,
+          queryParamsHandling: 'merge'
+        }
+      );
+    }
   }
 
   initFormHandler() {
@@ -100,7 +121,7 @@ export class GlobalSearchResultsComponent implements OnInit {
       switchMap(([term, tags]) => {
         if (term?.length || tags?.length) {
           this.waiting = true;
-          return this.searchService.getResultsInCurrentArchive(term, tags, 10)
+          return this.searchService.getResultsInCurrentArchive(term, tags, 1000)
             .pipe(catchError(err => {
               return of(err);
             }));
@@ -145,7 +166,6 @@ export class GlobalSearchResultsComponent implements OnInit {
   }
 
   updateTagsResults(term: string, selectedTags: TagVOData[]) {
-    console.log(term);
     const termMatches = this.searchService.getTagResults(term);
     const selectedNames = selectedTags.map(t => t.name);
     this.tagResults = termMatches.filter(i => !selectedNames.includes(i.name));

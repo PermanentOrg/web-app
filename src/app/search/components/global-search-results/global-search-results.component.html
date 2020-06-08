@@ -11,7 +11,7 @@
     <label>Tags</label>
     <div class="tag-results">
       <div class="tag" *ngFor="let tag of tagResults"
-        (click)="onTagResultClick(tag)">
+        (click)="onTagResultClick(tag)" ngbTooltip='Find items with tag "{{tag.name}}"'>
         {{tag.name}}
       </div>
     </div>
@@ -23,7 +23,7 @@
     <label>{{itemResults.length || 'No'}} results</label>
     <div class="item-result-list no-scroll">
       <div class="item-result-wrapper" *ngFor="let item of itemResults; trackBy: resultTrackByFn">
-        <div class="item-result"
+        <div class="item-result" ngbTooltip="Go to item {{item.displayName}}"
         (click)="onItemResultClick(item)">
           <div class="item-thumb" prBgImage [bgSrc]="item.thumbURL200" [cover]="true" *ngIf="item.isRecord"></div>
           <div class="item-thumb" *ngIf="item.isFolder">
@@ -40,39 +40,4 @@
       </div>
     </div>
   </div>
-  <!-- <div class="result-group" *ngIf="recordResults?.length" @ngIfFadeInAnimation>
-    <label>Files</label>
-    <div class="result-count">{{recordResults.length || 'No'}} results</div>
-    <div class="item-result-list">
-      <div class="item-result" *ngFor="let record of recordResults; trackBy: resultTrackByFn"
-        (click)="onItemResultClick(record)">
-        <div class="item-thumb" prBgImage [bgSrc]="record.thumbURL200" [cover]="true"></div>
-        <div class="item-info">
-          <div class="item-name">{{record.displayName}}</div>
-          <div class="item-parent-folder">
-            <i class="ion-md-folder"></i>
-            {{record.parentDisplayName}}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="result-group" *ngIf="folderResults?.length" @ngIfFadeInAnimation>
-    <label>Folders</label>
-    <div class="result-count">{{folderResults.length || 'No'}} results</div>
-    <div class="item-result-list">
-      <div class="item-result" *ngFor="let folder of folderResults; trackBy: resultTrackByFn"
-      (click)="onItemResultClick(folder)">
-        <div class="item-thumb">
-          <i class="ion-md-folder"></i>
-        </div>
-        <div class="item-info">
-          <div class="item-name">{{folder.displayName}}</div>
-          <div class="item-parent-folder">
-            <i class="ion-md-folder"></i>
-            {{folder.parentDisplayName}}</div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>

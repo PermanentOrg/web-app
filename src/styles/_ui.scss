@@ -225,6 +225,10 @@ button.btn-wordpress, button.btn-wordpress-alternate {
   line-height: 0px;
 }
 
+.btn-purple {
+  @include button-variant($PR-purple, $PR-purple);
+}
+
 
 .btn-alternate,
 .btn-alternate:disabled,

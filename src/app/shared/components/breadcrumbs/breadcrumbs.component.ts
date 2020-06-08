@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
 import debug from 'debug';
+import { EditService } from '@core/services/edit/edit.service';
 
 export class Breadcrumb {
   public routerPath: string;
@@ -58,7 +59,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private elementRef: ElementRef,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private edit: EditService
   ) {
   }
 
@@ -158,6 +160,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   scrollToEnd() {
     this.scrollElement.scrollLeft = this.scrollElement.scrollWidth - this.scrollElement.clientWidth;
+  }
+
+  onShareIconClick() {
+    this.edit.openShareDialog(this.dataService.currentFolder);
   }
 
 }

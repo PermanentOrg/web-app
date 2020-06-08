@@ -47,7 +47,6 @@ export class FolderResolveService implements Resolve<any> {
         return Promise.resolve(folder);
       }
     } else if (state.url.includes('/p/archive/')) {
-      console.log('resolve!');
       const publicRoot = findRouteData(route, 'publicRoot');
       targetFolder = new FolderVO(publicRoot);
     } else if (state.url.includes('/public')) {
@@ -57,8 +56,6 @@ export class FolderResolveService implements Resolve<any> {
       const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
       targetFolder = new FolderVO(myFiles);
     }
-
-    console.log(targetFolder);
 
     return this.api.folder.navigate(targetFolder)
       .pipe(map(((response: FolderResponse) => {
