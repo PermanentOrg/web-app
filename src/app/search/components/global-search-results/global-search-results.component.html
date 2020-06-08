@@ -16,6 +16,24 @@
       </div>
     </div>
   </div>
+  <div class="result-group" *ngIf="waiting || recordResults">
+    <label>Files</label>
+    <div class="result-count" *ngIf="recordResults">{{recordResults.length || 'No'}} results</div>
+    <div class="result-count" *ngIf="!recordResults">Searching...</div>
+    <div class="item-result-list">
+      <div class="item-result" *ngFor="let record of recordResults; trackBy: resultTrackByFn"
+        (click)="onItemResultClick(record)">
+        <div class="item-thumb" prBgImage [bgSrc]="record.thumbURL200" [cover]="true"></div>
+        <div class="item-info">
+          <div class="item-name">{{record.displayName}}</div>
+          <div class="item-parent-folder">
+            <i class="ion-md-folder"></i>
+            {{record.parentDisplayName}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="result-group" *ngIf="waiting || folderResults">
     <label>Folders</label>
     <div class="result-count" *ngIf="folderResults">{{folderResults.length || 'No'}} results</div>
@@ -31,24 +49,6 @@
           <div class="item-parent-folder">
             <i class="ion-md-folder"></i>
             {{folder.parentDisplayName}}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="result-group" *ngIf="waiting || recordResults">
-    <label>Files</label>
-    <div class="result-count" *ngIf="recordResults">{{recordResults.length || 'No'}} results</div>
-    <div class="result-count" *ngIf="!recordResults">Searching...</div>
-    <div class="item-result-list">
-      <div class="item-result" *ngFor="let record of recordResults; trackBy: resultTrackByFn"
-        (click)="onItemResultClick(record)">
-        <div class="item-thumb" prBgImage [bgSrc]="record.thumbURL200" [cover]="true"></div>
-        <div class="item-info">
-          <div class="item-name">{{record.displayName}}</div>
-          <div class="item-parent-folder">
-            <i class="ion-md-folder"></i>
-            {{record.parentDisplayName}}
-          </div>
         </div>
       </div>
     </div>
