@@ -6,7 +6,7 @@ import { Deferred } from '@root/vendor/deferred';
 
 import { DataService } from '@shared/services/data/data.service';
 
-import { FolderVO, ItemVO } from '@root/app/models/index';
+import { FolderVO, ItemVO, RecordVO } from '@root/app/models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
@@ -34,6 +34,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public saving: boolean;
   public isRootFolder = true;
   public allowRecords = false;
+
+  public selectedRecord: ItemVO;
 
   public filterFolderLinkIds: number[];
 
@@ -70,6 +72,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
       case FolderPickerOperations.Copy:
         this.operationName = 'Copy';
         break;
+      case FolderPickerOperations.ChooseRecord:
+        this.operationName = 'Choose file';
+        break;
     }
 
     this.setFolder(startingFolder)
@@ -82,11 +87,24 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     return this.chooseFolderDeferred.promise;
   }
 
-  navigate(folder: FolderVO, evt: Event) {
-    this.setFolder(folder);
+  onItemClick(item: ItemVO, evt: Event) {
+    if (item instanceof FolderVO) {
+      this.navigate(item);
+    } else {
+      this.showRecord(item);
+    }
+
     evt.stopPropagation();
     evt.preventDefault();
     return false;
+  }
+
+  navigate(folder: FolderVO) {
+    this.setFolder(folder);
+  }
+
+  showRecord(record: RecordVO) {
+    this.selectedRecord =  record;
   }
 
   setFolder(folder: FolderVO) {
@@ -109,6 +127,14 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
       });
   }
 
+  onBackClick() {
+    if (this.selectedRecord) {
+      this.selectedRecord = null;
+    } else {
+      this.goToParentFolder();
+    }
+  }
+
   goToParentFolder() {
     const parentFolder = new FolderVO({
       folder_linkId: this.currentFolder.parentFolder_linkId,
@@ -124,7 +150,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   chooseFolder() {
-    if (this.currentFolder) {
+    if (this.selectedRecord) {
+      this.chooseFolderDeferred.resolve(this.selectedRecord);
+    } else if (this.currentFolder) {
       this.chooseFolderDeferred.resolve(this.currentFolder);
     }
     if (!this.savePromise) {
@@ -145,6 +173,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   hide() {
     this.visible = false;
+    this.selectedRecord = null;
+
     setTimeout(() => {
       this.currentFolder = null;
       this.chooseFolderDeferred = null;

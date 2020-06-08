@@ -48,6 +48,14 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>('/archive/change', data, ArchiveResponse);
   }
 
+  public update(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/update', data, ArchiveResponse);
+  }
+
   public create(archive: ArchiveVO | ArchiveVO[]): Promise<ArchiveResponse> {
     if (!isArray(archive)) {
       archive = [archive];

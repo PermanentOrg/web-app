@@ -1,7 +1,8 @@
 <div class="profile-group">
   <div class="profile-item">
     <div class="profile-item-content">
-      <div class="profile-picture" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true">
+      <div class="profile-picture" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"
+        (click)="onProfilePictureClick()">
         <i class="ion-md-camera"></i>
       </div>
     </div>

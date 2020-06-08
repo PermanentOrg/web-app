@@ -11,7 +11,6 @@ export class ProfileItemsResolveService implements Resolve<any> {
 
   async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     const response = await this.api.archive.getAllProfileItems(this.accountService.getArchive());
-    console.log(response.getResultsData());
     return response.getProfileItemVOs();
   }
 }

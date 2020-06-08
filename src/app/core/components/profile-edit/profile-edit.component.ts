@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, ArchiveVO } from '@models';
+import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import { ProfileItemVOData, FieldNameUI } from '@models/profile-item-vo';
 import { ActivatedRoute } from '@angular/router';
 import { groupBy } from 'lodash';
@@ -10,6 +10,8 @@ import { UploadService } from '@core/services/upload/upload.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { ArchiveResponse } from '@shared/services/api/index.repo';
+import { MessageService } from '@shared/services/message/message.service';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -59,6 +61,7 @@ export class ProfileEditComponent implements OnInit {
     private api: ApiService,
     private upload: UploadService,
     private prompt: PromptService,
+    private message: MessageService,
     private folderPicker: FolderPickerService
   ) {
     this.data.setCurrentFolder(
@@ -118,11 +121,18 @@ export class ProfileEditComponent implements OnInit {
     console.log(fieldName, value);
   }
 
-  onProfilePictureClick() {
+  async onProfilePictureClick() {
     const privateRoot = this.account.getPrivateRoot();
     try {
-      this.folderPicker.chooseRecord(privateRoot);
+      const record = (await this.folderPicker.chooseRecord(privateRoot)) as RecordVO;
+      const updateArchive = new ArchiveVO({...this.archive, thumbArchiveNbr: record.archiveNbr});
+      const updateResponse = await this.api.archive.update(updateArchive);
+      this.archive.update(updateResponse.getArchiveVO());
     } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError('There was a problem changing the archive profile picture.');
+        console.error(err);
+      }
     }
   }
 
