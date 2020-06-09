@@ -2,10 +2,13 @@
   <span>{{this.account.primaryEmail}}</span>
   <span>&#9660;</span>
 </button>
-<div class="account-dropdown-menu" *ngIf="showMenu">
-  <pr-storage-meter></pr-storage-meter>
-  <a href="/add-storage">Add Storage</a>
-  <a [routerLink]="['/m', 'account']">Account Settings</a>
-  <a [routerLink]="['/m', 'invitations']">Invitations</a>
-  <a (click)="onLogoutClick()">Log Out</a>
+<div class="account-dropdown-menu" *ngIf="showMenu" [@dropdownMenuAnimation]>
+  <div *ngIf="showMenu" [@ngIfFadeInAnimationSlow]>
+    <pr-storage-meter></pr-storage-meter>
+    <a href="/add-storage">Add Storage</a>
+    <a [routerLink]="['/m', 'account']">Account Settings</a>
+    <a [routerLink]="['/m', 'notificationPreferences']">Notification Preferences</a>
+    <a [routerLink]="['/m', 'invitations']">Invitations</a>
+    <a (click)="onLogoutClick()">Log Out</a>
+  </div>
 </div>

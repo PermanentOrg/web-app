@@ -37,6 +37,7 @@ import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.compon
 import { TooltipsPipe } from './pipes/tooltips.pipe';
 import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
+import { StorageAmountPipe } from './pipes/storage-amount.pipe';
 
 @NgModule({
   imports: [
@@ -86,6 +87,7 @@ import { StorageMeterComponent } from './components/storage-meter/storage-meter.
     NgbTooltipModule,
     NgbDropdownModule,
     PublicViewLinkPipe,
+    StorageAmountPipe,
     StorageMeterComponent
   ],
   entryComponents: [
@@ -125,6 +127,7 @@ import { StorageMeterComponent } from './components/storage-meter/storage-meter.
     BetaToggleComponent,
     TooltipsPipe,
     PublicViewLinkPipe,
+    StorageAmountPipe,
     StorageMeterComponent
   ],
   providers: [

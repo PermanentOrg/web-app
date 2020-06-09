@@ -28,11 +28,15 @@ p {
   }
 }
 
+.form-check {
+  font-size: $font-size-sm;
+}
+
 
 .settings-item {
   padding: 5px $settings-padding-x;
   & > label {
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0px;
   }
 

@@ -1,6 +1,9 @@
+<div class="space-title">
+  Storage
+</div>
 <div class="space-meter">
   <div class="space-meter-inner" [style.width]="getMeterWidth()"></div>
 </div>
 <div class="space-label">
-  {{account.spaceTotal - account.spaceLeft | dsFileSize}} used 
+  {{account.spaceTotal - account.spaceLeft | prStorageAmount}} of {{account.spaceTotal | dsFileSize:0}} used 
 </div>

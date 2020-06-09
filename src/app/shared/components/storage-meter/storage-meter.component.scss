@@ -4,20 +4,28 @@
   margin-top: 0.5rem;
   padding: 0.5rem 12px;
   display: block;
+  border-bottom: 1px solid $gray-300;
+  color: $body-color;
 }
 
-$meter-height: 10px;
+$meter-height: 12px;
 
 .space-meter {
   height: $meter-height;
   width: 100%;
-  border: 1px solid $PR-purple;
   overflow: hidden;
+  border-radius: 2px;
+  background: rgba($PR-purple, 0.3);
 
   .space-meter-inner {
     height: $meter-height;
-    background: rgba($PR-purple, 0.8);
+    background: rgba($PR-purple, 1);
   }
+}
+
+.space-title {
+  font-size: $font-size-sm;
+  font-weight: 700;
 }
 
 .space-label {

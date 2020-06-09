@@ -11,6 +11,8 @@ button span:last-child {
 button {
   position: relative;
   z-index: 2;
+  outline: none !important;
+  box-shadow: none !important;
 
   &.active {
     background-color: white;
@@ -21,24 +23,25 @@ button {
   position: absolute;
   width: 100%;
   top: calc(100% - 17px);
-  padding-top: 17px;
-  background-color: $PR-orange;
+  padding-top: 5px;
+  background-color: white;
   z-index: 1;
   box-shadow: $box-shadow;
+  overflow: hidden;
 
-  > a {
+  a {
     padding: 7px 12px;
     display: block;
-    color: white;
+    color: $body-color;
     font-weight: 500;
     text-align: right;
 
     &:hover {
-      background-color: darken($PR-orange, 7%);
+      background-color: darken(white, 4%);
       text-decoration: none;
     }
   }
 
-  border-bottom-left-radius: $border-radius-sm;
-  border-bottom-right-radius: $border-radius-sm;
+  border-bottom-left-radius: 17px;
+  border-bottom-right-radius: 17px;
 }

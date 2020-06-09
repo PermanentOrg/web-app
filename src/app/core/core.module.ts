@@ -31,6 +31,7 @@ import { SearchModule } from '@search/search.module';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { ProfileEditComponent } from './components/profile-edit/profile-edit.com
     MembersComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
+    NotificationPreferencesComponent,
     ArchiveSelectorComponent,
     ProfileEditComponent
   ],

@@ -24,7 +24,7 @@ const EASE_IN_SINE = 'cubic-bezier(0.12, 0, 0.39, 0)';
 const EASE_OUT_SINE = 'cubic-bezier(0.61, 1, 0.88, 1)';
 
 const TAYLOR = 'cubic-bezier(.77, 0, .175, 1)';
-const TWEAKED = 'cubic-bezier(.63,.01,.3,1)';
+export const TWEAKED = 'cubic-bezier(.63,.01,.3,1)';
 const slideUpAnimationLength = 500;
 
 export const slideUpAnimation = trigger('slideUpAnimation', [
@@ -97,14 +97,14 @@ export const ngIfFadeInAnimationSlow = trigger('ngIfFadeInAnimationSlow', [
     ':enter',
     [
       style({ opacity: 0 }),
-      animate(`1000ms ${TWEAKED}`, style({ opacity: '*' }))
+      animate(`500ms ${TWEAKED}`, style({ opacity: '*' }))
     ]
   ),
   transition(
     ':leave',
     [
       style({ opacity: 1 }),
-      animate(`1000ms ${TWEAKED}`, style({ opacity: '*' }))
+      animate(`500ms ${TWEAKED}`, style({ opacity: '*' }))
     ]
   )
 ]);
@@ -178,6 +178,23 @@ export const ngIfScaleHeightEnterAnimation = trigger('ngIfScaleHeightEnterAnimat
     [
       style({ height: '0px', opacity: 0 }),
       animate(`125ms ${TWEAKED}`, style({ height: '*', opacity: 1 })),
+    ]
+  )
+]);
+
+export const ngIfScaleHeightAnimation = trigger('ngIfScaleHeightAnimation', [
+  transition(
+    ':enter',
+    [
+      style({ height: '0px' }),
+      animate(`250ms ${TWEAKED}`, style({ height: '*' })),
+    ]
+  ),
+  transition(
+    ':leave',
+    [
+      style({ height: '*', opacity: 0 }),
+      animate(`250ms ${TWEAKED}`, style({ height: '0px' })),
     ]
   )
 ]);

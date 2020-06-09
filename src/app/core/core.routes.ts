@@ -27,6 +27,7 @@ import { ProfileEditComponent } from './components/profile-edit/profile-edit.com
 import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
 import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
 import { TagsResolveService } from './resolves/tags.resolve.service';
+import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -114,6 +115,12 @@ export const routes: RoutesWithData = [
         path: 'account',
         component: AccountSettingsComponent,
         data: { title: 'Account Settings'},
+        resolve: { account: AccountResolveService }
+      },
+      {
+        path: 'notificationPreferences',
+        component: NotificationPreferencesComponent,
+        data: { title: 'Notification Preferences'},
         resolve: { account: AccountResolveService }
       },
       {

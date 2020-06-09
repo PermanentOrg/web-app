@@ -1,15 +1,38 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO, ArchiveVO } from '@models';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
 import { Router, NavigationStart } from '@angular/router';
+import { ngIfFadeInAnimationSlow, TWEAKED } from '@shared/animations';
+import { trigger, transition, style, animate, group, query, animateChild } from '@angular/animations';
+
+const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
+  transition(
+    ':enter',
+    group([
+      query('@ngIfFadeInAnimationSlow', [
+        animateChild()
+      ]),
+      style({ height: '0px' }),
+      animate(`250ms ${TWEAKED}`, style({ height: '*' })),
+    ])
+  ),
+  transition(
+    ':leave',
+    [
+      style({ height: '*', opacity: 0 }),
+      animate(`250ms ${TWEAKED}`, style({ height: '0px' })),
+    ]
+  )
+]);
 
 @Component({
   selector: 'pr-account-dropdown',
   templateUrl: './account-dropdown.component.html',
-  styleUrls: ['./account-dropdown.component.scss']
+  styleUrls: ['./account-dropdown.component.scss'],
+  animations: [ dropdownMenuAnimation, ngIfFadeInAnimationSlow ]
 })
 export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscriptions {
   public account: AccountVO;
@@ -22,7 +45,8 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
   constructor(
     private accountService: AccountService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private element: ElementRef
   ) { }
 
   ngOnInit() {
@@ -55,6 +79,14 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
     await this.accountService.logOut();
     this.messageService.showMessage(`Logged out successfully`, 'success');
     this.router.navigate(['/login']);
+  }
+
+  @HostListener('window:click', ['$event'])
+  onWindowClick(event: PointerEvent) {
+    const outsideClick = !(this.element.nativeElement as HTMLElement).contains(event.target as Node);
+    if (this.showMenu && outsideClick) {
+      this.showMenu = false;
+    }
   }
 
 }
