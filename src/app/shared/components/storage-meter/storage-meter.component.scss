@@ -1,0 +1,27 @@
+@import 'variables';
+
+:host {
+  margin-top: 0.5rem;
+  padding: 0.5rem 12px;
+  display: block;
+}
+
+$meter-height: 7px;
+
+.space-meter {
+  height: $meter-height;
+  width: 100%;
+  border: 1px solid $PR-purple;
+  overflow: hidden;
+
+  .space-meter-inner {
+    height: $meter-height;
+    background: rgba($PR-purple, 0.5);
+  }
+}
+
+.space-label {
+  font-size: $font-size-sm;
+  text-align: right;
+  font-weight: 500;
+}

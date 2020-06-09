@@ -17,6 +17,7 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { Subscription } from 'rxjs';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import debug from 'debug';
+import { AccountService } from '@shared/services/account/account.service';
 
 @Injectable()
 export class UploadService implements HasSubscriptions, OnDestroy {
@@ -33,7 +34,12 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   private debug = debug('service:upload');
 
-  constructor(private api: ApiService, private message: MessageService, private dataService: DataService) {
+  constructor(
+    private api: ApiService,
+    private message: MessageService,
+    private dataService: DataService,
+    private accountService: AccountService
+  ) {
     this.debouncedRefresh = debounce(() => {
       this.dataService.refreshCurrentFolder();
     }, 750);
@@ -50,13 +56,15 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId && currentCount === 0) {
         this.dataService.refreshCurrentFolder();
       }
+
+      this.accountService.refreshAccountDebounced();
     }));
 
-    // this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
-    //   if (status === UploadSessionStatus.Done) {
-    //     this.debouncedRefresh();
-    //   }
-    // }));
+    this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
+      if (status === UploadSessionStatus.Done) {
+        this.accountService.refreshAccountDebounced();
+      }
+    }));
   }
 
   ngOnDestroy() {
@@ -118,6 +126,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
         this.message.showError('You do not have enough storage available to upload these files.');
       }
     }
+
+    this.accountService.refreshAccountDebounced();
   }
 
   showProgress() {

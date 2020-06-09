@@ -1,0 +1,6 @@
+<div class="space-meter">
+  <div class="space-meter-inner" [style.width]="getMeterWidth()"></div>
+</div>
+<div class="space-label">
+  {{account.spaceTotal - account.spaceLeft | dsFileSize}} used 
+</div>

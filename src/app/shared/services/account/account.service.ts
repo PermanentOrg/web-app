@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { map, min } from 'rxjs/operators';
-import { find } from 'lodash';
+import { find, debounce } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -32,6 +32,10 @@ export class AccountService {
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
   public accountChange: EventEmitter<AccountVO> = new EventEmitter();
+
+  public refreshAccountDebounced = debounce(() => {
+    this.refreshAccount();
+  }, 5000);
 
   constructor(
     private api: ApiService,
@@ -140,7 +144,6 @@ export class AccountService {
         const newAccount = response.getAccountVO();
         this.account.update(newAccount);
         this.storage.local.set(ACCOUNT_KEY, this.account);
-        this.setArchives();
       })
       .catch((response: AccountResponse | any) => {
         this.logOut();

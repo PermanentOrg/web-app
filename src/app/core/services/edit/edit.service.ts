@@ -268,6 +268,8 @@ export class EditService {
     } catch (err) {
       items.forEach(i => i.isPendingAction = false);
       throw err;
+    } finally {
+      this.accountService.refreshAccountDebounced();
     }
   }
 
@@ -431,6 +433,10 @@ export class EditService {
     } else {
       promises.push(Promise.resolve());
     }
+
+    Promise.all(promises).then(() => {
+        this.accountService.refreshAccountDebounced();
+    });
 
     return Promise.all(promises);
   }

@@ -91,6 +91,7 @@ export class PublishComponent implements OnInit {
       }
     } finally {
       this.waiting = false;
+      this.accountService.refreshAccountDebounced();
     }
   }
 
