@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
 
 import { ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -15,6 +15,16 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() relation: string;
   @Input() accessRole: string;
   @Input() isPending = false;
+
+  @Output() archiveClick = new EventEmitter<any>();
+
+  @HostBinding('class.large-on-desktop') @Input() largeOnDesktop = false;
+  @Input() showRemove = false;
+  @Output() removeClick = new EventEmitter<any>();
+
+  @Input() showEdit = false;
+  @Output() editClick = new EventEmitter<any>();
+
 
   public isCurrent = false;
   public relationDisplay: string;

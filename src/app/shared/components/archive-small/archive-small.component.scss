@@ -1,14 +1,15 @@
 @import 'variables';
 :host {
-  display: block;
-  cursor: pointer;
+  display: flex;
   max-width: 100%;
+  align-items: center;
 }
 
 .archive {
   display: flex;
   align-items: center;
-  max-width: 100%;
+  flex: 1 1 auto;
+  cursor: pointer;
 }
 
 $thumb-size: 50px;
@@ -41,6 +42,30 @@ $thumb-size: 50px;
   font-size: 12px;
 }
 
-.archive-edit button {
-  margin: 0px;
+.archive-edit {
+  display: flex;
+
+  button {
+    margin: 0px;
+    margin-left: 10px;
+  }
+}
+$thumb-size-large: 100px;
+
+:host.large-on-desktop {
+  @include desktop {
+    padding: 0.5rem;
+
+    .archive {
+      flex: 0 1 auto;
+      margin-right: auto;
+    }
+
+    .archive-thumb {
+      width: $thumb-size-large;
+      height: $thumb-size-large;
+      flex-basis: $thumb-size-large;
+      margin-right: 10px;
+    }
+  }
 }
