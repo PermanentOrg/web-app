@@ -105,7 +105,7 @@ export class MembersComponent implements OnInit {
 
   removeMember(member: AccountVO) {
     const deferred = new Deferred();
-    const confirmTitle = `Remove ${member.fullName} from ${this.accountService.getArchive().fullName}?`;
+    const confirmTitle = `Remove ${member.fullName}'s access to ${this.accountService.getArchive().fullName}?`;
 
     return this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {

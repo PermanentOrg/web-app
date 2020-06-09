@@ -8,7 +8,7 @@
   No members on this archive.
 </p>
 <div class="members-list">
-  <div class="member" *ngFor="let member of members" (click)="onMemberClick(member)">
+  <div class="member" *ngFor="let member of members">
     <div class="member-info">
       <div class="member-name">
         {{member.fullName}}
@@ -22,10 +22,20 @@
         {{member.accessRole | prConstants}} <span *ngIf="member.status === 'status.generic.pending'">(pending)</span>
       </div>
     </div>
-    <div class="member-button">
-      <button class="btn btn-primary"
+    <div class="member-button hide-desktop">
+      <button class="btn btn-primary" (click)="onMemberClick(member)"
+        [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+        Manage
+      </button>
+    </div>
+    <div class="member-button hide-mobile">
+      <button class="btn btn-primary" (click)="editMember(member)"
         [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
         Edit
+      </button>
+        <button class="btn btn-danger" (click)="removeMember(member)"
+        [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+        Remove
       </button>
     </div>
   </div>
