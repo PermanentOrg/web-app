@@ -2,7 +2,7 @@
   Storage
 </div>
 <div class="space-meter">
-  <div class="space-meter-inner" [style.width]="getMeterWidth()"></div>
+  <div class="space-meter-inner" [style]="getMeterTransform()"></div>
 </div>
 <div class="space-label">
   {{account.spaceTotal - account.spaceLeft | prStorageAmount}} of {{account.spaceTotal | dsFileSize:0}} used 
