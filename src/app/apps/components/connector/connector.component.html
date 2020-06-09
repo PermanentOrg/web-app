@@ -1,6 +1,7 @@
 <div class="connector-info" (click)="goToFolder()">
   <div prBgImage [bgSrc]="folder.thumbURL200" *ngIf="folder"></div>
   <div prBgImage bgSrc="assets/img/familysearch/tree_logo.png" *ngIf="!folder && connector.type.includes('familysearch')"></div>
+  <div prBgImage bgSrc="assets/img/facebook/f_logo.png" *ngIf="!folder && connector.type.includes('facebook')"></div>
   <div class="name">
     {{connectorName}} <em *ngIf="connector.type.includes('familysearch')">(Beta)</em>
   </div>
