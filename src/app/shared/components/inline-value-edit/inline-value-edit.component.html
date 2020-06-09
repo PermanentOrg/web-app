@@ -4,7 +4,7 @@
     <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <input type="text" name="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"
-          [required]="required" [email]="email" [minLength]="minLength">
+          [required]="required" [email]="email" [minLength]="minLength" (blur)="onTextInputBlur()">
         <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing">
           {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)}}
         </div>
@@ -22,7 +22,9 @@
   <ng-container *ngSwitchCase="'textarea'">
     <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
-        <textarea name="textarea" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"></textarea>
+        <textarea name="textarea" class="form-control" [class.is-editing]="isEditing"
+        [(ngModel)]="editValue" #input #model="ngModel"
+        (blur)="onTextInputBlur()"></textarea>
         <div class="inline-value-display inline-value-textarea form-control"
           [class.is-editing]="isEditing"
           (click)="startEdit()"

@@ -63,11 +63,19 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   }
 
   resetImage() {
-    this.setImageBg(this.item.thumbURL200);
-    this.currentThumbWidth = 200;
-    this.targetThumbWidth = 200;
-    this.checkElementWidth();
-    this.lastItemDataStatus = this.item.dataStatus;
+    if (!this.item.isFolder) {
+      this.setImageBg(this.item.thumbURL200);
+      this.currentThumbWidth = 200;
+      this.targetThumbWidth = 200;
+      this.checkElementWidth();
+      this.lastItemDataStatus = this.item.dataStatus;
+    } else {
+      this.setImageBg();
+      this.currentThumbWidth = 200;
+      this.targetThumbWidth = 200;
+      this.lastItemDataStatus = this.item.dataStatus;
+    }
+
   }
 
   @HostListener('window:resize', [])
@@ -107,8 +115,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
       this.setImageBg(targetUrl);
     }
   }
-
-
 
   setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;

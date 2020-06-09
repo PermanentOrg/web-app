@@ -320,7 +320,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       return;
     }
 
-    mouseDownEvent.preventDefault();
+    // mouseDownEvent.preventDefault();
     const preDragMouseUpHandler = (mouseUpEvent: MouseEvent) => {
       clearTimeout(this.mouseDownDragTimeout);
     };

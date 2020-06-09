@@ -31,6 +31,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() maxLength = false;
   @Input() email = false;
   @Input() noScroll = true;
+  @Input() saveOnBlur = true;
+
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
@@ -82,12 +84,15 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     }
   }
 
-  save() {
+  save(skipBlur = false) {
     if (this.displayValue !== this.editValue) {
+      console.log('emit change!');
       this.doneEditing.emit(this.editValue);
     }
     this.isEditing = false;
-    this.blurInput();
+    if (!skipBlur) {
+      this.blurInput();
+    }
   }
 
   cancel() {
@@ -141,6 +146,13 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   blurInput() {
     if (this.inputElementRef) {
       (this.inputElementRef.nativeElement as HTMLInputElement).blur();
+    }
+  }
+
+  onTextInputBlur() {
+    console.log('blur!');
+    if (this.saveOnBlur) {
+      this.save(true);
     }
   }
 

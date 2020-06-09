@@ -102,7 +102,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   }
 
   setCurrentTab(tab: SidebarTab) {
-    if (tab === 'sharing' && (this.isRootFolder || this.isPublicItem)){
+    if (tab === 'sharing' && (this.isRootFolder || this.isPublicItem)) {
       return;
     }
 
@@ -114,18 +114,20 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   }
 
   async onFinishEditing(property: keyof ItemVO, value: string) {
-    if (this.selectedItem) {
-      const originalValue = this.selectedItem[property];
+    const item = this.selectedItem;
+
+    if (item) {
+      const originalValue = item[property];
       const newData: any = {};
       newData[property] = value;
       try {
-        this.selectedItem.update(newData);
-        await this.editService.updateItems([this.selectedItem], [property]);
+        item.update(newData);
+        await this.editService.updateItems([item], [property]);
       } catch (err) {
         if (err instanceof FolderResponse || err instanceof RecordResponse ) {
           const revertData: any = {};
           revertData[property] = originalValue;
-          this.selectedItem.update(revertData);
+          item.update(revertData);
         }
       }
     }
