@@ -127,6 +127,10 @@ form {
 
   select.form-control {
     color: rgba(white, 0);
+
+    option {
+      color: $body-color;
+    }
   }
 
   .input-vertical-select-placeholder {
