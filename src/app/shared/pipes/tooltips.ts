@@ -80,5 +80,12 @@ export const TOOLTIPS = {
   nav: {
     addStorage: 'Add storage',
     help: 'Help'
+  },
+  members: {
+    viewer: 'A member with permission to view files and folders only',
+    contributor: 'A member with permission to view and create files and folders (e.g. upload only)',
+    editor: 'A member with permission to view, create, and edit metadata',
+    curator: 'A member with permission to view, create, edit, move, copy, and delete files and folders',
+    owner: 'A member with all permissions, including adding new members and changing owners'
   }
 };

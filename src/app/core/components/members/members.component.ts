@@ -170,6 +170,10 @@ export class MembersComponent implements OnInit {
     }
   }
 
+  getTooltipForAccess(accessRole: AccessRoleType) {
+    return 'members.' + accessRole.split('.').pop();
+  }
+
   confirmOwnershipTransfer() {
     return this.promptService.confirm('Transfer ownership', 'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Curator');
   }

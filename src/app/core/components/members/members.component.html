@@ -18,6 +18,7 @@
         {{member.primaryEmail}}
       </div>
       <div class="member-access">
+        <i class="ion-md-information-circle" [ngbTooltip]="getTooltipForAccess(member.accessRole) | prTooltip"></i>
         {{member.accessRole | prConstants}} <span *ngIf="member.status === 'status.generic.pending'">(pending)</span>
       </div>
     </div>
