@@ -38,7 +38,7 @@ export class TagsService {
   async refreshTags() {
     if (this.account.getArchive()) {
       const response = await this.api.tag.getTagsByArchive(this.account.getArchive());
-      const tags = response.getTagVOs();
+      const tags = response.getTagVOs().filter(t => t.name);
       for (const tag of tags) {
         this.tags.set(tag.tagId, tag);
       }
@@ -57,7 +57,7 @@ export class TagsService {
     let hasNew = false;
 
     for (const itemTag of item.TagVOs) {
-      if (!this.tags.has(itemTag.tagId)) {
+      if (!this.tags.has(itemTag.tagId) && itemTag.name) {
         this.tags.set(itemTag.tagId, itemTag);
         hasNew = true;
         this.debug('new tag seen %o', itemTag);

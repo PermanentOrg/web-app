@@ -11,6 +11,7 @@ import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { ngIfScaleAnimation } from '@shared/animations';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
+import { SearchService } from '@search/services/search.service';
 
 @Component({
   selector: 'pr-edit-tags',
@@ -20,8 +21,11 @@ import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 })
 export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscriptions {
   @Input() item: ItemVO;
+  @Input() loading: boolean;
+
   @HostBinding('class.can-edit') @Input() canEdit: boolean;
   public allTags: TagVOData[];
+  public matchingTags: TagVOData[];
 
   public itemTagsById: Set<number> = new Set();
 
@@ -40,6 +44,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
     @Optional() private dialogRef: DialogRef,
+    private searchService: SearchService,
     private tagsService: TagsService,
     private message: MessageService,
     private api: ApiService,
@@ -47,6 +52,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
     private elementRef: ElementRef
   ) {
     this.allTags = tagsService.getTags();
+    this.matchingTags = this.allTags;
 
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe(tags => {
@@ -56,6 +62,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
     if (this.dialogData) {
       this.isDialog = true;
+      this.canEdit = true;
       this.item = this.dialogData.item;
       this.startEditing();
     }
@@ -81,9 +88,14 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
   }
 
   async onInputEnter(newTagName: string) {
+    if (!newTagName || !newTagName.length) {
+      return;
+    }
+
     const tag: TagVOData = { name: newTagName };
     await this.onTagClick(tag);
     this.newTagName = null;
+    this.onTagType(this.newTagName);
   }
 
   async onTagClick(tag: TagVOData) {
@@ -111,6 +123,16 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
     } finally {
       this.checkItemTags();
       this.waiting = false;
+      this.newTagName = null;
+      this.onTagType(this.newTagName);
+    }
+  }
+
+  onTagType(tag: string) {
+    if (tag) {
+      this.matchingTags = this.searchService.getTagResults(tag);
+    } else {
+      this.matchingTags = this.allTags;
     }
   }
 
