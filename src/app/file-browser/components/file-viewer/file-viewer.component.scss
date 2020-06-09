@@ -2,6 +2,24 @@
 
 $toolbar-height: 30px;
 $transition-length: 0.35s;
+$button-size: 2rem;
+:host {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: block;
+
+  @include until($tablet-horizontal) {
+    // animation-name: $slide-up-animation;
+    // animation-timing-function: $tweaked-ease;
+    // animation-duration: 750ms;
+  }
+}
+
+
 
 .file-viewer {
   position: fixed;
@@ -10,7 +28,11 @@ $transition-length: 0.35s;
   left: 0;
   right: 0;
   background-color: white;
-  z-index: 10;
+
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 
   &.minimal {
     background-color: black;
@@ -31,6 +53,8 @@ $transition-length: 0.35s;
   top: 0;
   height: $toolbar-height;
   transform: translateY(0);
+  display: flex;
+  align-items: center;
 
   a {
     line-height: $toolbar-height;
@@ -39,6 +63,18 @@ $transition-length: 0.35s;
     > span {
       opacity: 0.5;
     }
+  }
+
+  button.close {
+    border-radius: 50%;
+    background-color: $gray-500;
+    width: $button-size;
+    height: $button-size;
+    line-height: $button-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
   }
 }
 
@@ -94,7 +130,6 @@ $transition-length: 0.35s;
 }
 
 .file-viewer-control {
-  $button-size: 2rem;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -185,6 +220,31 @@ $transition-length: 0.35s;
   .file-viewer-name {
     display: none;
   }
+}
+
+.file-viewer-metadata {
+  td {
+    padding: 5px 0;
+    vertical-align: top;
+
+    &:first-child {
+      padding-right: 5px;
+    }
+  }
+  .metadata-item {
+    padding: 5px 10px;
+    label {
+      font-weight: 600;
+      margin-bottom: 0px;
+    }
+  
+    .metadata-item-content {
+      $padding-y: 0.25rem;
+      padding: $padding-y 0;
+      min-height: $line-height-base * 1rem + (2 * $padding-y);
+    }
+  }
+
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {

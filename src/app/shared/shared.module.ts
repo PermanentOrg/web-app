@@ -1,5 +1,5 @@
 import { NgModule, ComponentFactoryResolver } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
@@ -10,7 +10,6 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
-import { IFrameService } from './services/iframe/iframe.service';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { RouterModule } from '@angular/router';
 import { FileSizePipe } from './pipes/filesize.pipe';
@@ -21,6 +20,24 @@ import { TimelineCompleteDialogComponent } from './components/timeline-complete-
 import { PublicLinkPipe } from './pipes/public-link.pipe';
 import { ShareActionLabelPipe } from './pipes/share-action-label.pipe';
 import { NewlineTextPipe } from './pipes/newline-text.pipe';
+import { AccountDropdownComponent } from './components/account-dropdown/account-dropdown.component';
+import { InlineValueEditComponent } from './components/inline-value-edit/inline-value-edit.component';
+import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.component';
+import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
+import { PublicRoutePipe } from './pipes/public-route.pipe';
+import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
+import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { PrDatePipe } from './pipes/pr-date.pipe';
+import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
+import { FolderContentsPipe } from './pipes/folder-contents.pipe';
+import { StaticMapComponent } from './components/static-map/static-map.component';
+import { PrLocationPipe } from './pipes/pr-location.pipe';
+import { TagsComponent } from './components/tags/tags.component';
+import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.component';
+import { TooltipsPipe } from './pipes/tooltips.pipe';
+import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
+import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
+import { StorageAmountPipe } from './pipes/storage-amount.pipe';
 
 @NgModule({
   imports: [
@@ -28,7 +45,11 @@ import { NewlineTextPipe } from './pipes/newline-text.pipe';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    DialogModule
+    DialogModule,
+    NgbDatepickerModule,
+    NgbTimepickerModule,
+    NgbTooltipModule,
+    NgbDropdownModule
   ],
   exports: [
     CommonModule,
@@ -41,13 +62,33 @@ import { NewlineTextPipe } from './pipes/newline-text.pipe';
     ArchiveSmallComponent,
     ArchivePickerComponent,
     TimelineCompleteDialogComponent,
+    BreadcrumbComponent,
     BreadcrumbsComponent,
     PromptComponent,
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
+    PublicRoutePipe,
     ShareActionLabelPipe,
-    NewlineTextPipe
+    PrDatePipe,
+    NewlineTextPipe,
+    FolderCastPipe,
+    RecordCastPipe,
+    FolderContentsPipe,
+    PrLocationPipe,
+    AccountDropdownComponent,
+    InlineValueEditComponent,
+    DragTargetRouterLinkDirective,
+    FolderViewToggleComponent,
+    StaticMapComponent,
+    TagsComponent,
+    BetaToggleComponent,
+    TooltipsPipe,
+    NgbTooltipModule,
+    NgbDropdownModule,
+    PublicViewLinkPipe,
+    StorageAmountPipe,
+    StorageMeterComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -62,17 +103,38 @@ import { NewlineTextPipe } from './pipes/newline-text.pipe';
     PromptComponent,
     ArchiveSmallComponent,
     ArchivePickerComponent,
+    BreadcrumbComponent,
     BreadcrumbsComponent,
     FileSizePipe,
     PrConstantsPipe,
     PublicLinkPipe,
+    PublicRoutePipe,
     ShareActionLabelPipe,
+    PrDatePipe,
+    PrLocationPipe,
     ArchiveSwitcherDialogComponent,
     TimelineCompleteDialogComponent,
-    NewlineTextPipe
+    NewlineTextPipe,
+    FolderCastPipe,
+    RecordCastPipe,
+    FolderContentsPipe,
+    AccountDropdownComponent,
+    InlineValueEditComponent,
+    DragTargetRouterLinkDirective,
+    FolderViewToggleComponent,
+    StaticMapComponent,
+    TagsComponent,
+    BetaToggleComponent,
+    TooltipsPipe,
+    PublicViewLinkPipe,
+    StorageAmountPipe,
+    StorageMeterComponent
   ],
   providers: [
-    PublicLinkPipe
+    PublicLinkPipe,
+    PublicRoutePipe,
+    PrLocationPipe,
+    DatePipe
   ]
 })
 export class SharedModule {
@@ -91,7 +153,29 @@ export class SharedModule {
     }
   ];
 
-  constructor(private dialog: Dialog, private resolver: ComponentFactoryResolver) {
+  constructor(
+    private dialog: Dialog,
+    private resolver: ComponentFactoryResolver,
+    private datePickerConfig: NgbDatepickerConfig,
+    private timePickerConfig: NgbTimepickerConfig,
+    private tooltipConfig: NgbTooltipConfig,
+    private dropdownConfig: NgbDropdownConfig
+  ) {
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+
+    this.datePickerConfig.showWeekdays = false;
+    this.datePickerConfig.minDate = {
+      year: 1,
+      day: 1,
+      month: 1
+    };
+
+    this.timePickerConfig.spinners = false;
+    this.timePickerConfig.seconds = true;
+    this.timePickerConfig.meridian = true;
+
+    this.tooltipConfig.openDelay = 500;
+    this.tooltipConfig.container = 'body';
+    this.tooltipConfig.tooltipClass = 'pr-tooltip';
   }
 }

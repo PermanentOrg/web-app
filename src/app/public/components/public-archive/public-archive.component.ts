@@ -1,11 +1,11 @@
 import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
@@ -14,11 +14,13 @@ import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { collapseAnimationCustom } from '@shared/animations';
 
 @Component({
   selector: 'pr-public-archive',
   templateUrl: './public-archive.component.html',
-  styleUrls: ['./public-archive.component.scss']
+  styleUrls: ['./public-archive.component.scss'],
+  animations: [ collapseAnimationCustom(250) ]
 })
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   public archive: ArchiveVO;

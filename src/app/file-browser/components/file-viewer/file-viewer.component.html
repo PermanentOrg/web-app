@@ -1,7 +1,10 @@
 <div class="file-viewer" [ngClass]="{'minimal': useMinimalView}">
   <div class="file-viewer-close">
+    <!-- <button type="button" class="close" aria-label="Close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
     <a (click)="close()">
-      <span>&#8249;</span> Back
+      <i class="ion-md-arrow-dropleft"></i> Back
     </a>
   </div>
   <div class="thumb-target">
@@ -38,6 +41,17 @@
         </tr>
         <tr>
           <td>Type</td><td>{{currentRecord.type | prConstants | titlecase}}</td>
+        </tr>
+        <tr>
+          <td>Tags</td><td><pr-tags [tags]="currentRecord.TagVOs"></pr-tags></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td>
+            <pr-static-map [location]="currentRecord.LocnVO" *ngIf="currentRecord.LocnVO"></pr-static-map>
+            <span *ngIf="currentRecord.LocnVO">{{(currentRecord.LocnVO | prLocation)?.full}}</span>
+            <span *ngIf="!currentRecord.LocnVO">No location</span>
+          </td>
         </tr>
       </table>
     </div>

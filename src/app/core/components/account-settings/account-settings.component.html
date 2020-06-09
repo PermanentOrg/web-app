@@ -1,0 +1,37 @@
+<div class="settings-group">
+  <div class="settings-group-title">
+    Account Information
+  </div>
+  <div class="settings-item">
+    <label>Account Name</label>
+    <div class="settings-item-content">
+      <pr-inline-value-edit [displayValue]="account.fullName" [horizontalControls]="false" [required]="true" [noScroll]="true" [minLength]="1"
+        (doneEditing)="onSaveProfileInfo('fullName', $event)"></pr-inline-value-edit>
+    </div>
+  </div>
+  <div class="settings-item">
+    <label>Email</label>
+    <div class="settings-item-content">
+      <pr-inline-value-edit [displayValue]="account.primaryEmail" [horizontalControls]="false" [email]="true" [noScroll]="true" [minLength]="3"
+        (doneEditing)="onSaveProfileInfo('primaryEmail', $event)"></pr-inline-value-edit>
+    </div>
+  </div>
+  <div class="settings-item">
+    <label>Mobile Phone</label>
+    <div class="settings-item-content">
+      <pr-inline-value-edit [displayValue]="account.primaryPhone" [horizontalControls]="false" [noScroll]="true"
+        (doneEditing)="onSaveProfileInfo('primaryPhone', $event)"></pr-inline-value-edit>
+    </div>
+  </div>
+</div>
+<!-- <div class="settings-group" *ngIf="preferences.emailPreference">
+  <div class="settings-group-title">Email Preferences</div>
+  <div class="settings-item" *ngFor="let feature of account.notificationPreferences.emailPreference | keyvalue">
+    <label>{{feature.key | titlecase}}</label>
+    <div class="form-check" *ngFor="let type of feature.value | keyvalue">
+      <input type="checkbox" class="form-check-input"
+        [(ngModel)]="preferences.emailPreference[feature.key][type.key]" (ngModelChange)="onPreferenceChange(['emailPreference', feature.key, type.key], $event)">
+      <label for="" class="form-check-label">{{type.key | titlecase}}</label>
+    </div>
+  </div>
+</div> -->

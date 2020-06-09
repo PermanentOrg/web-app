@@ -5,7 +5,7 @@ import { environment } from '@root/environments/environment';
 import { TEST_DATA, TEST_DATA_2 } from '@core/core.module.spec';
 import { HttpService, Observable } from '@shared/services/http/http.service';
 import { ShareRepo, ShareResponse } from '@shared/services/api/share.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
+import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO, FolderVO, RecordVO, ItemVO } from '@root/app/models';
 
 describe('ShareRepo', () => {
   let repo: ShareRepo;
@@ -43,7 +43,7 @@ describe('ShareRepo', () => {
     repo.getShares()
       .then((response: ShareResponse) => {
         const shareArchive = response.getShareArchiveVOs()[0] as ArchiveVO;
-        shareArchive.ItemVOs.forEach((item: FolderVO | RecordVO) => {
+        shareArchive.ItemVOs.forEach((item: ItemVO) => {
           if (item.type.includes('folder')) {
             expect(item.isFolder).toBeTruthy();
           } else {

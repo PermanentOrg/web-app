@@ -1,4 +1,5 @@
 @import 'colors';
+@import 'z-index';
 
 $primary: $PR-blue;
 $alternate: $PR-orange;
@@ -11,11 +12,11 @@ $input-transition: border-color .15s ease-in-out, background-color .15s ease-in-
 
 $max-form-width: 400px;
 
-$file-list-row-height: 50px;
+$darken-percent: 7%;
 
 $bottom-safe-area-padding: 40px;
 
-$default-transition-length: 0.4s;
+$default-transition-length: 0.5s;
 $shadow-color: rgba(black, 0.15);
 $shadow-color-dark: rgba(black, 0.45);
 
@@ -29,8 +30,45 @@ $public-archive-header-height: 70px;
 
 $breadcrumb-divider: quote(">");
 $breadcrumb-height: 34px;
+$breadcrumb-height-desktop: 60px;
 $timeline-breadcrumb-height: $breadcrumb-height;
 $timeline-folder-info-height: 50px;
+
+$left-menu-width: 250px;
+$navbar-height: 50px;
+$navbar-height-desktop: 75px;
+$navbar-total-height: $navbar-height + $breadcrumb-height;
+$navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-desktop;
+
+$navbar-button-icon-padding: 0.5rem;
+
+$sidebar-width: 300px;
+$sidebar-tab-height: 30px;
+
+$file-list-border: 1px solid $gray-300;
+$file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
+$file-list-row-height: 50px;
+$file-list-controls-height: $sidebar-tab-height;
+$file-list-thumb-col-width: $file-list-row-height;
+$file-list-type-col-width: 8rem;
+$file-list-access-col-width: $file-list-type-col-width;
+$file-list-date-col-width: 8rem;
+$file-list-name-col-width: 30rem;
+$file-list-shared-by-col-width: 20rem;
+$file-list-shared-icon-col-width: 2rem;
+
+
+$phone: 450px;
+$tablet: 768px;
+$tablet-horizontal: 900px;
+$desktop: 1200px;
+
+$scrollbar-margin: 20px;
+
+$taylor-ease: cubic-bezier(.77, 0, .175, 1);
+$tweaked-ease: cubic-bezier(.63,.01,.3,1);
+
+$slide-up-animation: slideUp;
 
 @mixin public-centered {
   max-width: $public-max-width;
@@ -39,10 +77,74 @@ $timeline-folder-info-height: 50px;
 }
 
 @mixin has-breadcrumbs {
-  padding-top: 34px;
+  // padding-top: 34px;
   display: block;
 }
 
+@mixin file-list-col-name {
+  flex: 1 1 $file-list-name-col-width;
+
+  @include after($desktop) {
+    padding-right: 0.5rem;
+    flex-grow: 0;
+    $ui-width-px: $left-menu-width + $sidebar-width;
+    $list-items-width-em: $file-list-type-col-width + $file-list-date-col-width;
+    $list-items-width-px: $scrollbar-margin + $file-list-row-height;
+    flex-basis: calc(100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em});
+  }
+}
+
+@mixin file-list-col-type {
+  width: $file-list-type-col-width;
+  flex: 0 0 $file-list-type-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+@mixin file-list-col-access {
+  width: $file-list-access-col-width;
+  flex: 0 0 $file-list-access-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+@mixin file-list-col-date {
+  width: $file-list-date-col-width;
+  flex: 0 0 $file-list-date-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+@mixin file-list-col-shared-by {
+  width: $file-list-shared-by-col-width;
+  flex: 0 0 $file-list-shared-by-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+@mixin file-list-col-shared-icon {
+  min-width: $file-list-shared-icon-col-width;
+  width: $file-list-shared-icon-col-width;
+  flex: 0 0 $file-list-shared-icon-col-width;
+
+  @include until($desktop) {
+    display: none;
+  }
+}
+
+
+
+$ionicons-font-path: 'https://unpkg.com/ionicons@4.6.3/dist/fonts';
 
 @import 'vendor/bootstrap/functions';
 @import 'vendor/bootstrap/variables';
+@import 'utilities';
+

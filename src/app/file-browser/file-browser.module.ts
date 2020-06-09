@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -10,10 +10,12 @@ import { FileListItemComponent } from '@fileBrowser/components/file-list-item/fi
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { VideoComponent } from '@shared/components/video/video.component';
-import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
-import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
+
+export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule);
 
 @NgModule({
   imports: [
@@ -23,6 +25,7 @@ import { FileBrowserComponentsModule } from './file-browser-components.module';
     FileBrowserRoutingModule,
     SharedModule,
     DialogModule,
+    NgbTooltipModule
   ],
   exports: [
     FileListComponent,
@@ -33,12 +36,4 @@ import { FileBrowserComponentsModule } from './file-browser-components.module';
   ]
 })
 export class FileBrowserModule {
-  private dialogComponents: DialogChildComponentData[] = [{
-    token: 'SharingComponent',
-    component: SharingComponent
-  }];
-
-  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
-    this.dialog.registerComponents(this.dialogComponents, resolver, true);
-  }
 }

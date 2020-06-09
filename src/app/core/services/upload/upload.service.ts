@@ -1,6 +1,6 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
-import { debounce } from 'lodash';
+import { debounce, remove } from 'lodash';
 
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 
@@ -15,44 +15,69 @@ import { UploadItem } from '@core/services/upload/uploadItem';
 import { RecordResponse } from '@shared/services/api/index.repo';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import debug from 'debug';
+import { AccountService } from '@shared/services/account/account.service';
 
-
-@Injectable({
-  providedIn: 'root'
-})
-export class UploadService {
+@Injectable()
+export class UploadService implements HasSubscriptions, OnDestroy {
   public uploader: Uploader = new Uploader(this.api, this.message);
   public component: UploadProgressComponent;
-  public buttonComponent: UploadButtonComponent;
+  public buttonComponents: UploadButtonComponent[] = [];
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
 
   private debouncedRefresh: Function;
 
-  constructor(private api: ApiService, private message: MessageService, private dataService: DataService) {
+  private itemsQueuedByParentFolderId = new Map<number, number>();
+
+  subscriptions: Subscription[] = [];
+
+  private debug = debug('service:upload');
+
+  constructor(
+    private api: ApiService,
+    private message: MessageService,
+    private dataService: DataService,
+    private accountService: AccountService
+  ) {
     this.debouncedRefresh = debounce(() => {
       this.dataService.refreshCurrentFolder();
     }, 750);
 
-    this.uploader.fileUploadComplete.subscribe((item: UploadItem) => {
+    this.subscriptions.push(this.uploader.fileUploadComplete.subscribe((item: UploadItem) => {
       const parentFolderId = item.parentFolder.folderId;
-      if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
-        this.debouncedRefresh();
+      let currentCount = 0;
+      if (this.itemsQueuedByParentFolderId.has(parentFolderId)) {
+        currentCount = this.itemsQueuedByParentFolderId.get(parentFolderId) - 1;
       }
-    });
 
-    this.uploader.uploadSessionStatus.subscribe(status => {
-      if (status === UploadSessionStatus.Done) {
-        this.debouncedRefresh();
+      this.itemsQueuedByParentFolderId.set(parentFolderId, currentCount);
+
+      if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId && currentCount === 0) {
+        this.dataService.refreshCurrentFolder();
       }
-    });
+
+      this.accountService.refreshAccountDebounced();
+    }));
+
+    this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
+      if (status === UploadSessionStatus.Done) {
+        this.accountService.refreshAccountDebounced();
+      }
+    }));
+  }
+
+  ngOnDestroy() {
+    unsubscribeAll(this.subscriptions);
+    this.uploader.closeSocketConnection();
   }
 
   registerButtonComponent(component: UploadButtonComponent) {
-    this.buttonComponent = component;
+    this.buttonComponents.push(component);
   }
 
-  deregisterButtonComponent() {
-    this.buttonComponent = null;
+  unregisterButtonComponent(component: UploadButtonComponent) {
+    remove(this.buttonComponents, component);
   }
 
   registerComponent(component: UploadProgressComponent) {
@@ -60,12 +85,20 @@ export class UploadService {
   }
 
   promptForFiles() {
-    if (this.buttonComponent) {
-      this.buttonComponent.promptForFiles();
+    if (this.buttonComponents.length) {
+      this.buttonComponents[0].promptForFiles();
     }
   }
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {
+    this.debug('uploadFiles %d files to folder %o', files.length, parentFolder);
+    let currentCount = 0;
+    if (this.itemsQueuedByParentFolderId.has(parentFolder.folderId)) {
+      currentCount = this.itemsQueuedByParentFolderId.get(parentFolder.folderId);
+    }
+
+    this.itemsQueuedByParentFolderId.set(parentFolder.folderId, currentCount + files.length);
+
     return this.uploader.connectAndUpload(parentFolder, files)
       .catch((response: any) => {
         this.handleUploaderError(response);
@@ -93,6 +126,8 @@ export class UploadService {
         this.message.showError('You do not have enough storage available to upload these files.');
       }
     }
+
+    this.accountService.refreshAccountDebounced();
   }
 
   showProgress() {

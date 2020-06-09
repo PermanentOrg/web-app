@@ -4,4 +4,5 @@
     Shared by {{archive.fullName}}
   </div>
 </div>
-<pr-file-list-item [item]="share" [isShareRoot]="true" *ngFor="let share of archive.ItemVOs" (itemUnshared)="onShareDeleted($event)"></pr-file-list-item>
+<pr-file-list-item [item]="share" [isShareRoot]="true" [showAccess]="true"
+  *ngFor="let share of archive.ItemVOs" (itemUnshared)="onShareDeleted($event)"></pr-file-list-item>

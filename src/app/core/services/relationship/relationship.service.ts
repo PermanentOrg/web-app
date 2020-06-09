@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RelationVO, ArchiveVO } from '@models/index';
+import { RelationVO, ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { RelationResponse } from '@shared/services/api/index.repo';

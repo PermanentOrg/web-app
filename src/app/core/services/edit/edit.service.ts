@@ -1,16 +1,16 @@
 import { Injectable, EventEmitter  } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 import { partition, remove, find } from 'lodash';
+import { environment } from '@root/environments/environment';
+import debug from 'debug';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { FolderVO, RecordVO, ItemVO, FolderVOData } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData, ShareVO } from '@root/app/models';
 
 import { FolderResponse, RecordResponse, ShareResponse } from '@shared/services/api/index.repo';
-import { PromptButton, PromptService } from '../prompt/prompt.service';
+import { PromptButton, PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
@@ -59,6 +59,10 @@ export const ItemActions: {[key: string]: PromptButton} = {
   SetFolderView: {
     buttonName: 'setFolderView',
     buttonText: 'Set folder view'
+  },
+  Tags: {
+    buttonName: 'tags',
+    buttonText: 'Tags'
   }
 };
 
@@ -69,10 +73,25 @@ export type ActionType = 'delete' |
   'download' |
   'copy' |
   'move' |
-  'setFolderView';
+  'setFolderView' |
+  'tags'
+  ;
+
+type EditServiceClipboardOperation = 'copy' | 'move';
+
+interface EditServiceClipboard {
+  items: ItemVO[];
+  operation: EditServiceClipboardOperation;
+}
 
 @Injectable()
 export class EditService {
+  private clipboard: EditServiceClipboard;
+
+  private isGoogleMapsApiLoaded = false;
+  private googleMapsLoadedDeferred: Deferred;
+
+  private debug = debug('service:editService');
 
   constructor(
     private api: ApiService,
@@ -82,7 +101,55 @@ export class EditService {
     private prompt: PromptService,
     private accountService: AccountService,
     private dialog: Dialog
-  ) { }
+  ) {
+    this.loadGoogleMapsApi();
+  }
+
+  loadGoogleMapsApi() {
+    if (window['google']?.maps) {
+      this.debug('Google Maps API already loaded, skipping');
+      this.isGoogleMapsApiLoaded = true;
+      return;
+    }
+
+    if (!this.isGoogleMapsApiLoaded) {
+      this.googleMapsLoadedDeferred = new Deferred();
+
+      const script = document.createElement('script');
+      const callbackName = '__gmapsLoaded';
+      const apiKey = environment.google.apiKey;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}&libraries=places`;
+      script.defer = true;
+      script.async = true;
+
+
+      window[callbackName] = () => {
+        this.isGoogleMapsApiLoaded = true;
+        this.googleMapsLoadedDeferred.resolve();
+        this.debug('Google Maps API loaded');
+      };
+
+      document.head.appendChild(script);
+    }
+  }
+
+  waitForGoogleMapsApi() {
+    if (this.isGoogleMapsApiLoaded) {
+      return Promise.resolve();
+    } else {
+      return this.googleMapsLoadedDeferred.promise;
+    }
+  }
+
+  sendToClipboard(items: ItemVO[], operation: EditServiceClipboardOperation) {
+    this.clipboard = {
+      items,
+      operation
+    };
+  }
+
+  executeClipboard() {
+  }
 
   promptForAction(items: ItemVO[], actions: PromptButton[] = []) {
     const actionDeferred = new Deferred();
@@ -152,7 +219,6 @@ export class EditService {
       }
       actionDeferred.resolve();
     }
-
   }
 
   createFolder(folderName: string, parentFolder: FolderVO): Promise<FolderVO | FolderResponse>   {
@@ -168,9 +234,11 @@ export class EditService {
       });
   }
 
-  deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
+  async deleteItems(items: any[]): Promise<FolderResponse | RecordResponse | any> {
     let folders: FolderVO[];
     let records: RecordVO[];
+
+    items.forEach(i => i.isPendingAction = true);
 
     [ folders, records ] = partition(items, 'isFolder') as any[];
 
@@ -192,20 +260,37 @@ export class EditService {
       promises.push(Promise.resolve());
     }
 
-    return Promise.all(promises)
-      .then((results) => {
-        let folderResponse, recordResponse;
-        [folderResponse, recordResponse] = results;
-      });
+    try {
+      const results = await Promise.all(promises);
+      let folderResponse, recordResponse;
+      [folderResponse, recordResponse] = results;
+      this.dataService.hideItemsInCurrentFolder(items);
+    } catch (err) {
+      items.forEach(i => i.isPendingAction = false);
+      throw err;
+    } finally {
+      this.accountService.refreshAccountDebounced();
+    }
   }
 
-  updateItems(items: any[]): Promise<FolderResponse | RecordResponse | any>   {
+  async unshareItem(item: ItemVO) {
+    const shareVO = new ShareVO({
+      folder_linkId: item.folder_linkId,
+      archiveId: this.accountService.getArchive().archiveId
+    });
+
+    await this.api.share.remove(shareVO);
+    this.dataService.itemUnshared(item);
+  }
+
+  updateItems(items: any[], whitelist?: (keyof ItemVO)[]): Promise<FolderResponse | RecordResponse | any>   {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
-    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+    const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     const recordsByRecordId: Map<number, RecordVO> = new Map();
+    const foldersByFolderId: Map<number, FolderVO> = new Map();
 
     items.forEach((item) => {
       item.isFolder ? folders.push(item) : records.push(item);
@@ -214,6 +299,10 @@ export class EditService {
         if (item.recordId) {
           recordsByRecordId.set(item.recordId, item);
         }
+      } else {
+        if (item.folderId) {
+          foldersByFolderId.set(item.folderId, item);
+        }
       }
     });
 
@@ -221,7 +310,7 @@ export class EditService {
 
     if (folders.length) {
       promises.push(
-        this.api.folder.update(folders)
+        this.api.folder.update(folders, whitelist)
       );
     } else {
       promises.push(Promise.resolve());
@@ -229,7 +318,7 @@ export class EditService {
 
     if (records.length) {
       promises.push(
-        this.api.record.update(records)
+        this.api.record.update(records, whitelist)
       );
     } else {
       promises.push(Promise.resolve());
@@ -244,29 +333,47 @@ export class EditService {
         if (folderResponse) {
           folderResponse.getFolderVOs()
             .forEach((updatedItem) => {
-              (itemsByLinkId[updatedItem.folder_linkId] as FolderVO).update(updatedItem);
+              const newData: FolderVOData = {
+                updatedDT: updatedItem.updatedDT
+              };
+
+              if (updatedItem.TimezoneVO) {
+                newData.TimezoneVO = updatedItem.TimezoneVO;
+              }
+
+              const folder = (itemsByLinkId[updatedItem.folder_linkId] as FolderVO) || foldersByFolderId.get(updatedItem.folderId);
+              folder.update(newData);
             });
         }
 
         if (recordResponse) {
           recordResponse.getRecordVOs()
           .forEach((updatedItem) => {
+            const newData: RecordVOData = {
+              updatedDT: updatedItem.updatedDT
+            };
+
+            if (updatedItem.TimezoneVO) {
+              newData.TimezoneVO = updatedItem.TimezoneVO;
+            }
+
             const record = (itemsByLinkId[updatedItem.folder_linkId] as RecordVO) || recordsByRecordId.get(updatedItem.recordId);
-            record.update(updatedItem);
+            record.update(newData);
           });
         }
       });
   }
 
-  moveItems(items: any[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
+  moveItems(items: ItemVO[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
-    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+    const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     items.forEach((item) => {
-      item.isFolder ? folders.push(item) : records.push(item);
+      item instanceof FolderVO ? folders.push(item) : records.push(item);
       itemsByLinkId[item.folder_linkId] = item;
+      item.isPendingAction = true;
     });
 
     const promises: Array<Promise<any>> = [];
@@ -287,14 +394,22 @@ export class EditService {
       promises.push(Promise.resolve());
     }
 
-    return Promise.all(promises);
+    return Promise.all(promises)
+      .then(results => {
+        this.dataService.hideItemsInCurrentFolder(items);
+        return results;
+      })
+      .catch(err => {
+        items.forEach(item => item.isPendingAction = false);
+        throw err;
+      });
   }
 
   copyItems(items: any[], destination: FolderVO): Promise<FolderResponse | RecordResponse | any>  {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
 
-    const itemsByLinkId: {[key: number]: FolderVO | RecordVO} = {};
+    const itemsByLinkId: {[key: number]: ItemVO} = {};
 
     items.forEach((item) => {
       item.isFolder ? folders.push(item) : records.push(item);
@@ -319,7 +434,28 @@ export class EditService {
       promises.push(Promise.resolve());
     }
 
+    Promise.all(promises).then(() => {
+        this.accountService.refreshAccountDebounced();
+    });
+
     return Promise.all(promises);
+  }
+
+  async openShareDialog(item: ItemVO) {
+    const response = await this.api.share.getShareLink(item);
+    this.dialog.open('SharingComponent', { item, link: response.getShareByUrlVO() });
+  }
+
+  async openPublishDialog(item: ItemVO) {
+    this.dialog.open('PublishComponent', { item }, { height: 'auto' });
+  }
+
+  async openTagsDialog(item: ItemVO) {
+    this.dialog.open('EditTagsComponent', { item }, { height: 'auto' });
+  }
+
+  async openLocationDialog(item: ItemVO) {
+    this.dialog.open('LocationPickerComponent', { item }, { height: 'auto', width: '600px' } );
   }
 
   openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {

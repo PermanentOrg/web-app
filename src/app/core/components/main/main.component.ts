@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, HostListener, Optional } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { FolderVO, FolderVOData, ShareByUrlVO, RecordVO, AccountVO } from '@root/app/models';
 import { find } from 'lodash';
@@ -21,17 +21,25 @@ import { UploadSessionStatus } from '@core/services/upload/uploader';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { ScrollService } from '@shared/services/scroll/scroll.service';
+import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent, DragServiceEvent } from '@shared/services/drag/drag.service';
+import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 
 @Component({
   selector: 'pr-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy, DraggableComponent, DragTargetDroppableComponent {
   public isNavigating: boolean;
   public uploadProgressVisible: boolean;
 
+  public isDraggingFile: boolean;
+  public isDragTarget: boolean;
+
   private routerListener: Subscription;
+  @ViewChild('mainContent') mainContentElement: ElementRef;
+  @ViewChild(CdkPortalOutlet) portalOutlet: PortalOutlet;
 
   constructor(
     private accountService: AccountService,
@@ -42,7 +50,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     private prompt: PromptService,
     private api: ApiService,
     private dialog: Dialog,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    @Optional() private drag: DragService,
+    private data: DataService
   ) {
     this.routerListener = this.router.events
       .pipe(filter((event) => {
@@ -99,7 +109,6 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
   }
 
   ngAfterViewInit() {
@@ -260,4 +269,55 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // handle all file drag events
+  @HostListener('dragenter', ['$event'])
+  onDragEnter(event: any) {
+    if (!this.isDraggingFile) {
+      this.isDraggingFile = true;
+      const dragEvent: DragServiceStartEndEvent = {
+        type: 'start',
+        targetTypes: ['folder'],
+        srcComponent: this,
+        event: event
+      };
+
+      this.drag.dispatch(dragEvent);
+    }
+  }
+
+  // handle all file drag events
+  @HostListener('dragleave', ['$event'])
+  onDragLeave(event: any) {
+    if (this.isDraggingFile && event.screenX === 0 && event.clientX === 0) {
+      const dragEvent: DragServiceStartEndEvent = {
+        type: 'end',
+        targetTypes: ['folder'],
+        srcComponent: this,
+        event: event
+      };
+
+      this.drag.dispatch(dragEvent);
+      this.isDraggingFile = false;
+    }
+  }
+
+
+  // on file drop
+  onDrop(dropTarget: DragTargetDroppableComponent, dragEvent: DragServiceEvent) {
+    const files = (dragEvent.event as DragEvent).dataTransfer.files;
+    this.isDraggingFile = false;
+
+    if (!files.length) {
+      return;
+    }
+    let targetFolder: FolderVO;
+
+    if (!dropTarget) {
+      targetFolder = this.data.currentFolder;
+    } else {
+      targetFolder = this.drag.getDestinationFromDropTarget(dropTarget);
+    }
+
+    this.upload.uploadFiles(targetFolder, Array.from(files));
+  }
 }

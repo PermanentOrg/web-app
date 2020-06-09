@@ -13,6 +13,12 @@
   background-color: white;
   text-align: center;
   padding: 10px 10px 0px;
+  
+  @include mainContentScrollDesktop;
+  @include desktop {
+    position: relative;
+    z-index: initial;
+  }
 }
 
 .archive-list-title {

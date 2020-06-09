@@ -1,5 +1,7 @@
+@import 'variables';
+
 .main-content {
-  padding-top: 50px;
+  padding-top: $navbar-total-height;
   opacity: 1;
 
   &.navigating {
@@ -10,5 +12,46 @@
 
   &.uploading {
     padding-bottom: 80px;
+  }
+
+  // @include after($tablet-horizontal) {
+  //   padding: 0;
+  //   position: fixed;
+  //   top: $navbar-total-height-desktop;
+  //   bottom: 0;
+  //   left: $left-menu-width;
+  //   right: 0;
+  // // }
+
+  //   @include after($tablet-horizontal) {
+  //   padding: 0;
+  //   margin-left: $left-menu-width;
+  //   width: calc(100vw - #{$left-menu-width});
+  // }
+}
+
+@include desktop {
+  :host {
+    display: flex;
+    height: 100vh;
+  }
+
+  .main-panel {
+    flex: 1 1 auto;
+    max-width: calc(100% - #{$left-menu-width});
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding-top: 0;
+
+    &.uploading {
+      padding-bottom: 0;
+    }
+  }
+
+  pr-nav {
+    flex: 0 0 $navbar-total-height-desktop;
   }
 }

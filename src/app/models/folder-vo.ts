@@ -1,28 +1,42 @@
-import { orderBy } from 'lodash';
-
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, BaseVOData } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
-import { isArray } from 'util';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
+import { ItemVO, ArchiveVO } from '.';
+import { FolderType, SortType, FolderLinkType } from './vo-types';
+import { formatDateISOString } from '@shared/utilities/dateTime';
+import { LocnVOData } from './locn-vo';
+import { TagVOData } from './tag-vo';
 
-export type FolderViewType =
-  'folder.view.grid' |
-  'folder.view.list' |
-  'folder.view.timeline'
-  ;
+export interface HasParentFolder {
+  parentDisplayName?: string;
+}
 
-export class FolderVO extends BaseVO {
+export interface ChildItemData {
+  isFolder: boolean;
+  isRecord: boolean;
+
+  isFetching: boolean;
+  fetched: Promise<boolean>;
+  dataStatus: DataStatus;
+
+  isPendingAction: boolean;
+  isNewlyCreated: boolean;
+}
+
+export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
   public isFolder = true;
   public isRecord = false;
 
   public isFetching = false;
   public fetched: Promise<boolean>;
-
   public dataStatus = DataStatus.Placeholder;
+
+  public isPendingAction = false;
+  public isNewlyCreated = false;
 
   public folderId;
   public archiveNbr;
@@ -36,14 +50,14 @@ export class FolderVO extends BaseVO {
   public note;
   public description;
   public special;
-  public sort;
+  public sort: SortType;
   public locnId;
   public timeZoneId;
   public view: FolderView;
   public viewProperty;
   public thumbArchiveNbr;
   public imageRatio;
-  public type;
+  public type: FolderType;
 
   // Thumbnails
   public thumbStatus;
@@ -56,7 +70,7 @@ export class FolderVO extends BaseVO {
   public status;
   public publicDT;
   public parentFolderId;
-  public folder_linkType;
+  public folder_linkType: FolderLinkType;
   public FolderLinkVOs;
   public accessRole: AccessRoleType;
   public position;
@@ -69,21 +83,24 @@ export class FolderVO extends BaseVO {
   public parentFolder_linkId: number;
   public ParentFolderVOs;
   public parentArchiveNbr;
+  public parentDisplayName: string;
   public pathAsArchiveNbr: string[];
 
   // Children
   public ChildFolderVOs;
   public RecordVOs;
-  public LocnVO;
+  public LocnVO: LocnVOData;
   public TimezoneVO: TimezoneVOData;
   public DirectiveVOs;
-  public TagVOs;
+  public TagVOs: TagVOData[];
   public SharedArchiveVOs;
-  public FolderSizeVO;
+  public FolderSizeVO: FolderSizeVOData;
   public AttachmentRecordVOs;
   public hasAttachments;
-  public ChildItemVOs: any;
+  public ChildItemVOs: ItemVO[];
   public ShareVOs: ShareVO[];
+  public ArchiveVOs: ArchiveVO[];
+  public ShareArchiveVO: ArchiveVO;
   public AccessVO;
   public AccessVOs;
 
@@ -94,10 +111,8 @@ export class FolderVO extends BaseVO {
   constructor(voData: FolderVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
-    this.ChildItemVOs = orderBy(this.ChildItemVOs, 'position');
-
     if (initChildren) {
-      this.ChildItemVOs = this.ChildItemVOs.map((item) => {
+      this.ChildItemVOs = this.ChildItemVOs.map((item: any) => {
         if (item.folderId) {
           return new FolderVO(item, false);
         } else {
@@ -113,12 +128,25 @@ export class FolderVO extends BaseVO {
     if (dataStatus) {
       this.dataStatus = dataStatus;
     }
+
+    this.formatDates();
   }
 
-  public update (voData: FolderVOData | FolderVO): void {
+  private formatDates() {
+    this.displayDT = formatDateISOString(this.displayDT);
+    this.displayEndDT = formatDateISOString(this.displayEndDT);
+    this.derivedDT = formatDateISOString(this.derivedDT);
+    this.derivedEndDT = formatDateISOString(this.derivedEndDT);
+  }
+
+  public update (voData: FolderVOData | FolderVO, keepChildItems = false): void {
     if (voData) {
       for ( const key in voData ) {
-        if (voData[key] !== undefined) {
+        if (keepChildItems && key === 'ChildItemVOs') {
+          continue;
+        }
+
+        if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
       }
@@ -127,10 +155,12 @@ export class FolderVO extends BaseVO {
     if (this.ShareVOs) {
       this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
+
+    this.formatDates();
   }
 }
 
-export interface FolderVOData {
+export interface FolderVOData extends BaseVOData {
   folderId?: any;
   archiveNbr?: any;
   archiveArchiveNbr?: any;
@@ -171,15 +201,18 @@ export interface FolderVOData {
   parentFolder_linkId?: number;
   ParentFolderVOs?: any;
   parentArchiveNbr?: any;
+  parentDisplayName?: string;
   pathAsArchiveNbr?: string[];
   ChildFolderVOs?: any;
   RecordVOs?: any;
   LocnVO?: any;
-  TimezoneVO?: any;
+  TimezoneVO?: TimezoneVOData;
   DirectiveVOs?: any;
   TagVOs?: any;
   SharedArchiveVOs?: any;
-  FolderSizeVO?: any;
+  ArchiveVOs?: ArchiveVO[];
+  ShareArchiveVO?: ArchiveVO;
+  FolderSizeVO?: FolderSizeVOData;
   AttachmentRecordVOs?: any;
   hasAttachments?: any;
   ChildItemVOs?: any;
@@ -188,4 +221,72 @@ export interface FolderVOData {
   AccessVOs?: any;
   posStart?: any;
   posLimit?: any;
+}
+
+export interface FolderSizeVOData {
+  folder_sizeId;
+  folder_linkId;
+  archiveId;
+  folderId;
+  parentFolder_linkId;
+  parentFolderId;
+
+  myFileSizeShallow;
+  myFileSizeDeep;
+
+  myFolderCountShallow;
+  myFolderCountDeep;
+
+  myRecordCountShallow;
+  myRecordCountDeep;
+
+  myAudioCountShallow;
+  myAudioCountDeep;
+
+  myDocumentCountShallow;
+  myDocumentCountDeep;
+
+  myExperienceCountShallow;
+  myExperienceCountDeep;
+
+  myImageCountShallow;
+  myImageCountDeep;
+
+  myVideoCountShallow;
+  myVideoCountDeep;
+
+  allFileSizeShallow;
+  allFileSizeDeep;
+
+  allFolderCountShallow;
+  allFolderCountDeep;
+
+  allRecordCountShallow;
+  allRecordCountDeep;
+
+  allAudioCountShallow;
+  allAudioCountDeep;
+
+  allDocumentCountShallow;
+  allDocumentCountDeep;
+
+  allExperienceCountShallow;
+  allExperienceCountDeep;
+
+  allImageCountShallow;
+  allImageCountDeep;
+
+  allVideoCountShallow;
+  allVideoCountDeep;
+
+  lastExecuteDT;
+  lastExecuteReason;
+  nextExecuteDT;
+
+  displayName;
+  description;
+
+  type;
+  status;
+  position;
 }

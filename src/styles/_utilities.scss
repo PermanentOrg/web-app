@@ -1,0 +1,63 @@
+@mixin after($min-width) {
+  @media screen and (min-width: $min-width) {
+    @content;
+  }
+}
+
+@mixin until($max-width) {
+  @media screen and (max-width: $max-width - 1) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @include after($tablet-horizontal) {
+    @content;
+  }
+}
+
+@mixin fullscreen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.fullscreen {
+  @include fullscreen();
+}
+
+@mixin positionReset {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin mainContentScrollDesktop {
+  @include after($tablet-horizontal) {
+    max-height: calc(100vh - #{$navbar-total-height-desktop});
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
+
+.hide-desktop {
+  @include after($tablet-horizontal) {
+    display: none !important;
+  }
+}
+
+.hide-mobile {
+  @include until($tablet-horizontal) {
+    display: none !important;
+  }
+}

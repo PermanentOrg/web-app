@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 import { debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
 

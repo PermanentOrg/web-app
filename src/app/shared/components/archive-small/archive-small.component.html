@@ -1,10 +1,10 @@
-<div class="archive">
+<div class="archive" (click)="archiveClick.emit($event)">
   <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"></div>
   <div class="archive-name" [ngClass]="{'clickable': clickable}">
     <span class="archive-current" *ngIf="isCurrent && !clickable">
       Current Archive<br>
     </span>
-    {{archive.fullName}}
+    The {{archive.fullName}} Archive
     <span class="archive-switch" *ngIf="isCurrent && clickable">
       <br>Tap to switch archives
     </span>
@@ -21,7 +21,9 @@
       <br>Access: {{accessRoleDisplay}}
     </span>
   </div>
-  <!-- <div class="archive-edit">
-    <button class="btn btn-primary">Edit</button>
-  </div> -->
+</div>
+<div class="archive-edit hide-mobile" *ngIf="largeOnDesktop && (showEdit || showRemove)">
+  <button class="btn btn-primary" *ngIf="showAccept" (click)="acceptClick.emit($event)">Accept</button>
+  <button class="btn btn-primary" *ngIf="showEdit" (click)="editClick.emit($event)">Edit</button>
+  <button class="btn btn-danger" *ngIf="showRemove" (click)="removeClick.emit($event)">Remove</button>
 </div>

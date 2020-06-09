@@ -1,0 +1,47 @@
+@import 'variables';
+
+:host {
+  position: relative;
+}
+
+button span:last-child {
+  margin-left: 5px;
+}
+
+button {
+  position: relative;
+  z-index: 2;
+  outline: none !important;
+  box-shadow: none !important;
+
+  &.active {
+    background-color: white;
+  }
+}
+
+.account-dropdown-menu {
+  position: absolute;
+  width: 100%;
+  top: calc(100% - 17px);
+  padding-top: 5px;
+  background-color: white;
+  z-index: 1;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+
+  a {
+    padding: 7px 12px;
+    display: block;
+    color: $body-color;
+    font-weight: 500;
+    text-align: right;
+
+    &:hover {
+      background-color: darken(white, 4%);
+      text-decoration: none;
+    }
+  }
+
+  border-bottom-left-radius: 17px;
+  border-bottom-right-radius: 17px;
+}

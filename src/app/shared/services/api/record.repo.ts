@@ -1,7 +1,10 @@
-import { RecordVO, FolderVO } from '@root/app/models';
+import { RecordVO, FolderVO, RecordVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+
+const MIN_WHITELIST: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'folder_linkId'];
+const DEFAULT_WHITELIST: (keyof RecordVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT'];
 
 export class RecordRepo extends BaseRepo {
   public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
@@ -40,14 +43,21 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequest<RecordResponse>('/record/postMetaBatch', data, RecordResponse);
   }
 
-  public update(recordVOs: RecordVO[]): Promise<RecordResponse> {
+  public update(recordVOs: RecordVO[], whitelist = DEFAULT_WHITELIST): Promise<RecordResponse> {
+    if (whitelist !== DEFAULT_WHITELIST) {
+      whitelist = [...whitelist, ...MIN_WHITELIST];
+    }
+
     const data = recordVOs.map((vo) => {
+      const updateData: RecordVOData = {};
+      for (const prop of whitelist) {
+        if (vo[prop] !== undefined) {
+          updateData[prop] = vo[prop];
+        }
+      }
+
       return {
-        RecordVO: new RecordVO({
-          recordId: vo.recordId,
-          archiveNbr: vo.archiveNbr,
-          displayName: vo.displayName
-        })
+        RecordVO: new RecordVO(updateData)
       };
     });
 

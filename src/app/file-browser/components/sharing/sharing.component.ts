@@ -3,7 +3,7 @@ import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core'
 import { remove, find, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
-import { PromptButton, PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptButton, PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -13,7 +13,7 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
-import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO } from '@models/index';
+import { RecordVO, FolderVO, ShareVO, ArchiveVO, ShareByUrlVO, ItemVO } from '@models';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
 import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } from '@shared/components/prompt/prompt-fields';
 import { ActivatedRoute } from '@angular/router';
@@ -72,7 +72,7 @@ export class SharingComponent implements OnInit {
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService
   ) {
-    this.shareItem = this.data.item as FolderVO | RecordVO;
+    this.shareItem = this.data.item as ItemVO;
     this.shareLink = this.data.link;
 
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
@@ -153,51 +153,52 @@ export class SharingComponent implements OnInit {
       });
   }
 
-  addShareMember() {
+  async addShareMember() {
     this.loadingRelations = true;
     let isExistingRelation = false;
-    return this.relationshipService.get()
-      .catch(() => {
-        this.loadingRelations = false;
-      })
-      .then((relations) => {
-        this.loadingRelations = false;
-        const config: ArchivePickerComponentConfig = {
-          shareItem: this.shareItem
-        };
+    try {
+      const relations = await this.relationshipService.get();
+      this.loadingRelations = false;
+      const config: ArchivePickerComponentConfig = {
+        shareItem: this.shareItem
+      };
 
-        if (relations && relations.length) {
-          config.relations = relations.filter((relation) => {
-            return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId})
-              && relation.status === 'status.generic.ok';
-          });
-        }
-
-        return this.dialog.open('ArchivePickerComponent', config);
-      })
-      .then((archive: ArchiveVO) => {
-        const newShareVo = new ShareVO({
-          ArchiveVO: archive,
-          accessRole: 'access.role.viewer',
-          archiveId: archive.archiveId,
-          folder_linkId: this.shareItem.folder_linkId
+      if (relations && relations.length) {
+        config.relations = relations.filter((relation) => {
+          return !find(this.shareItem.ShareVOs, {archiveId: relation.RelationArchiveVO.archiveId})
+            && relation.status === 'status.generic.ok';
         });
+      }
 
-        isExistingRelation = this.relationshipService.hasRelation(archive);
+      return this.dialog.open('ArchivePickerComponent', config)
+        .then((archive: ArchiveVO) => {
+          const newShareVo = new ShareVO({
+            ArchiveVO: archive,
+            accessRole: 'access.role.viewer',
+            archiveId: archive.archiveId,
+            folder_linkId: this.shareItem.folder_linkId
+          });
 
-        return this.editShareVo(newShareVo);
-      })
-      .then(() => {
-        if (isExistingRelation) {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
-        } else {
-          this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
-        }
-      })
-      .catch(() => {
-      });
+          isExistingRelation = this.relationshipService.hasRelation(archive);
 
-
+          return this.editShareVo(newShareVo);
+        })
+        .then(() => {
+          if (isExistingRelation) {
+            this.ga.sendEvent(EVENTS.SHARE.ShareByRelationship.initiated.params);
+          } else {
+            this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            console.error('Error in archive picker', err);
+          }
+        });
+    } catch (err) {
+      this.loadingRelations = false;
+      console.error(err);
+    }
   }
 
 

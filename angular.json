@@ -62,7 +62,8 @@
                   "with": "src/index.serve.html"
                 }
               ],
-              "deployUrl": "/"
+              "deployUrl": "/",
+              "tsConfig": "src/tsconfig.serve.json"
             },
             "proxy": {
               "fileReplacements": [
@@ -75,7 +76,8 @@
                   "with": "src/index.serve.html"
                 }
               ],
-              "deployUrl": "/"
+              "deployUrl": "/",
+              "tsConfig": "src/tsconfig.serve.json"
             },
             "proxy_hmr": {
               "fileReplacements": [
@@ -88,7 +90,8 @@
                   "with": "src/index.serve.html"
                 }
               ],
-              "deployUrl": "/"
+              "deployUrl": "/",
+              "tsConfig": "src/tsconfig.serve.json"
             },
             "proxy_hmr_prod": {
               "fileReplacements": [
@@ -200,7 +203,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mdot:build"
+            "browserTarget": "mdot:build",
+            "aot": true
           },
           "configurations": {
             "production": {
@@ -209,7 +213,8 @@
             "hmr": {
               "host": "local.permanent.org",
               "ssl": true,
-              "hmr": true,
+              "hmr": false,
+              "aot": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:hmr",
@@ -231,6 +236,8 @@
               "host": "local.permanent.org",
               "ssl": true,
               "hmr": true,
+              "aot": true,
+              "liveReload": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_hmr",
@@ -330,7 +337,11 @@
   "defaultProject": "mdot",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "styleext": "scss",
+      "style": "scss"
     }
+  },
+  "cli": {
+    "analytics": "0f7fbf7e-c8eb-4198-b099-2c1d5308c974"
   }
 }

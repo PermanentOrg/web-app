@@ -1,0 +1,171 @@
+@import 'variables';
+
+$inline-padding-x: 0.25rem;
+$inline-padding-y: 0.25rem;
+
+:host {
+  display: block;
+  position: relative;
+}
+
+form {
+  padding: 0px;
+  margin: 0;
+  max-width: none;
+}
+
+.inline-value-container {
+  position: relative;
+
+  &.inline-value-date {
+    display: flex;
+    justify-content: center;
+
+    ngb-datepicker {
+      flex: 1 1 auto;
+    }
+  }
+}
+
+.inline-value-display {
+  width: calc(100% + #{2 * $inline-padding-x});
+  background-color: white;
+  padding: $inline-padding-y $inline-padding-x;
+  margin-left: -1 * $inline-padding-x;
+  margin-right: -1 * $inline-padding-x;
+  position: relative;
+  border-color: rgba($input-border-color, 0);
+
+  &.is-editing {
+    opacity: 0;
+  }
+}
+
+.inline-value-placeholder {
+  position: absolute;
+  padding: $inline-padding-y $inline-padding-x;
+  left: -1 * $inline-padding-x;
+  right: -1 * $inline-padding-x;
+  top: 0;
+  bottom: 0;
+
+  .placeholder-line {
+    height: 1.5rem;
+    width: 95%;
+    position: relative;
+
+    &:after {
+      content: '';
+      background-color: $gray-200;
+      position: absolute;
+      top: 4px;
+      bottom: 2px;
+      width: 100%;
+    }
+
+    &.two-thirds {
+      &:after {
+        width: 66.66%;
+      }
+    }
+
+    &.three-quarters {
+      &:after {
+        width: 75%;
+      }
+    }
+  }
+}
+
+.inline-value-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.showing-empty-message {
+    color: $text-muted;
+  }
+}
+
+.inline-value-textarea {
+  min-height: 6 * 1.5rem;
+  white-space: pre-wrap;
+
+  &.showing-empty-message {
+    color: $text-muted;
+  }
+}
+
+div.form-control {
+  color: $body-color;
+}
+
+.form-control {
+  padding: $inline-padding-y $inline-padding-x;
+}
+
+.inline-value-container > input, .inline-value-container > textarea {
+  position: absolute;
+  top: 0px;
+  left: -1 * $inline-padding-x;
+  right: -1 * $inline-padding-x;
+  bottom: 0px;
+  opacity: 0;
+  z-index: 0;
+  resize: none;
+  width: calc(100% + #{2 * $inline-padding-x});
+  display: none;
+
+  &.is-editing {
+    opacity: 1;
+    z-index: 1;
+  }
+}
+
+.inline-value-container {
+  &.can-edit {
+    .inline-value-display {
+      cursor: pointer;
+      &:hover {
+        border-color: rgba($input-border-color, 0.75);
+      }
+    }
+
+    & > input, & > textarea {
+      display: initial;
+    }
+  }
+}
+
+.input-group {
+  button {
+    margin: 0;
+  }
+}
+
+:host.horizontal-controls {
+  display: flex;
+  align-items: center;
+  form {
+    display: flex;
+    align-items: center;
+  }
+
+  .inline-value-container {
+    flex: 1 0 100%;
+  }
+
+  .inline-value-controls {
+    flex: 0 0 auto;
+    margin-top: 0;
+  }
+}
+
+input, select, textarea {
+  &.ng-invalid {
+    &.ng-touched, &.ng-dirty {
+      background-color: rgba($danger, 0.2);
+      border-color: $danger !important;
+    }
+  }
+}

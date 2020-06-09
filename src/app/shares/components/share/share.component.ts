@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
-import { ArchiveVO, FolderVO, RecordVO } from '@root/app/models/index';
+import { ArchiveVO, FolderVO, RecordVO, ItemVO } from '@root/app/models/index';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { ActivatedRoute } from '@angular/router';
 import { find, remove } from 'lodash';
@@ -39,7 +39,7 @@ export class ShareComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onShareDeleted(item: FolderVO | RecordVO) {
+  onShareDeleted(item: ItemVO) {
     if (this.archive && this.archive.ItemVOs) {
       remove(this.archive.ItemVOs, item);
     }

@@ -6,7 +6,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
@@ -25,13 +25,22 @@ import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
+import { RouterModule } from '@angular/router';
+import { DragService } from '@shared/services/drag/drag.service';
+import { SearchModule } from '@search/search.module';
+import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
+import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     CoreRoutingModule,
-    DialogModule
+    RouterModule,
+    DialogModule,
+    SearchModule
   ],
   declarations: [
     MainComponent,
@@ -47,13 +56,18 @@ import { EditService } from './services/edit/edit.service';
     RelationshipsComponent,
     MembersComponent,
     MultiSelectStatusComponent,
+    AccountSettingsComponent,
+    NotificationPreferencesComponent,
+    ArchiveSelectorComponent,
+    ProfileEditComponent
   ],
   providers: [
     DataService,
     FolderViewService,
+    FolderPickerService,
     UploadService,
-    PromptService,
-    EditService
+    EditService,
+    DragService
   ]
 })
 export class CoreModule {

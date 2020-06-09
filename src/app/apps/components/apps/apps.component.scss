@@ -1,4 +1,6 @@
+@import 'variables';
+
 :host {
   display: block;
-  padding-top: 34px;
+  @include mainContentScrollDesktop;
 }

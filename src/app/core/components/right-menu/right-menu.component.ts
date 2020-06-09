@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderResponse} from '@shared/services/api/index.repo';
@@ -16,6 +16,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { Subscription } from 'rxjs';
+import { BaseResponse } from '@shared/services/api/base';
 
 @Component({
   selector: 'pr-right-menu',
@@ -140,18 +141,21 @@ export class RightMenuComponent implements OnInit {
       createReject = reject;
     });
 
-    return this.prompt.prompt(fields, 'Create New Folder', createPromise, 'Create Folder')
+    return this.prompt.prompt(fields, 'Create new folder', createPromise, 'Create folder')
       .then((value: any) => {
         this.edit.createFolder(value.folderName, this.currentFolder)
-          .then((folder: FolderVO) => {
+          .then(async (folder: FolderVO) => {
             this.message.showMessage(`Folder "${value.folderName}" has been created`, 'success');
+            await this.dataService.refreshCurrentFolder();
             createResolve();
-            return this.dataService.refreshCurrentFolder();
+            this.dataService.showItem(folder);
           })
-          .catch((response: FolderResponse) => {
-            if (response) {
-              this.message.showError(response.getMessage(), true);
+          .catch((err) => {
+            if (err instanceof BaseResponse) {
+              this.message.showError(err.getMessage(), true);
               createReject();
+            } else {
+              console.error(err);
             }
           });
       });

@@ -1,5 +1,64 @@
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, BaseVOData } from '@models/base-vo';
 import { AccessRoleType } from './access-role';
+
+
+interface NotificationTypes {
+  alerts?: boolean;
+  confirmations?: boolean;
+  recommendations: true;
+  security?: boolean;
+}
+
+interface NotificationPreference {
+  account?: NotificationTypes;
+  apps?: NotificationTypes;
+  archive?: NotificationTypes;
+  relationships?: NotificationTypes;
+  share?: NotificationTypes;
+  system?: NotificationTypes;
+}
+
+export interface AccountVOData extends BaseVOData {
+  accountId?: number;
+  primaryEmail?: string;
+  fullName?: string;
+  address?: string;
+  address2?: string;
+  country?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  primaryPhone?: string;
+  defaultArchiveId?: any;
+  level?: string;
+  apiToken?: any;
+  facebookAccountId?: any;
+  googleAccountId?: any;
+  status?: any;
+  type?: any;
+  agreed?: any;
+  optIn?: any;
+  emailArray?: any;
+  inviteCode?: any;
+  rememberMe?: any;
+  keepLoggedIn?: any;
+  accessRole?: AccessRoleType;
+  spaceTotal?: any;
+  spaceLeft?: any;
+  fileTotal?: any;
+  fileLeft?: any;
+  changePrimaryEmail?: any;
+  changePrimaryPhone?: any;
+  emailStatus?: any;
+  phoneStatus?: any;
+  notificationPreferences?: NotificationPreferencesI;
+}
+
+export interface NotificationPreferencesI {
+  emailPreference?: NotificationPreference;
+  inAppPreference?: NotificationPreference;
+  textPreference?: NotificationPreference;
+}
 
 export class AccountVO extends BaseVO {
   public isCurrent: boolean;
@@ -37,7 +96,19 @@ export class AccountVO extends BaseVO {
   public changePrimaryPhone;
   public emailStatus;
   public phoneStatus;
+  public notificationPreferences: NotificationPreferencesI;
 
+  constructor(voData: AccountVOData) {
+    super(voData);
+
+    if (this.notificationPreferences && typeof this.notificationPreferences === 'string') {
+      try {
+        this.notificationPreferences = JSON.parse(this.notificationPreferences);
+      } catch (err) {
+        console.error('Error parsing account preferences');
+      }
+    }
+  }
   needsVerification(): boolean {
     return this.status && this.status.includes('status.auth.need');
   }

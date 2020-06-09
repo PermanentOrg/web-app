@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark">
+<nav class="navbar navbar-dark nav-mobile">
   <button class="navbar-toggler" type="button" (click)="showHamburgerMenu()">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,7 +7,30 @@
     <span class="right-menu-toggler-icon"></span>
   </button>
 </nav>
-<pr-breadcrumbs></pr-breadcrumbs>
-<pr-left-menu [(isVisible)]="hambugerMenuVisible"></pr-left-menu>
-<pr-right-menu [(isVisible)]="rightMenuVisible"></pr-right-menu>
+<nav class="navbar navbar-dark nav-desktop">
+  <pr-global-search-bar></pr-global-search-bar>
+  <div class="nav-buttons">
+    <a href="/add-storage" [ngbTooltip]="'nav.addStorage' | prTooltip">
+      <i class="ion-md-add-circle"></i>
+    </a>
+    <a href="https://desk.zoho.com/portal/permanent/home" target="_blank"  [ngbTooltip]="'nav.help' | prTooltip">
+      <i class="ion-md-help-circle"></i>
+    </a>
+  </div>
+  <pr-account-dropdown></pr-account-dropdown>
+</nav>
+<div class="nav-second-row">
+  <pr-breadcrumbs [darkText]="true"></pr-breadcrumbs>
+  <pr-folder-view-toggle></pr-folder-view-toggle>
+  <div class="sidebar-align">
+    <pr-upload-button class="full-width" #uploadButton></pr-upload-button>
+    <div [ngbTooltip]="(rightMenu.allowedActions.createFolder ? 'fileList.actions.newFolder.enabled' : 'fileList.actions.newFolder.disabled') | prTooltip">
+      <button class="btn btn-primary" (click)="rightMenu.createNewFolder()" [disabled]="!rightMenu.allowedActions.createFolder" [hidden]="uploadButton.hidden"
+      *ngIf="rightMenu.currentFolder?.type !== 'type.folder.root.share'">
+      <i class="ion-md-folder"></i>New folder
+      </button>
+    </div>
+  </div>
+</div>
+<pr-right-menu [(isVisible)]="rightMenuVisible" #rightMenu></pr-right-menu>
 <pr-multi-select-status></pr-multi-select-status>

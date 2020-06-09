@@ -1,20 +1,57 @@
-<div class="file-list-item" (click)="goToItem()" [ngClass]="{'grid-view': inGridView}"> 
-  <div prBgImage [bgSrc]="!inGridView || item.isFolder ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
+<div class="file-list-item"
+  (click)="onItemClick($event)" 
+  [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction }"
+  (mousedown)="onItemMouseDown($event)" (touchstart)="onItemTouchStart($event)" (touchend)="onItemTouchEnd($event)"
+  (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
+  (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"> 
+  <ng-container [ngSwitch]="item.isFolder">
+    <div class="file-list-item-folder-icon" *ngSwitchCase="true">
+      <i class="ion-md-folder"></i>
+    </div>
+    <div *ngSwitchCase="false" prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
+  </ng-container>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">
-    {{item.displayName}}
+    <div class="first-row">
+      <span>{{item.displayName}}</span>
+      <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation [ngbTooltip]="'fileList.icons.share' | prTooltip"></i>
+    </div>
+    <div class="second-row">
+      <span *ngIf="(!showAccess || !item.ShareArchiveVO)">
+        {{item.displayDT | prDate: item.TimezoneVO: 'date' }} <span *ngIf="item.dataStatus > 0" @ngIfFadeInAnimation>{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</span>
+      </span>
+      <span *ngIf="showAccess || item.ShareArchiveVO">
+        Shared by The {{item.ShareArchiveVO?.fullName}} Archive
+      </span>
+    </div>
   </div>
-  <div class="actions" *ngIf="allowActions && !multiSelect">
+  <div class="type" *ngIf="!showAccess && !inGridView">
+    {{item.type | prConstants | titlecase }}
+  </div>
+  <div class="date" *ngIf="!showAccess && item.dataStatus > 0" @ngIfFadeInAnimation>
+    <div class="date-top">{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
+    <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
+  </div>
+  <div class="access" *ngIf="showAccess && !inGridView">
+    {{item.accessRole | prConstants | titlecase}}
+  </div>
+  <div class="shared-by" *ngIf="showAccess && !inGridView">
+    <ng-container *ngIf="item.ShareArchiveVO">
+      <div class="archive-thumb" prBgImage [bgSrc]="item.ShareArchiveVO.thumbURL200" [cover]="true"></div>
+      <span>The {{item.ShareArchiveVO?.fullName}} Archive</span>
+    </ng-container>
+  </div>
+  <div class="actions" *ngIf="allowActions">
     <button class="right-menu-toggler" (click)="showActions($event)">
       <span class="right-menu-toggler-icon right-menu-toggler-icon-dark"></span>
     </button>
   </div>
-  <div class="multi-select" *ngIf="allowActions && multiSelect">
+  <!-- <div class="multi-select" *ngIf="allowActions && multiSelect">
     <div class="select" (click)="$event.stopPropagation()">
       <label>
         <input type="checkbox" [(ngModel)]="isMultiSelected" (ngModelChange)="onMultiSelectChange()">
         <div class="select-active" *ngIf="isMultiSelected"></div>
       </label>
     </div>
-  </div>
+  </div> -->
 </div>

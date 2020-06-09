@@ -4,7 +4,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@a
 import { ApiService } from '@shared/services/api/api.service';
 
 import { FolderResponse } from '@shared/services/api/index.repo';
-import { FolderVO } from '@models/index';
+import { FolderVO } from '@models';
 
 @Injectable()
 export class PublicRootResolveService implements Resolve<any> {

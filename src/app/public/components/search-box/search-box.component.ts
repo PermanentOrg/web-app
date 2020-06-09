@@ -1,6 +1,6 @@
-import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding, Inject } from '@angular/core';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs/operators';
@@ -66,7 +66,7 @@ constructor(
     this.searchInputRef.nativeElement.addEventListener('keydown', evt => this.onSearchInputKeydown(evt));
   }
 
-  archiveResultTrackByFn(archive: ArchiveVO) {
+  archiveResultTrackByFn(index, archive: ArchiveVO) {
     return archive.archiveId;
   }
 

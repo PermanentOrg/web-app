@@ -1,18 +1,22 @@
 @import 'variables';
 
 :host {
-  display: block;
-  padding-top: 34px;
+  @include has-breadcrumbs;
+  @include mainContentScrollDesktop;
 }
 
 .shares-heading {
   text-align: center;
-  padding: 20px 0px;
-  font-weight: 600;
+  padding: 10px;
+  font-weight: 500;
   border-bottom: 1px solid $gray-300;
+
+  @include desktop {
+      text-align: left;
+  }
 }
 
-.shares-empty-message {
+.empty-message {
+  padding: 20px 10px;
   text-align: center;
-  padding: 20px 0px;
 }

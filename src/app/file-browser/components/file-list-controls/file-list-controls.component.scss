@@ -1,0 +1,194 @@
+@import 'variables';
+
+:host {
+  display: block;
+  height: $file-list-controls-height;
+  display: flex;
+  align-items: center;
+  border-bottom: $file-list-border;
+  position: relative;
+
+  @include until($tablet-horizontal) {
+    display: none;
+  }
+}
+
+.file-list-header {
+  $sort-arrow-size: 0.5em;
+  flex: 1 1 100%;
+  display: flex;
+  align-items: center;
+
+  font-size: $font-size-sm;
+
+  > * {
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    align-items: baseline;
+
+    .col-title {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .col-title::after {
+      content: '\25BC';
+      font-size: $sort-arrow-size;
+      padding-left: $sort-arrow-size;
+      position: relative;
+      top: -$sort-arrow-size / 4;
+      opacity: 0.5;
+    }
+
+    .col-title:hover::after {
+      opacity: 0.75;
+    }
+
+    .col-title:only-child {
+      cursor: auto;
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .save-sort {
+    display: none;
+    opacity: 0.5;
+    cursor: pointer;
+    font-size: 0.85em;
+    padding-left: $sort-arrow-size;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .dropdown + .save-sort {
+    padding-left: 0;
+  }
+  .active-sort {
+    .col-title::after {
+      opacity: 1;
+    }
+
+    &.sort-desc .col-title::after {
+      content: '\25B2';
+    }
+  }
+
+  &.is-sort-changed {
+    .active-sort .save-sort, &> .save-sort {
+      display: initial;
+    }
+  }
+
+  &.hide-sort {
+    *::after, .save-sort {
+      display: none;
+    }
+
+    .col-title {
+      cursor: auto;
+    }
+  }
+
+  &.is-sorting {
+    .col-title {
+      cursor: wait;
+    }
+  }
+
+  &.is-saving-sort {
+    .save-sort {
+      cursor: wait;
+      opacity: 0.5;
+    }
+  }
+
+
+  .name {
+    @include file-list-col-name;
+    margin-left: $file-list-thumb-col-width;
+  }
+
+  .type {
+    @include file-list-col-type;
+  }
+
+  .date {
+    @include file-list-col-date;
+  }
+
+  .access {
+    @include file-list-col-access;
+  }
+
+  .shared-by {
+    @include file-list-col-shared-by;
+  }
+
+  .shared-icon {
+    @include file-list-col-shared-icon;
+  }
+
+  .single-col-sort {
+    padding: 0 10px;
+    cursor: pointer;
+  }
+
+  .single-col-sort-option {
+    font-size: $font-size-sm;
+    padding: 0.5rem 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: $gray-200;
+    }
+  }
+
+  .dropdown-menu {
+    margin-top: 0;
+    padding: 0px;
+  }
+}
+
+.file-list-controls {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  font-size: $font-size-sm;
+  padding-left: 5px;
+
+  .file-list-control {
+    &:not(:last-child) {
+      margin-right: 1.25em;
+    }
+
+    cursor: pointer;
+    user-select: none;
+
+    i {
+      opacity: 0.7;
+      margin-right: 0.25em;
+      transition: opacity 0.125s $tweaked-ease;
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    &:hover:not(.disabled) {
+      i {
+        opacity: 1;
+        transition: none;
+      }
+    }
+  }
+}

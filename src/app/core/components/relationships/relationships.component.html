@@ -10,25 +10,38 @@
 <div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
 <div class="relations" *ngIf="sentRelationRequests.length">
   <pr-archive-small *ngFor="let relation of sentRelationRequests"
-  (click)="onSentRelationRequestClick(relation)"
+  (archiveClick)="onSentRelationRequestClick(relation)"
   [archive]="relation.RelationArchiveVO"
   [relation]="relation.type"
+  [largeOnDesktop]="true"
+  [showRemove]="true"
+  (removeClick)="removeRelation(relation)"
   ></pr-archive-small>
 </div>
 <div class="page-subheading" *ngIf="relationRequests.length">Relationship requests</div>
 <div class="relations" *ngIf="relationRequests.length">
   <pr-archive-small *ngFor="let relation of relationRequests"
-  (click)="onRelationRequestClick(relation)"
+  (archiveClick)="onRelationRequestClick(relation)"
   [archive]="relation.ArchiveVO"
   [isPending]="true"
   [relation]="relation.type"
+  [largeOnDesktop]="true"
+  [showAccept]="true"
+  (acceptClick)="onRelationRequestClick(relation, true)"
+  [showRemove]="true"
+  (removeClick)="removeRelation(relation)"
   ></pr-archive-small>
 </div>
 <div class="page-subheading">Established relationships</div>
 <div class="relations">
   <pr-archive-small *ngFor="let relation of relations"
-  (click)="onRelationClick(relation)"
+  (archiveClick)="onRelationClick(relation)"
   [archive]="relation.RelationArchiveVO"
   [relation]="relation.type"
+  [largeOnDesktop]="true"
+  [showRemove]="true"
+  (removeClick)="removeRelation(relation)"
+  [showEdit]="true"
+  (editClick)="editRelation(relation)"
   ></pr-archive-small>
 </div>

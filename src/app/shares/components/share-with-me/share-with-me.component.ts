@@ -1,25 +1,27 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { find, remove } from 'lodash';
+import { find, filter } from 'lodash';
 import { TweenLite, ScrollToPlugin } from 'gsap/all';
 import { DataService } from '@shared/services/data/data.service';
 
-import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO } from '@root/app/models';
+import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ItemVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
+import { slideUpAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-share-with-me',
   templateUrl: './share-with-me.component.html',
-  styleUrls: ['./share-with-me.component.scss']
+  styleUrls: ['./share-with-me.component.scss'],
+  animations: [ slideUpAnimation ]
 })
-export class ShareWithMeComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ShareWithMeComponent implements OnInit, OnDestroy {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
 
   sharesFolder: FolderVO;
-  sharedByMe: Array<FolderVO | RecordVO>;
+  sharedByMe: Array<ItemVO>;
   sharedWithMe: ArchiveVO[];
 
   constructor(
@@ -29,38 +31,15 @@ export class ShareWithMeComponent implements OnInit, AfterViewInit, OnDestroy {
     private accountService: AccountService,
     @Inject(DOCUMENT) private document: any
   ) {
-    this.sharesFolder = new FolderVO({
-      displayName: 'Shared With Me',
-      pathAsText: ['Shared With Me'],
-      type: 'type.folder.root.share'
-    });
-    this.dataService.setCurrentFolder(this.sharesFolder);
     const shares = this.route.snapshot.data.shares as ArchiveVO[] || [];
-    remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop();
-
-    this.sharedWithMe = shares;
+    const currentArchiveId = this.accountService.getArchive().archiveId;
+    this.sharedWithMe = filter(shares, s => s.archiveId !== currentArchiveId);
   }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
-    if (this.route.snapshot.params) {
-      const archiveNbr = this.route.snapshot.params.archiveNbr;
-      if (archiveNbr) {
-        const targetShare = find(this.shareComponents.toArray(), (share: ShareComponent) => {
-          return share.archive.archiveNbr === archiveNbr;
-        }) as ShareComponent;
-
-        if (targetShare) {
-          window.scrollTo(0, targetShare.element.nativeElement.offsetTop - 100);
-        }
-      }
-    }
-  }
-
   ngOnDestroy() {
-    this.dataService.setCurrentFolder();
   }
 
 }

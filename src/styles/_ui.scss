@@ -5,6 +5,12 @@ button.btn, a.btn {
   max-width: $max-form-width;
 }
 
+.input-group {
+  button.btn, a.btn {
+    margin: 0;
+  }
+}
+
 .alert-wrapper {
   max-width: $max-form-width + 100px;
   .alert {
@@ -94,6 +100,12 @@ nav .btn {
   margin-left: auto;
 }
 
+.nav-second-row .btn {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  margin: 0;
+}
+
 .right-menu-toggler {
   padding: 0px 0px;
   font-size: 1.25rem;
@@ -102,6 +114,9 @@ nav .btn {
   border: 1px solid transparent;
   border-radius: 0.25rem;
   cursor: pointer;
+  height: $navbar-height;
+  display: flex;
+  align-items: center;
   &:focus {
     outline: none;
     text-decoration: none;
@@ -210,6 +225,10 @@ button.btn-wordpress, button.btn-wordpress-alternate {
   line-height: 0px;
 }
 
+.btn-purple {
+  @include button-variant($PR-purple, $PR-purple);
+}
+
 
 .btn-alternate,
 .btn-alternate:disabled,
@@ -235,6 +254,10 @@ button.btn-wordpress, button.btn-wordpress-alternate {
   }
 }
 
+.btn[disabled] {
+  cursor: not-allowed;
+}
+
 .perm-banner {
   flex: 0 0 100px;
   height: 100px;
@@ -254,4 +277,126 @@ button.btn-wordpress, button.btn-wordpress-alternate {
     flex: 0 0 auto;
     width: 200px;
   }
+}
+
+// DRAGGING RELATED
+
+body.dragging {
+  overflow-y: hidden;
+
+  *:not(.drag-target) {
+    cursor: no-drop !important;
+  }
+
+  *.drag-target, .drag-target * {
+    cursor: pointer !important;
+  }
+}
+
+$drag-outline-border: 5px;
+
+.drag-service-cursor {
+  position: absolute;
+  opacity: 1;
+  padding: 0.25rem;
+  z-index: 100;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  border-radius: $border-radius;
+  background-color: rgba($PR-orange, 0.9);
+
+  &.active {
+    opacity: 1;
+    // $blur-size: 10px;
+    // backdrop-filter: blur($blur-size);
+    // -webkit-backdrop-filter: blur($blur-size);
+  }
+  
+  .drag-service-cursor-item {
+    font-weight: 700;
+  }
+
+  .drag-service-cursor-action {
+    font-weight: 500;
+  }
+
+  &.for-file-list-item, &.for-file-upload {
+    height: $file-list-row-height * 1.25;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 15rem;
+    max-width: $file-list-width-desktop / 3;
+    // transform-origin: 50% 50%;
+
+    .drag-service-cursor-item, .drag-service-cursor-action {
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .drag-service-cursor-action {
+      font-size: $font-size-sm;
+      position: absolute;
+      bottom: 0.125rem;
+      max-width: 100%
+    }
+  }
+
+  &.for-file-upload {
+    position: fixed;
+    top: $drag-outline-border;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $PR-orange;
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    .drag-service-cursor-item, .drag-service-cursor-action {
+      text-align: center;
+    }
+
+    .drag-service-cursor-action {
+      position: initial;
+      height: $font-size-sm * 1.25;
+      line-height: $font-size-sm * 1.25;
+    }
+    
+  }
+}
+
+.drag-service-screen-outline {
+  border: $drag-outline-border solid $PR-orange;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.inline-value-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+
+  button {
+    flex: 0 0 auto;
+    margin: 0;
+    margin-left: 0.5rem;
+    font-size: $font-size-sm;
+    width: auto;
+  }
+}
+
+.pr-tooltip {
+  animation-name: fadein;
+  animation-duration: 125ms;
+  animation-timing-function: $tweaked-ease;
 }

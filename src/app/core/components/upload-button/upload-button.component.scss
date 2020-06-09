@@ -1,3 +1,28 @@
+@import 'variables';
+
+$padding-x: $navbar-button-icon-padding;
+
 .btn-alternate {
   color: white;
+  margin-bottom: 0;
+  padding-left: $padding-x;
+  padding-right: $padding-x;
+
+  i {
+    margin-right: $padding-x;
+  }
+
+  &.disabled {
+  }
 }
+
+:host.full-width {
+  display: block;
+  width: 100%;
+  flex: 1 1 100%;
+
+  label {
+    width: 100%;
+  }
+}
+

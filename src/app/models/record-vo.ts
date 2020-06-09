@@ -1,16 +1,25 @@
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, BaseVOData } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
+import { ChildItemData, HasParentFolder } from './folder-vo';
+import { RecordType, FolderLinkType } from './vo-types';
+import { formatDateISOString } from '@shared/utilities/dateTime';
+import { LocnVOData } from './locn-vo';
+import { TagVOData } from './tag-vo';
+import { ArchiveVO } from './archive-vo';
 
-export class RecordVO extends BaseVO {
+export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
   public isRecord = true;
   public isFolder = false;
 
   public isFetching = false;
   public fetched: Promise<boolean>;
+
+  public isPendingAction = false;
+  public isNewlyCreated = false;
 
   public dataStatus = DataStatus.Placeholder;
 
@@ -38,7 +47,7 @@ export class RecordVO extends BaseVO {
   public encryption;
   public metaToken;
   public refArchiveNbr;
-  public type;
+  public type: RecordType;
 
   // Thumbnails
   public thumbStatus;
@@ -62,24 +71,26 @@ export class RecordVO extends BaseVO {
   public position;
   public accessRole: AccessRoleType;
   public folderArchiveId: number;
-  public folder_linkType;
+  public folder_linkType: FolderLinkType;
 
   // For the iParentFolderVO
   public pathAsFolder_linkId;
   public pathAsText;
   public parentFolder_linkId;
   public ParentFolderVOs;
-  public parentArchiveNbr;
+  public parentArchiveNbr: string;
+  public parentDisplayName: string;
   public pathAsArchiveNbr;
 
   // Other stuff
-  public LocnVO;
+  public LocnVO: LocnVOData;
   public TimezoneVO: TimezoneVOData;
   public FileVOs;
   public DirectiveVOs;
-  public TagVOs;
+  public TagVOs: TagVOData[];
   public TextDataVOs;
-  public ArchiveVOs;
+  public ArchiveVOs: ArchiveVO[];
+  public ShareArchiveVO: ArchiveVO;
   public saveAs;
   public AttachmentRecordVOs;
   public isAttachment;
@@ -88,10 +99,10 @@ export class RecordVO extends BaseVO {
   public fileDurationInSecs;
   public batchNbr;
   public RecordExifVO;
-  public ShareVOs;
+  public ShareVOs: ShareVO[];
   public AccessVO;
 
-  constructor(voData: any | RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(voData: RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
     super(voData);
 
     if (this.ShareVOs) {
@@ -101,12 +112,21 @@ export class RecordVO extends BaseVO {
     if (dataStatus) {
       this.dataStatus = dataStatus;
     }
+
+    this.formatDates();
+  }
+
+  private formatDates() {
+    this.displayDT = formatDateISOString(this.displayDT);
+    this.displayEndDT = formatDateISOString(this.displayEndDT);
+    this.derivedDT = formatDateISOString(this.derivedDT);
+    this.derivedEndDT = formatDateISOString(this.derivedEndDT);
   }
 
   public update (voData: RecordVOData | RecordVO): void {
     if (voData) {
       for ( const key in voData ) {
-        if (voData[key] !== undefined) {
+        if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
       }
@@ -118,7 +138,7 @@ export class RecordVO extends BaseVO {
   }
 }
 
-export interface RecordVOData {
+export interface RecordVOData extends BaseVOData {
   recordId?: any;
   archiveId?: any;
   archiveNbr?: any;
@@ -156,7 +176,7 @@ export interface RecordVOData {
   folder_linkId?: number;
   parentFolderId?: number;
   position?: any;
-  accessRole?: any;
+  accessRole?: AccessRoleType;
   folderArchiveId?: number;
   folder_linkType?: any;
   pathAsFolder_linkId?: any;
@@ -164,14 +184,16 @@ export interface RecordVOData {
   parentFolder_linkId?: any;
   ParentFolderVOs?: any;
   parentArchiveNbr?: any;
+  parentDisplayName?: string;
   pathAsArchiveNbr?: any;
   LocnVO?: any;
-  TimezoneVO?: any;
+  TimezoneVO?: TimezoneVOData;
   FileVOs?: any;
   DirectiveVOs?: any;
   TagVOs?: any;
   TextDataVOs?: any;
-  ArchiveVOs?: any;
+  ArchiveVOs?: ArchiveVO[];
+  ShareArchiveVO?: ArchiveVO;
   saveAs?: any;
   AttachmentRecordVOs?: any;
   isAttachment?: any;

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, AccountVO } from '@models/index';
+import { FolderVO, AccountVO } from '@models';
 import { ActivatedRoute } from '@angular/router';
-import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ACCESS_ROLE_FIELD, ACCESS_ROLE_FIELD_INITIAL } from '@shared/components/prompt/prompt-fields';
 import { Deferred } from '@root/vendor/deferred';
@@ -105,7 +105,7 @@ export class MembersComponent implements OnInit {
 
   removeMember(member: AccountVO) {
     const deferred = new Deferred();
-    const confirmTitle = `Remove ${member.fullName} from ${this.accountService.getArchive().fullName}?`;
+    const confirmTitle = `Remove ${member.fullName}'s access to ${this.accountService.getArchive().fullName}?`;
 
     return this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {
@@ -168,6 +168,10 @@ export class MembersComponent implements OnInit {
       }
       deferred.resolve();
     }
+  }
+
+  getTooltipForAccess(accessRole: AccessRoleType) {
+    return 'members.' + accessRole.split('.').pop();
   }
 
   confirmOwnershipTransfer() {

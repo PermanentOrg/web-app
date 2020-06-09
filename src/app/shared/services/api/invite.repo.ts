@@ -1,4 +1,4 @@
-import { InviteVO, RecordVO, FolderVO, AccountVO, ArchiveVO } from '@root/app/models';
+import { InviteVO, RecordVO, FolderVO, AccountVO, ArchiveVO, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 
@@ -27,7 +27,7 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>('/invite/byEmailAddress', data, InviteResponse);
   }
 
-  public sendShareInvite(invites: InviteVO[], itemToShare: FolderVO | RecordVO): Promise<InviteResponse> {
+  public sendShareInvite(invites: InviteVO[], itemToShare: ItemVO): Promise<InviteResponse> {
     const data = invites.map((invite) => {
       const vos: any = {
         InviteVO: invite

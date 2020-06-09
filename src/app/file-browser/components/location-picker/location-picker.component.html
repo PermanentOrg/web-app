@@ -1,0 +1,39 @@
+<div class="dialog-content">
+  <div class="dialog-body">
+    <div class="map-wrapper" #mapWrapper>
+      <google-map [options]="mapOptions"
+      [center]="center"
+      [height]="height"
+      [width]="width"
+      (mapClick)="onMapClick($event)"
+      >
+        <map-marker *ngIf="currentLocation"
+          [position]="currentLocationLatLng">
+        </map-marker>
+      </google-map>
+      <div class="location-panel" *ngIf="currentLocation" @ngIfFadeInAnimation>
+        <div class="location-info">
+          <ng-container *ngIf="currentLocationDisplay.displayName">
+            <span>{{currentLocationDisplay.displayName}}</span>
+            <br>
+          </ng-container>
+          <span>{{currentLocationDisplay.line1}}</span>
+          <br>
+          <span>{{currentLocationDisplay.line2}}</span>
+        </div>
+      </div>
+      <div class="location-search">
+        <input type="text" class="form-control" placeholder="Search locations" #autocompleteInput>
+      </div>
+    </div>
+  </div>
+  <div class="dialog-footer">
+    <button class="btn btn-secondary" (click)="cancel()" *ngIf="hasChanged">
+      Cancel
+    </button>
+    <button class="btn btn-primary" (click)="save()">
+      {{ hasChanged ? 'Save' : 'Done' }}
+    </button>
+  </div>
+</div>
+

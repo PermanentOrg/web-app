@@ -16,11 +16,9 @@ export class FolderViewComponent implements OnInit, OnDestroy {
   ) {
     if (this.data.currentFolder) {
       this.currentView = data.currentFolder.view;
-      console.log(this);
     }
     this.dataServiceSubscription = this.data.currentFolderChange.subscribe(folder => {
       this.currentView = folder.view;
-      console.log(this);
     });
   }
 

@@ -4,8 +4,8 @@ import { PublicRoutingModule } from './public.routes';
 import { RouterModule } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
-import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
+import { } from '@core/services/folder-picker/folder-picker.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { PublicItemComponent } from './components/public-item/public-item.component';
 import { SharedModule } from '@shared/shared.module';
@@ -15,7 +15,7 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
 import { SearchComponent } from './components/search/search.component';
 import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
-import { EditService } from '@core/services/edit/edit.service';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -35,10 +35,7 @@ import { EditService } from '@core/services/edit/edit.service';
   ],
   providers: [
     DataService,
-    FolderViewService,
-    PromptService,
-    FolderPickerService,
-    EditService
+    FolderViewService
   ]
 })
 export class PublicModule {

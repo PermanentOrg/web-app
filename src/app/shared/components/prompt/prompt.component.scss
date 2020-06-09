@@ -1,11 +1,11 @@
 @import 'variables';
 
-$transition-length: 0.25s;
+$transition-length: 0.4s;
 
 .menu-wrapper.visible {
   .prompt {
     transform: translateY(0);
-    transition: transform $transition-length ease-out;
+    // transition: transform $transition-length ease-out;
   }
 }
 
@@ -14,10 +14,40 @@ $transition-length: 0.25s;
   right: 0;
   bottom: 0;
   transform: translateY(100%);
-  transition:  transform $transition-length ease-in;
-  max-height: 80%;
+  // transition:  transform $transition-length ease-in;
+  max-height: 85vh;
   overflow-y: auto;
   webkit-overflow-scrolling: touch;
+
+
+  @include after($tablet-horizontal) {
+    opacity: 0;
+  }
+}
+
+@include after($tablet-horizontal) {
+  .menu-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .visible {
+    .prompt {
+      opacity: 1;
+    }
+  }
+
+  .prompt {
+    border-radius: $border-radius;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    height: auto;
+  }
 }
 
 

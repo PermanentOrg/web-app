@@ -7,15 +7,123 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1;
-  background-color: $PR-blue;
+  z-index: $z-index-nav;
+  background-color: $white;
+  box-shadow: $box-shadow-sm;
+
+  @include after($tablet-horizontal) {
+    left: $left-menu-width;
+    box-shadow: none;
+    position: initial;
+
+    // background-color: $gray-700;
+  }
+}
+
+.global-search-active :host {
+  z-index: $z-index-nav + 1;
 }
 
 nav.navbar {
   padding: 0 0.5rem;
   color: white;
-  height: 50px;
+  height: $navbar-height;
   align-items: center;
+  background-color: $PR-blue;
+
+  &.nav-desktop {
+    display: none;
+    height: $navbar-height-desktop;
+    padding-left: 0;
+  }
+
+  @include after($tablet-horizontal) {
+    &.nav-mobile {
+      display: none;
+    }
+
+    &.nav-desktop {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    // background-color: $PR-blue;
+  }
+}
+
+.nav-second-row {
+  display: flex;
+  align-items: center;
+  pr-breadcrumbs {
+    flex: 1 1 auto;
+  }
+
+  .sidebar-align {
+    flex: 0 0 $sidebar-width;
+    display: none;
+    padding: 0px 10px;
+
+    > * {
+      flex: 1 1 50%;
+    }
+    
+    .btn {
+      padding: 7px $navbar-button-icon-padding;
+      
+      i {
+        margin-right: $navbar-button-icon-padding;
+      }
+    }
+  }
+
+  pr-folder-view-toggle {
+    flex: 0 0 auto;
+    display: none;
+  }
+
+  @include after($tablet-horizontal) {
+    min-height: $breadcrumb-height-desktop;
+    border-bottom: 1px solid $gray-300;
+    box-shadow: none;
+    .sidebar-align {
+      display: flex;
+      justify-content: center;
+      > *:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    pr-folder-view-toggle {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.nav-desktop {
+  pr-global-search-bar {
+    flex: 0 1 40rem;
+    margin-right: auto;
+  }
+  pr-account-dropdown {
+    margin-left: 10px;
+  }
+}
+
+.nav-buttons {
+  padding: 0px 10px;
+  margin-left: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+
+  > *:not(:first-child) {
+    margin-left: 20px;
+  }
+
+  i {
+    color: white;
+    font-size: 1.5rem;
+  }
 }
 
 .navbar-toggler {

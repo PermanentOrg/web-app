@@ -1,5 +1,6 @@
 import { NgModule, ModuleWithProviders, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PortalModule } from '@angular/cdk/portal'; ;
 import { Dialog, DialogRef, DIALOG_DATA, DialogChildComponentData } from './dialog.service';
 import { DialogComponent } from './dialog.component';
 import { DialogRootComponent } from './dialog-root.component';
@@ -8,16 +9,18 @@ export { Dialog, DialogRef, DialogRootComponent, DIALOG_DATA, DialogChildCompone
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    PortalModule
   ],
   declarations: [
     DialogRootComponent,
-    DialogComponent
+    DialogComponent,
   ],
   entryComponents: [
     DialogComponent
   ],
   exports: [
+    PortalModule,
     DialogRootComponent
   ]
 })
@@ -26,7 +29,7 @@ export class DialogModule {
     dialog.setDialogModuleResolver(resolver);
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<DialogModule> {
     return {
       ngModule: DialogModule,
       providers: [ Dialog ],

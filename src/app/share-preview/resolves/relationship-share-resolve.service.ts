@@ -8,7 +8,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { ShareResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 
 @Injectable()
 export class RelationshipShareResolveService implements Resolve<any> {

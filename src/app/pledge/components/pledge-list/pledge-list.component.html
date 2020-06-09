@@ -9,7 +9,7 @@
     <div class="pledge" *ngFor="let pledge of pledges" [ngClass]="{'new': pledge.new}">
       <div class="amount">{{pledge.dollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
       <div class="name">{{pledge.name}}</div>
-      <div class="bottom">{{pledge.timestamp | timeAgo}}</div>
+      <div class="bottom">{{pledge.timestamp | date:'shortDate'}}</div>
     </div>
   </div>
 </div>

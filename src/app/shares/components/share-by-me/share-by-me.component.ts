@@ -1,24 +1,27 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { remove, find } from 'lodash';
+import { find } from 'lodash';
 
-import { DataService } from '@shared/services/data/data.service';
+import { DataService, SelectClickEvent } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
 
-import { FolderVO, RecordVO, ArchiveVO } from '@root/app/models';
+import { FolderVO, RecordVO, ArchiveVO, ItemVO } from '@root/app/models';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { Deferred } from '@root/vendor/deferred';
+import { slideUpAnimation } from '@shared/animations';
+import { ItemClickEvent, FileListItemParent } from '@fileBrowser/components/file-list/file-list.component';
 
 @Component({
   selector: 'pr-share-by-me',
   templateUrl: './share-by-me.component.html',
-  styleUrls: ['./share-by-me.component.scss']
+  styleUrls: ['./share-by-me.component.scss'],
+  animations: [ slideUpAnimation ]
 })
-export class ShareByMeComponent implements OnInit, OnDestroy {
+export class ShareByMeComponent implements OnInit, OnDestroy, FileListItemParent {
   sharesFolder: FolderVO;
-  sharedByMe: Array<FolderVO | RecordVO>;
+  sharedByMe: Array<ItemVO>;
   sharedWithMe: ArchiveVO[];
 
   shareItemFound = false;
@@ -32,57 +35,31 @@ export class ShareByMeComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private message: MessageService
   ) {
-    this.sharesFolder = new FolderVO({
-      displayName: 'Shared By Me',
-      pathAsText: ['Shared By Me'],
-      type: 'type.folder.root.share'
-    });
-    this.dataService.setCurrentFolder(this.sharesFolder);
-
     const shares = this.route.snapshot.data.shares as ArchiveVO[];
-    const currentArchive = remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop() as ArchiveVO;
-
-    this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
-
-    // check shared with me for item to redirect if needed
-    const queryParams = this.route.snapshot.queryParams;
-    if (queryParams) {
-      if (queryParams.shareArchiveNbr) {
-        for (const shareArchive of shares) {
-          const targetShare = find(shareArchive.ItemVOs, { archiveNbr: queryParams.shareArchiveNbr });
-          if (targetShare) {
-            this.router.navigate(['shares', 'withme'], { queryParamsHandling: 'preserve' });
-            this.shareItemFound = true;
-          }
-        }
-      }
-    }
-
+    const currentArchiveId = this.accountService.getArchive().archiveId;
+    const currentShareArchive = find(shares, { archiveId: currentArchiveId });
+    this.sharedByMe = currentShareArchive ? currentShareArchive.ItemVOs : [];
   }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit(): void {
-    const queryParams = this.route.snapshot.queryParams;
-
-    if (queryParams) {
-      if (queryParams.shareArchiveNbr) {
-        const targetShare = find(this.listItemsQuery.toArray(), (share: FileListItemComponent) => {
-          return share.item.archiveNbr === queryParams.shareArchiveNbr;
-        }) as FileListItemComponent;
-
-        if (!targetShare && !this.shareItemFound) {
-          this.message.showError('Shared item not found.');
-        } else if (targetShare) {
-          targetShare.onActionClick('share', new Deferred());
-        }
-      }
-    }
+  ngOnDestroy() {
   }
 
-  ngOnDestroy() {
-    this.dataService.setCurrentFolder();
+  onItemClick(itemClick: ItemClickEvent) {
+    const selectEvent: SelectClickEvent = {
+      type: 'click',
+      item: itemClick.item,
+    };
+
+    if (itemClick.event?.shiftKey) {
+      selectEvent.modifierKey = 'shift';
+    } else if (itemClick.event?.metaKey || itemClick.event?.ctrlKey) {
+      selectEvent.modifierKey = 'ctrl';
+    }
+
+    this.dataService.onSelectEvent(selectEvent);
   }
 
 }

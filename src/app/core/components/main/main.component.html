@@ -1,6 +1,9 @@
-<pr-nav></pr-nav>
-<div class="main-content" [ngClass]="{'navigating': isNavigating, 'uploading': uploadProgressVisible}">
-  <router-outlet></router-outlet>
+<pr-left-menu [(isVisible)]="nav.hambugerMenuVisible"></pr-left-menu>
+<div class="main-panel">
+  <pr-nav #nav></pr-nav>
+  <div class="main-content" [ngClass]="{'navigating': isNavigating, 'uploading': uploadProgressVisible}" #mainContent>
+    <router-outlet></router-outlet>
+  </div>
 </div>
 <pr-upload-progress></pr-upload-progress>
 <pr-folder-picker></pr-folder-picker>

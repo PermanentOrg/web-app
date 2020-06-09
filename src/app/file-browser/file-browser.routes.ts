@@ -15,11 +15,11 @@ const recordResolve = {
   currentRecord: RecordResolveService
 };
 
-const fileListChildRoutes = [
+export const fileListChildRoutes = [
   {
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,
-    resolve: recordResolve,
+    resolve: recordResolve
   }
 ];
 
@@ -31,14 +31,14 @@ export const routes: Routes = [
     children: fileListChildRoutes
   },
   {
+    path: 'view',
+    loadChildren: () => import('../views/views.module').then(m => m.ViewsModule)
+  },
+  {
     path: ':archiveNbr/:folderLinkId',
     component: FileListComponent,
     resolve: folderResolve,
     children: fileListChildRoutes
-  },
-  {
-    path: 'view',
-    loadChildren: '@root/app/views/views.module#ViewsModule'
   }
 ];
 @NgModule({

@@ -1,0 +1,55 @@
+@import 'variables';
+
+:host {
+  @include has-breadcrumbs;
+  @include mainContentScrollDesktop;
+}
+
+$settings-padding-x: 10px;
+
+p {
+  padding: 10px;
+}
+
+.settings-group {
+  margin-bottom: 10px;
+
+  .settings-group-title {
+    font-weight: $font-weight-bold;
+    // border-bottom: 1px solid $gray-300;
+    padding: $settings-padding-x;
+  }
+  
+
+  &:not(:first-of-type) {
+    .settings-group-title {
+      // border-top: 1px solid $gray-300;
+    }
+  }
+}
+
+.form-check {
+  font-size: $font-size-sm;
+}
+
+
+.settings-item {
+  padding: 5px $settings-padding-x;
+  & > label {
+    font-weight: 500;
+    margin-bottom: 0px;
+  }
+
+  .settings-item-content {
+    $padding-y: 0.25rem;
+    padding: $padding-y 0;
+  }
+
+  @include after($phone) {
+    max-width: 20rem;
+  }
+
+  &.settings-item-large {
+    max-width: 40rem;
+  }
+}

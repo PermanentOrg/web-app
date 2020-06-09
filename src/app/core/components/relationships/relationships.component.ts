@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { RelationVO, FolderVO, ArchiveVO } from '@models/index';
+import { RelationVO, FolderVO, ArchiveVO } from '@models';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
@@ -122,14 +122,14 @@ export class RelationshipsComponent implements OnDestroy {
       .catch(() => {});
   }
 
-  onRelationRequestClick(relation: RelationVO) {
+  onRelationRequestClick(relation: RelationVO, skipDecline = false) {
     const deferred = new Deferred();
     this.promptService.prompt(
       [RELATIONSHIP_FIELD],
       `Accept relationship with ${relation.ArchiveVO.fullName}?`,
       deferred.promise,
       'Accept',
-      'Decline'
+      skipDecline ? 'Cancel' : 'Decline'
     ).then((value) => {
       const relationMyVo = new RelationVO({
         type: value.relationType
@@ -160,7 +160,7 @@ export class RelationshipsComponent implements OnDestroy {
       if (response) {
         deferred.resolve();
         this.messageService.showError(response.getMessage(), true);
-      } else {
+      } else if (!skipDecline) {
         deferred.resolve();
         this.removeRelation(relation);
       }

@@ -1,9 +1,9 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { Subscription } from 'rxjs';
-import { ItemVO } from '@models/index';
+import { ItemVO } from '@models';
 import { EditService, ItemActions } from '@core/services/edit/edit.service';
-import { PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptButton } from '@shared/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-multi-select-status',
@@ -14,13 +14,13 @@ export class MultiSelectStatusComponent implements OnInit, OnDestroy {
   @HostBinding('class.visible') isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
 
-  public multiSelectItems: Map<number, ItemVO> = new Map();
+  public multiclickItems: Map<number, ItemVO> = new Map();
 
   constructor(
     private data: DataService,
     private edit: EditService
   ) {
-    this.multiSelectItems = this.data.multiSelectItems;
+    this.multiclickItems = this.data.multiclickItems;
     this.isMultiSelectEnabledSubscription = this.data.multiSelectChange.subscribe(enabled => {
       this.isMultiSelectEnabled = enabled;
     });
@@ -35,7 +35,7 @@ export class MultiSelectStatusComponent implements OnInit, OnDestroy {
 
   onDoneClick() {
     const items: ItemVO[] = [];
-    this.multiSelectItems.forEach(i => items.push(i));
+    this.multiclickItems.forEach(i => items.push(i));
     this.data.setMultiSelect(false);
 
     const actions: PromptButton[] = [

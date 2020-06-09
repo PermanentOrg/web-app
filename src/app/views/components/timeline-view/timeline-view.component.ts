@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, Hos
 import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem, moment } from '@permanent.org/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FolderVO, RecordVO, TimezoneVO, TimezoneVOData } from '@models/index';
+import { FolderVO, RecordVO, ItemVO, TimezoneVO, TimezoneVOData } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { remove, find, throttle, minBy, maxBy, debounce, countBy } from 'lodash';
@@ -18,12 +18,10 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { DeviceService } from '@shared/services/device/device.service';
 
 interface VoDataItem extends DataItem {
-  itemVO: FolderVO | RecordVO;
+  itemVO: ItemVO;
 }
 
 type TimelineItemAny = TimelineItem | TimelineGroup;
-
-type ItemVO = RecordVO | FolderVO;
 
 const ZOOM_PERCENTAGE = 1;
 

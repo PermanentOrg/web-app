@@ -1,5 +1,7 @@
 import { RecordVOData } from '@models/record-vo';
 import { FolderVOData } from '@models/folder-vo';
+import { moment } from '@permanent.org/vis-timeline';
+import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export class BaseVO {
   public dataWhitelist: string[];
@@ -13,11 +15,14 @@ export class BaseVO {
   constructor (voData: any) {
     if (voData) {
       for ( const key in voData ) {
-        if (voData[key] !== undefined) {
+        if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
       }
     }
+
+    // this.createdDT = formatDateISOString(this.createdDT);
+    // this.updatedDT = formatDateISOString(this.updatedDT);
   }
 
   public update (voData: any | RecordVOData | FolderVOData) {
@@ -55,7 +60,16 @@ export class BaseVO {
     delete clone.isRecord;
     delete clone.isFolder;
     delete clone.isFetching;
+    delete clone.isNewlyCreated;
+    delete clone.fetched;
+    delete clone.isPendingAction;
     delete clone.dataStatus;
+    delete clone.ShareArchiveVO;
     return clone;
   }
+}
+
+export interface BaseVOData {
+  createdDT?: string;
+  updatedDT?: string;
 }

@@ -2,10 +2,14 @@
 
 :host {
   display: block;
-  padding-top: 34px;
+  @include mainContentScrollDesktop;
 }
 
 .shares-empty-message {
   text-align: center;
-  padding: 20px 0px;
+  padding: 20px 10px;
+
+  @include desktop {
+    text-align: left;
+  }
 }

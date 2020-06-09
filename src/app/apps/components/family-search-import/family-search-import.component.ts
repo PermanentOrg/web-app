@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { filter } from 'lodash';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';

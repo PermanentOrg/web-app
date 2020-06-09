@@ -1,28 +1,32 @@
 <div class="menu-wrapper" [ngClass]="{'visible': visible}">
   <div class="menu folder-picker">
     <div class="picker-header">
-      <div class="picker-back" *ngIf="!isRootFolder" (click)="goToParentFolder()">
-        < Back
+      <div class="picker-back" *ngIf="!isRootFolder || selectedRecord" (click)="onBackClick()">
+        <i class="ion-md-arrow-dropleft"></i> Back
       </div>
       <div class="picker-folder-name">
-        {{currentFolder ? currentFolder.displayName : 'Loading...'}}
+        {{currentFolder ? (selectedRecord ? selectedRecord.displayName : currentFolder.displayName) : 'Loading...'}}
       </div>
-      <div class="picker-back" *ngIf="!isRootFolder"></div>
+      <div class="picker-back" *ngIf="!isRootFolder || selectedRecord"></div>
     </div>
     <div class="picker-contents" *ngIf="!currentFolder">
     </div>
-    <div class="picker-contents" *ngIf="currentFolder" [ngClass]="{'navigating': waiting}">
-      <div class="picker-row" *ngFor="let folder of currentFolder.ChildItemVOs" (click)="navigate(folder, $event)">
-          <div prBgImage [bgSrc]="folder.thumbURL200"></div>
-        <div class="name">{{folder.displayName}}</div>
+    <div class="picker-contents" *ngIf="currentFolder && !selectedRecord" [ngClass]="{'navigating': waiting}">
+      <div class="picker-row" *ngFor="let item of currentFolder.ChildItemVOs" (click)="onItemClick(item, $event)">
+          <div prBgImage [bgSrc]="item.thumbURL200"></div>
+        <div class="name">{{item.displayName}}</div>
       </div>
+
       <div class="picker-empty" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
-        No subfolders
+        {{ allowRecords ? 'This folder is empty' : 'No subfolders' }}
       </div>
+    </div>
+    <div class="picker-contents picker-selected-record" *ngIf="selectedRecord">
+      <div prBgImage [bgSrc]="selectedRecord.thumbURL200"></div>
     </div>
     <div class="picker-footer">
       <button class="btn btn-secondary" (click)="hide()" [disabled]="saving">Cancel</button>
-      <button class="btn btn-primary" (click)="chooseFolder()" [disabled]="saving || waiting">{{operation ? operationName : 'Choose'}}</button>
+      <button class="btn btn-primary" (click)="chooseFolder()" [disabled]="saving || waiting || (operation === 3 && !selectedRecord)">{{operation ? operationName : 'Choose'}}</button>
     </div>
   </div>
 </div>

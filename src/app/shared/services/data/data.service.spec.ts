@@ -49,7 +49,7 @@ describe('DataService', () => {
     service.setCurrentFolder(testFolder);
     service.registerItem(testRecord);
     expect(service.getItemByFolderLinkId(testRecord.folder_linkId)).toBe(testRecord);
-    service.deregisterItem(testRecord);
+    service.unregisterItem(testRecord);
     expect(service.getItemByFolderLinkId(testRecord.folder_linkId)).toBeUndefined();
   }));
 

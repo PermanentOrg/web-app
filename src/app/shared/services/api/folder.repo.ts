@@ -1,7 +1,10 @@
-import { FolderVO } from '@root/app/models';
+import { FolderVO, FolderVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+
+const MIN_WHITELIST: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'folder_linkId'];
+const DEFAULT_WHITELIST: (keyof FolderVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT', 'displayEndDT', 'view'];
 
 export class FolderRepo extends BaseRepo {
   public getRoot(): Promise<FolderResponse> {
@@ -73,10 +76,21 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>('/folder/post', data, FolderResponse);
   }
 
-  public update(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const data = folderVOs.map((folderVO) => {
+  public update(folderVOs: FolderVO[], whitelist = DEFAULT_WHITELIST): Promise<FolderResponse> {
+    if (whitelist !== DEFAULT_WHITELIST) {
+      whitelist = [...whitelist, ...MIN_WHITELIST];
+    }
+
+    const data = folderVOs.map((vo) => {
+      const updateData: FolderVOData = {};
+      for (const prop of whitelist) {
+        if (vo[prop] !== undefined) {
+          updateData[prop] = vo[prop];
+        }
+      }
+
       return {
-        FolderVO: new FolderVO(folderVO)
+        FolderVO: new FolderVO(updateData)
       };
     });
 
@@ -127,6 +141,19 @@ export class FolderRepo extends BaseRepo {
     }];
 
     return this.http.sendRequestPromise<FolderResponse>('/folder/getPublicRoot', data, FolderResponse);
+  }
+
+  public sort(folderVOs: FolderVO[]): Promise<FolderResponse> {
+    const data = folderVOs.map((folderVO) => {
+      return {
+        FolderVO: new FolderVO({
+          folder_linkId: folderVO.folder_linkId,
+          sort: folderVO.sort
+        })
+      };
+    });
+
+    return this.http.sendRequestPromise<FolderResponse>('/folder/sort', data, FolderResponse);
   }
 }
 

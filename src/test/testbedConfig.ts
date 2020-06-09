@@ -4,12 +4,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
-import { PromptService } from '@core/services/prompt/prompt.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
+import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -25,9 +27,11 @@ export const BASE_TEST_CONFIG = {
     PromptService,
     DataService,
     FolderViewService,
+    FolderPickerService,
     PrConstantsService,
     EditService
   ] as any[],
   declarations: [
+    TooltipsPipe
   ] as any[]
 };

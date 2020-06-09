@@ -3,6 +3,7 @@ import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { AccessRoleType } from './access-role';
+import { ItemVO } from '.';
 
 export class ArchiveVO extends BaseVO {
   public archiveId;
@@ -20,7 +21,7 @@ export class ArchiveVO extends BaseVO {
   public homeCity;
   public homeState;
   public homeCountry;
-  public ItemVOs;
+  public ItemVOs: ItemVO[];
   public birthDay;
   public company;
   public description;

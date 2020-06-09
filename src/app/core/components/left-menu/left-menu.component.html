@@ -1,37 +1,82 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
+    <div class="menu-branding">
+      <img src="assets/img/logo/sideways_logo.png" alt="">
+    </div>
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
-    <a class="menu-item" [routerLink]="['/myfiles']" routerLinkActive="active">
-      My Files
-    </a>
-    <a class="menu-item" [routerLink]="['/shares/byme']" routerLinkActive="active">
-      Shared By Me
-    </a>
-    <a class="menu-item" [routerLink]="['/shares/withme']" routerLinkActive="active">
-      Shared With Me
-    </a>
-    <a class="menu-item" [routerLink]="['/public']" routerLinkActive="active">
-      Public
-    </a>
-    <a class="menu-item" [routerLink]="['/apps']" routerLinkActive="active">
-      Apps
-    </a>
-    <a class="menu-item" [routerLink]="['/relationships']" routerLinkActive="active">
-      Relationships
-    </a>
-    <a class="menu-item" [routerLink]="['/members']" routerLinkActive="active">
-      Members
-    </a>
-    <a class="menu-item" [routerLink]="['/invitations']" routerLinkActive="active">
-      Invitations
-    </a>
-    <a class="menu-item" href="/add-storage">
-      Add Storage
-    </a>
-    <a class="menu-item" (click)='logOut()'>
-      Log Out
-    </a>
+    <div class="menu-header-desktop">
+      <div class="archive" [routerLink]="['/choosearchive']">
+        <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
+        <div class="archive-name">The {{archive.fullName}} Archive</div>
+      </div>
+      <!-- <div class="archive-selector-indicator" (click)="showArchiveSelector = !showArchiveSelector">
+        <i class="ion-md-arrow-dropright" [hidden]="showArchiveSelector"></i>
+        <i class="ion-md-arrow-dropleft" [hidden]="!showArchiveSelector"></i>
+      </div> -->
+    </div>
+    <div class="menu-scroll" #scroll>
+      <a class="menu-item hide-desktop"
+      [routerLink]="['/search']"
+      [class.active]="checkMenuItemActive('/search')">
+        <i class="ion-md-search"></i>
+        Search
+      </a>
+      <a class="menu-item"
+      [routerLink]="['/myfiles']"
+      [class.active]="checkMenuItemActive('/myfiles')"
+      prDragTargetRouterLink>
+        <i class="ion-md-folder"></i>
+        My Files
+      </a>
+      <a class="menu-item" [routerLink]="['/shares']" [class.active]="checkMenuItemActive('/shares')">
+        <i class="ion-md-share"></i>
+        Shares
+      </a>
+      <a class="menu-item"
+        [routerLink]="['/public']"
+        [class.active]="checkMenuItemActive('/public')"
+        prDragTargetRouterLink>
+        <i class="ion-md-globe"></i>
+        Public
+      </a>
+      <!-- <a class="menu-item"
+        [routerLink]="['/profile']"
+        [class.active]="checkMenuItemActive('/profile')">
+        <i class="ion-md-contact"></i>
+        Profile
+      </a> -->
+      <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
+        <i class="ion-md-swap"></i>
+        Apps
+      </a>
+      <a class="menu-item" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
+        <i class="ion-md-people"></i>
+        Relationships
+      </a>
+      <a class="menu-item" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
+        <i class="ion-md-person-add"></i>
+        Members
+      </a>
+      <a class="menu-item hide-desktop" [routerLink]="['/invitations']" [class.active]="checkMenuItemActive('/invitations')">
+        <i class="ion-md-person-add"></i>
+        Invitations
+      </a>
+      <a class="menu-item hide-desktop" href="/add-storage">
+        <i class="ion-md-add-circle"></i>
+        Add Storage
+      </a>
+      <a class="menu-item hide-desktop" href="https://desk.zoho.com/portal/permanent/home" target="_blank">
+        <i class="ion-md-help-circle"></i>
+        Help
+      </a>
+      <a class="menu-item hide-desktop" (click)='logOut()'>
+        <i class="ion-md-exit"></i>
+        Log Out
+      </a>
+    </div>
+    <pr-beta-toggle></pr-beta-toggle>
   </div>
 </div>
+<!-- <pr-archive-selector [visible]="showArchiveSelector" [@ngIfSlideInAnimation]></pr-archive-selector> -->

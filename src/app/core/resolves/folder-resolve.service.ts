@@ -11,6 +11,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 
 import { FolderVO } from '@root/app/models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { findRouteData } from '@shared/utilities/router';
 
 @Injectable()
 export class FolderResolveService implements Resolve<any> {
@@ -27,6 +28,7 @@ export class FolderResolveService implements Resolve<any> {
     let targetFolder;
 
     if (route.params.archiveNbr && route.params.folderLinkId) {
+      console.log('navigating to folder...', route.params.archiveNbr, route.params.folderLinkId);
       targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
     } else if (state.url === '/apps') {
       const apps = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
@@ -45,7 +47,7 @@ export class FolderResolveService implements Resolve<any> {
         return Promise.resolve(folder);
       }
     } else if (state.url.includes('/p/archive/')) {
-      const publicRoot = route.parent.data.publicRoot;
+      const publicRoot = findRouteData(route, 'publicRoot');
       targetFolder = new FolderVO(publicRoot);
     } else if (state.url.includes('/public')) {
       const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.public'});
@@ -63,7 +65,7 @@ export class FolderResolveService implements Resolve<any> {
 
         const folder = response.getFolderVO(true);
 
-        if (folder.view === FolderView.Timeline && route.data.folderView !== FolderView.Timeline) {
+        if (folder.view === FolderView.Timeline && !route.data.folderView) {
           if (route.params.publicArchiveNbr) {
             return this.router.navigate([
               'p',

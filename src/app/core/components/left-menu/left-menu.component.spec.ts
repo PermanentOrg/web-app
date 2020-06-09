@@ -7,7 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { TEST_DATA } from '@core/core.module.spec';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
-import { AccountVO, ArchiveVO } from '@models/index';
+import { AccountVO, ArchiveVO } from '@models';
 
 describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;

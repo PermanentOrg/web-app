@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { PromptService, PromptField, PromptButton, PromptConfig } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField, PromptButton, PromptConfig } from '@shared/services/prompt/prompt.service';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 const DEFAULT_SAVE_TEXT = 'OK';
@@ -48,7 +48,7 @@ export class PromptComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.service.deregisterComponent();
+    this.service.unregisterComponent();
   }
 
   hide(event: Event) {

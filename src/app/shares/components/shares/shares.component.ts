@@ -1,72 +1,117 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, Inject, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { find, remove } from 'lodash';
 import { TweenLite, ScrollToPlugin } from 'gsap/all';
-import { DataService } from '@shared/services/data/data.service';
+import { DataService, SelectClickEvent, SelectedItemsSet } from '@shared/services/data/data.service';
 
-import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ShareVO } from '@root/app/models';
+import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ShareVO, ItemVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
 import { MessageService } from '@shared/services/message/message.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
+import { FileListItemParent, ItemClickEvent } from '@fileBrowser/components/file-list/file-list.component';
+import { Subscription } from 'rxjs';
+import debug from 'debug';
+import { unsubscribeAll, HasSubscriptions } from '@shared/utilities/hasSubscriptions';
 
 @Component({
   selector: 'pr-shares',
   templateUrl: './shares.component.html',
-  styleUrls: ['./shares.component.scss']
+  styleUrls: ['./shares.component.scss'],
+  animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic ]
 })
-export class SharesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileListItemParent, HasSubscriptions {
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
 
-  sharesFolder: FolderVO;
-  sharedByMe: Array<FolderVO | RecordVO>;
-  sharedWithMe: ArchiveVO[];
+  @HostBinding('class.show-sidebar') showSidebar = true;
+  sharedByMe: ItemVO;
+  sharedWithMe: ItemVO[];
+  shareItems: ItemVO[] = [];
 
+  selectedItems: SelectedItemsSet = new Set();
+
+  subscriptions: Subscription[] = [];
+  private debug = debug('component:fileList');
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
     private accountService: AccountService,
+    public device: DeviceService,
     @Inject(DOCUMENT) private document: any
   ) {
-    this.sharesFolder = new FolderVO({
+    const currentArchive = this.accountService.getArchive();
+    const shareArchives = this.route.snapshot.data.shares as ArchiveVO[] || [];
+    for (const archive of shareArchives.filter(a => a.archiveId !== currentArchive.archiveId)) {
+      for (const item of archive.ItemVOs) {
+        item.ShareArchiveVO = archive;
+        this.shareItems.push(item);
+      }
+    }
+
+    const sharesFolder = new FolderVO({
       displayName: 'Shares',
       pathAsText: ['Shares'],
-      type: 'type.folder.root.share'
+      type: 'type.folder.root.share',
+      ChildItemVOs: this.shareItems
     });
-    this.dataService.setCurrentFolder(this.sharesFolder);
 
-    const shares = this.route.snapshot.data.shares as ArchiveVO[];
-    const currentArchive = remove(shares, {archiveId: this.accountService.getArchive().archiveId}).pop() as ArchiveVO;
+    this.dataService.setCurrentFolder(sharesFolder);
 
-    this.sharedByMe = currentArchive ? currentArchive.ItemVOs : [];
-    this.sharedWithMe = shares;
+    this.registerDataServiceHandlers();
+  }
 
-    console.log(this.sharedByMe);
+  registerDataServiceHandlers() {
+    this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
+      this.selectedItems = selectedItems;
+    }));
+
+    this.subscriptions.push(this.dataService.unsharedItem$().subscribe(item => {
+      item.isPendingAction = true;
+      this.dataService.clearSelectedItems();
+      remove(this.shareItems, item);
+    }));
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    if (this.route.snapshot.params) {
-      const archiveNbr = this.route.snapshot.params.archiveNbr;
-      if (archiveNbr) {
-        const targetShare = find(this.shareComponents.toArray(), (share: ShareComponent) => {
-          return share.archive.archiveNbr === archiveNbr;
-        }) as ShareComponent;
+    // if (this.route.snapshot.params) {
+    //   const archiveNbr = this.route.snapshot.params.shareArchiveNbr;
+    //   if (archiveNbr) {
+    //     const targetShare = find(this.shareComponents.toArray(), (share: ShareComponent) => {
+    //       return share.archive.archiveNbr === archiveNbr;
+    //     }) as ShareComponent;
 
-        if (targetShare) {
-          window.scrollTo(0, targetShare.element.nativeElement.offsetTop - 100);
-        }
-      }
-    }
-
+    //     if (targetShare) {
+    //       (targetShare.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start' });
+    //     }
+    //   }
+    // }
   }
 
   ngOnDestroy() {
     this.dataService.setCurrentFolder();
+    unsubscribeAll(this.subscriptions);
+  }
+
+  onItemClick(itemClick: ItemClickEvent) {
+    const selectEvent: SelectClickEvent = {
+      type: 'click',
+      item: itemClick.item,
+    };
+
+    if (itemClick.event?.shiftKey) {
+      selectEvent.modifierKey = 'shift';
+    } else if (itemClick.event?.metaKey || itemClick.event?.ctrlKey) {
+      selectEvent.modifierKey = 'ctrl';
+    }
+
+    this.dataService.onSelectEvent(selectEvent);
   }
 
 }

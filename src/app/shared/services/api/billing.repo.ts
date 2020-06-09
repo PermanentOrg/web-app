@@ -1,6 +1,6 @@
 import { ArchiveVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { BillingCardVO, BillingPaymentVO } from '@models/index';
+import { BillingCardVO, BillingPaymentVO } from '@models';
 
 export class BillingRepo extends BaseRepo {
   public getCards(): Promise<BillingResponse> {

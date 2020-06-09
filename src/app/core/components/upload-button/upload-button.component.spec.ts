@@ -44,30 +44,33 @@ describe('UploadButtonComponent', () => {
     expect(button.hidden).toBeTruthy();
   });
 
-  it('should be visible when current folder is not an apps folder', async () => {
+  it('should be visible and enabled when current folder is not an apps folder', async () => {
     dataService.setCurrentFolder(new FolderVO({
       type: 'type.folder.private',
       accessRole: 'access.role.owner'
     }));
     await fixture.whenStable();
     expect(component.hidden).toBeFalsy();
+    expect(component.disabled).toBeFalsy();
   });
 
-  it('should be hidden when current folder is an apps folder', async () => {
+  it('should be disabled when current folder is an apps folder', async () => {
     dataService.setCurrentFolder(new FolderVO({
       accessRole: 'access.role.owner',
       type: 'type.folder.app'
     }));
     await fixture.whenStable();
-    expect(component.hidden).toBeTruthy();
+    expect(component.hidden).toBeFalsy();
+    expect(component.disabled).toBeTruthy();
   });
 
-  it('should be hidden when current folder does not have write access', async () => {
+  it('should be disabled when current folder does not have write access', async () => {
     dataService.setCurrentFolder(new FolderVO({
       type: 'type.folder.private',
       accessRole: 'access.role.viewer'
     }));
     await fixture.whenStable();
-    expect(component.hidden).toBeTruthy();
+    expect(component.hidden).toBeFalsy();
+    expect(component.disabled).toBeTruthy();
   });
 });

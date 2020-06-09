@@ -11,7 +11,7 @@ import { TEST_DATA } from '@core/core.module.spec';
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';
 import { BillingResponse } from '@shared/services/api/index.repo';
-import { BillingPaymentVOData } from '@models/index';
+import { BillingPaymentVOData } from '@models';
 
 const cardData = require('@root/test/responses/billing.getBillingCards.multiple.success.json');
 

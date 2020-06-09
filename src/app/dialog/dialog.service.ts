@@ -1,10 +1,12 @@
 // tslint:disable-next-line:max-line-length
-import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject } from '@angular/core';
+import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
 import { DOCUMENT } from '@angular/common';
+import debug from 'debug';
+import { PortalOutlet } from '@angular/cdk/portal';
 
 type DialogComponentToken =
   'FamilySearchImportComponent' |
@@ -26,6 +28,7 @@ export interface DialogOptions {
 const DEFAULT_OPTIONS: DialogOptions = {
   height: 'fullscreen'
 };
+
 
 export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
@@ -64,12 +67,16 @@ export class Dialog {
   private rootComponent: DialogRootComponent;
   private currentId = 0;
 
+  public portalOutlet: PortalOutlet;
+
   public registeredComponents: {[token: string]: any} = {};
   public componentResolvers: {[token: string]: any} = {};
 
   private dialogs: {[id: number]: DialogRef} = {};
 
   private bodyScrollAllowed = true;
+
+  private debug = debug('service:dialogService');
 
   constructor(
     private app: ApplicationRef,
@@ -99,6 +106,7 @@ export class Dialog {
     if (!this.registeredComponents[componentData.token]) {
       this.registeredComponents[componentData.token] = componentData.component;
       this.componentResolvers[componentData.token] = resolver;
+      this.debug('register component %s', componentData.token);
     } else if (!allowDupes) {
       throw new Error(`Dialog - component with token ${componentData.token} already registered`);
     }
@@ -120,6 +128,24 @@ export class Dialog {
     });
   }
 
+  registerPortalOutlet(outlet: PortalOutlet) {
+    if (this.portalOutlet) {
+      throw new Error(`Dialog - portal outlet already registered. Make sure to unregister when destroying.`);
+    }
+
+    this.portalOutlet = outlet;
+    this.debug('portal outlet registered %o', outlet);
+  }
+
+  unregisterPortalOutlet(outlet: PortalOutlet) {
+    if (this.portalOutlet !== outlet) {
+      throw new Error(`Dialog - attempting to unregister incorrect portal outlet`);
+    }
+
+    this.portalOutlet = null;
+    this.debug('portal outlet unregistered %o', outlet);
+  }
+
   open(token: DialogComponentToken | any, data?: any, options = DEFAULT_OPTIONS): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
@@ -135,6 +161,8 @@ export class Dialog {
 
     const newDialog = this.createDialog(token, data, options);
     newDialog.dialogComponent.show();
+
+    this.debug('open dialog %s %o %o', token, data, options);
 
     if (this.bodyScrollAllowed) {
       this.document.body.style.overflow = 'hidden';
@@ -162,7 +190,7 @@ export class Dialog {
     }, 500);
   }
 
-  private createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
+  public createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;

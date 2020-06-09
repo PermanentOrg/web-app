@@ -1,0 +1,77 @@
+import { Component, OnInit, Inject, ViewChild, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { LocnVOData, ItemVO } from '@models';
+import { environment } from '@root/environments/environment';
+import { compact } from 'lodash';
+
+const BASE_URL = `https://maps.googleapis.com/maps/api/staticmap?key=${environment.google.apiKey}`;
+
+@Component({
+  selector: 'pr-static-map',
+  templateUrl: './static-map.component.html',
+  styleUrls: ['./static-map.component.scss']
+})
+export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
+  private dpiScale = 1;
+
+  @Input() item: ItemVO;
+  @Input() items: ItemVO[];
+  @Input() location: LocnVOData;
+
+  public imageUrl: string;
+
+  private elementSize: number;
+
+  constructor(
+    private elementRef: ElementRef
+  ) {
+    this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
+  }
+
+  ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    setTimeout(() => {
+      this.buildUrl();
+    });
+  }
+
+  ngAfterViewInit() {
+  }
+
+  buildUrl() {
+    let locations: LocnVOData[];
+
+    if (this.item) {
+      locations = [ this.item.LocnVO ];
+    } else if (this.items) {
+      locations = this.items.map(i => i.LocnVO);
+    } else if (this.location) {
+      locations = [ this.location ];
+    }
+
+    locations = compact(locations);
+
+    if (!locations.length) {
+      return this.imageUrl = null;
+    }
+
+    const width = (this.elementRef.nativeElement as HTMLElement).clientWidth;
+    const height = (this.elementRef.nativeElement as HTMLElement).clientHeight;
+
+    let url = BASE_URL;
+    for (const locn of locations) {
+      url += `&markers=${locn.latitude},${locn.longitude}`;
+    }
+
+    if (locations.length === 1) {
+      url += '&zoom=10';
+    }
+
+    url += `&size=${width}x${height}&scale=${this.dpiScale}`;
+
+    if (url !== this.imageUrl) {
+      this.imageUrl = url;
+    }
+  }
+}

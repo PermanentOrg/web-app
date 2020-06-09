@@ -7,75 +7,43 @@ import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-vi
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ShareByMeComponent } from '@shares/components/share-by-me/share-by-me.component';
 import { ShareWithMeComponent } from '@shares/components/share-with-me/share-with-me.component';
+import { RoutesWithData } from '../app.routes';
 
 const sharesRootResolve = {
   shares: SharesResolveService
 };
 
-export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'byme',
-    pathMatch: 'full'
-  },
-  {
-    path: ':archiveNbr/:folderLinkId',
-    redirectTo: 'withme/:archiveNbr/:folderLinkId',
-    pathMatch: 'full'
-  },
+const shareRootChildren: RoutesWithData = [
   {
     path: 'record/:recArchiveNbr',
-    redirectTo: 'withme/record/:recArchiveNbr',
-    pathMatch: 'full'
-  },
+    component: FileViewerComponent,
+    data: {
+      singleFile: true
+    },
+    resolve: {
+      currentRecord: RecordResolveService
+    }
+  }
+];
+
+export const routes: RoutesWithData = [
   {
-    path: 'byme',
-    component: ShareByMeComponent,
+    path: '',
+    component: SharesComponent,
     resolve: sharesRootResolve,
-    children: [
-      {
-        path: 'record/:recArchiveNbr',
-        component: FileViewerComponent,
-        data: {
-          singleFile: true
-        },
-        resolve: {
-          currentRecord: RecordResolveService
-        }
-      }
-    ]
-  },
-  {
-    path: 'withme',
-    component: ShareWithMeComponent,
-    resolve: sharesRootResolve,
-    children: [
-      {
-        path: 'record/:recArchiveNbr',
-        component: FileViewerComponent,
-        data: {
-          singleFile: true
-        },
-        resolve: {
-          currentRecord: RecordResolveService
-        }
-      }
-    ]
+    children: shareRootChildren,
+    data: {
+      showSidebar: true
+    }
   },
   {
     path: ':archiveNbr',
-    redirectTo: 'withme/:archiveNbr',
-    pathMatch: 'full'
+    redirectTo: ''
   },
   {
-    path: 'withme/:archiveNbr',
-    component: ShareWithMeComponent,
-    resolve: sharesRootResolve,
-  },
-  {
-    path: 'withme/:archiveNbr/:folderLinkId',
-    loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule'
-  },
+    path: ':archiveNbr/:folderLinkId',
+    loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule)
+  }
 ];
 @NgModule({
   imports: [

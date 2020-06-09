@@ -7,16 +7,17 @@ import { Deferred } from '@root/vendor/deferred';
 import { gsap } from 'gsap';
 
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptService, PromptButton, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { ArchiveVO } from '@root/app/models';
+import { ArchiveVO, FolderVO } from '@root/app/models';
 import { BaseResponse } from '@shared/services/api/base';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
+import { DataService } from '@shared/services/data/data.service';
 
 @Component({
   selector: 'pr-archive-switcher',
@@ -29,12 +30,19 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
   constructor(
     private accountService: AccountService,
     private api: ApiService,
+    private data: DataService,
     private prConstants: PrConstantsService,
     private route: ActivatedRoute,
     private prompt: PromptService,
     private message: MessageService,
     private router: Router
   ) {
+
+    this.data.setCurrentFolder(new FolderVO({
+      displayName: 'Archives',
+      pathAsText: ['Archives'],
+      type: 'page'
+    }));
     this.currentArchive = accountService.getArchive();
 
     const archivesData = this.route.snapshot.data['archives'] || [];
@@ -82,7 +90,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
       }
     ];
 
-    let message = `Switch archive to ${archive.fullName}?`;
+    let message = `Switch to The ${archive.fullName} Archive?`;
 
     if (archive.isPending()) {
       message = `You have been invited to collaborate on the ${archive.fullName} archive. Accept ${this.prConstants.translate(archive.accessRole)} access and switch?`;

@@ -12,6 +12,11 @@ p {
   padding-bottom: 10px;
   display: flex;
   align-content: center;
+
+  @include desktop {
+    margin-bottom: 10px;
+  }
+  
   .member-info {
     flex: 1 0;
     overflow: hidden;
@@ -19,6 +24,12 @@ p {
 
   .member-button {
     flex: 0 1 auto;
+    display: flex;
+    align-items: center;
+
+    .btn:not(:first-child) {
+      margin-left: 10px;
+    }
   }
 
   .member-name {
@@ -42,4 +53,5 @@ p {
 
 :host {
   @include has-breadcrumbs;
+  @include mainContentScrollDesktop;
 }

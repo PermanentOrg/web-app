@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 
 declare var ga: any;
 
-interface EventData {
+export interface EventParams {
+  hitType: 'event' | string;
+  eventCategory: string;
+  eventAction: string;
+}
+
+export interface EventData {
   key: string;
-  params: {
-    hitType: 'event';
-    eventCategory: string;
-    eventAction: string;
-  };
+  params: EventParams;
 }
 
 @Injectable({
@@ -33,9 +35,9 @@ export class GoogleAnalyticsService {
     }
   }
 
-  sendEvent(eventData: EventData | any) {
+  sendEvent(eventData: EventParams) {
     if (this.checkForGlobal()) {
-      this.tracker.send(eventData['params'] ? eventData.params : eventData);
+      this.tracker.send(eventData);
     }
   }
 

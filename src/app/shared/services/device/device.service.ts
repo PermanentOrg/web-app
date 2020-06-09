@@ -4,7 +4,7 @@ const MOBILE_USER_AGENT_MATCH = /android|blackberry|iphone|ipod|iemobile|opera m
 const IOS_USER_AGENT_MATCH = /ipad|ipod|iphone/i;
 
 export function isMobileWidth() {
-  return window.screen.width < 768;
+  return !(window.matchMedia('(min-width: 900px)').matches);
 }
 
 @Injectable({
@@ -19,10 +19,10 @@ export class DeviceService {
   }
 
   isMobile() {
-    return navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
+    return !!navigator.userAgent.match(MOBILE_USER_AGENT_MATCH);
   }
 
   isIos() {
-    return navigator.userAgent.match(IOS_USER_AGENT_MATCH);
+    return !!navigator.userAgent.match(IOS_USER_AGENT_MATCH);
   }
 }

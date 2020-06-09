@@ -24,7 +24,7 @@ pipelines:
             - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run test_build
   branches:
     dev:
@@ -39,7 +39,7 @@ pipelines:
             - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build_dev
             - cd ..
             - mkdir mdot
@@ -61,6 +61,30 @@ pipelines:
             - echo "mdot-dev-${BITBUCKET_BUILD_NUMBER}" > version.txt
             - aws s3 cp deploy.txt s3://permanent-repos/dev/deploy.txt
             - aws s3 cp version.txt s3://permanent-repos/dev/version.txt
+    feature/full-responsive:
+      - step:
+          name: Build and upload to S3
+          image: permanentlegacy/node-git-aws:latest
+          deployment: demo
+          caches:
+            - node
+          script:
+            - cd /data/www
+            - git clone git@bitbucket.org:permanent-org/files.git
+            - git clone git@bitbucket.org:permanent-org/deploy.git
+            - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
+            - cd $BITBUCKET_CLONE_DIR
+            - npm install --unsafe-perm
+            - npm run build_dev
+            - cd ..
+            - mkdir mdot-responsive
+            - mv $BITBUCKET_CLONE_DIR/dist mdot-responsive/dist
+            - tar -czvf mdot-responsive.tar.gz mdot-responsive
+            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+            - aws s3 cp mdot-responsive.tar.gz s3://permanent-repos/dev/mdot-responsive.tar.gz 
+            - ssh ubuntu@dev1.permanent.org 'bash -s' < deploy/scripts/mdot/deploy-responsive-dev.sh
     release/staging:
       - step:
           name: Build and upload to S3
@@ -73,7 +97,7 @@ pipelines:
             - git clone -b release/staging --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build_staging
             - cd ..
             - mkdir mdot
@@ -95,7 +119,7 @@ pipelines:
             - git clone -b release/production --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install
+            - npm install --unsafe-perm
             - npm run build
             - cd ..
             - mkdir mdot

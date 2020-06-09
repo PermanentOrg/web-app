@@ -1,6 +1,7 @@
 import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { SharedModule } from '@shared/shared.module';
 
@@ -15,6 +16,11 @@ import { DialogModule } from '../dialog/dialog.module';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
 import { PublishComponent } from './components/publish/publish.component';
 import { FolderDescriptionComponent } from './components/folder-description/folder-description.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { FileListControlsComponent } from './components/file-list-controls/file-list-controls.component';
+import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
+import { LocationPickerComponent } from './components/location-picker/location-picker.component';
+import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
 
 @NgModule({
   imports: [
@@ -22,28 +28,40 @@ import { FolderDescriptionComponent } from './components/folder-description/fold
     RouterModule,
     SharedModule,
     DialogModule,
+    GoogleMapsModule
   ],
   exports: [
     FileListComponent,
     FileListItemComponent,
     FileViewerComponent,
     ThumbnailComponent,
-    VideoComponent
+    VideoComponent,
+    SidebarComponent,
+    FileListControlsComponent,
+    EditTagsComponent,
+    LocationPickerComponent
   ],
   declarations: [
     FileListComponent,
     FileListItemComponent,
+    FileListControlsComponent,
     FileViewerComponent,
     FolderViewComponent,
     ThumbnailComponent,
     VideoComponent,
     SharingComponent,
     PublishComponent,
-    FolderDescriptionComponent
+    FolderDescriptionComponent,
+    SidebarComponent,
+    EditTagsComponent,
+    LocationPickerComponent,
+    SidebarViewOptionComponent
   ],
   entryComponents: [
     SharingComponent,
-    PublishComponent
+    PublishComponent,
+    EditTagsComponent,
+    LocationPickerComponent
   ]
 })
 export class FileBrowserComponentsModule {
@@ -55,6 +73,14 @@ export class FileBrowserComponentsModule {
     {
       token: 'PublishComponent',
       component: PublishComponent
+    },
+    {
+      token: 'EditTagsComponent',
+      component: EditTagsComponent
+    },
+    {
+      token: 'LocationPickerComponent',
+      component: LocationPickerComponent
     }
   ];
 

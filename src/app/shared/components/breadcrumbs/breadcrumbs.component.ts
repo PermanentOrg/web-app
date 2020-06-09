@@ -1,22 +1,21 @@
-import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy, Input, ViewEncapsulation, Optional } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
+import debug from 'debug';
+import { EditService } from '@core/services/edit/edit.service';
 
-class Breadcrumb {
+export class Breadcrumb {
   public routerPath: string;
-  constructor(rootUrl: string, public text: string, archiveNbr?: string, folder_linkId?: number, rootUrlOnly = false) {
+  constructor(rootUrl: string, public text: string, public archiveNbr?: string, public folder_linkId?: number, rootUrlOnly = false) {
 
     if (rootUrlOnly) {
       this.routerPath = rootUrl;
     } else if (!archiveNbr && !folder_linkId) {
       this.routerPath = this.getSpecialRouterPath(text).join('/');
-      if (text === 'Shares') {
-        this.text = 'Shared With Me';
-      }
     } else {
       this.routerPath = [rootUrl, archiveNbr, folder_linkId].join('/');
     }
@@ -31,7 +30,7 @@ class Breadcrumb {
       case 'Apps':
         return ['/apps'];
       case 'Shares':
-        return ['/shares/withme'];
+        return ['/shares'];
       default:
         return ['/'];
     }
@@ -41,20 +40,27 @@ class Breadcrumb {
 @Component({
   selector: 'pr-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: ['./breadcrumbs.component.scss']
+  styleUrls: ['./breadcrumbs.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
-  public currentFolder;
+  public currentFolder: FolderVO;
   public breadcrumbs;
+
+  public showingShareArchives = false;
+
+  @Input() darkText = false;
 
   private scrollElement: Element;
   private folderChangeListener: Subscription;
 
+  private debug = debug('component:breadcrumbs');
   constructor(
     private dataService: DataService,
     private elementRef: ElementRef,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Optional() private edit: EditService
   ) {
   }
 
@@ -91,6 +97,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     const isInSharePreviewInviteView = isInShareInvitePreview && this.router.routerState.snapshot.url.includes('/view');
     const isInPublicArchive = this.router.routerState.snapshot.url.includes('/p/archive');
     const isInPublic = this.router.routerState.snapshot.url.includes('/p/');
+    const isInFolderView = this.router.routerState.snapshot.url.includes('/view/');
 
     const showRootBreadcrumb = !isInPublic &&
                               !isInSharePreviewView &&
@@ -107,7 +114,13 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     } else if (isInSharePreviewInviteView) {
       rootUrl = `/share/invite/${this.route.snapshot.params.inviteCode}/view`;
     } else if (isInPublicArchive) {
-      rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}`;
+      if (isInFolderView) {
+        const folderViewEx = /\/view\/([a-z]*)/;
+        const folderViewName = folderViewEx.exec(this.router.routerState.snapshot.url)[1];
+        rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}/view/${folderViewName}`;
+      } else {
+        rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}`;
+      }
     } else if  (isInPublic) {
       rootUrl = `/p/${this.route.firstChild.snapshot.params.publishUrlToken}`;
     } else if (this.router.routerState.snapshot.url.includes('/public')) {
@@ -117,6 +130,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     }
 
     if (!folder) {
+      this.debug('no folder');
       return;
     }
 
@@ -129,9 +143,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     }
 
     for (let i = 1; i < folder.pathAsText.length; i++) {
-      // if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 2) {
-      //   continue;
-      // }
+      if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 2) {
+        continue;
+      }
 
       this.breadcrumbs.push(new Breadcrumb(
         rootUrl,
@@ -141,10 +155,17 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       ));
     }
 
+    this.debug('breadcrumbs %o', this.breadcrumbs);
   }
 
   scrollToEnd() {
     this.scrollElement.scrollLeft = this.scrollElement.scrollWidth - this.scrollElement.clientWidth;
+  }
+
+  onShareIconClick() {
+    if (this.edit) {
+      this.edit.openShareDialog(this.dataService.currentFolder);
+    }
   }
 
 }

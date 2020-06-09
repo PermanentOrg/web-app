@@ -5,7 +5,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { PublishResponse } from '@shared/services/api/index.repo';
-import { RecordVO } from '@models/index';
+import { RecordVO } from '@models';
 
 @Injectable()
 export class PublishResolveService implements Resolve<any> {

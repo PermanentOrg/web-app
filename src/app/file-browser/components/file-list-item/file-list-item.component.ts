@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, HostBinding, OnChanges, Output, EventEmitter, Optional, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
 import { clone, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
-import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton, PromptField, FOLDER_VIEW_FIELD_INIIAL } from '@shared/services/prompt/prompt.service';
 
-import { FolderVO, RecordVO, FolderVOData, RecordVOData, ShareVO } from '@root/app/models';
+import { FolderVO, RecordVO, FolderVOData, RecordVOData, ShareVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { RecordResponse, FolderResponse, ShareResponse } from '@shared/services/api/index.repo';
@@ -20,6 +20,14 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { DeviceService } from '@shared/services/device/device.service';
+
+import { ItemClickEvent } from '../file-list/file-list.component';
+import { DragService, DragServiceEvent, DragTargetType, DraggableComponent, DragTargetDroppableComponent } from '@shared/services/drag/drag.service';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { Subscription } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
+import { ngIfFadeInAnimation } from '@shared/animations';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -63,6 +71,10 @@ export const ItemActions: {[key: string]: PromptButton} = {
   SetFolderView: {
     buttonName: 'setFolderView',
     buttonText: 'Set folder view'
+  },
+  Tags: {
+    buttonName: 'tags',
+    buttonText: 'Tags'
   }
 };
 
@@ -74,26 +86,44 @@ type ActionType = 'delete' |
   'download' |
   'copy' |
   'move' |
-  'setFolderView';
+  'setFolderView' |
+  'tags'
+  ;
+
+const SINGLE_CLICK_DELAY = 100;
+const DOUBLE_CLICK_TIMEOUT = 350;
+const DOUBLE_CLICK_TIMEOUT_IOS = 1500;
+const MOUSE_DOWN_DRAG_TIMEOUT = 500;
+const DRAG_MIN_Y = 1;
 
 @Component({
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
-  styleUrls: ['./file-list-item.component.scss']
+  styleUrls: ['./file-list-item.component.scss'],
+  animations: [ ngIfFadeInAnimation ]
 })
-export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() item: FolderVO | RecordVO;
+export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy,
+  HasSubscriptions, DraggableComponent, DragTargetDroppableComponent {
+  @Input() item: ItemVO;
   @Input() folderView: FolderView;
 
   @Input() allowNavigation = true;
   @Input() isShareRoot = false;
   @Input() multiSelect = false;
+  @Input() isSelected = false;
+  @Input() showAccess = false;
+  @Input() canSelect = true;
 
   public isMultiSelected =  false;
+  public isDragTarget = false;
+  public isDropTarget = false;
+  public isDragging = false;
+  public isDisabled =  false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
-  @Output() itemUnshared = new EventEmitter<FolderVO | RecordVO>();
+  @Output() itemUnshared = new EventEmitter<ItemVO>();
+  @Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
   public allowActions = true;
   public isMyItem = true;
@@ -107,6 +137,13 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   private isInSharePreview: boolean;
   private checkFolderView: boolean;
 
+  private singleClickTimeout: NodeJS.Timeout;
+  private mouseDownDragTimeout: NodeJS.Timeout;
+  private waitingForDoubleClick = false;
+  private touchStartEvent: TouchEvent;
+
+  subscriptions: Subscription[] = [];
+
   constructor(
     private dataService: DataService,
     private api: ApiService,
@@ -115,10 +152,13 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     public element: ElementRef,
     private message: MessageService,
     private prompt: PromptService,
-    private edit: EditService,
+    @Optional() private edit: EditService,
     private accountService: AccountService,
-    private folderPicker: FolderPickerService,
-    private dialog: Dialog
+    @Optional() private folderPicker: FolderPickerService,
+    private dialog: Dialog,
+    private device: DeviceService,
+    @Optional() private drag: DragService,
+    @Inject(DOCUMENT) private document: Document
   ) {
   }
 
@@ -173,6 +213,21 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
 
     this.inGridView = this.folderView === FolderView.Grid;
 
+    if (this.drag) {
+      this.subscriptions.push(
+        this.drag.events().subscribe(dragEvent => {
+          this.onDragServiceEvent(dragEvent);
+        })
+      );
+    }
+  }
+
+  ngAfterViewInit() {
+    if (this.item.isNewlyCreated) {
+      setTimeout(() => {
+        this.item.isNewlyCreated = false;
+      });
+    }
   }
 
   ngOnChanges() {
@@ -184,7 +239,168 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.dataService.deregisterItem(this.item);
+    this.dataService.unregisterItem(this.item);
+    unsubscribeAll(this.subscriptions);
+  }
+
+  async onDrop(dropTarget: DragTargetDroppableComponent) {
+    const destination = this.drag.getDestinationFromDropTarget(dropTarget);
+
+    if (destination) {
+      this.isDisabled = true;
+      const selectedItems = this.dataService.getSelectedItems();
+      const srcItemSelected = selectedItems.has(this.item);
+      const multipleItemsSelected = selectedItems.size > 1;
+      let itemsToMove: ItemVO[];
+      let itemText: string;
+
+      if (multipleItemsSelected && srcItemSelected) {
+        itemsToMove = Array.from(selectedItems.keys());
+        itemText = `${selectedItems.size} items`;
+      } else {
+        itemsToMove = [ this.item ];
+        itemText = this.item.displayName;
+      }
+
+      try {
+        await this.prompt.confirm(
+          'Move',
+          `Move ${itemText} to ${destination.displayName}?`,
+        );
+        await this.edit.moveItems(itemsToMove, destination);
+      } catch (err) {
+        this.isDisabled = false;
+        if (err instanceof RecordResponse || err instanceof FolderResponse) {
+          this.message.showError(err.getMessage());
+        }
+      }
+    }
+  }
+
+  onDragServiceEvent(dragEvent: DragServiceEvent) {
+    if (dragEvent.srcComponent === this) {
+      return;
+    }
+
+    if (dragEvent.srcComponent instanceof FileListItemComponent) {
+      const srcItem = dragEvent.srcComponent.item;
+      const selectedItems = this.dataService.getSelectedItems();
+      const srcItemSelected = selectedItems.has(srcItem);
+      const multipleItemsSelected = selectedItems.size > 1;
+
+      if (srcItemSelected && multipleItemsSelected && this.isSelected) {
+        this.isDragging = dragEvent.type === 'start';
+        return;
+      }
+    }
+
+    switch (dragEvent.type) {
+      case 'start':
+      case 'end':
+        const start = dragEvent.type === 'start';
+
+        if (this.item.isRecord && dragEvent.targetTypes.includes('record')) {
+          this.isDragTarget = start;
+        }
+
+        if (this.item.isFolder && dragEvent.targetTypes.includes('folder')) {
+          this.isDragTarget = start;
+        }
+
+        if (!start) {
+          this.isDropTarget = false;
+        }
+
+        break;
+    }
+  }
+
+  onItemMouseDown(mouseDownEvent: MouseEvent) {
+    if (this.isShareRoot || this.isInApps) {
+      return;
+    }
+
+    // mouseDownEvent.preventDefault();
+    const preDragMouseUpHandler = (mouseUpEvent: MouseEvent) => {
+      clearTimeout(this.mouseDownDragTimeout);
+    };
+
+    this.document.addEventListener('mouseup', preDragMouseUpHandler);
+
+    this.mouseDownDragTimeout = setTimeout(() => {
+      this.document.removeEventListener('mouseup', preDragMouseUpHandler);
+      const targetTypes: DragTargetType[] = ['folder'];
+
+      // if (this.item.isRecord) {
+      //   targetTypes.push('record');
+      // }
+
+      let isDragging = false;
+      const mouseUpHandler = (mouseUpEvent: MouseEvent) => {
+        this.drag.dispatch({
+          type: 'end',
+          srcComponent: this,
+          event: mouseUpEvent,
+          targetTypes
+        });
+        this.document.removeEventListener('mouseup', mouseUpHandler);
+        setTimeout(() => {
+          this.isDragging = false;
+        });
+      };
+      const mouseMoveHandler = (mouseMoveEvent: MouseEvent) => {
+        mouseMoveEvent.preventDefault();
+        if (!isDragging) {
+          isDragging = Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) > DRAG_MIN_Y;
+          if (isDragging) {
+            this.drag.dispatch({
+              type: 'start',
+              srcComponent: this,
+              event: mouseMoveEvent,
+              targetTypes
+            });
+            this.isDragging = true;
+            this.document.addEventListener('mouseup', mouseUpHandler);
+            this.document.removeEventListener('mousemove', mouseMoveHandler);
+          }
+        }
+      };
+      this.document.addEventListener('mousemove', mouseMoveHandler);
+    }, MOUSE_DOWN_DRAG_TIMEOUT);
+  }
+
+  onItemMouseEnterLeave(event: MouseEvent, enter = true) {
+    if (this.isDragTarget) {
+      let type;
+      if (enter) {
+        type = 'enter';
+      } else {
+        type = 'leave';
+      }
+      this.drag.dispatch({
+        type,
+        srcComponent: this,
+        event
+      }, event.type === 'dragenter' ? 1 : 0);
+      this.isDropTarget = enter;
+    }
+  }
+
+  onItemClick(event: MouseEvent) {
+    if (this.device.isMobileWidth() || !this.canSelect) {
+      this.goToItem();
+    } else {
+      this.onItemSingleClick(event);
+    }
+  }
+
+  onItemDoubleClick() {
+    if (this.singleClickTimeout) {
+      clearTimeout(this.singleClickTimeout);
+      this.singleClickTimeout = null;
+    }
+
+    this.goToItem();
   }
 
   goToItem() {
@@ -213,7 +429,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
     if (this.isInApps) {
       rootUrl = '/apps';
     } else if (this.isInShares && !this.isMyItem) {
-      rootUrl = '/shares/withme';
+      rootUrl = '/shares';
     } else if (this.isInSharePreview) {
       rootUrl = '/share';
     } else if (this.isInPublic) {
@@ -235,10 +451,64 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
       }
     } else if (!this.isInSharePreview && !this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
-      this.router.navigate(['/shares/withme/record', this.item.archiveNbr]);
+      this.router.navigate(['/shares/record', this.item.archiveNbr]);
     } else {
       this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
+  }
+
+  onItemSingleClick(event: MouseEvent | TouchEvent) {
+    if (this.isDragging) {
+      return;
+    }
+
+    if (this.waitingForDoubleClick) {
+      this.waitingForDoubleClick = false;
+      return this.onItemDoubleClick();
+    }
+
+    this.waitingForDoubleClick = true;
+    this.singleClickTimeout = setTimeout(() => {
+      this.itemClicked.emit({
+        item: this.item,
+        event: event as MouseEvent
+      });
+    }, SINGLE_CLICK_DELAY);
+
+    setTimeout(() => {
+      this.waitingForDoubleClick = false;
+    }, DOUBLE_CLICK_TIMEOUT);
+  }
+
+  onItemTouchStart(event) {
+    this.touchStartEvent = event;
+  }
+
+  onItemTouchEnd(event) {
+    if (!this.touchStartEvent) {
+      return;
+    }
+
+    if ((event.target as HTMLElement).classList.contains('right-menu-toggler-icon')) {
+      this.touchStartEvent = null;
+      return;
+    }
+
+    // don't trigger click from scroll...
+    const startX = this.touchStartEvent.touches.item(0).clientX;
+    const endX = (event as TouchEvent).changedTouches.item(0).clientX;
+    const startY = this.touchStartEvent.touches.item(0).clientY;
+    const endY = (event as TouchEvent).changedTouches.item(0).clientY;
+    const distance = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2));
+
+    if (distance > 15) {
+      return;
+    }
+
+    event.preventDefault();
+    this.touchStartEvent = null;
+
+    this.onItemClick(event);
   }
 
   isFolderViewSet() {
@@ -264,6 +534,7 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   showActions(event: Event) {
+    event.preventDefault();
     event.stopPropagation();
 
     const actionButtons: PromptButton[] = [];
@@ -300,6 +571,8 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
 
+      actionButtons.push(ItemActions.Tags);
+
       if (this.item.isRecord) {
         actionButtons.push(ItemActions.Download);
       }
@@ -323,8 +596,6 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
         this.prompt.confirm('OK', this.item.displayName, null, null, `<p>No actions available</p>`);
       } catch (err) { }
     }
-
-
 
     return false;
   }
@@ -365,6 +636,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
       case 'publish':
         actionDeferred.resolve();
         this.dialog.open('PublishComponent', { item: this.item }, { height: 'auto' });
+        break;
+      case 'tags':
+        actionDeferred.resolve();
+        this.dialog.open('EditTagsComponent', { item: this.item }, { height: 'auto' });
         break;
       case 'setFolderView':
         actionDeferred.resolve();
@@ -407,6 +682,10 @@ export class FileListItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   openFolderPicker(operation: FolderPickerOperations) {
+    if (!this.folderPicker) {
+      return false;
+    }
+
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
     const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);

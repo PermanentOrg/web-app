@@ -12,7 +12,7 @@ import { ConnectorOverviewVO, FolderVO, SimpleVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { PromptService, PromptButton } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptButton } from '@shared/services/prompt/prompt.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
 
@@ -59,7 +59,7 @@ export class ConnectorComponent implements OnInit {
     const type = this.connector.type.split('.').pop();
     this.folder = _.find(this.appsFolder.ChildItemVOs, {special: `${type}.root.folder`}) as FolderVO;
     if (this.folder) {
-      this.hasFiles = this.folder.ChildItemVOs && this.folder.ChildItemVOs.length;
+      this.hasFiles = this.folder.ChildItemVOs?.length > 0;
     }
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();

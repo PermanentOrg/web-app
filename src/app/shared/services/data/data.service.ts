@@ -1,14 +1,34 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { partition, remove, find } from 'lodash';
+import { partition, remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
+import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData, SortType } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
+import { Subject, BehaviorSubject } from 'rxjs';
+import debug from 'debug';
+import { debugSubscribable } from '@shared/utilities/debug';
+import { TagsService } from '@core/services/tags/tags.service';
 
-const THUMBNAIL_REFRESH_INTERVAL = 7500;
+const THUMBNAIL_REFRESH_INTERVAL = 3000;
+
+export type SelectedItemsSet = Set<ItemVO>;
+
+export interface SelectKeyEvent {
+  type: 'key';
+  key?: 'up' | 'down' | 'a';
+  modifierKey?: 'ctrl' | 'shift';
+}
+
+export interface SelectClickEvent {
+  type: 'click';
+  item: RecordVO | FolderVO;
+  modifierKey?: 'ctrl' | 'shift';
+}
+
+export type SelectEvent = SelectClickEvent | SelectKeyEvent;
 
 @Injectable()
 export class DataService {
@@ -24,24 +44,43 @@ export class DataService {
   public multiSelectEnabled = false;
   public multiSelectChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  private byFolderLinkId: {[key: number]: FolderVO | RecordVO} = {};
-  private byArchiveNbr: {[key: string]: FolderVO | RecordVO} = {};
-  private thumbRefreshQueue: Array<FolderVO | RecordVO> = [];
+  private byFolderLinkId: {[key: number]: ItemVO} = {};
+  private byArchiveNbr: {[key: string]: ItemVO} = {};
+  private thumbRefreshQueue: Array<ItemVO> = [];
   private thumbRefreshTimeout;
 
-  public multiSelectItems: Map<number, ItemVO> = new Map();
+  public multiclickItems: Map<number, ItemVO> = new Map();
 
-  constructor(private api: ApiService) {
+  private selectedItems: SelectedItemsSet = new Set();
+  private selectedItemsSubject: BehaviorSubject<SelectedItemsSet> = new BehaviorSubject(this.selectedItems);
+  private lastManualclickItem: ItemVO;
+  private lastArrowclickItem: ItemVO;
+
+  private showItemSubject = new Subject<ItemVO>();
+  private itemToShowAfterNavigate: ItemVO;
+
+  private unsharedItemSubject = new Subject<ItemVO>();
+
+  private debug = debug('service:dataService');
+
+  constructor(
+    private api: ApiService,
+    private tags: TagsService
+  ) {
+    debugSubscribable('currentFolderChange', this.debug, this.currentFolderChange);
+    debugSubscribable('folderUpdate', this.debug, this.folderUpdate);
+    debugSubscribable('selectedItems', this.debug, this.selectedItems$());
+    debugSubscribable('showItem', this.debug, this.itemToShow$());
   }
 
-  public registerItem(item: FolderVO | RecordVO) {
+  public registerItem(item: ItemVO) {
     this.byFolderLinkId[item.folder_linkId] = item;
     if (item.archiveNbr) {
       this.byArchiveNbr[item.archiveNbr] = item;
     }
   }
 
-  public deregisterItem(item: FolderVO | RecordVO) {
+  public unregisterItem(item: ItemVO) {
     delete this.byFolderLinkId[item.folder_linkId];
     if (item.archiveNbr) {
       delete this.byArchiveNbr[item.archiveNbr];
@@ -49,8 +88,14 @@ export class DataService {
   }
 
   public setCurrentFolder(folder?: FolderVO, isPage?: boolean) {
+    if (folder === this.currentFolder) {
+      return;
+    }
+
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
+
+    this.clearSelectedItems();
 
     clearTimeout(this.thumbRefreshTimeout);
     this.thumbRefreshQueue = [];
@@ -60,7 +105,30 @@ export class DataService {
     }
   }
 
-  public fetchLeanItems(items: Array<FolderVO | RecordVO>, currentFolder ?: FolderVO): Promise<number> {
+  public hideItemsInCurrentFolder(items: Array<ItemVO>) {
+    this.debug('hideItemsInCurrentFolder %d requested', items.length);
+    const itemsInFolder = items.filter(i => i.parentFolder_linkId === this.currentFolder.folder_linkId);
+
+    if (!itemsInFolder.length) {
+      this.debug('hideItemsInCurrentFolder no items match current folder', items.length);
+      return;
+    }
+
+    const itemsMap = new Map<ItemVO, true>();
+    for (const item of itemsInFolder) {
+      itemsMap.set(item, true);
+      this.selectedItems.delete(item);
+    }
+
+    this.selectedItemsSubject.next(this.selectedItems);
+
+    remove(this.currentFolder.ChildItemVOs, x => itemsMap.has(x));
+    this.debug('hideItemsInCurrentFolder %d removed', itemsInFolder.length);
+  }
+
+  public fetchLeanItems(items: Array<ItemVO>, currentFolder ?: FolderVO): Promise<number> {
+    this.debug('fetchLeanItems %d items requested', items.length);
+
     const itemResolves = [];
     const itemRejects = [];
     let handleItemRegistration = false;
@@ -95,6 +163,7 @@ export class DataService {
     });
 
     if (!folder.ChildItemVOs.length) {
+      this.debug('fetchLeanItems all items already fetching');
       return Promise.resolve(0);
     }
 
@@ -121,6 +190,7 @@ export class DataService {
             item.fetched = null;
 
             if (!item.thumbURL200 && item.parentFolderId === this.currentFolder.folderId) {
+              this.debug('thumbRefreshQueue push %s', item.archiveNbr);
               this.thumbRefreshQueue.push(item);
             }
           }
@@ -128,22 +198,28 @@ export class DataService {
 
         if (handleItemRegistration) {
           items.map(item => {
-            this.deregisterItem(item);
+            this.unregisterItem(item);
           });
         }
+
+        this.debug('fetchLeanItems %d items fetched', leanItems.length);
 
         return Promise.resolve(leanItems.length);
       })
       .catch((response) => {
         itemRejects.map((reject, index) => {
+          items[index].isFetching = false;
           items[index].fetched = null;
           reject();
         });
         console.error(response);
+        return 0;
       });
   }
 
-  public fetchFullItems(items: Array<FolderVO | RecordVO>, withChildren?: boolean) {
+  public fetchFullItems(items: Array<ItemVO>, withChildren?: boolean) {
+    this.debug('fetchFullItems %d items requested', items.length);
+
     const itemResolves = [];
     const itemRejects = [];
 
@@ -195,11 +271,14 @@ export class DataService {
       for (let i = 0; i < records.length; i++) {
         records[i].update(fullRecords[i]);
         records[i].dataStatus = DataStatus.Full;
+        this.tags.checkTagsOnItem(records[i]);
       }
 
       for (let i = 0; i < folders.length; i++) {
-        folders[i].update(fullFolders[i]);
-        folders[i].dataStatus = DataStatus.Full;
+        const folder = folders[i] as FolderVO;
+        folder.update(fullFolders[i] as FolderVOData, folders[i] === this.currentFolder);
+        folder.dataStatus = DataStatus.Full;
+        this.tags.checkTagsOnItem(folders[i]);
       }
 
       itemResolves.map((resolve, index) => {
@@ -207,6 +286,8 @@ export class DataService {
         this.byArchiveNbr[items[index].archiveNbr] = items[index];
         resolve();
       });
+
+      this.debug('fetchFullItems %d items fetched', items.length);
 
       return Promise.resolve(true);
     })
@@ -219,22 +300,89 @@ export class DataService {
     });
   }
 
-  public refreshCurrentFolder() {
+  public refreshCurrentFolder(sortOnly = false) {
+    this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
+
     return this.api.folder.navigate(this.currentFolder)
       .pipe(map(((response: FolderResponse) => {
+        this.debug('refreshCurrentFolder data fetched', sortOnly);
+
         if (!response.isSuccessful) {
           throw response;
         }
 
         return response.getFolderVO(true);
       }))).toPromise()
-      .then((folder: FolderVO) => {
-        this.currentFolder.update(folder);
+      .then((updatedFolder: FolderVO) => {
+        this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
+        this.debug('refreshCurrentFolder done', sortOnly);
         this.folderUpdate.emit(this.currentFolder);
-      })
-      .catch((error) => {
-        console.error(error);
       });
+  }
+
+  public updateChildItems(folder1: FolderVO, folder2: FolderVO, sortOnly = false) {
+    this.debug('updateChildItems (sortOnly = %o)', sortOnly);
+
+    if (!folder2.ChildItemVOs || !folder2.ChildItemVOs.length) {
+      folder1.ChildItemVOs = folder2.ChildItemVOs;
+      this.debug('updateChildItems done no child items', sortOnly);
+      return;
+    }
+
+    const original = folder1.ChildItemVOs as ItemVO[];
+    const updated = folder2.ChildItemVOs as ItemVO[];
+
+    const originalItemsById = new Map<number, ItemVO>();
+    const updatedItemsById = new Map<number, ItemVO>();
+
+    const updatedOrderedIds: number[] = [];
+
+    if (sortOnly) {
+      for (const item of original) {
+        originalItemsById.set(item.folder_linkId, item);
+      }
+
+      const sortedItems: ItemVO[] = updated.map(item => {
+        return originalItemsById.get(item.folder_linkId);
+      });
+
+      folder1.ChildItemVOs = sortedItems;
+    } else {
+      for (const item of updated) {
+        updatedItemsById.set(item.folder_linkId, item);
+        updatedOrderedIds.push(item.folder_linkId);
+      }
+
+      for (const item of original) {
+        originalItemsById.set(item.folder_linkId, item);
+
+        if (updatedItemsById.has(item.folder_linkId)) {
+          const updatedItem = updatedItemsById.get(item.folder_linkId);
+          const dataToUpdate: FolderVOData | RecordVOData = {
+            updatedDT: updatedItem.updatedDT,
+          };
+          item.update(dataToUpdate);
+        } else {
+          if (this.selectedItems.has(item)) {
+            this.selectedItems.delete(item);
+            this.selectedItemsSubject.next(this.selectedItems);
+          }
+        }
+      }
+
+      const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map(id => {
+        const isNew = !originalItemsById.has(id);
+        const item = !isNew ? originalItemsById.get(id) : updatedItemsById.get(id);
+        if (isNew) {
+          item.isNewlyCreated = true;
+        }
+        return item;
+      });
+
+      folder1.ChildItemVOs = finalUpdatedItems;
+    }
+
+    this.debug('updateChildItems done %d items', folder1.ChildItemVOs.length);
   }
 
   public checkMissingThumbs() {
@@ -248,6 +396,7 @@ export class DataService {
 
     const itemsToCheck = this.thumbRefreshQueue;
     this.thumbRefreshQueue = [];
+    this.debug('checkMissingThumbs %d items', itemsToCheck.length);
     this.fetchLeanItems(itemsToCheck)
       .then(() => {
         this.scheduleMissingThumbsCheck();
@@ -297,22 +446,165 @@ export class DataService {
     }
   }
 
+  public selectedItems$() {
+    return this.selectedItemsSubject.asObservable();
+  }
+
+  public getSelectedItems() {
+    return this.selectedItemsSubject.value;
+  }
+
+  public onSelectEvent(selectEvent: SelectEvent) {
+    switch (selectEvent.type) {
+      case 'click':
+        switch (selectEvent.modifierKey) {
+          case 'ctrl':
+            this.clickItemSingle(selectEvent.item, false);
+            break;
+          case 'shift':
+            this.clickItemsBetweenItems(this.lastManualclickItem, selectEvent.item);
+            break;
+          default:
+            this.clickItemSingle(selectEvent.item);
+        }
+        break;
+      case 'key':
+        switch (selectEvent.key) {
+          case 'up':
+          case 'down':
+            const items = this.currentFolder.ChildItemVOs;
+            const index = this.lastManualclickItem ? findIndex(items, this.lastManualclickItem) : 0;
+            if (!selectEvent.modifierKey) {
+              let newIndex = index + (selectEvent.key === 'up' ? -1 : 1);
+              newIndex = Math.max(0, newIndex);
+              newIndex = Math.min(items.length - 1, newIndex);
+              const newItem = items[newIndex];
+              if (newItem !== this.lastManualclickItem) {
+                this.clickItemSingle(newItem);
+              }
+            } else {
+              if (!this.lastArrowclickItem) {
+                this.lastArrowclickItem = this.lastManualclickItem;
+              }
+              const indexEnd = this.lastArrowclickItem ? findIndex(items, this.lastArrowclickItem) : 0;
+              let newIndex = indexEnd + (selectEvent.key === 'up' ? -1 : 1);
+              newIndex = Math.max(0, newIndex);
+              newIndex = Math.min(items.length - 1, newIndex);
+              const newItem = items[newIndex];
+              this.clickItemsBetweenIndicies(index, newIndex);
+              this.lastArrowclickItem = newItem;
+            }
+            break;
+          case 'a':
+            this.clickItemsBetweenIndicies(0, this.currentFolder.ChildItemVOs.length - 1);
+            break;
+        }
+        break;
+    }
+  }
+
+  clearSelectedItems() {
+    this.selectedItems.clear();
+    this.selectedItemsSubject.next(this.selectedItems);
+  }
+
+  clickItemSingle(item: ItemVO, replace = true) {
+    if (this.selectedItems.has(item)) {
+      if (this.selectedItems.size > 1 && replace) {
+        this.selectedItems.clear();
+        this.selectedItems.add(item);
+      } else if (replace) {
+        this.selectedItems.clear();
+      } else {
+        this.selectedItems.delete(item);
+      }
+    } else {
+      if (replace) {
+        this.selectedItems.clear();
+        this.lastManualclickItem = this.lastArrowclickItem = item;
+      }
+      this.selectedItems.add(item);
+    }
+
+    this.selectedItemsSubject.next(this.selectedItems);
+  }
+
+  fetchSelectedItems() {
+    return this.fetchFullItems(Array.from(this.selectedItems.keys()));
+  }
+
+  clickItemsBetweenIndicies(item1Index: number, item2Index: number) {
+    const items = this.currentFolder.ChildItemVOs;
+
+    this.selectedItems.clear();
+
+    let current = Math.min(item1Index, item2Index);
+    const end = Math.max(item1Index, item2Index);
+
+    while (current <= end) {
+      this.selectedItems.add(items[current++]);
+    }
+
+    this.selectedItemsSubject.next(this.selectedItems);
+  }
+
+  clickItemsBetweenItems(item1: ItemVO, item2: ItemVO) {
+    const items = this.currentFolder.ChildItemVOs;
+    const item1Index = item1 ? findIndex(items, item1) : 0;
+    const item2Index = findIndex(items, item2);
+
+    this.clickItemsBetweenIndicies(item1Index, item2Index);
+  }
+
   public setMultiSelect(enabled: boolean) {
     this.multiSelectEnabled = enabled;
     this.multiSelectChange.emit(enabled);
 
     if (!this.multiSelectEnabled) {
       setTimeout(() => {
-        this.multiSelectItems.clear();
+        this.multiclickItems.clear();
       }, 500);
     }
   }
 
   public setItemMultiSelectStatus(item: ItemVO, selected: boolean) {
     if (selected) {
-      this.multiSelectItems.set(item.folder_linkId, item);
+      this.multiclickItems.set(item.folder_linkId, item);
     } else {
-      this.multiSelectItems.delete(item.folder_linkId);
+      this.multiclickItems.delete(item.folder_linkId);
     }
+  }
+
+  public showItem(item: ItemVO, select = false) {
+    this.showItemSubject.next(item);
+    if (select) {
+      this.clearSelectedItems();
+      this.clickItemSingle(this.byFolderLinkId[item.folder_linkId], true);
+      this.debug('selected item %o', item);
+    }
+  }
+
+  public itemToShow$() {
+    return this.showItemSubject.asObservable();
+  }
+
+  public unsharedItem$() {
+    return this.unsharedItemSubject.asObservable();
+  }
+
+  public itemUnshared(item: ItemVO) {
+    this.clearSelectedItems();
+    this.unsharedItemSubject.next(item);
+  }
+
+  public showItemAfterNavigate(item: ItemVO) {
+    this.debug('got item to show after navigate %o', item);
+    this.itemToShowAfterNavigate = item;
+  }
+
+  public getItemToShowAfterNavigate() {
+    const item = this.itemToShowAfterNavigate;
+    this.itemToShowAfterNavigate = null;
+    return item;
   }
 }

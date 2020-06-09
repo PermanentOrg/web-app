@@ -1,5 +1,5 @@
 import { DataItem, moment } from '@permanent.org/vis-timeline';
-import { RecordVO, FolderVO, ItemVO, TimezoneVOData } from '@models/index';
+import { RecordVO, FolderVO, ItemVO, TimezoneVOData } from '@models';
 import { groupBy, minBy, maxBy, meanBy } from 'lodash';
 import { isMobileWidth } from '@shared/services/device/device.service';
 

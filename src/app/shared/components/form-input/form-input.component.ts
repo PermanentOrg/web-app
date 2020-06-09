@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef, AfterViewInit, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
+import { find } from 'lodash';
 
 export interface FormInputSelectOption {
   text: string | number;
@@ -112,6 +113,8 @@ export class FormInputComponent implements OnInit, AfterViewInit {
     return this.element;
   }
 
-
+  getOptionTextFromValue(value: string) {
+    return find(this.selectOptions, { value })?.text;
+  }
 
 }

@@ -1,10 +1,32 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-const routes: Routes = [
+export interface RouteData {
+  title?: string;
+
+  showSidebar?: boolean;
+  showFolderViewToggle?: boolean;
+  showFolderDescription?: boolean;
+
+  singleFile?: boolean;
+
+  checkFolderViewOnNavigate?: boolean;
+  noFileListPadding?: boolean;
+  fileListCentered?: boolean;
+  isPublicArchive?: boolean;
+}
+
+export interface RouteWithData extends Route {
+  data?: RouteData;
+  children?: RoutesWithData;
+}
+
+export type RoutesWithData = RouteWithData[];
+
+const routes: RoutesWithData = [
   {
     path: 'm',
     children: [
@@ -19,24 +41,25 @@ const routes: Routes = [
       { path: 'signupEmbed', redirectTo: 'embed/signup', pathMatch: 'full'  },
       { path: 'verifyEmbed', redirectTo: 'embed/verify', pathMatch: 'full'  },
       { path: 'doneEmbed', redirectTo: 'embed/done', pathMatch: 'full'  },
-      { path: 'auth', loadChildren: '@auth/auth.module#AuthModule' },
-      { path: 'embed', loadChildren: '@embed/embed.module#EmbedModule' },
-      { path: 'pledge', loadChildren: '@pledge/pledge.module#PledgeModule'},
-      { path: '', loadChildren: '@core/core.module#CoreModule' },
+      { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+      { path: 'embed', loadChildren: () => import('./embed/embed.module').then(m => m.EmbedModule) },
+      { path: 'pledge', loadChildren: () => import('./pledge/pledge.module').then(m => m.PledgeModule)},
+      { path: '', loadChildren: () => import('./core/core.module').then(m => m.CoreModule) },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
-  { path: 'p', loadChildren: '@public/public.module#PublicModule', 
+  { path: 'p', loadChildren: () => import('./public/public.module').then(m => m.PublicModule),
     data: {
       title: 'Public'
     }
   },
-  { path: 'share', loadChildren: '@share-preview/share-preview.module#SharePreviewModule', 
+  { path: 'share', loadChildren: () => import('./share-preview/share-preview.module').then(m => m.SharePreviewModule),
     data: {
       title: 'Sharing'
     }
   },
   { path: '', redirectTo: 'm', pathMatch: 'full'},
+  { path: 'app', redirectTo: 'm', pathMatch: 'full'},
   { path: ':path', redirectTo: 'm/:path'},
 ];
 

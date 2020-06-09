@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
-import { ArchiveVO } from '@models/index';
+import { ArchiveVO } from '@models';
 
 import { orderBy } from 'lodash';
 

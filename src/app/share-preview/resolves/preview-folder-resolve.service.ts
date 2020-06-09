@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { FolderVO, RecordVO, RecordVOData } from '@models/index';
+import { FolderVO, RecordVO, RecordVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 
 

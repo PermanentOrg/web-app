@@ -20,22 +20,52 @@ import { RelationshipsComponent } from './components/relationships/relationships
 import { MembersComponent } from './components/members/members.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
 import { LeanFolderResolveService } from './resolves/lean-folder-resolve.service';
+import { RoutesWithData } from '../app.routes';
+import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
+import { AccountResolveService } from './resolves/account-resolve.service';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
+import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
+import { TagsResolveService } from './resolves/tags.resolve.service';
+import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
 
-export const routes: Routes = [
+export const routes: RoutesWithData = [
   { path: '',
     component: MainComponent,
     canActivate: [ AuthGuard ],
     canActivateChild: [ AuthGuard ],
     resolve: rootFolderResolve,
     children: [
-      { path: 'myfiles', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'My Files'} },
-      { path: 'public', loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule', data: { title: 'Public'} },
-      { path: 'apps', loadChildren: '@apps/apps.module#AppsModule', data: { title: 'Apps'} },
-      { path: 'shares', loadChildren: '@shares/shares.module#SharesModule', data: { title: 'Shares'} },
+      {
+        path: 'myfiles',
+        loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule),
+        data: { title: 'My Files', showSidebar: true, showFolderViewToggle: true }
+      },
+      {
+        path: 'public',
+        loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule),
+        data: { title: 'Public', showSidebar: true }
+      },
+      {
+        path: 'apps',
+        loadChildren: () => import('../apps/apps.module').then(m => m.AppsModule),
+        data: { title: 'Apps', showSidebar: true }
+      },
+      {
+        path: 'profile',
+        component: ProfileEditComponent,
+        data: { title: 'Profile'},
+        resolve: { profileItems: ProfileItemsResolveService }
+      },
+      {
+        path: 'shares',
+        loadChildren: () => import('../shares/shares.module').then(m => m.SharesModule),
+        data: { title: 'Shares', showSidebar: true }
+      },
       {
         path: 'choosearchive',
         component: ArchiveSwitcherComponent,
@@ -81,6 +111,24 @@ export const routes: Routes = [
         path: 'archive/members',
         redirectTo: 'members'
       },
+      {
+        path: 'account',
+        component: AccountSettingsComponent,
+        data: { title: 'Account Settings'},
+        resolve: { account: AccountResolveService }
+      },
+      {
+        path: 'notificationPreferences',
+        component: NotificationPreferencesComponent,
+        data: { title: 'Notification Preferences'},
+        resolve: { account: AccountResolveService }
+      },
+      {
+        path: 'search',
+        component: GlobalSearchResultsComponent,
+        data: { title: 'Search' },
+        resolve: { loadTags: TagsResolveService }
+      },
       { path: '**', redirectTo: 'myfiles'}
     ]
   }
@@ -100,7 +148,10 @@ export const routes: Routes = [
     ArchivesResolveService,
     DonateResolveService,
     RelationshipsResolveService,
-    MembersResolveService
+    MembersResolveService,
+    AccountResolveService,
+    ProfileItemsResolveService,
+    TagsResolveService
   ],
   declarations: []
 })

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
-import { RecordVOData, FolderVOData, RecordVO, FolderVO } from '@models/index';
+import { RecordVOData, FolderVOData, RecordVO, FolderVO } from '@models';
 
 @Injectable()
 export class ShareInviteResolveService implements Resolve<any> {

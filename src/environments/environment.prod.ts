@@ -11,5 +11,8 @@ export const environment = {
     projectId: 'prpledgeprod',
     storageBucket: 'prpledgeprod.appspot.com',
     messagingSenderId: '802935961762'
-  }
+  },
+  google: {
+    apiKey: 'AIzaSyC6JvFpTpreKFl_1HvWk9pSERh9xbLdTlg'
+  },
 };

@@ -1,0 +1,15 @@
+<div class="view-name">{{folderView | prConstants}}</div>
+<div class="view-preview">
+  <img [src]="images[folderView]">
+</div>
+<div class="view-actions">
+  <a class="btn btn-purple btn-sm" [href]="folder | publicViewLink:folderView" target="_blank">
+    View
+  </a>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="isDefault">
+    <label class="form-check-label">
+      Folder default
+    </label>
+  </div>
+</div>

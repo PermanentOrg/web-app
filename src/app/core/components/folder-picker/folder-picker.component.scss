@@ -10,15 +10,34 @@ $row-height: 40px;
   left: $picker-margin;
   right: $picker-margin;
   transform: translateY(100%);
-  transition:  transform $transition-length ease-in;
   border-radius: $border-radius;
 
   display: flex;
   flex-direction: column;
 }
 
+@include after($tablet-horizontal) {
+  .menu-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .folder-picker {
+    opacity: 0;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    height: 500px;
+    max-height: calc(100vh - #{4 * $picker-margin});
+  }
+}
+
 .visible .folder-picker{
-  transition: transform $transition-length ease-out;
+  opacity: 1;
 }
 
 .picker-contents {
@@ -34,6 +53,20 @@ $row-height: 40px;
   }
 }
 
+.picker-selected-record {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+  [prBgImage] {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
 .picker-empty {
   text-align: center;
   padding-top: 10px;
@@ -46,6 +79,10 @@ $row-height: 40px;
 .picker-header {
   padding: 10px;
   display: flex;
+
+  > * {
+    user-select: none;
+  }
 }
 
 .picker-folder-name {
@@ -88,6 +125,13 @@ $row-height: 40px;
   border-bottom: 1px solid $gray-300;
   cursor: pointer;
   user-select: none;
+
+  [prBgImage] {
+    height: $row-height - 10px;
+    width: $row-height - 10px;
+    flex: 0 0 $row-height - 10px;
+    margin: 5px 5px;
+  }
 }
 
 .name {
@@ -95,11 +139,4 @@ $row-height: 40px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-[prBgImage] {
-  height: $row-height - 10px;
-  width: $row-height - 10px;
-  flex: 0 0 $row-height - 10px;
-  margin: 5px 5px;
 }

@@ -13,6 +13,7 @@ import { PublicArchiveComponent } from './components/public-archive/public-archi
 import { PublicArchiveResolveService } from './resolves/public-archive-resolve.service';
 import { PublicRootResolveService } from './resolves/public-root-resolve.service';
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
+import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 
 const archiveResolve = {
   archive: PublishArchiveResolveService
@@ -47,7 +48,7 @@ export const routes: Routes = [
         path: 'archive/:publicArchiveNbr',
         component: PublicArchiveComponent,
         resolve: publicArchiveResolve,
-        loadChildren: '@fileBrowser/file-browser.module#FileBrowserModule',
+        loadChildren: LazyLoadFileBrowserSibling,
         data: {
           noFileListPadding: true,
           fileListCentered: true,

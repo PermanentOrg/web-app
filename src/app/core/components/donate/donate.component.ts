@@ -5,11 +5,11 @@ import { find } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 
-import { AccountVO, BillingCardVO, BillingPaymentVO, BillingPaymentVOData } from '@models/index';
+import { AccountVO, BillingCardVO, BillingPaymentVO, BillingPaymentVOData } from '@models';
 
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute } from '@angular/router';
-import { PromptService, PromptField } from '@core/services/prompt/prompt.service';
+import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
 import { BillingResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 

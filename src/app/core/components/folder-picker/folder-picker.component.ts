@@ -6,14 +6,15 @@ import { Deferred } from '@root/vendor/deferred';
 
 import { DataService } from '@shared/services/data/data.service';
 
-import { FolderVO, ItemVO } from '@root/app/models/index';
+import { FolderVO, ItemVO, RecordVO } from '@root/app/models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
 export enum FolderPickerOperations {
   Move = 1,
-  Copy
+  Copy,
+  ChooseRecord
 }
 
 @Component({
@@ -32,6 +33,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public waiting: boolean;
   public saving: boolean;
   public isRootFolder = true;
+  public allowRecords = false;
+
+  public selectedRecord: ItemVO;
 
   public filterFolderLinkIds: number[];
 
@@ -46,9 +50,16 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  show(startingFolder: FolderVO, operation: FolderPickerOperations, savePromise?: Promise<any>, filterFolderLinkIds: number[] = null) {
+  show(
+    startingFolder: FolderVO,
+    operation: FolderPickerOperations,
+    savePromise?: Promise<any>,
+    filterFolderLinkIds: number[] = null,
+    allowRecords = false
+  ) {
     this.visible = true;
     this.operation = operation;
+    this.allowRecords = allowRecords;
 
     this.savePromise = savePromise;
 
@@ -60,6 +71,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
         break;
       case FolderPickerOperations.Copy:
         this.operationName = 'Copy';
+        break;
+      case FolderPickerOperations.ChooseRecord:
+        this.operationName = 'Choose file';
         break;
     }
 
@@ -73,11 +87,24 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     return this.chooseFolderDeferred.promise;
   }
 
-  navigate(folder: FolderVO, evt: Event) {
-    this.setFolder(folder);
+  onItemClick(item: ItemVO, evt: Event) {
+    if (item instanceof FolderVO) {
+      this.navigate(item);
+    } else {
+      this.showRecord(item);
+    }
+
     evt.stopPropagation();
     evt.preventDefault();
     return false;
+  }
+
+  navigate(folder: FolderVO) {
+    this.setFolder(folder);
+  }
+
+  showRecord(record: RecordVO) {
+    this.selectedRecord =  record;
   }
 
   setFolder(folder: FolderVO) {
@@ -91,11 +118,21 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
         this.waiting = false;
         this.currentFolder = response.getFolderVO(true);
         this.isRootFolder = this.currentFolder.type.includes('root');
-        remove(this.currentFolder.ChildItemVOs, 'isRecord');
+        if (!this.allowRecords) {
+          remove(this.currentFolder.ChildItemVOs, 'isRecord');
+        }
         if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
           remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
         }
       });
+  }
+
+  onBackClick() {
+    if (this.selectedRecord) {
+      this.selectedRecord = null;
+    } else {
+      this.goToParentFolder();
+    }
   }
 
   goToParentFolder() {
@@ -113,7 +150,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   chooseFolder() {
-    if (this.currentFolder) {
+    if (this.selectedRecord) {
+      this.chooseFolderDeferred.resolve(this.selectedRecord);
+    } else if (this.currentFolder) {
       this.chooseFolderDeferred.resolve(this.currentFolder);
     }
     if (!this.savePromise) {
@@ -134,6 +173,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   hide() {
     this.visible = false;
+    this.selectedRecord = null;
+
     setTimeout(() => {
       this.currentFolder = null;
       this.chooseFolderDeferred = null;
@@ -142,6 +183,6 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.folderPickerService.deregisterComponent();
+    this.folderPickerService.unregisterComponent();
   }
 }

@@ -7,6 +7,25 @@
   bottom: 0;
   width: 100%;
   transform: translateY(100%);
+
+  @include after($tablet-horizontal) {
+    @include positionReset;
+    width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+  }
+}
+
+.menu-wrapper {
+  @include after($tablet-horizontal) {
+    @include flexCenter;
+    &.visible {
+      .menu {
+        opacity: 1;
+      }
+    }
+  }
 }
 
 .dialog-auto-height {
@@ -24,7 +43,7 @@
 }
 
 
-@media screen and (min-width: 768px) {
+@include after($tablet-horizontal) {
   .dialog-auto-width {
     .menu {
       width: auto;
@@ -39,6 +58,12 @@
   
     &.menu-wrapper.visible {
       background-color: $shadow-color-dark;
+    }
+  }
+
+  .dialog-auto-height {
+    .menu {
+      border-radius: $border-radius;
     }
   }
 }
