@@ -280,7 +280,7 @@ export class GlobalSearchBarComponent implements OnInit {
   }
 
   onAllResultsClick() {
-    this.router.navigate(['/m', 'search'], { queryParams: { query: this.formControl.value } });
+    this.router.navigate(['/m', 'search'], { queryParams: { query: this.formControl.value?.trim() } });
     this.onCoverClick();
   }
 
