@@ -122,14 +122,14 @@ export class RelationshipsComponent implements OnDestroy {
       .catch(() => {});
   }
 
-  onRelationRequestClick(relation: RelationVO) {
+  onRelationRequestClick(relation: RelationVO, skipDecline = false) {
     const deferred = new Deferred();
     this.promptService.prompt(
       [RELATIONSHIP_FIELD],
       `Accept relationship with ${relation.ArchiveVO.fullName}?`,
       deferred.promise,
       'Accept',
-      'Decline'
+      skipDecline ? 'Cancel' : 'Decline'
     ).then((value) => {
       const relationMyVo = new RelationVO({
         type: value.relationType
@@ -160,7 +160,7 @@ export class RelationshipsComponent implements OnDestroy {
       if (response) {
         deferred.resolve();
         this.messageService.showError(response.getMessage(), true);
-      } else {
+      } else if (!skipDecline) {
         deferred.resolve();
         this.removeRelation(relation);
       }

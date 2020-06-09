@@ -25,6 +25,8 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() showEdit = false;
   @Output() editClick = new EventEmitter<any>();
 
+  @Input() showAccept = false;
+  @Output() acceptClick = new EventEmitter<any>();
 
   public isCurrent = false;
   public relationDisplay: string;

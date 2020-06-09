@@ -26,6 +26,8 @@
   [isPending]="true"
   [relation]="relation.type"
   [largeOnDesktop]="true"
+  [showAccept]="true"
+  (acceptClick)="onRelationRequestClick(relation, true)"
   [showRemove]="true"
   (removeClick)="removeRelation(relation)"
   ></pr-archive-small>
