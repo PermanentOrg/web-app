@@ -36,13 +36,17 @@ export class TagsService {
   }
 
   async refreshTags() {
-    const response = await this.api.tag.getTagsByArchive(this.account.getArchive());
-    const tags = response.getTagVOs();
-    for (const tag of tags) {
-      this.tags.set(tag.tagId, tag);
+    if (this.account.getArchive()) {
+      const response = await this.api.tag.getTagsByArchive(this.account.getArchive());
+      const tags = response.getTagVOs();
+      for (const tag of tags) {
+        this.tags.set(tag.tagId, tag);
+      }
+      this.tagsSubject.next(this.getTags());
+      this.debug('got %d tags for archive', this.tags.size);
+    } else {
+      this.tags.clear();
     }
-    this.tagsSubject.next(this.getTags());
-    this.debug('got %d tags for archive', this.tags.size);
   }
 
   checkTagsOnItem(item: ItemVO) {

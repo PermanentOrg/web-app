@@ -172,14 +172,10 @@
   </ng-container>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'views'">
-  <div class="sidebar-item">
-    <pr-sidebar-view-option [folderView]="'folder.view.grid'" (setDefault)="onFinishEditing('view', $event)"
+  <pr-sidebar-view-option [folderView]="'folder.view.grid'" (setDefault)="onFinishEditing('view', $event)"
     [folder]="selectedItem | asFolder" [folderDefault]="(selectedItem | asFolder).view">
   </pr-sidebar-view-option>
-  </div>
-  <div class="sidebar-item">
-    <pr-sidebar-view-option [folderView]="'folder.view.timeline'" (setDefault)="onFinishEditing('view', $event)"
+  <pr-sidebar-view-option [folderView]="'folder.view.timeline'" (setDefault)="onFinishEditing('view', $event)"
     [folder]="selectedItem | asFolder" [folderDefault]="(selectedItem | asFolder).view">
   </pr-sidebar-view-option>
-  </div>
 </div>
