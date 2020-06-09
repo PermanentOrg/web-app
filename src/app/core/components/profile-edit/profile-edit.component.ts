@@ -59,8 +59,6 @@ export class ProfileEditComponent implements OnInit {
     private account: AccountService,
     private route: ActivatedRoute,
     private api: ApiService,
-    private upload: UploadService,
-    private prompt: PromptService,
     private message: MessageService,
     private folderPicker: FolderPickerService
   ) {

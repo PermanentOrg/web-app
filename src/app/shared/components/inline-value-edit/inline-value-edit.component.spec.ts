@@ -94,7 +94,7 @@ describe('InlineValueEditComponent', () => {
     expect(component.isEditing).toBeFalsy();
   });
 
-  fit('should not allow editing if canEdit is false', async () => {
+  it('should not allow editing if canEdit is false', async () => {
     component.canEdit = false;
 
     fixture.detectChanges();

@@ -11,6 +11,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -31,5 +32,6 @@ export const BASE_TEST_CONFIG = {
     EditService
   ] as any[],
   declarations: [
+    TooltipsPipe
   ] as any[]
 };

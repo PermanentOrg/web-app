@@ -19,7 +19,7 @@ describe('PrDatePipe', () => {
     };
     const output = pipe.transform(displayDT, timezoneVO);
     expect(output).toContain('PDT');
-    expect(output).toContain('11:36');
+    expect(output).toContain('9:36');
   });
 
   it('transforms a standard date in Pacific time', () => {
@@ -33,6 +33,6 @@ describe('PrDatePipe', () => {
     };
     const output = pipe.transform(displayDT, timezoneVO);
     expect(output).toContain('PST');
-    expect(output).toContain('10:36');
+    expect(output).toContain('8:36');
   });
 });

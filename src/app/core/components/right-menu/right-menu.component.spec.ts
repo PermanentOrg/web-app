@@ -20,6 +20,9 @@ describe('RightMenuComponent', () => {
         return new ArchiveVO({
           accessRole: 'access.role.owner'
         });
+      },
+      archiveChange: {
+        subscribe: () => {}
       }
     };
 

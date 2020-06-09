@@ -26,6 +26,9 @@ import { DialogComponent } from '@root/app/dialog/dialog.component';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { DialogModule } from '@root/app/dialog/dialog.module';
 import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-status.component';
+import { GlobalSearchBarComponent } from '@search/components/global-search-bar/global-search-bar.component';
+import { SearchService } from '@search/services/search.service';
+import { TagsService } from '@core/services/tags/tags.service';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 
@@ -51,10 +54,13 @@ describe('MainComponent', () => {
     config.declarations.push(UploadButtonComponent);
     config.declarations.push(FolderPickerComponent);
     config.declarations.push(MultiSelectStatusComponent);
+    config.declarations.push(GlobalSearchBarComponent);
 
     config.providers.push(AccountService);
     config.providers.push(DataService);
     config.providers.push(FolderPickerService);
+    config.providers.push(SearchService);
+    config.providers.push(TagsService);
 
     await TestBed.configureTestingModule(config).compileComponents();
 
