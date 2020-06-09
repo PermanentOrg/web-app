@@ -6,7 +6,7 @@
   display: block;
 }
 
-$meter-height: 7px;
+$meter-height: 10px;
 
 .space-meter {
   height: $meter-height;
@@ -16,7 +16,7 @@ $meter-height: 7px;
 
   .space-meter-inner {
     height: $meter-height;
-    background: rgba($PR-purple, 0.5);
+    background: rgba($PR-purple, 0.8);
   }
 }
 
