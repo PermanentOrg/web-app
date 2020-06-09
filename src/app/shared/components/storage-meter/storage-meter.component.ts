@@ -10,6 +10,8 @@ import { AccountVO } from '@models';
 export class StorageMeterComponent implements OnInit {
   account: AccountVO;
 
+  animate = false;
+
   constructor(
     private accountService: AccountService
   ) {
@@ -17,11 +19,23 @@ export class StorageMeterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.animate = true;
+    });
   }
 
   getMeterWidth() {
     const widthFraction = Math.min((this.account.spaceTotal - this.account.spaceLeft) / this.account.spaceTotal, 1);
     return `${widthFraction * 100}%`;
+  }
+
+  getMeterTransform() {
+    if (!this.animate) {
+      return null;
+    }
+
+    const widthFraction = Math.min((this.account.spaceTotal - this.account.spaceLeft) / this.account.spaceTotal, 1);
+    return `transform: translateX(${(widthFraction * 100) - 100}%)`;
   }
 
 }
