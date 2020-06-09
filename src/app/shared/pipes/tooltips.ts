@@ -76,5 +76,9 @@ export const TOOLTIPS = {
         public: 'Views can currently only be applied folders in Public'
       }
     }
+  },
+  nav: {
+    addStorage: 'Add storage',
+    help: 'Help'
   }
 };

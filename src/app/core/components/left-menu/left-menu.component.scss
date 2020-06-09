@@ -20,6 +20,8 @@ $active-indicator-color: lighten($active-color, 7%);
   background-color: $PR-blue;
   color: white;
   max-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   .menu-item {
     padding: $input-btn-padding-y * 1.5 10px;
@@ -86,9 +88,9 @@ $active-indicator-color: lighten($active-color, 7%);
 
 
   .menu-scroll {
-    max-height: 100vh;
     overflow: hidden;
     overflow-y: auto;
+    flex: 1 1 auto;
   }
 }
 

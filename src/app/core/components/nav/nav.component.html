@@ -9,6 +9,14 @@
 </nav>
 <nav class="navbar navbar-dark nav-desktop">
   <pr-global-search-bar></pr-global-search-bar>
+  <div class="nav-buttons">
+    <a href="/add-storage" [ngbTooltip]="'nav.addStorage' | prTooltip">
+      <i class="ion-md-add-circle"></i>
+    </a>
+    <a href="https://desk.zoho.com/portal/permanent/home" target="_blank"  [ngbTooltip]="'nav.help' | prTooltip">
+      <i class="ion-md-help-circle"></i>
+    </a>
+  </div>
   <pr-account-dropdown></pr-account-dropdown>
 </nav>
 <div class="nav-second-row">
