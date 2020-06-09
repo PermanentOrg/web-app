@@ -3,7 +3,7 @@
 $transition-length: $default-transition-length;
 
 $hover-color: lighten($PR-blue, 4%);
-$active-color: lighten($PR-blue, 7%);
+$active-color: lighten($PR-blue, 12%);
 $active-indicator-color: lighten($active-color, 7%);
 
 :host {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy, Input, ViewEncapsulation, Optional } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -60,7 +60,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private router: Router,
     private route: ActivatedRoute,
-    private edit: EditService
+    @Optional() private edit: EditService
   ) {
   }
 
@@ -163,7 +163,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   }
 
   onShareIconClick() {
-    this.edit.openShareDialog(this.dataService.currentFolder);
+    if (this.edit) {
+      this.edit.openShareDialog(this.dataService.currentFolder);
+    }
   }
 
 }
