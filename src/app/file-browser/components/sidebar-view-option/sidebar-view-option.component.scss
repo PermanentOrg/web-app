@@ -9,18 +9,34 @@
 }
 
 .view-preview {
-  width: 100%;
-  padding-top: 50%;
-  background-color: $gray-300;
-  content: ' ';
-  margin-bottom: 0.5rem;
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
 
 .view-actions {
   display: flex;
   margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
 
   .btn {
     margin: 0;
+    flex: 1 1 50%;
+    width: auto;
   }
+
+  .form-check {
+    margin-top: 0;
+    margin-left: 2rem;
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+
+    .form-check-input {
+      margin-top: 0;
+    }
+  }
+
+
 }
