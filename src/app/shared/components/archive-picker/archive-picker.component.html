@@ -25,7 +25,7 @@
     <div *ngIf="dialogData.shareItem">
       <div class="page-subheading">Relationships</div>
       <p *ngIf="!relations">No relationships</p>
-      <p *ngIf="relations && !relations.length">All relationships shared with</p>
+      <p *ngIf="relations && !relations.length">No relationships available to share with</p>
       <div class="relations">
         <pr-archive-small
           (click)="chooseArchive(relation.RelationArchiveVO)"
