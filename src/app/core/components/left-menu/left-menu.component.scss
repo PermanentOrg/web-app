@@ -92,6 +92,10 @@ $active-indicator-color: lighten($active-color, 7%);
     overflow-y: auto;
     flex: 1 1 auto;
   }
+
+  pr-beta-toggle {
+    flex: 0 0 auto;
+  }
 }
 
 
