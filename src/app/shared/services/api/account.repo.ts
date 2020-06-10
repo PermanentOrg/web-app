@@ -29,13 +29,18 @@ export class AccountRepo extends BaseRepo {
       passwordVerify: passwordConfirm
     });
 
-    return this.http.sendRequest<AccountResponse>('/account/post', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AccountResponse);
+    const data = [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }];
+
+    return this.http.sendRequest<AccountResponse>('/account/post', data, AccountResponse);
 
   }
 
   public update(accountVO: AccountVO) {
+    const clone = new AccountVO(accountVO);
+    delete clone.notificationPreferences;
+
     const data = [{
-      AccountVO: accountVO
+      AccountVO: clone
     }];
 
     return this.http.sendRequestPromise<AccountResponse>('/account/update', data, AccountResponse);
