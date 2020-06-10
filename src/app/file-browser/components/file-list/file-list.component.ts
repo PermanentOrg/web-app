@@ -275,12 +275,14 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       this.location.replaceState(this.router.url.split('?')[0]);
       const item = find(this.currentFolder.ChildItemVOs, { folder_linkId });
       this.scrollToItem(item);
-      setTimeout(() => {
-        this.dataService.onSelectEvent({
-          type: 'click',
-          item
+      if (!this.device.isMobileWidth()) {
+        setTimeout(() => {
+          this.dataService.onSelectEvent({
+            type: 'click',
+            item
+          });
         });
-      });
+      }
     }
   }
 
