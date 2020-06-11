@@ -46,9 +46,9 @@ describe('File Management', () => {
       const description = `description${folderName}`;
       helpers.fileList.createFolder(folderName);
       helpers.fileList.clickItem(folderName);
-      cy.get('pr-sidebar').contains('Description').siblings('pr-inline-value-edit').click();
-      cy.focused().type(`{selectall}${description}`);
-      cy.get('.inline-value-controls').contains('Save').click();
+      cy.contains('pr-inline-value-edit', 'Click to add description').click();
+      cy.focused().scrollIntoView().type(`{selectall}${description}`);
+      cy.get('.inline-value-controls').contains('Save').scrollIntoView().click();
       cy.get('pr-sidebar').contains('.inline-value-display', description).should('exist');
       helpers.fileList.deleteItem(folderName, true);
     });

@@ -1,3 +1,4 @@
 {
-  "baseUrl": "https://local.permanent.org:4200"
+  "baseUrl": "https://local.permanent.org:4200",
+  "video": false
 }
