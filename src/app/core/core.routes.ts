@@ -48,7 +48,7 @@ export const routes: RoutesWithData = [
       {
         path: 'public',
         loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule),
-        data: { title: 'Public', showSidebar: true }
+        data: { title: 'Public', showSidebar: true, showFolderViewToggle: true }
       },
       {
         path: 'apps',

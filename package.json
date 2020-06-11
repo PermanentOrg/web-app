@@ -18,7 +18,10 @@
     "lint": "ng lint",
     "e2e_local": "protractor e2e/protractor.conf.js",
     "e2e_dev": "protractor e2e/protractor.dev.conf.js",
-    "e2e_proxy": "ng e2e -c proxy --protractor-config e2e/protractor.local_build.conf.js --host local.permanent.org"
+    "e2e_proxy": "ng e2e -c proxy --protractor-config e2e/protractor.local_build.conf.js --host local.permanent.org",
+    "cypress_dev": "cypress run --config-file cypress.dev.json",
+    "cypress_staging": "cypress run --config-file cypress.staging.json",
+    "cypress_prod": "cypress run --config-file cypress.prod.json"
   },
   "private": true,
   "dependencies": {

@@ -99,16 +99,22 @@ $active-indicator-color: lighten($active-color, 7%);
 }
 
 
-@include after($tablet-horizontal) {
+@include desktop {
   :host {
-    display: block;
+    display: flex;
     flex: 0 0 $left-menu-width;
     position: relative;
+  }
+
+  .menu-wrapper {
+    position: static;
+    visibility: visible;
   }
 
   .hamburger-menu {
     transform: translateX(0);
     visibility: visible;
+    max-width: none;
   
     .menu-header {
       display: none;
