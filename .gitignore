@@ -41,3 +41,6 @@ Thumbs.db
 e2e/jasmine-results.json
 *.xml
 test-reports
+
+cypress/videos
+cypress/screenshots
