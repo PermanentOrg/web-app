@@ -38,7 +38,7 @@ describe('Relationship Sharing', () => {
 
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
-      cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+      cy.get('.breadcrumbs').should('contain', accounts.testAccount.archiveName).and('contain', folderName);
 
       helpers.fileList.itemSelectedInSidebar(folderName);
       const disabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
@@ -71,7 +71,7 @@ describe('Relationship Sharing', () => {
 
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
-      cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+      cy.get('.breadcrumbs').should('contain', accounts.testAccount.archiveName).and('contain', folderName);
 
       helpers.fileList.itemSelectedInSidebar(folderName);
       const disabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
@@ -105,7 +105,7 @@ describe('Relationship Sharing', () => {
 
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
-      cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+      cy.get('.breadcrumbs').should('contain', accounts.testAccount.archiveName).and('contain', folderName);
       
       helpers.fileList.itemSelectedInSidebar(folderName);
       const enabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
@@ -139,7 +139,7 @@ describe('Relationship Sharing', () => {
 
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
-      cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+      cy.get('.breadcrumbs').should('contain', accounts.testAccount.archiveName).and('contain', folderName);
 
       helpers.fileList.itemSelectedInSidebar(folderName);
       const enabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];
@@ -178,7 +178,7 @@ describe('Relationship Sharing', () => {
 
       // check permissions inside folder
       helpers.fileList.doubleClickItem(folderName);
-      cy.get('.breadcrumbs').should('contain', accounts.testAccount.name).and('contain', folderName);
+      cy.get('.breadcrumbs').should('contain', accounts.testAccount.archiveName).and('contain', folderName);
 
       helpers.fileList.itemSelectedInSidebar(folderName);
       const enabledFields = ['Name', 'Description', 'Start date', 'End date', 'Tags', 'Location'];

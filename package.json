@@ -19,9 +19,10 @@
     "e2e_local": "protractor e2e/protractor.conf.js",
     "e2e_dev": "protractor e2e/protractor.dev.conf.js",
     "e2e_proxy": "ng e2e -c proxy --protractor-config e2e/protractor.local_build.conf.js --host local.permanent.org",
-    "cypress_dev": "cypress run --config-file cypress.dev.json",
-    "cypress_staging": "cypress run --config-file cypress.staging.json",
-    "cypress_prod": "cypress run --config-file cypress.prod.json"
+    "cypress": "cypress run --config-file cypress.json --browser chrome --headless",
+    "cypress_dev": "cypress run --config-file cypress.dev.json --browser chrome --headless",
+    "cypress_staging": "cypress run --config-file cypress.staging.json --browser chrome --headless",
+    "cypress_prod": "cypress run --config-file cypress.prod.json --browser chrome --headless"
   },
   "private": true,
   "dependencies": {

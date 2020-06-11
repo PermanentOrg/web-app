@@ -1,6 +1,7 @@
 {
   "testAccount": {
     "name": "Test Account",
+    "archiveName": "Test Archive",
     "email": "tstr@permanent.org",
     "password": "Abc123!!!!"
   },

@@ -45,7 +45,7 @@ describe('Login', () => {
   it('logs out successfully', () => {
     helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
     cy.get('pr-account-dropdown > .btn').click();
-    cy.get('.account-dropdown-menu > :nth-child(2)').click();
+    cy.get('.account-dropdown-menu').contains('Log Out').click();
     cy.url().should('contain', 'login');
   });
 });
