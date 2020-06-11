@@ -15,4 +15,5 @@ export const environment = {
   google: {
     apiKey: 'AIzaSyC6JvFpTpreKFl_1HvWk9pSERh9xbLdTlg'
   },
+  debug: false
 };
