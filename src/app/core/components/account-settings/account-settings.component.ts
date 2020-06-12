@@ -14,7 +14,6 @@ import { MessageService } from '@shared/services/message/message.service';
 })
 export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
-  public preferences: NotificationPreferencesI;
   constructor(
     private accountService: AccountService,
     private dataService: DataService,
@@ -28,23 +27,21 @@ export class AccountSettingsComponent implements OnInit {
     }), true);
 
     this.account = this.accountService.getAccount();
-    this.preferences = cloneDeep(this.account.notificationPreferences);
-    console.log(this.preferences);
   }
 
   ngOnInit(): void {
   }
 
-  async onSaveProfileInfo(prop: keyof AccountVO, value: any) {
+  async onSaveProfileInfo(prop: keyof AccountVO, value: string) {
     const originalValue = this.account[prop];
-    const data: AccountVOData = { ...this.account };
+    const data: AccountVOData = new AccountVO(this.account);
     data[prop] = value;
     delete data.notificationPreferences;
     const updateAccountVo = new AccountVO(data);
     this.account.update(data);
     const response = await this.api.account.update(updateAccountVo);
     if (!response.isSuccessful) {
-      const revertData = { ...this.account };
+      const revertData: AccountVOData = {};
       revertData[prop] = originalValue;
       this.account.update(revertData);
       this.message.showError('There was a problem saving your account changes');
@@ -52,12 +49,4 @@ export class AccountSettingsComponent implements OnInit {
       this.message.showMessage('Account information saved.', 'success');
     }
   }
-
-  async onPreferenceChange(path: string[], value: boolean) {
-    const response = await this.api.account.updateNotificationPreference(path.join('.'), value);
-    if (response.isSuccessful) {
-
-    }
-  }
-
 }

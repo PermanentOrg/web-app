@@ -32,9 +32,9 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
     query(
       ':leave',
       [
-        style({ ...FULLSCREEN, transform: 'translateY(0)' }),
+        style({ transform: 'translateY(0)' }),
         animate(`${slideUpAnimationLength}ms ${TWEAKED}`,
-          style({ ...FULLSCREEN, transform: 'translateY(100vh)' })
+          style({ transform: 'translateY(100vh)' })
         )
       ],
       { optional: true }
@@ -42,9 +42,9 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
     query(
       ':enter',
       [
-        style({ ...FULLSCREEN, transform: 'translateY(100vh)' }),
+        style({ transform: 'translateY(100vh)' }),
         animate(`${slideUpAnimationLength}ms ${TWEAKED}`,
-          style({ ...FULLSCREEN, transform: 'translateY(0)' })
+          style({ transform: 'translateY(0)' })
         )
       ],
       { optional: true }

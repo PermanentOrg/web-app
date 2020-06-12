@@ -123,7 +123,8 @@ export class ProfileEditComponent implements OnInit {
     const privateRoot = this.account.getPrivateRoot();
     try {
       const record = (await this.folderPicker.chooseRecord(privateRoot)) as RecordVO;
-      const updateArchive = new ArchiveVO({...this.archive, thumbArchiveNbr: record.archiveNbr});
+      const updateArchive = new ArchiveVO(this.archive);
+      updateArchive.thumbArchiveNbr = record.archiveNbr;
       const updateResponse = await this.api.archive.update(updateArchive);
       this.archive.update(updateResponse.getArchiveVO());
     } catch (err) {
