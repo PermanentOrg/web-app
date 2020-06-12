@@ -57,6 +57,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   sortDesc = false;
 
   isShareRoot = false;
+  isPublic = false;
 
   isSavingSort = false;
   isSorting = false;
@@ -123,6 +124,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
   setAvailableActions() {
     this.isShareRoot = this.data.currentFolder.type === 'type.folder.root.share';
+    this.isPublic = this.data.currentFolder.type.includes('public');
     this.setAllActions(false);
 
     if (!this.selectedItems.length || !this.edit) {
@@ -154,12 +156,14 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       case AccessRole.Owner:
         if (this.isShareRoot && isSingleItem) {
           return this.setMultipleActions(['unshare', 'copy', 'move', 'download'], true);
-        } else {
-          if (isSingleItem) {
+        } else if (isSingleItem) {
+          if (!this.isPublic) {
             return this.setAllActions(true);
           } else {
-            return this.setMultipleActions(['delete', 'copy', 'move', 'download'], true);
+            this.setMultipleActions(['delete', 'copy', 'move',  'publish', 'download'], true);
           }
+        } else {
+          return this.setMultipleActions(['delete', 'copy', 'move', 'download'], true);
         }
     }
   }

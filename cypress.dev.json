@@ -1,3 +1,4 @@
 {
-  "baseUrl": "https://dev.permanent.org"
+  "baseUrl": "https://dev.permanent.org",
+  "video": false
 }
