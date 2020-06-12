@@ -1,3 +1,4 @@
 {
-  "baseUrl": "https://staging.permanent.org"
+  "baseUrl": "https://staging.permanent.org",
+  "video": false
 }
