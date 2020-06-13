@@ -19,6 +19,7 @@ import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } fro
 import { ActivatedRoute } from '@angular/router';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { copyFromInputElement } from '@shared/utilities/forms';
+import { query } from '@angular/animations';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
@@ -84,19 +85,21 @@ export class SharingComponent implements OnInit {
     const queryParams = this.route.snapshot.queryParams;
 
     if (queryParams.shareArchiveNbr && queryParams.requestToken) {
-      const targetRequest: any = find(this.shareItem.ShareVOs, { requestToken: queryParams.requestToken }) as any;
-      if (!targetRequest) {
-        this.messageService.showError('Share request not found.');
-      } else if (targetRequest.status.includes('ok')) {
-        this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} already approved.`);
-      } else {
-        switch (queryParams.requestAction) {
-          case 'approve':
-            this.approvePendingShareVo(targetRequest);
-            break;
-          case 'deny':
-            this.removeShareVo(targetRequest);
-            break;
+      if (this.shareItem.archiveNbr === queryParams.shareArchiveNbr) {
+        const targetRequest: any = find(this.shareItem.ShareVOs, { requestToken: queryParams.requestToken }) as any;
+        if (!targetRequest) {
+          this.messageService.showError('Share request not found.');
+        } else if (targetRequest.status.includes('ok')) {
+          this.messageService.showMessage(`Share request for ${targetRequest.ArchiveVO.fullName} already approved.`);
+        } else {
+          switch (queryParams.requestAction) {
+            case 'approve':
+              this.approvePendingShareVo(targetRequest);
+              break;
+            case 'deny':
+              this.removeShareVo(targetRequest);
+              break;
+          }
         }
       }
     }

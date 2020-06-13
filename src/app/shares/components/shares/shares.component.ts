@@ -16,6 +16,7 @@ import { FileListItemParent, ItemClickEvent } from '@fileBrowser/components/file
 import { Subscription } from 'rxjs';
 import debug from 'debug';
 import { unsubscribeAll, HasSubscriptions } from '@shared/utilities/hasSubscriptions';
+import { EditService } from '@core/services/edit/edit.service';
 
 @Component({
   selector: 'pr-shares',
@@ -29,6 +30,7 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
   @HostBinding('class.show-sidebar') showSidebar = true;
   sharedByMe: ItemVO;
   sharedWithMe: ItemVO[];
+  allShareItems: ItemVO[] = [];
   shareItems: ItemVO[] = [];
 
   selectedItems: SelectedItemsSet = new Set();
@@ -39,16 +41,21 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
     private route: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
+    private editService: EditService,
     private accountService: AccountService,
     public device: DeviceService,
     @Inject(DOCUMENT) private document: any
   ) {
     const currentArchive = this.accountService.getArchive();
     const shareArchives = this.route.snapshot.data.shares as ArchiveVO[] || [];
-    for (const archive of shareArchives.filter(a => a.archiveId !== currentArchive.archiveId)) {
+    for (const archive of shareArchives) {
       for (const item of archive.ItemVOs) {
         item.ShareArchiveVO = archive;
-        this.shareItems.push(item);
+        if (archive.archiveId !== currentArchive.archiveId) {
+          this.shareItems.push(item);
+        }
+
+        this.allShareItems.push(item);
       }
     }
 
@@ -77,6 +84,14 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
   }
 
   ngOnInit() {
+    const queryParams = this.route.snapshot.queryParams;
+
+    if (queryParams.shareArchiveNbr) {
+      const targetItem = find(this.allShareItems, { archiveNbr: queryParams.shareArchiveNbr });
+      if (targetItem) {
+        this.editService.openShareDialog(targetItem);
+      }
+    }
   }
 
   ngAfterViewInit() {
