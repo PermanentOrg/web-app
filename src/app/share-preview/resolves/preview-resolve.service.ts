@@ -68,7 +68,7 @@ export class PreviewResolveService implements Resolve<any> {
       // if folder and share preview on, just show the folder after setting the dummy path
 
       setDummyPathFromDisplayName(sharePreviewVO.FolderVO);
-      return Promise.resolve(sharePreviewVO.FolderVO);
+      return Promise.resolve(new FolderVO(sharePreviewVO.FolderVO, true));
     } else if (sharePreviewVO.FolderVO) {
       // if folder and share preview off, create the dummy folder with preview images
 

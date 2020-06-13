@@ -8,7 +8,7 @@
     <div class="file-list-item-folder-icon" *ngSwitchCase="true">
       <i class="ion-md-folder"></i>
     </div>
-    <div *ngSwitchCase="false" prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
+    <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
   <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
   <div class="name">
