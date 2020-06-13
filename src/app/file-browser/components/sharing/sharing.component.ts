@@ -19,7 +19,6 @@ import { ACCESS_ROLE_FIELD_INITIAL, ON_OFF_FIELD, NUMBER_FIELD, DATE_FIELD } fro
 import { ActivatedRoute } from '@angular/router';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { copyFromInputElement } from '@shared/utilities/forms';
-import { query } from '@angular/animations';
 
 const ShareActions: {[key: string]: PromptButton} = {
   ChangeAccess: {
