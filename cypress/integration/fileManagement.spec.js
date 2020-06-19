@@ -52,6 +52,26 @@ describe('File Management', () => {
       cy.get('pr-sidebar').contains('.inline-value-display', description).should('exist');
       helpers.fileList.deleteItem(folderName, true);
     });
+
+    it.only('copies a single image', () => {
+      const copyDestName = `Copy Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(copyDestName);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(1);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.fileList.deleteItem(copyDestName);
+    });
   });
 
   context(viewports.mobile.name, () => {

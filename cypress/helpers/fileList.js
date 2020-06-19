@@ -37,6 +37,11 @@ export function doubleClickItem(itemName) {
   cy.contains('.file-list-item', itemName).dblclick();
 }
 
+export function navigateToFolder(folderName) {
+  doubleClickItem(folderName);
+  cy.get('.breadcrumbs').contains(folderName).should('exist');
+}
+
 export function itemExists(itemName) {
   cy.contains('.file-list-item', itemName, {timeout: 10000}).should('exist');
 }
@@ -73,4 +78,12 @@ export function clickItemActionMobile(item, action) {
 export function deleteItemMobile(item) {
   clickItemActionMobile(item, 'Delete');
   cy.contains('.file-list-item', item).should('not.exist');
+}
+
+export function getListItem(itemNumber) {
+  return cy.get('pr-file-list-item').eq(itemNumber - 1);
+}
+
+export function shouldHaveItemCount(itemCount) {
+  cy.get('pr-file-list-item').should('have.length', itemCount);
 }
