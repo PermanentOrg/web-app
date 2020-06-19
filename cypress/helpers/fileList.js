@@ -87,3 +87,13 @@ export function getListItem(itemNumber) {
 export function shouldHaveItemCount(itemCount) {
   cy.get('pr-file-list-item').should('have.length', itemCount);
 }
+
+export function multiSelectNextItems(itemCount) {
+  for (let i = 0; i < itemCount; i++) {
+    cy.get('body').type('{shift}{downarrow}');
+  }
+}
+
+export function shouldHaveCountSelected(itemCount) {
+  cy.get('.file-list-item.selected').should('have.length', itemCount);
+}
