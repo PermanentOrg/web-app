@@ -96,6 +96,51 @@ describe('File Management', () => {
       helpers.navigation.clickBreadcrumbItem(filesFolderName);
       helpers.fileList.deleteItem(copyDestName);
     });
+
+    it('copies a single folder', () => {
+      const newFolderName = `New Folder ${Date.now()}`
+      const copyDestName = `Copy Here ${Date.now()}`;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.createFolder(copyDestName);
+      helpers.fileList.createFolder(newFolderName);
+      helpers.fileList.clickItem(newFolderName);
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(1);
+      helpers.navigation.clickBreadcrumbItem('My Files');
+      helpers.fileList.deleteItem(copyDestName);
+      helpers.fileList.deleteItem(newFolderName);
+    });
+
+    it.only('copies multiple folders', () => {
+      const newFolderName = `New Folder ${Date.now()}`
+      const newFolder2Name = `New Folder 2 ${Date.now()}`
+      const newFolder3Name = `New Folder 3 ${Date.now()}`
+      const copyDestName = `Copy Here ${Date.now()}`;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.createFolder(copyDestName);
+      helpers.fileList.createFolder(newFolderName);
+      helpers.fileList.createFolder(newFolder3Name);
+      helpers.fileList.createFolder(newFolder2Name);
+      helpers.fileList.clickItem(newFolderName);
+      helpers.fileList.clickItem(newFolder2Name, null, '{ctrl}');
+      helpers.fileList.clickItem(newFolder3Name, null, '{ctrl}');
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(3);
+      helpers.navigation.clickBreadcrumbItem('My Files');
+      helpers.fileList.deleteItems([copyDestName, newFolderName, newFolder2Name, newFolder3Name]);
+    });
   });
 
   context(viewports.mobile.name, () => {

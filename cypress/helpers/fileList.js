@@ -22,10 +22,27 @@ export function createFolderMobile(folderName) {
   cy.contains('.file-list-item', folderName, {timeout: 10000}).should('exist');
 }
 
-export function clickItem(itemName, clickOnly) {
-  cy.contains('.file-list-item', itemName).click();
-  if (!clickOnly) {
+export function clickItem(itemName, clickOnly, metaKeys) {
+  if (!metaKeys) {
+    cy.contains('.file-list-item', itemName).click();
+  } else {
+    cy.get('body').type(metaKeys, {release: false}).contains('.file-list-item', itemName).click();
+  }
+
+  if (!clickOnly && !metaKeys) {
     cy.get('pr-sidebar').contains(itemName).should('exist');
+  }
+}
+/**
+ * 
+ * @param {Array<string>} items 
+ */
+export function selectItems(items) {
+  items = [...items];
+  clickItem(items.shift());
+
+  while (items.length) {
+    clickItem(items.shift(), null, '{ctrl}');
   }
 }
 
@@ -53,6 +70,20 @@ export function deleteItem(item, alreadySelected) {
   clickItemAction('Delete');
   cy.get('#confirm').contains('Delete').click();
   cy.get('pr-file-list-item').contains(item).should('not.exist');
+}
+
+/**
+ * 
+ * @param {Array<string>} items 
+ */
+export function deleteItems(items) {
+  selectItems(items);
+  clickItemAction('Delete');
+  cy.get('#confirm').contains('Delete').click();
+  
+  for (const item of items) {
+    cy.get('pr-file-list-item').contains(item).should('not.exist');
+  }
 }
 
 export function clickItemAction(action) {
