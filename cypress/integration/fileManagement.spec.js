@@ -117,7 +117,7 @@ describe('File Management', () => {
       helpers.fileList.deleteItem(newFolderName);
     });
 
-    it.only('copies multiple folders', () => {
+    it('copies multiple folders', () => {
       const newFolderName = `New Folder ${Date.now()}`
       const newFolder2Name = `New Folder 2 ${Date.now()}`
       const newFolder3Name = `New Folder 3 ${Date.now()}`
@@ -140,6 +140,56 @@ describe('File Management', () => {
       helpers.fileList.shouldHaveItemCount(3);
       helpers.navigation.clickBreadcrumbItem('My Files');
       helpers.fileList.deleteItems([copyDestName, newFolderName, newFolder2Name, newFolder3Name]);
+    });
+
+    it.only('moves a single image', () => {
+      const moveDestname = `Move Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(moveDestname);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(moveDestname);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('moved successfully');
+      helpers.fileList.navigateToFolder(moveDestname);
+      helpers.fileList.shouldHaveItemCount(1);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.fileList.shouldHaveItemCount(0);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.fileList.deleteItem(moveDestname);
+    });
+
+    it('moves a single image', () => {
+      const moveDestname = `Move Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(moveDestname);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(moveDestname);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('moved successfully');
+      helpers.fileList.navigateToFolder(moveDestname);
+      helpers.fileList.shouldHaveItemCount(1);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.fileList.shouldHaveItemCount(0);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.fileList.deleteItem(moveDestname);
     });
   });
 
