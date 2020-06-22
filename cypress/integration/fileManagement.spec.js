@@ -1,6 +1,7 @@
 /// <reference types="Cypress" />
 
 import * as helpers from '../helpers/index';
+import { count } from 'console';
 const viewports = require('../fixtures/constants.json').viewports;
 const accounts = require('../fixtures/accounts.json');
 
@@ -51,6 +52,149 @@ describe('File Management', () => {
       cy.get('.inline-value-controls').contains('Save').scrollIntoView().click();
       cy.get('pr-sidebar').contains('.inline-value-display', description).should('exist');
       helpers.fileList.deleteItem(folderName, true);
+    });
+
+    it('copies a single image', () => {
+      const copyDestName = `Copy Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(copyDestName);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(1);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.fileList.deleteItem(copyDestName);
+    });
+
+    it('copies multiple images', () => {
+      const copyDestName = `Copy Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+      const countToCopy = 5;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(copyDestName);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.multiSelectNextItems(countToCopy - 1);
+      helpers.fileList.shouldHaveCountSelected(countToCopy);
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(countToCopy);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.fileList.deleteItem(copyDestName);
+    });
+
+    it('copies a single folder', () => {
+      const newFolderName = `New Folder ${Date.now()}`
+      const copyDestName = `Copy Here ${Date.now()}`;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.createFolder(copyDestName);
+      helpers.fileList.createFolder(newFolderName);
+      helpers.fileList.clickItem(newFolderName);
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(1);
+      helpers.navigation.clickBreadcrumbItem('My Files');
+      helpers.fileList.deleteItem(copyDestName);
+      helpers.fileList.deleteItem(newFolderName);
+    });
+
+    it('copies multiple folders', () => {
+      const newFolderName = `New Folder ${Date.now()}`
+      const newFolder2Name = `New Folder 2 ${Date.now()}`
+      const newFolder3Name = `New Folder 3 ${Date.now()}`
+      const copyDestName = `Copy Here ${Date.now()}`;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.createFolder(copyDestName);
+      helpers.fileList.createFolder(newFolderName);
+      helpers.fileList.createFolder(newFolder3Name);
+      helpers.fileList.createFolder(newFolder2Name);
+      helpers.fileList.clickItem(newFolderName);
+      helpers.fileList.clickItem(newFolder2Name, null, '{ctrl}');
+      helpers.fileList.clickItem(newFolder3Name, null, '{ctrl}');
+      helpers.fileList.clickItemAction('Copy');
+      helpers.folderPicker.clickFolderPickerItem(copyDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('copied successfully');
+      helpers.fileList.navigateToFolder(copyDestName);
+      helpers.fileList.shouldHaveItemCount(3);
+      helpers.navigation.clickBreadcrumbItem('My Files');
+      helpers.fileList.deleteItems([copyDestName, newFolderName, newFolder2Name, newFolder3Name]);
+    });
+
+    it('moves a single image', () => {
+      const moveDestname = `Move Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(moveDestname);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(moveDestname);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('moved successfully');
+      helpers.fileList.navigateToFolder(moveDestname);
+      helpers.fileList.shouldHaveItemCount(1);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.fileList.shouldHaveItemCount(0);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.fileList.deleteItem(moveDestname);
+    });
+
+    it.only('moves multiple images', () => {
+      const moveDestName = `Move Here ${Date.now()}`;
+      const filesFolderName = 'Files For Test';
+      const countToMove = 5;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      cy.url().should('contain', 'myfiles');
+      helpers.fileList.navigateToFolder(filesFolderName);
+      helpers.fileList.createFolder(moveDestName);
+      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.multiSelectNextItems(countToMove - 1);
+      helpers.fileList.shouldHaveCountSelected(countToMove);
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.clickFolderPickerItem(moveDestName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.message.shouldShowMessage('moved successfully');
+      helpers.fileList.navigateToFolder(moveDestName);
+      cy.reload();
+      helpers.fileList.shouldHaveItemCount(countToMove);
+      cy.get('body').type('{ctrl}a');
+      helpers.fileList.clickItemAction('Move');
+      helpers.folderPicker.clickFolderPickerItem(filesFolderName);
+      helpers.folderPicker.confirmPickerOperation();
+      helpers.fileList.shouldHaveItemCount(0);
+      helpers.navigation.clickBreadcrumbItem(filesFolderName);
+      helpers.navigation.breadcrumbsShouldNotContain(moveDestName);
+      helpers.fileList.deleteItem(moveDestName);
     });
   });
 
