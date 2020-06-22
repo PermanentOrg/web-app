@@ -142,7 +142,7 @@ describe('File Management', () => {
       helpers.fileList.deleteItems([copyDestName, newFolderName, newFolder2Name, newFolder3Name]);
     });
 
-    it.only('moves a single image', () => {
+    it('moves a single image', () => {
       const moveDestname = `Move Here ${Date.now()}`;
       const filesFolderName = 'Files For Test';
 
@@ -167,29 +167,34 @@ describe('File Management', () => {
       helpers.fileList.deleteItem(moveDestname);
     });
 
-    it('moves a single image', () => {
-      const moveDestname = `Move Here ${Date.now()}`;
+    it.only('moves multiple images', () => {
+      const moveDestName = `Move Here ${Date.now()}`;
       const filesFolderName = 'Files For Test';
+      const countToMove = 5;
 
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
       helpers.fileList.navigateToFolder(filesFolderName);
-      helpers.fileList.createFolder(moveDestname);
+      helpers.fileList.createFolder(moveDestName);
       cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.multiSelectNextItems(countToMove - 1);
+      helpers.fileList.shouldHaveCountSelected(countToMove);
       helpers.fileList.clickItemAction('Move');
       helpers.folderPicker.clickFolderPickerItem(filesFolderName);
-      helpers.folderPicker.clickFolderPickerItem(moveDestname);
+      helpers.folderPicker.clickFolderPickerItem(moveDestName);
       helpers.folderPicker.confirmPickerOperation();
       helpers.message.shouldShowMessage('moved successfully');
-      helpers.fileList.navigateToFolder(moveDestname);
-      helpers.fileList.shouldHaveItemCount(1);
-      cy.contains('.file-list-item', 'Image').click();
+      helpers.fileList.navigateToFolder(moveDestName);
+      cy.reload();
+      helpers.fileList.shouldHaveItemCount(countToMove);
+      cy.get('body').type('{ctrl}a');
       helpers.fileList.clickItemAction('Move');
       helpers.folderPicker.clickFolderPickerItem(filesFolderName);
       helpers.folderPicker.confirmPickerOperation();
       helpers.fileList.shouldHaveItemCount(0);
       helpers.navigation.clickBreadcrumbItem(filesFolderName);
-      helpers.fileList.deleteItem(moveDestname);
+      helpers.navigation.breadcrumbsShouldNotContain(moveDestName);
+      helpers.fileList.deleteItem(moveDestName);
     });
   });
 
