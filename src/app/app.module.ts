@@ -42,6 +42,7 @@ Sentry.init({
 });
 
 
+
 @Injectable()
 export class CustomUrlSerializer implements UrlSerializer {
   private defaultSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
@@ -108,15 +109,17 @@ export class SentryErrorHandler implements ErrorHandler {
     const extractedError = this.extractError(error) || 'Handled unknown error';
 
     // Capture handled exception and send it to Sentry.
-    const eventId = Sentry.captureException(extractedError);
+    if (environment.environment !== 'local') {
+      const eventId = Sentry.captureException(extractedError);
+      // Optionally show user dialog to provide details on what happened.
+      // Sentry.showReportDialog({ eventId });
+    }
 
     // When in development mode, log the error to console for immediate feedback.
     if (!environment.production) {
       console.error(extractedError);
     }
 
-    // Optionally show user dialog to provide details on what happened.
-    // Sentry.showReportDialog({ eventId });
   }
 }
 
