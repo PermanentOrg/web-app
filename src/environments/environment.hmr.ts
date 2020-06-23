@@ -1,6 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { version as release } from '../../package.json';
 
 export const environment = {
   production: false,
@@ -19,7 +20,9 @@ export const environment = {
   google: {
     apiKey: 'AIzaSyC6JvFpTpreKFl_1HvWk9pSERh9xbLdTlg'
   },
-  debug: false
+  debug: false,
+  release,
+  environment: 'local'
 };
 
 /*

@@ -1,3 +1,5 @@
+import { version as release } from '../../package.json';
+
 export const environment = {
   production: false,
   apiKey: 'wlK?anNl,BW%W#5;FJN11qGn',
@@ -16,5 +18,7 @@ export const environment = {
   google: {
     apiKey: 'AIzaSyC6JvFpTpreKFl_1HvWk9pSERh9xbLdTlg'
   },
-  debug: true
+  debug: true,
+  release,
+  environment: 'local'
 };
