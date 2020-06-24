@@ -109,7 +109,7 @@ export class SentryErrorHandler implements ErrorHandler {
     const extractedError = this.extractError(error) || 'Handled unknown error';
 
     // Capture handled exception and send it to Sentry.
-    if (environment.environment !== 'local') {
+    if (true || environment.environment !== 'local') {
       const eventId = Sentry.captureException(extractedError);
       // Optionally show user dialog to provide details on what happened.
       // Sentry.showReportDialog({ eventId });

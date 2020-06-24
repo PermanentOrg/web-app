@@ -42,7 +42,12 @@
             "local": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": false,
+                "scripts": true,
+                "styles": true,
+                "vendor": false
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -124,7 +129,8 @@
               "sourceMap": {
                 "hidden": true,
                 "scripts": true,
-                "styles": true
+                "styles": true,
+                "vendor": false
               },
               "extractCss": true,
               "namedChunks": false,
@@ -151,7 +157,8 @@
               "sourceMap": {
                 "hidden": true,
                 "scripts": true,
-                "styles": true
+                "styles": true,
+                "vendor": false
               },
               "extractCss": true,
               "namedChunks": false,
@@ -178,7 +185,8 @@
               "sourceMap": {
                 "hidden": true,
                 "scripts": true,
-                "styles": true
+                "styles": true,
+                "vendor": false
               },
               "extractCss": true,
               "namedChunks": false,
@@ -205,7 +213,7 @@
               "sourceMap": {
                 "hidden": true,
                 "scripts": true,
-                "styles": true
+                "styles": false
               },
               "extractCss": true,
               "namedChunks": false,
