@@ -52,7 +52,7 @@ pipelines:
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
             - git tag $version
-            - get push origin --tags
+            - git push origin --tags
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
