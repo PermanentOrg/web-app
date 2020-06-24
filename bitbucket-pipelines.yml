@@ -47,6 +47,7 @@ pipelines:
             - cp -r dist/mdot dist/p
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - sentry-cli releases set-commits mdot@2.8.1 --auto
             - sentry-cli releases files mdot@2.8.1 upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
             - cd ..
