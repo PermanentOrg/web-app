@@ -54,7 +54,7 @@ pipelines:
             - rm -r dist/m dist/share dist/p
             - git config --global user.email "engineering@permanent.org"
             - git config --global user.name "Bitbucket Pipelines"
-            - git tag $version
+            - git tag $VERSION
             - git push origin --tags
             - cd ..
             - mkdir mdot
