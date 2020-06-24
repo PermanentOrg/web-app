@@ -35,6 +35,7 @@ pipelines:
           caches:
             - node
           script:
+            - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
             - git clone git@bitbucket.org:permanent-org/files.git
