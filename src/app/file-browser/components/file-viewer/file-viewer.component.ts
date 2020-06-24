@@ -94,8 +94,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
     this.screenWidth = this.touchElement.clientWidth;
     this.offscreenThreshold = this.screenWidth / 2;
-
-    throw new Error('testing sentry with account and archive data!');
   }
 
   ngOnDestroy() {

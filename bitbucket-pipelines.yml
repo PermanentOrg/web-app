@@ -35,6 +35,7 @@ pipelines:
           caches:
             - node
           script:
+            - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
             - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
@@ -47,9 +48,11 @@ pipelines:
             - cp -r dist/mdot dist/p
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
-            - sentry-cli releases set-commits mdot@2.8.1 --auto
-            - sentry-cli releases files mdot@2.8.1 upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - sentry-cli releases set-commits $VERSION --auto
+            - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
+            - git tag $version
+            - get push origin --tags
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
@@ -102,12 +105,22 @@ pipelines:
           caches:
             - node
           script:
+            - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
             - git clone -b release/staging --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
             - npm run build_staging
+            ## have to make these goofy dupe directories to match paths for sentry
+            - cp -r dist/mdot dist/m
+            - cp -r dist/mdot dist/share
+            - cp -r dist/mdot dist/p
+            - npm install -g @sentry/cli --unsafe-perm
+            - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - sentry-cli releases set-commits $VERSION --auto
+            - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - rm -r dist/m dist/share dist/p
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
@@ -124,12 +137,22 @@ pipelines:
           caches:
             - node
           script:
+            - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
             - git clone -b release/production --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
             - npm run build
+           ## have to make these goofy dupe directories to match paths for sentry
+            - cp -r dist/mdot dist/m
+            - cp -r dist/mdot dist/share
+            - cp -r dist/mdot dist/p
+            - npm install -g @sentry/cli --unsafe-perm
+            - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - sentry-cli releases set-commits $VERSION --auto
+            - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - rm -r dist/m dist/share dist/p
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
