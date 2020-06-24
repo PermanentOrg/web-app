@@ -51,6 +51,8 @@ pipelines:
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
+            - git config --global user.email "engineering@permanent.org"
+            - git config --global user.name "Bitbucket Pipelines"
             - git tag $version
             - git push origin --tags
             - cd ..
