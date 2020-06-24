@@ -42,7 +42,12 @@
             "local": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": false,
+                "scripts": true,
+                "styles": true,
+                "vendor": false
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -121,7 +126,12 @@
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "scripts": true,
+                "styles": true,
+                "vendor": false
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -144,7 +154,12 @@
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "scripts": true,
+                "styles": true,
+                "vendor": false
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -167,7 +182,12 @@
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "scripts": true,
+                "styles": true,
+                "vendor": false
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -190,7 +210,11 @@
               "deployUrl": "/m/",
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "scripts": true,
+                "styles": false
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,

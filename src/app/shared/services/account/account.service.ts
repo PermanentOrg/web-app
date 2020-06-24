@@ -12,6 +12,8 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccessRole } from '@models/access-role.enum';
 import { AccessRoleType, checkMinimumAccess } from '@models/access-role';
 
+import * as Sentry from '@sentry/browser'
+
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
 const ROOT_KEY = 'root';
@@ -66,11 +68,21 @@ export class AccountService {
   public setAccount(newAccount: AccountVO) {
     this.account = newAccount;
     this.storage.local.set(ACCOUNT_KEY, this.account);
+
+    // set account data on Sentry scope
+    Sentry.configureScope(scope => {
+      scope.setUser({id: this.account.accountId, email: this.account.primaryEmail});
+    });
   }
 
   public setArchive(newArchive: ArchiveVO) {
     this.archive = newArchive;
     this.storage.local.set(ARCHIVE_KEY, this.archive);
+
+    // set archive data as 'archive' context on Sentry scope
+    Sentry.configureScope(scope => {
+      scope.setContext('archive', { archiveNbr: newArchive.archiveNbr, archiveId: newArchive.archiveId });
+    });
   }
 
   public setArchives(newArchives: ArchiveVO[] = []) {
@@ -124,6 +136,11 @@ export class AccountService {
     this.clearAccount();
     this.clearArchive();
     this.clearRootFolder();
+
+    Sentry.configureScope(scope => {
+      scope.setUser(null);
+      scope.setContext('archive', null);
+    });
   }
 
   public getPrivateRoot() {

@@ -3,7 +3,10 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "resolveJsonModule": true,
     "sourceMap": true,
+    "sourceRoot": "/",
+    "inlineSources": true,
     "declaration": false,
     "module": "esnext",
     "moduleResolution": "node",
