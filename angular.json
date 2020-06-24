@@ -213,7 +213,7 @@
               "sourceMap": {
                 "hidden": true,
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "extractCss": true,
               "namedChunks": false,
