@@ -35,7 +35,6 @@ pipelines:
           caches:
             - node
           script:
-            - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
             - git clone git@bitbucket.org:permanent-org/files.git
@@ -105,7 +104,6 @@ pipelines:
           caches:
             - node
           script:
-            - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
             - git clone -b release/staging --single-branch git@bitbucket.org:permanent-org/files.git
@@ -123,10 +121,6 @@ pipelines:
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
             - rm dist/mdot/*.map
-            - git config --global user.email "engineering@permanent.org"
-            - git config --global user.name "Bitbucket Pipelines"
-            - git tag $VERSION
-            - git push origin --tags
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
