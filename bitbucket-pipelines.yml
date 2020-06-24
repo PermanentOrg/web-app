@@ -52,6 +52,7 @@ pipelines:
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
+            - rm dist/mdot/*.map
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
@@ -121,6 +122,7 @@ pipelines:
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
+            - rm dist/mdot/*.map
             - git config --global user.email "engineering@permanent.org"
             - git config --global user.name "Bitbucket Pipelines"
             - git tag $VERSION
@@ -153,6 +155,7 @@ pipelines:
             - cp -r dist/mdot dist/m
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
+            - rm dist/mdot/*.map
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
             - sentry-cli releases set-commits $VERSION --auto
