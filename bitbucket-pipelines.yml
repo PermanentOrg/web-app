@@ -41,9 +41,15 @@ pipelines:
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
             - npm run build_dev
+            ## have to make these goofy dupe directories to match paths for sentry
+            - cp -r dist/mdot dist/m
+            - cp -r dist/mdot dist/share
+            - cp -r dist/mdot dist/p
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
-            - sentry-cli releases files mdot@2.8.1 upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/mdot
+            - sentry-cli releases set-commits mdot@2.8.1 --auto
+            - sentry-cli releases files mdot@2.8.1 upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - rm -r dist/m dist/share dist/p
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
