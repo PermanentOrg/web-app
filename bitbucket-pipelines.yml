@@ -41,6 +41,9 @@ pipelines:
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
             - npm run build_dev
+            - npm install -g @sentry/cli --unsafe-perm
+            - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - sentry-cli releases files mdot@2.8.1 upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/mdot
             - cd ..
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
