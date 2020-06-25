@@ -21,3 +21,9 @@ export function createAndShareFolder(folderName, shareArchiveName, accessRole) {
   prompt.clickPromptFieldButton('Share');
   cy.get('pr-sharing').contains('button', 'Done').click();
 }
+
+export function getShareLink(callback) {
+  cy.get('.share-link input[readonly]')
+    .invoke('val')
+    .then(callback);
+}
