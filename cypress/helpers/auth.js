@@ -22,6 +22,12 @@ export function signUp(name, email, password) {
   cy.get('button.btn').click();
 }
 
+export function logOut() {
+  cy.get('pr-account-dropdown > .btn').click();
+  cy.get('.account-dropdown-menu').contains('Log Out').click();
+  cy.url().should('contain', 'login');
+}
+
 export function switchArchive(archiveName) {
   cy.visit('/m/choosearchive');
 }

@@ -22,6 +22,14 @@ export function createFolderMobile(folderName) {
   cy.contains('.file-list-item', folderName, {timeout: 10000}).should('exist');
 }
 
+export function clickFirstItem() {
+  cy.get('.file-list-item').first().click();
+}
+
+export function doubleClickFirstItem() {
+  cy.get('.file-list-item').first().dblclick();
+}
+
 export function clickItem(itemName, clickOnly, metaKeys) {
   if (!metaKeys) {
     cy.contains('.file-list-item', itemName).click();
@@ -86,20 +94,53 @@ export function deleteItems(items) {
   }
 }
 
+/**
+ * 
+ * @typedef {'Copy'|'Move'|'Delete'|'Publish'|'Share'|'Download'|'Get Link'} ActionName
+ */
+
+/**
+ * 
+ * @param {ActionName} action 
+ */
 export function clickItemAction(action) {
   cy.get('.file-list-controls').contains(action).click();
 }
 
+/**
+ * 
+ * @param {ActionName} action 
+ */
 export function checkItemActionEnabled(action) {
   cy.contains('.file-list-control', action).should('not.have.class', 'disabled');
 }
 
+/**
+ * 
+ * @param {ActionName} action 
+ */
 export function checkItemActionDisabled(action) {
   cy.contains('.file-list-control', action).should('have.class', 'disabled');
 }
 
+/**
+ * 
+ * @param {ActionName} action 
+ */
 export function clickItemActionMobile(item, action) {
   cy.contains('.file-list-item', item).within(() => {
+    cy.get('.right-menu-toggler').click();
+  });
+  cy.get('.prompt').should('be.visible');
+  cy.get('.prompt-buttons').contains(action).click();
+}
+
+/**
+ * 
+ * @param {ActionName} action 
+ */
+export function clickFirstItemActionMobile(action) {
+  cy.get('.file-list-item').first().within(() => {
     cy.get('.right-menu-toggler').click();
   });
   cy.get('.prompt').should('be.visible');
@@ -127,4 +168,8 @@ export function multiSelectNextItems(itemCount) {
 
 export function shouldHaveCountSelected(itemCount) {
   cy.get('.file-list-item.selected').should('have.length', itemCount);
+}
+
+export function selectAll() {
+  cy.get('body').type('{ctrl}a');
 }
