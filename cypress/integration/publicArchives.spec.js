@@ -139,13 +139,14 @@ describe('Publish and Public Archives', () => {
     it('should return a public archive in search results', () => {
       // publish and visit the /p/ site on the test archive
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      helpers.fileList.clickItem(filesFolderName);
+      helpers.fileList.clickItem(archives.fileToPublish);
       helpers.fileList.clickItemAction('Publish');
       helpers.modal.clickModalButton('Publish');
-      helpers.modal.clickModalButton('View on web');
+      helpers.modal.clickModalButton('Copy link');
+      cy.visit(`/p/archive/${Cypress.config('testArchiveNbr')}`);
       cy.url().should('contain', '/p/archive');
-      helpers.navigation.breadcrumbsShouldContain(filesFolderName);
       helpers.navigation.breadcrumbsShouldContain('Public');
+      helpers.archive.checkPublicArchiveName(archives.mainArchive);
 
       // search for a given public archive
       cy.get('pr-search-box .search-box-input input').type(archives.publicArchive.toLowerCase());
@@ -155,7 +156,7 @@ describe('Publish and Public Archives', () => {
 
       // clean up the test archive public 
       cy.visit('/m/public');
-      helpers.fileList.deleteItem(filesFolderName);
+      helpers.fileList.deleteItem(archives.fileToPublish);
       helpers.fileList.shouldHaveItemCount(0);
     });
 
@@ -235,12 +236,14 @@ describe('Publish and Public Archives', () => {
     it('should return a public archive in search results', () => {
       // publish and visit the /p/ site on the test archive
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      helpers.fileList.clickItemActionMobile(archives.filesFolderName, 'Publish');
+      helpers.fileList.clickItemActionMobile(archives.fileToPublish, 'Publish');
       helpers.modal.clickModalButton('Publish');
-      helpers.modal.clickModalButton('View on web');
+      helpers.modal.clickModalButton('Copy link');
+      cy.visit(`/p/archive/${Cypress.config('testArchiveNbr')}`);
       cy.url().should('contain', '/p/archive');
-      helpers.navigation.breadcrumbsShouldContain(filesFolderName);
       helpers.navigation.breadcrumbsShouldContain('Public');
+      helpers.archive.checkPublicArchiveName(archives.mainArchive);
+
 
       // search for a given public archive
       cy.get('.search-box-button').click();
@@ -251,7 +254,7 @@ describe('Publish and Public Archives', () => {
 
       // clean up the test archive public 
       cy.visit('/m/public');
-      helpers.fileList.deleteItemMobile(archives.filesFolderName);
+      helpers.fileList.deleteItemMobile(archives.fileToPublish);
       helpers.fileList.shouldHaveItemCount(0);
     });
   })
