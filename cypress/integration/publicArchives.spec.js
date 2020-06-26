@@ -136,6 +136,38 @@ describe('Publish and Public Archives', () => {
       helpers.fileList.shouldHaveItemCount(0);
     });
 
+    it('should return a public archive in search results', () => {
+      // publish and visit the /p/ site on the test archive
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      helpers.fileList.clickItem(filesFolderName);
+      helpers.fileList.clickItemAction('Publish');
+      helpers.modal.clickModalButton('Publish');
+      helpers.modal.clickModalButton('View on web');
+      cy.url().should('contain', '/p/archive');
+      helpers.navigation.breadcrumbsShouldContain(filesFolderName);
+      helpers.navigation.breadcrumbsShouldContain('Public');
+
+      // search for a given public archive
+      cy.get('pr-search-box .search-box-input input').type(archives.publicArchive.toLowerCase());
+      cy.contains('.search-box-results .archive', archives.publicArchive).should('exist');
+      cy.contains('.search-box-results .archive', archives.publicArchive).click();
+      helpers.archive.checkPublicArchiveName(archives.publicArchive);
+
+      // clean up the test archive public 
+      cy.visit('/m/public');
+      helpers.fileList.deleteItem(filesFolderName);
+      helpers.fileList.shouldHaveItemCount(0);
+    });
+
+    it('should not return a private archive in search results', () => {
+      cy.visit(`/p/archive/${Cypress.config('publicArchiveNbr')}`);
+      helpers.archive.checkPublicArchiveName(archives.publicArchive);
+
+      // search for the test archive, which should be private
+      cy.get('pr-search-box .search-box-input input').type(archives.mainArchive.toLowerCase());
+      cy.contains('.search-box-results .archive', archives.mainArchive).should('not.exist');
+    });
+
   });
 
   context(viewports.mobile.name, () => {
@@ -197,6 +229,29 @@ describe('Publish and Public Archives', () => {
       helpers.fileList.deleteItemMobile(archives.filesFolderName);
       helpers.fileList.deleteItemMobile(archives.fileToPublish);
 
+      helpers.fileList.shouldHaveItemCount(0);
+    });
+
+    it('should return a public archive in search results', () => {
+      // publish and visit the /p/ site on the test archive
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      helpers.fileList.clickItemActionMobile(archives.filesFolderName, 'Publish');
+      helpers.modal.clickModalButton('Publish');
+      helpers.modal.clickModalButton('View on web');
+      cy.url().should('contain', '/p/archive');
+      helpers.navigation.breadcrumbsShouldContain(filesFolderName);
+      helpers.navigation.breadcrumbsShouldContain('Public');
+
+      // search for a given public archive
+      cy.get('.search-box-button').click();
+      cy.get('pr-search-box .search-box-input input').type(archives.publicArchive.toLowerCase());
+      cy.contains('.search-box-results .archive', archives.publicArchive).should('exist');
+      cy.contains('.search-box-results .archive', archives.publicArchive).click();
+      helpers.archive.checkPublicArchiveName(archives.publicArchive);
+
+      // clean up the test archive public 
+      cy.visit('/m/public');
+      helpers.fileList.deleteItemMobile(archives.filesFolderName);
       helpers.fileList.shouldHaveItemCount(0);
     });
   })

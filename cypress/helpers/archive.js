@@ -31,3 +31,7 @@ export function checkArchivePublic(archiveNbr) {
   cy.visit(`/p/archive/${archiveNbr}`);
   cy.url().should('not.contain', 'error').and('contain', archiveNbr);
 }
+
+export function checkPublicArchiveName(archiveName) {
+  cy.contains('.public-archive', archiveName).should('exist');
+}

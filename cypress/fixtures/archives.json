@@ -1,6 +1,7 @@
 {
-  "mainArchive": "Test Account",
+  "mainArchive": "Test Archive",
   "shareWithArchive": "Archive To Share With",
+  "publicArchive": "Public Archive",
   "filesFolderName": "Files For Test",
   "fileToShare": "File To Share",
   "folderToShare": "Folder To Share",
