@@ -23,9 +23,10 @@ describe('Publish and Public Archives', () => {
     });
 
     it('should publish a file so it is publically viewable', () => {
+      const filename = archives.fileToPublish;
+
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      helpers.fileList.navigateToFolder(filesFolderName);
-      helpers.fileList.clickFirstItem();
+      helpers.fileList.clickItem(filename);
       helpers.fileList.clickItemAction('Publish');
       helpers.modal.clickModalButton('Publish');
       helpers.modal.clickModalButton('View on web');
@@ -34,9 +35,7 @@ describe('Publish and Public Archives', () => {
 
       // cleanup published record
       cy.visit('/m/public');
-      helpers.fileList.clickFirstItem();
-      helpers.fileList.clickItemAction('Delete');
-      helpers.prompt.clickPromptButton('Delete');
+      helpers.fileList.deleteItem(filename);
       helpers.fileList.shouldHaveItemCount(0);
     });
 
@@ -55,16 +54,15 @@ describe('Publish and Public Archives', () => {
 
       // cleanup published folder
       cy.visit('/m/public');
-      helpers.fileList.clickItem(filesFolderName);
-      helpers.fileList.clickItemAction('Delete');
-      helpers.prompt.clickPromptButton('Delete');
+      helpers.fileList.deleteItem(filesFolderName);
       helpers.fileList.shouldHaveItemCount(0);
     });
 
     it('should load the public root of a public archive', () => {
+      const filename = archives.fileToPublish;
+
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      helpers.fileList.navigateToFolder(filesFolderName);
-      helpers.fileList.clickFirstItem();
+      helpers.fileList.clickItem(filename);
       helpers.fileList.clickItemAction('Publish');
       helpers.modal.clickModalButton('Publish');
       helpers.modal.clickModalButton('Copy link');
@@ -73,23 +71,22 @@ describe('Publish and Public Archives', () => {
 
       // cleanup published record
       cy.visit('/m/public');
-      helpers.fileList.clickFirstItem();
-      helpers.fileList.clickItemAction('Delete');
-      helpers.prompt.clickPromptButton('Delete');
+      helpers.fileList.deleteItem(filename);
       helpers.fileList.shouldHaveItemCount(0);
     });
 
     it('should have the public link for a an existing public file', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      helpers.fileList.navigateToFolder(filesFolderName);
-      helpers.fileList.clickFirstItem();
+      const filename = archives.fileToPublish;
+
+      helpers.fileList.clickItem(filename);
       helpers.fileList.clickItemAction('Publish');
       helpers.modal.clickModalButton('Publish');
       helpers.modal.clickModalButton('Done');
 
       helpers.navigation.clickLeftMenuItem('Public');
       cy.url().should('contain', 'public');
-      helpers.fileList.clickFirstItem();
+      helpers.fileList.clickItem(filename);
       helpers.fileList.clickItemAction('Publish');
       helpers.modal.clickModalButton('View on web');
 
@@ -98,14 +95,12 @@ describe('Publish and Public Archives', () => {
       // cleanup published record
       cy.visit('/m/public');
       cy.url().should('contain', 'public');
-      helpers.fileList.clickFirstItem();
-      helpers.fileList.clickItemAction('Delete');
-      helpers.prompt.clickPromptButton('Delete');
+      helpers.fileList.deleteItem(filename);
       helpers.fileList.shouldHaveItemCount(0);
     });
 
 
-    it.only('should have the proper available actions in Public', () => {
+    it('should have the proper available actions in Public', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       helpers.fileList.clickItem(archives.fileToPublish);
       helpers.fileList.clickItemAction('Publish');
@@ -149,9 +144,11 @@ describe('Publish and Public Archives', () => {
     });
 
     it('should publish a record so it is publically viewable', () => {
+      const filename = archives.fileToPublish;
+
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      helpers.fileList.navigateToFolder(filesFolderName);
-      helpers.fileList.clickFirstItemActionMobile('Publish');
+
+      helpers.fileList.clickItemActionMobile(filename, "Publish");
       helpers.modal.clickModalButton('Publish');
       helpers.modal.clickModalButton('View on web');
       cy.url().should('contain', '/p/archive').and('contain', 'record');
@@ -159,8 +156,47 @@ describe('Publish and Public Archives', () => {
 
       // cleanup published record
       cy.visit('/m/public');
-      helpers.fileList.clickFirstItemActionMobile('Delete');
-      helpers.prompt.clickPromptButton('Delete');
+      helpers.fileList.deleteItemMobile(filename);
+      helpers.fileList.shouldHaveItemCount(0);
+    });
+
+    it('should have the proper available actions in Public', () => {
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      helpers.fileList.clickItemActionMobile(archives.filesFolderName, 'Publish');
+      helpers.modal.clickModalButton('Publish');
+      helpers.modal.clickModalButton('Done');
+
+      helpers.fileList.clickItemActionMobile(archives.fileToPublish, 'Publish');
+      helpers.modal.clickModalButton('Publish');
+      helpers.modal.clickModalButton('Done');
+
+      cy.visit('/m/public');
+
+
+      // check actions for file
+      helpers.fileList.openItemActionsMobile(archives.fileToPublish);
+      helpers.fileList.checkItemActionEnabledMobile('Copy');
+      helpers.fileList.checkItemActionEnabledMobile('Move');
+      helpers.fileList.checkItemActionEnabledMobile('Delete');
+      helpers.fileList.checkItemActionEnabledMobile('Get link');
+      helpers.fileList.checkItemActionDisabledMobile('Share');
+      helpers.fileList.closeItemActionsMobile();
+
+      cy.reload();
+      
+      // check actions for folder
+      helpers.fileList.openItemActionsMobile(archives.filesFolderName);
+      helpers.fileList.checkItemActionEnabledMobile('Copy');
+      helpers.fileList.checkItemActionEnabledMobile('Move');
+      helpers.fileList.checkItemActionEnabledMobile('Delete');
+      helpers.fileList.checkItemActionEnabledMobile('Get link');
+      helpers.fileList.checkItemActionDisabledMobile('Share');
+      helpers.fileList.closeItemActionsMobile();
+
+      // clean up
+      helpers.fileList.deleteItemMobile(archives.filesFolderName);
+      helpers.fileList.deleteItemMobile(archives.fileToPublish);
+
       helpers.fileList.shouldHaveItemCount(0);
     });
   })

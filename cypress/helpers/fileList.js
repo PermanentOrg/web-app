@@ -96,7 +96,7 @@ export function deleteItems(items) {
 
 /**
  * 
- * @typedef {'Copy'|'Move'|'Delete'|'Publish'|'Share'|'Download'|'Get Link'} ActionName
+ * @typedef {'Copy'|'Move'|'Delete'|'Publish'|'Share'|'Download'|'Get link'|'Get Link'} ActionName
  */
 
 /**
@@ -119,12 +119,41 @@ export function checkItemActionEnabled(action) {
  * 
  * @param {ActionName} action 
  */
+export function checkItemActionEnabledMobile(action) {
+  cy.contains('.prompt-buttons button', action).should('exist');
+}
+
+/**
+ * 
+ * @param {ActionName} action 
+ */
 export function checkItemActionDisabled(action) {
   cy.contains('.file-list-control', action).should('have.class', 'disabled');
 }
 
 /**
  * 
+ * @param {ActionName} action 
+ */
+export function checkItemActionDisabledMobile(action) {
+  cy.contains('.prompt-buttons button', action).should('not.exist');
+}
+
+export function openItemActionsMobile(item) {
+  cy.contains('.file-list-item', item).within(() => {
+    cy.get('.right-menu-toggler').click();
+  });
+  cy.get('.prompt').should('be.visible');
+}
+
+export function closeItemActionsMobile() {
+  cy.get('pr-prompt > .menu-wrapper').click('top');
+  cy.get('.prompt').should('not.be.visible');
+}
+
+
+/**
+ * @param {*} item
  * @param {ActionName} action 
  */
 export function clickItemActionMobile(item, action) {
