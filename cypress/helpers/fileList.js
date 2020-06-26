@@ -186,6 +186,7 @@ export function getListItem(itemNumber) {
 }
 
 export function shouldHaveItemCount(itemCount) {
+  cy.get('.file-list-scroll').should('exist');
   cy.get('pr-file-list-item').should('have.length', itemCount);
 }
 

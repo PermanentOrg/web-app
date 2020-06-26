@@ -90,7 +90,7 @@ describe('Sharing by URL', () => {
     });
   });
 
-  context.only(viewports.mobile.name, () => {
+  context(viewports.mobile.name, () => {
     beforeEach(() => {
       cy.viewport(...viewports.mobile.params);
     });

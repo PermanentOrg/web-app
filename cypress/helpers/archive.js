@@ -1,9 +1,21 @@
 import * as prompt from './prompt';
+import { access } from 'fs';
 
 export function switchToArchive(archiveName) {
   cy.get('.hamburger-menu .menu-header-desktop .archive').click();
   cy.get('.archive-list').contains(archiveName).click();
   prompt.clickPromptButton('Switch archive');
+}
+
+export function hasAccessToArchive(archiveName, accessLevel) {
+  if (!accessLevel) {
+    cy.contains('.archive-list pr-archive-small', archiveName).should('exist');
+  } else {
+    cy.contains('.archive-list pr-archive-small', archiveName)
+    .within(() => {
+      cy.contains('.archive-subtitle', `Access: ${accessLevel}`);
+    });
+  }
 }
 
 export function getCurrentArchiveNbr() {
