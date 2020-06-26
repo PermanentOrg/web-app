@@ -26,6 +26,9 @@ describe('Sharing by URL', () => {
         helpers.modal.clickModalButton('Done');
         helpers.auth.logOut();
         cy.visit(shareLink);
+        helpers.sharing.checkShareAccount(accounts.testAccount.name);
+        helpers.sharing.checkShareArchive(archives.mainArchive);
+        helpers.sharing.checkShareTitle(filename);
         helpers.navigation.breadcrumbsShouldContain(filename);
         helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
         helpers.fileList.clickItem(filename);
@@ -46,6 +49,9 @@ describe('Sharing by URL', () => {
         helpers.modal.clickModalButton('Done');
         helpers.auth.logOut();
         cy.visit(shareLink);
+        helpers.sharing.checkShareAccount(accounts.testAccount.name);
+        helpers.sharing.checkShareArchive(archives.mainArchive);
+        helpers.sharing.checkShareTitle(folderName);
         helpers.navigation.breadcrumbsShouldContain(folderName);
         helpers.fileList.shouldHaveItemCount(SHARE_PREVIEW_DISABLED_COUNT);
         helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
@@ -70,6 +76,9 @@ describe('Sharing by URL', () => {
         helpers.modal.clickModalButton('Done');
         helpers.auth.logOut();
         cy.visit(shareLink);
+        helpers.sharing.checkShareAccount(accounts.testAccount.name);
+        helpers.sharing.checkShareArchive(archives.mainArchive);
+        helpers.sharing.checkShareTitle(folderName);
         helpers.navigation.breadcrumbsShouldContain(folderName);
         helpers.fileList.shouldHaveItemCount(1);
         helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
@@ -81,9 +90,30 @@ describe('Sharing by URL', () => {
     });
   });
 
-  context(viewports.mobile.name, () => {
+  context.only(viewports.mobile.name, () => {
     beforeEach(() => {
       cy.viewport(...viewports.mobile.params);
+    });
+
+    it('should create a share link for a file', () => {
+      const filename = archives.fileToShare;
+
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      helpers.fileList.clickItemActionMobile(filename, 'Share');
+      helpers.modal.clickModalButton('Get share link');
+      helpers.sharing.getShareLink((shareLink) => {
+        helpers.modal.clickModalButton('Done');
+        helpers.auth.logOutMobile();
+        cy.visit(shareLink);
+        helpers.sharing.checkShareAccount(accounts.testAccount.name);
+        helpers.sharing.checkShareArchive(archives.mainArchive);
+        helpers.sharing.checkShareTitle(filename);
+        helpers.navigation.breadcrumbsShouldContain(filename);
+        helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+        helpers.fileList.clickItemActionMobile(filename, 'Share');
+        helpers.modal.clickModalButton('Remove link');
+        helpers.prompt.clickPromptButton('Remove link');
+      });
     });
   })
 });

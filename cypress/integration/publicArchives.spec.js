@@ -8,7 +8,7 @@ const archives = require('../fixtures/archives.json');
 const filesFolderName = archives.filesFolderName;
 
 describe('Publish and Public Archives', () => {
-  context.skip(viewports.desktop.name, () => {
+  context(viewports.desktop.name, () => {
     beforeEach(() => {
       cy.viewport(...viewports.desktop.params);
     });
@@ -22,7 +22,7 @@ describe('Publish and Public Archives', () => {
       helpers.archive.checkArchiveNonPublic(Cypress.config('testArchiveNbr'));
     });
 
-    it('should publish a record so it is publically viewable', () => {
+    it('should publish a file so it is publically viewable', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       helpers.fileList.navigateToFolder(filesFolderName);
       helpers.fileList.clickFirstItem();
@@ -99,6 +99,43 @@ describe('Publish and Public Archives', () => {
       cy.visit('/m/public');
       cy.url().should('contain', 'public');
       helpers.fileList.clickFirstItem();
+      helpers.fileList.clickItemAction('Delete');
+      helpers.prompt.clickPromptButton('Delete');
+      helpers.fileList.shouldHaveItemCount(0);
+    });
+
+
+    it.only('should have the proper available actions in Public', () => {
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      helpers.fileList.clickItem(archives.fileToPublish);
+      helpers.fileList.clickItemAction('Publish');
+      helpers.modal.clickModalButton('Publish');
+      helpers.modal.clickModalButton('Done');
+
+      helpers.fileList.clickItem(archives.filesFolderName);
+      helpers.fileList.clickItemAction('Publish');
+      helpers.modal.clickModalButton('Publish');
+      helpers.modal.clickModalButton('Done');
+
+      cy.visit('/m/public');
+      
+      // check tabs for folder
+      helpers.fileList.clickItem(archives.filesFolderName);
+      helpers.fileList.checkSidebarTabDisabled('Sharing');
+      helpers.fileList.checkSidebarTabEnabled('Views');
+
+      // check tabs and actions for file
+      helpers.fileList.clickItem(archives.fileToPublish);
+      // helpers.fileList.checkSidebarTabDisabled('Sharing');
+      helpers.fileList.checkSidebarTabDisabled('Views');
+      helpers.fileList.checkItemActionEnabled('Copy');
+      helpers.fileList.checkItemActionEnabled('Move');
+      helpers.fileList.checkItemActionEnabled('Delete');
+      helpers.fileList.checkItemActionEnabled('Publish');
+      helpers.fileList.checkItemActionDisabled('Share');
+
+      // clean up
+      helpers.fileList.selectAll();
       helpers.fileList.clickItemAction('Delete');
       helpers.prompt.clickPromptButton('Delete');
       helpers.fileList.shouldHaveItemCount(0);

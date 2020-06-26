@@ -27,3 +27,15 @@ export function getShareLink(callback) {
     .invoke('val')
     .then(callback);
 }
+
+export function checkShareTitle(itemName) {
+  cy.contains('.share-preview-archive', itemName).should('exist');
+}
+
+export function checkShareArchive(archiveName) {
+  cy.contains('.share-preview-archive', archiveName).should('exist');
+}
+
+export function checkShareAccount(accountName) {
+  cy.contains('.share-preview-archive', `Shared by ${accountName}`).should('exist');
+}

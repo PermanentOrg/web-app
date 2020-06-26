@@ -173,3 +173,15 @@ export function shouldHaveCountSelected(itemCount) {
 export function selectAll() {
   cy.get('body').type('{ctrl}a');
 }
+
+export function checkSidebarTabEnabled(tabName) {
+  cy.contains('.sidebar-tab', tabName).should('exist').and('not.have.class', 'disabled');
+}
+
+export function checkSidebarTabActive(tabName) {
+  cy.contains('.sidebar-tab.active', tabName).should('exist');
+}
+
+export function checkSidebarTabDisabled(tabName) {
+  cy.contains('.sidebar-tab.disabled', tabName).should('exist');
+}
