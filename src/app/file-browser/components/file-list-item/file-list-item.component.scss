@@ -1,8 +1,8 @@
 @import 'variables';
 
 $row-height: $file-list-row-height;
-$max-grid-width: 200px;
-$max-grid-width-sidebar: 175px;
+$max-grid-width: pxToGrid(200px);
+$max-grid-width-sidebar: pxToGrid(175px);
 $action-button-height: 32px;
 $grid-info-section-margin: 5px;
 $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin;
@@ -177,7 +177,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   display: flex;
   align-items: center;
 
-  $thumb-size: $row-height - 20px;
+  $thumb-size: $row-height - $grid-unit;
 
   .archive-thumb {
     width: $thumb-size;
@@ -216,9 +216,9 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 [prBgImage], .file-list-item-folder-icon {
-  height: $row-height - 10px;
-  width: $row-height - 10px;
-  flex: 0 0 $row-height - 10px;
+  height: $row-height - ($grid-unit / 2);
+  width: $row-height - ($grid-unit / 2);
+  flex: 0 0 $row-height - ($grid-unit / 2);
   margin: 5px 5px;
   .grid-view & {
     flex: 0 0 100%;

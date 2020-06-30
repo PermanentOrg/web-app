@@ -87,8 +87,8 @@ i.ion-md-search {
   }
 }
 
-$result-width: 125px;
-$result-width-desktop: 175px;
+$result-width: pxToGrid(125px);
+$result-width-desktop: pxToGrid(175px);
 $result-gutter: 1rem;
 
 .result-loading {

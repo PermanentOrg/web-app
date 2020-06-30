@@ -21,6 +21,7 @@ pr-file-list, pr-shares {
         height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
         max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
         padding-bottom: $file-list-row-height * 1;
+        padding-right: 2 * $grid-unit;
       }
     }
   }
