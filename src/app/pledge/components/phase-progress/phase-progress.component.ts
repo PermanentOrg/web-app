@@ -118,7 +118,7 @@ export class PhaseProgressComponent implements OnInit {
 
   redrawProgress() {
     if (this.innerBar) {
-      const percentage = this.currentProgress.totalDollarAmount / this.currentProgress.goalDollarAmount;
+      const percentage = Math.min(this.currentProgress.totalDollarAmount / this.currentProgress.goalDollarAmount, 1);
       try {
         this.innerBar.animate(percentage);
       } catch (err) {
