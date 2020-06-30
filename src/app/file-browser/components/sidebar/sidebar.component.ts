@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
         }
 
         this.isRootFolder = this.selectedItem?.type.includes('root');
-        this.isPublicItem = this.selectedItem?.type.includes('public');
+        this.isPublicItem = this.selectedItem?.type.includes('public') || this.selectedItem?.folder_linkType.includes('public');
 
         this.checkPermissions();
 

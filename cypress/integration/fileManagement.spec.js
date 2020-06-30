@@ -4,6 +4,9 @@ import * as helpers from '../helpers/index';
 import { count } from 'console';
 const viewports = require('../fixtures/constants.json').viewports;
 const accounts = require('../fixtures/accounts.json');
+const archives = require('../fixtures/archives.json');
+
+const filesFolderName = archives.filesFolderName;
 
 let itemsCreated = [];
 
@@ -56,7 +59,6 @@ describe('File Management', () => {
 
     it('copies a single image', () => {
       const copyDestName = `Copy Here ${Date.now()}`;
-      const filesFolderName = 'Files For Test';
 
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
@@ -76,7 +78,6 @@ describe('File Management', () => {
 
     it('copies multiple images', () => {
       const copyDestName = `Copy Here ${Date.now()}`;
-      const filesFolderName = 'Files For Test';
       const countToCopy = 5;
 
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
@@ -127,24 +128,23 @@ describe('File Management', () => {
       cy.url().should('contain', 'myfiles');
       helpers.fileList.createFolder(copyDestName);
       helpers.fileList.createFolder(newFolderName);
-      helpers.fileList.createFolder(newFolder3Name);
       helpers.fileList.createFolder(newFolder2Name);
+      helpers.fileList.createFolder(newFolder3Name);
       helpers.fileList.clickItem(newFolderName);
       helpers.fileList.clickItem(newFolder2Name, null, '{ctrl}');
       helpers.fileList.clickItem(newFolder3Name, null, '{ctrl}');
       helpers.fileList.clickItemAction('Copy');
       helpers.folderPicker.clickFolderPickerItem(copyDestName);
       helpers.folderPicker.confirmPickerOperation();
-      helpers.message.shouldShowMessage('copied successfully');
       helpers.fileList.navigateToFolder(copyDestName);
+      cy.reload();
       helpers.fileList.shouldHaveItemCount(3);
-      helpers.navigation.clickBreadcrumbItem('My Files');
+      cy.visit('/m/myfiles');
       helpers.fileList.deleteItems([copyDestName, newFolderName, newFolder2Name, newFolder3Name]);
     });
 
-    it('moves a single image', () => {
+    it.skip('moves a single image', () => {
       const moveDestname = `Move Here ${Date.now()}`;
-      const filesFolderName = 'Files For Test';
 
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
       cy.url().should('contain', 'myfiles');
@@ -167,9 +167,8 @@ describe('File Management', () => {
       helpers.fileList.deleteItem(moveDestname);
     });
 
-    it.only('moves multiple images', () => {
+    it.skip('moves multiple images', () => {
       const moveDestName = `Move Here ${Date.now()}`;
-      const filesFolderName = 'Files For Test';
       const countToMove = 5;
 
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
@@ -187,7 +186,7 @@ describe('File Management', () => {
       helpers.fileList.navigateToFolder(moveDestName);
       cy.reload();
       helpers.fileList.shouldHaveItemCount(countToMove);
-      cy.get('body').type('{ctrl}a');
+      helpers.fileList.selectAll();
       helpers.fileList.clickItemAction('Move');
       helpers.folderPicker.clickFolderPickerItem(filesFolderName);
       helpers.folderPicker.confirmPickerOperation();

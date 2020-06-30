@@ -1,4 +1,6 @@
 {
   "baseUrl": "https://dev.permanent.org",
-  "video": false
+  "testArchiveNbr": "06ih-0000",
+  "video": false,
+  "publicArchiveNbr": "06ir-0000"
 }
