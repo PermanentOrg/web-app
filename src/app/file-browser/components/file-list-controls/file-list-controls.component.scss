@@ -21,6 +21,8 @@
 
   font-size: $font-size-sm;
 
+  padding-right: 2 * $grid-unit;
+
   > * {
     font-weight: 600;
     position: relative;

@@ -28,9 +28,9 @@
   <div class="type" *ngIf="!showAccess && !inGridView">
     {{item.type | prConstants | titlecase }}
   </div>
-  <div class="date" *ngIf="!showAccess && item.dataStatus > 0" @ngIfFadeInAnimation>
-    <div class="date-top">{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
-    <div class="date-bottom">{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
+  <div class="date">
+    <div class="date-top" *ngIf="!showAccess && item.dataStatus > 0" @ngIfFadeInAnimation>{{item.displayDT | prDate: item.TimezoneVO: 'date' }}</div>
+    <div class="date-bottom" *ngIf="!showAccess && item.dataStatus > 0" @ngIfFadeInAnimation>{{item.displayDT | prDate: item.TimezoneVO: 'time' }}</div>
   </div>
   <div class="access" *ngIf="showAccess && !inGridView">
     {{item.accessRole | prConstants | titlecase}}
