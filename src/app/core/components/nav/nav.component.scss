@@ -37,7 +37,7 @@ nav.navbar {
     padding-left: 0;
   }
 
-  @include after($tablet-horizontal) {
+  @include desktop {
     &.nav-mobile {
       display: none;
     }
@@ -102,25 +102,26 @@ nav.navbar {
   }
 }
 
-.nav-desktop {
+nav.nav-desktop {
   pr-global-search-bar {
     flex: 0 1 40rem;
     margin-right: auto;
   }
   pr-account-dropdown {
-    margin-left: 10px;
+    margin-left: $grid-unit;
   }
+
+  padding-right: 2 * $grid-unit;
 }
 
 .nav-buttons {
-  padding: 0px 10px;
-  margin-left: 10px;
+  margin-left: $grid-unit;
   color: white;
   display: flex;
   align-items: center;
 
   > *:not(:first-child) {
-    margin-left: 20px;
+    margin-left: $grid-unit;
   }
 
   i {

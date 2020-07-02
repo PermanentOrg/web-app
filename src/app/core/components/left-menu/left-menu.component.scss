@@ -170,7 +170,7 @@ $active-indicator-color: lighten($active-color, 7%);
     }
 
     .menu-branding {
-      padding-left: 10px;
+      padding-left: $grid-unit;
       height: $navbar-height-desktop;
       display: flex;
       align-items: center;
