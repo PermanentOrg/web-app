@@ -45,7 +45,7 @@ $navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-deskto
 $navbar-button-icon-padding: 0.5rem;
 
 $sidebar-width: pxToGrid(360px);
-$sidebar-tab-height: 30px;
+$sidebar-tab-height: 2 * $grid-unit;
 
 $file-list-border: 1px solid $gray-300;
 $file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
