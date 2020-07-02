@@ -175,7 +175,8 @@ $active-indicator-color: lighten($active-color, 7%);
       display: flex;
       align-items: center;
       img {
-        height: $navbar-height-desktop / 3;
+        height: auto;
+        width: pxToGrid(200px);
       }
       // box-shadow: $box-shadow;
     }
