@@ -1,6 +1,7 @@
 @import 'colors';
 @import 'grid';
 @import 'z-index';
+@import 'typography';
 
 $primary: $PR-blue;
 $alternate: $PR-orange;
@@ -26,18 +27,18 @@ $wordpress-shadow: 0em 0em 0.65em rgba(0,0,0,0.8);
 $metadata-width: 350px;
 
 $public-max-width: 800px;
-$public-banner-height: 100px;
-$public-archive-header-height: 70px;
+$public-banner-height: pxToGrid(100px);
+$public-archive-header-height: pxToGrid(70px);
 
 $breadcrumb-divider: quote(">");
-$breadcrumb-height: 34px;
-$breadcrumb-height-desktop: 60px;
+$breadcrumb-height: pxToGrid(34px);
+$breadcrumb-height-desktop: 6 * $grid-unit;
 $timeline-breadcrumb-height: $breadcrumb-height;
-$timeline-folder-info-height: 50px;
+$timeline-folder-info-height: pxToGrid(50px);
 
 $left-menu-width: pxToGrid(280px);
-$navbar-height: 50px;
-$navbar-height-desktop: 75px;
+$navbar-height: pxToGrid(50px);
+$navbar-height-desktop: pxToGrid(75px);
 $navbar-total-height: $navbar-height + $breadcrumb-height;
 $navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-desktop;
 
@@ -49,7 +50,7 @@ $sidebar-tab-height: 30px;
 $file-list-border: 1px solid $gray-300;
 $file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
 $file-list-row-height: pxToGrid(60px);
-$file-list-controls-height: $sidebar-tab-height;
+$file-list-controls-height: $file-list-row-height;
 $file-list-thumb-col-width: $file-list-row-height;
 $file-list-type-col-width: 8rem;
 $file-list-access-col-width: $file-list-type-col-width;

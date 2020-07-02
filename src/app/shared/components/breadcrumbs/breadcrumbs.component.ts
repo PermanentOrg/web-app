@@ -50,6 +50,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
   public showingShareArchives = false;
 
   @Input() darkText = false;
+  @Input() large = false;
 
   private scrollElement: Element;
   private folderChangeListener: Subscription;
