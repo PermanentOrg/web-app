@@ -83,7 +83,7 @@ nav.navbar {
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
     padding-left: 2 * $grid-unit;
-    padding-right: $grid-unit;
+    // padding-right: $grid-unit;
     // border-bottom: 1px solid $gray-300;
     box-shadow: none;
     .sidebar-align {
@@ -97,6 +97,7 @@ nav.navbar {
     pr-folder-view-toggle {
       display: flex;
       align-items: center;
+      margin-right: 2 * $grid-unit;
     }
   }
 }

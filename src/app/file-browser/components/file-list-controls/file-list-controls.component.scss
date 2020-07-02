@@ -5,6 +5,7 @@
   height: $file-list-controls-height;
   display: flex;
   align-items: center;
+  margin-right: 2 * $grid-unit;
   border-bottom: $file-list-border;
   position: relative;
 
@@ -20,9 +21,7 @@
   align-items: center;
 
   font-size: $font-size-sm;
-
-  padding-right: 2 * $grid-unit;
-
+  
   > * {
     font-weight: 600;
     position: relative;
