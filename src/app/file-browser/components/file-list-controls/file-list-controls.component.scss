@@ -19,8 +19,6 @@
   display: flex;
   align-items: center;
 
-  font-size: $font-size-sm;
-
   > * {
     font-weight: 600;
     position: relative;
@@ -162,12 +160,11 @@
   left: 0;
   right: 0;
   background-color: white;
-  font-size: $font-size-sm;
   padding-left: 5px;
 
   .file-list-control {
     &:not(:last-child) {
-      margin-right: 1.25em;
+      margin-right: $grid-unit;
     }
 
     cursor: pointer;

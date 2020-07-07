@@ -1,0 +1,7 @@
+$grid-unit-px: 20px;
+$grid-unit: 1.25rem;
+$half-unit: $grid-unit / 2;
+
+@function pxToGrid($px) {
+  @return ($px / $grid-unit-px) * $grid-unit;
+}

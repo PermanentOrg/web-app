@@ -52,6 +52,14 @@ pr-breadcrumb {
   pr-breadcrumb, a {
     color: $body-color;
   }
+
+  @include desktop {
+    padding-left: 0px;
+  }
+}
+
+.breadcrumbs-large {
+  font-size: $large-size;
 }
 
 .breadcrumb-shares {

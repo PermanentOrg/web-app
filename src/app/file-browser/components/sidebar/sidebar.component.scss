@@ -14,11 +14,11 @@ $sidebar-thumb-height: 200px;
 
 .sidebar-tabs {
   display: flex;
+  border-top: $sidebar-border;
 
   .sidebar-tab {
     flex: 1 1 auto;
     height: $sidebar-tab-height;
-    font-size: $font-size-sm;
     line-height: $sidebar-tab-height;
     text-align: center;
     border-bottom: $sidebar-border;

@@ -38,9 +38,9 @@ $info-height: $file-list-row-height;
 }
 
 [prBgImage] {
-  height: $info-height - 10px;
-  width: $info-height - 10px;
-  flex: 0 0 $info-height - 10px;
+  height: $info-height - ($grid-unit / 2);
+  width: $info-height - ($grid-unit / 2);
+  flex: 0 0 $info-height - ($grid-unit / 2);
   margin: 5px 0px;
   margin-right: 5px;
 }

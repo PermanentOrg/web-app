@@ -1,7 +1,6 @@
 @import 'variables';
 
 :host {
-  // border-bottom: 1px $gray-500 solid;
   display: block;
   position: fixed;
   top: 0;
@@ -15,8 +14,6 @@
     left: $left-menu-width;
     box-shadow: none;
     position: initial;
-
-    // background-color: $gray-700;
   }
 }
 
@@ -37,7 +34,7 @@ nav.navbar {
     padding-left: 0;
   }
 
-  @include after($tablet-horizontal) {
+  @include desktop {
     &.nav-mobile {
       display: none;
     }
@@ -46,7 +43,6 @@ nav.navbar {
       display: flex;
       flex-wrap: nowrap;
     }
-    // background-color: $PR-blue;
   }
 }
 
@@ -82,7 +78,7 @@ nav.navbar {
 
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
-    border-bottom: 1px solid $gray-300;
+    padding-left: 2 * $grid-unit;
     box-shadow: none;
     .sidebar-align {
       display: flex;
@@ -95,29 +91,31 @@ nav.navbar {
     pr-folder-view-toggle {
       display: flex;
       align-items: center;
+      margin-right: 2 * $grid-unit;
     }
   }
 }
 
-.nav-desktop {
+nav.nav-desktop {
   pr-global-search-bar {
     flex: 0 1 40rem;
     margin-right: auto;
   }
   pr-account-dropdown {
-    margin-left: 10px;
+    margin-left: $grid-unit;
   }
+
+  padding-right: 2 * $grid-unit;
 }
 
 .nav-buttons {
-  padding: 0px 10px;
-  margin-left: 10px;
+  margin-left: $grid-unit;
   color: white;
   display: flex;
   align-items: center;
 
   > *:not(:first-child) {
-    margin-left: 20px;
+    margin-left: $grid-unit;
   }
 
   i {

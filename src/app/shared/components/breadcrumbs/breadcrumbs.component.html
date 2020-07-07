@@ -1,4 +1,5 @@
-<div class="breadcrumbs" [hidden]="areBreadcrumbsHidden() || !currentFolder || !breadcrumbs || !breadcrumbs.length" [class.breadcrumbs-dark-text]="darkText">
+<div class="breadcrumbs" [hidden]="areBreadcrumbsHidden() || !currentFolder || !breadcrumbs || !breadcrumbs.length" [class.breadcrumbs-dark-text]="darkText"
+  [class.breadcrumbs-large]="large">
   <pr-breadcrumb class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last" [breadcrumb]="breadcrumb" [last]="last">
   </pr-breadcrumb>
   <div class="breadcrumb-shares" *ngIf="currentFolder?.ShareVOs?.length">
