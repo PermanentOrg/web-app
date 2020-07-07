@@ -2,6 +2,8 @@
 
 $transition-length: $default-transition-length;
 
+$left-menu-icon-width: 4 * $grid-unit;
+
 $hover-color: lighten($PR-blue, 4%);
 $active-color: lighten($PR-blue, 12%);
 $active-indicator-color: lighten($active-color, 7%);
@@ -24,20 +26,24 @@ $active-indicator-color: lighten($active-color, 7%);
   flex-direction: column;
 
   .menu-item {
-    padding: $input-btn-padding-y * 1.5 10px;
-    font-size: $font-size-base;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    height: 4 * $grid-unit;
+    font-size: $font-size-lg;
     line-height: $btn-line-height;
     cursor: pointer;
     user-select: none;
-    display: block;
+    // display: block;
     color: white;
     font-weight: 700;
 
     transition: background-color $transition-length / 4 ease-in;
 
     i {
-      width: 1rem;
-      display: inline-block;
+      flex: 0 0 $left-menu-icon-width;
+      font-size: $font-size-lg * 1.5;
+      text-align: center;
     }
 
     &:hover {
@@ -195,7 +201,7 @@ $active-indicator-color: lighten($active-color, 7%);
     width: calc(#{$left-menu-width} + var(--safe-area-inset-left)) !important;
 
     .menu-header, .menu-item{
-      padding-left: calc(10px + var(--safe-area-inset-left)) !important;
+      padding-left: calc(var(--safe-area-inset-left)) !important;
     }
   }
 }
