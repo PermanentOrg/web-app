@@ -34,7 +34,6 @@ $active-indicator-color: lighten($active-color, 7%);
     line-height: $btn-line-height;
     cursor: pointer;
     user-select: none;
-    // display: block;
     color: white;
     font-weight: 700;
 
@@ -184,7 +183,6 @@ $active-indicator-color: lighten($active-color, 7%);
         height: auto;
         width: pxToGrid(200px);
       }
-      // box-shadow: $box-shadow;
     }
   }
 

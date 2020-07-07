@@ -16,15 +16,7 @@ p {
 
   .settings-group-title {
     font-weight: $font-weight-bold;
-    // border-bottom: 1px solid $gray-300;
     padding: $grid-unit / 2 0;
-  }
-  
-
-  &:not(:first-of-type) {
-    .settings-group-title {
-      // border-top: 1px solid $gray-300;
-    }
   }
 }
 

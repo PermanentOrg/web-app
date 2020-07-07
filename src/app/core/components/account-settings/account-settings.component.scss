@@ -16,15 +16,7 @@ p {
 
   .settings-group-title {
     font-weight: $font-weight-bold;
-    // border-bottom: 1px solid $gray-300;
     padding: $grid-unit / 2 0;
-  }
-  
-
-  &:not(:first-of-type) {
-    .settings-group-title {
-      // border-top: 1px solid $gray-300;
-    }
   }
 }
 
@@ -38,11 +30,6 @@ p {
   & > label {
     font-weight: 500;
     margin-bottom: 0px;
-  }
-
-  .settings-item-content {
-    // $padding-y: $grid-unit / 2;
-    // padding: $padding-y 0;
   }
 
   @include after($phone) {

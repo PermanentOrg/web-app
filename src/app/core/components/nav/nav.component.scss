@@ -1,7 +1,6 @@
 @import 'variables';
 
 :host {
-  // border-bottom: 1px $gray-500 solid;
   display: block;
   position: fixed;
   top: 0;
@@ -15,8 +14,6 @@
     left: $left-menu-width;
     box-shadow: none;
     position: initial;
-
-    // background-color: $gray-700;
   }
 }
 
@@ -46,7 +43,6 @@ nav.navbar {
       display: flex;
       flex-wrap: nowrap;
     }
-    // background-color: $PR-blue;
   }
 }
 
@@ -83,8 +79,6 @@ nav.navbar {
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
     padding-left: 2 * $grid-unit;
-    // padding-right: $grid-unit;
-    // border-bottom: 1px solid $gray-300;
     box-shadow: none;
     .sidebar-align {
       display: flex;
