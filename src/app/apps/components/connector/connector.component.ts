@@ -75,6 +75,36 @@ export class ConnectorComponent implements OnInit {
     this.connected = this.connector.status === 'status.connector.connected';
   }
 
+  async familysearchUploadRequest() {
+    this.waiting = true;
+    const archive = this.account.getArchive();
+    try {
+      const response = await this.api.connector.familysearchMemorySyncRequest(archive);
+      this.message.showMessage('FamilySearch memory upload started in background. This may take a few moments.', 'success');
+    } catch (err) {
+      if (err instanceof ConnectorResponse) {
+        this.message.showError(err.getMessage());
+      }
+    } finally {
+      this.waiting = false;
+    }
+  }
+
+  async familysearchDownloadRequest() {
+    this.waiting = true;
+    const archive = this.account.getArchive();
+    try {
+      const response = await this.api.connector.familysearchMemorySyncRequest(archive);
+      this.message.showMessage('FamilySearch memory download started in background. This may take a few moments.', 'success');
+    } catch (err) {
+      if (err instanceof ConnectorResponse) {
+        this.message.showError(err.getMessage());
+      }
+    } finally {
+      this.waiting = false;
+    }
+  }
+
   async familysearchSyncRequest() {
     this.waiting = true;
     const archive = this.account.getArchive();

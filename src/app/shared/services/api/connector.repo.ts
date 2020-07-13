@@ -111,21 +111,31 @@ export class ConnectorRepo extends BaseRepo {
     return this.http.sendRequestPromise<ConnectorResponse>('/connector/getFamilysearchMemories', data, ConnectorResponse);
   }
 
-  public familysearchMemoryImportRequest(archive: ArchiveVO | ArchiveVO[], personId: string | string[]): Promise<any> {
+  public familysearchMemoryImportRequest(archive: ArchiveVO | ArchiveVO[], personId?: string | string[]): Promise<any> {
     if (!isArray(archive)) {
       archive = [ archive ];
     }
 
-    if (!isArray(personId)) {
+    if (personId && !isArray(personId)) {
       personId = [ personId ];
     }
 
-    const data = archive.map((vo, i) => {
-      return {
-        ArchiveVO: vo,
-        SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
-      };
-    });
+    let data;
+
+    if (personId) {
+      data = archive.map((vo, i) => {
+        return {
+          ArchiveVO: vo,
+          SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
+        };
+      });
+    } else {
+      data = archive.map((vo, i) => {
+        return {
+          ArchiveVO: vo
+        };
+      });
+    }
 
     return this.http.sendRequestPromise<ConnectorResponse>('/connector/familysearchMemoryImportRequest', data, ConnectorResponse);
   }
@@ -142,6 +152,20 @@ export class ConnectorRepo extends BaseRepo {
     });
 
     return this.http.sendRequestPromise<ConnectorResponse>('/connector/familysearchMemorySyncRequest', data, ConnectorResponse);
+  }
+
+  public familysearchMemoryUploadRequest(archive: ArchiveVO | ArchiveVO[]): Promise<any> {
+    if (!isArray(archive)) {
+      archive = [ archive ];
+    }
+
+    const data = archive.map(vo => {
+      return {
+        ArchiveVO: vo,
+      };
+    });
+
+    return this.http.sendRequestPromise<ConnectorResponse>('/connector/familysearchMemoryUploadRequest', data, ConnectorResponse);
   }
 
   public familysearchFactImportRequest(archive: ArchiveVO | ArchiveVO[], personId: string | string[]): Promise<any> {
