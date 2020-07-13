@@ -5,7 +5,7 @@ $transition-length: $default-transition-length;
 $left-menu-icon-width: 4 * $grid-unit;
 
 $hover-color: lighten($PR-blue, 4%);
-$active-color: lighten($PR-blue, 12%);
+$active-color: $PR-orange;
 $active-indicator-color: lighten($active-color, 7%);
 
 :host {
@@ -63,7 +63,7 @@ $active-indicator-color: lighten($active-color, 7%);
       top: 0;
       bottom: 0;
       right: 0;
-      width: 10px;
+      width: $grid-unit;
       background-color: $active-indicator-color;
       box-shadow: $box-shadow;
       animation-name: slideIn;
