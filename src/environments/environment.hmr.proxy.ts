@@ -5,7 +5,7 @@ export const environment = {
   apiKey: 'wlK?anNl,BW%W#5;FJN11qGn',
   apiUrl: 'https://local.permanent.org:4200/api',
   uploaderUrl: 'wss://local.permanent.org:4200/uploadsvc',
-  hmr: false,
+  hmr: true,
   stripeKey: 'pk_test_kGSsLxH88lyxBUp9Lluji2Rn',
   firebase: {
     apiKey: 'AIzaSyAThS43euMcSjPdDvtB9qM-9-diloP-eHE',

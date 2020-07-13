@@ -247,6 +247,7 @@
             },
             "proxy": {
               "host": "local.permanent.org",
+              "hmr": false,
               "ssl": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
@@ -258,7 +259,7 @@
             "proxy_hmr": {
               "host": "local.permanent.org",
               "ssl": true,
-              "hmr": false,
+              "hmr": true,
               "liveReload": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
