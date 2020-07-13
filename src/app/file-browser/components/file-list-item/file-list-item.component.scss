@@ -114,8 +114,8 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 
   i {
     flex: 0 0 auto;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: $grid-unit / 2;
+    margin-right: $grid-unit / 2;
   }
 
   .second-row {
@@ -219,7 +219,9 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   height: $row-height - ($grid-unit / 2);
   width: $row-height - ($grid-unit / 2);
   flex: 0 0 $row-height - ($grid-unit / 2);
-  margin: 5px 5px;
+  margin: pxToGrid(5px);
+  margin-right: pxToGrid(5px) + $grid-unit;
+
   .grid-view & {
     flex: 0 0 100%;
     width: 100%;

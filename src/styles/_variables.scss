@@ -91,7 +91,7 @@ $slide-up-animation: slideUp;
     flex-grow: 0;
     $ui-width-px: $left-menu-width + $sidebar-width - (4 * $grid-unit);
     $list-items-width-em: $file-list-type-col-width + $file-list-date-col-width;
-    $list-items-width-px: $scrollbar-margin + $file-list-row-height;
+    $list-items-width-px: $scrollbar-margin + $file-list-row-height + $grid-unit;
     flex-basis: calc(100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em});
   }
 }

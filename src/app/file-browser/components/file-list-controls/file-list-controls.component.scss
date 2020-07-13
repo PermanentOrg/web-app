@@ -108,7 +108,7 @@
 
   .name {
     @include file-list-col-name;
-    margin-left: $file-list-thumb-col-width;
+    margin-left: $file-list-thumb-col-width + $grid-unit;
   }
 
   .type {
