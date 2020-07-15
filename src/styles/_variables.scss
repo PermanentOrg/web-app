@@ -50,7 +50,7 @@ $sidebar-tab-height: 2 * $grid-unit;
 $file-list-border: 1px solid $gray-300;
 $file-list-width-desktop: 100vw - #{$left-menu-width + $sidebar-width};
 $file-list-row-height: pxToGrid(60px);
-$file-list-controls-height: $file-list-row-height;
+$file-list-controls-height: $file-list-row-height * 2;
 $file-list-thumb-col-width: $file-list-row-height;
 $file-list-type-col-width: 8rem;
 $file-list-access-col-width: $file-list-type-col-width;

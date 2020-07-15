@@ -1,5 +1,9 @@
 @import 'variables';
 
+:host {
+  display: flex;
+}
+
 button {
   padding-left: 10px;
   padding-right: 10px;

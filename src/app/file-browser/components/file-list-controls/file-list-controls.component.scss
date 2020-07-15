@@ -3,7 +3,6 @@
 :host {
   display: block;
   height: $file-list-controls-height;
-  display: flex;
   align-items: center;
   border-bottom: $file-list-border;
   position: relative;
@@ -18,6 +17,7 @@
   flex: 1 1 100%;
   display: flex;
   align-items: center;
+  height: 3 * $grid-unit;
 
   > * {
     font-weight: 600;
@@ -151,16 +151,31 @@
   }
 }
 
+.top-row {
+  display: flex;
+  height: 3 * $grid-unit;
+  align-items: center;
+
+}
+
+pr-folder-view-toggle {
+  flex: 0 0 auto;
+}
+
 .file-list-controls {
+  flex: 1 1 auto;
+  height: 3 * $grid-unit;
   display: flex;
   align-items: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   background-color: white;
   padding-left: 5px;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+    transition: 125ms $tweaked-ease opacity;
+  }
+
 
   .file-list-control {
     &:not(:last-child) {
