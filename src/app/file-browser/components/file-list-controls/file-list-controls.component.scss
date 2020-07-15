@@ -13,7 +13,6 @@
 }
 
 .file-list-header {
-  $sort-arrow-size: 0.5em;
   flex: 1 1 100%;
   display: flex;
   align-items: center;
@@ -28,15 +27,21 @@
     .col-title {
       cursor: pointer;
       user-select: none;
+      display: flex;
+      align-items: center;
     }
 
     .col-title::after {
-      content: '\25BC';
-      font-size: $sort-arrow-size;
-      padding-left: $sort-arrow-size;
-      position: relative;
-      top: -$sort-arrow-size / 4;
+      @include material-icon;
+      content: 'expand_more';
+      margin-left: $grid-unit / 2;
+      font-size: $font-size-lg;
+      display: inline-flex;
+      align-items: center;
       opacity: 0.5;
+      position: relative;
+      transition: 250ms $tweaked-ease transform;
+      transform: rotate(0deg);
     }
 
     .col-title:hover::after {
@@ -56,7 +61,7 @@
     opacity: 0.5;
     cursor: pointer;
     font-size: 0.85em;
-    padding-left: $sort-arrow-size;
+    padding-left: $grid-unit / 2;
 
     &:hover {
       opacity: 0.8;
@@ -72,7 +77,8 @@
     }
 
     &.sort-desc .col-title::after {
-      content: '\25B2';
+      // content: 'expand_less';
+      transform: rotate(180deg);
     }
   }
 
