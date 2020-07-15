@@ -32,14 +32,16 @@ import { environment } from '@root/environments/environment';
 
 declare var ga: any;
 
-Sentry.init({
-  dsn: 'https://5cb2f4943c954624913c336eb10da4c5@o360597.ingest.sentry.io/5285675"',
-  integrations: [new Sentry.Integrations.TryCatch({
-    XMLHttpRequest: false,
-  })],
-  release: `mdot@${environment.release}`,
-  environment: environment.environment
-});
+if (environment.environment !== 'local') {
+  Sentry.init({
+    dsn: 'https://5cb2f4943c954624913c336eb10da4c5@o360597.ingest.sentry.io/5285675"',
+    integrations: [new Sentry.Integrations.TryCatch({
+      XMLHttpRequest: false,
+    })],
+    release: `mdot@${environment.release}`,
+    environment: environment.environment
+  });
+}
 
 
 
