@@ -54,32 +54,32 @@
 <div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>
   <div class="file-list-control" *ngIf="!isShareRoot" [class.disabled]="!can.delete" (click)="onDeleteClick()"
     [ngbTooltip]="getTooltipConstantForAction('delete') | prTooltip">
-    <i class="ion-md-trash"></i>
+    <i class="material-icons">delete</i>
     <span>Delete</span>
   </div>
   <div class="file-list-control" *ngIf="isShareRoot" [class.disabled]="!can.unshare" (click)="onUnshareClick()"
   [ngbTooltip]="getTooltipConstantForAction('unshare') | prTooltip">
-  <i class="ion-md-trash"></i>
-  <span>Unshare</span>
+    <i class="material-icons">delete</i>
+    <span>Unshare</span>
 </div>
   <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()"
     [ngbTooltip]="getTooltipConstantForAction('copy') | prTooltip">
-    <i class="ion-md-copy"></i>
+    <i class="material-icons">content_copy</i>
     <span>Copy</span>
   </div>
   <div class="file-list-control" [class.disabled]="!can.move" (click)="onMoveClick()"
     [ngbTooltip]="getTooltipConstantForAction('move') | prTooltip">
-    <i class="ion-md-folder"></i>
+    <i class="material-icons">folder</i>
     <span>Move</span>
   </div>
   <div class="file-list-control" [class.disabled]="!can.share" (click)="onShareClick()"
     [ngbTooltip]="getTooltipConstantForAction('share') | prTooltip">
-    <i class="ion-md-share"></i>
+    <i class="material-icons">share</i>
     <span>Share</span>
   </div>
   <div class="file-list-control" [class.disabled]="!can.publish" (click)="onPublishClick()"
     [ngbTooltip]="getTooltipConstantForAction('publish') | prTooltip">
-    <i class="ion-md-globe"></i>
+    <i class="material-icons">public</i>
     <span>Publish</span>
   </div>
   <!-- <div class="file-list-control" [class.disabled]="!can.download">

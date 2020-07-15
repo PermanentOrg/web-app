@@ -10,7 +10,7 @@ import { Subscription, Observable } from 'rxjs';
 import { unsubscribeAll, HasSubscriptions } from '@shared/utilities/hasSubscriptions';
 import { map } from 'rxjs/operators';
 interface FolderViewToggleOption {
-  iconClass: 'ion-md-list' | 'ion-md-grid';
+  iconClass: 'reorder' | 'view_module';
   folderView: FolderView;
   tooltip?: string;
 }
@@ -24,12 +24,12 @@ export class FolderViewToggleComponent implements OnInit, OnDestroy, HasSubscrip
   currentFolderView: FolderView;
   folderViews: FolderViewToggleOption[] = [
     {
-      iconClass: 'ion-md-list',
+      iconClass: 'reorder',
       folderView: FolderView.List,
       tooltip: 'fileList.viewToggle.list'
     },
     {
-      iconClass: 'ion-md-grid',
+      iconClass: 'view_module',
       folderView: FolderView.Grid,
       tooltip: 'fileList.viewToggle.grid'
     },

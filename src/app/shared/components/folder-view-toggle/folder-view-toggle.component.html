@@ -3,6 +3,6 @@
     [class.active]="view.folderView === currentFolderView"
     [ngbTooltip]="view.folderView === currentFolderView ? null : (view.tooltip | prTooltip)"
     (click)="onFolderViewClick(view)">
-    <i [class]="view.iconClass"></i>
+    <i class="material-icons">{{view.iconClass}}</i>
   </button>
 </ng-container>

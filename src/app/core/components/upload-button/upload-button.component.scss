@@ -7,9 +7,12 @@ $padding-x: $navbar-button-icon-padding;
   margin-bottom: 0;
   padding-left: $padding-x;
   padding-right: $padding-x;
+  display: flex;
+  align-items: center;
 
   i {
     margin-right: $padding-x;
+    font-size: $mat-icon-sm;
   }
 
   &.disabled {
@@ -23,6 +26,17 @@ $padding-x: $navbar-button-icon-padding;
 
   label {
     width: 100%;
+  }
+}
+
+@include desktop {
+  .btn {
+    height: 3 * $grid-unit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
   }
 }
 

@@ -56,14 +56,20 @@ nav.navbar {
   .sidebar-align {
     flex: 0 0 $sidebar-width;
     display: none;
-    padding: 0px 10px;
+    padding: 0px;
+    padding-right: $grid-unit;
 
     > * {
       flex: 1 1 50%;
     }
     
     .btn {
-      padding: 7px $navbar-button-icon-padding;
+      height: 3 * $grid-unit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
       
       i {
         margin-right: $navbar-button-icon-padding;
@@ -79,12 +85,13 @@ nav.navbar {
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
     padding-left: 2 * $grid-unit;
+    padding-top: $grid-unit;
     box-shadow: none;
     .sidebar-align {
       display: flex;
       justify-content: center;
       > *:not(:last-child) {
-        margin-right: 10px;
+        margin-right: $grid-unit;
       }
     }
 

@@ -170,10 +170,14 @@
     cursor: pointer;
     user-select: none;
 
+    display: flex;
+    align-items: center;
+
     i {
       opacity: 0.7;
       margin-right: 0.25em;
       transition: opacity 0.125s $tweaked-ease;
+      font-size: $mat-icon-sm;
     }
 
     &.disabled {
