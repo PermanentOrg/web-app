@@ -16,7 +16,7 @@ $menu-transition-length-desktop: 0.5s;
 
   .menu {
     position: absolute;
-    transition:  transform $menu-transition-length $menu-close-ease, opacity $menu-transition-length $menu-close-ease;
+    transition: transform $menu-transition-length $menu-close-ease, opacity $menu-transition-length $menu-close-ease;
     background-color: white;
   }
 

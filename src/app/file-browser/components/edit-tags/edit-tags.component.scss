@@ -2,6 +2,8 @@
 
 :host {
   display: block;
+  flex: 1;
+  max-width: 100%;
 
   &.is-waiting {
     opacity: 0.5;
