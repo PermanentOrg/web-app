@@ -20,6 +20,8 @@ pr-file-list, pr-shares {
         overflow-y: auto;
         height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
         max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+        margin-right: -$grid-unit;
+        padding-right: $grid-unit;
         padding-bottom: $file-list-row-height * 1;
       }
     }

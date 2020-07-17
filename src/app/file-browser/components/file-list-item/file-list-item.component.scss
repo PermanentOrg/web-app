@@ -220,7 +220,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   width: $row-height - ($grid-unit / 2);
   flex: 0 0 $row-height - ($grid-unit / 2);
   margin: pxToGrid(5px);
-  margin-right: pxToGrid(5px) + $grid-unit;
 
   .grid-view & {
     flex: 0 0 100%;
@@ -238,11 +237,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   color: #F7C985;
 
   i {
-    @if $file-list-row-height < 3 * $grid-unit {
-      font-size: $mat-icon-lg;
-    } @else {
-      font-size: $mat-icon * 2;
-    }
+    font-size: $file-list-row-height - ($grid-unit / 4);
   }
 
   .grid-view & {
@@ -266,6 +261,11 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   .grid-view .name {
     right: 5px;
   }
+
+  [prBgImage], .file-list-item-folder-icon {
+    margin-right: pxToGrid(5px);
+  }
+
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {
