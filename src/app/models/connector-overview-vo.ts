@@ -11,4 +11,6 @@ export class ConnectorOverviewVO extends BaseVO {
   public errorCount;
   public type;
   public status;
+
+  public ConnectorFamilysearchVO;
 }

@@ -19,10 +19,10 @@
   <button class="btn btn-primary" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting"
     *ngIf="connector.type.includes('facebook')">Import Photos</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="startFamilysearchTreeImport()" [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')">Import Family Tree</button>
-  <button class="btn btn-primary" [hidden]="!connected" (click)="familysearchUploadRequest()" [disabled]="waiting"
+    *ngIf="connector.type.includes('familysearch')">Import family tree</button>
+  <button class="btn btn-primary" [hidden]="!(connected && connector.ConnectorFamilysearchVO)" (click)="familysearchUploadRequest()" [disabled]="waiting"
     *ngIf="connector.type.includes('familysearch')">Upload to FamilySearch</button>
-  <button class="btn btn-primary" [hidden]="!connected" (click)="familysearchDownloadRequest()" [disabled]="waiting"
+  <button class="btn btn-primary" [hidden]="!(connected && connector.ConnectorFamilysearchVO)" (click)="familysearchDownloadRequest()" [disabled]="waiting"
     *ngIf="connector.type.includes('familysearch')">Download from FamilySearch</button>
   <button class="btn btn-primary" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
   <button class="btn btn-primary" [hidden]="" (click)="showHelp = !showHelp" [disabled]="waiting">{{ showHelp ? 'Hide Help' : 'Help' }}</button>

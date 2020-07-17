@@ -79,7 +79,7 @@ export class ConnectorComponent implements OnInit {
     this.waiting = true;
     const archive = this.account.getArchive();
     try {
-      const response = await this.api.connector.familysearchMemorySyncRequest(archive);
+      const response = await this.api.connector.familysearchMemoryUploadRequest(archive);
       this.message.showMessage('FamilySearch memory upload started in background. This may take a few moments.', 'success');
     } catch (err) {
       if (err instanceof ConnectorResponse) {
@@ -94,7 +94,7 @@ export class ConnectorComponent implements OnInit {
     this.waiting = true;
     const archive = this.account.getArchive();
     try {
-      const response = await this.api.connector.familysearchMemorySyncRequest(archive);
+      const response = await this.api.connector.familysearchMemoryImportRequest(archive);
       this.message.showMessage('FamilySearch memory download started in background. This may take a few moments.', 'success');
     } catch (err) {
       if (err instanceof ConnectorResponse) {
