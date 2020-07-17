@@ -263,7 +263,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   }
 
   [prBgImage], .file-list-item-folder-icon {
-    margin-right: pxToGrid(5px);
+    margin-right: pxToGrid(5px) + $grid-unit;
   }
 
 }
