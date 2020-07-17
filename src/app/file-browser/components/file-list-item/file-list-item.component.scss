@@ -236,7 +236,14 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   align-items: center;
   justify-content: center;
   color: #F7C985;
-  font-size: 2.6rem;
+
+  i {
+    @if $file-list-row-height < 3 * $grid-unit {
+      font-size: $mat-icon-lg;
+    } @else {
+      font-size: $mat-icon * 2;
+    }
+  }
 
   .grid-view & {
     position: relative;

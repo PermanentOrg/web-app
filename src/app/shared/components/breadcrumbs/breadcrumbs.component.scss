@@ -60,7 +60,7 @@ pr-breadcrumb {
 
 .breadcrumbs-large {
   @include desktop {
-    font-size: $xl-size;
+    font-size: $large-size;
     height: 2 * $grid-unit;
   }
 }

@@ -64,11 +64,10 @@ nav.navbar {
     }
     
     .btn {
-      height: 3 * $grid-unit;
+      height: 2 * $grid-unit;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: $font-size-lg;
       font-weight: $font-weight-bold;
       
       i {
@@ -84,8 +83,7 @@ nav.navbar {
 
   @include after($tablet-horizontal) {
     min-height: $breadcrumb-height-desktop;
-    padding-left: 2 * $grid-unit;
-    padding-top: $grid-unit;
+    padding-left: 1 * $grid-unit;
     box-shadow: none;
     .sidebar-align {
       display: flex;
@@ -98,7 +96,7 @@ nav.navbar {
     pr-folder-view-toggle {
       display: flex;
       align-items: center;
-      margin-right: 2 * $grid-unit;
+      margin-right: 1 * $grid-unit;
     }
   }
 }

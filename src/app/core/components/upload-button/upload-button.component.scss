@@ -31,11 +31,10 @@ $padding-x: $navbar-button-icon-padding;
 
 @include desktop {
   .btn {
-    height: 3 * $grid-unit;
+    height: 2 * $grid-unit;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
   }
 }

@@ -6,7 +6,7 @@
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"> 
   <ng-container [ngSwitch]="item.isFolder">
     <div class="file-list-item-folder-icon" *ngSwitchCase="true">
-      <i class="ion-md-folder"></i>
+      <i class="material-icons">folder</i>
     </div>
     <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
