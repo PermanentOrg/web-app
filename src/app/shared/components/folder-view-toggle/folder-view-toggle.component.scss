@@ -1,10 +1,15 @@
 @import 'variables';
 
+:host {
+  display: flex;
+}
+
 button {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: $grid-unit / 2;
+  padding-right: $grid-unit / 2;
   background: none;
-  font-size: $font-size-lg;
+  display: flex;
+  align-items: center;
   
   i {
     opacity: 0.5;

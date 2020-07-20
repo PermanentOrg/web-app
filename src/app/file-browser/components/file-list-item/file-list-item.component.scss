@@ -114,8 +114,8 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 
   i {
     flex: 0 0 auto;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: $grid-unit / 2;
+    margin-right: $grid-unit / 2;
   }
 
   .second-row {
@@ -219,7 +219,8 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   height: $row-height - ($grid-unit / 2);
   width: $row-height - ($grid-unit / 2);
   flex: 0 0 $row-height - ($grid-unit / 2);
-  margin: 5px 5px;
+  margin: pxToGrid(5px);
+
   .grid-view & {
     flex: 0 0 100%;
     width: 100%;
@@ -234,7 +235,10 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   align-items: center;
   justify-content: center;
   color: #F7C985;
-  font-size: 2.6rem;
+
+  i {
+    font-size: $file-list-row-height - ($grid-unit / 4);
+  }
 
   .grid-view & {
     position: relative;
@@ -257,6 +261,11 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   .grid-view .name {
     right: 5px;
   }
+
+  [prBgImage], .file-list-item-folder-icon {
+    margin-right: pxToGrid(5px) + $grid-unit;
+  }
+
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {

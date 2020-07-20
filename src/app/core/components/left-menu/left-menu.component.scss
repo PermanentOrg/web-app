@@ -2,10 +2,10 @@
 
 $transition-length: $default-transition-length;
 
-$left-menu-icon-width: 4 * $grid-unit;
+$left-menu-icon-width: 3 * $grid-unit;
 
 $hover-color: lighten($PR-blue, 4%);
-$active-color: lighten($PR-blue, 12%);
+$active-color: $PR-orange;
 $active-indicator-color: lighten($active-color, 7%);
 
 :host {
@@ -29,8 +29,8 @@ $active-indicator-color: lighten($active-color, 7%);
     padding: 0px;
     display: flex;
     align-items: center;
-    height: 4 * $grid-unit;
-    font-size: $font-size-lg;
+    height: 3 * $grid-unit;
+    font-size: $base-size;
     line-height: $btn-line-height;
     cursor: pointer;
     user-select: none;
@@ -41,7 +41,7 @@ $active-indicator-color: lighten($active-color, 7%);
 
     i {
       flex: 0 0 $left-menu-icon-width;
-      font-size: $font-size-lg * 1.5;
+      font-size: $mat-icon;
       text-align: center;
     }
 
@@ -55,20 +55,6 @@ $active-indicator-color: lighten($active-color, 7%);
       background-color: $active-color;
       transition: none;
       position: relative;
-    }
-
-    &.active:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      width: 10px;
-      background-color: $active-indicator-color;
-      box-shadow: $box-shadow;
-      animation-name: slideIn;
-      animation-duration: 0.25s;
-      animation-timing-function: $tweaked-ease;
     }
 
     &.drop-target, &.drop-target:hover {
@@ -181,7 +167,7 @@ $active-indicator-color: lighten($active-color, 7%);
       align-items: center;
       img {
         height: auto;
-        width: pxToGrid(200px);
+        width: pxToGrid(160px);
       }
     }
   }

@@ -55,16 +55,14 @@ $sidebar-thumb-height: 200px;
 }
 
 .sidebar-item {
-  padding: 5px 10px;
+  padding: $grid-unit / 2 $grid-unit;
   label {
     font-weight: 600;
-    margin-bottom: 0px;
+    margin-bottom: $grid-unit / 2;
   }
 
   .sidebar-item-content {
-    $padding-y: 0.25rem;
-    padding: $padding-y 0;
-    min-height: $line-height-base * 1rem + (2 * $padding-y);
+    min-height: $line-height-base * 1rem;
 
     &.can-edit {
       cursor: pointer;

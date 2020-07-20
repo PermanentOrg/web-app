@@ -1,3 +1,42 @@
+<div class="top-row">
+  <div class="file-list-controls" [class.visible]="this.selectedItems.length">
+    <div class="file-list-control" *ngIf="!isShareRoot" [class.disabled]="!can.delete" (click)="onDeleteClick()"
+      [ngbTooltip]="getTooltipConstantForAction('delete') | prTooltip">
+      <i class="material-icons">delete</i>
+      <span>Delete</span>
+    </div>
+    <div class="file-list-control" *ngIf="isShareRoot" [class.disabled]="!can.unshare" (click)="onUnshareClick()"
+    [ngbTooltip]="getTooltipConstantForAction('unshare') | prTooltip">
+      <i class="material-icons">delete</i>
+      <span>Unshare</span>
+  </div>
+    <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()"
+      [ngbTooltip]="getTooltipConstantForAction('copy') | prTooltip">
+      <i class="material-icons">content_copy</i>
+      <span>Copy</span>
+    </div>
+    <div class="file-list-control" [class.disabled]="!can.move" (click)="onMoveClick()"
+      [ngbTooltip]="getTooltipConstantForAction('move') | prTooltip">
+      <i class="material-icons">folder</i>
+      <span>Move</span>
+    </div>
+    <div class="file-list-control" [class.disabled]="!can.share" (click)="onShareClick()"
+      [ngbTooltip]="getTooltipConstantForAction('share') | prTooltip">
+      <i class="material-icons">share</i>
+      <span>Share</span>
+    </div>
+    <div class="file-list-control" [class.disabled]="!can.publish" (click)="onPublishClick()"
+      [ngbTooltip]="getTooltipConstantForAction('publish') | prTooltip">
+      <i class="material-icons">public</i>
+      <span>Publish</span>
+    </div>
+    <!-- <div class="file-list-control" [class.disabled]="!can.download">
+      <i class="ion-md-cloud-download"></i>
+      <span>Download</span>
+    </div> -->
+  </div>
+  <pr-folder-view-toggle></pr-folder-view-toggle>
+</div>
 <div class="file-list-header"
   [ngClass]="{'is-sort-changed': isSortChanged(), 'is-sorting': isSorting, 'is-saving-sort': isSavingSort, 'hide-sort': !allowSort}">
   <ng-container [ngSwitch]="currentFolderView">
@@ -49,41 +88,4 @@
       <span class="save-sort" (click)="saveSort()" *ngIf="canSaveSort">Save</span>
     </ng-container>
   </ng-container>
-
-</div>
-<div class="file-list-controls" *ngIf="this.selectedItems.length" [@ngIfFadeInAnimation]>
-  <div class="file-list-control" *ngIf="!isShareRoot" [class.disabled]="!can.delete" (click)="onDeleteClick()"
-    [ngbTooltip]="getTooltipConstantForAction('delete') | prTooltip">
-    <i class="ion-md-trash"></i>
-    <span>Delete</span>
-  </div>
-  <div class="file-list-control" *ngIf="isShareRoot" [class.disabled]="!can.unshare" (click)="onUnshareClick()"
-  [ngbTooltip]="getTooltipConstantForAction('unshare') | prTooltip">
-  <i class="ion-md-trash"></i>
-  <span>Unshare</span>
-</div>
-  <div class="file-list-control" [class.disabled]="!can.copy" (click)="onCopyClick()"
-    [ngbTooltip]="getTooltipConstantForAction('copy') | prTooltip">
-    <i class="ion-md-copy"></i>
-    <span>Copy</span>
-  </div>
-  <div class="file-list-control" [class.disabled]="!can.move" (click)="onMoveClick()"
-    [ngbTooltip]="getTooltipConstantForAction('move') | prTooltip">
-    <i class="ion-md-folder"></i>
-    <span>Move</span>
-  </div>
-  <div class="file-list-control" [class.disabled]="!can.share" (click)="onShareClick()"
-    [ngbTooltip]="getTooltipConstantForAction('share') | prTooltip">
-    <i class="ion-md-share"></i>
-    <span>Share</span>
-  </div>
-  <div class="file-list-control" [class.disabled]="!can.publish" (click)="onPublishClick()"
-    [ngbTooltip]="getTooltipConstantForAction('publish') | prTooltip">
-    <i class="ion-md-globe"></i>
-    <span>Publish</span>
-  </div>
-  <!-- <div class="file-list-control" [class.disabled]="!can.download">
-    <i class="ion-md-cloud-download"></i>
-    <span>Download</span>
-  </div> -->
 </div>

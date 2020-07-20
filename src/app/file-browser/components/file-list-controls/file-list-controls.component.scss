@@ -3,7 +3,6 @@
 :host {
   display: block;
   height: $file-list-controls-height;
-  display: flex;
   align-items: center;
   border-bottom: $file-list-border;
   position: relative;
@@ -14,10 +13,10 @@
 }
 
 .file-list-header {
-  $sort-arrow-size: 0.5em;
   flex: 1 1 100%;
   display: flex;
   align-items: center;
+  height: $file-list-controls-height / 2;
 
   > * {
     font-weight: 600;
@@ -28,15 +27,21 @@
     .col-title {
       cursor: pointer;
       user-select: none;
+      display: flex;
+      align-items: center;
     }
 
     .col-title::after {
-      content: '\25BC';
-      font-size: $sort-arrow-size;
-      padding-left: $sort-arrow-size;
-      position: relative;
-      top: -$sort-arrow-size / 4;
+      @include material-icon;
+      content: 'expand_more';
+      margin-left: $grid-unit / 2;
+      font-size: $font-size-lg;
+      display: inline-flex;
+      align-items: center;
       opacity: 0.5;
+      position: relative;
+      transition: 250ms $tweaked-ease transform;
+      transform: rotate(0deg);
     }
 
     .col-title:hover::after {
@@ -56,7 +61,7 @@
     opacity: 0.5;
     cursor: pointer;
     font-size: 0.85em;
-    padding-left: $sort-arrow-size;
+    padding-left: $grid-unit / 2;
 
     &:hover {
       opacity: 0.8;
@@ -72,7 +77,8 @@
     }
 
     &.sort-desc .col-title::after {
-      content: '\25B2';
+      // content: 'expand_less';
+      transform: rotate(180deg);
     }
   }
 
@@ -108,7 +114,7 @@
 
   .name {
     @include file-list-col-name;
-    margin-left: $file-list-thumb-col-width;
+    margin-left: $file-list-thumb-col-width + $grid-unit;
   }
 
   .type {
@@ -151,16 +157,30 @@
   }
 }
 
+.top-row {
+  display: flex;
+  height: $file-list-controls-height / 2;
+  align-items: center;
+
+}
+
+pr-folder-view-toggle {
+  flex: 0 0 auto;
+}
+
 .file-list-controls {
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   background-color: white;
   padding-left: 5px;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+    transition: 125ms $tweaked-ease opacity;
+  }
+
 
   .file-list-control {
     &:not(:last-child) {
@@ -170,10 +190,14 @@
     cursor: pointer;
     user-select: none;
 
+    display: flex;
+    align-items: center;
+
     i {
       opacity: 0.7;
       margin-right: 0.25em;
       transition: opacity 0.125s $tweaked-ease;
+      font-size: $mat-icon-sm;
     }
 
     &.disabled {

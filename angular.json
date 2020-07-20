@@ -61,10 +61,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.serve.html"
                 }
               ],
               "deployUrl": "/",
@@ -75,10 +71,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.proxy.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.serve.html"
                 }
               ],
               "deployUrl": "/",
@@ -89,10 +81,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.proxy.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.serve.html"
                 }
               ],
               "deployUrl": "/",
@@ -103,10 +91,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.proxy_prod.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.serve.html"
                 }
               ],
               "deployUrl": "/"
@@ -116,10 +100,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.dev.html"
                 }
               ],
               "index": "src/index/dev/index.html",
@@ -144,10 +124,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.prod.html"
                 }
               ],
               "index": "src/index/prod/index.html",
@@ -172,10 +148,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.testots.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.dev.html"
                 }
               ],
               "index": "src/index/staging/index.html",
@@ -200,10 +172,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.staging.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.dev.html"
                 }
               ],
               "index": "src/index/staging/index.html",
@@ -247,6 +215,7 @@
             },
             "proxy": {
               "host": "local.permanent.org",
+              "hmr": false,
               "ssl": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",
@@ -258,7 +227,7 @@
             "proxy_hmr": {
               "host": "local.permanent.org",
               "ssl": true,
-              "hmr": false,
+              "hmr": true,
               "liveReload": true,
               "sslCert": "../operations/vagrant/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "../operations/vagrant/etc/ssl/permanent.key",

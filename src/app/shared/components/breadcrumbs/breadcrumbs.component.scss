@@ -59,7 +59,10 @@ pr-breadcrumb {
 }
 
 .breadcrumbs-large {
-  font-size: $large-size;
+  @include desktop {
+    font-size: $large-size;
+    height: 2 * $grid-unit;
+  }
 }
 
 .breadcrumb-shares {

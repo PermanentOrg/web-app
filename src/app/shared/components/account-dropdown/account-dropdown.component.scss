@@ -13,6 +13,17 @@ button {
   z-index: 2;
   outline: none !important;
   box-shadow: none !important;
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
+  border-radius: $grid-unit;
+  font-size: $font-size-base;
+  text-transform: none;
+  letter-spacing: normal;
+
+  i {
+    margin-left: $grid-unit / 4;
+  }
 
   &.active {
     background-color: white;
