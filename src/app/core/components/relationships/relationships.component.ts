@@ -65,8 +65,8 @@ export class RelationshipsComponent implements OnDestroy {
     private dialog: Dialog
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
-      displayName: 'Relationships',
-      pathAsText: ['Relationships'],
+      displayName: 'Connected Archives',
+      pathAsText: ['Connected Archives'],
       type: 'page'
     }), true);
     this.route.snapshot.data.relations.map((relation: RelationVO) => {

@@ -4,7 +4,7 @@
   Adding a relationship does not give another user any permission to access or edit this archive.
 </p> -->
 <p>
-  <button class="btn btn-primary" (click)="addRelation()">Add relationship</button>
+  <button class="btn btn-primary" (click)="addRelation()">Connect an Archive</button>
 </p>
 <p *ngIf="!relations || !relations.length">No relationships</p>
 <div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
@@ -45,3 +45,4 @@
   (editClick)="editRelation(relation)"
   ></pr-archive-small>
 </div>
+<div class="sidebar"></div>

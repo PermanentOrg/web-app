@@ -1,4 +1,7 @@
 @import 'variables';
+:host {
+  @include hasFloatSidebar;
+}
 
 .relations {
   padding: 10px 10px;
@@ -11,6 +14,10 @@ pr-archive-small {
 
 p {
   padding: 0px 10px;
+}
+
+.sidebar {
+  @include mainContentFloatSidebar;
 }
 
 :host {

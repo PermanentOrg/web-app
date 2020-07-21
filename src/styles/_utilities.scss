@@ -50,6 +50,27 @@
   }
 }
 
+@mixin hasFloatSidebar{
+  @include desktop {
+    width: calc(100% - #{$sidebar-width - 2 * $grid-unit});
+  }
+}
+
+@mixin mainContentFloatSidebar {
+  display: none;
+
+  @include desktop {
+    display: block;
+    position: fixed;
+    right: 0;
+    width: $sidebar-width;
+    top: $navbar-total-height-desktop;
+    bottom: $grid-unit;
+    padding: $grid-unit;
+    border: 1px solid $file-list-border;
+  }
+}
+
 .hide-desktop {
   @include after($tablet-horizontal) {
     display: none !important;
