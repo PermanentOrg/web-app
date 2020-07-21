@@ -6,15 +6,23 @@
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
-    <div class="menu-header-desktop">
-      <div class="archive" [routerLink]="['/choosearchive']">
+    <div class="menu-header-desktop" [class.show-shadow]="showArchiveOptions">
+      <div class="archive">
         <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
         <div class="archive-name">The {{archive.fullName}} Archive</div>
+        <div class="archive-access">Access role: {{archive.accessRole | prConstants}}</div>
+        <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
+          [class.reverse]="showArchiveOptions">
+          <i class="material-icons">expand_more</i>
+        </div>
       </div>
-      <!-- <div class="archive-selector-indicator" (click)="showArchiveSelector = !showArchiveSelector">
-        <i class="ion-md-arrow-dropright" [hidden]="showArchiveSelector"></i>
-        <i class="ion-md-arrow-dropleft" [hidden]="!showArchiveSelector"></i>
-      </div> -->
+    </div>
+    <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
+      <div class="archive-options-option">Edit Archive Profile</div>
+      <div class="archive-options-option">Manage Archive Connections</div>
+      <div class="archive-options-option">Manage Archive Members</div>
+      <hr>
+      <div class="archive-options-option">View All Archives</div>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item hide-desktop"

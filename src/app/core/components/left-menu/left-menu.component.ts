@@ -5,13 +5,13 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveVO } from '@root/app/models';
 import { Subscription } from 'rxjs';
-import { ngIfSlideInAnimation } from '@shared/animations';
+import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-left-menu',
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss'],
-  animations: [ ngIfSlideInAnimation ]
+  animations: [ ngIfSlideInAnimation, ngIfScaleHeightAnimation ]
 })
 export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isVisible = false;
@@ -20,6 +20,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public showArchiveSelector: false;
   public archiveName: string;
   public archive: ArchiveVO;
+
+  public showArchiveOptions = false;
 
   @ViewChild('scroll') scrollElementRef: ElementRef;
 

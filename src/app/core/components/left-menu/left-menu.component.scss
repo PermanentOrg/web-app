@@ -8,6 +8,10 @@ $hover-color: lighten($PR-blue, 4%);
 $active-color: $PR-orange;
 $active-indicator-color: lighten($active-color, 7%);
 
+$archive-options-shadow-color: rgba($black, .1);
+$archive-options-shadow-spread: $grid-unit / 4;
+$archive-options-shadow-offset: 0.5rem;
+
 :host {
   z-index: $z-index-nav + 1;
 }
@@ -69,7 +73,7 @@ $active-indicator-color: lighten($active-color, 7%);
     }
   }
 
-  .menu-header-desktop {
+  .menu-header-desktop, .archive-options {
     display: none;
   }
 
@@ -114,29 +118,51 @@ $active-indicator-color: lighten($active-color, 7%);
     .menu-header-desktop {
       display: flex;
       padding: 0;
-      $thumb-size: $left-menu-width * 0.5;
       position: relative;
       outline: none !important;
+      background-color: $PR-blue-light;
+      z-index: 3;
 
       .archive {
         flex: 1 1 auto;
-        padding: 1rem 0;
         outline: none !important;
         cursor: pointer;
       }
 
       .archive-thumb {
-        width: $thumb-size;
-        height: $thumb-size;
-        border-radius: 50%;
-        margin: 0px auto 0.5rem;
+        width: 100%;
+        padding-top: 100%;
       }
       
       .archive-name {
-        font-size: $font-size-sm;
         text-align: center;
-        padding: 0.5rem;
         font-weight: bold;
+        padding: $grid-unit / 2;
+      }
+
+      .archive-access {
+        text-align: center;
+        font-size: $font-size-sm;
+        height: $grid-unit;
+        line-height: $grid-unit;
+      }
+
+      .archive-options-toggle {
+        height: 2 * $grid-unit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        i {
+          font-size: $mat-icon-lg;
+          transition: transform 250ms $tweaked-ease;
+        }
+
+        &.reverse {
+          i {
+            transform: rotate(180deg);
+          }
+        }
       }
 
       .archive-selector-indicator {
@@ -153,7 +179,25 @@ $active-indicator-color: lighten($active-color, 7%);
           transition: background-color 0s;
         }
       }
+    }
 
+    .archive-options {
+      display: initial;
+      flex: 0 0 auto;
+      background-color: $PR-blue-light;
+      hr {
+        margin: $grid-unit / 2;
+        border-color: white;
+      }
+      overflow-y: hidden;
+    }
+
+    .archive-options-option {
+      height: 2 * $grid-unit;
+      padding: 0 $grid-unit / 2;
+      display: flex;
+      align-items: center;
+      font-size: $font-size-sm;
     }
 
     .menu-scroll {
@@ -164,6 +208,7 @@ $active-indicator-color: lighten($active-color, 7%);
       padding-left: $grid-unit;
       height: $navbar-height-desktop;
       display: flex;
+      flex: 0 0 auto;
       align-items: center;
       img {
         height: auto;
