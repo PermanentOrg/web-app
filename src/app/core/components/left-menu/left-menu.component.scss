@@ -201,9 +201,14 @@ $archive-options-shadow-offset: 0.5rem;
 
       color: white;
 
-      &:hover {
+      &:hover:not(.active) {
         text-decoration: none;
         background-color: lighten($PR-blue-light, 4%);
+      }
+
+      &.active {
+        text-decoration: none;
+        background-color: $PR-orange;
       }
     }
 

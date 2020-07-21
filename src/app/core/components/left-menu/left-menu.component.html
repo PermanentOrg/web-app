@@ -19,10 +19,13 @@
     </div>
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
       <a class="archive-options-option">Edit Archive Profile</a>
-      <a class="archive-options-option" [routerLink]="['/relationships']">Manage Archive Connections</a>
-      <a class="archive-options-option" [routerLink]="['/members']">Manage Archive Members</a>
+      <a class="archive-options-option"
+        [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">Manage Archive Connections</a>
+      <a class="archive-options-option"
+        [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">Manage Archive Members</a>
       <hr>
-      <a class="archive-options-option" [routerLink]="['/choosearchive']">View All Archives</a>
+      <a class="archive-options-option"
+        [routerLink]="['/choosearchive']" [class.active]="checkMenuItemActive('/choosearchive')">View All Archives</a>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item hide-desktop"
@@ -54,7 +57,7 @@
         <i class="ion-md-swap"></i>
         Apps
       </a>
-      <a class="menu-item" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
+      <a class="menu-item hide-desktop" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
         <i class="ion-md-people"></i>
         Relationships
       </a>
