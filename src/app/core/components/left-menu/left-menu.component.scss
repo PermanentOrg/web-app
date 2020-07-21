@@ -126,7 +126,6 @@ $archive-options-shadow-offset: 0.5rem;
       .archive {
         flex: 1 1 auto;
         outline: none !important;
-        cursor: pointer;
       }
 
       .archive-thumb {
@@ -148,6 +147,7 @@ $archive-options-shadow-offset: 0.5rem;
       }
 
       .archive-options-toggle {
+        cursor: pointer;
         height: 2 * $grid-unit;
         display: flex;
         align-items: center;
@@ -198,6 +198,13 @@ $archive-options-shadow-offset: 0.5rem;
       display: flex;
       align-items: center;
       font-size: $font-size-sm;
+
+      color: white;
+
+      &:hover {
+        text-decoration: none;
+        background-color: lighten($PR-blue-light, 4%);
+      }
     }
 
     .menu-scroll {

@@ -18,11 +18,11 @@
       </div>
     </div>
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
-      <div class="archive-options-option">Edit Archive Profile</div>
-      <div class="archive-options-option">Manage Archive Connections</div>
-      <div class="archive-options-option">Manage Archive Members</div>
+      <a class="archive-options-option">Edit Archive Profile</a>
+      <a class="archive-options-option" [routerLink]="['/relationships']">Manage Archive Connections</a>
+      <a class="archive-options-option" [routerLink]="['/members']">Manage Archive Members</a>
       <hr>
-      <div class="archive-options-option">View All Archives</div>
+      <a class="archive-options-option" [routerLink]="['/choosearchive']">View All Archives</a>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item hide-desktop"
@@ -50,12 +50,6 @@
         <i class="ion-md-globe"></i>
         Public
       </a>
-      <!-- <a class="menu-item"
-        [routerLink]="['/profile']"
-        [class.active]="checkMenuItemActive('/profile')">
-        <i class="ion-md-contact"></i>
-        Profile
-      </a> -->
       <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
         <i class="ion-md-swap"></i>
         Apps
@@ -64,7 +58,7 @@
         <i class="ion-md-people"></i>
         Relationships
       </a>
-      <a class="menu-item" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
+      <a class="menu-item hide-desktop" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
         <i class="ion-md-person-add"></i>
         Members
       </a>
