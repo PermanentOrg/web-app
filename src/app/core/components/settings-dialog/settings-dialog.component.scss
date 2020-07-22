@@ -5,9 +5,11 @@
   width: 100%;
 }
 
+$header-height: 3 * $grid-unit;
+
 .header {
   height: 3 * $grid-unit;
-  flex: 0 0;
+  flex: 0 0 ;
   background-color: $PR-purple;
   display: flex;
   align-items: center;
@@ -28,11 +30,14 @@
   }
 }
 
+
 .settings-content {
   flex: 1 1 auto;
+  overflow-y: auto;
   @include desktop {
     display: flex;
     height: 400px;
+    overflow: visible;
   }
 }
 
