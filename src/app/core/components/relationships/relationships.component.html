@@ -1,5 +1,8 @@
 <div class="sidebar">
   <div class="title">Pending connections</div>
+  <div *ngIf="!relationRequests.length && !sentRelationRequests.length">
+    No pending conections
+  </div>
   <div class="sidebar-relation" *ngFor="let relation of relationRequests">
     <div class="sidebar-relation-main">
       <div class="archive-thumb" prBgImage [bgSrc]="relation.ArchiveVO.thumbURL200" [cover]="true"></div>
@@ -29,8 +32,8 @@
 <ng-template cdkPortal>
   <button class="btn btn-primary" (click)="addRelation()" id="addConnection">Connect an Archive</button>
 </ng-template>
-<p *ngIf="!relations || !relations.length">No relationships</p>
 <div class="hide-desktop">
+  <p *ngIf="!relations || !relations.length">No relationships</p>
   <div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
   <div class="relations" *ngIf="sentRelationRequests.length">
     <pr-archive-small *ngFor="let relation of sentRelationRequests"
@@ -58,6 +61,7 @@
   </div>
 </div>
 <div class="page-subheading">({{relations.length}}) Connections</div>
+<div *ngIf="!relations.length">No connections</div>
 <div class="relations">
   <pr-archive-small *ngFor="let relation of relations"
   (archiveClick)="onRelationClick(relation)"
