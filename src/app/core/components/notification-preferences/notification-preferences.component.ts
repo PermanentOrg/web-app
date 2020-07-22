@@ -20,12 +20,6 @@ export class NotificationPreferencesComponent implements OnInit {
     private api: ApiService,
     private message: MessageService
   ) {
-    this.dataService.setCurrentFolder(new FolderVO({
-      displayName: 'Notification Preferences',
-      pathAsText: ['Notification Preferences'],
-      type: 'page'
-    }), true);
-
     this.account = this.accountService.getAccount();
     this.preferences = cloneDeep(this.account.notificationPreferences);
   }
