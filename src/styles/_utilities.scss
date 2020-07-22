@@ -74,12 +74,14 @@
     bottom: $grid-unit;
     padding: 0 $grid-unit;
     border: $file-list-border;
+    overflow-y: auto;
 
     .title  {
       height: 2 * $grid-unit;
       display: flex;
       align-items: center;
       border-bottom: $file-list-border;
+      margin-bottom: $grid-unit;
     }
   }
 }

@@ -1,6 +1,30 @@
 <div class="sidebar">
   <div class="title">Pending connections</div>
-  
+  <div class="sidebar-relation" *ngFor="let relation of relationRequests">
+    <div class="sidebar-relation-main">
+      <div class="archive-thumb" prBgImage [bgSrc]="relation.ArchiveVO.thumbURL200" [cover]="true"></div>
+      <div class="archive-info">
+        <div class="name">{{relation.ArchiveVO.fullName}}</div>
+        <div class="relation-type">{{relation.type | prConstants}}</div>
+      </div>
+    </div>
+    <div class="sidebar-relation-actions">
+      <button class="btn btn-sm btn-success" click="onRelationRequestClick(relation, true)">Accept</button>
+      <button class="btn btn-sm btn-danger" click="removeRelation(relation)">Deny Request</button>
+    </div>
+  </div>
+  <div class="sidebar-relation" *ngFor="let relation of sentRelationRequests">
+    <div class="sidebar-relation-main">
+      <div class="archive-thumb" prBgImage [bgSrc]="relation.ArchiveVO.thumbURL200" [cover]="true"></div>
+      <div class="archive-info">
+        <div class="name">{{relation.ArchiveVO.fullName}}</div>
+        <div class="relation-type">{{relation.type | prConstants}}</div>
+      </div>
+    </div>
+    <div class="sidebar-relation-actions">
+      <button class="btn btn-sm btn-danger" click="removeRelation(relation)">Cancel Request</button>
+    </div>
+  </div>
 </div>
 <div class="sidebar-action">
   <button class="btn btn-primary" (click)="addRelation()" id="addConnection">Connect an Archive</button>
