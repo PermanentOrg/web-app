@@ -9,7 +9,6 @@ export class SidebarActionPortalService {
   constructor() { }
 
   provideOutlet(portalOutlet: PortalOutlet) {
-    console.log(portalOutlet);
     this.outlet = portalOutlet;
 
     if (this.currentPortal) {
