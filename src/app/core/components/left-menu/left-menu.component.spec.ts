@@ -8,6 +8,7 @@ import { TEST_DATA } from '@core/core.module.spec';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { AccountVO, ArchiveVO } from '@models';
+import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 
 describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
@@ -19,6 +20,7 @@ describe('LeftMenuComponent', () => {
     config.declarations.push(LeftMenuComponent);
     config.declarations.push(ArchiveSmallComponent);
     config.declarations.push(BgImageSrcDirective);
+    config.declarations.push(PrConstantsPipe);
 
     TestBed.configureTestingModule(config).compileComponents();
 

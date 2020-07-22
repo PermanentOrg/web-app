@@ -112,18 +112,6 @@ export const routes: RoutesWithData = [
         redirectTo: 'members'
       },
       {
-        path: 'account',
-        component: AccountSettingsComponent,
-        data: { title: 'Account Settings'},
-        resolve: { account: AccountResolveService }
-      },
-      {
-        path: 'notificationPreferences',
-        component: NotificationPreferencesComponent,
-        data: { title: 'Notification Preferences'},
-        resolve: { account: AccountResolveService }
-      },
-      {
         path: 'search',
         component: GlobalSearchResultsComponent,
         data: { title: 'Search' },

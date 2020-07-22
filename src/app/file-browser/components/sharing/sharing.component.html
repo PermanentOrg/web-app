@@ -12,7 +12,6 @@
     <div class="share-link-button" *ngIf="!shareLink">
       <button class="btn btn-primary" (click)="generateShareLink()">Get share link</button>
     </div>
-    <div class="page-subheading"></div>
     <div class="page-subheading" *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')">Share Requests</div>
     <div class="share-item-members" *ngIf="pendingShares.length && shareItem.accessRole.includes('owner')">
       <pr-archive-small *ngFor="let shareVo of pendingShares"

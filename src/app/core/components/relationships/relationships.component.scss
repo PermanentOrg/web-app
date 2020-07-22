@@ -1,19 +1,73 @@
 @import 'variables';
 
-.relations {
-  padding: 10px 10px;
-  display: block;
-}
-
 pr-archive-small {
-  margin-bottom: 20px;
+  margin-bottom: $grid-unit;
 }
 
 p {
   padding: 0px 10px;
 }
 
+.sidebar {
+  @include mainContentFloatSidebar;
+}
+
+.sidebar-relation {
+  margin-bottom: $grid-unit;
+
+  $thumb-size: 2 * $grid-unit;
+  .sidebar-relation-main {
+    height: pxToGrid(80px);
+    display: flex;
+    align-items: center;
+    font-size: $font-size-sm;
+    border: $file-list-border;
+    border-radius: $border-radius;
+    padding: $grid-unit;
+  }
+
+  .archive-thumb {
+    flex: 0 0 $thumb-size;
+    height: $thumb-size;
+    border-radius: 50%;
+    margin-right: $grid-unit;
+  }
+
+  .archive-info {
+    flex: 1 1 auto;
+
+    .name {
+      font-weight: $font-weight-bold;
+    }
+
+    .relation-type {
+      color: $text-muted;
+      font-size: 12px;
+    }
+  }
+
+  .sidebar-relation-actions {
+    padding-top: $grid-unit;
+    display: flex;
+    button {
+      margin-top: 0;
+      margin-bottom: 0;
+      flex: 1 1 auto;
+
+      &:not(:first-child) {
+        margin-left: $grid-unit;
+      }
+    }
+  }
+}
+
 :host {
   @include has-breadcrumbs;
   @include mainContentScrollDesktop;
+  @include hasFloatSidebar;
+
+  @include beforeDesktop {
+    padding: 0 $grid-unit / 2;
+  } 
 }
+

@@ -16,6 +16,12 @@
   }
 }
 
+@mixin beforeDesktop {
+  @include until($tablet-horizontal) {
+    @content;
+  }
+}
+
 @mixin fullscreen {
   position: fixed;
   top: 0;
@@ -48,6 +54,42 @@
     overflow: hidden;
     overflow-y: auto;
   }
+}
+
+@mixin hasFloatSidebar{
+  @include desktop {
+    width: calc(100% - #{$sidebar-width});
+  }
+}
+
+@mixin mainContentFloatSidebar {
+  display: none;
+
+  @include desktop {
+    display: block;
+    position: fixed;
+    right: $grid-unit;
+    width: $sidebar-width - $grid-unit;
+    top: $navbar-total-height-desktop;
+    bottom: $grid-unit;
+    padding: 0 $grid-unit;
+    border: $file-list-border;
+    overflow-y: auto;
+
+    .title  {
+      height: 2 * $grid-unit;
+      display: flex;
+      align-items: center;
+      border-bottom: $file-list-border;
+      margin-bottom: $grid-unit;
+    }
+  }
+}
+
+@mixin gridHeightButton {
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
 }
 
 .hide-desktop {

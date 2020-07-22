@@ -1,38 +1,67 @@
-<!-- <p>
-  Relationships are between archives only and not between accounts.
-  <br><br>
-  Adding a relationship does not give another user any permission to access or edit this archive.
-</p> -->
-<p>
-  <button class="btn btn-primary" (click)="addRelation()">Add relationship</button>
-</p>
-<p *ngIf="!relations || !relations.length">No relationships</p>
-<div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
-<div class="relations" *ngIf="sentRelationRequests.length">
-  <pr-archive-small *ngFor="let relation of sentRelationRequests"
-  (archiveClick)="onSentRelationRequestClick(relation)"
-  [archive]="relation.RelationArchiveVO"
-  [relation]="relation.type"
-  [largeOnDesktop]="true"
-  [showRemove]="true"
-  (removeClick)="removeRelation(relation)"
-  ></pr-archive-small>
+<div class="sidebar">
+  <div class="title">Pending connections</div>
+  <div *ngIf="!relationRequests.length && !sentRelationRequests.length">
+    No pending conections
+  </div>
+  <div class="sidebar-relation" *ngFor="let relation of relationRequests">
+    <div class="sidebar-relation-main">
+      <div class="archive-thumb" prBgImage [bgSrc]="relation.ArchiveVO.thumbURL200" [cover]="true"></div>
+      <div class="archive-info">
+        <div class="name">{{relation.ArchiveVO.fullName}}</div>
+        <div class="relation-type">{{relation.type | prConstants}}</div>
+      </div>
+    </div>
+    <div class="sidebar-relation-actions">
+      <button class="btn btn-sm btn-success" click="onRelationRequestClick(relation, true)">Accept</button>
+      <button class="btn btn-sm btn-danger" click="removeRelation(relation)">Deny Request</button>
+    </div>
+  </div>
+  <div class="sidebar-relation" *ngFor="let relation of sentRelationRequests">
+    <div class="sidebar-relation-main">
+      <div class="archive-thumb" prBgImage [bgSrc]="relation.ArchiveVO.thumbURL200" [cover]="true"></div>
+      <div class="archive-info">
+        <div class="name">{{relation.ArchiveVO.fullName}}</div>
+        <div class="relation-type">{{relation.type | prConstants}}</div>
+      </div>
+    </div>
+    <div class="sidebar-relation-actions">
+      <button class="btn btn-sm btn-danger" click="removeRelation(relation)">Cancel Request</button>
+    </div>
+  </div>
 </div>
-<div class="page-subheading" *ngIf="relationRequests.length">Relationship requests</div>
-<div class="relations" *ngIf="relationRequests.length">
-  <pr-archive-small *ngFor="let relation of relationRequests"
-  (archiveClick)="onRelationRequestClick(relation)"
-  [archive]="relation.ArchiveVO"
-  [isPending]="true"
-  [relation]="relation.type"
-  [largeOnDesktop]="true"
-  [showAccept]="true"
-  (acceptClick)="onRelationRequestClick(relation, true)"
-  [showRemove]="true"
-  (removeClick)="removeRelation(relation)"
-  ></pr-archive-small>
+<ng-template cdkPortal>
+  <button class="btn btn-primary" (click)="addRelation()" id="addConnection">Connect an Archive</button>
+</ng-template>
+<div class="hide-desktop">
+  <p *ngIf="!relations || !relations.length">No relationships</p>
+  <div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
+  <div class="relations" *ngIf="sentRelationRequests.length">
+    <pr-archive-small *ngFor="let relation of sentRelationRequests"
+    (archiveClick)="onSentRelationRequestClick(relation)"
+    [archive]="relation.RelationArchiveVO"
+    [relation]="relation.type"
+    [largeOnDesktop]="true"
+    [showRemove]="true"
+    (removeClick)="removeRelation(relation)"
+    ></pr-archive-small>
+  </div>
+  <div class="page-subheading" *ngIf="relationRequests.length">Relationship requests</div>
+  <div class="relations" *ngIf="relationRequests.length">
+    <pr-archive-small *ngFor="let relation of relationRequests"
+    (archiveClick)="onRelationRequestClick(relation)"
+    [archive]="relation.ArchiveVO"
+    [isPending]="true"
+    [relation]="relation.type"
+    [largeOnDesktop]="true"
+    [showAccept]="true"
+    (acceptClick)="onRelationRequestClick(relation, true)"
+    [showRemove]="true"
+    (removeClick)="removeRelation(relation)"
+    ></pr-archive-small>
+  </div>
 </div>
-<div class="page-subheading">Established relationships</div>
+<div class="page-subheading">({{relations.length}}) Connections</div>
+<div *ngIf="!relations.length">No connections</div>
 <div class="relations">
   <pr-archive-small *ngFor="let relation of relations"
   (archiveClick)="onRelationClick(relation)"
@@ -45,3 +74,4 @@
   (editClick)="editRelation(relation)"
   ></pr-archive-small>
 </div>
+

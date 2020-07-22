@@ -1,8 +1,8 @@
 @import 'variables';
 
 :host {
-  @include has-breadcrumbs;
-  @include mainContentScrollDesktop;
+  padding: 0 $grid-unit;
+  display: block;
 }
 
 $settings-padding-x: 0;
@@ -28,7 +28,8 @@ p {
 .settings-item {
   padding: $grid-unit / 2 0;
   & > label {
-    font-weight: 500;
+    font-weight: $font-weight-bold;
+    color: $text-muted;
     margin-bottom: 0px;
   }
 

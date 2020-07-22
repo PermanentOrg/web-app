@@ -6,15 +6,26 @@
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
     </div>
-    <div class="menu-header-desktop">
-      <div class="archive" [routerLink]="['/choosearchive']">
+    <div class="menu-header-desktop" [class.show-shadow]="showArchiveOptions">
+      <div class="archive">
         <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
         <div class="archive-name">The {{archive.fullName}} Archive</div>
+        <div class="archive-access">Access role: {{archive.accessRole | prConstants}}</div>
+        <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
+          [class.reverse]="showArchiveOptions">
+          <i class="material-icons">expand_more</i>
+        </div>
       </div>
-      <!-- <div class="archive-selector-indicator" (click)="showArchiveSelector = !showArchiveSelector">
-        <i class="ion-md-arrow-dropright" [hidden]="showArchiveSelector"></i>
-        <i class="ion-md-arrow-dropleft" [hidden]="!showArchiveSelector"></i>
-      </div> -->
+    </div>
+    <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
+      <a class="archive-options-option">Edit Archive Profile</a>
+      <a class="archive-options-option"
+        [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">Manage Archive Connections</a>
+      <a class="archive-options-option"
+        [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">Manage Archive Members</a>
+      <hr>
+      <a class="archive-options-option"
+        [routerLink]="['/choosearchive']" [class.active]="checkMenuItemActive('/choosearchive')">View All Archives</a>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item hide-desktop"
@@ -42,21 +53,15 @@
         <i class="ion-md-globe"></i>
         Public
       </a>
-      <!-- <a class="menu-item"
-        [routerLink]="['/profile']"
-        [class.active]="checkMenuItemActive('/profile')">
-        <i class="ion-md-contact"></i>
-        Profile
-      </a> -->
       <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
         <i class="ion-md-swap"></i>
         Apps
       </a>
-      <a class="menu-item" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
+      <a class="menu-item hide-desktop" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
         <i class="ion-md-people"></i>
         Relationships
       </a>
-      <a class="menu-item" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
+      <a class="menu-item hide-desktop" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
         <i class="ion-md-person-add"></i>
         Members
       </a>

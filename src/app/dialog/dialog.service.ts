@@ -12,7 +12,8 @@ type DialogComponentToken =
   'FamilySearchImportComponent' |
   'ArchivePickerComponent' |
   'SharingComponent' |
-  'ArchiveSwitcherDialogComponent'
+  'ArchiveSwitcherDialogComponent' |
+  'SettingsDialogComponent'
   ;
 
 export interface DialogChildComponentData {

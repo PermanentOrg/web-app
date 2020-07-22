@@ -116,7 +116,6 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSaveIntProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsIntDataCol, value: number) {
-    console.log(fieldName, value);
   }
 
   async onProfilePictureClick() {

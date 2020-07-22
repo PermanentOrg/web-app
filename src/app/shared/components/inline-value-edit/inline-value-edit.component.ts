@@ -86,7 +86,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 
   save(skipBlur = false) {
     if (this.displayValue !== this.editValue) {
-      console.log('emit change!');
+      ('emit change!');
       this.doneEditing.emit(this.editValue);
     }
     this.isEditing = false;
@@ -150,7 +150,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   onTextInputBlur() {
-    console.log('blur!');
+    ('blur!');
     if (this.saveOnBlur) {
       this.save(true);
     }

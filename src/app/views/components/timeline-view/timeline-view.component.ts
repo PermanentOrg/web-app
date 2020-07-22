@@ -242,8 +242,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const diff = end - start;
     const buffer = diff * 0.5;
 
-    console.log(new Date(start - buffer), new Date(end + buffer));
-
     this.timeline.setOptions({
       min: start - buffer,
       max: end + buffer,
@@ -398,7 +396,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (newTimespan !== undefined && newTimespan !== this.currentTimespan) {
       this.currentTimespan = newTimespan;
-      console.log('trigger group from zoom');
       this.groupTimelineItems(false);
     }
 

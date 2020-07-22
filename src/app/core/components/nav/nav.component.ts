@@ -1,18 +1,36 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, ViewChild, Optional, OnDestroy } from '@angular/core';
+import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
+import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 
 @Component({
   selector: 'pr-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   hambugerMenuVisible: boolean;
   rightMenuVisible: boolean;
 
-  constructor() {
+  @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
+
+  constructor(
+    @Optional() private portalService: SidebarActionPortalService
+  ) {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    if (this.portalService) {
+      this.portalService.provideOutlet(this.portalOutlet);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.portalService) {
+      this.portalService.dispose(this.portalOutlet);
+    }
   }
 
   showHamburgerMenu() {

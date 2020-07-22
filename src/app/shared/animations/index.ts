@@ -193,7 +193,7 @@ export const ngIfScaleHeightAnimation = trigger('ngIfScaleHeightAnimation', [
   transition(
     ':leave',
     [
-      style({ height: '*', opacity: 0 }),
+      style({ height: '*' }),
       animate(`250ms ${TWEAKED}`, style({ height: '0px' })),
     ]
   )

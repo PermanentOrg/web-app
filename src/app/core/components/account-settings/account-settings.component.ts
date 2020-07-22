@@ -20,12 +20,6 @@ export class AccountSettingsComponent implements OnInit {
     private api: ApiService,
     private message: MessageService
   ) {
-    this.dataService.setCurrentFolder(new FolderVO({
-      displayName: 'Account Settings',
-      pathAsText: ['Account Settings'],
-      type: 'page'
-    }), true);
-
     this.account = this.accountService.getAccount();
   }
 

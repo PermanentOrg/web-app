@@ -11,6 +11,5 @@ export class TagsResolveService implements Resolve<any> {
 
   async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
     await this.tags.refreshTags();
-    console.log('done tags?');
   }
 }

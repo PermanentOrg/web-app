@@ -1,0 +1,27 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Settings</span>
+    <button class="btn btn-secondary" (click)="onDoneClick()">Done</button>
+  </div>
+  <div class="settings-content">
+    <div class="settings-tabs">
+      <a class="settings-tab" href="/add-storage">
+        Add Storage
+      </a>
+      <div class="settings-tab"
+        (click)="setTab('account')" [class.active]="activeTab === 'account'">
+        Account Settings
+      </div>
+      <div class="settings-tab"
+        (click)="setTab('notification')" [class.active]="activeTab === 'notification'">
+        Notification Preferences
+      </div>
+    </div>
+    <div class="settings-panel">
+      <ng-container [ngSwitch]="activeTab">
+        <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
+        <pr-notification-preferences *ngSwitchCase="'notification'"></pr-notification-preferences>
+      </ng-container>
+    </div>
+  </div>
+</div>

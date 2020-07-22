@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
@@ -15,6 +15,8 @@ import { RELATIONSHIP_FIELD_INITIAL, RELATIONSHIP_FIELD } from '@shared/componen
 import { DataService } from '@shared/services/data/data.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+import { CdkPortal } from '@angular/cdk/portal';
+import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 
 const RelationActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -47,12 +49,14 @@ interface RelationType {
   templateUrl: './relationships.component.html',
   styleUrls: ['./relationships.component.scss']
 })
-export class RelationshipsComponent implements OnDestroy {
+export class RelationshipsComponent implements AfterViewInit, OnDestroy {
   relations: RelationVO[] = [];
   relationRequests: RelationVO[] = [];
   sentRelationRequests: RelationVO[] = [];
 
   relationOptions: FormInputSelectOption[];
+
+  @ViewChild(CdkPortal) sidebarActionPortal: CdkPortal;
 
   constructor(
     private route: ActivatedRoute,
@@ -62,11 +66,12 @@ export class RelationshipsComponent implements OnDestroy {
     private messageService: MessageService,
     private prConstants: PrConstantsService,
     private accountService: AccountService,
-    private dialog: Dialog
+    private dialog: Dialog,
+    @Optional() private portalService: SidebarActionPortalService
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
-      displayName: 'Relationships',
-      pathAsText: ['Relationships'],
+      displayName: 'Connected Archives',
+      pathAsText: ['Connected Archives'],
       type: 'page'
     }), true);
     this.route.snapshot.data.relations.map((relation: RelationVO) => {
@@ -89,7 +94,16 @@ export class RelationshipsComponent implements OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    if (this.portalService) {
+      this.portalService.providePortal(this.sidebarActionPortal);
+    }
+  }
+
   ngOnDestroy() {
+    if (this.portalService) {
+      this.portalService.detachPortal(this.sidebarActionPortal);
+    }
     this.dataService.setCurrentFolder();
   }
 

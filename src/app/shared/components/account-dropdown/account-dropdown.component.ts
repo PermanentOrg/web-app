@@ -7,6 +7,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { Router, NavigationStart } from '@angular/router';
 import { ngIfFadeInAnimationSlow, TWEAKED } from '@shared/animations';
 import { trigger, transition, style, animate, group, query, animateChild } from '@angular/animations';
+import { Dialog } from '@root/app/dialog/dialog.module';
+import { SettingsTab } from '@core/components/settings-dialog/settings-dialog.component';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   transition(
@@ -46,7 +48,8 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
     private accountService: AccountService,
     private messageService: MessageService,
     private router: Router,
-    private element: ElementRef
+    private element: ElementRef,
+    private dialog: Dialog
   ) { }
 
   ngOnInit() {
@@ -86,6 +89,15 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
     const outsideClick = !(this.element.nativeElement as HTMLElement).contains(event.target as Node);
     if (this.showMenu && outsideClick) {
       this.showMenu = false;
+    }
+  }
+
+  openSettingsDialog(activeTab: SettingsTab) {
+    this.showMenu = false;
+    try {
+      this.dialog.open('SettingsDialogComponent', { tab: activeTab }, { width: '800px' });
+    } catch (err) {
+
     }
   }
 

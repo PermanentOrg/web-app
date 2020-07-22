@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CoreRoutingModule } from '@core/core.routes';
@@ -21,7 +21,7 @@ import { FolderPickerComponent } from '@core/components/folder-picker/folder-pic
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
-import { DialogModule } from '@root/app/dialog/dialog.module';
+import { DialogModule, DialogChildComponentData, Dialog } from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
@@ -32,6 +32,9 @@ import { AccountSettingsComponent } from './components/account-settings/account-
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
+import { PortalModule } from '@angular/cdk/portal';
+import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
+import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 
 @NgModule({
   imports: [
@@ -40,7 +43,8 @@ import { NotificationPreferencesComponent } from './components/notification-pref
     CoreRoutingModule,
     RouterModule,
     DialogModule,
-    SearchModule
+    SearchModule,
+    PortalModule
   ],
   declarations: [
     MainComponent,
@@ -59,7 +63,8 @@ import { NotificationPreferencesComponent } from './components/notification-pref
     AccountSettingsComponent,
     NotificationPreferencesComponent,
     ArchiveSelectorComponent,
-    ProfileEditComponent
+    ProfileEditComponent,
+    SettingsDialogComponent
   ],
   providers: [
     DataService,
@@ -67,8 +72,24 @@ import { NotificationPreferencesComponent } from './components/notification-pref
     FolderPickerService,
     UploadService,
     EditService,
-    DragService
+    DragService,
+    SidebarActionPortalService
   ]
 })
 export class CoreModule {
+  private dialogComponents: DialogChildComponentData[] = [
+    {
+      token: 'SettingsDialogComponent',
+      component: SettingsDialogComponent
+    }
+  ];
+
+  constructor(
+    @Optional() private dialog?: Dialog,
+    @Optional() private resolver?: ComponentFactoryResolver,
+  ) {
+    if (this.dialog) {
+      this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+    }
+  }
 }

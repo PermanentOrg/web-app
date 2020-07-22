@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Optional } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Optional, HostBinding } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
@@ -23,7 +23,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
 
   @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
   public currentFolder: FolderVO;
-  public hidden: boolean;
+  @HostBinding('hidden') hidden: boolean;
   public disabled: boolean;
 
   isDragTarget: boolean;
