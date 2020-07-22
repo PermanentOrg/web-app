@@ -30,8 +30,8 @@ nav.navbar {
 
   &.nav-desktop {
     display: none;
+    padding-left: $grid-unit;
     height: $navbar-height-desktop;
-    padding-left: 0;
   }
 
   @include desktop {

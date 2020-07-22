@@ -28,6 +28,7 @@ import { ProfileItemsResolveService } from './resolves/profile-items-resolve.ser
 import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
 import { TagsResolveService } from './resolves/tags.resolve.service';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
+import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -70,6 +71,12 @@ export const routes: RoutesWithData = [
         path: 'choosearchive',
         component: ArchiveSwitcherComponent,
         data: { title: 'Choose Archive'},
+        resolve: { archives: ArchivesResolveService }
+      },
+      {
+        path: 'archives',
+        component: AllArchivesComponent,
+        data: { title: 'Archives'},
         resolve: { archives: ArchivesResolveService }
       },
       {
