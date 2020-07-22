@@ -1,15 +1,7 @@
 @import 'variables';
-:host {
-  @include hasFloatSidebar;
-}
-
-.relations {
-  padding: 10px 10px;
-  display: block;
-}
 
 pr-archive-small {
-  margin-bottom: 20px;
+  margin-bottom: $grid-unit;
 }
 
 p {
@@ -20,7 +12,17 @@ p {
   @include mainContentFloatSidebar;
 }
 
+.sidebar-action {
+  @include floatSidebarButtons;
+}
+
 :host {
   @include has-breadcrumbs;
   @include mainContentScrollDesktop;
+  @include hasFloatSidebar;
+
+  @include beforeDesktop {
+    padding: 0 $grid-unit / 2;
+  } 
 }
+

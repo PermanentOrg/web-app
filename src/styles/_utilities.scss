@@ -16,6 +16,12 @@
   }
 }
 
+@mixin beforeDesktop {
+  @include until($tablet-horizontal) {
+    @content;
+  }
+}
+
 @mixin fullscreen {
   position: fixed;
   top: 0;
@@ -52,7 +58,7 @@
 
 @mixin hasFloatSidebar{
   @include desktop {
-    width: calc(100% - #{$sidebar-width - 2 * $grid-unit});
+    width: calc(100% - #{$sidebar-width});
   }
 }
 
@@ -62,13 +68,51 @@
   @include desktop {
     display: block;
     position: fixed;
-    right: 0;
-    width: $sidebar-width;
+    right: $grid-unit;
+    width: $sidebar-width - $grid-unit;
     top: $navbar-total-height-desktop;
     bottom: $grid-unit;
-    padding: $grid-unit;
-    border: 1px solid $file-list-border;
+    padding: 0 $grid-unit;
+    border: $file-list-border;
+
+    .title  {
+      height: 2 * $grid-unit;
+      display: flex;
+      align-items: center;
+      border-bottom: $file-list-border;
+    }
   }
+}
+
+@mixin floatSidebarButtons {
+  @include desktop {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: $sidebar-width;
+    top: $navbar-height-desktop;
+    padding-right: $grid-unit;
+    right: 0;
+    z-index: $z-index-nav;
+    height: $breadcrumb-height-desktop;
+
+    button {
+      margin-top: 0;
+      margin-bottom: 0;
+      height: 2 * $grid-unit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+@mixin gridHeightButton {
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
 }
 
 .hide-desktop {

@@ -151,9 +151,13 @@ nav .btn {
 }
 
 .page-subheading {
-  padding: 5px 10px;
-  font-weight: 500;
+  border-bottom: $file-list-border;
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
+  margin-bottom: $grid-unit;
 }
+
 
 .break-all {
   word-break: break-all;
@@ -168,6 +172,11 @@ pr-dialog {
     .dialog-body {
       flex: 1 1 auto;
       overflow-y: auto;
+
+      .page-subheading {
+        margin-right: $grid-unit / 2;
+        margin-left: $grid-unit / 2;
+      }
     }
 
     .dialog-footer {

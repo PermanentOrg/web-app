@@ -49,13 +49,17 @@ $thumb-size: 50px;
   button {
     margin: 0px;
     margin-left: 10px;
+    @include gridHeightButton;
   }
 }
-$thumb-size-large: 100px;
+$thumb-size-large: pxToGrid(60px);
 
 :host.large-on-desktop {
   @include desktop {
-    padding: 0.5rem;
+    height: pxToGrid(100px);
+    padding: 0px $grid-unit;
+    border: $file-list-border;
+    border-radius: $border-radius;
 
     .archive {
       flex: 0 1 auto;
@@ -66,7 +70,7 @@ $thumb-size-large: 100px;
       width: $thumb-size-large;
       height: $thumb-size-large;
       flex-basis: $thumb-size-large;
-      margin-right: 10px;
+      margin-right: $grid-unit;
     }
   }
 }
