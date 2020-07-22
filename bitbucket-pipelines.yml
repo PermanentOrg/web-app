@@ -75,7 +75,7 @@ pipelines:
     feature/full-responsive:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentlegacy/mdot:latest
           deployment: demo
           caches:
             - node
@@ -99,7 +99,7 @@ pipelines:
     release/staging:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentlegacy/mdot:latest
           deployment: staging
           caches:
             - node
@@ -132,7 +132,7 @@ pipelines:
     release/production:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentlegacy/mdot:latest
           deployment: production
           caches:
             - node
