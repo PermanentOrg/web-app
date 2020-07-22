@@ -54,7 +54,7 @@ $header-height: 3 * $grid-unit;
     position: relative;
     display: flex;
     align-items: center;
-    padding-left: $grid-unit;
+    padding-left: $grid-unit / 2;
     font-size: $font-size-sm;
     cursor: pointer;
 
