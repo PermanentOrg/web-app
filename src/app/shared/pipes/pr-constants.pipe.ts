@@ -11,6 +11,10 @@ export class PrConstantsPipe implements PipeTransform {
   ) { }
 
   transform(value: any, args?: any): any {
+    if (!value) {
+      return value;
+    }
+    
     return this.prConstants.translate(value);
   }
 

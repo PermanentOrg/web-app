@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
@@ -67,7 +67,7 @@ export class RelationshipsComponent implements AfterViewInit, OnDestroy {
     private prConstants: PrConstantsService,
     private accountService: AccountService,
     private dialog: Dialog,
-    private portalService: SidebarActionPortalService
+    @Optional() private portalService: SidebarActionPortalService
   ) {
     this.dataService.setCurrentFolder(new FolderVO({
       displayName: 'Connected Archives',
@@ -95,11 +95,15 @@ export class RelationshipsComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.portalService.providePortal(this.sidebarActionPortal);
+    if (this.portalService) {
+      this.portalService.providePortal(this.sidebarActionPortal);
+    }
   }
 
   ngOnDestroy() {
-    this.portalService.detachPortal(this.sidebarActionPortal);
+    if (this.portalService) {
+      this.portalService.detachPortal(this.sidebarActionPortal);
+    }
     this.dataService.setCurrentFolder();
   }
 

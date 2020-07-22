@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, ViewChild, Optional, OnDestroy } from '@angular/core';
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 
@@ -7,14 +7,14 @@ import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit, AfterViewInit {
+export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   hambugerMenuVisible: boolean;
   rightMenuVisible: boolean;
 
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   constructor(
-    private portalService: SidebarActionPortalService
+    @Optional() private portalService: SidebarActionPortalService
   ) {
   }
 
@@ -22,7 +22,15 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.portalService.provideOutlet(this.portalOutlet);
+    if (this.portalService) {
+      this.portalService.provideOutlet(this.portalOutlet);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.portalService) {
+      this.portalService.dispose(this.portalOutlet);
+    }
   }
 
   showHamburgerMenu() {

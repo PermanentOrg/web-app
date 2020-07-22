@@ -1,4 +1,4 @@
-import { NgModule, ComponentFactoryResolver } from '@angular/core';
+import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CoreRoutingModule } from '@core/core.routes';
@@ -85,9 +85,11 @@ export class CoreModule {
   ];
 
   constructor(
-    private dialog: Dialog,
-    private resolver: ComponentFactoryResolver,
+    @Optional() private dialog?: Dialog,
+    @Optional() private resolver?: ComponentFactoryResolver,
   ) {
-    this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+    if (this.dialog) {
+      this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+    }
   }
 }

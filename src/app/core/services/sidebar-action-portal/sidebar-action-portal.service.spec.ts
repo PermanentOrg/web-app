@@ -6,7 +6,9 @@ describe('SidebarActionPortalService', () => {
   let service: SidebarActionPortalService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [ SidebarActionPortalService ]
+    });
     service = TestBed.inject(SidebarActionPortalService);
   });
 

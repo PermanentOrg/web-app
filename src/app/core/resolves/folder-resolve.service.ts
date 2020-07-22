@@ -28,7 +28,6 @@ export class FolderResolveService implements Resolve<any> {
     let targetFolder;
 
     if (route.params.archiveNbr && route.params.folderLinkId) {
-      console.log('navigating to folder...', route.params.archiveNbr, route.params.folderLinkId);
       targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
     } else if (state.url === '/apps') {
       const apps = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
