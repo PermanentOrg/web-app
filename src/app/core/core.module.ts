@@ -32,6 +32,8 @@ import { AccountSettingsComponent } from './components/account-settings/account-
 import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
+import { PortalModule } from '@angular/cdk/portal';
+import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
 
 @NgModule({
   imports: [
@@ -40,7 +42,8 @@ import { NotificationPreferencesComponent } from './components/notification-pref
     CoreRoutingModule,
     RouterModule,
     DialogModule,
-    SearchModule
+    SearchModule,
+    PortalModule
   ],
   declarations: [
     MainComponent,
@@ -67,7 +70,8 @@ import { NotificationPreferencesComponent } from './components/notification-pref
     FolderPickerService,
     UploadService,
     EditService,
-    DragService
+    DragService,
+    SidebarActionPortalService
   ]
 })
 export class CoreModule {
