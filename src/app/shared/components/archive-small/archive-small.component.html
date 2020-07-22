@@ -22,8 +22,8 @@
     </span>
   </div>
 </div>
-<div class="archive-edit hide-mobile" *ngIf="largeOnDesktop && (showEdit || showRemove)">
-  <button class="btn btn-primary" *ngIf="showAccept" (click)="acceptClick.emit($event)">Accept</button>
+<div class="archive-edit hide-mobile" *ngIf="largeOnDesktop && (showEdit || showRemove || showAccept)">
+  <button class="btn btn-primary" *ngIf="showAccept" (click)="acceptClick.emit($event)">{{ acceptText || 'Accept' }}</button>
   <button class="btn btn-primary" *ngIf="showEdit" (click)="editClick.emit($event)">Edit</button>
   <button class="btn btn-danger" *ngIf="showRemove" (click)="removeClick.emit($event)">Remove</button>
 </div>
