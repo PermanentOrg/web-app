@@ -65,8 +65,6 @@ export class SharingComponent implements OnInit {
     private dialog: Dialog,
     private route: ActivatedRoute,
     private promptService: PromptService,
-    private prConstants: PrConstantsService,
-    private device: DeviceService,
     private api: ApiService,
     private messageService: MessageService,
     private relationshipService: RelationshipService,
