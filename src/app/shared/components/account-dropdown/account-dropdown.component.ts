@@ -72,8 +72,6 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
         }
       })
     );
-
-    this.openSettingsDialog('account');
   }
 
   ngOnDestroy() {
