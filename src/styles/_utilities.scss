@@ -86,31 +86,6 @@
   }
 }
 
-@mixin floatSidebarButtons {
-  @include desktop {
-    display: flex;
-    align-items: center;
-    position: fixed;
-    width: $sidebar-width;
-    top: $navbar-height-desktop;
-    padding-right: $grid-unit;
-    right: 0;
-    z-index: $z-index-nav;
-    height: $breadcrumb-height-desktop;
-
-    button {
-      margin-top: 0;
-      margin-bottom: 0;
-      height: 2 * $grid-unit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-weight: $font-weight-bold;
-    }
-  }
-}
-
 @mixin gridHeightButton {
   height: 2 * $grid-unit;
   display: flex;

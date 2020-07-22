@@ -10,7 +10,7 @@ button span:last-child {
 
 button {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   outline: none !important;
   box-shadow: none !important;
   height: 2 * $grid-unit;
@@ -36,7 +36,7 @@ button {
   top: calc(100% - 17px);
   padding-top: 5px;
   background-color: white;
-  z-index: 2;
+  z-index: 1;
   box-shadow: $box-shadow;
   overflow: hidden;
 

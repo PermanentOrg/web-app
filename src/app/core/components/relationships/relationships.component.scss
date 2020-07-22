@@ -12,13 +12,9 @@ p {
   @include mainContentFloatSidebar;
 }
 
-.sidebar-action {
-  @include floatSidebarButtons;
-}
-
 .sidebar-relation {
   margin-bottom: $grid-unit;
-  
+
   $thumb-size: 2 * $grid-unit;
   .sidebar-relation-main {
     height: pxToGrid(80px);
