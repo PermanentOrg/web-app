@@ -35,6 +35,7 @@ import { NotificationPreferencesComponent } from './components/notification-pref
 import { PortalModule } from '@angular/cdk/portal';
 import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
+import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { SettingsDialogComponent } from './components/settings-dialog/settings-d
     NotificationPreferencesComponent,
     ArchiveSelectorComponent,
     ProfileEditComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    AllArchivesComponent
   ],
   providers: [
     DataService,
