@@ -16,7 +16,7 @@ pipelines:
     '**':
       - step:
           name: Unit tests
-          image: permanentlegacy/node-git-aws:with-chrome
+          image: permanentorg/mdot:test
           caches:
             - node
           script: # Modify the commands below to build your repository.
@@ -30,7 +30,7 @@ pipelines:
     dev:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentorg/mdot:build
           deployment: dev
           caches:
             - node
@@ -75,7 +75,7 @@ pipelines:
     feature/full-responsive:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentorg/mdot:build
           deployment: demo
           caches:
             - node
@@ -99,7 +99,7 @@ pipelines:
     release/staging:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentorg/mdot:build
           deployment: staging
           caches:
             - node
@@ -132,7 +132,7 @@ pipelines:
     release/production:
       - step:
           name: Build and upload to S3
-          image: permanentlegacy/node-git-aws:latest
+          image: permanentorg/mdot:build
           deployment: production
           caches:
             - node
@@ -166,4 +166,4 @@ pipelines:
             - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
             - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
             - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-            - aws s3 cp mdot.tar.gz s3://permanent-repos/production/mdot.tar.gz 
+            - aws s3 cp mdot.tar.gz s3://permanent-repos/production/mdot.tar.gz
