@@ -208,7 +208,9 @@ $button-size: 2rem;
     right: 0;
     position: absolute;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
     padding: 10px;
 
     td:first-child {
@@ -230,6 +232,12 @@ $button-size: 2rem;
     &:first-child {
       padding-right: 5px;
     }
+  }
+
+  .file-viewer-description {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
   }
   .metadata-item {
     padding: 5px 10px;
