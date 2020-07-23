@@ -26,7 +26,8 @@ describe('Check test archive setup', () => {
 
     it('should have access to the needed archives', () => {
       helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
-      cy.get('.hamburger-menu .menu-header-desktop .archive').click();
+      cy.get('.hamburger-menu .archive-options-toggle').click();
+      cy.contains('.hamburger-menu a', 'View All Archives').click();
       helpers.archive.hasAccessToArchive(archives.shareWithArchive, 'Owner');
       helpers.archive.hasAccessToArchive(archives.publicArchive);
     });
