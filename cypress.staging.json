@@ -1,4 +1,6 @@
 {
   "baseUrl": "https://staging.permanent.org",
-  "video": false
+  "video": false,
+  "testArchiveNbr": "00cj-0000",
+  "publicArchiveNbr": "00d4-0000"
 }

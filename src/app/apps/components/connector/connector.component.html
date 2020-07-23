@@ -9,9 +9,6 @@
     View Files
   </div>
 </div>
-<!-- <div class="connector-info-more" *ngIf="connector.type.includes('familysearch') && connected">
-  Connected as: <strong>{{connectedAccountName}}</strong>
-</div> -->
 <div class="connector-actions">
   <button class="btn btn-primary" id="connector-connect" [hidden]="connected" (click)="connect()" [disabled]="waiting">
     {{ connectText || 'Connect' }}
