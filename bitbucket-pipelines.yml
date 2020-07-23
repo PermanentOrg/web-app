@@ -16,7 +16,7 @@ pipelines:
     '**':
       - step:
           name: Unit tests
-          image: permanentorg/mdot:test
+          image: permanentlegacy/node-git-aws:with-chrome
           caches:
             - node
           script: # Modify the commands below to build your repository.
