@@ -18,11 +18,10 @@
       </div>
     </div>
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
-      <a class="archive-options-option">Edit Archive Profile</a>
       <a class="archive-options-option"
-        [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">Manage Archive Connections</a>
+        [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">Archive Connections</a>
       <a class="archive-options-option"
-        [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">Manage Archive Members</a>
+        [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">Archive Members</a>
       <hr>
       <a class="archive-options-option"
         [routerLink]="['/archives']" [class.active]="checkMenuItemActive('/archives')">View All Archives</a>

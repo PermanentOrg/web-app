@@ -33,8 +33,8 @@
   <button class="btn btn-primary" (click)="addRelation()" id="addConnection">Connect an Archive</button>
 </ng-template>
 <div class="hide-desktop">
-  <p *ngIf="!relations || !relations.length">No relationships</p>
-  <div class="page-subheading" *ngIf="sentRelationRequests.length">Sent relationship requests</div>
+  <p *ngIf="!relations || !relations.length">No connections</p>
+  <div class="page-subheading" *ngIf="sentRelationRequests.length">Sent connection requests</div>
   <div class="relations" *ngIf="sentRelationRequests.length">
     <pr-archive-small *ngFor="let relation of sentRelationRequests"
     (archiveClick)="onSentRelationRequestClick(relation)"
@@ -45,7 +45,7 @@
     (removeClick)="removeRelation(relation)"
     ></pr-archive-small>
   </div>
-  <div class="page-subheading" *ngIf="relationRequests.length">Relationship requests</div>
+  <div class="page-subheading" *ngIf="relationRequests.length">Connection requests</div>
   <div class="relations" *ngIf="relationRequests.length">
     <pr-archive-small *ngFor="let relation of relationRequests"
     (archiveClick)="onRelationRequestClick(relation)"
