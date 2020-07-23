@@ -17,6 +17,7 @@ import { PhaseProgressComponent } from './components/phase-progress/phase-progre
 import { ClaimStorageComponent } from './components/claim-storage/claim-storage.component';
 import { PledgeListComponent } from './components/pledge-list/pledge-list.component';
 import { MissingPledgeComponent } from './components/missing-pledge/missing-pledge.component';
+import { UpdateCardComponent } from './components/update-card/update-card.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { MissingPledgeComponent } from './components/missing-pledge/missing-pled
     ClaimStorageLoginComponent,
     ClaimDoneComponent,
     PledgeListComponent,
-    MissingPledgeComponent
+    MissingPledgeComponent,
+    UpdateCardComponent
   ]
 })
 export class PledgeModule { }

@@ -9,6 +9,7 @@ import { PledgeListComponent } from './components/pledge-list/pledge-list.compon
 import { PhaseProgressComponent } from './components/phase-progress/phase-progress.component';
 import { PledgeResolveService } from './resolves/pledge-resolve.service';
 import { MissingPledgeComponent } from './components/missing-pledge/missing-pledge.component';
+import { UpdateCardComponent } from './components/update-card/update-card.component';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,10 @@ export const routes: Routes = [
   {
     path: 'progress',
     component: PhaseProgressComponent
+  },
+  {
+    path: 'update/:pledgeId',
+    component: UpdateCardComponent
   },
   {
     path: '',
