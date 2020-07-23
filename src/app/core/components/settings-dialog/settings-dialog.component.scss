@@ -9,7 +9,7 @@ $header-height: 3 * $grid-unit;
 
 .header {
   height: 3 * $grid-unit;
-  flex: 0 0 ;
+  flex: 0 0 auto;
   background-color: $PR-purple;
   display: flex;
   align-items: center;
