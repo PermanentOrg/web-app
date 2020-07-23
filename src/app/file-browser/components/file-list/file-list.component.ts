@@ -49,7 +49,7 @@ export interface FileListItemParent {
 }
 
 const NAV_HEIGHT = 84;
-const ITEM_HEIGHT_LIST_VIEW = 51;
+const ITEM_HEIGHT_LIST_VIEW = 61;
 
 const ITEM_MAX_WIDTH_GRID_VIEW = 200;
 const ITEM_MAX_WIDTH_GRID_VIEW_SIDEBAR = 175;
