@@ -20,7 +20,7 @@
       <br><br>
       This card will be charged for {{userData?.phase1?.pledgeTotal | currency}} within 5-7 business days.
     </p>
-    <div class="input-group-vertical">
+    <div class="input-group-vertical" [hidden]="cardSaved">
       <pr-form-input fieldName="name" placeholder="Name" [control]="nameControl"
       [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
       <div class="form-control input-vertical ng-touched" [ngClass]="{'ng-invalid': !!cardError}">
@@ -28,7 +28,7 @@
         <div class="input-vertical-error" [ngClass]="{'hidden':!cardError}">{{cardError}}</div>
       </div>
     </div>
-    <button class="btn btn-primary" [disabled]="nameControl.invalid || !cardComplete || waiting" (click)="saveCard()">Update payment details</button>
-    <p [hidden]="!cardSaved"><br>Your payment details have been saved!<br><br></p>
+    <button class="btn btn-primary" [disabled]="nameControl.invalid || !cardComplete || waiting || cardSaved" (click)="saveCard()"  [hidden]="cardSaved">Update payment details</button>
+    <p [hidden]="!cardSaved"><br>Your payment details have been saved! You may close this window.<br><br></p>
   </div>
 </div>

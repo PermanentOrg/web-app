@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { PledgeData, UserData } from 'functions/src/models';
 import * as firebase from 'firebase';
+import 'firebase/functions';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@root/environments/environment';
 import { FormControl, Validators } from '@angular/forms';
+import { MessageService } from '@shared/services/message/message.service';
 
 const stripe = window['Stripe'](environment.stripeKey);
 const elements = stripe.elements();
@@ -31,6 +33,7 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private db: AngularFireDatabase,
+    private message: MessageService
   ) {
     this.initStripeElements();
     this.userId = this.route.snapshot.params.userId;
@@ -93,11 +96,19 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const token = stripeResult.token;
+    const token = stripeResult.token.id;
 
     const updateUser = firebase.functions().httpsCallable('updateUserPaymentMethod');
 
-    await updateUser({userId: this.userId, email: this.userData.email, stripeToken: token});
+    const result = await updateUser({userId: this.userId, email: this.userData.email, stripeToken: token});
+    console.log(result);
+    this.waiting = false;
+    if (!result.data) {
+      this.message.showError('There was an issue saving your payment information. Please try again.');
+    } else {
+      this.message.showMessage('Payment method updated successfully.', 'success');
+      this.cardSaved = true;
+    }
   }
 
 }
