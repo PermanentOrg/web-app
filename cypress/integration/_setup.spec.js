@@ -31,5 +31,13 @@ describe('Check test archive setup', () => {
       helpers.archive.hasAccessToArchive(archives.shareWithArchive, 'Owner');
       helpers.archive.hasAccessToArchive(archives.publicArchive);
     });
+
+    it('Public Archive should have public items', () => {
+      helpers.auth.logIn(accounts.testAccount.email, accounts.testAccount.password);
+      helpers.archive.switchToArchive(archives.publicArchive);
+      helpers.navigation.clickLeftMenuItem('Public');
+      cy.get('.file-list-scroll').should('exist');
+      cy.get('pr-file-list-item').should('exist');
+    });
   })
 });
