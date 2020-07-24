@@ -50,7 +50,7 @@ export const routes: Routes = [
     component: PhaseProgressComponent
   },
   {
-    path: 'update/:pledgeId',
+    path: 'update/:userId',
     component: UpdateCardComponent
   },
   {

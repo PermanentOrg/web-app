@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { PledgeData } from 'functions/src/models';
+import { PledgeData, UserData } from 'functions/src/models';
+import * as firebase from 'firebase';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@root/environments/environment';
+import { FormControl, Validators } from '@angular/forms';
 
 const stripe = window['Stripe'](environment.stripeKey);
 const elements = stripe.elements();
@@ -13,26 +15,29 @@ const elements = stripe.elements();
   styleUrls: ['./update-card.component.scss']
 })
 export class UpdateCardComponent implements OnInit, AfterViewInit {
-  pledgeId: string;
-  pledgeData: PledgeData;
+  userId: string;
+  userData: UserData;
 
   @ViewChild('card', { static: true }) elementsContainer: ElementRef;
   stripeElementsCard: any;
   cardError: any;
   cardComplete = false;
 
-  cardSaved = true;
+  nameControl = new FormControl('', [ Validators.required ]);
+
+  cardSaved = false;
+  waiting = false;
 
   constructor(
     private route: ActivatedRoute,
     private db: AngularFireDatabase,
   ) {
     this.initStripeElements();
-    this.pledgeId = this.route.snapshot.params.pledgeId;
+    this.userId = this.route.snapshot.params.userId;
   }
 
   async ngOnInit() {
-    this.pledgeData = (await this.db.database.ref('/pledges').child(this.pledgeId).once('value')).val() as PledgeData;
+    this.userData = (await this.db.database.ref('/users').child(this.userId).once('value')).val() as UserData;
   }
 
   ngAfterViewInit() {
@@ -73,6 +78,26 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
 
   bindStripeElements() {
     this.stripeElementsCard.mount(this.elementsContainer.nativeElement);
+  }
+
+  async saveCard() {
+    this.waiting = true;
+
+    const stripeResult = await stripe.createToken(this.stripeElementsCard, {
+      name: this.nameControl.value
+    });
+
+    if (stripeResult.error) {
+      this.waiting = false;
+      this.cardError = stripeResult.error.message;
+      return;
+    }
+
+    const token = stripeResult.token;
+
+    const updateUser = firebase.functions().httpsCallable('updateUserPaymentMethod');
+
+    await updateUser({userId: this.userId, email: this.userData.email, stripeToken: token});
   }
 
 }

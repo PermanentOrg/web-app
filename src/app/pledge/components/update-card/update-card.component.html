@@ -6,31 +6,29 @@
   </div>
 </div>
 <div class="container">
-  <p *ngIf="pledgeData === undefined">Loading pledge...</p>
-  <p *ngIf="pledgeData === null">
+  <p *ngIf="userData === undefined">Loading pledge...</p>
+  <p *ngIf="userData === null">
     Pledge not found. Please contact <a href="mailto:support@permanent.org">support@permanent.org</a>.
   </p>
-  <div class="pledge-info" *ngIf="pledgeData?.email">
-    <div class="email">Pledge by {{pledgeData.email}}</div>
-
-    <div class="date">Made on {{pledgeData.timestamp | date}}</div>
+  <div class="pledge-info" *ngIf="userData?.email">
+    <div class="email">{{userData.email}}</div>
   </div>
-  <div [hidden]="!pledgeData?.email">
-    <form action="" [hidden]="cardSaved">
-      <p>
-        <br>
-        Please update payment details for your pledge below. If you don't need to update your payment, you may leave this page.
-        <br><br>
-        This card will be charged for the total amount of any pledges as <strong>{{pledgeData?.email}}</strong>
-      </p>
-      <div class="input-group-vertical">
-        <div class="form-control input-vertical ng-touched" [ngClass]="{'ng-invalid': !!cardError}">
-          <div #card></div>
-          <div class="input-vertical-error" [ngClass]="{'hidden':!cardError}">{{cardError}}</div>
-        </div>
+  <div [hidden]="!userData?.email">
+    <p>
+      <br>
+      Please update payment details for your pledge below. If you don't need to update your payment, you may leave this page.
+      <br><br>
+      This card will be charged for {{userData?.phase1?.pledgeTotal | currency}} within 5-7 business days.
+    </p>
+    <div class="input-group-vertical">
+      <pr-form-input fieldName="name" placeholder="Name" [control]="nameControl"
+      [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
+      <div class="form-control input-vertical ng-touched" [ngClass]="{'ng-invalid': !!cardError}">
+        <div #card></div>
+        <div class="input-vertical-error" [ngClass]="{'hidden':!cardError}">{{cardError}}</div>
       </div>
-      <button class="btn btn-primary" type="submit" [disabled]="">Update payment details</button>
-    </form>
+    </div>
+    <button class="btn btn-primary" [disabled]="nameControl.invalid || !cardComplete || waiting" (click)="saveCard()">Update payment details</button>
     <p [hidden]="!cardSaved"><br>Your payment details have been saved!<br><br></p>
   </div>
 </div>
