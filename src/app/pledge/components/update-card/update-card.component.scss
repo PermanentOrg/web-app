@@ -1,0 +1,56 @@
+@import 'variables';
+
+$pledge-max-width: 800px;
+$pledge-banner-height: 100px;
+
+.pledge-banner {
+  flex: 0 0 100px;
+  height: $pledge-banner-height;
+  padding: 0px 0.5rem;
+  color: white;
+  background-color: $PR-blue;
+
+  .banner-content {
+    margin: 0 auto;
+    max-width: $pledge-max-width;
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  .banner-logo-wrapper {
+    flex: 0 0 200px;
+    img {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .banner-logo-wrapper {
+      flex: 0 1 200px;
+      margin-right: 5px;
+    }
+  }
+
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 400px;
+  padding: $grid-unit 0;
+  text-align: center;
+
+  @include beforeDesktop {
+    padding: $grid-unit;
+  }
+}
+
+.pledge-info {
+  .email {
+    font-weight: bold;
+  }
+
+  .date {
+    font-size: $font-size-sm;
+  }
+}

@@ -106,7 +106,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       style: {
         base: {
           fontSize: '16px',
-          fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif',
+          fontFamily: 'Open Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif',
           '::placeholder:': {
             color: '#6c757d'
           }
@@ -211,10 +211,11 @@ export interface PledgeData {
   dollarAmount: number;
   name?: string;
   stripeToken?: string;
+  stripeCustomerId?: string;
   timestamp?: number;
   accountId?: number;
   claimed?: boolean;
   anonymous?: boolean;
   zip?: string;
-  location?: string;
+  id?: string;
 }
