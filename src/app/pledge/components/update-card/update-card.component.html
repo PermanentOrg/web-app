@@ -14,7 +14,7 @@
     <div class="email">{{userData.email}}</div>
   </div>
   <div [hidden]="!userData?.email">
-    <p>
+    <p [hidden]="cardSaved">
       <br>
       Please update payment details for your pledge below. If you don't need to update your payment, you may leave this page.
       <br><br>

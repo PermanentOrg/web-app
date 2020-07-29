@@ -108,6 +108,7 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
     } else {
       this.message.showMessage('Payment method updated successfully.', 'success');
       this.cardSaved = true;
+      this.nameControl.reset();
     }
   }
 
