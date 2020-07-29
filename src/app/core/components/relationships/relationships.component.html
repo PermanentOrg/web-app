@@ -18,9 +18,9 @@
   </div>
   <div class="sidebar-relation" *ngFor="let relation of sentRelationRequests">
     <div class="sidebar-relation-main">
-      <div class="archive-thumb" prBgImage [bgSrc]="relation.ArchiveVO.thumbURL200" [cover]="true"></div>
+      <div class="archive-thumb" prBgImage [bgSrc]="relation.RelationArchiveVO.thumbURL200" [cover]="true"></div>
       <div class="archive-info">
-        <div class="name">{{relation.ArchiveVO.fullName}}</div>
+        <div class="name">{{relation.RelationArchiveVO.fullName}}</div>
         <div class="relation-type">{{relation.type | prConstants}}</div>
       </div>
     </div>
