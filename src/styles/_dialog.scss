@@ -10,16 +10,24 @@ $header-height: 3 * $grid-unit;
   color: white;
   font-size: $font-size-lg;
   padding: 0 $grid-unit;
+  padding-right: 0;
 
   span {
     flex: 1 1 auto;
   }
 
   button {
+    margin: 0;
     margin-left: auto;
-    @include gridHeightButton;
     flex: 0 0 auto;
     width: auto;
+    @include gridHeightButton;
+    background: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
   }
 }
 
