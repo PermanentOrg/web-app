@@ -1,1 +1,35 @@
-<p>connections-dialog works!</p>
+<div class="dialog-content">
+  <div class="header">
+    <span>Connections</span>
+    <button class="btn btn-secondary" (click)="onDoneClick()">Done</button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('connections')" [class.active]="activeTab === 'connections'">
+        Connections
+      </div>
+      <div class="dialog-tab"
+        (click)="setTab('pending')" [class.active]="activeTab === 'pending'">
+        Pending Connections
+      </div>
+      <div class="dialog-tab"
+        (click)="setTab('new')" [class.active]="activeTab === 'new'">
+        Add Connections
+      </div>
+    </div>
+    <div class="settings-panel">
+      <ng-container [ngSwitch]="activeTab">
+        <ng-template *ngSwitchCase="'connections'">
+          existing connections
+        </ng-template>
+        <ng-template *ngSwitchCase="'pending'">
+          pending connections
+        </ng-template>
+        <ng-template *ngSwitchCase="'new'">
+          new connection!
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</div>
