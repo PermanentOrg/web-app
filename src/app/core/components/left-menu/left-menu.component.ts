@@ -6,6 +6,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveVO } from '@root/app/models';
 import { Subscription } from 'rxjs';
 import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
+import { RelationshipService } from '@core/services/relationship/relationship.service';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-left-menu',
@@ -33,6 +35,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private accountService: AccountService,
     private messageService: MessageService,
     private router: Router,
+    private relationshipService: RelationshipService,
+    private dialog: Dialog,
     private elementRef: ElementRef
   ) {
     if (this.accountService.getArchive()) {
@@ -100,6 +104,11 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     return this.urlMatches.get(urlSegment);
+  }
+
+  async onConnectionsClick() {
+    const connections = await this.relationshipService.get();
+    this.dialog.open('ConnectionsDialogComponent', { connections });
   }
 
 }

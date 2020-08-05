@@ -85,6 +85,10 @@ export class CoreModule {
     {
       token: 'SettingsDialogComponent',
       component: SettingsDialogComponent
+    },
+    {
+      token: 'ConnectionsDialogComponent',
+      component: ConnectionsDialogComponent
     }
   ];
 
