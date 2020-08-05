@@ -47,8 +47,9 @@ $header-height: 3 * $grid-unit;
     display: flex;
     align-items: center;
     padding-left: $grid-unit / 2;
-    font-size: $font-size-sm;
     cursor: pointer;
+    user-select: none;
+    font-size: $font-size-sm;
 
     &:not(.active) {
       color: $text-muted;
@@ -75,7 +76,7 @@ $header-height: 3 * $grid-unit;
     }
 
     &.active {
-      font-weight: $font-weight-bold;
+      font-weight: $font-weight-semibold;
       &::before 
       {
         opacity: 1;
@@ -88,11 +89,13 @@ $header-height: 3 * $grid-unit;
 @mixin tabbedDialogPanel {
   flex: 1 1 auto;
   @include desktop {
-    padding: $grid-unit 0;
+    padding: $grid-unit;
     overflow-y: auto;
   }
 }
 
 @mixin tabbedDialogPanelTitle {
-  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  height: 2 * $grid-unit;
+  line-height: 2 * $grid-unit;
 }

@@ -108,7 +108,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onConnectionsClick() {
     const connections = await this.relationshipService.get();
-    this.dialog.open('ConnectionsDialogComponent', { connections });
+    this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '800px'});
   }
 
 }

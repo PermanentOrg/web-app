@@ -18,17 +18,36 @@
         Add Connections
       </div>
     </div>
-    <div class="settings-panel">
+    <div class="panel">
       <ng-container [ngSwitch]="activeTab">
-        <ng-template *ngSwitchCase="'connections'">
-          existing connections
-        </ng-template>
-        <ng-template *ngSwitchCase="'pending'">
-          pending connections
-        </ng-template>
-        <ng-template *ngSwitchCase="'new'">
+        <ng-container *ngSwitchCase="'connections'">
+          <div class="panel-title">Connections</div>
+          <div class="connections">
+            <pr-archive-small *ngFor="let relation of connections"
+            (archiveClick)="onConnectionClick(relation)"
+            [archive]="relation.RelationArchiveVO"
+            [relation]="relation.type"
+            [largeOnDesktop]="true"
+            [showRemove]="true"
+            (removeClick)="removeRelation(relation)"
+            [showEdit]="true"
+            (editClick)="editRelation(relation)"
+            ></pr-archive-small>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'pending'">
+          <pr-archive-small *ngFor="let relation of sentConnectionsRequests"
+          (archiveClick)="onSentRelationRequestClick(relation)"
+          [archive]="relation.RelationArchiveVO"
+          [relation]="relation.type"
+          [largeOnDesktop]="true"
+          [showRemove]="true"
+          (removeClick)="removeRelation(relation)"
+          ></pr-archive-small>
+        </ng-container>
+        <ng-container *ngSwitchCase="'new'">
           new connection!
-        </ng-template>
+        </ng-container>
       </ng-container>
     </div>
   </div>
