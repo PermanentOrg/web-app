@@ -1,0 +1,98 @@
+$header-height: 3 * $grid-unit;
+
+@mixin tabbedDialogHeader($color: $PR-purple) {
+  height: 3 * $grid-unit;
+  flex: 0 0 auto;
+  background-color: $color;
+  display: flex;
+  align-items: center;
+
+  color: white;
+  font-size: $font-size-lg;
+  padding: 0 $grid-unit;
+
+  span {
+    flex: 1 1 auto;
+  }
+
+  button {
+    margin-left: auto;
+    @include gridHeightButton;
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+
+@mixin tabbedDialogContent($height: 400px) {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  @include desktop {
+    display: flex;
+    height: $height;
+    overflow: visible;
+  }
+}
+
+@mixin tabbedDialogNav($color: $PR-purple, $tabClass: 'dialog-tab') {
+  flex: 0 0 (10 * $grid-unit);
+
+  @include desktop {
+    border-right: $file-list-border;
+    padding-top: $grid-unit;
+  }
+
+  .#{$tabClass} {
+    height: 2 * $grid-unit;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: $grid-unit / 2;
+    font-size: $font-size-sm;
+    cursor: pointer;
+
+    &:not(.active) {
+      color: $text-muted;
+    }
+
+    &::before {
+      content: ' ';
+      background-color: $gray-500;
+      position: absolute;
+      left: 0;
+      width: $grid-unit / 5;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 125ms $tweaked-ease;
+    }
+
+    &:hover {
+      text-decoration: none;
+      &::before {
+        transition: opacity 0ms;
+        opacity: 1;
+      }
+    }
+
+    &.active {
+      font-weight: $font-weight-bold;
+      &::before 
+      {
+        opacity: 1;
+        background-color: $color;
+      }
+    }
+  }
+}
+
+@mixin tabbedDialogPanel {
+  flex: 1 1 auto;
+  @include desktop {
+    padding: $grid-unit 0;
+    overflow-y: auto;
+  }
+}
+
+@mixin tabbedDialogPanelTitle {
+  font-size: $font-size-lg;
+}

@@ -5,103 +5,22 @@
   width: 100%;
 }
 
-$header-height: 3 * $grid-unit;
-
 .header {
-  height: 3 * $grid-unit;
-  flex: 0 0 auto;
-  background-color: $PR-purple;
-  display: flex;
-  align-items: center;
-
-  color: white;
-  font-size: $font-size-lg;
-  padding: 0 $grid-unit;
-
-  span {
-    flex: 1 1 auto;
-  }
-
-  button {
-    margin-left: auto;
-    @include gridHeightButton;
-    flex: 0 0 auto;
-    width: auto;
-  }
+  @include tabbedDialogHeader($PR-purple)
 }
 
-
 .settings-content {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  @include desktop {
-    display: flex;
-    height: 400px;
-    overflow: visible;
-  }
+  @include tabbedDialogContent;
 }
 
 .settings-tabs {
-  flex: 0 0 (10 * $grid-unit);
-
-  @include desktop {
-    border-right: $file-list-border;
-    padding-top: $grid-unit;
-  }
-
-  .settings-tab {
-    height: 2 * $grid-unit;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: $grid-unit / 2;
-    font-size: $font-size-sm;
-    cursor: pointer;
-
-    &:not(.active) {
-      color: $text-muted;
-    }
-
-    &::before {
-      content: ' ';
-      background-color: $gray-500;
-      position: absolute;
-      left: 0;
-      width: $grid-unit / 5;
-      top: 0;
-      bottom: 0;
-      opacity: 0;
-      transition: opacity 125ms $tweaked-ease;
-    }
-
-    &:hover {
-      text-decoration: none;
-      &::before {
-        transition: opacity 0ms;
-        opacity: 1;
-      }
-    }
-
-    &.active {
-      font-weight: $font-weight-bold;
-      &::before 
-      {
-        opacity: 1;
-        background-color: $PR-purple;
-      }
-    }
-  }
+  @include tabbedDialogNav($PR-purple, 'settings-tab');
 }
 
 .settings-panel {
-  flex: 1 1 auto;
-  @include desktop {
-    padding: $grid-unit 0;
-    overflow-y: auto;
-  }
+  @include tabbedDialogPanel;
 }
 
 .panel-title {
-  font-size: $font-size-lg;
-
+  @include tabbedDialogPanelTitle;
 }
