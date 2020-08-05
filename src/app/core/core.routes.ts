@@ -95,18 +95,22 @@ export const routes: RoutesWithData = [
         redirectTo: 'invitations'
       },
       {
-        path: 'relationships',
+        path: 'connections',
         component: RelationshipsComponent,
-        data: { title: 'Relationships' },
+        data: { title: 'Connections' },
         resolve: { relations: RelationshipsResolveService }
       },
       {
+        path: 'relationships',
+        redirectTo: 'connections'
+      },
+      {
         path: 'archive/relationships',
-        redirectTo: 'relationships'
+        redirectTo: 'connections'
       },
       {
         path: 'relationship_request/:email',
-        redirectTo: 'relationships'
+        redirectTo: 'connections'
       },
       {
         path: 'members',

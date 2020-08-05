@@ -94,6 +94,17 @@
   align-items: center;
 }
 
+@mixin gridHeightButtonSmall {
+  height: 1.5 * $grid-unit;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  display: flex;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+  justify-content: center;
+}
+
 .hide-desktop {
   @include after($tablet-horizontal) {
     display: none !important;

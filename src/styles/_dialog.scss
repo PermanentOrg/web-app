@@ -88,6 +88,7 @@ $header-height: 3 * $grid-unit;
 
 @mixin tabbedDialogPanel {
   flex: 1 1 auto;
+  padding: 0 $grid-unit / 2;
   @include desktop {
     padding: $grid-unit;
     overflow-y: auto;
