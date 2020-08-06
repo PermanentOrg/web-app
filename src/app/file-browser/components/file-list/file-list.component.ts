@@ -345,7 +345,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     const listItem = find(this.listItemsQuery.toArray(), x => x.item.folder_linkId === folder_linkId);
     if (listItem) {
       const itemElem = listItem.element.nativeElement as HTMLElement;
-      itemElem.scrollIntoView({behavior: 'smooth', block: 'center'});
+      itemElem.scrollIntoView();
     }
   }
 
