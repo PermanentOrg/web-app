@@ -118,7 +118,11 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       })
       .then((response: ArchiveResponse) => {
         this.message.showMessage('Member removed successfully.', 'success');
-        remove(this.members, member);
+        if (member.status.includes('pending')) {
+          remove(this.pendingMembers, member);
+        } else {
+          remove(this.members, member);
+        }
         deferred.resolve();
       })
       .catch((response: ArchiveResponse) => {
@@ -162,7 +166,8 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       }
       const account = response.getAccountVOs().pop();
       account.accessRole = member.accessRole;
-      this.members.push(account);
+      this.pendingMembers.push(account);
+      this.setTab('pending');
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         if (err.getMessage() === 'warning.archive.no_email_found') {
