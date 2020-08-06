@@ -19,7 +19,8 @@ type DialogComponentToken =
   'LocationPickerComponent' |
   'EditTagsComponent' |
   'PublishComponent' |
-  'ProfileEditComponent'
+  'ProfileEditComponent' |
+  'MembersDialogComponent'
   ;
 
 export interface DialogChildComponentData {

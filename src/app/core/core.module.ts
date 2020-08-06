@@ -37,6 +37,7 @@ import { SidebarActionPortalService } from './services/sidebar-action-portal/sid
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
+import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { ConnectionsDialogComponent } from './components/connections-dialog/conn
     ProfileEditComponent,
     SettingsDialogComponent,
     AllArchivesComponent,
-    ConnectionsDialogComponent
+    ConnectionsDialogComponent,
+    MembersDialogComponent
   ],
   providers: [
     DataService,
@@ -93,6 +95,10 @@ export class CoreModule {
     {
       token: 'ProfileEditComponent',
       component: ProfileEditComponent
+    },
+    {
+      token: 'MembersDialogComponent',
+      component: MembersDialogComponent
     }
   ];
 
