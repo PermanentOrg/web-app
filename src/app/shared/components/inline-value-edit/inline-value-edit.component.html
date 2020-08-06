@@ -65,6 +65,16 @@
     </div>
     <ng-container *ngTemplateOutlet="inlineControls"></ng-container>
   </ng-container>
+  <ng-container *ngSwitchCase="'select'">
+    <form novalidate>
+      <div class="inline-value-container" [class.can-edit]="canEdit">
+        <select name="select" class="form-control" #input #model="ngModel" [(ngModel)]="editValue" (blur)="onTextInputBlur()"
+         [required]="required" [class.is-editing]="isEditing">
+          <option [value]="option.value" *ngFor="let option of selectOptions">{{option.text}}</option>
+        </select>
+      </div>
+    </form>
+  </ng-container>
   <ng-template #inlineControls>
     <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
       <button class="btn btn-primary btn-sm" (click)="save()" type="submit">

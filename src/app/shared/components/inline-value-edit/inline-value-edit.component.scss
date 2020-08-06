@@ -27,15 +27,23 @@ form {
   }
 }
 
-.inline-value-display {
+.inline-value-display, select {
   width: calc(100% + #{2 * $inline-padding-x});
+  height: auto;
   background-color: white;
   padding: $inline-padding-y $inline-padding-x;
   margin-left: -1 * $inline-padding-x;
   margin-right: -1 * $inline-padding-x;
   position: relative;
   border-color: rgba($input-border-color, 0);
+}
 
+select { 
+  height: auto !important;
+  appearance: none;
+}
+
+.inline-value-display {
   &.is-editing {
     opacity: 0;
   }
@@ -104,34 +112,36 @@ div.form-control {
   padding: $inline-padding-y $inline-padding-x;
 }
 
-.inline-value-container > input, .inline-value-container > textarea {
-  position: absolute;
-  top: 0px;
-  left: -1 * $inline-padding-x;
-  right: -1 * $inline-padding-x;
-  bottom: 0px;
-  opacity: 0;
-  z-index: 0;
-  resize: none;
-  width: calc(100% + #{2 * $inline-padding-x});
-  display: none;
+.inline-value-container {
+  & > input, & > textarea {
+    position: absolute;
+    top: 0px;
+    left: -1 * $inline-padding-x;
+    right: -1 * $inline-padding-x;
+    bottom: 0px;
+    opacity: 0;
+    z-index: 0;
+    resize: none;
+    width: calc(100% + #{2 * $inline-padding-x});
+    display: none;
 
-  &.is-editing {
-    opacity: 1;
-    z-index: 1;
+    &.is-editing {
+      opacity: 1;
+      z-index: 1;
+    }
   }
 }
 
 .inline-value-container {
   &.can-edit {
-    .inline-value-display {
+    .inline-value-display, select {
       cursor: pointer;
       &:hover {
         border-color: rgba($input-border-color, 0.75);
       }
     }
 
-    & > input, & > textarea {
+    & > input, & > textarea, & > select {
       display: initial;
     }
   }

@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
+import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 
 @Component({
   selector: 'pr-account-settings',
@@ -15,7 +16,7 @@ import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-co
 })
 export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
-  public countries: Country[];
+  public countries: FormInputSelectOption[];
 
   constructor(
     private accountService: AccountService,
@@ -25,7 +26,12 @@ export class AccountSettingsComponent implements OnInit {
     private message: MessageService
   ) {
     this.account = this.accountService.getAccount();
-    this.countries = this.prConstants.getCountries();
+    this.countries = this.prConstants.getCountries().map(c => {
+      return {
+        text: c.name,
+        value: c.abbrev
+      };
+    });
   }
 
   ngOnInit(): void {

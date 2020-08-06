@@ -7,6 +7,7 @@ import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormat
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { ENTER } from '@angular/cdk/keycodes';
+import { FormInputSelectOption } from '../form-input/form-input.component';
 
 export type InlineValueEditType = 'text' | 'date' | 'textarea' | 'select';
 
@@ -32,6 +33,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() email = false;
   @Input() noScroll = true;
   @Input() saveOnBlur = true;
+  @Input() selectOptions: FormInputSelectOption[];
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
@@ -49,6 +51,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
+    if (this.type === 'select') {
+      this.editValue = this.displayValue;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
