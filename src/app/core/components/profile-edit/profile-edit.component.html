@@ -1,4 +1,31 @@
-<div class="profile-group">
+<div class="dialog-content">
+  <div class="header">
+    <span>Archive Profile</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('about')" [class.active]="activeTab === 'about'">
+        About This Archive
+      </div>
+      <div class="dialog-tab"
+        (click)="setTab('info')" [class.active]="activeTab === 'info'">
+        Person Information
+      </div>
+    </div>
+    <div class="panel">
+      <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'about'">
+          
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<!-- <div class="profile-group">
   <div class="profile-item">
     <div class="profile-item-content">
       <div class="profile-picture" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"
@@ -32,4 +59,4 @@
       type='textarea'></pr-inline-value-edit>
     </div>
   </div>
-</div>
+</div> -->

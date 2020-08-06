@@ -3,11 +3,12 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ArchiveVO } from '@root/app/models';
+import { ArchiveVO, AccountVO } from '@root/app/models';
 import { Subscription } from 'rxjs';
 import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -33,6 +34,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private accountService: AccountService,
+    private api: ApiService,
     private messageService: MessageService,
     private router: Router,
     private relationshipService: RelationshipService,
@@ -108,7 +110,28 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onConnectionsClick() {
     const connections = await this.relationshipService.get();
-    this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '800px'});
+    this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '1000px'});
+    this.showArchiveOptions = false;
   }
+
+  async onProfileClick() {
+    const profileItems = await this.api.archive.getAllProfileItems(this.archive);
+    this.dialog.open('ProfileEditComponent', { profileItems }, { width: '1000px'});
+    this.showArchiveOptions = false;
+  }
+
+  async onMembersClick() {
+    const currentAccount = this.accountService.getAccount();
+    const response = await this.api.archive.getMembers(this.accountService.getArchive());
+    const members = response.getAccountVOs();
+    members.forEach((member: AccountVO) => {
+      if (member.accountId === currentAccount.accountId) {
+        member.isCurrent = true;
+      }
+    });
+    this.dialog.open('MembersDialogComponent', { members }, { width: '800px'});
+    this.showArchiveOptions = false;
+  }
+
 
 }

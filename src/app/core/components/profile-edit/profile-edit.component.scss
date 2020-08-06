@@ -1,8 +1,28 @@
 @import 'variables';
 
 :host {
-  @include has-breadcrumbs;
-  @include mainContentScrollDesktop;
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader($PR-blue-light)
+}
+
+.content {
+  @include tabbedDialogContent(500px);
+}
+
+.tabs {
+  @include tabbedDialogNav($PR-blue-light, 'dialog-tab');
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
 }
 
 $profile-padding-x: 10px;
