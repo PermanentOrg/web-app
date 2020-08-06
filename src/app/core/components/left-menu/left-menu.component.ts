@@ -111,11 +111,13 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   async onConnectionsClick() {
     const connections = await this.relationshipService.get();
     this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '1000px'});
+    this.showArchiveOptions = false;
   }
 
   async onProfileClick() {
     const profileItems = await this.api.archive.getAllProfileItems(this.archive);
     this.dialog.open('ProfileEditComponent', { profileItems }, { width: '1000px'});
+    this.showArchiveOptions = false;
   }
 
   async onMembersClick() {
@@ -128,6 +130,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
     this.dialog.open('MembersDialogComponent', { members }, { width: '800px'});
+    this.showArchiveOptions = false;
   }
+
 
 }

@@ -152,6 +152,7 @@ $archive-options-shadow-offset: 0.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
+        user-select: none;
         text-align: center;
         i {
           font-size: $mat-icon-lg;
@@ -198,7 +199,7 @@ $archive-options-shadow-offset: 0.5rem;
       display: flex;
       align-items: center;
       font-size: $font-size-sm;
-
+      user-select: none;
       color: white;
 
       &:hover:not(.active) {
