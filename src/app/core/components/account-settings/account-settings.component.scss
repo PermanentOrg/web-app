@@ -1,7 +1,6 @@
 @import 'variables';
 
 :host {
-  padding: 0 $grid-unit;
   display: block;
 }
 
@@ -26,18 +25,29 @@ p {
 
 
 .settings-item {
-  padding: $grid-unit / 2 0;
+  display: flex;
+
   & > label {
     font-weight: $font-weight-bold;
     color: $text-muted;
+    padding: $grid-unit / 2 0;
     margin-bottom: 0px;
+    flex: 0 0 12rem;
+  }
+
+  .settings-item-content {
+    flex: 1 1 auto;
   }
 
   @include after($phone) {
-    max-width: 20rem;
+    .settings-item-content {
+      max-width: 15rem;
+    }
+
+    &.settings-item-large .settings-item-content {
+      max-width: 30rem;
+    }
   }
 
-  &.settings-item-large {
-    max-width: 40rem;
-  }
+
 }
