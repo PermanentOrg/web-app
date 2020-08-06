@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import { ProfileItemVOData, FieldNameUI } from '@models/profile-item-vo';
@@ -6,12 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { groupBy } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role.enum';
-import { UploadService } from '@core/services/upload/upload.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { Dialog, DIALOG_DATA, IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -43,41 +42,43 @@ type ProfileItemsDictionary = {
   [Field in FieldNameUI]: ProfileItemVOData[]
 };
 
+type ProfileTab = 'about' | 'info' | 'online' | 'residence' | 'work';
+
 @Component({
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.scss']
 })
-export class ProfileEditComponent implements OnInit {
+export class ProfileEditComponent implements OnInit, IsTabbedDialog {
   archive: ArchiveVO;
   profileItems: ProfileItemsDictionary;
 
   canEdit: boolean;
 
+  activeTab: ProfileTab = 'about';
   constructor(
-    private data: DataService,
     private account: AccountService,
-    private route: ActivatedRoute,
+    private dialogRef: DialogRef,
+    @Inject(DIALOG_DATA) public data: any,
     private api: ApiService,
-    private message: MessageService,
-    private folderPicker: FolderPickerService
+    private message: MessageService
   ) {
-    this.data.setCurrentFolder(
-      new FolderVO({
-        type: 'page',
-        displayName: 'Profile',
-        pathAsText: ['Profile']
-      })
-    );
-
     this.archive = this.account.getArchive();
-    const profileItems = this.route.snapshot.data.profileItems as ProfileItemVOData[];
+    const profileItems = this.data.profileItems as ProfileItemVOData[];
     this.profileItems = groupBy(profileItems, 'fieldNameUI') as ProfileItemsDictionary;
 
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
   }
 
   ngOnInit(): void {
+  }
+
+  setTab(tab: ProfileTab) {
+    this.activeTab = tab;
+  }
+
+  onDoneClick() {
+    this.dialogRef.close();
   }
 
   async onSaveStringProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsStringDataCol, value: string) {
@@ -116,24 +117,5 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSaveIntProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsIntDataCol, value: number) {
-  }
-
-  async onProfilePictureClick() {
-    const privateRoot = this.account.getPrivateRoot();
-    try {
-      const record = (await this.folderPicker.chooseRecord(privateRoot)) as RecordVO;
-      const updateArchive = new ArchiveVO(this.archive);
-      updateArchive.thumbArchiveNbr = record.archiveNbr;
-      const updateResponse = await this.api.archive.update(updateArchive);
-      this.archive.update(updateResponse.getArchiveVO());
-    } catch (err) {
-      if (err instanceof ArchiveResponse) {
-        this.message.showError('There was a problem changing the archive profile picture.');
-        console.error(err);
-      }
-    }
-  }
-
-  promptForExistingPicture() {
   }
 }

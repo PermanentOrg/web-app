@@ -18,7 +18,8 @@ type DialogComponentToken =
   'TimelineCompleteDialogComponent' |
   'LocationPickerComponent' |
   'EditTagsComponent' |
-  'PublishComponent'
+  'PublishComponent' |
+  'ProfileEditComponent'
   ;
 
 export interface DialogChildComponentData {
