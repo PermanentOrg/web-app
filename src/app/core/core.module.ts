@@ -36,6 +36,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
+import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 
 @NgModule({
   imports: [
@@ -66,7 +67,8 @@ import { AllArchivesComponent } from './components/all-archives/all-archives.com
     ArchiveSelectorComponent,
     ProfileEditComponent,
     SettingsDialogComponent,
-    AllArchivesComponent
+    AllArchivesComponent,
+    MembersDialogComponent
   ],
   providers: [
     DataService,
