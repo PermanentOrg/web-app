@@ -6,6 +6,8 @@ import { cloneDeep } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
+import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
+import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 
 @Component({
   selector: 'pr-account-settings',
@@ -14,13 +16,29 @@ import { MessageService } from '@shared/services/message/message.service';
 })
 export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
+  public countries: FormInputSelectOption[];
+  public states: FormInputSelectOption[];
+
   constructor(
     private accountService: AccountService,
     private dataService: DataService,
+    private prConstants: PrConstantsService,
     private api: ApiService,
     private message: MessageService
   ) {
     this.account = this.accountService.getAccount();
+    this.countries = this.prConstants.getCountries().map(c => {
+      return {
+        text: c.name,
+        value: c.abbrev
+      };
+    });
+    this.states = Object.values(this.prConstants.getStates()).map((s: string) => {
+      return {
+        text: s,
+        value: s
+      };
+    });
   }
 
   ngOnInit(): void {

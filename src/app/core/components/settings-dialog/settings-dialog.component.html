@@ -1,13 +1,15 @@
 <div class="dialog-content">
   <div class="header">
-    <span>Settings</span>
-    <button class="btn btn-secondary" (click)="onDoneClick()">Done</button>
+    <span>Account Settings</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
   </div>
   <div class="settings-content">
     <div class="settings-tabs">
       <div class="settings-tab"
         (click)="setTab('account')" [class.active]="activeTab === 'account'">
-        Account Settings
+        Personal Info
       </div>
       <div class="settings-tab"
         (click)="setTab('notification')" [class.active]="activeTab === 'notification'">

@@ -95,7 +95,7 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
   openSettingsDialog(activeTab: SettingsTab) {
     this.showMenu = false;
     try {
-      this.dialog.open('SettingsDialogComponent', { tab: activeTab }, { width: '800px' });
+      this.dialog.open('SettingsDialogComponent', { tab: activeTab }, { width: '1000px' });
     } catch (err) {
 
     }

@@ -7,8 +7,10 @@ import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormat
 import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { ENTER } from '@angular/cdk/keycodes';
+import { FormInputSelectOption } from '../form-input/form-input.component';
+import { NgModel, FormControl, Validators } from '@angular/forms';
 
-export type InlineValueEditType = 'text' | 'date' | 'textarea';
+export type InlineValueEditType = 'text' | 'date' | 'textarea' | 'select';
 
 type ValueType = string | number;
 @Component({
@@ -27,16 +29,19 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() item: ItemVO;
   @Input() canEdit = true;
   @Input() required = false;
-  @Input() minLength = false;
-  @Input() maxLength = false;
+  @Input() minLength: number;
+  @Input() maxLength: number;
   @Input() email = false;
   @Input() noScroll = true;
   @Input() saveOnBlur = true;
+  @Input() selectOptions: FormInputSelectOption[];
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
+  formControl: FormControl;
   @ViewChild('input') inputElementRef: ElementRef;
+  @ViewChild(NgModel) ngModel: NgModel;
   @ViewChild('datePicker') datePicker: NgbDatepicker;
 
   isEditing = false;
@@ -49,6 +54,22 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
+    if (this.type === 'select') {
+      this.editValue = this.displayValue;
+    }
+
+    const validators = [];
+    if (this.required) {
+      validators.push(Validators.required);
+    }
+
+    if (this.minLength) {
+      validators.push(Validators.minLength(this.minLength));
+    }
+
+    if (this.email) {
+      validators.push(Validators.email);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -85,8 +106,11 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   save(skipBlur = false) {
+    if (this.ngModel.invalid) {
+      return;
+    }
+    
     if (this.displayValue !== this.editValue) {
-      ('emit change!');
       this.doneEditing.emit(this.editValue);
     }
     this.isEditing = false;
@@ -150,7 +174,6 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   onTextInputBlur() {
-    ('blur!');
     if (this.saveOnBlur) {
       this.save(true);
     }
