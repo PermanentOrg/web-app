@@ -17,6 +17,7 @@ import { FormInputSelectOption } from '@shared/components/form-input/form-input.
 export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
   public countries: FormInputSelectOption[];
+  public states: FormInputSelectOption[];
 
   constructor(
     private accountService: AccountService,
@@ -30,6 +31,12 @@ export class AccountSettingsComponent implements OnInit {
       return {
         text: c.name,
         value: c.abbrev
+      };
+    });
+    this.states = Object.values(this.prConstants.getStates()).map((s: string) => {
+      return {
+        text: s,
+        value: s
       };
     });
   }

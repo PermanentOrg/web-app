@@ -15,38 +15,48 @@
 <div class="settings-item">
   <label>Mobile Phone</label>
   <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.primaryPhone" [noScroll]="true"
+    <pr-inline-value-edit [displayValue]="account.primaryPhone" [noScroll]="true" [emptyMessage]="'Mobile Phone Number'"
       (doneEditing)="onSaveProfileInfo('primaryPhone', $event)"></pr-inline-value-edit>
   </div>
 </div>
 <div class="settings-item">
   <label>Address Line 1</label>
   <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.address" [noScroll]="true" [emptyMessage]="'455 Sunflower Rd'"
+    <pr-inline-value-edit [displayValue]="account.address" [noScroll]="true" [emptyMessage]="'Street Address Line 1'"
       (doneEditing)="onSaveProfileInfo('address', $event)"></pr-inline-value-edit>
   </div>
 </div>
 <div class="settings-item">
   <label>Address Line 2</label>
   <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.address2" [noScroll]="true" [emptyMessage]="'Suite 400'"
+    <pr-inline-value-edit [displayValue]="account.address2" [noScroll]="true" [emptyMessage]="'Street Address Line 2'"
       (doneEditing)="onSaveProfileInfo('address2', $event)"></pr-inline-value-edit>
   </div>
 </div>
 <div class="settings-item">
   <label>City</label>
   <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.city" [noScroll]="true" [emptyMessage]="'Springfield'"
+    <pr-inline-value-edit [displayValue]="account.city" [noScroll]="true" [emptyMessage]="'City'"
       (doneEditing)="onSaveProfileInfo('city', $event)"></pr-inline-value-edit>
   </div>
 </div>
-<div class="settings-item">
-  <label>State</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.state" [noScroll]="true" [emptyMessage]="'Missouri'"
-      (doneEditing)="onSaveProfileInfo('state', $event)"></pr-inline-value-edit>
+<ng-container [ngSwitch]="account.country">
+  <div class="settings-item" *ngSwitchCase="'US'">
+    <label>State</label>
+    <div class="settings-item-content">
+      <pr-inline-value-edit [displayValue]="account.state" [noScroll]="true" [emptyMessage]="'Select state'" [type]="'select'"
+        [selectOptions]="states" (doneEditing)="onSaveProfileInfo('state', $event)"></pr-inline-value-edit>
+    </div>
   </div>
-</div>
+  <div class="settings-item" *ngSwitchDefault>
+    <label>Province/Region</label>
+    <div class="settings-item-content">
+      <pr-inline-value-edit [displayValue]="account.state" [noScroll]="true" [emptyMessage]="'Province/Region'"
+        (doneEditing)="onSaveProfileInfo('state', $event)"></pr-inline-value-edit>
+    </div>
+  </div>
+</ng-container>
+
 <div class="settings-item">
   <label>Postal Code</label>
   <div class="settings-item-content">

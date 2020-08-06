@@ -81,6 +81,10 @@ export class PrConstantsService {
     return this.countries;
   }
 
+  public getStates() {
+    return this.constants['us_states'];
+  }
+
   public getAccessRoles() {
     return this.accessRoles;
   }
