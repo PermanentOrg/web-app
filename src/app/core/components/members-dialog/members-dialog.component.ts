@@ -9,7 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { AccessRoleType } from '@models/access-role';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { clone, remove } from 'lodash';
+import { clone, remove, partition } from 'lodash';
 
 const MemberActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -32,6 +32,7 @@ type MembersTab = 'members' | 'pending' | 'add';
 })
 export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   members: AccountVO[];
+  pendingMembers: AccountVO[];
   canEdit: boolean;
 
   activeTab: MembersTab = 'members';
@@ -44,7 +45,8 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     private api: ApiService,
     private accountService: AccountService
   ) {
-    this.members = this.data.members;
+    [ this.members, this.pendingMembers ] = partition(this.data.members, { status: 'status.generic.ok' });
+    this.canEdit = this.accountService.getArchive().accessRole === 'access.role.owner';
   }
 
   ngOnInit(): void {
@@ -108,7 +110,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
 
   removeMember(member: AccountVO) {
     const deferred = new Deferred();
-    const confirmTitle = `Remove ${member.fullName}'s access to ${this.accountService.getArchive().fullName}?`;
+    const confirmTitle = `Remove ${member.fullName}'s access to The ${this.accountService.getArchive().fullName} Archive?`;
 
     return this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {
