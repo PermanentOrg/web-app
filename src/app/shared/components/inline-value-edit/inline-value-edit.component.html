@@ -67,9 +67,10 @@
   </ng-container>
   <ng-container *ngSwitchCase="'select'">
     <form novalidate>
-      <div class="inline-value-container" [class.can-edit]="canEdit">
+      <div class="inline-value-container inline-value-select" [class.can-edit]="canEdit" [class.showing-empty-message]="!displayValue && emptyMessage">
         <select name="select" class="form-control" #input #model="ngModel" [(ngModel)]="editValue" (blur)="onTextInputBlur()"
          [required]="required" [class.is-editing]="isEditing">
+          <option value="" disabled selected>{{emptyMessage}}</option>
           <option [value]="option.value" *ngFor="let option of selectOptions">{{option.text}}</option>
         </select>
       </div>

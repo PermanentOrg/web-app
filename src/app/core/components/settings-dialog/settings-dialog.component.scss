@@ -10,7 +10,7 @@
 }
 
 .settings-content {
-  @include tabbedDialogContent;
+  @include tabbedDialogContent(500px);
 }
 
 .settings-tabs {

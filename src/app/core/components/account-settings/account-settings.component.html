@@ -8,7 +8,7 @@
 <div class="settings-item">
   <label>Email</label>
   <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.primaryEmail" [email]="true" [noScroll]="true" [minLength]="3"
+    <pr-inline-value-edit [displayValue]="account.primaryEmail" [email]="true" [noScroll]="true" [minLength]="3" [required]="true"
       (doneEditing)="onSaveProfileInfo('primaryEmail', $event)"></pr-inline-value-edit>
   </div>
 </div>
@@ -57,7 +57,7 @@
 <div class="settings-item">
   <label>Country</label>
   <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.country" [noScroll]="true" [emptyMessage]="'47685'" [type]="'select'"
+    <pr-inline-value-edit [displayValue]="account.country" [noScroll]="true" [emptyMessage]="'Select country'" [type]="'select'"
       [selectOptions]="countries" (doneEditing)="onSaveProfileInfo('country', $event)"></pr-inline-value-edit>
   </div>
 </div>

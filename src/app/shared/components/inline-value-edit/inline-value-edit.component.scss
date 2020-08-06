@@ -95,6 +95,14 @@ select {
   }
 }
 
+.inline-value-select {
+  &.showing-empty-message {
+    select {
+      color: $text-muted;
+    }
+  }
+}
+
 .inline-value-textarea {
   min-height: 6 * 1.5rem;
   white-space: pre-wrap;

@@ -1,7 +1,7 @@
 $header-height: 3 * $grid-unit;
 
 @mixin tabbedDialogHeader($color: $PR-purple) {
-  height: 3 * $grid-unit;
+  height: $header-height;
   flex: 0 0 auto;
   background-color: $color;
   display: flex;
@@ -36,7 +36,7 @@ $header-height: 3 * $grid-unit;
   overflow-y: auto;
   @include desktop {
     display: flex;
-    height: $height;
+    height: pxToGrid($height);
     overflow: visible;
   }
 }
