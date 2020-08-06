@@ -5,7 +5,8 @@
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <input type="text" name="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"
           [required]="required" [email]="email" [minLength]="minLength" (blur)="onTextInputBlur()">
-        <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing">
+        <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
+          [class.showing-empty-message]="!displayValue && emptyMessage">
           {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)}}
         </div>
       </div>
@@ -63,6 +64,17 @@
       </ng-template>
     </div>
     <ng-container *ngTemplateOutlet="inlineControls"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'select'">
+    <form novalidate>
+      <div class="inline-value-container inline-value-select" [class.can-edit]="canEdit" [class.showing-empty-message]="!displayValue && emptyMessage">
+        <select name="select" class="form-control" #input #model="ngModel" [(ngModel)]="editValue" (blur)="onTextInputBlur()"
+         [required]="required" [class.is-editing]="isEditing">
+          <option value="" disabled selected>{{emptyMessage}}</option>
+          <option [value]="option.value" *ngFor="let option of selectOptions">{{option.text}}</option>
+        </select>
+      </div>
+    </form>
   </ng-container>
   <ng-template #inlineControls>
     <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>

@@ -36,7 +36,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
-import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
+import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 
 @NgModule({
   imports: [
@@ -68,7 +68,7 @@ import { MembersDialogComponent } from './components/members-dialog/members-dial
     ProfileEditComponent,
     SettingsDialogComponent,
     AllArchivesComponent,
-    MembersDialogComponent
+    ConnectionsDialogComponent
   ],
   providers: [
     DataService,
@@ -85,6 +85,10 @@ export class CoreModule {
     {
       token: 'SettingsDialogComponent',
       component: SettingsDialogComponent
+    },
+    {
+      token: 'ConnectionsDialogComponent',
+      component: ConnectionsDialogComponent
     }
   ];
 

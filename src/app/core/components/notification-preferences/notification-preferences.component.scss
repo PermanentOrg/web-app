@@ -2,47 +2,32 @@
 
 :host {
   display: block;
-  padding: 0 $grid-unit;
 }
 
-$settings-padding-x: 0;
-
-p {
-  padding: 10px;
+.panel-subheading {
+  @include tabbedDialogPanelSubheading;
 }
 
-.settings-group {
-  margin-bottom: $grid-unit;
-
-  .settings-group-title {
-    font-weight: $font-weight-bold;
-    padding: $grid-unit / 2 0;
+.preferences {
+  @include desktop {
+    display: flex;
+    flex-wrap: wrap;
   }
+}
+
+.preference-group {
+  flex: 0 1 33.3%;
+}
+
+.preference-group-title {
+  font-weight: $font-weight-bold;
+  padding: $grid-unit / 2 0;
 }
 
 .form-check {
-  font-size: $font-size-sm;
-}
+  margin-bottom: $grid-unit / 2;
 
-
-.settings-item {
-  padding: $grid-unit / 2 0;
-  & > label {
-    font-weight: $font-weight-bold;
-    color: $text-muted;
-    margin-bottom: 0px;
-  }
-
-  .settings-item-content {
-    $padding-y: $grid-unit / 2;
-    padding: $padding-y 0;
-  }
-
-  @include after($phone) {
-    max-width: 20rem;
-  }
-
-  &.settings-item-large {
-    max-width: 40rem;
+  input {
+    cursor: pointer;
   }
 }

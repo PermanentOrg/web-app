@@ -13,11 +13,16 @@ type DialogComponentToken =
   'ArchivePickerComponent' |
   'SharingComponent' |
   'ArchiveSwitcherDialogComponent' |
-  'SettingsDialogComponent'
+  'SettingsDialogComponent' |
+  'ConnectionsDialogComponent' |
+  'TimelineCompleteDialogComponent' |
+  'LocationPickerComponent' |
+  'EditTagsComponent' |
+  'PublishComponent'
   ;
 
 export interface DialogChildComponentData {
-  token: string;
+  token: DialogComponentToken;
   component: any;
 }
 
@@ -147,7 +152,7 @@ export class Dialog {
     this.debug('portal outlet unregistered %o', outlet);
   }
 
-  open(token: DialogComponentToken | any, data?: any, options = DEFAULT_OPTIONS): Promise<any> {
+  open(token: DialogComponentToken, data?: any, options = DEFAULT_OPTIONS): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
     }
@@ -157,7 +162,7 @@ export class Dialog {
     }
 
     if (typeof token !== 'string') {
-      token = token.name;
+      token = (token as any).name;
     }
 
     const newDialog = this.createDialog(token, data, options);

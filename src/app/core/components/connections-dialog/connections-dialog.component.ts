@@ -1,0 +1,265 @@
+import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '@shared/services/api/api.service';
+import { DataService } from '@shared/services/data/data.service';
+import { PromptService, PromptButton, RELATIONSHIP_FIELD, PromptField, RELATIONSHIP_FIELD_INITIAL } from '@shared/services/prompt/prompt.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { RelationVO, ArchiveVO } from '@models';
+import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
+import { DIALOG_DATA, DialogRef, Dialog, IsTabbedDialog } from '@root/app/dialog/dialog.module';
+import { Deferred } from '@root/vendor/deferred';
+import { RelationResponse } from '@shared/services/api/index.repo';
+import { remove, find } from 'lodash';
+import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+
+const ConnectionActions: {[key: string]: PromptButton} = {
+  Edit: {
+    buttonName: 'edit',
+    buttonText: 'Edit'
+  },
+  Accept: {
+    buttonName: 'accept',
+    buttonText: 'Accept'
+  },
+  Decline: {
+    buttonName: 'decline',
+    buttonText: 'decline',
+    class: 'btn-danger'
+  },
+  Remove: {
+    buttonName: 'remove',
+    buttonText: 'Remove',
+    class: 'btn-danger'
+  }
+};
+
+type ConnectionsTab = 'connections' | 'pending' | 'new';
+
+@Component({
+  selector: 'pr-connections-dialog',
+  templateUrl: './connections-dialog.component.html',
+  styleUrls: ['./connections-dialog.component.scss']
+})
+export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
+  connections: RelationVO[] = [];
+  connectionRequests: RelationVO[] = [];
+  sentConnectionsRequests: RelationVO[] = [];
+
+  connectionOptions: FormInputSelectOption[];
+
+  activeTab: ConnectionsTab = 'connections';
+
+  constructor(
+    private route: ActivatedRoute,
+    private api: ApiService,
+    private dataService: DataService,
+    private promptService: PromptService,
+    private messageService: MessageService,
+    private prConstants: PrConstantsService,
+    private accountService: AccountService,
+    private dialog: Dialog,
+    @Inject(DIALOG_DATA) public data: any,
+    private dialogRef: DialogRef,
+  ) {
+   this.data.connections.map((relation: RelationVO) => {
+      if (relation.status.includes('ok')) {
+        // existing connectionship
+        this.connections.push(relation);
+      } else if (relation.ArchiveVO.archiveId === this.accountService.getArchive().archiveId) {
+        // sent connectionship request
+        this.sentConnectionsRequests.push(relation);
+      } else {
+        // incoming connectionship request
+        this.connectionRequests.push(relation);
+      }
+    });
+
+    this.connectionOptions = this.prConstants.getRelations().map((type) => {
+      return {
+        text: type.name,
+        value: type.type
+      };
+    });
+  }
+
+  ngOnInit(): void {
+  }
+
+  onDoneClick(): void {
+    this.dialogRef.close();
+  }
+
+  setTab(tab: ConnectionsTab): void {
+    this.activeTab = tab;
+  }
+
+  onConnectionClick(relation: RelationVO) {
+    const buttons = [ ConnectionActions.Edit, ConnectionActions.Remove ];
+    this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
+      .then((value: string) => {
+        switch (value) {
+          case 'edit':
+            this.editRelation(relation);
+            break;
+          case 'remove':
+            this.removeRelation(relation);
+            break;
+        }
+      })
+      .catch(() => {});
+  }
+
+  onSentRelationRequestClick(relation: RelationVO) {
+    const buttons = [ ConnectionActions.Remove ];
+    this.promptService.promptButtons(buttons, `Relationship with ${relation.RelationArchiveVO.fullName}`)
+      .then((value: string) => {
+        switch (value) {
+          case 'remove':
+            this.removeRelation(relation);
+            break;
+        }
+      })
+      .catch(() => {});
+  }
+
+  onRelationRequestClick(relation: RelationVO, skipDecline = false) {
+    const deferred = new Deferred();
+    this.promptService.prompt(
+      [RELATIONSHIP_FIELD],
+      `Accept relationship with ${relation.ArchiveVO.fullName}?`,
+      deferred.promise,
+      'Accept',
+      skipDecline ? 'Cancel' : 'Decline'
+    ).then((value) => {
+      const relationMyVo = new RelationVO({
+        type: value.relationType
+      });
+      return this.api.relation.accept(relation, relationMyVo)
+        .then((response: RelationResponse) => {
+          this.messageService.showMessage('Relationship created successfully.', 'success');
+          const newRelation = response.getRelationVO();
+          relation.relationId = newRelation.relationId;
+          relation.archiveId = newRelation.archiveId;
+          relation.relationArchiveId = newRelation.relationArchiveId;
+          relation.status = newRelation.status;
+          relation.type = newRelation.type;
+
+          const archiveVo = relation.ArchiveVO;
+          const relationArchiveVo = relation.RelationArchiveVO;
+
+          relation.ArchiveVO = relationArchiveVo;
+          relation.RelationArchiveVO = archiveVo;
+
+          remove(this.connectionRequests, relation);
+          this.connections.push(relation);
+
+          deferred.resolve();
+        });
+    })
+    .catch((response: RelationResponse) => {
+      if (response) {
+        deferred.resolve();
+        this.messageService.showError(response.getMessage(), true);
+      } else if (!skipDecline) {
+        deferred.resolve();
+        this.removeRelation(relation);
+      }
+    });
+  }
+
+  addRelation() {
+    const newRelation: RelationVO = new RelationVO({});
+    const config: ArchivePickerComponentConfig = {
+      hideAccessRoleOnInvite: true
+    };
+
+    return this.dialog.open('ArchivePickerComponent', config)
+      .then((archive: ArchiveVO) => {
+        if (find(this.connections, {relationArchiveId: archive.archiveId})) {
+          return this.messageService.showMessage('You already have a relationship with this archive.', 'info');
+        }
+
+        newRelation.relationArchiveId = archive.archiveId;
+        newRelation.RelationArchiveVO = archive;
+        this.sentConnectionsRequests.push(newRelation);
+        return this.editRelation(newRelation);
+      })
+      .catch(() => {});
+  }
+
+  editRelation(relation: RelationVO) {
+    let updatedRelation: RelationVO;
+    const isNewRelation = !relation.relationId;
+    const deferred = new Deferred();
+    const fields: PromptField[] = [ RELATIONSHIP_FIELD_INITIAL(relation.type) ];
+
+    return this.promptService.prompt(
+      fields,
+      `Relationship with ${relation.RelationArchiveVO.fullName}`,
+      deferred.promise,
+      'Save'
+      )
+      .then((value) => {
+        updatedRelation = new RelationVO({
+          relationId: relation.relationId,
+          type: value.relationType
+        });
+
+        if (updatedRelation.relationId) {
+          return this.api.relation.update(updatedRelation);
+        } else {
+          updatedRelation.relationArchiveId = relation.relationArchiveId;
+          return this.api.relation.create(updatedRelation);
+        }
+      })
+      .then((response: RelationResponse) => {
+        this.messageService.showMessage('Relationship saved successfully.', 'success');
+        relation.type = updatedRelation.type;
+        if (isNewRelation) {
+          relation.relationId = response.getRelationVO().relationId;
+        }
+        deferred.resolve();
+      })
+      .catch((response: RelationResponse) => {
+        if (response) {
+          this.messageService.showError(response.getMessage(), true);
+          deferred.reject();
+        } else if (isNewRelation) {
+          remove(this.connections, relation);
+        }
+      });
+  }
+
+  removeRelation(relation: RelationVO) {
+    const deferred = new Deferred();
+    let confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
+    let confirmText = 'Remove';
+
+    if (relation.RelationArchiveVO.archiveId === this.accountService.getArchive().archiveId) {
+      confirmTitle = `Decline relationship with ${relation.ArchiveVO.fullName}?`;
+      confirmText = 'Decline';
+    }
+
+    this.promptService.confirm(confirmText, confirmTitle, deferred.promise, 'btn-danger')
+      .then(() => {
+        this.api.relation.delete(relation)
+        .then((response: RelationResponse) => {
+          this.messageService.showMessage(response.getMessage(), 'success', true);
+          remove(this.connections, relation);
+          remove(this.connectionRequests, relation);
+          remove(this.sentConnectionsRequests, relation);
+          deferred.resolve();
+        })
+        .catch((response: RelationResponse) => {
+          deferred.resolve();
+          this.messageService.showError(response.getMessage(), true);
+        });
+      })
+      .catch(() => {
+        deferred.resolve();
+      });
+  }
+
+}
