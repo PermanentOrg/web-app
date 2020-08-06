@@ -1,26 +1,63 @@
-<div class="settings-group">
-  <div class="settings-group-title">
-    Account Information
+<div class="settings-item">
+  <label>Account Name</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.fullName" [horizontalControls]="false" [required]="true" [noScroll]="true" [minLength]="1"
+      (doneEditing)="onSaveProfileInfo('fullName', $event)"></pr-inline-value-edit>
   </div>
-  <div class="settings-item">
-    <label>Account Name</label>
-    <div class="settings-item-content">
-      <pr-inline-value-edit [displayValue]="account.fullName" [horizontalControls]="false" [required]="true" [noScroll]="true" [minLength]="1"
-        (doneEditing)="onSaveProfileInfo('fullName', $event)"></pr-inline-value-edit>
-    </div>
+</div>
+<div class="settings-item">
+  <label>Email</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.primaryEmail" [horizontalControls]="false" [email]="true" [noScroll]="true" [minLength]="3"
+      (doneEditing)="onSaveProfileInfo('primaryEmail', $event)"></pr-inline-value-edit>
   </div>
-  <div class="settings-item">
-    <label>Email</label>
-    <div class="settings-item-content">
-      <pr-inline-value-edit [displayValue]="account.primaryEmail" [horizontalControls]="false" [email]="true" [noScroll]="true" [minLength]="3"
-        (doneEditing)="onSaveProfileInfo('primaryEmail', $event)"></pr-inline-value-edit>
-    </div>
+</div>
+<div class="settings-item">
+  <label>Mobile Phone</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.primaryPhone" [horizontalControls]="false" [noScroll]="true"
+      (doneEditing)="onSaveProfileInfo('primaryPhone', $event)"></pr-inline-value-edit>
   </div>
-  <div class="settings-item">
-    <label>Mobile Phone</label>
-    <div class="settings-item-content">
-      <pr-inline-value-edit [displayValue]="account.primaryPhone" [horizontalControls]="false" [noScroll]="true"
-        (doneEditing)="onSaveProfileInfo('primaryPhone', $event)"></pr-inline-value-edit>
-    </div>
+</div>
+<div class="settings-item">
+  <label>Address Line 1</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.address" [horizontalControls]="false" [noScroll]="true" [emptyMessage]="'455 Sunflower Rd'"
+      (doneEditing)="onSaveProfileInfo('address', $event)"></pr-inline-value-edit>
+  </div>
+</div>
+<div class="settings-item">
+  <label>Address Line 2</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.address2" [horizontalControls]="false" [noScroll]="true" [emptyMessage]="'Suite 400'"
+      (doneEditing)="onSaveProfileInfo('address2', $event)"></pr-inline-value-edit>
+  </div>
+</div>
+<div class="settings-item">
+  <label>City</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.city" [horizontalControls]="false" [noScroll]="true" [emptyMessage]="'Springfield'"
+      (doneEditing)="onSaveProfileInfo('city', $event)"></pr-inline-value-edit>
+  </div>
+</div>
+<div class="settings-item">
+  <label>State</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.state" [horizontalControls]="false" [noScroll]="true" [emptyMessage]="'Missouri'"
+      (doneEditing)="onSaveProfileInfo('state', $event)"></pr-inline-value-edit>
+  </div>
+</div>
+<div class="settings-item">
+  <label>Postal Code</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.zip" [horizontalControls]="false" [noScroll]="true" [emptyMessage]="'47685'"
+      (doneEditing)="onSaveProfileInfo('zip', $event)"></pr-inline-value-edit>
+  </div>
+</div>
+<div class="settings-item">
+  <label>Country</label>
+  <div class="settings-item-content">
+    <pr-inline-value-edit [displayValue]="account.country" [horizontalControls]="false" [noScroll]="true" [emptyMessage]="'47685'" [type]="'select'"
+      (doneEditing)="onSaveProfileInfo('country', $event)"></pr-inline-value-edit>
   </div>
 </div>

@@ -8,7 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { ENTER } from '@angular/cdk/keycodes';
 
-export type InlineValueEditType = 'text' | 'date' | 'textarea';
+export type InlineValueEditType = 'text' | 'date' | 'textarea' | 'select';
 
 type ValueType = string | number;
 @Component({

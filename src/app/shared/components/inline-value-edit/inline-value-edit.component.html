@@ -5,7 +5,8 @@
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <input type="text" name="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"
           [required]="required" [email]="email" [minLength]="minLength" (blur)="onTextInputBlur()">
-        <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing">
+        <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
+          [class.showing-empty-message]="!displayValue && emptyMessage">
           {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)}}
         </div>
       </div>
