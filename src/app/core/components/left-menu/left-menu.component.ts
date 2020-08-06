@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -33,6 +34,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private accountService: AccountService,
+    private api: ApiService,
     private messageService: MessageService,
     private router: Router,
     private relationshipService: RelationshipService,
@@ -108,7 +110,12 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onConnectionsClick() {
     const connections = await this.relationshipService.get();
-    this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '800px'});
+    this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '1000px'});
+  }
+
+  async onProfileClick() {
+    const profileItems = await this.api.archive.getAllProfileItems(this.archive);
+    this.dialog.open('ProfileEditComponent', { profileItems }, { width: '1000px'});
   }
 
 }

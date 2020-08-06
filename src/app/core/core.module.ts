@@ -89,6 +89,10 @@ export class CoreModule {
     {
       token: 'ConnectionsDialogComponent',
       component: ConnectionsDialogComponent
+    },
+    {
+      token: 'ProfileEditComponent',
+      component: ProfileEditComponent
     }
   ];
 
