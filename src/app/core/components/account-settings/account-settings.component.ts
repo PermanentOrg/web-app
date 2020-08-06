@@ -26,8 +26,6 @@ export class AccountSettingsComponent implements OnInit {
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries();
-
-    console.log(this.countries);
   }
 
   ngOnInit(): void {
