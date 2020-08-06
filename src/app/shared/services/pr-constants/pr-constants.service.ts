@@ -7,12 +7,22 @@ import { AccessRole } from '@models/access-role.enum';
 
 declare var require: any;
 const SYNC_CONSTANTS = require('../../../../../../files/constants/master_en.json');
+const COUNTRY_CODES = require('../../../../../../files/constants/country_codes.json');
+
+export interface Country {
+  name: string;
+  abbrev: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrConstantsService {
   private constants = SYNC_CONSTANTS;
+  private countries: Country[] = COUNTRY_CODES.map(c => {
+    return { name: c['@name'], abbrev: c['@alpha-2'] };
+  });
+
   private accessRoles = [
     {
       type: 'access.role.viewer',
@@ -41,8 +51,6 @@ export class PrConstantsService {
     },
   ];
 
-  constructor() {}
-
   public getConstants() {
     return this.constants;
   }
@@ -67,6 +75,10 @@ export class PrConstantsService {
     }
 
     return relationTypes;
+  }
+
+  public getCountries() {
+    return this.countries;
   }
 
   public getAccessRoles() {
