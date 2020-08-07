@@ -1,7 +1,9 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
     <div class="menu-branding">
-      <img src="assets/img/logo/sideways_logo.png" alt="">
+      <a href="/">
+        <img src="assets/img/logo/sideways_logo.png" alt="">
+      </a>
     </div>
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
