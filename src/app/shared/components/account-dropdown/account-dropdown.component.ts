@@ -101,4 +101,13 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
     }
   }
 
+  openInvitationsDialog() {
+    this.showMenu = false;
+    try {
+      this.dialog.open('InvitationsDialogComponent', {}, { width: '1000px' });
+    } catch (err) {
+
+    }
+  }
+
 }

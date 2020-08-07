@@ -1,0 +1,26 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader($PR-purple)
+}
+
+.content {
+  @include tabbedDialogContent;
+}
+
+.tabs {
+  @include tabbedDialogNav($PR-purple);
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}

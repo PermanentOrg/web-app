@@ -38,6 +38,7 @@ import { SettingsDialogComponent } from './components/settings-dialog/settings-d
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
+import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { MembersDialogComponent } from './components/members-dialog/members-dial
     SettingsDialogComponent,
     AllArchivesComponent,
     ConnectionsDialogComponent,
-    MembersDialogComponent
+    MembersDialogComponent,
+    InvitationsDialogComponent
   ],
   providers: [
     DataService,
@@ -99,6 +101,10 @@ export class CoreModule {
     {
       token: 'MembersDialogComponent',
       component: MembersDialogComponent
+    },
+    {
+      token: 'InvitationsDialogComponent',
+      component: InvitationsDialogComponent
     }
   ];
 

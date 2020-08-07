@@ -1,0 +1,27 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Invitations</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('new')" [class.active]="activeTab === 'new'">
+        Send Invite
+      </div>
+      <div class="dialog-tab"
+        (click)="setTab('pending')" [class.active]="activeTab === 'pending'">
+        Pending Invites
+      </div>
+      <div class="dialog-tab" (click)="setTab('accepted')" [class.active]="activeTab === 'accepted'">
+        Accepted Invites
+      </div>
+    </div>
+    <div class="panel">
+      <ng-container [ngSwitch]="activeTab">
+      </ng-container>
+    </div>
+  </div>
+</div>
