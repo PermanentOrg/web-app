@@ -26,6 +26,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public records: RecordVO[];
   public currentIndex: number;
   public isVideo = false;
+  public isAudio = false;
   public isPdf = false;
   public showThumbnail = true;
 
@@ -124,6 +125,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   initRecord() {
+    this.isAudio = this.currentRecord.type.includes('audio');
     this.isVideo = this.currentRecord.type.includes('video');
     this.isPdf = this.currentRecord.type.includes('pdf');
     this.documentUrl = this.getPdfUrl();
@@ -275,28 +277,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    const routeParams = this.route.snapshot.params;
-    let rootUrl = '/myfiles';
-
     this.router.navigate(['.'], { relativeTo: this.route.parent});
-    return;
-
-    if (this.router.routerState.snapshot.url.includes('/shares')) {
-      if (this.router.routerState.snapshot.url.includes('/withme')) {
-        rootUrl = '/shares/withme';
-      } else {
-        rootUrl = '/shares/byme';
-      }
-    } else if (this.router.routerState.snapshot.url.includes('/p/')) {
-      rootUrl = `/p/${this.route.snapshot.params.publishUrlToken}`;
-    }
-
-    if (routeParams.archiveNbr) {
-      this.router.navigate([rootUrl, routeParams.archiveNbr, routeParams.folderLinkId]);
-    } else {
-      this.router.navigate([rootUrl]);
-    }
-    return false;
   }
 
 }

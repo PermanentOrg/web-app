@@ -38,6 +38,7 @@ import { TooltipsPipe } from './pipes/tooltips.pipe';
 import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
 import { StorageAmountPipe } from './pipes/storage-amount.pipe';
+import { AudioComponent } from './components/audio/audio.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { StorageAmountPipe } from './pipes/storage-amount.pipe';
     NgbDropdownModule,
     PublicViewLinkPipe,
     StorageAmountPipe,
-    StorageMeterComponent
+    StorageMeterComponent,
+    AudioComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -128,7 +130,8 @@ import { StorageAmountPipe } from './pipes/storage-amount.pipe';
     TooltipsPipe,
     PublicViewLinkPipe,
     StorageAmountPipe,
-    StorageMeterComponent
+    StorageMeterComponent,
+    AudioComponent
   ],
   providers: [
     PublicLinkPipe,
