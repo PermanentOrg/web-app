@@ -1,0 +1,63 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader($PR-blue-light)
+}
+
+.content {
+  @include tabbedDialogContent;
+}
+
+.tabs {
+  @include tabbedDialogNav($PR-blue-light);
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  height: 4 * $grid-unit;
+}
+
+.member-name {
+  font-weight: $font-weight-semibold;
+}
+
+.member-info {
+  flex: 1 1 auto;
+  font-size: $font-size-sm;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+
+  > * {
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+}
+
+.member-email, .member-access {
+  color: $text-muted
+}
+
+.member-button {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  button {
+    @include gridHeightButtonSmall;
+    margin-left: $grid-unit / 2;
+  }
+}

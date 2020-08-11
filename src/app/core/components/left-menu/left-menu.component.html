@@ -1,7 +1,9 @@
 <div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="hide($event)">
   <div class="menu hamburger-menu">
     <div class="menu-branding">
-      <img src="assets/img/logo/sideways_logo.png" alt="">
+      <a href="/">
+        <img src="assets/img/logo/sideways_logo.png" alt="">
+      </a>
     </div>
     <div class="menu-header">
       <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
@@ -18,9 +20,9 @@
       </div>
     </div>
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
+      <a class="archive-options-option" (click)="onProfileClick()">Archive Profile</a>
       <a class="archive-options-option" (click)="onConnectionsClick()">Archive Connections</a>
-      <a class="archive-options-option"
-        [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">Archive Members</a>
+      <a class="archive-options-option" (click)="onMembersClick()">Archive Members</a>
       <hr>
       <a class="archive-options-option"
         [routerLink]="['/archives']" [class.active]="checkMenuItemActive('/archives')">View All Archives</a>
