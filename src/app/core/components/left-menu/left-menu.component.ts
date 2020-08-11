@@ -116,7 +116,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onProfileClick() {
     const profileItems = await this.api.archive.getAllProfileItems(this.archive);
-    this.dialog.open('ProfileEditComponent', { profileItems }, { width: '1000px'});
+    this.dialog.open('ProfileEditComponent', { profileItems }, { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'});
     this.showArchiveOptions = false;
   }
 

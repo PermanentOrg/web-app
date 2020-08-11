@@ -12,6 +12,8 @@ export class DialogComponent implements AfterViewInit {
   public height = 'fullscreen';
   public width = 'fullscreen';
 
+  public menuClass: string;
+
   private dialogRef: DialogRef;
 
   @ViewChild('dialogContent', { read: ViewContainerRef, static: true }) viewContainer: ViewContainerRef;
@@ -39,6 +41,10 @@ export class DialogComponent implements AfterViewInit {
 
       if (options.width) {
         this.width = options.width;
+      }
+
+      if (options.menuClass) {
+        this.menuClass = options.menuClass;
       }
     }
   }

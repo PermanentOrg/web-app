@@ -31,6 +31,7 @@ export interface DialogChildComponentData {
 export interface DialogOptions {
   height?: 'auto' | 'fullscreen';
   width?: 'auto' | 'fullscreen' | any;
+  menuClass?: string;
 }
 
 const DEFAULT_OPTIONS: DialogOptions = {
