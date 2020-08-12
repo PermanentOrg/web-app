@@ -10,7 +10,7 @@
 }
 
 .content {
-  @include tabbedDialogContent;
+  @include tabbedDialogContent(540px);
 }
 
 .tabs {

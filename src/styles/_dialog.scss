@@ -108,6 +108,7 @@ $header-height: 3 * $grid-unit;
   height: 8 * $grid-unit;
   padding: 1.5 * $grid-unit 2 * $grid-unit;
   padding-right: 30%;
+  margin-bottom: $grid-unit;
 
   .banner-heading {
     font-size: $font-size-lg;

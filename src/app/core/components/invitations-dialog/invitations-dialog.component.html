@@ -32,6 +32,21 @@
               </div>
             </div>
           </div>
+          <form [formGroup]="newInviteForm" class="dialog-form">
+            <div class="dialog-form-field">
+              <label for="name">Recipient Name</label>
+              <input type="text" class="form-control" id="newInviteName" name="name"
+                formControlName="name">
+            </div>
+            <div class="dialog-form-field">
+              <label for="email">Recipient Email</label>
+              <input type="email" class="form-control" id="newInviteEmail" name="email"
+                formControlName="email">
+            </div>
+            <div class="dialog-form-field">
+              <button class="btn btn-primary" [disabled]="newInviteForm.invalid">Send Invitation</button>
+            </div>
+          </form>
         </ng-container>
       </ng-container>
     </div>
