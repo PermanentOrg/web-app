@@ -140,3 +140,31 @@ $header-height: 3 * $grid-unit;
 @mixin tabbedDialogPanelSubheading {
   padding-bottom: $grid-unit;
 }
+
+@mixin tabbedDialogPanelForm($fieldClass: 'dialog-form-field', $labelWidth: 8rem) {
+  margin-left: 0;
+  max-width: 500px;
+  padding: $grid-unit 0;
+
+  .#{$fieldClass} {
+    display: flex;
+    align-items: center;
+
+    label {
+      flex: 0 0 $labelWidth;
+      font-weight: $font-weight-bold;
+      margin-right: $grid-unit;
+    }
+    margin-bottom: $grid-unit;
+  }
+
+  .form-control {
+    padding: $grid-unit / 2 $grid-unit / 5;
+  }
+
+  button {
+    @include gridHeightButtonSmall;
+    margin-left: $labelWidth + $grid-unit;
+    width: auto;
+  }
+}

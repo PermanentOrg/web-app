@@ -35,3 +35,7 @@
     background-position: 80% 100%;
   }
 }
+
+form {
+  @include tabbedDialogPanelForm;
+}
