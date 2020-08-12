@@ -32,11 +32,11 @@
               </div>
             </div>
           </div>
-          <form [formGroup]="newInviteForm" class="dialog-form">
+          <form [formGroup]="newInviteForm" class="dialog-form" (submit)="onNewInviteFormSubmit(newInviteForm.value)">
             <div class="dialog-form-field">
               <label for="name">Recipient Name</label>
               <input type="text" class="form-control" id="newInviteName" name="name"
-                formControlName="name">
+                formControlName="fullName">
             </div>
             <div class="dialog-form-field">
               <label for="email">Recipient Email</label>
@@ -44,7 +44,7 @@
                 formControlName="email">
             </div>
             <div class="dialog-form-field">
-              <button class="btn btn-primary" [disabled]="newInviteForm.invalid">Send Invitation</button>
+              <button class="btn btn-primary" [disabled]="newInviteForm.invalid || waiting">Send Invitation</button>
             </div>
           </form>
         </ng-container>
