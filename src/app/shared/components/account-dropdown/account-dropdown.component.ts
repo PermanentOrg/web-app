@@ -80,8 +80,7 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
 
   async onLogoutClick() {
     await this.accountService.logOut();
-    this.messageService.showMessage(`Logged out successfully`, 'success');
-    this.router.navigate(['/login']);
+    window.location.assign('/');
   }
 
   @HostListener('window:click', ['$event'])
