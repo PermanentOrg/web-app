@@ -38,6 +38,7 @@ import { SettingsDialogComponent } from './components/settings-dialog/settings-d
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
+import { ProfileEditTopicComponent } from './components/profile-edit-topic/profile-edit-topic.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { MembersDialogComponent } from './components/members-dialog/members-dial
     SettingsDialogComponent,
     AllArchivesComponent,
     ConnectionsDialogComponent,
-    MembersDialogComponent
+    MembersDialogComponent,
+    ProfileEditTopicComponent
   ],
   providers: [
     DataService,
