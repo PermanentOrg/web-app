@@ -24,3 +24,14 @@
 .panel-title {
   @include tabbedDialogPanelTitle;
 }
+
+.banner {
+  @include tabbedDialogPanelBanner;
+  background-image: url('/assets/svg/invitation-banner.svg');
+  background-position: 50% 50%;
+  background-size: cover;
+
+  @include beforeDesktop {
+    background-position: 80% 100%;
+  }
+}

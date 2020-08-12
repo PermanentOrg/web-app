@@ -21,6 +21,18 @@
     </div>
     <div class="panel">
       <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'new'">
+          <div class="banner">
+            <div>
+              <div class="banner-heading">
+                Give a gig, get a gig
+              </div>
+              <div class="banner-text">
+                Invite your friends and family to sign up and both of your accounts will be credited with one free gigabyte of storage.
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </ng-container>
     </div>
   </div>
