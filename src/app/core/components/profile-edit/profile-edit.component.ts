@@ -1,16 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary } from '@models/profile-item-vo';
-import { ActivatedRoute } from '@angular/router';
-import { groupBy } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role.enum';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { Dialog, DIALOG_DATA, IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { DIALOG_DATA, IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { EditService } from '@core/services/edit/edit.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 
@@ -76,8 +73,6 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
 
     this.profileItems = this.profile.getProfileItemDictionary();
 
-    console.log(this.profileItems);
-
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
   }
 
@@ -110,41 +105,19 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
     }
   }
 
-  async onSaveStringProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsStringDataCol, value: string) {
-    let profileItem = this.profileItems[fieldName]?.[0];
-    let isNew = false;
-
-    if (!profileItem) {
-      const type = fieldName.replace('profile.', 'profile_item.');
-      profileItem = {
-        fieldNameUI: fieldName,
-        archiveId: this.archive.archiveId,
-        type
-      };
-      isNew = true;
-    }
-
-    const originalValue = profileItem[dataCol];
-    profileItem[dataCol] = value;
-
+  async onSaveProfileItem(item: ProfileItemVOData, valueKey: ProfileItemsDataCol, newValue: any, refreshArchive = false) {
+    const originalValue = item[valueKey];
+    item[valueKey] = newValue as never;
     try {
-      if (isNew) {
-        this.profileItems[fieldName] = [ profileItem ];
-      }
-      const response = await this.api.archive.addUpdateProfileItem(profileItem);
-      if (isNew) {
-        const newProfileItem = response.getProfileItemVOs()[0];
-        profileItem.profile_itemId = newProfileItem.profile_itemId;
+      await this.profile.saveProfileItem(item, [valueKey]);
+      if (refreshArchive) {
+        await this.account.refreshArchive();
       }
     } catch (err) {
-      if (!isNew) {
-        profileItem[dataCol] = originalValue;
-      } else {
-        this.profileItems[fieldName] = null;
+      if (err instanceof ArchiveResponse) {
+        item[valueKey] = originalValue as never;
+        this.message.showError(err.getMessage(), true);
       }
     }
-  }
-
-  onSaveIntProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsIntDataCol, value: number) {
   }
 }

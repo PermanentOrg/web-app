@@ -60,7 +60,11 @@
               The name of this Archive is…
             </div>
             <div class="profile-fields">
-              <pr-inline-value-edit [displayValue]="this.profileItems.basic[0]?.string1"></pr-inline-value-edit>
+              <pr-inline-value-edit
+                [displayValue]="this.profileItems.basic[0]?.string1"
+                [required]="true"
+                (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string1', $event, true)"
+                ></pr-inline-value-edit>
             </div>
           </div>
           <div class="profile-group">
@@ -68,14 +72,34 @@
               What is this Archive for?
             </div>
             <div class="profile-fields">
-              <pr-inline-value-edit [displayValue]="this.profileItems.blurb[0]?.string1"></pr-inline-value-edit>
+              <pr-inline-value-edit [displayValue]="this.profileItems.blurb[0]?.string1"
+              emptyMessage="Add a short description about the purpose of this Archive."
+              (doneEditing)="onSaveProfileItem(this.profileItems.blurb[0], 'string1', $event)"></pr-inline-value-edit>
+            </div>
+            <div class="profile-fields-subtitle">
+              280 character limit
             </div>
           </div>
           <div class="profile-group">
             <div class="profile-prompt">
               Tell us about this Person.
             </div>
-            <div class="profile-fields"></div>
+            <div class="profile-fields">
+              <pr-inline-value-edit [displayValue]="this.profileItems.description[0]?.textData1" type="textarea"
+              (doneEditing)="onSaveProfileItem(this.profileItems.description[0], 'textData1', $event, true)"
+                emptyMessage="Tell the story of the Person this Archive is for.">
+              </pr-inline-value-edit>
+            </div>
+          </div>
+          <div class="profile-group">
+            <div class="profile-prompt">
+              Email
+            </div>
+            <div class="profile-fields">
+              <pr-inline-value-edit [displayValue]="this.profileItems.email[0]?.string1"
+              emptyMessage="Email address"
+              (doneEditing)="onSaveProfileItem(this.profileItems.email[0], 'string1', $event)"></pr-inline-value-edit>
+            </div>
           </div>
         </div>
       </div>

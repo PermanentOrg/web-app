@@ -84,10 +84,6 @@
   &.visible {
     .profile-editor-dialog {
       transform: translateX(0);
-
-      @include desktop {
-        transition-duration: $menu-transition-length-desktop * 2
-      }
     }
   }
 }

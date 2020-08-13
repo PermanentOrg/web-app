@@ -5,7 +5,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { RecordVO, ArchiveVO } from '@models';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
-import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary } from '@models/profile-item-vo';
+import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
 
 @Injectable()
@@ -49,6 +49,9 @@ export class ProfileService {
     for (const item of profileItems) {
       this.addProfileItemToDictionary(item);
     }
+
+    // create stubs for the rest of the profile items so at least one exists for given profile item type
+    this.stubEmptyProfileItems();
   }
 
   getProfileItemDictionary() {
@@ -66,6 +69,53 @@ export class ProfileService {
       this.profileItemDictionary[fieldNameUIShort] = [ item ];
     } else {
       this.profileItemDictionary[fieldNameUIShort].push(item);
+    }
+  }
+
+  createEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
+    const currentArchive = this.account.getArchive();
+    const shortType = currentArchive.type.split('.').pop();
+    const template = this.constants.getProfileTemplate();
+    const templateForType = template[shortType];
+    const valueTemplate = templateForType[fieldNameShort];
+
+    const item: ProfileItemVOData = {
+      archiveId: currentArchive.archiveId,
+      fieldNameUI: valueTemplate.field_name_ui
+    };
+
+
+    // completely useless type field but have to still set it for now
+    switch (fieldNameShort) {
+      case 'birth_info':
+      case 'death_info':
+        item.type = 'type.widget.date';
+        break;
+      case 'job':
+      case 'home':
+        item.type = 'type.widget.locn';
+        break;
+      case 'description':
+        item.type = 'type.widget.description';
+        break;
+      default:
+        item.type = 'type.widget.string';
+    }
+
+    return item;
+  }
+
+  stubEmptyProfileItems() {
+    const currentArchive = this.account.getArchive();
+    const shortType = currentArchive.type.split('.').pop();
+    const template = this.constants.getProfileTemplate();
+    const templateForType = template[shortType];
+
+    const fields = Object.keys(templateForType) as FieldNameUIShort[];
+    for (const fieldNameShort of fields) {
+      if (!this.profileItemDictionary[fieldNameShort]) {
+        this.profileItemDictionary[fieldNameShort] = [ this.createEmptyProfileItem(fieldNameShort) ];
+      }
     }
   }
 

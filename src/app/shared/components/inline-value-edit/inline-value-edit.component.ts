@@ -106,10 +106,10 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   save(skipBlur = false) {
-    if (this.ngModel.invalid) {
+    if (this.ngModel.invalid || !this.isEditing) {
       return;
     }
-    
+
     if (this.displayValue !== this.editValue) {
       this.doneEditing.emit(this.editValue);
     }

@@ -87,6 +87,9 @@
 .panel-scroll {
   flex: 1 1 auto;
   overflow-y: auto;
+
+  margin: 0 -$grid-unit;
+  padding: 0 $grid-unit;
 }
 
 .profile-banner {
@@ -113,5 +116,10 @@
 }
 
 .profile-group {
-  
+ max-width: 1000px; 
+}
+
+.profile-fields-subtitle {
+  color: $text-muted;
+  text-align: right;
 }
