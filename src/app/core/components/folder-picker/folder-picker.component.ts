@@ -10,6 +10,7 @@ import { FolderVO, ItemVO, RecordVO } from '@root/app/models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 export enum FolderPickerOperations {
   Move = 1,
@@ -42,6 +43,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private api: ApiService,
+    private message: MessageService,
     private folderPickerService: FolderPickerService
   ) {
     this.folderPickerService.registerComponent(this);
@@ -99,32 +101,42 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  navigate(folder: FolderVO) {
-    this.setFolder(folder);
+  async navigate(folder: FolderVO) {
+    await this.setFolder(folder);
+    this.loadCurrentFolderChildData();
   }
 
   showRecord(record: RecordVO) {
     this.selectedRecord =  record;
   }
 
-  setFolder(folder: FolderVO) {
+  async setFolder(folder: FolderVO) {
     this.waiting = true;
-    return this.api.folder.navigate(new FolderVO({
+    try {
+
+    const folderResponse = await this.api.folder.navigate(new FolderVO({
       folder_linkId: folder.folder_linkId,
       folderId: folder.folderId,
       archiveNbr: folder.archiveNbr
-    })).toPromise()
-      .then((response: FolderResponse) => {
-        this.waiting = false;
-        this.currentFolder = response.getFolderVO(true);
-        this.isRootFolder = this.currentFolder.type.includes('root');
-        if (!this.allowRecords) {
-          remove(this.currentFolder.ChildItemVOs, 'isRecord');
-        }
-        if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
-          remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
-        }
-      });
+    })).toPromise();
+    this.currentFolder = folderResponse.getFolderVO(true);
+    this.isRootFolder = this.currentFolder.type.includes('root');
+    if (!this.allowRecords) {
+      remove(this.currentFolder.ChildItemVOs, 'isRecord');
+    }
+    if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
+      remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
+    }
+
+    } catch (err) {
+      if (err instanceof FolderResponse) {
+        this.message.showError(err.getMessage(), true);
+      } else {
+        console.error(err);
+      }
+    } finally {
+      this.waiting = false;
+    }
   }
 
   onBackClick() {
@@ -144,9 +156,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   loadCurrentFolderChildData() {
-    return this.dataService.fetchLeanItems(this.currentFolder.ChildItemVOs, this.currentFolder)
-      .then(() => {
-      });
+    return this.dataService.fetchLeanItems(this.currentFolder.ChildItemVOs, this.currentFolder);
   }
 
   chooseFolder() {

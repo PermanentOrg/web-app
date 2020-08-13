@@ -8,9 +8,11 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role.enum';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { ArchiveResponse } from '@shared/services/api/index.repo';
+import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { Dialog, DIALOG_DATA, IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { EditService } from '@core/services/edit/edit.service';
+import { ProfileService } from '@shared/services/profile/profile.service';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -56,7 +58,7 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
 
   canEdit: boolean;
 
-  isPublic: boolean;
+  isPublic = true;
 
   activeTab: ProfileTab = 'info';
   constructor(
@@ -64,10 +66,13 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
     private api: ApiService,
+    private edit: EditService,
+    private folderPicker: FolderPickerService,
+    private profile: ProfileService,
     private message: MessageService
   ) {
     this.archive = this.account.getArchive();
-    this.publicRoot = this.account.getPublicRoot();
+    this.publicRoot = new FolderVO(this.account.getPublicRoot());
 
     const profileItems = this.data.profileItems as ProfileItemVOData[];
     this.profileItems = groupBy(profileItems, 'fieldNameUI') as ProfileItemsDictionary;
@@ -84,6 +89,24 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
 
   onDoneClick() {
     this.dialogRef.close();
+  }
+
+  async chooseProfilePicture() {
+    this.profile.promptForProfilePicture();
+  }
+
+  async chooseBannerPicture() {
+    const originalValue = this.publicRoot.thumbArchiveNbr;
+    try {
+      const record = await this.folderPicker.chooseRecord(this.account.getRootFolder());
+      this.publicRoot.thumbArchiveNbr = record.archiveNbr;
+      await this.edit.updateItems([this.publicRoot]);
+    } catch (err) {
+      if (err instanceof FolderResponse) {
+        this.publicRoot.thumbArchiveNbr = originalValue;
+        console.error('error updating!');
+      }
+    }
   }
 
   async onSaveStringProfileItem(fieldName: FieldNameUI, dataCol: ProfileItemsStringDataCol, value: string) {

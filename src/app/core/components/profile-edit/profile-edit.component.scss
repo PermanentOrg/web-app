@@ -90,17 +90,28 @@
 }
 
 .profile-banner {
-  position: relative;
   height: pxToGrid(220px);
+}
 
-  .profile-photo {
-    height: pxToGrid(180px);
-    width: pxToGrid(180px);
-    background-size: cover;
-    background-position: 50% 50%;
-    position: absolute;
-    left: 2 * $grid-unit;
-    bottom: 0;
-    transform: translateY(50%);
-  }
+.profile-photo {
+  $size: pxToGrid(180px);
+  height: $size;
+  width: $size;
+  background-size: cover;
+  background-position: 50% 50%;
+  margin-left: 2 * $grid-unit;
+  margin-bottom: -$size/2 + $grid-unit;
+  transform: translateY(-50%);
+}
+
+.profile-prompt {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
+}
+
+.profile-group {
+  
 }

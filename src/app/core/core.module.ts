@@ -39,6 +39,7 @@ import { AllArchivesComponent } from './components/all-archives/all-archives.com
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 import { ProfileEditTopicComponent } from './components/profile-edit-topic/profile-edit-topic.component';
+import { ProfileService } from '@shared/services/profile/profile.service';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { ProfileEditTopicComponent } from './components/profile-edit-topic/profi
     DataService,
     FolderViewService,
     FolderPickerService,
+    ProfileService,
     UploadService,
     EditService,
     DragService,

@@ -39,6 +39,9 @@ import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
 import { StorageAmountPipe } from './pipes/storage-amount.pipe';
 import { AudioComponent } from './components/audio/audio.component';
+import { ScrollSectionDirective } from './scroll-section.directive';
+import { ScrollNavDirective } from './scroll-nav.directive';
+import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 
 @NgModule({
   imports: [
@@ -90,7 +93,8 @@ import { AudioComponent } from './components/audio/audio.component';
     PublicViewLinkPipe,
     StorageAmountPipe,
     StorageMeterComponent,
-    AudioComponent
+    AudioComponent,
+    ThumbnailComponent
   ],
   entryComponents: [
     ArchivePickerComponent,
@@ -98,6 +102,7 @@ import { AudioComponent } from './components/audio/audio.component';
     TimelineCompleteDialogComponent
   ],
   declarations: [
+    ThumbnailComponent,
     FormInputComponent,
     LogoComponent,
     TermsComponent,
@@ -131,7 +136,9 @@ import { AudioComponent } from './components/audio/audio.component';
     PublicViewLinkPipe,
     StorageAmountPipe,
     StorageMeterComponent,
-    AudioComponent
+    AudioComponent,
+    ScrollSectionDirective,
+    ScrollNavDirective
   ],
   providers: [
     PublicLinkPipe,

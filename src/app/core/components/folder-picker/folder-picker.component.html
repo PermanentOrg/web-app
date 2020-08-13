@@ -13,7 +13,12 @@
     </div>
     <div class="picker-contents" *ngIf="currentFolder && !selectedRecord" [ngClass]="{'navigating': waiting}">
       <div class="picker-row" *ngFor="let item of currentFolder.ChildItemVOs" (click)="onItemClick(item, $event)">
-          <div prBgImage [bgSrc]="item.thumbURL200"></div>
+        <ng-container [ngSwitch]="item.isFolder">
+          <div class="folder-icon" *ngSwitchCase="true">
+            <i class="material-icons">folder</i>
+          </div>
+          <div *ngSwitchDefault prBgImage [bgSrc]="item.thumbURL200"></div>
+        </ng-container>
         <div class="name">{{item.displayName}}</div>
       </div>
 

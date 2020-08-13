@@ -6,9 +6,7 @@ import { RecordVO, ArchiveVO } from '@models';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 
-@Injectable({
-providedIn: 'root'
-})
+@Injectable()
 export class ProfileService {
 
   constructor(
@@ -27,6 +25,12 @@ export class ProfileService {
       updateArchive.thumbArchiveNbr = record.archiveNbr;
       const updateResponse = await this.api.archive.update(updateArchive);
       currentArchive.update(updateResponse.getArchiveVO());
+
+      // borrow thumb URLs from record for now, until they can be regenerated
+      const thumbProps: Array<keyof (ArchiveVO|RecordVO)> = ['thumbURL200', 'thumbURL500', 'thumbURL1000', 'thumbURL2000'];
+      for (const prop of thumbProps) {
+        currentArchive[prop] = record[prop];
+      }
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         this.message.showError('There was a problem changing the archive profile picture.');
