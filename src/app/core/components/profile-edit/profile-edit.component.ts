@@ -42,7 +42,7 @@ type ProfileItemsDictionary = {
   [Field in FieldNameUI]: ProfileItemVOData[]
 };
 
-type ProfileTab = 'about' | 'info' | 'online' | 'residence' | 'work';
+type ProfileTab = 'info' | 'online' | 'residence' | 'work';
 
 @Component({
   selector: 'pr-profile-edit',
@@ -55,7 +55,9 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
 
   canEdit: boolean;
 
-  activeTab: ProfileTab = 'about';
+  isPublic: boolean;
+
+  activeTab: ProfileTab = 'info';
   constructor(
     private account: AccountService,
     private dialogRef: DialogRef,

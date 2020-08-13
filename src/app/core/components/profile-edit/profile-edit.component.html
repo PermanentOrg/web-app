@@ -1,27 +1,54 @@
 <div class="dialog-content">
   <div class="header">
-    <span>Archive Profile</span>
     <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
+      <i class="material-icons">arrow_back</i>
     </button>
+    <span>Archive Profile</span>
   </div>
   <div class="content">
     <div class="tabs">
       <div class="dialog-tab"
         (click)="setTab('about')" [class.active]="activeTab === 'about'">
-        About This Archive
+        Person Information
       </div>
       <div class="dialog-tab"
         (click)="setTab('info')" [class.active]="activeTab === 'info'">
-        Person Information
+        Online Presence
+      </div>
+      <div class="dialog-tab"
+      (click)="setTab('info')" [class.active]="activeTab === 'info'">
+        Residence History
+      </div>
+      <div class="dialog-tab"
+      (click)="setTab('info')" [class.active]="activeTab === 'info'">
+        Work History
       </div>
     </div>
     <div class="panel">
-      <ng-container [ngSwitch]="activeTab">
-        <ng-container *ngSwitchCase="'about'">
-          
-        </ng-container>
-      </ng-container>
+      <div class="panel-header">
+        <div class="profile-visibility">
+          <div>Profile Visibility</div>
+          <div class="visibility-option">
+            <input type="radio" [(ngModel)]="isPublic" [value]="true">
+            <div>
+              <div>Public</div>
+              <span>Anyone can see the page</span>
+            </div>
+          </div>
+          <div class="visibility-option">
+            <input type="radio" [(ngModel)]="isPublic" [value]="false">
+            <div>
+              <div>Private</div>
+              <span>Only contributors can see the page</span>
+            </div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button class="btn btn-alternate btn-alternate-blue-light">View On Web</button>
+          <button class="btn btn-alternate">Share Profile</button>
+        </div>
+      </div>
+      <div class="panel-scroll"></div>
     </div>
   </div>
 </div>

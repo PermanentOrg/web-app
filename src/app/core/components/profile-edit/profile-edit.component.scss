@@ -6,7 +6,11 @@
 }
 
 .header {
-  @include tabbedDialogHeader($PR-blue-light)
+  @include tabbedDialogHeader($PR-blue-light);
+  button {
+    margin-left: -$grid-unit / 2;
+    margin-right: $grid-unit / 2;
+  }
 }
 
 .content {
@@ -18,79 +22,69 @@
 }
 
 .panel {
-  @include tabbedDialogPanel;
-}
-
-.panel-title {
-  @include tabbedDialogPanelTitle;
-}
-
-$profile-padding-x: 10px;
-
-p {
-  padding: 10px;
-}
-
-.profile-group {
-  margin-bottom: 10px;
-
-  .profile-group-title {
-    font-weight: $font-weight-bold;
-    border-bottom: 1px solid $gray-300;
-    padding: $profile-padding-x;
-  }
-  
-
-  &:not(:first-of-type) {
-    .profile-group-title {
-      border-top: 1px solid $gray-300;
-    }
+  flex: 1 1 auto;
+  padding: 0 $grid-unit / 2;
+  display: flex;
+  flex-direction: column;
+  @include desktop {
+    padding: 0 $grid-unit;
   }
 }
 
-.profile-picture {
-  $profile-picture-size: 200px;
-  height: $profile-picture-size;
-  width: $profile-picture-size;
-  border-radius: 50%;
+.panel-header {
+  height: pxToGrid(100px);
+  flex: 0 0 pxToGrid(100px);
+  border-bottom: $file-list-border;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
 
-  i {
-    color: white;
-    opacity: 0.5;
-    font-size: 2rem;
-    transition: opacity 125ms $tweaked-ease;
+  .buttons {
+    display: flex;
+    margin-left: auto;
   }
 
-  &:hover {
-    i {
-      opacity: 0.7;
-      transition: opacity 0ms;
+  button {
+    @include gridHeightButton;
+    justify-content: center;
+    width: 8 * $grid-unit;
+    margin: 0;
+    margin-left: $grid-unit;
+  }
+
+  .profile-visibility {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: $font-weight-semibold;
+    max-width: 24 * $grid-unit;
+    margin-right: auto;
+
+    > * {
+      flex: 0 0 auto;
+      margin-right: $grid-unit * 2;
+    }
+
+    .visibility-option {
+      display: flex;
+      align-items: center;
+      
+      input {
+        cursor: pointer;
+        margin-right: $grid-unit / 2;
+      }
+
+      span {
+        display: block;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-base;
+        color: $text-muted;
+      }
     }
   }
 }
 
-
-.profile-item {
-  padding: 5px $profile-padding-x;
-  & > label {
-    font-weight: 600;
-    margin-bottom: 0px;
-  }
-
-  .profile-item-content {
-    $padding-y: 0.25rem;
-    padding: $padding-y 0;
-  }
-
-  @include after($phone) {
-    max-width: 20rem;
-  }
-
-  &.profile-item-large {
-    max-width: 40rem;
-  }
+.panel-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
 }
