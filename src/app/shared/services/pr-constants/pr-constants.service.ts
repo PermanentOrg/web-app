@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { access } from 'fs';
-import { orderBy } from 'lodash';
 import { AccessRole } from '@models/access-role.enum';
+import { ProfileTemplate } from '@models/profile-item-vo';
 
 declare var require: any;
 const SYNC_CONSTANTS = require('../../../../../../files/constants/master_en.json');
+const PROFILE_TEMPLATE = require('../../../../../../files/constants/profile_template.json');
 const COUNTRY_CODES = require('../../../../../../files/constants/country_codes.json');
 
 export interface Country {
@@ -18,6 +16,7 @@ export interface Country {
   providedIn: 'root'
 })
 export class PrConstantsService {
+  private profileTemplate = PROFILE_TEMPLATE;
   private constants = SYNC_CONSTANTS;
   private countries: Country[] = COUNTRY_CODES.map(c => {
     return { name: c['@name'], abbrev: c['@alpha-2'] };
@@ -98,5 +97,9 @@ export class PrConstantsService {
     }
 
     return currentBranch || translateString;
+  }
+
+  public getProfileTemplate(): ProfileTemplate {
+    return this.profileTemplate;
   }
 }

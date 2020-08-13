@@ -54,18 +54,22 @@
             (click)="chooseBannerPicture()">
           </div>
           <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
-          (click)="chooseProfilePicture()"></div>
+          (click)="onProfilePictureClick()"></div>
           <div class="profile-group">
             <div class="profile-prompt">
               The name of this Archive is…
             </div>
-            <div class="profile-fields"></div>
+            <div class="profile-fields">
+              <pr-inline-value-edit [displayValue]="this.profileItems.basic[0]?.string1"></pr-inline-value-edit>
+            </div>
           </div>
           <div class="profile-group">
             <div class="profile-prompt">
               What is this Archive for?
             </div>
-            <div class="profile-fields"></div>
+            <div class="profile-fields">
+              <pr-inline-value-edit [displayValue]="this.profileItems.blurb[0]?.string1"></pr-inline-value-edit>
+            </div>
           </div>
           <div class="profile-group">
             <div class="profile-prompt">

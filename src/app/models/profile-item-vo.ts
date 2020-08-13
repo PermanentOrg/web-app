@@ -19,6 +19,23 @@ export type FieldNameUI =
 'profile.social_media' |
 'profile.timezone';
 
+export type FieldNameUIShort =
+'basic' |
+'birth_info' |
+'blurb' |
+'closure_info' |
+'death_info' |
+'description' |
+'established_info' |
+'email' |
+'gender' |
+'home' |
+'job' |
+'location' |
+'phone_nbr' |
+'social_media' |
+'timezone';
+
 type ProfileItemType =
   'type.widget.string' |
   'type.widget.wysiwyg' |
@@ -61,4 +78,26 @@ export interface ProfileItemVOData extends BaseVOData {
   textData2?: string;
 
   archiveNbr?:  string;
+}
+
+export type ProfileItemVOMap = Map<FieldNameUI, ProfileItemVOData[]>;
+export type ProfileItemVODictionary = { [key in FieldNameUIShort]?: ProfileItemVOData[] };
+
+export interface ProfileTemplate {
+  [key: string]: {
+    [key in FieldNameUIShort]: {
+      grouping: string;
+      field_name_ui: FieldNameUI,
+      description: string,
+      position: number,
+      allow_multiple: number,
+      date_added: string,
+      values: {
+        [key: string]: {
+          field_name_ui: string,
+          description: string,
+        }
+      }
+    }
+  };
 }

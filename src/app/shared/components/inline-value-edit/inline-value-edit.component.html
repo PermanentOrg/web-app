@@ -7,7 +7,7 @@
           [required]="required" [email]="email" [minLength]="minLength" (blur)="onTextInputBlur()">
         <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
           [class.showing-empty-message]="!displayValue && emptyMessage">
-          {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)}}
+          {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>

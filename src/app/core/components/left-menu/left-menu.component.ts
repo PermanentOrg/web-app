@@ -9,6 +9,7 @@ import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animatio
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
+import { ProfileService } from '@shared/services/profile/profile.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -39,6 +40,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private relationshipService: RelationshipService,
     private dialog: Dialog,
+    private profile: ProfileService,
     private elementRef: ElementRef
   ) {
     if (this.accountService.getArchive()) {
@@ -115,8 +117,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   async onProfileClick() {
-    const profileItems = await this.api.archive.getAllProfileItems(this.archive);
-    this.dialog.open('ProfileEditComponent', { profileItems }, { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'});
+    await this.profile.fetchProfileItems();
+    this.dialog.open('ProfileEditComponent', null, { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'});
     this.showArchiveOptions = false;
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
-import { ProfileItemVOData, FieldNameUI } from '@models/profile-item-vo';
+import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary } from '@models/profile-item-vo';
 import { ActivatedRoute } from '@angular/router';
 import { groupBy } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
@@ -54,7 +54,7 @@ type ProfileTab = 'info' | 'online' | 'residence' | 'work';
 export class ProfileEditComponent implements OnInit, IsTabbedDialog {
   archive: ArchiveVO;
   publicRoot: FolderVO;
-  profileItems: ProfileItemsDictionary;
+  profileItems: ProfileItemVODictionary;
 
   canEdit: boolean;
 
@@ -74,8 +74,9 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
 
-    const profileItems = this.data.profileItems as ProfileItemVOData[];
-    this.profileItems = groupBy(profileItems, 'fieldNameUI') as ProfileItemsDictionary;
+    this.profileItems = this.profile.getProfileItemDictionary();
+
+    console.log(this.profileItems);
 
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
   }
@@ -91,7 +92,7 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
     this.dialogRef.close();
   }
 
-  async chooseProfilePicture() {
+  async onProfilePictureClick() {
     this.profile.promptForProfilePicture();
   }
 
