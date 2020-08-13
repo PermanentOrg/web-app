@@ -68,7 +68,7 @@
     .visibility-option {
       display: flex;
       align-items: center;
-      
+
       input {
         cursor: pointer;
         margin-right: $grid-unit / 2;
@@ -87,4 +87,20 @@
 .panel-scroll {
   flex: 1 1 auto;
   overflow-y: auto;
+}
+
+.profile-banner {
+  position: relative;
+  height: pxToGrid(220px);
+
+  .profile-photo {
+    height: pxToGrid(180px);
+    width: pxToGrid(180px);
+    background-size: cover;
+    background-position: 50% 50%;
+    position: absolute;
+    left: 2 * $grid-unit;
+    bottom: 0;
+    transform: translateY(50%);
+  }
 }

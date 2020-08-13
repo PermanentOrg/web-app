@@ -51,6 +51,7 @@ type ProfileTab = 'info' | 'online' | 'residence' | 'work';
 })
 export class ProfileEditComponent implements OnInit, IsTabbedDialog {
   archive: ArchiveVO;
+  publicRoot: FolderVO;
   profileItems: ProfileItemsDictionary;
 
   canEdit: boolean;
@@ -66,6 +67,8 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
     private message: MessageService
   ) {
     this.archive = this.account.getArchive();
+    this.publicRoot = this.account.getPublicRoot();
+
     const profileItems = this.data.profileItems as ProfileItemVOData[];
     this.profileItems = groupBy(profileItems, 'fieldNameUI') as ProfileItemsDictionary;
 

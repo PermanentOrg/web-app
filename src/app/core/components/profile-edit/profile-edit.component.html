@@ -48,7 +48,11 @@
           <button class="btn btn-alternate">Share Profile</button>
         </div>
       </div>
-      <div class="panel-scroll"></div>
+      <div class="panel-scroll">
+        <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null">
+          <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
