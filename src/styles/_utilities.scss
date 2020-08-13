@@ -127,3 +127,12 @@
     display: none !important;
   }
 }
+
+
+// from https://codepen.io/cathydutton/pen/dPPpWj
+@mixin gradient($direction, $list) { 
+  background: -webkit-linear-gradient($direction, $list);
+  background: -moz-linear-gradient($direction, $list);
+  background: -o-linear-gradient($direction, $list);
+  background: linear-gradient($direction, $list);  
+}
