@@ -20,7 +20,8 @@ type DialogComponentToken =
   'EditTagsComponent' |
   'PublishComponent' |
   'ProfileEditComponent' |
-  'MembersDialogComponent'
+  'MembersDialogComponent' |
+  'InvitationsDialogComponent'
   ;
 
 export interface DialogChildComponentData {

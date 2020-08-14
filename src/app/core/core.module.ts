@@ -41,6 +41,7 @@ import { MembersDialogComponent } from './components/members-dialog/members-dial
 import { ProfileEditTopicComponent } from './components/profile-edit-topic/profile-edit-topic.component';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
+import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-ar
     AllArchivesComponent,
     ConnectionsDialogComponent,
     MembersDialogComponent,
+    InvitationsDialogComponent,
     ProfileEditTopicComponent,
     MyArchivesDialogComponent
   ],
@@ -105,6 +107,10 @@ export class CoreModule {
     {
       token: 'MembersDialogComponent',
       component: MembersDialogComponent
+    },
+    {
+      token: 'InvitationsDialogComponent',
+      component: InvitationsDialogComponent
     }
   ];
 

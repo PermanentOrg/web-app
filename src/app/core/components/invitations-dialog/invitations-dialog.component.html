@@ -1,0 +1,54 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Invitations</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('new')" [class.active]="activeTab === 'new'">
+        Send Invite
+      </div>
+      <div class="dialog-tab"
+        (click)="setTab('pending')" [class.active]="activeTab === 'pending'">
+        Pending Invites
+      </div>
+      <div class="dialog-tab" (click)="setTab('accepted')" [class.active]="activeTab === 'accepted'">
+        Accepted Invites
+      </div>
+    </div>
+    <div class="panel">
+      <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'new'">
+          <div class="banner">
+            <div>
+              <div class="banner-heading">
+                Give a gig, get a gig
+              </div>
+              <div class="banner-text">
+                Invite your friends and family to sign up and both of your accounts will be credited with one free gigabyte of storage.
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="newInviteForm" class="dialog-form" (submit)="onNewInviteFormSubmit(newInviteForm.value)">
+            <div class="dialog-form-field">
+              <label for="name">Recipient Name</label>
+              <input type="text" class="form-control" id="newInviteName" name="name"
+                formControlName="fullName">
+            </div>
+            <div class="dialog-form-field">
+              <label for="email">Recipient Email</label>
+              <input type="email" class="form-control" id="newInviteEmail" name="email"
+                formControlName="email">
+            </div>
+            <div class="dialog-form-field">
+              <button class="btn btn-primary" [disabled]="newInviteForm.invalid || waiting">Send Invitation</button>
+            </div>
+          </form>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader($PR-purple)
+}
+
+.content {
+  @include tabbedDialogContent(540px);
+}
+
+.tabs {
+  @include tabbedDialogNav($PR-purple);
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}
+
+.banner {
+  @include tabbedDialogPanelBanner;
+  background-image: url('/assets/svg/invitation-banner.svg');
+  background-position: 50% 50%;
+  background-size: cover;
+
+  @include beforeDesktop {
+    background-position: 80% 100%;
+  }
+}
+
+form {
+  @include tabbedDialogPanelForm;
+}
