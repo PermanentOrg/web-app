@@ -9,7 +9,6 @@ import { PrLocationPipe, LocnPipeOutput } from '@shared/pipes/pr-location.pipe';
 import { MessageService } from '@shared/services/message/message.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { ProfileItemVOData } from '@models/profile-item-vo';
-import { ProfileService } from '@shared/services/profile/profile.service';
 
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER: google.maps.LatLngLiteral = {

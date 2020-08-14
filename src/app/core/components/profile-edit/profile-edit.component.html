@@ -131,6 +131,15 @@
                 ></pr-inline-value-edit>
               </div>
               <div class="profile-field">
+                <label>Gender</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                [displayValue]="profileItems.gender[0]?.string1"
+                (doneEditing)="onSaveProfileItem(profileItems.gender[0], 'string1', $event)"
+                ></pr-inline-value-edit>
+              </div>
+            </div>
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
                 <label>Date of Birth</label>
                 <pr-inline-value-edit [alwaysShow]="true"
                 [displayValue]="profileItems.birth_info[0]?.day1"
@@ -139,17 +148,14 @@
                 (doneEditing)="onSaveProfileItem(profileItems.birth_info[0], 'day1', $event)"
                 ></pr-inline-value-edit>
               </div>
-            </div>
-            <div class="profile-group in-thirds">
-              <div class="profile-field">
-                <label>Gender</label>
-                <pr-inline-value-edit [alwaysShow]="true"
-                [displayValue]="profileItems.gender[0]?.string1"
-                (doneEditing)="onSaveProfileItem(profileItems.gender[0], 'string1', $event)"
-                ></pr-inline-value-edit>
-              </div>
               <div class="profile-field">
                 <label>Place of Birth</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                type='external'
+                (externalEdit)="chooseLocationForItem(profileItems.birth_info[0])"
+                [emptyMessage]="fieldPlacholders.address"
+                [displayValue]="profileItems.birth_info[0].LocnVOs?.length ? (profileItems.birth_info[0].LocnVOs[0] | prLocation).full : null"
+                ></pr-inline-value-edit>
               </div>
               <div></div>
             </div>
