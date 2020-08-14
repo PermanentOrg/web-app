@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { AccountService } from '@shared/services/account/account.service';
@@ -23,7 +23,7 @@ type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
   styleUrls: ['./profile-edit.component.scss'],
   animations: [ collapseAnimation, ngIfScaleAnimationDynamic ]
 })
-export class ProfileEditComponent implements OnInit {
+export class ProfileEditComponent implements OnInit, AfterViewInit {
   archive: ArchiveVO;
   publicRoot: FolderVO;
   profileItems: ProfileItemVODictionary;
@@ -45,6 +45,8 @@ export class ProfileEditComponent implements OnInit {
     phone: '555-555-5555',
   };
 
+  totalProgress = 0;
+
   private debug = debug('component:profileEdit');
 
   constructor(
@@ -63,15 +65,28 @@ export class ProfileEditComponent implements OnInit {
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
 
     this.profileItems = this.profile.getProfileItemDictionary();
-
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
   }
 
   ngOnInit(): void {
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.updateProgress();
+    });
+  }
+
   onDoneClick() {
     this.dialogRef.close();
+  }
+
+  updateProgress() {
+    this.totalProgress = this.profile.calculateProfileProgress();
+  }
+
+  getProgressTransform() {
+    return `transform: translateX(${(this.totalProgress * 100) - 100}%)`;
   }
 
   async onProfilePictureClick() {
@@ -115,6 +130,7 @@ export class ProfileEditComponent implements OnInit {
       }
     } finally {
       item.isPendingAction = false;
+      this.updateProgress();
     }
   }
 
@@ -136,6 +152,7 @@ export class ProfileEditComponent implements OnInit {
       }
     } finally {
       deferred.resolve();
+      this.updateProgress();
     }
   }
 
@@ -154,6 +171,11 @@ export class ProfileEditComponent implements OnInit {
   }
 
   async chooseLocationForItem(item: ProfileItemVOData) {
-    this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
+    try {
+      await this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
+    } catch (err) { }
+    finally {
+      this.updateProgress();
+    }
   }
 }

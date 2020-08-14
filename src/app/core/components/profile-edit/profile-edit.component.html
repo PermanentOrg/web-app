@@ -35,30 +35,44 @@
     </div>
     <div class="panel">
       <div class="panel-header">
-        <div class="profile-visibility">
-          <div>Profile Visibility</div>
-          <div class="visibility-option">
-            <input type="radio" [(ngModel)]="isPublic" [value]="true">
-            <div>
-              <div>Public</div>
-              <span>Anyone can see the page</span>
+        <div class="panel-header-top-row">
+          <div class="profile-visibility">
+            <div>Profile Visibility</div>
+            <div class="visibility-option">
+              <input type="radio" [(ngModel)]="isPublic" [value]="true">
+              <div>
+                <div>Public</div>
+                <span>Anyone can see the page</span>
+              </div>
+            </div>
+            <div class="visibility-option">
+              <input type="radio" [(ngModel)]="isPublic" [value]="false">
+              <div>
+                <div>Private</div>
+                <span>Only contributors can see the page</span>
+              </div>
             </div>
           </div>
-          <div class="visibility-option">
-            <input type="radio" [(ngModel)]="isPublic" [value]="false">
-            <div>
-              <div>Private</div>
-              <span>Only contributors can see the page</span>
-            </div>
+          <div class="buttons">
+            <button class="btn btn-alternate btn-alternate-blue-light">View On Web</button>
+            <button class="btn btn-alternate">Share Profile</button>
           </div>
         </div>
-        <div class="buttons">
-          <button class="btn btn-alternate btn-alternate-blue-light">View On Web</button>
-          <button class="btn btn-alternate">Share Profile</button>
+        <div class="panel-header-bottom-row">
+          <div class="profile-progress">
+            <div class="title">
+              Profile {{totalProgress | percent}} complete
+              <div class="progress-bar">
+                <div class="progress-bar-progress" [style]="getProgressTransform()"></div>
+              </div>
+            </div>
+            <em>The more fields you fill out, the more likely others will be able to find you online.</em>
+          </div>
         </div>
       </div>
       <div class="panel-scroll" prScrollNav #scrollNav="prScrollNav">
         <div id='profile-section'>
+
           <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
             (click)="chooseBannerPicture()" prScrollSection='about'>
           </div>

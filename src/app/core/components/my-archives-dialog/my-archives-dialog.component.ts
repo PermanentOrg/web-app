@@ -37,10 +37,8 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   async onArchiveClick(archive: ArchiveVO) {
     try {
       await this.accountService.changeArchive(archive);
+      this.onDoneClick();
       await this.router.navigate(['/m', 'switching']);
-      setTimeout(() => {
-        this.onDoneClick();
-      }, 2000);
     } catch (err) {}
   }
 

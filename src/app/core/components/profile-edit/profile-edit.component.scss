@@ -34,11 +34,7 @@ $max-width: 1000px;
 }
 
 .panel-header {
-  height: pxToGrid(100px);
-  flex: 0 0 pxToGrid(100px);
-  border-bottom: $file-list-border;
-  display: flex;
-  align-items: center;
+  flex: 0 0 auto;
   background-color: white;
 
   .buttons {
@@ -52,6 +48,13 @@ $max-width: 1000px;
     width: 8 * $grid-unit;
     margin: 0;
     margin-left: $grid-unit;
+  }
+
+  .panel-header-top-row, .panel-header-bottom-row {
+    display: flex;
+    align-items: center;
+    height: pxToGrid(100px);
+    border-bottom: $file-list-border;
   }
 
   .profile-visibility {
@@ -82,6 +85,38 @@ $max-width: 1000px;
         font-size: $font-size-xs;
         font-weight: $font-weight-base;
         color: $text-muted;
+      }
+    }
+  }
+
+  .profile-progress {
+    .title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      display: flex;
+      align-items: center;
+      margin-bottom: $grid-unit / 2;
+    }
+
+    em {
+      font-size: $font-size-base;
+      font-weight: $font-weight-base;
+      color: $text-muted;
+    }
+
+    .progress-bar {
+      margin-left: $grid-unit;
+      height: $grid-unit;
+      width: 10 * $grid-unit;
+      border: $file-list-border;
+      overflow: hidden;
+
+      .progress-bar-progress {
+        height: 100%;
+        width: 100%;
+        transform: translateX(-100%);
+        background-color: $success;
+        transition: transform 1s $tweaked-ease;
       }
     }
   }
