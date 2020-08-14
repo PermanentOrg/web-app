@@ -40,6 +40,7 @@ import { ConnectionsDialogComponent } from './components/connections-dialog/conn
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 import { ProfileEditTopicComponent } from './components/profile-edit-topic/profile-edit-topic.component';
 import { ProfileService } from '@shared/services/profile/profile.service';
+import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 
 @NgModule({
   imports: [
@@ -73,7 +74,8 @@ import { ProfileService } from '@shared/services/profile/profile.service';
     AllArchivesComponent,
     ConnectionsDialogComponent,
     MembersDialogComponent,
-    ProfileEditTopicComponent
+    ProfileEditTopicComponent,
+    MyArchivesDialogComponent
   ],
   providers: [
     DataService,
