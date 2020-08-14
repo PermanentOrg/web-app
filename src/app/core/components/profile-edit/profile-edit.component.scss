@@ -98,10 +98,8 @@ $max-width: 1000px;
   height: pxToGrid(220px);
   background-size: cover;
   background-position: 50% 50%;
-  &.show-gradient {
-    $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
-    @include gradient(to top left, $list);
-  }
+  $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
+  @include gradient(to top left, $list);
 }
 
 .profile-photo {
