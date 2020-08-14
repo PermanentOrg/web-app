@@ -113,6 +113,7 @@
               <div class="profile-field">
                 <label>This Person's Full Name</label>
                 <pr-inline-value-edit [alwaysShow]="true"
+                emptyMessage="Full name"
                 [displayValue]="profileItems.basic[0]?.string2"
                 (doneEditing)="onSaveProfileItem(profileItems.basic[0], 'string2', $event)"
                 ></pr-inline-value-edit>
@@ -120,6 +121,7 @@
               <div class="profile-field">
                 <label>Also Known As...</label>
                 <pr-inline-value-edit [alwaysShow]="true"
+                emptyMessage="Aliases or nicknames"
                 [displayValue]="profileItems.basic[0]?.string3"
                 (doneEditing)="onSaveProfileItem(profileItems.basic[0], 'string3', $event)"
                 ></pr-inline-value-edit>
@@ -155,27 +157,31 @@
               <i class="material-icons">expand_less</i>
             </div>
           </div>
-          <div class="profile-section" [@collapseAnimation]="sectionState.info" hidden>
+          <div class="profile-section" [@collapseAnimation]="sectionState.info">
             <div class="profile-group in-thirds">
               <div class="profile-field">
-                <label>Email Address</label>
-                <pr-inline-value-edit  [alwaysShow]="true"
-                *ngFor="let profileItem of profileItems.email; let index = index; let last = last;"
+                <label>Email Address(es)</label>
+                <pr-inline-value-edit *ngFor="let profileItem of profileItems.email"
+                [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
+                [alwaysShow]="true"
+                emptyMessage="email@website.com"
                 [displayValue]="profileItem?.string1"
                 (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
                 ></pr-inline-value-edit>
-                <button class="btn btn-primary" (click)="addEmptyProfileItem('email')">Add</button>
+                <button class="btn btn-primary" (click)="addEmptyProfileItem('email')">Add Email</button>
               </div>
             </div>
             <div class="profile-group in-thirds">
               <div class="profile-field">
                 <label>Social Media</label>
-                <pr-inline-value-edit  [alwaysShow]="true"
-                *ngFor="let profileItem of profileItems.social_media; let index = index; let last = last;"
+                <pr-inline-value-edit *ngFor="let profileItem of profileItems.social_media"
+                [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
+                [alwaysShow]="true" 
+                emptyMessage="www.website.com/user"
                 [displayValue]="profileItem?.string1"
                 (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
                 ></pr-inline-value-edit>
-                <button class="btn btn-primary" (click)="addEmptyProfileItem('social_media')">Add</button>
+                <button class="btn btn-primary" (click)="addEmptyProfileItem('social_media')">Add Social Media</button>
               </div>
             </div>
           </div>
@@ -191,39 +197,40 @@
                 <div class="profile-field">
                   <label>Address</label>
                   <pr-inline-value-edit [alwaysShow]="true"
-                  [displayValue]="profileItem.locnId1"
+                  type='external'
+                  (externalEdit)="chooseLocationForItem(profileItem)"
+                  [emptyMessage]="fieldPlacholders.address"
+                  [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
                   ></pr-inline-value-edit>
                 </div>
                 <div class="profile-field">
+                  <label>Move In Date</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.day1"
+                  emptyMessage="YYYY-MM-DD"
+                  type='date'
+                  (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field">
+                  <label>Move Out Date</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.day2"
+                  emptyMessage="YYYY-MM-DD"
+                  type='date'
+                  (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+              </div>
+              <div class="profile-group in-thirds">
+                <div class="profile-field">
                   <label>Residence Phone Number</label>
                   <pr-inline-value-edit [alwaysShow]="true"
+                  [emptyMessage]="fieldPlacholders.phone"
                   [displayValue]="profileItem.string2"
                   (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
                   ></pr-inline-value-edit>
                 </div>
-                <div class="profile-group in-half">
-                  <div class="profile-field">
-                    <label>Move In Date</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [displayValue]="profileItem.day1"
-                    emptyMessage="YYYY-MM-DD"
-                    type='date'
-                    (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
-                    ></pr-inline-value-edit>
-                  </div>
-                  <div class="profile-field">
-                    <label>Move Out Date</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [displayValue]="profileItem.day2"
-                    emptyMessage="YYYY-MM-DD"
-                    type='date'
-                    (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
-                    ></pr-inline-value-edit>
-                  </div>
-                </div>
-              </div>
-              <div class="profile-group in-thirds">
-                <div></div>
                 <div class="profile-field two-thirds">
                   <label>What was it like living there?</label>
                   <pr-inline-value-edit [alwaysShow]="true"
@@ -233,6 +240,7 @@
                 </div>
               </div>
             </div>
+            <button class="btn btn-primary" (click)="addEmptyProfileItem('home')">Add Residence</button>
           </div>
           <div class="profile-section-header" prScrollSection="work">
             Work History
@@ -246,6 +254,7 @@
                 <div class="profile-field">
                   <label>Company</label>
                   <pr-inline-value-edit [alwaysShow]="true"
+                  emptyMessage="Company, Inc."
                   [displayValue]="profileItem.string1"
                   (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
                   ></pr-inline-value-edit>
@@ -253,6 +262,7 @@
                 <div class="profile-field">
                   <label>Title</label>
                   <pr-inline-value-edit [alwaysShow]="true"
+                  emptyMessage="Sales Manager"
                   [displayValue]="profileItem.string3"
                   (doneEditing)="onSaveProfileItem(profileItem, 'string3', $event)"
                   ></pr-inline-value-edit>
@@ -262,7 +272,10 @@
                 <div class="profile-field">
                   <label>Address</label>
                   <pr-inline-value-edit [alwaysShow]="true"
-                  [displayValue]="profileItem.locnId1"
+                  type='external'
+                  (externalEdit)="chooseLocationForItem(profileItem)"
+                  [emptyMessage]="fieldPlacholders.address"
+                  [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
                   ></pr-inline-value-edit>
                 </div>
                 <div class="profile-field">

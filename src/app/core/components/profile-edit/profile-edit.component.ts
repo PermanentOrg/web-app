@@ -7,40 +7,11 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { DIALOG_DATA, IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { EditService } from '@core/services/edit/edit.service';
-import { ProfileService } from '@shared/services/profile/profile.service';
-import { collapseAnimation } from '@shared/animations';
-
-type ProfileItemsStringDataCol =
-'string1' |
-'string2' |
-'string3' |
-'datetime1' |
-'datetime2' |
-'textData1' |
-'textData2' |
-'day1' |
-'day2'
-;
-
-type ProfileItemsIntDataCol =
-'int1' |
-'int2' |
-'int3' |
-'locnId1' |
-'locnId2' |
-'otherId1' |
-'otherId2' |
-'text_dataId1' |
-'text_dataId2'
-;
-
-type ProfileItemsDataCol = ProfileItemsStringDataCol | ProfileItemsIntDataCol;
-
-type ProfileItemsDictionary = {
-  [Field in FieldNameUI]: ProfileItemVOData[]
-};
+import { ProfileService, ProfileItemsDataCol } from '@shared/services/profile/profile.service';
+import { collapseAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
+import debug from 'debug';
 
 type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
 
@@ -48,7 +19,7 @@ type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.scss'],
-  animations: [ collapseAnimation ]
+  animations: [ collapseAnimation, ngIfScaleAnimationDynamic ]
 })
 export class ProfileEditComponent implements OnInit {
   archive: ArchiveVO;
@@ -67,10 +38,18 @@ export class ProfileEditComponent implements OnInit {
     work: 'open'
   };
 
+  fieldPlacholders = {
+    address: 'Choose a location',
+    phone: '555-555-5555',
+  };
+
+  private debug = debug('component:profileEdit');
+
   constructor(
     private account: AccountService,
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
+    private dialog: Dialog,
     private api: ApiService,
     private edit: EditService,
     private folderPicker: FolderPickerService,
@@ -113,8 +92,14 @@ export class ProfileEditComponent implements OnInit {
   async onSaveProfileItem(item: ProfileItemVOData, valueKey: ProfileItemsDataCol, newValue: any, refreshArchive = false) {
     const originalValue = item[valueKey];
     item[valueKey] = newValue as never;
+    item.isPendingAction = true;
     try {
-      await this.profile.saveProfileItem(item, [valueKey]);
+      if (this.profile.isItemEmpty(item)) {
+        this.debug('item is empty, attempting delete %o', item);
+        await this.profile.deleteProfileItem(item);
+      } else {
+        await this.profile.saveProfileItem(item, [valueKey]);
+      }
       if (refreshArchive) {
         await this.account.refreshArchive();
       }
@@ -123,6 +108,8 @@ export class ProfileEditComponent implements OnInit {
         item[valueKey] = originalValue as never;
         this.message.showError(err.getMessage(), true);
       }
+    } finally {
+      item.isPendingAction = false;
     }
   }
 
@@ -136,6 +123,11 @@ export class ProfileEditComponent implements OnInit {
 
   addEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
     const empty = this.profile.createEmptyProfileItem(fieldNameShort);
+    empty.isNewlyCreated = true;
     this.profile.addProfileItemToDictionary(empty);
+  }
+
+  async chooseLocationForItem(item: ProfileItemVOData) {
+    this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
   }
 }

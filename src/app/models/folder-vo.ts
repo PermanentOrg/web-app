@@ -1,4 +1,4 @@
-import { BaseVO, BaseVOData } from '@models/base-vo';
+import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
@@ -27,7 +27,7 @@ export interface ChildItemData {
   isNewlyCreated: boolean;
 }
 
-export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder {
+export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, DynamicListChild {
   public isFolder = true;
   public isRecord = false;
 

@@ -137,6 +137,14 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<ArchiveResponse>('/profile_item/safeAddUpdate', data, ArchiveResponse);
   }
+
+  public deleteProfileItem(profileItem: ProfileItemVOData) {
+    const data = [{
+      Profile_itemVO: profileItem
+    }];
+
+    return this.http.sendRequestPromise<ArchiveResponse>('/profile_item/delete', data, ArchiveResponse);
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {

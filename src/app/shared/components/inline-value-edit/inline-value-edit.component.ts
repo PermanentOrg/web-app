@@ -10,7 +10,13 @@ import { ENTER } from '@angular/cdk/keycodes';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { NgModel, FormControl, Validators } from '@angular/forms';
 
-export type InlineValueEditType = 'text' | 'date' | 'textarea' | 'select';
+export type InlineValueEditType = 
+  'text' |
+  'date' | 
+  'textarea' | 
+  'select' |
+  'external'
+  ;
 
 type ValueType = string | number;
 @Component({
@@ -39,6 +45,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @HostBinding('class.always-show') @Input() alwaysShow = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
+  @Output() externalEdit: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
   formControl: FormControl;
   @ViewChild('input') inputElementRef: ElementRef;
@@ -104,6 +111,10 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
         (this.elementRef.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start'});
       });
     }
+  }
+
+  startExternalEdit() {
+    this.externalEdit.emit();
   }
 
   save(skipBlur = false) {

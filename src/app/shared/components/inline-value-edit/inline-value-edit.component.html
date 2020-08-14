@@ -76,6 +76,14 @@
       </div>
     </form>
   </ng-container>
+  <ng-container *ngSwitchCase="'external'">
+    <div class="inline-value-container" [class.can-edit]="canEdit">
+      <div class="inline-value-display inline-value-text form-control" (click)="startExternalEdit()"
+        [class.showing-empty-message]="!displayValue && emptyMessage">
+        {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}
+      </div>
+    </div>
+  </ng-container>
   <ng-template #inlineControls>
     <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
       <button class="btn btn-primary btn-sm" (click)="save()" type="submit">

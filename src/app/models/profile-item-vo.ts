@@ -1,4 +1,4 @@
-import { BaseVOData } from '@models/base-vo';
+import { BaseVOData, DynamicListChild } from '@models/base-vo';
 import { LocnVOData } from './locn-vo';
 import { TimezoneVOData } from './timezone-vo';
 
@@ -44,7 +44,7 @@ type ProfileItemType =
   'type.widget.timezone'
   ;
 
-export interface ProfileItemVOData extends BaseVOData {
+export interface ProfileItemVOData extends BaseVOData, DynamicListChild {
   profile_itemId?: number;
   archiveId?: number;
   fieldNameUI?: FieldNameUI;

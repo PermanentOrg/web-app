@@ -7,6 +7,33 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
+import { remove } from 'lodash';
+
+type ProfileItemsStringDataCol =
+'string1' |
+'string2' |
+'string3' |
+'datetime1' |
+'datetime2' |
+'textData1' |
+'textData2' |
+'day1' |
+'day2'
+;
+
+type ProfileItemsIntDataCol =
+'int1' |
+'int2' |
+'int3' |
+'locnId1' |
+'locnId2' |
+'otherId1' |
+'otherId2' |
+'text_dataId1' |
+'text_dataId2'
+;
+
+export type ProfileItemsDataCol = ProfileItemsStringDataCol | ProfileItemsIntDataCol;
 
 @Injectable()
 export class ProfileService {
@@ -131,8 +158,24 @@ export class ProfileService {
       }
     }
     const response = await this.api.archive.addUpdateProfileItem(item);
+
     const updated = response.getProfileItemVOs()[0];
     item.updatedDT = updated.updatedDT;
+    if (!item.profile_itemId) {
+      item.profile_itemId = updated.profile_itemId;
+    }
+  }
+
+  async deleteProfileItem(item: ProfileItemVOData) {
+    const response = await this.api.archive.deleteProfileItem(item);
+    const fieldNameShort = item.fieldNameUI.split('.')[1] as FieldNameUIShort;
+    const list = this.profileItemDictionary[fieldNameShort];
+
+    if (list.length === 1) {
+      list[0] = this.createEmptyProfileItem(fieldNameShort);
+    } else {
+      remove(this.profileItemDictionary[fieldNameShort], item);
+    }
   }
 
   getSpecificFieldNameUIFromValueKey(field: FieldNameUI, valueKey: keyof ProfileItemVOData) {
@@ -143,5 +186,25 @@ export class ProfileService {
     const templateForType = template[shortType];
     const valueTemplate = templateForType[shortField].values[valueKey];
     return valueTemplate.field_name_ui;
+  }
+
+  isItemEmpty(item: ProfileItemVOData) {
+    const fieldsToCheck: ProfileItemsDataCol[] = [
+      'string1',
+      'string2',
+      'string3',
+      'day1',
+      'day2',
+      'textData1',
+      'locnId1'
+    ];
+
+    for (const field of fieldsToCheck) {
+      if (item[field]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
