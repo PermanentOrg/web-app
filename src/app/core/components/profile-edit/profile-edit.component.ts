@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
-import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary } from '@models/profile-item-vo';
+import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role.enum';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
@@ -10,6 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { DIALOG_DATA, IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { EditService } from '@core/services/edit/edit.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
+import { collapseAnimation } from '@shared/animations';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -46,7 +47,8 @@ type ProfileTab = 'info' | 'online' | 'residence' | 'work';
 @Component({
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',
-  styleUrls: ['./profile-edit.component.scss']
+  styleUrls: ['./profile-edit.component.scss'],
+  animations: [ collapseAnimation ]
 })
 export class ProfileEditComponent implements OnInit, IsTabbedDialog {
   archive: ArchiveVO;
@@ -58,6 +60,13 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
   isPublic = true;
 
   activeTab: ProfileTab = 'info';
+  sectionState: { [key in ProfileTab ]: 'open' | 'closed'} = {
+    info: 'open',
+    online: 'open',
+    residence: 'open',
+    work: 'open'
+  };
+
   constructor(
     private account: AccountService,
     private dialogRef: DialogRef,
@@ -119,5 +128,18 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
         this.message.showError(err.getMessage(), true);
       }
     }
+  }
+
+  toggleSection(sectionName: ProfileTab) {
+    if (this.sectionState[sectionName] === 'open') {
+      this.sectionState[sectionName] = 'closed';
+    } else {
+      this.sectionState[sectionName] = 'open';
+    }
+  }
+
+  addEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
+    const empty = this.profile.createEmptyProfileItem(fieldNameShort);
+    this.profile.addProfileItemToDictionary(empty);
   }
 }

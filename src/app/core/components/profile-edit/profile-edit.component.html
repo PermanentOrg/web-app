@@ -8,19 +8,19 @@
   <div class="content">
     <div class="tabs">
       <div class="dialog-tab"
-        (click)="setTab('about')" [class.active]="activeTab === 'info'">
+        (click)="scrollNav.scrollToSection('info')">
         Person Information
       </div>
       <div class="dialog-tab"
-        (click)="setTab('info')" [class.active]="activeTab === 'online'">
+        (click)="scrollNav.scrollToSection('online')">
         Online Presence
       </div>
       <div class="dialog-tab"
-      (click)="setTab('info')" [class.active]="activeTab === 'residence'">
+        (click)="scrollNav.scrollToSection('home')">
         Residence History
       </div>
       <div class="dialog-tab"
-      (click)="setTab('info')" [class.active]="activeTab === 'work'">
+        (click)="scrollNav.scrollToSection('work')">
         Work History
       </div>
     </div>
@@ -48,18 +48,18 @@
           <button class="btn btn-alternate">Share Profile</button>
         </div>
       </div>
-      <div class="panel-scroll">
+      <div class="panel-scroll" prScrollNav #scrollNav="prScrollNav">
         <div id='section-info'>
           <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
             (click)="chooseBannerPicture()">
           </div>
           <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
           (click)="onProfilePictureClick()"></div>
-          <div class="profile-group">
+          <div class="profile-section">
             <div class="profile-prompt">
               The name of this Archive is…
             </div>
-            <div class="profile-fields">
+            <div class="profile-field">
               <pr-inline-value-edit
                 [displayValue]="this.profileItems.basic[0]?.string1"
                 [required]="true"
@@ -67,35 +67,112 @@
                 ></pr-inline-value-edit>
             </div>
           </div>
-          <div class="profile-group">
+          <div class="profile-section">
             <div class="profile-prompt">
               What is this Archive for?
             </div>
-            <div class="profile-fields">
+            <div class="profile-field">
               <pr-inline-value-edit [displayValue]="this.profileItems.blurb[0]?.string1"
               emptyMessage="Add a short description about the purpose of this Archive."
               (doneEditing)="onSaveProfileItem(this.profileItems.blurb[0], 'string1', $event)"></pr-inline-value-edit>
             </div>
-            <div class="profile-fields-subtitle">
+            <div class="profile-field-subtitle">
               280 character limit
             </div>
           </div>
-          <div class="profile-group">
+          <div class="profile-section">
             <div class="profile-prompt">
               Tell us about this Person.
             </div>
-            <div class="profile-fields">
+            <div class="profile-field">
               <pr-inline-value-edit [displayValue]="this.profileItems.description[0]?.textData1" type="textarea"
               (doneEditing)="onSaveProfileItem(this.profileItems.description[0], 'textData1', $event, true)"
                 emptyMessage="Tell the story of the Person this Archive is for.">
               </pr-inline-value-edit>
             </div>
           </div>
+          <div class="profile-section-header" prScrollSection="info">
+            Person Information
+            <div class="collapse" (click)="toggleSection('info')" [class.closed]="sectionState.info === 'closed'">
+              <i class="material-icons">expand_less</i>
+            </div>
+          </div>
+          <div class="profile-section" [@collapseAnimation]="sectionState.info">
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>This Person's Full Name</label>
+                <pr-inline-value-edit
+                [displayValue]="this.profileItems.basic[0]?.string2"
+                (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string2', $event)"
+                ></pr-inline-value-edit>
+              </div>
+              <div class="profile-field">
+                <label>Also Known As...</label>
+                <pr-inline-value-edit
+                [displayValue]="this.profileItems.basic[0]?.string3"
+                (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string3', $event)"
+                ></pr-inline-value-edit>
+              </div>
+              <div class="profile-field">
+                <label>Date of Birth</label>
+                <pr-inline-value-edit
+                [displayValue]="this.profileItems.birth_info[0]?.day1"
+                emptyMessage="YYYY-MM-DD"
+                type='date'
+                (doneEditing)="onSaveProfileItem(this.profileItems.birth_info[0], 'day1', $event)"
+                ></pr-inline-value-edit>
+              </div>
+            </div>
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>Gender</label>
+                <pr-inline-value-edit
+                [displayValue]="this.profileItems.gender[0]?.string1"
+                (doneEditing)="onSaveProfileItem(this.profileItems.gender[0], 'string1', $event)"
+                ></pr-inline-value-edit>
+              </div>
+              <div class="profile-field">
+                <label>Place of Birth</label>
+              </div>
+              <div class="profile-field">
+                <label>Place of Residence</label>
+              </div>
+            </div>
+            <div class="profile-group"></div>
+          </div>
+          <div class="profile-section-header">
+            Online Presence
+            <div class="collapse" (click)="toggleSection('online')" [class.closed]="sectionState.online === 'closed'">
+              <i class="material-icons">expand_less</i>
+            </div>
+          </div>
+          <div class="profile-section" [@collapseAnimation]="sectionState.info">
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>Email Address</label>
+                <pr-inline-value-edit *ngFor="let profileItem of this.profileItems.email; let index = index; let last = last;"
+                [displayValue]="profileItem?.string1"
+                (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                ></pr-inline-value-edit>
+                <button class="btn btn-primary" (click)="addEmptyProfileItem('email')">Add</button>
+              </div>
+            </div>
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>Social Media</label>
+                <pr-inline-value-edit *ngFor="let profileItem of this.profileItems.social_media; let index = index; let last = last;"
+                [displayValue]="profileItem?.string1"
+                (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                ></pr-inline-value-edit>
+                <button class="btn btn-primary" (click)="addEmptyProfileItem('social_media')">Add</button>
+              </div>
+            </div>
+          </div>
           <div class="profile-group">
             <div class="profile-prompt">
               Email
             </div>
-            <div class="profile-fields">
+            <div class="profile-field">
               <pr-inline-value-edit [displayValue]="this.profileItems.email[0]?.string1"
               emptyMessage="Email address"
               (doneEditing)="onSaveProfileItem(this.profileItems.email[0], 'string1', $event)"></pr-inline-value-edit>

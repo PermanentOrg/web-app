@@ -11,7 +11,7 @@ import { ArchivePickerComponent } from './components/archive-picker/archive-pick
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Scroll } from '@angular/router';
 import { FileSizePipe } from './pipes/filesize.pipe';
 import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 import { PromptComponent } from './components/prompt/prompt.component';
@@ -39,8 +39,8 @@ import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
 import { StorageAmountPipe } from './pipes/storage-amount.pipe';
 import { AudioComponent } from './components/audio/audio.component';
-import { ScrollSectionDirective } from './scroll-section.directive';
-import { ScrollNavDirective } from './scroll-nav.directive';
+import { ScrollSectionDirective } from './directives/scroll-section.directive';
+import { ScrollNavDirective } from './directives/scroll-nav.directive';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 
 @NgModule({
@@ -94,7 +94,9 @@ import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
     StorageAmountPipe,
     StorageMeterComponent,
     AudioComponent,
-    ThumbnailComponent
+    ThumbnailComponent,
+    ScrollNavDirective,
+    ScrollSectionDirective
   ],
   entryComponents: [
     ArchivePickerComponent,
