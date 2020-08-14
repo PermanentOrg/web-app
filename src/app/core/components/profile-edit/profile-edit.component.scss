@@ -91,7 +91,7 @@ $max-width: 1000px;
   flex: 1 1 auto;
   overflow-y: auto;
   margin: 0px (-$grid-unit);
-  padding: 0px ($grid-unit);
+  padding: 0px ($grid-unit) $grid-unit * 2;
 }
 
 .profile-banner {

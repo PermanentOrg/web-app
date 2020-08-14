@@ -58,9 +58,9 @@
         </div>
       </div>
       <div class="panel-scroll" prScrollNav #scrollNav="prScrollNav">
-        <div id='profile-section' prScrollSection='about'>
+        <div id='profile-section'>
           <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
-            (click)="chooseBannerPicture()">
+            (click)="chooseBannerPicture()" prScrollSection='about'>
           </div>
           <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
           (click)="onProfilePictureClick()"></div>

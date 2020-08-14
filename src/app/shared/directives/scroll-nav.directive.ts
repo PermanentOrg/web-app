@@ -1,21 +1,20 @@
-import { Directive, ViewChildren, QueryList, AfterViewInit, ContentChildren, AfterContentInit, OnDestroy, ElementRef } from '@angular/core';
+import { Directive, QueryList, ContentChildren, AfterContentInit, ElementRef, HostListener } from '@angular/core';
 import { ScrollSectionDirective } from './scroll-section.directive';
 import debug from 'debug';
-import { find, maxBy, some, minBy } from 'lodash';
+import { find, throttle } from 'lodash';
 
 @Directive({
   selector: '[prScrollNav]',
   exportAs: 'prScrollNav'
 })
-export class ScrollNavDirective implements AfterContentInit, OnDestroy {
+export class ScrollNavDirective implements AfterContentInit {
   @ContentChildren(ScrollSectionDirective, { descendants: true }) sections!: QueryList<ScrollSectionDirective>;
 
   private debug = debug('directive:scrollNavDirective');
 
-  private observerOptions: IntersectionObserverInit = {
-    threshold: 0.75,
-  };
-  private observer: IntersectionObserver;
+  private throttledHandler = throttle(() => {
+    this.checkActiveSection();
+  }, 256);
 
   activeSectionId: string;
   constructor(
@@ -23,38 +22,31 @@ export class ScrollNavDirective implements AfterContentInit, OnDestroy {
   ) { }
 
   ngAfterContentInit(): void {
-    const sections = this.sections.toArray();
-    this.observer = new IntersectionObserver(
-      () => { this.onIntersection(); },
-      this.observerOptions
-    );
-    for (const section of sections) {
-      this.observer.observe(section.element);
-    }
+    setTimeout(() => {
+      this.checkActiveSection();
+    });
   }
 
-  ngOnDestroy(): void {
-    this.observer.disconnect();
+
+  @HostListener('scroll', ['$event'])
+  onViewportScroll(event: Event) {
+    this.throttledHandler();
   }
 
-  onIntersection() {
-    this.debug('change in visible! check sections');
+  checkActiveSection() {
     const scrollElem = this.elementRef.nativeElement as HTMLElement;
-    const topOfScroll = scrollElem.getBoundingClientRect().y;
-    const visibleSections = this.sections.toArray().filter(s => s.element.getBoundingClientRect().y >= topOfScroll);
+    const scrollFromBottom = scrollElem.scrollHeight - scrollElem.clientHeight - scrollElem.scrollTop;
+    const scrollElemRect = scrollElem.getBoundingClientRect();
+    const threshold = scrollElemRect.y + (scrollElemRect.height / 3);
+    const pastThreshold = this.sections.toArray()
+      .filter(s =>  s.element.getBoundingClientRect().y <= threshold);
 
-    this.debug('visible sections %o', visibleSections.map(s => s.sectionId));
-
-    let targetSection: ScrollSectionDirective;
-    if (!visibleSections.length) {
-      this.debug('all sections offscreen, get the last one');
-      targetSection = this.sections.toArray().pop();
+    if (scrollFromBottom > 50) {
+      this.activeSectionId = pastThreshold.pop().sectionId;
     } else {
-      targetSection = minBy(visibleSections, s => s.element.getBoundingClientRect().y);
+      // last item isn't tall enough to cross threshold
+      this.activeSectionId = this.sections.toArray().pop().sectionId;
     }
-
-    this.debug('target section %s', targetSection.sectionId);
-    this.activeSectionId = targetSection.sectionId;
   }
 
   scrollToSection(sectionId: string) {
@@ -64,7 +56,7 @@ export class ScrollNavDirective implements AfterContentInit, OnDestroy {
     const targetSection = find(sections, { sectionId });
     if (targetSection) {
       this.debug('section found %o', targetSection);
-      targetSection.element.scrollIntoView();
+      targetSection.element.scrollIntoView({behavior: 'smooth'});
     } else {
       this.debug('section not found!');
     }
