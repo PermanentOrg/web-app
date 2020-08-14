@@ -10,6 +10,5 @@ export class ScrollSectionDirective {
     elementRef: ElementRef
   ) {
     this.element = elementRef.nativeElement;
-    console.log(this);
   }
 }

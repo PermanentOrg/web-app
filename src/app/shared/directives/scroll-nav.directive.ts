@@ -37,7 +37,7 @@ export class ScrollNavDirective implements AfterContentInit {
     const scrollElem = this.elementRef.nativeElement as HTMLElement;
     const scrollFromBottom = scrollElem.scrollHeight - scrollElem.clientHeight - scrollElem.scrollTop;
     const scrollElemRect = scrollElem.getBoundingClientRect();
-    const threshold = scrollElemRect.y + (scrollElemRect.height / 3);
+    const threshold = scrollElemRect.top + 280;
     const pastThreshold = this.sections.toArray()
       .filter(s =>  s.element.getBoundingClientRect().y <= threshold);
 

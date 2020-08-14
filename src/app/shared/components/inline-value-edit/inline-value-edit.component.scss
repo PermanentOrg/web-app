@@ -179,6 +179,12 @@ div.form-control {
   }
 }
 
+:host.always-show {
+  .inline-value-display, select {
+    border-color: rgba($input-border-color, 0.75);
+  }
+}
+
 input, select, textarea {
   &.ng-invalid {
     &.ng-touched, &.ng-dirty {

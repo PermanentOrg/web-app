@@ -37,6 +37,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() selectOptions: FormInputSelectOption[];
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
+  @HostBinding('class.always-show') @Input() alwaysShow = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
 
   formControl: FormControl;
