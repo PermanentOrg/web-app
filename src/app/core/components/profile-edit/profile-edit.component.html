@@ -68,12 +68,16 @@
             <div class="profile-prompt">
               The name of this Archive is…
             </div>
-            <div class="profile-field">
-              <pr-inline-value-edit [alwaysShow]="true"
-                [displayValue]="this.profileItems.basic[0]?.string1"
-                [required]="true"
-                (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string1', $event, true)"
-                ></pr-inline-value-edit>
+            <div class="profile-group archive-name">
+              <span>The</span>
+              <div class="profile-field">
+                <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="this.profileItems.basic[0]?.string1"
+                  [required]="true"
+                  (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string1', $event, true)"
+                  ></pr-inline-value-edit>
+              </div>
+              <span>Archive</span>
             </div>
           </div>
           <div class="profile-section">
@@ -192,10 +196,11 @@
             </div>
           </div>
           <div class="profile-section" [@collapseAnimation]="sectionState.residence">
-            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.home">
+            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.home"
+            [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
               <div class="profile-group in-thirds">
                 <div class="profile-field">
-                  <label>Address</label>
+                  <label>Location</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   type='external'
                   (externalEdit)="chooseLocationForItem(profileItem)"
@@ -239,6 +244,9 @@
                   ></pr-inline-value-edit>
                 </div>
               </div>
+              <div class="profile-group align-right">
+                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">Remove Residence</button>
+              </div>
             </div>
             <button class="btn btn-primary" (click)="addEmptyProfileItem('home')">Add Residence</button>
           </div>
@@ -249,7 +257,8 @@
             </div>
           </div>
           <div class="profile-section" [@collapseAnimation]="sectionState.work">
-            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.job">
+            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.job"
+            [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
               <div class="profile-group in-half">
                 <div class="profile-field">
                   <label>Company</label>
@@ -270,7 +279,7 @@
               </div>
               <div class="profile-group in-thirds">
                 <div class="profile-field">
-                  <label>Address</label>
+                  <label>Location</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   type='external'
                   (externalEdit)="chooseLocationForItem(profileItem)"
@@ -307,7 +316,11 @@
                   ></pr-inline-value-edit>
                 </div>
               </div>
+              <div class="profile-group align-right">
+                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">Remove Residence</button>
+              </div>
             </div>
+            <button class="btn btn-primary" (click)="addEmptyProfileItem('job')">Add Work</button>
           </div>
         </div>
       </div>

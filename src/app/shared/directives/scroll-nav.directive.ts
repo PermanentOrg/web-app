@@ -14,7 +14,7 @@ export class ScrollNavDirective implements AfterContentInit {
 
   private throttledHandler = throttle(() => {
     this.checkActiveSection();
-  }, 256);
+  }, 64);
 
   activeSectionId: string;
   constructor(

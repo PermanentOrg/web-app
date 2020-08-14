@@ -213,9 +213,27 @@ $max-width: 1000px;
     }
   }
 
-  &.in-half > *{
+  &.in-half > * {
     flex: 0 1 50%;
     max-width: 50%;
+  }
+
+  &.align-right > *:first-child {
+    margin-left: auto;
+  }
+
+  > button {
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+
+.archive-name {
+  max-width: pxToGrid(400px);
+  > span {
+    min-height: $line-height-base;
+    padding-top: $grid-unit / 2;
+    flex: 0 0 auto;
   }
 }
 

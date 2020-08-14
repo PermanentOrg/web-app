@@ -167,7 +167,9 @@ export class ProfileService {
   }
 
   async deleteProfileItem(item: ProfileItemVOData) {
-    const response = await this.api.archive.deleteProfileItem(item);
+    if (item.profile_itemId) {
+      const response = await this.api.archive.deleteProfileItem(item);
+    }
     const fieldNameShort = item.fieldNameUI.split('.')[1] as FieldNameUIShort;
     const list = this.profileItemDictionary[fieldNameShort];
 

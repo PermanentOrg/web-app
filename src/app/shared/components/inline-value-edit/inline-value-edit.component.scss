@@ -1,6 +1,6 @@
 @import 'variables';
 
-$inline-padding-x: 0.25rem;
+$inline-padding-x: $grid-unit / 5;
 $inline-padding-y: $grid-unit / 2;
 
 :host {

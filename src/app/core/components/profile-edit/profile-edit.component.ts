@@ -12,6 +12,8 @@ import { EditService } from '@core/services/edit/edit.service';
 import { ProfileService, ProfileItemsDataCol } from '@shared/services/profile/profile.service';
 import { collapseAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import debug from 'debug';
+import { PromptService } from '@shared/services/prompt/prompt.service';
+import { Deferred } from '@root/vendor/deferred';
 
 type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
 
@@ -54,6 +56,7 @@ export class ProfileEditComponent implements OnInit {
     private edit: EditService,
     private folderPicker: FolderPickerService,
     private profile: ProfileService,
+    private prompt: PromptService,
     private message: MessageService
   ) {
     this.archive = this.account.getArchive();
@@ -96,7 +99,9 @@ export class ProfileEditComponent implements OnInit {
     try {
       if (this.profile.isItemEmpty(item)) {
         this.debug('item is empty, attempting delete %o', item);
-        await this.profile.deleteProfileItem(item);
+        if (item.profile_itemId) {
+          await this.profile.deleteProfileItem(item);
+        }
       } else {
         await this.profile.saveProfileItem(item, [valueKey]);
       }
@@ -110,6 +115,27 @@ export class ProfileEditComponent implements OnInit {
       }
     } finally {
       item.isPendingAction = false;
+    }
+  }
+
+  async onRemoveProfileItemClick(item: ProfileItemVOData) {
+    const deferred = new Deferred();
+    try {
+      if (!this.profile.isItemEmpty(item)) {
+        await this.prompt.confirm(
+          'Remove',
+          'Remove this item?',
+          deferred.promise,
+          'btn-danger'
+        );
+      }
+      await this.profile.deleteProfileItem(item);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      deferred.resolve();
     }
   }
 
