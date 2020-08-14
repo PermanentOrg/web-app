@@ -42,7 +42,7 @@ type ProfileItemsDictionary = {
   [Field in FieldNameUI]: ProfileItemVOData[]
 };
 
-type ProfileTab = 'info' | 'online' | 'residence' | 'work';
+type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
 
 @Component({
   selector: 'pr-profile-edit',
@@ -50,7 +50,7 @@ type ProfileTab = 'info' | 'online' | 'residence' | 'work';
   styleUrls: ['./profile-edit.component.scss'],
   animations: [ collapseAnimation ]
 })
-export class ProfileEditComponent implements OnInit, IsTabbedDialog {
+export class ProfileEditComponent implements OnInit {
   archive: ArchiveVO;
   publicRoot: FolderVO;
   profileItems: ProfileItemVODictionary;
@@ -59,8 +59,8 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
 
   isPublic = true;
 
-  activeTab: ProfileTab = 'info';
-  sectionState: { [key in ProfileTab ]: 'open' | 'closed'} = {
+  sectionState: { [key in ProfileSection ]: 'open' | 'closed'} = {
+    about: 'open',
     info: 'open',
     online: 'open',
     residence: 'open',
@@ -86,10 +86,6 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
   }
 
   ngOnInit(): void {
-  }
-
-  setTab(tab: ProfileTab) {
-    this.activeTab = tab;
   }
 
   onDoneClick() {
@@ -130,7 +126,7 @@ export class ProfileEditComponent implements OnInit, IsTabbedDialog {
     }
   }
 
-  toggleSection(sectionName: ProfileTab) {
+  toggleSection(sectionName: ProfileSection) {
     if (this.sectionState[sectionName] === 'open') {
       this.sectionState[sectionName] = 'closed';
     } else {

@@ -8,19 +8,28 @@
   <div class="content">
     <div class="tabs">
       <div class="dialog-tab"
-        (click)="scrollNav.scrollToSection('info')">
+        (click)="scrollNav.scrollToSection('about')"
+        [class.active]="scrollNav.activeSectionId === 'about'">
+        About This Archive
+      </div>
+      <div class="dialog-tab"
+        (click)="scrollNav.scrollToSection('info')"
+        [class.active]="scrollNav.activeSectionId === 'info'">
         Person Information
       </div>
       <div class="dialog-tab"
-        (click)="scrollNav.scrollToSection('online')">
+        (click)="scrollNav.scrollToSection('online')"
+        [class.active]="scrollNav.activeSectionId === 'online'">
         Online Presence
       </div>
       <div class="dialog-tab"
-        (click)="scrollNav.scrollToSection('home')">
+        (click)="scrollNav.scrollToSection('home')"
+        [class.active]="scrollNav.activeSectionId === 'home'">
         Residence History
       </div>
       <div class="dialog-tab"
-        (click)="scrollNav.scrollToSection('work')">
+        (click)="scrollNav.scrollToSection('work')"
+        [class.active]="scrollNav.activeSectionId === 'work'">
         Work History
       </div>
     </div>
@@ -49,7 +58,7 @@
         </div>
       </div>
       <div class="panel-scroll" prScrollNav #scrollNav="prScrollNav">
-        <div id='section-info'>
+        <div id='profile-section' prScrollSection='about'>
           <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
             (click)="chooseBannerPicture()">
           </div>
@@ -140,7 +149,7 @@
             </div>
             <div class="profile-group"></div>
           </div>
-          <div class="profile-section-header">
+          <div class="profile-section-header" prScrollSection="online">
             Online Presence
             <div class="collapse" (click)="toggleSection('online')" [class.closed]="sectionState.online === 'closed'">
               <i class="material-icons">expand_less</i>
