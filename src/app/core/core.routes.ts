@@ -29,6 +29,7 @@ import { GlobalSearchResultsComponent } from '@search/components/global-search-r
 import { TagsResolveService } from './resolves/tags.resolve.service';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
+import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
@@ -127,6 +128,10 @@ export const routes: RoutesWithData = [
         component: GlobalSearchResultsComponent,
         data: { title: 'Search' },
         resolve: { loadTags: TagsResolveService }
+      },
+      {
+        path: 'switching',
+        component: LoadingArchiveComponent
       },
       { path: '**', redirectTo: 'myfiles'}
     ]

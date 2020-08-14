@@ -33,6 +33,16 @@ type ProfileItemsIntDataCol =
 'text_dataId2'
 ;
 
+const DATA_FIELDS: ProfileItemsDataCol[] = [
+  'string1',
+  'string2',
+  'string3',
+  'day1',
+  'day2',
+  'textData1',
+  'locnId1'
+];
+
 export type ProfileItemsDataCol = ProfileItemsStringDataCol | ProfileItemsIntDataCol;
 
 @Injectable()
@@ -73,6 +83,8 @@ export class ProfileService {
     const currentArchive = this.account.getArchive();
     const profileResponse = await this.api.archive.getAllProfileItems(currentArchive);
     const profileItems = profileResponse.getProfileItemVOs();
+    this.profileItemDictionary = {};
+
     for (const item of profileItems) {
       this.addProfileItemToDictionary(item);
     }
@@ -191,15 +203,7 @@ export class ProfileService {
   }
 
   isItemEmpty(item: ProfileItemVOData) {
-    const fieldsToCheck: ProfileItemsDataCol[] = [
-      'string1',
-      'string2',
-      'string3',
-      'day1',
-      'day2',
-      'textData1',
-      'locnId1'
-    ];
+    const fieldsToCheck = DATA_FIELDS;
 
     for (const field of fieldsToCheck) {
       if (item[field]) {
@@ -209,4 +213,10 @@ export class ProfileService {
 
     return true;
   }
+
+  getProfileProgress() {
+
+  }
+
+
 }

@@ -42,6 +42,7 @@ import { ProfileEditTopicComponent } from './components/profile-edit-topic/profi
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
+import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { InvitationsDialogComponent } from './components/invitations-dialog/invi
     MembersDialogComponent,
     InvitationsDialogComponent,
     ProfileEditTopicComponent,
-    MyArchivesDialogComponent
+    MyArchivesDialogComponent,
+    LoadingArchiveComponent
   ],
   providers: [
     DataService,
