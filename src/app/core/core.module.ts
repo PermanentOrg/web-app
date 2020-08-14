@@ -109,6 +109,10 @@ export class CoreModule {
       component: MembersDialogComponent
     },
     {
+      token: 'MyArchivesDialogComponent',
+      component: MyArchivesDialogComponent
+    },
+    {
       token: 'InvitationsDialogComponent',
       component: InvitationsDialogComponent
     }

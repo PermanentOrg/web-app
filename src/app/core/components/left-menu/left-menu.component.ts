@@ -122,6 +122,12 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.showArchiveOptions = false;
   }
 
+  async onAllArchivesClick() {
+    await this.accountService.refreshArchives();
+    this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px'});
+    this.showArchiveOptions = false;
+  }
+
   async onMembersClick() {
     const currentAccount = this.accountService.getAccount();
     const response = await this.api.archive.getMembers(this.accountService.getArchive());

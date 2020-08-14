@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IsTabbedDialog } from '@root/app/dialog/dialog.module';
+import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { ArchiveVO } from '@models';
+import { AccountService } from '@shared/services/account/account.service';
 
 type MyArchivesTab = 'switch' | 'new' | 'pending';
 
@@ -11,7 +13,13 @@ type MyArchivesTab = 'switch' | 'new' | 'pending';
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   activeTab: MyArchivesTab = 'switch';
 
-  constructor() { }
+  archives: ArchiveVO[];
+  constructor(
+    private dialogRef: DialogRef,
+    private accountService: AccountService
+  ) {
+    this.archives = this.accountService.getArchives();
+  }
 
   ngOnInit(): void {
   }
@@ -21,7 +29,14 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   onDoneClick(): void {
+    this.dialogRef.close();
+  }
 
+  async onArchiveClick(archive: ArchiveVO) {
+    try {
+      await this.accountService.changeArchive(archive);
+      this.onDoneClick();
+    } catch (err) {}
   }
 
 }

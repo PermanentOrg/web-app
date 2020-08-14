@@ -21,7 +21,8 @@ type DialogComponentToken =
   'PublishComponent' |
   'ProfileEditComponent' |
   'MembersDialogComponent' |
-  'InvitationsDialogComponent'
+  'InvitationsDialogComponent' |
+  'MyArchivesDialogComponent'
   ;
 
 export interface DialogChildComponentData {
@@ -200,7 +201,7 @@ export class Dialog {
     }, 500);
   }
 
-  public createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
+  public createDialog(token: DialogComponentToken, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;
