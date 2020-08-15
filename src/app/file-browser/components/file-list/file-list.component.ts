@@ -38,6 +38,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import debug from 'debug';
 import { CdkPortal } from '@angular/cdk/portal';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { AccountService } from '@shared/services/account/account.service';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -88,7 +89,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   private mouseMoveHandlerThrottled: Function;
 
   private itemsFetchedCount: number;
-  private routeListener: Subscription;
   private reinit = false;
   private inFileView = false;
 
@@ -115,6 +115,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   private unlistenMouseMove: Function;
 
   constructor(
+    private account: AccountService,
     private route: ActivatedRoute,
     private dataService: DataService,
     private router: Router,
@@ -150,9 +151,26 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.scrollHandlerDebounced = debounce(this.loadVisibleItems.bind(this), SCROLL_DEBOUNCE);
     this.scrollHandlerThrottled = throttle(this.loadVisibleItems.bind(this), SCROLL_THROTTLE);
 
+    this.registerArchiveChangeHandlers();
     this.registerRouterEventHandlers();
     this.registerDataServiceHandlers();
     this.registerDragServiceHandlers();
+  }
+
+  registerArchiveChangeHandlers() {
+    // register for archive change events to reload the root section
+    this.subscriptions.push(
+      this.account.archiveChange.subscribe(async archive => {
+        const url = this.router.url;
+        const urlParts = url.split('/').slice(0, 3);
+        const currentRoot = urlParts.join('/');
+        if (url !== currentRoot) {
+          this.router.navigateByUrl(currentRoot);
+        } else {
+          this.router.navigate(['']);
+        }
+      })
+    );
   }
 
   registerRouterEventHandlers() {

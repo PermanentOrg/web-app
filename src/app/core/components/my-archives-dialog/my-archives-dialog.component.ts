@@ -38,7 +38,6 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     try {
       await this.accountService.changeArchive(archive);
       this.onDoneClick();
-      await this.router.navigate(['/m', 'switching']);
     } catch (err) {}
   }
 

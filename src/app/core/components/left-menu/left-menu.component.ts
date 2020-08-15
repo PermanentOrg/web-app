@@ -56,7 +56,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
-          this.currentUrl = event.url;
+          this.currentUrl = this.router.url;
           this.urlMatches.clear();
         }
       })
