@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -12,9 +12,10 @@ type MyArchivesTab = 'switch' | 'new' | 'pending';
   styleUrls: ['./my-archives-dialog.component.scss']
 })
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
-  activeTab: MyArchivesTab = 'switch';
-
   archives: ArchiveVO[];
+  
+  activeTab: MyArchivesTab = 'switch';
+  @ViewChild('panel') panelElem: ElementRef;
   constructor(
     private dialogRef: DialogRef,
     private accountService: AccountService,
@@ -28,6 +29,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
 
   setTab(tab: MyArchivesTab) {
     this.activeTab = tab;
+    this.panelElem.nativeElement.scrollTop = 0;
   }
 
   onDoneClick(): void {

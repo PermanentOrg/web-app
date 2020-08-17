@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -50,6 +50,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
   connectionOptions: FormInputSelectOption[];
 
   activeTab: ConnectionsTab = 'connections';
+  @ViewChild('panel') panelElem: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -93,6 +94,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
 
   setTab(tab: ConnectionsTab): void {
     this.activeTab = tab;
+    this.panelElem.nativeElement.scrollTop = 0;
   }
 
   onConnectionClick(relation: RelationVO) {

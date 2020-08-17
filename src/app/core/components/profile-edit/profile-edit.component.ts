@@ -9,11 +9,12 @@ import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo
 import { MessageService } from '@shared/services/message/message.service';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { EditService } from '@core/services/edit/edit.service';
-import { ProfileService, ProfileItemsDataCol } from '@shared/services/profile/profile.service';
+import { ProfileService, ProfileItemsDataCol, ALWAYS_PUBLIC } from '@shared/services/profile/profile.service';
 import { collapseAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import debug from 'debug';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
+import { some } from 'lodash';
 
 type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
 
@@ -66,6 +67,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
     this.profileItems = this.profile.getProfileItemDictionary();
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
+    this.checkProfilePublic();
   }
 
   ngOnInit(): void {
@@ -87,6 +89,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   getProgressTransform() {
     return `transform: translateX(${(this.totalProgress * 100) - 100}%)`;
+  }
+
+  checkProfilePublic() {
+    const allItems = this.profile.getProfileItemsAsArray();
+    this.isPublic = some(allItems, i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.publicDT);
   }
 
   async onProfilePictureClick() {
