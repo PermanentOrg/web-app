@@ -74,7 +74,7 @@
         <div id='profile-section'>
 
           <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
-            (click)="chooseBannerPicture()" prScrollSection='about'>
+            (click)="chooseBannerPicture()" prScrollSection='about' [class.show-gradient]="!this.publicRoot.thumbArchiveNbr">
             <div class="change-thumbnail">
               <div>
                 <i class="material-icons">camera_alt</i> Change Banner

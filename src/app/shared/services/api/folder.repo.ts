@@ -97,6 +97,27 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>('/folder/update', data, FolderResponse);
   }
 
+  public updateRoot(folderVOs: FolderVO[], whitelist = DEFAULT_WHITELIST): Promise<FolderResponse> {
+    if (whitelist !== DEFAULT_WHITELIST) {
+      whitelist = [...whitelist, ...MIN_WHITELIST];
+    }
+
+    const data = folderVOs.map((vo) => {
+      const updateData: FolderVOData = {};
+      for (const prop of whitelist) {
+        if (vo[prop] !== undefined) {
+          updateData[prop] = vo[prop];
+        }
+      }
+
+      return {
+        FolderVO: new FolderVO(updateData)
+      };
+    });
+
+    return this.http.sendRequestPromise<FolderResponse>('/folder/updateRootColumns', data, FolderResponse);
+  }
+
   public delete(folderVOs: FolderVO[]): Promise<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
