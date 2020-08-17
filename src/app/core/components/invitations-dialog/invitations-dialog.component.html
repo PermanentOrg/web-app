@@ -48,6 +48,20 @@
             </div>
           </form>
         </ng-container>
+        <ng-container *ngSwitchCase="'pending'">
+          <div>Pending invites</div>
+          <div *ngFor="let invite of pendingInvites">
+            {{invite.email}}<br>
+            {{invite.status}}
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'accepted'">
+          <div>Accepted invites archives</div>
+          <div *ngFor="let invite of acceptedInvites">
+            {{invite.email}}<br>
+            {{invite.status}}
+          </div>
+        </ng-container>
       </ng-container>
     </div>
   </div>

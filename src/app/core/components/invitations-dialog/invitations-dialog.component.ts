@@ -5,6 +5,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { InviteVOData, InviteVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { partition } from 'lodash';
 
 type InvitationsTab = 'new' | 'pending' | 'accepted';
 
@@ -16,6 +17,9 @@ type InvitationsTab = 'new' | 'pending' | 'accepted';
 export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   newInviteForm: FormGroup;
   waiting = false;
+
+  pendingInvites: InviteVO[];
+  acceptedInvites: InviteVO[];
 
   activeTab: InvitationsTab = 'new';
   constructor(
@@ -32,6 +36,18 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   ngOnInit(): void {
+    this.loadInvites();
+  }
+
+  async loadInvites() {
+    try {
+      const response = await this.api.invite.getInvites();
+      [ this.acceptedInvites, this.pendingInvites ] = partition(response.getInviteVOs(), { status: 'status.invite.accepted' });
+    } catch (err) {
+      if (err instanceof InviteResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+    }
   }
 
   setTab(tab: InvitationsTab) {
