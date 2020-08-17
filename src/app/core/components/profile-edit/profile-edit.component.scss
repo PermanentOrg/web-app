@@ -133,8 +133,10 @@ $max-width: 1000px;
   height: pxToGrid(220px);
   background-size: cover;
   background-position: 50% 50%;
+  position: relative;
   $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
   @include gradient(to top left, $list);
+  cursor: pointer;
 }
 
 .profile-photo {
@@ -143,9 +145,36 @@ $max-width: 1000px;
   width: $size;
   background-size: cover;
   background-position: 50% 50%;
+  position: relative;
   margin-left: 2 * $grid-unit;
   margin-bottom: -$size/2 + $grid-unit;
   transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.change-thumbnail {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: $grid-unit / 4;
+  height: $grid-unit * 3;
+
+  $list: rgba($black, 0), rgba($black, 0.7);
+  @include gradient(to bottom, $list);
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  i {
+    color: white;
+    font-size: $mat-icon-sm;
+  }
 }
 
 .profile-prompt {
