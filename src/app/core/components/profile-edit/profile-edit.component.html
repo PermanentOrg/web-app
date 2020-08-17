@@ -39,14 +39,14 @@
           <div class="profile-visibility">
             <div>Profile Visibility</div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="true">
+              <input type="radio" [(ngModel)]="isPublic" [value]="true" (ngModelChange)="onProfilePublicChange($event)">
               <div>
                 <div>Public</div>
                 <span>Anyone can see the page</span>
               </div>
             </div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="false">
+              <input type="radio" [(ngModel)]="isPublic" [value]="false" (ngModelChange)="onProfilePublicChange($event)">
               <div>
                 <div>Private</div>
                 <span>Only contributors can see the page</span>
@@ -54,8 +54,8 @@
             </div>
           </div>
           <div class="buttons">
-            <button class="btn btn-alternate btn-alternate-blue-light">View On Web</button>
-            <button class="btn btn-alternate">Share Profile</button>
+            <button class="btn btn-alternate">View On Web</button>
+            <button class="btn btn-primary">Share Profile</button>
           </div>
         </div>
         <div class="panel-header-bottom-row">

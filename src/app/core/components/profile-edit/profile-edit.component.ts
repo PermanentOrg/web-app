@@ -156,6 +156,17 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     }
   }
 
+  async onProfilePublicChange(isPublic: boolean) {
+    try {
+      await this.profile.setProfilePublic(isPublic);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+      this.isPublic = !isPublic;
+    }
+  }
+
   toggleSection(sectionName: ProfileSection) {
     if (this.sectionState[sectionName] === 'open') {
       this.sectionState[sectionName] = 'closed';

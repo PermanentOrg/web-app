@@ -7,7 +7,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
-import { remove } from 'lodash';
+import { remove, update } from 'lodash';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -159,6 +159,19 @@ export class ProfileService {
     return item;
   }
 
+  getProfileItemsAsArray() {
+    const allItems: ProfileItemVOData[] = [];
+
+    for (const key in this.profileItemDictionary) {
+      if (Object.prototype.hasOwnProperty.call(this.profileItemDictionary, key)) {
+        const items = this.profileItemDictionary[key];
+        allItems.push(...items);
+      }
+    }
+
+    return allItems;
+  }
+
   stubEmptyProfileItems() {
     const currentArchive = this.account.getArchive();
     const shortType = currentArchive.type.split('.').pop();
@@ -173,6 +186,37 @@ export class ProfileService {
     }
   }
 
+  async setProfilePublic(setPublic = true) {
+    const alwaysPublic: FieldNameUI[] = [
+      'profile.basic',
+      'profile.description'
+    ];
+
+    const allItems = this.getProfileItemsAsArray().filter(i => {
+      return !alwaysPublic.includes(i.fieldNameUI);
+    });
+    const originalValues = [];
+
+    allItems.map(i => {
+      originalValues.push(i.publicDT);
+      i.publicDT = setPublic ? new Date().toISOString() : null;
+    });
+
+    try {
+      const response = await this.api.archive.addUpdateProfileItems(allItems);
+      const updated = response.getProfileItemVOs();
+      updated.forEach((item, i) => {
+        allItems[i].updatedDT = item.updatedDT;
+      });
+    } catch (err) {
+      allItems.forEach((item, i) => {
+        item.publicDT = originalValues[i];
+      });
+
+      throw err;
+    }
+  }
+
   async saveProfileItem(item: ProfileItemVOData, valueWhitelist?: (keyof ProfileItemVOData)[]) {
     let updateItem = item;
     if (valueWhitelist) {
@@ -184,7 +228,7 @@ export class ProfileService {
         (updateItem as any)[value] = item[value];
       }
     }
-    const response = await this.api.archive.addUpdateProfileItem(item);
+    const response = await this.api.archive.addUpdateProfileItems([item]);
 
     const updated = response.getProfileItemVOs()[0];
     item.updatedDT = updated.updatedDT;

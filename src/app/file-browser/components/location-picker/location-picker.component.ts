@@ -167,7 +167,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
       const original = this.profileItem.locnId1;
       try {
         this.profileItem.locnId1 = locnVO.locnId;
-        await this.api.archive.addUpdateProfileItem(this.profileItem);
+        await this.api.archive.addUpdateProfileItems([this.profileItem]);
         this.profileItem.LocnVOs = [locnVO];
       } catch (err) {
         this.profileItem.locnId1 = original;
