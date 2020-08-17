@@ -61,7 +61,7 @@
         <div class="panel-header-bottom-row">
           <div class="profile-progress">
             <div class="title">
-              Profile {{totalProgress | percent}} complete
+              Profile&nbsp;<span [countUp]="totalProgress * 100" [options]="countUpOptions">0</span>&nbsp;complete
               <div class="progress-bar">
                 <div class="progress-bar-progress" [style]="getProgressTransform()"></div>
               </div>

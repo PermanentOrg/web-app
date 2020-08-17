@@ -47,6 +47,15 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   };
 
   totalProgress = 0;
+  countUpOptions = {
+    useEasing: true,
+    useGrouping: false,
+    separator: ',',
+    decimal: '.',
+    duration: 1,
+    suffix: '%',
+    startValue: 0
+  };
 
   private debug = debug('component:profileEdit');
 
