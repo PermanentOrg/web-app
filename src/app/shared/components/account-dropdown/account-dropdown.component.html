@@ -8,7 +8,7 @@
     <a href="/add-storage">Add Storage</a>
     <a (click)="openSettingsDialog('account')">Account Settings</a>
     <a (click)="openSettingsDialog('notification')">Notification Preferences</a>
-    <a [routerLink]="['/m', 'invitations']">Invitations</a>
+    <a (click)="openInvitationsDialog()">Invitations</a>
     <a (click)="onLogoutClick()">Log Out</a>
   </div>
 </div>

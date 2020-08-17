@@ -7,7 +7,7 @@
           [required]="required" [email]="email" [minLength]="minLength" (blur)="onTextInputBlur()">
         <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
           [class.showing-empty-message]="!displayValue && emptyMessage">
-          {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)}}
+          {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
@@ -53,7 +53,7 @@
     <div class="inline-value-container inline-value-date" [class.can-edit]="canEdit">
       <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing"
       [class.showing-empty-message]="!displayValue && emptyMessage">
-        {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : (!canEdit ? readOnlyEmptyMessage : emptyMessage) }}
+        {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;' }}
       </div>
       <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
         (dateSelect)="onDateChange($event)" [footerTemplate]="timePicker"></ngb-datepicker>
@@ -75,6 +75,14 @@
         </select>
       </div>
     </form>
+  </ng-container>
+  <ng-container *ngSwitchCase="'external'">
+    <div class="inline-value-container" [class.can-edit]="canEdit">
+      <div class="inline-value-display inline-value-text form-control" (click)="startExternalEdit()"
+        [class.showing-empty-message]="!displayValue && emptyMessage">
+        {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}
+      </div>
+    </div>
   </ng-container>
   <ng-template #inlineControls>
     <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>

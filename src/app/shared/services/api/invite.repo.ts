@@ -64,6 +64,20 @@ export class InviteRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<InviteResponse>('/invite/getFullShareInvite', data, InviteResponse);
   }
+
+  public getInvites() {
+    return this.http.sendRequestPromise<InviteResponse>('/invite/getMyInvites', [{}], InviteResponse);
+  }
+
+  public resendInvites(invites: InviteVO[]) {
+    const data = invites.map((invite) => {
+      return {
+        InviteVO: invite
+      };
+    });
+
+    return this.http.sendRequestPromise<InviteResponse>('/invite/inviteResend', data, InviteResponse);
+  }
 }
 
 export class InviteResponse extends BaseResponse {

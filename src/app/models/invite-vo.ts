@@ -1,6 +1,8 @@
 import { BaseVO } from '@models/base-vo';
 import { ArchiveVO, AccountVO, RecordVO, FolderVO, ShareVO } from '.';
 
+type InviteStatusType = 'status.invite.pending' | 'status.invite.accepted' | 'status.invite.revoked';
+
 export class InviteVO extends BaseVO {
   public email: string;
   public fullName: string;
@@ -8,6 +10,7 @@ export class InviteVO extends BaseVO {
   public byArchiveId: number;
   public accessRole: string;
   public type: string;
+  public status: InviteStatusType;
 
   public ArchiveVO;
   public AccountVO;
@@ -46,6 +49,8 @@ export interface InviteVOData {
   fullName?: string;
   relationship?: string;
   type?: string;
+  status?: InviteStatusType;
+
   byArchiveId?: number;
   accessRole?: string;
 }

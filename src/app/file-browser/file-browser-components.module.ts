@@ -8,7 +8,6 @@ import { SharedModule } from '@shared/shared.module';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
-import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { VideoComponent } from '@shared/components/video/video.component';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
@@ -34,7 +33,6 @@ import { SidebarViewOptionComponent } from './components/sidebar-view-option/sid
     FileListComponent,
     FileListItemComponent,
     FileViewerComponent,
-    ThumbnailComponent,
     VideoComponent,
     SidebarComponent,
     FileListControlsComponent,
@@ -47,7 +45,6 @@ import { SidebarViewOptionComponent } from './components/sidebar-view-option/sid
     FileListControlsComponent,
     FileViewerComponent,
     FolderViewComponent,
-    ThumbnailComponent,
     VideoComponent,
     SharingComponent,
     PublishComponent,

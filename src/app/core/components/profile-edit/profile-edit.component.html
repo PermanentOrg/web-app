@@ -1,62 +1,349 @@
 <div class="dialog-content">
   <div class="header">
-    <span>Archive Profile</span>
     <button class="btn" (click)="onDoneClick()">
-      <i class="material-icons">close</i>
+      <i class="material-icons">arrow_back</i>
     </button>
+    <span>Archive Profile</span>
   </div>
   <div class="content">
     <div class="tabs">
       <div class="dialog-tab"
-        (click)="setTab('about')" [class.active]="activeTab === 'about'">
+        (click)="scrollNav.scrollToSection('about')"
+        [class.active]="scrollNav.activeSectionId === 'about'">
         About This Archive
       </div>
       <div class="dialog-tab"
-        (click)="setTab('info')" [class.active]="activeTab === 'info'">
+        (click)="scrollNav.scrollToSection('info')"
+        [class.active]="scrollNav.activeSectionId === 'info'">
         Person Information
+      </div>
+      <div class="dialog-tab"
+        (click)="scrollNav.scrollToSection('online')"
+        [class.active]="scrollNav.activeSectionId === 'online'">
+        Online Presence
+      </div>
+      <div class="dialog-tab"
+        (click)="scrollNav.scrollToSection('residence')"
+        [class.active]="scrollNav.activeSectionId === 'residence'">
+        Residence History
+      </div>
+      <div class="dialog-tab"
+        (click)="scrollNav.scrollToSection('work')"
+        [class.active]="scrollNav.activeSectionId === 'work'">
+        Work History
       </div>
     </div>
     <div class="panel">
-      <ng-container [ngSwitch]="activeTab">
-        <ng-container *ngSwitchCase="'about'">
-          
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
-</div>
-<!-- <div class="profile-group">
-  <div class="profile-item">
-    <div class="profile-item-content">
-      <div class="profile-picture" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"
-        (click)="onProfilePictureClick()">
-        <i class="ion-md-camera"></i>
+      <div class="panel-header">
+        <div class="panel-header-top-row">
+          <div class="profile-visibility">
+            <div>Profile Visibility</div>
+            <div class="visibility-option">
+              <input type="radio" [(ngModel)]="isPublic" [value]="true" (ngModelChange)="onProfilePublicChange($event)">
+              <div>
+                <div>Public</div>
+                <span>Anyone can see the page</span>
+              </div>
+            </div>
+            <div class="visibility-option">
+              <input type="radio" [(ngModel)]="isPublic" [value]="false" (ngModelChange)="onProfilePublicChange($event)">
+              <div>
+                <div>Private</div>
+                <span>Only contributors can see the page</span>
+              </div>
+            </div>
+          </div>
+          <div class="buttons">
+            <button class="btn btn-alternate">View On Web</button>
+            <button class="btn btn-primary">Share Profile</button>
+          </div>
+        </div>
+        <div class="panel-header-bottom-row">
+          <div class="profile-progress">
+            <div class="title">
+              Profile {{totalProgress | percent}} complete
+              <div class="progress-bar">
+                <div class="progress-bar-progress" [style]="getProgressTransform()"></div>
+              </div>
+            </div>
+            <em>The more fields you fill out, the more likely others will be able to find you online.</em>
+          </div>
+        </div>
+      </div>
+      <div class="panel-scroll" prScrollNav #scrollNav="prScrollNav">
+        <div id='profile-section'>
+
+          <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
+            (click)="chooseBannerPicture()" prScrollSection='about'>
+          </div>
+          <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
+          (click)="onProfilePictureClick()"></div>
+          <div class="profile-section">
+            <div class="profile-prompt">
+              The name of this Archive is…
+            </div>
+            <div class="profile-group archive-name">
+              <span>The</span>
+              <div class="profile-field">
+                <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="this.profileItems.basic[0]?.string1"
+                  [required]="true"
+                  (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string1', $event, true)"
+                  ></pr-inline-value-edit>
+              </div>
+              <span>Archive</span>
+            </div>
+          </div>
+          <div class="profile-section">
+            <div class="profile-prompt">
+              What is this Archive for?
+            </div>
+            <div class="profile-field">
+              <pr-inline-value-edit [alwaysShow]="true"
+                [displayValue]="this.profileItems.blurb[0]?.string1"
+                emptyMessage="Add a short description about the purpose of this Archive."
+                (doneEditing)="onSaveProfileItem(this.profileItems.blurb[0], 'string1', $event)"></pr-inline-value-edit>
+            </div>
+            <div class="profile-field-subtitle">
+              280 character limit
+            </div>
+          </div>
+          <div class="profile-section">
+            <div class="profile-prompt">
+              Tell us about this Person.
+            </div>
+            <div class="profile-field">
+              <pr-inline-value-edit [alwaysShow]="true"
+                [displayValue]="this.profileItems.description[0]?.textData1" type="textarea"
+                (doneEditing)="onSaveProfileItem(this.profileItems.description[0], 'textData1', $event, true)"
+                emptyMessage="Tell the story of the Person this Archive is for.">
+              </pr-inline-value-edit>
+            </div>
+          </div>
+          <div class="profile-section-header" prScrollSection="info">
+            Person Information
+            <div class="collapse" (click)="toggleSection('info')" [class.closed]="sectionState.info === 'closed'">
+              <i class="material-icons">expand_less</i>
+            </div>
+          </div>
+          <div class="profile-section" [@collapseAnimation]="sectionState.info">
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>This Person's Full Name</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                emptyMessage="Full name"
+                [displayValue]="profileItems.basic[0]?.string2"
+                (doneEditing)="onSaveProfileItem(profileItems.basic[0], 'string2', $event)"
+                ></pr-inline-value-edit>
+              </div>
+              <div class="profile-field">
+                <label>Also Known As...</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                emptyMessage="Aliases or nicknames"
+                [displayValue]="profileItems.basic[0]?.string3"
+                (doneEditing)="onSaveProfileItem(profileItems.basic[0], 'string3', $event)"
+                ></pr-inline-value-edit>
+              </div>
+              <div class="profile-field">
+                <label>Gender</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                [displayValue]="profileItems.gender[0]?.string1"
+                (doneEditing)="onSaveProfileItem(profileItems.gender[0], 'string1', $event)"
+                ></pr-inline-value-edit>
+              </div>
+            </div>
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>Date of Birth</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                [displayValue]="profileItems.birth_info[0]?.day1"
+                emptyMessage="YYYY-MM-DD"
+                type='date'
+                (doneEditing)="onSaveProfileItem(profileItems.birth_info[0], 'day1', $event)"
+                ></pr-inline-value-edit>
+              </div>
+              <div class="profile-field">
+                <label>Place of Birth</label>
+                <pr-inline-value-edit [alwaysShow]="true"
+                type='external'
+                (externalEdit)="chooseLocationForItem(profileItems.birth_info[0])"
+                [emptyMessage]="fieldPlacholders.address"
+                [displayValue]="profileItems.birth_info[0].LocnVOs?.length ? (profileItems.birth_info[0].LocnVOs[0] | prLocation).full : null"
+                ></pr-inline-value-edit>
+              </div>
+              <div></div>
+            </div>
+            <div class="profile-group"></div>
+          </div>
+          <div class="profile-section-header" prScrollSection="online">
+            Online Presence
+            <div class="collapse" (click)="toggleSection('online')" [class.closed]="sectionState.online === 'closed'">
+              <i class="material-icons">expand_less</i>
+            </div>
+          </div>
+          <div class="profile-section" [@collapseAnimation]="sectionState.info">
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>Email Address(es)</label>
+                <pr-inline-value-edit *ngFor="let profileItem of profileItems.email"
+                [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
+                [alwaysShow]="true"
+                emptyMessage="email@website.com"
+                [displayValue]="profileItem?.string1"
+                (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                ></pr-inline-value-edit>
+                <button class="btn btn-primary" (click)="addEmptyProfileItem('email')">Add Email</button>
+              </div>
+            </div>
+            <div class="profile-group in-thirds">
+              <div class="profile-field">
+                <label>Social Media</label>
+                <pr-inline-value-edit *ngFor="let profileItem of profileItems.social_media"
+                [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
+                [alwaysShow]="true" 
+                emptyMessage="www.website.com/user"
+                [displayValue]="profileItem?.string1"
+                (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                ></pr-inline-value-edit>
+                <button class="btn btn-primary" (click)="addEmptyProfileItem('social_media')">Add Social Media</button>
+              </div>
+            </div>
+          </div>
+          <div class="profile-section-header" prScrollSection="residence">
+            Residence History
+            <div class="collapse" (click)="toggleSection('residence')" [class.closed]="sectionState.residence === 'closed'">
+              <i class="material-icons">expand_less</i>
+            </div>
+          </div>
+          <div class="profile-section" [@collapseAnimation]="sectionState.residence">
+            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.home"
+            [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
+              <div class="profile-group in-thirds">
+                <div class="profile-field">
+                  <label>Location</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  type='external'
+                  (externalEdit)="chooseLocationForItem(profileItem)"
+                  [emptyMessage]="fieldPlacholders.address"
+                  [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field">
+                  <label>Move In Date</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.day1"
+                  emptyMessage="YYYY-MM-DD"
+                  type='date'
+                  (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field">
+                  <label>Move Out Date</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.day2"
+                  emptyMessage="YYYY-MM-DD"
+                  type='date'
+                  (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+              </div>
+              <div class="profile-group in-thirds">
+                <div class="profile-field">
+                  <label>Residence Phone Number</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [emptyMessage]="fieldPlacholders.phone"
+                  [displayValue]="profileItem.string2"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field two-thirds">
+                  <label>What was it like living there?</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.string1" type="textarea"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+              </div>
+              <div class="profile-group align-right">
+                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">Remove Residence</button>
+              </div>
+            </div>
+            <button class="btn btn-primary" (click)="addEmptyProfileItem('home')">Add Residence</button>
+          </div>
+          <div class="profile-section-header" prScrollSection="work">
+            Work History
+            <div class="collapse" (click)="toggleSection('work')" [class.closed]="sectionState.work === 'closed'">
+              <i class="material-icons">expand_less</i>
+            </div>
+          </div>
+          <div class="profile-section" [@collapseAnimation]="sectionState.work">
+            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.job"
+            [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
+              <div class="profile-group in-half">
+                <div class="profile-field">
+                  <label>Company</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  emptyMessage="Company, Inc."
+                  [displayValue]="profileItem.string1"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field">
+                  <label>Title</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  emptyMessage="Sales Manager"
+                  [displayValue]="profileItem.string3"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string3', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+              </div>
+              <div class="profile-group in-thirds">
+                <div class="profile-field">
+                  <label>Location</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  type='external'
+                  (externalEdit)="chooseLocationForItem(profileItem)"
+                  [emptyMessage]="fieldPlacholders.address"
+                  [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field">
+                  <label>Start Date</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.day1"
+                  emptyMessage="YYYY-MM-DD"
+                  type='date'
+                  (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field">
+                  <label>End Date</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.day2"
+                  emptyMessage="YYYY-MM-DD"
+                  type='date'
+                  (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+              </div>
+              <div class="profile-group in-thirds">
+                <div></div>
+                <div class="profile-field two-thirds">
+                  <label>What did they do?</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [displayValue]="profileItem.string2" type="textarea"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+              </div>
+              <div class="profile-group align-right">
+                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">Remove Residence</button>
+              </div>
+            </div>
+            <button class="btn btn-primary" (click)="addEmptyProfileItem('job')">Add Work</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="profile-item">
-    <label>Archive Name</label>
-    <div class="profile-item-content">
-      <pr-inline-value-edit
-        [displayValue]="profileItems['profile.basic'] && profileItems['profile.basic'][0].string1"
-        [horizontalControls]="false"
-        [required]="true"
-        [noScroll]="true"
-        [canEdit]="canEdit"
-        [minLength]="1"
-        (doneEditing)="onSaveStringProfileItem('profile.basic', 'string1', $event)"></pr-inline-value-edit>
-    </div>
-  </div>
-  <div class="profile-item profile-item-large">
-    <label>Archive Description</label>
-    <div class="profile-item-content">
-      <pr-inline-value-edit
-      [displayValue]="profileItems['profile.description'] && profileItems['profile.description'][0].textData1"
-      [canEdit]="canEdit"
-      (doneEditing)="onSaveStringProfileItem('profile.description', 'textData1', $event)"
-      emptyMessage="Click to add description"
-      readOnlyEmptyMessage="No description"
-      type='textarea'></pr-inline-value-edit>
-    </div>
-  </div>
-</div> -->
+</div>

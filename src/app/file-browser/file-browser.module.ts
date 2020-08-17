@@ -8,7 +8,6 @@ import { SharedModule } from '@shared/shared.module';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
-import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { VideoComponent } from '@shared/components/video/video.component';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
@@ -31,7 +30,6 @@ export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-bro
     FileListComponent,
     FileListItemComponent,
     FileViewerComponent,
-    ThumbnailComponent,
     VideoComponent
   ]
 })

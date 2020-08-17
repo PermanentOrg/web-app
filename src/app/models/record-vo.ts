@@ -1,4 +1,4 @@
-import { BaseVO, BaseVOData } from '@models/base-vo';
+import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
@@ -10,7 +10,7 @@ import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 
-export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder {
+export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, DynamicListChild {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
   public isRecord = true;
   public isFolder = false;

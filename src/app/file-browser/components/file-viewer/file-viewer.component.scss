@@ -97,7 +97,7 @@ $button-size: 2rem;
   transition: transform $transition-length ease-in-out;
 }
 
-.file-viewer-image, pr-thumbnail, pr-video, .thumb-preview, iframe {
+.file-viewer-image, pr-thumbnail, pr-video, pr-audio .thumb-preview, iframe {
   position: absolute;
   top: 0px;
   bottom: 0px;

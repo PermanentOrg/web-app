@@ -14,6 +14,7 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { ApiService } from '@shared/services/api/api.service';
 import { HttpService } from '@shared/services/http/http.service';
+import { ProfileService } from '@shared/services/profile/profile.service';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -33,6 +34,7 @@ export const BASE_TEST_CONFIG = {
     FolderViewService,
     FolderPickerService,
     PrConstantsService,
+    ProfileService,
     EditService
   ] as any[],
   declarations: [

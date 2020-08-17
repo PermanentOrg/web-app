@@ -2,7 +2,7 @@
 
 $picker-margin: 20px;
 $transition-length: 0.4s;
-$row-height: 40px;
+$row-height: 2 * $grid-unit;
 
 .folder-picker {
   top: $picker-margin * 2;
@@ -126,11 +126,15 @@ $row-height: 40px;
   cursor: pointer;
   user-select: none;
 
-  [prBgImage] {
-    height: $row-height - 10px;
-    width: $row-height - 10px;
-    flex: 0 0 $row-height - 10px;
+  [prBgImage], pr-thumbnail, .folder-icon {
+    height: $row-height - pxToGrid(10px);
+    width: $row-height - pxToGrid(10px);
+    flex: 0 0 $row-height - pxToGrid(10px);
     margin: 5px 5px;
+  }
+
+  .folder-icon {
+    @include folderIcon($row-height);
   }
 }
 

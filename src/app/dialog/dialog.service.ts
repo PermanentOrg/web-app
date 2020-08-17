@@ -20,7 +20,9 @@ type DialogComponentToken =
   'EditTagsComponent' |
   'PublishComponent' |
   'ProfileEditComponent' |
-  'MembersDialogComponent'
+  'MembersDialogComponent' |
+  'InvitationsDialogComponent' |
+  'MyArchivesDialogComponent'
   ;
 
 export interface DialogChildComponentData {
@@ -31,6 +33,7 @@ export interface DialogChildComponentData {
 export interface DialogOptions {
   height?: 'auto' | 'fullscreen';
   width?: 'auto' | 'fullscreen' | any;
+  menuClass?: string;
 }
 
 const DEFAULT_OPTIONS: DialogOptions = {
@@ -198,7 +201,7 @@ export class Dialog {
     }, 500);
   }
 
-  public createDialog(token: string, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
+  public createDialog(token: DialogComponentToken, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;

@@ -73,3 +73,8 @@ export interface BaseVOData {
   createdDT?: string;
   updatedDT?: string;
 }
+
+export interface DynamicListChild {
+  isPendingAction?: boolean;
+  isNewlyCreated?: boolean;
+}

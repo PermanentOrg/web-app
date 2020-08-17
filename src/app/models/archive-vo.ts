@@ -5,6 +5,8 @@ import { DataStatus } from '@models/data-status.enum';
 import { AccessRoleType } from './access-role';
 import { ItemVO } from '.';
 
+type ArchiveType = 'type.archive.person' | 'type.archive.family' | 'type.archive.organization' | 'type.archive.nonprofit';
+
 export class ArchiveVO extends BaseVO {
   public archiveId;
   public archiveNbr;
@@ -30,7 +32,7 @@ export class ArchiveVO extends BaseVO {
   public thumbURL1000;
   public thumbURL2000;
   public thumbArchiveNbr: string;
-  public type;
+  public type: ArchiveType;
 
   constructor(voData: any) {
     super(voData);

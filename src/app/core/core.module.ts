@@ -38,6 +38,11 @@ import { SettingsDialogComponent } from './components/settings-dialog/settings-d
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
+import { ProfileEditTopicComponent } from './components/profile-edit-topic/profile-edit-topic.component';
+import { ProfileService } from '@shared/services/profile/profile.service';
+import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
+import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
+import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 
 @NgModule({
   imports: [
@@ -70,12 +75,17 @@ import { MembersDialogComponent } from './components/members-dialog/members-dial
     SettingsDialogComponent,
     AllArchivesComponent,
     ConnectionsDialogComponent,
-    MembersDialogComponent
+    MembersDialogComponent,
+    InvitationsDialogComponent,
+    ProfileEditTopicComponent,
+    MyArchivesDialogComponent,
+    LoadingArchiveComponent
   ],
   providers: [
     DataService,
     FolderViewService,
     FolderPickerService,
+    ProfileService,
     UploadService,
     EditService,
     DragService,
@@ -99,6 +109,14 @@ export class CoreModule {
     {
       token: 'MembersDialogComponent',
       component: MembersDialogComponent
+    },
+    {
+      token: 'MyArchivesDialogComponent',
+      component: MyArchivesDialogComponent
+    },
+    {
+      token: 'InvitationsDialogComponent',
+      component: InvitationsDialogComponent
     }
   ];
 

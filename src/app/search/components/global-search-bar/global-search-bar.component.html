@@ -13,7 +13,12 @@
     <div class="search-result-group-title">In this folder</div>
     <div class="search-result" *ngFor="let result of localResults; let i = index; trackBy: resultTrackByFn" (click)="onLocalResultClick(result)"
       [class.selected]="isSelectedResult('local', i)">
-      <div class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
+      <ng-container [ngSwitch]="result.isFolder">
+        <div class="folder-icon" *ngSwitchCase="true">
+          <i class="material-icons">folder</i>
+        </div>
+        <div *ngSwitchDefault class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
+      </ng-container>
       <div class="name">{{result.displayName}}</div>
       <div class="type">{{result.type | prConstants | titlecase}}</div>
     </div>
@@ -27,10 +32,15 @@
     <ng-container *ngIf="globalResults?.length">
       <div class="search-result" *ngFor="let result of globalResults; let i = index; trackBy: resultTrackByFn" (click)="onGlobalResultClick(result)"
       [class.selected]="isSelectedResult('global', i)">
-        <div class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
+        <ng-container [ngSwitch]="result.isFolder">
+          <div class="folder-icon" *ngSwitchCase="true">
+            <i class="material-icons">folder</i>
+          </div>
+          <div *ngSwitchDefault class="thumbnail" prBgImage [bgSrc]="result.thumbURL200"></div>
+        </ng-container>
         <div class="name">{{result.displayName}}</div>
         <div class="location">
-          <i class="ion-md-folder"></i>
+          <i class="material-icons">folder</i>
           {{result.parentDisplayName}}
         </div>
         <div class="type">{{result.type | prConstants | titlecase}}</div>

@@ -1,12 +1,18 @@
 @import 'variables';
 
+$max-width: 1000px;
+
 :host {
   display: block;
   width: 100%;
 }
 
 .header {
-  @include tabbedDialogHeader($PR-blue-light)
+  @include tabbedDialogHeader($PR-blue-light);
+  button {
+    margin-left: -$grid-unit / 2;
+    margin-right: $grid-unit / 2;
+  }
 }
 
 .content {
@@ -18,79 +24,274 @@
 }
 
 .panel {
-  @include tabbedDialogPanel;
+  flex: 1 1 auto;
+  padding: 0 $grid-unit / 2;
+  display: flex;
+  flex-direction: column;
+  @include desktop {
+    padding: 0 $grid-unit;
+  }
 }
 
-.panel-title {
-  @include tabbedDialogPanelTitle;
+.panel-header {
+  flex: 0 0 auto;
+  background-color: white;
+
+  .buttons {
+    display: flex;
+    margin-left: auto;
+  }
+
+  button {
+    @include gridHeightButton;
+    justify-content: center;
+    width: 8 * $grid-unit;
+    margin: 0;
+    margin-left: $grid-unit;
+  }
+
+  .panel-header-top-row, .panel-header-bottom-row {
+    display: flex;
+    align-items: center;
+    height: pxToGrid(100px);
+    border-bottom: $file-list-border;
+  }
+
+  .profile-visibility {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: $font-weight-semibold;
+    max-width: 24 * $grid-unit;
+    margin-right: auto;
+
+    > * {
+      flex: 0 0 auto;
+      margin-right: $grid-unit * 2;
+    }
+
+    .visibility-option {
+      display: flex;
+      align-items: center;
+
+      input {
+        cursor: pointer;
+        margin-right: $grid-unit / 2;
+      }
+
+      span {
+        display: block;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-base;
+        color: $text-muted;
+      }
+    }
+  }
+
+  .profile-progress {
+    .title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      display: flex;
+      align-items: center;
+      margin-bottom: $grid-unit / 2;
+    }
+
+    em {
+      font-size: $font-size-base;
+      font-weight: $font-weight-base;
+      color: $text-muted;
+    }
+
+    .progress-bar {
+      margin-left: $grid-unit;
+      height: $grid-unit;
+      width: 10 * $grid-unit;
+      border: $file-list-border;
+      overflow: hidden;
+
+      .progress-bar-progress {
+        height: 100%;
+        width: 100%;
+        transform: translateX(-100%);
+        background-color: $success;
+        transition: transform 1s $tweaked-ease;
+      }
+    }
+  }
 }
 
-$profile-padding-x: 10px;
+.panel-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin: 0px (-$grid-unit);
+  padding: 0px ($grid-unit) $grid-unit * 2;
+}
 
-p {
-  padding: 10px;
+.profile-banner {
+  height: pxToGrid(220px);
+  background-size: cover;
+  background-position: 50% 50%;
+  $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
+  @include gradient(to top left, $list);
+}
+
+.profile-photo {
+  $size: pxToGrid(180px);
+  height: $size;
+  width: $size;
+  background-size: cover;
+  background-position: 50% 50%;
+  margin-left: 2 * $grid-unit;
+  margin-bottom: -$size/2 + $grid-unit;
+  transform: translateY(-50%);
+}
+
+.profile-prompt {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
+}
+
+.profile-section {
+ max-width: $max-width;
+ padding-top: $grid-unit;
+}
+
+.profile-field-subtitle {
+  color: $text-muted;
+  text-align: right;
+}
+
+.profile-section-header {
+  margin-top: $grid-unit;
+  max-width: $max-width;
+  $height: 3 * $grid-unit;
+  height: $height;
+  display: flex;
+  align-items: center;
+  padding-left: $grid-unit;
+
+  background-color: $gray-200;
+
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+
+  .collapse {
+    height: $height;
+    flex: 0 0 $height;
+    background-color: $PR-blue;
+    color: white;
+    display: flex;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    cursor: pointer;
+    user-select: none;
+
+    i {
+      color: white;
+      font-size: $mat-icon-lg;
+      transform: rotate(0deg);
+      transition: transform 125ms $tweaked-ease;
+    }
+
+    &.closed {
+      i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.profile-repeat-entry:not(:last-of-type) {
+  margin-bottom: 2 * $grid-unit;
+  border-bottom: $file-list-border;
+}
+
+.profile-section {
+  button {
+    margin: 0;
+    width: auto;
+    @include gridHeightButton;
+  }
+
+  & > button {
+    margin: $grid-unit 0;
+  }
 }
 
 .profile-group {
-  margin-bottom: 10px;
-
-  .profile-group-title {
-    font-weight: $font-weight-bold;
-    border-bottom: 1px solid $gray-300;
-    padding: $profile-padding-x;
-  }
-  
-
-  &:not(:first-of-type) {
-    .profile-group-title {
-      border-top: 1px solid $gray-300;
-    }
-  }
-}
-
-.profile-picture {
-  $profile-picture-size: 200px;
-  height: $profile-picture-size;
-  width: $profile-picture-size;
-  border-radius: 50%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  margin-bottom: 2 * $grid-unit;
 
-  i {
-    color: white;
-    opacity: 0.5;
-    font-size: 2rem;
-    transition: opacity 125ms $tweaked-ease;
-  }
-
-  &:hover {
-    i {
-      opacity: 0.7;
-      transition: opacity 0ms;
+  > * {
+    flex: 1 1 auto;
+    &:not(:last-child) {
+      margin-right: $grid-unit;
     }
   }
+
+  > .profile-group {
+    margin-bottom: 0;
+  }
+
+  &.in-thirds > * {
+    flex: 0 1 (100% * 1/3);
+    max-width: 100% * 1/3;
+
+    &.two-thirds {
+      flex: 0 1 68.9%;
+      max-width: 68.9%
+    }
+  }
+
+  &.in-half > * {
+    flex: 0 1 50%;
+    max-width: 50%;
+  }
+
+  &.align-right > *:first-child {
+    margin-left: auto;
+  }
+
+  > button {
+    flex: 0 0 auto;
+    width: auto;
+  }
 }
 
-
-.profile-item {
-  padding: 5px $profile-padding-x;
-  & > label {
-    font-weight: 600;
-    margin-bottom: 0px;
-  }
-
-  .profile-item-content {
-    $padding-y: 0.25rem;
-    padding: $padding-y 0;
-  }
-
-  @include after($phone) {
-    max-width: 20rem;
-  }
-
-  &.profile-item-large {
-    max-width: 40rem;
+.archive-name {
+  max-width: pxToGrid(400px);
+  > span {
+    min-height: $line-height-base;
+    padding-top: $grid-unit / 2;
+    flex: 0 0 auto;
   }
 }
+
+.profile-field {
+  label {
+    margin-bottom: $grid-unit / 4;
+    font-weight: $font-weight-semibold;
+  }
+
+  pr-inline-value-edit {
+    margin-left: $grid-unit / 4;
+    margin-right: $grid-unit / 4;
+
+    &:not(:first-of-type) {
+      margin-top: $grid-unit;
+    }
+  }
+
+  > button:last-child {
+    margin-top: $grid-unit;
+  }
+
+}
+

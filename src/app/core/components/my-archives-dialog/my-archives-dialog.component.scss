@@ -1,0 +1,30 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader;
+}
+
+.content {
+  @include tabbedDialogContent;
+}
+
+.tabs {
+  @include tabbedDialogNav;
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}
+
+pr-archive-small {
+  margin-bottom: $grid-unit;
+}

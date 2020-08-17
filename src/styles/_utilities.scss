@@ -105,6 +105,17 @@
   justify-content: center;
 }
 
+@mixin folderIcon($height: $file-list-row-height) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F7C985;
+
+  i {
+    font-size: $height - ($grid-unit / 4);
+  }
+}
+
 .hide-desktop {
   @include after($tablet-horizontal) {
     display: none !important;
@@ -115,4 +126,12 @@
   @include until($tablet-horizontal) {
     display: none !important;
   }
+}
+
+
+@mixin gradient($direction, $list) { 
+  background: -webkit-linear-gradient($direction, $list);
+  background: -moz-linear-gradient($direction, $list);
+  background: -o-linear-gradient($direction, $list);
+  background: linear-gradient($direction, $list);  
 }

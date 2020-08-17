@@ -1,6 +1,6 @@
 @import 'variables';
 
-$inline-padding-x: 0.25rem;
+$inline-padding-x: $grid-unit / 5;
 $inline-padding-y: $grid-unit / 2;
 
 :host {
@@ -176,6 +176,12 @@ div.form-control {
   .inline-value-controls {
     flex: 0 0 auto;
     margin-top: 0;
+  }
+}
+
+:host.always-show {
+  .inline-value-display, select {
+    border-color: rgba($input-border-color, 0.75);
   }
 }
 

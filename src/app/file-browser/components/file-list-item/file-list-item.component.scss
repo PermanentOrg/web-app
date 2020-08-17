@@ -231,14 +231,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 .file-list-item-folder-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #F7C985;
-
-  i {
-    font-size: $file-list-row-height - ($grid-unit / 4);
-  }
+  @include folderIcon;
 
   .grid-view & {
     position: relative;

@@ -75,6 +75,12 @@ $tweaked-ease: cubic-bezier(.63,.01,.3,1);
 
 $slide-up-animation: slideUp;
 
+$menu-ease: $tweaked-ease;
+$menu-open-ease: $menu-ease;
+$menu-close-ease: $menu-ease;
+$menu-transition-length: 0.45s;
+$menu-transition-length-desktop: 0.5s;
+
 @mixin public-centered {
   max-width: $public-max-width;
   margin-left: auto;

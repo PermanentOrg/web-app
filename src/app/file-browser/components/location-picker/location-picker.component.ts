@@ -8,6 +8,7 @@ import { find } from 'lodash';
 import { PrLocationPipe, LocnPipeOutput } from '@shared/pipes/pr-location.pipe';
 import { MessageService } from '@shared/services/message/message.service';
 import { EditService } from '@core/services/edit/edit.service';
+import { ProfileItemVOData } from '@models/profile-item-vo';
 
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER: google.maps.LatLngLiteral = {
@@ -23,6 +24,7 @@ const DEFAULT_CENTER: google.maps.LatLngLiteral = {
 })
 export class LocationPickerComponent implements OnInit, AfterViewInit {
   @Input() item: ItemVO;
+  @Input() profileItem: ProfileItemVOData;
   @Input() archive: ArchiveVO;
 
   mapOptions: google.maps.MapOptions = {
@@ -63,6 +65,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
   ) {
     if (this.dialogData) {
       this.item = this.dialogData.item;
+      this.profileItem = this.dialogData.profileItem;
       this.archive = this.dialogData.archive;
     }
   }
@@ -99,8 +102,10 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
   }
 
   checkItemLocation() {
-    if (this.item.LocnVO) {
+    if (this.item?.LocnVO) {
       this.setCurrentLocation(this.item.LocnVO);
+    } else if (this.profileItem?.LocnVOs?.length) {
+      this.setCurrentLocation(this.profileItem.LocnVOs[0]);
     }
   }
 
@@ -132,9 +137,11 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     } else {
       this.saving = true;
       try {
-        this.item.update({LocnVO: this.currentLocation});
-        await this.editService.updateItems([this.item], ['LocnVO']);
-        // this.item.LocnVO = this.currentLocation;
+        if (this.profileItem) {
+          await this.saveProfileItem();
+        } else {
+          await this.saveItem();
+        }
         this.dialogRef.close();
         this.message.showMessage('Location saved.', 'success');
       } catch (err) {
@@ -143,6 +150,29 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
      } finally {
        this.saving = false;
      }
+    }
+  }
+
+  async saveItem() {
+    this.item.update({LocnVO: this.currentLocation});
+    await this.editService.updateItems([this.item], ['LocnVO']);
+  }
+
+  async saveProfileItem() {
+    const response = await this.api.locn.create(this.currentLocation);
+    const locnVO = response.getLocnVO();
+    if (locnVO.locnId === this.profileItem.locnId1) {
+      return true;
+    } else {
+      const original = this.profileItem.locnId1;
+      try {
+        this.profileItem.locnId1 = locnVO.locnId;
+        await this.api.archive.addUpdateProfileItems([this.profileItem]);
+        this.profileItem.LocnVOs = [locnVO];
+      } catch (err) {
+        this.profileItem.locnId1 = original;
+        throw err;
+      }
     }
   }
 
