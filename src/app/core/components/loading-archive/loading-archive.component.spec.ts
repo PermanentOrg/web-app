@@ -4,7 +4,7 @@ import { LoadingArchiveComponent } from './loading-archive.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 
-fdescribe('LoadingArchiveComponent', () => {
+describe('LoadingArchiveComponent', () => {
   let component: LoadingArchiveComponent;
   let fixture: ComponentFixture<LoadingArchiveComponent>;
 
