@@ -9,11 +9,12 @@ import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo
 import { MessageService } from '@shared/services/message/message.service';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { EditService } from '@core/services/edit/edit.service';
-import { ProfileService, ProfileItemsDataCol } from '@shared/services/profile/profile.service';
+import { ProfileService, ProfileItemsDataCol, ALWAYS_PUBLIC } from '@shared/services/profile/profile.service';
 import { collapseAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import debug from 'debug';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
+import { some } from 'lodash';
 
 type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
 
@@ -46,6 +47,15 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   };
 
   totalProgress = 0;
+  countUpOptions = {
+    useEasing: true,
+    useGrouping: false,
+    separator: ',',
+    decimal: '.',
+    duration: 1,
+    suffix: '%',
+    startValue: 0
+  };
 
   private debug = debug('component:profileEdit');
 
@@ -66,6 +76,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
     this.profileItems = this.profile.getProfileItemDictionary();
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
+    this.checkProfilePublic();
   }
 
   ngOnInit(): void {
@@ -89,6 +100,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     return `transform: translateX(${(this.totalProgress * 100) - 100}%)`;
   }
 
+  checkProfilePublic() {
+    const allItems = this.profile.getProfileItemsAsArray();
+    this.isPublic = some(allItems, i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.publicDT);
+  }
+
   async onProfilePictureClick() {
     this.profile.promptForProfilePicture();
   }
@@ -96,9 +112,16 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   async chooseBannerPicture() {
     const originalValue = this.publicRoot.thumbArchiveNbr;
     try {
-      const record = await this.folderPicker.chooseRecord(this.account.getRootFolder());
+      const record = await this.folderPicker.chooseRecord(this.account.getPrivateRoot());
+      const updateFolder = new FolderVO(this.publicRoot);
+      updateFolder.thumbArchiveNbr = record.archiveNbr;
+      await this.api.folder.updateRoot([updateFolder], ['thumbArchiveNbr', 'view', 'viewProperty']);
+      // borrow thumb URLs from record for now, until they can be regenerated
+      const thumbProps: Array<keyof (ArchiveVO|RecordVO)> = ['thumbURL200', 'thumbURL500', 'thumbURL1000', 'thumbURL2000'];
+      for (const prop of thumbProps) {
+        this.publicRoot[prop] = record[prop];
+      }
       this.publicRoot.thumbArchiveNbr = record.archiveNbr;
-      await this.edit.updateItems([this.publicRoot]);
     } catch (err) {
       if (err instanceof FolderResponse) {
         this.publicRoot.thumbArchiveNbr = originalValue;

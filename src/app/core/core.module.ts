@@ -43,6 +43,7 @@ import { ProfileService } from '@shared/services/profile/profile.service';
 import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
+import { CountUpModule } from 'countup.js-angular2';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { LoadingArchiveComponent } from './components/loading-archive/loading-ar
     RouterModule,
     DialogModule,
     SearchModule,
-    PortalModule
+    PortalModule,
+    CountUpModule
   ],
   declarations: [
     MainComponent,

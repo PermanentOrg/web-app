@@ -28,7 +28,8 @@ export const routes: Routes = [
     path: '',
     component: FileListComponent,
     resolve: folderResolve,
-    children: fileListChildRoutes
+    children: fileListChildRoutes,
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'view',

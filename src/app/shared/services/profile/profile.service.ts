@@ -7,7 +7,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
-import { remove, update } from 'lodash';
+import { remove, update, min } from 'lodash';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -59,6 +59,11 @@ const CHECKLIST: ProfileProgressChecklist = {
   home: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
   job: ['day1', 'day2', 'string1', 'string2', 'string3', 'locnId1'],
 };
+
+export const ALWAYS_PUBLIC: FieldNameUI[] = [
+  'profile.basic',
+  'profile.description'
+];
 
 @Injectable()
 export class ProfileService {
@@ -187,23 +192,22 @@ export class ProfileService {
   }
 
   async setProfilePublic(setPublic = true) {
-    const alwaysPublic: FieldNameUI[] = [
-      'profile.basic',
-      'profile.description'
-    ];
-
     const allItems = this.getProfileItemsAsArray().filter(i => {
-      return !alwaysPublic.includes(i.fieldNameUI);
+      return !ALWAYS_PUBLIC.includes(i.fieldNameUI);
     });
     const originalValues = [];
 
-    allItems.map(i => {
+    const minItems = allItems.map(i => {
       originalValues.push(i.publicDT);
-      i.publicDT = setPublic ? new Date().toISOString() : null;
+      const minItem: ProfileItemVOData = {
+        profile_itemId: i.profile_itemId,
+        publicDT: setPublic ? new Date().toISOString() : null
+      };
+      return minItem;
     });
 
     try {
-      const response = await this.api.archive.addUpdateProfileItems(allItems);
+      const response = await this.api.archive.addUpdateProfileItems(minItems);
       const updated = response.getProfileItemVOs();
       updated.forEach((item, i) => {
         allItems[i].updatedDT = item.updatedDT;

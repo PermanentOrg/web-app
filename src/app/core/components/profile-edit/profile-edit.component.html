@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="buttons">
+          <div class="buttons" hidden>
             <button class="btn btn-alternate">View On Web</button>
             <button class="btn btn-primary">Share Profile</button>
           </div>
@@ -61,7 +61,7 @@
         <div class="panel-header-bottom-row">
           <div class="profile-progress">
             <div class="title">
-              Profile {{totalProgress | percent}} complete
+              Profile&nbsp;<span [countUp]="totalProgress * 100" [options]="countUpOptions">0</span>&nbsp;complete
               <div class="progress-bar">
                 <div class="progress-bar-progress" [style]="getProgressTransform()"></div>
               </div>
@@ -74,10 +74,21 @@
         <div id='profile-section'>
 
           <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
-            (click)="chooseBannerPicture()" prScrollSection='about'>
+            (click)="chooseBannerPicture()" prScrollSection='about' [class.show-gradient]="!this.publicRoot.thumbArchiveNbr">
+            <div class="change-thumbnail">
+              <div>
+                <i class="material-icons">camera_alt</i> Change Banner
+              </div>
+            </div>
           </div>
           <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
-          (click)="onProfilePictureClick()"></div>
+          (click)="onProfilePictureClick()">
+          <div class="change-thumbnail">
+            <div>
+              <i class="material-icons">camera_alt</i> Change Photo
+            </div>
+          </div>
+          </div>
           <div class="profile-section">
             <div class="profile-prompt">
               The name of this Archive is…

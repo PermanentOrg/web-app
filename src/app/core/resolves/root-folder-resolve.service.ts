@@ -35,10 +35,6 @@ export class RootFolderResolveService implements Resolve<any> {
 
     const currentRoot = this.accountService.getRootFolder();
 
-    if (currentRoot && currentRoot.archiveId === this.accountService.getArchive().archiveId) {
-      return Promise.resolve(currentRoot);
-    }
-
     return this.api.folder.getRoot()
       .then((response: FolderResponse) => {
         if (!response.isSuccessful) {

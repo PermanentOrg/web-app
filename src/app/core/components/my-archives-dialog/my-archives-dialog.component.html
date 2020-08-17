@@ -19,7 +19,7 @@
         New Archive
       </div>
     </div>
-    <div class="panel">
+    <div class="panel" #pending>
       <ng-container [ngSwitch]="activeTab">
         <ng-container *ngSwitchCase="'switch'">
           <div class="panel-title">({{archives.length}}) Archives</div>
