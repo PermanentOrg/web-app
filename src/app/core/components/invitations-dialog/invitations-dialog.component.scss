@@ -39,3 +39,40 @@
 form {
   @include tabbedDialogPanelForm;
 }
+
+.invitation-list {
+  .invitation, .list-header {
+    display: flex;
+    align-items: center;
+    height: 3 * $grid-unit;
+  }
+
+  .list-header {
+    font-weight: $font-weight-semibold;
+  }
+
+  .invitation {
+    border-bottom: $file-list-border;
+    color: $text-muted;
+    font-size: $font-size-sm;
+  }
+
+  .date {
+    flex: 0 0 9rem;
+  }
+
+  .name, .email {
+    flex: 0 1 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .actions {
+    flex: 0 0 5rem;
+    margin-left: auto;
+
+    button {
+      @include gridHeightButtonSmall;
+    }
+  }
+}

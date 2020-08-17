@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { IsTabbedDialog, DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { InviteVOData, InviteVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { partition } from 'lodash';
+import { partition, filter } from 'lodash';
 
 type InvitationsTab = 'new' | 'pending' | 'accepted';
 
@@ -22,6 +22,8 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   acceptedInvites: InviteVO[];
 
   activeTab: InvitationsTab = 'new';
+  @ViewChild('panel') panelElem: ElementRef;
+
   constructor(
     private fb: FormBuilder,
     @Inject(DIALOG_DATA) public data: any,
@@ -42,7 +44,9 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   async loadInvites() {
     try {
       const response = await this.api.invite.getInvites();
-      [ this.acceptedInvites, this.pendingInvites ] = partition(response.getInviteVOs(), { status: 'status.invite.accepted' });
+      const allInvites = response.getInviteVOs();
+      this.acceptedInvites = filter(allInvites, { status: 'status.invite.accepted' });
+      this.pendingInvites = filter(allInvites, { status: 'status.invite.pending' });
     } catch (err) {
       if (err instanceof InviteResponse) {
         this.messageService.showError(err.getMessage(), true);
@@ -52,6 +56,7 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
 
   setTab(tab: InvitationsTab) {
     this.activeTab = tab;
+    this.panelElem.nativeElement.scrollTop = 0;
   }
 
   onDoneClick() {
@@ -74,7 +79,22 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
     } finally {
       this.waiting = false;
     }
+  }
 
+  async resendInvite(invite: InviteVO) {
+    try {
+      this.waiting = true;
+      const response = await this.api.invite.resendInvites([invite]);
+      const updated = response.getInviteVO();
+      invite.updatedDT = updated.updatedDT;
+      this.messageService.showMessage('Invitation re-sent.', 'success');
+    } catch (err) {
+      if (err instanceof InviteResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+    } finally {
+      this.waiting = false;
+    }
   }
 
 }
