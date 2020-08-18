@@ -173,6 +173,7 @@
                 <label>Date of Birth</label>
                 <pr-inline-value-edit [alwaysShow]="true"
                 [displayValue]="profileItems.birth_info[0]?.day1"
+                [dateOnly]="true"
                 emptyMessage="YYYY-MM-DD"
                 type='date'
                 (doneEditing)="onSaveProfileItem(profileItems.birth_info[0], 'day1', $event)"
@@ -250,6 +251,7 @@
                   <label>Move In Date</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day1"
+                  [dateOnly]="true"
                   emptyMessage="YYYY-MM-DD"
                   type='date'
                   (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
@@ -259,6 +261,7 @@
                   <label>Move Out Date</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day2"
+                  [dateOnly]="true"
                   emptyMessage="YYYY-MM-DD"
                   type='date'
                   (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
@@ -333,6 +336,7 @@
                   <label>Start Date</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day1"
+                  [dateOnly]="true"
                   emptyMessage="YYYY-MM-DD"
                   type='date'
                   (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
@@ -342,6 +346,7 @@
                   <label>End Date</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day2"
+                  [dateOnly]="true"
                   emptyMessage="YYYY-MM-DD"
                   type='date'
                   (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
