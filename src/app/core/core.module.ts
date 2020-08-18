@@ -111,6 +111,10 @@ export class CoreModule {
       component: ProfileEditComponent
     },
     {
+      token: 'ProfileEditFirstTimeDialogComponent',
+      component: ProfileEditFirstTimeDialogComponent
+    },
+    {
       token: 'MembersDialogComponent',
       component: MembersDialogComponent
     },

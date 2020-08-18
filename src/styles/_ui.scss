@@ -238,7 +238,6 @@ button.btn-wordpress, button.btn-wordpress-alternate {
   @include button-variant($PR-purple, $PR-purple);
 }
 
-
 .btn-alternate,
 .btn-alternate:disabled,
 .btn-alternate:hover,
@@ -249,33 +248,11 @@ button.btn-wordpress, button.btn-wordpress-alternate {
 }
 
 .btn-alternate-purple {
-  background-color: $PR-purple;
-  border-color: $PR-purple;
-
-  &:hover {
-    background-color: darken($PR-purple, 5%);
-    border-color: darken($PR-purple, 5%);
-  }
-
-  &:focus, &:active {
-    background-color: darken($PR-purple, 7%);
-    border-color: darken($PR-purple, 7%);
-  }
+  @include button-variant($PR-purple, $PR-purple);
 }
 
 .btn-alternate-blue-light {
-  background-color: $PR-blue-light;
-  border-color: $PR-blue-light;
-
-  &:hover {
-    background-color: darken($PR-blue-light, 5%);
-    border-color: darken($PR-blue-light, 5%);
-  }
-
-  &:focus, &:active {
-    background-color: darken($PR-blue-light, 7%);
-    border-color: darken($PR-blue-light, 7%);
-  }
+  @include button-variant($PR-blue-light, $PR-blue-light);
 }
 
 .btn[disabled] {
