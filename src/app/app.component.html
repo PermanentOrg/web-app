@@ -1,3 +1,6 @@
-<router-outlet></router-outlet>
+<router-outlet #o="outlet">
+</router-outlet>
+<div class="lds-dual-ring" *ngIf="!o.isActivated"></div>
 <pr-message></pr-message>
-<router-outlet name="fullscreen"></router-outlet>
+<router-outlet name="fullscreen">
+</router-outlet>
