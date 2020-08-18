@@ -98,11 +98,6 @@ import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
     ScrollNavDirective,
     ScrollSectionDirective
   ],
-  entryComponents: [
-    ArchivePickerComponent,
-    ArchiveSwitcherDialogComponent,
-    TimelineCompleteDialogComponent
-  ],
   declarations: [
     ThumbnailComponent,
     FormInputComponent,

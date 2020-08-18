@@ -23,9 +23,6 @@ import { DialogChildComponentData, Dialog, DialogModule } from '../dialog/dialog
     ConnectorComponent,
     FamilySearchImportComponent
   ],
-  entryComponents: [
-    FamilySearchImportComponent
-  ],
   providers: [
   ]
 })

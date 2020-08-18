@@ -29,9 +29,6 @@ export interface IsTabbedDialog {
     DialogRootComponent,
     DialogComponent,
   ],
-  entryComponents: [
-    DialogComponent
-  ],
   exports: [
     PortalModule,
     DialogRootComponent

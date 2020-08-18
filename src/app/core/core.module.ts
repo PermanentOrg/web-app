@@ -44,6 +44,7 @@ import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-ar
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 import { CountUpModule } from 'countup.js-angular2';
+import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { CountUpModule } from 'countup.js-angular2';
     InvitationsDialogComponent,
     ProfileEditTopicComponent,
     MyArchivesDialogComponent,
-    LoadingArchiveComponent
+    LoadingArchiveComponent,
+    ProfileEditFirstTimeDialogComponent
   ],
   providers: [
     DataService,

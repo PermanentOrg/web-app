@@ -53,12 +53,6 @@ import { SidebarViewOptionComponent } from './components/sidebar-view-option/sid
     EditTagsComponent,
     LocationPickerComponent,
     SidebarViewOptionComponent
-  ],
-  entryComponents: [
-    SharingComponent,
-    PublishComponent,
-    EditTagsComponent,
-    LocationPickerComponent
   ]
 })
 export class FileBrowserComponentsModule {
