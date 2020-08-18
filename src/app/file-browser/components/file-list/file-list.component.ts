@@ -161,14 +161,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     // register for archive change events to reload the root section
     this.subscriptions.push(
       this.account.archiveChange.subscribe(async archive => {
+        // may be in a subfolder we don't have access to, reload just the 'root'
         const url = this.router.url;
         const urlParts = url.split('/').slice(0, 3);
         const currentRoot = urlParts.join('/');
-        if (url !== currentRoot) {
-          this.router.navigateByUrl(currentRoot);
-        } else {
-          this.router.navigate(['']);
-        }
+        this.router.navigateByUrl(currentRoot);
       })
     );
   }

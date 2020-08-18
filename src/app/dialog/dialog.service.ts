@@ -8,7 +8,7 @@ import { DOCUMENT } from '@angular/common';
 import debug from 'debug';
 import { PortalOutlet } from '@angular/cdk/portal';
 
-type DialogComponentToken =
+export type DialogComponentToken =
   'FamilySearchImportComponent' |
   'ArchivePickerComponent' |
   'SharingComponent' |
@@ -175,11 +175,6 @@ export class Dialog {
 
     this.debug('open dialog %s %o %o', token, data, options);
 
-    if (this.bodyScrollAllowed) {
-      this.document.body.style.overflow = 'hidden';
-      this.bodyScrollAllowed = false;
-    }
-
     return newDialog.closePromise;
   }
 
@@ -223,6 +218,12 @@ export class Dialog {
 
     // create custom component inside new dialog component
     dialog.contentComponentRef = dialog.dialogComponent.viewContainer.createComponent(factory, undefined, injector);
+
+    // toggle body scroll if needed
+    if (this.bodyScrollAllowed) {
+      this.document.body.style.overflow = 'hidden';
+      this.bodyScrollAllowed = false;
+    }
 
     return dialog;
   }
