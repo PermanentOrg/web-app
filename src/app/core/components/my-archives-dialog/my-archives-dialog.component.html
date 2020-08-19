@@ -24,6 +24,7 @@
         <ng-container *ngSwitchCase="'switch'">
           <div class="panel-title">({{archives.length}}) Archives</div>
           <pr-archive-small *ngFor="let archive of archives" (archiveClick)="onArchiveClick(archive)"
+            [clickable]="true"
             [largeOnDesktop]="true" [archive]="archive"
             [accessRole]="archive.accessRole"></pr-archive-small>
         </ng-container>

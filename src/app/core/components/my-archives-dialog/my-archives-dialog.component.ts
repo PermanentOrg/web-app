@@ -13,7 +13,7 @@ type MyArchivesTab = 'switch' | 'new' | 'pending';
 })
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   archives: ArchiveVO[];
-  
+
   activeTab: MyArchivesTab = 'switch';
   @ViewChild('panel') panelElem: ElementRef;
   constructor(

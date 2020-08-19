@@ -11,7 +11,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() archive: ArchiveVO = null;
-  @Input() clickable = false;
+  @HostBinding('class.clickable') @Input() clickable = false;
   @Input() relation: string;
   @Input() accessRole: string;
   @Input() isPending = false;

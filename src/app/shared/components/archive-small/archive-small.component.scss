@@ -3,6 +3,10 @@
   display: flex;
   max-width: 100%;
   align-items: center;
+
+  &:hover {
+    background-color: darken(white, 4%);
+  }
 }
 
 .archive {

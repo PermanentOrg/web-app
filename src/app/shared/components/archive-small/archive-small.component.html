@@ -5,7 +5,7 @@
       Current Archive<br>
     </span>
     The {{archive.fullName}} Archive
-    <span class="archive-switch" *ngIf="isCurrent && clickable">
+    <span class="archive-switch" *ngIf="isCurrent && clickable && !accessRole">
       <br>Tap to switch archives
     </span>
     <span class="archive-pending" *ngIf="isPending && !relation">
@@ -19,6 +19,9 @@
     </span>
     <span class="archive-subtitle" *ngIf="accessRole && !isCurrent">
       <br>Access: {{accessRoleDisplay}}
+    </span>
+    <span class="archive-subtitle" *ngIf="clickable && isCurrent">
+      <br>Current Archive
     </span>
   </div>
 </div>
