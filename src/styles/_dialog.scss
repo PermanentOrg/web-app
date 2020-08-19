@@ -153,13 +153,41 @@ $header-height: 3 * $grid-unit;
     label {
       flex: 0 0 $labelWidth;
       font-weight: $font-weight-bold;
+      margin: 0;
       margin-right: $grid-unit;
     }
     margin-bottom: $grid-unit;
   }
 
+  .dialog-inline-field {
+    display: flex;
+    align-items: center;
+
+    > * {
+      width: auto;
+      flex: 0 0 auto;
+
+      &.form-control {
+        flex: 1 1 auto;
+      }
+
+      &:not(:last-child) {
+        margin-right: $grid-unit / 2;
+      }
+    }
+  }
+
   .form-control {
     padding: $grid-unit / 2 $grid-unit / 5;
+    height: auto;
+  }
+
+  select {
+    max-width: 300px;
+  }
+
+  .form-check:not(:last-child) {
+    margin-right: $grid-unit / 2;
   }
 
   button {

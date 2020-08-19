@@ -8,8 +8,32 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/archive.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
+import { ArchiveType } from '@models/archive-vo';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
 
 type MyArchivesTab = 'switch' | 'new' | 'pending';
+
+interface ArchiveFormData {
+  fullName: string;
+  type: ArchiveType;
+  relationType: string;
+}
+
+const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
+  {
+    text: 'Person',
+    value: 'type.archive.person'
+  },
+  {
+    text: 'Family',
+    value: 'type.archive.family'
+  },
+  {
+    text: 'Organization',
+    value: 'type.archive.organization'
+  },
+];
 
 @Component({
   selector: 'pr-my-archives-dialog',
@@ -19,6 +43,11 @@ type MyArchivesTab = 'switch' | 'new' | 'pending';
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   archives: ArchiveVO[];
   pendingArchives: ArchiveVO[];
+  waiting = false;
+
+  archiveTypes = ARCHIVE_TYPES;
+  relationTypes = RELATION_OPTIONS;
+  newArchiveForm: FormGroup;
 
   activeTab: MyArchivesTab = 'switch';
   @ViewChild('panel') panelElem: ElementRef;
@@ -29,8 +58,14 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     private dialogRef: DialogRef,
     private accountService: AccountService,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private fb: FormBuilder
   ) {
+    this.newArchiveForm = this.fb.group({
+      fullName: ['', [Validators.required]],
+      type: [ARCHIVE_TYPES[0].value, [Validators.required]],
+      relationType: [null]
+    });
   }
 
   ngOnInit(): void {
@@ -44,6 +79,15 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
 
   onDoneClick(): void {
     this.dialogRef.close();
+  }
+
+  scrollToArchive(archive: ArchiveVO) {
+    setTimeout(() => {
+      const component = find(this.archiveComponents.toArray(), cmp => cmp.archive === archive);
+      if (component) {
+        (component.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
+      }
+    });
   }
 
   async onArchiveClick(archive: ArchiveVO) {
@@ -66,12 +110,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       remove(this.pendingArchives, archive);
       this.archives.push(archive);
       this.setTab('switch');
-      setTimeout(() => {
-        const component = find(this.archiveComponents.toArray(), cmp => cmp.archive === archive);
-        if (component) {
-          (component.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
-        }
-      });
+      this.scrollToArchive(archive);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         this.message.showError(err.getMessage(), true);
@@ -92,6 +131,24 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       }
     } finally {
       archive.isPendingAction = false;
+    }
+  }
+
+  async onNewArchiveFormSubmit(value: ArchiveFormData) {
+    try {
+      this.waiting = true;
+      const response = await this.api.archive.create(new ArchiveVO(value));
+      const newArchive = response.getArchiveVO();
+      this.archives.push(newArchive);
+      this.newArchiveForm.reset();
+      this.setTab('switch');
+      this.scrollToArchive(newArchive);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      this.waiting = false;
     }
   }
 }

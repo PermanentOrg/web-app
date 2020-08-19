@@ -3,6 +3,7 @@ import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output
 import { ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-archive-small',
@@ -37,6 +38,7 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
   constructor(
     private account: AccountService,
+    private api: ApiService,
     private prConstants: PrConstantsService,
     public element: ElementRef
   ) { }
@@ -55,6 +57,8 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
     if (this.relation) {
     }
+
+    this.checkArchiveThumbnail();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,6 +76,17 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
       } else {
         this.accessRoleDisplay = null;
       }
+    }
+  }
+
+  checkArchiveThumbnail() {
+    if (!this.archive.thumbURL200 && this.archive.status === 'status.archive.gen_avatar') {
+      setTimeout(async () => {
+        const response = await this.api.archive.get([this.archive]);
+        const updated = response.getArchiveVO();
+        this.archive.update(updated);
+        this.checkArchiveThumbnail();
+      }, 5000);
     }
   }
 

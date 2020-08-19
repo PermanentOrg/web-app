@@ -25,6 +25,12 @@
   @include tabbedDialogPanelTitle;
 }
 
+form {
+  @include tabbedDialogPanelForm;
+  max-width: 600px;
+  padding-top: 0;
+}
+
 pr-archive-small {
   margin-bottom: $grid-unit;
 

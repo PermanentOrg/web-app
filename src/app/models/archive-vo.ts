@@ -5,7 +5,7 @@ import { DataStatus } from '@models/data-status.enum';
 import { AccessRoleType } from './access-role';
 import { ItemVO } from '.';
 
-type ArchiveType = 'type.archive.person' | 'type.archive.family' | 'type.archive.organization' | 'type.archive.nonprofit';
+export type ArchiveType = 'type.archive.person' | 'type.archive.family' | 'type.archive.organization' | 'type.archive.nonprofit';
 
 export class ArchiveVO extends BaseVO implements DynamicListChild  {
   public archiveId;
