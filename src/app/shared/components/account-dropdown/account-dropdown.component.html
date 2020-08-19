@@ -5,9 +5,9 @@
 <div class="account-dropdown-menu" *ngIf="showMenu" [@dropdownMenuAnimation]>
   <div *ngIf="showMenu" [@ngIfFadeInAnimationSlow]>
     <pr-storage-meter></pr-storage-meter>
+    <a (click)="openSettingsDialog('account')">Account</a>
     <a href="/add-storage">Add Storage</a>
-    <a (click)="openSettingsDialog('account')">Account Settings</a>
-    <a (click)="openSettingsDialog('notification')">Notification Preferences</a>
+    <a [routerLink]="['/m', 'archives']">Archives</a>
     <a (click)="openInvitationsDialog()">Invitations</a>
     <a (click)="onLogoutClick()">Log Out</a>
   </div>

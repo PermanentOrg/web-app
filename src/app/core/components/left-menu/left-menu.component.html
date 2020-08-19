@@ -21,10 +21,9 @@
     </div>
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
       <a class="archive-options-option" (click)="onProfileClick()">Archive Profile</a>
+      <hr>
       <a class="archive-options-option" (click)="onConnectionsClick()">Archive Connections</a>
       <a class="archive-options-option" (click)="onMembersClick()">Archive Members</a>
-      <hr>
-      <a class="archive-options-option" [routerLink]="['/m','archives']">View All Archives</a>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item hide-desktop"
