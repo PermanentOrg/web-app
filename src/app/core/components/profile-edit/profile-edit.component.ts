@@ -15,6 +15,8 @@ import debug from 'debug';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { some } from 'lodash';
+import { CookieService } from 'ngx-cookie-service';
+import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
 type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
 
@@ -65,11 +67,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     @Inject(DIALOG_DATA) public data: any,
     private dialog: Dialog,
     private api: ApiService,
-    private edit: EditService,
     private folderPicker: FolderPickerService,
     private profile: ProfileService,
     private prompt: PromptService,
-    private message: MessageService
+    private message: MessageService,
+    private cookies: CookieService
   ) {
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
@@ -85,7 +87,22 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.updateProgress();
+      this.showFirstTimeDialog();
     });
+  }
+
+  showFirstTimeDialog() {
+    if (this.cookies.check(PROFILE_ONBOARDING_COOKIE)) {
+      return;
+    }
+
+    if (this.totalProgress >= 0.1) {
+      return;
+    }
+
+    try {
+      this.dialog.open('ProfileEditFirstTimeDialogComponent', null, { width: '760px', height: 'auto'});
+    } catch (err) { }
   }
 
   onDoneClick() {

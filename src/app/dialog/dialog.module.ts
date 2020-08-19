@@ -1,11 +1,18 @@
 import { NgModule, ModuleWithProviders, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
-import { Dialog, DialogRef, DIALOG_DATA, DialogChildComponentData } from './dialog.service';
+import { Dialog, DialogRef, DIALOG_DATA, DialogChildComponentData, DialogComponentToken } from './dialog.service';
 import { DialogComponent } from './dialog.component';
 import { DialogRootComponent } from './dialog-root.component';
 
-export { Dialog, DialogRef, DialogRootComponent, DIALOG_DATA, DialogChildComponentData };
+export {
+  Dialog,
+  DialogRef,
+  DialogRootComponent,
+  DIALOG_DATA,
+  DialogChildComponentData,
+  DialogComponentToken
+};
 
 export interface IsTabbedDialog {
   activeTab: any;
@@ -21,9 +28,6 @@ export interface IsTabbedDialog {
   declarations: [
     DialogRootComponent,
     DialogComponent,
-  ],
-  entryComponents: [
-    DialogComponent
   ],
   exports: [
     PortalModule,

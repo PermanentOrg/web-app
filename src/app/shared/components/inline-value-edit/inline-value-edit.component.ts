@@ -10,10 +10,10 @@ import { ENTER } from '@angular/cdk/keycodes';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { NgModel, FormControl, Validators } from '@angular/forms';
 
-export type InlineValueEditType = 
+export type InlineValueEditType =
   'text' |
-  'date' | 
-  'textarea' | 
+  'date' |
+  'textarea' |
   'select' |
   'external'
   ;
@@ -41,6 +41,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() noScroll = true;
   @Input() saveOnBlur = true;
   @Input() selectOptions: FormInputSelectOption[];
+  @Input() dateOnly = false;
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @HostBinding('class.always-show') @Input() alwaysShow = false;
@@ -118,7 +119,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   save(skipBlur = false) {
-    if (this.ngModel.invalid || !this.isEditing) {
+    if (this.ngModel?.invalid || !this.isEditing) {
       return;
     }
 
@@ -142,7 +143,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       this.editValue = moment.utc().toISOString();
     }
     const date = moment.utc(this.editValue);
-    applyTimezoneOffset(date, this.item?.TimezoneVO);
+    if (!this.dateOnly) {
+      applyTimezoneOffset(date, this.item?.TimezoneVO);
+    }
     this.ngbDate = NgbDate.from({
       year: momentFormatNum(date, 'YYYY'),
       month: momentFormatNum(date, 'M'),
@@ -157,8 +160,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 
   onDateChange(date: NgbDate) {
     const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
-    const currentTime = currentOffset.format('HH:mm:ss');
-    const tzOffset = currentOffset.format('Z');
+    const currentTime = !this.dateOnly ? currentOffset.format('HH:mm:ss') : '00:00:00';
+    const tzOffset = !this.dateOnly ? currentOffset.format('Z') : '+00:00';
     const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}T${currentTime}${tzOffset}`;
     const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
     this.editValue = newOffset.toISOString();

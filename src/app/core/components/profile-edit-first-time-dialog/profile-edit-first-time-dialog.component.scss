@@ -1,0 +1,28 @@
+@import 'variables';
+
+:host {
+  display: block;
+  background: white;
+  padding: 2 * $grid-unit;
+  border-radius: $border-radius-lg;
+  background-image: url('/assets/svg/corner-magnifying-glass.svg');
+  background-repeat: no-repeat;
+  background-position: 108% 100%;
+}
+
+h2 {
+  font-weight: $font-weight-bold;
+  margin-bottom: $grid-unit;
+}
+
+p {
+  margin-bottom: $grid-unit;
+  color: $text-muted;
+  max-width: 75%;
+}
+
+button {
+  @include gridHeightButton;
+  margin: 0 auto;
+  width: auto;
+}

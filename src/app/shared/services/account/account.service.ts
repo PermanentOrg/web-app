@@ -12,7 +12,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccessRole } from '@models/access-role.enum';
 import { AccessRoleType, checkMinimumAccess } from '@models/access-role';
 
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/browser';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -62,6 +62,7 @@ export class AccountService {
 
     if (cachedRoot) {
       this.setRootFolder(new FolderVO(cachedRoot));
+      this.refreshRoot();
     }
   }
 
@@ -197,6 +198,12 @@ export class AccountService {
         this.setArchives(archives);
         return this.getArchives();
       });
+  }
+
+  public async refreshRoot() {
+    const response = await this.api.folder.getRoot();
+    const root = response.getFolderVO();
+    this.setRootFolder(root);
   }
 
   public updateAccount(accountChanges: AccountVO) {

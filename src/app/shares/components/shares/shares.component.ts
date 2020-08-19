@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ElementRef, Inject, HostBinding } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { find, remove } from 'lodash';
 import { TweenLite, ScrollToPlugin } from 'gsap/all';
@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 import debug from 'debug';
 import { unsubscribeAll, HasSubscriptions } from '@shared/utilities/hasSubscriptions';
 import { EditService } from '@core/services/edit/edit.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'pr-shares',
@@ -28,6 +29,8 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
   @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
 
   @HostBinding('class.show-sidebar') showSidebar = true;
+
+  sharesFolder: FolderVO;
   sharedByMe: ItemVO;
   sharedWithMe: ItemVO[];
   allShareItems: ItemVO[] = [];
@@ -46,29 +49,14 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
     public device: DeviceService,
     @Inject(DOCUMENT) private document: any
   ) {
-    const currentArchive = this.accountService.getArchive();
-    const shareArchives = this.route.snapshot.data.shares as ArchiveVO[] || [];
-    for (const archive of shareArchives) {
-      for (const item of archive.ItemVOs) {
-        item.ShareArchiveVO = archive;
-        if (archive.archiveId !== currentArchive.archiveId) {
-          this.shareItems.push(item);
-        }
-
-        this.allShareItems.push(item);
-      }
-    }
-
-    const sharesFolder = new FolderVO({
+    this.sharesFolder = new FolderVO({
       displayName: 'Shares',
       pathAsText: ['Shares'],
       type: 'type.folder.root.share',
-      ChildItemVOs: this.shareItems
+      ChildItemVOs: []
     });
 
-    this.dataService.setCurrentFolder(sharesFolder);
-
-    this.registerDataServiceHandlers();
+    this.dataService.setCurrentFolder(this.sharesFolder);
   }
 
   registerDataServiceHandlers() {
@@ -83,7 +71,46 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
     }));
   }
 
+  registerArchiveChangeHandlers() {
+    // register for archive change events to reload the root section
+    this.subscriptions.push(
+      this.accountService.archiveChange.subscribe(async archive => {
+        // may be in a record we don't have access to, reload just the 'root'
+        this.router.navigate(['.'], { relativeTo: this.route });
+      })
+    );
+  }
+
+  registerRouterEventHandlers() {
+    // register for navigation events to reinit page on folder changes
+    this.subscriptions.push(this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd ))
+      .subscribe((event: NavigationEnd) => {
+        if (event.url === '/m/shares') {
+          this.ngOnInit();
+        }
+      }));
+  }
+
   ngOnInit() {
+    this.shareItems = [];
+    this.allShareItems = [];
+
+    const currentArchive = this.accountService.getArchive();
+    const shareArchives = this.route.snapshot.data.shares as ArchiveVO[] || [];
+    for (const archive of shareArchives) {
+      for (const item of archive.ItemVOs) {
+        item.ShareArchiveVO = archive;
+        if (archive.archiveId !== currentArchive.archiveId) {
+          this.shareItems.push(item);
+        }
+
+        this.allShareItems.push(item);
+      }
+    }
+
+    this.sharesFolder.ChildItemVOs = this.shareItems;
+
     const queryParams = this.route.snapshot.queryParams;
 
     if (queryParams.shareArchiveNbr) {
@@ -92,21 +119,15 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
         this.editService.openShareDialog(targetItem);
       }
     }
+
+    if (!this.subscriptions.length) {
+      this.registerDataServiceHandlers();
+      this.registerArchiveChangeHandlers();
+      this.registerRouterEventHandlers();
+    }
   }
 
   ngAfterViewInit() {
-    // if (this.route.snapshot.params) {
-    //   const archiveNbr = this.route.snapshot.params.shareArchiveNbr;
-    //   if (archiveNbr) {
-    //     const targetShare = find(this.shareComponents.toArray(), (share: ShareComponent) => {
-    //       return share.archive.archiveNbr === archiveNbr;
-    //     }) as ShareComponent;
-
-    //     if (targetShare) {
-    //       (targetShare.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start' });
-    //     }
-    //   }
-    // }
   }
 
   ngOnDestroy() {
