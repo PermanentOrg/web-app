@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -20,13 +20,14 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
   @HostBinding('class.large-on-desktop') @Input() largeOnDesktop = false;
   @Input() showRemove = false;
+  @Input() removeText = 'Remove';
   @Output() removeClick = new EventEmitter<any>();
 
   @Input() showEdit = false;
   @Output() editClick = new EventEmitter<any>();
 
   @Input() showAccept = false;
-  @Input() acceptText;
+  @Input() acceptText = 'Accept';
   @Output() acceptClick = new EventEmitter<any>();
 
 
@@ -36,7 +37,8 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
   constructor(
     private account: AccountService,
-    private prConstants: PrConstantsService
+    private prConstants: PrConstantsService,
+    public element: ElementRef
   ) { }
 
   ngOnInit() {

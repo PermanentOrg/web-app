@@ -1,7 +1,6 @@
 import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
-import { Observable } from 'rxjs';
 import { ProfileItemVOData } from '@models/profile-item-vo';
 
 export class ArchiveRepo extends BaseRepo {
@@ -74,6 +73,14 @@ export class ArchiveRepo extends BaseRepo {
     }];
 
     return this.http.sendRequestPromise<ArchiveResponse>('/archive/accept', data, ArchiveResponse);
+  }
+
+  public decline(archive: ArchiveVO): Promise<ArchiveResponse> {
+    const data = [{
+      ArchiveVO: archive
+    }];
+
+    return this.http.sendRequestPromise<ArchiveResponse>('/archive/decline', data, ArchiveResponse);
   }
 
   public getMembers(archive: ArchiveVO): Promise<ArchiveResponse> {

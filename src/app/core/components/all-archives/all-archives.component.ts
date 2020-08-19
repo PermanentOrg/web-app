@@ -149,6 +149,17 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  async declinePendingArchive(archive: ArchiveVO) {
+    try {
+      await this.api.archive.decline(archive);
+      remove(this.pendingArchives, archive);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    }
+  }
+
   async onRemoveClick(archive: ArchiveVO) {
 
   }

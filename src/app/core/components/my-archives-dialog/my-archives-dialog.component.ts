@@ -1,8 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
+import { partition, remove, find } from 'lodash';
+import { ApiService } from '@shared/services/api/api.service';
+import { ArchiveResponse } from '@shared/services/api/archive.repo';
+import { MessageService } from '@shared/services/message/message.service';
+import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 
 type MyArchivesTab = 'switch' | 'new' | 'pending';
 
@@ -13,18 +18,23 @@ type MyArchivesTab = 'switch' | 'new' | 'pending';
 })
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   archives: ArchiveVO[];
+  pendingArchives: ArchiveVO[];
 
   activeTab: MyArchivesTab = 'switch';
   @ViewChild('panel') panelElem: ElementRef;
+
+  @ViewChildren(ArchiveSmallComponent) archiveComponents: QueryList<ArchiveSmallComponent>;
+
   constructor(
     private dialogRef: DialogRef,
     private accountService: AccountService,
-    private router: Router
+    private api: ApiService,
+    private message: MessageService
   ) {
-    this.archives = this.accountService.getArchives();
   }
 
   ngOnInit(): void {
+    [this.pendingArchives, this.archives] = partition(this.accountService.getArchives(), { status: 'status.generic.pending'} );
   }
 
   setTab(tab: MyArchivesTab) {
@@ -37,10 +47,51 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   async onArchiveClick(archive: ArchiveVO) {
+    if (archive.isPendingAction) {
+      return;
+    }
+
     try {
+      archive.isPendingAction = true;
       await this.accountService.changeArchive(archive);
       this.onDoneClick();
     } catch (err) {}
   }
 
+  async acceptPendingArchive(archive: ArchiveVO) {
+    try {
+      archive.isPendingAction = true;
+      await this.api.archive.accept(archive);
+      archive.status = 'status.generic.ok';
+      remove(this.pendingArchives, archive);
+      this.archives.push(archive);
+      this.setTab('switch');
+      setTimeout(() => {
+        const component = find(this.archiveComponents.toArray(), cmp => cmp.archive === archive);
+        if (component) {
+          (component.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
+        }
+      });
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      archive.isPendingAction = false;
+    }
+  }
+
+  async declinePendingArchive(archive: ArchiveVO) {
+    try {
+      archive.isPendingAction = true;
+      await this.api.archive.decline(archive);
+      remove(this.pendingArchives, archive);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      archive.isPendingAction = false;
+    }
+  }
 }
