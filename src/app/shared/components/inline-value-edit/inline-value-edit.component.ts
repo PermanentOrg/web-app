@@ -35,8 +35,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() item: ItemVO;
   @Input() canEdit = true;
   @Input() required = false;
-  @Input() minLength: number;
-  @Input() maxLength: number;
+  @Input() minLength: number = null;
+  @Input() maxLength: number = null;
   @Input() email = false;
   @Input() noScroll = true;
   @Input() saveOnBlur = true;
