@@ -62,7 +62,7 @@
         </ng-container>
       </div>
       <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
-        (dateSelect)="onDateChange($event)" [footerTemplate]="dateOnly ? timePicker : null"></ngb-datepicker>
+        (dateSelect)="onDateChange($event)" [footerTemplate]="!dateOnly ? timePicker : null"></ngb-datepicker>
       <ng-template #timePicker>
         <div class="datepicker-footer">
           <ngb-timepicker [(ngModel)]="ngbTime" (ngModelChange)="onTimeChange($event)"></ngb-timepicker>
