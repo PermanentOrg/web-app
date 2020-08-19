@@ -128,18 +128,6 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
   }
 
   ngAfterViewInit() {
-    // if (this.route.snapshot.params) {
-    //   const archiveNbr = this.route.snapshot.params.shareArchiveNbr;
-    //   if (archiveNbr) {
-    //     const targetShare = find(this.shareComponents.toArray(), (share: ShareComponent) => {
-    //       return share.archive.archiveNbr === archiveNbr;
-    //     }) as ShareComponent;
-
-    //     if (targetShare) {
-    //       (targetShare.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start' });
-    //     }
-    //   }
-    // }
   }
 
   ngOnDestroy() {
