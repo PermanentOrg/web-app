@@ -11,10 +11,10 @@
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid">
+        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid" name="save">
           Save
         </button>
-        <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+        <button class="btn btn-secondary btn-sm" (mousedown)="cancel()" type="button" name="cancel">
           Cancel
         </button>
       </div>

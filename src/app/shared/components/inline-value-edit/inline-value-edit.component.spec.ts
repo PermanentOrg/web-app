@@ -85,6 +85,7 @@ describe('InlineValueEditComponent', () => {
   });
 
   it('should stop editing on cancel', async () => {
+    const saveSpy = spyOn(component.doneEditing, 'emit');
     component.displayValue = TEST_TEXT;
     component.startEdit();
     expect(component.isEditing).toBeTruthy();
@@ -92,6 +93,32 @@ describe('InlineValueEditComponent', () => {
     component.cancel();
 
     expect(component.isEditing).toBeFalsy();
+    expect(saveSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('should not save on cancel button click', async () => {
+    const onBlurSpy = spyOn(component, 'onTextInputBlur');
+    const doneEditingSpy = spyOn(component.doneEditing, 'emit');
+    component.displayValue = null;
+    component.startEdit();
+
+    const inputElem = component.inputElementRef.nativeElement as HTMLInputElement;
+    expect(document.activeElement).toBe(inputElem);
+    inputElem.value = 'new value!';
+
+    fixture.detectChanges();
+
+    const rootElement = fixture.debugElement.nativeElement as HTMLElement;
+    const cancelButton = rootElement.querySelector('button[name=cancel]') as HTMLButtonElement;
+    cancelButton.dispatchEvent(new Event('mousedown'));
+
+    fixture.detectChanges();
+
+    setTimeout(() => {
+      expect(onBlurSpy).toHaveBeenCalledTimes(1);
+      expect(doneEditingSpy).not.toHaveBeenCalled();
+    });
+
   });
 
   it('should not allow editing if canEdit is false', async () => {
