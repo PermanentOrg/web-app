@@ -50,6 +50,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(
       this.accountService.archiveChange.subscribe((archive: ArchiveVO) => {
         this.archive = archive;
+        this.checkArchiveThumbnail();
       })
     );
 
@@ -64,6 +65,16 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.checkArchiveThumbnail();
+  }
+
+  checkArchiveThumbnail() {
+    if (!this.archive.thumbURL500) {
+      setTimeout(async () => {
+        await this.accountService.refreshArchive();
+        this.checkArchiveThumbnail();
+      }, 5000);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -59,6 +59,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'pending'">
           <div class="panel-title">Pending Members</div>
+          <div *ngIf="!pendingMembers.length">No pending members</div>
           <div class="members">
             <div class="member" *ngFor="let member of pendingMembers">
               <div class="member-info">
