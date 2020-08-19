@@ -174,10 +174,10 @@
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'views'">
   <ng-container *ngIf="selectedItem">
     <pr-sidebar-view-option [folderView]="'folder.view.grid'" (setDefault)="onFinishEditing('view', $event)"
-      [folder]="selectedItem | asFolder" [folderDefault]="(selectedItem | asFolder).view">
+      [folder]="selectedItem | asFolder">
     </pr-sidebar-view-option>
     <pr-sidebar-view-option [folderView]="'folder.view.timeline'" (setDefault)="onFinishEditing('view', $event)"
-      [folder]="selectedItem | asFolder" [folderDefault]="(selectedItem | asFolder).view">
+      [folder]="selectedItem | asFolder">
     </pr-sidebar-view-option>
   </ng-container>
 </div>
