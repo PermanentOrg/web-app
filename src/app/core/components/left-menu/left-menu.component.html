@@ -24,7 +24,7 @@
       <a class="archive-options-option" (click)="onConnectionsClick()">Archive Connections</a>
       <a class="archive-options-option" (click)="onMembersClick()">Archive Members</a>
       <hr>
-      <a class="archive-options-option" (click)="onAllArchivesClick()">View All Archives</a>
+      <a class="archive-options-option" [routerLink]="['/m','archives']">View All Archives</a>
     </div>
     <div class="menu-scroll" #scroll>
       <a class="menu-item hide-desktop"
