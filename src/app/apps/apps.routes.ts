@@ -19,6 +19,7 @@ export const routes: Routes = [
     path: '',
     component: AppsComponent,
     resolve: appsRootResolve,
+    runGuardsAndResolvers: 'always'
   },
   {
     path: ':archiveNbr/:folderLinkId',
