@@ -53,10 +53,12 @@ const CHECKLIST: ProfileProgressChecklist = {
   blurb: ['string1'],
   description: ['textData1'],
   birth_info: ['day1', 'locnId1'],
+  established_info: ['day1', 'locnId1'],
   gender: ['string1'],
   email: ['string1'],
   social_media: ['string1'],
   home: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
+  location: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
   job: ['day1', 'day2', 'string1', 'string2', 'string3', 'locnId1'],
 };
 
@@ -280,12 +282,17 @@ export class ProfileService {
   calculateProfileProgress(): number {
     let totalEntries = 0;
     let filledEntries = 0;
+    const template = this.constants.getProfileTemplate();
+    const currentArchive = this.account.getArchive();
+    const shortType = currentArchive.type.split('.').pop();
+    const templateForType = template[shortType];
+
     for (const fieldNameShort in CHECKLIST) {
-      if (Object.prototype.hasOwnProperty.call(CHECKLIST, fieldNameShort)) {
+      if (Object.prototype.hasOwnProperty.call(CHECKLIST, fieldNameShort) && templateForType[fieldNameShort]) {
         const cols = CHECKLIST[fieldNameShort];
         totalEntries += cols.length;
 
-        const itemToCheck = this.profileItemDictionary[fieldNameShort][0];
+        const itemToCheck = this.profileItemDictionary[fieldNameShort]?.[0];
         if (itemToCheck) {
           for (const col of cols) {
             if (itemToCheck[col]) {

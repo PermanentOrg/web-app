@@ -18,8 +18,6 @@ import { some } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
-type ProfileSection = 'about' | 'info' | 'online' | 'residence' | 'work';
-
 @Component({
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',
@@ -34,14 +32,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   canEdit: boolean;
 
   isPublic = true;
-
-  sectionState: { [key in ProfileSection ]: 'open' | 'closed'} = {
-    about: 'open',
-    info: 'open',
-    online: 'open',
-    residence: 'open',
-    work: 'open'
-  };
 
   fieldPlacholders = {
     address: 'Choose a location',
@@ -142,7 +132,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     } catch (err) {
       if (err instanceof FolderResponse) {
         this.publicRoot.thumbArchiveNbr = originalValue;
-        console.error('error updating!');
       }
     }
   }
@@ -204,14 +193,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
         this.message.showError(err.getMessage(), true);
       }
       this.isPublic = !isPublic;
-    }
-  }
-
-  toggleSection(sectionName: ProfileSection) {
-    if (this.sectionState[sectionName] === 'open') {
-      this.sectionState[sectionName] = 'closed';
-    } else {
-      this.sectionState[sectionName] = 'open';
     }
   }
 
