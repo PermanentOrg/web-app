@@ -11,10 +11,10 @@
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid">
+        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid" name="save">
           Save
         </button>
-        <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+        <button class="btn btn-secondary btn-sm" (mousedown)="cancel()" type="button" name="cancel">
           Cancel
         </button>
       </div>
@@ -62,7 +62,7 @@
         </ng-container>
       </div>
       <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
-        (dateSelect)="onDateChange($event)" [footerTemplate]="dateOnly ? timePicker : null"></ngb-datepicker>
+        (dateSelect)="onDateChange($event)" [footerTemplate]="!dateOnly ? timePicker : null"></ngb-datepicker>
       <ng-template #timePicker>
         <div class="datepicker-footer">
           <ngb-timepicker [(ngModel)]="ngbTime" (ngModelChange)="onTimeChange($event)"></ngb-timepicker>
