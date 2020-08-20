@@ -3,7 +3,7 @@ import { RelationVO, ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { RelationResponse } from '@shared/services/api/index.repo';
-import { find } from 'lodash';
+import { find, remove } from 'lodash';
 
 
 const REFRESH_THRESHOLD = 2 * 60 * 1000;
@@ -44,6 +44,12 @@ export class RelationshipService {
         this.lastUpdated = new Date();
         this.relations  = response.getRelationVOs();
       });
+  }
+
+  async remove(relation: RelationVO): Promise<any> {
+    const response = await this.api.relation.delete(relation);
+    remove(this.relations, { relationId: relation.relationId });
+    return response;
   }
 
   clear() {
