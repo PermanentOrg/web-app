@@ -12,22 +12,13 @@ type FolderViewImages = {
   templateUrl: './sidebar-view-option.component.html',
   styleUrls: ['./sidebar-view-option.component.scss']
 })
-export class SidebarViewOptionComponent implements OnInit {
+export class SidebarViewOptionComponent {
   @Input() folderView: FolderViewType;
   @Input() folder: FolderVO;
-  @Input() folderDefault: FolderViewType;
 
   @Output() setDefault = new EventEmitter<FolderViewType>();
 
-  get isDefault(): boolean {
-    return this.folderDefault === this.folderView;
-  }
-
-  set isDefault(value: boolean) {
-    if (value) {
-      this.onSetDefault();
-    }
-  }
+  radioId = `folder-view-checkbox-${Math.random().toString(36).substr(2, 5)}`;
 
   images: FolderViewImages = {
     'folder.view.grid': 'assets/img/views/grid.png',
@@ -35,17 +26,5 @@ export class SidebarViewOptionComponent implements OnInit {
   };
 
   constructor(
-    private router: Router
   ) { }
-
-  ngOnInit(): void {
-  }
-
-  onSetDefault() {
-    if (this.folderDefault === this.folderView) {
-      return;
-    } else {
-      this.setDefault.emit(this.folderView);
-    }
-  }
 }
