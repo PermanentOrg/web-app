@@ -6,6 +6,7 @@ import { PromptService, PromptButton, RELATIONSHIP_FIELD, PromptField, RELATIONS
 import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { RelationVO, ArchiveVO } from '@models';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { DIALOG_DATA, DialogRef, Dialog, IsTabbedDialog } from '@root/app/dialog/dialog.module';
@@ -60,6 +61,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
     private messageService: MessageService,
     private prConstants: PrConstantsService,
     private accountService: AccountService,
+    private relationService: RelationshipService,
     private dialog: Dialog,
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
@@ -234,7 +236,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
       });
   }
 
-  removeRelation(relation: RelationVO) {
+  async removeRelation(relation: RelationVO) {
     const deferred = new Deferred();
     let confirmTitle = `Remove relationship with ${relation.RelationArchiveVO.fullName}?`;
     let confirmText = 'Remove';
@@ -244,24 +246,20 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
       confirmText = 'Decline';
     }
 
-    this.promptService.confirm(confirmText, confirmTitle, deferred.promise, 'btn-danger')
-      .then(() => {
-        this.api.relation.delete(relation)
-        .then((response: RelationResponse) => {
-          this.messageService.showMessage(response.getMessage(), 'success', true);
-          remove(this.connections, relation);
-          remove(this.connectionRequests, relation);
-          remove(this.sentConnectionsRequests, relation);
-          deferred.resolve();
-        })
-        .catch((response: RelationResponse) => {
-          deferred.resolve();
-          this.messageService.showError(response.getMessage(), true);
-        });
-      })
-      .catch(() => {
-        deferred.resolve();
-      });
+    try {
+      await this.promptService.confirm(confirmText, confirmTitle, deferred.promise, 'btn-danger');
+      const response = await this.relationService.remove(relation);
+      this.messageService.showMessage(response.getMessage(), 'success', true);
+      remove(this.connections, relation);
+      remove(this.connectionRequests, relation);
+      remove(this.sentConnectionsRequests, relation);
+    } catch (err) {
+      if (err instanceof RelationResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+    } finally {
+      deferred.resolve();
+    }
   }
 
 }
