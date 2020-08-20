@@ -7,10 +7,9 @@ import { NgbDatepickerModule, NgbTimepickerModule, NgbDate, NgbTimeStruct } from
 import { SharedModule } from '@shared/shared.module';
 
 import { moment } from '@permanent.org/vis-timeline';
-import { RecordVO, TimezoneVOData, RecordVOData, ArchiveVO } from '@models';
+import { RecordVO, RecordVOData } from '@models';
 import { getOffsetMomentFromDTString, formatDateISOString, getUtcMomentFromDTString, momentFormatNum, applyTimezoneOffset } from '@shared/utilities/dateTime';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AccountService } from '@shared/services/account/account.service';
 
 describe('InlineValueEditComponent', () => {
   let component: InlineValueEditComponent;
@@ -85,6 +84,7 @@ describe('InlineValueEditComponent', () => {
   });
 
   it('should stop editing on cancel', async () => {
+    const saveSpy = spyOn(component.doneEditing, 'emit');
     component.displayValue = TEST_TEXT;
     component.startEdit();
     expect(component.isEditing).toBeTruthy();
@@ -92,6 +92,32 @@ describe('InlineValueEditComponent', () => {
     component.cancel();
 
     expect(component.isEditing).toBeFalsy();
+    expect(saveSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('should not save on cancel button click', async () => {
+    const onBlurSpy = spyOn(component, 'onTextInputBlur');
+    const doneEditingSpy = spyOn(component.doneEditing, 'emit');
+    component.displayValue = null;
+    component.startEdit();
+
+    const inputElem = component.inputElementRef.nativeElement as HTMLInputElement;
+    expect(document.activeElement).toBe(inputElem);
+    inputElem.value = 'new value!';
+
+    fixture.detectChanges();
+
+    const rootElement = fixture.debugElement.nativeElement as HTMLElement;
+    const cancelButton = rootElement.querySelector('button[name=cancel]') as HTMLButtonElement;
+    cancelButton.dispatchEvent(new Event('mousedown'));
+
+    fixture.detectChanges();
+
+    setTimeout(() => {
+      expect(onBlurSpy).toHaveBeenCalledTimes(1);
+      expect(doneEditingSpy).not.toHaveBeenCalled();
+    });
+
   });
 
   it('should not allow editing if canEdit is false', async () => {
@@ -224,6 +250,56 @@ describe('InlineValueEditComponent', () => {
     expect(Number(utcDt.format('D'))).toEqual(11);
     expect(Number(utcDt.format('M'))).toEqual(newDate.month);
     expect(Number(utcDt.format('H'))).toEqual(2);
+  });
+
+  it('should default to displaying the time picker', () => {
+    const voData: RecordVOData = {
+      accessRole: 'access.role.owner',
+      displayDT: '2017-05-14T02:36:29.000000',
+      TimezoneVO: {
+        dstAbbrev: 'PDT',
+        dstOffset: '-07:00',
+        stdAbbrev: 'PST',
+        stdOffset: '-08:00',
+      }
+    };
+    const record = new RecordVO(voData);
+    component.item = record;
+    component.displayValue = record.displayDT;
+    component.type = 'date';
+    fixture.detectChanges();
+    component.startEdit();
+    fixture.detectChanges();
+
+    const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
+    expect(component.dateOnly).toBeFalse();
+    expect(timePicker).toBeTruthy();
+  });
+
+  it('should hide the time picker when dateOnly specified', () => {
+    const voData: RecordVOData = {
+      accessRole: 'access.role.owner',
+      displayDT: '2017-05-14T02:36:29.000000',
+      TimezoneVO: {
+        dstAbbrev: 'PDT',
+        dstOffset: '-07:00',
+        stdAbbrev: 'PST',
+        stdOffset: '-08:00',
+      }
+    };
+    const record = new RecordVO(voData);
+    component.item = record;
+    component.displayValue = record.displayDT;
+    component.type = 'date';
+    component.dateOnly = true;
+
+    fixture.detectChanges();
+    component.startEdit();
+    fixture.detectChanges();
+
+    const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
+    expect(component.dateOnly).toBeTrue();
+    expect(timePicker).toBeNull();
   });
 
   xit('should update edit value when time is changed', () => {
