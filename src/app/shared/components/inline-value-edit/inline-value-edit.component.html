@@ -4,17 +4,17 @@
     <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <input type="text" name="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"
-          [required]="required" [email]="email" [minLength]="minLength" [maxLength]="maxLength" (blur)="onTextInputBlur()">
+          [required]="required" [email]="email" [attr.minlength]="minLength > 0 ? minLength : null" [attr.maxlength]="maxLength > 0 ? maxLength : null" (blur)="onTextInputBlur()">
         <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
           [class.showing-empty-message]="!displayValue && emptyMessage">
           {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
-        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid">
+        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid" name="save">
           Save
         </button>
-        <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+        <button class="btn btn-secondary btn-sm" (mousedown)="cancel()" type="button" name="cancel">
           Cancel
         </button>
       </div>
@@ -24,7 +24,7 @@
     <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <textarea name="textarea" class="form-control" [class.is-editing]="isEditing"
-        [maxLength]="maxLength"
+        [attr.maxlength]="maxLength > 0 ? maxLength : null"
         [(ngModel)]="editValue" #input #model="ngModel"
         (blur)="onTextInputBlur()"></textarea>
         <div class="inline-value-display inline-value-textarea form-control"
@@ -62,7 +62,7 @@
         </ng-container>
       </div>
       <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
-        (dateSelect)="onDateChange($event)" [footerTemplate]="dateOnly ? timePicker : null"></ngb-datepicker>
+        (dateSelect)="onDateChange($event)" [footerTemplate]="!dateOnly ? timePicker : null"></ngb-datepicker>
       <ng-template #timePicker>
         <div class="datepicker-footer">
           <ngb-timepicker [(ngModel)]="ngbTime" (ngModelChange)="onTimeChange($event)"></ngb-timepicker>
