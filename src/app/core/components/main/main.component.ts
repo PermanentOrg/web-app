@@ -310,6 +310,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
     if (!files.length) {
       return;
     }
+
+    const items = (dragEvent.event as DragEvent).dataTransfer.items;
+
     let targetFolder: FolderVO;
 
     if (!dropTarget) {
@@ -318,6 +321,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
       targetFolder = this.drag.getDestinationFromDropTarget(dropTarget);
     }
 
-    this.upload.uploadFiles(targetFolder, Array.from(files));
+    if (items?.length && items[0].webkitGetAsEntry != null) {
+      // browser supports folders and file entry
+      this.upload.uploadFolders(targetFolder, Array.from(items));
+    } else {
+      this.upload.uploadFiles(targetFolder, Array.from(files));
+    }
+
   }
 }

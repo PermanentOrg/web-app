@@ -12,12 +12,26 @@ import { FolderVO } from '@root/app/models';
 
 import { Uploader, UploadSessionStatus } from './uploader';
 import { UploadItem } from '@core/services/upload/uploadItem';
-import { RecordResponse } from '@shared/services/api/index.repo';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import debug from 'debug';
 import { AccountService } from '@shared/services/account/account.service';
+import { Deferred } from '@root/vendor/deferred';
+
+const FILENAME_BLACKLIST = ['.DS_Store'];
+
+interface FileWithPath {
+  file: File;
+  path?: string;
+  parentFolder?: FolderVO;
+}
+
+interface FileSystemFolder {
+  path?: string;
+  parentFolder?: FolderVO;
+  folder?: FolderVO;
+}
 
 @Injectable()
 export class UploadService implements HasSubscriptions, OnDestroy {
@@ -103,6 +117,142 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       .catch((response: any) => {
         this.handleUploaderError(response);
       });
+  }
+
+  async uploadFolders(parentFolder: FolderVO, items: DataTransferItem[]) {
+    this.debug('uploadFolders %d items to folder %o', items.length, parentFolder);
+
+    const self = this;
+    const foldersByPath: Map<string, FileSystemFolder> = new Map();
+    const filesByPath: Map<string, FileWithPath[]> = new Map();
+
+    foldersByPath.set('', { path: '', folder: parentFolder });
+
+    const entries = items.map(i => i.webkitGetAsEntry());
+    await getItemsFromItemList(entries);
+    this.createFoldersAndUploadFiles(foldersByPath, filesByPath);
+
+    async function getItemsFromItemList(dirEntries: any[]) {
+      self.debug('uploadFolders getItemsFromItemList %d items in folder', entries.length);
+      const filePromises: Promise<any>[] = [];
+      for (const entry of dirEntries) {
+        if (entry.isFile) {
+          const deferred = new Deferred();
+          filePromises.push(deferred.promise);
+          entry.file(file => {
+            if (FILENAME_BLACKLIST.includes((file as File).name)) {
+              return deferred.resolve();
+            }
+
+            // store file with parent folder VO grouped by path
+            const path = entry.fullPath;
+            const pathParts = path.split('/');
+            pathParts.pop();
+            const parentPath = pathParts.join('/');
+            const fileWithPath = {
+              path: parentPath,
+              file,
+              parentFolder: foldersByPath.get(parentPath).folder
+            };
+
+            if (filesByPath.has(parentPath)) {
+              filesByPath.get(parentPath).push(fileWithPath);
+            } else {
+              filesByPath.set(parentPath, [ fileWithPath ]);
+            }
+
+            deferred.resolve();
+          });
+        } else {
+          const vo = new FolderVO({ displayName: entry.name });
+          const path = entry.fullPath;
+          const pathParts = path.split('/');
+          pathParts.pop();
+          const parentPath = pathParts.join('/');
+          const folder: FileSystemFolder = {
+            path,
+            folder: vo,
+            parentFolder: foldersByPath.get(parentPath).folder
+          };
+          foldersByPath.set(entry.fullPath, folder);
+          const childEntries = await readDirectory(entry);
+          await getItemsFromItemList(childEntries);
+        }
+      }
+
+      await Promise.all(filePromises);
+    }
+
+    function readDirectory(directory): Promise<any[]> {
+      const dirReader = directory.createReader();
+      let e = [];
+
+      const deferred = new Deferred();
+      const getEntries = function() {
+        dirReader.readEntries(function(results) {
+          if (results.length) {
+            e = e.concat(Array.from(results));
+            getEntries();
+          } else {
+            deferred.resolve(e);
+          }
+        });
+      };
+
+      getEntries();
+
+      return deferred.promise;
+    }
+  }
+
+  async createFoldersAndUploadFiles(folders: Map<string, FileSystemFolder>, files: Map<string, FileWithPath[]>) {
+    const pathsByDepth = new Map<Number, FileSystemFolder[]>();
+    for (const [path, folder] of folders) {
+      const depth = path.split('/').length - 1;
+      if (pathsByDepth.has(depth)) {
+        pathsByDepth.get(depth).push(folder);
+      } else {
+        pathsByDepth.set(depth, [ folder ]);
+      }
+    }
+
+    // group folder creation at each depth
+    for (const [depth, foldersAtDepth] of pathsByDepth) {
+      // create folders if needed
+      const needIds = foldersAtDepth.filter(f => !f.folder.folderId);
+
+      let needsRefresh = false;
+      if (needIds.length && depth > 0) {
+        for (const f of needIds) {
+          f.folder.parentFolderId = f.parentFolder.folderId;
+          f.folder.parentFolder_linkId = f.parentFolder.folder_linkId;
+
+          if (f.parentFolder.folderId === this.dataService.currentFolder.folderId) {
+            needsRefresh = true;
+          }
+        }
+
+        const response = await this.api.folder.post(needIds.map(f => f.folder));
+        const updatedFolders = response.getFolderVOs();
+
+        needIds.forEach((f, i) => {
+          f.folder.update(updatedFolders[i]);
+        });
+      }
+
+      if (needsRefresh) {
+        this.dataService.refreshCurrentFolder();
+      }
+
+      // queue uploads for each folder
+      for (const f of foldersAtDepth) {
+        if (files.has(f.path)) {
+          const filesForFolder = files.get(f.path);
+          this.uploadFiles(f.folder, filesForFolder.map(i => i.file));
+        }
+      }
+    }
+
   }
 
   retryFiles() {
