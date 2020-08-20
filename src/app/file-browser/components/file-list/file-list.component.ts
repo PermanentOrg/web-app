@@ -165,7 +165,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
         const url = this.router.url;
         const urlParts = url.split('/').slice(0, 3);
         const currentRoot = urlParts.join('/');
-        this.router.navigateByUrl(`${currentRoot}?reload`);
+        if (currentRoot !== url) {
+          this.router.navigateByUrl(currentRoot);
+        } else {
+          this.router.navigateByUrl(`${currentRoot}?reload`);
+        }
       })
     );
   }
@@ -520,4 +524,4 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     }
   }
 
-}
+} 
