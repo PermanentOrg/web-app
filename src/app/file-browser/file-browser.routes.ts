@@ -29,7 +29,7 @@ export const routes: Routes = [
     component: FileListComponent,
     resolve: folderResolve,
     children: fileListChildRoutes,
-    runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   },
   {
     path: 'view',
