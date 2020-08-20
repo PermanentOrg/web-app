@@ -1,13 +1,13 @@
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, DynamicListChild } from '@models/base-vo';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { AccessRoleType } from './access-role';
 import { ItemVO } from '.';
 
-type ArchiveType = 'type.archive.person' | 'type.archive.family' | 'type.archive.organization' | 'type.archive.nonprofit';
+export type ArchiveType = 'type.archive.person' | 'type.archive.family' | 'type.archive.organization' | 'type.archive.nonprofit';
 
-export class ArchiveVO extends BaseVO {
+export class ArchiveVO extends BaseVO implements DynamicListChild  {
   public archiveId;
   public archiveNbr;
   public ChildFolderVOs;
@@ -33,6 +33,8 @@ export class ArchiveVO extends BaseVO {
   public thumbURL2000;
   public thumbArchiveNbr: string;
   public type: ArchiveType;
+  public isPendingAction: boolean;
+  public isNewlyCreated: boolean;
 
   constructor(voData: any) {
     super(voData);

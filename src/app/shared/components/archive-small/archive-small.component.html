@@ -5,7 +5,7 @@
       Current Archive<br>
     </span>
     The {{archive.fullName}} Archive
-    <span class="archive-switch" *ngIf="isCurrent && clickable">
+    <span class="archive-switch" *ngIf="isCurrent && clickable && !accessRole">
       <br>Tap to switch archives
     </span>
     <span class="archive-pending" *ngIf="isPending && !relation">
@@ -20,10 +20,13 @@
     <span class="archive-subtitle" *ngIf="accessRole && !isCurrent">
       <br>Access: {{accessRoleDisplay}}
     </span>
+    <span class="archive-subtitle" *ngIf="clickable && isCurrent">
+      <br>Current Archive
+    </span>
   </div>
 </div>
 <div class="archive-edit hide-mobile" *ngIf="largeOnDesktop && (showEdit || showRemove || showAccept)">
-  <button class="btn btn-primary" *ngIf="showAccept" (click)="acceptClick.emit($event)">{{ acceptText || 'Accept' }}</button>
-  <button class="btn btn-primary" *ngIf="showEdit" (click)="editClick.emit($event)">Edit</button>
-  <button class="btn btn-danger" *ngIf="showRemove" (click)="removeClick.emit($event)">Remove</button>
+  <button class="btn btn-primary" *ngIf="showAccept" (click)="acceptClick.emit($event)" [disabled]="archive.isPendingAction">{{ acceptText }}</button>
+  <button class="btn btn-primary" *ngIf="showEdit" (click)="editClick.emit($event)" [disabled]="archive.isPendingAction">Edit</button>
+  <button class="btn btn-danger" *ngIf="showRemove" (click)="removeClick.emit($event)" [disabled]="archive.isPendingAction">{{ removeText }}</button>
 </div>

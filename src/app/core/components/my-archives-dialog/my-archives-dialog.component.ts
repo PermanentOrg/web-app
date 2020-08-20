@@ -1,10 +1,39 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
+import { partition, remove, find } from 'lodash';
+import { ApiService } from '@shared/services/api/api.service';
+import { ArchiveResponse } from '@shared/services/api/archive.repo';
+import { MessageService } from '@shared/services/message/message.service';
+import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
+import { ArchiveType } from '@models/archive-vo';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
 
 type MyArchivesTab = 'switch' | 'new' | 'pending';
+
+interface ArchiveFormData {
+  fullName: string;
+  type: ArchiveType;
+  relationType: string;
+}
+
+const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
+  {
+    text: 'Person',
+    value: 'type.archive.person'
+  },
+  {
+    text: 'Family',
+    value: 'type.archive.family'
+  },
+  {
+    text: 'Organization',
+    value: 'type.archive.organization'
+  },
+];
 
 @Component({
   selector: 'pr-my-archives-dialog',
@@ -13,18 +42,34 @@ type MyArchivesTab = 'switch' | 'new' | 'pending';
 })
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   archives: ArchiveVO[];
-  
+  pendingArchives: ArchiveVO[];
+  waiting = false;
+
+  archiveTypes = ARCHIVE_TYPES;
+  relationTypes = RELATION_OPTIONS;
+  newArchiveForm: FormGroup;
+
   activeTab: MyArchivesTab = 'switch';
   @ViewChild('panel') panelElem: ElementRef;
+
+  @ViewChildren(ArchiveSmallComponent) archiveComponents: QueryList<ArchiveSmallComponent>;
+
   constructor(
     private dialogRef: DialogRef,
     private accountService: AccountService,
-    private router: Router
+    private api: ApiService,
+    private message: MessageService,
+    private fb: FormBuilder
   ) {
-    this.archives = this.accountService.getArchives();
+    this.newArchiveForm = this.fb.group({
+      fullName: ['', [Validators.required]],
+      type: [ARCHIVE_TYPES[0].value, [Validators.required]],
+      relationType: [null]
+    });
   }
 
   ngOnInit(): void {
+    [this.pendingArchives, this.archives] = partition(this.accountService.getArchives(), { status: 'status.generic.pending'} );
   }
 
   setTab(tab: MyArchivesTab) {
@@ -36,11 +81,74 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     this.dialogRef.close();
   }
 
+  scrollToArchive(archive: ArchiveVO) {
+    setTimeout(() => {
+      const component = find(this.archiveComponents.toArray(), cmp => cmp.archive === archive);
+      if (component) {
+        (component.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
+      }
+    });
+  }
+
   async onArchiveClick(archive: ArchiveVO) {
+    if (archive.isPendingAction) {
+      return;
+    }
+
     try {
+      archive.isPendingAction = true;
       await this.accountService.changeArchive(archive);
       this.onDoneClick();
     } catch (err) {}
   }
 
+  async acceptPendingArchive(archive: ArchiveVO) {
+    try {
+      archive.isPendingAction = true;
+      await this.api.archive.accept(archive);
+      archive.status = 'status.generic.ok';
+      remove(this.pendingArchives, archive);
+      this.archives.push(archive);
+      this.setTab('switch');
+      this.scrollToArchive(archive);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      archive.isPendingAction = false;
+    }
+  }
+
+  async declinePendingArchive(archive: ArchiveVO) {
+    try {
+      archive.isPendingAction = true;
+      await this.api.archive.decline(archive);
+      remove(this.pendingArchives, archive);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      archive.isPendingAction = false;
+    }
+  }
+
+  async onNewArchiveFormSubmit(value: ArchiveFormData) {
+    try {
+      this.waiting = true;
+      const response = await this.api.archive.create(new ArchiveVO(value));
+      const newArchive = response.getArchiveVO();
+      this.archives.push(newArchive);
+      this.newArchiveForm.reset();
+      this.setTab('switch');
+      this.scrollToArchive(newArchive);
+    } catch (err) {
+      if (err instanceof ArchiveResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      this.waiting = false;
+    }
+  }
 }

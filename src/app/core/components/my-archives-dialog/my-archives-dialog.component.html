@@ -19,13 +19,59 @@
         New Archive
       </div>
     </div>
-    <div class="panel" #pending>
+    <div class="panel" #panel>
       <ng-container [ngSwitch]="activeTab">
         <ng-container *ngSwitchCase="'switch'">
           <div class="panel-title">({{archives.length}}) Archives</div>
           <pr-archive-small *ngFor="let archive of archives" (archiveClick)="onArchiveClick(archive)"
+            [clickable]="true"
             [largeOnDesktop]="true" [archive]="archive"
-            [accessRole]="archive.accessRole"></pr-archive-small>
+            [accessRole]="archive.accessRole" [class.waiting]="archive.isPendingAction"></pr-archive-small>
+        </ng-container>
+        <ng-container *ngSwitchCase="'pending'">
+          <div class="panel-title">({{pendingArchives.length}}) Pending Archives</div>
+          <div *ngIf="!pendingArchives.length">No pending archives</div>
+          <pr-archive-small *ngFor="let archive of pendingArchives"
+            [largeOnDesktop]="true" [archive]="archive"
+            [accessRole]="archive.accessRole"
+            [showAccept]="true"
+            (acceptClick)="acceptPendingArchive(archive)"
+            [showRemove]="true"
+            removeText="Decline"
+            (removeClick)="declinePendingArchive(archive)"
+            >
+          </pr-archive-small>
+        </ng-container>
+        <ng-container *ngSwitchCase="'new'">
+          <form [formGroup]="newArchiveForm" class="dialog-form" (submit)="onNewArchiveFormSubmit(newArchiveForm.value)">
+            <div class="dialog-form-field">
+              <label for="name">Archive Name</label>
+              <div class="dialog-inline-field">
+                <span>The</span>
+                <input type="text" class="form-control" id="newArchiveName" name="name"
+                  placeholder="Name"
+                  formControlName="fullName">
+                <span>Archive</span>
+              </div>
+            </div>
+            <div class="dialog-form-field">
+              <label for="email">Archive Type</label>
+              <div class="form-check" *ngFor="let typeOption of archiveTypes">
+                <input type="radio" class="form-check-input" formControlName="type" [value]="typeOption.value">
+                <div class="form-check-label">{{typeOption.text}}</div>
+              </div>
+            </div>
+            <div class="dialog-form-field">
+              <label for="relation">Connection</label>
+              <select name="relation" class="form-control" formControlName="relationType">
+                <option value="" disabled selected>Choose connection (optional)</option>
+                <option [value]="relation.value" *ngFor="let relation of relationTypes">{{relation.text}}</option>
+              </select>
+            </div>
+            <div class="dialog-form-field">
+              <button class="btn btn-primary" [disabled]="newArchiveForm.invalid || waiting">Create New Archive</button>
+            </div>
+          </form>
         </ng-container>
       </ng-container>
     </div>

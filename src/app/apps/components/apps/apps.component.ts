@@ -1,25 +1,32 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { DataService } from '@shared/services/data/data.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ConnectorOverviewVO, FolderVO } from '@root/app/models';
 import { ConnectorComponent, FAMILYSEARCH_CONNECT_KEY } from '../connector/connector.component';
 import { find } from 'lodash';
+import { AccountService } from '@shared/services/account/account.service';
+import { HasSubscriptions } from '@shared/utilities/hasSubscriptions';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'pr-apps',
   templateUrl: './apps.component.html',
   styleUrls: ['./apps.component.scss']
 })
-export class AppsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppsComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions {
   appsFolder: FolderVO;
   connectors: ConnectorOverviewVO[];
 
   @ViewChildren(ConnectorComponent) connectorComponents: QueryList<ConnectorComponent>;
 
+  subscriptions: Subscription[] = [];
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private accountService: AccountService,
     private dataService: DataService,
     private storage: StorageService
   ) {
@@ -27,10 +34,37 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.connectors = this.route.snapshot.data.connectors;
 
     this.dataService.setCurrentFolder(this.appsFolder);
+
+    this.registerArchiveChangeHandlers();
+    this.registerRouterEventHandlers();
   }
 
   ngOnInit() {
   }
+
+  registerArchiveChangeHandlers() {
+    // register for archive change events to reload the root section
+    this.subscriptions.push(
+      this.accountService.archiveChange.subscribe(async archive => {
+        this.router.navigate(['.'], { relativeTo: this.route });
+      })
+    );
+  }
+
+  registerRouterEventHandlers() {
+    // register for navigation events to reinit page on folder changes
+    this.subscriptions.push(this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd ))
+      .subscribe((event: NavigationEnd) => {
+        if (event.url === '/m/apps') {
+          this.appsFolder = this.route.snapshot.data.appsFolder;
+          this.connectors = this.route.snapshot.data.connectors;
+
+          this.dataService.setCurrentFolder(this.appsFolder);
+        }
+      }));
+  }
+
 
   ngAfterViewInit() {
     const queryParams = this.route.snapshot.queryParams;

@@ -108,4 +108,9 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
     }
   }
 
+  async openArchivesDialog() {
+    await this.accountService.refreshArchives();
+    this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px'});
+  }
+
 }

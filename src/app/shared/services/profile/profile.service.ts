@@ -90,7 +90,7 @@ export class ProfileService {
       // borrow thumb URLs from record for now, until they can be regenerated
       const thumbProps: Array<keyof (ArchiveVO|RecordVO)> = ['thumbURL200', 'thumbURL500', 'thumbURL1000', 'thumbURL2000'];
       for (const prop of thumbProps) {
-        currentArchive[prop] = record[prop];
+        currentArchive[prop] = record[prop] as never;
       }
     } catch (err) {
       if (err instanceof ArchiveResponse) {

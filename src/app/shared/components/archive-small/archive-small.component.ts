@@ -1,8 +1,9 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output, EventEmitter, ElementRef } from '@angular/core';
 
 import { ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-archive-small',
@@ -11,7 +12,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() archive: ArchiveVO = null;
-  @Input() clickable = false;
+  @HostBinding('class.clickable') @Input() clickable = false;
   @Input() relation: string;
   @Input() accessRole: string;
   @Input() isPending = false;
@@ -20,13 +21,14 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
   @HostBinding('class.large-on-desktop') @Input() largeOnDesktop = false;
   @Input() showRemove = false;
+  @Input() removeText = 'Remove';
   @Output() removeClick = new EventEmitter<any>();
 
   @Input() showEdit = false;
   @Output() editClick = new EventEmitter<any>();
 
   @Input() showAccept = false;
-  @Input() acceptText;
+  @Input() acceptText = 'Accept';
   @Output() acceptClick = new EventEmitter<any>();
 
 
@@ -36,7 +38,9 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
   constructor(
     private account: AccountService,
-    private prConstants: PrConstantsService
+    private api: ApiService,
+    private prConstants: PrConstantsService,
+    public element: ElementRef
   ) { }
 
   ngOnInit() {
@@ -53,6 +57,8 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
     if (this.relation) {
     }
+
+    this.checkArchiveThumbnail();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,6 +76,17 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
       } else {
         this.accessRoleDisplay = null;
       }
+    }
+  }
+
+  checkArchiveThumbnail() {
+    if (!this.archive.thumbURL200 && this.archive.status === 'status.archive.gen_avatar') {
+      setTimeout(async () => {
+        const response = await this.api.archive.get([this.archive]);
+        const updated = response.getArchiveVO();
+        this.archive.update(updated);
+        this.checkArchiveThumbnail();
+      }, 5000);
     }
   }
 

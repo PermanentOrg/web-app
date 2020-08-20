@@ -7,7 +7,7 @@
     <pr-storage-meter></pr-storage-meter>
     <a (click)="openSettingsDialog('account')">Account</a>
     <a href="/add-storage">Add Storage</a>
-    <a [routerLink]="['/m', 'archives']">Archives</a>
+    <a (click)="openArchivesDialog()">Archives</a>
     <a (click)="openInvitationsDialog()">Invitations</a>
     <a (click)="onLogoutClick()">Log Out</a>
   </div>
