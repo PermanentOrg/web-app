@@ -194,10 +194,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
           this.inDialog = true;
         }
 
-        if (this.routeHistory.previousRoute?.includes('archives')) {
-          this.inDialog = false;
-        }
-
         if (this.reinit && !this.inFileView && !this.inDialog) {
           this.refreshView();
         }

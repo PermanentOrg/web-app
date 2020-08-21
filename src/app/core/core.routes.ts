@@ -144,6 +144,20 @@ export const routes: RoutesWithData = [
         redirectTo: '/m/(myfiles//dialog:profile)'
       },
       {
+        path: 'account',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Account',
+          dialogToken: 'SettingsDialogComponent',
+          dialogOptions: { width: '1000px'}
+        }
+      },
+      {
+        path: 'account',
+        redirectTo: '/m/(myfiles//dialog:account)'
+      },
+      {
         path: 'members',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',

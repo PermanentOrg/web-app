@@ -200,6 +200,24 @@ pr-folder-view-toggle {
       font-size: $mat-icon-sm;
     }
 
+    @include until(1000px) {
+      font-size: $font-size-sm;
+      &:not(:last-child) {
+        margin-right: $grid-unit / 4;
+      }
+
+      i {
+        font-size: $mat-icon-sm * 0.75;
+        margin-right: 0.125em;
+      }
+    }
+
+    @include until (1100px) {
+      &:not(:last-child) {
+        margin-right: $grid-unit / 2;
+      }
+    }
+
     &.disabled {
       cursor: not-allowed;
       opacity: 0.5;
