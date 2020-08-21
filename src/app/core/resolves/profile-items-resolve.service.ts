@@ -3,14 +3,14 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/r
 
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { ProfileService } from '@shared/services/profile/profile.service';
 
 @Injectable()
 export class ProfileItemsResolveService implements Resolve<any> {
 
-  constructor(private api: ApiService, private accountService: AccountService) { }
+  constructor(private profile: ProfileService) { }
 
   async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
-    const response = await this.api.archive.getAllProfileItems(this.accountService.getArchive());
-    return response.getProfileItemVOs();
+    return this.profile.fetchProfileItems();
   }
 }

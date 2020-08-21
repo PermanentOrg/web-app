@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
-      <a class="archive-options-option" (click)="onProfileClick()">Archive Profile</a>
+      <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['profile']}}]">Archive Profile</a>
       <hr>
       <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['connections']}}]">
         Archive Connections

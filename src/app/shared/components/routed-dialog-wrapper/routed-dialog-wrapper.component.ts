@@ -19,6 +19,8 @@ export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, O
 
   private previousTitle: string;
 
+  private closedByNavigate = false;
+
   subscriptions: Subscription[] = [];
   constructor(
     private route: ActivatedRoute,
@@ -45,8 +47,10 @@ export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, O
 
     this.dialogRef.closePromise.finally(() => {
       this.dialogRef = null;
-      const targetRoute = this.routeHistory.previousRoute || '/m/';
-      this.router.navigateByUrl(targetRoute);
+      if (!this.closedByNavigate) {
+        const targetRoute = this.routeHistory.previousRoute || '/m/';
+        this.router.navigateByUrl(targetRoute);
+      }
     });
   }
 
@@ -54,6 +58,7 @@ export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, O
     if (this.dialogRef) {
       this.dialogRef.close();
     }
+    this.closedByNavigate = true;
     unsubscribeAll(this.subscriptions);
   }
 

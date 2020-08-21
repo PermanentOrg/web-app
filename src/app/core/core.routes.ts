@@ -135,6 +135,21 @@ export const routes: RoutesWithData = [
         redirectTo: '/m/(myfiles//dialog:archives)'
       },
       {
+        path: 'profile',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archive Profile',
+          dialogToken: 'ProfileEditComponent',
+          dialogOptions:  { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'}
+        },
+        resolve: { profileItems: ProfileItemsResolveService }
+      },
+      {
+        path: 'profile',
+        redirectTo: '/m/(myfiles//dialog:profile)'
+      },
+      {
         path: 'members',
         component: MembersComponent,
         data: { title: 'Members' },
