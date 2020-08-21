@@ -58,11 +58,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         return event instanceof NavigationStart || event instanceof NavigationEnd;
       })).subscribe((event) => {
         if (event instanceof NavigationStart) {
-          const fromHasDialog = this.routeHistory?.currentRoute.includes('(');
-          const toHasDialog = event.url.includes('(');
-          if (!(fromHasDialog || toHasDialog)) {
-            this.isNavigating = true;
-          }
+          this.isNavigating = true;
         } else if (event instanceof NavigationEnd) {
           this.isNavigating = false;
         }

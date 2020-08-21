@@ -203,7 +203,6 @@ export class AppModule {
         return event instanceof NavigationEnd;
       })).subscribe((event) => {
         this.routerDebug('end navigate %s', this.router.url);
-
         let currentRoute = this.route;
         let currentTitle;
         while (currentRoute.firstChild) {

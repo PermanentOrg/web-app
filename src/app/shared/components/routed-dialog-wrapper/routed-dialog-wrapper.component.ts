@@ -6,6 +6,7 @@ import { DialogOptions } from '@root/app/dialog/dialog.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { RouteHistoryService } from 'ngx-route-history';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'pr-routed-dialog-wrapper',
@@ -16,16 +17,20 @@ export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, O
   private dialogOptions: DialogOptions;
   private dialogRef: DialogRef;
 
+  private previousTitle: string;
+
   subscriptions: Subscription[] = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private dialog: Dialog,
-    private routeHistory: RouteHistoryService
-  ) {
-  }
+    private routeHistory: RouteHistoryService,
+    private title: Title
+  ) { }
 
   ngOnInit(): void {
+    this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
+
     this.dialogToken = (this.route.snapshot.data as RouteData).dialogToken;
 
     if (!this.dialogToken) {

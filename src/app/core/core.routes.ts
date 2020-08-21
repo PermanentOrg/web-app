@@ -120,6 +120,21 @@ export const routes: RoutesWithData = [
         redirectTo: '/m/(myfiles//dialog:connections)'
       },
       {
+        path: 'archives',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archives',
+          dialogToken: 'MyArchivesDialogComponent',
+          dialogOptions:  { width: '1000px'}
+        },
+        resolve: { connections: ArchivesResolveService }
+      },
+      {
+        path: 'archives',
+        redirectTo: '/m/(myfiles//dialog:archives)'
+      },
+      {
         path: 'members',
         component: MembersComponent,
         data: { title: 'Members' },
@@ -142,9 +157,9 @@ export const routes: RoutesWithData = [
       { path: '**', redirectTo: 'myfiles'}
     ]
   },
-  { path: ':path', redirectTo: 'm/:path'},
   { path: 'app', redirectTo: 'm', pathMatch: 'full'},
   { path: '', redirectTo: 'm', pathMatch: 'full'},
+  { path: ':path', redirectTo: 'm/:path'},
 ];
 @NgModule({
   imports: [
