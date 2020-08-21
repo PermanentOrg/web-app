@@ -43,11 +43,3 @@
     }
   }
 }
-
-// @supports (padding-left: constant(safe-area-inset-left)) {
-//   .menu.hamburger-menu {
-//     --safe-area-inset-left: constant(safe-area-inset-left);
-//     width: calc(300px + var(--safe-area-inset-left)) !important;
-//     padding-left: var(--safe-area-inset-left);
-//   }
-// }
