@@ -7,10 +7,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
-import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { FolderVO, FolderVOData, ShareByUrlVO, RecordVO, AccountVO } from '@root/app/models';
+import { FolderVO, RecordVO, AccountVO } from '@root/app/models';
 import { find } from 'lodash';
-import { FolderPickerOperations } from '../folder-picker/folder-picker.component';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { Deferred } from '@root/vendor/deferred';
@@ -21,9 +19,9 @@ import { UploadSessionStatus } from '@core/services/upload/uploader';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
-import { ScrollService } from '@shared/services/scroll/scroll.service';
 import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent, DragServiceEvent } from '@shared/services/drag/drag.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
+import { RouteHistoryService } from 'ngx-route-history';
 
 @Component({
   selector: 'pr-main',
@@ -48,6 +46,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
     private upload: UploadService,
     private route: ActivatedRoute,
     private prompt: PromptService,
+    @Optional() private routeHistory: RouteHistoryService,
     private api: ApiService,
     private dialog: Dialog,
     private ga: GoogleAnalyticsService,
@@ -59,7 +58,11 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         return event instanceof NavigationStart || event instanceof NavigationEnd;
       })).subscribe((event) => {
         if (event instanceof NavigationStart) {
-          this.isNavigating = true;
+          const fromHasDialog = this.routeHistory?.currentRoute.includes('(');
+          const toHasDialog = event.url.includes('(');
+          if (!(fromHasDialog || toHasDialog)) {
+            this.isNavigating = true;
+          }
         } else if (event instanceof NavigationEnd) {
           this.isNavigating = false;
         }

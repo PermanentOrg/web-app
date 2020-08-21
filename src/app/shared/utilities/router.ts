@@ -34,3 +34,6 @@ export function findRouteData(snapshot: ActivatedRouteSnapshot, dataProp: string
   return data;
 }
 
+export function routeHasDialog(event: RouterEvent) {
+  return event.url.includes('(');
+}

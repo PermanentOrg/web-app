@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DialogComponentToken } from './dialog/dialog.module';
+import { DialogOptions } from './dialog/dialog.service';
 
 export interface RouteData {
   title?: string;
@@ -17,6 +19,9 @@ export interface RouteData {
   noFileListPadding?: boolean;
   fileListCentered?: boolean;
   isPublicArchive?: boolean;
+
+  dialogToken?: DialogComponentToken;
+  dialogOptions?: DialogOptions;
 }
 
 export interface RouteWithData extends Route {
@@ -28,7 +33,19 @@ export type RoutesWithData = RouteWithData[];
 
 const routes: RoutesWithData = [
   {
-    path: 'm',
+    path: 'p', loadChildren: () => import('./public/public.module').then(m => m.PublicModule),
+    data: {
+      title: 'Public'
+    }
+  },
+  {
+    path: 'share', loadChildren: () => import('./share-preview/share-preview.module').then(m => m.SharePreviewModule),
+    data: {
+      title: 'Sharing'
+    }
+  },
+  {
+    path: '',
     children: [
       { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
       { path: 'signup', redirectTo: 'auth/signup', pathMatch: 'full'  },
@@ -48,19 +65,6 @@ const routes: RoutesWithData = [
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
-  { path: 'p', loadChildren: () => import('./public/public.module').then(m => m.PublicModule),
-    data: {
-      title: 'Public'
-    }
-  },
-  { path: 'share', loadChildren: () => import('./share-preview/share-preview.module').then(m => m.SharePreviewModule),
-    data: {
-      title: 'Sharing'
-    }
-  },
-  { path: '', redirectTo: 'm', pathMatch: 'full'},
-  { path: 'app', redirectTo: 'm', pathMatch: 'full'},
-  { path: ':path', redirectTo: 'm/:path'},
 ];
 
 @NgModule({

@@ -22,7 +22,9 @@
     <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
       <a class="archive-options-option" (click)="onProfileClick()">Archive Profile</a>
       <hr>
-      <a class="archive-options-option" (click)="onConnectionsClick()">Archive Connections</a>
+      <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['connections']}}]">
+        Archive Connections
+      </a>
       <a class="archive-options-option" (click)="onMembersClick()">Archive Members</a>
     </div>
     <div class="menu-scroll" #scroll>
@@ -54,9 +56,11 @@
         <i class="ion-md-swap"></i>
         Apps
       </a>
-      <a class="menu-item hide-desktop" [routerLink]="['/relationships']" [class.active]="checkMenuItemActive('/relationships')">
+      <a class="menu-item hide-desktop"
+        [routerLink]="[{ outlets: { dialog: ['connections']}}]"
+        [class.active]="checkMenuItemActive('/connections')">
         <i class="ion-md-people"></i>
-        Relationships
+        Connections
       </a>
       <a class="menu-item hide-desktop" [routerLink]="['/members']" [class.active]="checkMenuItemActive('/members')">
         <i class="ion-md-person-add"></i>

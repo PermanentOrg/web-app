@@ -115,7 +115,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   checkMenuItemActive(urlSegment: string) {
     if (!this.urlMatches.has(urlSegment)) {
-      this.urlMatches.set(urlSegment, this.currentUrl?.includes(urlSegment));
+      this.urlMatches.set(urlSegment, this.currentUrl?.replace(/[()]/g, '').includes(urlSegment));
     }
 
     return this.urlMatches.get(urlSegment);
