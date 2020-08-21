@@ -85,12 +85,21 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'invitations',
-        component: InvitationsComponent,
-        data: { title: 'Invitations' }
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Invitations',
+          dialogToken: 'InvitationsDialogComponent',
+          dialogOptions: { width: '1000px'}
+        }
+      },
+      {
+        path: 'invitations',
+        redirectTo: '/m/(myfiles//dialog:invitations)'
       },
       {
         path: 'archive/sentInvites',
-        redirectTo: 'invitations'
+        redirectTo: '/m/(myfiles//dialog:invitations)'
       },
       {
         path: 'connections',
@@ -99,7 +108,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Connections',
           dialogToken: 'ConnectionsDialogComponent',
-          dialogOptions:  { width: '1000px'}
+          dialogOptions: { width: '1000px'}
         },
         resolve: { connections: RelationshipsResolveService }
       },
@@ -126,7 +135,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Archive Profile',
           dialogToken: 'ProfileEditComponent',
-          dialogOptions:  { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'}
+          dialogOptions: { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'}
         },
         resolve: { profileItems: ProfileItemsResolveService }
       },

@@ -157,6 +157,14 @@ $header-height: 3 * $grid-unit;
       margin-right: $grid-unit;
     }
     margin-bottom: $grid-unit;
+
+    @include beforeDesktop {
+      display: block;
+
+      label {
+        margin-bottom: $grid-unit / 4;
+      }
+    }
   }
 
   .dialog-inline-field {
@@ -196,5 +204,9 @@ $header-height: 3 * $grid-unit;
     margin-right: auto;
     margin-left: $labelWidth + $grid-unit;
     width: auto;
+    
+    @include beforeDesktop {
+      margin: 0 auto;
+    }
   }
 }
