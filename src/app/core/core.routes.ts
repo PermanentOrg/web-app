@@ -136,13 +136,22 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'members',
-        component: MembersComponent,
-        data: { title: 'Members' },
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archive Members',
+          dialogToken: 'MembersDialogComponent',
+          dialogOptions:  { width: '1000px'}
+        },
         resolve: { members: MembersResolveService }
       },
       {
+        path: 'members',
+        redirectTo: '/m/(myfiles//dialog:members)'
+      },
+      {
         path: 'archive/members',
-        redirectTo: 'members'
+        redirectTo: '/m/(myfiles//dialog:members)'
       },
       {
         path: 'search',
