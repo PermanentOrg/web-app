@@ -199,7 +199,7 @@ export class ProfileService {
     });
     const originalValues = [];
 
-    const minItems = allItems.map(i => {
+    const minItems = allItems.filter(i => i.profile_itemId).map(i => {
       originalValues.push(i.publicDT);
       const minItem: ProfileItemVOData = {
         profile_itemId: i.profile_itemId,
