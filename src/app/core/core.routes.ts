@@ -120,21 +120,6 @@ export const routes: RoutesWithData = [
         redirectTo: '/m/(myfiles//dialog:connections)'
       },
       {
-        path: 'archives',
-        component: RoutedDialogWrapperComponent,
-        outlet: 'dialog',
-        data: {
-          title: 'Archives',
-          dialogToken: 'MyArchivesDialogComponent',
-          dialogOptions:  { width: '1000px'}
-        },
-        resolve: { connections: ArchivesResolveService }
-      },
-      {
-        path: 'archives',
-        redirectTo: '/m/(myfiles//dialog:archives)'
-      },
-      {
         path: 'profile',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',

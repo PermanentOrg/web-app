@@ -40,6 +40,7 @@ import { CdkPortal } from '@angular/cdk/portal';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
+import { RouteHistoryService } from 'ngx-route-history';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -124,6 +125,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private elementRef: ElementRef,
     private dialog: Dialog,
     private folderViewService: FolderViewService,
+    private routeHistory: RouteHistoryService,
     private location: Location,
     @Inject(DOCUMENT) private document: any,
     @Optional() private drag: DragService,
@@ -190,6 +192,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
         if (routeHasDialog(event)) {
           this.inDialog = true;
+        }
+
+        if (this.routeHistory.previousRoute?.includes('archives')) {
+          this.inDialog = false;
         }
 
         if (this.reinit && !this.inFileView && !this.inDialog) {
