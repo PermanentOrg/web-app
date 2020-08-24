@@ -20,9 +20,17 @@ button {
   font-size: $font-size-sm;
   text-transform: none;
   letter-spacing: normal;
+  min-width: pxToGrid(200px);
+  max-width: pxToGrid(360px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  > span {
+    margin-right: $grid-unit / 4;
+  }
 
   i {
-    margin-left: $grid-unit / 4;
+    margin-left: auto;
   }
 
   &.active {

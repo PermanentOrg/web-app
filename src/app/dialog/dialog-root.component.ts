@@ -3,8 +3,7 @@ import { Dialog } from './dialog.service';
 
 @Component({
   selector: 'pr-dialog-root',
-  template: '<ng-template #dialogRoot></ng-template>',
-  styleUrls: ['./dialog.component.scss']
+  template: '<ng-template #dialogRoot></ng-template>'
 })
 export class DialogRootComponent implements OnDestroy {
   public isVisible = false;

@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, Optional } from '@angular/core';
+import { Component, OnDestroy, ViewChild, AfterViewInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';

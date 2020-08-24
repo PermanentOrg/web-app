@@ -15,6 +15,7 @@ import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { ApiService } from '@shared/services/api/api.service';
 import { HttpService } from '@shared/services/http/http.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
+import { RouteHistoryService } from 'ngx-route-history';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -35,7 +36,8 @@ export const BASE_TEST_CONFIG = {
     FolderPickerService,
     PrConstantsService,
     ProfileService,
-    EditService
+    EditService,
+    RouteHistoryService
   ] as any[],
   declarations: [
     TooltipsPipe

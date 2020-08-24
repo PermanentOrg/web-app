@@ -39,6 +39,8 @@ import debug from 'debug';
 import { CdkPortal } from '@angular/cdk/portal';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
+import { routeHasDialog } from '@shared/utilities/router';
+import { RouteHistoryService } from 'ngx-route-history';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -91,6 +93,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   private itemsFetchedCount: number;
   private reinit = false;
   private inFileView = false;
+  private inDialog = false;
 
   private lastScrollTop = 0;
   private lastItemOffset: number;
@@ -122,6 +125,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private elementRef: ElementRef,
     private dialog: Dialog,
     private folderViewService: FolderViewService,
+    private routeHistory: RouteHistoryService,
     private location: Location,
     @Inject(DOCUMENT) private document: any,
     @Optional() private drag: DragService,
@@ -186,12 +190,20 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
           this.inFileView = true;
         }
 
-        if (this.reinit && !this.inFileView) {
+        if (routeHasDialog(event)) {
+          this.inDialog = true;
+        }
+
+        if (this.reinit && !this.inFileView && !this.inDialog) {
           this.refreshView();
         }
 
         if (!event.url.includes('record') && this.inFileView) {
           this.inFileView = false;
+        }
+
+        if (!routeHasDialog(event) && this.inDialog) {
+          this.inDialog = false;
         }
       }));
   }

@@ -28,7 +28,11 @@
   }
 
   @include after($tablet-horizontal) {
-    transition: background-color $menu-transition-length-desktop $menu-open-ease, visibility 0s linear $menu-transition-length-desktop;
+    left: 100%;
+    transition: background-color $menu-transition-length-desktop $menu-open-ease,
+      visibility 0s linear $menu-transition-length-desktop,
+      left 0s linear $menu-transition-length-desktop;
+
     .menu {
       transition:  transform $menu-transition-length-desktop $menu-close-ease, opacity $menu-transition-length-desktop $menu-close-ease;
     }
@@ -43,11 +47,3 @@
     }
   }
 }
-
-// @supports (padding-left: constant(safe-area-inset-left)) {
-//   .menu.hamburger-menu {
-//     --safe-area-inset-left: constant(safe-area-inset-left);
-//     width: calc(300px + var(--safe-area-inset-left)) !important;
-//     padding-left: var(--safe-area-inset-left);
-//   }
-// }

@@ -11,25 +11,35 @@ import { AccountVO } from '@models';
   styleUrls: ['./beta-toggle.component.scss']
 })
 export class BetaToggleComponent implements OnInit {
-  public hasCookie: boolean;
+  public hasOptInCookie: boolean;
+  public hasOptOutCookie: boolean;
 
   constructor(
     private cookie: CookieService,
     private account: AccountService,
     private ga: GoogleAnalyticsService
   ) {
-    this.hasCookie = this.cookie.check('permBeta');
+    this.hasOptInCookie = this.cookie.check('permBeta');
+    this.hasOptOutCookie = this.cookie.check('permBetaOptOut');
   }
 
   ngOnInit(): void {
-    if (this.hasCookie && !this.account.getAccount()?.betaParticipant) {
+    if ((this.hasOptInCookie || !this.hasOptOutCookie) && !this.account.getAccount()?.betaParticipant) {
       this.account.updateAccount(new AccountVO({betaParticipant: 1}));
     }
   }
 
-  onClick() {
+  onSwitchBackClick() {
     this.ga.sendEvent(EVENTS.BETA.optOut);
     this.cookie.delete('permBeta', '/', `.${window.location.hostname}`);
+    setTimeout(() => {
+      window.location.assign(`https://${window.location.host}/app`);
+    });
+  }
+
+  onOptOutClick() {
+    this.ga.sendEvent(EVENTS.BETA.optOut);
+    this.cookie.set('permBetaOptOut', 'true', new Date('2020-10-01'), '/', `.${window.location.hostname}`);
     setTimeout(() => {
       window.location.assign(`https://${window.location.host}/app`);
     });

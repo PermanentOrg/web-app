@@ -32,4 +32,8 @@ button {
   &:focus {
     box-shadow: none;
   }
+
+  @include until(1100px) {
+    padding: 0 $grid-unit / 4;
+  }
 }

@@ -29,6 +29,10 @@ $archive-options-shadow-offset: 0.5rem;
   display: flex;
   flex-direction: column;
 
+  @include beforeDesktop {
+    width: $left-menu-width + 4 * $grid-unit;
+  }
+
   .menu-item {
     padding: 0px;
     display: flex;
@@ -238,12 +242,12 @@ $archive-options-shadow-offset: 0.5rem;
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {
-  .menu.hamburger-menu {
-    --safe-area-inset-left: env(safe-area-inset-left);
-    width: calc(#{$left-menu-width} + var(--safe-area-inset-left)) !important;
-
-    .menu-header, .menu-item{
+  @include beforeDesktop {
+    .menu.hamburger-menu {
+      --safe-area-inset-left: env(safe-area-inset-left);
+      width: calc(#{$left-menu-width + 4 * $grid-unit} + var(--safe-area-inset-left)) !important;
       padding-left: calc(var(--safe-area-inset-left)) !important;
     }
   }
+
 }

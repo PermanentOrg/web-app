@@ -13,7 +13,7 @@ import { HttpClientModule, HttpClientJsonpModule, HttpErrorResponse } from '@ang
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import debug from 'debug';
 
 import * as Sentry from '@sentry/browser';
@@ -29,7 +29,7 @@ import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { environment } from '@root/environments/environment';
-
+import { RouteHistoryService } from 'ngx-route-history';
 declare var ga: any;
 
 if (environment.environment !== 'local') {
@@ -169,7 +169,8 @@ export class PermErrorHandler implements ErrorHandler {
     {
       provide: APP_BASE_HREF,
       useValue: '/'
-    }
+    },
+    RouteHistoryService
   ],
   bootstrap: [AppComponent]
 })
@@ -202,7 +203,6 @@ export class AppModule {
         return event instanceof NavigationEnd;
       })).subscribe((event) => {
         this.routerDebug('end navigate %s', this.router.url);
-
         let currentRoute = this.route;
         let currentTitle;
         while (currentRoute.firstChild) {

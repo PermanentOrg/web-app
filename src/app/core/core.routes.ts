@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { MainComponent } from '@core/components/main/main.component';
 
@@ -16,27 +16,24 @@ import { SharedModule } from '@shared/shared.module';
 import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
 import { DonateComponent } from './components/donate/donate.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
-import { RelationshipsComponent } from './components/relationships/relationships.component';
 import { MembersComponent } from './components/members/members.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
-import { LeanFolderResolveService } from './resolves/lean-folder-resolve.service';
 import { RoutesWithData } from '../app.routes';
-import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
 import { AccountResolveService } from './resolves/account-resolve.service';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
 import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
 import { TagsResolveService } from './resolves/tags.resolve.service';
-import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
+import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService
 };
 
 export const routes: RoutesWithData = [
-  { path: '',
+  { path: 'm',
     component: MainComponent,
     canActivate: [ AuthGuard ],
     canActivateChild: [ AuthGuard ],
@@ -88,40 +85,96 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'invitations',
-        component: InvitationsComponent,
-        data: { title: 'Invitations' }
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Invitations',
+          dialogToken: 'InvitationsDialogComponent',
+          dialogOptions: { width: '1000px'}
+        }
+      },
+      {
+        path: 'invitations',
+        redirectTo: '/m/(myfiles//dialog:invitations)'
       },
       {
         path: 'archive/sentInvites',
-        redirectTo: 'invitations'
+        redirectTo: '/m/(myfiles//dialog:invitations)'
       },
       {
         path: 'connections',
-        component: RelationshipsComponent,
-        data: { title: 'Connections' },
-        resolve: { relations: RelationshipsResolveService }
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Connections',
+          dialogToken: 'ConnectionsDialogComponent',
+          dialogOptions: { width: '1000px'}
+        },
+        resolve: { connections: RelationshipsResolveService }
+      },
+      {
+        path: 'connections',
+        redirectTo: '/m/(myfiles//dialog:connections)'
       },
       {
         path: 'relationships',
-        redirectTo: 'connections'
+        redirectTo: '/m/(myfiles//dialog:connections)'
       },
       {
         path: 'archive/relationships',
-        redirectTo: 'connections'
+        redirectTo: '/m/(myfiles//dialog:connections)'
       },
       {
         path: 'relationship_request/:email',
-        redirectTo: 'connections'
+        redirectTo: '/m/(myfiles//dialog:connections)'
+      },
+      {
+        path: 'profile',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archive Profile',
+          dialogToken: 'ProfileEditComponent',
+          dialogOptions: { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'}
+        },
+        resolve: { profileItems: ProfileItemsResolveService }
+      },
+      {
+        path: 'profile',
+        redirectTo: '/m/(myfiles//dialog:profile)'
+      },
+      {
+        path: 'account',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Account',
+          dialogToken: 'SettingsDialogComponent',
+          dialogOptions: { width: '1000px'}
+        }
+      },
+      {
+        path: 'account',
+        redirectTo: '/m/(myfiles//dialog:account)'
       },
       {
         path: 'members',
-        component: MembersComponent,
-        data: { title: 'Members' },
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archive Members',
+          dialogToken: 'MembersDialogComponent',
+          dialogOptions:  { width: '1000px'}
+        },
         resolve: { members: MembersResolveService }
       },
       {
+        path: 'members',
+        redirectTo: '/m/(myfiles//dialog:members)'
+      },
+      {
         path: 'archive/members',
-        redirectTo: 'members'
+        redirectTo: '/m/(myfiles//dialog:members)'
       },
       {
         path: 'search',
@@ -135,7 +188,10 @@ export const routes: RoutesWithData = [
       },
       { path: '**', redirectTo: 'myfiles'}
     ]
-  }
+  },
+  { path: 'app', redirectTo: 'm', pathMatch: 'full'},
+  { path: '', redirectTo: 'm', pathMatch: 'full'},
+  { path: ':path', redirectTo: 'm/:path'},
 ];
 @NgModule({
   imports: [
