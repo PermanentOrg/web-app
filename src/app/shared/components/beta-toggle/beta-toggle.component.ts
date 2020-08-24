@@ -39,7 +39,7 @@ export class BetaToggleComponent implements OnInit {
 
   onOptOutClick() {
     this.ga.sendEvent(EVENTS.BETA.optOut);
-    this.cookie.delete('permBetaOptOut', '/', `.${window.location.hostname}`);
+    this.cookie.set('permBetaOptOut', 'true', new Date('2020-10-01'), '/', `.${window.location.hostname}`);
     setTimeout(() => {
       window.location.assign(`https://${window.location.host}/app`);
     });
