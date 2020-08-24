@@ -59,9 +59,9 @@ const routes: RoutesWithData = [
       { path: 'm/verifyEmbed', redirectTo: 'embed/verify', pathMatch: 'full'  },
       { path: 'm/doneEmbed', redirectTo: 'embed/done', pathMatch: 'full'  },
       { path: 'app/:path', redirectTo: 'm/:path', pathMatch: 'full'},
-      { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
-      { path: 'embed', loadChildren: () => import('./embed/embed.module').then(m => m.EmbedModule) },
-      { path: 'pledge', loadChildren: () => import('./pledge/pledge.module').then(m => m.PledgeModule)},
+      { path: 'm/auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+      { path: 'm/embed', loadChildren: () => import('./embed/embed.module').then(m => m.EmbedModule) },
+      { path: 'm/pledge', loadChildren: () => import('./pledge/pledge.module').then(m => m.PledgeModule)},
       { path: '', loadChildren: () => import('./core/core.module').then(m => m.CoreModule) },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
