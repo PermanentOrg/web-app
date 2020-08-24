@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
               this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
             });
         } else if (this.route.snapshot.queryParams.cta === 'timeline') {
-          if (this.device.isMobile()) {
+          if (this.device.isMobile() || !this.device.didOptOut()) {
             this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
           } else {
             window.location.assign(`/app/public?cta=timeline`);
