@@ -116,7 +116,7 @@ export class SignupComponent implements OnInit {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
           this.message.showMessage(`Verify to continue as ${account.primaryEmail}.`, 'warning');
-          this.router.navigate(['/verify']);
+          this.router.navigate(['..', 'verify'], {relativeTo: this.route});
         } else {
           this.accountService.logIn(formValue.email, formValue.password, true, true)
             .then(() => {
@@ -133,13 +133,13 @@ export class SignupComponent implements OnInit {
               if (this.route.snapshot.queryParams.shareByUrl) {
                 this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
               } else if (this.route.snapshot.queryParams.cta === 'timeline') {
-                if (this.device.isMobile()) {
+                if (this.device.isMobile() || !this.device.didOptOut()) {
                   this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
                 } else {
                   window.location.assign(`/app/public?cta=timeline`);
                 }
               } else if (!this.isForShareInvite) {
-                if (this.device.isMobile()) {
+                if (this.device.isMobile() || !this.device.didOptOut()) {
                   this.router.navigate(['/']);
                 } else {
                   window.location.assign('/app');

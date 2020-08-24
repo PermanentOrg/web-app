@@ -34,5 +34,5 @@
   <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
     {{isForShareInvite ? 'Continue' : 'Sign up' }}
   </button>
-  <a [routerLink]="['/auth','login']" queryParamsHandling="merge">Already have an account?</a>
+  <a [routerLink]="['..','login']" queryParamsHandling="merge">Already have an account?</a>
 </form>

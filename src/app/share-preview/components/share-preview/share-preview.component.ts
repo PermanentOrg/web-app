@@ -282,14 +282,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   onViewShareClick() {
     if (this.sharePreviewVO.RecordVO) {
-      if (this.device.isMobile()) {
+      if (this.device.isMobile() || !this.device.didOptOut()) {
         return this.router.navigate(['/shares', 'withme']);
       } else {
         window.location.assign(`/app/shares/`);
       }
     } else {
       const folder: FolderVO = this.sharePreviewVO.FolderVO;
-      if (this.device.isMobile()) {
+      if (this.device.isMobile() || !this.device.didOptOut()) {
         return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
       } else {
         window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
@@ -301,7 +301,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     this.sendGaEvent('reshare');
     if (!this.isLinkShare && (this.isOriginalOwner || this.canShare)) {
       const archiveNbr = this.sharePreviewVO.RecordVO ? this.sharePreviewVO.RecordVO.archiveNbr : this.sharePreviewVO.FolderVO.archiveNbr;
-      if (this.device.isMobile()) {
+      if (this.device.isMobile() || !this.device.didOptOut()) {
         return this.router.navigate(['/shares'], { queryParams: { shareArchiveNbr: archiveNbr }});
       } else {
         window.location.assign(`/app/shares?shareArchiveNbr=${archiveNbr}`);

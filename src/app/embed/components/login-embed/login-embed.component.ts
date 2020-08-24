@@ -66,12 +66,12 @@ export class LoginEmbedComponent implements OnInit {
     this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
-          this.router.navigate(['/embed', 'mfa'])
+          this.router.navigate(['..', 'mfa'], {relativeTo: this.route})
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
         } else if (response.needsVerification()) {
-          this.router.navigate(['/embed', 'verify'])
+          this.router.navigate(['..', 'verify'], {relativeTo: this.route})
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });

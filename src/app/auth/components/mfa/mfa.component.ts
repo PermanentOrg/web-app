@@ -45,7 +45,7 @@ export class MfaComponent implements OnInit {
         if (this.accountService.hasRedirect()) {
           this.accountService.goToRedirect();
         } else if (this.route.snapshot.queryParams.cta === 'timeline') {
-          if (this.device.isMobile()) {
+          if (this.device.isMobile() || !this.device.didOptOut()) {
             this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
           } else {
             window.location.assign(`/app/public?cta=timeline`);

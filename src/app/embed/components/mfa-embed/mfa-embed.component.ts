@@ -41,8 +41,6 @@ export class MfaEmbedComponent implements OnInit {
       .then((response: ArchiveResponse) => {
         this.waiting = false;
         this.iFrame.setParentUrl('/app');
-        // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-        // this.router.navigate(['/embed', 'done']);
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
