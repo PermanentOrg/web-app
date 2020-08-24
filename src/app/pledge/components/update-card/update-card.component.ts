@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { PledgeData, UserData } from 'functions/src/models';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import 'firebase/functions';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { ActivatedRoute } from '@angular/router';
