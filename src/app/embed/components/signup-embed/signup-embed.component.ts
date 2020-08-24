@@ -63,10 +63,6 @@ export class SignupEmbedComponent implements OnInit {
   }
 
   ngOnInit() {
-    // const currentAccount = this.accountService.getAccount();
-    // if (currentAccount && currentAccount.primaryEmail) {
-    //   this.router.navigate(['../', 'done'], {queryParams: { existing: true, inviteCode: this.inviteCode }, relativeTo: this.route});
-    // }
   }
 
   onSubmit(formValue: any) {
@@ -78,11 +74,11 @@ export class SignupEmbedComponent implements OnInit {
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
-          this.router.navigate(['../', 'verify'], { relativeTo: this.route });
+          this.router.navigate(['..', 'verify'], { relativeTo: this.route });
         } else {
           this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
-            this.router.navigate(['../', 'done'], { relativeTo: this.route, queryParams: { inviteCode: this.inviteCode } });
+            this.router.navigate(['..', 'done'], { relativeTo: this.route, queryParams: { inviteCode: this.inviteCode } });
           });
         }
       })

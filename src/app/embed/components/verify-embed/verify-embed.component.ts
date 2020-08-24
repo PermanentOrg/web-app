@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -15,7 +15,13 @@ export class VerifyEmbedComponent implements OnInit {
   verifyForm: FormGroup;
   waiting: boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router, private message: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private message: MessageService,
+    private route: ActivatedRoute
+  ) {
     this.verifyForm = fb.group({
       'token': ['', Validators.required],
     });
@@ -33,7 +39,7 @@ export class VerifyEmbedComponent implements OnInit {
       })
       .then((response: ArchiveResponse) => {
         this.waiting = false;
-        this.router.navigate(['/embed', 'done']);
+        this.router.navigate(['..', 'done'], { relativeTo: this.route });
       })
       .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;

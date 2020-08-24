@@ -23,10 +23,10 @@
     </label>
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="waiting || loginForm.invalid">Log in</button>
-  <a [routerLink]="['/auth','signup']" queryParamsHandling="merge">
+  <a [routerLink]="['..','signup']" queryParamsHandling="merge">
     Need to sign up?
   </a>
-  <a [routerLink]="['/auth','forgot']" queryParamsHandling="merge">
+  <a [routerLink]="['..','forgot']" queryParamsHandling="merge">
     Forgot password?
   </a>
 </form>
