@@ -1,0 +1,28 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Archive Profile</span>
+    <button class="btn" (click)="close()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <div class="profile-section banner-section">
+        <div class="profile-banner" prBgImage
+          [bgSrc]="this.publicRoot?.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
+          [class.show-gradient]="!this.publicRoot?.thumbArchiveNbr">
+        </div>
+        <div class="profile-name-and-photo">
+          <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500">
+          </div>
+          <div class="profile-name">
+            <div>
+              The {{this.archive.fullName}} Archive
+              <div class="profile-type">{{this.archive.type | prConstants}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

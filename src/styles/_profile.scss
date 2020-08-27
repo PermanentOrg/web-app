@@ -1,0 +1,36 @@
+@mixin profileBanner($desktop-size: pxToGrid(220px), $mobile-size: pxToGrid(120px)) {
+  height: $desktop-size;
+  background-size: cover;
+  background-position: 50% 50%;
+  position: relative;
+
+  cursor: pointer;
+
+  &.show-gradient {
+    $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
+    @include gradient(to top left, $list);
+  }
+
+  @include beforeDesktop {
+    height: $mobile-size;
+  }
+}
+
+@mixin profilePhoto($desktop-size: pxToGrid(180px), $mobile-size: pxToGrid(60px)) {
+  height: $desktop-size;
+  width: $desktop-size;
+  background-size: cover;
+  background-position: 50% 50%;
+  position: relative;
+  margin-left: 2 * $grid-unit;
+  margin-bottom: -$desktop-size/2 + $grid-unit;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  @include beforeDesktop {
+    height: $mobile-size;
+    width: $mobile-size;
+    margin-left: $grid-unit / 2;
+    margin-bottom: -$mobile-size/2 + $grid-unit;
+  }
+}

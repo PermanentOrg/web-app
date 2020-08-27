@@ -7,6 +7,7 @@
       {{archive.type | prConstants}}
     </span>
     <div class="public-archive-cta" *ngIf="!cta || !isMobile">
+      <button class="btn btn-primary" (click)="showProfile()">Profile</button>
       <button class="btn btn-primary" (click)="onShareClick()">Share</button>
     </div>
     <div class="public-archive-cta" *ngIf="cta">
@@ -28,3 +29,4 @@
 <div class="public-archive-content">
   <router-outlet></router-outlet>
 </div>
+<pr-dialog-root></pr-dialog-root>

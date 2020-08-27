@@ -1,0 +1,83 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+$photo-desktop: pxToGrid(220px);
+$photo-mobile: pxToGrid(80px);
+
+.header {
+  @include tabbedDialogHeader($PR-blue-light);
+  button {
+    margin-left: -$grid-unit / 2;
+    margin-right: $grid-unit / 2;
+  }
+}
+
+.content {
+  @include tabbedDialogContent(500px);
+}
+
+.panel {
+  @include tabbedDialogPanel
+}
+
+.profile-banner {
+  @include profileBanner;
+}
+
+.profile-photo {
+  @include profilePhoto($photo-desktop, $photo-mobile);
+  transform: translateY(0);
+  margin-bottom: 0;
+
+  @include beforeDesktop {
+    margin-bottom: 0;
+  }
+}
+
+.profile-name-and-photo {
+  position: relative;
+  transform: translateY(-$photo-desktop / 2);
+  align-items: flex-start;
+  display: flex;
+
+  @include beforeDesktop {
+    transform: translateY(-$photo-mobile / 2);
+  }
+}
+
+.profile-name {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  margin-left: $grid-unit * 2;
+  margin-top: $photo-desktop / 2;
+  height: $photo-desktop / 2;
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+
+  .profile-type {
+    color: $text-muted;
+    font-size: $font-size-base;
+    font-weight: $font-weight-base;
+  }
+
+  @include beforeDesktop {
+    margin-top: $photo-mobile / 2 + $grid-unit / 2;
+    height: $photo-mobile / 2;
+    display: block;
+    margin-left: $grid-unit / 2;
+    margin-right: $grid-unit / 2;
+  }
+}
+
+.banner-section {
+  margin: -$grid-unit;
+
+  @include beforeDesktop {
+    margin: -$grid-unit / 2;
+  }
+}

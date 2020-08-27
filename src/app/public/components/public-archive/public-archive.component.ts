@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy, Optional } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { ArchiveVO } from '@models';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
@@ -15,6 +15,7 @@ import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { collapseAnimationCustom } from '@shared/animations';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-public-archive',
@@ -47,7 +48,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private device: DeviceService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private linkPipe: PublicLinkPipe
+    private linkPipe: PublicLinkPipe,
+    @Optional() private dialog: Dialog
   ) {
 
     this.checkArchive();
@@ -148,5 +150,15 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   onArchiveThumbClick() {
     this.router.navigate(['/p', 'archive', this.archive.archiveNbr]);
+  }
+
+  showProfile() {
+    if (this.dialog) {
+      try {
+        this.dialog.open('PublicProfileComponent', this.route.snapshot.data, { width: '1000px', height: 'fullscreen' });
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 }
