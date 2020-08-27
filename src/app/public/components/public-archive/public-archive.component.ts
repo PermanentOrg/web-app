@@ -73,6 +73,10 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         this.checkArchive();
       }
     });
+
+    if (this.route.snapshot.queryParamMap.has('profile')) {
+      this.showProfile();
+    }
   }
 
   checkArchive() {
@@ -155,7 +159,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   showProfile() {
     if (this.dialog) {
       try {
-        this.dialog.open('PublicProfileComponent', this.route.snapshot.data, { width: '1000px', height: 'fullscreen' });
+        this.dialog.open('PublicProfileComponent', this.route.snapshot.data, { width: '100%', height: 'fullscreen', menuClass: 'public-profile-dialog' });
       } catch (err) {
         console.error(err);
       }

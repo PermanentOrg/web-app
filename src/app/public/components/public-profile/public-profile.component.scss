@@ -7,6 +7,7 @@
 
 $photo-desktop: pxToGrid(220px);
 $photo-mobile: pxToGrid(80px);
+$profile-max-width: 1200px;
 
 .header {
   @include tabbedDialogHeader($PR-blue-light);
@@ -43,9 +44,12 @@ $photo-mobile: pxToGrid(80px);
   transform: translateY(-$photo-desktop / 2);
   align-items: flex-start;
   display: flex;
+  margin-bottom: -$photo-desktop / 2 + $grid-unit;
 
   @include beforeDesktop {
     transform: translateY(-$photo-mobile / 2);
+    margin-bottom: -$photo-mobile / 2 + $grid-unit;
+    display: block;
   }
 }
 
@@ -66,12 +70,16 @@ $photo-mobile: pxToGrid(80px);
   }
 
   @include beforeDesktop {
-    margin-top: $photo-mobile / 2 + $grid-unit / 2;
-    height: $photo-mobile / 2;
+    margin-top: $grid-unit / 2;
+    height: auto;
     display: block;
     margin-left: $grid-unit / 2;
     margin-right: $grid-unit / 2;
   }
+}
+
+.profile-section {
+  @include profileSection;
 }
 
 .banner-section {
@@ -79,5 +87,36 @@ $photo-mobile: pxToGrid(80px);
 
   @include beforeDesktop {
     margin: -$grid-unit / 2;
+  }
+}
+
+.profile-section-header {
+  @include profileSectionHeader;
+}
+
+.profile-group {
+  display: flex;
+  margin-bottom: 2 * $grid-unit;
+  flex-wrap: wrap;
+
+  &.in-thirds > * {
+    flex: 0 1 (100% * 1/3);
+    
+    &.profile-field:not(:nth-child(3n + 2)) {
+      padding-right: $grid-unit;
+    }
+  }
+}
+
+.profile-prompt {
+  @include profilePrompt;
+}
+
+.profile-field {
+  @include profileField;
+  margin-bottom: $grid-unit;
+
+  &:not(:last-child) {
+    margin-bottom: $grid-unit / 2;
   }
 }

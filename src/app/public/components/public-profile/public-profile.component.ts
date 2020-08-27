@@ -3,7 +3,8 @@ import { FolderVO, ArchiveVO } from '@models';
 import { ActivatedRoute } from '@angular/router';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { findRouteData } from '@shared/utilities/router';
-import { ProfileItemVOData } from '@models/profile-item-vo';
+import { ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
+import { ProfileItemsDataCol } from '@shared/services/profile/profile.service';
 
 @Component({
   selector: 'pr-public-profile',
@@ -12,8 +13,10 @@ import { ProfileItemVOData } from '@models/profile-item-vo';
 })
 export class PublicProfileComponent implements OnInit {
   publicRoot: FolderVO;
-  profileItems: ProfileItemVOData[];
   archive: ArchiveVO;
+
+  profileItems: ProfileItemVODictionary = {};
+
   constructor(
     private route: ActivatedRoute,
     @Inject(DIALOG_DATA) public data: any,
@@ -23,12 +26,39 @@ export class PublicProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.publicRoot = this.data.publicRoot;
-    this.profileItems = this.data.profileItems;
     this.archive = this.data.archive;
+
+    this.buildProfileItemDictionary(this.data.profileItems);
   }
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  buildProfileItemDictionary(items: ProfileItemVOData[]) {
+    this.profileItems = {};
+
+    for (const item of items) {
+      this.addProfileItemToDictionary(item);
+    }
+  }
+
+  addProfileItemToDictionary(item: ProfileItemVOData) {
+    const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
+
+    if (!this.profileItems[fieldNameUIShort]) {
+      this.profileItems[fieldNameUIShort] = [ item ];
+    } else {
+      this.profileItems[fieldNameUIShort].push(item);
+    }
+
+    if (item.textData1) {
+      item.textData1 = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
+    }
+  }
+
+  hasSingleValueFor(field: FieldNameUIShort, column: ProfileItemsDataCol) {
+    return this.profileItems[field]?.length && this.profileItems[field][0][column];
   }
 
 }
