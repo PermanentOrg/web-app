@@ -16,6 +16,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { collapseAnimationCustom } from '@shared/animations';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { ProfileItemVOData } from '@models/profile-item-vo';
 
 @Component({
   selector: 'pr-public-archive',
@@ -30,6 +31,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   public showFolderDescription = false;
   public archiveDescriptionHidden = false;
   public isMobile = this.device.isMobileWidth();
+  public hasProfile = false;
 
   public get cta() {
     return this.data.publicCta;
@@ -87,6 +89,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
       } else {
         this.description = null;
       }
+
+      this.hasProfile = this.route.snapshot.data['profileItems']?.length > 2;
     }
   }
 

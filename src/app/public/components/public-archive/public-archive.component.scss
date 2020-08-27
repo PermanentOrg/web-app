@@ -45,7 +45,8 @@
 
   .public-archive-cta {
     margin-left: $grid-unit / 2;
-    button {
+    display: flex;
+    .btn {
       margin: 0px;
       display: inline-block;
       width: auto;

@@ -7,7 +7,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
-import { remove, update, min } from 'lodash';
+import { remove, update, min, orderBy } from 'lodash';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -64,7 +64,8 @@ const CHECKLIST: ProfileProgressChecklist = {
 
 export const ALWAYS_PUBLIC: FieldNameUI[] = [
   'profile.basic',
-  'profile.description'
+  'profile.description',
+  'profile.timezone'
 ];
 
 @Injectable()
@@ -113,6 +114,11 @@ export class ProfileService {
 
     // create stubs for the rest of the profile items so at least one exists for given profile item type
     this.stubEmptyProfileItems();
+
+    // order things by start date that have a start date
+    this.orderItems('home');
+    this.orderItems('location');
+    this.orderItems('job');
   }
 
   getProfileItemDictionary() {
@@ -278,6 +284,13 @@ export class ProfileService {
 
     return true;
   }
+
+  orderItems(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
+    if (this.profileItemDictionary[field]?.length > 1) {
+      this.profileItemDictionary[field] = orderBy(this.profileItemDictionary[field], column);
+    }
+  }
+
 
   calculateProfileProgress(): number {
     let totalEntries = 0;

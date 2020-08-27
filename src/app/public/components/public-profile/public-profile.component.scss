@@ -138,13 +138,14 @@ $profile-sidebar-width: pxToGrid(360px);
   
   pr-static-map {
     min-height: pxToGrid(260px);
+    margin-top: pxToGrid(4px);
   }
 }
 
 .profile-sidebar {
-  width: $profile-sidebar-width;
 
   @include desktop {
+    width: $profile-sidebar-width;
     position: absolute;
     right: $grid-unit * 2;
     top: $photo-desktop * 1.5 + $grid-unit;
