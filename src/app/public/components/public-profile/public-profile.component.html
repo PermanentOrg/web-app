@@ -12,103 +12,77 @@
           [bgSrc]="this.publicRoot?.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
           [class.show-gradient]="!this.publicRoot?.thumbArchiveNbr">
         </div>
-        <div class="profile-name-and-photo">
-          <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500">
-          </div>
-          <div class="profile-name">
-            <div>
-              The {{this.archive.fullName}} Archive
-              <div class="profile-type">{{this.archive.type | prConstants}}</div>
-            </div>
-          </div>
+        <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500">
         </div>
       </div>
-      <div class="profile-section" *ngIf="hasSingleValueFor('blurb', 'string1')">
-        <div class="profile-prompt">
-          What is this Archive for?
+      <div class="profile-about">
+        <div class="profile-name">
+          The {{this.archive.fullName}} Archive
         </div>
-        <div class="profile-field">
+        <div class="profile-blurb" *ngIf="hasSingleValueFor('blurb', 'string1')">
           {{ this.profileItems.blurb[0].string1 }}
         </div>
-      </div>
-      <div class="profile-section" *ngIf="hasSingleValueFor('description', 'textData1')">
-        <div class="profile-prompt">
-          Tell us about this {{this.archive.type | prConstants | titlecase}}
-        </div>
-        <div class="profile-field" [innerHTML]="this.profileItems.description[0].textData1">
+        <div class="profile-description" *ngIf="hasSingleValueFor('description', 'textData1')"  [innerHTML]="this.profileItems.description[0].textData1">
         </div>
       </div>
-      <div class="profile-section-header">
-        {{this.archive.type | prConstants | titlecase}} Information
-      </div>
-      <div class="profile-section">
-        <div class="profile-group in-thirds">
-          <div class="profile-field" *ngIf="hasSingleValueFor('basic', 'string2')">
-            <ng-container [ngSwitch]="archive.type">
-              <label *ngSwitchCase="'type.archive.family'">This Family's Nickname</label>
-              <label *ngSwitchCase="'type.archive.organization'">This Organization's Legal Name</label>
-              <label *ngSwitchCase="'type.archive.nonprofit'">This Non-Profit's Legal Name</label>
-              <label *ngSwitchDefault>This Person's Full Name</label>
-            </ng-container>
-            <div>{{profileItems.basic[0]?.string2}}</div>
-          </div>
-          <div class="profile-field" *ngIf="hasSingleValueFor('basic', 'string3')">
-            <ng-container [ngSwitch]="archive.type">
-              <label *ngSwitchCase="'type.archive.family'">Previous Name</label>
-              <label *ngSwitchCase="'type.archive.organization'">DBA Name</label>
-              <label *ngSwitchCase="'type.archive.nonprofit'">DBA Name</label>
-              <label *ngSwitchDefault>Also known as...</label>
-            </ng-container>
-            <div>{{profileItems.basic[0]?.string3}}</div>
-          </div>
-          <div class="profile-field" *ngIf="archive.type === 'type.archive.person' && hasSingleValueFor('gender', 'string1')">
-            <label>Gender</label>
-            <div>{{profileItems.gender[0]?.string1}}</div>
-          </div>
+      <div class="profile-sidebar">
+        <div class="sidebar-title">{{this.archive.type | prConstants | titlecase}} Information</div>
+        <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('basic', 'string2')">
+          <ng-container [ngSwitch]="archive.type">
+            <label *ngSwitchCase="'type.archive.family'">Nickname</label>
+            <label *ngSwitchCase="'type.archive.organization'">Legal Name</label>
+            <label *ngSwitchCase="'type.archive.nonprofit'">Legal Name</label>
+            <label *ngSwitchDefault>Full Name</label>
+          </ng-container>
+          <span>{{profileItems.basic[0]?.string2}}</span>
+        </div>
+        <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('gender', 'string2')">
+          <label>Gender</label>
+          <span>{{profileItems.gender[0]?.string1}}</span>
+        </div>
         <ng-container [ngSwitch]="archive.type">
           <ng-container *ngSwitchCase="'type.archive.person'">
-              <div class="profile-field" *ngIf="hasSingleValueFor('birth_info', 'day1')">
-                <label>Date of Birth</label>
-                <div>{{profileItems.birth_info[0]?.day1 | date }}</div>
-              </div>
-              <div class="profile-field" *ngIf="hasSingleValueFor('birth_info', 'locnId1')">
-                <label>Place of Birth</label>
-                <div>{{(profileItems.birth_info[0].LocnVOs[0] | prLocation).full}}</div>
-              </div>
+            <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('birth_info', 'day1')">
+              <label>Birth Date</label>
+              <span>{{profileItems.birth_info[0]?.day1}}</span>
+            </div>
           </ng-container>
           <ng-container *ngSwitchDefault>
-              <div class="profile-field" *ngIf="hasSingleValueFor('established_info', 'day1')">
-                <label>Date Established</label>
-                <div>{{profileItems.established_info[0]?.day1 | date }}</div>
-              </div>
-              <div class="profile-field" *ngIf="hasSingleValueFor('established_info', 'locnId1')">
-                <label>Location Established</label>
-                <div>{{(profileItems.established_info[0].LocnVOs[0] | prLocation).full}}</div>
-              </div>
-              <div></div>
+            <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('established_info', 'day1')">
+              <label>Date Established</label>
+              <span>{{profileItems.established_info[0]?.day1}}</span>
+            </div>
           </ng-container>
         </ng-container>
-        </div>
-      </div>
-      <ng-container *ngIf="profileItems.email?.length || profileItems.social_media?.length">
-        <div class="profile-section-header">
-          Online Presence
-        </div>
-        <div class="profile-section">
-          <div class="profile-field" *ngIf="profileItems.email?.length">
-            <label>Email Address(es)</label>
+        <ng-container [ngSwitch]="archive.type">
+          <ng-container *ngSwitchCase="'type.archive.person'">
+            <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('birth_info', 'locnId1')">
+              <label>Birth Location</label>
+              <span>{{(profileItems.birth_info[0].LocnVOs[0] | prLocation).full}}</span>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('established_info', 'locnId1')">
+              <label>Location Established</label>
+              <span>{{(profileItems.established_info[0].LocnVOs[0] | prLocation).full}}</span>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="profileItems.email?.length || profileItems.social_media?.length">
+          <hr>
+          <div class="sidebar-list-item">
+            <label>Online Presence</label>
             <div *ngFor="let item of profileItems.email">
               {{item.string1}}
             </div>
-          </div>
-          <div class="profile-field" *ngIf="profileItems.social_media?.length">
-            <label>Social Media</label>
             <div *ngFor="let item of profileItems.social_media">
-              <a [href]="item.string1 | link" target="_blank">{{item.string1}}</a>
+              <a [href]="item.string1 | link" target="_blank">
+                {{item.string1}}
+              </a>
             </div>
           </div>
-        </div>
-      </ng-container>
+        </ng-container>
+      </div>
       <ng-container *ngIf="profileItems.home?.length || profileItems.location?.length">
         <div class="profile-section-header" prScrollSection="residence" [ngSwitch]="archive.type">
           <ng-container *ngSwitchCase="'type.archive.person'">
