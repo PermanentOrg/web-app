@@ -78,6 +78,11 @@
         margin-right: $grid-unit / 2;
       }
 
+      label {
+        margin: 0;
+        cursor: pointer;
+      }
+
       span {
         display: block;
         font-size: $font-size-xs;

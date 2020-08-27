@@ -40,18 +40,22 @@
           <div class="profile-visibility">
             <div>Profile Visibility</div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="true" (ngModelChange)="onProfilePublicChange($event)">
-              <div>
+              <input type="radio" [(ngModel)]="isPublic" [value]="true"
+                (ngModelChange)="onProfilePublicChange($event)"
+                id="profile-public-toggle">
+              <label for="profile-public-toggle">
                 <div>Public</div>
                 <span>Anyone can see the page</span>
-              </div>
+              </label>
             </div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="false" (ngModelChange)="onProfilePublicChange($event)">
-              <div>
+              <input type="radio" [(ngModel)]="isPublic" [value]="false"
+                (ngModelChange)="onProfilePublicChange($event)"
+                id="profile-private-toggle">
+              <label for="profile-private-toggle">
                 <div>Private</div>
                 <span>Only contributors can see the page</span>
-              </div>
+              </label>
             </div>
           </div>
           <div class="buttons">
@@ -59,7 +63,7 @@
               [routerLink]="['/p', 'archive', this.archive.archiveNbr, 'profile']"
               [class.disabled]="!isPublic"
               >View On Web</a>
-            <button class="btn btn-primary" [disabled]="!isPublic">Share Profile</button>
+            <button class="btn btn-primary" [disabled]="!isPublic" (click)="onShareClick()">Share Profile</button>
           </div>
         </div>
         <div class="panel-header-bottom-row">

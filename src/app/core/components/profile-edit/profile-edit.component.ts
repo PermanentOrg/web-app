@@ -12,11 +12,12 @@ import { EditService } from '@core/services/edit/edit.service';
 import { ProfileService, ProfileItemsDataCol, ALWAYS_PUBLIC } from '@shared/services/profile/profile.service';
 import { collapseAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import debug from 'debug';
-import { PromptService } from '@shared/services/prompt/prompt.service';
+import { PromptService, READ_ONLY_FIELD } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { some } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
+import { copyFromInputElement } from '@shared/utilities/forms';
 
 @Component({
   selector: 'pr-profile-edit',
@@ -208,6 +209,24 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     } catch (err) { }
     finally {
       this.updateProgress();
+    }
+  }
+
+  async onShareClick() {
+    const url = `https://${location.host}/p/archive/${this.archive.archiveNbr}/profile`;
+    const fields = [
+      READ_ONLY_FIELD('profileLink', 'Profile link', url)
+    ];
+
+    const deferred = new Deferred();
+
+    try {
+      await this.prompt.prompt(fields, 'Share profile link', deferred.promise, 'Copy link');
+      const input = this.prompt.getInput('profileLink');
+      copyFromInputElement(input);
+      deferred.resolve();
+    } catch (err) {
+      console.error(err);
     }
   }
 }
