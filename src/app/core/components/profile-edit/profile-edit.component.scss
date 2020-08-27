@@ -40,7 +40,7 @@
     margin-left: auto;
   }
 
-  button {
+  .btn {
     @include gridHeightButton;
     justify-content: center;
     width: 8 * $grid-unit;

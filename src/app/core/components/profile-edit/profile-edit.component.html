@@ -285,6 +285,7 @@
                 </div>
                 <div class="profile-field" [ngSwitch]="archive.type">
                   <label *ngSwitchCase="'type.archive.person'">Move In Date</label>
+                  <label *ngSwitchCase="'type.archive.family'">Date Arrived</label>
                   <label *ngSwitchDefault>Date Opened</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day1"
@@ -296,8 +297,8 @@
                 </div>
                 <div class="profile-field" [ngSwitch]="archive.type">
                   <label *ngSwitchCase="'type.archive.person'">Move Out Date</label>
-                  <label *ngSwitchCase="'type.archive.organization'">Date Closed</label>
-                  <label *ngSwitchDefault>Date Left</label>
+                  <label *ngSwitchCase="'type.archive.family'">Date Left</label>
+                  <label *ngSwitchDefault>Date Closed</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day2"
                   [dateOnly]="true"
