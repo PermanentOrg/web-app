@@ -12,7 +12,7 @@ $photo-desktop: pxToGrid(220px);
 $photo-mobile: pxToGrid(80px);
 $profile-max-width: 1200px;
 
-$profile-sidebar-width: pxToGrid(400px);
+$profile-sidebar-width: pxToGrid(360px);
 
 .header {
   @include tabbedDialogHeader($PR-blue-light);
@@ -103,7 +103,15 @@ $profile-sidebar-width: pxToGrid(400px);
   &.in-thirds > * {
     flex: 0 1 (100% * 1/3);
     
-    &.profile-field:not(:nth-child(3n + 2)) {
+    &.profile-field:not(:nth-child(3n - 1)) {
+      padding-right: $grid-unit;
+    }
+  }
+
+  &.in-half > * {
+    flex: 0 1 50%;
+    
+    &.profile-field:not(:nth-child(even)) {
       padding-right: $grid-unit;
     }
   }
@@ -119,6 +127,10 @@ $profile-sidebar-width: pxToGrid(400px);
 
   &:not(:last-child) {
     margin-bottom: $grid-unit / 2;
+  }
+  
+  pr-static-map {
+    height: pxToGrid(260px);
   }
 }
 

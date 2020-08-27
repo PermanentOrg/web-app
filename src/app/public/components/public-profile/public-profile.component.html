@@ -95,29 +95,43 @@
       </ng-container>
       <div class="profile-section">
         <div class="profile-repeat-entry" *ngFor="let profileItem of (archive.type === 'type.archive.person' ? profileItems.home : profileItems.location)">
-          <div class="profile-group in-thirds">
+          <div class="profile-group in-half">
             <div class="profile-field" *ngIf="profileItem.LocnVOs?.length">
-              <label>Location</label>
-              <div>
-                {{(profileItem.LocnVOs[0] | prLocation).full}}
-              </div>
+              <label>{{(profileItem.LocnVOs[0] | prLocation).full}}</label>
+                <pr-static-map [location]="profileItem.LocnVOs[0]"></pr-static-map>
             </div>
-            <div class="profile-field" *ngIf="profileItem.day1">
-              <label>Move In Date</label>
-              <div>
-                {{ profileItem.day1 | date }}
+            <div class="profile-group in-half" *ngIf="profileItem.day1 || profileItem.day2 || profileItem.string2">
+              <div class="profile-field">
+                <label [ngSwitch]="archive.type">
+                  <ng-container *ngSwitchCase="'type.archive.person'">
+                    Move In Date
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    Start Date
+                  </ng-container>
+                </label>
+                <div>
+                  {{ profileItem.day1 | date }}
+                </div>
               </div>
-            </div>
-            <div class="profile-field" *ngIf="profileItem.day2">
-              <label>Move Out Date</label>
-              <div>
-                {{ profileItem.day2 | date }}
+              <div class="profile-field" *ngIf="profileItem.day2">
+                <label [ngSwitch]="archive.type">
+                  <ng-container *ngSwitchCase="'type.archive.person'">
+                    Move Out Date
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    End Date
+                  </ng-container>
+                </label>
+                <div>
+                  {{ profileItem.day2 | date }}
+                </div>
               </div>
-            </div>
-            <div class="profile-field" *ngIf="profileItem.string2">
-              <label>Phone Number</label>
-              <div>
-                {{ profileItem.string2 | date }}
+              <div class="profile-field" *ngIf="profileItem.string2">
+                <label>Residence Phone Number</label>
+                <div>
+                  {{ profileItem.string2 | date }}
+                </div>
               </div>
             </div>
           </div>
