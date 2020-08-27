@@ -3,6 +3,9 @@
 :host {
   display: block;
   width: 100%;
+
+
+
 }
 
 $photo-desktop: pxToGrid(220px);
@@ -18,7 +21,9 @@ $profile-max-width: 1200px;
 }
 
 .content {
-  @include tabbedDialogContent(500px);
+  :host.is-dialog & {
+    @include tabbedDialogContent(700px);
+  }
 }
 
 .panel {

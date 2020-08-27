@@ -54,8 +54,11 @@
               </div>
             </div>
           </div>
-          <div class="buttons" hidden>
-            <button class="btn btn-alternate">View On Web</button>
+          <div class="buttons">
+            <a class="btn btn-alternate"
+              [routerLink]="['/p', 'archive', this.archive.archiveNbr]"
+              [queryParams]="{profile: null}"
+              >View On Web</a>
             <button class="btn btn-primary">Share Profile</button>
           </div>
         </div>
