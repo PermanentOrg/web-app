@@ -44,13 +44,13 @@
           <ng-container *ngSwitchCase="'type.archive.person'">
             <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('birth_info', 'day1')">
               <label>Birth Date</label>
-              <span>{{profileItems.birth_info[0]?.day1}}</span>
+              <span>{{profileItems.birth_info[0]?.day1 | date}}</span>
             </div>
           </ng-container>
           <ng-container *ngSwitchDefault>
             <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('established_info', 'day1')">
               <label>Date Established</label>
-              <span>{{profileItems.established_info[0]?.day1}}</span>
+              <span>{{profileItems.established_info[0]?.day1 | date }}</span>
             </div>
           </ng-container>
         </ng-container>
