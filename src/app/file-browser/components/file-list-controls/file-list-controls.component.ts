@@ -127,28 +127,29 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     this.isPublic = this.data.currentFolder.type.includes('public');
     this.setAllActions(false);
 
+    const isSingleItem = this.selectedItems.length === 1;
+    const isSingleRecord = isSingleItem && this.selectedItems[0] instanceof RecordVO;
+
     if (!this.selectedItems.length || !this.edit) {
       return this.setAllActions(false);
     }
 
-    if (!this.account.checkMinimumArchiveAccess(AccessRole.Curator)) {
-      return this.can.download = true;
+    if (isSingleRecord) {
+      this.can.download = true;
     }
 
-    const isSingleItem = this.selectedItems.length === 1;
-    const isSingleRecord = isSingleItem && this.selectedItems[0] instanceof RecordVO;
+    if (!this.account.checkMinimumArchiveAccess(AccessRole.Curator)) {
+      return;
+    }
+
     const minimumAccess = min(this.selectedItems.map(i => getAccessAsEnum(i.accessRole)));
 
     switch (minimumAccess) {
       case AccessRole.Viewer:
       case AccessRole.Editor:
       case AccessRole.Contributor:
-        if (this.isShareRoot) {
-          if (isSingleRecord) {
-            return this.setMultipleActions(['unshare', 'download'], true);
-          } else if (isSingleItem) {
-            return this.can.unshare = true;
-          }
+        if (this.isShareRoot && isSingleItem) {
+          return this.can.unshare = true;
         }
         return;
       case AccessRole.Curator:
@@ -159,20 +160,15 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
         }
       case AccessRole.Owner:
         if (this.isShareRoot && isSingleItem) {
-          return this.setMultipleActions(['unshare', 'copy', 'move', 'download'], true);
+          return this.setMultipleActions(['unshare', 'copy', 'move'], true);
         } else if (isSingleItem) {
           if (!this.isPublic) {
-            this.setAllActions(true);
+            return this.setMultipleActions(['delete', 'copy', 'move', 'share', 'publish'], true);
           } else {
-            this.setMultipleActions(['delete', 'copy', 'move',  'publish', 'download'], true);
+            return this.setMultipleActions(['delete', 'copy', 'move', 'publish'], true);
           }
-
-          if (!isSingleRecord) {
-            this.can.download = false;
-          }
-          return;
         } else {
-          return this.setMultipleActions(['delete', 'copy', 'move', 'download'], true);
+          return this.setMultipleActions(['delete', 'copy', 'move'], true);
         }
     }
   }

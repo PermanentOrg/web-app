@@ -200,7 +200,7 @@ pr-folder-view-toggle {
       font-size: $mat-icon-sm;
     }
 
-    @include until(1000px) {
+    @include until(1100px) {
       font-size: $font-size-sm;
       &:not(:last-child) {
         margin-right: $grid-unit / 4;
@@ -212,7 +212,7 @@ pr-folder-view-toggle {
       }
     }
 
-    @include until (1100px) {
+    @include until (1200px) {
       &:not(:last-child) {
         margin-right: $grid-unit / 2;
       }
