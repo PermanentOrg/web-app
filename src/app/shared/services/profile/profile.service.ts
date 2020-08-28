@@ -230,17 +230,15 @@ export class ProfileService {
   }
 
   async saveProfileItem(item: ProfileItemVOData, valueWhitelist?: (keyof ProfileItemVOData)[]) {
-    let updateItem = item;
+    const updateItem = item;
     if (valueWhitelist) {
-      updateItem = {
-        profile_itemId: item.profile_itemId
-      };
+      const minWhitelist: (keyof ProfileItemVOData)[] = ['profile_itemId', 'fieldNameUI', 'archiveId'];
 
-      for (const value of valueWhitelist) {
+      for (const value of minWhitelist.concat(...valueWhitelist)) {
         (updateItem as any)[value] = item[value];
       }
     }
-    const response = await this.api.archive.addUpdateProfileItems([item]);
+    const response = await this.api.archive.addUpdateProfileItems([updateItem]);
 
     const updated = response.getProfileItemVOs()[0];
     item.updatedDT = updated.updatedDT;
