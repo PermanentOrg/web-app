@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class LinkPipe implements PipeTransform {
 
   transform(text: any, ...args: any[]): any {
-    if (!text || !text.length || text.includes('http')) {
+    if (!text || !text.length || text.indexOf('http') === 0) {
       return text;
     }
 
