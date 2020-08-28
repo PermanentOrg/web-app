@@ -5,6 +5,29 @@
   @include mainContentScrollDesktop;
 }
 
+.banner {
+  @include tabbedDialogPanelBanner;
+  background-image: url('^assets/svg/apps-banner.svg');
+  background-position: 50% 50%;
+  background-size: cover;
+  padding-top: $grid-unit;
+  padding-right: 50%;
+  height: 12rem;
+
+  .banner-heading {
+    font-size: $font-size-lg;
+  }
+
+  @include beforeDesktop {
+    background-position: 24% 30%;
+    padding-right: $grid-unit;
+    padding-bottom: $grid-unit * 3;
+    .banner-text {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
 .connectors {
   pr-connector {
     margin-bottom: $grid-unit * 2;
@@ -19,7 +42,7 @@
     flex-wrap: wrap;
 
     pr-connector {
-      @include flexGridWithGutter;
+      @include flexGridWithGutter(3);
     }
   }
 }
