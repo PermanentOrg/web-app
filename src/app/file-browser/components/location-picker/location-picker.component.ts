@@ -59,7 +59,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
     @Optional() private dialogRef: DialogRef,
     private api: ApiService,
-    private profile: ProfileService,
+    @Optional() private profile: ProfileService,
     private locationPipe: PrLocationPipe,
     private zone: NgZone,
     private message: MessageService,
