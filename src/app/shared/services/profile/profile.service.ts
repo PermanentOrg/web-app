@@ -7,7 +7,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
-import { remove, update, min, orderBy } from 'lodash';
+import { remove, orderBy, some } from 'lodash';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -223,6 +223,7 @@ export class ProfileService {
       const updated = response.getProfileItemVOs();
       updated.forEach((item, i) => {
         allItems[i].updatedDT = item.updatedDT;
+        allItems[i].publicDT = item.publicDT;
       });
     } catch (err) {
       allItems.forEach((item, i) => {
@@ -231,6 +232,18 @@ export class ProfileService {
 
       throw err;
     }
+  }
+
+  checkProfilePublic() {
+    const allItems = this.getProfileItemsAsArray();
+    const nonDefaultItems = allItems.filter(i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId);
+    if (!nonDefaultItems.length) {
+      return true;
+    }
+
+    const isPublic = some(nonDefaultItems, 'publicDT');
+
+    return isPublic;
   }
 
   async saveProfileItem(item: ProfileItemVOData, valueWhitelist?: (keyof ProfileItemVOData)[]) {
@@ -243,10 +256,10 @@ export class ProfileService {
       }
     }
 
-    if (!updateItem.profile_itemId && ALWAYS_PUBLIC.includes(updateItem.fieldNameUI)) {
+    if (!updateItem.profile_itemId && (ALWAYS_PUBLIC.includes(updateItem.fieldNameUI) || this.checkProfilePublic())) {
       updateItem.publicDT = new Date().toISOString();
     }
-    
+
     const response = await this.api.archive.addUpdateProfileItems([updateItem]);
 
     const updated = response.getProfileItemVOs()[0];
