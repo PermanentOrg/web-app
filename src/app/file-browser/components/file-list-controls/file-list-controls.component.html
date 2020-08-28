@@ -30,10 +30,11 @@
       <i class="material-icons">public</i>
       <span>Publish</span>
     </div>
-    <!-- <div class="file-list-control" [class.disabled]="!can.download">
-      <i class="ion-md-cloud-download"></i>
+    <div class="file-list-control" [class.disabled]="!can.download" (click)="onDownloadClick()"
+    [ngbTooltip]="getTooltipConstantForAction('download') | prTooltip">
+      <i class="material-icons">cloud_download</i>
       <span>Download</span>
-    </div> -->
+    </div>
   </div>
   <pr-folder-view-toggle></pr-folder-view-toggle>
 </div>
