@@ -38,7 +38,7 @@ export class PublicProfileComponent implements OnInit {
     this.archive = data.archive;
     this.buildProfileItemDictionary(data.profileItems);
 
-    const hasPublicItems = some(data.profileItems, i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.publicDT);
+    const hasPublicItems = some(data.profileItems as ProfileItemVOData[], i => i.publicDT && i.fieldNameUI !== 'profile.basic');
 
     if (!hasPublicItems) {
       this.router.navigate(['..'], { relativeTo: this.route });

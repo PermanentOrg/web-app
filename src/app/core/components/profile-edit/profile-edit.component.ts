@@ -110,7 +110,12 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   checkProfilePublic() {
     const allItems = this.profile.getProfileItemsAsArray();
-    this.isPublic = some(allItems, i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.publicDT);
+    const nonDefaultItems = allItems.filter(i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId);
+    if (!nonDefaultItems.length) {
+      return true;
+    }
+
+    this.isPublic = some(nonDefaultItems, 'publicDT');
   }
 
   async onProfilePictureClick() {

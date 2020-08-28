@@ -214,6 +214,10 @@ export class ProfileService {
       return minItem;
     });
 
+    if (!minItems.length) {
+      return;
+    }
+
     try {
       const response = await this.api.archive.addUpdateProfileItems(minItems);
       const updated = response.getProfileItemVOs();
@@ -238,6 +242,11 @@ export class ProfileService {
         (updateItem as any)[value] = item[value];
       }
     }
+
+    if (!updateItem.profile_itemId && ALWAYS_PUBLIC.includes(updateItem.fieldNameUI)) {
+      updateItem.publicDT = new Date().toISOString();
+    }
+    
     const response = await this.api.archive.addUpdateProfileItems([updateItem]);
 
     const updated = response.getProfileItemVOs()[0];
