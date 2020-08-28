@@ -15,6 +15,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { PromptService, PromptButton } from '@shared/services/prompt/prompt.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { ConnectorType } from '@models/connector-overview-vo';
 
 export enum ConnectorImportType {
   Everything,
@@ -73,6 +74,15 @@ export class ConnectorComponent implements OnInit {
 
   setStatus() {
     this.connected = this.connector.status === 'status.connector.connected';
+  }
+
+  getConnectorClass(type: ConnectorType) {
+    switch (type) {
+      case 'type.connector.facebook':
+        return 'connector-facebook';
+      case 'type.connector.familysearch':
+        return 'connector-familysearch';
+    }
   }
 
   async familysearchUploadRequest() {

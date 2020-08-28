@@ -1,5 +1,7 @@
 import { BaseVO } from '@models/base-vo';
 
+export type ConnectorType = 'type.connector.facebook' | 'type.connector.familysearch';
+
 export interface ConnectorOverviewVOData {
   connector_overviewId?: number;
   archiveId?: number;
@@ -9,7 +11,7 @@ export interface ConnectorOverviewVOData {
   currentState?: any;
   checkpointDT?: string;
   errorCount?: any;
-  type?: 'type.connector.facebook' | 'type.connector.familysearch';
+  type?: ConnectorType;
   status?: 'status.connector.not_setup' | 'status.connector.connected';
 
   ConnectorFamilysearchVO?: any;
@@ -24,7 +26,7 @@ export class ConnectorOverviewVO extends BaseVO {
   public currentState;
   public checkpointDT;
   public errorCount;
-  public type;
+  public type: ConnectorType;
   public status;
 
   public ConnectorFamilysearchVO;

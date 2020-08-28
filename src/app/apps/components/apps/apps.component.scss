@@ -4,3 +4,22 @@
   display: block;
   @include mainContentScrollDesktop;
 }
+
+.connectors {
+  pr-connector {
+    margin-bottom: $grid-unit * 2;
+  }
+
+  @include beforeDesktop {
+    padding: $grid-unit;
+  }
+
+  @include desktop {
+    display: flex;
+    flex-wrap: wrap;
+
+    pr-connector {
+      @include flexGridWithGutter;
+    }
+  }
+}

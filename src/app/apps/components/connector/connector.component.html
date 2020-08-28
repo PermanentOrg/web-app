@@ -1,12 +1,15 @@
-<div class="connector-info" (click)="goToFolder()">
-  <div prBgImage [bgSrc]="folder.thumbURL200" *ngIf="folder"></div>
-  <div prBgImage bgSrc="assets/img/familysearch/tree_logo.png" *ngIf="!folder && connector.type.includes('familysearch')"></div>
-  <div prBgImage bgSrc="assets/img/facebook/f_logo.png" *ngIf="!folder && connector.type.includes('facebook')"></div>
-  <div class="name">
-    {{connectorName}} <em *ngIf="connector.type.includes('familysearch')">(Beta)</em>
+<div class="connector-about">
+  <div class="connector-logo" [ngClass]="getConnectorClass(connector.type)">
+    <div class="logo-img"></div>
   </div>
-  <div class="view-files" *ngIf="hasFiles">
-    View Files
+  <div class="connector-info" (click)="goToFolder()">
+    <div class="name">
+      {{connector.type | prConstants}}
+    </div>
+    <div class="blurb" [ngSwitch]="connector.type">
+      <ng-container *ngSwitchCase="'type.connector.familysearch'">Connect your family memories</ng-container>
+      <ng-container *ngSwitchCase="'type.connector.facebook'">Import your photo albums</ng-container>
+    </div>
   </div>
 </div>
 <div class="connector-actions">
