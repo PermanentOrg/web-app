@@ -7,7 +7,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
-import { remove, update, min } from 'lodash';
+import { remove, orderBy, some } from 'lodash';
 
 type ProfileItemsStringDataCol =
 'string1' |
@@ -64,7 +64,8 @@ const CHECKLIST: ProfileProgressChecklist = {
 
 export const ALWAYS_PUBLIC: FieldNameUI[] = [
   'profile.basic',
-  'profile.description'
+  'profile.description',
+  'profile.timezone'
 ];
 
 @Injectable()
@@ -113,6 +114,11 @@ export class ProfileService {
 
     // create stubs for the rest of the profile items so at least one exists for given profile item type
     this.stubEmptyProfileItems();
+
+    // order things by start date that have a start date
+    this.orderItems('home');
+    this.orderItems('location');
+    this.orderItems('job');
   }
 
   getProfileItemDictionary() {
@@ -208,11 +214,16 @@ export class ProfileService {
       return minItem;
     });
 
+    if (!minItems.length) {
+      return;
+    }
+
     try {
       const response = await this.api.archive.addUpdateProfileItems(minItems);
       const updated = response.getProfileItemVOs();
       updated.forEach((item, i) => {
         allItems[i].updatedDT = item.updatedDT;
+        allItems[i].publicDT = item.publicDT;
       });
     } catch (err) {
       allItems.forEach((item, i) => {
@@ -223,18 +234,33 @@ export class ProfileService {
     }
   }
 
-  async saveProfileItem(item: ProfileItemVOData, valueWhitelist?: (keyof ProfileItemVOData)[]) {
-    let updateItem = item;
-    if (valueWhitelist) {
-      updateItem = {
-        profile_itemId: item.profile_itemId
-      };
+  checkProfilePublic() {
+    const allItems = this.getProfileItemsAsArray();
+    const nonDefaultItems = allItems.filter(i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId);
+    if (!nonDefaultItems.length) {
+      return true;
+    }
 
-      for (const value of valueWhitelist) {
+    const isPublic = some(nonDefaultItems, 'publicDT');
+
+    return isPublic;
+  }
+
+  async saveProfileItem(item: ProfileItemVOData, valueWhitelist?: (keyof ProfileItemVOData)[]) {
+    const updateItem = item;
+    if (valueWhitelist) {
+      const minWhitelist: (keyof ProfileItemVOData)[] = ['profile_itemId', 'fieldNameUI', 'archiveId'];
+
+      for (const value of minWhitelist.concat(...valueWhitelist)) {
         (updateItem as any)[value] = item[value];
       }
     }
-    const response = await this.api.archive.addUpdateProfileItems([item]);
+
+    if (!updateItem.profile_itemId && (ALWAYS_PUBLIC.includes(updateItem.fieldNameUI) || this.checkProfilePublic())) {
+      updateItem.publicDT = new Date().toISOString();
+    }
+
+    const response = await this.api.archive.addUpdateProfileItems([updateItem]);
 
     const updated = response.getProfileItemVOs()[0];
     item.updatedDT = updated.updatedDT;
@@ -278,6 +304,13 @@ export class ProfileService {
 
     return true;
   }
+
+  orderItems(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
+    if (this.profileItemDictionary[field]?.length > 1) {
+      this.profileItemDictionary[field] = orderBy(this.profileItemDictionary[field], column);
+    }
+  }
+
 
   calculateProfileProgress(): number {
     let totalEntries = 0;

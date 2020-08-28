@@ -44,9 +44,15 @@
   }
 
   .public-archive-cta {
-    margin-left: 10px;
-    button {
+    margin-left: $grid-unit / 2;
+    display: flex;
+    .btn {
       margin: 0px;
+      display: inline-block;
+      width: auto;
+      &:not(:last-child) {
+        margin-right: $grid-unit / 2;
+      }
     }
   }
 

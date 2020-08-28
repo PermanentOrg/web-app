@@ -61,7 +61,7 @@
                 <div class="form-check-label">{{typeOption.text}}</div>
               </div>
             </div>
-            <div class="dialog-form-field">
+            <div class="dialog-form-field" *ngIf="newArchiveForm.value.type === 'type.archive.person'">
               <label for="relation">Connection</label>
               <select name="relation" class="form-control" formControlName="relationType">
                 <option value="" disabled selected>Choose connection (optional)</option>

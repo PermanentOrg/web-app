@@ -23,7 +23,8 @@ export type DialogComponentToken =
   'MembersDialogComponent' |
   'InvitationsDialogComponent' |
   'MyArchivesDialogComponent' |
-  'ProfileEditFirstTimeDialogComponent'
+  'ProfileEditFirstTimeDialogComponent' |
+  'PublicProfileComponent'
   ;
 
 export interface DialogChildComponentData {

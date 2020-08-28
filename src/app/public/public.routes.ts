@@ -10,13 +10,12 @@ import { PublicArchiveComponent } from './components/public-archive/public-archi
 import { PublicArchiveResolveService } from './resolves/public-archive-resolve.service';
 import { PublicRootResolveService } from './resolves/public-root-resolve.service';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
-
-const archiveResolve = {
-  archive: PublishArchiveResolveService
-};
+import { PublicProfileItemsResolveService } from './resolves/public-profile-items-resolve.service';
+import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
+  profileItems: PublicProfileItemsResolveService,
   publicRoot: PublicRootResolveService
 };
 
@@ -42,16 +41,25 @@ export const routes: Routes = [
       },
       {
         path: 'archive/:publicArchiveNbr',
-        component: PublicArchiveComponent,
         resolve: publicArchiveResolve,
-        loadChildren: LazyLoadFileBrowserSibling,
-        data: {
-          noFileListPadding: true,
-          fileListCentered: true,
-          isPublicArchive: true,
-          checkFolderViewOnNavigate: true,
-          showFolderDescription: true
-        },
+        children: [
+          {
+            path: 'profile',
+            component: PublicProfileComponent,
+          },
+          {
+            path: '',
+            component: PublicArchiveComponent,
+            loadChildren: LazyLoadFileBrowserSibling,
+            data: {
+              noFileListPadding: true,
+              fileListCentered: true,
+              isPublicArchive: true,
+              checkFolderViewOnNavigate: true,
+              showFolderDescription: true
+            },
+          }
+        ]
       },
       {
         path: ':publishUrlToken',
@@ -69,7 +77,8 @@ export const routes: Routes = [
     PublishResolveService,
     PublishArchiveResolveService,
     PublicArchiveResolveService,
-    PublicRootResolveService
+    PublicRootResolveService,
+    PublicProfileItemsResolveService
   ]
 })
 export class PublicRoutingModule { }
