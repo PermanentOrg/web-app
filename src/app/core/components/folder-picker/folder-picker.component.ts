@@ -39,6 +39,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public selectedRecord: ItemVO;
 
   public filterFolderLinkIds: number[];
+  
+  private cancelResetTimeout: NodeJS.Timeout;
 
   constructor(
     private dataService: DataService,
@@ -59,6 +61,10 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     filterFolderLinkIds: number[] = null,
     allowRecords = false
   ) {
+    if (this.cancelResetTimeout) {
+      clearTimeout(this.cancelResetTimeout);
+      this.cancelResetTimeout = null;
+    }
     this.visible = true;
     this.operation = operation;
     this.allowRecords = allowRecords;
@@ -185,11 +191,12 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     this.visible = false;
     this.selectedRecord = null;
 
-    setTimeout(() => {
+    this.cancelResetTimeout = setTimeout(() => {
       this.currentFolder = null;
       this.chooseFolderDeferred = null;
       this.isRootFolder = true;
-    }, 1500);
+      this.cancelResetTimeout = null;
+    }, 500);
   }
 
   ngOnDestroy() {
