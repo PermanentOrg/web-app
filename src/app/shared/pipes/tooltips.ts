@@ -34,6 +34,10 @@ export const TOOLTIPS = {
       newFolder: {
         enabled: 'Create a new folder in the current folder',
         disabled: 'You do not have permission to create a folder in the current folder'
+      },
+      download: {
+        enabled: 'Download selected file',
+        disabled: 'Only single files can be downloaded'
       }
     },
     sort: {

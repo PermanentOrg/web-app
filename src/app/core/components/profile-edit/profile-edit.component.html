@@ -40,23 +40,30 @@
           <div class="profile-visibility">
             <div>Profile Visibility</div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="true" (ngModelChange)="onProfilePublicChange($event)">
-              <div>
+              <input type="radio" [(ngModel)]="isPublic" [value]="true"
+                (ngModelChange)="onProfilePublicChange($event)"
+                id="profile-public-toggle">
+              <label for="profile-public-toggle">
                 <div>Public</div>
                 <span>Anyone can see the page</span>
-              </div>
+              </label>
             </div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="false" (ngModelChange)="onProfilePublicChange($event)">
-              <div>
+              <input type="radio" [(ngModel)]="isPublic" [value]="false"
+                (ngModelChange)="onProfilePublicChange($event)"
+                id="profile-private-toggle">
+              <label for="profile-private-toggle">
                 <div>Private</div>
                 <span>Only contributors can see the page</span>
-              </div>
+              </label>
             </div>
           </div>
-          <div class="buttons" hidden>
-            <button class="btn btn-alternate">View On Web</button>
-            <button class="btn btn-primary">Share Profile</button>
+          <div class="buttons">
+            <a class="btn btn-alternate"
+              [routerLink]="['/p', 'archive', this.archive.archiveNbr, 'profile']"
+              [class.disabled]="!isPublic"
+              >View On Web</a>
+            <button class="btn btn-primary" [disabled]="!isPublic" (click)="onShareClick()">Share Profile</button>
           </div>
         </div>
         <div class="panel-header-bottom-row">
@@ -83,11 +90,11 @@
           </div>
           <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
           (click)="onProfilePictureClick()">
-          <div class="change-thumbnail">
-            <div>
-              <i class="material-icons">camera_alt</i> Change Photo
+            <div class="change-thumbnail">
+              <div>
+                <i class="material-icons">camera_alt</i> Change Photo
+              </div>
             </div>
-          </div>
           </div>
           <div class="profile-section">
             <div class="profile-prompt">
@@ -283,6 +290,7 @@
                 </div>
                 <div class="profile-field" [ngSwitch]="archive.type">
                   <label *ngSwitchCase="'type.archive.person'">Move In Date</label>
+                  <label *ngSwitchCase="'type.archive.family'">Date Arrived</label>
                   <label *ngSwitchDefault>Date Opened</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day1"
@@ -294,8 +302,8 @@
                 </div>
                 <div class="profile-field" [ngSwitch]="archive.type">
                   <label *ngSwitchCase="'type.archive.person'">Move Out Date</label>
-                  <label *ngSwitchCase="'type.archive.organization'">Date Closed</label>
-                  <label *ngSwitchDefault>Date Left</label>
+                  <label *ngSwitchCase="'type.archive.family'">Date Left</label>
+                  <label *ngSwitchDefault>Date Closed</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [displayValue]="profileItem.day2"
                   [dateOnly]="true"

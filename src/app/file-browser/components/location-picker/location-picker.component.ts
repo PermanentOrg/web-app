@@ -9,6 +9,7 @@ import { PrLocationPipe, LocnPipeOutput } from '@shared/pipes/pr-location.pipe';
 import { MessageService } from '@shared/services/message/message.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { ProfileItemVOData } from '@models/profile-item-vo';
+import { ProfileService } from '@shared/services/profile/profile.service';
 
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER: google.maps.LatLngLiteral = {
@@ -58,6 +59,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
     @Optional() private dialogRef: DialogRef,
     private api: ApiService,
+    @Optional() private profile: ProfileService,
     private locationPipe: PrLocationPipe,
     private zone: NgZone,
     private message: MessageService,
@@ -167,9 +169,8 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
       const original = this.profileItem.locnId1;
       try {
         this.profileItem.locnId1 = locnVO.locnId;
-        const response = await this.api.archive.addUpdateProfileItems([this.profileItem]);
+        await this.profile.saveProfileItem(this.profileItem, ['locnId1']);
         this.profileItem.LocnVOs = [locnVO];
-        this.profileItem.profile_itemId = response.getProfileItemVOs()[0].profile_itemId;
       } catch (err) {
         this.profileItem.locnId1 = original;
         throw err;

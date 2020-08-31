@@ -81,6 +81,16 @@
     opacity: 1;
   }
 
+  .public-profile-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: none;
+    opacity: 1;
+  }
+
   &.visible {
     .profile-editor-dialog {
       transform: translateX(0);

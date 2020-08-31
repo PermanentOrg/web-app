@@ -4,7 +4,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 import { Subscription, Subject } from 'rxjs';
 import { min } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
-import { ItemVO, AccessRole, SortType, FolderVO } from '@models';
+import { ItemVO, AccessRole, SortType, FolderVO, RecordVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
 import { fadeAnimation, ngIfFadeInAnimation } from '@shared/animations';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
@@ -127,15 +127,21 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     this.isPublic = this.data.currentFolder.type.includes('public');
     this.setAllActions(false);
 
+    const isSingleItem = this.selectedItems.length === 1;
+    const isSingleRecord = isSingleItem && this.selectedItems[0] instanceof RecordVO;
+
     if (!this.selectedItems.length || !this.edit) {
       return this.setAllActions(false);
     }
 
-    if (!this.account.checkMinimumArchiveAccess(AccessRole.Curator)) {
-      return this.can.download = true;
+    if (isSingleRecord) {
+      this.can.download = true;
     }
 
-    const isSingleItem = this.selectedItems.length === 1;
+    if (!this.account.checkMinimumArchiveAccess(AccessRole.Curator)) {
+      return;
+    }
+
     const minimumAccess = min(this.selectedItems.map(i => getAccessAsEnum(i.accessRole)));
 
     switch (minimumAccess) {
@@ -143,10 +149,9 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       case AccessRole.Editor:
       case AccessRole.Contributor:
         if (this.isShareRoot && isSingleItem) {
-          return this.setMultipleActions(['unshare', 'download'], true);
-        } else {
-          return this.can.download = true;
+          return this.can.unshare = true;
         }
+        return;
       case AccessRole.Curator:
         if (this.isShareRoot && isSingleItem) {
           return this.setMultipleActions(['unshare', 'copy', 'move'], true);
@@ -155,15 +160,15 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
         }
       case AccessRole.Owner:
         if (this.isShareRoot && isSingleItem) {
-          return this.setMultipleActions(['unshare', 'copy', 'move', 'download'], true);
+          return this.setMultipleActions(['unshare', 'copy', 'move'], true);
         } else if (isSingleItem) {
           if (!this.isPublic) {
-            return this.setAllActions(true);
+            return this.setMultipleActions(['delete', 'copy', 'move', 'share', 'publish'], true);
           } else {
-            this.setMultipleActions(['delete', 'copy', 'move',  'publish', 'download'], true);
+            return this.setMultipleActions(['delete', 'copy', 'move', 'publish'], true);
           }
         } else {
-          return this.setMultipleActions(['delete', 'copy', 'move', 'download'], true);
+          return this.setMultipleActions(['delete', 'copy', 'move'], true);
         }
     }
   }
@@ -322,6 +327,16 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     }
 
     this.edit.openPublishDialog(this.selectedItems[0]);
+  }
+
+  onDownloadClick() {
+    if (!this.can.download) {
+      return;
+    }
+
+    if (this.selectedItems[0] instanceof RecordVO) {
+      this.data.downloadFile(this.selectedItems[0]);
+    }
   }
 
   getTooltipConstantForAction(action: keyof FileListActions) {
