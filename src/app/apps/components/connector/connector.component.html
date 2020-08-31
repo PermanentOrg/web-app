@@ -1,4 +1,4 @@
-<div class="connector-about">
+<div class="connector-about" [class.clickable]="hasFiles" (click)="goToFolder()" [ngbTooltip]="getTooltip()">
   <div class="connector-logo" [ngClass]="getConnectorClass(connector.type)">
     <div class="logo-img"></div>
   </div>
@@ -25,24 +25,5 @@
   <button class="btn btn-primary" id="familysearch-download" [hidden]="!(connected && connector.ConnectorFamilysearchVO)" (click)="familysearchDownloadRequest()" [disabled]="waiting"
     *ngIf="connector.type.includes('familysearch')">Download from FamilySearch</button>
   <button class="btn btn-primary" id="connector-disconnect" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
-  <button class="btn btn-primary" id="connector-help" [hidden]="" (click)="showHelp = !showHelp" [disabled]="waiting">{{ showHelp ? 'Hide Help' : 'Help' }}</button>
-</div>
-<div class="connector-help" *ngIf="showHelp">
-  <div *ngIf="connector.type.includes('facebook')">
-    Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
-    <br><br>
-    You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
-  </div>
-  <div *ngIf="connector.type.includes('family')">
-    <span *ngIf="connected">
-      Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
-      <br><br>
-      This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
-    </span>
-    <span *ngIf="!connected">
-      Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
-      <br><br>
-      This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
-    </span>
-  </div>
+  <button class="btn btn-primary" id="connector-help" [hidden]="" (click)="showHelp()" [disabled]="waiting">Help</button>
 </div>

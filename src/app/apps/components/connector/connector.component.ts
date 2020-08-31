@@ -42,7 +42,6 @@ export class ConnectorComponent implements OnInit {
 
   public connectedAccountName: string;
 
-  public showHelp = false;
   public connectText: string = null;
 
   constructor(
@@ -68,6 +67,7 @@ export class ConnectorComponent implements OnInit {
     switch (type) {
       case 'familysearch':
         this.connectText = 'Sign In with FamilySearch';
+        this.hasFiles = !!this.connector.ConnectorFamilysearchVO;
         break;
     }
   }
@@ -131,12 +131,34 @@ export class ConnectorComponent implements OnInit {
   }
 
   async startFamilysearchTreeImport() {
+    let generationsToImport = 4;
+
+    try {
+      const result = await this.prompt.prompt(
+        [{
+          fieldName: 'generations',
+          placeholder: 'Number of generations',
+          type: 'select',
+          initialValue: generationsToImport.toString(),
+          selectOptions: [1, 2, 3, 4, 5, 6, 7].map(i => {
+            return { text: i, value: i.toString() };
+          })
+        }],
+        'How many generations of ancestors would you like to import?'
+      );
+
+      generationsToImport = parseInt(result.generations, 10);
+    } catch (err) {
+      return;
+    }
+
     const data = await this.getFamilysearchTreeData();
 
     if (!data) {
       return;
     }
 
+    data.treeData = data.treeData.filter(i => parseInt(i.display.ascendancyNumber, 10) < Math.pow(2, generationsToImport + 1));
 
     try {
       await this.dialog.open('FamilySearchImportComponent', data);
@@ -163,12 +185,67 @@ export class ConnectorComponent implements OnInit {
     }
   }
 
+  showHelp() {
+    let template: string;
+    switch (this.connector.type) {
+      case 'type.connector.facebook':
+        template = `
+        Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
+        <br><br>
+        You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
+        <br>
+        `;
+        break;
+      case 'type.connector.familysearch':
+        if (!this.connected) {
+          template = `
+          Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
+          <br><br>
+          This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
+          <br>
+          `;
+        } else {
+          template = `
+          Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
+          <br><br>
+          This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
+          <br>
+          `;
+        }
+        break;
+    }
+
+    try {
+      this.prompt.confirm(
+        'Done',
+        this.prConstants.translate(this.connector.type),
+        null,
+        null,
+        template
+        );
+    } catch (err) {
+    }
+  }
+
   goToFolder() {
     if (!this.hasFiles) {
       return;
     }
 
     this.router.navigate(['/apps', this.folder.archiveNbr, this.folder.folder_linkId]);
+  }
+
+  getTooltip() {
+    if (!this.hasFiles) {
+      return null;
+    }
+
+    switch (this.connector.type) {
+      case 'type.connector.facebook':
+        return 'View imported photos';
+      case 'type.connector.familysearch':
+        return 'View imported memories and add new memories to upload';
+    }
   }
 
   connect() {
