@@ -42,6 +42,7 @@ const DEFAULT_OPTIONS: DialogOptions = {
   height: 'fullscreen'
 };
 
+export const DEFAULT_ANIMATION_LENGTH = 500;
 
 export class DialogRef {
   dialogComponentRef?: ComponentRef<DialogComponent>;
