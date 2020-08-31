@@ -1,7 +1,5 @@
 @import 'variables';
 
-$max-width: 1000px;
-
 :host {
   display: block;
   width: 100%;
@@ -42,7 +40,7 @@ $max-width: 1000px;
     margin-left: auto;
   }
 
-  button {
+  .btn {
     @include gridHeightButton;
     justify-content: center;
     width: 8 * $grid-unit;
@@ -78,6 +76,11 @@ $max-width: 1000px;
       input {
         cursor: pointer;
         margin-right: $grid-unit / 2;
+      }
+
+      label {
+        margin: 0;
+        cursor: pointer;
       }
 
       span {
@@ -130,30 +133,11 @@ $max-width: 1000px;
 }
 
 .profile-banner {
-  height: pxToGrid(220px);
-  background-size: cover;
-  background-position: 50% 50%;
-  position: relative;
-
-  cursor: pointer;
-
-  &.show-gradient {
-    $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
-    @include gradient(to top left, $list);
-  }
+  @include profileBanner;
 }
 
 .profile-photo {
-  $size: pxToGrid(180px);
-  height: $size;
-  width: $size;
-  background-size: cover;
-  background-position: 50% 50%;
-  position: relative;
-  margin-left: 2 * $grid-unit;
-  margin-bottom: -$size/2 + $grid-unit;
-  transform: translateY(-50%);
-  cursor: pointer;
+  @include profilePhoto;
 }
 
 .change-thumbnail {
@@ -183,16 +167,11 @@ $max-width: 1000px;
 }
 
 .profile-prompt {
-  font-weight: $font-weight-bold;
-  font-size: $font-size-lg;
-  height: 2 * $grid-unit;
-  display: flex;
-  align-items: center;
+  @include profilePrompt;
 }
 
 .profile-section {
- max-width: $max-width;
- padding-top: $grid-unit;
+  @include profileSection;
 }
 
 .profile-field-subtitle {
@@ -201,102 +180,12 @@ $max-width: 1000px;
 }
 
 .profile-section-header {
-  margin-top: $grid-unit;
-  max-width: $max-width;
-  $height: 3 * $grid-unit;
-  height: $height;
-  display: flex;
-  align-items: center;
-  padding-left: $grid-unit;
-
-  background-color: $gray-200;
-
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
-
-  .collapse {
-    height: $height;
-    flex: 0 0 $height;
-    background-color: $PR-blue;
-    color: white;
-    display: flex;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    cursor: pointer;
-    user-select: none;
-
-    i {
-      color: white;
-      font-size: $mat-icon-lg;
-      transform: rotate(0deg);
-      transition: transform 125ms $tweaked-ease;
-    }
-
-    &.closed {
-      i {
-        transform: rotate(180deg);
-      }
-    }
-  }
+  @include profileSectionHeader;
 }
 
-.profile-repeat-entry:not(:last-of-type) {
-  margin-bottom: 2 * $grid-unit;
-  border-bottom: $file-list-border;
-}
-
-.profile-section {
-  button {
-    margin: 0;
-    width: auto;
-    @include gridHeightButton;
-  }
-
-  & > button {
-    margin: $grid-unit 0;
-  }
-}
 
 .profile-group {
-  display: flex;
-  margin-bottom: 2 * $grid-unit;
-
-  > * {
-    flex: 1 1 auto;
-    &:not(:last-child) {
-      margin-right: $grid-unit;
-    }
-  }
-
-  > .profile-group {
-    margin-bottom: 0;
-  }
-
-  &.in-thirds > * {
-    flex: 0 1 (100% * 1/3);
-    max-width: 100% * 1/3;
-
-    &.two-thirds {
-      flex: 0 1 68.9%;
-      max-width: 68.9%
-    }
-  }
-
-  &.in-half > * {
-    flex: 0 1 50%;
-    max-width: 50%;
-  }
-
-  &.align-right > *:first-child {
-    margin-left: auto;
-  }
-
-  > button {
-    flex: 0 0 auto;
-    width: auto;
-  }
+  @include profileGroup;
 }
 
 .archive-name {
@@ -309,23 +198,6 @@ $max-width: 1000px;
 }
 
 .profile-field {
-  label {
-    margin-bottom: $grid-unit / 4;
-    font-weight: $font-weight-semibold;
-  }
-
-  pr-inline-value-edit {
-    margin-left: $grid-unit / 4;
-    margin-right: $grid-unit / 4;
-
-    &:not(:first-of-type) {
-      margin-top: $grid-unit;
-    }
-  }
-
-  > button:last-child {
-    margin-top: $grid-unit;
-  }
-
+  @include profileField;
 }
 

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PublicRoutingModule } from './public.routes';
 import { RouterModule } from '@angular/router';
@@ -16,6 +16,8 @@ import { SearchComponent } from './components/search/search.component';
 import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { PublicProfileComponent } from './components/public-profile/public-profile.component';
+import { Dialog, DialogChildComponentData, DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   declarations: [
@@ -25,13 +27,15 @@ import { BrowserModule } from '@angular/platform-browser';
     SearchComponent,
     PublicArchiveComponent,
     SearchBoxComponent,
+    PublicProfileComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     PublicRoutingModule,
     SharedModule,
-    FileBrowserModule
+    FileBrowserModule,
+    DialogModule
   ],
   providers: [
     DataService,
@@ -39,7 +43,22 @@ import { BrowserModule } from '@angular/platform-browser';
   ]
 })
 export class PublicModule {
-  constructor(folderView: FolderViewService) {
+  private dialogComponents: DialogChildComponentData[] = [
+    {
+      token: 'PublicProfileComponent',
+      component: PublicProfileComponent
+    },
+  ];
+
+  constructor(
+    folderView: FolderViewService,
+    @Optional() private dialog?: Dialog,
+    @Optional() private resolver?: ComponentFactoryResolver,
+    ) {
     folderView.setFolderView(FolderView.Grid, true);
+
+    if (this.dialog) {
+      this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+    }
   }
 }
