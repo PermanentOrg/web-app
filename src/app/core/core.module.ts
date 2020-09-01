@@ -44,6 +44,7 @@ import { InvitationsDialogComponent } from './components/invitations-dialog/invi
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 import { CountUpModule } from 'countup.js-angular2';
 import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
+import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-f
     ProfileEditTopicComponent,
     MyArchivesDialogComponent,
     LoadingArchiveComponent,
-    ProfileEditFirstTimeDialogComponent
+    ProfileEditFirstTimeDialogComponent,
+    StorageDialogComponent
   ],
   providers: [
     DataService,
@@ -124,6 +126,10 @@ export class CoreModule {
     {
       token: 'InvitationsDialogComponent',
       component: InvitationsDialogComponent
+    },
+    {
+      token: 'StorageDialogComponent',
+      component: StorageDialogComponent
     }
   ];
 

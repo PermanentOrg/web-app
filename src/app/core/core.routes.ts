@@ -177,6 +177,20 @@ export const routes: RoutesWithData = [
         redirectTo: '/m/(myfiles//dialog:members)'
       },
       {
+        path: 'storage',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Storage',
+          dialogToken: 'StorageDialogComponent',
+          dialogOptions: { width: '1000px'}
+        }
+      },
+      {
+        path: 'storage',
+        redirectTo: '/m/(myfiles//dialog:storage)'
+      },
+      {
         path: 'search',
         component: GlobalSearchResultsComponent,
         data: { title: 'Search' },

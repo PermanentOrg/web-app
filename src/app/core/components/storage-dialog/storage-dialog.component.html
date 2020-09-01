@@ -1,0 +1,30 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Storage</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('add')" [class.active]="activeTab === 'add'">
+        Add Storage
+      </div>
+      <div class="dialog-tab"
+        (click)="setTab('promo')" [class.active]="activeTab === 'promo'">
+        Gift Code
+      </div>
+      <div class="dialog-tab" (click)="setTab('history')" [class.active]="activeTab === 'history'">
+        File History
+      </div>
+    </div>
+    <div class="panel" #panel>
+      <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'history'">
+          <div class="panel-title">File History</div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>

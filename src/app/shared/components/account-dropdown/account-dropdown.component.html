@@ -5,7 +5,7 @@
 <div class="account-dropdown-menu" *ngIf="showMenu" [@dropdownMenuAnimation]>
   <div *ngIf="showMenu" [@ngIfFadeInAnimationSlow]>
     <pr-storage-meter></pr-storage-meter>
-    <a href="/add-storage">Add Storage</a>
+    <a [routerLink]="[{ outlets: { dialog: ['storage']}}]">Storage</a>
     <a [routerLink]="[{ outlets: { dialog: ['account']}}]">Account</a>
     <a (click)="openArchivesDialog()">Archives</a>
     <a [routerLink]="[{ outlets: { dialog: ['invitations']}}]">Invitations</a>
