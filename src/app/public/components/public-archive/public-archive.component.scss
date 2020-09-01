@@ -105,6 +105,17 @@
   @include public-centered;
 }
 
+.public-profile-link {
+  display: flex;
+  margin: $grid-unit auto;
+  max-width: $public-max-width;
+  > .btn {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0;
+    @include gridHeightButton;
+  }
+}
 
 
 

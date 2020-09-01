@@ -7,7 +7,6 @@
       {{archive.type | prConstants}}
     </span>
     <div class="public-archive-cta" *ngIf="!cta || !isMobile">
-      <a class="btn btn-primary" [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']" *ngIf="hasProfile">Profile</a>
       <button class="btn btn-primary" (click)="onShareClick()">Share</button>
     </div>
     <div class="public-archive-cta" *ngIf="cta">
@@ -16,12 +15,8 @@
     </div>
   </div>
 </div>
-<div class="public-archive-description" *ngIf="isArchiveRoot && description">
-  <div class="public-archive-description-header">
-    <span>About this archive</span>
-    <small><a (click)="archiveDescriptionHidden = !archiveDescriptionHidden">{{archiveDescriptionHidden ? 'Show' : 'Hide'}} details</a></small>
-  </div>
-  <div class="public-archive-description-contents" [innerHTML]="description" [@collapseAnimation]="archiveDescriptionHidden ? 'closed' : 'open'"></div>
+<div class="public-profile-link" *ngIf="hasProfile">
+  <a [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']" class="btn btn-primary">View Public Profile</a>
 </div>
 <div class="public-archive-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>
