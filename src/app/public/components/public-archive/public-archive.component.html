@@ -7,6 +7,7 @@
       {{archive.type | prConstants}}
     </span>
     <div class="public-archive-cta" *ngIf="!cta || !isMobile">
+      <a class="btn btn-primary hide-mobile" [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']" *ngIf="hasProfile">View Public Profile</a>
       <button class="btn btn-primary" (click)="onShareClick()">Share</button>
     </div>
     <div class="public-archive-cta" *ngIf="cta">
@@ -15,7 +16,7 @@
     </div>
   </div>
 </div>
-<div class="public-profile-link" *ngIf="hasProfile">
+<div class="public-profile-link hide-desktop" *ngIf="hasProfile">
   <a [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']" class="btn btn-primary">View Public Profile</a>
 </div>
 <div class="public-archive-breadcrumbs">

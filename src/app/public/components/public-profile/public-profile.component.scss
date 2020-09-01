@@ -92,9 +92,16 @@ $profile-sidebar-width: pxToGrid(360px);
 
 .banner-section {
   margin: -$grid-unit;
+  position: relative;
 
   @include beforeDesktop {
     margin: -$grid-unit / 2;
+  }
+
+  .profile-archive-link {
+    position: absolute;
+    right: $grid-unit * 2;
+    bottom: $photo-desktop / 2 + $grid-unit;
   }
 }
 
