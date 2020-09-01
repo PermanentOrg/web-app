@@ -1,0 +1,142 @@
+$profile-max-width: 1000px;
+
+@mixin profileBanner($desktop-size: pxToGrid(220px), $mobile-size: pxToGrid(120px)) {
+  height: $desktop-size;
+  background-size: cover;
+  background-position: 50% 50%;
+  position: relative;
+
+  cursor: pointer;
+
+  &.show-gradient {
+    $list: $PR-blue 0%, $PR-purple 66%, mix($PR-purple, $PR-orange, 50%) 100%;
+    @include gradient(to top left, $list);
+  }
+
+  @include beforeDesktop {
+    height: $mobile-size;
+  }
+}
+
+@mixin profilePhoto($desktop-size: pxToGrid(180px), $mobile-size: pxToGrid(60px)) {
+  height: $desktop-size;
+  width: $desktop-size;
+  background-size: cover;
+  background-position: 50% 50%;
+  position: relative;
+  margin-left: 2 * $grid-unit;
+  margin-bottom: -$desktop-size/2 + $grid-unit;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  @include beforeDesktop {
+    height: $mobile-size;
+    width: $mobile-size;
+    margin-left: $grid-unit / 2;
+    margin-bottom: -$mobile-size/2 + $grid-unit;
+  }
+}
+
+@mixin profileSection {
+  max-width: $profile-max-width;
+  padding-top: $grid-unit;
+ 
+   button {
+     margin: 0;
+     width: auto;
+     @include gridHeightButton;
+   }
+ 
+   & > button {
+     margin: $grid-unit 0;
+   }
+
+
+  .profile-repeat-entry:not(:last-of-type) {
+    margin-bottom: 2 * $grid-unit;
+    border-bottom: $file-list-border;
+  }
+}
+
+@mixin profileSectionHeader {
+  margin-top: $grid-unit;
+  max-width: $profile-max-width;
+  $height: 3 * $grid-unit;
+  height: $height;
+  display: flex;
+  align-items: center;
+  padding-left: $grid-unit;
+
+  background-color: $gray-200;
+
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+@mixin profileGroup {
+  display: flex;
+  margin-bottom: 2 * $grid-unit;
+
+  > * {
+    flex: 1 1 auto;
+    &:not(:last-child) {
+      margin-right: $grid-unit;
+    }
+  }
+
+  > .profile-group {
+    margin-bottom: 0;
+  }
+
+  &.in-thirds > * {
+    flex: 0 1 (100% * 1/3);
+    max-width: 100% * 1/3;
+
+    &.two-thirds {
+      flex: 0 1 68.9%;
+      max-width: 68.9%
+    }
+  }
+
+  &.in-half > * {
+    flex: 0 1 50%;
+    max-width: 50%;
+  }
+
+  &.align-right > *:first-child {
+    margin-left: auto;
+  }
+
+  > button {
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+
+@mixin profileField {
+  label {
+    margin-bottom: $grid-unit / 4;
+    font-weight: $font-weight-semibold;
+  }
+
+  pr-inline-value-edit {
+    margin-left: $grid-unit / 4;
+    margin-right: $grid-unit / 4;
+
+    &:not(:first-of-type) {
+      margin-top: $grid-unit;
+    }
+  }
+
+  > button:last-child {
+    margin-top: $grid-unit;
+  }
+}
+
+@mixin profilePrompt {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  height: 2 * $grid-unit;
+  display: flex;
+  align-items: center;
+}

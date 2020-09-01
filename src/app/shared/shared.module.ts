@@ -43,6 +43,7 @@ import { ScrollSectionDirective } from './directives/scroll-section.directive';
 import { ScrollNavDirective } from './directives/scroll-nav.directive';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper/routed-dialog-wrapper.component';
+import { LinkPipe } from './pipes/link.pipe';
 
 @NgModule({
   imports: [
@@ -98,7 +99,8 @@ import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper
     ThumbnailComponent,
     ScrollNavDirective,
     ScrollSectionDirective,
-    RoutedDialogWrapperComponent
+    RoutedDialogWrapperComponent,
+    LinkPipe
   ],
   declarations: [
     ThumbnailComponent,
@@ -138,7 +140,8 @@ import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper
     AudioComponent,
     ScrollSectionDirective,
     ScrollNavDirective,
-    RoutedDialogWrapperComponent
+    RoutedDialogWrapperComponent,
+    LinkPipe
   ],
   providers: [
     PublicLinkPipe,

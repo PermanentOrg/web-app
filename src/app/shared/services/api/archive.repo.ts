@@ -130,11 +130,14 @@ export class ArchiveRepo extends BaseRepo {
   public getAllProfileItems(archive: ArchiveVO): Promise<ArchiveResponse> {
     const data = [{
       Profile_itemVO: {
-        archiveId: archive.archiveId
+        archiveId: archive.archiveId,
+        archiveNbr: archive.archiveNbr
       }
     }];
 
-    return this.http.sendRequestPromise<ArchiveResponse>('/profile_item/getAllByArchiveId', data, ArchiveResponse);
+    const endpoint = archive.archiveNbr ? '/profile_item/getAllByArchiveNbr' : '/profile_item/getAllByArchiveId';
+
+    return this.http.sendRequestPromise<ArchiveResponse>(endpoint, data, ArchiveResponse);
   }
 
   public addUpdateProfileItems(profileItems: ProfileItemVOData[]) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy, Optional } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { ArchiveVO } from '@models';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
@@ -15,6 +15,8 @@ import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { collapseAnimationCustom } from '@shared/animations';
+import { Dialog } from '@root/app/dialog/dialog.module';
+import { ProfileItemVOData } from '@models/profile-item-vo';
 
 @Component({
   selector: 'pr-public-archive',
@@ -29,6 +31,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   public showFolderDescription = false;
   public archiveDescriptionHidden = false;
   public isMobile = this.device.isMobileWidth();
+  public hasProfile = false;
 
   public get cta() {
     return this.data.publicCta;
@@ -47,7 +50,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private device: DeviceService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private linkPipe: PublicLinkPipe
+    private linkPipe: PublicLinkPipe,
+    @Optional() private dialog: Dialog
   ) {
 
     this.checkArchive();
@@ -71,6 +75,10 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         this.checkArchive();
       }
     });
+
+    if (this.route.snapshot.queryParamMap.has('profile')) {
+      this.showProfile();
+    }
   }
 
   checkArchive() {
@@ -81,6 +89,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
       } else {
         this.description = null;
       }
+
+      this.hasProfile = this.route.snapshot.data['profileItems']?.length > 2;
     }
   }
 
@@ -148,5 +158,15 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   onArchiveThumbClick() {
     this.router.navigate(['/p', 'archive', this.archive.archiveNbr]);
+  }
+
+  showProfile() {
+    if (this.dialog) {
+      try {
+        this.dialog.open('PublicProfileComponent', this.route.snapshot.data, { width: '100%', height: 'fullscreen', menuClass: 'public-profile-dialog' });
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 }

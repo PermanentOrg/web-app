@@ -11,6 +11,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { DEFAULT_ANIMATION_LENGTH } from '@root/app/dialog/dialog.service';
 
 export enum FolderPickerOperations {
   Move = 1,
@@ -39,6 +40,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public selectedRecord: ItemVO;
 
   public filterFolderLinkIds: number[];
+  
+  private cancelResetTimeout: NodeJS.Timeout;
 
   constructor(
     private dataService: DataService,
@@ -59,6 +62,10 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     filterFolderLinkIds: number[] = null,
     allowRecords = false
   ) {
+    if (this.cancelResetTimeout) {
+      clearTimeout(this.cancelResetTimeout);
+      this.cancelResetTimeout = null;
+    }
     this.visible = true;
     this.operation = operation;
     this.allowRecords = allowRecords;
@@ -185,11 +192,12 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     this.visible = false;
     this.selectedRecord = null;
 
-    setTimeout(() => {
+    this.cancelResetTimeout = setTimeout(() => {
       this.currentFolder = null;
       this.chooseFolderDeferred = null;
       this.isRootFolder = true;
-    }, 1500);
+      this.cancelResetTimeout = null;
+    }, DEFAULT_ANIMATION_LENGTH);
   }
 
   ngOnDestroy() {
