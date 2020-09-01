@@ -71,6 +71,16 @@ $profile-sidebar-width: pxToGrid(360px);
   margin-bottom: $grid-unit;
 }
 
+.profile-archive-link {
+  display: flex;
+  > .btn {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0;
+    @include gridHeightButton;
+  }
+}
+
 .profile-section {
   @include profileSection;
   
