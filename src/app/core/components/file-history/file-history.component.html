@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of ledgerItemPages[currentPage]">
+        <tr *ngFor="let item of ledgerItemPages[currentPage - 1]">
           <td>{{item.createdDT | date}}</td>
           <td>{{item.spaceDelta | dsFileSize}}</td>
           <td>{{item.type | prConstants}}</td>

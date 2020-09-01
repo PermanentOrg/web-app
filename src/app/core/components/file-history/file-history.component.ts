@@ -13,7 +13,7 @@ import { DeviceService } from '@shared/services/device/device.service';
   styleUrls: ['./file-history.component.scss']
 })
 export class FileHistoryComponent implements OnInit {
-  currentPage = 0;
+  currentPage = 1;
   pageSize = 10;
   maxPageCount = 10;
   ledgerItemCount = 0;
@@ -42,10 +42,9 @@ export class FileHistoryComponent implements OnInit {
       this.ledgerItemCount = ledgerItems.length;
       this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
     } catch (err) {
-      if (err instanceof BillingResponse) {
-        this.message.showError('There was a problem loading your file history.');
-        this.error = true;
-      }
+      console.error(err);
+      this.message.showError('There was a problem loading your file history.');
+      this.error = true;
     } finally {
       this.loading = false;
     }
