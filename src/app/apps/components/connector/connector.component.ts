@@ -67,7 +67,7 @@ export class ConnectorComponent implements OnInit {
     switch (type) {
       case 'familysearch':
         this.connectText = 'Sign In with FamilySearch';
-        this.hasFiles = !!this.connector.ConnectorFamilysearchVO;
+        this.hasFiles = this.connector.ConnectorFamilysearchVO ? true : false;
         break;
     }
   }
