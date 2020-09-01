@@ -9,7 +9,7 @@ type StorageDialogTab = 'add' | 'history' | 'promo';
   styleUrls: ['./storage-dialog.component.scss']
 })
 export class StorageDialogComponent implements OnInit, IsTabbedDialog {
-  activeTab: StorageDialogTab = 'history';
+  activeTab: StorageDialogTab = 'add';
   constructor(
     private dialogRef: DialogRef,
   ) { }

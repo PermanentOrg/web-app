@@ -10,7 +10,7 @@
 }
 
 .content {
-  @include tabbedDialogContent(540px);
+  @include tabbedDialogContent(700px);
 }
 
 .tabs {
@@ -23,4 +23,9 @@
 
 .panel-title {
   @include tabbedDialogPanelTitle;
+}
+
+.btn {
+  margin: $grid-unit 0;
+  width: auto;
 }
