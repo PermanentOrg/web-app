@@ -237,7 +237,7 @@ export class ConnectorComponent implements OnInit {
 
   getTooltip() {
     if (!this.hasFiles) {
-      return null;
+      return '';
     }
 
     switch (this.connector.type) {
