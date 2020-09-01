@@ -135,3 +135,13 @@
   background: -o-linear-gradient($direction, $list);
   background: linear-gradient($direction, $list);  
 }
+
+@mixin flexGridWithGutter($count: 4, $gutter: $grid-unit) {
+  $flex-basis: calc((100% - #{($count - 1)} * #{$gutter}) / #{$count});
+
+  flex: 0 0 $flex-basis;
+
+  &:not(:nth-child(#{$count}n)) {
+    margin-right: $gutter;
+  }
+}
