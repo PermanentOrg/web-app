@@ -14,6 +14,9 @@
         </div>
         <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500">
         </div>
+        <div class="profile-archive-link hide-mobile">
+          <a [routerLink]="['..']" class="btn btn-primary">View Public Archive</a>
+        </div>
       </div>
       <div class="profile-about">
         <div class="profile-name">
@@ -23,6 +26,9 @@
           {{ this.profileItems.blurb[0].string1 }}
         </div>
         <div class="profile-description" *ngIf="hasSingleValueFor('description', 'textData1')"  [innerHTML]="this.profileItems.description[0].textData1">
+        </div>
+        <div class="profile-archive-link hide-desktop">
+          <a [routerLink]="['..']" class="btn btn-primary">View Public Archive</a>
         </div>
       </div>
       <div class="profile-sidebar">

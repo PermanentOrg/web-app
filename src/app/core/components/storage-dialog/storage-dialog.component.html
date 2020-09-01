@@ -1,0 +1,34 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Storage</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('add')" [class.active]="activeTab === 'add'">
+        Add Storage
+      </div>
+      <div class="dialog-tab" (click)="setTab('history')" [class.active]="activeTab === 'history'">
+        File History
+      </div>
+    </div>
+    <div class="panel" #panel>
+      <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'add'">
+          <div class="panel-title">Add Storage</div>
+          <p>Need more storage? Feel free to make another pledge to Permanent.org anytime you'd like.</p>
+          <div class="panel-button">
+            <a href="/add-storage" class="btn btn-primary">Add Storage</a>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'history'">
+          <div class="panel-title">File History</div>
+          <pr-file-history></pr-file-history>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+em {
+  color: $text-muted
+}
+
+ngb-pagination {
+  display: flex;
+  justify-content: center;
+}
