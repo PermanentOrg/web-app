@@ -21,7 +21,7 @@
   <button type="submit" class="btn btn-primary" [disabled]="waiting || signupForm.invalid">
     Sign up
   </button>
-  <a [routerLink]="['/pledge','claimlogin']">Already have an account?</a>
+  <a [routerLink]="['..','claimlogin']">Already have an account?</a>
 </form>
 <form *ngIf="pledge.claimed">
   <h1 class="form-title">

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -29,12 +29,13 @@ export class ClaimStorageLoginComponent implements OnInit {
     private api: ApiService,
     private pledgeService: PledgeService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private message: MessageService,
     private cookies: CookieService
   ) {
     if (!pledgeService.currentPledge) {
-      this.router.navigate(['/pledge']);
+      this.router.navigate(['..'], {relativeTo: this.route});
       return this;
     }
 
@@ -130,7 +131,7 @@ export class ClaimStorageLoginComponent implements OnInit {
       const billingResponse = await this.api.billing.claimPledge(payment, pledgeId);
       this.waiting = false;
       if (billingResponse.isSuccessful) {
-        this.router.navigate(['/pledge', 'done']);
+        this.router.navigate(['..', 'done'], {relativeTo: this.route});
       } else {
         console.error(billingResponse);
       }

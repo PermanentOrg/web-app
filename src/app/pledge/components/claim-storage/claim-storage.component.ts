@@ -32,10 +32,10 @@ export class ClaimStorageComponent implements OnInit {
     private pledgeService: PledgeService
   ) {
     if (!pledgeService.currentPledge) {
-      this.router.navigate(['/pledge']);
+      this.router.navigate(['..'], {relativeTo: this.route});
       return this;
     } else if (!pledgeService.currentPledgeData.timestamp) {
-      this.router.navigate(['/pledge', 'missing']);
+      this.router.navigate(['..', 'missing'], {relativeTo: this.route});
       return this;
     }
 
@@ -71,7 +71,7 @@ export class ClaimStorageComponent implements OnInit {
         this.waiting = false;
 
         if (billingResponse.isSuccessful) {
-          this.router.navigate(['/pledge', 'done']);
+          this.router.navigate(['..', 'done'], {relativeTo: this.route});
         }
 
       })

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { PledgeService } from '@pledge/services/pledge.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class ClaimDoneComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private router: Router,
+    private route: ActivatedRoute,
     private pledgeService: PledgeService
   ) {
   }
@@ -22,9 +23,9 @@ export class ClaimDoneComponent implements OnInit {
     const loggedIn = await this.accountService.isLoggedIn();
 
     if (!loggedIn && this.pledgeService.currentPledge) {
-      return this.router.navigate(['/pledge', 'claim']);
+      return this.router.navigate(['..', 'claim'], {relativeTo: this.route});
     } else if (!this.pledgeService.currentPledge) {
-      return this.router.navigate(['/pledge']);
+      return this.router.navigate(['..'], {relativeTo: this.route});
     }
 
     this.storageAmount = Math.floor(this.pledgeService.currentPledgeData.dollarAmount / 10);

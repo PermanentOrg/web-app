@@ -187,9 +187,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
-      this.router.navigate(['/pledge', 'claim']);
+      this.router.navigate(['..', 'claim'], {relativeTo: this.route});
     } else {
-      this.router.navigate(['/pledge', 'claimlogin']);
+      this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});
     }
     this.waiting = false;
   }
