@@ -29,3 +29,7 @@
   margin: $grid-unit 0;
   width: auto;
 }
+
+form {
+  @include tabbedDialogPanelForm;
+}
