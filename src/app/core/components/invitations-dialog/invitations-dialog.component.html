@@ -75,7 +75,7 @@
               <div class="name">Name</div>
               <div class="actions">&nbsp;</div>
             </div>
-            <div class="invitation" *ngFor="let invite of pendingInvites">
+            <div class="invitation" *ngFor="let invite of acceptedInvites">
               <div class="date">{{invite.updatedDT | date}}</div>
               <div class="email">{{invite.email}}</div>
               <div class="name" [hidden]="!invite.fullName">{{invite.fullName}}</div>
