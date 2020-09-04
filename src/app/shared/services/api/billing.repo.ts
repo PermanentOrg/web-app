@@ -1,4 +1,4 @@
-import { ArchiveVO, LedgerNonfinancialVOData, AccountVO, PromoVOData } from '@root/app/models';
+import { LedgerNonfinancialVOData, LedgerFinancialVOData, AccountVO, PromoVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { BillingCardVO, BillingPaymentVO } from '@models';
 
@@ -45,6 +45,15 @@ export class BillingRepo extends BaseRepo {
     return this.http.sendRequestPromise<BillingResponse>('/billing/getBillingLedgerNonfinancial', data, BillingResponse);
   }
 
+  public getTransactionHistory(account: AccountVO) {
+    const data = [{
+      LedgerFinancialVO: {
+        fromAccountId: account.accountId
+      }
+    }];
+    return this.http.sendRequestPromise<BillingResponse>('/billing/getBillingLedgerFinancial', data, BillingResponse);
+  }
+
   public redeemPromoCode(promo: PromoVOData) {
     const data = [{
       PromoVO: promo
@@ -83,6 +92,15 @@ export class BillingResponse extends BaseResponse {
     }
 
     return data[0].map(result => result.LedgerNonfinancialVO);
+  }
+
+  getLedgerFinancialVOs(): LedgerFinancialVOData[] {
+    const data = this.getResultsData();
+    if (!data || !data[0]) {
+      return [];
+    }
+
+    return data[0].map(result => result.LedgerFinancialVO);
   }
 
   public getPromoVO() {

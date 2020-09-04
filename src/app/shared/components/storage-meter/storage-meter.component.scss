@@ -1,10 +1,7 @@
 @import 'variables';
 
 :host {
-  margin-top: 0.5rem;
-  padding: 0.5rem 12px;
   display: block;
-  border-bottom: 1px solid $gray-300;
   color: $body-color;
 }
 
