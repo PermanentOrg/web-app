@@ -8,14 +8,13 @@ import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'pr-account-settings',
-  templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  selector: 'pr-billing-settings',
+  templateUrl: './billing-settings.component.html',
+  styleUrls: ['./billing-settings.component.scss']
 })
-export class AccountSettingsComponent implements OnInit {
+export class BillingSettingsComponent implements OnInit {
   public account: AccountVO;
   public countries: FormInputSelectOption[];
   public states: FormInputSelectOption[];
@@ -24,8 +23,6 @@ export class AccountSettingsComponent implements OnInit {
     private accountService: AccountService,
     private dataService: DataService,
     private prConstants: PrConstantsService,
-    private route: ActivatedRoute,
-    private router: Router,
     private api: ApiService,
     private message: MessageService
   ) {
@@ -47,33 +44,21 @@ export class AccountSettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async onSaveProfileInfo(prop: keyof AccountVO, value: string) {
+  async onSaveInfo(prop: keyof AccountVO, value: string) {
     const originalValue = this.account[prop];
     const data: AccountVOData = new AccountVO(this.account);
     data[prop] = value;
     delete data.notificationPreferences;
     const updateAccountVo = new AccountVO(data);
     this.account.update(data);
-    try {
-      const response = await this.api.account.update(updateAccountVo);
-      this.account.update(response.getAccountVO());
-      this.accountService.setAccount(this.account);
-      this.message.showMessage('Account information saved.', 'success');
-    } catch (err) {
+    const response = await this.api.account.update(updateAccountVo);
+    if (!response.isSuccessful) {
       const revertData: AccountVOData = {};
       revertData[prop] = originalValue;
       this.account.update(revertData);
       this.message.showError('There was a problem saving your account changes');
+    } else {
+      this.message.showMessage('Account information saved.', 'success');
     }
-  }
-
-  async onValidateEmailClick() {
-    await this.router.navigate(['.'], { relativeTo: this.route.parent });
-    await this.router.navigate(['/m/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendEmail: true } });
-  }
-
-  async onValidatePhoneClick() {
-    await this.router.navigate(['.'], { relativeTo: this.route.parent });
-    await this.router.navigate(['/m/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendSms: true } });
   }
 }

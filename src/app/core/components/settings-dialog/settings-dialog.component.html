@@ -8,17 +8,22 @@
   <div class="settings-content">
     <div class="settings-tabs">
       <div class="settings-tab"
-        (click)="setTab('account')" [class.active]="activeTab === 'account'">
-        Personal Info
-      </div>
-      <div class="settings-tab"
         (click)="setTab('notification')" [class.active]="activeTab === 'notification'">
         Notification Preferences
+      </div>
+      <div class="settings-tab"
+        (click)="setTab('account')" [class.active]="activeTab === 'account'">
+        Login Info
+      </div>
+      <div class="settings-tab"
+        (click)="setTab('billing')" [class.active]="activeTab === 'billing'">
+        Billing Info
       </div>
     </div>
     <div class="settings-panel">
       <ng-container [ngSwitch]="activeTab">
         <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
+        <pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
         <pr-notification-preferences *ngSwitchCase="'notification'"></pr-notification-preferences>
       </ng-container>
     </div>

@@ -1,73 +1,40 @@
-<div class="settings-item">
-  <label>Account Name</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.fullName" [required]="true" [noScroll]="true" [minLength]="1"
-      (doneEditing)="onSaveProfileInfo('fullName', $event)"></pr-inline-value-edit>
-  </div>
-</div>
-<div class="settings-item">
-  <label>Email</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.primaryEmail" [email]="true" [noScroll]="true" [minLength]="3" [required]="true"
-      (doneEditing)="onSaveProfileInfo('primaryEmail', $event)"></pr-inline-value-edit>
-  </div>
-</div>
-<div class="settings-item">
-  <label>Mobile Phone</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.primaryPhone" [noScroll]="true" [emptyMessage]="'Mobile Phone Number'"
-      (doneEditing)="onSaveProfileInfo('primaryPhone', $event)"></pr-inline-value-edit>
-  </div>
-</div>
-<div class="settings-item">
-  <label>Address Line 1</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.address" [noScroll]="true" [emptyMessage]="'Street Address Line 1'"
-      (doneEditing)="onSaveProfileInfo('address', $event)"></pr-inline-value-edit>
-  </div>
-</div>
-<div class="settings-item">
-  <label>Address Line 2</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.address2" [noScroll]="true" [emptyMessage]="'Street Address Line 2'"
-      (doneEditing)="onSaveProfileInfo('address2', $event)"></pr-inline-value-edit>
-  </div>
-</div>
-<div class="settings-item">
-  <label>City</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.city" [noScroll]="true" [emptyMessage]="'City'"
-      (doneEditing)="onSaveProfileInfo('city', $event)"></pr-inline-value-edit>
-  </div>
-</div>
-<ng-container [ngSwitch]="account.country">
-  <div class="settings-item" *ngSwitchCase="'US'">
-    <label>State</label>
+<div class="settings-group">
+  <div class="settings-item">
+    <label>Account Email
+      <i class="material-icons" [ngbTooltip]="'This email address is used to log into this account'">help</i>
+    </label>
     <div class="settings-item-content">
-      <pr-inline-value-edit [displayValue]="account.state" [noScroll]="true" [emptyMessage]="'Select state'" [type]="'select'"
-        [selectOptions]="states" (doneEditing)="onSaveProfileInfo('state', $event)"></pr-inline-value-edit>
+      <pr-inline-value-edit [displayValue]="account.primaryEmail" [email]="true" [noScroll]="true" [minLength]="3" [required]="true"
+        (doneEditing)="onSaveProfileInfo('primaryEmail', $event)"></pr-inline-value-edit>
     </div>
   </div>
-  <div class="settings-item" *ngSwitchDefault>
-    <label>Province/Region</label>
-    <div class="settings-item-content">
-      <pr-inline-value-edit [displayValue]="account.state" [noScroll]="true" [emptyMessage]="'Province/Region'"
-        (doneEditing)="onSaveProfileInfo('state', $event)"></pr-inline-value-edit>
+  <div class="settings-item">
+    <label>Validation Status</label>
+    <div class="settings-item-content" [ngSwitch]="account.emailStatus">
+      <ng-container *ngSwitchCase="'status.auth.verified'">
+        <span class="verified">Validated</span> 
+      </ng-container>
+      <button class="btn btn-primary" *ngSwitchDefault (click)="onValidateEmailClick()">Validate Email Address</button>
     </div>
   </div>
-</ng-container>
-
-<div class="settings-item">
-  <label>Postal Code</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.zip" [noScroll]="true" [emptyMessage]="'47685'"
-      (doneEditing)="onSaveProfileInfo('zip', $event)"></pr-inline-value-edit>
-  </div>
 </div>
-<div class="settings-item">
-  <label>Country</label>
-  <div class="settings-item-content">
-    <pr-inline-value-edit [displayValue]="account.country" [noScroll]="true" [emptyMessage]="'Select country'" [type]="'select'"
-      [selectOptions]="countries" (doneEditing)="onSaveProfileInfo('country', $event)"></pr-inline-value-edit>
+<div class="settings-group">
+  <div class="settings-item">
+    <label>Mobile Phone
+      <i class="material-icons" [ngbTooltip]="'A mobile phone number that can recieve verification codes via text message'">help</i>
+    </label>
+    <div class="settings-item-content">
+      <pr-inline-value-edit [displayValue]="account.primaryPhone" [noScroll]="true" [emptyMessage]="'Mobile Phone Number'"
+        (doneEditing)="onSaveProfileInfo('primaryPhone', $event)"></pr-inline-value-edit>
+    </div>
+  </div>
+  <div class="settings-item">
+    <label>Validation Status</label>
+    <div class="settings-item-content" [ngSwitch]="account.phoneStatus">
+      <ng-container *ngSwitchCase="'status.auth.verified'">
+        <span class="verified">Validated</span> 
+      </ng-container>
+      <button class="btn btn-primary" *ngSwitchDefault (click)="onValidatePhoneClick()">Validate Phone Number</button>
+    </div>
   </div>
 </div>
