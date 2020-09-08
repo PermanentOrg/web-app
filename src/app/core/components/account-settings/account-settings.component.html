@@ -38,3 +38,23 @@
     </div>
   </div>
 </div>
+<form [formGroup]="changePasswordForm" class="dialog-form" (submit)="onChangePasswordFormSubmit(changePasswordForm.value)">
+  <div class="dialog-form-field">
+    <label for="name">Current Password</label>
+    <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+      formControlName="passwordOld">
+  </div>
+  <div class="dialog-form-field">
+    <label for="email">New Password (min. 8 chars)</label>
+    <input type="password" class="form-control" id="newPassword" name="newPassword"
+      formControlName="password">
+  </div>
+  <div class="dialog-form-field">
+    <label for="email">Confirm New Password</label>
+    <input type="password" class="form-control" id="newPasswordConfirm" name="newPasswordConfirm"
+      formControlName="passwordVerify">
+  </div>
+  <div class="dialog-form-field">
+    <button class="btn btn-primary" [disabled]="changePasswordForm.invalid || waiting">Change Password</button>
+  </div>
+</form>

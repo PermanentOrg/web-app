@@ -70,3 +70,7 @@ p {
 .verified {
   color: $success;
 }
+
+form {
+  @include tabbedDialogPanelForm;
+}

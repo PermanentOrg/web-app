@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, AccountVO, NotificationPreferencesI } from '@models';
+import { AccountVO, AccountPasswordVOData } from '@models';
 import { cloneDeep } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
@@ -9,6 +9,9 @@ import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
+import { matchControlValidator } from '@shared/utilities/forms';
 
 @Component({
   selector: 'pr-account-settings',
@@ -20,6 +23,10 @@ export class AccountSettingsComponent implements OnInit {
   public countries: FormInputSelectOption[];
   public states: FormInputSelectOption[];
 
+  public changePasswordForm: FormGroup;
+
+  public waiting = false;
+
   constructor(
     private accountService: AccountService,
     private dataService: DataService,
@@ -27,7 +34,8 @@ export class AccountSettingsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private fb: FormBuilder
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map(c => {
@@ -42,6 +50,17 @@ export class AccountSettingsComponent implements OnInit {
         value: s
       };
     });
+
+    this.changePasswordForm = fb.group({
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      passwordOld: ['', [Validators.required, Validators.minLength(8)]],
+    });
+
+    const verifyPasswordControl = new FormControl(
+      '',
+      [Validators.required, matchControlValidator(this.changePasswordForm.controls['password'])]
+    );
+    this.changePasswordForm.addControl('passwordVerify', verifyPasswordControl);
   }
 
   ngOnInit(): void {
@@ -75,5 +94,21 @@ export class AccountSettingsComponent implements OnInit {
   async onValidatePhoneClick() {
     await this.router.navigate(['.'], { relativeTo: this.route.parent });
     await this.router.navigate(['/m/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendSms: true } });
+  }
+
+  async onChangePasswordFormSubmit(value: AccountPasswordVOData) {
+    this.waiting = true;
+
+    try {
+      await this.api.auth.updatePassword(this.account, value);
+      this.message.showMessage('Password updated.', 'success');
+    } catch (err) {
+      if (err instanceof AuthResponse) {
+        this.message.showError(err.getMessage(), true);
+      }
+    } finally {
+      this.waiting = false;
+      this.changePasswordForm.reset();
+    }
   }
 }
