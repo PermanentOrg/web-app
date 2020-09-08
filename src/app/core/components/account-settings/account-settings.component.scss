@@ -25,7 +25,9 @@ p {
 
 
 .settings-item {
-  display: flex;
+  @include desktop{
+    display: flex;
+  }
 
   & > label {
     font-weight: $font-weight-bold;
