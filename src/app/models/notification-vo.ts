@@ -1,6 +1,6 @@
 import { BaseVOData } from './base-vo';
 
-type NotificationStatus =
+export type NotificationStatus =
   'status.notification.new' |
   'status.notification.seen' |
   'status.notification.read' |

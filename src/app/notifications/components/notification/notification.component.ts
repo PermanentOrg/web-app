@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { NotificationVOData } from '@models/notification-vo';
 
 @Component({
@@ -8,8 +8,13 @@ import { NotificationVOData } from '@models/notification-vo';
 })
 export class NotificationComponent implements OnInit {
   @Input() notification: NotificationVOData;
+  element: HTMLElement;
 
-  constructor() { }
+  constructor(
+    private elementRef: ElementRef
+  ) {
+    this.element = elementRef.nativeElement as HTMLElement;
+  }
 
   ngOnInit(): void {
   }

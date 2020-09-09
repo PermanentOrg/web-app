@@ -13,6 +13,16 @@ export class NotificationRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<NotificationResponse>('/notification/getMyNotificationsSince', [data], NotificationResponse);
   }
+
+  public update(notifications: NotificationVOData[]) {
+    const data = notifications.map(n => {
+      return {
+        NotificationVO: n
+      };
+    });
+
+    return this.http.sendRequestPromise<NotificationResponse>('/notification/updateNotification', data, NotificationResponse);
+  }
 }
 
 export class NotificationResponse extends BaseResponse {
