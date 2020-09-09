@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } fro
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
-import { Router } from '@angular/router';
 import { partition, remove, find } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/archive.repo';
@@ -11,7 +10,6 @@ import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-
 import { ArchiveType } from '@models/archive-vo';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RELATION_OPTIONS, PromptService } from '@shared/services/prompt/prompt.service';
-import { Deferred } from '@root/vendor/deferred';
 
 type MyArchivesTab = 'switch' | 'new' | 'pending';
 
