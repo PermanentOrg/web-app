@@ -10,7 +10,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { ArchiveType } from '@models/archive-vo';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
+import { RELATION_OPTIONS, PromptService } from '@shared/services/prompt/prompt.service';
+import { Deferred } from '@root/vendor/deferred';
 
 type MyArchivesTab = 'switch' | 'new' | 'pending';
 
@@ -42,6 +43,7 @@ const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
 })
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   account: AccountVO;
+  currentArchive: ArchiveVO;
   archives: ArchiveVO[];
   pendingArchives: ArchiveVO[];
   waiting = false;
@@ -59,6 +61,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     private dialogRef: DialogRef,
     private accountService: AccountService,
     private api: ApiService,
+    private prompt: PromptService,
     private message: MessageService,
     private fb: FormBuilder,
   ) {
@@ -71,6 +74,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
 
   ngOnInit(): void {
     this.account = this.accountService.getAccount();
+    this.currentArchive = this.accountService.getArchive();
     [this.pendingArchives, this.archives] = partition(this.accountService.getArchives(), { status: 'status.generic.pending'} );
   }
 
@@ -117,6 +121,35 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       this.message.showError('There was a problem changing the default archive.', false);
     } finally {
       archive.isPendingAction = false;
+    }
+  }
+
+  async onArchiveDeleteClick(archive: ArchiveVO) {
+    if (this.currentArchive.archiveId === archive.archiveId) {
+      return;
+    }
+
+    if (archive.isPendingAction || archive.archiveId === this.account.defaultArchiveId) {
+      return;
+    }
+
+    archive.isPendingAction = true;
+    try {
+      await this.prompt.confirm(
+        `Delete The ${archive.fullName} Archive`,
+        'Are you sure you want to permanently delete this archive?',
+        null,
+        'btn-danger'
+        );
+    } catch (err) {
+      return;
+    }
+
+    try {
+      await this.api.archive.delete(archive);
+      remove(this.archives, archive);
+    } catch (err) {
+      this.message.showError('There was a problem deleting this archive.', false);
     }
   }
 
