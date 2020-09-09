@@ -8,7 +8,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 
-type StorageDialogTab = 'add' | 'file' | 'transction' | 'promo';
+type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo';
 
 @Component({
   selector: 'pr-storage-dialog',
