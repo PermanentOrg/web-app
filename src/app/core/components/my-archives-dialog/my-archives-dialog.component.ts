@@ -125,7 +125,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   async onArchiveDeleteClick(archive: ArchiveVO) {
-    if (this.currentArchive.archiveId === archive.archiveId) {
+    if (this.currentArchive.archiveId === archive.archiveId || archive.accessRole !== 'access.role.owner') {
       return;
     }
 
@@ -150,6 +150,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       remove(this.archives, archive);
     } catch (err) {
       this.message.showError('There was a problem deleting this archive.', false);
+      archive.isPendingAction = false;
     }
   }
 

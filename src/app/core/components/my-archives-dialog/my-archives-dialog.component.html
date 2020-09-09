@@ -28,7 +28,7 @@
             [showAccept]="account.defaultArchiveId !== archive.archiveId"
             acceptText="Make Default"
             (acceptClick)="onArchiveMakeDefaultClick(archive)"
-            [showRemove]="currentArchive.archiveId !== archive.archiveId && account.defaultArchiveId !== archive.archiveId && archives.length > 1"
+            [showRemove]="archive.accessRole.includes('owner') && currentArchive.archiveId !== archive.archiveId && account.defaultArchiveId !== archive.archiveId && archives.length > 1"
             removeText="Delete"
             (removeClick)="onArchiveDeleteClick(archive)"            
             [largeOnDesktop]="true" [archive]="archive"
