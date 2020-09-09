@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 
-export type SettingsTab = 'storage' | 'account' | 'notification';
+export type SettingsTab = 'storage' | 'account' | 'notification' | 'billing';
 
 @Component({
   selector: 'pr-settings-dialog',

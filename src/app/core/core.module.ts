@@ -47,6 +47,7 @@ import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-f
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 import { FileHistoryComponent } from './components/file-history/file-history.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
+import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { TransactionHistoryComponent } from './components/transaction-history/tr
     MembersComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
+    BillingSettingsComponent,
     NotificationPreferencesComponent,
     ArchiveSelectorComponent,
     ProfileEditComponent,

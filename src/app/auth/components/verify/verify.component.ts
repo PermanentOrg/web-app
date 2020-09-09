@@ -155,8 +155,6 @@ export class VerifyComponent implements OnInit {
   finish() {
     return this.accountService.switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
-        this.waiting = false;
-
         if (this.route.snapshot.queryParams.shareByUrl) {
           this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
             .then(() => {

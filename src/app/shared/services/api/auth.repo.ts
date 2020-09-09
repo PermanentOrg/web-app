@@ -1,4 +1,4 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/models';
+import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, AccountPasswordVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -58,6 +58,15 @@ export class AuthRepo extends BaseRepo {
     };
 
     return this.http.sendRequest<AuthResponse>('/auth/resetPassword', [data], AuthResponse);
+  }
+
+  public updatePassword(account: AccountVO, passwordVo: AccountPasswordVOData) {
+    const data = [{
+      AccountVO: account,
+      AccountPasswordVO: passwordVo
+    }];
+
+    return this.http.sendRequestPromise<AuthResponse>('/account/changePassword', data, AuthResponse);
   }
 
   public resendEmailVerification(accountVO: AccountVO) {
