@@ -2,6 +2,7 @@ import { Component, OnInit, HostBinding, AfterViewInit, ViewChild, Optional, OnD
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-nav',
@@ -16,7 +17,8 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     @Optional() private portalService: SidebarActionPortalService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    @Optional() private dialog: Dialog
   ) {
   }
 
@@ -49,6 +51,10 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hideRightMenu() {
     this.rightMenuVisible = false;
+  }
+
+  showNotificationMenu() {
+    this.dialog.open('NotificationDialogComponent', null, { height: 'fullscreen', menuClass: 'notification-dialog'});
   }
 
 }
