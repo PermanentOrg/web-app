@@ -46,6 +46,7 @@ import { CountUpModule } from 'countup.js-angular2';
 import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 import { FileHistoryComponent } from './components/file-history/file-history.component';
+import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { FileHistoryComponent } from './components/file-history/file-history.com
     MembersComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
+    BillingSettingsComponent,
     NotificationPreferencesComponent,
     ArchiveSelectorComponent,
     ProfileEditComponent,

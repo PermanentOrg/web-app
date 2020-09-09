@@ -25,7 +25,7 @@ p {
 
 
 .settings-item {
-  @include desktop{
+  @include desktop {
     display: flex;
   }
 
@@ -34,28 +34,10 @@ p {
     padding: $grid-unit / 2 0;
     margin-bottom: 0px;
     flex: 0 0 12rem;
-    display: flex;
-    align-items: center;
-
-    i {
-      font-size: $mat-icon-sm;
-      margin-left: $grid-unit / 2;
-      cursor: pointer;
-    }
   }
 
   .settings-item-content {
     flex: 1 1 auto;
-
-    display: flex;
-    align-items: center;
-
-    .btn {
-      @include gridHeightButtonSmall;
-      margin: 0;
-      flex: 0 0 auto;
-      width: auto;
-    }
   }
 
   @include after($phone) {
@@ -67,12 +49,6 @@ p {
       max-width: 30rem;
     }
   }
-}
 
-.verified {
-  color: $success;
-}
 
-form {
-  @include tabbedDialogPanelForm;
 }
