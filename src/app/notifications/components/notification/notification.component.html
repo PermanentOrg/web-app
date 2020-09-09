@@ -1,1 +1,4 @@
-<p>notification works!</p>
+<div class="content">
+  Notification content
+</div>
+<div class="timestamp" *ngIf="notification">{{notification.createdDT | timeAgo}}</div>

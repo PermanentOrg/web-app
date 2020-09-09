@@ -5,4 +5,8 @@
       <i class="material-icons">close</i>
     </button>
   </div>
+  <div class="notifications">
+    <pr-notification *ngFor="let notification of notificationService.notifications"
+      [notification]="notification"></pr-notification>
+  </div>
 </div>

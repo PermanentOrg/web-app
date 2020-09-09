@@ -4,11 +4,13 @@ import { NotificationService } from './services/notification.service';
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
 import { DialogChildComponentData, Dialog } from '../dialog/dialog.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [NotificationComponent, NotificationDialogComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
   providers: [
     NotificationService

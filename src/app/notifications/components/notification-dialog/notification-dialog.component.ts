@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'pr-notification-dialog',
@@ -7,10 +8,10 @@ import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
   styleUrls: ['./notification-dialog.component.scss']
 })
 export class NotificationDialogComponent implements OnInit {
-
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
+    public notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
