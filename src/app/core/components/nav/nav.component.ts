@@ -1,6 +1,7 @@
 import { Component, OnInit, HostBinding, AfterViewInit, ViewChild, Optional, OnDestroy } from '@angular/core';
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
+import { NotificationService } from '@root/app/notifications/services/notification.service';
 
 @Component({
   selector: 'pr-nav',
@@ -14,7 +15,8 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   constructor(
-    @Optional() private portalService: SidebarActionPortalService
+    @Optional() private portalService: SidebarActionPortalService,
+    public notificationService: NotificationService
   ) {
   }
 

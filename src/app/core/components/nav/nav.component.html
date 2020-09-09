@@ -10,6 +10,9 @@
 <nav class="navbar navbar-dark nav-desktop">
   <pr-global-search-bar></pr-global-search-bar>
   <div class="nav-buttons">
+    <i class="material-icons" [class.has-badge]="notificationService.newNotificationCount">
+      notifications
+    </i>
     <a href="/add-storage" [ngbTooltip]="'nav.addStorage' | prTooltip">
       +
     </a>

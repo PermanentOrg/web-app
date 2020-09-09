@@ -14,6 +14,7 @@ export class ApiService {
   public folder: Repo.FolderRepo;
   public invite: Repo.InviteRepo;
   public locn: Repo.LocnRepo;
+  public notification: Repo.NotificationRepo;
   public publish: Repo.PublishRepo;
   public record: Repo.RecordRepo;
   public relation: Repo.RelationRepo;
@@ -31,6 +32,7 @@ export class ApiService {
     this.folder = new Repo.FolderRepo(this.http);
     this.invite = new Repo.InviteRepo(this.http);
     this.locn = new Repo.LocnRepo(this.http);
+    this.notification = new Repo.NotificationRepo(this.http);
     this.publish = new Repo.PublishRepo(this.http);
     this.record = new Repo.RecordRepo(this.http);
     this.relation = new Repo.RelationRepo(this.http);

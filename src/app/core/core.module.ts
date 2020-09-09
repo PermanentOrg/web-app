@@ -47,6 +47,7 @@ import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-f
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 import { FileHistoryComponent } from './components/file-history/file-history.component';
 import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { BillingSettingsComponent } from './components/billing-settings/billing-
     SearchModule,
     PortalModule,
     CountUpModule,
+    NotificationsModule
   ],
   declarations: [
     MainComponent,
