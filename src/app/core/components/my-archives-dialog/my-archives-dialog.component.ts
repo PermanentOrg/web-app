@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
-import { ArchiveVO } from '@models';
+import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 import { partition, remove, find } from 'lodash';
@@ -41,6 +41,7 @@ const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
   styleUrls: ['./my-archives-dialog.component.scss']
 })
 export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
+  account: AccountVO;
   archives: ArchiveVO[];
   pendingArchives: ArchiveVO[];
   waiting = false;
@@ -59,7 +60,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     private accountService: AccountService,
     private api: ApiService,
     private message: MessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.newArchiveForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -69,6 +70,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   ngOnInit(): void {
+    this.account = this.accountService.getAccount();
     [this.pendingArchives, this.archives] = partition(this.accountService.getArchives(), { status: 'status.generic.pending'} );
   }
 
@@ -100,6 +102,20 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       await this.accountService.changeArchive(archive);
       this.onDoneClick();
     } catch (err) {}
+  }
+
+  async onArchiveMakeDefaultClick(archive: ArchiveVO) {
+    if (archive.isPendingAction) {
+      return;
+    }
+
+    try {
+      archive.isPendingAction = true;
+    } catch (err) {
+
+    } finally {
+      archive.isPendingAction = false;
+    }
   }
 
   async acceptPendingArchive(archive: ArchiveVO) {
