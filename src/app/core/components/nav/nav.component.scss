@@ -119,7 +119,7 @@ nav.nav-desktop {
   display: flex;
   align-items: center;
 
-  $button-size: $grid-unit * 1.5;
+  $button-size: $grid-unit;
 
   > a, > i {
     border-radius: 50%;
@@ -131,11 +131,16 @@ nav.nav-desktop {
     line-height: $button-size;
     font-weight: bold;
     text-decoration: none !important;
-    font-size: $font-size-lg;
+    font-size: $font-size-base;
     cursor: pointer;
 
     &.has-badge {
+      position: relative;
+
       &:after {
+        position: absolute;
+        top: 0;
+        right: -$grid-unit / 4;
         display: block;
         content: '';
         height: $grid-unit / 2;
