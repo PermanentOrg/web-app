@@ -105,14 +105,16 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   async onArchiveMakeDefaultClick(archive: ArchiveVO) {
-    if (archive.isPendingAction) {
+    if (archive.isPendingAction || archive.archiveId === this.account.defaultArchiveId) {
       return;
     }
 
     try {
       archive.isPendingAction = true;
+      const updateAccount = new AccountVO({defaultArchiveId: archive.archiveId});
+      await this.accountService.updateAccount(updateAccount);
     } catch (err) {
-
+      this.message.showError('There was a problem changing the default archive.', false);
     } finally {
       archive.isPendingAction = false;
     }

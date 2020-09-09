@@ -25,8 +25,9 @@
           <div class="panel-title">({{archives.length}}) Archives</div>
           <pr-archive-small *ngFor="let archive of archives" (archiveClick)="onArchiveClick(archive)"
             [clickable]="true"
-            [showEdit]="account.defaultArchiveId !== archive.archiveId"
-            (editClick)="onArchiveMakeDefaultClick(archive)"
+            [showAccept]="account.defaultArchiveId !== archive.archiveId"
+            acceptText="Make Default"
+            (acceptClick)="onArchiveMakeDefaultClick(archive)"
             [largeOnDesktop]="true" [archive]="archive"
             [accessRole]="archive.accessRole" [class.waiting]="archive.isPendingAction"></pr-archive-small>
         </ng-container>
