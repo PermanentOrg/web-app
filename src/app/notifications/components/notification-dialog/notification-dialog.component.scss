@@ -14,6 +14,12 @@
 .notifications {
   flex: 1 1 auto;
   overflow-y: auto;
+
+  .empty-message {
+    font-size: $font-size-sm;
+    text-align: center;
+    padding: $grid-unit;
+  }
 }
 
 .footer {

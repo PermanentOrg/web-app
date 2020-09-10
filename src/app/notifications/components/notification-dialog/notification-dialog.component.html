@@ -6,6 +6,7 @@
     </button>
   </div>
   <div class="notifications">
+    <div class="empty-message" *ngIf="!notificationService.notifications">No activity</div>
     <pr-notification *ngFor="let notification of notificationService.notifications"
       [notification]="notification" (click)="onNotificationClick(notification)"></pr-notification>
   </div>
