@@ -16,6 +16,19 @@
   overflow-y: auto;
 }
 
-pr-notification {
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: $grid-unit / 2;
+  border-top: $file-list-border;
+  .btn {
+    @include gridHeightButtonSmall;
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+  }
+}
+
+pr-notification:not(:last-child) {
   border-bottom: $file-list-border;
 }

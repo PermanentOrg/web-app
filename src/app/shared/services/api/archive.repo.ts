@@ -169,7 +169,7 @@ export class ArchiveResponse extends BaseResponse {
     return new ArchiveVO(data[0][0].ArchiveVO);
   }
 
-  public getArchiveVOs() {
+  public getArchiveVOs(): ArchiveVO[] {
     const data = this.getResultsData();
     const archives = data.map((result) => {
       return result.map((resultList) => {

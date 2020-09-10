@@ -147,6 +147,8 @@ nav.nav-desktop {
         width: $grid-unit / 2;
         background: $red;
         border-radius: 50%;
+
+        animation:  fadeIn 1s, slideUp 1s;
       }
     }
   }

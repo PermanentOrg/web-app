@@ -20,11 +20,6 @@ export class NotificationDialogComponent implements OnInit, AfterViewInit, OnDes
     private dialogRef: DialogRef,
     public notificationService: NotificationService
   ) {
-
-    this.subscriptions.push(
-      this.notificationService.notificationsChange.subscribe(() => {
-      })
-    );
   }
 
   ngOnInit(): void {
