@@ -148,7 +148,7 @@ nav.nav-desktop {
         background: $red;
         border-radius: 50%;
 
-        animation:  fadeIn 1s $tweaked-ease, slideUp 1s $tweaked-ease;
+        animation:  fadeIn 125ms $tweaked-ease, scaleIn 250ms $tweaked-ease;
       }
     }
   }

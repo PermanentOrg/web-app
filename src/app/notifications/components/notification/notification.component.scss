@@ -16,13 +16,22 @@
 
 .content {
   flex: 1 1 auto;
-  font-size: $font-size-sm;
-  .text {
 
+  .text {
+    font-size: $font-size-sm;
   }
 
   .actions {
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: $grid-unit;
+    .btn {
+      margin: 0;
+      @include gridHeightButtonSmall;
+      flex: 0 0 auto;
+      width: auto;
+    }
   }
 }
 

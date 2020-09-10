@@ -54,7 +54,10 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showNotificationMenu() {
-    this.dialog.open('NotificationDialogComponent', null, { height: 'fullscreen', menuClass: 'notification-dialog'});
+    try {
+      this.dialog.open('NotificationDialogComponent', null, { height: 'fullscreen', menuClass: 'notification-dialog'});
+    } catch (err) {
+    }
   }
 
 }

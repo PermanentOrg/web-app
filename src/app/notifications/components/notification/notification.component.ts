@@ -10,6 +10,8 @@ export class NotificationComponent implements OnInit {
   @Input() notification: NotificationVOData;
   element: HTMLElement;
 
+  showActions = false;
+
   constructor(
     private elementRef: ElementRef
   ) {
@@ -17,6 +19,7 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.showActions = this.notification.type === 'type.notification.zip';
   }
 
 }

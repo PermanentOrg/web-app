@@ -16,6 +16,7 @@ export class NotificationService {
   refreshIntervalId: NodeJS.Timeout;
 
   notificationsChange = new EventEmitter<void>();
+  waiting = false;
 
   private debug = debug('service:notificationService');
   constructor(
@@ -52,6 +53,11 @@ export class NotificationService {
   }
 
   async loadLatestNotifications() {
+    if (this.waiting) {
+      return;
+    }
+
+    this.waiting = true;
     try {
       const response = await this.api.notification.getNotifications();
       this.notifications = response.getNotificationVOs();
@@ -63,10 +69,17 @@ export class NotificationService {
     } catch (err) {
       console.error(err);
       this.message.showError('There was an error fetching your notifications.', false);
+    } finally {
+      this.waiting = false;
     }
   }
 
   async loadNewNotifications() {
+    if (this.waiting) {
+      return;
+    }
+
+    this.waiting = true;
     try {
       if (this.notifications.length) {
         const response = await this.api.notification.getNotificationsSince(this.notifications[0]);
@@ -83,6 +96,8 @@ export class NotificationService {
     } catch (err) {
       console.error(err);
       this.message.showError('There was an error fetching your notifications.', false);
+    } finally {
+      this.waiting = false;
     }
   }
 
@@ -117,7 +132,7 @@ export class NotificationService {
   }
 
   markAsSeen() {
-    const notRead = this.notifications.filter(n => n.status === 'status.notification.read');
+    const notRead = this.notifications.filter(n => n.status !== 'status.notification.read');
     this.setNotificationStatus(notRead, 'status.notification.seen');
   }
 
@@ -134,6 +149,10 @@ export class NotificationService {
       path = ['/m', 'connections'];
     } else if (notification.type === 'type.notification.share') {
       path = ['/m', 'shares'];
+    } else if (notification.type === 'type.notification.zip') {
+      const link = document.createElement('a');
+      link.href = notification.redirectUrl;
+      link.click();
     }
 
     if (path) {

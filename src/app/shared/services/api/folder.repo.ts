@@ -1,4 +1,4 @@
-import { FolderVO, FolderVOData } from '@root/app/models';
+import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -175,6 +175,16 @@ export class FolderRepo extends BaseRepo {
     });
 
     return this.http.sendRequestPromise<FolderResponse>('/folder/sort', data, FolderResponse);
+  }
+
+  public createZip(items: ItemVO[]): Promise<FolderResponse> {
+    const data = [{
+      ZipVO: {
+        items: items.map(i => i.archiveNbr).join(',')
+      }
+    }];
+
+    return this.http.sendRequestPromise<FolderResponse>('/zip/post', data, FolderResponse);
   }
 }
 
