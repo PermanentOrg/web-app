@@ -94,7 +94,7 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   }
 
   isDefaultArchive() {
-    return this.account.getAccount().defaultArchiveId === this.archive.archiveId;
+    return this.account.getAccount()?.defaultArchiveId === this.archive.archiveId;
   }
 
 }
