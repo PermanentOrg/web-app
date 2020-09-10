@@ -6,6 +6,8 @@ import { MessageService } from '@shared/services/message/message.service';
 import { filter } from 'lodash';
 import debug from 'debug';
 import { Router } from '@angular/router';
+import { Dialog } from '@root/app/dialog/dialog.module';
+import { MyArchivesTab } from '@core/components/my-archives-dialog/my-archives-dialog.component';
 
 const REFRESH_INTERVAL = 30 * 1000;
 @Injectable()
@@ -23,7 +25,8 @@ export class NotificationService {
     private api: ApiService,
     private message: MessageService,
     private account: AccountService,
-    private router: Router
+    private router: Router,
+    private dialog: Dialog
   ) {
     this.reset();
 
@@ -140,7 +143,7 @@ export class NotificationService {
     this.setNotificationStatus(this.notifications, status);
   }
 
-  goToNotification(notification: NotificationVOData) {
+  async goToNotification(notification: NotificationVOData) {
     this.setNotificationStatus([notification], 'status.notification.read');
     let path: string[];
     if (notification.type.includes('facebook')) {
@@ -153,6 +156,18 @@ export class NotificationService {
       const link = document.createElement('a');
       link.href = notification.redirectUrl;
       link.click();
+    } else if (notification.type.includes('type.notification.pa_')) {
+      await this.account.refreshArchives();
+      let data: any;
+      if (notification.type === 'type.notification.pa_transfer' || notification.type === 'type.notification.pa_share') {
+        const activeTab: MyArchivesTab = 'pending';
+        data = {
+          activeTab
+        };
+      }
+      try {
+        this.dialog.open('MyArchivesDialogComponent', data, { width: '1000px'});
+      } catch (err) { }
     }
 
     if (path) {

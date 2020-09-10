@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, Inject } from '@angular/core';
+import { IsTabbedDialog, DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { ArchiveType } from '@models/archive-vo';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
 
-type MyArchivesTab = 'switch' | 'new' | 'pending';
+export type MyArchivesTab = 'switch' | 'new' | 'pending';
 
 interface ArchiveFormData {
   fullName: string;
@@ -56,6 +56,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
 
   constructor(
     private dialogRef: DialogRef,
+    @Inject(DIALOG_DATA) public data: any,
     private accountService: AccountService,
     private api: ApiService,
     private message: MessageService,
@@ -66,6 +67,10 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       type: [ARCHIVE_TYPES[0].value, [Validators.required]],
       relationType: [null]
     });
+
+    if (this.data && this.data.activeTab) {
+      this.activeTab = this.data.activeTab as MyArchivesTab;
+    }
   }
 
   ngOnInit(): void {

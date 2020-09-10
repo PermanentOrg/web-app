@@ -21,6 +21,7 @@ export type NotificationType =
   'type.notification.facebook_permanent_retrieval_out_of_space' |
   'type.notification.pa_access_change' |
   'type.notification.pa_response' |
+  'type.notification.pa_share' |
   'type.notification.pa_transfer' |
   'type.notification.relationship_accept' |
   'type.notification.relationship_reject' |
