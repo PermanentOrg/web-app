@@ -22,6 +22,7 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @HostBinding('class.large-on-desktop') @Input() largeOnDesktop = false;
   @Input() showRemove = false;
   @Input() removeText = 'Remove';
+  @Input() removeIcon = 'delete';
   @Output() removeClick = new EventEmitter<any>();
 
   @Input() showEdit = false;
@@ -29,8 +30,10 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
 
   @Input() showAccept = false;
   @Input() acceptText = 'Accept';
+  @Input() acceptIcon = 'check';
   @Output() acceptClick = new EventEmitter<any>();
 
+  @Input() actionsAsDropdown = false;
 
   public isCurrent = false;
   public relationDisplay: string;
@@ -88,6 +91,10 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
         this.checkArchiveThumbnail();
       }, 5000);
     }
+  }
+
+  isDefaultArchive() {
+    return this.account.getAccount().defaultArchiveId === this.archive.archiveId;
   }
 
 }
