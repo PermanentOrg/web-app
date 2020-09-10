@@ -2,9 +2,9 @@ import { Component, OnInit, Inject, ViewChildren, AfterViewInit, OnDestroy, Elem
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationComponent } from '../notification/notification.component';
-import { some } from 'lodash';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
+import { NotificationVOData } from '@models/notification-vo';
 
 @Component({
   selector: 'pr-notification-dialog',
@@ -26,7 +26,7 @@ export class NotificationDialogComponent implements OnInit, AfterViewInit, OnDes
   }
 
   ngAfterViewInit(): void {
-    this.markAllAsSeen();
+    this.markNewAsSeen();
   }
 
   ngOnDestroy(): void {
@@ -37,8 +37,13 @@ export class NotificationDialogComponent implements OnInit, AfterViewInit, OnDes
     this.dialogRef.close();
   }
 
-  markAllAsSeen(): void {
-    this.notificationService.markAll('status.notification.seen');
+  onNotificationClick(notification: NotificationVOData) {
+    this.onDoneClick();
+    this.notificationService.goToNotification(notification);
+  }
+
+  markNewAsSeen(): void {
+    this.notificationService.markAsSeen();
   }
 
   markAllAsRead(): void {
