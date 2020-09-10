@@ -8,6 +8,7 @@ import debug from 'debug';
 import { Router } from '@angular/router';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { MyArchivesTab } from '@core/components/my-archives-dialog/my-archives-dialog.component';
+import { ConnectionsTab } from '@core/components/connections-dialog/connections-dialog.component';
 
 const REFRESH_INTERVAL = 30 * 1000;
 @Injectable()
@@ -145,11 +146,18 @@ export class NotificationService {
 
   async goToNotification(notification: NotificationVOData) {
     this.setNotificationStatus([notification], 'status.notification.read');
-    let path: string[];
+    let path: any[];
+    let queryParams: any;
     if (notification.type.includes('facebook')) {
       path = ['/m', 'apps'];
     } else if (notification.type.includes('relationship')) {
-      path = ['/m', 'connections'];
+      if (notification.type === 'type.notification.relationship_request') {
+        const tab: ConnectionsTab = 'pending';
+        queryParams = {
+          tab
+        };
+      }
+      path = ['/m', { outlets: { dialog: ['connections']}}];
     } else if (notification.type === 'type.notification.share') {
       path = ['/m', 'shares'];
     } else if (notification.type === 'type.notification.zip') {
@@ -171,7 +179,7 @@ export class NotificationService {
     }
 
     if (path) {
-      return this.router.navigate(path);
+      return this.router.navigate(path, { queryParams });
     }
   }
 }

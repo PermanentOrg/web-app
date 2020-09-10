@@ -36,7 +36,7 @@ const ConnectionActions: {[key: string]: PromptButton} = {
   }
 };
 
-type ConnectionsTab = 'connections' | 'pending' | 'new';
+export type ConnectionsTab = 'connections' | 'pending' | 'new';
 
 @Component({
   selector: 'pr-connections-dialog',
@@ -85,6 +85,15 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
         value: type.type
       };
     });
+
+    if (this.route.snapshot.queryParams.tab) {
+      const tab = this.route.snapshot.queryParams.tab as ConnectionsTab;
+      switch (tab) {
+        case 'new':
+        case 'pending':
+          this.activeTab  = tab;
+      }
+    }
   }
 
   ngOnInit(): void {
