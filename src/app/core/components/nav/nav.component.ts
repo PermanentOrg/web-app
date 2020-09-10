@@ -17,7 +17,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     @Optional() private portalService: SidebarActionPortalService,
-    public notificationService: NotificationService,
+    @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog
   ) {
   }

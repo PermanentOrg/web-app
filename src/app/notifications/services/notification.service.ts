@@ -68,7 +68,7 @@ export class NotificationService {
       if (this.notifications) {
         this.notificationsChange.emit();
       }
-      this.setUnreadCount();
+      this.setNewNotificationCount();
       this.debug('got full list %d items', this.notifications.length);
     } catch (err) {
       console.error(err);
@@ -93,7 +93,7 @@ export class NotificationService {
           this.notifications.unshift(...newNotifications.reverse());
           this.notificationsChange.emit();
         }
-        this.setUnreadCount();
+        this.setNewNotificationCount();
       } else {
         this.loadLatestNotifications();
       }
@@ -105,7 +105,7 @@ export class NotificationService {
     }
   }
 
-  setUnreadCount() {
+  setNewNotificationCount() {
     this.newNotificationCount = filter(this.notifications, n => n.status === 'status.notification.new' || n.status === 'status.notification.emailed').length;
   }
 
@@ -124,7 +124,7 @@ export class NotificationService {
 
     try {
       await this.api.notification.update(needsUpdate);
-      this.setUnreadCount();
+      this.setNewNotificationCount();
     } catch (err) {
       console.error(err);
       for (let i = 0; i < needsUpdate.length; i++) {
