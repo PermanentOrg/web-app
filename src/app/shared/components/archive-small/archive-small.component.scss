@@ -47,6 +47,15 @@ $thumb-size: 50px;
   color: $text-muted;
 }
 
+.archive-default {
+  i {
+    width: $mat-icon;
+    text-align: center;
+    font-size: $mat-icon-sm;
+    color: $yellow;
+  }
+}
+
 .archive-edit {
   display: flex;
 
@@ -76,6 +85,37 @@ $desktop-height: pxToGrid(60px);
       height: $desktop-height;
       flex-basis: $desktop-height;
       margin-right: $grid-unit;
+    }
+
+    .archive-edit-dropdown {
+      > i {
+        cursor: pointer;
+        padding: $grid-unit;
+        margin-right: -$grid-unit;
+      }
+
+      .dropdown-toggle {
+        &:after {
+          display: none;
+        }
+      }
+
+      .dropdown {
+        padding: 0px;
+        > a {
+          display: flex;
+          padding: $grid-unit / 4 $grid-unit / 2;
+          align-items: center;
+
+          > i {
+            margin-right: $grid-unit / 2;
+          }
+
+          &:hover {
+            background-color: darken(white, 4%);
+          }
+        }
+      }
     }
   }
 }

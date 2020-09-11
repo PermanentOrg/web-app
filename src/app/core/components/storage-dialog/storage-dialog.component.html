@@ -11,7 +11,13 @@
         (click)="setTab('add')" [class.active]="activeTab === 'add'">
         Add Storage
       </div>
-      <div class="dialog-tab" (click)="setTab('history')" [class.active]="activeTab === 'history'">
+      <div class="dialog-tab" (click)="setTab('promo')" [class.active]="activeTab === 'promo'">
+        Redeem Gift
+      </div>
+      <div class="dialog-tab" (click)="setTab('transaction')" [class.active]="activeTab === 'transaction'">
+        Transaction History
+      </div>
+      <div class="dialog-tab" (click)="setTab('file')" [class.active]="activeTab === 'file'">
         File History
       </div>
     </div>
@@ -19,12 +25,31 @@
       <ng-container [ngSwitch]="activeTab">
         <ng-container *ngSwitchCase="'add'">
           <div class="panel-title">Add Storage</div>
+          <pr-storage-meter></pr-storage-meter>
           <p>Need more storage? Feel free to make another pledge to Permanent.org anytime you'd like.</p>
           <div class="panel-button">
             <a href="/add-storage" class="btn btn-primary">Add Storage</a>
           </div>
         </ng-container>
-        <ng-container *ngSwitchCase="'history'">
+        <ng-container *ngSwitchCase="'promo'">
+          <div class="panel-title">Redeem Gift</div>
+          <p>If you've been given a gift code, you can redeem it for free storage below.</p>
+          <form [formGroup]="promoForm" class="dialog-form" (submit)="onPromoFormSubmit(promoForm.value)">
+            <div class="dialog-form-field">
+              <label for="promoCode">Gift code</label>
+              <input type="text" class="form-control" id="promoCode" name="name"
+                formControlName="code">
+            </div>
+            <div class="dialog-form-field">
+              <button class="btn btn-primary" [disabled]="promoForm.invalid || waiting">Redeem</button>
+            </div>
+          </form>
+        </ng-container>
+        <ng-container *ngSwitchCase="'transaction'">
+          <div class="panel-title">Transaction History</div>
+          <pr-transaction-history></pr-transaction-history>
+        </ng-container>
+        <ng-container *ngSwitchCase="'file'">
           <div class="panel-title">File History</div>
           <pr-file-history></pr-file-history>
         </ng-container>

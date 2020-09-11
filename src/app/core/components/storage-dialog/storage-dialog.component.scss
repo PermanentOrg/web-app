@@ -29,3 +29,11 @@
   margin: $grid-unit 0;
   width: auto;
 }
+
+form {
+  @include tabbedDialogPanelForm;
+}
+
+pr-storage-meter {
+  margin: $grid-unit 0;
+}

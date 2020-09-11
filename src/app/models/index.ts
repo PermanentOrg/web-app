@@ -14,6 +14,7 @@ export * from '@models/folder-vo';
 export * from '@models/invite-vo';
 export * from './ledger-vo';
 export * from './locn-vo';
+export * from './promo-vo';
 export *  from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { RelationVO } from '@models/relation-vo';
