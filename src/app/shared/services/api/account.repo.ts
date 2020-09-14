@@ -46,6 +46,17 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>('/account/update', data, AccountResponse);
   }
 
+  public delete(accountVO: AccountVO) {
+    const clone = new AccountVO(accountVO);
+    delete clone.notificationPreferences;
+
+    const data = [{
+      AccountVO: clone
+    }];
+
+    return this.http.sendRequestPromise<AccountResponse>('/account/delete', data, AccountResponse);
+  }
+
   public updateNotificationPreference(preferencePath: string, value: boolean) {
     const data = [{
       SimpleVO: new SimpleVO({key: preferencePath, value})
