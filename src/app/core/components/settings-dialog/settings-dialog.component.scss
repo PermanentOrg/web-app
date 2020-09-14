@@ -24,3 +24,7 @@
 .panel-title {
   @include tabbedDialogPanelTitle;
 }
+
+.dialog-form {
+  @include tabbedDialogPanelForm;
+}
