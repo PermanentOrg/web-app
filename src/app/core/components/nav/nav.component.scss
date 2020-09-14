@@ -121,7 +121,7 @@ nav.nav-desktop {
 
   $button-size: $grid-unit * 1.5;
 
-  > a {
+  > a, > i {
     border-radius: 50%;
     width: $button-size;
     height: $button-size;
@@ -132,6 +132,25 @@ nav.nav-desktop {
     font-weight: bold;
     text-decoration: none !important;
     font-size: $font-size-lg;
+    cursor: pointer;
+
+    &.has-badge {
+      position: relative;
+
+      &:after {
+        position: absolute;
+        top: 0;
+        right: -$grid-unit / 4;
+        display: block;
+        content: '';
+        height: $grid-unit / 2;
+        width: $grid-unit / 2;
+        background: $red;
+        border-radius: 50%;
+
+        animation:  fadeIn 125ms $tweaked-ease, scaleIn 250ms $tweaked-ease;
+      }
+    }
   }
 
   > *:not(:first-child) {

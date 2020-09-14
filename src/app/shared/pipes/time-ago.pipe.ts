@@ -1,6 +1,32 @@
-// import { TimeAgoPipe } from 'time-ago-pipe/time-ago-pipe';
-// import { PipeTransform, Pipe } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
+import { getUtcMomentFromDTString } from '@shared/utilities/dateTime';
+import { moment } from '@permanent.org/vis-timeline';
 
-// @Pipe({ name: 'timeAgo', pure: true })
-// export class TimeAgoV9Pipe extends TimeAgoPipe implements PipeTransform {
-// }
+moment.updateLocale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past:   '%s ago',
+    s  : 'now',
+    ss : '%ds',
+    m:  '1m',
+    mm: '%dm',
+    h:  '1h',
+    hh: '%dh',
+    d:  '1d',
+    dd: '%dd',
+    M:  '1m',
+    MM: '%dm',
+    y:  '1y',
+    yy: '%dy'
+  }
+});
+
+@Pipe({
+  name: 'timeAgo'
+})
+export class TimeAgoPipe implements PipeTransform {
+  transform(datetime: string): any {
+    const utcDt = getUtcMomentFromDTString(datetime);
+    return utcDt.fromNow(true);
+  }
+}

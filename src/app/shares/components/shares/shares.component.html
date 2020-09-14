@@ -10,10 +10,6 @@
   <div class="empty-message" *ngIf="!shareItems?.length">
     This archive has no shared items
   </div>
-  <!-- <div class="shares-heading">Shared By Me</div>
-  <pr-share-by-me></pr-share-by-me>
-  <div class="shares-heading">Shared With Me</div>
-  <pr-share-with-me></pr-share-with-me> -->
 </div>
 <pr-sidebar></pr-sidebar>
 <div [@slideUpAnimation]="(device.isMobileWidth() && o.isActivated) ? o.activatedRoute : ''">

@@ -48,6 +48,7 @@ import { StorageDialogComponent } from './components/storage-dialog/storage-dial
 import { FileHistoryComponent } from './components/file-history/file-history.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { BillingSettingsComponent } from './components/billing-settings/billing-
     SearchModule,
     PortalModule,
     CountUpModule,
+    NotificationsModule
   ],
   declarations: [
     MainComponent,

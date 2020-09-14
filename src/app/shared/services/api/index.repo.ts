@@ -6,6 +6,7 @@ export * from '@shared/services/api/connector.repo';
 export * from '@shared/services/api/folder.repo';
 export * from '@shared/services/api/invite.repo';
 export * from '@shared/services/api/locn.repo';
+export * from '@shared/services/api/notification.repo';
 export * from '@shared/services/api/publish.repo';
 export * from '@shared/services/api/record.repo';
 export * from '@shared/services/api/relation.repo';

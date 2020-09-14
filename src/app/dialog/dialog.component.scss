@@ -69,6 +69,8 @@
   }
 }
 
+
+// custom dialog menu classes for use with menuClass
 .menu-wrapper {
   .profile-editor-dialog {
     position: fixed;
@@ -81,18 +83,25 @@
     opacity: 1;
   }
 
-  .public-profile-dialog {
+  .notification-dialog {
     position: fixed;
     top: 0;
-    left: 0;
+    left: initial;
     right: 0;
+    width: pxToGrid(460px);
     bottom: 0;
     max-height: none;
+    transform: translateX(100%);
     opacity: 1;
+
+    @include beforeDesktop {
+      left: 0;
+      width: 100%;
+    }
   }
 
   &.visible {
-    .profile-editor-dialog {
+    .profile-editor-dialog, .notification-dialog {
       transform: translateX(0);
     }
   }

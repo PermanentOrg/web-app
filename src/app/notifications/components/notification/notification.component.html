@@ -1,0 +1,4 @@
+<div class="content">
+  <div class="text">{{notification.message}}</div>
+</div>
+<div class="timestamp" *ngIf="notification">{{notification.createdDT | timeAgo}}</div>

@@ -1,0 +1,40 @@
+@import 'variables';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+}
+
+.header {
+  @include tabbedDialogHeader;
+}
+
+.notifications {
+  flex: 1 1 auto;
+  overflow-y: auto;
+
+  .empty-message {
+    font-size: $font-size-sm;
+    text-align: center;
+    padding: $grid-unit;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: $grid-unit / 2;
+  border-top: $file-list-border;
+  .btn {
+    @include gridHeightButtonSmall;
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+  }
+}
+
+pr-notification:not(:last-child) {
+  border-bottom: $file-list-border;
+}

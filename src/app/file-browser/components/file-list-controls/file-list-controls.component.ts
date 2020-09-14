@@ -18,6 +18,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { isKeyEventFromBody } from '@shared/utilities/events';
 import debug from 'debug';
+import { NotificationService } from '@root/app/notifications/services/notification.service';
 
 
 interface FileListActions {
@@ -86,7 +87,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     private message: MessageService,
     private account: AccountService,
     private api: ApiService,
-    private folderView: FolderViewService
+    private folderView: FolderViewService,
+    private notificationService: NotificationService
   ) {
     this.getSortFromCurrentFolder();
     this.initialSortType = this.data.currentFolder?.sort;
@@ -128,15 +130,12 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     this.setAllActions(false);
 
     const isSingleItem = this.selectedItems.length === 1;
-    const isSingleRecord = isSingleItem && this.selectedItems[0] instanceof RecordVO;
 
     if (!this.selectedItems.length || !this.edit) {
       return this.setAllActions(false);
     }
 
-    if (isSingleRecord) {
-      this.can.download = true;
-    }
+    this.can.download = true;
 
     if (!this.account.checkMinimumArchiveAccess(AccessRole.Curator)) {
       return;
@@ -329,13 +328,23 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     this.edit.openPublishDialog(this.selectedItems[0]);
   }
 
-  onDownloadClick() {
+  async onDownloadClick() {
     if (!this.can.download) {
       return;
     }
 
-    if (this.selectedItems[0] instanceof RecordVO) {
+    if (this.selectedItems.length === 1 && this.selectedItems[0] instanceof RecordVO) {
       this.data.downloadFile(this.selectedItems[0]);
+    } else {
+      try {
+        await this.data.createZipForDownload(this.selectedItems);
+        this.message.showMessage('Your zip file is being created. An in-app notification will let you know when it is ready to download.', 'success');
+        setTimeout(() => {
+          this.notificationService.loadNewNotifications();
+        }, 10000);
+      } catch (err) {
+        this.message.showError('There was a problem creating a zip file to download', false);
+      }
     }
   }
 

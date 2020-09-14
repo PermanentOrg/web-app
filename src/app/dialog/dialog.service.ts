@@ -25,7 +25,8 @@ export type DialogComponentToken =
   'MyArchivesDialogComponent' |
   'ProfileEditFirstTimeDialogComponent' |
   'PublicProfileComponent' |
-  'StorageDialogComponent'
+  'StorageDialogComponent' |
+  'NotificationDialogComponent'
   ;
 
 export interface DialogChildComponentData {

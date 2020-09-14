@@ -44,6 +44,7 @@ import { ScrollNavDirective } from './directives/scroll-nav.directive';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { LinkPipe } from './pipes/link.pipe';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
 
 @NgModule({
   imports: [
@@ -102,7 +103,8 @@ import { LinkPipe } from './pipes/link.pipe';
     ScrollNavDirective,
     ScrollSectionDirective,
     RoutedDialogWrapperComponent,
-    LinkPipe
+    LinkPipe,
+    TimeAgoPipe
   ],
   declarations: [
     ThumbnailComponent,
@@ -143,7 +145,8 @@ import { LinkPipe } from './pipes/link.pipe';
     ScrollSectionDirective,
     ScrollNavDirective,
     RoutedDialogWrapperComponent,
-    LinkPipe
+    LinkPipe,
+    TimeAgoPipe
   ],
   providers: [
     PublicLinkPipe,
