@@ -7,7 +7,7 @@
   </div>
   <div class="notifications">
     <div class="empty-message" *ngIf="!notificationService.notifications">No activity</div>
-    <pr-notification *ngFor="let notification of notificationService.notifications" [class.is-unread]="notification.status !== 'status.notification.read'"
+    <pr-notification *ngFor="let notification of notificationService.notifications" [isUnread]="notification.status !== 'status.notification.read'"
       [notification]="notification" (click)="onNotificationClick(notification)"></pr-notification>
   </div>
   <div class="footer">

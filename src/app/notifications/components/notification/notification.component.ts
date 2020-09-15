@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, HostBinding } from '@angular/core';
 import { NotificationVOData } from '@models/notification-vo';
 
 @Component({
@@ -8,6 +8,8 @@ import { NotificationVOData } from '@models/notification-vo';
 })
 export class NotificationComponent implements OnInit {
   @Input() notification: NotificationVOData;
+  @HostBinding('class.is-unread') @Input() isUnread: boolean;
+
   element: HTMLElement;
 
   showActions = false;

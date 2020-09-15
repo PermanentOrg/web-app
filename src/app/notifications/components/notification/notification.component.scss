@@ -12,6 +12,14 @@
   &:hover {
     background-color: darken(white, 4%);
   }
+
+  &.is-unread {
+    background-color: rgba($PR-purple, 0.15);
+
+    &:hover {
+      background-color: rgba($PR-purple, 0.20);
+    }
+  }
 }
 
 .content {
