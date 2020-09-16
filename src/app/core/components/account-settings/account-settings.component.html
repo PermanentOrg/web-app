@@ -9,10 +9,10 @@
     </div>
   </div>
   <div class="settings-item">
-    <label>Validation Status</label>
+    <label>Verification Status</label>
     <div class="settings-item-content" [ngSwitch]="account.emailStatus">
       <ng-container *ngSwitchCase="'status.auth.verified'">
-        <span class="verified">Validated</span> 
+        <span class="verified">Verified</span> 
       </ng-container>
       <button class="btn btn-primary" *ngSwitchDefault (click)="onValidateEmailClick()">Validate Email Address</button>
     </div>
@@ -29,10 +29,10 @@
     </div>
   </div>
   <div class="settings-item">
-    <label>Validation Status</label>
+    <label>Verification Status</label>
     <div class="settings-item-content" [ngSwitch]="account.phoneStatus">
       <ng-container *ngSwitchCase="'status.auth.verified'">
-        <span class="verified">Validated</span> 
+        <span class="verified">Verified</span> 
       </ng-container>
       <button class="btn btn-primary" *ngSwitchDefault (click)="onValidatePhoneClick()">Validate Phone Number</button>
     </div>
