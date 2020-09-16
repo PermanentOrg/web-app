@@ -38,6 +38,18 @@ button {
   }
 }
 
+i.badge {
+  position: absolute;
+  color: $warning;
+  font-size: $mat-icon-sm;
+
+  top: -$grid-unit / 4;
+  right: 0;
+  z-index: 3;
+
+  animation:  fadeIn 125ms $tweaked-ease, pulse 2s $tweaked-ease infinite;
+}
+
 .account-dropdown-menu {
   position: absolute;
   width: 100%;
@@ -50,14 +62,22 @@ button {
 
   a {
     padding: 7px 12px;
-    display: block;
+    display: flex;
     color: $body-color;
     font-weight: 500;
     text-align: right;
+    align-items: center;
+    justify-content: flex-end;
 
     &:hover {
       background-color: darken(white, 4%);
       text-decoration: none;
+    }
+
+    i {
+      font-size: $mat-icon-sm;
+      margin-right: $grid-unit / 2;
+      animation:  fadeIn 125ms $tweaked-ease, pulse 2s $tweaked-ease infinite;
     }
   }
 

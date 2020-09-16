@@ -254,6 +254,10 @@ export class AccountService {
     return !!this.account && !!this.archive;
   }
 
+  public isEmailOrPhoneUnverified(): boolean {
+    return this.account.emailStatus === 'status.auth.unverified' || this.account.phoneStatus === 'status.auth.unverified';
+  }
+
   public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Promise<any> {
     this.skipSessionCheck = false;
 

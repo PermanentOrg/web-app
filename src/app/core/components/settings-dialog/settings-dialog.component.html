@@ -14,6 +14,7 @@
       <div class="settings-tab"
         (click)="setTab('account')" [class.active]="activeTab === 'account'">
         Login Info
+        <i class="material-icons text-warning" *ngIf="accountService.isEmailOrPhoneUnverified()">report_problem</i>
       </div>
       <div class="settings-tab"
         (click)="setTab('billing')" [class.active]="activeTab === 'billing'">

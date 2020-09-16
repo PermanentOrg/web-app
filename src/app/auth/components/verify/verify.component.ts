@@ -155,6 +155,7 @@ export class VerifyComponent implements OnInit {
   finish() {
     return this.accountService.switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
+        this.message.showMessage(`${this.verifyingEmail ? 'Email' : 'Phone number'} verified.`, 'success');
         if (this.route.snapshot.queryParams.shareByUrl) {
           this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
             .then(() => {

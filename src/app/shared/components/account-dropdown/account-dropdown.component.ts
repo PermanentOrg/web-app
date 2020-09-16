@@ -44,8 +44,12 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
 
   public showMenu = false;
 
+  public showAccountBadge = true;
+  public badgeIcon = 'report_problem';
+  public badgeTooltip = 'Your account information needs verifying';
+
   constructor(
-    private accountService: AccountService,
+    public accountService: AccountService,
     private messageService: MessageService,
     private router: Router,
     private element: ElementRef,
