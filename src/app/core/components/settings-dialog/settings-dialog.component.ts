@@ -21,7 +21,7 @@ export class SettingsDialogComponent implements OnInit {
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
-    private account: AccountService,
+    public accountService: AccountService,
     private message: MessageService,
     private api: ApiService
   ) {
@@ -49,8 +49,8 @@ export class SettingsDialogComponent implements OnInit {
     this.waiting = true;
 
     try {
-      await this.api.account.delete(this.account.getAccount());
-      await this.account.logOut();
+      await this.api.account.delete(this.accountService.getAccount());
+      await this.accountService.logOut();
       window.location.assign('/');
     } catch (err) {
       if (err instanceof AccountResponse) {
