@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -56,7 +56,9 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(
       this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
+        if (event instanceof NavigationStart) {
+          this.showArchiveOptions = false;
+        } else if (event instanceof NavigationEnd) {
           this.currentUrl = this.router.url;
           this.urlMatches.clear();
         }
