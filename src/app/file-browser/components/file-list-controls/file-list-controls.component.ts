@@ -18,7 +18,6 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { isKeyEventFromBody } from '@shared/utilities/events';
 import debug from 'debug';
-import { NotificationService } from '@root/app/notifications/services/notification.service';
 
 
 interface FileListActions {
