@@ -47,3 +47,52 @@
     }
   }
 }
+
+
+pr-dialog {
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .dialog-body {
+      flex: 1 1 auto;
+      overflow-y: auto;
+
+      .page-subheading {
+        margin-right: $grid-unit / 2;
+        margin-left: $grid-unit / 2;
+      }
+    }
+
+    .dialog-footer {
+      padding: 0px 10px;
+      flex: 0 0 auto;
+      display: flex;
+
+      button {
+        max-width: 100%;
+      }
+    
+      button:not(:first-child) {
+        margin-left: 10px;
+      }
+    
+      button.btn-secondary:not(:last-child) {
+        flex: 0 0 33.33%
+      }
+    }
+  }
+
+  .split-dialog {
+    .dialog-body {
+      box-shadow: $box-shadow-dark;
+      background: white;
+      border-radius: $border-radius;
+
+      &:not(:last-child) {
+        margin-bottom: $grid-unit;
+      }
+    }
+  }
+}

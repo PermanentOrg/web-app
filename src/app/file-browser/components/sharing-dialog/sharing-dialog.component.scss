@@ -14,10 +14,26 @@
 
 .header {
   @include tabbedDialogHeader($white, $body-color);
+  font-weight: $font-weight-bold;
 }
 
 .header-small {
   @include tabbedDialogHeader($white, $body-color);
   font-size: $font-size-base;
   font-weight: $font-weight-semibold;
+}
+
+.share-link {
+  display: flex;
+  align-items: center;
+
+  .share-link-container {
+    flex: 1 1 auto;
+    margin-right: $grid-unit;
+  }
+
+  button {
+    flex: 0 0 6rem;
+    width: auto;
+  }
 }
