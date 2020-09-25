@@ -1,0 +1,23 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.dialog-body {
+  background-color: green;
+  .content {
+    padding: 0 $grid-unit $grid-unit;
+  }
+}
+
+.header {
+  @include tabbedDialogHeader($white, $body-color);
+}
+
+.header-small {
+  @include tabbedDialogHeader($white, $body-color);
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+}

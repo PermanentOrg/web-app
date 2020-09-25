@@ -197,6 +197,17 @@ pr-dialog {
       }
     }
   }
+
+  .split-dialog {
+    .dialog-body {
+      background: white;
+      border-radius: $border-radius;
+
+      &:not(:last-child) {
+        margin-bottom: $grid-unit;
+      }
+    }
+  }
 }
 
 a {
