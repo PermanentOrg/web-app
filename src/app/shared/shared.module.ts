@@ -26,7 +26,7 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
-import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
@@ -45,6 +45,7 @@ import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { LinkPipe } from './pipes/link.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 
 @NgModule({
   imports: [
@@ -104,7 +105,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     ScrollSectionDirective,
     RoutedDialogWrapperComponent,
     LinkPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ArchiveSearchBoxComponent
   ],
   declarations: [
     ThumbnailComponent,
@@ -146,7 +148,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     ScrollNavDirective,
     RoutedDialogWrapperComponent,
     LinkPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ArchiveSearchBoxComponent
   ],
   providers: [
     PublicLinkPipe,

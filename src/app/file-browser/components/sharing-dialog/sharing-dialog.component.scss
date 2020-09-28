@@ -6,7 +6,7 @@
 }
 
 .dialog-body {
-  background-color: green;
+  overflow-y: visible !important;
   .content {
     padding: 0 $grid-unit $grid-unit;
   }
@@ -23,6 +23,10 @@
   font-weight: $font-weight-semibold;
 }
 
+p {
+  margin-bottom: $grid-unit;
+}
+
 .share-link {
   display: flex;
   align-items: center;
@@ -32,8 +36,47 @@
     margin-right: $grid-unit;
   }
 
+  input {
+    @include gridHeightInput;
+  }
+
   button {
+    @include gridHeightButton;
     flex: 0 0 6rem;
     width: auto;
+    justify-content: center;
+  }
+}
+
+.share-link-settings-toggle {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: $grid-unit * 2;
+
+  .btn {
+    margin: 0;
+    width: auto;
+  }
+}
+
+.share-link-settings {
+  .link-settings-item {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child) {
+      margin-bottom: $grid-unit;
+    }
+      
+    > label {
+      font-weight: $font-weight-semibold;
+      margin: 0;
+      margin-right: $grid-unit;
+    }
+
+    .form-check {
+      margin-top: 0;
+    }
   }
 }

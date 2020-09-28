@@ -4,14 +4,14 @@ import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
 
 export class SearchRepo extends BaseRepo {
-  public archiveByEmail(email: string): Promise<SearchResponse> {
+  public archiveByEmail(email: string): Observable<SearchResponse> {
     const data = [{
       SearchVO: {
         query: email
       }
     }];
 
-    return this.http.sendRequestPromise<SearchResponse>('/search/archiveByEmail', data, SearchResponse);
+    return this.http.sendRequest<SearchResponse>('/search/archiveByEmail', data, SearchResponse);
   }
 
   public archiveByName(query: string): Promise<SearchResponse> {
@@ -59,7 +59,7 @@ export class SearchRepo extends BaseRepo {
 }
 
 export class SearchResponse extends BaseResponse {
-  public getArchiveVOs() {
+  public getArchiveVOs(): ArchiveVO[] {
     const data = this.getResultsData();
 
     if (!data || !data.length) {

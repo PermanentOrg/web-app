@@ -1,9 +1,11 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ItemVO } from '@models';
+import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO } from '@models';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
+import { ngIfScaleAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -16,7 +18,8 @@ import { partition } from 'lodash';
 @Component({
   selector: 'pr-sharing-dialog',
   templateUrl: './sharing-dialog.component.html',
-  styleUrls: ['./sharing-dialog.component.scss']
+  styleUrls: ['./sharing-dialog.component.scss'],
+  animations: [ ngIfScaleAnimation ]
 })
 export class SharingDialogComponent implements OnInit {
   public shareItem: ItemVO = null;
@@ -27,7 +30,11 @@ export class SharingDialogComponent implements OnInit {
   public shareLink: ShareByUrlVO = null;
   public loadingRelations = false;
 
+  public shareLinkForm: FormGroup;
+
   public linkCopied = false;
+
+  public showLinkSettings = false;
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
   constructor(
@@ -36,11 +43,16 @@ export class SharingDialogComponent implements OnInit {
     private dialog: Dialog,
     private route: ActivatedRoute,
     private promptService: PromptService,
+    private fb: FormBuilder,
     private api: ApiService,
     private messageService: MessageService,
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService
-  ) { }
+  ) {
+    this.shareLinkForm = this.fb.group({
+      expiresDT: [null]
+    });
+  }
 
   ngOnInit(): void {
     this.shareItem = this.data.item as ItemVO;
@@ -49,12 +61,29 @@ export class SharingDialogComponent implements OnInit {
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
       [ this.pendingShares, this.shares ] = partition(this.shareItem.ShareVOs, {status: 'status.generic.pending'}) as any;
     }
+
+    this.relationshipService.update();
+  }
+
+  setLinkSettingsFormValue(): void {
+    if (this.shareLink) {
+
+    } else {
+      this.shareLinkForm.reset();
+    }
   }
 
   onDoneClick(): void {
     this.dialogRef.close();
   }
 
+  onAddArchive(archive: ArchiveVO) {
+    console.log(archive);
+  }
+
+  onAddInvite(email: string) {
+    console.log(email);
+  }
 
   async generateShareLink() {
     const response = await this.api.share.generateShareLink(this.shareItem);

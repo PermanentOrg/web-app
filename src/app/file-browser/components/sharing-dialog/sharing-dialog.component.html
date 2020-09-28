@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="content">
-      top panel content
+      <pr-archive-search-box class="archive-search-box" (archiveSelect)="onAddArchive($event)" (invite)="onAddInvite($event)"></pr-archive-search-box>
     </div>
   </div>
   <div class="dialog-body">
@@ -26,6 +26,32 @@
         <button class="btn btn-primary-light" (click)="generateShareLink()" *ngIf="!shareLink">
           Create
         </button>
+      </div>
+      <div class="share-link-settings-toggle" *ngIf="shareLink" >
+        <button class="btn btn-link" (click)="showLinkSettings = !showLinkSettings">Show link settings</button>
+      </div>
+      <div class="share-link-settings" *ngIf="showLinkSettings" @ngIfScaleAnimation>
+        <div class="link-settings-item">
+          <label>Share Preview</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="sharePreviewToggle" id="sharePreviewToggleOn" [value]="1" [(ngModel)]="shareLink.previewToggle">
+            <label class="form-check-label" for="sharePreviewToggleOn">On</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="sharePreviewToggle" id="sharePreviewToggleOff" [value]="0" [(ngModel)]="shareLink.previewToggle">
+            <label class="form-check-label" for="sharePreviewToggleOff">Off</label>
+          </div>
+        </div>
+        <div class="text-muted" [ngSwitch]="shareLink.previewToggle">
+          <em>
+            <ng-container *ngSwitchCase="1">
+              Recipients can see a preview without being logged in.
+            </ng-container>
+            <ng-container *ngSwitchCase="0">
+              Recipients must be granted access to view content.
+            </ng-container>
+          </em>
+        </div>
       </div>
       <!-- <div class="share-link" *ngIf="shareLink">
         <p>Send this link via text, email, or other message service to invite people to share this content.</p>
