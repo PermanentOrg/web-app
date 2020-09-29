@@ -112,7 +112,9 @@
         <div class="share-link-container" *ngIf="!shareLink">
           Generate a link to send via text or email to invite people to share this content.
         </div>
-        <button class="btn btn-primary-light" (click)="generateShareLink()" *ngIf="!shareLink">
+        <button class="btn btn-primary-light" *ngIf="!shareLink"
+          (click)="generateShareLink()"
+          [disabled]="updatingLink">
           Create
         </button>
       </div>

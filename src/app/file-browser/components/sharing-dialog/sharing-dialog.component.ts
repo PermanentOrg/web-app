@@ -359,13 +359,21 @@ export class SharingDialogComponent implements OnInit {
   }
 
   async generateShareLink() {
-    const response = await this.api.share.generateShareLink(this.shareItem);
-
-    if (response.isSuccessful) {
+    this.updatingLink = true;
+    try {
+      const response = await this.api.share.generateShareLink(this.shareItem);
       this.shareLink = response.getShareByUrlVO();
       this.setShareLinkFormValue();
+      this.showLinkSettings = true;
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
+    } catch (err) {
+      if (err instanceof ShareResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+    } finally {
+      this.updatingLink = false;
     }
+
   }
 
   copyShareLink() {
