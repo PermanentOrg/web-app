@@ -49,7 +49,6 @@ export class SharingDialogComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     private promptService: PromptService,
-    private changeDet: ChangeDetectorRef,
     private fb: FormBuilder,
     private api: ApiService,
     private messageService: MessageService,
@@ -111,6 +110,15 @@ export class SharingDialogComponent implements OnInit {
     return this.promptService.confirm(
       'Remove from share',
       `Are you sure you want to remove The ${share.ArchiveVO.fullName} Archive?`,
+      null,
+      'btn-danger'
+    );
+  }
+
+  confirmDeny(share: ShareVO) {
+    return this.promptService.confirm(
+      'Deny request',
+      `Are you sure you want deny The ${share.ArchiveVO.fullName} Archive access?`,
       null,
       'btn-danger'
     );
@@ -181,12 +189,42 @@ export class SharingDialogComponent implements OnInit {
     }
   }
 
-  async removeShare(share: ShareVO) {
+  async approveShare(share: ShareVO) {
+    share.isPendingAction = true;
+    share.status = 'status.generic.ok';
+    remove(this.pendingShares, share);
+    this.shares.push(share);
+    this.shares = sortShareVOs(this.shares);
     try {
-      await this.confirmRemove(share);
+      await this.api.share.upsert(share);
     } catch (err) {
-      share.accessRole = this.originalRoles.get(share.shareId);
-      return;
+      if (err instanceof ShareResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+      remove(this.shares, share);
+      this.pendingShares.push(share);
+      this.pendingShares = sortShareVOs(this.pendingShares);
+    } finally {
+      share.isPendingAction = false;
+    }
+  }
+
+  async removeShare(share: ShareVO) {
+    const isPending = share.status?.includes('pending');
+
+    if (isPending) {
+      try {
+        await this.confirmDeny(share);
+      } catch (err) {
+        return;
+      }
+    } else {
+      try {
+        await this.confirmRemove(share);
+      } catch (err) {
+        share.accessRole = this.originalRoles.get(share.shareId);
+        return;
+      }
     }
 
     try {

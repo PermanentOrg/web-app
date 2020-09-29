@@ -22,7 +22,27 @@
       <ng-container *ngIf="shares?.length">
         <div class="shares-title">Shared with</div>
         <div class="shares">
-          <div class="share-archive" *ngFor="let share of shares" [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
+          <div class="share-archive pending-share" *ngFor="let share of pendingShares"
+            [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
+            <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+            <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive
+              <div class="subtitle">Requested {{share.createdDT | timeAgo}} ago</div>
+            </div>
+            <div class="archive-actions">
+              <button class="btn btn-primary"
+                [disabled]="share.isPendingAction"
+                (click)="approveShare(share)">
+                Approve
+              </button>
+              <button class="btn btn-danger"
+                [disabled]="share.isPendingAction"
+                (click)="removeShare(share)">
+                Deny
+              </button>
+            </div>
+          </div>
+          <div class="share-archive" *ngFor="let share of shares"
+            [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
             <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
             <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
             <select class="form-control" [disabled]="!canShare || share.accessRole === 'access.role.owner' || share.isPendingAction"

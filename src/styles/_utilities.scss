@@ -94,6 +94,15 @@
   align-items: center;
 }
 
+@mixin gridHeightInputSmall {
+  height: 1.5 * $grid-unit;
+  display: flex;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+  font-size: $font-size-sm;
+}
+
 @mixin gridHeightButton {
   height: 2 * $grid-unit;
   display: flex;
