@@ -34,8 +34,6 @@ export class SharingDialogComponent implements OnInit {
   public pendingShares: ShareVO[] = [];
 
   public shareLink: ShareByUrlVO = null;
-  public loadingRelations = false;
-
   public shareLinkForm: FormGroup;
 
   public linkCopied = false;
@@ -56,6 +54,7 @@ export class SharingDialogComponent implements OnInit {
     private ga: GoogleAnalyticsService
   ) {
     this.shareLinkForm = this.fb.group({
+      previewToggle: [false],
       expiresDT: [null]
     });
   }
@@ -76,14 +75,10 @@ export class SharingDialogComponent implements OnInit {
     this.canShare = this.shareItem.accessRole === 'access.role.owner';
 
     this.relationshipService.update();
-  }
 
-  setLinkSettingsFormValue(): void {
-    if (this.shareLink) {
+    this.shareLinkForm.valueChanges.subscribe(() => {
 
-    } else {
-      this.shareLinkForm.reset();
-    }
+    });
   }
 
   onDoneClick(): void {
@@ -241,11 +236,23 @@ export class SharingDialogComponent implements OnInit {
     }
   }
 
+  setShareLinkFormValue(emitEvent = true): void {
+    if (this.shareLink) {
+      this.shareLinkForm.setValue({
+        previewToggle: this.shareLink.previewToggle,
+        expiresDT: this.shareLink.expiresDT,
+      }, { emitEvent: emitEvent });
+    } else {
+      this.shareLinkForm.reset();
+    }
+  }
+
   async generateShareLink() {
     const response = await this.api.share.generateShareLink(this.shareItem);
 
     if (response.isSuccessful) {
       this.shareLink = response.getShareByUrlVO();
+      this.setShareLinkFormValue(false);
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }
   }
@@ -273,12 +280,28 @@ export class SharingDialogComponent implements OnInit {
 
       await this.api.share.removeShareLink(this.shareLink);
       this.shareLink = null;
+      this.setShareLinkFormValue(false);
       deferred.resolve();
     } catch (response) {
       deferred.resolve();
       if (response instanceof ShareResponse) {
         this.messageService.showError(response.getMessage());
       }
+    }
+  }
+
+  async updateShareLink() {
+
+  }
+
+  async onPreviewToggleChange() {
+    try {
+      await this.api.share.updateShareLink(this.shareLink);
+    } catch (err) {
+      if (err instanceof ShareResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+      this.shareLink.previewToggle = this.shareLink.previewToggle ? 0 : 1;
     }
   }
 
