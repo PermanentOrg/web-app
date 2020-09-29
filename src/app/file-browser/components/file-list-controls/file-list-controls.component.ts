@@ -157,7 +157,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
         }
       case AccessRole.Owner:
         if (this.isShareRoot && isSingleItem) {
-          return this.setMultipleActions(['unshare', 'copy', 'move'], true);
+          return this.setMultipleActions(['unshare', 'copy', 'move', 'share'], true);
         } else if (isSingleItem) {
           if (!this.isPublic) {
             return this.setMultipleActions(['delete', 'copy', 'move', 'share', 'publish'], true);

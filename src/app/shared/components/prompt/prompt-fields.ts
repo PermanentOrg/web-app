@@ -88,7 +88,7 @@ export const ACCESS_ROLE_FIELD: PromptField =  {
   })
 };
 
-export function ACCESS_ROLE_FIELD_INITIAL(initialValue: string): PromptField {
+export function ACCESS_ROLE_FIELD_INITIAL(initialValue: AccessRoleType): PromptField {
   const initialized = clone(ACCESS_ROLE_FIELD);
   initialized.initialValue = initialValue;
   return initialized;

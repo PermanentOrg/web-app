@@ -9,6 +9,10 @@
   z-index: 2;
 }
 
+input {
+  @include gridHeightInput;
+}
+
 .search-results {
   position: absolute;
   background: white;

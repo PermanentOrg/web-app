@@ -5,6 +5,12 @@
   width: 100%;
 }
 
+$accessRoleWidth: auto;
+
+select.form-control {
+  width: auto;
+}
+
 .dialog-body {
   overflow-y: visible !important;
   .content {
@@ -25,6 +31,72 @@
 
 p {
   margin-bottom: $grid-unit;
+}
+
+.archive-search {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  > *:not(:last-child) {
+    margin-right: $grid-unit;
+  }
+
+  pr-archive-search-box {
+    flex: 1 1 auto;
+  }
+
+  select {
+    flex: 0 0 $accessRoleWidth;
+    @include gridHeightInput;
+  }
+}
+
+.shares-title, .shares-empty {
+  margin-top: $grid-unit / 2;
+  height: $grid-unit * 2;
+  display: flex;
+  align-items: center;
+
+  &.shares-title {
+    font-weight: $font-weight-bold;
+  }
+
+  &.shares-empty {
+    color: $text-muted;
+  }
+}
+
+.shares {
+  overflow-y: auto;
+  padding-bottom: $grid-unit;
+  min-height: $grid-unit * 10;
+}
+
+.share-archive {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+
+  &:not(:last-child) {
+    margin-bottom: $grid-unit / 4;
+  }
+
+  .archive-thumb {
+    height: $grid-unit * 2;
+    flex: 0 0 $grid-unit * 2;
+    margin-right: $grid-unit / 2;
+  }
+
+  .archive-name {
+    font-weight: $font-weight-semibold;
+    flex: 1 1 auto;
+  }
+
+  select {
+    flex: 0 0 $accessRoleWidth;
+    @include gridHeightInput;
+  }
 }
 
 .share-link {

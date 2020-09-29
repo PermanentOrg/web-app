@@ -7,10 +7,32 @@
       </button>
     </div>
     <div class="content">
-      <pr-archive-search-box class="archive-search-box" (archiveSelect)="onAddArchive($event)" (invite)="onAddInvite($event)"></pr-archive-search-box>
+      <div class="archive-search" *ngIf="canShare">
+        <pr-archive-search-box class="archive-search-box" (archiveSelect)="onAddArchive($event)" (invite)="onAddInvite($event)"></pr-archive-search-box>
+        <select class="form-control" [(ngModel)]="newAccessRole">
+          <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+        </select>
+      </div>
+      <ng-container *ngIf="!shares || !shares.length">
+        <div class="shares-empty">Not shared with anyone</div>
+      </ng-container>
+      <ng-container *ngIf="shares?.length">
+        <div class="shares-title">Shared with</div>
+        <div class="shares">
+          <div class="share-archive" *ngFor="let share of shares" [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
+            <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+            <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
+            <select class="form-control" [disabled]="!canShare || share.accessRole === 'access.role.owner' || share.isPendingAction"
+              [(ngModel)]="share.accessRole" (ngModelChange)="onAccessChange(share, ctrl)" #ctrl="ngModel">
+              <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+              <option value="remove">Remove</option>
+            </select>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
-  <div class="dialog-body">
+  <div class="dialog-body" *ngIf="canShare">
     <div class="header-small">Share link</div>
     <div class="content">
       <div class="share-link">

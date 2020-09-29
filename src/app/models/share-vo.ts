@@ -1,18 +1,22 @@
 import { orderBy } from 'lodash';
 
-import { BaseVO } from '@models/base-vo';
+import { BaseVO, DynamicListChild } from '@models/base-vo';
 import { ArchiveVO } from './archive-vo';
 import { FolderVO } from './folder-vo';
 import { RecordVO } from './record-vo';
+import { AccessRoleType } from './access-role';
 
-export class ShareVO extends BaseVO {
+export class ShareVO extends BaseVO implements DynamicListChild {
   public shareId;
   public folder_linkId;
   public archiveId;
-  public accessRole;
+  public accessRole: AccessRoleType;
   public type;
   public status;
   public requestToken: string;
+
+  public isPendingAction = false;
+  public isNewlyCreated = false;
 
   public FolderVO: FolderVO;
   public RecordVO: RecordVO;
