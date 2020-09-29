@@ -1,6 +1,6 @@
 import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
-import { ShareVO } from '@models/share-vo';
+import { ShareVO, sortShareVOs } from '@models/share-vo';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
@@ -9,6 +9,7 @@ import { formatDateISOString } from '@shared/utilities/dateTime';
 import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
+import { orderBy } from 'lodash';
 
 export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, DynamicListChild {
   public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
@@ -106,7 +107,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
     super(voData);
 
     if (this.ShareVOs) {
-      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
+      this.ShareVOs = sortShareVOs(this.ShareVOs.map((data) => new ShareVO(data)));
     }
 
     if (dataStatus) {

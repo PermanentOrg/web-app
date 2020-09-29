@@ -4,7 +4,23 @@ import { BaseVO, DynamicListChild } from '@models/base-vo';
 import { ArchiveVO } from './archive-vo';
 import { FolderVO } from './folder-vo';
 import { RecordVO } from './record-vo';
-import { AccessRoleType } from './access-role';
+import { AccessRoleType, getAccessAsEnum } from './access-role';
+
+export function sortShareVOs(shares: ShareVO[]) {
+  return orderBy(
+    shares,
+    [
+      share => share.status?.includes('pending') ? true : false,
+      share => getAccessAsEnum(share.accessRole),
+      share => (share.ArchiveVO.fullName as string).toLowerCase()
+    ],
+    [
+      'desc',
+      'desc',
+      'asc'
+    ]
+  );
+}
 
 export class ShareVO extends BaseVO implements DynamicListChild {
   public shareId;

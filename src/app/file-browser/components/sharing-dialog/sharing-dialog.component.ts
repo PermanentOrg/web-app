@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO } from '@models';
 import { AccessRoleType } from '@models/access-role';
+import { sortShareVOs } from '@models/share-vo';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
 import { ngIfScaleAnimation, ngIfScaleAnimationDynamic, ngIfScaleHeightAnimation } from '@shared/animations';
@@ -13,9 +14,9 @@ import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ACCESS_ROLE_FIELD, DATE_FIELD, NUMBER_FIELD, ON_OFF_FIELD, PromptField, PromptService } from '@shared/services/prompt/prompt.service';
+import { ACCESS_ROLE_FIELD, PromptService } from '@shared/services/prompt/prompt.service';
 import { copyFromInputElement } from '@shared/utilities/forms';
-import { indexOf, partition, remove } from 'lodash';
+import { find, partition, remove } from 'lodash';
 
 @Component({
   selector: 'pr-sharing-dialog',
@@ -41,7 +42,7 @@ export class SharingDialogComponent implements OnInit {
   public showLinkSettings = false;
 
   public newAccessRole: AccessRoleType = 'access.role.viewer';
-  public accessRoleOptions: FormInputSelectOption[] = ACCESS_ROLE_FIELD.selectOptions;
+  public accessRoleOptions: FormInputSelectOption[] = ACCESS_ROLE_FIELD.selectOptions.reverse();
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
   constructor(
@@ -64,6 +65,8 @@ export class SharingDialogComponent implements OnInit {
     this.shareItem = this.data.item as ItemVO;
     this.shareLink = this.data.link;
 
+    this.shareItem.ShareVOs = sortShareVOs(this.shareItem.ShareVOs);
+
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
       for (const share of this.shareItem.ShareVOs) {
         this.originalRoles.set(share.shareId, share.accessRole);
@@ -85,7 +88,7 @@ export class SharingDialogComponent implements OnInit {
   }
 
   onDoneClick(): void {
-    this.shareItem.ShareVOs = [...this.shares, ...this.pendingShares];
+    this.shareItem.ShareVOs = [...this.pendingShares, ...this.shares];
     this.dialogRef.close();
   }
 
@@ -121,7 +124,16 @@ export class SharingDialogComponent implements OnInit {
     }
   }
 
+  isArchiveSharedWith(archive: ArchiveVO) {
+    return find(this.shares, { archiveId: archive.archiveId}) || find(this.pendingShares, { archiveId: archive.archiveId});
+  }
+
   async createShare(archive: ArchiveVO, accessRole: AccessRoleType) {
+    if (this.isArchiveSharedWith(archive)) {
+      this.messageService.showMessage('This archive has already been shared with');
+      return;
+    }
+
     const share = new ShareVO({});
     share.accessRole = accessRole;
     share.archiveId = archive.archiveId;
@@ -139,6 +151,7 @@ export class SharingDialogComponent implements OnInit {
     try {
       share.isNewlyCreated = true;
       this.shares.push(share);
+      this.shares = sortShareVOs(this.shares);
       const response = await this.api.share.upsert(share);
       share.isNewlyCreated = false;
       share.shareId = response.getShareVO().shareId;
@@ -156,11 +169,12 @@ export class SharingDialogComponent implements OnInit {
       if (share.accessRole === 'access.role.owner') {
         await this.confirmOwnerAdd(share);
       }
+      this.shares = sortShareVOs(this.shares);
       await this.api.share.upsert(share);
       this.originalRoles.set(share.shareId, share.accessRole);
     } catch (err) {
       share.accessRole = this.originalRoles.get(share.shareId);
-      this.shares = [...this.shares];
+      this.shares = sortShareVOs(this.shares);
       if (err instanceof ShareResponse) {
         this.messageService.showError(err.getMessage(), true);
       }
@@ -172,7 +186,6 @@ export class SharingDialogComponent implements OnInit {
       await this.confirmRemove(share);
     } catch (err) {
       share.accessRole = this.originalRoles.get(share.shareId);
-      this.shares = [...this.shares];
       return;
     }
 
@@ -181,6 +194,7 @@ export class SharingDialogComponent implements OnInit {
       await this.api.share.remove(share);
       remove(this.shares, share);
       remove(this.pendingShares, share);
+      this.shares = sortShareVOs(this.shares);
     } catch (err) {
       share.isPendingAction = false;
       if (err instanceof ShareResponse) {

@@ -70,7 +70,7 @@ p {
 .shares {
   overflow-y: auto;
   padding-bottom: $grid-unit;
-  min-height: $grid-unit * 10;
+  height: $grid-unit * 10;
 }
 
 .share-archive {
@@ -79,7 +79,7 @@ p {
   min-width: 0;
 
   &:not(:last-child) {
-    margin-bottom: $grid-unit / 4;
+    margin-bottom: $grid-unit / 2;
   }
 
   .archive-thumb {
