@@ -58,6 +58,7 @@ export class SharingDialogComponent implements OnInit {
   public shares: ShareVO[] = [];
   public pendingShares: ShareVO[] = [];
 
+
   public shareLink: ShareByUrlVO = null;
 
   public previewToggle = 0;
@@ -77,6 +78,10 @@ export class SharingDialogComponent implements OnInit {
   public invitationForm: FormGroup;
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
+
+  public archiveFilterFn = (a: ArchiveVO) => {
+    return !find(this.shares, { archiveId: a.archiveId }) && !find(this.shares, { archiveId: a.archiveId});
+  }
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private accountService: AccountService,

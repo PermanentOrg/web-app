@@ -45,6 +45,10 @@ export class RelationshipService {
     }
   }
 
+  getSync(): RelationVO[] {
+    return this.relations || [];
+  }
+
   update(): Promise<any> {
     return this.api.relation.getAll(this.currentArchive)
       .then((response: RelationResponse) => {

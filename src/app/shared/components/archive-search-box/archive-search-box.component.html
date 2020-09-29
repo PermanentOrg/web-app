@@ -1,6 +1,6 @@
 <div class="search-results" [hidden]="resultsCount === null">
   <div class="archive-result" *ngFor="let archive of (searchResults$ | async); let i = index;" (click)="onArchiveSelect(archive)"
-    [class.active]="i === activeResultIndex">
+  [class.active]="i === activeResultIndex">
     <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"></div>
     <div class="archive-name">The {{archive.fullName}} Archive</div>
   </div>
@@ -16,6 +16,7 @@
   [placeholder]="placeholderText"
   [formControl]="control"
   (keydown)="onInputKeydown($event)"
+  (focus)="onFocus()"
   (blur)="onBlur()"
   #input
   >

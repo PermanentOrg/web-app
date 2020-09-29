@@ -36,6 +36,7 @@
       <ng-container *ngIf="!showInvitationForm">
         <div class="archive-search" *ngIf="canShare">
           <pr-archive-search-box class="archive-search-box"
+            [filterFn]="archiveFilterFn"
             (archiveSelect)="onAddArchive($event)"
             (invite)="onAddInvite($event)"
           ></pr-archive-search-box>

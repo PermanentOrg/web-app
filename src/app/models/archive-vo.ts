@@ -14,7 +14,7 @@ export class ArchiveVO extends BaseVO implements DynamicListChild  {
   public FolderSizeVOs;
   public RecordVOs;
   public accessRole: AccessRoleType;
-  public fullName;
+  public fullName: string;
   public spaceTotal;
   public spaceLeft;
   public fileTotal;

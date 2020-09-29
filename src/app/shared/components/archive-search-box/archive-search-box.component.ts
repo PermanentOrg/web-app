@@ -3,9 +3,9 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Optional, Output, V
 import { FormControl, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ArchiveVO } from '@models';
-import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { orderBy } from 'lodash';
 import { Observable, of } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 
@@ -16,11 +16,13 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
 })
 export class ArchiveSearchBoxComponent implements OnInit {
   @Input() searchPublicArchives = false;
+  @Input() filterFn: (a: ArchiveVO) => boolean;
   @Output() archiveSelect = new EventEmitter<ArchiveVO>();
   @Output() invite = new EventEmitter<string>();
 
   @ViewChild('input') inputElement: ElementRef;
 
+  public focused = false;
   public searchText = null;
   public control = new FormControl('', [Validators.email]);
   public placeholderText = 'Search by email or archive name';
@@ -72,19 +74,26 @@ export class ArchiveSearchBoxComponent implements OnInit {
     return text$.pipe(
       map(term => {
         this.activeResultIndex = -1;
-        if (!term) {
+        if (!term && !this.focused) {
           this.resultsCount = null;
         }
         return term;
       }),
       debounceTime(100),
       switchMap((term) => {
-        if (!term) {
+        if (!term && !this.focused) {
           return of(null);
-        } if (!term.includes('@') && this.relationshipService) {
+        } else if (!term && this.focused) {
+          return of(
+              this.relationshipService.getSync()
+                .map(relation => relation.RelationArchiveVO)
+                .filter(a => this.filterFn ? this.filterFn(a) : true)
+            );
+        } else if (!term.includes('@') && this.relationshipService) {
           return of(
             this.relationshipService.searchRelationsByName(term)
               .map(relation => relation.RelationArchiveVO)
+              .filter(a => this.filterFn ? this.filterFn(a) : true)
             );
         } else if (this.control.valid) {
             return this.apiService.search.archiveByEmail(term)
@@ -101,6 +110,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
       map(results => {
         if (results) {
           this.resultsCount = results.length;
+          results = orderBy(results, (a: ArchiveVO) => a.fullName.toLowerCase());
         } else {
           this.resultsCount = null;
         }
@@ -126,8 +136,14 @@ export class ArchiveSearchBoxComponent implements OnInit {
     (this.inputElement.nativeElement as HTMLInputElement).blur();
   }
 
+  onFocus() {
+    this.focused = true;
+    this.control.setValue('', { emitEvent: true });
+  }
+
   onBlur() {
     setTimeout(() => {
+      this.focused = false;
       this.control.reset();
     }, 150);
   }
