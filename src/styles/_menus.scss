@@ -88,7 +88,7 @@ pr-dialog {
     .dialog-body {
       box-shadow: $box-shadow-dark;
       background: white;
-      border-radius: $border-radius;
+      border-radius: $border-radius-lg;
 
       &:not(:last-child) {
         margin-bottom: $grid-unit;

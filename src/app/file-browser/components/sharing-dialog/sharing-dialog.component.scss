@@ -19,12 +19,12 @@ select.form-control {
 }
 
 .header {
-  @include tabbedDialogHeader($white, $body-color);
+  @include tabbedDialogHeader(none, $body-color);
   font-weight: $font-weight-bold;
 }
 
 .header-small {
-  @include tabbedDialogHeader($white, $body-color);
+  @include tabbedDialogHeader(none, $body-color);
   font-size: $font-size-base;
   font-weight: $font-weight-bold;
 }

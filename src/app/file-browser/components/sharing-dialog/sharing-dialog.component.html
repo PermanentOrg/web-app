@@ -72,8 +72,10 @@
           Create
         </button>
       </div>
-      <div class="share-link-settings-toggle" *ngIf="shareLink" >
-        <button class="btn btn-link" (click)="showLinkSettings = !showLinkSettings">Show link settings</button>
+      <div class="share-link-settings-toggle" *ngIf="shareLink">
+        <button class="btn btn-link" (click)="showLinkSettings = !showLinkSettings">
+          {{showLinkSettings ? 'Hide' : 'Show'}} link settings
+        </button>
       </div>
       <div class="share-link-settings" *ngIf="showLinkSettings" @ngIfScaleAnimation>
         <div class="link-settings-item">

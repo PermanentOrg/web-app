@@ -194,6 +194,7 @@ export class SharingDialogComponent implements OnInit {
   }
 
   async updateShare(share: ShareVO) {
+    share.isPendingAction = true;
     try {
       if (share.accessRole === 'access.role.owner') {
         await this.confirmOwnerAdd(share);
@@ -207,6 +208,8 @@ export class SharingDialogComponent implements OnInit {
       if (err instanceof ShareResponse) {
         this.messageService.showError(err.getMessage(), true);
       }
+    } finally {
+      share.isPendingAction = false;
     }
   }
 
