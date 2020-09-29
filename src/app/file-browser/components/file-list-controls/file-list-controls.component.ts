@@ -351,13 +351,19 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     if (action === 'publish' && this.isPublic) {
       action = 'getLink' as keyof FileListActions;
     }
-    
+
+    let tooltipKey: string = action;
+
+    if (action === 'publish' && this.isPublic) {
+      tooltipKey = 'getLink';
+    }
+
     if (actionAllowed) {
-      return `${basePath}.${action}.enabled`;
+      return `${basePath}.${tooltipKey}.enabled`;
     } else if (multiSelected && (action === 'share' || action === 'publish')) {
-      return `${basePath}.${action}.disabledMulti`;
+      return `${basePath}.${tooltipKey}.disabledMulti`;
     } else {
-      return `${basePath}.${action}.disabled`;
+      return `${basePath}.${tooltipKey}.disabled`;
     }
   }
 
