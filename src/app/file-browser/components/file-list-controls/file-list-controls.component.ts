@@ -347,6 +347,11 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     const basePath = 'fileList.actions';
     const actionAllowed = this.can[action];
     const multiSelected = this.selectedItems?.length > 1;
+
+    if (action === 'publish' && this.isPublic) {
+      action = 'getLink' as keyof FileListActions;
+    }
+    
     if (actionAllowed) {
       return `${basePath}.${action}.enabled`;
     } else if (multiSelected && (action === 'share' || action === 'publish')) {
