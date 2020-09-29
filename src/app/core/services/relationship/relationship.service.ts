@@ -69,8 +69,6 @@ export class RelationshipService {
     } else {
       this.fuse.setCollection([]);
     }
-
-    console.log(this.relations, this.fuse);
   }
 
   clear() {

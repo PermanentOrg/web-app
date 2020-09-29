@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgModel } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO } from '@models';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
-import { ngIfScaleAnimation, ngIfScaleAnimationDynamic, ngIfScaleHeightAnimation } from '@shared/animations';
+import { ngIfScaleAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
@@ -16,7 +15,31 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { MessageService } from '@shared/services/message/message.service';
 import { ACCESS_ROLE_FIELD, PromptService } from '@shared/services/prompt/prompt.service';
 import { copyFromInputElement } from '@shared/utilities/forms';
+import { addDays, differenceInHours, isPast } from 'date-fns';
 import { find, partition, remove } from 'lodash';
+
+enum Expiration {
+  Never = 'Never',
+  Day = '1 day',
+  Week = '1 week',
+  Month = '1 month',
+  Year = '1 year',
+  Other = 'Other'
+}
+
+enum ExpirationDays {
+  Day = 1,
+  Week = 7,
+  Month = 30,
+  Year = 365,
+}
+
+const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(Expiration).map(x => {
+  return {
+    value: x,
+    text: x
+  };
+});
 
 @Component({
   selector: 'pr-sharing-dialog',
@@ -36,11 +59,16 @@ export class SharingDialogComponent implements OnInit {
   public shareLink: ShareByUrlVO = null;
   public shareLinkForm: FormGroup;
 
+  public previewToggle = 0;
+  public expiration: Expiration;
+
+  public updatingLink = false;
   public linkCopied = false;
   public showLinkSettings = false;
 
   public newAccessRole: AccessRoleType = 'access.role.viewer';
   public accessRoleOptions: FormInputSelectOption[] = ACCESS_ROLE_FIELD.selectOptions.reverse();
+  public expirationOptions: FormInputSelectOption[] = EXPIRATION_OPTIONS;
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
   constructor(
@@ -61,7 +89,6 @@ export class SharingDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.shareItem = this.data.item as ItemVO;
-    this.shareLink = this.data.link;
 
     this.shareItem.ShareVOs = sortShareVOs(this.shareItem.ShareVOs);
 
@@ -76,9 +103,8 @@ export class SharingDialogComponent implements OnInit {
 
     this.relationshipService.update();
 
-    this.shareLinkForm.valueChanges.subscribe(() => {
-
-    });
+    this.shareLink = this.data.link;
+    this.setShareLinkFormValue();
   }
 
   onDoneClick(): void {
@@ -224,7 +250,7 @@ export class SharingDialogComponent implements OnInit {
 
     try {
       share.isPendingAction = true;
-      await this.api.share.remove(share);
+      await this.api.share.remove(new ShareVO({}));
       remove(this.shares, share);
       remove(this.pendingShares, share);
       this.shares = sortShareVOs(this.shares);
@@ -236,14 +262,58 @@ export class SharingDialogComponent implements OnInit {
     }
   }
 
-  setShareLinkFormValue(emitEvent = true): void {
-    if (this.shareLink) {
-      this.shareLinkForm.setValue({
-        previewToggle: this.shareLink.previewToggle,
-        expiresDT: this.shareLink.expiresDT,
-      }, { emitEvent: emitEvent });
+  getExpirationFromExpiresDT(expiresDT: string): Expiration {
+    if (!expiresDT) {
+      return Expiration.Never;
+    }
+
+    const diff = differenceInHours(new Date(expiresDT), new Date(this.shareLink.createdDT));
+
+    if (diff <= 24 * ExpirationDays.Day) {
+      return Expiration.Day;
+    } else if (diff <= 24 * ExpirationDays.Week) {
+      return Expiration.Week;
+    } else if (diff <= 24 * 7 * ExpirationDays.Month) {
+      return Expiration.Month;
+    } else if (diff <= 24 * 7 * ExpirationDays.Year) {
+      return Expiration.Year;
     } else {
-      this.shareLinkForm.reset();
+      return Expiration.Other;
+    }
+  }
+
+  getExpiresDTFromExpiration(expiration: Expiration): string {
+    switch (expiration) {
+      case Expiration.Never:
+        return null;
+      case Expiration.Day:
+        return addDays(new Date(this.shareLink.createdDT), 1).toISOString();
+      case Expiration.Week:
+        return addDays(new Date(this.shareLink.createdDT), 7).toISOString();
+      case Expiration.Month:
+        return addDays(new Date(this.shareLink.createdDT), 30).toISOString();
+      case Expiration.Year:
+        return addDays(new Date(this.shareLink.createdDT), 365).toISOString();
+    }
+  }
+
+  setShareLinkFormValue(): void {
+    if (this.shareLink) {
+      this.previewToggle = this.shareLink.previewToggle;
+      this.expiration = this.getExpirationFromExpiresDT(this.shareLink.expiresDT);
+      this.expirationOptions = EXPIRATION_OPTIONS.filter(expiration => {
+        switch (expiration.value) {
+          case Expiration.Never:
+          case Expiration.Other:
+            return true;
+          default:
+            return !isPast(new Date(this.getExpiresDTFromExpiration(expiration.value as Expiration)));
+        }
+      });
+    } else {
+      this.previewToggle = 0;
+      this.expiration = Expiration.Never;
+      this.expirationOptions = EXPIRATION_OPTIONS;
     }
   }
 
@@ -252,7 +322,7 @@ export class SharingDialogComponent implements OnInit {
 
     if (response.isSuccessful) {
       this.shareLink = response.getShareByUrlVO();
-      this.setShareLinkFormValue(false);
+      this.setShareLinkFormValue();
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }
   }
@@ -280,7 +350,7 @@ export class SharingDialogComponent implements OnInit {
 
       await this.api.share.removeShareLink(this.shareLink);
       this.shareLink = null;
-      this.setShareLinkFormValue(false);
+      this.setShareLinkFormValue();
       deferred.resolve();
     } catch (response) {
       deferred.resolve();
@@ -295,14 +365,36 @@ export class SharingDialogComponent implements OnInit {
   }
 
   async onPreviewToggleChange() {
+    this.updatingLink = true;
     try {
-      await this.api.share.updateShareLink(this.shareLink);
+      const update = new ShareByUrlVO(this.shareLink);
+      update.previewToggle = this.previewToggle;
+      await this.api.share.updateShareLink(update);
+      this.shareLink.previewToggle = this.previewToggle;
     } catch (err) {
       if (err instanceof ShareResponse) {
         this.messageService.showError(err.getMessage(), true);
       }
-      this.shareLink.previewToggle = this.shareLink.previewToggle ? 0 : 1;
+      this.setShareLinkFormValue();
+    } finally {
+      this.updatingLink = false;
     }
   }
 
+  async onExpirationChange() {
+    this.updatingLink = true;
+    try {
+      const update = new ShareByUrlVO(this.shareLink);
+      update.expiresDT = this.getExpiresDTFromExpiration(this.expiration);
+      await this.api.share.updateShareLink(update);
+      this.shareLink.expiresDT = update.expiresDT;
+    } catch (err) {
+      if (err instanceof ShareResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+      this.setShareLinkFormValue();
+    } finally {
+      this.updatingLink = false;
+    }
+  }
 }
