@@ -69,8 +69,19 @@ p {
 
 .shares {
   overflow-y: auto;
-  padding-bottom: $grid-unit;
-  height: $grid-unit * 10;
+  margin-bottom: $grid-unit;
+  height: $grid-unit * 11;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+
+  .btn {
+    @include gridHeightButton;
+    width: auto;
+    margin: 0;
+  }
 }
 
 .share-archive {

@@ -1,3 +1,4 @@
+import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnInit, Optional, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
@@ -24,6 +25,9 @@ export class ArchiveSearchBoxComponent implements OnInit {
   public searchResults$: Observable<ArchiveVO[]>;
   public relationshipResults$: Observable<ArchiveVO[]>;
   public resultsCount: number = null;
+  public results: ArchiveVO[] = null;
+
+  public activeResultIndex = -1;
 
   constructor(
     @Optional() private relationshipService: RelationshipService,
@@ -34,9 +38,36 @@ export class ArchiveSearchBoxComponent implements OnInit {
     this.initFormHandler();
   }
 
+  onInputKeydown(event: KeyboardEvent) {
+    if (this.resultsCount === null) {
+      return;
+    }
+
+    const isEnter = event.keyCode === ENTER;
+    const isArrow = event.keyCode === UP_ARROW || event.keyCode === DOWN_ARROW;
+
+    if (!this.resultsCount && this.control.valid) {
+      if (isEnter) {
+        this.onInvite(this.control.value);
+      }
+      return;
+    } else if (!this.resultsCount) {
+      return;
+    }
+
+    if (isArrow) {
+      const direction = event.keyCode === DOWN_ARROW ? 1 : -1;
+      const newActiveResultIndex = this.activeResultIndex + direction;
+      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), this.resultsCount - 1);
+    } else if (event.keyCode === ENTER) {
+      this.onArchiveSelect(this.results[this.activeResultIndex]);
+    }
+  }
+
   searchArchives(text$: Observable<string>) {
     return text$.pipe(
       map(term => {
+        this.activeResultIndex = -1;
         if (!term) {
           this.resultsCount = null;
         }
@@ -68,6 +99,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
         } else {
           this.resultsCount = null;
         }
+        this.results = results;
         return results;
       })
     );

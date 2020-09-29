@@ -52,4 +52,8 @@ input {
   .archive-name {
     font-weight: $font-weight-semibold;
   }
+
+  &:hover, &.active {
+    background-color: darken(white, 4%);
+  }
 }
