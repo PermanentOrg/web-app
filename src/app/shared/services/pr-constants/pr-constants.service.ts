@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AccessRole } from '@models/access-role.enum';
 import { ProfileTemplate } from '@models/profile-item-vo';
+import { orderBy } from 'lodash';
 
 declare var require: any;
 const SYNC_CONSTANTS = require('../../../../../../files/constants/master_en.json');
@@ -55,7 +56,7 @@ export class PrConstantsService {
   }
 
   public getRelations() {
-    const relationTypes = [];
+    const relationTypes: { type: string, name: string}[] = [];
     for (const key in this.constants.relation) {
       if (key === 'family') {
         // tslint:disable-next-line:forin
@@ -73,7 +74,7 @@ export class PrConstantsService {
       }
     }
 
-    return relationTypes;
+    return orderBy(relationTypes, r => r.name.toLowerCase());
   }
 
   public getCountries() {

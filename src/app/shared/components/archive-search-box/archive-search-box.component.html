@@ -16,5 +16,7 @@
   [placeholder]="placeholderText"
   [formControl]="control"
   (keydown)="onInputKeydown($event)"
+  (blur)="onBlur()"
+  #input
   >
 </div>

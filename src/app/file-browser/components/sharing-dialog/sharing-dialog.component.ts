@@ -1,19 +1,21 @@
 import { Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgModel } from '@angular/forms';
+import { FormBuilder, FormGroup, NgModel, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO } from '@models';
+import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
 import { ngIfScaleAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
+import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { InviteResponse } from '@shared/services/api/index.repo';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ACCESS_ROLE_FIELD, PromptService } from '@shared/services/prompt/prompt.service';
+import { ACCESS_ROLE_FIELD, PromptService, RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { addDays, differenceInHours, isPast } from 'date-fns';
 import { find, partition, remove } from 'lodash';
@@ -57,7 +59,6 @@ export class SharingDialogComponent implements OnInit {
   public pendingShares: ShareVO[] = [];
 
   public shareLink: ShareByUrlVO = null;
-  public shareLinkForm: FormGroup;
 
   public previewToggle = 0;
   public expiration: Expiration;
@@ -69,10 +70,16 @@ export class SharingDialogComponent implements OnInit {
   public newAccessRole: AccessRoleType = 'access.role.viewer';
   public accessRoleOptions: FormInputSelectOption[] = ACCESS_ROLE_FIELD.selectOptions.reverse();
   public expirationOptions: FormInputSelectOption[] = EXPIRATION_OPTIONS;
+  public relationOptions: FormInputSelectOption[] = RELATION_OPTIONS;
+
+  public sendingInvitation = false;
+  public showInvitationForm = false;
+  public invitationForm: FormGroup;
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
   constructor(
     @Inject(DIALOG_DATA) public data: any,
+    private accountService: AccountService,
     private dialogRef: DialogRef,
     private promptService: PromptService,
     private fb: FormBuilder,
@@ -81,9 +88,11 @@ export class SharingDialogComponent implements OnInit {
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService
   ) {
-    this.shareLinkForm = this.fb.group({
-      previewToggle: [false],
-      expiresDT: [null]
+    this.invitationForm = this.fb.group({
+      fullName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      relationship: ['relation.friend', [Validators.required]],
+      accessRole: ['access.role.viewer', [Validators.required]]
     });
   }
 
@@ -117,7 +126,36 @@ export class SharingDialogComponent implements OnInit {
   }
 
   onAddInvite(email: string) {
-    console.log(email, this.newAccessRole);
+    this.invitationForm.reset();
+    this.invitationForm.patchValue({
+      email,
+      accessRole: this.newAccessRole,
+      relationship: 'relation.friend'
+    });
+
+    this.showInvitationForm = true;
+  }
+
+  async sendInvite(value: any) {
+    try {
+      this.sendingInvitation = true;
+      const invite = new InviteVO({
+        email: value.email,
+        fullName: value.name,
+        byArchiveId: this.accountService.getArchive().archiveId,
+        relationship: 'relation.family.uncle',
+        accessRole: value.accessRole
+      });
+      await this.api.invite.sendShareInvite([invite], this.shareItem);
+      this.messageService.showMessage('Share invitation sent.', 'success');
+      this.showInvitationForm = false;
+    } catch (err) {
+      if (err instanceof InviteResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+    } finally {
+      this.sendingInvitation = false;
+    }
   }
 
   confirmOwnerAdd(share: ShareVO) {
@@ -129,7 +167,7 @@ export class SharingDialogComponent implements OnInit {
 
   confirmRemove(share: ShareVO) {
     return this.promptService.confirm(
-      'Remove from share',
+      'Remove',
       `Are you sure you want to remove The ${share.ArchiveVO.fullName} Archive?`,
       null,
       'btn-danger'
@@ -253,7 +291,7 @@ export class SharingDialogComponent implements OnInit {
 
     try {
       share.isPendingAction = true;
-      await this.api.share.remove(new ShareVO({}));
+      await this.api.share.remove(share);
       remove(this.shares, share);
       remove(this.pendingShares, share);
       this.shares = sortShareVOs(this.shares);
@@ -355,6 +393,7 @@ export class SharingDialogComponent implements OnInit {
       this.shareLink = null;
       this.setShareLinkFormValue();
       deferred.resolve();
+      this.showLinkSettings = false;
     } catch (response) {
       deferred.resolve();
       if (response instanceof ShareResponse) {

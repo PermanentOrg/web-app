@@ -7,54 +7,95 @@
       </button>
     </div>
     <div class="content">
-      <div class="archive-search" *ngIf="canShare">
-        <pr-archive-search-box class="archive-search-box"
-          (archiveSelect)="onAddArchive($event)"
-          (invite)="onAddInvite($event)"
-        ></pr-archive-search-box>
-        <select class="form-control" [(ngModel)]="newAccessRole">
-          <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
-        </select>
-      </div>
-      <ng-container *ngIf="!shares || !shares.length">
-        <div class="shares-empty">Not shared with anyone</div>
-      </ng-container>
-      <ng-container *ngIf="shares?.length">
-        <div class="shares-title">Shared with</div>
-        <div class="shares">
-          <div class="share-archive pending-share" *ngFor="let share of pendingShares"
-            [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
-            <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
-            <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive
-              <div class="subtitle">Requested {{share.createdDT | date}}</div>
-            </div>
-            <div class="archive-actions">
-              <button class="btn btn-primary"
-                [disabled]="share.isPendingAction"
-                (click)="approveShare(share)">
-                Approve
-              </button>
-              <button class="btn btn-danger"
-                [disabled]="share.isPendingAction"
-                (click)="removeShare(share)">
-                Deny
-              </button>
-            </div>
+      <ng-container *ngIf="showInvitationForm">
+        <form [formGroup]="invitationForm" class="dialog-form">
+          <div class="dialog-form-field">
+            <label for="name">Recipient Name</label>
+            <input type="text" class="form-control" id="newInviteName" name="name"
+              formControlName="fullName">
           </div>
-          <div class="share-archive" *ngFor="let share of shares"
-            [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
-            <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
-            <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
-            <select class="form-control" [disabled]="!canShare || share.accessRole === 'access.role.owner' || share.isPendingAction"
-              [(ngModel)]="share.accessRole" (ngModelChange)="onAccessChange(share, ctrl)" #ctrl="ngModel">
-              <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
-              <option value="remove">Remove</option>
+          <div class="dialog-form-field">
+            <label for="email">Recipient Email</label>
+            <input type="email" class="form-control" id="newInviteEmail" name="email"
+              formControlName="email">
+          </div>
+          <div class="dialog-form-field">
+            <label for="inviteConnection">Connection</label>
+            <select class="form-control" name="inviteConnection" formControlName="relationship">
+              <option *ngFor="let option of relationOptions" [value]="option.value">{{option.text}}</option>
             </select>
           </div>
+          <div class="dialog-form-field">
+            <label for="inviteAccessRole">Access Role</label>
+            <select class="form-control" name="inviteAccessRole" formControlName="accessRole">
+              <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+            </select>
+          </div>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="!showInvitationForm">
+        <div class="archive-search" *ngIf="canShare">
+          <pr-archive-search-box class="archive-search-box"
+            (archiveSelect)="onAddArchive($event)"
+            (invite)="onAddInvite($event)"
+          ></pr-archive-search-box>
+          <select class="form-control" [(ngModel)]="newAccessRole">
+            <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+          </select>
         </div>
+        <ng-container *ngIf="!shares || !shares.length">
+          <div class="shares-empty">Not shared with anyone</div>
+        </ng-container>
+        <ng-container *ngIf="shares?.length">
+          <div class="shares-title">Shared with</div>
+          <div class="shares">
+            <div class="share-archive pending-share" *ngFor="let share of pendingShares"
+              [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
+              <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+              <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive
+                <div class="subtitle">Requested {{share.createdDT | date}}</div>
+              </div>
+              <div class="archive-actions">
+                <button class="btn btn-primary"
+                  [disabled]="share.isPendingAction"
+                  (click)="approveShare(share)">
+                  Approve
+                </button>
+                <button class="btn btn-danger"
+                  [disabled]="share.isPendingAction"
+                  (click)="removeShare(share)">
+                  Deny
+                </button>
+              </div>
+            </div>
+            <div class="share-archive" *ngFor="let share of shares"
+              [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
+              <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+              <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
+              <select class="form-control" [disabled]="!canShare || share.accessRole === 'access.role.owner' || share.isPendingAction"
+                [(ngModel)]="share.accessRole" (ngModelChange)="onAccessChange(share, ctrl)" #ctrl="ngModel">
+                <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+                <option value="remove">Remove</option>
+              </select>
+            </div>
+          </div>
+        </ng-container>
       </ng-container>
       <div class="buttons">
-        <button class="btn btn-primary" (click)="onDoneClick()">Done</button>
+        <button class="btn btn-primary" *ngIf="!showInvitationForm"
+          (click)="onDoneClick()">
+          Done
+        </button>
+        <button class="btn btn-secondary" *ngIf="showInvitationForm"
+          (click)="showInvitationForm = false"
+          [disabled]="sendingInvitation">
+          Cancel
+        </button>
+        <button class="btn btn-primary" *ngIf="showInvitationForm"
+          (click)="sendInvite(invitationForm.value)"
+          [disabled]="invitationForm.invalid || sendingInvitation">
+          Send invitation
+        </button>
       </div>
     </div>
   </div>
@@ -75,12 +116,12 @@
           Create
         </button>
       </div>
-      <div class="share-link-settings-toggle" *ngIf="shareLink">
+      <div class="share-link-settings-toggle" *ngIf="shareLink" @ngIfScaleAnimation>
         <button class="btn btn-link" (click)="showLinkSettings = !showLinkSettings">
           {{showLinkSettings ? 'Hide' : 'Show'}} link settings
         </button>
       </div>
-      <div class="share-link-settings" *ngIf="showLinkSettings" @ngIfScaleAnimation>
+      <div class="share-link-settings" *ngIf="showLinkSettings && shareLink" @ngIfScaleAnimation>
         <div class="link-settings-item">
           <label>Share Preview</label>
           <div class="form-check form-check-inline">
@@ -110,26 +151,17 @@
             [(ngModel)]="expiration" (ngModelChange)="onExpirationChange()">
             <option *ngFor="let option of expirationOptions" [value]="option.value" [hidden]="option.value === 'Other'">{{option.text}}</option>
           </select>
+          <button class="btn btn-danger ml-auto" (click)="removeShareLink()">Remove link</button>
         </div>
         <small class="text-muted" [ngSwitch]="shareLink.expiresDT">
           <ng-container *ngSwitchCase="null">
-            This link will never expire
+            This link will only expire if deleted
           </ng-container>
           <ng-container *ngSwitchDefault>
             This link will expire {{shareLink.expiresDT | date: 'MMM d, y \'at\' h:mm:ss a'}}
           </ng-container>
         </small>
       </div>
-      <!-- <div class="share-link" *ngIf="shareLink">
-        <p>Send this link via text, email, or other message service to invite people to share this content.</p>
-          <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" #shareUrlInput>
-          <button class="btn btn-primary" [disabled]="linkCopied" (click)="copyShareLink()">{{ linkCopied ? 'Link copied' : 'Copy link'}}</button>
-          <button class="btn btn-primary" (click)="manageShareLink()">Manage link</button>
-          <button class="btn btn-danger" (click)="removeShareLink()">Remove link</button>
-      </div>
-      <div class="share-link-button" *ngIf="!shareLink">
-        <button class="btn btn-primary" (click)="generateShareLink()">Get share link</button>
-      </div> -->
     </div>
   </div>
 </div>

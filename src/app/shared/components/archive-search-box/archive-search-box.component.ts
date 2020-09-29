@@ -1,9 +1,10 @@
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
-import { Component, EventEmitter, Input, OnInit, Optional, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Optional, Output, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ArchiveVO } from '@models';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { Observable, of } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
@@ -18,6 +19,8 @@ export class ArchiveSearchBoxComponent implements OnInit {
   @Output() archiveSelect = new EventEmitter<ArchiveVO>();
   @Output() invite = new EventEmitter<string>();
 
+  @ViewChild('input') inputElement: ElementRef;
+
   public searchText = null;
   public control = new FormControl('', [Validators.email]);
   public placeholderText = 'Search by email or archive name';
@@ -31,6 +34,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
 
   constructor(
     @Optional() private relationshipService: RelationshipService,
+    @Optional() private accountService: AccountService,
     private apiService: ApiService
   ) { }
 
@@ -86,7 +90,8 @@ export class ArchiveSearchBoxComponent implements OnInit {
             return this.apiService.search.archiveByEmail(term)
             .pipe(
               map(response => {
-                return response.getArchiveVOs();
+                return response.getArchiveVOs()
+                  .filter(a => a.archiveId !== this.accountService.getArchive()?.archiveId);
               })
             );
         } else {
@@ -112,10 +117,18 @@ export class ArchiveSearchBoxComponent implements OnInit {
   onArchiveSelect(archive: ArchiveVO) {
     this.control.reset();
     this.archiveSelect.emit(archive);
+    (this.inputElement.nativeElement as HTMLInputElement).blur();
   }
 
   onInvite(email: string) {
     this.control.reset();
     this.invite.emit(email);
+    (this.inputElement.nativeElement as HTMLInputElement).blur();
+  }
+
+  onBlur() {
+    setTimeout(() => {
+      this.control.reset();
+    }, 150);
   }
 }

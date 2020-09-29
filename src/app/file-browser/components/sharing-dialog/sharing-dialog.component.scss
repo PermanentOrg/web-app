@@ -81,7 +81,12 @@ p {
     @include gridHeightButton;
     width: auto;
     margin: 0;
+    margin-left: $grid-unit / 2;
   }
+}
+
+.dialog-form {
+  @include tabbedDialogPanelForm;
 }
 
 .share-archive {
@@ -181,6 +186,13 @@ p {
     select {
       @include gridHeightInputSmall;
       margin-left: -$grid-unit / 2;
+      margin-right: auto;
+    }
+
+    .btn {
+      @include gridHeightButtonSmall;
+      width: auto;
+      margin: 0;
     }
   }
 }
