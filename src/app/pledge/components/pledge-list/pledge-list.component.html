@@ -1,12 +1,12 @@
 <div class="pledge-list-sort">
-  <select name="" id="" class="form-control" (change)="setSort($event)">
-    <option value="pledgesByNew">Recent Donations</option>
-    <option value="pledgesByAmount">Highest Donations</option>
+  <select class="form-control" [(ngModel)]="activeList" (ngModelChange)="onChangePledges()">
+    <option [value]="'latest'">Recent Donations</option>
+    <option [value]="'highest'">Largest Donations</option>
   </select>
 </div>
 <div class="pledge-list-wrapper">
   <div class="pledge-list">
-    <div class="pledge" *ngFor="let pledge of pledges" [ngClass]="{'new': pledge.new}">
+    <div class="pledge" *ngFor="let pledge of (pledges$ | async)" [ngClass]="{'new': pledge.isNew}">
       <div class="amount">{{pledge.dollarAmount | currency:'USD':'symbol':'1.0-0'}}</div>
       <div class="name">{{pledge.name}}</div>
       <div class="bottom">{{pledge.timestamp | date:'shortDate'}}</div>
