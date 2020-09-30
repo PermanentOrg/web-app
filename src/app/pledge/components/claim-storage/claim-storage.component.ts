@@ -31,7 +31,7 @@ export class ClaimStorageComponent implements OnInit {
     private accountService: AccountService,
     private pledgeService: PledgeService
   ) {
-    if (!pledgeService.currentPledge) {
+    if (!pledgeService.currentPledgeData) {
       this.router.navigate(['..'], {relativeTo: this.route});
       return this;
     } else if (!pledgeService.currentPledgeData.timestamp) {
