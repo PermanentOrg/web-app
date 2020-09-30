@@ -1,0 +1,1159 @@
+{
+	"person": {
+		"basic": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.basic",
+			"description": "How others identify you",
+			"position": 0,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"string1": {
+					"description": "Display Name",
+					"field_name_ui": "profile.basic.display_name",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Given Name",
+					"field_name_ui": "profile.basic.given_name",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string3": {
+					"description": "Nick name",
+					"field_name_ui": "profile.basic.nickname_1",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"otherId1": {
+					"description": "Avatar",
+					"field_name_ui": "profile.basic.thumbnail",
+					"validation": "bigint",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.thumbnail"
+				},
+				"otherId2": {
+					"description": "QR Code",
+					"field_name_ui": "profile.basic.qr_thumbnail",
+					"validation": "bigint",
+					"position": 4,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.thumbnail"
+				}
+			}
+		},
+		"birth_info": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.birth_info",
+			"description": "Birth Information",
+			"position": 6,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"day1": {
+					"description": "Birth Day",
+					"field_name_ui": "profile.birth_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.birth_info.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				}
+			}
+		},
+		"blurb": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.blurb",
+			"description": "Blurbage",
+			"position": 2,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.blurb.single",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				}
+			}
+		},
+		"death_info": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.death_info",
+			"description": "Death Information",
+			"position": 7,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"day1": {
+					"description": "Date Died",
+					"field_name_ui": "profile.death_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"locnId1": {
+					"description": "Where died",
+					"field_name_ui": "profile.death_info.died_address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"locnId2": {
+					"description": "Where buried",
+					"field_name_ui": "profile.death_info.interned_address",
+					"validation": "bigint",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				}
+			}
+		},
+		"description": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.description",
+			"description": "Description",
+			"position": 1,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"text_dataId1": {
+					"description": "",
+					"field_name_ui": "profile.description.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.textdata"
+				}
+			}
+		},
+		"email": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.email",
+			"description": "Email",
+			"position": 3,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.email.single",
+					"validation": "email",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.email"
+				}
+			}
+		},
+		"gender": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.gender",
+			"description": "Gender",
+			"position": 5,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.gender.single",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				}
+			}
+		},
+		"home": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.home",
+			"description": "Where you live",
+			"position": 8,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.home.address",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Description",
+					"field_name_ui": "profile.home.description",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"day2": {
+					"description": "Ended",
+					"field_name_ui": "profile.home.end_day",
+					"validation": "day",
+					"position": 6,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"string2": {
+					"description": "Phone #",
+					"field_name_ui": "profile.home.phone_nbr",
+					"validation": "phone",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.phone"
+				},
+				"recordArchiveNbr": {
+					"description": "Archive #",
+					"field_name_ui": "profile.home.record_archive_nbr",
+					"validation": "pa_nbr",
+					"position": 4,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.pa_nbr"
+				},
+				"day1": {
+					"description": "Started",
+					"field_name_ui": "profile.home.start_day",
+					"validation": "day",
+					"position": 5,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				}
+			}
+		},
+		"job": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.job",
+			"description": "Where you work",
+			"position": 9,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.job.address",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"archiveArchiveNbr": {
+					"description": "Archive #",
+					"field_name_ui": "profile.job.archive_archive_nbr",
+					"validation": "pa_nbr",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.pa_nbr"
+				},
+				"string1": {
+					"description": "Company",
+					"field_name_ui": "profile.job.company",
+					"validation": "free_form_string",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Description",
+					"field_name_ui": "profile.job.description",
+					"validation": "free_form_string",
+					"position": 4,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"day2": {
+					"description": "Ended Date",
+					"field_name_ui": "profile.job.end_day",
+					"validation": "day",
+					"position": 6,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"day1": {
+					"description": "Started Day",
+					"field_name_ui": "profile.job.start_day",
+					"validation": "day",
+					"position": 5,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"string3": {
+					"description": "Title",
+					"field_name_ui": "profile.job.title",
+					"validation": "free_form_string",
+					"position": 6,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				}
+			}
+		},
+		"phone_nbr": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.phone_nbr",
+			"description": "Phone #",
+			"position": 4,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.phone_nbr.single",
+					"validation": "phone",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.phone"
+				}
+			}
+		},
+		"social_media": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.social_media",
+			"description": "Social Media",
+			"position": 10,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.social_media.single",
+					"validation": "url",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.url"
+				}
+			}
+		},
+		"timezone": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.timezone",
+			"description": "Timezone",
+			"position": 11,
+			"allow_multiple": 0,
+			"date_added": "2017-10-23",
+			"values": {
+				"otherId1": {
+					"description": "",
+					"field_name_ui": "profile.timezone.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.timezone"
+				}
+			}
+		}
+	},
+
+
+
+	"organization": {
+		"basic": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.basic",
+			"description": "How others identify your organization",
+			"position": 0,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "Display Name",
+					"field_name_ui": "profile.basic.display_name",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Legal Name",
+					"field_name_ui": "profile.basic.legal_name",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"string3": {
+					"description": "DBA name",
+					"field_name_ui": "profile.basic.dba_1",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"otherId1": {
+					"description": "Logo",
+					"field_name_ui": "profile.basic.thumbnail",
+					"validation": "bigint",
+					"position": 3,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.thumbnail"
+				},
+				"otherId2": {
+					"description": "QR Code",
+					"field_name_ui": "profile.basic.qr_thumbnail",
+					"validation": "bigint",
+					"position": 4,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.thumbnail"
+				}
+			}
+		},
+		"established_info": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.established_info",
+			"description": "Established Information",
+			"position": 6,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"day1": {
+					"description": "Established Day",
+					"field_name_ui": "profile.established_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				},
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.established_info.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.locn"
+				}
+			}
+		},
+		"blurb": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.blurb",
+			"description": "Blurbage",
+			"position": 2,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.blurb.single",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				}
+			}
+		},
+		"closure_info": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.closure_info",
+			"description": "Closure Information",
+			"position": 7,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"day1": {
+					"description": "Date Closed",
+					"field_name_ui": "profile.closure_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		},
+		"description": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.description",
+			"description": "Description",
+			"position": 1,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"text_dataId1": {
+					"description": "",
+					"field_name_ui": "profile.description.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.textdata"
+				}
+			}
+		},
+		"email": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.email",
+			"description": "Email",
+			"position": 3,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.email.single",
+					"validation": "email",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.email"
+				}
+			}
+		},
+		"timezone": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.timezone",
+			"description": "Timezone",
+			"position": 11,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"otherId1": {
+					"description": "",
+					"field_name_ui": "profile.timezone.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.timezone"
+				}
+			}
+		},
+		"phone_nbr": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.phone_nbr",
+			"description": "Phone #",
+			"position": 4,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.phone_nbr.single",
+					"validation": "phone",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.phone"
+				}
+			}
+		},
+		"social_media": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.social_media",
+			"description": "Social Media",
+			"position": 10,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.social_media.single",
+					"validation": "url",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.url"
+				}
+			}
+		},
+		"location": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.location",
+			"description": "Where the organization is located",
+			"position": 8,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.location.address",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Description",
+					"field_name_ui": "profile.location.description",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"day2": {
+					"description": "Closed",
+					"field_name_ui": "profile.location.closed_day",
+					"validation": "day",
+					"position": 6,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				},
+				"string2": {
+					"description": "Phone #",
+					"field_name_ui": "profile.location.phone_nbr",
+					"validation": "phone",
+					"position": 3,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.phone"
+				},
+				"recordArchiveNbr": {
+					"description": "Archive #",
+					"field_name_ui": "profile.location.record_archive_nbr",
+					"validation": "pa_nbr",
+					"position": 4,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.pa_nbr"
+				},
+				"day1": {
+					"description": "Established",
+					"field_name_ui": "profile.location.established_day",
+					"validation": "day",
+					"position": 5,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		}
+	},
+
+
+
+
+	"family": {
+		"basic": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.basic",
+			"description": "Your family name",
+			"position": 0,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "Display Name",
+					"field_name_ui": "profile.basic.display_name",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Nick Name",
+					"field_name_ui": "profile.basic.nick_name",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"string3": {
+					"description": "Previous name",
+					"field_name_ui": "profile.basic.previous_name",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"otherId1": {
+					"description": "Family Crest",
+					"field_name_ui": "profile.basic.thumbnail",
+					"validation": "bigint",
+					"position": 3,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.thumbnail"
+				},
+				"otherId2": {
+					"description": "QR Code",
+					"field_name_ui": "profile.basic.qr_thumbnail",
+					"validation": "bigint",
+					"position": 4,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.thumbnail"
+				}
+			}
+		},
+		"established_info": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.established_info",
+			"description": "Established Information",
+			"position": 6,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"day1": {
+					"description": "Established Day",
+					"field_name_ui": "profile.established_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				},
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.established_info.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.locn"
+				}
+			}
+		},
+		"blurb": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.blurb",
+			"description": "Blurbage",
+			"position": 2,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.blurb.single",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				}
+			}
+		},
+		"death_info": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.death_info",
+			"description": "Family ended",
+			"position": 7,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"day1": {
+					"description": "Date the family ended",
+					"field_name_ui": "profile.death_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		},
+		"description": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.description",
+			"description": "Description",
+			"position": 1,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"text_dataId1": {
+					"description": "",
+					"field_name_ui": "profile.description.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.textdata"
+				}
+			}
+		},
+		"email": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.email",
+			"description": "Email",
+			"position": 3,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.email.single",
+					"validation": "email",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.email"
+				}
+			}
+		},
+		"timezone": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.timezone",
+			"description": "Timezone",
+			"position": 11,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"otherId1": {
+					"description": "",
+					"field_name_ui": "profile.timezone.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.timezone"
+				}
+			}
+		},
+		"phone_nbr": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.phone_nbr",
+			"description": "Phone #",
+			"position": 4,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.phone_nbr.single",
+					"validation": "phone",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.phone"
+				}
+			}
+		},
+		"social_media": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.social_media",
+			"description": "Social Media",
+			"position": 10,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.social_media.single",
+					"validation": "url",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.url"
+				}
+			}
+		},
+		"location": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.location",
+			"description": "Where the family is located",
+			"position": 8,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.location.address",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Description",
+					"field_name_ui": "profile.location.description",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"day2": {
+					"description": "Closed",
+					"field_name_ui": "profile.location.closed_day",
+					"validation": "day",
+					"position": 6,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				},
+				"string2": {
+					"description": "Phone #",
+					"field_name_ui": "profile.location.phone_nbr",
+					"validation": "phone",
+					"position": 3,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.phone"
+				},
+				"recordArchiveNbr": {
+					"description": "Archive #",
+					"field_name_ui": "profile.location.record_archive_nbr",
+					"validation": "pa_nbr",
+					"position": 4,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.pa_nbr"
+				},
+				"day1": {
+					"description": "Established",
+					"field_name_ui": "profile.location.established_day",
+					"validation": "day",
+					"position": 5,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		}
+	},
+
+
+	"nonprofit": {
+		"basic": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.basic",
+			"description": "How others identify your nonprofit",
+			"position": 0,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "Display Name",
+					"field_name_ui": "profile.basic.display_name",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Legal Name",
+					"field_name_ui": "profile.basic.legal_name",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"string3": {
+					"description": "DBA name",
+					"field_name_ui": "profile.basic.dba_1",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"otherId1": {
+					"description": "Logo",
+					"field_name_ui": "profile.basic.thumbnail",
+					"validation": "bigint",
+					"position": 3,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.thumbnail"
+				},
+				"otherId2": {
+					"description": "QR Code",
+					"field_name_ui": "profile.basic.qr_thumbnail",
+					"validation": "bigint",
+					"position": 4,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.thumbnail"
+				}
+			}
+		},
+		"established_info": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.established_info",
+			"description": "Established Information",
+			"position": 6,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"day1": {
+					"description": "Established Day",
+					"field_name_ui": "profile.established_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				},
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.established_info.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.locn"
+				}
+			}
+		},
+		"blurb": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.blurb",
+			"description": "Blurbage",
+			"position": 2,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.blurb.single",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				}
+			}
+		},
+		"closure_info": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.closure_info",
+			"description": "Closure Information",
+			"position": 7,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"day1": {
+					"description": "Date Closed",
+					"field_name_ui": "profile.closure_info.day",
+					"validation": "day",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		},
+		"description": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.description",
+			"description": "Description",
+			"position": 1,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"text_dataId1": {
+					"description": "",
+					"field_name_ui": "profile.description.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.textdata"
+				}
+			}
+		},
+		"email": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.email",
+			"description": "Email",
+			"position": 3,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.email.single",
+					"validation": "email",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.email"
+				}
+			}
+		},
+		"timezone": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.timezone",
+			"description": "Timezone",
+			"position": 11,
+			"allow_multiple": 0,
+			"date_added": "2018-08-22",
+			"values": {
+				"otherId1": {
+					"description": "",
+					"field_name_ui": "profile.timezone.single",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.timezone"
+				}
+			}
+		},
+		"phone_nbr": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.phone_nbr",
+			"description": "Phone #",
+			"position": 4,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.phone_nbr.single",
+					"validation": "phone",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.phone"
+				}
+			}
+		},
+		"social_media": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.social_media",
+			"description": "Social Media",
+			"position": 10,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"string1": {
+					"description": "",
+					"field_name_ui": "profile.social_media.single",
+					"validation": "url",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.url"
+				}
+			}
+		},
+		"location": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.location",
+			"description": "Where the organization is located",
+			"position": 8,
+			"allow_multiple": 1,
+			"date_added": "2018-08-22",
+			"values": {
+				"locnId1": {
+					"description": "Address",
+					"field_name_ui": "profile.location.address",
+					"validation": "bigint",
+					"position": 0,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Description",
+					"field_name_ui": "profile.location.description",
+					"validation": "free_form_string",
+					"position": 1,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.string"
+				},
+				"day2": {
+					"description": "Closed",
+					"field_name_ui": "profile.location.closed_day",
+					"validation": "day",
+					"position": 6,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				},
+				"string2": {
+					"description": "Phone #",
+					"field_name_ui": "profile.location.phone_nbr",
+					"validation": "phone",
+					"position": 3,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.phone"
+				},
+				"recordArchiveNbr": {
+					"description": "Archive #",
+					"field_name_ui": "profile.location.record_archive_nbr",
+					"validation": "pa_nbr",
+					"position": 4,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.pa_nbr"
+				},
+				"day1": {
+					"description": "Established",
+					"field_name_ui": "profile.location.established_day",
+					"validation": "day",
+					"position": 5,
+					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		}
+	}
+}
