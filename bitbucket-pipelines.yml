@@ -21,7 +21,6 @@ pipelines:
             - node
           script: # Modify the commands below to build your repository.
             - cd /data/www
-            - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -37,7 +36,6 @@ pipelines:
           script:
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
-            - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -49,7 +47,7 @@ pipelines:
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
             - sentry-cli releases set-commits $VERSION --auto
-            - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - sentry-cli releases $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
             - rm dist/mdot/*.map
             - cd ..
@@ -81,7 +79,6 @@ pipelines:
             - node
           script:
             - cd /data/www
-            - git clone git@bitbucket.org:permanent-org/files.git
             - git clone git@bitbucket.org:permanent-org/deploy.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
@@ -106,7 +103,6 @@ pipelines:
           script:
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
-            - git clone -b release/staging --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -118,7 +114,7 @@ pipelines:
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
             - sentry-cli releases set-commits $VERSION --auto
-            - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - sentry-cli releases $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
             - rm dist/mdot/*.map
             - cd ..
@@ -140,7 +136,6 @@ pipelines:
             - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
-            - git clone -b release/production --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -153,7 +148,7 @@ pipelines:
             - npm install -g @sentry/cli --unsafe-perm
             - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
             - sentry-cli releases set-commits $VERSION --auto
-            - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+            - sentry-cli releases $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
             - git config --global user.email "engineering@permanent.org"
             - git config --global user.name "Bitbucket Pipelines"
