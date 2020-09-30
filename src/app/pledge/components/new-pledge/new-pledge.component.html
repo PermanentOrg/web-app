@@ -34,7 +34,7 @@
   </div>
   <button class="btn btn-primary"
     [disabled]="!cardComplete || (donationSelection === 'custom' && !pledgeForm.value.customDonationAmount) || !pledgeForm.valid || waiting">
-    Pledge {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount) | currency:'USD':'symbol':'1.0-0'}} 
-    for {{ getStorageAmount(donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount ) | number:'1.0-0'}} GB
+    Donate {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount) | currency:'USD':'symbol':'1.0-0'}} 
+    to endow {{ getStorageAmount(donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount ) | number:'1.0-0'}} GB
   </button>
 </form>
