@@ -100,7 +100,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
             .pipe(
               map(response => {
                 return response.getArchiveVOs()
-                  .filter(a => a.archiveId !== this.accountService.getArchive()?.archiveId);
+                  .filter(a => a.archiveId !== this.accountService?.getArchive()?.archiveId);
               })
             );
         } else {

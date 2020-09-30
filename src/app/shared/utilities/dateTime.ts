@@ -56,3 +56,7 @@ export function formatDateISOString(dtString: string) {
     return dtString;
   }
 }
+
+export function getSQLDateTime(date: Date | moment.Moment) {
+  return date.toISOString().slice(0, 19).replace('T', ' ');
+}

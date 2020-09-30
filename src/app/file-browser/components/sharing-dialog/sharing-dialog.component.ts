@@ -16,6 +16,7 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { ACCESS_ROLE_FIELD, PromptService, RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
+import { getSQLDateTime } from '@shared/utilities/dateTime';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { addDays, differenceInHours, isPast } from 'date-fns';
 import { find, partition, remove } from 'lodash';
@@ -99,11 +100,11 @@ export class SharingDialogComponent implements OnInit {
       relationship: ['relation.friend', [Validators.required]],
       accessRole: ['access.role.viewer', [Validators.required]]
     });
+
+    this.shareItem = this.data.item as ItemVO;
   }
 
   ngOnInit(): void {
-    this.shareItem = this.data.item as ItemVO;
-
     this.shareItem.ShareVOs = sortShareVOs(this.shareItem.ShareVOs);
 
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
@@ -333,13 +334,13 @@ export class SharingDialogComponent implements OnInit {
       case Expiration.Never:
         return null;
       case Expiration.Day:
-        return addDays(new Date(this.shareLink.createdDT), 1).toISOString();
+        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 1));
       case Expiration.Week:
-        return addDays(new Date(this.shareLink.createdDT), 7).toISOString();
+        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 7));
       case Expiration.Month:
-        return addDays(new Date(this.shareLink.createdDT), 30).toISOString();
+        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 30));
       case Expiration.Year:
-        return addDays(new Date(this.shareLink.createdDT), 365).toISOString();
+        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 365));
     }
   }
 
@@ -413,10 +414,6 @@ export class SharingDialogComponent implements OnInit {
         this.messageService.showError(response.getMessage());
       }
     }
-  }
-
-  async updateShareLink() {
-
   }
 
   async onPreviewToggleChange() {
