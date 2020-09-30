@@ -8,6 +8,7 @@ import { ArchiveVO, ItemVO, RecordVO, ShareVO } from '@models';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
+import { AccessRoleType } from '@models/access-role';
 
 const archive1 = new ArchiveVO({
   fullName: 'Mr Archive',
@@ -161,5 +162,41 @@ describe('SharingDialogComponent', () => {
     expect(component.shares.length).toBe(2);
     expect(component.shares[0].shareId).toEqual(pendingShare.shareId);
     expect(component.shares[1].shareId).toEqual(shareViewer.shareId);
+  }));
+
+  it('should confirm removal and not remove if cancelled', fakeAsync(() => {
+    component.shareItem = new RecordVO({...item, ShareVOs: [shareViewer]});
+    component.ngOnInit();
+
+    const confirmSpy = spyOn(component, 'confirmRemove')
+      .and.returnValue(Promise.reject(false));
+
+    const share = component.shares[0];
+    share.accessRole = 'remove' as AccessRoleType;
+
+    component.onAccessChange(share);
+
+    tick();
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(component.shares.length).toBe(1);
+    expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
+  }));
+
+  it('should confirm adding a new owner and reset if denied', fakeAsync(() => {
+    component.shareItem = new RecordVO({...item, ShareVOs: [shareViewer]});
+    component.ngOnInit();
+
+    const confirmSpy = spyOn(component, 'confirmOwnerAdd')
+      .and.returnValue(Promise.reject(false));
+
+    const share = component.shares[0];
+    share.accessRole = 'access.role.owner';
+
+    component.onAccessChange(share);
+
+    tick();
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(component.shares.length).toBe(1);
+    expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
   }));
 });
