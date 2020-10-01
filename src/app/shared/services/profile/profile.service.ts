@@ -68,7 +68,7 @@ export const ALWAYS_PUBLIC: FieldNameUI[] = [
   'profile.timezone'
 ];
 
-export function addProfileItemToDictionary(item: ProfileItemVOData, dict: ProfileItemVODictionary) {
+export function addProfileItemToDictionary(dict: ProfileItemVODictionary, item: ProfileItemVOData) {
   const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
 
   if (!dict[fieldNameUIShort]) {
@@ -78,7 +78,7 @@ export function addProfileItemToDictionary(item: ProfileItemVOData, dict: Profil
   }
 }
 
-export function orderItemsInDictionary(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1', dict: ProfileItemVODictionary) {
+export function orderItemsInDictionary(dict: ProfileItemVODictionary, field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
   if (dict[field]?.length > 1) {
     dict[field] = orderBy(dict[field], column);
   }
@@ -125,7 +125,7 @@ export class ProfileService {
     this.profileItemDictionary = {};
 
     for (const item of profileItems) {
-      this.addProfileItemToDictionary(item);
+      addProfileItemToDictionary(this.profileItemDictionary, item);
     }
 
     // create stubs for the rest of the profile items so at least one exists for given profile item type
@@ -145,8 +145,8 @@ export class ProfileService {
     this.profileItemDictionary = {};
   }
 
-  async addProfileItemToDictionary(item: ProfileItemVOData) {
-    addProfileItemToDictionary(item, this.profileItemDictionary);
+  addProfileItemToDictionary(item: ProfileItemVOData) {
+    addProfileItemToDictionary(this.profileItemDictionary, item);
   }
 
   createEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
@@ -316,7 +316,7 @@ export class ProfileService {
   }
 
   orderItems(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
-    orderItemsInDictionary(field, column, this.profileItemDictionary);
+    orderItemsInDictionary(this.profileItemDictionary, field);
   }
 
 
