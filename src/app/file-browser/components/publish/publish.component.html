@@ -1,6 +1,7 @@
 <div class="dialog-content">
   <div class="dialog-body">
-    <div class="page-title break-all">Publish {{sourceItem.displayName}}</div>
+    <div class="page-title break-all">
+      {{this.sourceItem.folder_linkType.includes('public') ? 'Get public link for' : 'Publish'}} {{sourceItem.displayName}}</div>
     <div class="public-link" *ngIf="publicLink">
       <p>This item can be viewed by anyone using the link provided</p>
         <input type="text" class="form-control" readonly [value]="publicLink" #publicLinkInput>

@@ -27,6 +27,11 @@ export const TOOLTIPS = {
         disabled: 'You do not have permission to publish',
         disabledMulti: 'Items must be published individually'
       },
+      getLink: {
+        enabled: 'Get public link for selected item',
+        disabled: 'You do not have permission to get this link',
+        disabledMulti: 'Items have individual links'
+      },
       upload: {
         enabled: 'Upload files and folders to the current folder',
         disabled: 'You do not have permission to upload to the current folder'
