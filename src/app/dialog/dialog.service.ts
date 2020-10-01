@@ -24,7 +24,6 @@ export type DialogComponentToken =
   'InvitationsDialogComponent' |
   'MyArchivesDialogComponent' |
   'ProfileEditFirstTimeDialogComponent' |
-  'PublicProfileComponent' |
   'StorageDialogComponent' |
   'NotificationDialogComponent'
   ;

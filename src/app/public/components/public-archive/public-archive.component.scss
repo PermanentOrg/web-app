@@ -3,120 +3,116 @@
 :host {
   display: block;
   width: 100%;
+}
 
-  &.container-vertical-flex {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    min-height: calc(100vh - #{$public-banner-height});
+$photo-desktop: pxToGrid(220px);
+$photo-mobile: pxToGrid(80px);
+$profile-max-width: 1200px;
 
-    .public-archive-content {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-    }
+$profile-sidebar-width: pxToGrid(360px);
+
+@mixin sidebarMargin {
+  margin-right: $profile-sidebar-width + 3 * $grid-unit;
+}
+
+.profile-banner {
+  @include profileBanner;
+  cursor: initial;
+}
+
+.profile-photo {
+  @include profilePhoto($photo-desktop, $photo-mobile);
+  cursor: initial;
+}
+
+.profile-about {
+  margin-bottom: $grid-unit * 2;
+  @include desktop {
+    padding-left: $grid-unit;
+    @include sidebarMargin;
   }
 }
 
-.public-archive-header {
-  background: $PR-orange;
+.profile-name {
+  font-size: $font-size-base * 2;
+  font-weight: $font-weight-bold;
+  margin-bottom: $grid-unit;
+
+  @include beforeDesktop {
+    font-size: $font-size-base * 1.5;
+  }
 }
 
-.public-archive {
-  @include public-centered;
+.profile-blurb {
+  color: $text-muted;
+  font-style: oblique;
+  margin-bottom: $grid-unit;
+}
 
+.profile-archive-link {
   display: flex;
-  align-items: center;
-  padding: 10px 0px;
-
-  .public-archive-thumb {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-    cursor: pointer;
-    flex: 0 0 50px;
-  }
-
-  .public-archive-name {
-    margin-right: auto;
-  }
-
-  .public-archive-cta {
-    margin-left: $grid-unit / 2;
-    display: flex;
-    .btn {
-      margin: 0px;
-      display: inline-block;
-      width: auto;
-      &:not(:last-child) {
-        margin-right: $grid-unit / 2;
-      }
-    }
-  }
-
-  @media screen and (max-width: $public-max-width) {
-    width: 100%;
-
-    .public-archive-thumb {
-      margin-left: 10px;
-    }
-
-    .public-archive-cta {
-      margin-right: 10px;
-    }
-  }
-
-}
-
-.public-archive-description {
-  @include public-centered;
-  padding-top: 0.5rem;
-  .public-archive-description-header {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    a {
-      user-select: none;
-    }
-  }
-
-  p {
-    font-size: $font-size-sm;
-  }
-
-  .public-archive-description-contents {
-    margin-bottom: 0;
-    overflow: hidden;
-  }
-
-  @media screen and (max-width: $public-max-width) {
-    padding: 10px;
-  }
-}
-
-.public-archive-breadcrumbs {
-  background: $gray-700;
-  @include public-centered;
-}
-
-.public-profile-link {
-  display: flex;
-  justify-content: center;
-  margin: $grid-unit auto;
-  max-width: $public-max-width;
   > .btn {
     flex: 0 0 auto;
     width: auto;
     margin: 0;
     @include gridHeightButton;
   }
+
+  margin-bottom: $grid-unit;
 }
 
+.profile-sidebar {
+  @include desktop {
+    width: $profile-sidebar-width;
+    position: absolute;
+    right: $grid-unit * 2;
+    top: $photo-desktop * 1.5 + $grid-unit;
+  }
 
+  .sidebar-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin-bottom: $grid-unit;
+  }
 
+  .sidebar-inline-item {
+    display: flex;
+    min-width: 0;
+    align-items: flex-start;
+    margin-bottom: $grid-unit;
+
+    span {
+      flex: 1 1 auto;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    label {
+      margin: 0;
+      margin-right: $grid-unit / 2;
+      font-weight: $font-weight-semibold;
+      white-space: nowrap;
+    }
+  }
+
+  .sidebar-list-item {
+    label {
+      font-weight: $font-weight-semibold;
+      white-space: nowrap;
+    }
+
+    > * {
+      margin-bottom: $grid-unit / 2;
+    }
+  }
+}
+
+.profile-contents {
+  min-height: 100vh;
+  @include desktop {
+    padding-left: $grid-unit;
+    @include sidebarMargin;
+  }
+}

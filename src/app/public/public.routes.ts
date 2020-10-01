@@ -42,6 +42,7 @@ export const routes: Routes = [
       {
         path: 'archive/:publicArchiveNbr',
         resolve: publicArchiveResolve,
+        component: PublicArchiveComponent,
         children: [
           {
             path: 'profile',
@@ -49,16 +50,15 @@ export const routes: Routes = [
           },
           {
             path: '',
-            component: PublicArchiveComponent,
             loadChildren: LazyLoadFileBrowserSibling,
             data: {
               noFileListPadding: true,
-              fileListCentered: true,
+              fileListCentered: false,
               isPublicArchive: true,
               checkFolderViewOnNavigate: true,
               showFolderDescription: true
             },
-          }
+          },
         ]
       },
       {

@@ -1,8 +1,6 @@
 import { Component, OnInit, Inject, Optional, HostBinding } from '@angular/core';
 import { FolderVO, ArchiveVO } from '@models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
-import { findRouteData } from '@shared/utilities/router';
 import { ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { ProfileItemsDataCol, ALWAYS_PUBLIC } from '@shared/services/profile/profile.service';
 import { orderBy, some } from 'lodash';
@@ -14,25 +12,22 @@ import { MessageService } from '@shared/services/message/message.service';
   styleUrls: ['./public-profile.component.scss']
 })
 export class PublicProfileComponent implements OnInit {
-  @HostBinding('class.is-dialog') isDialog: boolean;
-
   publicRoot: FolderVO;
   archive: ArchiveVO;
 
   profileItems: ProfileItemVODictionary = {};
 
+  publicArchivePath: string[];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private message: MessageService,
-    @Optional() @Inject(DIALOG_DATA) public data: any,
-    @Optional() private dialogRef: DialogRef,
+    private message: MessageService
   ) {
-    this.isDialog = dialogRef ? true : false;
   }
 
   ngOnInit(): void {
-    const data = this.data || this.route.snapshot.data;
+    const data = this.route.snapshot.data;
 
     this.publicRoot = data.publicRoot;
     this.archive = data.archive;
@@ -44,10 +39,6 @@ export class PublicProfileComponent implements OnInit {
       this.router.navigate(['..'], { relativeTo: this.route });
       this.message.showError('This profile has no public information.');
     }
-  }
-
-  close(): void {
-    this.dialogRef?.close();
   }
 
   buildProfileItemDictionary(items: ProfileItemVOData[]) {

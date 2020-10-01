@@ -11,16 +11,6 @@
       </div>
   </div>
 </div>
-<!-- <div class="public-archive" *ngIf="publishArchive">
-  <div class="public-archive-thumb" prBgImage [bgSrc]="publishArchive.thumbURL200"></div>
-  <span>
-    <strong>{{displayName}}</strong><br>
-    Shared by {{publishArchive.fullName}}
-  </span>
-</div> -->
-<!-- <div class="public-content-breadcrumbs">
-  <pr-breadcrumbs></pr-breadcrumbs>
-</div> -->
 <div class="public-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
 </div>

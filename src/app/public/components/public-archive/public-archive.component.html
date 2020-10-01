@@ -1,28 +1,91 @@
-<div class="public-archive-header">
-  <div class="public-archive" *ngIf="archive">
-    <div class="public-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" [cover]="true"
-    (click)="onArchiveThumbClick()"></div>
-    <span class="public-archive-name">
-      <strong>The {{archive.fullName || 'Archive Name'}} Archive</strong><br>
-      {{archive.type | prConstants}}
-    </span>
-    <div class="public-archive-cta" *ngIf="!cta || !isMobile">
-      <a class="btn btn-primary hide-mobile" [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']" *ngIf="hasProfile">View Public Profile</a>
-      <button class="btn btn-primary" (click)="onShareClick()">Share</button>
-    </div>
-    <div class="public-archive-cta" *ngIf="cta">
-      <button class="btn btn-primary" (click)="onCtaClick()" *ngIf="!isMobile">Create a new timeline</button>
-      <button class="btn btn-primary mobile-only" (click)="onCtaClickMobile()" *ngIf="isMobile">Create</button>
-    </div>
+<div class="banner-section">
+  <div class="profile-banner" prBgImage
+    [bgSrc]="this.publicRoot?.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
+    [class.show-gradient]="!this.publicRoot?.thumbArchiveNbr">
+  </div>
+  <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500">
   </div>
 </div>
-<div class="public-profile-link hide-desktop" *ngIf="hasProfile">
-  <a [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']" class="btn btn-primary">View Public Profile</a>
+<div class="profile-about">
+  <div class="profile-name">
+    The {{this.archive.fullName}} Archive
+  </div>
+  <div class="profile-blurb" *ngIf="hasSingleValueFor('blurb', 'string1')">
+    {{ this.profileItems.blurb[0].string1 }}
+  </div>
+  <div class="profile-description" *ngIf="hasSingleValueFor('description', 'textData1')"  [innerHTML]="this.profileItems.description[0].textData1">
+  </div>
 </div>
-<div class="public-archive-breadcrumbs">
-  <pr-breadcrumbs></pr-breadcrumbs>
+<div class="profile-sidebar">
+  <div class="profile-archive-link">
+    <a class="btn btn-primary"
+      [routerLink]="['/p', 'archive', archive.archiveNbr]"
+      [hidden]="!(isViewingProfile$ | async)">
+      View Public Archive
+    </a>
+    <a class="btn btn-primary"
+      [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']"
+      [hidden]="(isViewingProfile$ | async)">
+      View Public Profile
+    </a>
+  </div>
+  <div class="sidebar-title">{{this.archive.type | prConstants | titlecase}} Information</div>
+  <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('basic', 'string2')">
+    <ng-container [ngSwitch]="archive.type">
+      <label *ngSwitchCase="'type.archive.family'">Nickname</label>
+      <label *ngSwitchCase="'type.archive.organization'">Legal Name</label>
+      <label *ngSwitchCase="'type.archive.nonprofit'">Legal Name</label>
+      <label *ngSwitchDefault>Full Name</label>
+    </ng-container>
+    <span>{{profileItems.basic[0]?.string2}}</span>
+  </div>
+  <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('gender', 'string2')">
+    <label>Gender</label>
+    <span>{{profileItems.gender[0]?.string1}}</span>
+  </div>
+  <ng-container [ngSwitch]="archive.type">
+    <ng-container *ngSwitchCase="'type.archive.person'">
+      <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('birth_info', 'day1')">
+        <label>Birth Date</label>
+        <span>{{profileItems.birth_info[0]?.day1 | date}}</span>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('established_info', 'day1')">
+        <label>Date Established</label>
+        <span>{{profileItems.established_info[0]?.day1 | date }}</span>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-container [ngSwitch]="archive.type">
+    <ng-container *ngSwitchCase="'type.archive.person'">
+      <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('birth_info', 'locnId1')">
+        <label>Birth Location</label>
+        <span>{{(profileItems.birth_info[0].LocnVOs[0] | prLocation).full}}</span>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <div class="sidebar-inline-item" *ngIf="hasSingleValueFor('established_info', 'locnId1')">
+        <label>Location Established</label>
+        <span>{{(profileItems.established_info[0].LocnVOs[0] | prLocation).full}}</span>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="profileItems.email?.length || profileItems.social_media?.length">
+    <hr>
+    <div class="sidebar-list-item">
+      <label>Online Presence</label>
+      <div *ngFor="let item of profileItems.email">
+        {{item.string1}}
+      </div>
+      <div *ngFor="let item of profileItems.social_media">
+        <a [href]="item.string1 | link" target="_blank">
+          {{item.string1}}
+        </a>
+      </div>
+    </div>
+  </ng-container>
 </div>
-<div class="public-archive-content">
+<div class="profile-contents">
   <router-outlet></router-outlet>
 </div>
-<pr-dialog-root></pr-dialog-root>

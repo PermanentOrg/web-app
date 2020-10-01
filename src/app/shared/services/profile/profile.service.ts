@@ -68,6 +68,22 @@ export const ALWAYS_PUBLIC: FieldNameUI[] = [
   'profile.timezone'
 ];
 
+export function addProfileItemToDictionary(item: ProfileItemVOData, dict: ProfileItemVODictionary) {
+  const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
+
+  if (!dict[fieldNameUIShort]) {
+    dict[fieldNameUIShort] = [ item ];
+  } else {
+    dict[fieldNameUIShort].push(item);
+  }
+}
+
+export function orderItemsInDictionary(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1', dict: ProfileItemVODictionary) {
+  if (dict[field]?.length > 1) {
+    dict[field] = orderBy(dict[field], column);
+  }
+}
+
 @Injectable()
 export class ProfileService {
   private profileItemDictionary: ProfileItemVODictionary = {};
@@ -130,13 +146,7 @@ export class ProfileService {
   }
 
   async addProfileItemToDictionary(item: ProfileItemVOData) {
-    const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
-
-    if (!this.profileItemDictionary[fieldNameUIShort]) {
-      this.profileItemDictionary[fieldNameUIShort] = [ item ];
-    } else {
-      this.profileItemDictionary[fieldNameUIShort].push(item);
-    }
+    addProfileItemToDictionary(item, this.profileItemDictionary);
   }
 
   createEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
@@ -306,9 +316,7 @@ export class ProfileService {
   }
 
   orderItems(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
-    if (this.profileItemDictionary[field]?.length > 1) {
-      this.profileItemDictionary[field] = orderBy(this.profileItemDictionary[field], column);
-    }
+    orderItemsInDictionary(field, column, this.profileItemDictionary);
   }
 
 
