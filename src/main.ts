@@ -1,18 +1,17 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, ɵresetCompiledComponents } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import { hmrBootstrap } from './hmr';
-
 if (environment.production) {
   enableProdMode();
 }
 
-const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
-if (environment.hmr) {
-  hmrBootstrap(module, bootstrap);
-} else {
-    bootstrap();
+declare var module: any;
+if (module['hot']) {
+  module['hot'].accept();
+  module['hot'].dispose(() => ɵresetCompiledComponents());
 }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

@@ -45,6 +45,7 @@ import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { LinkPipe } from './pipes/link.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 
 @NgModule({
   imports: [
@@ -104,7 +105,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     ScrollSectionDirective,
     RoutedDialogWrapperComponent,
     LinkPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ArchiveSearchBoxComponent
   ],
   declarations: [
     ThumbnailComponent,
@@ -146,7 +148,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     ScrollNavDirective,
     RoutedDialogWrapperComponent,
     LinkPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ArchiveSearchBoxComponent
   ],
   providers: [
     PublicLinkPipe,

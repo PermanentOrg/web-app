@@ -6,8 +6,6 @@ import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { SearchResponse } from '@shared/services/api/index.repo';
 import { TagsService } from '@core/services/tags/tags.service';
-import { query } from '@angular/animations';
-import { compact } from 'lodash';
 
 @Injectable()
 export class SearchService {

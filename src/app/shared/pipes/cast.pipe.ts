@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FolderVO, ItemVO, RecordVO } from '@models';
+import { ArchiveVO, FolderVO, ItemVO, RecordVO } from '@models';
 
 @Pipe({
   name: 'asFolder',
@@ -26,6 +26,20 @@ export class RecordCastPipe implements PipeTransform {
 
   transform(value: ItemVO, args?: any): RecordVO {
     return value as RecordVO;
+  }
+}
+
+@Pipe({
+  name: 'asArchive',
+  pure: true
+})
+export class ArchiveCastPipe implements PipeTransform {
+
+  constructor() {
+  }
+
+  transform(value: any, args?: any): ArchiveVO {
+    return value as ArchiveVO;
   }
 }
 

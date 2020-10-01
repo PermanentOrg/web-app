@@ -12,6 +12,7 @@ export type DialogComponentToken =
   'FamilySearchImportComponent' |
   'ArchivePickerComponent' |
   'SharingComponent' |
+  'SharingDialogComponent' |
   'ArchiveSwitcherDialogComponent' |
   'SettingsDialogComponent' |
   'ConnectionsDialogComponent' |

@@ -1,13 +1,13 @@
 $header-height: 3 * $grid-unit;
 
-@mixin tabbedDialogHeader($color: $PR-purple) {
+@mixin tabbedDialogHeader($color: $PR-purple, $text-color: $white) {
   height: $header-height;
   flex: 0 0 auto;
   background-color: $color;
   display: flex;
   align-items: center;
 
-  color: white;
+  color: $text-color;
   font-size: $font-size-lg;
   padding: 0 $grid-unit;
   padding-right: 0;
@@ -27,7 +27,7 @@ $header-height: 3 * $grid-unit;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: $text-color;
   }
 }
 

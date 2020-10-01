@@ -77,7 +77,7 @@ export class ArchivePickerComponent implements OnInit {
     return this.prompt.prompt(fields, 'Search by email', deferred.promise, 'Search')
       .then((value) => {
         this.searchEmail = value.email;
-        return this.api.search.archiveByEmail(value.email);
+        return this.api.search.archiveByEmail(value.email).toPromise();
       })
       .then((response: SearchResponse) => {
         this.searchResults = response.getArchiveVOs();

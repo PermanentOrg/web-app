@@ -1,7 +1,7 @@
 import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
-import { ShareVO } from '@models/share-vo';
+import { ShareVO, sortShareVOs } from '@models/share-vo';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
@@ -122,7 +122,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, 
     }
 
     if (this.ShareVOs) {
-      this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
+      this.ShareVOs = sortShareVOs(this.ShareVOs.map((data) => new ShareVO(data)));
     }
 
     if (dataStatus) {

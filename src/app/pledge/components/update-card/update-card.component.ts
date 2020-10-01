@@ -101,7 +101,6 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
     const updateUser = firebase.functions().httpsCallable('updateUserPaymentMethod');
 
     const result = await updateUser({userId: this.userId, email: this.userData.email, stripeToken: token});
-    console.log(result);
     this.waiting = false;
     if (!result.data) {
       this.message.showError('There was an issue saving your payment information. Please try again.');
