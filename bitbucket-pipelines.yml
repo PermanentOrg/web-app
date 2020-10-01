@@ -21,7 +21,6 @@ pipelines:
             - node
           script: # Modify the commands below to build your repository.
             - cd /data/www
-            - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -37,7 +36,6 @@ pipelines:
           script:
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
-            - git clone git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -81,7 +79,6 @@ pipelines:
             - node
           script:
             - cd /data/www
-            - git clone git@bitbucket.org:permanent-org/files.git
             - git clone git@bitbucket.org:permanent-org/deploy.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
@@ -106,7 +103,6 @@ pipelines:
           script:
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
-            - git clone -b release/staging --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm
@@ -140,7 +136,6 @@ pipelines:
             - git remote set-url origin ${BITBUCKET_GIT_SSH_ORIGIN}
             - declare -x VERSION=mdot@$(jq -r '.version' package.json)
             - cd /data/www
-            - git clone -b release/production --single-branch git@bitbucket.org:permanent-org/files.git
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
             - npm install --unsafe-perm

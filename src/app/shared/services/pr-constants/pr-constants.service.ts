@@ -3,9 +3,9 @@ import { AccessRole } from '@models/access-role.enum';
 import { ProfileTemplate } from '@models/profile-item-vo';
 
 declare var require: any;
-const SYNC_CONSTANTS = require('../../../../../../files/constants/master_en.json');
-const PROFILE_TEMPLATE = require('../../../../../../files/constants/profile_template.json');
-const COUNTRY_CODES = require('../../../../../../files/constants/country_codes.json');
+const SYNC_CONSTANTS = require('../../../../../constants/master_en.json');
+const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json');
+const COUNTRY_CODES = require('../../../../../constants/country_codes.json');
 
 export interface Country {
   name: string;
