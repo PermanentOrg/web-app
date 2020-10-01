@@ -28,7 +28,7 @@
     <div class="file-list-control" [class.disabled]="!can.publish" (click)="onPublishClick()"
       [ngbTooltip]="getTooltipConstantForAction('publish') | prTooltip">
       <i class="material-icons">public</i>
-      <span>Publish</span>
+      <span>{{isPublic ? 'Get link' : 'Publish'}}</span>
     </div>
     <div class="file-list-control" [class.disabled]="!can.download" (click)="onDownloadClick()"
     [ngbTooltip]="getTooltipConstantForAction('download') | prTooltip">
