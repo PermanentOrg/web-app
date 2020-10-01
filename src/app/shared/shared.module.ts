@@ -26,7 +26,7 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
-import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig, NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
