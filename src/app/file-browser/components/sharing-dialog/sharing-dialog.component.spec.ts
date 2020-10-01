@@ -9,6 +9,7 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { AccessRoleType } from '@models/access-role';
+import { MessageService } from '@shared/services/message/message.service';
 
 const archive1 = new ArchiveVO({
   fullName: 'Mr Archive',
@@ -38,6 +39,7 @@ const pendingShare = new ShareVO({
 pendingShare.shareId = 59;
 pendingShare.accessRole = 'access.role.viewer';
 pendingShare.status = 'status.generic.pending';
+pendingShare.requestToken = 'testToken';
 
 describe('SharingDialogComponent', () => {
   let component: SharingDialogComponent;
@@ -45,6 +47,9 @@ describe('SharingDialogComponent', () => {
   let item: RecordVO;
 
   let relationUpdateSpy;
+
+  let showMessageSpy;
+  let showErrorSpy;
 
   let apiService: ApiService;
 
@@ -82,6 +87,9 @@ describe('SharingDialogComponent', () => {
 
     relationUpdateSpy = spyOn(TestBed.inject(RelationshipService), 'update')
       .and.returnValue(Promise.resolve());
+
+    showMessageSpy = spyOn(TestBed.inject(MessageService), 'showMessage').and.returnValue();
+    showErrorSpy = spyOn(TestBed.inject(MessageService), 'showError').and.returnValue();
 
     apiService = TestBed.inject(ApiService);
   });
@@ -158,6 +166,7 @@ describe('SharingDialogComponent', () => {
 
     tick();
     expect(apiSpy).toHaveBeenCalled();
+    expect(showMessageSpy).toHaveBeenCalled();
     expect(component.pendingShares.length).toBe(0);
     expect(component.shares.length).toBe(2);
     expect(component.shares[0].shareId).toEqual(pendingShare.shareId);

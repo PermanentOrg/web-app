@@ -1,5 +1,6 @@
 import { Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgModel, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
 import { AccessRoleType } from '@models/access-role';
@@ -92,7 +93,8 @@ export class SharingDialogComponent implements OnInit {
     private api: ApiService,
     private messageService: MessageService,
     private relationshipService: RelationshipService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    private route: ActivatedRoute
   ) {
     this.invitationForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -120,6 +122,27 @@ export class SharingDialogComponent implements OnInit {
 
     this.shareLink = this.data.link;
     this.setShareLinkFormValue();
+
+    this.checkQueryParams();
+  }
+
+  checkQueryParams() {
+    const params = this.route.snapshot.queryParamMap;
+    console.log(params);
+    if (params.has('requestToken') && params.has('requestAction')) {
+      const pendingShare = find(this.pendingShares, { requestToken: params.get('requestToken') });
+      if (pendingShare) {
+        const action = params.get('requestAction');
+        switch (action) {
+          case 'approve':
+            this.approveShare(pendingShare);
+            break;
+          case 'deny':
+            this.removeShare(pendingShare);
+            break;
+        }
+      }
+    }
   }
 
   onDoneClick(): void {
@@ -265,6 +288,7 @@ export class SharingDialogComponent implements OnInit {
     this.shares = sortShareVOs(this.shares);
     try {
       await this.api.share.upsert(share);
+      this.messageService.showMessage(`Share request approved for The ${share.ArchiveVO.fullName} Archive.`, 'success');
     } catch (err) {
       if (err instanceof ShareResponse) {
         this.messageService.showError(err.getMessage(), true);
