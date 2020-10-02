@@ -28,6 +28,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { ngIfFadeInAnimation } from '@shared/animations';
+import { InViewportTrigger } from 'ng-in-viewport';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -90,6 +91,12 @@ type ActionType = 'delete' |
   'tags'
   ;
 
+export interface FileListItemVisibleEvent {
+  visible: boolean;
+  element: HTMLElement;
+  component: FileListItemComponent;
+}
+
 const SINGLE_CLICK_DELAY = 100;
 const DOUBLE_CLICK_TIMEOUT = 350;
 const DOUBLE_CLICK_TIMEOUT_IOS = 1500;
@@ -124,6 +131,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
   @Output() itemUnshared = new EventEmitter<ItemVO>();
   @Output() itemClicked = new EventEmitter<ItemClickEvent>();
+  @Output() itemVisible = new EventEmitter<FileListItemVisibleEvent>();
 
   public allowActions = true;
   public isMyItem = true;
@@ -791,5 +799,15 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     this.dataService.setItemMultiSelectStatus(this.item, this.isMultiSelected);
   }
 
+  onIntersection({ target, visible }: { target: Element; visible: boolean }) {
+    if (this.item.dataStatus > DataStatus.Placeholder || this.item.isFetching) {
+      return;
+    }
 
+    this.itemVisible.emit({
+      visible,
+      component: this,
+      element: this.element.nativeElement as HTMLElement
+    });
+  }
 }
