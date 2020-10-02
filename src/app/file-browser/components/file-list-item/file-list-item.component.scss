@@ -253,6 +253,11 @@ $bg-transition-length: 0.075s;
     overflow: hidden;
   }
 
+  .grid-view:hover & {
+    transition: box-shadow 0ms $tweaked-ease;
+    box-shadow: inset 0px 0px 0px $grid-selected-border - 1px darken($gray-300, 10%);
+  }
+
   .grid-view.selected & {
     transition: box-shadow 0ms $tweaked-ease;
     box-shadow: inset 0px 0px 0px $grid-selected-border $PR-orange;
@@ -299,7 +304,7 @@ $bg-transition-length: 0.075s;
 
   .selected & .material-icons {
     color: $PR-orange;
-    transition: color 0 $tweaked-ease;
+    transition: color 0ms $tweaked-ease;
   }
 }
 

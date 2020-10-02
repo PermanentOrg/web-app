@@ -25,5 +25,28 @@ pr-file-list, pr-shares {
         padding-bottom: $file-list-row-height * 1;
       }
     }
+
+    &.grid-view {
+      .file-list-scroll {
+        padding-top: $file-list-grid-gutter;
+        margin: 0 (-$file-list-grid-gutter / 2);
+        margin-right: -($file-list-grid-gutter / 2) ;
+  
+        @include beforeDesktop {
+          margin: 0 (-$file-list-grid-gutter / 2);
+        }
+      }
+
+      &.show-sidebar .file-list-scroll {
+        margin-right: -$grid-unit;
+        padding-right: $grid-unit - ($file-list-grid-gutter/2);
+      }
+  
+      .file-list-scroll:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
   }
 }

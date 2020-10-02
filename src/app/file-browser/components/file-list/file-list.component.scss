@@ -2,24 +2,6 @@
 
 :host {
   @include has-breadcrumbs;
-  &.grid-view {
-    margin: 0 (-$file-list-grid-gutter / 2);
-
-    @include beforeDesktop {
-      margin: 0 (-$file-list-grid-gutter / 2);
-    }
-    // background-color: $gray-100;
-
-    .file-list-scroll {
-      padding-top: $file-list-grid-gutter;
-    }
-
-    .file-list-scroll:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-  }
 
   &.no-padding {
     padding-top: 0px;

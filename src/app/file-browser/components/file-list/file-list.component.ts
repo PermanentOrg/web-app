@@ -278,7 +278,12 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.registerMouseMoveHandler();
 
     this.loadVisibleItems(true);
-    this.getScrollElement().scrollTo(0, 0);
+
+    if (this.showSidebar) {
+      this.getScrollElement().scrollTo(0, 0);
+    } else {
+      // (this.scrollElement.nativeElement as HTMLElement).scrollIntoView(true);
+    }
 
     const queryParams = this.route.snapshot.queryParamMap;
     if (queryParams.has('showItem')) {
