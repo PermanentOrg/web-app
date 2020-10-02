@@ -24,21 +24,6 @@ export class PledgeService {
     return this.currentPledge.key || null;
   }
 
-  async createPledge(pledgeData: PledgeData) {
-    this.currentPledge = await this.pledgesList.push(pledgeData);
-    if (!this.currentPledge) {
-      throw new Error('PledgeService - error saving pledge');
-    }
-
-    merge(this.currentPledgeData, pledgeData);
-
-    this.currentPledge.on('value', snapshot => {
-      merge(this.currentPledgeData, snapshot.val());
-    });
-
-    return this.currentPledge;
-  }
-
   async loadPledge(pledgeId: string) {
     this.currentPledge = await this.db.database.ref(`/pledges/${pledgeId}`);
     if (!this.currentPledge) {

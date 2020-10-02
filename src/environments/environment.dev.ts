@@ -10,6 +10,7 @@ export const environment = {
     apiKey: 'AIzaSyAThS43euMcSjPdDvtB9qM-9-diloP-eHE',
     authDomain: 'prpledgedev.firebaseapp.com',
     databaseURL: 'https://prpledgedev.firebaseio.com',
+    functionsURL: 'https://us-central1-prpledgedev.cloudfunctions.net',
     projectId: 'prpledgedev',
     storageBucket: 'prpledgedev.appspot.com',
     messagingSenderId: '248842011228'

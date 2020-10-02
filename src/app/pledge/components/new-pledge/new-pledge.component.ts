@@ -9,6 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { environment } from '@root/environments/environment';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
+import { HttpClient } from '@angular/common/http';
 
 const stripe = window['Stripe'](environment.stripeKey);
 const elements = stripe.elements();
@@ -16,7 +17,7 @@ const elements = stripe.elements();
 @Component({
   selector: 'pr-new-pledge',
   templateUrl: './new-pledge.component.html',
-  styleUrls: ['./new-pledge.component.scss']
+  styleUrls: ['./new-pledge.component.scss'],
 })
 export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   public waiting: boolean;
@@ -36,7 +37,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   cardError: any;
   cardComplete = false;
 
-
   constructor(
     private fb: FormBuilder,
     private pledgeService: PledgeService,
@@ -44,6 +44,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private accountService: AccountService,
     private route: ActivatedRoute,
     private message: MessageService,
+    private http: HttpClient,
     private iframe: IFrameService
   ) {
     this.initStripeElements();
@@ -95,7 +96,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.bindStripeElements();
-
   }
 
   initStripeElements() {
@@ -153,7 +153,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async submitPledge(formValue: any) {
-
+    this.cardError = false;
     this.waiting = true;
 
     const stripeResult = await stripe.createToken(this.stripeElementsCard, {
@@ -166,9 +166,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.stripeElementsCard.clear();
-
-    const pledge: PledgeData = {
+    let pledge: PledgeData = {
       email: formValue.email,
       dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
       name: formValue.name,
@@ -178,12 +176,32 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       anonymous: formValue.anonymous
     };
 
-    await this.pledgeService.createPledge(pledge);
+    try {
+      const body = await this.http.post(
+        `${environment.firebase.functionsURL}/donation/charge`,
+        pledge,
+      ).toPromise();
+      pledge = body as PledgeData;
+    } catch (err) {
+      this.waiting = false;
+      switch (err.code) {
+        case 'card_declined':
+          this.cardError = 'Your card was declined.';
+          break;
+        default:
+          this.cardError = 'This card could not be charged.';
+      }
+      return;
+    }
+
+    this.stripeElementsCard.clear();
     this.pledgeForm.patchValue({
       email: null,
       name: null
     });
     this.pledgeForm.reset();
+
+    await this.pledgeService.loadPledge(pledge.id);
 
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
@@ -218,4 +236,6 @@ export interface PledgeData {
   anonymous?: boolean;
   zip?: string;
   id?: string;
+  paid?: boolean;
+  stripeChargeId?: string;
 }
