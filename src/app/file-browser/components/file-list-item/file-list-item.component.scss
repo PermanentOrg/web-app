@@ -2,10 +2,11 @@
 
 $row-height: $file-list-row-height;
 $max-grid-width: pxToGrid(200px);
-$max-grid-width-sidebar: pxToGrid(175px);
+$max-grid-width-sidebar: pxToGrid(300px);
+$max-grid-width-public: pxToGrid(300px);
 $action-button-height: 32px;
-$grid-info-section-margin: 5px;
-$grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin;
+$grid-info-section-margin: 0px;
+$grid-info-section-height: $grid-unit * 3;
 
 :host {
   display: block;
@@ -22,7 +23,10 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 }
 
 :host.grid-view {
-  .public-content &, .share-preview-content & {
+  padding: 0 $file-list-grid-gutter / 2;
+  margin-bottom: $file-list-grid-gutter;
+
+  .share-preview-content & {
     @media screen and (min-width: 800px) {
       width: 25%;
     }
@@ -31,6 +35,14 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   .show-sidebar & {
     @for $i from 2 through 10 {
       @media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1){
+        width: 100% / $i;
+      }
+    }
+  }
+
+  .public-content & {
+    @for $i from 2 through 10 {
+      @media screen and (min-width: ($i * $max-grid-width-public) + $profile-sidebar-width + 1){
         width: 100% / $i;
       }
     }
@@ -52,13 +64,11 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   min-height: $row-height;
 
   &.grid-view {
+    border-bottom: none;
     background-color: white;
     flex-wrap: wrap;
     padding-bottom: $grid-info-section-height;
     position: relative;
-    border-right: 1px solid $gray-300;
-    border-top: 1px solid $gray-300;
-    box-shadow: $box-shadow-sm;
   }
 
   &.selected, &.selected:hover {
@@ -101,6 +111,7 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   > div {
     display: flex;
     line-height: 1.25;
+    max-width: 100%;
 
     span {
       flex: 1 1 auto;
@@ -109,8 +120,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
       text-overflow: ellipsis;
     }
   }
-
-
 
   i {
     flex: 0 0 auto;
@@ -130,17 +139,23 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
   }
 
   .grid-view & {
-    line-height: $grid-info-section-height;
     height: $grid-info-section-height;
     position: absolute;
     bottom: 0px;
-    left: $grid-info-section-margin;
-    right: $action-button-height;
+    background: white;
+    left: 0;
+    right: 0;
+    min-width: 0;
     display: flex;
     align-items: center;
+    font-weight: $font-weight-semibold;
 
     .second-row {
       display: none;
+    }
+
+    @include until($tablet-horizontal) {
+      padding-right: $action-button-height;
     }
   }
 }
@@ -226,7 +241,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
     width: 100%;
     padding-top: 100%;
     margin: 0px;
-    border-bottom: 1px solid $gray-300;
   }
 }
 
@@ -249,10 +263,6 @@ $grid-info-section-height: $action-button-height + 2 * $grid-info-section-margin
 @include desktop {
   .actions {
     display: none;
-  }
-
-  .grid-view .name {
-    right: 5px;
   }
 
   [prBgImage], .file-list-item-folder-icon {

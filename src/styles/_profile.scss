@@ -1,4 +1,5 @@
 $profile-max-width: 1000px;
+$profile-sidebar-width: pxToGrid(360px);
 
 @mixin profileBanner($desktop-size: pxToGrid(220px), $mobile-size: pxToGrid(120px)) {
   height: $desktop-size;

@@ -19,6 +19,7 @@ export interface RouteData {
   noFileListPadding?: boolean;
   fileListCentered?: boolean;
   isPublicArchive?: boolean;
+  isPublic?: boolean;
 
   dialogToken?: DialogComponentToken;
   dialogOptions?: DialogOptions;

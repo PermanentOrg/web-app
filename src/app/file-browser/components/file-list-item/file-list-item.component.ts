@@ -29,6 +29,7 @@ import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { InViewportTrigger } from 'ng-in-viewport';
+import { RouteData } from '@root/app/app.routes';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -193,22 +194,19 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       this.isInMyPublic = true;
     }
 
-    if (this.route.snapshot.data.isPublic) {
+    const data = this.route.snapshot.data as RouteData;
+
+    if (data.isPublic) {
       this.isInPublic = true;
     }
 
-    if (this.route.snapshot.data.isPublicArchive) {
+    if (data.isPublicArchive) {
       this.isInPublicArchive = true;
     }
 
-    if (this.route.snapshot.data.checkFolderViewOnNavigate) {
+    if (data.checkFolderViewOnNavigate) {
       this.checkFolderView = true;
     }
-
-    // if (this.route.snapshot.data.noFileListNavigation) {
-    //   this.allowActions = false;
-    //   this.allowNavigation = false;
-    // }
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
