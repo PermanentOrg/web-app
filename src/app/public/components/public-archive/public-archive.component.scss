@@ -6,7 +6,7 @@
   padding: 0 $grid-unit / 2;
 }
 
-$photo-desktop: pxToGrid(220px);
+$photo-desktop: pxToGrid(300px);
 $photo-mobile: pxToGrid(80px);
 $profile-max-width: 1200px;
 
@@ -24,12 +24,12 @@ $profile-max-width: 1200px;
 }
 
 .profile-banner {
-  @include profileBanner;
+  @include profileBanner($photo-desktop, $photo-mobile);
   cursor: initial;
 }
 
 .profile-photo {
-  @include profilePhoto($photo-desktop, $photo-mobile);
+  @include profilePhoto(pxToGrid(200px), $photo-mobile);
   cursor: initial;
 }
 

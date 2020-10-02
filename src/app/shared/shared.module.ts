@@ -45,6 +45,8 @@ import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { LinkPipe } from './pipes/link.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { ItemTypeIconPipe } from './pipes/item-type-icon.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
   imports: [
@@ -104,7 +106,9 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     ScrollSectionDirective,
     RoutedDialogWrapperComponent,
     LinkPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ItemTypeIconPipe,
+    SafeHtmlPipe
   ],
   declarations: [
     ThumbnailComponent,
@@ -146,7 +150,9 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     ScrollNavDirective,
     RoutedDialogWrapperComponent,
     LinkPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ItemTypeIconPipe,
+    SafeHtmlPipe
   ],
   providers: [
     PublicLinkPipe,

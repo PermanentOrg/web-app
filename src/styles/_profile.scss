@@ -1,7 +1,7 @@
 $profile-max-width: 1000px;
 $profile-sidebar-width: pxToGrid(360px);
 
-@mixin profileBanner($desktop-size: pxToGrid(220px), $mobile-size: pxToGrid(120px)) {
+@mixin profileBanner($desktop-size: pxToGrid(300px), $mobile-size: pxToGrid(160px)) {
   height: $desktop-size;
   background-size: cover;
   background-position: 50% 50%;
@@ -26,8 +26,8 @@ $profile-sidebar-width: pxToGrid(360px);
   background-position: 50% 50%;
   position: relative;
   margin-left: 2 * $grid-unit;
-  margin-bottom: -$desktop-size/2 + $grid-unit;
-  transform: translateY(-50%);
+  margin-bottom: -$desktop-size * 2/3 + $grid-unit;
+  transform: translateY(-(2/3 * 100%));
   cursor: pointer;
 
   @include beforeDesktop {

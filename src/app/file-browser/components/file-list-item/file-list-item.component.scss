@@ -64,7 +64,7 @@ $bg-transition-length: 0.075s;
   border-bottom: 1px solid $gray-300;
   cursor: pointer;
   user-select: none;
-  transition: background-color $bg-transition-length ease-in;
+  transition: background-color $bg-transition-length $tweaked-ease;
   background-color: rgba(white, 0);
   overflow-y: hidden;
   min-height: $row-height;
@@ -272,6 +272,34 @@ $bg-transition-length: 0.075s;
       display: flex;
       align-items: center;
     }
+  }
+}
+
+.grid-item-type-icon {
+  $diameter: $grid-unit * 2;
+  $margin: $grid-unit / 2;
+  position: absolute;
+  bottom: $grid-info-section-height + $margin;
+  right: $margin;
+  background: white;
+  height: $diameter;
+  width: $diameter;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $gray-300;
+  box-shadow: $box-shadow-sm;
+
+  .material-icons {
+    color: $PR-blue;
+    font-size: $mat-icon-sm;
+    transition: color $bg-transition-length $tweaked-ease;
+  }
+
+  .selected & .material-icons {
+    color: $PR-orange;
+    transition: color 0 $tweaked-ease;
   }
 }
 
