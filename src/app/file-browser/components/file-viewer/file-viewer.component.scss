@@ -12,7 +12,7 @@ $button-size: 2rem;
   z-index: 10;
   display: block;
 
-  @include until($tablet-horizontal) {
+  @include beforeDesktop {
     // animation-name: $slide-up-animation;
     // animation-timing-function: $tweaked-ease;
     // animation-duration: 750ms;

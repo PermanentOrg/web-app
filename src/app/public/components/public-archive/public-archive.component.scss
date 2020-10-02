@@ -3,6 +3,7 @@
 :host {
   display: block;
   width: 100%;
+  padding: 0 $grid-unit / 2;
 }
 
 $photo-desktop: pxToGrid(220px);
@@ -11,6 +12,15 @@ $profile-max-width: 1200px;
 
 @mixin sidebarMargin {
   margin-right: $profile-sidebar-width + 3 * $grid-unit;
+}
+
+.banner-section {
+  margin: 0 (-$grid-unit);
+  position: relative;
+
+  @include beforeDesktop {
+    margin: 0 -$grid-unit / 2;
+  }
 }
 
 .profile-banner {
@@ -112,5 +122,9 @@ $profile-max-width: 1200px;
   @include desktop {
     padding-left: $grid-unit;
     @include sidebarMargin;
+  }
+
+  @include beforeDesktop {
+    margin-top: $grid-unit / 2;
   }
 }

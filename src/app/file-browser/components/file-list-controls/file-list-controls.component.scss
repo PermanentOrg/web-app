@@ -7,7 +7,7 @@
   border-bottom: $file-list-border;
   position: relative;
 
-  @include until($tablet-horizontal) {
+  @include beforeDesktop {
     display: none;
   }
 }

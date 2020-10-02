@@ -26,6 +26,11 @@ $grid-info-section-height: $grid-unit * 3;
   padding: 0 $file-list-grid-gutter / 2;
   margin-bottom: $file-list-grid-gutter;
 
+  @include beforeDesktop {
+    padding: 0 $file-list-grid-gutter / 4;
+    margin-bottom: $file-list-grid-gutter / 2;
+  }
+
   .share-preview-content & {
     @media screen and (min-width: 800px) {
       width: 25%;
@@ -154,7 +159,7 @@ $grid-info-section-height: $grid-unit * 3;
       display: none;
     }
 
-    @include until($tablet-horizontal) {
+    @include beforeDesktop {
       padding-right: $action-button-height;
     }
   }
