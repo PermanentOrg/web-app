@@ -48,6 +48,7 @@
     "binaryjs": "0.2.1",
     "core-js": "3.6.4",
     "countup.js-angular2": "7.3.0",
+    "date-fns": "^2.16.1",
     "debug": "4.1.1",
     "firebase": "^7.7.0",
     "firebase-functions": "^3.8.0",

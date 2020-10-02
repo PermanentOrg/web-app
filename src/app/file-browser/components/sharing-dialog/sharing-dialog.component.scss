@@ -1,0 +1,198 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+$accessRoleWidth: auto;
+
+select.form-control {
+  width: auto;
+}
+
+.dialog-body {
+  overflow-y: visible !important;
+  .content {
+    padding: 0 $grid-unit $grid-unit;
+  }
+}
+
+.header {
+  @include tabbedDialogHeader(none, $body-color);
+  font-weight: $font-weight-bold;
+}
+
+.header-small {
+  @include tabbedDialogHeader(none, $body-color);
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+}
+
+p {
+  margin-bottom: $grid-unit;
+}
+
+.archive-search {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  > *:not(:last-child) {
+    margin-right: $grid-unit;
+  }
+
+  pr-archive-search-box {
+    flex: 1 1 auto;
+  }
+
+  select {
+    flex: 0 0 $accessRoleWidth;
+    @include gridHeightInput;
+  }
+}
+
+.shares-title, .shares-empty {
+  margin-top: $grid-unit / 2;
+  height: $grid-unit * 2;
+  display: flex;
+  align-items: center;
+
+  &.shares-title {
+    font-weight: $font-weight-bold;
+  }
+
+  &.shares-empty {
+    color: $text-muted;
+  }
+}
+
+.shares {
+  overflow-y: auto;
+  margin-bottom: $grid-unit;
+  height: $grid-unit * 11;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+
+  .btn {
+    @include gridHeightButton;
+    width: auto;
+    margin: 0;
+    margin-left: $grid-unit / 2;
+  }
+}
+
+.dialog-form {
+  @include tabbedDialogPanelForm;
+}
+
+.share-archive {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+
+  &:not(:last-child) {
+    margin-bottom: $grid-unit / 2;
+  }
+
+  .archive-thumb {
+    height: $grid-unit * 2;
+    flex: 0 0 $grid-unit * 2;
+    margin-right: $grid-unit / 2;
+  }
+
+  .archive-name {
+    font-weight: $font-weight-semibold;
+    flex: 1 1 auto;
+
+    .subtitle {
+      font-weight: $font-weight-normal;
+      font-size: $font-size-sm;
+      color: $text-muted;
+    }
+  }
+
+  .archive-actions {
+    flex: 0 0 auto;
+    display: flex;
+    .btn {
+      @include gridHeightButtonSmall;
+      width: 6rem;
+      margin-left: $grid-unit / 2;
+    }
+  }
+
+  select {
+    flex: 0 0 $accessRoleWidth;
+    @include gridHeightInputSmall;
+  }
+}
+
+.share-link {
+  display: flex;
+  align-items: center;
+
+  .share-link-container {
+    flex: 1 1 auto;
+    margin-right: $grid-unit;
+  }
+
+  input {
+    @include gridHeightInput;
+  }
+
+  button {
+    @include gridHeightButton;
+    flex: 0 0 6rem;
+    width: auto;
+    justify-content: center;
+  }
+}
+
+.share-link-settings-toggle {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: $grid-unit * 2;
+
+  .btn {
+    margin: 0;
+    width: auto;
+  }
+}
+
+.share-link-settings {
+  .link-settings-item {
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child) {
+      margin-top: $grid-unit;
+    }
+      
+    > label {
+      font-weight: $font-weight-semibold;
+      margin: 0;
+      margin-right: $grid-unit;
+    }
+
+    .form-check {
+      margin-top: 0;
+    }
+
+    select {
+      @include gridHeightInputSmall;
+      margin-left: -$grid-unit / 2;
+      margin-right: auto;
+    }
+
+    .btn {
+      @include gridHeightButtonSmall;
+      width: auto;
+      margin: 0;
+    }
+  }
+}

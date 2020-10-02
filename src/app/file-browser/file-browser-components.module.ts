@@ -21,6 +21,7 @@ import { FileListControlsComponent } from './components/file-list-controls/file-
 import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from './components/location-picker/location-picker.component';
 import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
+import { SharingDialogComponent } from './components/sharing-dialog/sharing-dialog.component';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { SidebarViewOptionComponent } from './components/sidebar-view-option/sid
     SidebarComponent,
     EditTagsComponent,
     LocationPickerComponent,
-    SidebarViewOptionComponent
+    SidebarViewOptionComponent,
+    SharingDialogComponent
   ]
 })
 export class FileBrowserComponentsModule {
@@ -62,6 +64,10 @@ export class FileBrowserComponentsModule {
     {
       token: 'SharingComponent',
       component: SharingComponent
+    },
+    {
+      token: 'SharingDialogComponent',
+      component: SharingDialogComponent
     },
     {
       token: 'PublishComponent',

@@ -107,9 +107,9 @@
                 "failure": "Sorry, we were unable to process your payment. Please check all entered information and try again later."
             },
             "pledge": {
-                "already_claimed": "This pledge has already been claimed",
-                "lookup": "Pledge not found",
-                "update": "This pledge could not be updated"
+                "already_claimed": "This donation has already been claimed",
+                "lookup": "Donation not found",
+                "update": "This donation could not be updated"
             }
         },
         "connector": {
@@ -646,21 +646,21 @@
         },
         "billing": {
             "transfer": {
-                "account_to_creditcard": "Account to CC - Refund",
-                "creditcard_to_account": "CC to Account - Purchase",
-                "pledge_to_account": "System to Account - Pledge",
-                "account_to_pledge": "Account to System - Pledge failed",
+                "account_to_creditcard": "Refund",
+                "creditcard_to_account": "Purchase",
+                "pledge_to_account": "Donation",
+                "account_to_pledge": "Donation failed",
                 "ownership": "Transfer ownership of Account was started"
             },
             "file_delete": "File Deleted",
             "file_upload": "File Uploaded",
             "file_copy": "File Copied",
             "gift": {
-                "account_to_account": "Gift from Account to Account",
-                "invite_accepted_from": "Invite was accepted. From side",
-                "invite_accepted_to": "Invite was accepted. To side",
+                "account_to_account": "Gift from account to account",
+                "invite_accepted_from": "Sent invitation accepted",
+                "invite_accepted_to": "Invitation accepted",
                 "promo_code": "Gift code entered",
-                "system_to_account": "Gift from System to Account"
+                "system_to_account": "Gift from system to account"
 
             }
         },

@@ -1,6 +1,6 @@
 <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)" *ngIf="!pledge.claimed">
   <h1 class="form-title">
-    Thanks for your pledge!
+    Thanks for your donation!
   </h1>
   <p>Create a permanent.org account to claim and start using your {{pledge.dollarAmount / 10 | number:'1.0-0'}}GB of storage today.</p>
   <div class="input-group-vertical">
@@ -25,7 +25,7 @@
 </form>
 <form *ngIf="pledge.claimed">
   <h1 class="form-title">
-    The storage for this pledge has been claimed.
+    The storage for this donation has been claimed.
   </h1>
   <p>
     If you believe this is an error, please contact us.

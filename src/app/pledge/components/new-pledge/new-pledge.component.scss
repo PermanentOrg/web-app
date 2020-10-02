@@ -19,8 +19,6 @@ button {
   border: $input-border-width solid $input-border-color;
   border-top: 0px;
   border-bottom: 0px;
-  // border-bottom-left-radius: $input-border-radius;
-  // border-bottom-right-radius: $input-border-radius;
 }
 
 .StripeElement--focus:not(.ng-invalid) {
@@ -124,4 +122,8 @@ button {
   }
 
   overflow: hidden;
+}
+
+.error {
+  padding-top: $grid-unit / 2;
 }

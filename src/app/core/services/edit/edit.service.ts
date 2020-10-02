@@ -16,6 +16,7 @@ import { FolderPickerOperations } from '@core/components/folder-picker/folder-pi
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { DeviceService } from '@shared/services/device/device.service';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -100,7 +101,8 @@ export class EditService {
     private dataService: DataService,
     private prompt: PromptService,
     private accountService: AccountService,
-    private dialog: Dialog
+    private dialog: Dialog,
+    private device: DeviceService
   ) {
     this.loadGoogleMapsApi();
   }
@@ -443,7 +445,19 @@ export class EditService {
 
   async openShareDialog(item: ItemVO) {
     const response = await this.api.share.getShareLink(item);
-    this.dialog.open('SharingComponent', { item, link: response.getShareByUrlVO() });
+    if (this.device.isMobile()) {
+      try {
+        this.dialog.open('SharingComponent', { item, link: response.getShareByUrlVO() });
+      } catch (err) {}
+    } else {
+      try {
+        this.dialog.open(
+          'SharingDialogComponent',
+          { item, link: response.getShareByUrlVO() },
+          { menuClass: 'split-dialog', width: '600px' }
+        );
+      } catch (err) {}
+    }
   }
 
   async openPublishDialog(item: ItemVO) {

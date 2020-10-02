@@ -47,6 +47,7 @@ import { LinkPipe } from './pipes/link.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { ItemTypeIconPipe } from './pipes/item-type-icon.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 
 @NgModule({
   imports: [
@@ -108,7 +109,8 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     LinkPipe,
     TimeAgoPipe,
     ItemTypeIconPipe,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    ArchiveSearchBoxComponent
   ],
   declarations: [
     ThumbnailComponent,
@@ -152,7 +154,8 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     LinkPipe,
     TimeAgoPipe,
     ItemTypeIconPipe,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    ArchiveSearchBoxComponent
   ],
   providers: [
     PublicLinkPipe,

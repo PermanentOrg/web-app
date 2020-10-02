@@ -16,6 +16,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { HttpService } from '@shared/services/http/http.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { RouteHistoryService } from 'ngx-route-history';
+import { DeviceService } from '@shared/services/device/device.service';
 
 export const BASE_TEST_CONFIG = {
   imports: [
@@ -31,6 +32,7 @@ export const BASE_TEST_CONFIG = {
     PromptService,
     HttpService,
     ApiService,
+    DeviceService,
     DataService,
     FolderViewService,
     FolderPickerService,

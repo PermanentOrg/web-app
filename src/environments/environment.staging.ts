@@ -10,6 +10,7 @@ export const environment = {
     apiKey: 'AIzaSyBElcQliVYu6_gVqtN2voNcu0mVY0Z7p58',
     authDomain: 'prpledgestaging.firebaseapp.com',
     databaseURL: 'https://prpledgestaging.firebaseio.com',
+    functionsURL: 'https://us-central1-prpledgestaging.cloudfunctions.net',
     projectId: 'prpledgestaging',
     storageBucket: 'prpledgestaging.appspot.com',
     messagingSenderId: '311870668048'
