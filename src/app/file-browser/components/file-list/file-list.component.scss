@@ -10,6 +10,10 @@
     }
     // background-color: $gray-100;
 
+    .file-list-scroll {
+      padding-top: $file-list-grid-gutter;
+    }
+
     .file-list-scroll:after {
       content: "";
       display: table;

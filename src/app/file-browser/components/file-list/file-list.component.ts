@@ -120,7 +120,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private ngZone: NgZone
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
-    this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
+    // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
     this.showSidebar = this.route.snapshot.data.showSidebar;
 

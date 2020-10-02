@@ -7,6 +7,8 @@ $max-grid-width-public: pxToGrid(300px);
 $action-button-height: 32px;
 $grid-info-section-margin: 0px;
 $grid-info-section-height: $grid-unit * 3;
+$grid-selected-border: 3px;
+$bg-transition-length: 0.075s;
 
 :host {
   display: block;
@@ -38,6 +40,7 @@ $grid-info-section-height: $grid-unit * 3;
   }
 
   .show-sidebar & {
+    width: 50%;
     @for $i from 2 through 10 {
       @media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1){
         width: 100% / $i;
@@ -55,8 +58,6 @@ $grid-info-section-height: $grid-unit * 3;
 }
 
 .file-list-item {
-
-  $bg-transition-length: 0.075s;
 
   display: flex;
   align-items: center;
@@ -246,6 +247,15 @@ $grid-info-section-height: $grid-unit * 3;
     width: 100%;
     padding-top: 100%;
     margin: 0px;
+    box-shadow: inset 0px 0px 0px $grid-selected-border - 1px $gray-300;
+    transition: box-shadow $bg-transition-length $tweaked-ease;
+    border-radius: $grid-unit / 2;
+    overflow: hidden;
+  }
+
+  .grid-view.selected & {
+    transition: box-shadow 0ms $tweaked-ease;
+    box-shadow: inset 0px 0px 0px $grid-selected-border $PR-orange;
   }
 }
 

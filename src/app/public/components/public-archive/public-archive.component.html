@@ -87,5 +87,6 @@
   </ng-container>
 </div>
 <div class="profile-contents">
+  <pr-breadcrumbs *ngIf="!(isViewingProfile$ | async)" [darkText]="true" [large]="true"></pr-breadcrumbs>
   <router-outlet></router-outlet>
 </div>
