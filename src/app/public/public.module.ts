@@ -16,6 +16,7 @@ import { PublicArchiveComponent } from './components/public-archive/public-archi
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { PublicProfileService } from './services/public-profile/public-profile.service';
+import { DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PublicProfileService } from './services/public-profile/public-profile.s
     RouterModule,
     PublicRoutingModule,
     SharedModule,
-    FileBrowserModule
+    FileBrowserModule,
+    DialogModule
   ],
   providers: [
     DataService,

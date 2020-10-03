@@ -6,14 +6,5 @@
 
 .folder-description {
   font-size: $font-size-sm;
-  padding: 0 $file-list-grid-gutter / 2;
   display: block;
-  
-  @include beforeDesktop {
-    padding: 0 $file-list-grid-gutter / 4;
-  }
-
-  p:last-child {
-    margin-bottom: 0px;
-  }
 }

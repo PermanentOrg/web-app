@@ -5,6 +5,8 @@ import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogComponentToken } from './dialog/dialog.module';
 import { DialogOptions } from './dialog/dialog.service';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { FolderVO, RecordVO } from './models';
 
 export interface RouteData {
   title?: string;
@@ -23,6 +25,11 @@ export interface RouteData {
 
   dialogToken?: DialogComponentToken;
   dialogOptions?: DialogOptions;
+
+  folderView?: FolderView;
+
+  currentFolder?: FolderVO;
+  currentRecord?: RecordVO;
 }
 
 export interface RouteWithData extends Route {

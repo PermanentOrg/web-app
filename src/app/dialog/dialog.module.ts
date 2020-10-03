@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
-import { Dialog, DialogRef, DIALOG_DATA, DialogChildComponentData, DialogComponentToken } from './dialog.service';
+import { Dialog, DialogRef, DIALOG_DATA, OUTLET_TEMPLATE, DialogChildComponentData, DialogComponentToken } from './dialog.service';
 import { DialogComponent } from './dialog.component';
 import { DialogRootComponent } from './dialog-root.component';
 
@@ -10,6 +10,7 @@ export {
   DialogRef,
   DialogRootComponent,
   DIALOG_DATA,
+  OUTLET_TEMPLATE,
   DialogChildComponentData,
   DialogComponentToken
 };
