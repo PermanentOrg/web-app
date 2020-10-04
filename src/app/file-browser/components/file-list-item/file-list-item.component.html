@@ -11,7 +11,8 @@
     </div>
     <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
-  <div class="grid-item-type-icon" *ngIf="inGridView">
+  <div class="grid-item-type-icon" @ngIfFadeInAnimation
+    *ngIf="inGridView && item.isFolder ? item.view : true">
     <i class="material-icons">{{item | itemTypeIcon:item.view}}</i>
   </div>
   <div class="name">

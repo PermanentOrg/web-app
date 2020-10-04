@@ -184,7 +184,7 @@ export class Dialog {
       token = (token as any).name;
     }
 
-    const newDialog = this.createDialog(token, data, options, route);
+    const newDialog = this.createDialog(token, data, options, outlet, route);
     newDialog.dialogComponent.show();
 
     this.debug('open dialog %s %o %o', token, data, options);
