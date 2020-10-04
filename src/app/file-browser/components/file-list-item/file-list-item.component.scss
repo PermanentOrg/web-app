@@ -281,6 +281,10 @@ $bg-transition-length: 0.075s;
 }
 
 .grid-item-type-icon {
+  display: none;
+}
+
+.grid-view .grid-item-type-icon {
   $diameter: $grid-unit * 2;
   $margin: $grid-unit / 2;
   position: absolute;
