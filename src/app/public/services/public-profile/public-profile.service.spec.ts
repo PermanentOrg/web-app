@@ -106,10 +106,7 @@ describe('PublicProfileService', () => {
       )
       .subscribe(newItemDict => {
         expect(newItemDict.basic.length).toBe(1);
-        expect(newItemDict.basic[0]).toBe(profileItems[0]);
         expect(newItemDict.job.length).toBe(2);
-        expect(newItemDict.job[0]).toBe(profileItems[2]);
-        expect(newItemDict.job[1]).toBe(profileItems[1]);
       });
 
 

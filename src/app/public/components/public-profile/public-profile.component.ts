@@ -32,7 +32,6 @@ export class PublicProfileComponent implements OnInit, OnDestroy, HasSubscriptio
     this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
       map(profileItems => {
         const milestones = concat(profileItems['job'] || [], profileItems['home'] || [], profileItems['milestone'] || []);
-        console.log(milestones);
         return orderBy(milestones, i => i.day1, 'desc');
       })
     );

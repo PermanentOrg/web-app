@@ -205,7 +205,9 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   async chooseLocationForItem(item: ProfileItemVOData) {
     try {
       await this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
-    } catch (err) { }
+    } catch (err) {
+      console.error(err);
+    }
     finally {
       this.updateProgress();
     }

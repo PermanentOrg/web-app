@@ -38,9 +38,7 @@ export class PublicProfileService {
       addProfileItemToDictionary(dictionary, profileItem);
     }
 
-    orderItemsInDictionary(dictionary, 'home');
-    orderItemsInDictionary(dictionary, 'job');
-    orderItemsInDictionary(dictionary, 'location');
+    orderItemsInDictionary(dictionary, 'milestone');
 
     this.profileItemsDictionaryBs.next(dictionary);
   }

@@ -60,6 +60,7 @@ const CHECKLIST: ProfileProgressChecklist = {
   home: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
   location: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
   job: ['day1', 'day2', 'string1', 'string2', 'string3', 'locnId1'],
+  milestone: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
 };
 
 export const ALWAYS_PUBLIC: FieldNameUI[] = [
@@ -125,6 +126,18 @@ export class ProfileService {
     this.profileItemDictionary = {};
 
     for (const item of profileItems) {
+      // override type to convert to milestone on update
+      const fieldsToConvert: FieldNameUI[] = ['profile.home', 'profile.job', 'profile.location'];
+
+
+      // borrow description for title to overwrite phone nbr
+      if (item.fieldNameUI === 'profile.home' || item.fieldNameUI === 'profile.location') {
+        item.string2 = item.string1;
+      }
+
+      if (fieldsToConvert.includes(item.fieldNameUI)) {
+        item.fieldNameUI = 'profile.milestone';
+      }
       addProfileItemToDictionary(this.profileItemDictionary, item);
     }
 
@@ -132,9 +145,6 @@ export class ProfileService {
     this.stubEmptyProfileItems();
 
     // order things by start date that have a start date
-    this.orderItems('home');
-    this.orderItems('location');
-    this.orderItems('job');
     this.orderItems('milestone');
   }
 
