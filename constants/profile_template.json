@@ -306,6 +306,56 @@
 				}
 			}
 		},
+		"milestone": {
+			"grouping": "type.archive.person",
+			"field_name_ui": "profile.milestone",
+			"description": "Any significant detail, moment, life event, or milestone",
+			"position": 9,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"locnId1": {
+					"description": "Location",
+					"field_name_ui": "profile.milestone.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Title",
+					"field_name_ui": "profile.milestone.title",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Description",
+					"field_name_ui": "profile.milestone.description",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"day1": {
+					"description": "Start Date",
+					"field_name_ui": "profile.milestone.start_day",
+					"validation": "day",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"day2": {
+					"description": "End Date",
+					"field_name_ui": "profile.milestone.end_day",
+					"validation": "day",
+					"position": 4,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				}
+			}
+		},
 		"phone_nbr": {
 			"grouping": "type.archive.person",
 			"field_name_ui": "profile.phone_nbr",
@@ -361,9 +411,6 @@
 			}
 		}
 	},
-
-
-
 	"organization": {
 		"basic": {
 			"grouping": "type.archive.organization",
@@ -624,12 +671,58 @@
 					"ui_type": "type.ui.day"
 				}
 			}
+		},
+		"milestone": {
+			"grouping": "type.archive.organization",
+			"field_name_ui": "profile.milestone",
+			"description": "Any significant detail, moment, life event, or milestone",
+			"position": 9,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"locnId1": {
+					"description": "Location",
+					"field_name_ui": "profile.milestone.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Title",
+					"field_name_ui": "profile.milestone.title",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Description",
+					"field_name_ui": "profile.milestone.description",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"day1": {
+					"description": "Start Date",
+					"field_name_ui": "profile.milestone.start_day",
+					"validation": "day",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"day2": {
+					"description": "End Date",
+					"field_name_ui": "profile.milestone.end_day",
+					"validation": "day",
+					"position": 4,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				}
+			}
 		}
 	},
-
-
-
-
 	"family": {
 		"basic": {
 			"grouping": "type.archive.family",
@@ -890,10 +983,58 @@
 					"ui_type": "type.ui.day"
 				}
 			}
+		},
+		"milestone": {
+			"grouping": "type.archive.family",
+			"field_name_ui": "profile.milestone",
+			"description": "Any significant detail, moment, life event, or milestone",
+			"position": 9,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"locnId1": {
+					"description": "Location",
+					"field_name_ui": "profile.milestone.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Title",
+					"field_name_ui": "profile.milestone.title",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Description",
+					"field_name_ui": "profile.milestone.description",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"day1": {
+					"description": "Start Date",
+					"field_name_ui": "profile.milestone.start_day",
+					"validation": "day",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"day2": {
+					"description": "End Date",
+					"field_name_ui": "profile.milestone.end_day",
+					"validation": "day",
+					"position": 4,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				}
+			}
 		}
 	},
-
-
 	"nonprofit": {
 		"basic": {
 			"grouping": "type.archive.nonprofit",
@@ -1151,6 +1292,56 @@
 					"validation": "day",
 					"position": 5,
 					"date_added": "2018-08-22",
+					"ui_type": "type.ui.day"
+				}
+			}
+		},
+		"milestone": {
+			"grouping": "type.archive.nonprofit",
+			"field_name_ui": "profile.milestone",
+			"description": "Any significant detail, moment, event, or milestone",
+			"position": 9,
+			"allow_multiple": 1,
+			"date_added": "2017-10-23",
+			"values": {
+				"locnId1": {
+					"description": "Location",
+					"field_name_ui": "profile.milestone.address",
+					"validation": "bigint",
+					"position": 1,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.locn"
+				},
+				"string1": {
+					"description": "Title",
+					"field_name_ui": "profile.milestone.title",
+					"validation": "free_form_string",
+					"position": 0,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"string2": {
+					"description": "Description",
+					"field_name_ui": "profile.milestone.description",
+					"validation": "free_form_string",
+					"position": 2,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.string"
+				},
+				"day1": {
+					"description": "Start Date",
+					"field_name_ui": "profile.milestone.start_day",
+					"validation": "day",
+					"position": 3,
+					"date_added": "2017-10-23",
+					"ui_type": "type.ui.day"
+				},
+				"day2": {
+					"description": "End Date",
+					"field_name_ui": "profile.milestone.end_day",
+					"validation": "day",
+					"position": 4,
+					"date_added": "2017-10-23",
 					"ui_type": "type.ui.day"
 				}
 			}

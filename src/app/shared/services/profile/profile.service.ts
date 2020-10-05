@@ -135,6 +135,7 @@ export class ProfileService {
     this.orderItems('home');
     this.orderItems('location');
     this.orderItems('job');
+    this.orderItems('milestone');
   }
 
   getProfileItemDictionary() {
@@ -170,6 +171,7 @@ export class ProfileService {
         break;
       case 'job':
       case 'home':
+      case 'milestone':
         item.type = 'type.widget.locn';
         break;
       case 'description':

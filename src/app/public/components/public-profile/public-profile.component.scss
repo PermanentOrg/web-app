@@ -31,7 +31,7 @@ $profile-max-width: 1200px;
 
 .profile-group {
   margin-bottom: 2 * $grid-unit;
-
+  flex-basis: 100%;
   @include desktop {
     flex-wrap: wrap;
     display: flex;

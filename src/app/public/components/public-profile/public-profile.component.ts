@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ArchiveVO } from '@models';
-import { ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
-import { ProfileItemsDataCol } from '@shared/services/profile/profile.service';
+import { ProfileItemVODictionary, ProfileItemVOData } from '@models/profile-item-vo';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { map } from 'rxjs/operators';
+import { concat, orderBy } from 'lodash';
 
 @Component({
   selector: 'pr-public-profile',
@@ -14,6 +15,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 export class PublicProfileComponent implements OnInit, OnDestroy, HasSubscriptions {
   archive: ArchiveVO;
   profileItems: ProfileItemVODictionary = {};
+  milestones$: Observable<ProfileItemVOData[]>;
 
   subscriptions: Subscription[] = [];
   constructor(
@@ -25,6 +27,14 @@ export class PublicProfileComponent implements OnInit, OnDestroy, HasSubscriptio
     this.subscriptions.push(
       this.publicProfile.archive$().subscribe(archive => this.archive = archive),
       this.publicProfile.profileItemsDictionary$().subscribe(items => this.profileItems = items)
+    );
+
+    this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
+      map(profileItems => {
+        const milestones = concat(profileItems['job'] || [], profileItems['home'] || [], profileItems['milestone'] || []);
+        console.log(milestones);
+        return orderBy(milestones, i => i.day1, 'desc');
+      })
     );
   }
 
