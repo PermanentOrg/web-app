@@ -265,6 +265,9 @@
             Milestones
           </div>
           <div class="profile-section">
+            <em>Milestones capture any significant event in the history of this archive, and are ordered from most recent to least recent.</em>
+          </div>
+          <div class="profile-section">
             <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.milestone"
             [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
               <div class="profile-group in-thirds">
@@ -273,6 +276,7 @@
                   <pr-inline-value-edit [alwaysShow]="true"
                   [maxLength]="140"
                   [displayValue]="profileItem.string1"
+                  [emptyMessage]="'What was this milestone?'"
                   (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
                   ></pr-inline-value-edit>
                 </div>
@@ -310,9 +314,10 @@
                   </div>
                 </div>
                 <div class="profile-field">
-                  <label>What was it like there?</label>
+                  <label>About</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [maxLength]="280"
+                  [emptyMessage]="'More details and information about this milestone'"
                   [displayValue]="profileItem.string2" type="textarea"
                   (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
                   ></pr-inline-value-edit>
