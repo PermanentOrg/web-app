@@ -23,15 +23,9 @@
         Online Presence
       </div>
       <div class="dialog-tab"
-        (click)="scrollNav.scrollToSection('residence')"
-        [class.active]="scrollNav.activeSectionId === 'residence'">
-        Residence History
-      </div>
-      <div class="dialog-tab"
-        *ngIf="archive.type === 'type.archive.person'"
-        (click)="scrollNav.scrollToSection('work')"
-        [class.active]="scrollNav.activeSectionId === 'work'">
-        Work History
+        (click)="scrollNav.scrollToSection('milestones')"
+        [class.active]="scrollNav.activeSectionId === 'milestones'">
+        Milestones
       </div>
     </div>
     <div class="panel">
@@ -267,19 +261,26 @@
               </div>
             </div>
           </div>
-          <div class="profile-section-header" prScrollSection="residence" [ngSwitch]="archive.type">
-            <ng-container *ngSwitchCase="'type.archive.person'">
-              Residence History
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              Location History
-            </ng-container>
+          <div class="profile-section-header" prScrollSection="milestones" [ngSwitch]="archive.type">
+            Milestones
           </div>
           <div class="profile-section">
-            <div class="profile-repeat-entry" *ngFor="let profileItem of (archive.type === 'type.archive.person' ? profileItems.home : profileItems.location)"
+            <em>Milestones capture any significant event in the history of this archive, and are ordered from most recent to least recent.</em>
+          </div>
+          <div class="profile-section">
+            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.milestone"
             [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
               <div class="profile-group in-thirds">
                 <div class="profile-field">
+                  <label>Milestone</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [maxLength]="140"
+                  [displayValue]="profileItem.string1"
+                  [emptyMessage]="'What was this milestone?'"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                  ></pr-inline-value-edit>
+                </div>
+                <div class="profile-field two-thirds">
                   <label>Location</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   type='external'
@@ -288,99 +289,9 @@
                   [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
                   ></pr-inline-value-edit>
                 </div>
-                <div class="profile-field" [ngSwitch]="archive.type">
-                  <label *ngSwitchCase="'type.archive.person'">Move In Date</label>
-                  <label *ngSwitchCase="'type.archive.family'">Date Arrived</label>
-                  <label *ngSwitchDefault>Date Opened</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  [displayValue]="profileItem.day1"
-                  [dateOnly]="true"
-                  emptyMessage="YYYY-MM-DD"
-                  type='date'
-                  (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
-                  ></pr-inline-value-edit>
-                </div>
-                <div class="profile-field" [ngSwitch]="archive.type">
-                  <label *ngSwitchCase="'type.archive.person'">Move Out Date</label>
-                  <label *ngSwitchCase="'type.archive.family'">Date Left</label>
-                  <label *ngSwitchDefault>Date Closed</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  [displayValue]="profileItem.day2"
-                  [dateOnly]="true"
-                  emptyMessage="YYYY-MM-DD"
-                  type='date'
-                  (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
-                  ></pr-inline-value-edit>
-                </div>
               </div>
-              <div class="profile-group in-thirds">
-                <div class="profile-field">
-                  <label>Phone Number</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  [maxLength]="16"
-                  [emptyMessage]="fieldPlacholders.phone"
-                  [displayValue]="profileItem.string2"
-                  (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
-                  ></pr-inline-value-edit>
-                </div>
-                <div class="profile-field two-thirds">
-                  <label>What was it like there?</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  [maxLength]="280"
-                  [displayValue]="profileItem.string1" type="textarea"
-                  (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
-                  ></pr-inline-value-edit>
-                </div>
-              </div>
-              <div class="profile-group align-right" [ngSwitch]="archive.type">
-                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)"
-                  *ngSwitchCase="'type.archive.person'">Remove Residence</button>
-                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)"
-                  *ngSwitchDefault>Remove Location</button>
-              </div>
-            </div>
-            <ng-container [ngSwitch]="archive.type">
-              <button class="btn btn-primary" (click)="addEmptyProfileItem('home')" *ngSwitchCase="'type.archive.person'">Add Residence</button>
-              <button class="btn btn-primary" (click)="addEmptyProfileItem('location')" *ngSwitchDefault>Add Location</button>
-            </ng-container>
-          </div>
-          <ng-container *ngIf="archive.type === 'type.archive.person'">
-            <div class="profile-section-header" prScrollSection="work">
-              Work History
-            </div>
-            <div class="profile-section">
-              <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.job"
-              [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
+              <div class="profile-group in-half">
                 <div class="profile-group in-half">
-                  <div class="profile-field">
-                    <label>Company</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    emptyMessage="Company, Inc."
-                    [maxLength]="120"
-                    [displayValue]="profileItem.string1"
-                    (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
-                    ></pr-inline-value-edit>
-                  </div>
-                  <div class="profile-field">
-                    <label>Title</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    emptyMessage="Sales Manager"
-                    [maxLength]="120"
-                    [displayValue]="profileItem.string3"
-                    (doneEditing)="onSaveProfileItem(profileItem, 'string3', $event)"
-                    ></pr-inline-value-edit>
-                  </div>
-                </div>
-                <div class="profile-group in-thirds">
-                  <div class="profile-field">
-                    <label>Location</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    type='external'
-                    (externalEdit)="chooseLocationForItem(profileItem)"
-                    [emptyMessage]="fieldPlacholders.address"
-                    [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
-                    ></pr-inline-value-edit>
-                  </div>
                   <div class="profile-field">
                     <label>Start Date</label>
                     <pr-inline-value-edit [alwaysShow]="true"
@@ -402,24 +313,26 @@
                     ></pr-inline-value-edit>
                   </div>
                 </div>
-                <div class="profile-group in-thirds">
-                  <div></div>
-                  <div class="profile-field two-thirds">
-                    <label>What did they do?</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [maxLength]="280"
-                    [displayValue]="profileItem.string2" type="textarea"
-                    (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
-                    ></pr-inline-value-edit>
-                  </div>
-                </div>
-                <div class="profile-group align-right">
-                  <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">Remove Residence</button>
+                <div class="profile-field">
+                  <label>About</label>
+                  <pr-inline-value-edit [alwaysShow]="true"
+                  [maxLength]="280"
+                  [emptyMessage]="'More details and information about this milestone'"
+                  [displayValue]="profileItem.string2" type="textarea"
+                  (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
+                  ></pr-inline-value-edit>
                 </div>
               </div>
-              <button class="btn btn-primary" (click)="addEmptyProfileItem('job')">Add Work</button>
+              <div class="profile-group align-right">
+                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">
+                  Remove Milestone
+                </button>
+              </div>
             </div>
-          </ng-container>
+            <ng-container>
+              <button class="btn btn-primary" (click)="addEmptyProfileItem('milestone')">Add Milestone</button>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>

@@ -60,6 +60,7 @@ const CHECKLIST: ProfileProgressChecklist = {
   home: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
   location: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
   job: ['day1', 'day2', 'string1', 'string2', 'string3', 'locnId1'],
+  milestone: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
 };
 
 export const ALWAYS_PUBLIC: FieldNameUI[] = [
@@ -67,6 +68,22 @@ export const ALWAYS_PUBLIC: FieldNameUI[] = [
   'profile.description',
   'profile.timezone'
 ];
+
+export function addProfileItemToDictionary(dict: ProfileItemVODictionary, item: ProfileItemVOData) {
+  const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
+
+  if (!dict[fieldNameUIShort]) {
+    dict[fieldNameUIShort] = [ item ];
+  } else {
+    dict[fieldNameUIShort].push(item);
+  }
+}
+
+export function orderItemsInDictionary(dict: ProfileItemVODictionary, field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
+  if (dict[field]?.length > 1) {
+    dict[field] = orderBy(dict[field], column);
+  }
+}
 
 @Injectable()
 export class ProfileService {
@@ -109,16 +126,26 @@ export class ProfileService {
     this.profileItemDictionary = {};
 
     for (const item of profileItems) {
-      this.addProfileItemToDictionary(item);
+      // override type to convert to milestone on update
+      const fieldsToConvert: FieldNameUI[] = ['profile.home', 'profile.job', 'profile.location'];
+
+
+      // borrow description for title to overwrite phone nbr
+      if (item.fieldNameUI === 'profile.home' || item.fieldNameUI === 'profile.location') {
+        item.string2 = item.string1;
+      }
+
+      if (fieldsToConvert.includes(item.fieldNameUI)) {
+        item.fieldNameUI = 'profile.milestone';
+      }
+      addProfileItemToDictionary(this.profileItemDictionary, item);
     }
 
     // create stubs for the rest of the profile items so at least one exists for given profile item type
     this.stubEmptyProfileItems();
 
     // order things by start date that have a start date
-    this.orderItems('home');
-    this.orderItems('location');
-    this.orderItems('job');
+    this.orderItems('milestone');
   }
 
   getProfileItemDictionary() {
@@ -129,14 +156,8 @@ export class ProfileService {
     this.profileItemDictionary = {};
   }
 
-  async addProfileItemToDictionary(item: ProfileItemVOData) {
-    const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
-
-    if (!this.profileItemDictionary[fieldNameUIShort]) {
-      this.profileItemDictionary[fieldNameUIShort] = [ item ];
-    } else {
-      this.profileItemDictionary[fieldNameUIShort].push(item);
-    }
+  addProfileItemToDictionary(item: ProfileItemVOData) {
+    addProfileItemToDictionary(this.profileItemDictionary, item);
   }
 
   createEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
@@ -160,6 +181,7 @@ export class ProfileService {
         break;
       case 'job':
       case 'home':
+      case 'milestone':
         item.type = 'type.widget.locn';
         break;
       case 'description':
@@ -306,9 +328,7 @@ export class ProfileService {
   }
 
   orderItems(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
-    if (this.profileItemDictionary[field]?.length > 1) {
-      this.profileItemDictionary[field] = orderBy(this.profileItemDictionary[field], column);
-    }
+    orderItemsInDictionary(this.profileItemDictionary, field);
   }
 
 

@@ -1,8 +1,7 @@
 <pr-file-list-controls [hidden]="!showSidebar" #controls></pr-file-list-controls>
+<pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
 <div class="file-list-scroll"
-  (scroll)="onViewportScroll($event)"
   [class.is-sorting]="controls?.isSorting$ | async" #scroll>
-  <pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
   <div class="empty-message" *ngIf="!currentFolder.ChildItemVOs || !currentFolder.ChildItemVOs.length">
     This folder is empty
   </div>
@@ -14,11 +13,11 @@
     [allowNavigation]="allowNavigation"
     [isSelected]="showSidebar ? selectedItems.has(item) : false"
     [canSelect]="showSidebar"
-    (itemClicked)="onItemClick($event)"></pr-file-list-item>
+    (itemClicked)="onItemClick($event)"
+    (itemVisible)="onItemVisible($event)"
+    ></pr-file-list-item>
 </div>
 <pr-sidebar *ngIf="showSidebar"></pr-sidebar>
-<div [@slideUpAnimation]="device.isMobileWidth() && o.isActivated ? o.activatedRoute : ''">
+<div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
   <router-outlet #o="outlet"></router-outlet>
 </div>
-
-

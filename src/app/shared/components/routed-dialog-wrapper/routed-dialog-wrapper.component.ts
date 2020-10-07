@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { DialogRef, Dialog, DialogComponentToken } from '@root/app/dialog/dialog.module';
 import { RouteData } from '@root/app/app.routes';
@@ -7,19 +7,26 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 import { Subscription } from 'rxjs';
 import { RouteHistoryService } from 'ngx-route-history';
 import { Title } from '@angular/platform-browser';
+import { slideUpAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-routed-dialog-wrapper',
-  template: ''
+  template: `
+  <ng-template #outletTemplate>
+    <div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
+      <router-outlet #o="outlet"></router-outlet>
+    </div>
+  </ng-template>`,
+  animations: [ slideUpAnimation ]
 })
-export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, OnDestroy {
+export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasSubscriptions, OnDestroy {
   private dialogToken: DialogComponentToken;
   private dialogOptions: DialogOptions;
   private dialogRef: DialogRef;
 
-  private previousTitle: string;
-
   private closedByNavigate = false;
+
+  @ViewChild('outletTemplate') private outletTemplate: TemplateRef<any>;
 
   subscriptions: Subscription[] = [];
   constructor(
@@ -31,6 +38,9 @@ export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, O
   ) { }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
     this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
 
     this.dialogToken = (this.route.snapshot.data as RouteData).dialogToken;
@@ -41,7 +51,13 @@ export class RoutedDialogWrapperComponent implements OnInit, HasSubscriptions, O
 
     this.dialogOptions = (this.route.snapshot.data as RouteData).dialogOptions;
 
-    this.dialogRef = this.dialog.createDialog(this.dialogToken, this.route.snapshot.data, this.dialogOptions);
+    const dialogData = {
+      ...this.route.snapshot.data,
+      activatedRoute: this.route,
+      outletTemplate: this.outletTemplate
+    };
+
+    this.dialogRef = this.dialog.createDialog(this.dialogToken, dialogData, this.dialogOptions, this.outletTemplate, this.route);
 
     this.dialogRef.dialogComponent.show();
 

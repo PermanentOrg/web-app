@@ -3,7 +3,7 @@ pr-sidebar {
 }
 
 pr-file-list, pr-shares {
-  width: 100%;
+  display: block;
   @include after($tablet-horizontal) {
     &.show-sidebar {
       width: calc(100% - #{$sidebar-width});
@@ -24,6 +24,35 @@ pr-file-list, pr-shares {
         padding-right: $grid-unit;
         padding-bottom: $file-list-row-height * 1;
       }
+    }
+
+    &.grid-view {
+      .file-list-scroll {
+        padding-top: $file-list-grid-gutter;
+        margin: 0 (-$file-list-grid-gutter / 2);
+        margin-right: -($file-list-grid-gutter / 2) ;
+  
+        @include beforeDesktop {
+          margin: 0 (-$file-list-grid-gutter / 2);
+        }
+      }
+
+      &.show-sidebar .file-list-scroll {
+        margin-right: -$grid-unit;
+        padding-right: $grid-unit - ($file-list-grid-gutter/2);
+      }
+  
+      .file-list-scroll:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
+  }
+
+  .folder-description {
+    p:last-child {
+      margin-bottom: 0px;
     }
   }
 }

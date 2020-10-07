@@ -3,7 +3,7 @@ import { IsTabbedDialog, DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
-import { partition, remove, find } from 'lodash';
+import { partition, remove, find, orderBy } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/archive.repo';
 import { MessageService } from '@shared/services/message/message.service';
@@ -79,7 +79,10 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
   ngOnInit(): void {
     this.account = this.accountService.getAccount();
     this.currentArchive = this.accountService.getArchive();
-    [this.pendingArchives, this.archives] = partition(this.accountService.getArchives(), { status: 'status.generic.pending'} );
+    [this.pendingArchives, this.archives] = partition(
+      orderBy(this.accountService.getArchives(), a => a.fullName.toLowerCase()),
+      { status: 'status.generic.pending'}
+    );
   }
 
   setTab(tab: MyArchivesTab) {

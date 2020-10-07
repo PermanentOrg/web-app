@@ -26,7 +26,7 @@ $gutter-size: 0.25rem;
     user-select: none;
   }
 
-  @include until($tablet-horizontal) {
+  @include beforeDesktop {
     max-height: 25vh;
     overflow-y: auto;
   }

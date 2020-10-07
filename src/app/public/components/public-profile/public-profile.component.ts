@@ -1,89 +1,43 @@
-import { Component, OnInit, Inject, Optional, HostBinding } from '@angular/core';
-import { FolderVO, ArchiveVO } from '@models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
-import { findRouteData } from '@shared/utilities/router';
-import { ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
-import { ProfileItemsDataCol, ALWAYS_PUBLIC } from '@shared/services/profile/profile.service';
-import { orderBy, some } from 'lodash';
-import { MessageService } from '@shared/services/message/message.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ArchiveVO } from '@models';
+import { ProfileItemVODictionary, ProfileItemVOData } from '@models/profile-item-vo';
+import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { Observable, Subscription } from 'rxjs';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { map } from 'rxjs/operators';
+import { concat, orderBy } from 'lodash';
 
 @Component({
   selector: 'pr-public-profile',
   templateUrl: './public-profile.component.html',
   styleUrls: ['./public-profile.component.scss']
 })
-export class PublicProfileComponent implements OnInit {
-  @HostBinding('class.is-dialog') isDialog: boolean;
-
-  publicRoot: FolderVO;
+export class PublicProfileComponent implements OnInit, OnDestroy, HasSubscriptions {
   archive: ArchiveVO;
-
   profileItems: ProfileItemVODictionary = {};
+  milestones$: Observable<ProfileItemVOData[]>;
 
+  subscriptions: Subscription[] = [];
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private message: MessageService,
-    @Optional() @Inject(DIALOG_DATA) public data: any,
-    @Optional() private dialogRef: DialogRef,
+    private publicProfile: PublicProfileService
   ) {
-    this.isDialog = dialogRef ? true : false;
   }
 
   ngOnInit(): void {
-    const data = this.data || this.route.snapshot.data;
+    this.subscriptions.push(
+      this.publicProfile.archive$().subscribe(archive => this.archive = archive),
+      this.publicProfile.profileItemsDictionary$().subscribe(items => this.profileItems = items)
+    );
 
-    this.publicRoot = data.publicRoot;
-    this.archive = data.archive;
-    this.buildProfileItemDictionary(data.profileItems);
-
-    const hasPublicItems = some(data.profileItems as ProfileItemVOData[], i => i.publicDT && i.fieldNameUI !== 'profile.basic');
-
-    if (!hasPublicItems) {
-      this.router.navigate(['..'], { relativeTo: this.route });
-      this.message.showError('This profile has no public information.');
-    }
+    this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
+      map(profileItems => {
+        const milestones = concat(profileItems['job'] || [], profileItems['home'] || [], profileItems['milestone'] || []);
+        return orderBy(milestones, i => i.day1, 'desc');
+      })
+    );
   }
 
-  close(): void {
-    this.dialogRef?.close();
+  ngOnDestroy(): void {
+    unsubscribeAll(this.subscriptions);
   }
-
-  buildProfileItemDictionary(items: ProfileItemVOData[]) {
-    this.profileItems = {};
-
-    for (const item of items) {
-      this.addProfileItemToDictionary(item);
-    }
-
-    this.orderItems('home');
-    this.orderItems('location');
-    this.orderItems('job');
-  }
-
-  orderItems(field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
-    if (this.profileItems[field]?.length > 1) {
-      this.profileItems[field] = orderBy(this.profileItems[field], column);
-    }
-  }
-
-  addProfileItemToDictionary(item: ProfileItemVOData) {
-    const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
-
-    if (!this.profileItems[fieldNameUIShort]) {
-      this.profileItems[fieldNameUIShort] = [ item ];
-    } else {
-      this.profileItems[fieldNameUIShort].push(item);
-    }
-
-    if (item.textData1) {
-      item.textData1 = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
-    }
-  }
-
-  hasSingleValueFor(field: FieldNameUIShort, column: ProfileItemsDataCol) {
-    return this.profileItems[field]?.length && this.profileItems[field][0][column];
-  }
-
 }

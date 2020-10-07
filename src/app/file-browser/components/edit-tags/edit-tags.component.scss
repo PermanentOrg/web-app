@@ -34,7 +34,7 @@
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
 
-  @include until($tablet-horizontal) {
+  @include beforeDesktop {
     max-height: 30vh;
   }
 }

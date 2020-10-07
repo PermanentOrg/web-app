@@ -25,7 +25,7 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private account: AccountService
   ) {
-    this.archives = orderBy(this.account.getArchives(), 'fullName');
+    this.archives = orderBy(this.account.getArchives(), a => a.fullName.toLowerCase());
 
     this.promptText = data.promptText;
   }

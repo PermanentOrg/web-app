@@ -2,6 +2,7 @@ import { NgModule, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { InViewportModule } from 'ng-in-viewport';
 
 import { SharedModule } from '@shared/shared.module';
 
@@ -28,7 +29,8 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
     RouterModule,
     SharedModule,
     DialogModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    InViewportModule
   ],
   exports: [
     FileListComponent,

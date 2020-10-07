@@ -30,6 +30,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { environment } from '@root/environments/environment';
 import { RouteHistoryService } from 'ngx-route-history';
+import { InViewportModule } from 'ng-in-viewport';
 declare var ga: any;
 
 if (environment.environment !== 'local') {
@@ -147,6 +148,7 @@ export class PermErrorHandler implements ErrorHandler {
     BrowserModule,
     CommonModule,
     BrowserAnimationsModule,
+    InViewportModule,
     DialogModule.forRoot()
   ],
   exports: [

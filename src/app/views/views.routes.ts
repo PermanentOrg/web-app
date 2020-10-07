@@ -8,6 +8,10 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { fileListChildRoutes } from '@fileBrowser/file-browser.routes';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
+import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
+import { SharedModule } from '@shared/shared.module';
+import { RoutesWithData } from '../app.routes';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 
 const folderResolve = {
   currentFolder: FolderResolveService
@@ -21,24 +25,30 @@ const recordResolve = {
   currentRecord: RecordResolveService
 };
 
-export const routes: Routes = [
+export const routes: RoutesWithData = [
   {
     path: 'timeline',
     data: {
-      folderView: 'folder.view.timeline',
-      containerVerticalFlex: true,
-      hideBreadcrumbs: true
+      folderView: FolderView.Timeline,
     },
     children: [
       {
         path: '',
-        component: TimelineViewComponent,
+        component: RoutedDialogWrapperComponent,
+        data: {
+          dialogToken: 'TimelineViewComponent',
+          dialogOptions: { width: '100%', height: 'fullscreen' }
+        },
         resolve: leanFolderResolve,
         children: fileListChildRoutes
       },
       {
         path: ':archiveNbr/:folderLinkId',
-        component: TimelineViewComponent,
+        component: RoutedDialogWrapperComponent,
+        data: {
+          dialogToken: 'TimelineViewComponent',
+          dialogOptions: { width: '100%', height: 'fullscreen', menuClass: 'always-fullscreen-dialog' }
+        },
         resolve: leanFolderResolve,
         children: fileListChildRoutes
       }
@@ -47,9 +57,7 @@ export const routes: Routes = [
   {
     path: 'grid',
     data: {
-      folderView: 'folder.view.grid',
-      containerVerticalFlex: false,
-      hideBreadcrumbs: false
+      folderView: FolderView.Grid
     },
     children: [
       {
@@ -70,6 +78,7 @@ export const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
+    SharedModule,
     FileBrowserComponentsModule
   ],
   exports: [

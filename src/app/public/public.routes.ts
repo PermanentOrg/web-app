@@ -12,6 +12,7 @@ import { PublicRootResolveService } from './resolves/public-root-resolve.service
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 import { PublicProfileItemsResolveService } from './resolves/public-profile-items-resolve.service';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
+import { RoutesWithData } from '../app.routes';
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
@@ -23,7 +24,7 @@ const publishResolve = {
   publishedItem: PublishResolveService
 };
 
-export const routes: Routes = [
+export const routes: RoutesWithData = [
   {
     path: '',
     component: PublicComponent,
@@ -42,6 +43,7 @@ export const routes: Routes = [
       {
         path: 'archive/:publicArchiveNbr',
         resolve: publicArchiveResolve,
+        component: PublicArchiveComponent,
         children: [
           {
             path: 'profile',
@@ -49,16 +51,14 @@ export const routes: Routes = [
           },
           {
             path: '',
-            component: PublicArchiveComponent,
             loadChildren: LazyLoadFileBrowserSibling,
             data: {
               noFileListPadding: true,
-              fileListCentered: true,
               isPublicArchive: true,
               checkFolderViewOnNavigate: true,
               showFolderDescription: true
             },
-          }
+          },
         ]
       },
       {

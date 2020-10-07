@@ -1,19 +1,10 @@
 @import 'variables';
 
-:host > div {
-  padding-top: 0.5rem;
+:host {
   display: block;
-
-  @media screen and (max-width: $public-max-width) {
-    padding: 10px 10px 0px;
-  }
-}
-
-.folder-name {
-  font-weight: 500;
-  margin-bottom: 0.5rem;
 }
 
 .folder-description {
   font-size: $font-size-sm;
+  display: block;
 }

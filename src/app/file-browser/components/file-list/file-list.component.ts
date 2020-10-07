@@ -21,10 +21,10 @@ import { UP_ARROW, DOWN_ARROW, CONTROL, META, SHIFT } from '@angular/cdk/keycode
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { throttle, debounce, find } from 'lodash';
+import { throttle, debounce, find, size } from 'lodash';
 import { gsap } from 'gsap';
 
-import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { FileListItemComponent, FileListItemVisibleEvent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { DataService, SelectClickEvent, SelectedItemsSet, SelectKeyEvent } from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO, ItemVO } from '@root/app/models';
@@ -50,17 +50,7 @@ export interface ItemClickEvent {
 export interface FileListItemParent {
   onItemClick(itemClick: ItemClickEvent);
 }
-
-const NAV_HEIGHT = 84;
-const ITEM_HEIGHT_LIST_VIEW = 61;
-
-const ITEM_MAX_WIDTH_GRID_VIEW = 200;
-const ITEM_MAX_WIDTH_GRID_VIEW_SIDEBAR = 175;
-
-const SCROLL_DEBOUNCE = 150;
-const SCROLL_THROTTLE = 500;
-const SCROLL_TIMING = 16;
-const SCROLL_VELOCITY_THRESHOLD = 4;
+const VISIBLE_DEBOUNCE = 250;
 
 const DRAG_SCROLL_THRESHOLD = 100; // px from top or bottom
 const DRAG_SCROLL_STEP = 20;
@@ -86,19 +76,15 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   @Input() allowNavigation = true;
 
-  private scrollHandlerDebounced: Function;
-  private scrollHandlerThrottled: Function;
+  private visibleItemsHandlerDebounced: Function;
   private mouseMoveHandlerThrottled: Function;
 
-  private itemsFetchedCount: number;
   private reinit = false;
   private inFileView = false;
   private inDialog = false;
 
-  private lastScrollTop = 0;
-  private lastItemOffset: number;
-  private currentScrollTop = 0;
   @ViewChild('scroll') private scrollElement: ElementRef;
+  visibleItems: Set<FileListItemComponent> = new Set();
 
   @ViewChild(CdkPortal) portal: CdkPortal;
 
@@ -134,7 +120,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private ngZone: NgZone
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
-    this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
+    // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
     this.showSidebar = this.route.snapshot.data.showSidebar;
 
@@ -151,9 +137,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       this.setFolderView(folderView);
     });
 
-    // create debounced scroll handler for placeholder loading
-    this.scrollHandlerDebounced = debounce(this.loadVisibleItems.bind(this), SCROLL_DEBOUNCE);
-    this.scrollHandlerThrottled = throttle(this.loadVisibleItems.bind(this), SCROLL_THROTTLE);
+    this.visibleItemsHandlerDebounced = debounce(() => this.loadVisibleItems(), VISIBLE_DEBOUNCE);
 
     this.registerArchiveChangeHandlers();
     this.registerRouterEventHandlers();
@@ -275,13 +259,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     }, 1);
   }
 
-  attachToPortal() {
-    // setTimeout(() => {
-    //   this.dialog.portalOutlet.detach();
-    //   this.dialog.portalOutlet.attach(this.portal);
-    // });
-  }
-
   ngOnInit() {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.showSidebar = this.route.snapshot.data.showSidebar;
@@ -289,7 +266,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.isRootFolder = this.currentFolder.type.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 
-    this.itemsFetchedCount = 0;
+    this.visibleItems.clear();
     this.reinit = true;
   }
 
@@ -301,7 +278,12 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     this.registerMouseMoveHandler();
 
     this.loadVisibleItems(true);
-    this.getScrollElement().scrollTo(0, 0);
+
+    if (this.showSidebar) {
+      this.getScrollElement().scrollTo(0, 0);
+    } else {
+      // (this.scrollElement.nativeElement as HTMLElement).scrollIntoView(true);
+    }
 
     const queryParams = this.route.snapshot.queryParamMap;
     if (queryParams.has('showItem')) {
@@ -331,40 +313,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   setFolderView(folderView: FolderView) {
     this.folderView = folderView;
     this.inGridView = folderView === FolderView.Grid;
-    setTimeout(() => {
-      // scroll to show items after change
-      const scrollTarget: FileListItemComponent = this.listItems[this.lastItemOffset];
-      (scrollTarget.element.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth'});
-      this.scrollHandlerThrottled();
-    });
   }
 
   getScrollElement(): HTMLElement {
     return ((this.device.isMobileWidth() || !this.showSidebar)
     ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onViewportScroll(event: Event) {
-    this.lastScrollTop = this.currentScrollTop;
-    if (event) {
-      const target = event.currentTarget;
-      this.currentScrollTop = target === window ? this.document.documentElement.scrollTop : (target as HTMLElement).scrollTop;
-    }
-
-    const scrollVelocity = (this.lastScrollTop - this.currentScrollTop) / SCROLL_TIMING;
-    if (Math.abs(scrollVelocity) < SCROLL_VELOCITY_THRESHOLD) {
-      // use throttled handler if scrolling slowly
-      this.scrollHandlerThrottled();
-    } else {
-      // use debounced handler if scrolling quickly
-      this.scrollHandlerDebounced();
-    }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onViewportResize(event) {
-    this.scrollHandlerDebounced();
   }
 
   onViewportMouseMove(event: MouseEvent) {
@@ -479,35 +432,16 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     return event.target === this.document.body && !this.router.url.includes('record');
   }
 
-  loadVisibleItems(animate ?: boolean) {
-    if (this.itemsFetchedCount >= this.currentFolder.ChildItemVOs.length) {
+  async loadVisibleItems(animate ?: boolean) {
+    this.debug('loadVisibleItems %d items', this.visibleItems.size);
+    if (!this.visibleItems.size) {
       return;
     }
 
-    const totalHeight = this.document.documentElement.clientHeight || this.document.body.clientHeight;
-    const viewportHeight = totalHeight - NAV_HEIGHT;
-    const listWidth = (this.elementRef.nativeElement as HTMLElement).clientWidth;
-
-    const top = this.currentScrollTop || 0;
-
-    let offset, count, itemHeight;
-    let itemsPerRow = 1;
-
-    if (this.folderView === FolderView.List) {
-      itemHeight = ITEM_HEIGHT_LIST_VIEW;
-    } else {
-      const max = this.showSidebar ? ITEM_MAX_WIDTH_GRID_VIEW_SIDEBAR : ITEM_MAX_WIDTH_GRID_VIEW;
-      itemsPerRow = Math.max(Math.floor(listWidth / max), 2);
-      itemHeight = this.listItems[0] ? this.listItems[0].element.nativeElement.clientHeight : ITEM_HEIGHT_LIST_VIEW;
-    }
-
-    offset = Math.floor(top / itemHeight) * itemsPerRow;
-    this.lastItemOffset = offset;
-
-    count = (Math.ceil(viewportHeight / itemHeight) + 4) * itemsPerRow;
-
+    const visibleListItems = Array.from(this.visibleItems);
+    this.visibleItems.clear();
     if (animate) {
-      const targetElems = this.listItems.slice(0, count).map((item) => item.element.nativeElement);
+      const targetElems = visibleListItems.map(c => c.element.nativeElement);
       gsap.from(
         targetElems,
         0.25,
@@ -522,20 +456,23 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       );
     }
 
-    const itemsToFetch = this.currentFolder.ChildItemVOs
-      .slice(offset, offset + count)
-      .filter((item: ItemVO) => {
-        return !item.isFetching && item.dataStatus < DataStatus.Lean;
-      });
+    const itemsToFetch = visibleListItems.map(c => c.item);
 
     if (itemsToFetch.length) {
-      this.dataService.fetchLeanItems(itemsToFetch)
-      .then((fetchedCount: number) => {
-        this.itemsFetchedCount += fetchedCount;
-      })
-      .catch((response) => {
-        console.error(response);
-      });
+      try {
+        await this.dataService.fetchLeanItems(itemsToFetch);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+
+  onItemVisible(event: FileListItemVisibleEvent) {
+    if (event.visible) {
+      this.visibleItems.add(event.component);
+      this.visibleItemsHandlerDebounced();
+    } else {
+      this.visibleItems.delete(event.component);
     }
   }
 
