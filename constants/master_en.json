@@ -698,13 +698,8 @@
             "veterans_board": "Veterans Board"
         },
         "connector": {
-            "dropbox": {
-                "sync": "Dropbox Sync",
-                "retrieve": "Dropbox Retrieve"
-            },
             "facebook": "Facebook",
-            "familysearch": "FamilySearch",
-            "gdrive": "Google"
+            "familysearch": "FamilySearch"
         },
         "contact": {
             "board_member": "Board Member",
@@ -713,12 +708,7 @@
             "site_request_ios": "Access was requested from the iOS app"
         },
         "daemon": {
-            "box_retrieve": "Box retrieve",
-            "cdrive_retrieve": "Amazon Cloud Drive retrieve",
-            "dropbox_sync": "Dropbox sync",
-            "dropbox_retrieve": "Dropbox retrieve",
             "facebook_retrieve_tagged": "Facebook retrieve tagged",
-            "gdrive_retrieve": "gDrive retrieve",
             "system_exception": "System Exception reporting"
         },
         "directive": {
@@ -727,10 +717,6 @@
             "public": "Make this item public",
             "share": "Share this item",
             "transfer": "Transfer ownership of this item"
-        },
-        "dropbox": {
-            "folder": "Folder",
-            "record": "Record"
         },
         "email": {
             "home": "Home email address",
@@ -838,10 +824,6 @@
                 "share": "share"
             }
         },
-        "gdrive": {
-            "folder": "Folder",
-            "record": "Record"
-        },
         "generic": {
             "error": "An entry that has an error and requires administrator attention",
             "placeholder": "A type we know this isn't set right, but that's ok",
@@ -929,13 +911,8 @@
             "thumbnail_record": "Thumbnail record"
         },
         "task_throttle": {
-            "box_retrieve": "Box retrieve",
-            "cdrive_retrieve": "Amazon Cloud Drive retrieve",
-            "dropbox_sync": "Dropbox sync",
-            "dropbox_retrieve": "Dropbox retrieve",
             "facebook_retrieve_tagged": "Facebook retrieve tagged",
-            "facebook_retrieve_everything": "Facebook retrieve everything",
-            "gdrive_retrieve": "gDrive retrieve"
+            "facebook_retrieve_everything": "Facebook retrieve everything"
         },
         "text_data": {
             "folder": {
