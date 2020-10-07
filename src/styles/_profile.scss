@@ -1,6 +1,7 @@
 $profile-max-width: 1000px;
+$profile-sidebar-width: pxToGrid(360px);
 
-@mixin profileBanner($desktop-size: pxToGrid(220px), $mobile-size: pxToGrid(120px)) {
+@mixin profileBanner($desktop-size: pxToGrid(300px), $mobile-size: pxToGrid(160px)) {
   height: $desktop-size;
   background-size: cover;
   background-position: 50% 50%;
@@ -25,8 +26,8 @@ $profile-max-width: 1000px;
   background-position: 50% 50%;
   position: relative;
   margin-left: 2 * $grid-unit;
-  margin-bottom: -$desktop-size/2 + $grid-unit;
-  transform: translateY(-50%);
+  margin-bottom: -$desktop-size * 2/3 + $grid-unit;
+  transform: translateY(-(2/3 * 100%));
   cursor: pointer;
 
   @include beforeDesktop {
@@ -76,9 +77,10 @@ $profile-max-width: 1000px;
 @mixin profileGroup {
   display: flex;
   margin-bottom: 2 * $grid-unit;
+  flex-basis: 100%;
 
   > * {
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     &:not(:last-child) {
       margin-right: $grid-unit;
     }
@@ -88,21 +90,6 @@ $profile-max-width: 1000px;
     margin-bottom: 0;
   }
 
-  &.in-thirds > * {
-    flex: 0 1 (100% * 1/3);
-    max-width: 100% * 1/3;
-
-    &.two-thirds {
-      flex: 0 1 68.9%;
-      max-width: 68.9%
-    }
-  }
-
-  &.in-half > * {
-    flex: 0 1 50%;
-    max-width: 50%;
-  }
-
   &.align-right > *:first-child {
     margin-left: auto;
   }
@@ -110,6 +97,27 @@ $profile-max-width: 1000px;
   > button {
     flex: 0 0 auto;
     width: auto;
+  }
+
+  @include beforeDesktop {
+    display: block;
+  }
+
+  @include desktop {
+    &.in-thirds > * {
+      flex: 0 1 (100% * 1/3);
+      max-width: 100% * 1/3;
+  
+      &.two-thirds {
+        flex: 0 1 68.9%;
+        max-width: 68.9%
+      }
+    }
+  
+    &.in-half > * {
+      flex: 0 1 50%;
+      max-width: 50%;
+    }
   }
 }
 

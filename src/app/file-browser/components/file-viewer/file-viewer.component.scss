@@ -4,22 +4,8 @@ $toolbar-height: 30px;
 $transition-length: 0.35s;
 $button-size: 2rem;
 :host {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  display: block;
-
-  @include until($tablet-horizontal) {
-    // animation-name: $slide-up-animation;
-    // animation-timing-function: $tweaked-ease;
-    // animation-duration: 750ms;
-  }
+  @include fullscreenComponent;
 }
-
-
 
 .file-viewer {
   position: fixed;

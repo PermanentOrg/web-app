@@ -328,7 +328,7 @@
   "defaultProject": "mdot",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss",
+      "style": "scss",
       "style": "scss"
     }
   },

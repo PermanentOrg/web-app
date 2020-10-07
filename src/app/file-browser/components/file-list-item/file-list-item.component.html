@@ -3,14 +3,18 @@
   [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction }"
   (mousedown)="onItemMouseDown($event)" (touchstart)="onItemTouchStart($event)" (touchend)="onItemTouchEnd($event)"
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
-  (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"> 
+  (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"
+  inViewport (inViewportAction)="onIntersection($event)" [inViewportOptions]="{ threshold: [0], rootMargin: '100px' }"> 
   <ng-container [ngSwitch]="item.isFolder">
     <div class="file-list-item-folder-icon" *ngSwitchCase="true">
       <i class="material-icons">folder</i>
     </div>
     <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
-  <!-- <div prBgImage [bgSrc]="item.thumbURL200" [cover]="inGridView"></div> -->
+  <div class="grid-item-type-icon" @ngIfFadeInAnimation
+    *ngIf="inGridView && item.isFolder ? item.view : true">
+    <i class="material-icons">{{item | itemTypeIcon:item.view}}</i>
+  </div>
   <div class="name">
     <div class="first-row">
       <span>{{item.displayName}}</span>

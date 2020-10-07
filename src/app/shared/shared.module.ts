@@ -45,6 +45,8 @@ import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { RoutedDialogWrapperComponent } from './components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { LinkPipe } from './pipes/link.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { ItemTypeIconPipe } from './pipes/item-type-icon.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 
 @NgModule({
@@ -106,6 +108,8 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     RoutedDialogWrapperComponent,
     LinkPipe,
     TimeAgoPipe,
+    ItemTypeIconPipe,
+    SafeHtmlPipe,
     ArchiveSearchBoxComponent
   ],
   declarations: [
@@ -149,6 +153,8 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     RoutedDialogWrapperComponent,
     LinkPipe,
     TimeAgoPipe,
+    ItemTypeIconPipe,
+    SafeHtmlPipe,
     ArchiveSearchBoxComponent
   ],
   providers: [

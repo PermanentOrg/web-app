@@ -6,7 +6,7 @@
   font-size: $font-size-xs;
   line-height: 1;
 
-  @include until($tablet-horizontal) {
+  @include beforeDesktop {
     display: none;
   }
 }

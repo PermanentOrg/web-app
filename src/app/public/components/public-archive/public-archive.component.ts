@@ -1,22 +1,13 @@
-import { Component, OnInit, HostBinding, AfterViewInit, OnDestroy, Optional } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { ArchiveVO } from '@models';
-import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { Subscription } from 'rxjs';
-import { DataService } from '@shared/services/data/data.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { PromptService } from '@shared/services/prompt/prompt.service';
-import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
-import { EVENTS } from '@shared/services/google-analytics/events';
-import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
-import { Deferred } from '@root/vendor/deferred';
-import { copyFromInputElement } from '@shared/utilities/forms';
-import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
-import { AccountService } from '@shared/services/account/account.service';
-import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { ArchiveVO, FolderVO } from '@models';
 import { collapseAnimationCustom } from '@shared/animations';
-import { Dialog } from '@root/app/dialog/dialog.module';
-import { ProfileItemVOData } from '@models/profile-item-vo';
+import { FieldNameUIShort, ProfileItemVODictionary } from '@models/profile-item-vo';
+import { ProfileItemsDataCol } from '@shared/services/profile/profile.service';
+import { of, merge, Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 
 @Component({
   selector: 'pr-public-archive',
@@ -25,148 +16,42 @@ import { ProfileItemVOData } from '@models/profile-item-vo';
   animations: [ collapseAnimationCustom(250) ]
 })
 export class PublicArchiveComponent implements OnInit, OnDestroy {
-  public archive: ArchiveVO;
-  public description: string;
-  public isArchiveRoot = false;
-  public showFolderDescription = false;
-  public archiveDescriptionHidden = false;
-  public isMobile = this.device.isMobileWidth();
-  public hasProfile = false;
+  publicRoot: FolderVO;
+  archive: ArchiveVO;
+  profileItems: ProfileItemVODictionary = {};
 
-  public get cta() {
-    return this.data.publicCta;
-  }
-
-  containerFlexSubscription: Subscription;
-  currentFolderSubscription: Subscription;
-  @HostBinding('class.container-vertical-flex') containerVerticalFlex: boolean;
-
+  isViewingProfile$ = merge(
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(event => {
+          if (event instanceof NavigationEnd) {
+            return event.url.includes('/profile');
+          }
+        }),
+      ),
+    of(this.router.url.includes('/profile'))
+  );
+  subscriptions: Subscription[] = [];
   constructor(
-    private account: AccountService,
-    private route: ActivatedRoute,
     private router: Router,
-    private folderView: FolderViewService,
-    private data: DataService,
-    private device: DeviceService,
-    private prompt: PromptService,
-    private ga: GoogleAnalyticsService,
-    private linkPipe: PublicLinkPipe,
-    @Optional() private dialog: Dialog
+    private publicProfile: PublicProfileService
   ) {
-
-    this.checkArchive();
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
-
-    this.containerVerticalFlex = this.folderView.containerFlex;
-
-    this.containerFlexSubscription = this.folderView.containerFlexChange.subscribe(x => {
-      this.containerVerticalFlex = x;
-    });
-
-    this.currentFolderSubscription = this.data.currentFolderChange.subscribe(folder => {
-      this.checkFolder();
-    });
   }
 
-  ngOnInit() {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.viewed.params);
-        this.checkArchive();
-      }
-    });
-
-    if (this.route.snapshot.queryParamMap.has('profile')) {
-      this.showProfile();
-    }
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.publicProfile.publicRoot$().subscribe(root => this.publicRoot = root),
+      this.publicProfile.archive$().subscribe(archive => this.archive = archive),
+      this.publicProfile.profileItemsDictionary$().subscribe(items => this.profileItems = items)
+    );
   }
 
-  checkArchive() {
-    if (!this.archive || this.archive.archiveNbr !== this.route.snapshot.data['archive'].archiveNbr) {
-      this.archive = this.route.snapshot.data['archive'];
-      if (this.archive.description) {
-        this.description = '<p>' + this.archive.description.replace(new RegExp('\n', 'g'), '</p><p>') + '</p>';
-      } else {
-        this.description = null;
-      }
-
-      this.hasProfile = this.route.snapshot.data['profileItems']?.length > 2;
-    }
+  ngOnDestroy(): void {
+    unsubscribeAll(this.subscriptions);
   }
 
-  checkFolder() {
-    if (this.data.currentFolder) {
-      this.isArchiveRoot = !!this.data.currentFolder.type.includes('root');
-      this.showFolderDescription = !this.isArchiveRoot && this.data.currentFolder.view !== FolderView.Timeline;
-    }
-  }
-
-  ngOnDestroy() {
-    this.containerFlexSubscription.unsubscribe();
-    this.currentFolderSubscription.unsubscribe();
-  }
-
-  onCtaClick() {
-    switch (this.cta) {
-      case 'timeline':
-        const queryParams = { cta: 'timeline', eventCategory: 'Publish by url' };
-        if (this.account.isLoggedIn()) {
-          if (this.device.isMobile()) {
-            this.router.navigate(['/public'], { queryParams });
-          } else {
-            window.location.assign('/app/public?cta=timeline');
-          }
-        } else {
-          this.router.navigate(['/auth', 'signup'], { queryParams });
-        }
-        break;
-    }
-  }
-
-  onShareClick() {
-    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.reshare.params);
-
-    const url = this.linkPipe.transform(this.data.currentFolder);
-    const fields = [
-      READ_ONLY_FIELD('publicLink', 'Public link', url)
-    ];
-
-    const deferred = new Deferred();
-
-    this.prompt.prompt(fields, 'Share public link', deferred.promise, 'Copy link')
-    .then(() => {
-      const input = this.prompt.getInput('publicLink');
-      copyFromInputElement(input);
-      deferred.resolve();
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-  }
-
-  async onCtaClickMobile() {
-    switch (this.cta) {
-      case 'timeline':
-        try {
-          if (await this.prompt.confirm('Continue', 'Create your own timeline?')) {
-            this.onCtaClick();
-          }
-        } catch (err) { }
-        break;
-    }
-  }
-
-  onArchiveThumbClick() {
-    this.router.navigate(['/p', 'archive', this.archive.archiveNbr]);
-  }
-
-  showProfile() {
-    if (this.dialog) {
-      try {
-        this.dialog.open('PublicProfileComponent', this.route.snapshot.data, { width: '100%', height: 'fullscreen', menuClass: 'public-profile-dialog' });
-      } catch (err) {
-        console.error(err);
-      }
-    }
+  hasSingleValueFor(field: FieldNameUIShort, column: ProfileItemsDataCol) {
+    return this.profileItems[field]?.length && this.profileItems[field][0][column];
   }
 }

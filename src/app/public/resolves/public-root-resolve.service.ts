@@ -2,26 +2,25 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
-
-import { FolderResponse } from '@shared/services/api/index.repo';
-import { FolderVO } from '@models';
+import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 
 @Injectable()
 export class PublicRootResolveService implements Resolve<any> {
   constructor(
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private publicProfile: PublicProfileService
   ) { }
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
+  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
     const archiveNbr = route.params.publicArchiveNbr;
-    return this.api.folder.getPublicRoot(archiveNbr)
-      .then((response: FolderResponse): FolderVO => {
-        return response.getFolderVO();
-      }).catch((response: any) => {
-        if (response instanceof FolderResponse) {
-          return this.router.navigate(['/p', 'error']);
-        }
-      });
+    try {
+      const response = await this.api.folder.getPublicRoot(archiveNbr);
+      const publicRoot = response.getFolderVO();
+      this.publicProfile.setPublicRoot(response.getFolderVO());
+      return publicRoot;
+    } catch (err) {
+      return this.router.navigate(['/p', 'error']);
+    }
   }
 }

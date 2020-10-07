@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, HostListener, Inject } from '@angular/core';
 
 import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem, moment } from '@permanent.org/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
@@ -16,6 +16,9 @@ import { Subscription } from 'rxjs';
 import { TimelineBreadcrumbsComponent, TimelineBreadcrumb } from './timeline-breadcrumbs/timeline-breadcrumbs.component';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { slideUpAnimation } from '@shared/animations';
+import { DIALOG_DATA, OUTLET_TEMPLATE } from '@root/app/dialog/dialog.module';
+import { RouteData } from '@root/app/app.routes';
 
 interface VoDataItem extends DataItem {
   itemVO: ItemVO;
@@ -30,7 +33,8 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 @Component({
   selector: 'pr-timeline-view',
   templateUrl: './timeline-view.component.html',
-  styleUrls: ['./timeline-view.component.scss']
+  styleUrls: ['./timeline-view.component.scss'],
+  animations: [ slideUpAnimation ]
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating = false;
@@ -49,7 +53,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public hasPrev = true;
   public hasNext = true;
 
-  public timelineRootFolder: FolderVO = this.route.snapshot.data.currentFolder;
+  public timelineRootFolder: FolderVO;
   public showFolderDetails = false;
 
   public displayTimezoneOffset: string;
@@ -102,8 +106,10 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
   constructor(
+    @Inject(DIALOG_DATA) public dialogData: any,
+    @Inject(OUTLET_TEMPLATE) public outletTemplate: any,
     private route: ActivatedRoute,
-    private data: DataService,
+    private dataService: DataService,
     private api: ApiService,
     private router: Router,
     private elementRef: ElementRef,
@@ -111,16 +117,21 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private device: DeviceService
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
-    this.data.showBreadcrumbs = false;
-    this.data.showPublicArchiveDescription = false;
-    this.data.publicCta = 'timeline';
+    this.dataService.showBreadcrumbs = false;
+    this.dataService.showPublicArchiveDescription = false;
+    this.dataService.publicCta = 'timeline';
     this.fvService.containerFlexChange.emit(true);
-    this.data.setCurrentFolder(this.route.snapshot.data.currentFolder);
+
+    this.outletTemplate = outletTemplate;
+
+    const data = dialogData as RouteData;
+    this.timelineRootFolder = data.currentFolder;
+    this.dataService.setCurrentFolder(data.currentFolder);
   }
 
   ngOnInit() {
     this.onFolderChange();
-    this.dataServiceSubscription = this.data.currentFolderChange.subscribe(() => {
+    this.dataServiceSubscription = this.dataService.currentFolderChange.subscribe(() => {
       this.onFolderChange();
     });
   }
@@ -136,9 +147,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.timeline.destroy();
     this.dataServiceSubscription.unsubscribe();
-    this.data.showBreadcrumbs = true;
-    this.data.showPublicArchiveDescription = true;
-    this.data.publicCta = null;
+    this.dataService.showBreadcrumbs = true;
+    this.dataService.showPublicArchiveDescription = true;
+    this.dataService.publicCta = null;
     this.fvService.containerFlexChange.emit(false);
   }
 
@@ -158,7 +169,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   onFolderChange() {
     this.timelineGroups.clear();
     this.findBestTimezone();
-    this.timelineRootFolder = this.data.currentFolder;
+    this.timelineRootFolder = this.dataService.currentFolder;
     this.groupTimelineItems(true, false);
     if (this.timeline) {
       this.setMaxZoom();
@@ -180,7 +191,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   findBestTimezone() {
     const counts = countBy(
-      this.data.currentFolder.ChildItemVOs.filter(i => i.TimezoneVO),
+      this.dataService.currentFolder.ChildItemVOs.filter(i => i.TimezoneVO),
       (i: ItemVO) => {
         const id = i.TimezoneVO.timeZoneId;
         if (!this.timezones.has(id)) {
@@ -262,7 +273,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let timespan = this.currentTimespan;
     if (bestFitTimespan) {
-      timespan = getBestFitTimespanForItems(this.data.currentFolder.ChildItemVOs);
+      timespan = getBestFitTimespanForItems(this.dataService.currentFolder.ChildItemVOs);
     }
 
     let itemsToAdd: any[];
@@ -270,7 +281,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.timelineGroups.has(timespan)) {
       itemsToAdd = this.timelineGroups.get(timespan);
     } else {
-      const groupResult = GroupByTimespan(this.data.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan, this.currentTimezone);
+      const groupResult = GroupByTimespan(this.dataService.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan, this.currentTimezone);
       this.currentTimespan = groupResult.timespan;
       this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
       itemsToAdd = groupResult.groupedItems;
@@ -426,7 +437,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       await folder.fetched;
     }
     const folderResponse = await this.api.folder.navigateLean(folder).toPromise();
-    this.data.setCurrentFolder(folderResponse.getFolderVO(true));
+    this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
     this.isNavigating = false;
   }
 
@@ -471,7 +482,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
     this.showFolderDetails = false;
     if (breadcrumb.type === 'folder') {
-      if (breadcrumb.folder_linkId === this.data.currentFolder.folder_linkId) {
+      if (breadcrumb.folder_linkId === this.dataService.currentFolder.folder_linkId) {
         this.groupTimelineItems(true, false);
         this.timeline.fit();
         this.breadcrumbs.setTimeBreadcrumbs();

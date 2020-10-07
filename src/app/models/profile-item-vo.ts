@@ -14,6 +14,7 @@ export type FieldNameUI =
 'profile.gender' |
 'profile.home' |
 'profile.job' |
+'profile.milestone' |
 'profile.location' |
 'profile.phone_nbr' |
 'profile.social_media' |
@@ -31,6 +32,7 @@ export type FieldNameUIShort =
 'gender' |
 'home' |
 'job' |
+'milestone' |
 'location' |
 'phone_nbr' |
 'social_media' |

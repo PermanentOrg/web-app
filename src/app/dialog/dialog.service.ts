@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild } from '@angular/core';
+import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
@@ -7,6 +7,7 @@ import { DialogRootComponent } from './dialog-root.component';
 import { DOCUMENT } from '@angular/common';
 import debug from 'debug';
 import { PortalOutlet } from '@angular/cdk/portal';
+import { ActivatedRoute } from '@angular/router';
 
 export type DialogComponentToken =
   'FamilySearchImportComponent' |
@@ -25,9 +26,9 @@ export type DialogComponentToken =
   'InvitationsDialogComponent' |
   'MyArchivesDialogComponent' |
   'ProfileEditFirstTimeDialogComponent' |
-  'PublicProfileComponent' |
   'StorageDialogComponent' |
-  'NotificationDialogComponent'
+  'NotificationDialogComponent' |
+  'TimelineViewComponent'
   ;
 
 export interface DialogChildComponentData {
@@ -74,6 +75,7 @@ export class DialogRef {
 }
 
 export const DIALOG_DATA = new InjectionToken<any>('DialogData');
+export const OUTLET_TEMPLATE = new InjectionToken<any>('OutletTemplate');
 
 @Injectable({
   providedIn: 'root'
@@ -163,7 +165,13 @@ export class Dialog {
     this.debug('portal outlet unregistered %o', outlet);
   }
 
-  open(token: DialogComponentToken, data?: any, options = DEFAULT_OPTIONS): Promise<any> {
+  open(
+    token: DialogComponentToken,
+    data?: any,
+    options = DEFAULT_OPTIONS,
+    outlet?: TemplateRef<any>,
+    route?: ActivatedRoute
+  ): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
     }
@@ -176,7 +184,7 @@ export class Dialog {
       token = (token as any).name;
     }
 
-    const newDialog = this.createDialog(token, data, options);
+    const newDialog = this.createDialog(token, data, options, outlet, route);
     newDialog.dialogComponent.show();
 
     this.debug('open dialog %s %o %o', token, data, options);
@@ -202,7 +210,13 @@ export class Dialog {
     }, 500);
   }
 
-  public createDialog(token: DialogComponentToken, data: any = {}, options = DEFAULT_OPTIONS): DialogRef {
+  public createDialog(
+    token: DialogComponentToken,
+    data: any = {},
+    options = DEFAULT_OPTIONS,
+    outlet: TemplateRef<any>,
+    route?: ActivatedRoute
+  ): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
     this.dialogs[dialog.id] = dialog;
@@ -219,7 +233,17 @@ export class Dialog {
     // build custom component factory and setup injector
     const component = this.registeredComponents[token];
     const resolver = this.componentResolvers[token];
-    const injector = new PortalInjector(this.injector, new WeakMap<any, any>([[DIALOG_DATA, data], [DialogRef, dialog]]));
+    const customTokens = new WeakMap<any, any>([
+      [DIALOG_DATA, data],
+      [OUTLET_TEMPLATE, outlet],
+      [DialogRef, dialog],
+    ]);
+
+    if (route) {
+      customTokens.set(ActivatedRoute, route);
+    }
+
+    const injector = new PortalInjector(this.injector, customTokens);
     const factory: ComponentFactory<any> = resolver.resolveComponentFactory(component);
 
     // create custom component inside new dialog component
