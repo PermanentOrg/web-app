@@ -272,7 +272,7 @@
             [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
               <div class="profile-group in-thirds">
                 <div class="profile-field">
-                  <label>Milestone</label>
+                  <label>Title</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [maxLength]="140"
                   [displayValue]="profileItem.string1"
@@ -314,7 +314,7 @@
                   </div>
                 </div>
                 <div class="profile-field">
-                  <label>About</label>
+                  <label>Description</label>
                   <pr-inline-value-edit [alwaysShow]="true"
                   [maxLength]="280"
                   [emptyMessage]="'More details and information about this milestone'"

@@ -14,7 +14,7 @@
       <div class="profile-group">
         <div class="profile-group" *ngIf="profileItem.string1">
           <div class="profile-field">
-            <label>Milestone</label>
+            <label>Title</label>
             <div>
               {{ profileItem.string1 }}
             </div>
@@ -39,129 +39,13 @@
           </div>
         </div>
       </div>
-
     </div>
-
     <div class="profile-group" *ngIf="profileItem.string2">
       <div class="profile-field">
-        <label>About</label>
+        <label>Description</label>
         <div [innerHTML]="profileItem.string2 | newlineText"></div>
       </div>
     </div>
   </div>
   </div>
 </ng-container>
-<!-- <ng-container *ngIf="false && profileItems.home?.length || profileItems.location?.length">
-  <div class="profile-section-header" [ngSwitch]="archive.type">
-    <ng-container *ngSwitchCase="'type.archive.person'">
-      Residence History
-    </ng-container>
-    <ng-container *ngSwitchDefault>
-      Location History
-    </ng-container>
-  </div>
-</ng-container>
-<div class="profile-section">
-  <div class="profile-repeat-entry"
-    *ngFor="let profileItem of (archive.type === 'type.archive.person' ? profileItems.home : profileItems.location)">
-    <div class="profile-group in-half">
-      <div class="profile-field" *ngIf="profileItem.LocnVOs?.length">
-        <label>{{(profileItem.LocnVOs[0] | prLocation).full}}</label>
-        <pr-static-map [location]="profileItem.LocnVOs[0]"></pr-static-map>
-      </div>
-      <div class="profile-group in-half" *ngIf="profileItem.day1 || profileItem.day2 || profileItem.string2">
-        <div class="profile-field">
-          <label [ngSwitch]="archive.type">
-            <ng-container *ngSwitchCase="'type.archive.person'">
-              Move In Date
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              Start Date
-            </ng-container>
-          </label>
-          <div>
-            {{ profileItem.day1 | date }}
-          </div>
-        </div>
-        <div class="profile-field" *ngIf="profileItem.day2">
-          <label [ngSwitch]="archive.type">
-            <ng-container *ngSwitchCase="'type.archive.person'">
-              Move Out Date
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              End Date
-            </ng-container>
-          </label>
-          <div>
-            {{ profileItem.day2 | date }}
-          </div>
-        </div>
-        <div class="profile-field" *ngIf="profileItem.string2">
-          <label>Residence Phone Number</label>
-          <div>
-            {{ profileItem.string2 }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="profile-group" *ngIf="profileItem.string1">
-      <div class="profile-field">
-        <label>About This Residence</label>
-        <div [innerHTML]="profileItem.string1 | newlineText"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<ng-container *ngIf="archive.type === 'type.archive.person' && profileItems.job?.length">
-  <div class="profile-section-header">
-    Work History
-  </div>
-  <div class="profile-section">
-    <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.job">
-      <div class="profile-group in-half">
-        <div class="profile-field" *ngIf="profileItem.LocnVOs?.length">
-          <label>{{(profileItem.LocnVOs[0] | prLocation).full}}</label>
-          <pr-static-map [location]="profileItem.LocnVOs[0]"></pr-static-map>
-        </div>
-        <div class="profile-group in-half" *ngIf="profileItem.day1 || profileItem.day2 || profileItem.string2">
-          <div class="profile-field">
-            <label>
-              Start Date
-            </label>
-            <div>
-              {{ profileItem.day1 | date }}
-            </div>
-          </div>
-          <div class="profile-field" *ngIf="profileItem.day2">
-            <label>
-              End Date
-            </label>
-            <div>
-              {{ profileItem.day2 | date }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="profile-group in-half">
-        <div class="profile-field" *ngIf="profileItem.string1">
-          <label>Company</label>
-          <div>
-            {{ profileItem.string1 }}
-          </div>
-        </div>
-        <div class="profile-field" *ngIf="profileItem.string3">
-          <label>Title</label>
-          <div>
-            {{ profileItem.string3 }}
-          </div>
-        </div>
-      </div>
-      <div class="profile-group" *ngIf="profileItem.string2">
-        <div class="profile-field">
-          <label>About This Job</label>
-          <div [innerHTML]="profileItem.string2 | newlineText"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-container> -->
