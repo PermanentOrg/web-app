@@ -5,9 +5,6 @@ pipelines:
           image: mesosphere/aws-cli:latest
           deployment: test
           script:
-            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - echo "mdot" > deploy.txt
             - echo "mdot-dev-${BITBUCKET_BUILD_NUMBER}" > version.txt
             - aws s3 cp deploy.txt s3://permanent-repos/dev/deploy.txt
@@ -23,7 +20,7 @@ pipelines:
             - cd /data/www
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install --unsafe-perm
+            - npm install
             - npm run test_build
   branches:
     dev:
@@ -38,14 +35,13 @@ pipelines:
             - cd /data/www
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install --unsafe-perm
+            - npm install
             - npm run build_dev
             ## have to make these goofy dupe directories to match paths for sentry
             - cp -r dist/mdot dist/m
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
-            - npm install -g @sentry/cli --unsafe-perm
-            - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - npm install -g @sentry/cli
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
@@ -54,18 +50,12 @@ pipelines:
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
             - tar -czvf mdot.tar.gz mdot
-            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - aws s3 cp mdot.tar.gz s3://permanent-repos/dev/mdot.tar.gz 
       - step:
           name: Deploy dev (optional)
           image: mesosphere/aws-cli:latest
           trigger: manual
           script:
-            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - echo "mdot" > deploy.txt
             - echo "mdot-dev-${BITBUCKET_BUILD_NUMBER}" > version.txt
             - aws s3 cp deploy.txt s3://permanent-repos/dev/deploy.txt
@@ -82,14 +72,13 @@ pipelines:
             - cd /data/www
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install --unsafe-perm
+            - npm install
             - npm run build_staging
             ## have to make these goofy dupe directories to match paths for sentry
             - cp -r dist/mdot dist/m
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
-            - npm install -g @sentry/cli --unsafe-perm
-            - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - npm install -g @sentry/cli
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
@@ -98,9 +87,6 @@ pipelines:
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
             - tar -czvf mdot.tar.gz mdot
-            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - aws s3 cp mdot.tar.gz s3://permanent-repos/staging/mdot.tar.gz
     release/production:
       - step:
@@ -115,15 +101,14 @@ pipelines:
             - cd /data/www
             - ln -s /data/www/* $BITBUCKET_CLONE_DIR/../
             - cd $BITBUCKET_CLONE_DIR
-            - npm install --unsafe-perm
+            - npm install
             - npm run build
            ## have to make these goofy dupe directories to match paths for sentry
             - cp -r dist/mdot dist/m
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
             - rm dist/mdot/*.map
-            - npm install -g @sentry/cli --unsafe-perm
-            - export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+            - npm install -g @sentry/cli
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
@@ -135,7 +120,4 @@ pipelines:
             - mkdir mdot
             - mv $BITBUCKET_CLONE_DIR/dist mdot/dist
             - tar -czvf mdot.tar.gz mdot
-            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
             - aws s3 cp mdot.tar.gz s3://permanent-repos/prod/mdot.tar.gz
