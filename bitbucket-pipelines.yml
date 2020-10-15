@@ -41,7 +41,6 @@ pipelines:
             - cp -r dist/mdot dist/m
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
-            - npm install -g @sentry/cli
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
@@ -78,7 +77,6 @@ pipelines:
             - cp -r dist/mdot dist/m
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
-            - npm install -g @sentry/cli
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
@@ -108,7 +106,6 @@ pipelines:
             - cp -r dist/mdot dist/share
             - cp -r dist/mdot dist/p
             - rm dist/mdot/*.map
-            - npm install -g @sentry/cli
             - sentry-cli releases set-commits $VERSION --auto
             - sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
             - rm -r dist/m dist/share dist/p
