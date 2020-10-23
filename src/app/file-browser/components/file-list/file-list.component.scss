@@ -1,6 +1,7 @@
 @import 'variables';
 
 :host {
+  width: 100%;
   @include has-breadcrumbs;
 
   &.no-padding {
