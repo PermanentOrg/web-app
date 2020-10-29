@@ -1,7 +1,13 @@
 {
   "/api": {
     "target": "https://local.permanent.org",
-    "secure": false
+    "secure": false,
+    "changeOrigin": true,
+    "cookieDomainRewrite": {
+      "local.permanent.org": "ng.permanent.org",
+      ".permanent.org": "ng.permanent.org",
+      "ng.permanent.org": "local.permanent.org"
+    }
   },
   "/uploadsvc": {
     "target": "wss://local.permanent.org:9000",
