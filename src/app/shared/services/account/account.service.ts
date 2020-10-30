@@ -9,8 +9,7 @@ import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
 import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
 import { Router } from '@angular/router';
 import { Dialog } from '@root/app/dialog/dialog.module';
-import { AccessRole } from '@models/access-role.enum';
-import { AccessRoleType, checkMinimumAccess } from '@models/access-role';
+import { AccessRole, AccessRoleType, checkMinimumAccess } from '@models/access-role';
 
 import * as Sentry from '@sentry/browser';
 

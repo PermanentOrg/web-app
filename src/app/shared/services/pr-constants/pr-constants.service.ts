@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AccessRole } from '@models/access-role.enum';
+import { AccessRole } from '@models/access-role';
 import { ProfileTemplate } from '@models/profile-item-vo';
 import { orderBy } from 'lodash';
 
