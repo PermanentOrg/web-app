@@ -6,7 +6,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { Validators } from '@angular/forms';
 import { ArchiveResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { AccessRoleType } from '@models/access-role';
+import { AccessRole, AccessRoleType } from '@models/access-role';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone, remove, partition } from 'lodash';
@@ -46,7 +46,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     private accountService: AccountService
   ) {
     [ this.members, this.pendingMembers ] = partition(this.data.members, { status: 'status.generic.ok' });
-    this.canEdit = this.accountService.getArchive().accessRole === 'access.role.owner';
+    this.canEdit = this.accountService.checkMinimumArchiveAccess(AccessRole.Manager);
   }
 
   ngOnInit(): void {

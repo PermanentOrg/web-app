@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
 import { AccountService } from '@shared/services/account/account.service';
-import { AccessRole } from '@models/access-role.enum';
+import { AccessRole } from '@models/access-role';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';

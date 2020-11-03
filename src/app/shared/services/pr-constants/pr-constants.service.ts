@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AccessRole } from '@models/access-role.enum';
+import { AccessRole } from '@models/access-role';
 import { ProfileTemplate } from '@models/profile-item-vo';
 import { orderBy } from 'lodash';
 
@@ -45,6 +45,11 @@ export class PrConstantsService {
       level: AccessRole.Curator
     },
     {
+      type: 'access.role.manager',
+      name: 'Manager',
+      level: AccessRole.Manager
+    },
+    {
       type: 'access.role.owner',
       name: 'Owner',
       level: AccessRole.Owner
@@ -87,6 +92,14 @@ export class PrConstantsService {
 
   public getAccessRoles() {
     return this.accessRoles;
+  }
+
+  public getArchiveAccessRoles() {
+    return this.accessRoles;
+  }
+
+  public getShareAccessRoles() {
+    return this.accessRoles.filter(i => i.level !== AccessRole.Manager);
   }
 
   public translate(translateString: string) {

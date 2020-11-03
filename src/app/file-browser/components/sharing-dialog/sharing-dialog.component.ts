@@ -16,7 +16,7 @@ import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ACCESS_ROLE_FIELD, PromptService, RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
+import { PromptService, RELATION_OPTIONS, SHARE_ACCESS_ROLE_FIELD } from '@shared/services/prompt/prompt.service';
 import { getSQLDateTime } from '@shared/utilities/dateTime';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { addDays, differenceInHours, isPast } from 'date-fns';
@@ -71,7 +71,7 @@ export class SharingDialogComponent implements OnInit {
   public showLinkSettings = false;
 
   public newAccessRole: AccessRoleType = 'access.role.viewer';
-  public accessRoleOptions: FormInputSelectOption[] = ACCESS_ROLE_FIELD.selectOptions.reverse();
+  public accessRoleOptions: FormInputSelectOption[] = SHARE_ACCESS_ROLE_FIELD.selectOptions.reverse();
   public expirationOptions: FormInputSelectOption[] = EXPIRATION_OPTIONS;
   public relationOptions: FormInputSelectOption[] = RELATION_OPTIONS;
 

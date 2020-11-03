@@ -56,17 +56,7 @@
               "buildOptimizer": true,
               "deployUrl": "/m/"
             },
-            "hmr": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.ts"
-                }
-              ],
-              "deployUrl": "/",
-              "tsConfig": "src/tsconfig.serve.json"
-            },
-            "proxy": {
+            "proxy_dev": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -76,24 +66,15 @@
               "deployUrl": "/",
               "tsConfig": "src/tsconfig.serve.json"
             },
-            "proxy_hmr": {
+            "proxy_local": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.proxy.ts"
+                  "with": "src/environments/environment.local.proxy.ts"
                 }
               ],
               "deployUrl": "/",
               "tsConfig": "src/tsconfig.serve.json"
-            },
-            "proxy_hmr_prod": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.proxy_prod.ts"
-                }
-              ],
-              "deployUrl": "/"
             },
             "development": {
               "fileReplacements": [
@@ -143,30 +124,6 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "ots_test": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.testots.ts"
-                }
-              ],
-              "index": "src/index/staging/index.html",
-              "deployUrl": "/m/",
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": {
-                "hidden": true,
-                "scripts": true,
-                "styles": true,
-                "vendor": false
-              },
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
-            },
             "staging": {
               "fileReplacements": [
                 {
@@ -195,57 +152,30 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mdot:build",
-            "aot": false
+            "browserTarget": "mdot:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "mdot:build:production"
-            },
-            "hmr": {
+            "dev": {
               "host": "local.permanent.org",
-              "ssl": true,
               "hmr": false,
+              "ssl": true,
               "sslCert": "/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "/etc/ssl/permanent.key",
-              "browserTarget": "mdot:build:hmr",
+              "browserTarget": "mdot:build:proxy_dev",
+              "deployUrl": "/",
+              "baseHref": "/",
+              "proxyConfig": "proxy.conf.dev.json"
+            },
+            "local": {
+              "host": "ng.permanent.org",
+              "hmr": false,
+              "ssl": true,
+              "sslCert": "/etc/ssl/STAR_permanent_org.crt",
+              "sslKey": "/etc/ssl/permanent.key",
+              "browserTarget": "mdot:build:proxy_local",
               "deployUrl": "/",
               "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
-            },
-            "proxy": {
-              "host": "local.permanent.org",
-              "hmr": false,
-              "ssl": true,
-              "sslCert": "/etc/ssl/STAR_permanent_org.crt",
-              "sslKey": "/etc/ssl/permanent.key",
-              "browserTarget": "mdot:build:proxy",
-              "deployUrl": "/",
-              "baseHref": "/",
-              "proxyConfig": "proxy.conf.json"
-            },
-            "proxy_hmr": {
-              "host": "local.permanent.org",
-              "ssl": true,
-              "hmr": true,
-              "liveReload": true,
-              "sslCert": "/etc/ssl/STAR_permanent_org.crt",
-              "sslKey": "/etc/ssl/permanent.key",
-              "browserTarget": "mdot:build:proxy_hmr",
-              "deployUrl": "/",
-              "baseHref": "/",
-              "proxyConfig": "proxy.conf.json"
-            },
-            "proxy_hmr_prod": {
-              "host": "local.permanent.org",
-              "ssl": true,
-              "hmr": false,
-              "sslCert": "/etc/ssl/STAR_permanent_org.crt",
-              "sslKey": "/etc/ssl/permanent.key",
-              "browserTarget": "mdot:build:proxy_hmr_prod",
-              "deployUrl": "/",
-              "baseHref": "/",
-              "proxyConfig": "proxy.conf.prod.json"
             }
           }
         },

@@ -95,6 +95,7 @@ export const TOOLTIPS = {
     contributor: 'A member with permission to view and create files and folders (e.g. upload only)',
     editor: 'A member with permission to view, create, and edit metadata',
     curator: 'A member with permission to view, create, edit, move, copy, and delete files and folders',
-    owner: 'A member with all permissions, including adding new members and changing owners'
+    manager: 'A member with all file and folder permissions and the permission to modify membership',
+    owner: 'a member with all permissions including transferring ownership or deleting the archive'
   }
 };

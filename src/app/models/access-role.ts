@@ -3,12 +3,22 @@ export enum AccessRole {
   Contributor,
   Editor,
   Curator,
-  Owner
+  Manager,
+  Owner,
 }
 
-export type AccessRoleType = 'access.role.viewer' | 'access.role.contributor' | 'access.role.editor' | 'access.role.curator' | 'access.role.owner';
+export type AccessRoleType =
+  | 'access.role.viewer'
+  | 'access.role.contributor'
+  | 'access.role.editor'
+  | 'access.role.curator'
+  | 'access.role.manager'
+  | 'access.role.owner';
 
-export function checkMinimumAccess(accessRole: AccessRoleType, minimumAccess: AccessRole) {
+export function checkMinimumAccess(
+  accessRole: AccessRoleType,
+  minimumAccess: AccessRole
+) {
   return getAccessAsEnum(accessRole) >= minimumAccess;
 }
 
@@ -22,6 +32,8 @@ export function getAccessAsEnum(accessRole: AccessRoleType): AccessRole {
       return AccessRole.Contributor;
     case 'access.role.curator':
       return AccessRole.Curator;
+    case 'access.role.manager':
+      return AccessRole.Manager;
     case 'access.role.owner':
       return AccessRole.Owner;
   }
