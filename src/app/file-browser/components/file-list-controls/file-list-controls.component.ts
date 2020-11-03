@@ -141,6 +141,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
     const minimumAccess = min(this.selectedItems.map(i => getAccessAsEnum(i.accessRole)));
 
+    this.debug('minimum access for items: %o', minimumAccess);
+
     switch (minimumAccess) {
       case AccessRole.Viewer:
       case AccessRole.Editor:
@@ -155,6 +157,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
         } else {
           return this.setMultipleActions(['delete', 'copy', 'move'], true);
         }
+      case AccessRole.Manager:
       case AccessRole.Owner:
         if (this.isShareRoot && isSingleItem) {
           return this.setMultipleActions(['unshare', 'copy', 'move', 'share'], true);

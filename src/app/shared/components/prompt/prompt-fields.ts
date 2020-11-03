@@ -94,6 +94,31 @@ export function ACCESS_ROLE_FIELD_INITIAL(initialValue: AccessRoleType): PromptF
   return initialized;
 }
 
+export const SHARE_ACCESS_ROLE_FIELD: PromptField =  {
+  fieldName: 'accessRole',
+  placeholder: 'Access Level',
+  type: 'select',
+  initialValue: 'access.role.viewer',
+  validators: [Validators.required],
+  config: {
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off'
+  },
+  selectOptions: prConstants.getShareAccessRoles().map((role) => {
+    return {
+      value: role.type as AccessRoleType,
+      text: role.name
+    };
+  })
+};
+
+export function SHARE_ACCESS_ROLE_FIELD_INITIAL(initialValue: AccessRoleType): PromptField {
+  const initialized = clone(SHARE_ACCESS_ROLE_FIELD);
+  initialized.initialValue = initialValue;
+  return initialized;
+}
+
 export function INVITATION_FIELDS(initialEmail?: string): PromptField[] {
   const fields: PromptField[] = [
     {
