@@ -139,9 +139,12 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    const minimumAccess = min(this.selectedItems.map(i => getAccessAsEnum(i.accessRole)));
+    const minimumAccess = min([
+      ...this.selectedItems.map(i => getAccessAsEnum(i.accessRole)),
+      getAccessAsEnum(this.account.getArchive().accessRole)
+    ]);
 
-    this.debug('minimum access for items: %o', minimumAccess);
+    this.debug('minimum access for items & archive: %o', minimumAccess);
 
     switch (minimumAccess) {
       case AccessRole.Viewer:
