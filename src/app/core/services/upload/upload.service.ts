@@ -255,13 +255,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   }
 
-  retryFiles() {
-    return this.uploader.retryFiles()
-      .catch((response: any) => {
-        this.handleUploaderError(response);
-      });
-  }
-
   async cleanUpFiles() {
     try {
       await this.uploader.cleanUpFiles();

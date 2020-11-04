@@ -59,10 +59,6 @@ export class UploadProgressComponent implements OnInit {
     this.visible = false;
   }
 
-  tryAgain() {
-    this.upload.retryFiles();
-  }
-
   cleanUp() {
     this.upload.cleanUpFiles();
     this.dismiss();

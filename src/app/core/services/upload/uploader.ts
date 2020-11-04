@@ -260,38 +260,6 @@ export class Uploader {
     }
   }
 
-  retryFiles() {
-    if (!this.errorQueue.length) {
-      this.uploadSessionStatus.emit(UploadSessionStatus.Done);
-      return Promise.resolve();
-    }
-
-    let hasMeta, needsMeta;
-
-    // grab files from error queue and reset it
-    [ hasMeta , needsMeta ] = partition(this.errorQueue, (item: UploadItem) => item.RecordVO.recordId);
-    this.errorQueue = [];
-
-    // put files that have RecordVOs in upload queue
-    this.uploadQueue = hasMeta;
-
-    // puts files that need RecordVOs in meta queue
-    this.metaQueue = needsMeta;
-
-    return this.openSocketConnection()
-      .then(() => {
-        if (this.metaQueue.length) {
-          return this.postMetaFromQueue();
-        }
-
-        return Promise.resolve();
-      })
-      .then(() => {
-        this.uploadNextFromQueue();
-        this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
-      });
-  }
-
   async cleanUpFiles() {
     if (!this.errorQueue.length) {
       return Promise.resolve();
