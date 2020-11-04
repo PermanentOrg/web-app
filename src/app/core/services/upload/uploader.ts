@@ -30,8 +30,6 @@ export class Uploader {
   public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
   public fileUploadComplete: EventEmitter<UploadItem> = new EventEmitter<UploadItem>();
 
-  private uploadItemsById: {[key: number]: UploadItem} = {};
-
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
   private errorQueue: UploadItem[] = [];
@@ -127,7 +125,6 @@ export class Uploader {
   connectAndUpload(parentFolder: FolderVO, files: File[]): Promise<any> {
     files.forEach((file) => {
       const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
-      this.uploadItemsById[uploadItem.uploadItemId] = uploadItem;
       this.metaQueue.push(uploadItem);
       this.fileCount.total++;
     });
