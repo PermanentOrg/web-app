@@ -11,7 +11,6 @@ export enum UploadStatus {
 }
 
 export class UploadItem {
-  public streamId: string;
   public RecordVO: RecordVO;
   public uploadStatus: UploadStatus = UploadStatus.Init;
   public transferProgress = 0;

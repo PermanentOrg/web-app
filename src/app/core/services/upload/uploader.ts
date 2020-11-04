@@ -211,8 +211,6 @@ export class Uploader {
 
     const stream = this.socketClient.send(currentItem.file, fileMeta);
 
-    currentItem.streamId = stream.id;
-
     stream.on('data', (data) => {
       if (data.fileProg) {
         currentItem.transferProgress += data.fileProg;
