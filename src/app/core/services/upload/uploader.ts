@@ -4,7 +4,6 @@ import { remove, partition } from 'lodash';
 import { environment } from '@root/environments/environment';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { MessageService } from '@shared/services/message/message.service';
 
 import { EventEmitter } from '@angular/core';
 import { FolderVO } from '@root/app/models';
@@ -45,7 +44,7 @@ export class Uploader {
 
   private uploadItemId = 0;
 
-  constructor(private api: ApiService, private message: MessageService) {
+  constructor(private api: ApiService) {
   }
 
   openSocketConnection() {
@@ -53,7 +52,6 @@ export class Uploader {
 
     const failedToConnect = (error) => {
       this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
-      this.message.showError('Unable to connect - try again in a moment');
 
       this.errorQueue = this.metaQueue.concat(this.uploadQueue);
 
@@ -82,8 +80,6 @@ export class Uploader {
           this.fileCount.completed = 0;
           this.fileCount.error = 0;
           this.fileCount.total = this.metaQueue.length + this.uploadQueue.length;
-
-          this.message.showMessage('Please don\'t close your browser until the upload is complete.');
 
           this.uploadSessionStatus.emit(UploadSessionStatus.Start);
           this.socketClient.removeListener('error', failedToConnect);
