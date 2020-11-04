@@ -59,11 +59,6 @@ export class UploadProgressComponent implements OnInit {
     this.visible = false;
   }
 
-  cleanUp() {
-    this.upload.cleanUpFiles();
-    this.dismiss();
-  }
-
   getProgressTransform() {
     if (this.currentItem) {
       return `scaleX(${this.currentItem.transferProgress})`;
