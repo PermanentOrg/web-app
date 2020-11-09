@@ -35,7 +35,7 @@ interface FileSystemFolder {
 
 @Injectable()
 export class UploadService implements HasSubscriptions, OnDestroy {
-  public uploader: Uploader = new Uploader(this.api, this.message);
+  public uploader: Uploader = new Uploader(this.api);
   public component: UploadProgressComponent;
   public buttonComponents: UploadButtonComponent[] = [];
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
@@ -75,8 +75,16 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     }));
 
     this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
-      if (status === UploadSessionStatus.Done) {
-        this.accountService.refreshAccountDebounced();
+      switch (status) {
+        case UploadSessionStatus.Start:
+          this.message.showMessage('Please don\'t close your browser until the upload is complete.');
+          break;
+        case UploadSessionStatus.Done:
+          this.accountService.refreshAccountDebounced();
+          break;
+        case UploadSessionStatus.ConnectionError:
+          this.message.showError('Unable to connect - try again in a moment');
+          break;
       }
     }));
   }
@@ -253,13 +261,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       }
     }
 
-  }
-
-  retryFiles() {
-    return this.uploader.retryFiles()
-      .catch((response: any) => {
-        this.handleUploaderError(response);
-      });
   }
 
   async cleanUpFiles() {

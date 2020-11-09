@@ -4,7 +4,6 @@ import { remove, partition } from 'lodash';
 import { environment } from '@root/environments/environment';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { MessageService } from '@shared/services/message/message.service';
 
 import { EventEmitter } from '@angular/core';
 import { FolderVO } from '@root/app/models';
@@ -30,8 +29,6 @@ export class Uploader {
   public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
   public fileUploadComplete: EventEmitter<UploadItem> = new EventEmitter<UploadItem>();
 
-  private uploadItemsById: {[key: number]: UploadItem} = {};
-
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
   private errorQueue: UploadItem[] = [];
@@ -47,7 +44,7 @@ export class Uploader {
 
   private uploadItemId = 0;
 
-  constructor(private api: ApiService, private message: MessageService) {
+  constructor(private api: ApiService) {
   }
 
   openSocketConnection() {
@@ -55,7 +52,6 @@ export class Uploader {
 
     const failedToConnect = (error) => {
       this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
-      this.message.showError('Unable to connect - try again in a moment');
 
       this.errorQueue = this.metaQueue.concat(this.uploadQueue);
 
@@ -84,8 +80,6 @@ export class Uploader {
           this.fileCount.completed = 0;
           this.fileCount.error = 0;
           this.fileCount.total = this.metaQueue.length + this.uploadQueue.length;
-
-          this.message.showMessage('Please don\'t close your browser until the upload is complete.');
 
           this.uploadSessionStatus.emit(UploadSessionStatus.Start);
           this.socketClient.removeListener('error', failedToConnect);
@@ -127,7 +121,6 @@ export class Uploader {
   connectAndUpload(parentFolder: FolderVO, files: File[]): Promise<any> {
     files.forEach((file) => {
       const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
-      this.uploadItemsById[uploadItem.uploadItemId] = uploadItem;
       this.metaQueue.push(uploadItem);
       this.fileCount.total++;
     });
@@ -214,8 +207,6 @@ export class Uploader {
 
     const stream = this.socketClient.send(currentItem.file, fileMeta);
 
-    currentItem.streamId = stream.id;
-
     stream.on('data', (data) => {
       if (data.fileProg) {
         currentItem.transferProgress += data.fileProg;
@@ -258,38 +249,6 @@ export class Uploader {
         this.cleanUpFiles();
       }
     }
-  }
-
-  retryFiles() {
-    if (!this.errorQueue.length) {
-      this.uploadSessionStatus.emit(UploadSessionStatus.Done);
-      return Promise.resolve();
-    }
-
-    let hasMeta, needsMeta;
-
-    // grab files from error queue and reset it
-    [ hasMeta , needsMeta ] = partition(this.errorQueue, (item: UploadItem) => item.RecordVO.recordId);
-    this.errorQueue = [];
-
-    // put files that have RecordVOs in upload queue
-    this.uploadQueue = hasMeta;
-
-    // puts files that need RecordVOs in meta queue
-    this.metaQueue = needsMeta;
-
-    return this.openSocketConnection()
-      .then(() => {
-        if (this.metaQueue.length) {
-          return this.postMetaFromQueue();
-        }
-
-        return Promise.resolve();
-      })
-      .then(() => {
-        this.uploadNextFromQueue();
-        this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
-      });
   }
 
   async cleanUpFiles() {
