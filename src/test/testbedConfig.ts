@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { Uploader } from '@core/services/upload/uploader';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
@@ -29,6 +30,7 @@ export const BASE_TEST_CONFIG = {
     CookieService,
     MessageService,
     UploadService,
+    Uploader,
     PromptService,
     HttpService,
     ApiService,

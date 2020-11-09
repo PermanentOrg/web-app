@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 import { BinaryClient, binaryFeatures } from '@root/vendor/binary';
 import { map } from 'rxjs/operators';
 import { remove, partition } from 'lodash';
@@ -21,6 +23,7 @@ export enum UploadSessionStatus {
   StorageError
 }
 
+@Injectable()
 export class Uploader {
   private socketClient: BinaryClient;
 
@@ -44,7 +47,9 @@ export class Uploader {
 
   private uploadItemId = 0;
 
-  constructor(private api: ApiService) {
+  constructor(
+    private api: ApiService,
+  ) {
   }
 
   openSocketConnection() {

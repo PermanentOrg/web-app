@@ -35,7 +35,6 @@ interface FileSystemFolder {
 
 @Injectable()
 export class UploadService implements HasSubscriptions, OnDestroy {
-  public uploader: Uploader = new Uploader(this.api);
   public component: UploadProgressComponent;
   public buttonComponents: UploadButtonComponent[] = [];
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
@@ -52,7 +51,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     private api: ApiService,
     private message: MessageService,
     private dataService: DataService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    public uploader: Uploader,
   ) {
     this.debouncedRefresh = debounce(() => {
       this.dataService.refreshCurrentFolder();
