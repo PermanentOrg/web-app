@@ -45,8 +45,6 @@ export class Uploader {
 
   public uploadInProgress: boolean;
 
-  private uploadItemId = 0;
-
   constructor(
     private api: ApiService,
   ) {
@@ -125,7 +123,7 @@ export class Uploader {
 
   connectAndUpload(parentFolder: FolderVO, files: File[]): Promise<any> {
     files.forEach((file) => {
-      const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
+      const uploadItem = new UploadItem(file, parentFolder);
       this.metaQueue.push(uploadItem);
       this.fileCount.total++;
     });
