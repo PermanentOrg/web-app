@@ -43,7 +43,7 @@ export class Uploader {
     error: 0
   };
 
-  public uploadInProgress: boolean;
+  private uploadInProgress: boolean;
 
   constructor(
     private api: ApiService,
