@@ -56,9 +56,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   editValue: ValueType;
   ngbTime: NgbTimeStruct;
   ngbDate: NgbDate;
-  minNgbDate: NgbDateStruct;
   maxNgbDate: NgbDateStruct;
-
 
   constructor(
     private elementRef: ElementRef
