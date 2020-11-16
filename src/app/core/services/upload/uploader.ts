@@ -18,7 +18,6 @@ export enum UploadSessionStatus {
   Start,
   InProgress,
   Done,
-  FileError,
   ConnectionError,
   StorageError
 }
