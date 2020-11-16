@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges, HostBinding } from '@angular/core';
 import { ngIfScaleAnimation, collapseAnimation } from '@shared/animations';
-import { NgbDate, NgbTimeStruct, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbTimeStruct, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from '@permanent.org/vis-timeline';
-import { ItemVO, ArchiveVO } from '@models';
+import { ItemVO } from '@models';
 import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
-import { AccountService } from '@shared/services/account/account.service';
-import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { ENTER } from '@angular/cdk/keycodes';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { NgModel, FormControl, Validators } from '@angular/forms';
+import { getDate, getMonth, getYear } from 'date-fns';
 
 export type InlineValueEditType =
   'text' |
@@ -57,6 +56,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   editValue: ValueType;
   ngbTime: NgbTimeStruct;
   ngbDate: NgbDate;
+  minNgbDate: NgbDateStruct;
+  maxNgbDate: NgbDateStruct;
+
 
   constructor(
     private elementRef: ElementRef
@@ -155,6 +157,13 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       hour: momentFormatNum(date, 'H'),
       minute: momentFormatNum(date, 'm'),
       second: momentFormatNum(date, 's')
+    };
+
+    const now = new Date();
+    this.maxNgbDate = {
+      year: getYear(now),
+      month: getMonth(now) + 1,
+      day: getDate(now) + 1
     };
   }
 
