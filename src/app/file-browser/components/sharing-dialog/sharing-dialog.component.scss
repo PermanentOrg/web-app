@@ -71,6 +71,8 @@ p {
   overflow-y: auto;
   margin-bottom: $grid-unit;
   height: $grid-unit * 8;
+
+  max-height: 10vh;
 }
 
 .buttons {
