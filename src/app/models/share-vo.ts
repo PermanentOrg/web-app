@@ -28,7 +28,7 @@ export class ShareVO extends BaseVO implements DynamicListChild {
   public archiveId;
   public accessRole: AccessRoleType;
   public type;
-  public status;
+  public status: 'status.generic.ok' | 'status.generic.deleted' | 'status.generic.pending';
   public requestToken: string;
 
   public isPendingAction = false;

@@ -350,10 +350,16 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         await this.accountService.promptForArchiveChange(this.chooseArchiveText);
         this.archiveConfirmed = true;
       }
-      await this.api.share.requestShareAccess(this.shareToken);
-      this.message.showMessage(`Access requested. ${this.shareAccount.fullName} must approve your request.` , 'success');
-      this.showCover = false;
-      this.hasRequested = true;
+      const response = await this.api.share.requestShareAccess(this.shareToken);
+      const shareVo = response.getShareVO();
+      if (shareVo.status === 'status.generic.pending') {
+        this.message.showMessage(`Access requested. ${this.shareAccount.fullName} must approve your request.` , 'success');
+        this.showCover = false;
+        this.hasRequested = true;
+      } else {
+        this.message.showMessage('Access granted.', 'success');
+        this.router.navigate(['/m', 'shares']);
+      }
     } catch (err) {
       if (err instanceof ShareResponse) {
         if (err.messageIncludesPhrase('share.already_exists')) {
