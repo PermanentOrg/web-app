@@ -129,7 +129,6 @@ export class SharingDialogComponent implements OnInit {
 
   checkQueryParams() {
     const params = this.route.snapshot.queryParamMap;
-    console.log(params);
     if (params.has('requestToken') && params.has('requestAction')) {
       const pendingShare = find(this.pendingShares, { requestToken: params.get('requestToken') });
       if (pendingShare) {
@@ -465,7 +464,6 @@ export class SharingDialogComponent implements OnInit {
     try {
       const update = new ShareByUrlVO(this.shareLink);
       update.autoApproveToggle = this.autoApproveToggle;
-      console.log(this.autoApproveToggle, update);
       await this.api.share.updateShareLink(update);
       this.shareLink.autoApproveToggle = this.autoApproveToggle;
     } catch (err) {

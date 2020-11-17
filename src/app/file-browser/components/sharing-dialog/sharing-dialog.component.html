@@ -44,10 +44,10 @@
             <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
           </select>
         </div>
-        <ng-container *ngIf="!shares || !shares.length">
+        <ng-container *ngIf="!shares?.length && !pendingShares?.length">
           <div class="shares-empty">Not shared with anyone</div>
         </ng-container>
-        <ng-container *ngIf="shares?.length">
+        <ng-container *ngIf="shares?.length || pendingShares?.length">
           <div class="shares-title">Shared with</div>
           <div class="shares">
             <div class="share-archive pending-share" *ngFor="let share of pendingShares"
