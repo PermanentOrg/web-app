@@ -61,7 +61,7 @@
           {{ displayValue ? (displayValue | date:'yyyy-MM-dd':'+0000') : (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;' }}
         </ng-container>
       </div>
-      <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing"
+      <ngb-datepicker #datePicker [startDate]="ngbDate" [hidden]="!isEditing" [maxDate]="maxNgbDate"
         (dateSelect)="onDateChange($event)" [footerTemplate]="!dateOnly ? timePicker : null"></ngb-datepicker>
       <ng-template #timePicker>
         <div class="datepicker-footer">
