@@ -201,7 +201,7 @@ export const routes: RoutesWithData = [
       { path: '**', redirectTo: 'myfiles'}
     ]
   },
-  { path: 'm', redirectTo: 'app', pathMatch: 'full'},
+  { path: 'm', redirectTo: 'app'},
   { path: '', redirectTo: 'app', pathMatch: 'full'},
   { path: ':path', redirectTo: 'app/:path'},
 ];

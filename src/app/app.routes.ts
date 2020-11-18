@@ -69,6 +69,8 @@ const routes: RoutesWithData = [
       { path: 'app/auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
       { path: 'app/embed', loadChildren: () => import('./embed/embed.module').then(m => m.EmbedModule) },
       { path: 'app/pledge', loadChildren: () => import('./pledge/pledge.module').then(m => m.PledgeModule)},
+      { path: 'm/embed', redirectTo: 'app/embed'},
+      { path: 'm/pledge', redirectTo: 'app/pledge'},
       { path: '', loadChildren: () => import('./core/core.module').then(m => m.CoreModule) },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
