@@ -358,7 +358,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         this.hasRequested = true;
       } else {
         this.message.showMessage('Access granted.', 'success');
-        this.router.navigate(['/m', 'shares']);
+        this.router.navigate(['/app', 'shares']);
       }
     } catch (err) {
       if (err instanceof ShareResponse) {

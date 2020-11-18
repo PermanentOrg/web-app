@@ -54,7 +54,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "deployUrl": "/m/"
+              "deployUrl": "/app/"
             },
             "proxy_dev": {
               "fileReplacements": [
@@ -84,7 +84,7 @@
                 }
               ],
               "index": "src/index/dev/index.html",
-              "deployUrl": "/m/",
+              "deployUrl": "/app/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
@@ -108,7 +108,7 @@
                 }
               ],
               "index": "src/index/prod/index.html",
-              "deployUrl": "/m/",
+              "deployUrl": "/app/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
@@ -132,7 +132,7 @@
                 }
               ],
               "index": "src/index/staging/index.html",
-              "deployUrl": "/m/",
+              "deployUrl": "/app/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
@@ -258,7 +258,6 @@
   "defaultProject": "mdot",
   "schematics": {
     "@schematics/angular:component": {
-      "style": "scss",
       "style": "scss"
     }
   },

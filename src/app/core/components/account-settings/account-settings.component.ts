@@ -88,12 +88,12 @@ export class AccountSettingsComponent implements OnInit {
 
   async onValidateEmailClick() {
     await this.router.navigate(['.'], { relativeTo: this.route.parent });
-    await this.router.navigate(['/m/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendEmail: true } });
+    await this.router.navigate(['/app/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendEmail: true } });
   }
 
   async onValidatePhoneClick() {
     await this.router.navigate(['.'], { relativeTo: this.route.parent });
-    await this.router.navigate(['/m/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendSms: true } });
+    await this.router.navigate(['/app/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendSms: true } });
   }
 
   async onChangePasswordFormSubmit(value: AccountPasswordVOData) {

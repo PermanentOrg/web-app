@@ -56,7 +56,7 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy, HasSubsc
     this.subscriptions.push(this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))
       .subscribe((event: NavigationEnd) => {
-        if (event.url === '/m/apps') {
+        if (event.url === '/app/apps') {
           this.appsFolder = this.route.snapshot.data.appsFolder;
           this.connectors = this.route.snapshot.data.connectors;
 

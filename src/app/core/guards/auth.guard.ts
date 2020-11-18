@@ -18,13 +18,13 @@ export class AuthGuard implements CanActivate {
       if (isSessionValid && this.account.isLoggedIn()) {
         return true;
       } else {
-        this.router.navigate(['/m', 'auth', 'login'], { queryParams: next.queryParams });
+        this.router.navigate(['/app', 'auth', 'login'], { queryParams: next.queryParams });
         return false;
       }
     })
     .catch(() => {
       this.account.clear();
-      this.router.navigate(['/m', 'auth', 'login'], { queryParams: next.queryParams });
+      this.router.navigate(['/app', 'auth', 'login'], { queryParams: next.queryParams });
       return false;
     });
   }
@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
     if (this.account.isLoggedIn()) {
       return true;
     } else {
-      this.router.navigate(['/m', 'auth', 'login'], { queryParams: next.queryParams });
+      this.router.navigate(['/app', 'auth', 'login'], { queryParams: next.queryParams });
       return false;
     }
   }

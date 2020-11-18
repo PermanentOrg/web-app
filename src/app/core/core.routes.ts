@@ -15,8 +15,6 @@ import { RelationshipsResolveService } from './resolves/relationships-resolve.se
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
 import { DonateComponent } from './components/donate/donate.component';
-import { InvitationsComponent } from './components/invitations/invitations.component';
-import { MembersComponent } from './components/members/members.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
 import { RoutesWithData } from '../app.routes';
 import { AccountResolveService } from './resolves/account-resolve.service';
@@ -33,7 +31,7 @@ const rootFolderResolve = {
 };
 
 export const routes: RoutesWithData = [
-  { path: 'm',
+  { path: 'app',
     component: MainComponent,
     canActivate: [ AuthGuard ],
     canActivateChild: [ AuthGuard ],
@@ -95,11 +93,11 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'invitations',
-        redirectTo: '/m/(myfiles//dialog:invitations)'
+        redirectTo: '/app/(myfiles//dialog:invitations)'
       },
       {
         path: 'archive/sentInvites',
-        redirectTo: '/m/(myfiles//dialog:invitations)'
+        redirectTo: '/app/(myfiles//dialog:invitations)'
       },
       {
         path: 'connections',
@@ -114,19 +112,19 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'connections',
-        redirectTo: '/m/(myfiles//dialog:connections)'
+        redirectTo: '/app/(myfiles//dialog:connections)'
       },
       {
         path: 'relationships',
-        redirectTo: '/m/(myfiles//dialog:connections)'
+        redirectTo: '/app/(myfiles//dialog:connections)'
       },
       {
         path: 'archive/relationships',
-        redirectTo: '/m/(myfiles//dialog:connections)'
+        redirectTo: '/app/(myfiles//dialog:connections)'
       },
       {
         path: 'relationship_request/:email',
-        redirectTo: '/m/(myfiles//dialog:connections)'
+        redirectTo: '/app/(myfiles//dialog:connections)'
       },
       {
         path: 'profile',
@@ -141,7 +139,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'profile',
-        redirectTo: '/m/(myfiles//dialog:profile)'
+        redirectTo: '/app/(myfiles//dialog:profile)'
       },
       {
         path: 'account',
@@ -155,7 +153,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'account',
-        redirectTo: '/m/(myfiles//dialog:account)'
+        redirectTo: '/app/(myfiles//dialog:account)'
       },
       {
         path: 'members',
@@ -170,11 +168,11 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'members',
-        redirectTo: '/m/(myfiles//dialog:members)'
+        redirectTo: '/app/(myfiles//dialog:members)'
       },
       {
         path: 'archive/members',
-        redirectTo: '/m/(myfiles//dialog:members)'
+        redirectTo: '/app/(myfiles//dialog:members)'
       },
       {
         path: 'storage',
@@ -188,7 +186,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'storage',
-        redirectTo: '/m/(myfiles//dialog:storage)'
+        redirectTo: '/app/(myfiles//dialog:storage)'
       },
       {
         path: 'search',
@@ -203,9 +201,9 @@ export const routes: RoutesWithData = [
       { path: '**', redirectTo: 'myfiles'}
     ]
   },
-  { path: 'app', redirectTo: 'm', pathMatch: 'full'},
-  { path: '', redirectTo: 'm', pathMatch: 'full'},
-  { path: ':path', redirectTo: 'm/:path'},
+  { path: 'm', redirectTo: 'app', pathMatch: 'full'},
+  { path: '', redirectTo: 'app', pathMatch: 'full'},
+  { path: ':path', redirectTo: 'app/:path'},
 ];
 @NgModule({
   imports: [
