@@ -63,7 +63,8 @@ export class SharingDialogComponent implements OnInit {
 
   public shareLink: ShareByUrlVO = null;
 
-  public previewToggle = 0;
+  public previewToggle: 0 | 1 = 0 ;
+  public autoApproveToggle: 0 | 1 = 0 ;
   public expiration: Expiration;
 
   public updatingLink = false;
@@ -128,7 +129,6 @@ export class SharingDialogComponent implements OnInit {
 
   checkQueryParams() {
     const params = this.route.snapshot.queryParamMap;
-    console.log(params);
     if (params.has('requestToken') && params.has('requestAction')) {
       const pendingShare = find(this.pendingShares, { requestToken: params.get('requestToken') });
       if (pendingShare) {
@@ -371,6 +371,7 @@ export class SharingDialogComponent implements OnInit {
   setShareLinkFormValue(): void {
     if (this.shareLink) {
       this.previewToggle = this.shareLink.previewToggle;
+      this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
       this.expiration = this.getExpirationFromExpiresDT(this.shareLink.expiresDT);
       this.expirationOptions = EXPIRATION_OPTIONS.filter(expiration => {
         switch (expiration.value) {
@@ -383,6 +384,7 @@ export class SharingDialogComponent implements OnInit {
       });
     } else {
       this.previewToggle = 0;
+      this.autoApproveToggle = 0;
       this.expiration = Expiration.Never;
       this.expirationOptions = EXPIRATION_OPTIONS;
     }
@@ -456,6 +458,24 @@ export class SharingDialogComponent implements OnInit {
       this.updatingLink = false;
     }
   }
+
+  async onAutoApproveToggleChange() {
+    this.updatingLink = true;
+    try {
+      const update = new ShareByUrlVO(this.shareLink);
+      update.autoApproveToggle = this.autoApproveToggle;
+      await this.api.share.updateShareLink(update);
+      this.shareLink.autoApproveToggle = this.autoApproveToggle;
+    } catch (err) {
+      if (err instanceof ShareResponse) {
+        this.messageService.showError(err.getMessage(), true);
+      }
+      this.setShareLinkFormValue();
+    } finally {
+      this.updatingLink = false;
+    }
+  }
+
 
   async onExpirationChange() {
     this.updatingLink = true;

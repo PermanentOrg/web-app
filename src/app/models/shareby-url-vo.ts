@@ -3,6 +3,7 @@ import { RecordVO } from './record-vo';
 import { ArchiveVO } from './archive-vo';
 import { AccountVO } from './account-vo';
 import { FolderVO } from './folder-vo';
+import { AccessRoleType } from './access-role';
 
 export class ShareByUrlVO extends BaseVO {
   public shareby_urlId: number;
@@ -12,7 +13,9 @@ export class ShareByUrlVO extends BaseVO {
   public shareUrl: string;
   public uses: number;
   public maxUses: number;
-  public previewToggle;
+  public previewToggle: 0 | 1;
+  public autoApproveToggle: 0 | 1;
+  public defaultAccessRole: AccessRoleType;
   public expiresDT;
   public byAccountId: number;
   public byArchiveId: number;
