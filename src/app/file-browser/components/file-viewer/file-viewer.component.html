@@ -15,7 +15,7 @@
         <pr-thumbnail [item]="currentRecord" *ngIf="showThumbnail"></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
-        <iframe [src]="documentUrl" *ngIf="isPdf && documentUrl"></iframe>
+        <iframe [src]="documentUrl" *ngIf="isDocument && documentUrl"></iframe>
       </div>
     </div>
     <div class="file-viewer-control file-viewer-control-previous" (click)="incrementCurrentRecord(true)"
