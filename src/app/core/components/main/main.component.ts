@@ -76,7 +76,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         'Your email and phone number need verification. Tap this message to verify.',
         'info',
         false,
-        ['/m/auth/verify'],
+        ['/app/auth/verify'],
         {
           sendEmail: true,
           sendSms: true
@@ -87,7 +87,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         'Your email needs verification. Tap this message to verify.',
         'info',
         false,
-        ['/m/auth/verify'],
+        ['/app/auth/verify'],
         {
           sendEmail: true
         }
@@ -97,7 +97,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         'Your phone number needs verification. Tap this message to verify.',
         'info',
         false,
-        ['/m/auth/verify'],
+        ['/app/auth/verify'],
         {
           sendSms: true
         }

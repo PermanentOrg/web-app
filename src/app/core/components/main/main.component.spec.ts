@@ -98,7 +98,7 @@ describe('MainComponent', () => {
       jasmine.stringMatching('email and phone'),
       'info',
       jasmine.anything(),
-      ['/m/auth/verify'],
+      ['/app/auth/verify'],
       {
         sendEmail: true,
         sendSms: true
@@ -114,7 +114,7 @@ describe('MainComponent', () => {
       jasmine.stringMatching('email'),
       'info',
       jasmine.anything(),
-      ['/m/auth/verify'],
+      ['/app/auth/verify'],
       {
         sendEmail: true
       }
@@ -135,7 +135,7 @@ describe('MainComponent', () => {
       jasmine.stringMatching('phone'),
       'info',
       jasmine.anything(),
-      ['/m/auth/verify'],
+      ['/app/auth/verify'],
       {
         sendSms: true
       }

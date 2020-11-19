@@ -149,7 +149,7 @@ export class NotificationService {
     let path: any[];
     let queryParams: any;
     if (notification.type.includes('facebook')) {
-      path = ['/m', 'apps'];
+      path = ['/app', 'apps'];
     } else if (notification.type.includes('relationship')) {
       if (notification.type === 'type.notification.relationship_request') {
         const tab: ConnectionsTab = 'pending';
@@ -157,9 +157,9 @@ export class NotificationService {
           tab
         };
       }
-      path = ['/m', { outlets: { dialog: ['connections']}}];
+      path = ['/app', { outlets: { dialog: ['connections']}}];
     } else if (notification.type === 'type.notification.share') {
-      path = ['/m', 'shares'];
+      path = ['/app', 'shares'];
     } else if (notification.type === 'type.notification.zip') {
       const link = document.createElement('a');
       link.href = notification.redirectUrl;

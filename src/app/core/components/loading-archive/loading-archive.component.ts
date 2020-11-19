@@ -14,7 +14,7 @@ export class LoadingArchiveComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.router.navigate(['/m', 'myfiles']);
+      this.router.navigate(['/app', 'myfiles']);
     }, 1000);
   }
 }

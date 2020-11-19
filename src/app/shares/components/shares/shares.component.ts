@@ -86,7 +86,7 @@ export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileLi
     this.subscriptions.push(this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd ))
       .subscribe((event: NavigationEnd) => {
-        if (event.url === '/m/shares') {
+        if (event.url === '/app/shares') {
           this.ngOnInit();
         }
       }));

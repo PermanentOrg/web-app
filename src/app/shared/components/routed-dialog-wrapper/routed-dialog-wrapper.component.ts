@@ -64,7 +64,7 @@ export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasS
     this.dialogRef.closePromise.finally(() => {
       this.dialogRef = null;
       if (!this.closedByNavigate) {
-        const targetRoute = this.routeHistory.previousRoute || '/m/';
+        const targetRoute = this.routeHistory.previousRoute || '/app/';
         this.router.navigateByUrl(targetRoute);
       }
     });

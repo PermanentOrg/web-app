@@ -36,7 +36,7 @@ describe('LoadingArchiveComponent', () => {
     const routerSpy = spyOn(router, 'navigate');
 
     setTimeout(() => {
-      expect(routerSpy).toHaveBeenCalledWith(['/m' , 'myfiles']);
+      expect(routerSpy).toHaveBeenCalledWith(['/app' , 'myfiles']);
       done();
     }, 2500);
   });

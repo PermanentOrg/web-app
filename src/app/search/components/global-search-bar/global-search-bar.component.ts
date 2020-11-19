@@ -260,15 +260,15 @@ export class GlobalSearchBarComponent implements OnInit {
 
     if (item.folder_linkType === 'type.folder_link.public') {
       if (item.parentArchiveNbr === publicRoot.archiveNbr) {
-        routerPath = ['/m', 'public'];
+        routerPath = ['/app', 'public'];
       } else {
-        routerPath = ['/m', 'public', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = ['/app', 'public', item.parentArchiveNbr, item.parentFolder_linkId];
       }
     } else if (item.folder_linkType === 'type.folder_link.private') {
       if (item.parentArchiveNbr === privateRoot.archiveNbr) {
-        routerPath = ['/m', 'myfiles'];
+        routerPath = ['/app', 'myfiles'];
       } else {
-        routerPath = ['/m', 'myfiles', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = ['/app', 'myfiles', item.parentArchiveNbr, item.parentFolder_linkId];
       }
     }
 
@@ -280,7 +280,7 @@ export class GlobalSearchBarComponent implements OnInit {
   }
 
   onAllResultsClick() {
-    this.router.navigate(['/m', 'search'], { queryParams: { query: this.formControl.value?.trim() } });
+    this.router.navigate(['/app', 'search'], { queryParams: { query: this.formControl.value?.trim() } });
     this.onCoverClick();
   }
 
