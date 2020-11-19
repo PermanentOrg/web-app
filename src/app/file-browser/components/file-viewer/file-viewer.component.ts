@@ -10,7 +10,6 @@ import { RecordVO, } from '@root/app/models';
 import { DataService } from '@shared/services/data/data.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
-import { DIALOG_DATA } from '@root/app/dialog/dialog.module';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -27,7 +26,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public currentIndex: number;
   public isVideo = false;
   public isAudio = false;
-  public isPdf = false;
+  public isDocument = false;
   public showThumbnail = true;
 
   public documentUrl = null;
@@ -127,22 +126,31 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   initRecord() {
     this.isAudio = this.currentRecord.type.includes('audio');
     this.isVideo = this.currentRecord.type.includes('video');
-    this.isPdf = this.currentRecord.type.includes('pdf');
+    this.isDocument = this.currentRecord.type.includes('document') || this.currentRecord.type.includes('pdf');
     this.documentUrl = this.getPdfUrl();
   }
 
   getPdfUrl() {
-    if (!this.isPdf) {
+    if (!this.isDocument) {
       return false;
     }
 
-    const original = find(this.currentRecord.FileVOs, {format: 'file.format.original'}) as any;
+    const original = find(this.currentRecord.FileVOs, { format: 'file.format.original' }) as any;
+    const pdf = find(this.currentRecord.FileVOs, f => f.type.includes('pdf')) as any;
 
-    if (!original) {
+    let url;
+
+    if (original?.type.includes('pdf')) {
+      url = original.fileURL;
+    } else if (pdf) {
+      url = pdf.fileURL;
+    }
+
+    if (!url) {
       return false;
     }
 
-    return this.sanitizer.bypassSecurityTrustResourceUrl(original.fileURL);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   isQueued(indexToCheck: number) {
