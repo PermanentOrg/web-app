@@ -22,7 +22,7 @@ export class UploadItem {
       parentFolder_linkId: parentFolder.folder_linkId,
       displayName: file.name,
       uploadFileName: file.name,
-      derivedCreatedDT: file.lastModified,
+      derivedCreatedDT: new Date(file.lastModified)
     });
   }
 
