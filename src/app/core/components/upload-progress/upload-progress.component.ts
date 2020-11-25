@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
-import { UploadSessionStatus } from '@core/services/upload/uploader';
+import { UploadProgressEvent, UploadSessionStatus } from '@core/services/upload/uploader';
 
 const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
 
@@ -45,8 +45,10 @@ export class UploadProgressComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.upload.uploader.uploadItem.subscribe((uploadItem) => {
-      this.currentItem = uploadItem;
+    this.upload.uploader.progress.subscribe((progressEvent: UploadProgressEvent) => {
+      if (progressEvent.item) {
+        this.currentItem = progressEvent.item;
+      }
     });
 
     this.fileCount = this.upload.uploader.fileCount;

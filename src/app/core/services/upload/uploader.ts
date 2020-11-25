@@ -30,7 +30,6 @@ export interface UploadProgressEvent {
 export class Uploader {
   private socketClient: BinaryClient;
 
-  public uploadItem: EventEmitter<UploadItem> = new EventEmitter();
   public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
 
   public progress: EventEmitter<UploadProgressEvent> = new EventEmitter();
@@ -201,7 +200,10 @@ export class Uploader {
     let transferComplete;
 
     this.fileCount.current++;
-    this.uploadItem.emit(currentItem);
+    this.progress.emit({
+      item: currentItem,
+    });
+
 
     const fileMeta = {
       name: currentItem.file.name,
@@ -222,10 +224,14 @@ export class Uploader {
         transferComplete = true;
         this.fileCount.completed++;
         currentItem.uploadStatus = UploadStatus.Done;
+      }
+
+      this.progress.emit({
+        item: currentItem,
+      });
+
+      if (data.done) {
         this.checkForNextOrFinish();
-        this.progress.emit({
-          item: currentItem,
-        });
       }
     });
 
