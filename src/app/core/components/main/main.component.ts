@@ -179,13 +179,13 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
       await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
 
       this.upload.promptForFiles();
-      const uploadListener = this.upload.uploader.uploadSessionStatus.subscribe(async (status: UploadSessionStatus) => {
-        if (status === UploadSessionStatus.Done) {
+      const uploadListener = this.upload.uploader.progress.subscribe(async (progressEvent) => {
+        if (progressEvent.sessionStatus === UploadSessionStatus.Done) {
           try {
             await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto' });
           } catch (err) { }
           uploadListener.unsubscribe();
-        } else if (status > UploadSessionStatus.Done) {
+        } else if (progressEvent.sessionStatus > UploadSessionStatus.Done) {
           uploadListener.unsubscribe();
         }
       });

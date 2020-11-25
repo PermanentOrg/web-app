@@ -74,10 +74,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
         this.accountService.refreshAccountDebounced();
       }
-    }));
 
-    this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
-      switch (status) {
+      switch (progressEvent.sessionStatus) {
         case UploadSessionStatus.Start:
           this.message.showMessage('Please don\'t close your browser until the upload is complete.');
           break;

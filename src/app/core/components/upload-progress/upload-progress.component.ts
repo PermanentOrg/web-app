@@ -28,9 +28,9 @@ export class UploadProgressComponent implements OnInit {
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
 
-    this.upload.uploader.uploadSessionStatus.subscribe((status: UploadSessionStatus) => {
-      this.status = status;
-      switch (status) {
+    this.upload.uploader.progress.subscribe((progressEvent: UploadProgressEvent) => {
+      this.status = progressEvent.sessionStatus;
+      switch (progressEvent.sessionStatus) {
         case UploadSessionStatus.Start:
           this.upload.showProgress();
           break;
