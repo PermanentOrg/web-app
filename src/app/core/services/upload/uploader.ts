@@ -25,6 +25,12 @@ export enum UploadSessionStatus {
 export interface UploadProgressEvent {
   item?: UploadItem;
   sessionStatus: UploadSessionStatus;
+  statistics: {
+    current: number;
+    completed: number;
+    total: number;
+    error: number;
+  };
 }
 
 @Injectable()
@@ -37,7 +43,7 @@ export class Uploader {
   private uploadQueue: UploadItem[] = [];
   private errorQueue: UploadItem[] = [];
 
-  public fileCount = {
+  private fileCount = {
     current: 0,
     completed: 0,
     total: 0,
@@ -57,6 +63,7 @@ export class Uploader {
     const failedToConnect = (error) => {
       this.progress.emit({
         sessionStatus: UploadSessionStatus.ConnectionError,
+        statistics: this.fileCount,
       });
 
       this.errorQueue = this.metaQueue.concat(this.uploadQueue);
@@ -89,6 +96,7 @@ export class Uploader {
 
           this.progress.emit({
             sessionStatus: UploadSessionStatus.Start,
+            statistics: this.fileCount,
           });
 
           this.socketClient.removeListener('error', failedToConnect);
@@ -117,6 +125,7 @@ export class Uploader {
   onSocketError() {
     this.progress.emit({
       sessionStatus: UploadSessionStatus.ConnectionError,
+      statistics: this.fileCount,
     });
     this.cleanUpFiles();
     this.socketClient = null;
@@ -155,6 +164,7 @@ export class Uploader {
       .catch((response: RecordResponse) => {
         this.progress.emit({
           sessionStatus: UploadSessionStatus.Done,
+          statistics: this.fileCount,
         });
         return Promise.reject(response);
       });
@@ -210,6 +220,7 @@ export class Uploader {
     this.progress.emit({
       item: currentItem,
       sessionStatus: UploadSessionStatus.InProgress,
+      statistics: this.fileCount,
     });
 
 
@@ -237,6 +248,7 @@ export class Uploader {
       this.progress.emit({
         item: currentItem,
         sessionStatus: UploadSessionStatus.InProgress,
+        statistics: this.fileCount,
       });
 
       if (data.done) {
@@ -269,6 +281,7 @@ export class Uploader {
       this.closeSocketConnection();
       this.progress.emit({
         sessionStatus: UploadSessionStatus.Done,
+        statistics: this.fileCount,
       });
 
       if (this.errorQueue.length) {

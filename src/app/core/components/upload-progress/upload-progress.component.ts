@@ -45,9 +45,9 @@ export class UploadProgressComponent {
       if (progressEvent.item) {
         this.currentItem = progressEvent.item;
       }
-    });
 
-    this.fileCount = this.upload.uploader.fileCount;
+      this.fileCount = progressEvent.statistics;
+    });
   }
 
   show() {
