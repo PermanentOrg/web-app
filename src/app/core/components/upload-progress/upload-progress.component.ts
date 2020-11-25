@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
@@ -11,7 +11,7 @@ const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
   templateUrl: './upload-progress.component.html',
   styleUrls: ['./upload-progress.component.scss']
 })
-export class UploadProgressComponent implements OnInit {
+export class UploadProgressComponent {
   UploadSessionStatus = UploadSessionStatus;
   public visible = false;
   public useFade = false;
@@ -41,11 +41,7 @@ export class UploadProgressComponent implements OnInit {
           this.upload.dismissProgress();
           break;
       }
-    });
-  }
 
-  ngOnInit() {
-    this.upload.uploader.progress.subscribe((progressEvent: UploadProgressEvent) => {
       if (progressEvent.item) {
         this.currentItem = progressEvent.item;
       }
