@@ -22,14 +22,18 @@ export enum UploadSessionStatus {
   StorageError
 }
 
+export interface UploadProgressEvent {
+  item?: UploadItem;
+}
+
 @Injectable()
 export class Uploader {
   private socketClient: BinaryClient;
 
   public uploadItem: EventEmitter<UploadItem> = new EventEmitter();
-
   public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
-  public fileUploadComplete: EventEmitter<UploadItem> = new EventEmitter<UploadItem>();
+
+  public progress: EventEmitter<UploadProgressEvent> = new EventEmitter();
 
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
@@ -217,8 +221,11 @@ export class Uploader {
       if (data.done) {
         transferComplete = true;
         this.fileCount.completed++;
+        currentItem.uploadStatus = UploadStatus.Done;
         this.checkForNextOrFinish();
-        this.fileUploadComplete.emit(currentItem);
+        this.progress.emit({
+          item: currentItem,
+        });
       }
     });
 

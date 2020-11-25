@@ -11,7 +11,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FolderVO } from '@root/app/models';
 
 import { Uploader, UploadSessionStatus } from './uploader';
-import { UploadItem } from '@core/services/upload/uploadItem';
+import { UploadItem, UploadStatus } from './uploadItem';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
@@ -58,20 +58,22 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       this.dataService.refreshCurrentFolder();
     }, 750);
 
-    this.subscriptions.push(this.uploader.fileUploadComplete.subscribe((item: UploadItem) => {
-      const parentFolderId = item.parentFolder.folderId;
-      let currentCount = 0;
-      if (this.itemsQueuedByParentFolderId.has(parentFolderId)) {
-        currentCount = this.itemsQueuedByParentFolderId.get(parentFolderId) - 1;
+    this.subscriptions.push(this.uploader.progress.subscribe((progressEvent) => {
+      if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
+        const parentFolderId = progressEvent.item.parentFolder.folderId;
+        let currentCount = 0;
+        if (this.itemsQueuedByParentFolderId.has(parentFolderId)) {
+          currentCount = this.itemsQueuedByParentFolderId.get(parentFolderId) - 1;
+        }
+
+        this.itemsQueuedByParentFolderId.set(parentFolderId, currentCount);
+
+        if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId && currentCount === 0) {
+          this.dataService.refreshCurrentFolder();
+        }
+
+        this.accountService.refreshAccountDebounced();
       }
-
-      this.itemsQueuedByParentFolderId.set(parentFolderId, currentCount);
-
-      if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId && currentCount === 0) {
-        this.dataService.refreshCurrentFolder();
-      }
-
-      this.accountService.refreshAccountDebounced();
     }));
 
     this.subscriptions.push(this.uploader.uploadSessionStatus.subscribe(status => {
