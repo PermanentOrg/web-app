@@ -156,7 +156,7 @@
           },
           "configurations": {
             "dev": {
-              "host": "local.permanent.org",
+              "host": "ng.permanent.org",
               "hmr": false,
               "ssl": true,
               "sslCert": "/etc/ssl/STAR_permanent_org.crt",
