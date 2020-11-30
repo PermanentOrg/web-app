@@ -10,11 +10,13 @@
   <div class="profile-name">
     The {{this.archive.fullName}} Archive
   </div>
-  <div class="profile-blurb" *ngIf="hasSingleValueFor('blurb', 'string1')">
-    {{ this.profileItems.blurb[0].string1 }}
-  </div>
-  <div class="profile-description" *ngIf="hasSingleValueFor('description', 'textData1')"  [innerHTML]="this.profileItems.description[0].textData1">
-  </div>
+  <ng-container *ngIf="isViewingProfile$ | async">
+    <div class="profile-blurb" *ngIf="hasSingleValueFor('blurb', 'string1')">
+      {{ this.profileItems.blurb[0].string1 }}
+    </div>
+    <div class="profile-description" *ngIf="hasSingleValueFor('description', 'textData1')"  [innerHTML]="this.profileItems.description[0].textData1">
+    </div>
+  </ng-container>
 </div>
 <div class="profile-sidebar">
   <div class="profile-archive-link">
