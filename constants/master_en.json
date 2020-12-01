@@ -96,7 +96,7 @@
       "lookup": "Data lookup failed (AU)"
     },
     "bad":{
-      "request":"404 Bad Request Error"
+      "request":"Error bad request"
     },
     "base_queue": {
       "lookup": "Data lookup failed (BQ)"
@@ -259,7 +259,7 @@
       "md5_check_failed": "Item not found"
     },
     "validate":{
-      "destination_url":"Destination Url validation failed"
+      "destination_url":"Upload destination URL failed"
     },
     "zip": {
       "missing_items": "No items to be zipped were included in the request.",
