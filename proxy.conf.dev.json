@@ -4,9 +4,9 @@
     "secure": false,
     "changeOrigin": true,
     "cookieDomainRewrite": {
-      "dev.permanent.org": "local.permanent.org",
-      ".permanent.org": "local.permanent.org",
-      "local.permanent.org": "dev.permanent.org"
+      "dev.permanent.org": "ng.permanent.org",
+      ".permanent.org": "ng.permanent.org",
+      "ng.permanent.org": "dev.permanent.org"
     }
   },
   "/uploadsvc": {
