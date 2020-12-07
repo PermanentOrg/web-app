@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
-import { UploadSessionStatus } from '@core/services/upload/uploader';
+import { UploadProgressEvent, UploadSessionStatus } from '@core/services/upload/uploader';
 
 const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
 
@@ -11,7 +11,8 @@ const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
   templateUrl: './upload-progress.component.html',
   styleUrls: ['./upload-progress.component.scss']
 })
-export class UploadProgressComponent implements OnInit {
+export class UploadProgressComponent {
+  UploadSessionStatus = UploadSessionStatus;
   public visible = false;
   public useFade = false;
 
@@ -27,9 +28,9 @@ export class UploadProgressComponent implements OnInit {
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
 
-    this.upload.uploader.uploadSessionStatus.subscribe((status: UploadSessionStatus) => {
-      this.status = status;
-      switch (status) {
+    this.upload.uploader.progress.subscribe((progressEvent: UploadProgressEvent) => {
+      this.status = progressEvent.sessionStatus;
+      switch (progressEvent.sessionStatus) {
         case UploadSessionStatus.Start:
           this.upload.showProgress();
           break;
@@ -40,15 +41,13 @@ export class UploadProgressComponent implements OnInit {
           this.upload.dismissProgress();
           break;
       }
-    });
-  }
 
-  ngOnInit() {
-    this.upload.uploader.uploadItem.subscribe((uploadItem) => {
-      this.currentItem = uploadItem;
-    });
+      if (progressEvent.item) {
+        this.currentItem = progressEvent.item;
+      }
 
-    this.fileCount = this.upload.uploader.fileCount;
+      this.fileCount = progressEvent.statistics;
+    });
   }
 
   show() {

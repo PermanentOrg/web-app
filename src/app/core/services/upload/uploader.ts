@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 import { BinaryClient, binaryFeatures } from '@root/vendor/binary';
 import { map } from 'rxjs/operators';
 import { remove, partition } from 'lodash';
@@ -16,42 +18,53 @@ export enum UploadSessionStatus {
   Start,
   InProgress,
   Done,
-  FileError,
   ConnectionError,
   StorageError
 }
 
+export interface UploadProgressEvent {
+  item?: UploadItem;
+  sessionStatus: UploadSessionStatus;
+  statistics: {
+    current: number;
+    completed: number;
+    total: number;
+    error: number;
+  };
+}
+
+@Injectable()
 export class Uploader {
   private socketClient: BinaryClient;
 
-  public uploadItem: EventEmitter<UploadItem> = new EventEmitter();
-
-  public uploadSessionStatus: EventEmitter<UploadSessionStatus> = new EventEmitter();
-  public fileUploadComplete: EventEmitter<UploadItem> = new EventEmitter<UploadItem>();
+  public progress: EventEmitter<UploadProgressEvent> = new EventEmitter();
 
   private metaQueue: UploadItem[] = [];
   private uploadQueue: UploadItem[] = [];
   private errorQueue: UploadItem[] = [];
 
-  public fileCount = {
+  private fileCount = {
     current: 0,
     completed: 0,
     total: 0,
     error: 0
   };
 
-  public uploadInProgress: boolean;
+  private uploadInProgress: boolean;
 
-  private uploadItemId = 0;
-
-  constructor(private api: ApiService) {
+  constructor(
+    private api: ApiService,
+  ) {
   }
 
   openSocketConnection() {
     let connectionReject;
 
     const failedToConnect = (error) => {
-      this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
+      this.progress.emit({
+        sessionStatus: UploadSessionStatus.ConnectionError,
+        statistics: this.fileCount,
+      });
 
       this.errorQueue = this.metaQueue.concat(this.uploadQueue);
 
@@ -81,7 +94,11 @@ export class Uploader {
           this.fileCount.error = 0;
           this.fileCount.total = this.metaQueue.length + this.uploadQueue.length;
 
-          this.uploadSessionStatus.emit(UploadSessionStatus.Start);
+          this.progress.emit({
+            sessionStatus: UploadSessionStatus.Start,
+            statistics: this.fileCount,
+          });
+
           this.socketClient.removeListener('error', failedToConnect);
           this.socketClient.on('close', (event) => {
             this.onSocketClose(event);
@@ -106,7 +123,10 @@ export class Uploader {
   }
 
   onSocketError() {
-    this.uploadSessionStatus.emit(UploadSessionStatus.ConnectionError);
+    this.progress.emit({
+      sessionStatus: UploadSessionStatus.ConnectionError,
+      statistics: this.fileCount,
+    });
     this.cleanUpFiles();
     this.socketClient = null;
   }
@@ -120,7 +140,7 @@ export class Uploader {
 
   connectAndUpload(parentFolder: FolderVO, files: File[]): Promise<any> {
     files.forEach((file) => {
-      const uploadItem = new UploadItem(file, parentFolder, this.uploadItemId++);
+      const uploadItem = new UploadItem(file, parentFolder);
       this.metaQueue.push(uploadItem);
       this.fileCount.total++;
     });
@@ -138,12 +158,14 @@ export class Uploader {
         if (!this.uploadInProgress) {
           this.uploadInProgress = true;
           this.uploadNextFromQueue();
-          this.uploadSessionStatus.emit(UploadSessionStatus.InProgress);
         }
 
       })
       .catch((response: RecordResponse) => {
-        this.uploadSessionStatus.emit(UploadSessionStatus.Done);
+        this.progress.emit({
+          sessionStatus: UploadSessionStatus.Done,
+          statistics: this.fileCount,
+        });
         return Promise.reject(response);
       });
     } else {
@@ -195,7 +217,12 @@ export class Uploader {
     let transferComplete;
 
     this.fileCount.current++;
-    this.uploadItem.emit(currentItem);
+    this.progress.emit({
+      item: currentItem,
+      sessionStatus: UploadSessionStatus.InProgress,
+      statistics: this.fileCount,
+    });
+
 
     const fileMeta = {
       name: currentItem.file.name,
@@ -215,8 +242,17 @@ export class Uploader {
       if (data.done) {
         transferComplete = true;
         this.fileCount.completed++;
+        currentItem.uploadStatus = UploadStatus.Done;
+      }
+
+      this.progress.emit({
+        item: currentItem,
+        sessionStatus: UploadSessionStatus.InProgress,
+        statistics: this.fileCount,
+      });
+
+      if (data.done) {
         this.checkForNextOrFinish();
-        this.fileUploadComplete.emit(currentItem);
       }
     });
 
@@ -243,7 +279,10 @@ export class Uploader {
       this.uploadInProgress = false;
 
       this.closeSocketConnection();
-      this.uploadSessionStatus.emit(UploadSessionStatus.Done);
+      this.progress.emit({
+        sessionStatus: UploadSessionStatus.Done,
+        statistics: this.fileCount,
+      });
 
       if (this.errorQueue.length) {
         this.cleanUpFiles();

@@ -6,6 +6,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
+import { Uploader } from '@core/services/upload/uploader';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 
@@ -100,6 +101,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
     FolderPickerService,
     ProfileService,
     UploadService,
+    Uploader,
     EditService,
     DragService,
     SidebarActionPortalService
