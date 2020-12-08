@@ -166,6 +166,11 @@
       "soft_delete_fail": "We could not delete the item you selected. Please try again or contact Support.",
       "update_fail": "We could not update the item you selected. Please try again or contact Support."
     },
+    "getting": {
+      "presigned": {
+        "url": "The upload could not be started"
+      }
+    },
     "imagick": {
       "read_image_blob": "The image format wasn't something we expected"
     },
