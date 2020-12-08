@@ -95,6 +95,9 @@
     "auth": {
       "lookup": "Data lookup failed (AU)"
     },
+    "bad": {
+      "request": "Request failed"
+    },
     "base_queue": {
       "lookup": "Data lookup failed (BQ)"
     },
@@ -259,6 +262,9 @@
     },
     "upload": {
       "md5_check_failed": "Item not found"
+    },
+    "validate": {
+      "destination_url": "Invalid upload destination URL"
     },
     "zip": {
       "missing_items": "No items to be zipped were included in the request.",
