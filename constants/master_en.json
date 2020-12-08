@@ -166,9 +166,9 @@
       "soft_delete_fail": "We could not delete the item you selected. Please try again or contact Support.",
       "update_fail": "We could not update the item you selected. Please try again or contact Support."
     },
-    "getting":{
-      "presigned":{
-        "url":"We were not able get a S3 URL for this upload"
+    "getting": {
+      "presigned": {
+        "url": "The upload could not be started"
       }
     },
     "imagick": {
