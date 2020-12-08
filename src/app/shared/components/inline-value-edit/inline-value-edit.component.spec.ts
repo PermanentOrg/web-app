@@ -302,6 +302,23 @@ describe('InlineValueEditComponent', () => {
     expect(timePicker).toBeNull();
   });
 
+  it('should update edit value with just date when date is changed and timeOnly = true', () => {
+    component.displayValue = '2020-05-02';
+    component.type = 'date';
+    component.dateOnly = true;
+    fixture.detectChanges();
+
+    component.startEdit();
+
+    const newDate = new NgbDate(2019, 2, 15);
+
+    component.ngbDate = newDate;
+    component.onDateChange(newDate);
+
+    expect(component.editValue).not.toBe(component.displayValue);
+    expect((component.editValue as string).length).toBe(10);
+  });
+
   xit('should update edit value when time is changed', () => {
     const voData: RecordVOData = {
       accessRole: 'access.role.owner',

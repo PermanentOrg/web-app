@@ -166,12 +166,16 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   onDateChange(date: NgbDate) {
-    const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
-    const currentTime = !this.dateOnly ? currentOffset.format('HH:mm:ss') : '00:00:00';
-    const tzOffset = !this.dateOnly ? currentOffset.format('Z') : '+00:00';
-    const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}T${currentTime}${tzOffset}`;
-    const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
-    this.editValue = newOffset.toISOString();
+    if (this.dateOnly) {
+      this.editValue = `${zeroPad(date.year, 4)}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}`;
+    } else {
+      const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
+      const currentTime = currentOffset.format('HH:mm:ss');
+      const tzOffset = currentOffset.format('Z');
+      const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}T${currentTime}${tzOffset}`;
+      const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
+      this.editValue = newOffset.toISOString();
+    }
   }
 
   onTimeChange(time: NgbTimeStruct) {
