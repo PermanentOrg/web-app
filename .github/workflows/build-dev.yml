@@ -23,9 +23,9 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run test_build
+        run: npm run build_dev
 
-      - name: Archive dist
+      - name: Archive `dist`
         uses: actions/upload-artifact@v2
         with:
           name: dist
