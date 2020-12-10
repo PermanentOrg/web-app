@@ -17,7 +17,7 @@ export const environment = {
     messagingSenderId: '248842011228'
   },
   google: {
-    apiKey: 'AIzaSyC6JvFpTpreKFl_1HvWk9pSERh9xbLdTlg'
+    apiKey: 'AIzaSyBPlEoumk_gQ0aNCOeaEU61ZKNU94TfCjk'
   },
   debug: true,
   release,
