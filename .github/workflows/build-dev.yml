@@ -36,6 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
 
       - name: Setup Sentry CLI
         uses: mathrix-education/setup-sentry-cli@1.0.0
