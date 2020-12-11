@@ -53,7 +53,7 @@ jobs:
       - name: Upload sourcemaps
         shell: bash
         run: |
-          cp -r dist/mdot dist/m
+          cp -r dist/mdot dist/app
           cp -r dist/mdot dist/share
           cp -r dist/mdot dist/p
           declare -x VERSION=mdot@$(jq -r '.version' package.json)
