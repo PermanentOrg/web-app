@@ -1,4 +1,4 @@
-name: Dev build
+name: Staging build
 
 on:
   push:
@@ -11,20 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/cache@v2
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
-
       - name: Install dependencies
         run: npm install
-
       - name: Build
-        run: npm run build_dev
-
+        run: npm run build_staging
       - name: Archive `dist`
         uses: actions/upload-artifact@v2
         with:
@@ -36,20 +32,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup Sentry CLI
         uses: mathrix-education/setup-sentry-cli@1.0.0
         with:
           token: ${{ secrets.SENTRY_TOKEN }}
           organization: permanentorg
           project: mdot
-      
       - name: Download dist
         uses: actions/download-artifact@v2
         with:
           name: dist
           path: dist
-
       - name: Upload sourcemaps
         shell: bash
         run: |
@@ -59,7 +52,7 @@ jobs:
           declare -x VERSION=mdot@$(jq -r '.version' package.json)
           sentry-cli releases set-commits $VERSION --auto
           sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
-  
+
   upload-code:
     needs: build
     runs-on: ubuntu-latest
@@ -69,20 +62,17 @@ jobs:
         with:
           name: dist
           path: dist
-
       - name: Create a tar archive
         run: |
           cd ..
           mkdir mdot
           mv web-app/dist mdot/dist
           tar -czvf mdot.tar.gz mdot
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-
       - name: Copy package to S3
-        run: aws s3 cp ../mdot.tar.gz s3://permanent-repos/dev/mdot.tar.gz
+        run: aws s3 cp ../mdot.tar.gz s3://permanent-repos/staging/mdot.tar.gz
