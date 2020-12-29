@@ -22,6 +22,7 @@ export class UploadItem {
       parentFolder_linkId: parentFolder.folder_linkId,
       displayName: file.name,
       uploadFileName: file.name,
+      size: file.size,
       derivedCreatedDT: new Date(file.lastModified)
     });
   }

@@ -70,13 +70,15 @@ export class UploadService implements HasSubscriptions, OnDestroy {
         case UploadSessionStatus.ConnectionError:
           this.message.showError('Unable to connect - try again in a moment');
           break;
+        case UploadSessionStatus.StorageError:
+          this.message.showError('You do not have enough storage available to upload these files.');
+          break;
       }
     }));
   }
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
-    this.uploader.closeSocketConnection();
   }
 
   registerButtonComponent(component: UploadButtonComponent) {
@@ -100,7 +102,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   uploadFiles(parentFolder: FolderVO, files: File[]) {
     this.debug('uploadFiles %d files to folder %o', files.length, parentFolder);
 
-    return this.uploader.connectAndUpload(parentFolder, files)
+    return this.uploader.directS3Upload(parentFolder, files)
       .catch((response: any) => {
         this.handleUploaderError(response);
       });
@@ -243,12 +245,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   handleUploaderError(response: any) {
-    if (response && typeof response.getMessage === 'function') {
-      if (response.messageIncludesPhrase('no_space_left')) {
-        this.message.showError('You do not have enough storage available to upload these files.');
-      }
-    }
-
     this.accountService.refreshAccountDebounced();
   }
 

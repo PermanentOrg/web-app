@@ -40,6 +40,9 @@ export class UploadProgressComponent {
         case UploadSessionStatus.ConnectionError:
           this.upload.dismissProgress();
           break;
+        case UploadSessionStatus.StorageError:
+          this.upload.dismissProgress();
+          break;
       }
 
       if (progressEvent.item) {
