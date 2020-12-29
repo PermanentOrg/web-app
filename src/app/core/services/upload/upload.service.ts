@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
-import { debounce, remove } from 'lodash';
+import { remove } from 'lodash';
 
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 
@@ -39,8 +39,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   public buttonComponents: UploadButtonComponent[] = [];
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
 
-  private debouncedRefresh: Function;
-
   subscriptions: Subscription[] = [];
 
   private debug = debug('service:upload');
@@ -52,10 +50,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     private accountService: AccountService,
     public uploader: Uploader,
   ) {
-    this.debouncedRefresh = debounce(() => {
-      this.dataService.refreshCurrentFolder();
-    }, 750);
-
     this.subscriptions.push(this.uploader.progress.subscribe((progressEvent) => {
       if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
         const parentFolderId = progressEvent.item.parentFolder.folderId;
