@@ -41,8 +41,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   private debouncedRefresh: Function;
 
-  private itemsQueuedByParentFolderId = new Map<number, number>();
-
   subscriptions: Subscription[] = [];
 
   private debug = debug('service:upload');
@@ -61,14 +59,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     this.subscriptions.push(this.uploader.progress.subscribe((progressEvent) => {
       if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
         const parentFolderId = progressEvent.item.parentFolder.folderId;
-        let currentCount = 0;
-        if (this.itemsQueuedByParentFolderId.has(parentFolderId)) {
-          currentCount = this.itemsQueuedByParentFolderId.get(parentFolderId) - 1;
-        }
-
-        this.itemsQueuedByParentFolderId.set(parentFolderId, currentCount);
-
-        if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId && currentCount === 0) {
+        if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
           this.dataService.refreshCurrentFolder();
         }
 
@@ -114,12 +105,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {
     this.debug('uploadFiles %d files to folder %o', files.length, parentFolder);
-    let currentCount = 0;
-    if (this.itemsQueuedByParentFolderId.has(parentFolder.folderId)) {
-      currentCount = this.itemsQueuedByParentFolderId.get(parentFolder.folderId);
-    }
-
-    this.itemsQueuedByParentFolderId.set(parentFolder.folderId, currentCount + files.length);
 
     return this.uploader.connectAndUpload(parentFolder, files)
       .catch((response: any) => {
