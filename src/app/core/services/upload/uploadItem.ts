@@ -26,9 +26,4 @@ export class UploadItem {
       derivedCreatedDT: new Date(file.lastModified)
     });
   }
-
-  updateProgress(increment: number) {
-    this.transferProgress += increment;
-    this.updated.emit();
-  }
 }
