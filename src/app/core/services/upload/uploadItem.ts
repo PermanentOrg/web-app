@@ -14,7 +14,6 @@ export class UploadItem {
   public RecordVO: RecordVO;
   public uploadStatus: UploadStatus = UploadStatus.Init;
   public transferProgress = 0;
-  public updated: EventEmitter<null> = new EventEmitter();
 
   constructor(public file: File, public parentFolder: FolderVO) {
     this.RecordVO = new RecordVO({
