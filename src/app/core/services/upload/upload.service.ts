@@ -10,7 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderVO } from '@root/app/models';
 
-import { Uploader, UploadSessionStatus } from './uploader';
+import { UploadSession, UploadSessionStatus } from './upload.session';
 import { UploadItem, UploadStatus } from './uploadItem';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
@@ -48,9 +48,9 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     private message: MessageService,
     private dataService: DataService,
     private accountService: AccountService,
-    public uploader: Uploader,
+    public uploadSession: UploadSession,
   ) {
-    this.subscriptions.push(this.uploader.progress.subscribe((progressEvent) => {
+    this.subscriptions.push(this.uploadSession.progress.subscribe((progressEvent) => {
       if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
         const parentFolderId = progressEvent.item.parentFolder.folderId;
         if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
@@ -69,9 +69,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
           break;
         case UploadSessionStatus.ConnectionError:
           this.message.showError('Unable to connect - try again in a moment');
+          this.accountService.refreshAccountDebounced();
           break;
         case UploadSessionStatus.StorageError:
           this.message.showError('You do not have enough storage available to upload these files.');
+          this.accountService.refreshAccountDebounced();
           break;
       }
     }));
@@ -102,10 +104,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   uploadFiles(parentFolder: FolderVO, files: File[]) {
     this.debug('uploadFiles %d files to folder %o', files.length, parentFolder);
 
-    return this.uploader.directS3Upload(parentFolder, files)
-      .catch((response: any) => {
-        this.handleUploaderError(response);
-      });
+    return this.uploadSession.queueFiles(parentFolder, files);
   }
 
   async uploadFolders(parentFolder: FolderVO, items: DataTransferItem[]) {
@@ -242,10 +241,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       }
     }
 
-  }
-
-  handleUploaderError(response: any) {
-    this.accountService.refreshAccountDebounced();
   }
 
   showProgress() {

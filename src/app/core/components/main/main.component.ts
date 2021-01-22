@@ -15,7 +15,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { Validators } from '@angular/forms';
 import { DataService } from '@shared/services/data/data.service';
-import { UploadSessionStatus } from '@core/services/upload/uploader';
+import { UploadSessionStatus } from '@core/services/upload/upload.session';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -179,7 +179,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
       await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
 
       this.upload.promptForFiles();
-      const uploadListener = this.upload.uploader.progress.subscribe(async (progressEvent) => {
+      const uploadListener = this.upload.uploadSession.progress.subscribe(async (progressEvent) => {
         if (progressEvent.sessionStatus === UploadSessionStatus.Done) {
           try {
             await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto' });

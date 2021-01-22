@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
-import { UploadProgressEvent, UploadSessionStatus } from '@core/services/upload/uploader';
+import {
+  UploadProgressEvent,
+  UploadSessionStatus,
+} from '@core/services/upload/upload.session';
 
 const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
 
@@ -28,7 +31,7 @@ export class UploadProgressComponent {
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
 
-    this.upload.uploader.progress.subscribe((progressEvent: UploadProgressEvent) => {
+    this.upload.uploadSession.progress.subscribe((progressEvent: UploadProgressEvent) => {
       this.status = progressEvent.sessionStatus;
       switch (progressEvent.sessionStatus) {
         case UploadSessionStatus.Start:
