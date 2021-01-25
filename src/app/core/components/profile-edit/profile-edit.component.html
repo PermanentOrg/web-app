@@ -316,11 +316,14 @@
                 <div class="profile-field">
                   <label>Description</label>
                   <pr-inline-value-edit [alwaysShow]="true"
-                  [maxLength]="280"
+                  [maxLength]="200"
                   [emptyMessage]="'More details and information about this milestone'"
                   [displayValue]="profileItem.string2" type="textarea"
                   (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
                   ></pr-inline-value-edit>
+                  <div class="profile-field-subtitle">
+                    200 character limit
+                  </div>
                 </div>
               </div>
               <div class="profile-group align-right">
