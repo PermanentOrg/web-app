@@ -1,0 +1,134 @@
+import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
+import { BaseResponse } from '@shared/services/api/base';
+import { FolderVO } from '@root/app/models';
+import { Uploader } from './uploader';
+import { UploadItem, UploadStatus } from './uploadItem';
+import debug from 'debug';
+
+export enum UploadSessionStatus {
+  Start,
+  InProgress,
+  Done,
+  ConnectionError,
+  StorageError,
+}
+
+export interface UploadProgressEvent {
+  item?: UploadItem;
+  sessionStatus: UploadSessionStatus;
+  statistics: {
+    current: number;
+    completed: number;
+    total: number;
+    error: number;
+  };
+}
+
+const isOutOfStorageMessage = (response: BaseResponse) => (
+  response.messageIncludesPhrase('no_space_left')
+);
+
+@Injectable()
+export class UploadSession {
+  public progress: EventEmitter<UploadProgressEvent> = new EventEmitter();
+
+  private queue: UploadItem[] = [];
+  private statistics = {
+    current: 0,
+    completed: 0,
+    total: 0,
+    error: 0,
+  };
+  private inProgress: boolean = false;
+
+  private debug = debug('service:uploadSession');
+
+  constructor(
+    private uploader: Uploader,
+  ) {
+  }
+
+  private emitProgress = (item: UploadItem) => this.progress.emit({
+    item,
+    sessionStatus: UploadSessionStatus.InProgress,
+    statistics: this.statistics,
+  });
+
+  private emitError = (
+    error: UploadSessionStatus,
+    item: UploadItem,
+  ) => this.progress.emit({
+    item,
+    sessionStatus: error,
+    statistics: this.statistics,
+  });
+
+  public queueFiles(parentFolder: FolderVO, files: File[]) {
+    this.debug('UploadSession.queueFiles: %d files to folder %o', files.length, parentFolder);
+    files
+      .map(file => new UploadItem(file, parentFolder))
+      .forEach(item => this.queue.push(item));
+    this.statistics.total += files.length;
+    this.debug('Queue: %o', this.queue);
+
+    if (!this.inProgress) {
+      this.debug('No previous upload in progress; starting upload');
+      this.inProgress = true;
+      this.progress.emit({
+        sessionStatus: UploadSessionStatus.Start,
+        statistics: this.statistics,
+      });
+      setTimeout(this.uploadNextInQueue, 0);
+    }
+  }
+
+  private uploadNextInQueue = async () => {
+    const item = this.queue.shift();
+    if (!item) {
+      this.debug('No items left in upload queue');
+      this.progress.emit({
+        sessionStatus: UploadSessionStatus.Done,
+        statistics: this.statistics,
+      });
+
+      this.inProgress = false;
+      this.statistics = {
+        current: 0,
+        completed: 0,
+        total: 0,
+        error: 0,
+      };
+
+      return;
+    }
+
+    this.debug('Starting upload for item %o', item);
+
+    const progressHandler = (transferProgress: number) => {
+      item.transferProgress = transferProgress;
+      this.emitProgress(item);
+    };
+
+    try {
+      this.statistics.current++;
+      await this.uploader.uploadFile(item, progressHandler);
+      this.statistics.completed++;
+      setTimeout(this.uploadNextInQueue, 0);
+    } catch (err: unknown) {
+      item.uploadStatus = UploadStatus.Cancelled;
+      this.statistics.error++;
+
+      if (err instanceof BaseResponse && isOutOfStorageMessage(err)) {
+        this.emitError(
+          UploadSessionStatus.StorageError,
+          item,
+        );
+      } else {
+        this.emitError(
+          UploadSessionStatus.ConnectionError,
+          item,
+        );
+      }
+    }
+  };
+}

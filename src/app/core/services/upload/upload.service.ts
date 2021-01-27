@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
-import { debounce, remove } from 'lodash';
+import { remove } from 'lodash';
 
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 
@@ -10,7 +10,7 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderVO } from '@root/app/models';
 
-import { Uploader, UploadSessionStatus } from './uploader';
+import { UploadSession, UploadSessionStatus } from './upload.session';
 import { UploadItem, UploadStatus } from './uploadItem';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
@@ -39,10 +39,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   public buttonComponents: UploadButtonComponent[] = [];
   public progressVisible: EventEmitter<boolean> = new EventEmitter();
 
-  private debouncedRefresh: Function;
-
-  private itemsQueuedByParentFolderId = new Map<number, number>();
-
   subscriptions: Subscription[] = [];
 
   private debug = debug('service:upload');
@@ -52,23 +48,12 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     private message: MessageService,
     private dataService: DataService,
     private accountService: AccountService,
-    public uploader: Uploader,
+    public uploadSession: UploadSession,
   ) {
-    this.debouncedRefresh = debounce(() => {
-      this.dataService.refreshCurrentFolder();
-    }, 750);
-
-    this.subscriptions.push(this.uploader.progress.subscribe((progressEvent) => {
+    this.subscriptions.push(this.uploadSession.progress.subscribe((progressEvent) => {
       if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
         const parentFolderId = progressEvent.item.parentFolder.folderId;
-        let currentCount = 0;
-        if (this.itemsQueuedByParentFolderId.has(parentFolderId)) {
-          currentCount = this.itemsQueuedByParentFolderId.get(parentFolderId) - 1;
-        }
-
-        this.itemsQueuedByParentFolderId.set(parentFolderId, currentCount);
-
-        if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId && currentCount === 0) {
+        if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
           this.dataService.refreshCurrentFolder();
         }
 
@@ -84,6 +69,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
           break;
         case UploadSessionStatus.ConnectionError:
           this.message.showError('Unable to connect - try again in a moment');
+          this.accountService.refreshAccountDebounced();
+          break;
+        case UploadSessionStatus.StorageError:
+          this.message.showError('You do not have enough storage available to upload these files.');
+          this.accountService.refreshAccountDebounced();
           break;
       }
     }));
@@ -91,7 +81,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
-    this.uploader.closeSocketConnection();
   }
 
   registerButtonComponent(component: UploadButtonComponent) {
@@ -114,17 +103,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   uploadFiles(parentFolder: FolderVO, files: File[]) {
     this.debug('uploadFiles %d files to folder %o', files.length, parentFolder);
-    let currentCount = 0;
-    if (this.itemsQueuedByParentFolderId.has(parentFolder.folderId)) {
-      currentCount = this.itemsQueuedByParentFolderId.get(parentFolder.folderId);
-    }
 
-    this.itemsQueuedByParentFolderId.set(parentFolder.folderId, currentCount + files.length);
-
-    return this.uploader.connectAndUpload(parentFolder, files)
-      .catch((response: any) => {
-        this.handleUploaderError(response);
-      });
+    return this.uploadSession.queueFiles(parentFolder, files);
   }
 
   async uploadFolders(parentFolder: FolderVO, items: DataTransferItem[]) {
@@ -261,24 +241,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       }
     }
 
-  }
-
-  async cleanUpFiles() {
-    try {
-      await this.uploader.cleanUpFiles();
-    } catch (err) {
-      this.handleUploaderError(err);
-    }
-  }
-
-  handleUploaderError(response: any) {
-    if (response && typeof response.getMessage === 'function') {
-      if (response.messageIncludesPhrase('no_space_left')) {
-        this.message.showError('You do not have enough storage available to upload these files.');
-      }
-    }
-
-    this.accountService.refreshAccountDebounced();
   }
 
   showProgress() {

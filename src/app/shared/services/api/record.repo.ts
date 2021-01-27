@@ -1,4 +1,4 @@
-import { RecordVO, FolderVO, RecordVOData } from '@root/app/models';
+import { RecordVO, FolderVO, RecordVOData, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -33,14 +33,30 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>('/record/getLean', data, RecordResponse);
   }
 
-  public postMeta(recordVOs: RecordVO[]): Observable<RecordResponse> {
-    const data = recordVOs.map((recordVO) => {
-      return {
-        RecordVO: recordVO
-      };
-    });
+  public getPresignedUrl(recordVO: RecordVO, fileType: string): Promise<BaseResponse> {
+    return this.http.sendRequestPromise(
+      '/record/getPresignedUrl',
+      [{
+        RecordVO: recordVO,
+        SimpleVO: {
+          key: 'type',
+          value: fileType,
+        },
+      }],
+    );
+  }
 
-    return this.http.sendRequest<RecordResponse>('/record/postMetaBatch', data, RecordResponse);
+  public registerRecord(recordVO: RecordVO, s3url: string): Promise<RecordResponse> {
+    return this.http.sendRequestPromise(
+      '/record/registerRecord',
+      {
+        RecordVO: recordVO,
+        SimpleVO: {
+          key: 's3url',
+          value: s3url,
+        },
+      },
+    );
   }
 
   public update(recordVOs: RecordVO[], whitelist = DEFAULT_WHITELIST): Promise<RecordResponse> {

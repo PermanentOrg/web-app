@@ -27,9 +27,13 @@
     </div>
   </div>
   <div *ngIf="status === UploadSessionStatus.StorageError" class="upload">
-    <div class="message">Your account does not have enough storage</div>
-    <div class="actions">
-      <button class="btn btn-primary">OK</button>
+    <div class="message">
+      <strong>
+        Out of storage
+      </strong>
+      <br>
+      <span *ngIf="fileCount.completed">{{fileCount.completed}} uploaded, </span>
+      <span *ngIf="fileCount.completed < fileCount.total">{{fileCount.total - fileCount.completed}} skipped</span>
     </div>
   </div>
 </div>
