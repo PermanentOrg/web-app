@@ -78,7 +78,7 @@ export class VerifyComponent implements OnInit {
     }
 
     this.verifyForm = fb.group({
-      'token': [params.code || ''],
+      'token': [queryParams.token || ''],
     });
   }
 
