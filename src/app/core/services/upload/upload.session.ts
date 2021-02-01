@@ -111,8 +111,13 @@ export class UploadSession {
 
     try {
       this.statistics.current++;
+
       await this.uploader.uploadFile(item, progressHandler);
+
       this.statistics.completed++;
+      item.uploadStatus = UploadStatus.Done;
+      this.emitProgress(item);
+
       setTimeout(this.uploadNextInQueue, 0);
     } catch (err: unknown) {
       item.uploadStatus = UploadStatus.Cancelled;
