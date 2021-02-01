@@ -34,27 +34,29 @@ export class VerifyComponent implements OnInit {
 
     const account = this.accountService.getAccount();
 
+    // TODO: Do we even need this?
     if (!account) {
-      this.router.navigate(['/auth', 'login'], { queryParamsHandling: 'preserve'});
+      //this.router.navigate(['/auth', 'login'], { queryParamsHandling: 'preserve'});
       return;
     }
 
-    const params = route.snapshot.params;
-    // if (params.email) {
-    //   const email = window.atob(params.email);
-    //   if (email !== account.primaryEmail) {
-    //     this.accountService.logOut();
-    //     account = new AccountVO(
-    //       {
-    //         primaryEmail: window.atob(params.email),
-    //         emailStatus: 'status.auth.unverified'
-    //       }
-    //     );
-    //     this.accountService.setAccount(account);
-    //   }
-    // }
-
     const queryParams = route.snapshot.queryParams;
+
+    if (queryParams.email) {
+      const email = atob(queryParams.email);
+      if (email !== account.primaryEmail) {
+        console.log("DEBUG: logged into a different account than the email I clicked");
+        this.accountService.logOut();
+        // TODO: this is an invalid assignment
+        account = new AccountVO(
+	  {
+	    primaryEmail: email,
+	    emailStatus: 'status.auth.unverified'
+	  }
+        );
+        this.accountService.setAccount(account);
+      }
+    }
 
     if (queryParams) {
       if (queryParams.sendEmail) {
@@ -78,7 +80,7 @@ export class VerifyComponent implements OnInit {
     }
 
     this.verifyForm = fb.group({
-      'token': [params.code || ''],
+      'token': [queryParams.token || ''],
     });
   }
 
