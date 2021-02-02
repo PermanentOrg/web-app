@@ -155,7 +155,7 @@ $header-height: 3 * $grid-unit;
     display: flex;
     align-items: center;
 
-    label {
+    .row-label {
       flex: 0 0 $labelWidth;
       font-weight: $font-weight-bold;
       margin: 0;

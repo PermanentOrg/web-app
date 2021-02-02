@@ -53,7 +53,7 @@
         <ng-container *ngSwitchCase="'new'">
           <form [formGroup]="newArchiveForm" class="dialog-form" (submit)="onNewArchiveFormSubmit(newArchiveForm.value)">
             <div class="dialog-form-field">
-              <label for="name">Archive Name</label>
+              <label class="row-label" for="name">Archive Name</label>
               <div class="dialog-inline-field">
                 <span>The</span>
                 <input type="text" class="form-control" id="newArchiveName" name="name"
@@ -63,14 +63,16 @@
               </div>
             </div>
             <div class="dialog-form-field">
-              <label for="email">Archive Type</label>
+              <label class="row-label" for="email">Archive Type</label>
               <div class="form-check" *ngFor="let typeOption of archiveTypes">
-                <input type="radio" class="form-check-input" formControlName="type" [value]="typeOption.value">
-                <div class="form-check-label">{{typeOption.text}}</div>
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" formControlName="type" [value]="typeOption.value">
+                  {{typeOption.text}}
+                </label>
               </div>
             </div>
             <div class="dialog-form-field" *ngIf="newArchiveForm.value.type === 'type.archive.person'">
-              <label for="relation">Connection</label>
+              <label class="row-label" for="relation">Connection</label>
               <select name="relation" class="form-control" formControlName="relationType">
                 <option value="" disabled selected>Choose connection (optional)</option>
                 <option [value]="relation.value" *ngFor="let relation of relationTypes">{{relation.text}}</option>
