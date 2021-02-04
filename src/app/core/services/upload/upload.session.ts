@@ -117,8 +117,6 @@ export class UploadSession {
       this.statistics.completed++;
       item.uploadStatus = UploadStatus.Done;
       this.emitProgress(item);
-
-      setTimeout(this.uploadNextInQueue, 0);
     } catch (err: unknown) {
       item.uploadStatus = UploadStatus.Cancelled;
       this.statistics.error++;
@@ -135,5 +133,6 @@ export class UploadSession {
         );
       }
     }
+    setTimeout(this.uploadNextInQueue, 0);
   };
 }
