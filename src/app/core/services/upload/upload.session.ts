@@ -39,6 +39,7 @@ export class UploadSession {
     total: 0,
     error: 0,
   };
+  private sentStart: boolean = false;
   private inProgress: boolean = false;
 
   private debug = debug('service:uploadSession');
@@ -63,8 +64,20 @@ export class UploadSession {
     statistics: this.statistics,
   });
 
+  public startSession() {
+    if (!this.sentStart) {
+      this.progress.emit({
+        sessionStatus: UploadSessionStatus.Start,
+        statistics: this.statistics,
+      });
+      this.sentStart = true;
+    }
+  }
+
   public queueFiles(parentFolder: FolderVO, files: File[]) {
     this.debug('UploadSession.queueFiles: %d files to folder %o', files.length, parentFolder);
+    this.startSession();
+
     files
       .map(file => new UploadItem(file, parentFolder))
       .forEach(item => this.queue.push(item));
@@ -74,10 +87,6 @@ export class UploadSession {
     if (!this.inProgress) {
       this.debug('No previous upload in progress; starting upload');
       this.inProgress = true;
-      this.progress.emit({
-        sessionStatus: UploadSessionStatus.Start,
-        statistics: this.statistics,
-      });
       setTimeout(this.uploadNextInQueue, 0);
     }
   }
@@ -85,20 +94,7 @@ export class UploadSession {
   private uploadNextInQueue = async () => {
     const item = this.queue.shift();
     if (!item) {
-      this.debug('No items left in upload queue');
-      this.progress.emit({
-        sessionStatus: UploadSessionStatus.Done,
-        statistics: this.statistics,
-      });
-
-      this.inProgress = false;
-      this.statistics = {
-        current: 0,
-        completed: 0,
-        total: 0,
-        error: 0,
-      };
-
+      this.endSession();
       return;
     }
 
@@ -134,5 +130,22 @@ export class UploadSession {
       }
     }
     setTimeout(this.uploadNextInQueue, 0);
+  };
+
+  private endSession = () => {
+    this.debug('End of upload session');
+    this.progress.emit({
+      sessionStatus: UploadSessionStatus.Done,
+      statistics: this.statistics,
+    });
+
+    this.sentStart = false;
+    this.inProgress = false;
+    this.statistics = {
+      current: 0,
+      completed: 0,
+      total: 0,
+      error: 0,
+    };
   };
 }
