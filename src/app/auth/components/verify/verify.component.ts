@@ -56,6 +56,10 @@ export class VerifyComponent implements OnInit {
 
     const queryParams = route.snapshot.queryParams;
 
+    this.verifyForm = fb.group({
+      'token': [queryParams.token || ''],
+    });
+
     if (queryParams) {
       if (queryParams.sendEmail) {
         this.accountService.resendEmailVerification();
@@ -68,22 +72,15 @@ export class VerifyComponent implements OnInit {
 
     if (queryParams.email) {
       // decode the base64
-      var decoded_email = queryParams.email.replace(/-/g, '+');
-      decoded_email = decoded_email.replace(/_/g, '/');
+      var decoded_email = queryParams.email.replace(/-/g, '+').replace(/_/g, '/');
       var query_email = atob(decoded_email);
       if (query_email !== account.primaryEmail) {
         this.message.showError(
           'Sorry, this verification code does not match your account.',
            true,
            ['/auth/', 'login']);
-        this.verifyForm = fb.group({
-          'token': [''],
-        });
+        this.verifyForm.patchValue({ 'token': ''});
         this.waiting = true;
-      } else {
-        this.verifyForm = fb.group({
-          'token': [queryParams.token || ''],
-        });
       }
     }
 
