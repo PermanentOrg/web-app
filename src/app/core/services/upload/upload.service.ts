@@ -110,6 +110,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   async uploadFolders(parentFolder: FolderVO, items: DataTransferItem[]) {
     this.debug('uploadFolders %d items to folder %o', items.length, parentFolder);
 
+    this.uploadSession.startSession();
+
     const self = this;
     const foldersByPath: Map<string, FileSystemFolder> = new Map();
     const filesByPath: Map<string, FileWithPath[]> = new Map();
