@@ -66,6 +66,27 @@ export class VerifyComponent implements OnInit {
       }
     }
 
+    if (queryParams.email) {
+      // decode the base64
+      var decoded_email = queryParams.email.replace(/-/g, '+');
+      decoded_email = decoded_email.replace(/_/g, '/');
+      var query_email = atob(decoded_email);
+      if (query_email !== account.primaryEmail) {
+        this.message.showError(
+          'Sorry, this verification code does not match your account.',
+           true,
+           ['/auth/', 'login']);
+        this.verifyForm = fb.group({
+          'token': [''],
+        });
+        this.waiting = true;
+      } else {
+        this.verifyForm = fb.group({
+          'token': [queryParams.token || ''],
+        });
+      }
+    }
+
     this.needsEmail = account.emailNeedsVerification();
     this.needsPhone = account.phoneNeedsVerification();
 
@@ -77,9 +98,6 @@ export class VerifyComponent implements OnInit {
       this.router.navigate(['/myfiles'], { queryParamsHandling: 'preserve'});
     }
 
-    this.verifyForm = fb.group({
-      'token': [queryParams.token || ''],
-    });
   }
 
   ngOnInit() {
