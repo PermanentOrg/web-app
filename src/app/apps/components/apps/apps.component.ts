@@ -10,6 +10,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { HasSubscriptions } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
+import { ImportFamilyTreeStep } from '@shared/services/guided-tour/tours/familysearch.tour';
 
 @Component({
   selector: 'pr-apps',
@@ -28,7 +30,8 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy, HasSubsc
     private router: Router,
     private accountService: AccountService,
     private dataService: DataService,
-    private storage: StorageService
+    private storage: StorageService,
+    private guidedTour: GuidedTourService
   ) {
     this.appsFolder = this.route.snapshot.data.appsFolder;
     this.connectors = this.route.snapshot.data.connectors;
@@ -86,6 +89,10 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy, HasSubsc
         fsConnectorComponent.authorize(queryParams.code);
       });
     }
+
+    setTimeout(() => {
+      this.guidedTour.startTour([ImportFamilyTreeStep]);
+    }, 1000);
   }
 
   ngOnDestroy() {

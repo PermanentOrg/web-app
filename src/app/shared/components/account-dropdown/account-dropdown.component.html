@@ -12,7 +12,7 @@
       <i class="material-icons text-warning" [ngbTooltip]="badgeTooltip" *ngIf="accountService.isEmailOrPhoneUnverified()">{{badgeIcon}}</i>
       Account
     </a>
-    <a (click)="openArchivesDialog()">Archives</a>
+    <a (click)="openArchivesDialog()" id="account-dropdown-archives-option">Archives</a>
     <a [routerLink]="[{ outlets: { dialog: ['invitations']}}]">Invitations</a>
     <a (click)="onLogoutClick()">Log Out</a>
   </div>
