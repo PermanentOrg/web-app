@@ -1,5 +1,6 @@
 export interface ShepherdStep {
   id: string;
+  advanceOn?: AdvanceOn
   attachTo: AttachTo;
   beforeShowPromise?: ShowOrHideOrBeforeShowPromise;
   buttons?: (ButtonsEntity)[] | null;
@@ -11,6 +12,11 @@ export interface ShepherdStep {
   text?: (string)[] | null;
   when?: When;
 }
+interface AdvanceOn {
+  selector: string;
+  event: string;
+}
+
 export interface AttachTo {
   element: string;
   on: 'left' | 'right' | 'top' | 'bottom';

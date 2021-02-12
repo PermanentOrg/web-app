@@ -16,6 +16,9 @@ import { PromptService, PromptButton } from '@shared/services/prompt/prompt.serv
 import { StorageService } from '@shared/services/storage/storage.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { ConnectorType } from '@models/connector-overview-vo';
+import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
+import { CreateArchivesComplete, ImportFamilyTree } from '@shared/services/guided-tour/tours/familysearch.tour';
+import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 
 export enum ConnectorImportType {
   Everything,
@@ -52,7 +55,8 @@ export class ConnectorComponent implements OnInit {
     private message: MessageService,
     private prompt: PromptService,
     private storage: StorageService,
-    private dialog: Dialog
+    private dialog: Dialog,
+    private guidedTour: GuidedTourService
   ) { }
 
   ngOnInit() {
@@ -318,8 +322,8 @@ export class ConnectorComponent implements OnInit {
     }
   }
 
-  authorize(code: string) {
-    let connectRequest: Observable<any>;
+  async authorize(code: string) {
+    let connectRequest: Promise<ConnectorResponse>;
     const archive = this.account.getArchive();
 
     this.waiting = true;
@@ -331,23 +335,27 @@ export class ConnectorComponent implements OnInit {
     }
 
     if (connectRequest) {
-      return connectRequest
-        .pipe(map(((response: ConnectorResponse) => {
-          this.waiting = false;
-          if (!response.isSuccessful) {
-            throw response;
-          }
-
-          return response.getConnectorOverviewVO();
-        }))).toPromise()
-        .then((connector: ConnectorOverviewVO) => {
-          this.connector.update(connector);
-          this.setStatus();
-          this.router.navigate(['/apps'], {queryParams: {}});
-        })
-        .catch((response: ConnectorResponse) => {
-          this.message.showError(response.getMessage(), true);
-        });
+      try {
+        const response = await connectRequest;
+        const connector = response.getConnectorOverviewVO();
+        this.connector.update(connector);
+        this.setStatus();
+        this.router.navigate(["/apps"], { queryParams: {} });
+        this.guidedTour.startTour([
+          ImportFamilyTree,
+          {
+            ...CreateArchivesComplete,
+            beforeShowPromise: () => {
+              this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
+            },
+          },
+        ]);
+      } catch (err) {
+        if (err instanceof ConnectorResponse) {
+          this.message.showError(err.getMessage(), true);
+        }
+      }
+      this.waiting = false;
     }
   }
 

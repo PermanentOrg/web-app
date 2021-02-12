@@ -66,7 +66,7 @@ export class ConnectorRepo extends BaseRepo {
       SimpleVO: simpleVo
     }];
 
-    return this.http.sendRequest<ConnectorResponse>(`/connector/familysearchAuthorize`, data, ConnectorResponse);
+    return this.http.sendRequestPromise<ConnectorResponse>(`/connector/familysearchAuthorize`, data, ConnectorResponse);
   }
 
   public familysearchDisconnect(archive: ArchiveVO) {

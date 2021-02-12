@@ -9,6 +9,8 @@ import { ngIfFadeInAnimationSlow, TWEAKED } from '@shared/animations';
 import { trigger, transition, style, animate, group, query, animateChild } from '@angular/animations';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { SettingsTab } from '@core/components/settings-dialog/settings-dialog.component';
+import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
+import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   transition(
@@ -53,7 +55,8 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
     private messageService: MessageService,
     private router: Router,
     private element: ElementRef,
-    private dialog: Dialog
+    private dialog: Dialog,
+    private guidedTour: GuidedTourService
   ) { }
 
   ngOnInit() {
@@ -76,6 +79,13 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
         }
       })
     );
+    this.subscriptions.push(
+      this.guidedTour.events$().subscribe(event => {
+        if (event === GuidedTourEvent.RequestAccountDropdownOpen) {
+          this.showMenu = true;
+        }
+      })
+    )
   }
 
   ngOnDestroy() {
@@ -89,8 +99,13 @@ export class AccountDropdownComponent implements OnInit, OnDestroy, HasSubscript
 
   @HostListener('window:click', ['$event'])
   onWindowClick(event: PointerEvent) {
+    // check if it's an element without the dropdown as a parent
     const outsideClick = !(this.element.nativeElement as HTMLElement).contains(event.target as Node);
-    if (this.showMenu && outsideClick) {
+
+    // check if it's an element used by GuidedTourService and Shepherd.js to display a step, i
+    const tourBackdropClick = (event.target as HTMLElement).closest('.shepherd-modal-overlay-container');
+    const tourPopupClick = (event.target as HTMLElement).closest('.shepherd-element');
+    if (this.showMenu && outsideClick && !tourBackdropClick && !tourPopupClick) {
       this.showMenu = false;
     }
   }

@@ -10,8 +10,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { HasSubscriptions } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { timeout } from '@shared/utilities/timeout';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
-import { ImportFamilyTreeStep } from '@shared/services/guided-tour/tours/familysearch.tour';
+import { CreateArchivesComplete } from '@shared/services/guided-tour/tours/familysearch.tour';
+import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 
 @Component({
   selector: 'pr-apps',
@@ -90,9 +92,15 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy, HasSubsc
       });
     }
 
-    setTimeout(() => {
-      this.guidedTour.startTour([ImportFamilyTreeStep]);
-    }, 1000);
+    this.guidedTour.startTour([
+      {
+        ...CreateArchivesComplete,
+        beforeShowPromise: () => {
+          this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
+          return timeout(500);
+        },
+      },
+    ]);
   }
 
   ngOnDestroy() {
