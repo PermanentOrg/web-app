@@ -17,7 +17,8 @@ export class SearchService {
 
   private tagsFuseOptions: Fuse.IFuseOptions<ItemVO> = {
     keys: ['name'],
-    threshold: 0.1
+    threshold: 0.1,
+    isCaseSensitive: true
   };
   private tagsFuse = new Fuse([], this.tagsFuseOptions);
 
