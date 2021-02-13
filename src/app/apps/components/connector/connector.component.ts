@@ -343,12 +343,6 @@ export class ConnectorComponent implements OnInit {
         this.router.navigate(["/apps"], { queryParams: {} });
         this.guidedTour.startTour([
           ImportFamilyTree,
-          {
-            ...CreateArchivesComplete,
-            beforeShowPromise: () => {
-              this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
-            },
-          },
         ]);
       } catch (err) {
         if (err instanceof ConnectorResponse) {

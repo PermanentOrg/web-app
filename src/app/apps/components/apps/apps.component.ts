@@ -91,16 +91,6 @@ export class AppsComponent implements OnInit, AfterViewInit, OnDestroy, HasSubsc
         fsConnectorComponent.authorize(queryParams.code);
       });
     }
-
-    this.guidedTour.startTour([
-      {
-        ...CreateArchivesComplete,
-        beforeShowPromise: () => {
-          this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
-          return timeout(500);
-        },
-      },
-    ]);
   }
 
   ngOnDestroy() {

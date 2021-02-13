@@ -4,7 +4,10 @@ import { filter } from 'lodash';
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { AccountService } from '@shared/services/account/account.service';
+import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
+import { CreateArchivesComplete } from '@shared/services/guided-tour/tours/familysearch.tour';
+import { GuidedTourEvent } from '@shared/services/guided-tour/events';
+import { timeout } from '@shared/utilities/timeout';
 
 interface FamilySearchPersonI {
   id: string;
@@ -41,7 +44,7 @@ export class FamilySearchImportComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private api: ApiService,
     private message: MessageService,
-    private account: AccountService
+    private guidedTour: GuidedTourService
   ) {
     this.currentUser = data.currentUserData;
     this.familyMembers = filter(data.treeData, person => person.id !== this.currentUser.id);
@@ -93,21 +96,33 @@ export class FamilySearchImportComponent implements OnInit {
       if (this.importMemories === 'yes') {
         await this.api.connector.familysearchMemoryImportRequest(newArchives, personIds);
       }
+
+      this.showImportSpinner = false;
+
+      this.message.showMessage(
+        `Import complete. Tap here to view your new archives.`,
+        'success',
+        false,
+        ['/choosearchive']
+      );
+
+      this.waiting = false;
+      this.dialogRef.close();
+
+      this.guidedTour.startTour([
+        {
+          ...CreateArchivesComplete,
+          beforeShowPromise: () => {
+            this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
+            return timeout(500);
+          },
+        },
+      ]);
     } catch (err) {
+      this.waiting = false;
+      console.error(err);
       this.message.showError('There was an error importing facts and memories. Please try again later.');
     }
-
-    this.showImportSpinner = false;
-
-    this.message.showMessage(
-      `Import complete. Tap here to view your new archives.`,
-      'success',
-      false,
-      ['/choosearchive']
-    );
-
-    this.waiting = false;
-    this.dialogRef.close();
   }
 
   getSelectedCount() {
