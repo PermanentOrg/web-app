@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run build_staging
+        run: npm run build:staging
       - name: Archive `dist`
         uses: actions/upload-artifact@v2
         with:
