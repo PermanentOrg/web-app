@@ -20,6 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
+        env:
+          PERMANENT_API_KEY: ${{ secrets.PERMANENT_API_KEY_STAGING }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_STAGING }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
         run: npm run build:staging
       - name: Archive `dist`
         uses: actions/upload-artifact@v2
