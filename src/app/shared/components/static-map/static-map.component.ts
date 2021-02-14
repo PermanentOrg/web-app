@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { LocnVOData, ItemVO } from '@models';
 import { environment } from '@root/environments/environment';
 import { compact } from 'lodash';
+import { SecretsService } from '../../services/secrets/secrets.service';
 
-const BASE_URL = `https://maps.googleapis.com/maps/api/staticmap?key=${environment.google.apiKey}`;
 
 @Component({
   selector: 'pr-static-map',
@@ -12,6 +12,7 @@ const BASE_URL = `https://maps.googleapis.com/maps/api/staticmap?key=${environme
 })
 export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
   private dpiScale = 1;
+  private baseUrl = `https://maps.googleapis.com/maps/api/staticmap?key=${this.secrets.get('GOOGLE_API_KEY')}`;
 
   @Input() item: ItemVO;
   @Input() items: ItemVO[];
@@ -22,7 +23,8 @@ export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
   private elementSize: number;
 
   constructor(
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private secrets: SecretsService
   ) {
     this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
   }
@@ -59,7 +61,7 @@ export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
     const width = (this.elementRef.nativeElement as HTMLElement).clientWidth;
     const height = (this.elementRef.nativeElement as HTMLElement).clientHeight;
 
-    let url = BASE_URL;
+    let url = this.baseUrl;
     for (const locn of locations) {
       url += `&markers=${locn.latitude},${locn.longitude}`;
     }

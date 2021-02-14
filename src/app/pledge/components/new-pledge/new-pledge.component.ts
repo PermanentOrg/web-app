@@ -8,10 +8,12 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { environment } from '@root/environments/environment';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
+
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
 
-const stripe = window['Stripe'](environment.stripeKey);
+const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
 
 @Component({

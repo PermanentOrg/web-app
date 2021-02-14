@@ -34,6 +34,10 @@ export class SecretsService {
   }
 
   get(key: string) {
+    return SecretsService.getStatic(key);
+  }
+
+  static getStatic(key: string) {
     if (secrets[key] === undefined) {
       throw new Error(`Secret ${key} not found. Check your .env file and restart`);
     }
