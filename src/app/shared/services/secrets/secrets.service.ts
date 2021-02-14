@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import requiredSecrets from '@root/required-secrets';
 import debug from 'debug';
+
+// `require` needed for compatibility across ng serve, ng build, and unit tests
+const requiredSecrets = require('@root/required-secrets');
 
 let secrets = {};
 
