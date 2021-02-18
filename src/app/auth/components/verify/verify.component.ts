@@ -71,9 +71,8 @@ export class VerifyComponent implements OnInit {
     }
 
     if (queryParams.email) {
-      // decode the base64
-      var decoded_email = queryParams.email.replace(/-/g, '+').replace(/_/g, '/');
-      var query_email = atob(decoded_email);
+      // decode the url encoding from the php
+      var query_email = decodeURI(queryParams.email);
       if (query_email !== account.primaryEmail) {
         this.message.showError(
           'Sorry, this verification code does not match your account.',

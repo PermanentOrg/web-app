@@ -50,14 +50,9 @@ if (environment.environment !== 'local') {
 export class CustomUrlSerializer implements UrlSerializer {
   private defaultSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
 
-  // custom URL parser to make sure base64 encoded tokens don't screw things up
+  // I don't think I should need this, since we're just doing default 
+  // parsing now, but compile fails without it
   parse(url: string): UrlTree {
-    if (url.indexOf('/auth/verify/') > -1 ) {
-      url = url.replace(/^\/auth\/verify\/([@a-zA-Z0-9+/=]+)\/[a-zA-Z0-9]{4}$/, (fullUrl, b64) => {
-        return fullUrl.replace(b64, encodeURIComponent(b64));
-      });
-    }
-
     return this.defaultSerializer.parse(url);
   }
 
