@@ -19,6 +19,6 @@ export class AppsFolderResolveService implements Resolve<any> {
     const appsFolder = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
     const folderResponse = await this.api.folder.getWithChildren([new FolderVO(appsFolder)])
 
-    return folderResponse.getFolderVO();
+    return folderResponse.getFolderVO(true);
   }
 }

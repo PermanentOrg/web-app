@@ -97,6 +97,26 @@ $archive-options-shadow-offset: 0.5rem;
   }
 }
 
+.submenu {
+  background: $PR-blue-light;
+
+  .submenu-item {
+    font-size: $font-size-sm;
+    cursor: pointer;
+    padding: 0 $grid-unit;
+    height: 2 * $grid-unit;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: white;
+
+    &:hover {
+      background: darken($PR-blue-light, 7%);
+      text-decoration: none;
+    }
+  }
+}
+
 
 @include desktop {
   :host {

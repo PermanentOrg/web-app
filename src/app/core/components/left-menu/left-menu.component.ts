@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { find } from 'lodash';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ArchiveVO, AccountVO } from '@root/app/models';
+import { ArchiveVO, AccountVO, FolderVO, ConnectorOverviewVO } from '@root/app/models';
 import { Subscription } from 'rxjs';
 import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
@@ -27,6 +28,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   public showArchiveOptions = false;
 
+  public appsSubfolders: FolderVO[] = [];
+
   @ViewChild('scroll') scrollElementRef: ElementRef;
 
   private subscriptions: Subscription[] = [];
@@ -40,17 +43,18 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private relationshipService: RelationshipService,
     private dialog: Dialog,
-    private profile: ProfileService,
-    private elementRef: ElementRef
+    private profile: ProfileService
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
+      this.loadAppsSubfolders();
     }
 
     this.subscriptions.push(
       this.accountService.archiveChange.subscribe((archive: ArchiveVO) => {
         this.archive = archive;
         this.checkArchiveThumbnail();
+        this.loadAppsSubfolders();
       })
     );
 
@@ -152,6 +156,17 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.dialog.open('MembersDialogComponent', { members }, { width: '800px'});
     this.showArchiveOptions = false;
+  }
+
+  async loadAppsSubfolders() {
+    try {
+      const apps = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
+      const folderResponse = await this.api.folder.getWithChildren([new FolderVO(apps)])
+      const appsFolder = folderResponse.getFolderVO(true);
+      this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
+    } catch (err) {
+      console.error('Error loading apps subfolders, silently failing', err);
+    }
   }
 
 

@@ -59,6 +59,12 @@
         <i class="ion-md-swap"></i>
         Apps
       </a>
+      <div class="submenu hide-mobile" *ngIf="appsSubfolders?.length">
+        <a class="submenu-item" *ngFor="let subfolder of appsSubfolders"
+          [routerLink]="['/apps', subfolder.archiveNbr, subfolder.folder_linkId]">
+          {{subfolder.displayName}}
+        </a>
+      </div>
       <a class="menu-item hide-desktop"
         [routerLink]="[{ outlets: { dialog: ['connections']}}]"
         [class.active]="checkMenuItemActive('/connections')">
