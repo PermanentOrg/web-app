@@ -218,7 +218,7 @@ $archive-options-shadow-offset: 0.5rem;
     }
 
     .menu-scroll {
-      max-height: calc(100vh - #{$navbar-total-height-desktop});
+      max-height: calc(100vh - #{$navbar-height-desktop});
     }
 
     .menu-branding {
