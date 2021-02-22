@@ -5,7 +5,6 @@ export const environment = {
   apiUrl: 'https://www.permanent.org/api',
   hmr: false,
   firebase: {
-    apiKey: 'AIzaSyAcBDvNQWiDogLtq-L9pEkG7M9snK97rKo',
     authDomain: 'prpledgeprod.firebaseapp.com',
     databaseURL: 'https://prpledgeprod.firebaseio.com',
     functionsURL: 'https://us-central1-prpledgeprod.cloudfunctions.net',
