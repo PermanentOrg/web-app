@@ -25,7 +25,6 @@
             ],
             "styles": [
               "node_modules/@permanent.org/vis-timeline/dist/vis-timeline-graph2d.css",
-              "node_modules/shepherd.js/dist/css/shepherd.css",
               "src/styles/main.scss"
             ],
             "stylePreprocessorOptions": {
