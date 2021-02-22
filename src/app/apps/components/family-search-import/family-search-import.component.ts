@@ -82,15 +82,16 @@ export class FamilySearchImportComponent implements OnInit {
     );
 
     this.showImportSpinner = true;
-    const response = await this.api.archive.create(archivesToCreate);
-
-    const newArchives = response.getArchiveVOs();
-    const personIds = [];
-    for (let index = 0; index < newArchives.length; index++) {
-      personIds.push(selected[index].id);
-    }
-
     try {
+
+      const response = await this.api.archive.create(archivesToCreate);
+
+      const newArchives = response.getArchiveVOs();
+      const personIds = [];
+      for (let index = 0; index < newArchives.length; index++) {
+        personIds.push(selected[index].id);
+      }
+
       await this.api.connector.familysearchFactImportRequest(newArchives, personIds);
 
       if (this.importMemories === 'yes') {
@@ -109,19 +110,27 @@ export class FamilySearchImportComponent implements OnInit {
       this.waiting = false;
       this.dialogRef.close();
 
-      this.guidedTour.startTour([
-        {
-          ...CreateArchivesComplete,
-          beforeShowPromise: () => {
-            this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
-            return timeout(500);
+      if (!this.guidedTour.isStepComplete('familysearch', 'switchArchives')) {
+        this.guidedTour.startTour([
+          {
+            ...CreateArchivesComplete,
+            beforeShowPromise: () => {
+              this.guidedTour.emit(GuidedTourEvent.RequestAccountDropdownOpen);
+              return timeout(500);
+            },
+            when: {
+              show: () => {
+                this.guidedTour.markStepComplete('familysearch', 'switchArchives');
+              }
+            }
           },
-        },
-      ]);
+        ]);
+      }
     } catch (err) {
+      this.showImportSpinner = false;
       this.waiting = false;
-      console.error(err);
       this.message.showError('There was an error importing facts and memories. Please try again later.');
+      this.dialogRef.close();
     }
   }
 
