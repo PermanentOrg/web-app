@@ -1,4 +1,4 @@
-<div class="connector-about" [class.clickable]="hasFiles" (click)="goToFolder()" [ngbTooltip]="getTooltip()">
+<div class="connector-about" [class.clickable]="folder" (click)="goToFolder()" [ngbTooltip]="getTooltip()">
   <div class="connector-logo" [ngClass]="getConnectorClass(connector.type)">
     <div class="logo-img"></div>
   </div>

@@ -5,32 +5,32 @@
         <img src="assets/img/logo/sideways_logo.png" alt="">
       </a>
     </div>
-    <div class="menu-header">
-      <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
-    </div>
-    <div class="menu-header-desktop" [class.show-shadow]="showArchiveOptions">
-      <div class="archive">
-        <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
-        <div class="archive-name">The {{archive.fullName}} Archive</div>
-        <div class="archive-access">Access role: {{archive.accessRole | prConstants}}</div>
-        <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
-          [class.reverse]="showArchiveOptions">
-          <i class="material-icons">expand_more</i>
+    <div class="menu-scroll" #scroll>
+      <div class="menu-header">
+        <pr-archive-small [archive]="archive" [routerLink]="['/choosearchive']" [clickable]="true"></pr-archive-small>
+      </div>
+      <div class="menu-header-desktop" [class.show-shadow]="showArchiveOptions">
+        <div class="archive">
+          <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
+          <div class="archive-name">The {{archive.fullName}} Archive</div>
+          <div class="archive-access">Access role: {{archive.accessRole | prConstants}}</div>
+          <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
+            [class.reverse]="showArchiveOptions">
+            <i class="material-icons">expand_more</i>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
-      <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['profile']}}]">
-        Archive Profile
-      </a>
-      <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['connections']}}]">
-        Archive Connections
-      </a>
-      <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['members']}}]">
-        Archive Members
-      </a>
-    </div>
-    <div class="menu-scroll" #scroll>
+      <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
+        <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['profile']}}]">
+          Archive Profile
+        </a>
+        <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['connections']}}]">
+          Archive Connections
+        </a>
+        <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['members']}}]">
+          Archive Members
+        </a>
+      </div>
       <a class="menu-item hide-desktop"
       [routerLink]="['/search']"
       [class.active]="checkMenuItemActive('/search')">
@@ -59,6 +59,12 @@
         <i class="ion-md-swap"></i>
         Apps
       </a>
+      <div class="submenu hide-mobile" *ngIf="appsSubfolders?.length">
+        <a class="submenu-item" *ngFor="let subfolder of appsSubfolders"
+          [routerLink]="['/apps', subfolder.archiveNbr, subfolder.folder_linkId]">
+          {{subfolder.displayName}}
+        </a>
+      </div>
       <a class="menu-item hide-desktop"
         [routerLink]="[{ outlets: { dialog: ['connections']}}]"
         [class.active]="checkMenuItemActive('/connections')">
