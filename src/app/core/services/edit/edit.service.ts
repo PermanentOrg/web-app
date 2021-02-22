@@ -17,6 +17,7 @@ import { FolderPickerService } from '../folder-picker/folder-picker.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -102,7 +103,8 @@ export class EditService {
     private prompt: PromptService,
     private accountService: AccountService,
     private dialog: Dialog,
-    private device: DeviceService
+    private device: DeviceService,
+    private secrets: SecretsService
   ) {
     this.loadGoogleMapsApi();
   }
@@ -119,7 +121,7 @@ export class EditService {
 
       const script = document.createElement('script');
       const callbackName = '__gmapsLoaded';
-      const apiKey = environment.google.apiKey;
+      const apiKey = this.secrets.get('GOOGLE_API_KEY');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=${callbackName}&libraries=places`;
       script.defer = true;
       script.async = true;

@@ -18,13 +18,17 @@ import { ClaimStorageComponent } from './components/claim-storage/claim-storage.
 import { PledgeListComponent } from './components/pledge-list/pledge-list.component';
 import { MissingPledgeComponent } from './components/missing-pledge/missing-pledge.component';
 import { UpdateCardComponent } from './components/update-card/update-card.component';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp({
+      ...environment.firebase,
+      apiKey: SecretsService.getStatic('FIREBASE_API_KEY')
+    }),
     AngularFireDatabaseModule,
     PledgeRoutingModule,
     CountUpModule,

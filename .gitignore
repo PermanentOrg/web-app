@@ -44,3 +44,6 @@ test-reports
 
 cypress/videos
 cypress/screenshots
+
+.env
+src/secrets.ts

@@ -2,6 +2,12 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
+## Secrets
+
+Prior to building, be sure to create a `.env` file with any necessary secrets for your environment, using `.env.template` as a guide if needed. 
+
+If adding any new secrets, update `.env.template` and `src/required-secrets.js` with the new variable names.
+
 ## Development server
 
 To run the app using `ng serve`, use the following `npm` scripts:

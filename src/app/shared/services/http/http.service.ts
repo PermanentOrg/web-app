@@ -7,24 +7,25 @@ import { environment } from '@root/environments/environment';
 import { RequestVO } from '@models/request-vo';
 import { BaseResponse } from '@shared/services/api/base';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { SecretsService } from '../secrets/secrets.service';
 
-const API_URL = environment.apiUrl;
-const API_KEY = environment.apiKey;
+
 const CSRF_KEY = 'CSRF';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
-  private defaultResponseClass;
+  private apiUrl = environment.apiUrl;
+  private apiKey = this.secrets.get('PERMANENT_API_KEY');
+  private defaultResponseClass = BaseResponse;
 
-  constructor(private http: HttpClient, private storage: StorageService ) {
-    this.defaultResponseClass = BaseResponse;
+  constructor(private http: HttpClient, private storage: StorageService, private secrets: SecretsService) {
   }
 
   public sendRequest<T = BaseResponse>(endpoint: string, data: any = [{}], responseClass ?: any): Observable<T> {
-    const requestVO = new RequestVO(API_KEY, this.storage.session.get(CSRF_KEY), data);
-    const url = API_URL + endpoint;
+    const requestVO = new RequestVO(this.apiKey, this.storage.session.get(CSRF_KEY), data);
+    const url = this.apiUrl + endpoint;
 
     return this.http
       .post(url, {RequestVO: requestVO})
