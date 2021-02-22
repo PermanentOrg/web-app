@@ -35,7 +35,6 @@ export class ConnectorComponent implements OnInit {
 
   public connected: boolean;
   public folder: FolderVO;
-  public hasFiles: boolean;
   public connectorName: string;
 
   public waiting: boolean;
@@ -58,16 +57,12 @@ export class ConnectorComponent implements OnInit {
   ngOnInit() {
     const type = this.connector.type.split('.').pop();
     this.folder = _.find(this.appsFolder.ChildItemVOs, {special: `${type}.root.folder`}) as FolderVO;
-    if (this.folder) {
-      this.hasFiles = this.folder.ChildItemVOs?.length > 0;
-    }
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();
 
     switch (type) {
       case 'familysearch':
         this.connectText = 'Sign In with FamilySearch';
-        this.hasFiles = this.connector.ConnectorFamilysearchVO ? true : false;
         break;
     }
   }
@@ -228,7 +223,7 @@ export class ConnectorComponent implements OnInit {
   }
 
   goToFolder() {
-    if (!this.hasFiles) {
+    if (!this.folder) {
       return;
     }
 
@@ -236,7 +231,7 @@ export class ConnectorComponent implements OnInit {
   }
 
   getTooltip() {
-    if (!this.hasFiles) {
+    if (!this.folder) {
       return '';
     }
 
