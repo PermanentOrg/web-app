@@ -20,6 +20,11 @@
   padding-bottom: 0;
 }
 
+.shepherd-footer {
+  padding: $grid-unit;
+  padding-top: 0;
+}
+
 .shepherd-cancel-icon {
   color: white;
 
@@ -28,8 +33,9 @@
   }
 }
 
-.shepherd-button {
-  @extend .btn;
+button.shepherd-button.btn {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .shepherd-text {

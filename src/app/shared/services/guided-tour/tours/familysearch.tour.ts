@@ -11,7 +11,7 @@ export const ImportFamilyTree: ShepherdStep = {
   text: ['You can now import your family tree'],
   buttons: [
     {
-      classes: 'btn btn-primary',
+      classes: 'btn btn-white',
       text: 'Awesome!',
       type: 'next'
     }
@@ -28,8 +28,8 @@ export const CreateArchivesComplete: ShepherdStep = {
   text: ['We’ve created individual Permanent Archives from your existing FamilySearch family tree. Switch archives and navigate to Apps to view imported memories'],
   buttons: [
     {
-      classes: 'btn btn-primary',
-      text: 'Wow!',
+      classes: 'btn btn-white',
+      text: 'OK!',
       type: 'next'
     }
   ],

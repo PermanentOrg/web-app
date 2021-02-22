@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ShepherdService } from 'angular-shepherd';
 import { Subject } from 'rxjs';
 import { AccountService } from '../account/account.service';
+import { DeviceService } from '../device/device.service';
 import { StorageService } from '../storage/storage.service';
 import { GuidedTourEvent } from './events';
 import { GuidedTourHistory, TourName, TourStep } from './history';
@@ -21,7 +22,8 @@ export class GuidedTourService {
   constructor(
     private shepherd: ShepherdService,
     private storage: StorageService,
-    private account: AccountService
+    private account: AccountService,
+    private device: DeviceService
   ) {
     this.shepherd.modal = true;
   }
@@ -56,7 +58,11 @@ export class GuidedTourService {
     return allHistory[account.accountId] || {};
   }
 
-  isStepComplete(tour: TourName, step: TourStep): boolean {
+  isStepComplete(tour: TourName, step: TourStep, skipMobile = true): boolean {
+    if (skipMobile && this.device.isMobileWidth()) {
+      return true;
+    }
+    
     const history = this.getHistoryForAccount();
 
     if (!history[tour]) {
