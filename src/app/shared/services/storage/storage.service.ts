@@ -23,7 +23,7 @@ class BaseStorage {
     }
   }
 
-  public get(key) {
+  public get<T = any>(key): T {
     if (this.storeInMemory) {
       return this.store[key];
     } else {
@@ -42,7 +42,7 @@ class BaseStorage {
     }
   }
 
-  public set(key, value) {
+  public set<T = any>(key, value: T) {
     if (this.storeInMemory) {
       this.store[key] = value;
     } else {
