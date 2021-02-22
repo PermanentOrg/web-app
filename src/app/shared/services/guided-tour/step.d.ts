@@ -32,6 +32,6 @@ export interface CancelIcon {
   enabled: boolean;
 }
 export interface When {
-  show: ShowOrHideOrBeforeShowPromise;
-  hide: ShowOrHideOrBeforeShowPromise;
+  show?: ShowOrHideOrBeforeShowPromise;
+  hide?: ShowOrHideOrBeforeShowPromise;
 }

@@ -341,9 +341,18 @@ export class ConnectorComponent implements OnInit {
         this.connector.update(connector);
         this.setStatus();
         this.router.navigate(["/apps"], { queryParams: {} });
-        this.guidedTour.startTour([
-          ImportFamilyTree,
-        ]);
+        if (!this.guidedTour.isStepComplete('familysearch', 'importFamilyTree')) {
+          this.guidedTour.startTour([
+            { 
+              ...ImportFamilyTree,
+              when: {
+                show: () => {
+                  this.guidedTour.markStepComplete('familysearch', 'importFamilyTree');
+                }
+              }
+            }
+          ]);
+        }
       } catch (err) {
         if (err instanceof ConnectorResponse) {
           this.message.showError(err.getMessage(), true);
