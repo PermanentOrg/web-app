@@ -8,9 +8,7 @@ export const environment = {
     authDomain: 'prpledgestaging.firebaseapp.com',
     databaseURL: 'https://prpledgestaging.firebaseio.com',
     functionsURL: 'https://us-central1-prpledgestaging.cloudfunctions.net',
-    projectId: 'prpledgestaging',
-    storageBucket: 'prpledgestaging.appspot.com',
-    messagingSenderId: '311870668048'
+    projectId: 'prpledgestaging'
   },
   debug: false,
   release,
