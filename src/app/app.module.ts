@@ -47,22 +47,6 @@ if (environment.environment !== 'local') {
 
 
 @Injectable()
-export class CustomUrlSerializer implements UrlSerializer {
-  private defaultSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
-
-  // I don't think I should need this, since we're just doing default 
-  // parsing now, but compile fails without it
-  parse(url: string): UrlTree {
-    return this.defaultSerializer.parse(url);
-  }
-
-  /** Converts a {@link UrlTree} into a url */
-  serialize(tree: UrlTree): string {
-    return this.defaultSerializer.serialize(tree);
-  }
-}
-
-@Injectable()
 export class SentryErrorHandler implements ErrorHandler {
   constructor() { }
 
@@ -155,10 +139,6 @@ export class PermErrorHandler implements ErrorHandler {
   providers: [
     CookieService,
     MessageService,
-    {
-      provide: UrlSerializer,
-      useClass: CustomUrlSerializer
-    },
     {
       provide: ErrorHandler,
       useClass: SentryErrorHandler
