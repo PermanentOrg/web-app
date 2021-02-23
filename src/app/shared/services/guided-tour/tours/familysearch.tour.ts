@@ -25,7 +25,7 @@ export const CreateArchivesComplete: ShepherdStep = {
     selector: AccountDropdownArchives.element,
     event: 'click'
   },
-  text: ['We’ve created individual Permanent Archives from your existing FamilySearch family tree. Switch archives and navigate to Apps to view imported memories'],
+  text: ['We’ve created individual Permanent Archives from your existing FamilySearch family tree. Switch archives and navigate to Apps to view imported memories.'],
   buttons: [
     {
       classes: 'btn btn-white',
