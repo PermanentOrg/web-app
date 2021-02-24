@@ -207,7 +207,7 @@ export class EditService {
           break;
         case 'publish':
           actionDeferred.resolve();
-          this.dialog.open('PublishComponent', { item: items[0] }, { height: 'auto' });
+          this.openPublishDialog(items[0]);
           break;
         case 'share':
           const response: ShareResponse = await this.api.share.getShareLink(items[0]);
