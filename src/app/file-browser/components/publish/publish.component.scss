@@ -6,3 +6,11 @@
 .public-link-button, .public-link {
   padding: 0 10px;
 }
+
+.buttons {
+  display: flex;
+
+  .btn:not(:last-child) {
+    margin-right: 10px;
+  }
+}

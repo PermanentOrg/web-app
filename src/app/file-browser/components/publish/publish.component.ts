@@ -12,6 +12,7 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
 import { Router } from '@angular/router';
+import { PublishIaData } from '@models/publish-ia-vo';
 
 @Component({
   selector: 'pr-publish',
@@ -23,11 +24,14 @@ export class PublishComponent implements OnInit {
   public publicItem: RecordVO | FolderVO = null;
 
   public publicLink: string = null;
+  public publishIa: PublishIaData = null;
 
   public waiting = false;
   public linkCopied = false;
+  public iaLinkCopied = false;
 
   @ViewChild('publicLinkInput', { static: false }) publicLinkInput: ElementRef;
+  @ViewChild('iaLinkInput', { static: false }) iaLinkInput: ElementRef;
 
   constructor(
     @Inject(DIALOG_DATA) public data: any,
@@ -46,6 +50,7 @@ export class PublishComponent implements OnInit {
     if (this.sourceItem.folder_linkType.includes('public')) {
       this.publicItem = this.sourceItem;
       this.publicLink =  this.linkPipe.transform(this.publicItem);
+      this.checkInternetArchiveLink();
     }
   }
 
@@ -107,9 +112,49 @@ export class PublishComponent implements OnInit {
     }, 5000);
   }
 
+  copyInternetArchiveLink() {
+    const element = this.iaLinkInput.nativeElement as HTMLInputElement;
+    copyFromInputElement(element);
+
+    this.iaLinkCopied = true;
+    setTimeout(() => {
+      this.iaLinkCopied = false;
+    }, 5000);
+  }
+
   onViewOnWebClick() {
     this.close();
     this.router.navigate(this.routePipe.transform(this.publicItem || this.sourceItem));
+  }
+
+  async checkInternetArchiveLink() {
+    this.waiting = true;
+    try {
+      const response = await this.api.publish.getInternetArchiveLink({ folder_linkId: this.publicItem.folder_linkId });
+      this.publishIa = response.getPublishIaVO();
+    } catch (err) {
+      this.messageService.showError('There was a problem loading the Internet Archive publish status of this item.');
+    }
+
+    this.waiting = false;
+  }
+
+  async publishItemToInternetArchive() {
+    this.waiting = true;
+    try {
+      const archive = this.account.getArchive();
+      const account = this.account.getAccount();
+      const response = await this.api.publish.publishToInternetArchive({ 
+        accountId: account.accountId,
+        archiveId: archive.archiveId,
+        folder_linkId: this.publicItem.folder_linkId
+      });
+      this.publishIa = response.getPublishIaVO();
+    } catch (err) {
+      this.messageService.showError('There was a problem publishing this item to the Internet Archive. Please try again later.');
+    }
+
+    this.waiting = false;
   }
 
   close() {
