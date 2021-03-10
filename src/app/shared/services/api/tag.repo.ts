@@ -5,7 +5,8 @@ export class TagRepo extends BaseRepo {
   public create(tag: TagVOData, tagLink: TagLinkVOData) {
     const data = [{
       TagVO: {
-        name: tag.name
+        name: tag.name,
+        type: tag.type
       },
       TagLinkVO: tagLink
     }];

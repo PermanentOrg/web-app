@@ -35,6 +35,8 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
   @HostBinding('class.is-waiting') public waiting = false;
 
   public newTagName: string;
+  public tagType: string;
+  public tagShortName: string;
 
   subscriptions: Subscription[] = [];
 
@@ -92,7 +94,16 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
       return;
     }
 
-    const tag: TagVOData = { name: newTagName };
+    if (newTagName.indexOf(':') !== -1) {
+      // then we have a metadata tag and its location
+      this.tagType = newTagName.substring(0, (newTagName.indexOf(':')));
+      this.tagShortName = newTagName.substring((newTagName.indexOf(':') + 1));
+    }
+
+    const tag: TagVOData = { 
+      name: this.tagShortName,
+      type: this.tagType,
+     };
     await this.onTagClick(tag);
     this.newTagName = null;
     this.onTagType(this.newTagName);
