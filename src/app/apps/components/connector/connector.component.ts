@@ -68,9 +68,6 @@ export class ConnectorComponent implements OnInit {
       case 'familysearch':
         this.connectText = 'Sign In with FamilySearch';
         break;
-      case 'facebook':
-        this.connectText = 'Sorry, our Facebook connection is suspended';
-        break;
     }
   }
 
@@ -192,7 +189,7 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
-        We have suspended our Facebook integration.
+        We have suspended our Facebook integration indefinitely.
         <br><br>
         Click <a href='https://www.permanent.org/blog/'>here</a> to learn more.
         <br>
