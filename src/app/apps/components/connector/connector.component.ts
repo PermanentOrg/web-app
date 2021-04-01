@@ -68,6 +68,9 @@ export class ConnectorComponent implements OnInit {
       case 'familysearch':
         this.connectText = 'Sign In with FamilySearch';
         break;
+      case 'facebook':
+        this.connectText = 'Sorry, our Facebook connection is suspended';
+        break;
     }
   }
 
@@ -189,9 +192,9 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
-        Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
+        We have suspended our Facebook integration.
         <br><br>
-        You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
+        Click <a href='https://www.permanent.org/blog/'>here</a> to learn more.
         <br>
         `;
         break;
