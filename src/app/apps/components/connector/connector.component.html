@@ -13,14 +13,11 @@
   </div>
 </div>
 <div class="connector-actions">
-  <ng-template #tooltipContent>Why can't I connect to Facebook?  Click Help.</ng-template>
   <button class="btn btn-primary"
           id="connector-connect"
           [hidden]="connected"
           (click)="connect()"
-          [disabled]="waiting || connectorName == 'Facebook'"
-          [ngbTooltip]="tooltipContent"
-          [disableTooltip]="connectorName == 'FamilySearch'">
+          [disabled]="waiting || connectorName == 'Facebook'">
     {{ connectText || 'Connect' }}
   </button>
   <button class="btn btn-primary" [hidden]="!folder" (click)="goToFolder()" [disabled]="waiting"

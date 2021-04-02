@@ -189,7 +189,7 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
-        We have suspended our Facebook integration indefinitely.
+        Why can't I connect to Facebook?  We have suspended our Facebook integration indefinitely.
         <br><br>
         Click <a href='https://www.permanent.org/blog/'>here</a> to learn more.
         <br>
