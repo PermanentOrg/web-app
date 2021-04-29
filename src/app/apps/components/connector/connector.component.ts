@@ -189,10 +189,8 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
-        Why can't I connect to Facebook?  We have suspended our Facebook integration indefinitely.
-        <br><br>
-        Click <a href='https://www.permanent.org/blog/'>here</a> to learn more.
-        <br>
+        <p><strong>Why can't I connect to Facebook?</strong></p>
+        <p>We have suspended our Facebook integration indefinitely.</p>
         `;
         break;
       case 'type.connector.familysearch':
@@ -214,14 +212,22 @@ export class ConnectorComponent implements OnInit {
         break;
     }
 
+    const done: string = this.isFacebook() ? 'Read More' : 'Done';
+
     try {
       this.prompt.confirm(
-        'Done',
+        done,
         this.prConstants.translate(this.connector.type),
         null,
         null,
         template
-        );
+      ).then((val) => {
+        if (this.isFacebook()) {
+          window.open('https://www.permanent.org/blog/why-weve-chosen-to-suspend-our-facebook-integration/', '_blank');
+        }
+      }).catch(() => {
+        // Do nothing on "Cancel" press, but still catch the promise rejection.
+      });
     } catch (err) {
     }
   }
@@ -438,4 +444,7 @@ export class ConnectorComponent implements OnInit {
     }
   }
 
+  private isFacebook(): boolean {
+    return this.connector.type === 'type.connector.facebook';
+  }
 }
