@@ -189,10 +189,8 @@ export class ConnectorComponent implements OnInit {
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
-        Add <strong>#permanent</strong> to the description of your photos or albums on Facebook. When you tap <strong>Import Photos</strong> and choose the <strong>#permanent</strong> option, we will import all tagged photos and albums into your #permanent folder.
-        <br><br>
-        You can also automatically import everything from your Facebook account by choosing the <strong>Everything</strong> option.
-        <br>
+        <p><strong>Why can't I connect to Facebook?</strong></p>
+        <p>We have suspended our Facebook integration indefinitely.</p>
         `;
         break;
       case 'type.connector.familysearch':
@@ -214,14 +212,22 @@ export class ConnectorComponent implements OnInit {
         break;
     }
 
+    const done: string = this.isFacebook() ? 'Read More' : 'Done';
+
     try {
       this.prompt.confirm(
-        'Done',
+        done,
         this.prConstants.translate(this.connector.type),
         null,
         null,
         template
-        );
+      ).then((val) => {
+        if (this.isFacebook()) {
+          window.open('https://www.permanent.org/blog/why-weve-chosen-to-suspend-our-facebook-integration/', '_blank');
+        }
+      }).catch(() => {
+        // Do nothing on "Cancel" press, but still catch the promise rejection.
+      });
     } catch (err) {
     }
   }
@@ -438,4 +444,7 @@ export class ConnectorComponent implements OnInit {
     }
   }
 
+  private isFacebook(): boolean {
+    return this.connector.type === 'type.connector.facebook';
+  }
 }
