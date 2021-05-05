@@ -40,7 +40,9 @@ export class ArchiveVO extends BaseVO implements DynamicListChild  {
     super(voData);
 
     if (this.ItemVOs && this.ItemVOs.length) {
-      this.ItemVOs = this.ItemVOs.map((item) => {
+      // remove null items
+      this.ItemVOs = this.ItemVOs.filter((item) => item.type !== null)
+        .map((item) => {
         if (item.type.includes('folder')) {
           return new FolderVO(item, false, DataStatus.Lean);
         } else {
