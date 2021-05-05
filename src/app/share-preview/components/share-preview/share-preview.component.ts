@@ -426,7 +426,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
             this.accountService.setRedirect(['/share', 'invite' , this.sharePreviewVO.token, 'view']);
           }
 
-          this.router.navigate(['/auth', 'mfa'], { queryParamsHandling: 'preserve' })
+          this.router.navigate(['/app', 'auth', 'mfa'], { queryParamsHandling: 'preserve' })
             .then(() => {
               this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
             });
