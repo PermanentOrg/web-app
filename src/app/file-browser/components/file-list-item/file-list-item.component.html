@@ -1,16 +1,21 @@
 <div class="file-list-item"
-  (click)="onItemClick($event)" 
+  (click)="onItemClick($event)"
   [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction }"
   (mousedown)="onItemMouseDown($event)" (touchstart)="onItemTouchStart($event)" (touchend)="onItemTouchEnd($event)"
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"
-  inViewport (inViewportAction)="onIntersection($event)" [inViewportOptions]="{ threshold: [0], rootMargin: '100px' }"> 
-  <ng-container [ngSwitch]="item.isFolder">
-    <div class="file-list-item-folder-icon" *ngSwitchCase="true">
+  inViewport (inViewportAction)="onIntersection($event)" [inViewportOptions]="{ threshold: [0], rootMargin: '100px' }">
+  <ng-container *ngIf="!isInPublicArchive || isEmptyFolder; else public_view" [ngSwitch]="item.isFolder">
+    <div [ngClass]="{'file-list-item-folder-icon': item.isFolder, 'public-view': isInPublicArchive}" *ngSwitchCase="true">
       <i class="material-icons">folder</i>
     </div>
     <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
+  <ng-template #public_view>
+    <div prBgImage [bgSrc]="getThumbnailPath()" [cover]="inGridView" [ngClass]="{'file-list-item-folder-icon': item.isFolder, 'public-view': isInPublicArchive}">
+      <i *ngIf="item.isFolder" class="material-icons">folder</i>
+    </div>
+  </ng-template>
   <div class="grid-item-type-icon" @ngIfFadeInAnimation
     *ngIf="inGridView && item.isFolder ? item.view : true">
     <i class="material-icons">{{item | itemTypeIcon:item.view}}</i>

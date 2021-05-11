@@ -138,6 +138,10 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   public isMyItem = true;
   public canEdit = true;
 
+  private folderThumb200: string;
+  private folderThumb500: string;
+  private isEmptyFolder: boolean = false;
+
   private isInShares: boolean;
   private isInApps: boolean;
   private isInPublic: boolean;
@@ -201,6 +205,22 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     }
 
     if (data.isPublicArchive) {
+      if (this.item.isFolder) {
+        this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
+          if (resp.isSuccessful) {
+            const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
+            const [thumbnailItem] = newFolderVO.ChildItemVOs;
+            if (thumbnailItem) {
+              this.folderThumb200 = thumbnailItem.thumbURL200;
+              this.folderThumb500 = thumbnailItem.thumbURL500;
+            } else {
+              this.isEmptyFolder = true;
+            }
+          }
+        }).catch((err) => {
+          // Just silently fail if we can't get items.
+        });
+      }
       this.isInPublicArchive = true;
     }
 
@@ -807,5 +827,13 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       component: this,
       element: this.element.nativeElement as HTMLElement
     });
+  }
+
+  private getThumbnailPath(): string {
+    if (this.item.isFolder && this.isInPublicArchive && (this.folderThumb200 || this.folderThumb500)) {
+      return this.inGridView ? this.folderThumb500 : this.folderThumb200;
+    } else {
+      return this.inGridView ? this.item.thumbURL500 : this.item.thumbURL200;
+    }
   }
 }

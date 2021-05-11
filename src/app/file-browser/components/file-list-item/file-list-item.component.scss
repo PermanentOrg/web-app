@@ -277,6 +277,10 @@ $bg-transition-length: 0.075s;
       display: flex;
       align-items: center;
     }
+    &.public-view > i {
+      font-size: 7rem;
+      filter: drop-shadow(0 0 0.25rem #000);
+    }
   }
 }
 
