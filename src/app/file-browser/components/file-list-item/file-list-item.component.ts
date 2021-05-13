@@ -694,9 +694,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
-    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
 
-    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise)
+    this.folderPicker.chooseFolder(rootFolder, operation, deferred.promise)
       .then((destination: FolderVO) => {
         switch (operation) {
           case FolderPickerOperations.Copy:

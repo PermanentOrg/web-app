@@ -127,7 +127,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
       archiveNbr: folder.archiveNbr
     })).toPromise();
     this.currentFolder = folderResponse.getFolderVO(true);
-    this.isRootFolder = this.currentFolder.type.includes('root');
+    this.isRootFolder = this.currentFolder.type.includes('type.folder.root.root');
     if (!this.allowRecords) {
       remove(this.currentFolder.ChildItemVOs, 'isRecord');
     }
