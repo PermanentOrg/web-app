@@ -80,6 +80,14 @@ export const ItemActions: {[key: string]: PromptButton} = {
   }
 };
 
+enum FolderContentsType {
+  NORMAL = "",
+  EMPTY_FOLDER = "folder_open",
+  BROKEN_THUMBNAILS = "folder",
+  SUBFOLDERS = "perm_media",
+  MIXED_FILES = "description"
+}
+
 type ActionType = 'delete' |
   'rename' |
   'share' |
@@ -140,7 +148,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
   private folderThumb200: string;
   private folderThumb500: string;
-  private isEmptyFolder: boolean = false;
+  private folderContentsType: FolderContentsType = FolderContentsType.NORMAL;
 
   private isInShares: boolean;
   private isInApps: boolean;
@@ -206,20 +214,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
     if (data.isPublicArchive) {
       if (this.item.isFolder) {
-        this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
-          if (resp.isSuccessful) {
-            const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
-            const [thumbnailItem] = newFolderVO.ChildItemVOs;
-            if (thumbnailItem) {
-              this.folderThumb200 = thumbnailItem.thumbURL200;
-              this.folderThumb500 = thumbnailItem.thumbURL500;
-            } else {
-              this.isEmptyFolder = true;
-            }
-          }
-        }).catch((err) => {
-          // Just silently fail if we can't get items.
-        });
+        this.getFolderThumbnail();
       }
       this.isInPublicArchive = true;
     }
@@ -829,11 +824,67 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     });
   }
 
+  private getFolderThumbnail(): void {
+    const sortPriorities = [
+      'type.record.image',
+      'type.record.video',
+      'type.record.presentation',
+      'type.record.pdf',
+    ];
+
+    const calculateSortPriority = (item: ItemVO): number => {
+      const priority = sortPriorities.indexOf(item.type);
+      if (priority < 0) {
+        return Infinity;
+      }
+      return priority;
+    };
+
+    this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
+      if (resp.isSuccessful) {
+        const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
+        const allChildren = newFolderVO.ChildItemVOs;
+        const [thumbnailItem] = newFolderVO.ChildItemVOs.filter(item => item.type.includes('type.record')).sort((a, b) => {
+          return calculateSortPriority(a) - calculateSortPriority(b);
+        });
+        if (thumbnailItem) {
+          if (sortPriorities.includes(thumbnailItem.type)) {
+            if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
+              this.folderThumb200 = thumbnailItem.thumbURL200;
+              this.folderThumb500 = thumbnailItem.thumbURL500;
+            } else {
+              this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+            }
+          } else {
+            this.folderContentsType = FolderContentsType.MIXED_FILES;
+          }
+        } else {
+          if (allChildren.length === 0) {
+            this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
+          } else {
+            this.folderContentsType = FolderContentsType.SUBFOLDERS;
+          }
+        }
+      } else {
+        this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+      }
+    }).catch((err) => {
+      this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+    });
+  }
+
   private getThumbnailPath(): string {
+    if (this.showFolderIcon()) {
+      return '';
+    }
     if (this.item.isFolder && this.isInPublicArchive && (this.folderThumb200 || this.folderThumb500)) {
       return this.inGridView ? this.folderThumb500 : this.folderThumb200;
     } else {
       return this.inGridView ? this.item.thumbURL500 : this.item.thumbURL200;
     }
+  }
+
+  private showFolderIcon(): boolean {
+    return this.folderContentsType !== FolderContentsType.NORMAL;
   }
 }
