@@ -206,6 +206,10 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       this.isInMyPublic = true;
     }
 
+    if (this.item.isFolder) {
+      this.getFolderThumbnail();
+    }
+
     const data = this.route.snapshot.data as RouteData;
 
     if (data.isPublic) {
@@ -213,9 +217,6 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     }
 
     if (data.isPublicArchive) {
-      if (this.item.isFolder) {
-        this.getFolderThumbnail();
-      }
       this.isInPublicArchive = true;
     }
 
@@ -844,9 +845,11 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       if (resp.isSuccessful) {
         const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
         const allChildren = newFolderVO.ChildItemVOs;
-        const [thumbnailItem] = newFolderVO.ChildItemVOs.filter(item => item.type.includes('type.record')).sort((a, b) => {
+        const sortedItems = newFolderVO.ChildItemVOs.filter(item => item.type.includes('type.record'));
+        sortedItems.sort((a, b) => {
           return calculateSortPriority(a) - calculateSortPriority(b);
         });
+        const thumbnailItem = sortedItems.shift();
         if (thumbnailItem) {
           if (sortPriorities.includes(thumbnailItem.type)) {
             if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
@@ -877,7 +880,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     if (this.showFolderIcon()) {
       return '';
     }
-    if (this.item.isFolder && this.isInPublicArchive && (this.folderThumb200 || this.folderThumb500)) {
+    if (this.item.isFolder && (this.folderThumb200 || this.folderThumb500)) {
       return this.inGridView ? this.folderThumb500 : this.folderThumb200;
     } else {
       return this.inGridView ? this.item.thumbURL500 : this.item.thumbURL200;
@@ -885,6 +888,6 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   }
 
   private showFolderIcon(): boolean {
-    return this.folderContentsType !== FolderContentsType.NORMAL;
+    return this.item.isFolder && this.folderContentsType !== FolderContentsType.NORMAL;
   }
 }
