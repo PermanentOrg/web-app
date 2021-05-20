@@ -1,14 +1,19 @@
 <div class="file-list-item"
-  (click)="onItemClick($event)" 
+  (click)="onItemClick($event)"
   [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction }"
   (mousedown)="onItemMouseDown($event)" (touchstart)="onItemTouchStart($event)" (touchend)="onItemTouchEnd($event)"
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"
-  inViewport (inViewportAction)="onIntersection($event)" [inViewportOptions]="{ threshold: [0], rootMargin: '100px' }"> 
+  inViewport (inViewportAction)="onIntersection($event)" [inViewportOptions]="{ threshold: [0], rootMargin: '100px' }">
   <ng-container [ngSwitch]="item.isFolder">
-    <div class="file-list-item-folder-icon" *ngSwitchCase="true">
-      <i class="material-icons">folder</i>
-    </div>
+    <ng-container *ngSwitchCase="true">
+      <div class="file-list-item-folder-icon" *ngIf="!inGridView">
+        <i class="material-icons">folder</i>
+      </div>
+      <div prBgImage [bgSrc]="!showFolderIcon() && getThumbnailPath()" [cover]="inGridView" class="file-list-item-folder-icon" *ngIf="inGridView">
+        <i *ngIf="showFolderIcon()" class="material-icons">{{ folderContentsType }}</i>
+      </div>
+    </ng-container>
     <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
   <div class="grid-item-type-icon" @ngIfFadeInAnimation
