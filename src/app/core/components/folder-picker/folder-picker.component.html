@@ -31,7 +31,7 @@
     </div>
     <div class="picker-footer">
       <button class="btn btn-secondary" (click)="hide()" [disabled]="saving">Cancel</button>
-      <button class="btn btn-primary" (click)="chooseFolder()" [disabled]="saving || waiting || (operation === 3 && !selectedRecord)">{{operation ? operationName : 'Choose'}}</button>
+      <button class="btn btn-primary" (click)="chooseFolder()" [disabled]="saving || waiting || (operation === 3 && !selectedRecord) || cannotCopyToFolder()">{{operation ? operationName : 'Choose'}}</button>
     </div>
   </div>
 </div>
