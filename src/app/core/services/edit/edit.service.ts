@@ -477,7 +477,6 @@ export class EditService {
   openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
-    const myFiles = new FolderVO(find(rootFolder.ChildItemVOs, {type: 'type.folder.root.private'}) as FolderVOData);
 
     const filterFolderLinkIds = [];
 
@@ -487,7 +486,7 @@ export class EditService {
       }
     }
 
-    this.folderPicker.chooseFolder(myFiles, operation, deferred.promise, filterFolderLinkIds)
+    this.folderPicker.chooseFolder(rootFolder, operation, deferred.promise, filterFolderLinkIds)
       .then((destination: FolderVO) => {
         switch (operation) {
           case FolderPickerOperations.Copy:

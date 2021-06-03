@@ -11,6 +11,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { DEFAULT_ANIMATION_LENGTH } from '@root/app/dialog/dialog.service';
 
 export enum FolderPickerOperations {
@@ -40,14 +41,15 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   public selectedRecord: ItemVO;
 
   public filterFolderLinkIds: number[];
-  
+
   private cancelResetTimeout: NodeJS.Timeout;
 
   constructor(
     private dataService: DataService,
     private api: ApiService,
     private message: MessageService,
-    private folderPickerService: FolderPickerService
+    private folderPickerService: FolderPickerService,
+    private prompt: PromptService,
   ) {
     this.folderPickerService.registerComponent(this);
   }
@@ -127,7 +129,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
       archiveNbr: folder.archiveNbr
     })).toPromise();
     this.currentFolder = folderResponse.getFolderVO(true);
-    this.isRootFolder = this.currentFolder.type.includes('root');
+    this.isRootFolder = this.currentFolder.type.includes('type.folder.root.root');
     if (!this.allowRecords) {
       remove(this.currentFolder.ChildItemVOs, 'isRecord');
     }
@@ -167,6 +169,35 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   chooseFolder() {
+    if (this.shouldConfirmFolderSelection()) {
+      this.prompt.confirm('Yes',
+      `This folder is publicly accessible by others. Are you sure you would like to ${this.operationName.toLocaleLowerCase()} to this location?`).then(() => {
+        this.setChosenFolder();
+      }).catch(() => {
+        // Just exit out of confirm box
+      });
+    } else {
+      this.setChosenFolder();
+    }
+  }
+
+  hide() {
+    this.visible = false;
+    this.selectedRecord = null;
+
+    this.cancelResetTimeout = setTimeout(() => {
+      this.currentFolder = null;
+      this.chooseFolderDeferred = null;
+      this.isRootFolder = true;
+      this.cancelResetTimeout = null;
+    }, DEFAULT_ANIMATION_LENGTH);
+  }
+
+  ngOnDestroy() {
+    this.folderPickerService.unregisterComponent();
+  }
+
+  protected setChosenFolder(): void {
     if (this.selectedRecord) {
       this.chooseFolderDeferred.resolve(this.selectedRecord);
     } else if (this.currentFolder) {
@@ -188,19 +219,11 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     }
   }
 
-  hide() {
-    this.visible = false;
-    this.selectedRecord = null;
-
-    this.cancelResetTimeout = setTimeout(() => {
-      this.currentFolder = null;
-      this.chooseFolderDeferred = null;
-      this.isRootFolder = true;
-      this.cancelResetTimeout = null;
-    }, DEFAULT_ANIMATION_LENGTH);
+  protected shouldConfirmFolderSelection(): boolean {
+    return this.currentFolder.type.endsWith('public');
   }
 
-  ngOnDestroy() {
-    this.folderPickerService.unregisterComponent();
+  protected cannotCopyToFolder(): boolean {
+    return this.isRootFolder || (this.currentFolder?.type.includes('root.app'));
   }
 }
