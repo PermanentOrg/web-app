@@ -59,7 +59,7 @@ export class SignupComponent implements OnInit {
     }
 
     if (params.inviteCode) {
-      inviteCode = window.atob(params.inviteCode);
+      inviteCode = params.inviteCode;
     }
 
     if (params.shid && params.tp) {
