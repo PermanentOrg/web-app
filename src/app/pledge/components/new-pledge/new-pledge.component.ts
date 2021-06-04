@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } fr
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { PledgeService } from '@pledge/services/pledge.service';
 import APP_CONFIG from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -41,7 +40,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private pledgeService: PledgeService,
     private router: Router,
     private accountService: AccountService,
     private route: ActivatedRoute,
@@ -203,13 +201,13 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.pledgeForm.reset();
 
-    await this.pledgeService.loadPledge(pledge.id);
-
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
       this.router.navigate(['..', 'claim'], {relativeTo: this.route});
     } else {
       this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});
+      // if...something
+      // claim-storage-login.component.ts -> claimStorage()
     }
     this.waiting = false;
   }
