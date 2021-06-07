@@ -42,7 +42,7 @@ describe('SignupComponent', () => {
               queryParams: {
                 fullName: window.btoa(TEST_DATA.user.name),
                 primaryEmail: window.btoa(TEST_DATA.user.email),
-                inviteCode: window.btoa('invite')
+                inviteCode: 'invite'
               }
             }
           }
