@@ -26,7 +26,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   waiting: boolean;
 
-  showInviteCode = true;
+  showInviteCode = false;
   isForShareInvite = false;
 
   shareArchiveNbr: string;
@@ -64,13 +64,11 @@ export class SignupComponent implements OnInit {
 
     if (params.shid && params.tp) {
       this.isForShareInvite = true;
-      this.showInviteCode = false;
 
       const responseData = this.route.snapshot.data.shareInviteData;
 
       if (!responseData) {
         this.isForShareInvite = false;
-        this.showInviteCode = true;
       } else {
         const itemData: RecordVOData | FolderVOData = {
           archiveNbr: responseData.recArchiveNbr,
