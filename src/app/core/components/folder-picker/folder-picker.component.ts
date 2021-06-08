@@ -197,6 +197,10 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     this.folderPickerService.unregisterComponent();
   }
 
+  public cannotCopyToFolder(): boolean {
+    return this.isRootFolder || (this.currentFolder?.type.includes('root.app'));
+  }
+
   protected setChosenFolder(): void {
     if (this.selectedRecord) {
       this.chooseFolderDeferred.resolve(this.selectedRecord);
@@ -221,9 +225,5 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   protected shouldConfirmFolderSelection(): boolean {
     return this.currentFolder.type.endsWith('public');
-  }
-
-  protected cannotCopyToFolder(): boolean {
-    return this.isRootFolder || (this.currentFolder?.type.includes('root.app'));
   }
 }
