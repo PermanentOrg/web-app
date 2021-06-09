@@ -51,6 +51,7 @@ import { FileHistoryComponent } from './components/file-history/file-history.com
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { PledgeModule } from '../pledge/pledge.module';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { NotificationsModule } from '../notifications/notifications.module';
     SearchModule,
     PortalModule,
     CountUpModule,
-    NotificationsModule
+    NotificationsModule,
+    PledgeModule,
   ],
   declarations: [
     MainComponent,

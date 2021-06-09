@@ -37,7 +37,6 @@ import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.compon
 import { TooltipsPipe } from './pipes/tooltips.pipe';
 import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
-import { NewPledgeComponent } from '../pledge/components/new-pledge/new-pledge.component';
 import { StorageAmountPipe } from './pipes/storage-amount.pipe';
 import { AudioComponent } from './components/audio/audio.component';
 import { ScrollSectionDirective } from './directives/scroll-section.directive';
@@ -102,7 +101,6 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     PublicViewLinkPipe,
     StorageAmountPipe,
     StorageMeterComponent,
-    NewPledgeComponent,
     AudioComponent,
     ThumbnailComponent,
     ScrollNavDirective,
@@ -149,7 +147,6 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     PublicViewLinkPipe,
     StorageAmountPipe,
     StorageMeterComponent,
-    NewPledgeComponent,
     AudioComponent,
     ScrollSectionDirective,
     ScrollNavDirective,
