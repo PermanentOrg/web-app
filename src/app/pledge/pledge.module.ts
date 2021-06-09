@@ -46,6 +46,9 @@ import { SecretsService } from '@shared/services/secrets/secrets.service';
     PledgeListComponent,
     MissingPledgeComponent,
     UpdateCardComponent
-  ]
+  ],
+  exports: [
+    NewPledgeComponent,
+  ],
 })
 export class PledgeModule { }
