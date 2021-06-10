@@ -136,6 +136,8 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
       remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
     }
+    remove(this.currentFolder.ChildItemVOs, (item) => item.type.includes('type.folder.root.app'));
+    remove(this.currentFolder.ChildItemVOs, (item) => item.type.includes('type.folder.root.vault'));
 
     } catch (err) {
       if (err instanceof FolderResponse) {
