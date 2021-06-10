@@ -8,6 +8,24 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 
 declare const require: any;
+window['Stripe'] = () => {
+  return {
+    elements: () => {
+      return {
+        create: (card, options) => {},
+      };
+    },
+    createToken: async (element, options) => {
+      return {
+        token: {
+          id: '0',
+          address_zip: '12345',
+        },
+        error: false,
+      }
+    },
+  }
+};
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
