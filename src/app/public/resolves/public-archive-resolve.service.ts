@@ -3,6 +3,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@a
 
 import { ApiService } from '@shared/services/api/api.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { ArchiveVO } from '@models';
 
 @Injectable()
 export class PublicArchiveResolveService implements Resolve<any> {
@@ -13,7 +14,7 @@ export class PublicArchiveResolveService implements Resolve<any> {
 
   async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
     const archiveNbr = route.params.publicArchiveNbr;
-    const response = await this.api.archive.getByArchiveNbr([archiveNbr]);
+    const response = await this.api.archive.get([new ArchiveVO({archiveNbr})]);
     this.publicProfile.setArchive(response.getArchiveVO());
   }
 }
