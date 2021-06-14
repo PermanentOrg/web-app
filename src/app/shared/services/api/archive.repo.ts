@@ -17,18 +17,6 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>('/archive/get', data, ArchiveResponse);
   }
 
-  public getByArchiveNbr(archiveNbrs: string[]): Promise<ArchiveResponse> {
-    const data = archiveNbrs.map((archiveNbr) => {
-      return {
-        ArchiveVO: new ArchiveVO({
-          archiveNbr
-        })
-      };
-    });
-
-    return this.http.sendRequestPromise<ArchiveResponse>('/archive/getByArchiveNbr', data, ArchiveResponse);
-  }
-
   public getAllArchives(accountVO: AccountVO): Promise<ArchiveResponse> {
     const data = [{
       AccountVO: {
