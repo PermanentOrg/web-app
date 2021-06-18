@@ -186,6 +186,7 @@ export class ConnectorComponent implements OnInit {
 
   showHelp() {
     let template: string;
+    const familySearchHelp = `This feature will import memories from persons you select in your family tree, then automatically create individual archives for each of those persons. You'll find those memories saved in the apps section of those person archives.`;
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
@@ -198,15 +199,15 @@ export class ConnectorComponent implements OnInit {
           template = `
           Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
           <br><br>
-          This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
-          <br>
+          ${familySearchHelp}
+          <br><br>
           `;
         } else {
           template = `
           Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
           <br><br>
-          This feature is currently in beta and connects to FamilySearch using their Beta site, which uses a separate copy of FamilySearch data, so recent additions to your data may not be available. Your existing FamilySearch data is safe.
-          <br>
+          ${familySearchHelp}
+          <br><br>
           `;
         }
         break;
@@ -344,7 +345,7 @@ export class ConnectorComponent implements OnInit {
         this.router.navigate(["/apps"], { queryParams: {} });
         if (!this.guidedTour.isStepComplete('familysearch', 'importFamilyTree')) {
           this.guidedTour.startTour([
-            { 
+            {
               ...ImportFamilyTree,
               when: {
                 show: () => {
