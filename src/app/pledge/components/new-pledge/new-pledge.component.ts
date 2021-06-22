@@ -1,14 +1,16 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { PledgeService } from '@pledge/services/pledge.service';
 import APP_CONFIG from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { environment } from '@root/environments/environment';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
+
+import { PledgeService } from '@pledge/services/pledge.service';
 
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
@@ -22,6 +24,7 @@ const elements = stripe.elements();
   styleUrls: ['./new-pledge.component.scss'],
 })
 export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() inlineFlow: boolean = false;
   public waiting: boolean;
   public pledgeForm: FormGroup;
 
@@ -39,15 +42,18 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   cardError: any;
   cardComplete = false;
 
+  public static stripeCardInstance: any;
+
   constructor(
+    private api: ApiService,
     private fb: FormBuilder,
-    private pledgeService: PledgeService,
     private router: Router,
     private accountService: AccountService,
     private route: ActivatedRoute,
     private message: MessageService,
     private http: HttpClient,
-    private iframe: IFrameService
+    private iframe: IFrameService,
+    private pledgeService: PledgeService,
   ) {
     this.initStripeElements();
     const account = this.accountService.getAccount();
@@ -101,6 +107,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   initStripeElements() {
+    if (NewPledgeComponent.stripeCardInstance) {
+      this.stripeElementsCard = NewPledgeComponent.stripeCardInstance;
+      return;
+    }
     const options = {
       classes: {
         invalid: '.ng-invalid'
@@ -130,6 +140,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cardComplete = false;
       }
     });
+
+    NewPledgeComponent.stripeCardInstance = this.stripeElementsCard;
   }
 
   bindStripeElements() {
@@ -203,13 +215,36 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.pledgeForm.reset();
 
-    await this.pledgeService.loadPledge(pledge.id);
-
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
       this.router.navigate(['..', 'claim'], {relativeTo: this.route});
     } else {
-      this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});
+      if (this.inlineFlow) {
+        this.waiting = true;
+
+        await this.pledgeService.loadPledge(pledge.id);
+
+        const pledgeId = pledge.id;
+        const account = this.accountService.getAccount();
+        const payment = this.pledgeService.createBillingPaymentVo(account);
+
+        try {
+          await this.pledgeService.linkAccount(account);
+          const billingResponse = await this.api.billing.claimPledge(payment, pledgeId);
+          this.waiting = false;
+          if (billingResponse.isSuccessful) {
+            this.message.showMessage(`You just claimed ${this.getStorageAmount(pledge.dollarAmount)} GB of storage!`, 'success');
+            this.router.navigate(['..', 'done'], {relativeTo: this.route});
+          } else {
+            console.error(billingResponse);
+          }
+        } catch (err) {
+          this.waiting = false;
+          console.error(err);
+        }
+      } else {
+        this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});
+      }
     }
     this.waiting = false;
   }

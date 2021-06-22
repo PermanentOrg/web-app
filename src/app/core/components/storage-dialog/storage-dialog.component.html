@@ -26,10 +26,13 @@
         <ng-container *ngSwitchCase="'add'">
           <div class="panel-title">Add Storage</div>
           <pr-storage-meter></pr-storage-meter>
-          <p>Need more storage? Feel free to make another pledge to Permanent.org anytime you'd like.</p>
-          <div class="panel-button">
-            <a href="/add-storage" class="btn btn-primary">Add Storage</a>
-          </div>
+          <p>
+            Need more storage? Feel free to make another donation to Permanent.org anytime you'd like.
+            <br />
+            <a href="https://desk.zoho.com/portal/permanent/en/kb/articles/how-our-endowment-works" target="_blank">Click here to learn more about our endowment model.</a>
+          </p>
+          <pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
+
         </ng-container>
         <ng-container *ngSwitchCase="'promo'">
           <div class="panel-title">Redeem Gift</div>
