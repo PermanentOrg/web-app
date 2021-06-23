@@ -186,7 +186,12 @@ export class ConnectorComponent implements OnInit {
 
   showHelp() {
     let template: string;
-    const familySearchHelp = `This feature will import memories from persons you select in your family tree, then automatically create individual archives for each of those persons. You'll find those memories saved in the apps section of those person archives.`;
+    const familySearchHelp = `
+    This feature will import memories from persons you select
+    in your family tree, then automatically create individual
+    archives for each of those persons. You'll find those
+    memories saved in the apps section of those person archives.
+    `;
     switch (this.connector.type) {
       case 'type.connector.facebook':
         template = `
