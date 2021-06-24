@@ -187,10 +187,10 @@ export class ConnectorComponent implements OnInit {
   showHelp() {
     let template: string;
     const familySearchHelp = `
-    This feature will import memories from persons you select
+    <p>This feature will import memories from persons you select
     in your family tree, then automatically create individual
     archives for each of those persons. You'll find those
-    memories saved in the apps section of those person archives.
+    memories saved in the apps section of those person archives.</p>
     `;
     switch (this.connector.type) {
       case 'type.connector.facebook':
@@ -202,23 +202,19 @@ export class ConnectorComponent implements OnInit {
       case 'type.connector.familysearch':
         if (!this.connected) {
           template = `
-          Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.
-          <br><br>
+          <p>Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.</p>
           ${familySearchHelp}
-          <br><br>
           `;
         } else {
           template = `
-          Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.
-          <br><br>
+          <p>Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.</p>
           ${familySearchHelp}
-          <br><br>
           `;
         }
         break;
     }
 
-    const done: string = this.isFacebook() ? 'Read More' : 'Done';
+    const done: string = 'Learn More';
 
     try {
       this.prompt.confirm(
@@ -230,6 +226,8 @@ export class ConnectorComponent implements OnInit {
       ).then((val) => {
         if (this.isFacebook()) {
           window.open('https://www.permanent.org/blog/why-weve-chosen-to-suspend-our-facebook-integration/', '_blank');
+        } else if (this.isFamilySearch()) {
+          window.open('https://desk.zoho.com/portal/permanent/en/kb/articles/import-persons-memories-familysearch', '_blank');
         }
       }).catch(() => {
         // Do nothing on "Cancel" press, but still catch the promise rejection.
@@ -452,5 +450,9 @@ export class ConnectorComponent implements OnInit {
 
   private isFacebook(): boolean {
     return this.connector.type === 'type.connector.facebook';
+  }
+
+  private isFamilySearch(): boolean {
+    return this.connector.type === 'type.connector.familysearch';
   }
 }
