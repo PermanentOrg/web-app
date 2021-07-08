@@ -28,6 +28,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public isAudio = false;
   public isDocument = false;
   public showThumbnail = true;
+  public isPublicArchive: boolean = false;
 
   public documentUrl = null;
 
@@ -74,6 +75,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       this.loadQueuedItems();
     }
 
+    if (route.snapshot.data?.isPublicArchive) {
+      this.isPublicArchive = route.snapshot.data.isPublicArchive;
+    }
   }
 
   ngOnInit() {
@@ -288,4 +292,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.router.navigate(['.'], { relativeTo: this.route.parent});
   }
 
+  public onDownloadClick(): void {
+    this.dataService.downloadFile(this.currentRecord);
+  }
 }

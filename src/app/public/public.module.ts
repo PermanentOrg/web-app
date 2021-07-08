@@ -6,7 +6,6 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { } from '@core/services/folder-picker/folder-picker.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
-import { PublicItemComponent } from './components/public-item/public-item.component';
 import { SharedModule } from '@shared/shared.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
@@ -20,7 +19,6 @@ import { DialogModule } from '../dialog/dialog.module';
 
 @NgModule({
   declarations: [
-    PublicItemComponent,
     PublicComponent,
     ItemNotFoundComponent,
     SearchComponent,

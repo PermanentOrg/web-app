@@ -31,6 +31,9 @@
     <div class="file-viewer-description">
       <p *ngIf="currentRecord.description">{{currentRecord.description}}</p>
     </div>
+    <div class="file-viewer-download" *ngIf="isPublicArchive">
+      <button class="btn btn-primary"  (click)="onDownloadClick()">Download</button>
+    </div>
     <table>
       <tr>
         <td>Date</td><td>{{currentRecord.displayDT | date}}</td>
