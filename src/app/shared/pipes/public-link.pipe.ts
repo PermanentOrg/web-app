@@ -16,7 +16,13 @@ export class PublicLinkPipe implements PipeTransform {
     const rootArchive = value.archiveNbr.split('-')[0] + '-0000';
     const base = `${baseUrl}/p/archive/${rootArchive}`;
     if (value instanceof RecordVO) {
-      return `${base}/record/${value.archiveNbr}`;
+      const parentFolders = value.ParentFolderVOs as FolderVO[];
+      let parentFolderPath = '';
+      if (parentFolders && parentFolders.length > 0) {
+        const parentFolder = parentFolders[0];
+        parentFolderPath = `${parentFolder.archiveNbr}/${value.parentFolder_linkId}`;
+      }
+      return `${base}/${parentFolderPath}/record/${value.archiveNbr}`;
     } else {
       return `${base}/${value.archiveNbr}/${value.folder_linkId}`;
     }

@@ -21,11 +21,17 @@ describe('PublicRoutePipe', () => {
   it('returns correct link for record', () => {
     const pipe = new PublicRoutePipe();
     const record = new RecordVO({
+      ParentFolderVOs: [
+        new RecordVO({
+          folder_linkId: 1234,
+          archiveNbr: '0001-meow',
+        }),
+      ],
       folder_linkId: 1001,
       archiveNbr: '0001-00gp'
     });
     const route = pipe.transform(record);
     expect(route).toBeDefined();
-    expect(route).toEqual(['/p', 'archive', '0001-0000', 'record', record.archiveNbr ]);
+    expect(route).toEqual(['/p', 'archive', '0001-0000', '0001-meow', '1234', 'record', record.archiveNbr ]);
   });
 });
