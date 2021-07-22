@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="public-link-button" *ngIf="!publicItem || !publicLink">
-      <p>Create a publicly viewable copy of this item in your Public folder and get a public link to share with anyone.</p>
+      <p>Create a publicly viewable copy of this item in your Public workspace and get a public link to share with anyone.</p>
       <button class="btn btn-primary" (click)="publishItem()" [disabled]="waiting">Publish</button>
     </div>
     <ng-container *ngIf="publicItem" [ngSwitch]="publishIa">
