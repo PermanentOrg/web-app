@@ -21,6 +21,7 @@ import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
+import { StorageService } from '@shared/services/storage/storage.service';
 
 import { ItemClickEvent } from '../file-list/file-list.component';
 import { DragService, DragServiceEvent, DragTargetType, DraggableComponent, DragTargetDroppableComponent } from '@shared/services/drag/drag.service';
@@ -30,6 +31,8 @@ import { DOCUMENT } from '@angular/common';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { InViewportTrigger } from 'ng-in-viewport';
 import { RouteData } from '@root/app/app.routes';
+
+import { ThumbnailCache } from './thumbnail-cache/thumbnail-cache';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
@@ -80,7 +83,7 @@ export const ItemActions: {[key: string]: PromptButton} = {
   }
 };
 
-enum FolderContentsType {
+export enum FolderContentsType {
   NORMAL = "",
   EMPTY_FOLDER = "folder_open",
   BROKEN_THUMBNAILS = "folder",
@@ -179,6 +182,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     private dialog: Dialog,
     private device: DeviceService,
     @Optional() private drag: DragService,
+    private storage: StorageService,
     @Inject(DOCUMENT) private document: Document
   ) {
   }
@@ -840,47 +844,69 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       return priority;
     };
 
-    this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
-      if (resp.isSuccessful) {
-        const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
-        const allChildren = newFolderVO.ChildItemVOs;
-        const sortedItems = newFolderVO.ChildItemVOs.filter(item => item.type.includes('type.record'));
-        sortedItems.sort((a, b) => {
-          return calculateSortPriority(a) - calculateSortPriority(b);
-        });
-        const thumbnailItem = sortedItems.shift();
-        if (thumbnailItem) {
-          if (sortPriorities.includes(thumbnailItem.type)) {
-            if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
-              this.folderThumb200 = thumbnailItem.thumbURL200;
-              this.folderThumb500 = thumbnailItem.thumbURL500;
+    const cache = new ThumbnailCache(this.storage);
+
+    if (cache.hasThumbnail(this.item)) {
+      [this.folderThumb200, this.folderThumb500] = cache.getThumbnail(this.item);
+      if (this.folderThumb200 === 'icon' && this.folderThumb500) {
+        this.folderContentsType = this.folderThumb500 as FolderContentsType;
+        this.folderThumb200 = null;
+        this.folderThumb500 = null;
+      }
+    } else {
+      this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
+        if (resp.isSuccessful) {
+          const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
+          const allChildren = newFolderVO.ChildItemVOs;
+          const sortedItems = newFolderVO.ChildItemVOs.filter(item => item.type.includes('type.record'));
+          sortedItems.sort((a, b) => {
+            return calculateSortPriority(a) - calculateSortPriority(b);
+          });
+          const thumbnailItem = sortedItems.shift();
+          if (thumbnailItem) {
+            if (sortPriorities.includes(thumbnailItem.type)) {
+              if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
+                this.folderThumb200 = thumbnailItem.thumbURL200;
+                this.folderThumb500 = thumbnailItem.thumbURL500;
+              } else {
+                this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+              }
             } else {
-              this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+              this.folderContentsType = FolderContentsType.MIXED_FILES;
             }
           } else {
-            this.folderContentsType = FolderContentsType.MIXED_FILES;
+            if (allChildren.length === 0) {
+              this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
+            } else {
+              this.folderContentsType = FolderContentsType.SUBFOLDERS;
+            }
           }
         } else {
-          if (allChildren.length === 0) {
-            this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
-          } else {
-            this.folderContentsType = FolderContentsType.SUBFOLDERS;
-          }
+          this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
         }
-      } else {
+      }).catch((err) => {
         this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
-      }
-    }).catch((err) => {
-      this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
-    });
+      }).finally(() => {
+        cache.saveThumbnail(this.item, {
+          folderThumb200: this.folderThumb200,
+          folderThumb500: this.folderThumb500,
+          folderContentsType: this.folderContentsType,
+        });
+      });
+    }
   }
 
   private getThumbnailPath(): string {
     if (this.showFolderIcon()) {
       return '';
     }
-    if (this.item.isFolder && (this.folderThumb200 || this.folderThumb500)) {
-      return this.inGridView ? this.folderThumb500 : this.folderThumb200;
+    if (this.item.isFolder) {
+      if (this.folderThumb200 || this.folderThumb500) {
+        return this.inGridView ? this.folderThumb500 : this.folderThumb200;
+      } else {
+        // Do not display default fallback thumbs
+        return '';
+      }
     } else {
       return this.inGridView ? this.item.thumbURL500 : this.item.thumbURL200;
     }
