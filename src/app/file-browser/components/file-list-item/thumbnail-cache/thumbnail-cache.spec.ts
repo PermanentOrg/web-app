@@ -26,10 +26,9 @@ describe('ThumbnailCache', () => {
   it('should exist', () => {
     expect(cache).not.toBeNull();
   });
-  it('should be return empty string tuple for uncached thumbnail', () => {
+  it('should return empty string tuple for uncached thumbnail', () => {
     const thumbs = cache.getThumbnail(folder);
-    expect(thumbs.length).toBe(2);
-    expect(thumbs.join('').length).toBe(0);
+    expect(thumbs).toBe(['', '']);
   });
   it('should be able to set and get thumbnail', () => {
     cache.saveThumbnail(folder, folderThumbData);
