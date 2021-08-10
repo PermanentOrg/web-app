@@ -67,6 +67,10 @@ describe('ThumbnailCache', () => {
       expect(folderContentsType).toBe(icon);
     }
   });
+  it('should be able to clear the cache for a specific folder', () => {
+    cache.invalidateFolder(1234);
+    expect(cache.hasThumbnail(folder)).toBeFalse();
+  });
   describe('malformed session storage', () => {
     it('handles completely invalid session storage value', () => {
       storage.session.set('folderThumbnailCache', 'potato');

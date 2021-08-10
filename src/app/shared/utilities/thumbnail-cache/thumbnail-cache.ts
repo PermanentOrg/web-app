@@ -59,6 +59,13 @@ export class ThumbnailCache {
     return this.cache.has(item.folder_linkId);
   }
 
+  public invalidateFolder(folderLinkId: number): void {
+    if(this.cache.has(folderLinkId)) {
+      this.cache.delete(folderLinkId);
+      this.saveMapToStorage();
+    }
+  }
+
   private fetchCacheMapFromStorage(): void {
     const cacheData = this.storage.session.get(this.STORAGE_KEY);
     if (cacheData && Array.isArray(cacheData)) {

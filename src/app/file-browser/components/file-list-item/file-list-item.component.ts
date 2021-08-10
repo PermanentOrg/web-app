@@ -32,7 +32,7 @@ import { ngIfFadeInAnimation } from '@shared/animations';
 import { InViewportTrigger } from 'ng-in-viewport';
 import { RouteData } from '@root/app/app.routes';
 
-import { ThumbnailCache } from './thumbnail-cache/thumbnail-cache';
+import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
