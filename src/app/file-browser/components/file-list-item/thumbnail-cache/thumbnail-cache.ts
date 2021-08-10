@@ -26,18 +26,33 @@ export class ThumbnailCache {
     this.saveMapToStorage();
   }
 
-  public getThumbnail(item: ItemVO): [string, string] {
+  public getThumbnail(item: ItemVO): FolderThumbData {
     if (this.cache.has(item.folder_linkId)) {
       const thumbs = this.cache.get(item.folder_linkId);
       if (thumbs && Array.isArray(thumbs) && thumbs.length > 1) {
+        if (thumbs[0] === 'icon') {
+          return {
+            folderThumb200: '',
+            folderThumb500: '',
+            folderContentsType: thumbs[1] as FolderContentsType,
+          };
+        }
         // Cast to string just to be sure we actually have strings from our data structure.
-        return [`${thumbs[0]}`, `${thumbs[1]}`];
+        return {
+          folderThumb200: `${thumbs[0]}`,
+          folderThumb500: `${thumbs[1]}`,
+          folderContentsType: FolderContentsType.NORMAL,
+        };
       } else {
         this.cache.delete(item.folder_linkId);
         this.saveMapToStorage();
       }
     }
-    return ['',''];
+    return {
+      folderThumb200: '',
+      folderThumb500: '',
+      folderContentsType: FolderContentsType.BROKEN_THUMBNAILS,
+    };
   }
 
   public hasThumbnail(item: ItemVO): boolean {

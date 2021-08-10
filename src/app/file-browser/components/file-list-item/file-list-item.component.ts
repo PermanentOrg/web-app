@@ -847,12 +847,10 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     const cache = new ThumbnailCache(this.storage);
 
     if (cache.hasThumbnail(this.item)) {
-      [this.folderThumb200, this.folderThumb500] = cache.getThumbnail(this.item);
-      if (this.folderThumb200 === 'icon' && this.folderThumb500) {
-        this.folderContentsType = this.folderThumb500 as FolderContentsType;
-        this.folderThumb200 = null;
-        this.folderThumb500 = null;
-      }
+      const thumbs = cache.getThumbnail(this.item);
+      this.folderContentsType = thumbs.folderContentsType;
+      this.folderThumb200 = thumbs.folderThumb200;
+      this.folderThumb500 = thumbs.folderThumb500;
     } else {
       this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
         if (resp.isSuccessful) {
