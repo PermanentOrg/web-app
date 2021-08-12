@@ -133,7 +133,7 @@ nav .btn {
   background-size: 100% 100%;
   background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='30px' height='30px' viewBox='0 0 30 30' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Options-Menu-Icon' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.5'%3E%3Ccircle id='Oval' fill='rgba(255,2555,255,1)' cx='15.5' cy='7.5' r='1.5'%3E%3C/circle%3E%3Ccircle id='Oval' fill='rgba(255,2555,255,1)' cx='15.5' cy='15.5' r='1.5'%3E%3C/circle%3E%3Ccircle id='Oval-Copy' fill='rgba(255,2555,255,1)' cx='15.5' cy='23.5' r='1.5'%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");
 
-  &.right-menu-toggler-icon-dark { 
+  &.right-menu-toggler-icon-dark {
     background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='30px' height='30px' viewBox='0 0 30 30' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Options-Menu-Icon' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.5'%3E%3Ccircle id='Oval' fill='%23000000' cx='15.5' cy='7.5' r='1.5'%3E%3C/circle%3E%3Ccircle id='Oval' fill='%23000000' cx='15.5' cy='15.5' r='1.5'%3E%3C/circle%3E%3Ccircle id='Oval-Copy' fill='%23000000' cx='15.5' cy='23.5' r='1.5'%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");
   }
 }
@@ -171,7 +171,7 @@ a {
   $size: 34px;
   background: rgba(white, 0.2);
   height: $size;
-  border-radius: $size / 2; 
+  border-radius: $size / 2;
   color: $PR-orange;
   font-weight: 700;
   text-transform: uppercase;
@@ -278,7 +278,7 @@ $drag-outline-border: 5px;
     // backdrop-filter: blur($blur-size);
     // -webkit-backdrop-filter: blur($blur-size);
   }
-  
+
   .drag-service-cursor-item {
     font-weight: 700;
   }
@@ -331,7 +331,7 @@ $drag-outline-border: 5px;
       height: $font-size-sm * 1.25;
       line-height: $font-size-sm * 1.25;
     }
-    
+
   }
 }
 
@@ -365,4 +365,13 @@ $drag-outline-border: 5px;
   animation-name: fadein;
   animation-duration: 125ms;
   animation-timing-function: $tweaked-ease;
+}
+
+#zohohc-asap-web-launcherbox {
+  opacity: 0.5;
+  transition: opacity 0.25s;
+}
+
+#zohohc-asap-web-launcherbox:hover {
+  opacity: 1;
 }
