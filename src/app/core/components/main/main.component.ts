@@ -67,6 +67,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
     this.upload.progressVisible.subscribe((visible: boolean) => {
       this.uploadProgressVisible = visible;
     });
+
+    const zohoScript = document.createElement('script');
+    zohoScript.type = 'text/javascript';
+    zohoScript.src = 'https://desk.zoho.com/portal/api/web/inapp/500343000003273001?orgId=714162809';
+    zohoScript.defer = true;
+    document.body.appendChild(zohoScript);
   }
 
   async ngOnInit() {
