@@ -3,6 +3,10 @@ import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+
+import { StorageService } from '@shared/services/storage/storage.service';
+import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
+
 const MIN_WHITELIST: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'folder_linkId'];
 const DEFAULT_WHITELIST: (keyof RecordVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT'];
 
@@ -87,6 +91,13 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
+    const cache = this.getThumbnailCache();
+    for (const record of recordVOs) {
+      if (record.parentFolder_linkId) {
+        cache.invalidateFolder(record.parentFolder_linkId);
+      }
+    }
+
     return this.http.sendRequestPromise<RecordResponse>('/record/delete', data, RecordResponse);
   }
 
@@ -99,6 +110,10 @@ export class RecordRepo extends BaseRepo {
         }
       };
     });
+
+    if (destination.folder_linkId) {
+      this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
+    }
 
     return this.http.sendRequestPromise<RecordResponse>('/record/move', data, RecordResponse);
   }
@@ -113,7 +128,16 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
+    if (destination.folder_linkId) {
+      this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
+    }
+
     return this.http.sendRequestPromise<RecordResponse>('/record/copy', data, RecordResponse);
+  }
+
+  private getThumbnailCache(): ThumbnailCache {
+    const storage = new StorageService();
+    return new ThumbnailCache(storage);
   }
 }
 
