@@ -129,16 +129,13 @@ export class ClaimStorageLoginComponent implements OnInit {
     try {
       await this.pledgeService.linkAccount(account);
       const billingResponse = await this.api.billing.claimPledge(payment, pledgeId);
-      this.waiting = false;
       if (billingResponse.isSuccessful) {
         this.router.navigate(['..', 'done'], {relativeTo: this.route});
       } else {
-        console.error(billingResponse);
+        throw billingResponse;
       }
-    } catch (err) {
+    } finally {
       this.waiting = false;
-      console.error(err);
     }
   }
-
 }
