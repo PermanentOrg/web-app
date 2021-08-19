@@ -7,7 +7,6 @@ import { environment } from '@root/environments/environment';
 import { RequestVO } from '@models/request-vo';
 import { BaseResponse } from '@shared/services/api/base';
 import { StorageService } from '@shared/services/storage/storage.service';
-import { SecretsService } from '../secrets/secrets.service';
 
 
 const CSRF_KEY = 'CSRF';
@@ -17,14 +16,13 @@ const CSRF_KEY = 'CSRF';
 })
 export class HttpService {
   private apiUrl = environment.apiUrl;
-  private apiKey = this.secrets.get('PERMANENT_API_KEY');
   private defaultResponseClass = BaseResponse;
 
-  constructor(private http: HttpClient, private storage: StorageService, private secrets: SecretsService) {
+  constructor(private http: HttpClient, private storage: StorageService) {
   }
 
   public sendRequest<T = BaseResponse>(endpoint: string, data: any = [{}], responseClass ?: any): Observable<T> {
-    const requestVO = new RequestVO(this.apiKey, this.storage.session.get(CSRF_KEY), data);
+    const requestVO = new RequestVO(this.storage.session.get(CSRF_KEY), data);
     const url = this.apiUrl + endpoint;
 
     return this.http
