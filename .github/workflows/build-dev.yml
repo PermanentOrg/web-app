@@ -24,7 +24,6 @@ jobs:
 
       - name: Build
         env:
-          PERMANENT_API_KEY: ${{ secrets.PERMANENT_API_KEY_DEV }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_DEV }}
           STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
