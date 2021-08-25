@@ -161,5 +161,11 @@ $ionicons-font-path: 'https://unpkg.com/ionicons@4.6.3/dist/fonts';
 @import 'vendor/bootstrap/variables';
 @import 'utilities';
 
+// Customizations to Bootstrap Variables
+$link-color:                lighten(theme-color("primary"), 20%);
+$link-decoration:           underline;
+$link-hover-color:          lighten($link-color, 20%);
+$link-hover-decoration:     none;
+
 @import 'dialog';
 @import 'profile';
