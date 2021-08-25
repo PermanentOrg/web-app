@@ -3,6 +3,7 @@ button.btn, a.btn {
   margin: 10px auto;
   width: 100%;
   max-width: $max-form-width;
+  text-decoration: none;
 }
 
 .input-group {
@@ -163,8 +164,9 @@ nav .btn {
   word-break: break-all;
 }
 
-a {
+a:link {
   cursor: pointer;
+  transition: color 0.3s;
 }
 
 .btn-wordpress, .btn-wordpress-alternate {

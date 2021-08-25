@@ -68,6 +68,7 @@ i.badge {
     text-align: right;
     align-items: center;
     justify-content: flex-end;
+    text-decoration: none;
 
     &:hover {
       background-color: darken(white, 4%);

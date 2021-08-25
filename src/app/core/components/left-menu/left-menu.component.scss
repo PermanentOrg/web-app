@@ -44,6 +44,7 @@ $archive-options-shadow-offset: 0.5rem;
     user-select: none;
     color: white;
     font-weight: 700;
+    text-decoration: none;
 
     transition: background-color $transition-length / 4 ease-in;
 
@@ -109,6 +110,7 @@ $archive-options-shadow-offset: 0.5rem;
     align-items: center;
     justify-content: flex-end;
     color: white;
+    text-decoration: none;
 
     &:hover {
       background: darken($PR-blue-light, 7%);
@@ -225,6 +227,7 @@ $archive-options-shadow-offset: 0.5rem;
       font-size: $font-size-sm;
       user-select: none;
       color: white;
+      text-decoration: none;
 
       &:hover:not(.active) {
         text-decoration: none;
