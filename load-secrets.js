@@ -25,5 +25,5 @@ const secretsFileContent = `export const SECRETS = { ${requiredSecrets.map(name 
 try {
   writeFileSync(outputFile, secretsFileContent);
 } catch (err) {
-  console.err(`Error writing to file: ${JSON.stringify(err)}`);
+  console.error(`Error writing to file: ${JSON.stringify(err)}`);
 }
