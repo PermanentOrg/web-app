@@ -191,13 +191,11 @@ export class SharingComponent implements OnInit {
           }
         })
         .catch((err) => {
-          if (err) {
-            console.error('Error in archive picker', err);
-          }
+          throw err;
         });
     } catch (err) {
       this.loadingRelations = false;
-      console.error(err);
+      throw err;
     }
   }
 
@@ -353,7 +351,7 @@ export class SharingComponent implements OnInit {
     .catch((err) => {
       if (err instanceof ShareResponse) {
       } else {
-        console.error(err);
+        throw err;
       }
     });
   }

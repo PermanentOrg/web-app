@@ -118,7 +118,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
       this.setCurrentLocation(response.getLocnVO(), true);
       this.hasChanged = true;
     } else {
-      console.error('Error looking this up!');
+      this.message.showError('There was an error in getting the current location.');
     }
   }
 
@@ -147,8 +147,8 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
         this.dialogRef.close();
         this.message.showMessage('Location saved.', 'success');
       } catch (err) {
-        console.error(err);
         this.message.showError('There was a problem saving the location.');
+        throw err;
      } finally {
        this.saving = false;
      }

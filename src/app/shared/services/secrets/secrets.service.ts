@@ -9,7 +9,6 @@ let secrets = {};
 try {
   secrets = require('@root/secrets').SECRETS;
 } catch (err) {
-  console.error(err);
   throw new Error('Unable to read secrets.ts - make sure to run `node secrets.js` before building!');
 }
 
@@ -31,7 +30,7 @@ export class SecretsService {
     this.debug('Loaded %d secrets from secrets.ts', Object.keys(secrets).length);
 
     if (missingSecrets.length) {
-      console.error('SecretsService: Missing required secrets: %s', missingSecrets.join(','));
+      throw new Error('SecretsService: Missing required secrets.');
     }
   }
 

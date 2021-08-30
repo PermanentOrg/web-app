@@ -97,7 +97,7 @@ constructor(
       const response = await this.api.search.archiveByName(query);
       this.archiveResults = response.getArchiveVOs();
     } catch (err) {
-      console.error('search err', err);
+      throw err;
     }
   }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { find } from 'lodash';
+import * as Sentry from '@sentry/browser';
+import debug from 'debug';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -35,6 +37,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   private subscriptions: Subscription[] = [];
   private currentUrl: string;
   private urlMatches: Map<string, boolean> = new Map();
+  private leftMenuDebug = debug('component:left-menu');
 
   constructor(
     private accountService: AccountService,
@@ -165,7 +168,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
       const appsFolder = folderResponse.getFolderVO(true);
       this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
     } catch (err) {
-      console.error('Error loading apps subfolders, silently failing', err);
+      Sentry.captureException(err);
+      this.leftMenuDebug('Error loading apps subfolders, silently failing', err);
     }
   }
 

@@ -84,7 +84,7 @@ export class SearchService {
         queryString = termString;
       }
     } catch (err) {
-      console.error('Parsing error!', err);
+      throw err;
     }
 
     return [ queryString, parsedTags ];

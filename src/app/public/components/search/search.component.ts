@@ -42,7 +42,7 @@ export class SearchComponent implements OnInit {
       const response = await this.api.search.archiveByName(query);
       this.results = response.getArchiveVOs();
     } catch (err) {
-      console.error('search err', err);
+      throw err;
     }
   }
 

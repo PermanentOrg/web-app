@@ -29,7 +29,7 @@ export class ConnectorsResolveService implements Resolve<any> {
 
         return response.getConnectorOverviewVOs();
       }))).toPromise().catch((error) => {
-        console.error(error);
+        throw error;
       });
   }
 }

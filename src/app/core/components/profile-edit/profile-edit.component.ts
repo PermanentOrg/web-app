@@ -206,7 +206,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     try {
       await this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
     } catch (err) {
-      console.error(err);
+      throw err;
     }
     finally {
       this.updateProgress();
@@ -227,7 +227,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       copyFromInputElement(input);
       deferred.resolve();
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 }

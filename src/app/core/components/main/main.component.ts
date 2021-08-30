@@ -196,10 +196,7 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         }
       });
     } catch (err) {
-      console.error(err);
-      if (err instanceof FolderResponse) {
-
-      }
+      throw err;
     }
   }
 
@@ -264,11 +261,12 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
           }
         }
       } catch (err) {
-        console.error('Error checking link', err);
         if (err instanceof ShareResponse) {
           // checkLink failed for shareByUrl;
           this.messageService.showError('Invalid share URL.');
           this.router.navigate(['.'], { relativeTo: this.route, queryParams: { shareByUrl: null },  });
+        } else {
+          throw err;
         }
       }
     }

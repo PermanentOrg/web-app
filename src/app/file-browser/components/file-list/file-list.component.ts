@@ -462,7 +462,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       try {
         await this.dataService.fetchLeanItems(itemsToFetch);
       } catch (err) {
-        console.error(err);
+        throw err;
       }
     }
   }

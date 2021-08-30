@@ -107,7 +107,7 @@ export class AccountVO extends BaseVO {
       try {
         this.notificationPreferences = JSON.parse(this.notificationPreferences);
       } catch (err) {
-        console.error('Error parsing account preferences');
+        throw err;
       }
     }
   }

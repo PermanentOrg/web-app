@@ -28,7 +28,7 @@ export class RelationshipShareResolveService implements Resolve<any> {
           await this.account.changeArchive(targetArchive);
         }
       } catch (err) {
-        console.error('AccountService - error switching to target archive');
+        throw err;
       }
     }
 

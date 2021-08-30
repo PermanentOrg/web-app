@@ -243,7 +243,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     } catch (err) {
       this.data.currentFolder.update({ sort: originalSort });
       this.getSortFromCurrentFolder();
-      console.error('sort error');
+      throw err;
     } finally {
       this.isSorting = false;
       this.isSorting$.next(false);
@@ -260,9 +260,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       await this.api.folder.sort([this.data.currentFolder]);
       this.initialSortType = this.data.currentFolder.sort;
     } catch (err) {
-      if (err instanceof FolderResponse) {
-        console.error('sort save error!');
-      }
+      throw err;
     } finally {
       this.isSavingSort = false;
     }

@@ -16,7 +16,6 @@ export class PledgeResolveService implements Resolve<any> {
     try {
       await this.pledgeService.loadPledge(route.queryParams.pledgeId);
     } catch (err) {
-      console.error('PledgeResolve error', err);
       return Promise.resolve(null);
     }
   }

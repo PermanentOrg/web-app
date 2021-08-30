@@ -107,8 +107,6 @@ export class GlobalSearchBarComponent implements OnInit {
       } else {
         this.reset();
       }
-    }, err => {
-      console.error('Error from search bar:', err);
     });
   }
 
