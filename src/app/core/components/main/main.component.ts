@@ -131,73 +131,69 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
   }
 
   async startTimelineOnboarding() {
-    try {
-      const firstScreenTemplate = `
-      <p>A Permanent timeline is the best way for others to experience your story as it unfolded in time.</p>
-      <p>In just two steps, you will create a public, interactive timeline that anyone can find and see online using an easy-to-share link.</p>
-      `;
+    const firstScreenTemplate = `
+    <p>A Permanent timeline is the best way for others to experience your story as it unfolded in time.</p>
+    <p>In just two steps, you will create a public, interactive timeline that anyone can find and see online using an easy-to-share link.</p>
+    `;
 
-      await this.prompt.confirm('Get started', 'Create your new timeline', null, null, firstScreenTemplate);
+    await this.prompt.confirm('Get started', 'Create your new timeline', null, null, firstScreenTemplate);
 
-      const secondScreenTemplate = `
-      <p>Give your timeline a name and an optional description so viewers can better understand what they see.</p>
-      `;
+    const secondScreenTemplate = `
+    <p>Give your timeline a name and an optional description so viewers can better understand what they see.</p>
+    `;
 
-      const secondScreenFields: PromptField[] = [
-        {
-          fieldName: 'displayName',
-          placeholder: 'Name',
-          validators: [ Validators.required ],
-          config: {
-            autocorrect: 'on',
-            spellcheck: 'on'
-          }
-        },
-        {
-          fieldName: 'description',
-          placeholder: 'Description (optional)',
-          config: {
-            autocorrect: 'on',
-            spellcheck: 'on'
-          }
+    const secondScreenFields: PromptField[] = [
+      {
+        fieldName: 'displayName',
+        placeholder: 'Name',
+        validators: [ Validators.required ],
+        config: {
+          autocorrect: 'on',
+          spellcheck: 'on'
         }
-      ];
-
-      const folderCreate = new Deferred();
-
-      const promptData: any = await this.prompt.prompt(
-        secondScreenFields, 'Name your new timeline', folderCreate.promise, 'Continue', null, secondScreenTemplate
-      );
-
-      const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
-      const folder = new FolderVO({
-        displayName: promptData.displayName,
-        description: promptData.description,
-        view: 'folder.view.timeline',
-        sort: 'sort.display_date_asc',
-        parentFolder_linkId: publicRoot.folder_linkId
-      });
-      const response = await this.api.folder.post([folder]);
-
-      this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated.params);
-      const newFolder = response.getFolderVO();
-      folderCreate.resolve();
-      await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
-
-      this.upload.promptForFiles();
-      const uploadListener = this.upload.uploadSession.progress.subscribe(async (progressEvent) => {
-        if (progressEvent.sessionStatus === UploadSessionStatus.Done) {
-          try {
-            await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto' });
-          } catch (err) { }
-          uploadListener.unsubscribe();
-        } else if (progressEvent.sessionStatus > UploadSessionStatus.Done) {
-          uploadListener.unsubscribe();
+      },
+      {
+        fieldName: 'description',
+        placeholder: 'Description (optional)',
+        config: {
+          autocorrect: 'on',
+          spellcheck: 'on'
         }
-      });
-    } catch (err) {
-      throw err;
-    }
+      }
+    ];
+
+    const folderCreate = new Deferred();
+
+    const promptData: any = await this.prompt.prompt(
+      secondScreenFields, 'Name your new timeline', folderCreate.promise, 'Continue', null, secondScreenTemplate
+    );
+
+    const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
+    const folder = new FolderVO({
+      displayName: promptData.displayName,
+      description: promptData.description,
+      view: 'folder.view.timeline',
+      sort: 'sort.display_date_asc',
+      parentFolder_linkId: publicRoot.folder_linkId
+    });
+    const response = await this.api.folder.post([folder]);
+
+    this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.initiated.params);
+    const newFolder = response.getFolderVO();
+    folderCreate.resolve();
+    await this.router.navigate(['/public', newFolder.archiveNbr, newFolder.folder_linkId]);
+
+    this.upload.promptForFiles();
+    const uploadListener = this.upload.uploadSession.progress.subscribe(async (progressEvent) => {
+      if (progressEvent.sessionStatus === UploadSessionStatus.Done) {
+        try {
+          await this.dialog.open('TimelineCompleteDialogComponent', { folder: newFolder }, { height: 'auto' });
+        } catch (err) { }
+        uploadListener.unsubscribe();
+      } else if (progressEvent.sessionStatus > UploadSessionStatus.Done) {
+        uploadListener.unsubscribe();
+      }
+    });
   }
 
   async checkShareByUrl() {

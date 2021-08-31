@@ -259,8 +259,6 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       this.isSavingSort = true;
       await this.api.folder.sort([this.data.currentFolder]);
       this.initialSortType = this.data.currentFolder.sort;
-    } catch (err) {
-      throw err;
     } finally {
       this.isSavingSort = false;
     }

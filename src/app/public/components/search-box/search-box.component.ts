@@ -93,12 +93,8 @@ constructor(
   }
 
   async search(query: string) {
-    try {
-      const response = await this.api.search.archiveByName(query);
-      this.archiveResults = response.getArchiveVOs();
-    } catch (err) {
-      throw err;
-    }
+    const response = await this.api.search.archiveByName(query);
+    this.archiveResults = response.getArchiveVOs();
   }
 
   async onArchiveClick(archive: ArchiveVO) {

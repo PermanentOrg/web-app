@@ -104,11 +104,7 @@ export class AccountVO extends BaseVO {
     super(voData);
 
     if (this.notificationPreferences && typeof this.notificationPreferences === 'string') {
-      try {
-        this.notificationPreferences = JSON.parse(this.notificationPreferences);
-      } catch (err) {
-        throw err;
-      }
+      this.notificationPreferences = JSON.parse(this.notificationPreferences);
     }
   }
   needsVerification(): boolean {

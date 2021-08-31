@@ -459,11 +459,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     const itemsToFetch = visibleListItems.map(c => c.item);
 
     if (itemsToFetch.length) {
-      try {
-        await this.dataService.fetchLeanItems(itemsToFetch);
-      } catch (err) {
-        throw err;
-      }
+      await this.dataService.fetchLeanItems(itemsToFetch);
     }
   }
 

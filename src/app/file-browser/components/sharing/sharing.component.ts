@@ -189,9 +189,6 @@ export class SharingComponent implements OnInit {
           } else {
             this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
           }
-        })
-        .catch((err) => {
-          throw err;
         });
     } catch (err) {
       this.loadingRelations = false;
