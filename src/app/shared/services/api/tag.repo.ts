@@ -19,7 +19,7 @@ export class TagRepo extends BaseRepo {
       TagLinkVO: tagLink
     }];
 
-    return this.http.sendRequestPromise<TagResponse>('/tag/delete', data, TagResponse);
+    return this.http.sendRequestPromise<TagResponse>('/tag/deleteTagLink', data, TagResponse);
   }
 
   public getTagsByArchive(archive: ArchiveVO): Promise<TagResponse> {
