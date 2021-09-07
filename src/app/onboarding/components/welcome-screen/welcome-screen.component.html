@@ -1,0 +1,16 @@
+<div class="welcome-screen">
+  <p *ngIf="pendingArchives.length === 0" class="welcome-message">Welcome to Permanent! Insert more welcome text here.</p>
+  <p *ngIf="pendingArchives.length > 0" class="welcome-message">Welcome to Permanent! Get started by accepting an invitation or creating a new archive.</p>
+  <div class="pending-archive-list" style="max-width: 800px; text-align: left; margin: 0 auto;" *ngIf="pendingArchives.length > 0">
+    <strong>Pending Archives:</strong>
+    <pr-archive-small *ngFor="let archive of pendingArchives"
+    [largeOnDesktop]="true" [archive]="archive"
+    [accessRole]="archive.accessRole"
+    [showAccept]="true"
+    (acceptClick)="acceptPendingArchive(archive)"
+    [showRemove]="false"></pr-archive-small>
+    <br />
+    <br />
+  </div>
+  <button class="btn btn-primary" (click)="goToScreen(OnboardingScreen.newArchive)">Create New Archive</button>
+</div>

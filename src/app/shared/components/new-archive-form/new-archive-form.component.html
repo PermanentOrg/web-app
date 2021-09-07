@@ -1,0 +1,25 @@
+<!-- TODO: Re-add connections to make it usable on my-archives-dialog -->
+<form [formGroup]="form" class="dialog-form" (submit)="onSubmit(form.value)">
+  <div class="dialog-form-field">
+    <label class="row-label" for="name">Archive Name</label>
+    <div class="dialog-inline-field">
+      <span>The</span>
+      <input type="text" class="form-control" id="newArchiveName" name="name"
+        placeholder="Name"
+        formControlName="fullName">
+      <span>Archive</span>
+    </div>
+  </div>
+  <div class="dialog-form-field">
+    <label class="row-label" for="email">Archive Type</label>
+    <div class="form-check" *ngFor="let typeOption of archiveTypes">
+      <label class="form-check-label">
+        <input type="radio" class="form-check-input" formControlName="type" [value]="typeOption.value">
+        {{typeOption.text}}
+      </label>
+    </div>
+  </div>
+  <div class="dialog-form-field">
+    <button class="btn btn-primary" [disabled]="form.invalid || waiting">Create New Archive</button>
+  </div>
+</form>

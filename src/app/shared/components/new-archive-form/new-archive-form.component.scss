@@ -1,0 +1,11 @@
+@import 'variables';
+
+// TODO: Fix these styles for my-archives-dialog
+
+form {
+  @include tabbedDialogPanelForm;
+  max-width: 500px;
+  padding-top: 0;
+  margin: auto !important;
+  padding: 0 !important;
+}

@@ -36,7 +36,8 @@
       "@search": ["src/app/search"],
       "@models/*": ["src/app/models/*"],
       "@models": ["src/app/models"],
-      "@root/*": ["src/*"]
+      "@root/*": ["src/*"],
+      "@onboarding/*": ["src/app/onboarding/*"],
     }
   },
   "angularCompilerOptions": {

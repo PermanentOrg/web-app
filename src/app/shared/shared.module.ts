@@ -48,6 +48,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { ItemTypeIconPipe } from './pipes/item-type-icon.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
+import { NewArchiveFormComponent } from './components/new-archive-form/new-archive-form.component';
 
 @NgModule({
   imports: [
@@ -110,7 +111,8 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     TimeAgoPipe,
     ItemTypeIconPipe,
     SafeHtmlPipe,
-    ArchiveSearchBoxComponent
+    ArchiveSearchBoxComponent,
+    NewArchiveFormComponent
   ],
   declarations: [
     ThumbnailComponent,
@@ -155,7 +157,8 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     TimeAgoPipe,
     ItemTypeIconPipe,
     SafeHtmlPipe,
-    ArchiveSearchBoxComponent
+    ArchiveSearchBoxComponent,
+    NewArchiveFormComponent
   ],
   providers: [
     PublicLinkPipe,
