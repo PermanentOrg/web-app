@@ -55,6 +55,7 @@
     "ngx-route-history": "0.0.4",
     "progressbar.js": "1.0.1",
     "rxjs": "6.6.3",
+    "shallow-render": "10.x",
     "time-ago-pipe": "^1.3.2",
     "ts-key-enum": "^2.0.2",
     "zone.js": "~0.10.2"
