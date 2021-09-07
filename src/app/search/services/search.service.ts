@@ -57,34 +57,30 @@ export class SearchService {
     let queryString: string;
     const parsedTags: TagVOData[] = [];
 
-    try {
-      if (termString.match(/tag:"(.*)"/)) {
-        const queryParts = [];
-        const parts = termString.split(splitByTerm).filter(x => x && x !== '"');
-        for (const part of parts) {
-          if (part.includes('tag:')) {
-            const tagNames = part.match(getTagName) || [];
-            for (const tagName of tagNames) {
-              if (tagName) {
-                const name = tagName.replace(/"/g, '');
-                const tag = this.tags.getTagByName(name);
-                if (tag) {
-                  parsedTags.push(tag);
-                }
+    if (termString.match(/tag:"(.*)"/)) {
+      const queryParts = [];
+      const parts = termString.split(splitByTerm).filter(x => x && x !== '"');
+      for (const part of parts) {
+        if (part.includes('tag:')) {
+          const tagNames = part.match(getTagName) || [];
+          for (const tagName of tagNames) {
+            if (tagName) {
+              const name = tagName.replace(/"/g, '');
+              const tag = this.tags.getTagByName(name);
+              if (tag) {
+                parsedTags.push(tag);
               }
             }
-          } else {
-            queryParts.push(part);
           }
+        } else {
+          queryParts.push(part);
         }
-        if (queryParts.length) {
-          queryString = queryParts.join(' ');
-        }
-      } else {
-        queryString = termString;
       }
-    } catch (err) {
-      console.error('Parsing error!', err);
+      if (queryParts.length) {
+        queryString = queryParts.join(' ');
+      }
+    } else {
+      queryString = termString;
     }
 
     return [ queryString, parsedTags ];

@@ -38,12 +38,8 @@ export class SearchComponent implements OnInit {
   }
 
   async search(query: string) {
-    try {
-      const response = await this.api.search.archiveByName(query);
-      this.results = response.getArchiveVOs();
-    } catch (err) {
-      console.error('search err', err);
-    }
+    const response = await this.api.search.archiveByName(query);
+    this.results = response.getArchiveVOs();
   }
 
   onArchiveClick(archive: ArchiveVO) {

@@ -189,15 +189,10 @@ export class SharingComponent implements OnInit {
           } else {
             this.ga.sendEvent(EVENTS.SHARE.ShareByAccountNoRel.initiated.params);
           }
-        })
-        .catch((err) => {
-          if (err) {
-            console.error('Error in archive picker', err);
-          }
         });
     } catch (err) {
       this.loadingRelations = false;
-      console.error(err);
+      throw err;
     }
   }
 
@@ -353,7 +348,7 @@ export class SharingComponent implements OnInit {
     .catch((err) => {
       if (err instanceof ShareResponse) {
       } else {
-        console.error(err);
+        throw err;
       }
     });
   }

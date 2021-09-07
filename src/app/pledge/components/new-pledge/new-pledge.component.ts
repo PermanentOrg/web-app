@@ -235,12 +235,10 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           if (billingResponse.isSuccessful) {
             this.message.showMessage(`You just claimed ${this.getStorageAmount(pledge.dollarAmount)} GB of storage!`, 'success');
             this.router.navigate(['..', 'done'], {relativeTo: this.route});
-          } else {
-            console.error(billingResponse);
           }
         } catch (err) {
           this.waiting = false;
-          console.error(err);
+          throw err;
         }
       } else {
         this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});

@@ -21,14 +21,10 @@ export class RelationshipShareResolveService implements Resolve<any> {
 
   async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
     if (route.queryParams.targetArchiveNbr && this.account.isLoggedIn()) {
-      try {
-        const archives = await this.account.refreshArchives();
-        const targetArchive = find(archives, { archiveNbr: route.queryParams.targetArchiveNbr}) as ArchiveVO;
-        if (targetArchive) {
-          await this.account.changeArchive(targetArchive);
-        }
-      } catch (err) {
-        console.error('AccountService - error switching to target archive');
+      const archives = await this.account.refreshArchives();
+      const targetArchive = find(archives, { archiveNbr: route.queryParams.targetArchiveNbr}) as ArchiveVO;
+      if (targetArchive) {
+        await this.account.changeArchive(targetArchive);
       }
     }
 

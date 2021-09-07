@@ -212,7 +212,6 @@ export class DataService {
           items[index].fetched = null;
           reject();
         });
-        console.error(response);
         return 0;
       });
   }
@@ -291,12 +290,11 @@ export class DataService {
 
       return Promise.resolve(true);
     })
-    .catch((response) => {
+    .catch(() => {
       itemRejects.map((reject, index) => {
         items[index].fetched = null;
         reject();
       });
-      console.error(response);
     });
   }
 

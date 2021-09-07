@@ -157,7 +157,7 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
         this.reset();
       }
     }, err => {
-      console.error('Error from search results input:', err);
+      throw err;
     });
   }
 

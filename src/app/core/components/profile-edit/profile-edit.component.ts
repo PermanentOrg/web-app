@@ -205,10 +205,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   async chooseLocationForItem(item: ProfileItemVOData) {
     try {
       await this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
-    } catch (err) {
-      console.error(err);
-    }
-    finally {
+    } finally {
       this.updateProgress();
     }
   }
@@ -221,13 +218,9 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
     const deferred = new Deferred();
 
-    try {
-      await this.prompt.prompt(fields, 'Share profile link', deferred.promise, 'Copy link');
-      const input = this.prompt.getInput('profileLink');
-      copyFromInputElement(input);
-      deferred.resolve();
-    } catch (err) {
-      console.error(err);
-    }
+    await this.prompt.prompt(fields, 'Share profile link', deferred.promise, 'Copy link');
+    const input = this.prompt.getInput('profileLink');
+    copyFromInputElement(input);
+    deferred.resolve();
   }
 }

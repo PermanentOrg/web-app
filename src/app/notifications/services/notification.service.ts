@@ -71,8 +71,8 @@ export class NotificationService {
       this.setNewNotificationCount();
       this.debug('got full list %d items', this.notifications.length);
     } catch (err) {
-      console.error(err);
       this.message.showError('There was an error fetching your notifications.', false);
+      throw err;
     } finally {
       this.waiting = false;
     }
@@ -98,8 +98,8 @@ export class NotificationService {
         this.loadLatestNotifications();
       }
     } catch (err) {
-      console.error(err);
       this.message.showError('There was an error fetching your notifications.', false);
+      throw err;
     } finally {
       this.waiting = false;
     }
@@ -126,12 +126,12 @@ export class NotificationService {
       await this.api.notification.update(needsUpdate);
       this.setNewNotificationCount();
     } catch (err) {
-      console.error(err);
       for (let i = 0; i < needsUpdate.length; i++) {
         const notification = needsUpdate[i];
         notification.status = originalValues[i];
       }
       this.message.showError('There was an error updating your notifications.', false);
+      throw err;
     }
   }
 
@@ -183,4 +183,3 @@ export class NotificationService {
     }
   }
 }
-

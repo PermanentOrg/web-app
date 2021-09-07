@@ -155,7 +155,7 @@ export class RightMenuComponent implements OnInit {
               this.message.showError(err.getMessage(), true);
               createReject();
             } else {
-              console.error(err);
+              throw err;
             }
           });
       });

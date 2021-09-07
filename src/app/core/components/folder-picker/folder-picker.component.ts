@@ -143,7 +143,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
       if (err instanceof FolderResponse) {
         this.message.showError(err.getMessage(), true);
       } else {
-        console.error(err);
+        throw err;
       }
     } finally {
       this.waiting = false;
