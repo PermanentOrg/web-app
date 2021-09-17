@@ -8,7 +8,6 @@ export class BaseResponse {
   public Results: any[];
   public csrf: string;
 
-  private sessionId: string;
   private createdDT: Date;
   private updatedDT: Date;
 
@@ -21,7 +20,6 @@ export class BaseResponse {
     this.isSystemUp = response.isSystemUp;
     this.Results = response.Results;
 
-    this.sessionId = response.sessionId;
     this.csrf = response.csrf;
   }
 

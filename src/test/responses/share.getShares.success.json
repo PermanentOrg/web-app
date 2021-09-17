@@ -3143,7 +3143,6 @@
   "actionFailKeys": [],
   "isSystemUp": true,
   "systemMessage": "Everything is A-OK",
-  "sessionId": null,
   "csrf": "a8f2ff48064b1854a18f923948e0afab",
   "vaultExpirationTime": "2018-09-11T18:58:27.000000",
   "createdDT": null,

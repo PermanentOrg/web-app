@@ -36,7 +36,6 @@
   "actionFailKeys": [],
   "isSystemUp": true,
   "systemMessage": "Everything is A-OK",
-  "sessionId": null,
   "csrf": "a293f0327f0651f89be9d0c90e8b01c7",
   "vaultExpirationTime": "2018-10-23T17:26:50.000000",
   "createdDT": null,
