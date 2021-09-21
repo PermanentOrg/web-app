@@ -46,6 +46,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   @Input() allowSort = true;
   @Input() showAccess = false;
 
+  @Output() refreshView = new EventEmitter<void>();
+
   currentFolderView: FolderView;
   views = {
     list: FolderView.List,
@@ -301,7 +303,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     if (!this.can.move || !this.edit) {
       return;
     }
-    this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Move);
+    await this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Move);
+    this.refreshView.emit();
   }
 
   async onCopyClick() {
@@ -309,7 +312,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Copy);
+    await this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Copy);
+    this.refreshView.emit();
   }
 
   onShareClick() {

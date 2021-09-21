@@ -474,7 +474,7 @@ export class EditService {
     this.dialog.open('LocationPickerComponent', { item }, { height: 'auto', width: '600px' } );
   }
 
-  openFolderPicker(items: ItemVO[], operation: FolderPickerOperations) {
+  public openFolderPicker(items: ItemVO[], operation: FolderPickerOperations): Promise<void> {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
 
@@ -486,28 +486,28 @@ export class EditService {
       }
     }
 
-    this.folderPicker.chooseFolder(rootFolder, operation, deferred.promise, filterFolderLinkIds)
-      .then((destination: FolderVO) => {
-        switch (operation) {
-          case FolderPickerOperations.Copy:
-            return this.copyItems(items, destination);
-          case FolderPickerOperations.Move:
-            return this.moveItems(items, destination);
-        }
-      })
-      .then(() => {
-        setTimeout(() => {
-          deferred.resolve();
-          const msg = `${items.length} item(s) ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
-          this.message.showMessage(msg, 'success');
-          if (operation === FolderPickerOperations.Move) {
-            this.dataService.refreshCurrentFolder();
-          }
-        }, 500);
-      })
-      .catch((response: FolderResponse | RecordResponse) => {
-        deferred.reject();
-        this.message.showError(response.getMessage(), true);
+    return new Promise<void>((resolve, reject) => {
+        this.folderPicker.chooseFolder(rootFolder, operation, deferred.promise, filterFolderLinkIds)
+          .then((destination: FolderVO) => {
+            switch (operation) {
+              case FolderPickerOperations.Copy:
+                return this.copyItems(items, destination);
+              case FolderPickerOperations.Move:
+                return this.moveItems(items, destination);
+            }
+          })
+          .then(() => {
+            setTimeout(() => {
+              deferred.resolve();
+              const msg = `${items.length} item(s) ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
+              this.message.showMessage(msg, 'success');
+              resolve();
+            }, 500);
+          })
+          .catch((response: FolderResponse | RecordResponse) => {
+            deferred.reject();
+            this.message.showError(response.getMessage(), true);
+          });
       });
   }
 }
