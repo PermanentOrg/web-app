@@ -144,6 +144,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   @Output() itemUnshared = new EventEmitter<ItemVO>();
   @Output() itemClicked = new EventEmitter<ItemClickEvent>();
   @Output() itemVisible = new EventEmitter<FileListItemVisibleEvent>();
+  @Output() refreshView = new EventEmitter<void>();
 
   public allowActions = true;
   public isMyItem = true;
@@ -733,6 +734,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
           if (operation === FolderPickerOperations.Move || this.item.isFolder) {
             this.dataService.refreshCurrentFolder();
           }
+          this.refreshView.emit();
         }, 500);
       })
       .catch((response: FolderResponse | RecordResponse) => {

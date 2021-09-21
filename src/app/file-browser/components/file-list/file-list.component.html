@@ -15,6 +15,7 @@
     [canSelect]="showSidebar"
     (itemClicked)="onItemClick($event)"
     (itemVisible)="onItemVisible($event)"
+    (refreshView)="refreshView()"
     ></pr-file-list-item>
 </div>
 <pr-sidebar *ngIf="showSidebar"></pr-sidebar>
