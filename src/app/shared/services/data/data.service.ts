@@ -59,6 +59,8 @@ export class DataService {
   private showItemSubject = new Subject<ItemVO>();
   private itemToShowAfterNavigate: ItemVO;
 
+  private currentHiddenItems: ItemVO[] = [];
+
   private unsharedItemSubject = new Subject<ItemVO>();
 
   private debug = debug('service:dataService');
@@ -95,6 +97,8 @@ export class DataService {
     this.currentFolder = folder;
     this.currentFolderChange.emit(folder);
 
+    this.currentHiddenItems = [];
+
     this.clearSelectedItems();
 
     clearTimeout(this.thumbRefreshTimeout);
@@ -105,24 +109,25 @@ export class DataService {
     }
   }
 
-  public hideItemsInCurrentFolder(items: Array<ItemVO>) {
+  public hideItemsInCurrentFolder(items: Array<ItemVO> = []) {
+    this.currentHiddenItems = this.currentHiddenItems.concat(items);
     this.debug('hideItemsInCurrentFolder %d requested', items.length);
-    const itemsInFolder = items.filter(i => i.parentFolder_linkId === this.currentFolder.folder_linkId);
+    const itemsInFolder = this.currentHiddenItems.filter(i => i.parentFolder_linkId === this.currentFolder.folder_linkId);
 
     if (!itemsInFolder.length) {
-      this.debug('hideItemsInCurrentFolder no items match current folder', items.length);
+      this.debug('hideItemsInCurrentFolder no items match current folder', this.currentHiddenItems.length);
       return;
     }
 
-    const itemsMap = new Map<ItemVO, true>();
+    const hiddenFolderLinkIds = new Set<number>();
     for (const item of itemsInFolder) {
-      itemsMap.set(item, true);
+      hiddenFolderLinkIds.add(item.folder_linkId);
       this.selectedItems.delete(item);
     }
 
     this.selectedItemsSubject.next(this.selectedItems);
 
-    remove(this.currentFolder.ChildItemVOs, x => itemsMap.has(x));
+    remove(this.currentFolder.ChildItemVOs, x => hiddenFolderLinkIds.has(x.folder_linkId));
     this.debug('hideItemsInCurrentFolder %d removed', itemsInFolder.length);
   }
 
@@ -313,8 +318,10 @@ export class DataService {
       }))).toPromise()
       .then((updatedFolder: FolderVO) => {
         this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
+        this.hideItemsInCurrentFolder();
         this.debug('refreshCurrentFolder done', sortOnly);
         this.folderUpdate.emit(this.currentFolder);
+        this.currentHiddenItems = [];
       });
   }
 
