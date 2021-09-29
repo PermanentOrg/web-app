@@ -31,10 +31,7 @@ export interface AccountVOData extends BaseVOData {
   primaryPhone?: string;
   defaultArchiveId?: any;
   level?: string;
-  apiToken?: any;
   betaParticipant?: any;
-  facebookAccountId?: any;
-  googleAccountId?: any;
   status?: any;
   type?: any;
   agreed?: any;
@@ -77,10 +74,7 @@ export class AccountVO extends BaseVO {
   public primaryPhone;
   public defaultArchiveId;
   public level;
-  public apiToken;
   public betaParticipant;
-  public facebookAccountId;
-  public googleAccountId;
   public status;
   public type;
   public agreed;
