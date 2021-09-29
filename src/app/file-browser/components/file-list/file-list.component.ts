@@ -285,6 +285,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       // (this.scrollElement.nativeElement as HTMLElement).scrollIntoView(true);
     }
 
+    this.dataService.refreshCurrentFolder();
+
     const queryParams = this.route.snapshot.queryParamMap;
     if (queryParams.has('showItem')) {
       const folder_linkId = Number(queryParams.get('showItem'));

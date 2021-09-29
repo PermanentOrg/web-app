@@ -1,4 +1,4 @@
-<pr-file-list-controls [hidden]="!showSidebar" #controls></pr-file-list-controls>
+<pr-file-list-controls [hidden]="!showSidebar" (refreshView)="refreshView()" #controls></pr-file-list-controls>
 <pr-folder-description [folder]="currentFolder" *ngIf="showFolderDescription && !isRootFolder"></pr-folder-description>
 <div class="file-list-scroll"
   [class.is-sorting]="controls?.isSorting$ | async" #scroll>
@@ -15,6 +15,7 @@
     [canSelect]="showSidebar"
     (itemClicked)="onItemClick($event)"
     (itemVisible)="onItemVisible($event)"
+    (refreshView)="refreshView()"
     ></pr-file-list-item>
 </div>
 <pr-sidebar *ngIf="showSidebar"></pr-sidebar>
