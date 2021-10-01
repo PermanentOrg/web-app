@@ -7,7 +7,7 @@ import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData, SortType } from
 import { DataStatus } from '@models/data-status.enum';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
 import { TagsService } from '@core/services/tags/tags.service';
@@ -62,6 +62,9 @@ export class DataService {
   private currentHiddenItems: ItemVO[] = [];
 
   private unsharedItemSubject = new Subject<ItemVO>();
+
+  private eventSubject: Subject<boolean> = new Subject<boolean>();
+  public events: Observable<boolean> = this.eventSubject.asObservable();
 
   private debug = debug('service:dataService');
 
@@ -615,5 +618,9 @@ export class DataService {
     const item = this.itemToShowAfterNavigate;
     this.itemToShowAfterNavigate = null;
     return item;
+  }
+
+  public beginPreparingForNavigate() {
+    this.eventSubject.next(true);
   }
 }
