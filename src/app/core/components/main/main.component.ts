@@ -62,7 +62,13 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
         } else if (event instanceof NavigationEnd) {
           this.isNavigating = false;
         }
+        this.setDocumentCursor();
       });
+
+    this.data.events.subscribe((event) => {
+      this.isNavigating = event;
+      this.setDocumentCursor();
+    });
 
     this.upload.progressVisible.subscribe((visible: boolean) => {
       this.uploadProgressVisible = visible;
@@ -327,5 +333,9 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy, Draggabl
       this.upload.uploadFiles(targetFolder, Array.from(files));
     }
 
+  }
+
+  protected setDocumentCursor(): void {
+    document.body.style.cursor = this.isNavigating ? 'wait' : 'auto';
   }
 }

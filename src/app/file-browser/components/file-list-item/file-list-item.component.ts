@@ -442,6 +442,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     }
 
     if (this.item.dataStatus < DataStatus.Lean) {
+      this.dataService.beginPreparingForNavigate();
       if (!this.item.isFetching) {
         this.dataService.fetchLeanItems([this.item]);
       }
