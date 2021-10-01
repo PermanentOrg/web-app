@@ -41,11 +41,13 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() saveOnBlur = true;
   @Input() selectOptions: FormInputSelectOption[];
   @Input() dateOnly = false;
+  @Input() class: string;
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @HostBinding('class.always-show') @Input() alwaysShow = false;
   @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
   @Output() externalEdit: EventEmitter<ValueType> = new EventEmitter<ValueType>();
+  @Output() toggledDatePicker: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   formControl: FormControl;
   @ViewChild('input') inputElementRef: ElementRef;
@@ -58,9 +60,13 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   ngbDate: NgbDate;
   maxNgbDate: NgbDateStruct;
 
+  public extraClasses: string[];
+
   constructor(
     private elementRef: ElementRef
-  ) { }
+  ) {
+    this.extraClasses = [];
+  }
 
   ngOnInit(): void {
     if (this.type === 'select') {
@@ -78,6 +84,10 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 
     if (this.email) {
       validators.push(Validators.email);
+    }
+
+    if (this.class) {
+      this.extraClasses = this.class.split(" ");
     }
   }
 
@@ -98,6 +108,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       this.editValue = moment.utc(this.displayValue).toISOString();
       this.setNgbDateAndTime();
       this.datePicker.focusDate(this.ngbDate);
+      this.toggledDatePicker.emit(true);
       setTimeout(() => {
         this.datePicker.focusSelect();
       });
@@ -123,6 +134,10 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       return;
     }
 
+    if (this.type === 'date') {
+      this.toggledDatePicker.emit(false);
+    }
+
     if (this.displayValue !== this.editValue) {
       this.doneEditing.emit(this.editValue);
     }
@@ -133,6 +148,10 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   cancel() {
+    if (this.type === 'date') {
+      this.toggledDatePicker.emit(false);
+    }
+
     this.editValue = this.displayValue;
     this.isEditing = false;
     this.blurInput();

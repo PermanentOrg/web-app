@@ -6,8 +6,11 @@ import * as Hammer from 'hammerjs';
 import { gsap } from 'gsap';
 import { filter, findIndex, find } from 'lodash';
 
-import { RecordVO, } from '@root/app/models';
+import { RecordVO, ItemVO, AccessRole } from '@root/app/models';
+import { AccountService } from '@shared/services/account/account.service';
+import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { DataService } from '@shared/services/data/data.service';
+import { EditService } from '@core/services/edit/edit.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -28,9 +31,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public isAudio = false;
   public isDocument = false;
   public showThumbnail = true;
-  public isPublicArchive: boolean = false;
 
   public documentUrl = null;
+
+  public canEdit: boolean;
 
   // Swiping
   private touchElement: HTMLElement;
@@ -45,6 +49,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   // UI
   public useMinimalView = false;
+  public editingDate: boolean = false;
   private bodyScrollTop: number;
 
   constructor(
@@ -53,7 +58,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private element: ElementRef,
     private dataService: DataService,
     @Inject(DOCUMENT) private document: any,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private accountService: AccountService,
+    private editService: EditService,
   ) {
     // store current scroll position in file list
     this.bodyScrollTop = window.scrollY;
@@ -74,10 +81,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
       this.loadQueuedItems();
     }
-
-    if (route.snapshot.data?.isPublicArchive) {
-      this.isPublicArchive = route.snapshot.data.isPublicArchive;
-    }
+    this.canEdit = this.accountService.checkMinimumAccess(this.currentRecord.accessRole, AccessRole.Editor);
   }
 
   ngOnInit() {
@@ -292,7 +296,39 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.router.navigate(['.'], { relativeTo: this.route.parent});
   }
 
-  public onDownloadClick(): void {
-    this.dataService.downloadFile(this.currentRecord);
+  public async onFinishEditing(property: keyof ItemVO, value: string): Promise<void> {
+    const item = this.currentRecord as ItemVO;
+
+    if (item) {
+      const originalValue = item[property];
+      const newData: any = {};
+      newData[property] = value;
+      try {
+        item.update(newData);
+        await this.editService.updateItems([item], [property]);
+      } catch (err) {
+        if (err instanceof FolderResponse || err instanceof RecordResponse ) {
+          const revertData: any = {};
+          revertData[property] = originalValue;
+          item.update(revertData);
+        }
+      }
+    }
+  }
+
+  public onLocationClick(): void {
+    if (this.canEdit) {
+      this.editService.openLocationDialog(this.currentRecord as ItemVO)
+    }
+  }
+
+  public onTagsClick(): void {
+    if (this.canEdit) {
+      this.editService.openTagsDialog(this.currentRecord as ItemVO)
+    }
+  }
+
+  public onDateToggle(active: boolean): void {
+    this.editingDate = active;
   }
 }

@@ -6,7 +6,7 @@
   background-color: rgba(black, 0);
   transition: background-color $menu-transition-length $menu-open-ease, visibility 0s linear $menu-transition-length;
   visibility: hidden;
-  z-index: 5;
+  z-index: 11;
 
   .menu {
     position: absolute;
@@ -73,11 +73,11 @@ pr-dialog {
       button {
         max-width: 100%;
       }
-    
+
       button:not(:first-child) {
         margin-left: 10px;
       }
-    
+
       button.btn-secondary:not(:last-child) {
         flex: 0 0 33.33%
       }
