@@ -1,5 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 
@@ -31,28 +30,36 @@ const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
 })
 export class NewArchiveFormComponent implements OnInit {
   @Output() success = new EventEmitter<ArchiveVO>();
-  @Output() error =  new EventEmitter();
-  public form: FormGroup;
+  @Output() error = new EventEmitter();
+  @ViewChild('newArchiveName') fullNameRef: ElementRef<HTMLInputElement>;
   public archiveTypes = ARCHIVE_TYPES;
   public waiting: boolean = false;
+  public formData: ArchiveFormData;
 
   constructor(
-    private fb: FormBuilder,
     private api: ApiService,
   ) {
-    this.form = this.fb.group({
-      fullName: ['', [Validators.required]],
-      type: [ARCHIVE_TYPES[0].value, [Validators.required]],
-    });
+    this.formData = {
+      fullName: '',
+      type: null,
+      relationType: ''
+    };
   }
 
   ngOnInit(): void {
   }
 
-  public async onSubmit(data: ArchiveFormData) {
+  public isFormValid() {
+    return this.fullNameRef?.nativeElement.validity.valid && this.formData.type !== null;
+  }
+
+  public async onSubmit() {
+    if (!this.isFormValid()) {
+      return;
+    }
     try {
       this.waiting = true;
-      const response = await this.api.archive.create(new ArchiveVO(data));
+      const response = await this.api.archive.create(new ArchiveVO(this.formData));
       const newArchive = response.getArchiveVO();
       this.success.emit(newArchive);
     } catch (err) {

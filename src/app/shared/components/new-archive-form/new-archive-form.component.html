@@ -1,25 +1,31 @@
-<!-- TODO: Re-add connections to make it usable on my-archives-dialog -->
-<form [formGroup]="form" class="dialog-form" (submit)="onSubmit(form.value)">
+<!-- If we add connections to this form we can  make it usable on my-archives-dialog -->
+<form class="dialog-form" (submit)="onSubmit()" ngNativeValidate>
   <div class="dialog-form-field">
     <label class="row-label" for="name">Archive Name</label>
     <div class="dialog-inline-field">
       <span>The</span>
-      <input type="text" class="form-control" id="newArchiveName" name="name"
+      <input
+        type="text"
+        class="form-control"
+        id="newArchiveName"
+        name="name"
         placeholder="Name"
-        formControlName="fullName">
+        [(ngModel)]="formData.fullName"
+        required
+        #newArchiveName />
       <span>Archive</span>
     </div>
   </div>
   <div class="dialog-form-field">
     <label class="row-label" for="email">Archive Type</label>
-    <div class="form-check" *ngFor="let typeOption of archiveTypes">
+    <div class="form-check" *ngFor="let typeOption of archiveTypes; index as i">
       <label class="form-check-label">
-        <input type="radio" class="form-check-input" formControlName="type" [value]="typeOption.value">
+        <input type="radio" class="form-check-input" name="type" [(ngModel)]="formData.type" [value]="typeOption.value" [required]="i === 1">
         {{typeOption.text}}
       </label>
     </div>
   </div>
   <div class="dialog-form-field">
-    <button class="btn btn-primary" [disabled]="form.invalid || waiting">Create New Archive</button>
+    <button class="btn btn-primary" type="submit" [disabled]="waiting">Create New Archive</button>
   </div>
 </form>

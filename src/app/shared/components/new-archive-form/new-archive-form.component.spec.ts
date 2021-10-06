@@ -30,6 +30,8 @@ describe('NewArchiveFormComponent #onboarding', () => {
     const input = find('#newArchiveName');
     input.nativeElement.value = 'Test User';
     input.triggerEventHandler('input', { target: input.nativeElement });
+    const radio = find('input[type="radio"][required]');
+    radio.nativeElement.click();
   }
   beforeEach(() => {
     created = false;
@@ -43,12 +45,12 @@ describe('NewArchiveFormComponent #onboarding', () => {
     const { element } = await shallow.render();
     expect(element).not.toBeNull();
   });
-  it('should disable button when form is invalid', async () => {
-    const { find, fixture } = await shallow.render();
-    expect(find('button').nativeElement.disabled).toBeTruthy();
-    fillOutForm(find);
-    fixture.detectChanges();
+  it('should not submit when form is invalid', async () => {
+    const { find, fixture, outputs } = await shallow.render();
     expect(find('button').nativeElement.disabled).toBeFalsy();
+    find('button').nativeElement.click();
+    expect(outputs.success.emit).not.toHaveBeenCalled();
+    expect(outputs.error.emit).not.toHaveBeenCalled();
   });
   it('should disable button when form is waiting', async () => {
     const { find, fixture } = await shallow.render();
