@@ -19,6 +19,8 @@ import { Dialog } from '@root/app/dialog/dialog.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 
+import type {KeysOfType} from '@shared/utilities/keysoftype';
+
 export const ItemActions: {[key: string]: PromptButton} = {
   Rename: {
     buttonName: 'rename',
@@ -285,6 +287,24 @@ export class EditService {
 
     await this.api.share.remove(shareVO);
     this.dataService.itemUnshared(item);
+  }
+
+  public async saveItemVoProperty(item: ItemVO, property: KeysOfType<ItemVO, string>, value: string) {
+    if (item) {
+      const originalValue = item[property];
+      const newData: Partial<ItemVO> = {};
+      newData[property] = value;
+      try {
+        item.update(newData);
+        await this.updateItems([item], [property]);
+      } catch (err) {
+        if (err instanceof FolderResponse || err instanceof RecordResponse ) {
+          const revertData: Partial<ItemVO> = {};
+          revertData[property] = originalValue;
+          item.update(revertData);
+        }
+      }
+    }
   }
 
   updateItems(items: any[], whitelist?: (keyof ItemVO)[]): Promise<FolderResponse | RecordResponse | any>   {

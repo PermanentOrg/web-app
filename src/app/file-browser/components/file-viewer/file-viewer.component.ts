@@ -14,6 +14,8 @@ import { EditService } from '@core/services/edit/edit.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import type { KeysOfType } from '@shared/utilities/keysoftype';
+
 @Component({
   selector: 'pr-file-viewer',
   templateUrl: './file-viewer.component.html',
@@ -296,24 +298,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.router.navigate(['.'], { relativeTo: this.route.parent});
   }
 
-  public async onFinishEditing(property: keyof ItemVO, value: string): Promise<void> {
-    const item = this.currentRecord as ItemVO;
-
-    if (item) {
-      const originalValue = item[property];
-      const newData: any = {};
-      newData[property] = value;
-      try {
-        item.update(newData);
-        await this.editService.updateItems([item], [property]);
-      } catch (err) {
-        if (err instanceof FolderResponse || err instanceof RecordResponse ) {
-          const revertData: any = {};
-          revertData[property] = originalValue;
-          item.update(revertData);
-        }
-      }
-    }
+  public async onFinishEditing(property: KeysOfType<ItemVO, string>, value: string): Promise<void> {
+    this.editService.saveItemVoProperty(this.currentRecord as ItemVO, property, value);
   }
 
   public onLocationClick(): void {
