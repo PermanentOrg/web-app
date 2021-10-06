@@ -81,7 +81,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
       this.loadQueuedItems();
     }
-    this.canEdit = this.accountService.checkMinimumAccess(this.currentRecord.accessRole, AccessRole.Editor);
+    this.canEdit = this.accountService.checkMinimumAccess(this.currentRecord.accessRole, AccessRole.Editor) && !route.snapshot.data?.isPublicArchive;
   }
 
   ngOnInit() {

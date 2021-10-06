@@ -7,6 +7,7 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { } from '@core/services/folder-picker/folder-picker.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { SharedModule } from '@shared/shared.module';
+import { CoreModule } from '@core/core.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
@@ -32,7 +33,8 @@ import { DialogModule } from '../dialog/dialog.module';
     PublicRoutingModule,
     SharedModule,
     FileBrowserModule,
-    DialogModule
+    DialogModule,
+    CoreModule,
   ],
   providers: [
     DataService,
