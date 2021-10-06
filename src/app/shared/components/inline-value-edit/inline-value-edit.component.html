@@ -7,7 +7,7 @@
           [required]="required" [email]="email" [attr.minlength]="minLength > 0 ? minLength : null" [attr.maxlength]="maxLength > 0 ? maxLength : null" (blur)="onTextInputBlur()">
         <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
           [class.showing-empty-message]="!displayValue && emptyMessage">
-          <span [ngClass]="extraClasses">{{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}</span>
+          <span [ngClass]="extraClasses">{{displayValue || (canEdit ? emptyMessage : readOnlyEmptyMessage) || '&nbsp;'}}</span>
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
@@ -60,7 +60,7 @@
         <div class="inline-value-display inline-value-textarea form-control"
           [class.is-editing]="isEditing"
           (click)="startEdit()"
-          [innerHTML]="!loading ? displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) : ''"
+          [innerHTML]="loading ? '' : displayValue || (canEdit ? emptyMessage : readOnlyEmptyMessage)"
           [class.showing-empty-message]="!loading && !displayValue && emptyMessage"></div>
         <div class="inline-value-placeholder" [hidden]="!loading || displayValue">
           <div class="placeholder-line two-thirds"></div>

@@ -40,7 +40,6 @@
       [displayValue]="currentRecord.description"
       [itemId]="currentRecord.folder_linkId"
       [canEdit]="canEdit"
-      [loading]="isLoading"
       (doneEditing)="onFinishEditing('description', $event)"
       emptyMessage="Click to add description"
       readOnlyEmptyMessage="No description"
