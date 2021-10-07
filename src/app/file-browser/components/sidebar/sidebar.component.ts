@@ -9,6 +9,8 @@ import { EditService } from '@core/services/edit/edit.service';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 
+import type { KeysOfType } from '@shared/utilities/keysoftype';
+
 type SidebarTab =  'info' | 'details' | 'sharing' | 'views';
 @Component({
   selector: 'pr-sidebar',
@@ -113,24 +115,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     this.currentTab = tab;
   }
 
-  async onFinishEditing(property: keyof ItemVO, value: string) {
-    const item = this.selectedItem;
-
-    if (item) {
-      const originalValue = item[property];
-      const newData: any = {};
-      newData[property] = value;
-      try {
-        item.update(newData);
-        await this.editService.updateItems([item], [property]);
-      } catch (err) {
-        if (err instanceof FolderResponse || err instanceof RecordResponse ) {
-          const revertData: any = {};
-          revertData[property] = originalValue;
-          item.update(revertData);
-        }
-      }
-    }
+  async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
+    this.editService.saveItemVoProperty(this.selectedItem, property, value);
   }
 
   onLocationClick() {

@@ -6,6 +6,8 @@ $inline-padding-y: $grid-unit / 2;
 :host {
   display: block;
   position: relative;
+  width: 96%;
+  margin: 0 auto;
 }
 
 form {
@@ -39,7 +41,7 @@ form {
   word-break: break-all;
 }
 
-select { 
+select {
   height: auto !important;
   appearance: none;
 }
@@ -193,4 +195,8 @@ input, select, textarea {
       border-color: $danger !important;
     }
   }
+}
+
+.no-padding {
+  padding: 0;
 }

@@ -1,8 +1,5 @@
-<div class="file-viewer" [ngClass]="{'minimal': useMinimalView}">
+<div class="file-viewer" [ngClass]="{'minimal': useMinimalView, 'editing-date': editingDate, 'can-edit': canEdit}">
   <div class="file-viewer-close">
-    <!-- <button type="button" class="close" aria-label="Close" (click)="close()">
-      <span aria-hidden="true">&times;</span>
-    </button> -->
     <a (click)="close()">
       <i class="ion-md-arrow-dropleft"></i> Back
     </a>
@@ -27,16 +24,46 @@
     {{currentRecord.displayName}}
   </div>
   <div class="file-viewer-metadata">
-    <h5>{{currentRecord.displayName}}</h5>
+    <pr-inline-value-edit
+      [displayValue]="currentRecord.displayName"
+      [itemId]="currentRecord.folder_linkId"
+      [canEdit]="canEdit"
+      [required]="true"
+      (doneEditing)="onFinishEditing('displayName', $event)"
+      emptyMessage="Click to add name"
+      readOnlyEmptyMessage="No name"
+      type="text"
+      class="h5"></pr-inline-value-edit>
     <div class="file-viewer-description">
-      <p *ngIf="currentRecord.description">{{currentRecord.description}}</p>
+      <pr-inline-value-edit
+      *ngIf="canEdit || currentRecord.description"
+      [displayValue]="currentRecord.description"
+      [itemId]="currentRecord.folder_linkId"
+      [canEdit]="canEdit"
+      (doneEditing)="onFinishEditing('description', $event)"
+      emptyMessage="Click to add description"
+      readOnlyEmptyMessage="No description"
+      type="description-textarea"></pr-inline-value-edit>
     </div>
     <div class="file-viewer-download" *ngIf="isPublicArchive">
       <button class="btn btn-primary"  (click)="onDownloadClick()">Download</button>
     </div>
     <table>
       <tr>
-        <td>Date</td><td>{{currentRecord.displayDT | date}}</td>
+        <td>Date</td>
+        <td>
+          <pr-inline-value-edit
+            [displayValue]="currentRecord.displayDT"
+            [canEdit]="canEdit"
+            [item]="currentRecord"
+            [itemId]="currentRecord.folder_linkId"
+            emptyMessage="Click to add date"
+            readOnlyEmptyMessage="No date"
+            (doneEditing)="onFinishEditing('displayDT', $event)"
+            (toggledDatePicker)="onDateToggle($event)"
+            type="date"
+            class="no-padding"></pr-inline-value-edit>
+        </td>
       </tr>
       <tr>
         <td>Uploaded</td><td>{{currentRecord.createdDT | date}}</td>
@@ -48,11 +75,11 @@
         <td>Type</td><td>{{currentRecord.type | prConstants | titlecase}}</td>
       </tr>
       <tr>
-        <td>Tags</td><td><pr-tags [tags]="currentRecord.TagVOs"></pr-tags></td>
+        <td>Tags</td><td (click)="onTagsClick()"><pr-tags [tags]="currentRecord.TagVOs"></pr-tags></td>
       </tr>
       <tr>
         <td>Location</td>
-        <td>
+        <td class="location-container" (click)="onLocationClick()">
           <pr-static-map [location]="currentRecord.LocnVO" *ngIf="currentRecord.LocnVO"></pr-static-map>
           <span *ngIf="currentRecord.LocnVO">{{(currentRecord.LocnVO | prLocation)?.full}}</span>
           <span *ngIf="!currentRecord.LocnVO">No location</span>

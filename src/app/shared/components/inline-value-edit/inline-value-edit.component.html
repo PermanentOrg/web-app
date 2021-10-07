@@ -7,7 +7,7 @@
           [required]="required" [email]="email" [attr.minlength]="minLength > 0 ? minLength : null" [attr.maxlength]="maxLength > 0 ? maxLength : null" (blur)="onTextInputBlur()">
         <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" [class.is-editing]="isEditing"
           [class.showing-empty-message]="!displayValue && emptyMessage">
-          {{displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'}}
+          <span [ngClass]="extraClasses">{{displayValue || (canEdit ? emptyMessage : readOnlyEmptyMessage) || '&nbsp;'}}</span>
         </div>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
@@ -50,9 +50,43 @@
       </div>
     </form>
   </ng-container>
+  <ng-container *ngSwitchCase="'description-textarea'">
+    <form novalidate>
+      <div *ngIf="isEditing" class="inline-value-container" [class.can-edit]="canEdit">
+        <textarea name="textarea" class="form-control" [class.is-editing]="isEditing"
+        [attr.maxlength]="maxLength > 0 ? maxLength : null"
+        [(ngModel)]="editValue" #input #model="ngModel"
+        (blur)="onTextInputBlur()"></textarea>
+        <div class="inline-value-display inline-value-textarea form-control"
+          [class.is-editing]="isEditing"
+          (click)="startEdit()"
+          [innerHTML]="loading ? '' : displayValue || (canEdit ? emptyMessage : readOnlyEmptyMessage)"
+          [class.showing-empty-message]="!loading && !displayValue && emptyMessage"></div>
+        <div class="inline-value-placeholder" [hidden]="!loading || displayValue">
+          <div class="placeholder-line two-thirds"></div>
+          <div class="placeholder-line"></div>
+          <div class="placeholder-line three-quarters"></div>
+          <div class="placeholder-line two-thirds"></div>
+          <div class="placeholder-line"></div>
+        </div>
+      </div>
+      <div *ngIf="!isEditing" (click)="startEdit()">
+        <p *ngIf="displayValue && displayValue.trim()">{{displayValue}}</p>
+        <p *ngIf="!displayValue || !displayValue.trim()">{{emptyMessage}}</p>
+      </div>
+      <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
+        <button class="btn btn-primary btn-sm" (click)="save()" type="submit" [disabled]="isEditing && model?.invalid">
+          Save
+        </button>
+        <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </ng-container>
   <ng-container *ngSwitchCase="'date'">
     <div class="inline-value-container inline-value-date" [class.can-edit]="canEdit">
-      <div class="inline-value-display inline-value-text form-control" (click)="startEdit()" *ngIf="!isEditing"
+      <div [ngClass]="'inline-value-display inline-value-text form-control ' + class" (click)="startEdit()" *ngIf="!isEditing"
       [class.showing-empty-message]="!displayValue && emptyMessage">
         <ng-container *ngIf="!dateOnly">
           {{ displayValue ? (displayValue | prDate:item?.TimezoneVO) : (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;' }}
