@@ -1,7 +1,5 @@
 <div class="sidebar-tabs">
   <div class="sidebar-tab" [class.active]="currentTab === 'info'" (click)="setCurrentTab('info')">Info</div>
-  <!-- <div class="sidebar-tab" [class.active]="currentTab === 'details'" (click)="setCurrentTab('details')"
-    [class.disabled]="isRootFolder">Details</div> -->
   <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')"
     [class.disabled]="isRootFolder || isPublicItem"
     [ngbTooltip]="isPublicItem ? ('sidebar.share.disabled.public' | prTooltip) : null">
@@ -155,7 +153,6 @@
       </button>
     </div>
     <div class="sidebar-item">
-      <!-- <label>Shared with</label> -->
       <div class="sidebar-item-content" *ngIf="selectedItem.ShareVOs?.length">
         <div class="shared-with-archive" *ngFor="let share of selectedItem.ShareVOs">
           <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
@@ -165,9 +162,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="sidebar-item-content" *ngIf="!selectedItem.ShareVOs?.length">
-        This item is not shared
-      </div> -->
     </div>
   </ng-container>
 </div>
