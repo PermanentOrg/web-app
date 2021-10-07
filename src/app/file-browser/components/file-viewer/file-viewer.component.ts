@@ -33,6 +33,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public isAudio = false;
   public isDocument = false;
   public showThumbnail = true;
+  public isPublicArchive: boolean = false;
 
   public documentUrl = null;
 
@@ -83,6 +84,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
       this.loadQueuedItems();
     }
+
+    if (route.snapshot.data?.isPublicArchive) {
+      this.isPublicArchive = route.snapshot.data.isPublicArchive;
+    }
+
     this.canEdit = this.accountService.checkMinimumAccess(this.currentRecord.accessRole, AccessRole.Editor) && !route.snapshot.data?.isPublicArchive;
   }
 
@@ -316,5 +322,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   public onDateToggle(active: boolean): void {
     this.editingDate = active;
+  }
+
+  public onDownloadClick(): void {
+    this.dataService.downloadFile(this.currentRecord);
   }
 }
