@@ -24,7 +24,7 @@ jobs:
 
       - name: Build
         env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_DEV }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_DEV }}
           STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
         run: npm run build:dev
@@ -47,7 +47,7 @@ jobs:
           token: ${{ secrets.SENTRY_TOKEN }}
           organization: permanentorg
           project: mdot
-      
+
       - name: Download dist
         uses: actions/download-artifact@v2
         with:
@@ -63,7 +63,7 @@ jobs:
           declare -x VERSION=mdot@$(jq -r '.version' package.json)
           sentry-cli releases set-commits $VERSION --auto
           sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
-  
+
   upload-code:
     needs: build
     runs-on: ubuntu-latest
