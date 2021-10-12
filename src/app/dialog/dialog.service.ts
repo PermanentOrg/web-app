@@ -1,4 +1,4 @@
-// tslint:disable-next-line:max-line-length
+// eslint-disable-next-line max-len
 import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { DialogComponent } from './dialog.component';
