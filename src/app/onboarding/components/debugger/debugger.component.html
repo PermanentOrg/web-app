@@ -1,0 +1,5 @@
+<div class="debugger" *ngIf="currentScreen !== 'done'">
+  <strong>Test Functionality:</strong><br />
+  <input id="pendingarchives" name="pendingarchives" type="checkbox" (change)="setPendingArchive($event.target.checked)" /> <label for="pendingarchives"> Test Pending Archives</label><br />
+  <button *ngIf="currentScreen === 'newArchive'" (click)="simulateNewArchiveCreation()">Submit Form Without API Call</button>
+</div>

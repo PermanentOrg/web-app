@@ -193,21 +193,17 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     }
   }
 
-  async onNewArchiveFormSubmit(value: ArchiveFormData) {
-    try {
-      this.waiting = true;
-      const response = await this.api.archive.create(new ArchiveVO(value));
-      const newArchive = response.getArchiveVO();
-      this.archives.push(newArchive);
-      this.newArchiveForm.reset();
-      this.setTab('switch');
-      this.scrollToArchive(newArchive);
-    } catch (err) {
-      if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
-      }
-    } finally {
-      this.waiting = false;
+  public onNewArchiveFormSubmit(newArchive: ArchiveVO): void {
+    this.archives.push(newArchive);
+    this.setTab('switch');
+    this.scrollToArchive(newArchive);
+    this.waiting = false;
+  }
+
+  public onNewArchiveFormFailure(err): void {
+    if (err instanceof ArchiveResponse) {
+      this.message.showError(err.getMessage(), true);
     }
+    this.waiting = false;
   }
 }
