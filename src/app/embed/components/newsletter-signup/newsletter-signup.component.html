@@ -17,13 +17,6 @@
     <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
       [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
   </div>
-  <!-- <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="terms"
-        formControlName="agreed">
-      <label class="form-check-label" for="terms">
-        I agree with the (required)</strong>
-      </label>
-    </div> -->
   <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid" (click)="onSignupSubmit(signupForm.value)">
     Create Account
   </button>

@@ -1,8 +1,4 @@
 <div class="archive-switcher-wrapper">
-  <!-- <div class="current-archive">
-    <pr-archive-small [archive]="currentArchive" (click)="close()"></pr-archive-small>
-    <div class="archive-list-title"><strong>{{promptText}}</strong></div>
-  </div> -->
   <div class="archive-list-wrapper">
     <div class="archive-list" *ngIf="!loadingArchives" [ngClass]="{'switching': waiting}">
       <pr-archive-small *ngFor="let archive of archives"
@@ -18,7 +14,6 @@
     </div>
   </div>
   <div class="archive-list-button">
-    <!-- <button class="btn btn-primary" (click)="createArchiveClick()">Create new archive</button> -->
     <button class="btn btn-wordpress" [disabled]="waiting" (click)="close()">Use Current Archive</button>
     <button class="btn btn-wordpress-alternate" [disabled]="waiting" (click)="logOut()">Log Out</button>
   </div>
