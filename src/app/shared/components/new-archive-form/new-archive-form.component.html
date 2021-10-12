@@ -1,4 +1,3 @@
-<!-- If we add connections to this form we can  make it usable on my-archives-dialog -->
 <form class="dialog-form" (submit)="onSubmit()" ngNativeValidate>
   <div class="dialog-form-field">
     <label class="row-label" for="name">Archive Name</label>
@@ -20,10 +19,17 @@
     <label class="row-label" for="email">Archive Type</label>
     <div class="form-check" *ngFor="let typeOption of archiveTypes; index as i">
       <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="type" [(ngModel)]="formData.type" [value]="typeOption.value" [required]="i === 1">
+        <input type="radio" class="form-check-input" name="type" [(ngModel)]="formData.type" [value]="typeOption.value" [required]="i === 0">
         {{typeOption.text}}
       </label>
     </div>
+  </div>
+  <div class="dialog-form-field" *ngIf="showRelations && formData.type === 'type.archive.person'">
+    <label class="row-label" for="relation">Connection</label>
+    <select name="relation" class="form-control" name="relation" [(ngModel)]="formData.relationType">
+      <option value="" disabled selected>Choose connection (optional)</option>
+      <option [value]="relation.value" *ngFor="let relation of relationTypes">{{relation.text}}</option>
+    </select>
   </div>
   <div class="dialog-form-field">
     <button class="btn btn-primary" type="submit" [disabled]="waiting">Create New Archive</button>

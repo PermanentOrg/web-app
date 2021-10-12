@@ -31,7 +31,7 @@
             (acceptClick)="onArchiveMakeDefaultClick(archive)"
             [showRemove]="archive.accessRole.includes('owner') && currentArchive.archiveId !== archive.archiveId && account.defaultArchiveId !== archive.archiveId && archives.length > 1"
             removeText="Delete Archive"
-            (removeClick)="onArchiveDeleteClick(archive)"            
+            (removeClick)="onArchiveDeleteClick(archive)"
             [largeOnDesktop]="true" [archive]="archive"
             [actionsAsDropdown]="true"
             [accessRole]="archive.accessRole" [class.waiting]="archive.isPendingAction"></pr-archive-small>
@@ -51,37 +51,7 @@
           </pr-archive-small>
         </ng-container>
         <ng-container *ngSwitchCase="'new'">
-          <form [formGroup]="newArchiveForm" class="dialog-form" (submit)="onNewArchiveFormSubmit(newArchiveForm.value)">
-            <div class="dialog-form-field">
-              <label class="row-label" for="name">Archive Name</label>
-              <div class="dialog-inline-field">
-                <span>The</span>
-                <input type="text" class="form-control" id="newArchiveName" name="name"
-                  placeholder="Name"
-                  formControlName="fullName">
-                <span>Archive</span>
-              </div>
-            </div>
-            <div class="dialog-form-field">
-              <label class="row-label" for="email">Archive Type</label>
-              <div class="form-check" *ngFor="let typeOption of archiveTypes">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" formControlName="type" [value]="typeOption.value">
-                  {{typeOption.text}}
-                </label>
-              </div>
-            </div>
-            <div class="dialog-form-field" *ngIf="newArchiveForm.value.type === 'type.archive.person'">
-              <label class="row-label" for="relation">Connection</label>
-              <select name="relation" class="form-control" formControlName="relationType">
-                <option value="" disabled selected>Choose connection (optional)</option>
-                <option [value]="relation.value" *ngFor="let relation of relationTypes">{{relation.text}}</option>
-              </select>
-            </div>
-            <div class="dialog-form-field">
-              <button class="btn btn-primary" [disabled]="newArchiveForm.invalid || waiting">Create New Archive</button>
-            </div>
-          </form>
+          <pr-new-archive-form [showRelations]="true" (success)="onNewArchiveFormSubmit($event)" (error)="onNewArchiveFormFailure($event)"></pr-new-archive-form>
         </ng-container>
       </ng-container>
     </div>

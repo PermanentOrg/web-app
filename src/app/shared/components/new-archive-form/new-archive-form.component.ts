@@ -1,11 +1,12 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
+import { RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
 
-interface ArchiveFormData {
+export interface ArchiveFormData {
   fullName: string;
   type: ArchiveType;
-  relationType: string;
+  relationType?: string;
 }
 
 const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
@@ -29,10 +30,12 @@ const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
   styleUrls: ['./new-archive-form.component.scss']
 })
 export class NewArchiveFormComponent implements OnInit {
+  @Input() showRelations: boolean = false;
   @Output() success = new EventEmitter<ArchiveVO>();
   @Output() error = new EventEmitter();
   @ViewChild('newArchiveName') fullNameRef: ElementRef<HTMLInputElement>;
   public archiveTypes = ARCHIVE_TYPES;
+  public relationTypes = RELATION_OPTIONS;
   public waiting: boolean = false;
   public formData: ArchiveFormData;
 
@@ -42,7 +45,7 @@ export class NewArchiveFormComponent implements OnInit {
     this.formData = {
       fullName: '',
       type: null,
-      relationType: ''
+      relationType: null,
     };
   }
 

@@ -1,11 +1,11 @@
 import { Shallow } from 'shallow-render';
-import { NewArchiveFormComponent } from './new-archive-form.component';
+import { ArchiveFormData, NewArchiveFormComponent } from './new-archive-form.component';
 import { SharedModule } from '@shared/shared.module';
 import { ApiService } from '@shared/services/api/api.service';
 
 let created: boolean = false;
 let throwError: boolean = false;
-let createdArchive: any;
+let createdArchive: ArchiveFormData;
 
 const mockApiService = {
   archive: {
@@ -14,7 +14,7 @@ const mockApiService = {
         throw "Test Error";
       }
       created = true;
-      createdArchive = data;
+      createdArchive = data as ArchiveFormData;
       return {
         getArchiveVO: () => {
           return data;
@@ -26,6 +26,7 @@ const mockApiService = {
 
 describe('NewArchiveFormComponent #onboarding', () => {
   let shallow: Shallow<NewArchiveFormComponent>;
+  let expectedApiVal: ArchiveFormData;
   function fillOutForm (find: (a: string) => any) {
     const input = find('#newArchiveName');
     input.nativeElement.value = 'Test User';
@@ -75,6 +76,9 @@ describe('NewArchiveFormComponent #onboarding', () => {
     find('button').nativeElement.click();
     await fixture.whenStable();
     expect(outputs.success.emit).toHaveBeenCalled();
+    expect(createdArchive.fullName).toBe('Test User');
+    expect(createdArchive.type).toBe('type.archive.person');
+    expect(createdArchive.relationType).toBeNull();
     expect(outputs.error.emit).not.toHaveBeenCalled();
   });
   it('should output errors if they occur', async () => {
@@ -86,5 +90,24 @@ describe('NewArchiveFormComponent #onboarding', () => {
     await fixture.whenStable();
     expect(outputs.error.emit).toHaveBeenCalled();
     expect(outputs.success.emit).not.toHaveBeenCalled();
+  });
+  it('should have an input that enables relations', async () => {
+    const { find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
+    fillOutForm(find);
+    fixture.detectChanges();
+    expect(find('select[name="relation"]')).toHaveFoundOne();
+    find('input[type="radio"]')[1].nativeElement.click();
+    fixture.detectChanges();
+    expect(find('select[name="relation"]')).not.toHaveFoundOne();
+  });
+  it('should submit relationType to API if it is enabled', async () => {
+    const { element, find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
+    fillOutForm(find);
+    fixture.detectChanges();
+    find('select').nativeElement.value = 'relation.other';
+    element.componentInstance.formData.relationType = 'relation.other';
+    find('button').nativeElement.click();
+    await fixture.whenStable();
+    expect(createdArchive.relationType).toBe('relation.other');
   });
 });
