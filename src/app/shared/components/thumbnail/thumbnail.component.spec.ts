@@ -20,7 +20,7 @@ function addParam(url, param) {
 const minItem = new RecordVO({ folder_linkId: 1 }, false, DataStatus.Placeholder);
 const leanItem = new RecordVO({folder_linkId: 1, thumbURL200: image200 }, false, DataStatus.Lean);
 const fullItem = new RecordVO(
-  { folder_linkId: 1, thumbURL200: image200, thumbURL500: image500, thumbURL1000: image1000 },
+  { folder_linkId: 1, thumbURL200: image200, thumbURL500: image500, thumbURL1000: image1000, type: 'type.record.image' },
   false,
   DataStatus.Full
   );
@@ -140,5 +140,16 @@ describe('ThumbnailComponent', () => {
     fixture.detectChanges();
     expect(component['targetThumbWidth']).toEqual(500);
     expect(component['currentThumbUrl']).toEqual(fullItem2.thumbURL500);
+  });
+
+  it('should show a zip icon if the item is a .zip archive', async () => {
+    component['dpiScale'] = 2;
+
+    hostComponent.item.update(fullItem);
+    hostComponent.item.type = 'type.record.archive';
+    hostComponent.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+    expect(component['element'].querySelector('.material-icons')).not.toBeNull();
+    expect(component['element'].querySelector('.pr-thumbnail-image:not([hidden])')).toBeNull();
   });
 });

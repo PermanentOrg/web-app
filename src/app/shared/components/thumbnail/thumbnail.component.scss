@@ -23,6 +23,11 @@
 }
 
 .pr-thumbnail-icon {
+  .material-icons {
+    color: #000;
+    user-select: none;
+    font-size: 7.8rem;
+  }
   display: flex;
   align-items: center;
   justify-content: center;
