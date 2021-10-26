@@ -1157,7 +1157,7 @@
       "dest_not_a_share": "You cannot share to a non share folder",
       "no_existing_share": "This user does not have a access to this share.",
       "no_link": "You cannot link a share",
-      "no_share_self": "You cannot share a folder with yourself",
+      "no_share_self": "You cannot share an item with yourself",
       "root_folder": "You cannot modify root folders.",
       "unshare_owner": "Shares with more than one owner cannot be unshared. You can make a copy of this share and make it your own.  You can also take yourself off the share list for this folder.",
       "update_owner": "You cannot change the access level of a share owner"
