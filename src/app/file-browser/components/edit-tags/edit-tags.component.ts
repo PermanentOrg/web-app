@@ -111,7 +111,7 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
     this.waiting = true;
     try {
       if (tag.tagId && this.itemTagsById.has(tag.tagId)) {
-        await this.api.tag.delete(tag, tagLink);
+        await this.api.tag.deleteTagLink(tag, tagLink);
       } else {
         await this.api.tag.create(tag, tagLink);
       }
