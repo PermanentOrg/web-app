@@ -1,4 +1,4 @@
-import { ArchiveVO, TagVOData, TagLinkVOData } from '@root/app/models';
+import { ArchiveVO, TagVO, TagVOData, TagLinkVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 
 export class TagRepo extends BaseRepo {
@@ -13,7 +13,7 @@ export class TagRepo extends BaseRepo {
     return this.http.sendRequestPromise<TagResponse>('/tag/post', data, TagResponse);
   }
 
-  public delete(tag: TagVOData, tagLink: TagLinkVOData) {
+  public deleteTagLink(tag: TagVOData, tagLink: TagLinkVOData) {
     const data = [{
       TagVO: tag,
       TagLinkVO: tagLink
@@ -30,6 +30,22 @@ export class TagRepo extends BaseRepo {
     }];
 
     return this.http.sendRequestPromise<TagResponse>('/tag/getTagsByArchive', data, TagResponse);
+  }
+
+  public delete(tag: TagVO): Promise<TagResponse> {
+    const data = [{
+      TagVO: new TagVO(tag),
+    }];
+
+    return this.http.sendRequestPromise<TagResponse>('/tag/delete', data, TagResponse);
+  }
+
+  public update(tag: TagVO): Promise<TagResponse> {
+    const data = [{
+      TagVO: new TagVO(tag),
+    }];
+
+    return this.http.sendRequestPromise<TagResponse>('/tag/updateTag', data, TagResponse);
   }
 }
 
