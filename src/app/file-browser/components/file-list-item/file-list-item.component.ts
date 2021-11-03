@@ -162,8 +162,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   private isInSharePreview: boolean;
   private checkFolderView: boolean;
 
-  private singleClickTimeout: NodeJS.Timeout;
-  private mouseDownDragTimeout: NodeJS.Timeout;
+  private singleClickTimeout: ReturnType<typeof setTimeout>;
+  private mouseDownDragTimeout: ReturnType<typeof setTimeout>;
   private waitingForDoubleClick = false;
   private touchStartEvent: TouchEvent;
 
