@@ -17,7 +17,10 @@ class NullRoute {
 describe('OnboardingComponent #onboarding', () => {
   let shallow: Shallow<OnboardingComponent>;
   beforeEach(() => {
-    shallow = new Shallow(OnboardingComponent, OnboardingModule).mock(ActivatedRoute, new NullRoute()).mock(Location, { go: (path: string) => {}}).replaceModule(RouterModule, RouterTestingModule);
+    shallow = new Shallow(OnboardingComponent, OnboardingModule)
+      .mock(ActivatedRoute, new NullRoute())
+      .mock(Location, { go: (path: string) => {}})
+      .replaceModule(RouterModule, RouterTestingModule);
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
