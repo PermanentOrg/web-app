@@ -1,6 +1,7 @@
 import { Shallow } from 'shallow-render';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { OnboardingComponent } from './onboarding.component';
 import { OnboardingModule } from '../../onboarding.module';
 
@@ -16,7 +17,10 @@ class NullRoute {
 describe('OnboardingComponent #onboarding', () => {
   let shallow: Shallow<OnboardingComponent>;
   beforeEach(() => {
-    shallow = new Shallow(OnboardingComponent, OnboardingModule).mock(ActivatedRoute, new NullRoute()).mock(Location, { go: (path: string) => {}});
+    shallow = new Shallow(OnboardingComponent, OnboardingModule)
+      .mock(ActivatedRoute, new NullRoute())
+      .mock(Location, { go: (path: string) => {}})
+      .replaceModule(RouterModule, RouterTestingModule);
   });
   it('should exist', async () => {
     const { element } = await shallow.render();

@@ -42,7 +42,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
 
   public filterFolderLinkIds: number[];
 
-  private cancelResetTimeout: NodeJS.Timeout;
+  private cancelResetTimeout: ReturnType<typeof setTimeout>;
 
   constructor(
     private dataService: DataService,
