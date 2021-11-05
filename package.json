@@ -1,6 +1,9 @@
 {
   "name": "mdot",
   "version": "2.13.5",
+  "engines" : { 
+    "node" : "~14.18"
+  },
   "scripts": {
     "secrets": "node load-secrets.js",
     "dev": "npm run secrets && node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
