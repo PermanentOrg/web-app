@@ -127,7 +127,7 @@ $bg-transition-length: 0.075s;
     }
   }
 
-  i {
+  i, fa-icon {
     flex: 0 0 auto;
     margin-left: $grid-unit / 2;
     margin-right: $grid-unit / 2;
@@ -270,7 +270,7 @@ $bg-transition-length: 0.075s;
   .grid-view & {
     position: relative;
     font-size: 8rem;
-    > i {
+    > i, > fa-icon {
       font-size: 7rem;
       position: absolute;
       top: 0;
@@ -280,8 +280,9 @@ $bg-transition-length: 0.075s;
     }
   }
 
-  &.zip-icon {
+  & fa-icon {
     color: #000;
+    font-size: 2em;
   }
 }
 

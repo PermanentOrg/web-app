@@ -16,7 +16,7 @@
     </ng-container>
     <ng-container *ngIf="!item.isFolder && isZip">
       <div class="file-list-item-folder-icon zip-icon">
-        <i class="material-icons">folder_zip</i>
+        <fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
       </div>
     </ng-container>
     <div *ngIf="!item.isFolder && !isZip" prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>

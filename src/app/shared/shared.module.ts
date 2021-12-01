@@ -49,6 +49,9 @@ import { ItemTypeIconPipe } from './pipes/item-type-icon.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -60,7 +63,8 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
     NgbTimepickerModule,
     NgbTooltipModule,
     NgbDropdownModule,
-    NgbPaginationModule
+    NgbPaginationModule,
+    FontAwesomeModule
   ],
   exports: [
     CommonModule,
@@ -186,8 +190,10 @@ export class SharedModule {
     private datePickerConfig: NgbDatepickerConfig,
     private timePickerConfig: NgbTimepickerConfig,
     private tooltipConfig: NgbTooltipConfig,
-    private dropdownConfig: NgbDropdownConfig
+    private dropdownConfig: NgbDropdownConfig,
+    private library: FaIconLibrary,
   ) {
+    library.addIcons(faFileArchive);
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
     this.datePickerConfig.showWeekdays = false;
