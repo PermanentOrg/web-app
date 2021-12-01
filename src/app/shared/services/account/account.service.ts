@@ -71,7 +71,7 @@ export class AccountService {
 
     // set account data on Sentry scope
     Sentry.configureScope(scope => {
-      scope.setUser({id: this.account.accountId, email: this.account.primaryEmail});
+      scope.setUser({id: this.account.accountId});
     });
   }
 
