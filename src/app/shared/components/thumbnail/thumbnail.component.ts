@@ -73,6 +73,7 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
       this.checkElementWidth();
       this.lastItemDataStatus = this.item.dataStatus;
     } else {
+      this.isZip = false;
       this.setImageBg();
       this.currentThumbWidth = 200;
       this.targetThumbWidth = 200;
