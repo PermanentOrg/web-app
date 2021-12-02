@@ -23,6 +23,9 @@ import { LocationPickerComponent } from './components/location-picker/location-p
 import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
 import { SharingDialogComponent } from './components/sharing-dialog/sharing-dialog.component';
 
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -30,7 +33,8 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
     SharedModule,
     DialogModule,
     GoogleMapsModule,
-    InViewportModule
+    InViewportModule,
+    FontAwesomeModule
   ],
   exports: [
     FileListComponent,
@@ -83,7 +87,8 @@ export class FileBrowserComponentsModule {
     }
   ];
 
-  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
+  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver, private library: FaIconLibrary) {
+    library.addIcons(faFileArchive);
     this.dialog.registerComponents(this.dialogComponents, resolver, true);
   }
 }

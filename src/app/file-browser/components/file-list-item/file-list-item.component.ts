@@ -149,6 +149,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   public allowActions = true;
   public isMyItem = true;
   public canEdit = true;
+  public isZip = false;
 
   private folderThumb200: string;
   private folderThumb500: string;
@@ -239,6 +240,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     }
 
     this.inGridView = this.folderView === FolderView.Grid;
+
+    this.isZip = this.item.type === 'type.record.archive';
 
     if (this.drag) {
       this.subscriptions.push(

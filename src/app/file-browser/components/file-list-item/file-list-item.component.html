@@ -5,8 +5,8 @@
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"
   inViewport (inViewportAction)="onIntersection($event)" [inViewportOptions]="{ threshold: [0], rootMargin: '100px' }">
-  <ng-container [ngSwitch]="item.isFolder">
-    <ng-container *ngSwitchCase="true">
+  <ng-container>
+    <ng-container *ngIf="item.isFolder">
       <div class="file-list-item-folder-icon" *ngIf="!inGridView">
         <i class="material-icons">folder</i>
       </div>
@@ -14,7 +14,12 @@
         <i *ngIf="showFolderIcon()" class="material-icons">{{ folderContentsType }}</i>
       </div>
     </ng-container>
-    <div *ngSwitchDefault prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
+    <ng-container *ngIf="!item.isFolder && isZip">
+      <div class="file-list-item-folder-icon zip-icon">
+        <fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
+      </div>
+    </ng-container>
+    <div *ngIf="!item.isFolder && !isZip" prBgImage [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500" [cover]="inGridView"></div>
   </ng-container>
   <div class="grid-item-type-icon" @ngIfFadeInAnimation
     *ngIf="inGridView && item.isFolder ? item.view : true">

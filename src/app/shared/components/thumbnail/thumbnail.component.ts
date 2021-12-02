@@ -32,6 +32,8 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   private debouncedResize;
   private debug = debug('component:thumbnail');
 
+  public isZip: boolean = false;
+
   constructor(
     elementRef: ElementRef,
     private renderer: Renderer2,
@@ -64,12 +66,14 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   resetImage() {
     if (!this.item.isFolder) {
+      this.isZip = this.item.type === 'type.record.archive';
       this.setImageBg(this.item.thumbURL200);
       this.currentThumbWidth = 200;
       this.targetThumbWidth = 200;
       this.checkElementWidth();
       this.lastItemDataStatus = this.item.dataStatus;
     } else {
+      this.isZip = false;
       this.setImageBg();
       this.currentThumbWidth = 200;
       this.targetThumbWidth = 200;
