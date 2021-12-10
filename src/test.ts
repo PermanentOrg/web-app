@@ -27,6 +27,9 @@ window['Stripe'] = () => {
   }
 };
 
+// Disable loading of external Google Maps API
+window['doNotLoadGoogleMapsAPI'] = true;
+
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
