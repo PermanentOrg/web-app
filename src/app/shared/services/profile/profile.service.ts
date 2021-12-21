@@ -237,7 +237,19 @@ export class ProfileService {
     });
 
     if (!minItems.length) {
-      return;
+      if (this.checkProfilePublic() === setPublic) {
+        return;
+      } else {
+        const currentArchive = this.account.getArchive();
+        const publicDummy: ProfileItemVOData = {
+          archiveId: currentArchive.archiveId,
+          fieldNameUI: 'profile.FORCE_PUBLIC_UPDATE',
+          string1: setPublic ? 'true' : 'false',
+          type: 'type.widget.string',
+          publicDT: setPublic ? new Date().toISOString() : null
+        };
+        minItems.push(publicDummy);
+      }
     }
 
     try {
