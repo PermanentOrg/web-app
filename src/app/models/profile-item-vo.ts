@@ -18,7 +18,8 @@ export type FieldNameUI =
 'profile.location' |
 'profile.phone_nbr' |
 'profile.social_media' |
-'profile.timezone';
+'profile.timezone' |
+'profile.FORCE_PUBLIC_UPDATE';
 
 export type FieldNameUIShort =
 'basic' |
