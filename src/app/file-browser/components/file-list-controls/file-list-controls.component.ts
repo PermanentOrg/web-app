@@ -288,7 +288,9 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    if (await this.prompt.confirmBoolean('Unshare', `Are you sure you remove this from your shared items?`)) {
+    if (await this.prompt.confirmBoolean('Unshare',
+       'Are you sure you wish to remove this from your shared items?')
+    ) {
       try {
         this.edit.unshareItem(this.selectedItems[0]);
       } catch (err) {
