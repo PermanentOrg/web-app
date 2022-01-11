@@ -175,6 +175,20 @@ export const routes: RoutesWithData = [
         redirectTo: '/app/(myfiles//dialog:members)'
       },
       {
+        path: 'settings',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archive Settings',
+          dialogToken: 'ArchiveSettingsDialogComponent',
+          dialogOptions: { width: '1000px'}
+        }
+      },
+      {
+        path: 'settings',
+        redirectTo: '/app/(myfiles//dialog:settings)'
+      },
+      {
         path: 'storage',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',
@@ -228,4 +242,3 @@ export const routes: RoutesWithData = [
   declarations: []
 })
 export class CoreRoutingModule { }
-

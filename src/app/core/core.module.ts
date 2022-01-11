@@ -52,6 +52,8 @@ import { TransactionHistoryComponent } from './components/transaction-history/tr
 import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PledgeModule } from '../pledge/pledge.module';
+import { ArchiveSettingsDialogComponent } from './components/archive-settings-dialog/archive-settings-dialog.component';
+import { ManageTagsComponent } from './components/manage-tags/manage-tags.component';
 
 @NgModule({
   imports: [
@@ -96,7 +98,9 @@ import { PledgeModule } from '../pledge/pledge.module';
     ProfileEditFirstTimeDialogComponent,
     StorageDialogComponent,
     FileHistoryComponent,
-    TransactionHistoryComponent
+    TransactionHistoryComponent,
+    ArchiveSettingsDialogComponent,
+    ManageTagsComponent
   ],
   providers: [
     DataService,
@@ -144,6 +148,10 @@ export class CoreModule {
     {
       token: 'StorageDialogComponent',
       component: StorageDialogComponent
+    },
+    {
+      token: 'ArchiveSettingsDialogComponent',
+      component: ArchiveSettingsDialogComponent
     }
   ];
 

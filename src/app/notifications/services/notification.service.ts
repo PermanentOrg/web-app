@@ -16,7 +16,7 @@ export class NotificationService {
   notifications: NotificationVOData[];
   newNotificationCount: number;
 
-  refreshIntervalId: NodeJS.Timeout;
+  refreshIntervalId: ReturnType<typeof setInterval>;
 
   notificationsChange = new EventEmitter<void>();
   waiting = false;

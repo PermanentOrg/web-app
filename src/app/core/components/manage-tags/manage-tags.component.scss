@@ -1,0 +1,49 @@
+@import 'variables';
+$gutter-size: 0.25rem;
+
+.tagsList {
+  width: 50%;
+}
+
+.tag-row {
+  display: flex;
+  justify-content: center;
+}
+
+.tag-row > * {
+  text-align: right;
+  padding: 0.25em;
+}
+
+.tag {
+  padding: 0.25rem 0.5rem;
+  border-radius: $border-radius;
+  margin-right: $gutter-size;
+  margin-bottom: $gutter-size;
+  background: rgba($PR-purple, 0.2);
+  user-select: none;
+}
+
+.tag-cell {
+  flex: 1 !important;
+}
+
+.tag-input {
+  border: 0;
+  outline: none;
+  text-align: center;
+}
+
+.filter {
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+form {
+  display: inline;
+}
+
+i {
+  cursor: pointer;
+  margin: 0 0.5em;
+}

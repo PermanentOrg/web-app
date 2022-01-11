@@ -16,5 +16,8 @@ module.exports = {
       "stringifyContentPathRegex": "\\.html$"
     }
   },
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>' })
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>' }),
+  transformIgnorePatterns: [
+      "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+  ]
 }
