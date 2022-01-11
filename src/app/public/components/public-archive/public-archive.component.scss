@@ -128,3 +128,7 @@ $profile-max-width: 1200px;
     margin-top: $grid-unit / 2;
   }
 }
+
+.profile-description {
+  white-space: pre-line;
+}
