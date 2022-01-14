@@ -4,6 +4,7 @@ import { ManageTagsComponent } from './manage-tags.component';
 
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 @NgModule({
   declarations: [], // components your module owns.
@@ -46,6 +47,16 @@ const mockApiService = {
     }
   }
 }
+let confirm: boolean = true;
+const mockPromptService = {
+  async confirm(): Promise<boolean> {
+    if (confirm) {
+      return Promise.resolve(true);
+    } else {
+      return Promise.reject();
+    }
+  }
+}
 
 describe('ManageTagsComponent #manage-tags', () => {
   let shallow: Shallow<ManageTagsComponent>;
@@ -63,6 +74,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     renamed = false;
     deletedTag = null;
     renamedTag = null;
+    confirm = true;
     defaultTags = [
       new TagVO({
         name: 'Tomato',
@@ -73,7 +85,7 @@ describe('ManageTagsComponent #manage-tags', () => {
         tagId: 1,
       }),
     ];
-    shallow = new Shallow(ManageTagsComponent, DummyModule).mock(ApiService, mockApiService);
+    shallow = new Shallow(ManageTagsComponent, DummyModule).mock(ApiService, mockApiService).mock(PromptService, mockPromptService);
   });
 
   it('should exist', async () => {
@@ -155,5 +167,17 @@ describe('ManageTagsComponent #manage-tags', () => {
     const { find, fixture, element, outputs } = await defaultRender([]);
     expect(find('.tag').length).toBe(0);
     expect(find('.tagList').length).toBe(0);
+  });
+
+  it('should prompt for deletion', async () => {
+    const { find, fixture, element, outputs } = await defaultRender();
+    confirm = false;
+    find('.delete')[0].nativeElement.click();
+    await fixture.whenStable();
+    expect(deleted).toBeFalsy();
+    confirm = true;
+    find('.delete')[0].nativeElement.click();
+    await fixture.whenStable();
+    expect(deleted).toBeTruthy();
   });
 });

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-manage-tags',
@@ -15,7 +16,8 @@ export class ManageTagsComponent implements OnInit {
   public filter: string = '';
 
   constructor(
-    private api: ApiService
+    private api: ApiService,
+    private prompt: PromptService
   ) { }
 
   ngOnInit(): void {
@@ -40,9 +42,13 @@ export class ManageTagsComponent implements OnInit {
   }
 
   public async deleteTag(tag: TagVO): Promise<void> {
-    this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
-    await this.api.tag.delete(tag);
-    this.refreshTags.emit();
+    this.prompt.confirm('Delete', 'Are you sure you want to delete this tag from all items in the current archive?').then(async () => {
+      this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
+      await this.api.tag.delete(tag);
+      this.refreshTags.emit();
+    }).catch(() => {
+      // do nothing
+    });
   }
 
   public isEditingTag(tag: TagVO): boolean {
