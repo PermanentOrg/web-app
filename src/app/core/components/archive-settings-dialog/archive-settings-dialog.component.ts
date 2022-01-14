@@ -26,6 +26,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   public ngOnInit(): void {
     this.api.tag.getTagsByArchive(this.account.getArchive()).then((response) => {
       this.tags = response.getTagVOs();
+      this.bindTagsToArchive();
       this.loadingTags = false;
     }).catch(() => {
       setTimeout(() => {
@@ -42,4 +43,10 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     // do nothing for now
   }
 
+  protected bindTagsToArchive(): void {
+    const archiveId = this.account.getArchive()?.archiveId;
+    for (let i = 0; i < this.tags.length; i++) {
+      this.tags[i].archiveId = archiveId;
+    }
+  }
 }
