@@ -136,10 +136,13 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(find('.edit').length).toBeGreaterThan(0);
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
+    find('.tag input').nativeElement.value = 'Do Not Show Value';
+    find('.tag input').nativeElement.dispatchEvent(new Event('change'));
     expect(find('.cancel').length).toBe(1);
     find('.cancel').nativeElement.click();
     await fixture.detectChanges();
     expect(find('.cancel').length).toBe(0);
+    expect(find('.tag')[0].nativeElement.textContent).not.toContain('Do Not Show Value');
   });
 
   it('should be able to filter the tags list', async () => {
