@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO } from '@models/tag-vo';
 
 type ArchiveSettingsDialogTab = 'manage-tags';
@@ -21,6 +22,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     private dialogRef: DialogRef,
     private api: ApiService,
     private account: AccountService,
+    private tagsService: TagsService,
   ) { }
 
   public ngOnInit(): void {
@@ -33,6 +35,11 @@ export class ArchiveSettingsDialogComponent implements OnInit {
        this.ngOnInit()
      }, 1000);
     })
+  }
+
+  public refreshTags(): void {
+    this.tagsService.refreshTags();
+    this.ngOnInit();
   }
 
   public onDoneClick(): void {
