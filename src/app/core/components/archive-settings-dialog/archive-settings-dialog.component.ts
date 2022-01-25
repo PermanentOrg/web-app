@@ -17,6 +17,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   public activeTab: ArchiveSettingsDialogTab = 'manage-tags';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
+  public hasAccess: boolean;
 
   constructor(
     private dialogRef: DialogRef,
@@ -26,15 +27,19 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.api.tag.getTagsByArchive(this.account.getArchive()).then((response) => {
-      this.tags = response.getTagVOs();
-      this.bindTagsToArchive();
-      this.loadingTags = false;
-    }).catch(() => {
-      setTimeout(() => {
-       this.ngOnInit()
-     }, 1000);
-    })
+    const accessRole = this.account.getArchive().accessRole;
+    this.hasAccess = accessRole === "access.role.owner"; /*|| accessRole === "access.role.manager"*/
+    if (this.hasAccess) {
+      this.api.tag.getTagsByArchive(this.account.getArchive()).then((response) => {
+        this.tags = response.getTagVOs();
+        this.bindTagsToArchive();
+        this.loadingTags = false;
+      }).catch(() => {
+        setTimeout(() => {
+         this.ngOnInit()
+       }, 1000);
+     });
+   }
   }
 
   public refreshTags(): void {
