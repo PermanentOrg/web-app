@@ -86,6 +86,11 @@
         <i class="ion-md-person-add"></i>
         Invitations
       </a>
+      <a class="menu-item hide-desktop" [routerLink]="[{ outlets: { dialog: ['settings']}}]"
+      [class.active]="checkMenuItemActive('/settings')">
+        <i class="ion-md-settings"></i>
+        Settings
+      </a>
       <a class="menu-item hide-desktop" [routerLink]="[{ outlets: { dialog: ['storage']}}]">
         <i class="ion-md-add-circle"></i>
         Add Storage
