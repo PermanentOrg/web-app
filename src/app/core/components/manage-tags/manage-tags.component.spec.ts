@@ -116,6 +116,15 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(find('.tag').length).toBe(1);
   });
 
+  it('should not delete a tag if an error happens', async () => {
+    const { find, fixture, outputs } = await defaultRender();
+    throwError = true;
+    find('.delete')[0].nativeElement.click();
+    await fixture.whenStable();
+    await fixture.detectChanges();
+    expect(find('.tag').length).toBe(2);
+  });
+
   it('should have edit buttons for each tag', async () => {
     const { find } = await defaultRender();
     expect(find('.edit').length).toBeGreaterThan(0);
