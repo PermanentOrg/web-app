@@ -100,25 +100,39 @@ describe('ManageTagsComponent #manage-tags', () => {
   });
 
   it('should have a delete button for each tag', async () => {
-    const { find, fixture, element, outputs } = await defaultRender();
+    const { find, outputs } = await defaultRender();
     expect(find('.delete').length).toBeGreaterThan(0);
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+  });
+
+  it('should be able to delete a tag', async () => {
+    const { find, fixture, outputs } = await defaultRender();
     find('.delete')[0].nativeElement.click();
     await fixture.whenStable();
+    await fixture.detectChanges();
     expect(deleted).toBeTruthy();
     expect(deletedTag.name).toBe('Potato');
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
-    await fixture.detectChanges();
     expect(find('.tag').length).toBe(1);
   });
 
-  it('should be able to rename tags', async () => {
-    const { find, fixture, element, outputs } = await defaultRender();
+  it('should have edit buttons for each tag', async () => {
+    const { find } = await defaultRender();
     expect(find('.edit').length).toBeGreaterThan(0);
+  });
+
+  it('should be able to enter edit mode for a tag', async() => {
+    const { find, fixture } = await defaultRender();
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
     expect(find('.tag input').length).toBe(1);
     expect(find('.tag input').nativeElement.value).toBe('Potato');
+  });
+
+  it('should be able to rename tags', async () => {
+    const { find, fixture, outputs } = await defaultRender();
+    find('.edit')[0].nativeElement.click();
+    await fixture.detectChanges();
     find('.tag input').nativeElement.focus();
     find('.tag input').nativeElement.value = 'Starchy Tuber';
     find('.tag input').nativeElement.dispatchEvent(new Event('change'));
@@ -133,54 +147,60 @@ describe('ManageTagsComponent #manage-tags', () => {
 
   it('can cancel out of renaming a tag', async () => {
     const { find, fixture } = await defaultRender();
-    expect(find('.edit').length).toBeGreaterThan(0);
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
     find('.tag input').nativeElement.value = 'Do Not Show Value';
     find('.tag input').nativeElement.dispatchEvent(new Event('change'));
-    expect(find('.cancel').length).toBe(1);
     find('.cancel').nativeElement.click();
     await fixture.detectChanges();
     expect(find('.cancel').length).toBe(0);
     expect(find('.tag')[0].nativeElement.textContent).not.toContain('Do Not Show Value');
   });
 
-  it('should be able to filter the tags list', async () => {
-    const { find, fixture, element, outputs } = await defaultRender();
-    expect(find('input.filter').length).toBe(1);
-    find('input.filter').nativeElement.value = '  p ';
-    find('input.filter').nativeElement.dispatchEvent(new Event('change'));
-    await fixture.detectChanges();
-    expect(find('.tag').length).toBe(1);
-    find('input.filter').nativeElement.value = 'To';
-    find('input.filter').nativeElement.dispatchEvent(new Event('change'));
-    await fixture.detectChanges();
-    expect(find('.tag').length).toBe(2);
-    find('input.filter').nativeElement.value = 'ToM';
-    find('input.filter').nativeElement.dispatchEvent(new Event('change'));
-    await fixture.detectChanges();
-    expect(find('.tag').length).toBe(1);
-    find('input.filter').nativeElement.value = 'zzz';
-    find('input.filter').nativeElement.dispatchEvent(new Event('change'));
-    await fixture.detectChanges();
-    expect(find('.tag').length).toBe(0);
-  });
-
   it('should have a null state', async () => {
-    const { find, fixture, element, outputs } = await defaultRender([]);
+    const { find } = await defaultRender([]);
     expect(find('.tag').length).toBe(0);
     expect(find('.tagList').length).toBe(0);
   });
 
-  it('should prompt for deletion', async () => {
-    const { find, fixture, element, outputs } = await defaultRender();
-    confirm = false;
-    find('.delete')[0].nativeElement.click();
-    await fixture.whenStable();
-    expect(deleted).toBeFalsy();
-    confirm = true;
-    find('.delete')[0].nativeElement.click();
-    await fixture.whenStable();
-    expect(deleted).toBeTruthy();
+  describe('Tags filtering', () => {
+    async function testValue(val: string, expectedCount: number) {
+      const { find, fixture } = await defaultRender();
+      find('input.filter').nativeElement.value = val;
+      find('input.filter').nativeElement.dispatchEvent(new Event('change'));
+      await fixture.detectChanges();
+      expect(find('.tag').length).toBe(expectedCount);
+    }
+    it('Trimming input', async () => {
+      testValue('  p ', 1);
+    });
+    it('Case-insensitivity', async () => {
+      testValue('tOm', 1);
+    });
+    it('Searches anywhere in word', async () => {
+      testValue('To', 2);
+    });
+    it('Completely invalid match', async () => {
+      testValue('zzz', 0);
+    });
+    it('Null case', async () => {
+      testValue('', 2);
+    });
+  });
+
+  describe('Prompting for deletion', () => {
+    async function testConfirm(clickConfirm: boolean) {
+      const { find, fixture } = await defaultRender();
+      confirm = clickConfirm;
+      find('.delete')[0].nativeElement.click();
+      await fixture.whenStable();
+      expect(deleted).toBe(clickConfirm);
+    }
+    it('should not delete when you cancel out', async () => {
+      testConfirm(false);
+    });
+    it('should delete when you click confirm', async () => {
+      testConfirm(true);
+    });
   });
 });
