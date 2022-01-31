@@ -7,17 +7,19 @@ import { TagVO } from '@models/tag-vo';
 
 type ArchiveSettingsDialogTab = 'manage-tags';
 
-
 @Component({
   selector: 'pr-archive-settings-dialog',
   templateUrl: './archive-settings-dialog.component.html',
   styleUrls: ['./archive-settings-dialog.component.scss']
 })
 export class ArchiveSettingsDialogComponent implements OnInit {
+  public readonly MAX_FETCH_ATTEMPTS: number = 5;
   public activeTab: ArchiveSettingsDialogTab = 'manage-tags';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasAccess: boolean;
+
+  protected fetchTagsAttempts: number = 0;
 
   constructor(
     private dialogRef: DialogRef,
@@ -36,8 +38,13 @@ export class ArchiveSettingsDialogComponent implements OnInit {
         this.loadingTags = false;
       }).catch(() => {
         setTimeout(() => {
-         this.ngOnInit()
-       }, 1000);
+          this.fetchTagsAttempts++;
+          if (this.fetchTagsAttempts < this.MAX_FETCH_ATTEMPTS) {
+            this.ngOnInit();
+          } else {
+            throw new Error("Archive Settings: Maximum number of tag fetch attempts reached.");
+          }
+        }, 1000);
      });
    }
   }
