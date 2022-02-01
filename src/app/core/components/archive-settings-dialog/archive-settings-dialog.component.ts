@@ -50,7 +50,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   }
 
   public refreshTags(): void {
-    this.tagsService.refreshTags();
+    this.tagsService.resetTags();
     this.ngOnInit();
   }
 
