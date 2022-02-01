@@ -38,7 +38,7 @@ export class TagsService {
   async refreshTags() {
     if (this.account.getArchive()) {
       const response = await this.api.tag.getTagsByArchive(this.account.getArchive());
-      const tags = response.getTagVOs().filter(t => t.name);
+      const tags = response.getTagVOsData().filter(t => t.name);
       for (const tag of tags) {
         this.tags.set(tag.tagId, tag);
       }

@@ -50,7 +50,7 @@ export class TagRepo extends BaseRepo {
 }
 
 export class TagResponse extends BaseResponse {
-  public getTagVO(): TagVOData {
+  public getTagVOData(): TagVOData {
     const data = this.getResultsData();
     if (!data || !data.length) {
       return null;
@@ -59,7 +59,7 @@ export class TagResponse extends BaseResponse {
     return data[0][0].TagVO as TagVOData;
   }
 
-  public getTagVOs(): TagVOData[] {
+  public getTagVOsData(): TagVOData[] {
     const data = this.getResultsData();
 
     if (!data[0]) {
@@ -68,6 +68,12 @@ export class TagResponse extends BaseResponse {
 
     return data[0].map((result) => {
       return result.TagVO as TagVOData;
+    });
+  }
+
+  public getTagVOs(): TagVO[] {
+    return this.getTagVOsData().map((tag) => {
+      return new TagVO(tag);
     });
   }
 }

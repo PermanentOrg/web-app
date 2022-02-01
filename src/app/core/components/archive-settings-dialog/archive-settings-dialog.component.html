@@ -1,0 +1,33 @@
+<div class="dialog-content">
+  <div class="header">
+    <span>Archive Settings</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="dialog-tab"
+        (click)="setTab('manage-tags')" [class.active]="activeTab === 'manage-tags'">
+        Manage Tags
+      </div>
+    </div>
+    <div class="panel" #panel>
+      <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'manage-tags'">
+          <div class="panel-title">Manage Tags</div>
+          <ng-container *ngIf="hasAccess ; else noAccess">
+            <pr-manage-tags [tags]="tags" *ngIf="!loadingTags ; else loadText" (refreshTags)="refreshTags()">
+            </pr-manage-tags>
+            <ng-template #loadText>
+              Loading Archive Tags...
+            </ng-template>
+          </ng-container>
+          <ng-template #noAccess>
+            <p>You do not have permission to manage tags for this archive. <a href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing" target="_blank">Learn more about permissions for managing tags here.</a></p>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>

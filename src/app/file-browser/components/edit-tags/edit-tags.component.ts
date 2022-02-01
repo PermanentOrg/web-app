@@ -29,6 +29,8 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
   public itemTagsById: Set<number> = new Set();
 
+  public itemTags: TagVOData[];
+
   public isEditing = false;
 
   @HostBinding('class.is-dialog') public isDialog = false;
@@ -56,7 +58,14 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe(tags => {
+        if (this.allTags.length > tags.length) {
+          // The user deleted one of our tags in manage-tags.
+          // Let's close the editor and refresh the tag list.
+          this.endEditing();
+          this.matchingTags = tags;
+        }
         this.allTags = tags;
+        this.checkItemTags();
       })
     );
 
@@ -157,11 +166,18 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
     this.itemTagsById.clear();
 
+    this.itemTags = this.item.TagVOs.map(
+      (tag) => this.allTags.find((t) => t.tagId === tag.tagId)
+    ).filter(
+      // Filter out tags that are now null from deletion
+      (tag) => tag?.name
+    );
+
     if (!this.item.TagVOs?.length) {
       return;
     }
 
-    for (const tag of this.item.TagVOs) {
+    for (const tag of this.itemTags) {
       this.itemTagsById.add(tag.tagId);
     }
   }

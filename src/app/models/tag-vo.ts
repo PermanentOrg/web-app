@@ -15,6 +15,7 @@ export interface TagLinkVOData extends BaseVOData {
 export class TagVO extends BaseVO implements TagVOData {
   public tagId: number;
   public name: string;
+  public archiveId: number;
 
   constructor(data: TagVOData) {
     super(data);

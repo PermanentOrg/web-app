@@ -30,6 +30,9 @@
         <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['members']}}]">
           Archive Members
         </a>
+        <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['settings']}}]">
+          Archive Settings
+        </a>
       </div>
       <a class="menu-item hide-desktop"
       [routerLink]="['/search']"
@@ -82,6 +85,11 @@
         [class.active]="checkMenuItemActive('/invitations')">
         <i class="ion-md-person-add"></i>
         Invitations
+      </a>
+      <a class="menu-item hide-desktop" [routerLink]="[{ outlets: { dialog: ['settings']}}]"
+      [class.active]="checkMenuItemActive('/settings')">
+        <i class="ion-md-settings"></i>
+        Settings
       </a>
       <a class="menu-item hide-desktop" [routerLink]="[{ outlets: { dialog: ['storage']}}]">
         <i class="ion-md-add-circle"></i>
