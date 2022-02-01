@@ -14,7 +14,7 @@ export class ManageTagsComponent implements OnInit {
 
   public editingTagIds: number[] = [];
   public filter: string = '';
-  public originalTagNames: string[] = [];
+  public originalTags = new Map<number, string>();
 
   constructor(
     private api: ApiService,
@@ -65,15 +65,17 @@ export class ManageTagsComponent implements OnInit {
   }
 
   public beginEditingTag(tag: TagVO): void {
+    this.originalTags.set(tag.tagId, tag.name);
     this.editingTagIds.push(tag.tagId);
-    this.originalTagNames[tag.tagId] = tag.name;
   }
 
   public endEditingTag(tag: TagVO, reset: boolean = false): void {
     this.editingTagIds = this.editingTagIds.filter((t) => t !== tag.tagId);
     if (reset) {
-      tag.name = this.originalTagNames[tag.tagId];
-      delete this.originalTagNames[tag.tagId];
+      if (this.originalTags.has(tag.tagId)) {
+        tag.name = this.originalTags.get(tag.tagId);
+        this.originalTags.delete(tag.tagId);
+      }
     }
   }
 }
