@@ -160,11 +160,9 @@ export class EditTagsComponent implements OnInit, DoCheck, OnDestroy, HasSubscri
 
     this.itemTagsById.clear();
 
-    this.itemTags = this.item.TagVOs.map((tag) => {
-      return this.allTags.filter(
-        (t) => t.tagId === tag.tagId
-      )[0];
-    });
+    this.itemTags = this.item.TagVOs.map(
+      (tag) => this.allTags.find((t) => t.tagId === tag.tagId)
+    );
 
     if (!this.item.TagVOs?.length) {
       return;
