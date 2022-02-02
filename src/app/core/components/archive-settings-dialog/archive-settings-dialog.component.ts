@@ -50,8 +50,11 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   }
 
   public refreshTags(): void {
-    this.tagsService.resetTags();
-    this.ngOnInit();
+    // Wait a bit for the back end to catch up.
+    setTimeout(() => {
+      this.tagsService.resetTags();
+      this.ngOnInit();
+    }, 500);
   }
 
   public onDoneClick(): void {
