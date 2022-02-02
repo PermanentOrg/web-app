@@ -30,7 +30,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     const accessRole = this.account.getArchive().accessRole;
-    this.hasAccess = accessRole === "access.role.owner"; /*|| accessRole === "access.role.manager"*/
+    this.hasAccess = accessRole === "access.role.owner" || accessRole === "access.role.manager";
     if (this.hasAccess) {
       this.api.tag.getTagsByArchive(this.account.getArchive()).then((response) => {
         this.tags = response.getTagVOs();
