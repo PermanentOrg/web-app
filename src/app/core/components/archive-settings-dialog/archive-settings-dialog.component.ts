@@ -30,7 +30,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     const accessRole = this.account.getArchive().accessRole;
-    this.hasAccess = accessRole === "access.role.owner"; /*|| accessRole === "access.role.manager"*/
+    this.hasAccess = accessRole === "access.role.owner" || accessRole === "access.role.manager";
     if (this.hasAccess) {
       this.api.tag.getTagsByArchive(this.account.getArchive()).then((response) => {
         this.tags = response.getTagVOs();
@@ -50,8 +50,11 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   }
 
   public refreshTags(): void {
-    this.tagsService.resetTags();
-    this.ngOnInit();
+    // Wait a bit for the back end to catch up.
+    setTimeout(() => {
+      this.tagsService.resetTags();
+      this.ngOnInit();
+    }, 500);
   }
 
   public onDoneClick(): void {
