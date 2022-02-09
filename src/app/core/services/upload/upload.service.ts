@@ -67,8 +67,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
         case UploadSessionStatus.Done:
           this.accountService.refreshAccountDebounced();
           break;
-        case UploadSessionStatus.ConnectionError:
-          this.message.showError('Unable to connect - try again in a moment');
+        case UploadSessionStatus.DefaultError:
+          this.message.showError('Oops, something went wrong! Please try again. If the issue persists, reach out to us at support@permanent.org.');
           this.accountService.refreshAccountDebounced();
           break;
         case UploadSessionStatus.StorageError:
