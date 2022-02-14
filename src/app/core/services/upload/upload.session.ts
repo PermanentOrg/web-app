@@ -9,7 +9,7 @@ export enum UploadSessionStatus {
   Start,
   InProgress,
   Done,
-  ConnectionError,
+  DefaultError,
   StorageError,
 }
 
@@ -124,7 +124,7 @@ export class UploadSession {
         );
       } else {
         this.emitError(
-          UploadSessionStatus.ConnectionError,
+          UploadSessionStatus.DefaultError,
           item,
         );
       }

@@ -16,10 +16,10 @@
         <strong>{{fileCount.completed}}</strong> of <strong>{{fileCount.total}}</strong>files uploaded 
     </div>
   </div>
-  <div *ngIf="status === UploadSessionStatus.ConnectionError" class="upload">
+  <div *ngIf="status === UploadSessionStatus.DefaultError" class="upload">
     <div class="message">
       <strong>
-        Connection error
+        Oops, something went wrong!
       </strong>
       <br>
       <span *ngIf="fileCount.completed">{{fileCount.completed}} uploaded, </span>
