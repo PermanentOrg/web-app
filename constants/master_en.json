@@ -6,7 +6,6 @@
       "curator": "Curator",
       "manager": "Manager",
       "minor": "Minor",
-      "nonOwner": "Non-Owner",
       "owner": "Owner",
       "viewer": "Viewer",
       "editor": "Editor"
