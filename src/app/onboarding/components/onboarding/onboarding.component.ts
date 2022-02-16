@@ -1,10 +1,15 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
+import { AccountVO } from '@models/account-vo';
+import { ApiService } from '@shared/services/api/api.service';
+import { AccountService } from '@shared/services/account/account.service';
 
 import { routes } from '@onboarding/onboarding.routes';
+
+import { partition as lodashPartition } from 'lodash';
 
 @Component({
   selector: 'pr-onboarding',
@@ -18,9 +23,14 @@ export class OnboardingComponent implements OnInit {
   public useApi: boolean = true;
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
 
+  public skipOnboarding: boolean = true;
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
+    private router: Router,
+    private api: ApiService,
+    private account: AccountService,
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -28,6 +38,20 @@ export class OnboardingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.account.refreshArchives().then((archives) => {
+      const [ownArchives, pendingArchives] = lodashPartition<ArchiveVO>(
+        archives,
+        (archive) => !archive.status.endsWith('pending')
+      );
+      if (ownArchives.length > 0 && false) {
+        // This user already has archives. They don't need to onboard.
+        this.skipOnboarding = true;
+        this.router.navigate(['/app', 'myfiles']);
+      } else {
+        this.pendingArchives = pendingArchives;
+        this.skipOnboarding = false;
+      }
+    });
   }
 
   public setScreen(screen: OnboardingScreen): void {
@@ -42,6 +66,9 @@ export class OnboardingComponent implements OnInit {
     });
     if (correspondingRoute) {
       this.location.go('app/onboarding/' + correspondingRoute.path);
+    }
+    if (screen === OnboardingScreen.done) {
+      this.router.navigate(['/app']);
     }
   }
 
@@ -60,5 +87,19 @@ export class OnboardingComponent implements OnInit {
     if (state.currentArchive) {
       this.currentArchive = state.currentArchive;
     }
+  }
+
+  public acceptArchiveInvitation(archive: ArchiveVO): void {
+    this.skipOnboarding = true;
+    this.api.archive.accept(archive).then(() => {
+      this.skipOnboarding = false;
+      this.account.setArchive(archive);
+      this.setNewArchive(archive);
+    }).catch(() => {
+      // TODO: This should be a MessageService message.
+      // However, MessageService and its Component aren't working properly.
+      // This will be changed in a later commit.
+      console.error(`There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`);
+    });
   }
 }

@@ -71,10 +71,17 @@ export class LoginComponent implements OnInit {
             window.location.assign(`/app/public?cta=timeline`);
           }
         } else {
-          this.router.navigate(['/'], { queryParamsHandling: 'preserve'})
-            .then(() => {
-              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-            });
+          const archives = this.accountService.getArchives().filter(
+            (archive) => !archive.isPending()
+          );
+          if (archives.length > 0) {
+            this.router.navigate(['/'], { queryParamsHandling: 'preserve'})
+              .then(() => {
+                this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+              });
+          } else {
+            this.router.navigate(['/app/onboarding']);
+          }
         }
       })
       .catch((response: AuthResponse) => {

@@ -18,7 +18,6 @@ export class WelcomeScreenComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.pendingArchives);
   }
 
   public goToScreen(screen: OnboardingScreen): void {
@@ -26,7 +25,6 @@ export class WelcomeScreenComponent implements OnInit {
   }
 
   public acceptPendingArchive(archive: ArchiveVO): void {
-    // TODO: accept invitation via API and wait for it to return
     this.acceptInvitation.emit(archive);
   }
 }

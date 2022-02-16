@@ -1,17 +1,62 @@
 import { Shallow } from 'shallow-render';
 import { Location } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { OnboardingComponent } from './onboarding.component';
 import { OnboardingModule } from '../../onboarding.module';
 
 import { ArchiveVO } from '@models/archive-vo';
+import { AccountVO } from '@models/account-vo';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
+import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 class NullRoute {
   public snapshot = {
     data: {}
   };
+}
+
+let throwError: boolean = false;
+const mockApiService = {
+  archive: {
+    getAllArchives: async (data: any) => {
+      if (throwError) {
+        throw 'Test Error';
+      }
+      return {
+        getArchiveVos: () => {
+          return [];
+        }
+      }
+    },
+    accept: async (data: any) => {
+      return true;
+    }
+  },
+};
+const mockAccountService = {
+  getAccount: () => {
+    return new AccountVO({
+      accountId: 1,
+      fullName: 'Test Account',
+    });
+  },
+  refreshArchives: async () => {
+    return [];
+  },
+  setArchive: (archive: ArchiveVO) => {}
+};
+const mockMessageService = {
+  showMessage: () => {},
+  showError: () => {},
+};
+
+const mockRouter = {
+  async navigate(path: any[]) {
+    return {};
+  }
 }
 
 describe('OnboardingComponent #onboarding', () => {
@@ -20,6 +65,10 @@ describe('OnboardingComponent #onboarding', () => {
     shallow = new Shallow(OnboardingComponent, OnboardingModule)
       .mock(ActivatedRoute, new NullRoute())
       .mock(Location, { go: (path: string) => {}})
+      .mock(ApiService, mockApiService)
+      .mock(AccountService, mockAccountService)
+      .mock(Router, mockRouter)
+      .mock(MessageService, mockMessageService)
       .replaceModule(RouterModule, RouterTestingModule);
   });
   it('should exist', async () => {
@@ -27,7 +76,8 @@ describe('OnboardingComponent #onboarding', () => {
     expect(element).not.toBeNull();
   });
   it('should load the welcome screen as default', async () => {
-    const { find } = await shallow.render();
+    const { find, fixture } = await shallow.render();
+    fixture.detectChanges();
     expect(find('pr-welcome-screen')).toHaveFoundOne();
   });
   it('can change screens', async () => {
@@ -40,6 +90,7 @@ describe('OnboardingComponent #onboarding', () => {
   it('stores the newly created archive', async () => {
     const { element, find, fixture } = await shallow.render();
     expect(element.componentInstance.currentArchive).toBeUndefined();
+    fixture.detectChanges();
     expect(find('pr-welcome-screen')).toHaveFoundOne();
     find('pr-welcome-screen').triggerEventHandler('nextScreen', OnboardingScreen.newArchive);
     fixture.detectChanges();
@@ -52,6 +103,7 @@ describe('OnboardingComponent #onboarding', () => {
     expect(find('pr-welcome-screen')).toHaveFoundOne();
     find('pr-welcome-screen').triggerEventHandler('acceptInvitation', new ArchiveVO({fullName: 'Pending Test'}));
     fixture.detectChanges();
+    await fixture.whenStable();
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
   });
   it('can be tested with debugging component', async () => {

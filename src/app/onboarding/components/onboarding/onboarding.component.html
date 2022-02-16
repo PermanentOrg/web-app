@@ -4,11 +4,14 @@
   </div>
 </div>
 <pr-debugger [currentScreen]="screen" (setState)="setState($event)"></pr-debugger>
-<div class="onboarding">
+<div class="onboarding" *ngIf="!skipOnboarding ; else loading">
   <ng-container [ngSwitch]="screen">
-    <pr-welcome-screen (nextScreen)="setScreen($event)" (acceptInvitation)="setNewArchive($event)" [pendingArchives]="pendingArchives" *ngSwitchCase="OnboardingScreen.welcomeScreen"></pr-welcome-screen>
+    <pr-welcome-screen (nextScreen)="setScreen($event)" (acceptInvitation)="acceptArchiveInvitation($event)" [pendingArchives]="pendingArchives" *ngSwitchCase="OnboardingScreen.welcomeScreen"></pr-welcome-screen>
     <pr-create-new-archive (createdArchive)="setNewArchive($event)" *ngSwitchCase="OnboardingScreen.newArchive"></pr-create-new-archive>
     <div *ngSwitchCase="OnboardingScreen.done">Done with process! (At this point we'd bring the user to the main app in their new archive). <br /> This account's main archive: <pre>{{ currentArchive | json}}</pre></div>
     <div *ngSwitchDefault>Something went wrong.</div>
   </ng-container>
 </div>
+<ng-template #loading>
+    <div class="loading">Loading...</div>
+</ng-template>
