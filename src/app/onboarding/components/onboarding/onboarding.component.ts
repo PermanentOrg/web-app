@@ -74,6 +74,7 @@ export class OnboardingComponent implements OnInit {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
+    this.account.setArchive(archive);
     this.setScreen(OnboardingScreen.done);
   }
 
@@ -93,7 +94,6 @@ export class OnboardingComponent implements OnInit {
     this.skipOnboarding = true;
     this.api.archive.accept(archive).then(() => {
       this.skipOnboarding = false;
-      this.account.setArchive(archive);
       this.setNewArchive(archive);
     }).catch(() => {
       // TODO: This should be a MessageService message.

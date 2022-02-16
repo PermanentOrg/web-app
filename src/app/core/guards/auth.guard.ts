@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate {
       if (isSessionValid && this.account.isLoggedIn()) {
         return true;
       } else {
+        this.account.refreshAccount();
         this.router.navigate(['/app', 'auth', 'login'], { queryParams: next.queryParams });
         return false;
       }
