@@ -15,19 +15,15 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    state: RouterStateSnapshot,
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.account.getAccount()?.accountId) {
-      this.account.refreshArchives().then((archives) => {
-        const ownArchives = archives.filter(
-          (archive) => !archive.isPending()
-        );
-        if (ownArchives.length > 0) {
-          this.router.navigate(['/app/myfiles']);
-        } else {
-          this.router.navigate(['/app/onboarding']);
+      return this.account.hasOwnArchives().then((hasArchives) => {
+        if (hasArchives) {
+          return this.router.parseUrl('/app/myfiles');
         }
+        return this.router.parseUrl('/app/onboarding');
       });
-      return false;
     }
     return true;
   }

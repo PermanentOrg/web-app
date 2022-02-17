@@ -15,21 +15,17 @@ export class OnboardingAuthGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    state: RouterStateSnapshot,
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.account.getAccount()?.accountId) {
-      return this.account.refreshArchives().then((archives) => {
-        const ownArchives = archives.filter(
-          (archive) => !archive.isPending()
-        );
-        if (ownArchives.length > 0) {
-          this.router.navigate(['/app/myfiles']);
-          return false;
-        } else {
-          return true;
+      return this.account.hasOwnArchives().then((hasArchives) => {
+        if (hasArchives) {
+          return this.router.parseUrl('/app/myfiles');
         }
+        return true;
       });
     }
-    return false;
+    return this.router.parseUrl('/app/auth');
   }
 
 }
