@@ -4,7 +4,7 @@
   </div>
 </div>
 <pr-debugger [currentScreen]="screen" (setState)="setState($event)"></pr-debugger>
-<div class="onboarding" *ngIf="!skipOnboarding ; else loading">
+<div class="onboarding" *ngIf="showOnboarding ; else loading">
   <ng-container [ngSwitch]="screen">
     <pr-welcome-screen (nextScreen)="setScreen($event)" (acceptInvitation)="acceptArchiveInvitation($event)" [pendingArchives]="pendingArchives" *ngSwitchCase="OnboardingScreen.welcomeScreen"></pr-welcome-screen>
     <pr-create-new-archive (createdArchive)="setNewArchive($event)" *ngSwitchCase="OnboardingScreen.newArchive"></pr-create-new-archive>

@@ -23,7 +23,7 @@ export class OnboardingComponent implements OnInit {
   public useApi: boolean = true;
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
 
-  public skipOnboarding: boolean = true;
+  public showOnboarding: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,11 +45,11 @@ export class OnboardingComponent implements OnInit {
       );
       if (ownArchives.length > 0 && false) {
         // This user already has archives. They don't need to onboard.
-        this.skipOnboarding = true;
+        this.showOnboarding = false;
         this.router.navigate(['/app', 'myfiles']);
       } else {
         this.pendingArchives = pendingArchives;
-        this.skipOnboarding = false;
+        this.showOnboarding = true;
       }
     });
   }
@@ -91,9 +91,9 @@ export class OnboardingComponent implements OnInit {
   }
 
   public acceptArchiveInvitation(archive: ArchiveVO): void {
-    this.skipOnboarding = true;
+    this.showOnboarding = false;
     this.api.archive.accept(archive).then(() => {
-      this.skipOnboarding = false;
+      this.showOnboarding = true;
       this.setNewArchive(archive);
     }).catch(() => {
       // TODO: This should be a MessageService message.
