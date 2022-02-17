@@ -194,9 +194,7 @@ export class AccountService {
     return this.api.archive.getAllArchives(this.account)
       .then((response: ArchiveResponse) => {
         const archives = response.getArchiveVOs();
-        if (archives.length >  0) {
-            this.setArchives(archives);
-        }
+        this.setArchives(archives);
         return this.getArchives();
       });
   }
@@ -276,7 +274,7 @@ export class AccountService {
             newAccount.isNew = currentAccount.isNew;
           }
           this.setAccount(newAccount);
-          if (response.getArchiveVO().archiveId) {
+          if (response.getArchiveVO()?.archiveId) {
               this.setArchive(response.getArchiveVO());
           }
           this.skipSessionCheck = true;
