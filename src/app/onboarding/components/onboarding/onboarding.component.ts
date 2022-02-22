@@ -74,8 +74,13 @@ export class OnboardingComponent implements OnInit {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
-    this.account.setArchive(archive);
-    this.setScreen(OnboardingScreen.done);
+    const updateAccount = new AccountVO({defaultArchiveId: archive.archiveId});
+    this.account.updateAccount(updateAccount).then(() => {
+      this.account.setArchive(archive);
+      this.api.archive.change(archive).then(() => {
+        this.setScreen(OnboardingScreen.done);
+      });
+    });
   }
 
   public setState(state: Partial<OnboardingComponent>): void {
