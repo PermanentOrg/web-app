@@ -111,6 +111,9 @@ export class SignupComponent implements OnInit {
     if (window.location.search.includes('noArchive')) {
       return false;
     }
+    if (this.isForShareInvite) {
+      return true;
+    }
     return true;
   }
 
