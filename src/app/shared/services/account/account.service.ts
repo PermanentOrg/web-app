@@ -379,8 +379,14 @@ export class AccountService {
   }
 
   public async signUp(
-    email: string, fullName: string, password: string, passwordConfirm: string,
-    agreed: boolean, optIn: boolean, phone: string, inviteCode: string
+    email: string,
+    fullName: string,
+    password: string,
+    passwordConfirm: string,
+    agreed: boolean,
+    optIn: boolean,
+    phone: string,
+    inviteCode: string,
   ) {
     this.skipSessionCheck = false;
 
@@ -390,7 +396,16 @@ export class AccountService {
       } catch (err) {}
     }
 
-    return this.api.account.signUp(email, fullName, password, passwordConfirm, agreed, optIn, phone, inviteCode)
+    return this.api.account.signUp(
+      email,
+      fullName,
+      password,
+      passwordConfirm,
+      agreed,
+      optIn,
+      phone,
+      inviteCode,
+    )
       .pipe(map((response: AccountResponse) => {
         if (response.isSuccessful) {
           const newAccount = response.getAccountVO();

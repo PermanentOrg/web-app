@@ -12,8 +12,14 @@ export class AccountRepo extends BaseRepo {
   }
 
   public signUp(
-    email: string, fullName: string, password: string, passwordConfirm: string,
-    agreed: boolean, optIn: boolean, phone: string, inviteCode: string
+    email: string,
+    fullName: string,
+    password: string,
+    passwordConfirm: string,
+    agreed: boolean,
+    optIn: boolean,
+    phone: string,
+    inviteCode: string,
   ) {
     const accountVO = new AccountVO({
       primaryEmail: email,

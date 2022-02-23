@@ -69,8 +69,14 @@ export class SignupEmbedComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.signUp(
-      formValue.email, formValue.name, formValue.password, formValue.confirm,
-      formValue.agreed, formValue.optIn, null, formValue.invitation
+      formValue.email,
+      formValue.name,
+      formValue.password,
+      formValue.confirm,
+      formValue.agreed,
+      formValue.optIn,
+      null,
+      formValue.invitation,
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {
