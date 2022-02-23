@@ -57,8 +57,15 @@ export class ClaimStorageComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.signUp(
-      formValue.email, formValue.name, formValue.password, formValue.password,
-      formValue.agreed, formValue.optIn, null, null
+      formValue.email,
+      formValue.name,
+      formValue.password,
+      formValue.password,
+      formValue.agreed,
+      formValue.optIn,
+      null,
+      null,
+      true,
     ).then(async (response: AccountResponse) => {
         const account = response.getAccountVO();
         await this.pledgeService.linkAccount(account);

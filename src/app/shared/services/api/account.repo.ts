@@ -12,8 +12,15 @@ export class AccountRepo extends BaseRepo {
   }
 
   public signUp(
-    email: string, fullName: string, password: string, passwordConfirm: string,
-    agreed: boolean, optIn: boolean, phone: string, inviteCode: string
+    email: string,
+    fullName: string,
+    password: string,
+    passwordConfirm: string,
+    agreed: boolean,
+    optIn: boolean,
+    phone: string,
+    inviteCode: string,
+    createDefaultArchive: boolean,
   ) {
     const accountVO = new AccountVO({
       primaryEmail: email,
@@ -29,17 +36,13 @@ export class AccountRepo extends BaseRepo {
       passwordVerify: passwordConfirm
     });
 
-    const data = [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO, SimpleVO: null }];
-
-    // HACK: This should be replaced with a function parameter
-    if (window.location.search.includes('createArchive')) {
-      data[0].SimpleVO = new SimpleVO({key: 'createArchive', value: true});
-    } else if (window.location.search.includes('noArchive')) {
-      data[0].SimpleVO = new SimpleVO({key: 'createArchive', value: false});
-    }
+    const data = [{
+      AccountVO: accountVO,
+      AccountPasswordVO: accountPasswordVO,
+      SimpleVO: new SimpleVO({key: 'createArchive', value: createDefaultArchive}),
+    }];
 
     return this.http.sendRequest<AccountResponse>('/account/post', data, AccountResponse);
-
   }
 
   public update(accountVO: AccountVO) {

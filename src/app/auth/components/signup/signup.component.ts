@@ -15,6 +15,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
+const NEW_ONBOARDING_CHANCE = 0;
 
 @Component({
   selector: 'pr-signup',
@@ -104,12 +105,32 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
 
+  shouldCreateDefaultArchive() {
+    if (window.location.search.includes('createArchive')) {
+      return true;
+    }
+    if (window.location.search.includes('noArchive')) {
+      return false;
+    }
+    if (this.isForShareInvite) {
+      return true;
+    }
+    return Math.random() > NEW_ONBOARDING_CHANCE;
+  }
+
   onSubmit(formValue: any) {
     this.waiting = true;
 
     this.accountService.signUp(
-      formValue.email, formValue.name, formValue.password, formValue.confirm,
-      formValue.agreed, formValue.optIn, null, formValue.invitation
+      formValue.email,
+      formValue.name,
+      formValue.password,
+      formValue.confirm,
+      formValue.agreed,
+      formValue.optIn,
+      null,
+      formValue.invitation,
+      this.shouldCreateDefaultArchive(),
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {

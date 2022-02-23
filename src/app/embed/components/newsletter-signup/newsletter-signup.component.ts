@@ -108,8 +108,15 @@ export class NewsletterSignupComponent implements OnInit {
     this.waiting = true;
 
     this.accountService.signUp(
-      formValue.email, formValue.name, formValue.password, formValue.password,
-      formValue.agreed, false, null, formValue.invitation
+      formValue.email,
+      formValue.name,
+      formValue.password,
+      formValue.password,
+      formValue.agreed,
+      false,
+      null,
+      formValue.invitation,
+      true,
     ).then((response: AccountResponse) => {
         return this.accountService.logIn(formValue.email, formValue.password, true, true)
           .then(() => {
