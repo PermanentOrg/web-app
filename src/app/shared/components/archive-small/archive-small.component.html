@@ -24,11 +24,11 @@
       <br>Current Archive
     </span>
   </div>
-  <div class="archive-default" *ngIf="isDefaultArchive()" [ngbTooltip]="'This archive is the default archive for your account.'">
+  <div class="archive-default" *ngIf="showDefault && isDefaultArchive()" [ngbTooltip]="'This archive is the default archive for your account.'">
     <i class="material-icons">star</i>
   </div>
 </div>
-<ng-container *ngIf="largeOnDesktop && (showEdit || showRemove || showAccept)" [ngSwitch]="actionsAsDropdown">
+<ng-container *ngIf="(largeOnDesktop || showAcceptMobile) && (showEdit || showRemove || showAccept)" [ngSwitch]="actionsAsDropdown">
   <div class="archive-edit-dropdown hide-mobile" *ngSwitchCase="true" ngbDropdown [placement]="'bottom-right'">
     <i class="material-icons" ngbDropdownToggle>more_vert</i>
     <div ngbDropdownMenu class="dropdown">
@@ -46,7 +46,7 @@
       </a>
     </div>
   </div>
-  <div class="archive-edit hide-mobile" *ngSwitchDefault>
+  <div [ngClass]="{'archive-edit': true, 'hide-mobile': !showAcceptMobile}" *ngSwitchDefault>
     <button class="btn btn-primary" *ngIf="showAccept" (click)="acceptClick.emit($event)" [disabled]="archive.isPendingAction">{{ acceptText }}</button>
     <button class="btn btn-primary" *ngIf="showEdit" (click)="editClick.emit($event)" [disabled]="archive.isPendingAction">Edit</button>
     <button class="btn btn-danger" *ngIf="showRemove" (click)="removeClick.emit($event)" [disabled]="archive.isPendingAction">{{ removeText }}</button>
