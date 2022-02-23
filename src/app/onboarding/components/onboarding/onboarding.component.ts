@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
@@ -21,9 +21,12 @@ export class OnboardingComponent implements OnInit {
   public currentArchive: ArchiveVO;
   public pendingArchives: ArchiveVO[] = [];
   public useApi: boolean = true;
+  public progress: number = 0;
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
 
   public showOnboarding: boolean = false;
+  public accountName: string = '';
+  public errorMessage: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +34,7 @@ export class OnboardingComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private account: AccountService,
+    private detector: ChangeDetectorRef,
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -38,6 +42,7 @@ export class OnboardingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.accountName = this.account.getAccount().fullName;
     this.account.refreshArchives().then((archives) => {
       const [ownArchives, pendingArchives] = lodashPartition<ArchiveVO>(
         archives,
@@ -95,16 +100,35 @@ export class OnboardingComponent implements OnInit {
     }
   }
 
+  public getProgressChunkClasses(num: number) {
+    return {
+      'progress-chunk': true,
+      'completed': this.progress >= num,
+    };
+  }
+
+  public setProgress(num: number) {
+    this.errorMessage = '';
+    this.progress = num;
+    this.detector.detectChanges();
+  }
+
   public acceptArchiveInvitation(archive: ArchiveVO): void {
     this.showOnboarding = false;
+    this.progress = 1;
     this.api.archive.accept(archive).then(() => {
+      this.progress = 2;
       this.showOnboarding = true;
       this.setNewArchive(archive);
     }).catch(() => {
-      // TODO: This should be a MessageService message.
-      // However, MessageService and its Component aren't working properly.
-      // This will be changed in a later commit.
-      console.error(`There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`);
+      this.progress = 0
+      this.showOnboarding = true;
+      this.errorMessage = `There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`;
     });
+  }
+
+  public logOut(): void {
+    this.account.clear();
+    this.router.navigate(['/app', 'auth']);
   }
 }

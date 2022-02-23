@@ -62,16 +62,6 @@ export class DebuggerComponent implements OnInit {
     this.dispatchState();
   }
 
-  public simulateNewArchiveCreation(): void {
-    const newArchive = new ArchiveVO({
-      fullName: (document.getElementsByName("name")[0] as HTMLInputElement).value,
-      type: document.querySelector("input[type='radio']:checked").getAttribute("ng-reflect-value"),
-    });
-    this.state.currentArchive = newArchive;
-    this.state.screen = OnboardingScreen.done;
-    this.dispatchState();
-  }
-
   public dispatchState(): void {
     this.setState.emit(this.state);
   }

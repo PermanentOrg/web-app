@@ -1,17 +1,39 @@
 <div class="perm-banner">
   <div class="banner-content">
     <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
+    <div class="banner-logout">
+      <strong>{{accountName}}</strong>
+      <button class="btn btn-primary" (click)="logOut()">Log Out</button>
+    </div>
   </div>
 </div>
-<pr-debugger [currentScreen]="screen" (setState)="setState($event)"></pr-debugger>
+<div *ngIf="errorMessage.length > 0">
+  <div class="alert-wrapper" class="visible fade">
+    <div class="alert alert-primary alert-warning">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>
 <div class="onboarding" *ngIf="showOnboarding ; else loading">
+  <div class="progress-bar">
+    <div [ngClass]="getProgressChunkClasses(0)"></div>
+    <div [ngClass]="getProgressChunkClasses(1)"></div>
+    <div [ngClass]="getProgressChunkClasses(2)"></div>
+  </div>
   <ng-container [ngSwitch]="screen">
     <pr-welcome-screen (nextScreen)="setScreen($event)" (acceptInvitation)="acceptArchiveInvitation($event)" [pendingArchives]="pendingArchives" *ngSwitchCase="OnboardingScreen.welcomeScreen"></pr-welcome-screen>
-    <pr-create-new-archive (createdArchive)="setNewArchive($event)" *ngSwitchCase="OnboardingScreen.newArchive"></pr-create-new-archive>
-    <div *ngSwitchCase="OnboardingScreen.done">Done with process! (At this point we'd bring the user to the main app in their new archive). <br /> This account's main archive: <pre>{{ currentArchive | json}}</pre></div>
+    <pr-create-new-archive
+    (back)="setScreen(OnboardingScreen.welcomeScreen)"
+    (createdArchive)="setNewArchive($event)"
+    (progress)="setProgress($event)"
+    (error)="errorMessage = $event"
+    *ngSwitchCase="OnboardingScreen.newArchive"
+    ></pr-create-new-archive>
+    <div *ngSwitchCase="OnboardingScreen.done" class="loading">Loading...</div>
     <div *ngSwitchDefault>Something went wrong.</div>
   </ng-container>
 </div>
 <ng-template #loading>
     <div class="loading">Loading...</div>
 </ng-template>
+<pr-debugger [currentScreen]="screen" (setState)="setState($event)"></pr-debugger>

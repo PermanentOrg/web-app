@@ -1,16 +1,32 @@
 <div class="welcome-screen">
-  <p *ngIf="pendingArchives.length === 0" class="welcome-message">Welcome to Permanent! Insert more welcome text here.</p>
-  <p *ngIf="pendingArchives.length > 0" class="welcome-message">Welcome to Permanent! Get started by accepting an invitation or creating a new archive.</p>
-  <div class="pending-archive-list" style="max-width: 800px; text-align: left; margin: 0 auto;" *ngIf="pendingArchives.length > 0">
-    <strong>Pending Archives:</strong>
-    <pr-archive-small *ngFor="let archive of pendingArchives"
-    [largeOnDesktop]="true" [archive]="archive"
-    [accessRole]="archive.accessRole"
-    [showAccept]="true"
-    (acceptClick)="acceptPendingArchive(archive)"
-    [showRemove]="false"></pr-archive-small>
-    <br />
-    <br />
+  <h2>Welcome to Permanent!</h2>
+  <div *ngIf="pendingArchives.length === 0" class="welcome-message no-invitations">
+    <p>You’ve just taken the first step on a journey to preserving what matters the most to you by creating archives that can represent yourself, your family, or your community.</p>
+
+    <p>Next, you’ll create your first archive. A Permanent archive is the collection of digital materials about an individual, family or group, or organizational entity.</p>
+    <div class="get-started">
+      <button class="btn btn-primary" (click)="goToScreen(OnboardingScreen.newArchive)">Get Started</button>
+    </div>
   </div>
-  <button class="btn btn-primary" (click)="goToScreen(OnboardingScreen.newArchive)">Create New Archive</button>
+  <div *ngIf="pendingArchives.length > 0" class="welcome-message has-invitations">
+    <p>You’ve been invited to collaborate on an archive as an archive member. A Permanent archive is the collection of digital materials about an individual, family or group, or organizational entity. Get started by accepting an invitation, or by creating a new archive of your own.</p>
+
+    <div class="pending-archive-list" style="margin: 0 auto;">
+      <strong>Pending invitations:</strong>
+      <pr-archive-small *ngFor="let archive of pendingArchives"
+      [largeOnDesktop]="true" [archive]="archive"
+      [accessRole]="archive.accessRole"
+      [showAccept]="true"
+      [showAcceptMobile]="true"
+      [showDefault]="false"
+      (acceptClick)="acceptPendingArchive(archive)"
+      [showRemove]="false"></pr-archive-small>
+      <br />
+      <br />
+    </div>
+
+    <div class="create-archive">
+      <a href="javascript:;" (click)="goToScreen(OnboardingScreen.newArchive)">Create a new archive</a>
+    </div>
+  </div>
 </div>

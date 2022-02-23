@@ -33,7 +33,8 @@ const mockApiService = {
     },
     accept: async (data: any) => {
       return true;
-    }
+    },
+    change: async (archive: ArchiveVO) => {}
   },
 };
 const mockAccountService = {
@@ -46,7 +47,9 @@ const mockAccountService = {
   refreshArchives: async () => {
     return [];
   },
-  setArchive: (archive: ArchiveVO) => {}
+  setArchive: (archive: ArchiveVO) => {},
+  updateAccount: async () => {},
+  change: async () => {},
 };
 const mockMessageService = {
   showMessage: () => {},

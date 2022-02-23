@@ -1,7 +1,28 @@
 .welcome-screen {
-  text-align: center;
+  text-align: left;
 }
 
-.welcome-message {
-  font-size: 2em;
+.btn {
+  white-space: normal !important;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-top: 2.25em;
+  margin-bottom: 2.25em;
+}
+
+.get-started {
+  & > button.btn {
+    @media only screen and (max-width: 950px) {
+      width: 100%;
+    }
+    display: inline-block;
+    width: 33%;
+  }
+  @media only screen and (max-width: 950px) {
+    text-align: center;
+  }
+  text-align: right;
 }
