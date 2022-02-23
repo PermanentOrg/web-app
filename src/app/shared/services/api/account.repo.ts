@@ -35,7 +35,11 @@ export class AccountRepo extends BaseRepo {
       passwordVerify: passwordConfirm
     });
 
-    const data = [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO, SimpleVO: null }];
+    const data = [{
+      AccountVO: accountVO,
+      AccountPasswordVO: accountPasswordVO,
+      SimpleVO: null,
+    }];
 
     // HACK: This should be replaced with a function parameter
     if (window.location.search.includes('createArchive')) {
