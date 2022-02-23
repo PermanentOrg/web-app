@@ -386,6 +386,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       formValue.optIn,
       null,
       formValue.invitation,
+      true,
     )
       .then((response: AccountResponse) => {
         this.sendGaEvent('signup');

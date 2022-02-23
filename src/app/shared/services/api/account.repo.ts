@@ -20,6 +20,7 @@ export class AccountRepo extends BaseRepo {
     optIn: boolean,
     phone: string,
     inviteCode: string,
+    createDefaultArchive: boolean,
   ) {
     const accountVO = new AccountVO({
       primaryEmail: email,
@@ -38,18 +39,10 @@ export class AccountRepo extends BaseRepo {
     const data = [{
       AccountVO: accountVO,
       AccountPasswordVO: accountPasswordVO,
-      SimpleVO: null,
+      SimpleVO: new SimpleVO({key: 'createArchive', value: createDefaultArchive}),
     }];
 
-    // HACK: This should be replaced with a function parameter
-    if (window.location.search.includes('createArchive')) {
-      data[0].SimpleVO = new SimpleVO({key: 'createArchive', value: true});
-    } else if (window.location.search.includes('noArchive')) {
-      data[0].SimpleVO = new SimpleVO({key: 'createArchive', value: false});
-    }
-
     return this.http.sendRequest<AccountResponse>('/account/post', data, AccountResponse);
-
   }
 
   public update(accountVO: AccountVO) {

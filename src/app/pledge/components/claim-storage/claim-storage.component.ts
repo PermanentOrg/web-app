@@ -65,6 +65,7 @@ export class ClaimStorageComponent implements OnInit {
       formValue.optIn,
       null,
       null,
+      true,
     ).then(async (response: AccountResponse) => {
         const account = response.getAccountVO();
         await this.pledgeService.linkAccount(account);

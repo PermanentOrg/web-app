@@ -104,6 +104,16 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
 
+  shouldCreateDefaultArchive() {
+    if (window.location.search.includes('createArchive')) {
+      return true;
+    }
+    if (window.location.search.includes('noArchive')) {
+      return false;
+    }
+    return true;
+  }
+
   onSubmit(formValue: any) {
     this.waiting = true;
 
@@ -116,6 +126,7 @@ export class SignupComponent implements OnInit {
       formValue.optIn,
       null,
       formValue.invitation,
+      this.shouldCreateDefaultArchive(),
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {

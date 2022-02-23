@@ -77,6 +77,7 @@ export class SignupEmbedComponent implements OnInit {
       formValue.optIn,
       null,
       formValue.invitation,
+      true,
     ).then((response: AccountResponse) => {
         const account = response.getAccountVO();
         if (account.needsVerification()) {

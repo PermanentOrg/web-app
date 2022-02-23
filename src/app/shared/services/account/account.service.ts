@@ -387,6 +387,7 @@ export class AccountService {
     optIn: boolean,
     phone: string,
     inviteCode: string,
+    createDefaultArchive: boolean,
   ) {
     this.skipSessionCheck = false;
 
@@ -405,6 +406,7 @@ export class AccountService {
       optIn,
       phone,
       inviteCode,
+      createDefaultArchive,
     )
       .pipe(map((response: AccountResponse) => {
         if (response.isSuccessful) {
