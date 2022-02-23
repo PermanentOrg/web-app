@@ -118,39 +118,7 @@ export class SignupComponent implements OnInit {
         } else {
           this.accountService.logIn(formValue.email, formValue.password, true, true)
             .then(() => {
-              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
-
-              if (this.route.snapshot.queryParams.eventCategory) {
-                this.ga.sendEvent({
-                  hitType: 'event',
-                  eventCategory: this.route.snapshot.queryParams.eventCategory,
-                  eventAction: 'signup'
-                });
-              }
-
-              if (this.route.snapshot.queryParams.shareByUrl) {
-                this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
-              } else if (this.route.snapshot.queryParams.cta === 'timeline') {
-                if (this.device.isMobile() || !this.device.didOptOut()) {
-                  this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
-                } else {
-                  window.location.assign(`/app/public?cta=timeline`);
-                }
-              } else if (!this.isForShareInvite) {
-                if (this.device.isMobile() || !this.device.didOptOut()) {
-                  this.router.navigate(['/']);
-                } else {
-                  window.location.assign('/app');
-                }
-              } else if (this.shareItemIsRecord) {
-                setTimeout(() => {
-                  this.router.navigate(['/shares', 'withme']);
-                }, 500);
-              } else {
-                setTimeout(() => {
-                  this.router.navigate(['/shares', 'withme', this.shareItem.archiveNbr, this.shareItem.folder_linkId]);
-                }, 500);
-              }
+              this.redirectUserFromSignup();
             });
         }
       })
@@ -158,5 +126,41 @@ export class SignupComponent implements OnInit {
         this.message.showError(response.getMessage(), true);
         this.waiting = false;
       });
+  }
+
+  public redirectUserFromSignup() {
+    this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+
+    if (this.route.snapshot.queryParams.eventCategory) {
+      this.ga.sendEvent({
+        hitType: 'event',
+        eventCategory: this.route.snapshot.queryParams.eventCategory,
+        eventAction: 'signup'
+      });
+    }
+
+    if (this.route.snapshot.queryParams.shareByUrl) {
+      this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
+    } else if (this.route.snapshot.queryParams.cta === 'timeline') {
+      if (this.device.isMobile() || !this.device.didOptOut()) {
+        this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
+      } else {
+        window.location.assign(`/app/public?cta=timeline`);
+      }
+    } else if (!this.isForShareInvite) {
+      if (this.device.isMobile() || !this.device.didOptOut()) {
+        this.router.navigate(['/app', 'onboarding']);
+      } else {
+        window.location.assign('/app/onboarding');
+      }
+    } else if (this.shareItemIsRecord) {
+      setTimeout(() => {
+        this.router.navigate(['/shares', 'withme']);
+      }, 500);
+    } else {
+      setTimeout(() => {
+        this.router.navigate(['/shares', 'withme', this.shareItem.archiveNbr, this.shareItem.folder_linkId]);
+      }, 500);
+    }
   }
 }

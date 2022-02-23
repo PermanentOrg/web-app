@@ -10,11 +10,16 @@ import { SharedModule } from '@shared/shared.module';
 import { DebuggerComponent } from './components/debugger/debugger.component';
 
 @NgModule({
-  declarations: [OnboardingComponent, WelcomeScreenComponent, CreateNewArchiveComponent, DebuggerComponent],
+  declarations: [
+    OnboardingComponent,
+    WelcomeScreenComponent,
+    CreateNewArchiveComponent,
+    DebuggerComponent,
+  ],
   imports: [
     CommonModule,
     OnboardingRoutingModule,
     SharedModule,
-  ]
+  ],
 })
 export class OnboardingModule { }

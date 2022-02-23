@@ -13,6 +13,8 @@ import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot
 import { TermsComponent } from '@shared/components/terms/terms.component';
 import { ShareInviteResolveService } from './resolves/share-invite-resolve.service';
 
+import { AuthGuard } from './guards/auth.guard';
+
 export const childRoutes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
   { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' }, resolve: { shareInviteData: ShareInviteResolveService }},
@@ -26,9 +28,10 @@ export const childRoutes: Routes = [
   { path: '**', redirectTo: 'login'}
 ];
 
-const routes = [
+const routes: Routes = [
   {
     path: '',
+    canActivate: [ AuthGuard ],
     component: AuthComponent,
     children: childRoutes
   }
@@ -53,4 +56,3 @@ const routes = [
   ]
 })
 export class AuthRoutingModule { }
-

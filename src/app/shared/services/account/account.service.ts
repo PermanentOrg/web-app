@@ -199,6 +199,14 @@ export class AccountService {
       });
   }
 
+  public async hasOwnArchives() {
+    const archives = await this.refreshArchives();
+    const ownArchives = archives.filter(
+      (archive) => !archive.isPending()
+    );
+    return ownArchives.length > 0;
+  }
+
   public async refreshRoot() {
     const response = await this.api.folder.getRoot();
     const root = response.getFolderVO();
@@ -274,7 +282,9 @@ export class AccountService {
             newAccount.isNew = currentAccount.isNew;
           }
           this.setAccount(newAccount);
-          this.setArchive(response.getArchiveVO());
+          if (response.getArchiveVO()?.archiveId) {
+              this.setArchive(response.getArchiveVO());
+          }
           this.skipSessionCheck = true;
 
           this.accountChange.emit(this.account);
