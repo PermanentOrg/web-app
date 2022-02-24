@@ -104,7 +104,7 @@ import { WelcomeInvitationDialogComponent } from './components/welcome-invitatio
     ArchiveSettingsDialogComponent,
     ManageTagsComponent,
     WelcomeDialogComponent,
-    WelcomeInvitationDialogComponent
+    WelcomeInvitationDialogComponent,
   ],
   providers: [
     DataService,
