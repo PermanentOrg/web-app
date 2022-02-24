@@ -1,8 +1,11 @@
+$mobile-breakpoint: 950px;
+$mobile-transition-breakpoint: 1200px;
+
 .onboarding {
-  @media only screen and (max-width: 1200px) {
+  @media only screen and (max-width: $mobile-transition-breakpoint) {
     width: 75%;
   }
-  @media only screen and (max-width: 950px) {
+  @media only screen and (max-width: $mobile-breakpoint) {
     width: auto;
     margin: 20px;
   }

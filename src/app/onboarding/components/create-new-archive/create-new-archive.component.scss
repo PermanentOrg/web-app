@@ -2,7 +2,7 @@
 
 .two-buttons {
   button {
-    @media only screen and (max-width: 950px) {
+    @media only screen and (max-width: $mobile-breakpoint) {
       width: 49%;
     }
     width: auto;
@@ -22,7 +22,7 @@
     max-width: 50%;
   }
 
-  @media only screen and (max-width: 950px) {
+  @media only screen and (max-width: $mobile-breakpoint) {
     max-width: 100%;
     border: 1px solid #C8C8C8;
     box-sizing: border-box;
@@ -53,12 +53,12 @@
 
 .archive-type-selector {
   & > * {
-    @media only screen and (max-width: 950px) {
+    @media only screen and (max-width: $mobile-breakpoint) {
       width: 100%;
     }
     width: 30%;
   }
-  @media only screen and (max-width: 950px) {
+  @media only screen and (max-width: $mobile-breakpoint) {
     flex-direction: column;
   }
   display: flex;
@@ -82,7 +82,7 @@
   }
 
   img {
-    @media only screen and (max-width: 950px) {
+    @media only screen and (max-width: $mobile-breakpoint) {
       max-height: 5em;
       margin-bottom: 0;
       flex: 1;
@@ -105,7 +105,7 @@
     border-color: #800080;
   }
 
-  @media only screen and (max-width: 950px) {
+  @media only screen and (max-width: $mobile-breakpoint) {
     flex-direction: row;
     justify-content: center;
   }

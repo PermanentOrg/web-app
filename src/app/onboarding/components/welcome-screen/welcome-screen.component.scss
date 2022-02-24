@@ -1,3 +1,5 @@
+$mobile-breakpoint: 950px;
+
 .welcome-screen {
   text-align: left;
 }
@@ -15,13 +17,13 @@ h2 {
 
 .get-started {
   & > button.btn {
-    @media only screen and (max-width: 950px) {
+    @media only screen and (max-width: $mobile-breakpoint) {
       width: 100%;
     }
     display: inline-block;
     width: 33%;
   }
-  @media only screen and (max-width: 950px) {
+  @media only screen and (max-width: $mobile-breakpoint) {
     text-align: center;
   }
   text-align: right;
