@@ -1,5 +1,11 @@
 @import '../welcome-screen/welcome-screen.component.scss';
 
+form {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
+
 .two-buttons {
   button {
     @media only screen and (max-width: $mobile-breakpoint) {

@@ -65,7 +65,17 @@ export class CreateNewArchiveComponent implements OnInit {
     }
   }
 
-  public async onSubmit(): Promise<void> {
+  public isFormValid(): boolean {
+    return this.archiveType !== null && this.archiveName.trim().length > 0;
+  }
+
+  public async onSubmit(event: Event): Promise<void> {
+    event.preventDefault();
+    if (!this.isFormValid()) {
+      const form = event.target as HTMLFormElement;
+      form.reportValidity();
+      return;
+    }
     try {
       this.loading = true;
       const archive = new ArchiveVO({

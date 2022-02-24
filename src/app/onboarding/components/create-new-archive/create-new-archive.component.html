@@ -49,43 +49,51 @@
     </div>
   </div>
   <div *ngIf="screen === 'name'">
-    <h2>Create Your First Archive: Name Your Archive</h2>
-    <div class="selected-archive">
-      <ng-container [ngSwitch]="archiveType">
-        <ng-container *ngSwitchCase="'type.archive.person'">
-          <img src="assets/svg/onboarding/archive-person.svg" alt="Person Archive" />
-          <div>
-            <strong class="archive-type-name">Person Archive</strong>
-            <span class="archive-type-description">represents an individual person, such as yourself or someone else</span>
-          </div>
+    <form (ngSubmit)="onSubmit($event)" ngNativeValidate>
+      <h2>Create Your First Archive: Name Your Archive</h2>
+      <div class="selected-archive">
+        <ng-container [ngSwitch]="archiveType">
+          <ng-container *ngSwitchCase="'type.archive.person'">
+            <img src="assets/svg/onboarding/archive-person.svg" alt="Person Archive" />
+            <div>
+              <strong class="archive-type-name">Person Archive</strong>
+              <span class="archive-type-description">represents an individual person, such as yourself or someone else</span>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'type.archive.family'">
+            <img src="assets/svg/onboarding/archive-group.svg" alt="Group Archive" />
+            <div>
+              <strong class="archive-type-name">Group Archive</strong>
+              <span class="archive-type-description">any group of people, such as a community group or a family</span>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'type.archive.organization'">
+            <img src="assets/svg/onboarding/archive-organization.svg" alt="Organization Archive" />
+            <div>
+              <strong class="archive-type-name">Organization Archive</strong>
+              <span class="archive-type-description">an organizational entity, such as a company or nonprofit</span>
+            </div>
+          </ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'type.archive.family'">
-          <img src="assets/svg/onboarding/archive-group.svg" alt="Group Archive" />
-          <div>
-            <strong class="archive-type-name">Group Archive</strong>
-            <span class="archive-type-description">any group of people, such as a community group or a family</span>
-          </div>
-        </ng-container>
-        <ng-container *ngSwitchCase="'type.archive.organization'">
-          <img src="assets/svg/onboarding/archive-organization.svg" alt="Organization Archive" />
-          <div>
-            <strong class="archive-type-name">Organization Archive</strong>
-            <span class="archive-type-description">an organizational entity, such as a company or nonprofit</span>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
-    <p><strong>What is your new archive called?</strong> This is generally the legal or official name of the person, family, or organization the archive is about &mdash; for example, “The Katherine Johnson Archive.”</p>
-    <p>You can always edit your archive’s name later.</p>
-    <div class="name-field">
-      <label for="archive-name">The</label>
-      <input type="text" id="archive-name" class="form-control" (input)="archiveName = $event?.target?.value" [value]="archiveName" [placeholder]="getArchiveNamePlaceholder()" />
-      <label for="archive-name">Archive</label>
-    </div>
+      </div>
+      <p><strong>What is your new archive called?</strong> This is generally the legal or official name of the person, family, or organization the archive is about &mdash; for example, “The Katherine Johnson Archive.”</p>
+      <p>You can always edit your archive’s name later.</p>
+      <div class="name-field">
+        <label for="archive-name">The</label>
+        <input type="text"
+        id="archive-name"
+        class="form-control"
+        (input)="archiveName = $event?.target?.value"
+        [value]="archiveName" [placeholder]="getArchiveNamePlaceholder()"
+        [required]="true"
+        />
+        <label for="archive-name">Archive</label>
+      </div>
 
-    <div class="two-buttons">
-      <button class="btn btn-secondary back-button" (click)="setScreen('type')">Back</button>
-      <button class="btn btn-primary next-button" [disabled]="archiveName.trim().length === 0 || loading" (click)="onSubmit()">Create Archive</button>
-    </div>
+      <div class="two-buttons">
+        <button class="btn btn-secondary back-button" (click)="setScreen('type')" type="button">Back</button>
+        <button class="btn btn-primary next-button" [disabled]="loading" type="submit">Create Archive</button>
+      </div>
+    </form>
   </div>
 </div>

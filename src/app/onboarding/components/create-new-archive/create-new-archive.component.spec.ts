@@ -75,12 +75,14 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     expect(outputs.back.emit).toHaveBeenCalled();
   });
   it('should be able to create a new archive', async () => {
-    const { find, fixture, outputs } = await shallow.render();
+    const { find, fixture, instance, outputs } = await shallow.render();
     checkRadio('type.archive.organization', find);
     clickButton('.next-button', find);
     await fixture.detectChanges();
     enterText('#archive-name', 'Test Archive', find);
-    clickButton('.next-button', find);
+    // While simulating the form submit works in Jest, it doesn't work in Karma
+    // So let's just call the handler directly.
+    instance.onSubmit(new Event('submit'));
     await fixture.whenStable();
     expect(createdArchive.type).toBe('type.archive.organization');
     expect(createdArchive.fullName).toBe('Test Archive');
