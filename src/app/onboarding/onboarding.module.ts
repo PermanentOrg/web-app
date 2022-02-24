@@ -7,14 +7,12 @@ import { WelcomeScreenComponent } from './components/welcome-screen/welcome-scre
 import { CreateNewArchiveComponent } from './components/create-new-archive/create-new-archive.component';
 
 import { SharedModule } from '@shared/shared.module';
-import { DebuggerComponent } from './components/debugger/debugger.component';
 
 @NgModule({
   declarations: [
     OnboardingComponent,
     WelcomeScreenComponent,
     CreateNewArchiveComponent,
-    DebuggerComponent,
   ],
   imports: [
     CommonModule,
