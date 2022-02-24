@@ -80,12 +80,14 @@
       <p>You can always edit your archive’s name later.</p>
       <div class="name-field">
         <label for="archive-name">The</label>
-        <input type="text"
-        id="archive-name"
-        class="form-control"
-        (input)="archiveName = $event?.target?.value"
-        [value]="archiveName" [placeholder]="getArchiveNamePlaceholder()"
-        [required]="true"
+        <input
+          type="text"
+          id="archive-name"
+          class="form-control"
+          (input)="archiveName = $event?.target?.value"
+          [value]="archiveName"
+          [placeholder]="getArchiveNamePlaceholder()"
+          [required]="true"
         />
         <label for="archive-name">Archive</label>
       </div>
