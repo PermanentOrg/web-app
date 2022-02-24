@@ -29,9 +29,12 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Output() editClick = new EventEmitter<any>();
 
   @Input() showAccept = false;
+  @Input() showAcceptMobile = false;
   @Input() acceptText = 'Accept';
   @Input() acceptIcon = 'check';
   @Output() acceptClick = new EventEmitter<any>();
+
+  @Input() showDefault = true;
 
   @Input() actionsAsDropdown = false;
 

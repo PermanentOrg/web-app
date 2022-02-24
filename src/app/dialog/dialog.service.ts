@@ -29,7 +29,9 @@ export type DialogComponentToken =
   'StorageDialogComponent' |
   'NotificationDialogComponent' |
   'TimelineViewComponent' |
-  'ArchiveSettingsDialogComponent'
+  'ArchiveSettingsDialogComponent' |
+  'WelcomeDialogComponent' |
+  'WelcomeInvitationDialogComponent'
 ;
 
 export interface DialogChildComponentData {

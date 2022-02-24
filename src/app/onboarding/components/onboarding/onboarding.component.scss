@@ -1,8 +1,81 @@
+$mobile-breakpoint: 950px;
+$mobile-transition-breakpoint: 1200px;
+
 .onboarding {
-  text-align: center;
-  padding: 10%;
+  @media only screen and (max-width: $mobile-transition-breakpoint) {
+    width: 75%;
+  }
+  @media only screen and (max-width: $mobile-breakpoint) {
+    width: auto;
+    margin: 20px;
+  }
+  width: 50%;
+  margin: 0 auto;
+}
+
+.banner-content {
+  justify-content: space-between;
+}
+
+.banner-logout {
+  .btn {
+    padding: 0.5em;
+    width: auto;
+    background-color: #41496E;
+    margin: 0 auto;
+  }
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 1.5em 0;
+}
+
+.progress-chunk {
+  &.completed {
+    background-color: #5261B7;
+  }
+  width: 30%;
+  height: 10px;
+  background-color: #EAEAEA;
+  transition: background-color 0.3s;
 }
 
 .loading {
   text-align: center;
+}
+
+
+$transition-length: 0.33s;
+
+.alert {
+  margin: 0;
+  cursor: pointer;
+}
+
+.alert-wrapper {
+  padding: 10px 10px;
+  transform: translateY(0);
+  transition: transform $transition-length ease-in 0s, visibility 0s linear $transition-length;
+  display: block;
+  margin: 0 auto;
+  visibility: hidden;
+
+  &.visible {
+    transform: translateY(100%);
+    transition: transform $transition-length ease-out, visibility 0s linear  0s;
+    visibility: visible;
+  }
+}
+
+.alert-wrapper.fade {
+  opacity: 0;
+  transition: transform 0s linear $transition-length, opacity $transition-length ease-in 0s, visibility 0s linear $transition-length;
+
+  &.visible {
+    opacity: 1;
+    transition: transform 0s, opacity $transition-length ease-out, visibility 0s linear  0s;
+  }
 }

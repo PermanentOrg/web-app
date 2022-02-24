@@ -1,0 +1,32 @@
+:host {
+  width: 100%;
+}
+
+.header {
+  .btn {
+    background: none;
+    outline: none;
+    height: 2.5rem;
+    width: auto;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  height: 3.75rem;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.25rem;
+  padding: 0 1.25rem;
+  padding-right: 0;
+}
+
+.dialog-body {
+  padding: 0 30px 30px 30px;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 27px;
+}

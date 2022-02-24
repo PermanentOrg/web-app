@@ -1,0 +1,130 @@
+@import '../welcome-screen/welcome-screen.component.scss';
+
+form {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
+
+.two-buttons {
+  button {
+    @media only screen and (max-width: $mobile-breakpoint) {
+      width: 49%;
+    }
+    width: auto;
+    margin: 0;
+  }
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 2em 0;
+}
+
+.selected-archive {
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 50%;
+  }
+
+  @media only screen and (max-width: $mobile-breakpoint) {
+    max-width: 100%;
+    border: 1px solid #C8C8C8;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-width: 50%;
+  margin: 2em auto;
+}
+
+.name-field {
+  input {
+    max-width: 50%;
+  }
+  & > * {
+    margin: 10px;
+  }
+  display: flex;
+  flex-direction: row;
+  font-size: 1.5em;
+  justify-content: center;
+  align-items: center;
+}
+
+.archive-type-selector {
+  & > * {
+    @media only screen and (max-width: $mobile-breakpoint) {
+      width: 100%;
+    }
+    width: 30%;
+  }
+  @media only screen and (max-width: $mobile-breakpoint) {
+    flex-direction: column;
+  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.archive-type-name {
+  margin-bottom: 7px;
+  align-self: center;
+}
+
+.archive-type-description {
+  color: #646464;
+}
+
+.archive-type {
+  input {
+    visibility: collapse;
+  }
+
+  img {
+    @media only screen and (max-width: $mobile-breakpoint) {
+      max-height: 5em;
+      margin-bottom: 0;
+      flex: 1;
+    }
+    width: 100%;
+    margin-bottom: 33px;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &:hover {
+    background-color: #FFEAD5;
+  }
+
+  &.selected {
+    outline: 3px solid #800080;
+    border-color: #800080;
+  }
+
+  @media only screen and (max-width: $mobile-breakpoint) {
+    flex-direction: row;
+    justify-content: center;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #C8C8C8;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 20px 11px;
+  background-color: #fff;
+  cursor: pointer;
+  outline: 3px solid transparent;
+  transition: background-color 0.3s, outline 0.3s, border-color 0.3s;
+  margin: 1.5%;
+}

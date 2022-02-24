@@ -1,7 +1,101 @@
 <div>
-  <h2>Create Your First Archive</h2>
-  <p>Give your archive a name and choose what kind of archive it is.</p>
-  <ng-container>
-    <pr-new-archive-form (success)="onSubmit($event)" (error)="onError()"></pr-new-archive-form>
-  </ng-container>
+  <div *ngIf="screen === 'type'">
+    <h2>Create Your First Archive: Select Type</h2>
+
+    <p>What will your first archive represent? It might be yourself, a family member, an ancestor, your neighborhood association, a small business or a nonprofit organization.</p>
+
+    <p>Not sure what archive option to choose? Start with yourself. You can always create new archives or change the name and type of your archive later.</p>
+
+    <p><strong>What type of archive will this be?</strong> You can always change this later.</p>
+
+    <div class="archive-type-selector">
+      <label>
+        <div [ngClass]="getArchiveTypeClasses('type.archive.person')">
+          <img src="assets/svg/onboarding/archive-person.svg" alt="Person Archive" />
+          <div>
+            <strong class="archive-type-name">Person Archive</strong>
+            <span class="archive-type-description">represents an individual person, such as yourself or someone else</span>
+          </div>
+          <input type="radio" name="archive-type" value="type.archive.person" (change)="setArchiveType($event.target.value)" />
+        </div>
+      </label>
+
+      <label>
+        <div [ngClass]="getArchiveTypeClasses('type.archive.family')">
+          <img src="assets/svg/onboarding/archive-group.svg" alt="Group Archive" />
+          <div>
+            <strong class="archive-type-name">Group Archive</strong>
+            <span class="archive-type-description">any group of people, such as a community group or a family</span>
+          </div>
+          <input type="radio" name="archive-type" value="type.archive.family" (change)="setArchiveType($event.target.value)" />
+        </div>
+      </label>
+
+      <label>
+        <div [ngClass]="getArchiveTypeClasses('type.archive.organization')">
+          <img src="assets/svg/onboarding/archive-organization.svg" alt="Organization Archive" />
+          <div>
+            <strong class="archive-type-name">Organization Archive</strong>
+            <span class="archive-type-description">an organizational entity, such as a company or nonprofit</span>
+          </div>
+          <input type="radio" name="archive-type" value="type.archive.organization" (change)="setArchiveType($event.target.value)" />
+        </div>
+      </label>
+    </div>
+
+    <div class="two-buttons">
+      <button class="btn btn-secondary back-button" (click)="onBackPress()">Back</button>
+      <button class="btn btn-primary next-button" [disabled]="!archiveType" (click)="setScreen('name')">Next: Name Archive</button>
+    </div>
+  </div>
+  <div *ngIf="screen === 'name'">
+    <form (ngSubmit)="onSubmit($event)" ngNativeValidate>
+      <h2>Create Your First Archive: Name Your Archive</h2>
+      <div class="selected-archive">
+        <ng-container [ngSwitch]="archiveType">
+          <ng-container *ngSwitchCase="'type.archive.person'">
+            <img src="assets/svg/onboarding/archive-person.svg" alt="Person Archive" />
+            <div>
+              <strong class="archive-type-name">Person Archive</strong>
+              <span class="archive-type-description">represents an individual person, such as yourself or someone else</span>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'type.archive.family'">
+            <img src="assets/svg/onboarding/archive-group.svg" alt="Group Archive" />
+            <div>
+              <strong class="archive-type-name">Group Archive</strong>
+              <span class="archive-type-description">any group of people, such as a community group or a family</span>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'type.archive.organization'">
+            <img src="assets/svg/onboarding/archive-organization.svg" alt="Organization Archive" />
+            <div>
+              <strong class="archive-type-name">Organization Archive</strong>
+              <span class="archive-type-description">an organizational entity, such as a company or nonprofit</span>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <p><strong>What is your new archive called?</strong> This is generally the legal or official name of the person, family, or organization the archive is about &mdash; for example, “The Katherine Johnson Archive.”</p>
+      <p>You can always edit your archive’s name later.</p>
+      <div class="name-field">
+        <label for="archive-name">The</label>
+        <input
+          type="text"
+          id="archive-name"
+          class="form-control"
+          (input)="archiveName = $event?.target?.value"
+          [value]="archiveName"
+          [placeholder]="getArchiveNamePlaceholder()"
+          [required]="true"
+        />
+        <label for="archive-name">Archive</label>
+      </div>
+
+      <div class="two-buttons">
+        <button class="btn btn-secondary back-button" (click)="setScreen('type')" type="button">Back</button>
+        <button class="btn btn-primary next-button" [disabled]="loading" type="submit">Create Archive</button>
+      </div>
+    </form>
+  </div>
 </div>
