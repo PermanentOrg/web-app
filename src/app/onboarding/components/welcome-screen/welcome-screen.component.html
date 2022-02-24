@@ -14,13 +14,15 @@
     <div class="pending-archive-list" style="margin: 0 auto;">
       <strong>Pending invitations:</strong>
       <pr-archive-small *ngFor="let archive of pendingArchives"
-      [largeOnDesktop]="true" [archive]="archive"
-      [accessRole]="archive.accessRole"
-      [showAccept]="true"
-      [showAcceptMobile]="true"
-      [showDefault]="false"
-      (acceptClick)="acceptPendingArchive(archive)"
-      [showRemove]="false"></pr-archive-small>
+        [largeOnDesktop]="true"
+        [archive]="archive"
+        [accessRole]="archive.accessRole"
+        [showAccept]="true"
+        [showAcceptMobile]="true"
+        [showDefault]="false"
+        (acceptClick)="acceptPendingArchive(archive)"
+        [showRemove]="false"
+      ></pr-archive-small>
       <br />
       <br />
     </div>
