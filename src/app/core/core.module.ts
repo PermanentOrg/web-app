@@ -54,6 +54,8 @@ import { NotificationsModule } from '../notifications/notifications.module';
 import { PledgeModule } from '../pledge/pledge.module';
 import { ArchiveSettingsDialogComponent } from './components/archive-settings-dialog/archive-settings-dialog.component';
 import { ManageTagsComponent } from './components/manage-tags/manage-tags.component';
+import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
+import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
 
 @NgModule({
   imports: [
@@ -100,7 +102,9 @@ import { ManageTagsComponent } from './components/manage-tags/manage-tags.compon
     FileHistoryComponent,
     TransactionHistoryComponent,
     ArchiveSettingsDialogComponent,
-    ManageTagsComponent
+    ManageTagsComponent,
+    WelcomeDialogComponent,
+    WelcomeInvitationDialogComponent
   ],
   providers: [
     DataService,
@@ -152,7 +156,15 @@ export class CoreModule {
     {
       token: 'ArchiveSettingsDialogComponent',
       component: ArchiveSettingsDialogComponent
-    }
+    },
+    {
+      token: 'WelcomeDialogComponent',
+      component: WelcomeDialogComponent
+    },
+    {
+      token: 'WelcomeInvitationDialogComponent',
+      component: WelcomeInvitationDialogComponent
+    },
   ];
 
   constructor(

@@ -189,6 +189,34 @@ export const routes: RoutesWithData = [
         redirectTo: '/app/(myfiles//dialog:settings)'
       },
       {
+        path: 'welcome',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Welcome!',
+          dialogToken: 'WelcomeDialogComponent',
+          dialogOptions: { width: '600px' }
+        }
+      },
+      {
+        path: 'welcome',
+        redirectTo: '/app/(myfiles//dialog:welcome)'
+      },
+      {
+        path: 'welcomeinvitation',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Welcome!',
+          dialogToken: 'WelcomeInvitationDialogComponent',
+          dialogOptions: { width: '600px' }
+        }
+      },
+      {
+        path: 'welcome-invitation',
+        redirectTo: '/app/(myfiles//dialog:welcomeinvitation)'
+      },
+      {
         path: 'storage',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',

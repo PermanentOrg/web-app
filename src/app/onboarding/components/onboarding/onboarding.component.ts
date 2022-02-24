@@ -28,6 +28,8 @@ export class OnboardingComponent implements OnInit {
   public accountName: string = '';
   public errorMessage: string = '';
 
+  public acceptedInvite: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -73,7 +75,11 @@ export class OnboardingComponent implements OnInit {
       this.location.go('app/onboarding/' + correspondingRoute.path);
     }
     if (screen === OnboardingScreen.done) {
-      this.router.navigate(['/app']);
+      if (this.acceptedInvite) {
+        this.router.navigate(['/app', 'welcome-invitation']);
+      } else {
+        this.router.navigate(['/app', 'welcome']);
+      }
     }
   }
 
@@ -119,6 +125,7 @@ export class OnboardingComponent implements OnInit {
     this.api.archive.accept(archive).then(() => {
       this.progress = 2;
       this.showOnboarding = true;
+      this.acceptedInvite = true;
       this.setNewArchive(archive);
     }).catch(() => {
       this.progress = 0
