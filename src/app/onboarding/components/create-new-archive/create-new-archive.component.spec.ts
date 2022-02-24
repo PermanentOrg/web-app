@@ -14,9 +14,7 @@ const mockApiService = {
       calledCreate = true;
       createdArchive = a;
       return {
-        getArchiveVO: () => {
-          return a;
-        }
+        getArchiveVO: () => a,
       }
     }
   },
