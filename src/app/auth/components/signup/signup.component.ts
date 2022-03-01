@@ -15,7 +15,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
-const NEW_ONBOARDING_CHANCE = 0;
+const NEW_ONBOARDING_CHANCE = 0.5;
 
 @Component({
   selector: 'pr-signup',
