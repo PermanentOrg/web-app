@@ -15,12 +15,10 @@ import { ShareInviteResolveService } from './resolves/share-invite-resolve.servi
 
 import { AuthGuard } from './guards/auth.guard';
 
-export const childRoutes: Routes = [
+const unauthenticatedRoutes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
   { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' }, resolve: { shareInviteData: ShareInviteResolveService }},
   { path: 'mfa', component: MfaComponent, data: { title: 'Verify'} },
-  { path: 'verify', component: VerifyComponent, data: { title: 'Verify'} },
-  { path: 'verify/:email/:code', component: VerifyComponent, data: { title: 'Verify'} },
   { path: 'forgot', component: ForgotPasswordComponent, data: { title: 'Forgot Password'} },
   { path: 'terms', component: TermsComponent, data: { title: 'Terms'} },
   { path: 'reset/:accountId/:token', component: ResetPasswordComponent, data: { title: 'Reset Password'} },
@@ -28,13 +26,23 @@ export const childRoutes: Routes = [
   { path: '**', redirectTo: 'login'}
 ];
 
+const verifyRoutes: Routes = [
+  { path: '', component: VerifyComponent, data: { title: 'Verify'} },
+  { path: '/:email/:code', component: VerifyComponent, data: { title: 'Verify'} },
+];
+
 const routes: Routes = [
+  {
+    path: 'verify',
+    component: AuthComponent,
+    children: verifyRoutes,
+  },
   {
     path: '',
     canActivate: [ AuthGuard ],
     component: AuthComponent,
-    children: childRoutes
-  }
+    children: unauthenticatedRoutes,
+  },
 ];
 
 @NgModule({
