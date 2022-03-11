@@ -63,8 +63,8 @@ export class SharingDialogComponent implements OnInit {
 
   public shareLink: ShareByUrlVO = null;
 
-  public previewToggle: 0 | 1 = 0 ;
-  public autoApproveToggle: 0 | 1 = 0 ;
+  public previewToggle: 0 | 1 = 1;
+  public autoApproveToggle: 0 | 1 = 1;
   public expiration: Expiration;
 
   public updatingLink = false;
@@ -383,8 +383,8 @@ export class SharingDialogComponent implements OnInit {
         }
       });
     } else {
-      this.previewToggle = 0;
-      this.autoApproveToggle = 0;
+      this.previewToggle = 1;
+      this.autoApproveToggle = 1;
       this.expiration = Expiration.Never;
       this.expirationOptions = EXPIRATION_OPTIONS;
     }
@@ -395,6 +395,9 @@ export class SharingDialogComponent implements OnInit {
     try {
       const response = await this.api.share.generateShareLink(this.shareItem);
       this.shareLink = response.getShareByUrlVO();
+      this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
+      this.shareLink.previewToggle = this.previewToggle || 0;
+      await this.api.share.updateShareLink(this.shareLink);
       this.setShareLinkFormValue();
       this.showLinkSettings = true;
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
