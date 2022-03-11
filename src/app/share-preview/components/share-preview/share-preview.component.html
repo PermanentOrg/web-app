@@ -89,7 +89,7 @@
       </div>
     </div>
     <div class="share-preview-cover-buttons" (click)="stopPropagation($event)" *ngIf="isLoggedIn" >
-      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">{{ hasRequested ? 'Access Requested' : 'Request Access' }}</button>
+      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">{{ hasRequested ? 'Access Requested' : requestAccessText }}</button>
       <button class="btn btn-wordpress" (click)="onArchiveThumbClick()" *ngIf="isRelationshipShare">Switch Archive</button>
     </div>
   </div>
@@ -113,7 +113,7 @@
       <strong *ngIf="isLinkShare && isLoggedIn && hasRequested">Your request is awaiting approval from {{shareAccount.fullName}}.</strong>
       <strong *ngIf="isRelationshipShare && isLoggedIn">Your current archive does not have access to this content. Switch to view or edit.</strong>
       <div *ngIf="isLinkShare && isLoggedIn">
-        <button class="btn btn-alternate" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">{{ hasRequested ? 'Access requested' : 'Request access' }}</button>
+        <button class="btn btn-alternate" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">{{ hasRequested ? 'Access requested' : requestAccessText }}</button>
       </div>
     </span>
   </div>

@@ -63,7 +63,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   isNavigating = false;
 
   archiveConfirmed = false;
-  chooseArchiveText;
+  public chooseArchiveText: string;
+  public requestAccessText: string = 'Request Access';
 
   formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
   signupForm: FormGroup;
@@ -192,6 +193,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     if (this.isLinkShare) {
       this.hasRequested = !!this.sharePreviewVO.ShareVO;
       this.hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+      if (this.sharePreviewVO?.autoApproveToggle === 1) {
+        this.requestAccessText = 'Accept Share';
+      }
     }
 
     if (this.isInvite || this.isLinkShare) {
@@ -494,5 +498,4 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   stopPropagation(evt) {
     evt.stopPropagation();
   }
-
 }
