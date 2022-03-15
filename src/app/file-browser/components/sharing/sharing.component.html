@@ -6,7 +6,7 @@
       <p>Send this link via text, email, or other message service to invite people to share this content.</p>
         <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" #shareUrlInput>
         <button class="btn btn-primary" [disabled]="linkCopied" (click)="copyShareLink()">{{ linkCopied ? 'Link copied' : 'Copy link'}}</button>
-        <button class="btn btn-primary" (click)="manageShareLink()">Manage link</button>
+        <button class="btn btn-primary" (click)="manageShareLink()">Link settings</button>
         <button class="btn btn-danger" (click)="removeShareLink()">Remove link</button>
     </div>
     <div class="share-link-button" *ngIf="!shareLink">
@@ -35,4 +35,3 @@
     <button class="btn btn-primary" (click)="addShareMember()" [disabled]="loadingRelations">Add</button>
   </div>
 </div>
-
