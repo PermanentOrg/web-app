@@ -217,9 +217,6 @@
       "not_in_lib": "This file is not in Private so the requested action cannot be completed.",
       "not_public": "This file is not publicly accessible."
     },
-    "record_attach": {
-      "lookup": "Data lookup failed (RA)"
-    },
     "record_file": {
       "lookup": "Data lookup failed (RF)"
     },
@@ -629,11 +626,6 @@
       "family": "Family",
       "nonprofit": "Nonprofit"
     },
-    "attach": {
-      "audio": "An audio attachment",
-      "text": "A text attachment",
-      "video": "A video attachment"
-    },
     "auth": {
       "created_account_email": "A MFA Token for Account Creation sent by email",
       "created_account_text": "A MFA Token for Account Creation sent by text",
@@ -1036,9 +1028,6 @@
       "no_email_found": "No Permanent Archive with that email address was found",
       "no_remove_access_active": "Can not remove there access of active Permanent Archive.",
       "no_remove_access_owner": "The owner can not remove there access."
-    },
-    "attach": {
-      "same": "You cannot attach a file to itself"
     },
     "auth": {
       "access_denied": "You do not have sufficient privileges to perform this action or access this item.",
