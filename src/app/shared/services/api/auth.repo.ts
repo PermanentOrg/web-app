@@ -49,17 +49,6 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest<AuthResponse>('/auth/sendEmailForgotPassword', [{AccountVO: accountVO}], AuthResponse);
   }
 
-  public changePassword(accountId: number, token: string, password: string, passwordConfirm: string) {
-    const data = {
-      accountId: accountId,
-      token: token,
-      password: password,
-      passwordverify: passwordConfirm
-    };
-
-    return this.http.sendRequest<AuthResponse>('/auth/resetPassword', [data], AuthResponse);
-  }
-
   public updatePassword(account: AccountVO, passwordVo: AccountPasswordVOData) {
     const data = [{
       AccountVO: account,
