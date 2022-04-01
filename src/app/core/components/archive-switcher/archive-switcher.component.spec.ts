@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
@@ -20,7 +20,7 @@ describe('ArchiveSwitcherComponent', () => {
   const archives = archiveResponse.getArchiveVOs();
   const currentArchive = new ArchiveVO(archives.pop());
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);

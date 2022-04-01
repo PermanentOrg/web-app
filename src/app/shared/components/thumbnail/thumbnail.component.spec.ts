@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { RecordVO } from '@models';
@@ -79,7 +79,7 @@ describe('ThumbnailComponent', () => {
   let hostComponent: TestHostComponent;
 
   let fixture: ComponentFixture<TestHostComponent>;
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ThumbnailComponent, TestHostComponent ]
     })

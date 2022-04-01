@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
@@ -15,7 +15,7 @@ describe('LeftMenuComponent', () => {
   let fixture: ComponentFixture<LeftMenuComponent>;
   let accountService: AccountService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(LeftMenuComponent);
     config.declarations.push(ArchiveSmallComponent);
