@@ -5,7 +5,6 @@
       "contributor": "Contributor",
       "curator": "Curator",
       "manager": "Manager",
-      "minor": "Minor",
       "owner": "Owner",
       "viewer": "Viewer",
       "editor": "Editor"
@@ -1040,7 +1039,6 @@
       "no_invite_found": "Couldn't find a valid invitation for this email address",
       "no_local_storage": "Your browser does not support local storage. Permanent.org uses local storage to provide information about your account. You are probably seeing this because you are using private browsing mode. Please disable private browsing mode for the best permanent.org experience.",
       "remember_me_token_unknown": "Couldn't preform auto login. Enter you credentials manually",
-      "restriction_you_are_a_minor": "Minors are not allowed to do that action.",
       "token_does_not_match": "The verification code entered is not valid. Please re-enter verification code.",
       "token_expired": "The verification code entered is no longer valid. Please re-enter verification code.",
       "validation_not_complete": "We haven't received a validation for your contact information. Click here to resend validation.",
