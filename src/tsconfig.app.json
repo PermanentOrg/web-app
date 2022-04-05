@@ -6,12 +6,12 @@
       "node"
     ]
   },
-  "files": [ 
-    "main.ts", 
+  "files": [
+    "main.ts",
     "polyfills.ts" ,
     "secrets.ts",
-  ], 
-  "include": [ 
-    "/src/**/*.d.ts" 
-  ] 
+  ],
+  "include": [
+    "/src/**/*.d.ts"
+  ]
 }
