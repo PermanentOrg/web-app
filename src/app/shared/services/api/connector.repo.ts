@@ -2,7 +2,10 @@ import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, ConnectorOverviewVO, S
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { isArray } from 'util';
+
+function isArray(obj: any) {
+  return Array.isArray(obj);
+}
 
 export class ConnectorRepo extends BaseRepo {
   public getOverview(connectors: ConnectorOverviewVO[]): Observable<ConnectorResponse> {
@@ -112,25 +115,31 @@ export class ConnectorRepo extends BaseRepo {
   }
 
   public familysearchMemoryImportRequest(archive: ArchiveVO | ArchiveVO[], personId?: string | string[]): Promise<any> {
+    let archiveArray: ArchiveVO[];
+    let personIdArray: string[];
     if (!isArray(archive)) {
-      archive = [ archive ];
+      archiveArray = [ archive as ArchiveVO ];
+    } else {
+      archiveArray = archive as ArchiveVO[];
     }
 
     if (personId && !isArray(personId)) {
-      personId = [ personId ];
+      personIdArray = [ personId as string ];
+    } else {
+      personIdArray = personId as string[];
     }
 
     let data;
 
-    if (personId) {
-      data = archive.map((vo, i) => {
+    if (personIdArray) {
+      data = archiveArray.map((vo, i) => {
         return {
           ArchiveVO: vo,
-          SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
+          SimpleVO: new SimpleVO({ key: 'personId', value: personIdArray[i] })
         };
       });
     } else {
-      data = archive.map((vo, i) => {
+      data = archiveArray.map((vo, i) => {
         return {
           ArchiveVO: vo
         };
@@ -141,11 +150,14 @@ export class ConnectorRepo extends BaseRepo {
   }
 
   public familysearchMemorySyncRequest(archive: ArchiveVO | ArchiveVO[]): Promise<any> {
+    let archiveArray: ArchiveVO[];
     if (!isArray(archive)) {
-      archive = [ archive ];
+      archiveArray = [ archive as ArchiveVO ];
+    } else {
+      archiveArray = archive as ArchiveVO[];
     }
 
-    const data = archive.map(vo => {
+    const data = archiveArray.map(vo => {
       return {
         ArchiveVO: vo,
       };
@@ -155,11 +167,14 @@ export class ConnectorRepo extends BaseRepo {
   }
 
   public familysearchMemoryUploadRequest(archive: ArchiveVO | ArchiveVO[]): Promise<any> {
+    let archiveArray: ArchiveVO[];
     if (!isArray(archive)) {
-      archive = [ archive ];
+      archiveArray = [ archive as ArchiveVO ];
+    } else {
+      archiveArray = archive as ArchiveVO[];
     }
 
-    const data = archive.map(vo => {
+    const data = archiveArray.map(vo => {
       return {
         ArchiveVO: vo,
       };
@@ -169,15 +184,21 @@ export class ConnectorRepo extends BaseRepo {
   }
 
   public familysearchFactImportRequest(archive: ArchiveVO | ArchiveVO[], personId: string | string[]): Promise<any> {
+    let archiveArray: ArchiveVO[];
+    let personIdArray: string[];
     if (!isArray(archive)) {
-      archive = [ archive ];
+      archiveArray = [ archive as ArchiveVO ];
+    } else {
+      archiveArray = archive as ArchiveVO[];
     }
 
-    if (!isArray(personId)) {
-      personId = [ personId ];
+    if (personId && !isArray(personId)) {
+      personIdArray = [ personId as string ];
+    } else {
+      personIdArray = personId as string[];
     }
 
-    const data = archive.map((vo, i) => {
+    const data = archiveArray.map((vo, i) => {
       return {
         ArchiveVO: vo,
         SimpleVO: new SimpleVO({ key: 'personId', value: personId[i] })
