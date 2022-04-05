@@ -155,8 +155,6 @@
               "sslCert": "/etc/ssl/STAR_permanent_org.crt",
               "sslKey": "/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_local",
-              "deployUrl": "/",
-              "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
             }
           }

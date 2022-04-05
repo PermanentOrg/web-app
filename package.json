@@ -6,7 +6,7 @@
   },
   "scripts": {
     "secrets": "node load-secrets.js",
-    "dev": "npm run secrets && node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
+    "dev": "npm run secrets && node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --host \"ng.permanent.org\" --serve-path \"app\" --proxy-config proxy.conf.local.json --ssl true",
     "build": "npm run secrets && ng build --aot --build-optimizer --configuration production",
     "build:local": "npm run secrets && ng build --aot --configuration=local",
     "build:dev": "npm run secrets && ng build --aot --build-optimizer --configuration=development",
