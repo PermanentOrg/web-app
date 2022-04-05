@@ -1,10 +1,19 @@
 import { Shallow } from 'shallow-render';
+import { NgModule } from '@angular/core';
 
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 import { OnboardingModule } from '@onboarding/onboarding.module';
 
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
+
+@NgModule({
+  declarations: [], // components your module owns.
+  imports: [], // other modules your module needs.
+  providers: [ApiService], // providers available to your module.
+  bootstrap: [] // bootstrap this root component.
+})
+class DummyModule {};
 
 let calledCreate: boolean = false;
 let createdArchive: ArchiveVO | null;
@@ -42,7 +51,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
   beforeEach(() => {
     calledCreate = false;
     createdArchive = null;
-    shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
+    shallow = new Shallow(CreateNewArchiveComponent, DummyModule)
     .mock(ApiService, mockApiService);
   });
   it('should exist', async () => {

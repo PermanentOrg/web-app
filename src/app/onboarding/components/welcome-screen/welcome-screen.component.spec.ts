@@ -1,8 +1,17 @@
 import { Shallow } from 'shallow-render';
+import { NgModule } from '@angular/core';
 import { WelcomeScreenComponent } from './welcome-screen.component';
 import { OnboardingModule } from '../../onboarding.module';
 
 import { ArchiveVO } from '@models/archive-vo';
+
+@NgModule({
+  declarations: [], // components your module owns.
+  imports: [], // other modules your module needs.
+  providers: [], // providers available to your module.
+  bootstrap: [] // bootstrap this root component.
+})
+class DummyModule {};
 
 describe('WelcomeScreenComponent #onboarding', () => {
   let shallow: Shallow<WelcomeScreenComponent>;
@@ -14,7 +23,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
      });
   }
   beforeEach(() => {
-    shallow = new Shallow(WelcomeScreenComponent, OnboardingModule);
+    shallow = new Shallow(WelcomeScreenComponent, DummyModule);
   });
   it('should exist', async () => {
     const { find } = await defaultRender();

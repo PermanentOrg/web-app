@@ -1,4 +1,5 @@
 import { Shallow } from 'shallow-render';
+import { NgModule } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -11,6 +12,19 @@ import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+
+import { CreateNewArchiveComponent } from '../create-new-archive/create-new-archive.component';
+import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
+import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
+
+
+@NgModule({
+  declarations: [CreateNewArchiveComponent, WelcomeScreenComponent, ArchiveSmallComponent], // components your module owns.
+  imports: [], // other modules your module needs.
+  providers: [AccountService, ApiService, MessageService], // providers available to your module.
+  bootstrap: [] // bootstrap this root component.
+})
+class DummyModule {};
 
 class NullRoute {
   public snapshot = {
@@ -65,7 +79,7 @@ const mockRouter = {
 describe('OnboardingComponent #onboarding', () => {
   let shallow: Shallow<OnboardingComponent>;
   beforeEach(() => {
-    shallow = new Shallow(OnboardingComponent, OnboardingModule)
+    shallow = new Shallow(OnboardingComponent, DummyModule)
       .mock(ActivatedRoute, new NullRoute())
       .mock(Location, { go: (path: string) => {}})
       .mock(ApiService, mockApiService)
