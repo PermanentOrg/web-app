@@ -109,7 +109,14 @@
         </div>
         <button class="btn btn-alternate" *ngIf="isRelationshipShare">Log in</button>
       </strong>
-      <strong *ngIf="isLinkShare && isLoggedIn && !hasRequested">Request full access from {{shareAccount.fullName}}.</strong>
+      <strong *ngIf="isLinkShare && isLoggedIn && !hasRequested">
+        <ng-container *ngIf="sharePreviewVO?.autoApproveToggle === 1 ; else requestFullAccessText">
+          Accept and view the share in your archive.
+        </ng-container>
+        <ng-template #requestFullAccessText>
+          Request full access from {{shareAccount.fullName}}.
+        </ng-template>
+      </strong>
       <strong *ngIf="isLinkShare && isLoggedIn && hasRequested">Your request is awaiting approval from {{shareAccount.fullName}}.</strong>
       <strong *ngIf="isRelationshipShare && isLoggedIn">Your current archive does not have access to this content. Switch to view or edit.</strong>
       <div *ngIf="isLinkShare && isLoggedIn">
