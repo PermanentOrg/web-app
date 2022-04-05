@@ -1,8 +1,10 @@
-import { version as release } from '../../package.json';
+import * as PackageJson from '../../package.json';
+
+const release = PackageJson;
 
 export const environment = {
   production: false,
-  apiUrl: 'https://local.permanent.org/api',
+  apiUrl: 'https://ng.permanent.org:4200/api',
   hmr: false,
   firebase: {
     authDomain: 'prpledgedev.firebaseapp.com',
@@ -10,7 +12,7 @@ export const environment = {
     functionsURL: 'https://us-central1-prpledgedev.cloudfunctions.net',
     projectId: 'prpledgedev'
   },
-  debug: false,
-  release,
+  debug: true,
+  release: release.version,
   environment: 'local'
 };

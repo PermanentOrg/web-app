@@ -1,4 +1,6 @@
-import { version as release } from '../../package.json';
+import * as PackageJson from '../../package.json';
+
+const release = PackageJson;
 
 export const environment = {
   production: false,
@@ -11,6 +13,6 @@ export const environment = {
     projectId: 'prpledgedev'
   },
   debug: true,
-  release,
+  release: release.version,
   environment: 'local'
 };
