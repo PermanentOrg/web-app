@@ -78,7 +78,7 @@ export class PublishComponent implements OnInit {
           if (latest && latest.displayName === this.sourceItem.displayName) {
             this.publicItem = latest;
           } else {
-            await new Promise(r => setTimeout(() => r(), 1000));
+            await new Promise(r => setTimeout(() => {}, 1000));
           }
         }
 
@@ -144,7 +144,7 @@ export class PublishComponent implements OnInit {
     try {
       const archive = this.account.getArchive();
       const account = this.account.getAccount();
-      const response = await this.api.publish.publishToInternetArchive({ 
+      const response = await this.api.publish.publishToInternetArchive({
         accountId: account.accountId,
         archiveId: archive.archiveId,
         folder_linkId: this.publicItem.folder_linkId
