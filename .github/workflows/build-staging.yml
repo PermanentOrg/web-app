@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup Sentry CLI
-        uses: mathrix-education/setup-sentry-cli@1.0.0
+        uses: mathieu-bour/setup-sentry-cli@1.2.0
         with:
           token: ${{ secrets.SENTRY_TOKEN }}
           organization: permanentorg
@@ -55,7 +55,7 @@ jobs:
           cp -r dist/mdot dist/p
           declare -x VERSION=mdot@$(jq -r '.version' package.json)
           sentry-cli releases set-commits $VERSION --auto
-          sentry-cli releases files $VERSION upload-sourcemaps --rewrite --validate --verbose --strip-common-prefix ./dist/ --ignore mdot
+          sentry-cli releases files $VERSION upload-sourcemaps --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
 
   upload-code:
     needs: build
