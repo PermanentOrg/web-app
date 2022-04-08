@@ -64,7 +64,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   archiveConfirmed = false;
   public chooseArchiveText: string;
-  public requestAccessText: string = 'Request Access';
+  public isAutoApprove: boolean = false;
 
   formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
   signupForm: FormGroup;
@@ -194,7 +194,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       this.hasRequested = !!this.sharePreviewVO.ShareVO;
       this.hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
       if (this.sharePreviewVO?.autoApproveToggle === 1) {
-        this.requestAccessText = 'Accept Share';
+        this.isAutoApprove = true;
       }
     }
 

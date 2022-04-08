@@ -89,7 +89,13 @@
       </div>
     </div>
     <div class="share-preview-cover-buttons" (click)="stopPropagation($event)" *ngIf="isLoggedIn" >
-      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">{{ hasRequested ? 'Access Requested' : requestAccessText }}</button>
+      <button class="btn btn-wordpress" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">
+        <ng-container *ngIf="hasRequested ; else accessText">Access Requested</ng-container>
+        <ng-template #accessText>
+          <ng-container *ngIf="isAutoApprove ; else requestAccess">Accept Share</ng-container>
+          <ng-template #requestAccess>Request Access</ng-template>
+        </ng-template>
+      </button>
       <button class="btn btn-wordpress" (click)="onArchiveThumbClick()" *ngIf="isRelationshipShare">Switch Archive</button>
     </div>
   </div>
@@ -110,7 +116,7 @@
         <button class="btn btn-alternate" *ngIf="isRelationshipShare">Log in</button>
       </strong>
       <strong *ngIf="isLinkShare && isLoggedIn && !hasRequested">
-        <ng-container *ngIf="sharePreviewVO?.autoApproveToggle === 1 ; else requestFullAccessText">
+        <ng-container *ngIf="isAutoApprove ; else requestFullAccessText">
           Accept and view the share in your archive.
         </ng-container>
         <ng-template #requestFullAccessText>
@@ -120,7 +126,13 @@
       <strong *ngIf="isLinkShare && isLoggedIn && hasRequested">Your request is awaiting approval from {{shareAccount.fullName}}.</strong>
       <strong *ngIf="isRelationshipShare && isLoggedIn">Your current archive does not have access to this content. Switch to view or edit.</strong>
       <div *ngIf="isLinkShare && isLoggedIn">
-        <button class="btn btn-alternate" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">{{ hasRequested ? 'Access requested' : requestAccessText }}</button>
+        <button class="btn btn-alternate" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">
+          <ng-container *ngIf="hasRequested ; else accessText">Access Requested</ng-container>
+          <ng-template #accessText>
+            <ng-container *ngIf="isAutoApprove ; else requestAccess">Accept Share</ng-container>
+            <ng-template #requestAccess>Request Access</ng-template>
+          </ng-template>
+        </button>
       </div>
     </span>
   </div>
