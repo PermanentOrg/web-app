@@ -71,7 +71,7 @@ $easing: $tweaked-ease;
   visibility: hidden;
   background: white;
   position: relative;
-  
+
   &.visible {
     transform: translateY(-100%);
     transition: transform $transition-length $easing, opacity $transition-length $easing, visibility 0s linear  0s;
@@ -106,6 +106,7 @@ $easing: $tweaked-ease;
     box-shadow: $box-shadow;
     user-select: none;
     opacity: 0;
+    margin-right: 92px;
     transform: translateY(#{$screen-padding});
 
     &.visible {
