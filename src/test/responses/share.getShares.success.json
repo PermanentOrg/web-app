@@ -304,7 +304,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": {
                   "record_exifId": null,
                   "recordId": null,
@@ -513,7 +512,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-09-12T19:46:22.000000",
                 "updatedDT": "2017-10-09T23:30:23.000000"
@@ -653,7 +651,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-07-31T15:58:16.000000",
                 "updatedDT": "2017-10-09T23:30:23.000000"
@@ -793,7 +790,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-02-21T21:16:35.000000",
                 "updatedDT": "2018-08-30T14:17:06.000000"
@@ -1084,7 +1080,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-01-31T02:10:55.000000",
                 "updatedDT": "2018-09-06T21:05:16.000000"
@@ -1275,7 +1270,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-01-16T19:13:08.000000",
                 "updatedDT": "2018-09-05T20:41:38.000000"
@@ -1415,7 +1409,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-01-16T19:13:08.000000",
                 "updatedDT": "2018-08-12T04:01:22.000000"
@@ -1706,7 +1699,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2018-03-30T16:05:41.000000",
                 "updatedDT": "2018-05-15T16:27:36.000000"
@@ -1997,7 +1989,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2018-03-30T16:08:01.000000",
                 "updatedDT": "2018-07-28T02:02:56.000000"
@@ -2188,7 +2179,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": {
                   "record_exifId": 16430,
                   "recordId": 59146,
@@ -2385,7 +2375,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-11-03T17:18:32.000000",
                 "updatedDT": "2018-09-04T19:24:42.000000"
@@ -2665,7 +2654,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": null,
                 "createdDT": "2017-01-16T19:13:08.000000",
                 "updatedDT": "2017-11-30T08:58:12.000000"
@@ -2844,7 +2832,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": {
                   "record_exifId": null,
                   "recordId": null,
@@ -3041,7 +3028,6 @@
                 "saveAs": null,
                 "uploadUri": null,
                 "fileDurationInSecs": null,
-                "batchNbr": null,
                 "RecordExifVO": {
                   "record_exifId": null,
                   "recordId": null,

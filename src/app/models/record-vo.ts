@@ -95,7 +95,6 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public saveAs;
   public uploadUri;
   public fileDurationInSecs;
-  public batchNbr;
   public RecordExifVO;
   public ShareVOs: ShareVO[];
   public AccessVO;
@@ -195,7 +194,6 @@ export interface RecordVOData extends BaseVOData {
   saveAs?: any;
   uploadUri?: any;
   fileDurationInSecs?: any;
-  batchNbr?: any;
   RecordExifVO?: any;
   ShareVOs?: any;
   AccessVO?: any;
