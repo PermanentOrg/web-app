@@ -138,17 +138,18 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     if (
       archive.accessRole !== 'access.role.manager' && archive.accessRole !== 'access.role.owner'
     ) {
-      this.promptService.confirm(
-        'Learn More',
-        'Add Member',
-        null,
-        null,
-        `You do not have permission to add members to this archive.`
-      ).then(() => {
+      try {
+        await this.promptService.confirm(
+          'Learn More',
+          'Add Member',
+          null,
+          null,
+          `You do not have permission to add members to this archive.`
+        );
         window.open('https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing');
-      }).catch(() => {
-        // Catch Promise rejection, but do nothing on "Cancel" button press
-      });
+      } catch {
+        // Catch PromptService rejection, but do nothing on "Cancel" button press
+      }
       return;
     }
     const deferred = new Deferred();
