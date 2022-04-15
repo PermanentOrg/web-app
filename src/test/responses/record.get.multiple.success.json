@@ -271,7 +271,6 @@
             "saveAs": null,
             "uploadUri": null,
             "fileDurationInSecs": null,
-            "batchNbr": null,
             "RecordExifVO": {
               "record_exifId": null,
               "recordId": null,
@@ -603,7 +602,6 @@
             "saveAs": null,
             "uploadUri": null,
             "fileDurationInSecs": null,
-            "batchNbr": null,
             "RecordExifVO": {
               "record_exifId": null,
               "recordId": null,
@@ -935,7 +933,6 @@
             "saveAs": null,
             "uploadUri": null,
             "fileDurationInSecs": null,
-            "batchNbr": null,
             "RecordExifVO": {
               "record_exifId": null,
               "recordId": null,

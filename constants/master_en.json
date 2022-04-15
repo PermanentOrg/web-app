@@ -453,11 +453,6 @@
       "expired": "Transfer expired space went back to original account. ",
       "in_progress": "Transfer waiting to be completed."
     },
-    "batch": {
-      "meta_only": "Only meta uploaded so far",
-      "uploaded": "Upload of everything was successful",
-      "error": "Something during upload failed"
-    },
     "billing_transfer": {
       "ownership_accept": "Transfer ownership of Account was accepted",
       "ownership_in_progress": "Transfer ownership of Account was started",
@@ -638,13 +633,6 @@
       "signup": "A MFA token for signup",
       "mfa": "Multi Factor Authentication",
       "mfaValidation": "Multi Factor Authentication validation"
-    },
-    "batch": {
-      "record_post": "New records",
-      "record_move": "Move records",
-      "record_copy": "Copy records",
-      "folder_move": "Move folders",
-      "folder_copy": "Copy folders"
     },
     "billing": {
       "transfer": {
