@@ -134,6 +134,24 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   async onAddMemberClick() {
+    const archive = this.accountService.getArchive();
+    if (
+      archive.accessRole !== 'access.role.manager' && archive.accessRole !== 'access.role.owner'
+    ) {
+      try {
+        await this.promptService.confirm(
+          'Learn More',
+          'Add Member',
+          null,
+          null,
+          `You do not have permission to add members to this archive.`
+        );
+        window.open('https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing');
+      } catch {
+        // Catch PromptService rejection, but do nothing on "Cancel" button press
+      }
+      return;
+    }
     const deferred = new Deferred();
     let member: AccountVO;
     const emailField: PromptField = {
@@ -157,10 +175,10 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       if (member.accessRole === 'access.role.owner') {
         deferred.resolve();
         await this.confirmOwnershipTransfer();
-        response = await this.api.archive.transferOwnership(member, this.accountService.getArchive());
+        response = await this.api.archive.transferOwnership(member, archive);
         this.message.showMessage('Ownership transfer request sent.', 'success');
       } else {
-        response = await this.api.archive.addMember(member, this.accountService.getArchive());
+        response = await this.api.archive.addMember(member, archive);
         this.message.showMessage('Member added successfully.', 'success');
         deferred.resolve();
       }
