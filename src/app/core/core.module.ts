@@ -44,7 +44,7 @@ import { ProfileService } from '@shared/services/profile/profile.service';
 import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
-import { CountUpModule } from 'countup.js-angular2';
+import { CountUpModule } from 'ngx-countup';
 import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 import { FileHistoryComponent } from './components/file-history/file-history.component';
