@@ -159,7 +159,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
           const timestamp = Date.now();
           const queryParams: any = {};
           queryParams[timestamp] = '';
-          this.router.navigate(['.'], {queryParams, preserveQueryParams: false, relativeTo: this.route});
+          this.router.navigate(['.'], { queryParams, relativeTo: this.route });
         }
       })
     );

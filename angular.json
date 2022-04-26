@@ -47,7 +47,6 @@
                 "styles": true,
                 "vendor": false
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -82,7 +81,6 @@
                 "styles": true,
                 "vendor": false
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -106,7 +104,6 @@
                 "styles": true,
                 "vendor": false
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -129,7 +126,6 @@
                 "scripts": true,
                 "styles": true
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
