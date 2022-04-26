@@ -62,6 +62,7 @@
                 }
               ],
               "deployUrl": "/",
+              "baseHref": "/",
               "tsConfig": "src/tsconfig.serve.json"
             },
             "development": {
@@ -145,8 +146,6 @@
               "hmr": false,
               "ssl": true,
               "browserTarget": "mdot:build:proxy_local",
-              "deployUrl": "/",
-              "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
             }
           }
