@@ -10,6 +10,8 @@ import { HttpTestingController } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { DataStatus } from '@models/data-status.enum';
 
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 const navigateMinData = require('@root/test/responses/folder.navigateMin.success.json');
 const getLeanItemsData = require('@root/test/responses/folder.getLeanItems.success.json');
 const getFullRecordsData = require('@root/test/responses/record.get.multiple.success.json');
@@ -20,6 +22,7 @@ const testRecord = new RecordVO({recordId: 1, displayName: 'test record', folder
 describe('DataService', () => {
   beforeEach(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+    config.imports.push(NgbTooltipModule);
     const providers = config.providers;
     providers.push(DataService);
     providers.push(ApiService);

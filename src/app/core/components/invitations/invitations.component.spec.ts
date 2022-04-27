@@ -10,6 +10,8 @@ import { AccountService } from '@shared/services/account/account.service';
 
 import { TEST_DATA } from '@core/core.module.spec';
 
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 describe('InvitationsComponent', () => {
   let component: InvitationsComponent;
   let fixture: ComponentFixture<InvitationsComponent>;
@@ -19,6 +21,7 @@ describe('InvitationsComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);
+    config.imports.push(NgbTooltipModule);
     config.declarations.push(InvitationsComponent);
     config.providers.push(AccountService);
 

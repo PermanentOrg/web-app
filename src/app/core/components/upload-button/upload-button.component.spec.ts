@@ -7,6 +7,8 @@ import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 describe('UploadButtonComponent', () => {
   let component: UploadButtonComponent;
   let fixture: ComponentFixture<UploadButtonComponent>;
@@ -17,6 +19,7 @@ describe('UploadButtonComponent', () => {
   beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(UploadButtonComponent);
+    config.imports.push(NgbTooltipModule);
     const providers = config.providers as any[];
     providers.push(DataService);
     providers.push(AccountService);
