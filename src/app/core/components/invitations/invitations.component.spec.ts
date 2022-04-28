@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 import { HttpTestingController } from '@angular/common/http/testing';
@@ -10,15 +10,18 @@ import { AccountService } from '@shared/services/account/account.service';
 
 import { TEST_DATA } from '@core/core.module.spec';
 
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 describe('InvitationsComponent', () => {
   let component: InvitationsComponent;
   let fixture: ComponentFixture<InvitationsComponent>;
   let accountService: AccountService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);
+    config.imports.push(NgbTooltipModule);
     config.declarations.push(InvitationsComponent);
     config.providers.push(AccountService);
 

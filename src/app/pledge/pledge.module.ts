@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { CountUpModule } from 'countup.js-angular2';
+import { CountUpModule } from 'ngx-countup';
 import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';

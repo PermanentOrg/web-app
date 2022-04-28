@@ -6,10 +6,12 @@ import { cloneDeep  } from 'lodash';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
 
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 describe('EditService', () => {
   beforeEach(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-
+    config.imports.push(NgbTooltipModule);
     TestBed.configureTestingModule(config);
   });
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
 
 import { InlineValueEditComponent } from './inline-value-edit.component';
 import { By } from '@angular/platform-browser';
@@ -21,7 +21,7 @@ describe('InlineValueEditComponent', () => {
 
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ InlineValueEditComponent ],
       imports: [

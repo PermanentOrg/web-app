@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
@@ -10,17 +10,20 @@ import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { AccountVO, ArchiveVO } from '@models';
 import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
   let fixture: ComponentFixture<LeftMenuComponent>;
   let accountService: AccountService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     config.declarations.push(LeftMenuComponent);
     config.declarations.push(ArchiveSmallComponent);
     config.declarations.push(BgImageSrcDirective);
     config.declarations.push(PrConstantsPipe);
+    config.imports.push(NgbTooltipModule);
 
     TestBed.configureTestingModule(config).compileComponents();
 

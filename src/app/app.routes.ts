@@ -82,7 +82,7 @@ const routes: RoutesWithData = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes, {paramsInheritanceStrategy: 'always', onSameUrlNavigation: 'reload'}),
+    RouterModule.forRoot(routes, { paramsInheritanceStrategy: 'always', onSameUrlNavigation: 'reload' }),
     FormsModule,
     ReactiveFormsModule
   ]

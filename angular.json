@@ -47,7 +47,6 @@
                 "styles": true,
                 "vendor": false
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -63,6 +62,7 @@
                 }
               ],
               "deployUrl": "/",
+              "baseHref": "/",
               "tsConfig": "src/tsconfig.serve.json"
             },
             "development": {
@@ -82,7 +82,6 @@
                 "styles": true,
                 "vendor": false
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -106,7 +105,6 @@
                 "styles": true,
                 "vendor": false
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -129,7 +127,6 @@
                 "scripts": true,
                 "styles": true
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -148,11 +145,7 @@
               "host": "ng.permanent.org",
               "hmr": false,
               "ssl": true,
-              "sslCert": "/etc/ssl/STAR_permanent_org.crt",
-              "sslKey": "/etc/ssl/permanent.key",
               "browserTarget": "mdot:build:proxy_local",
-              "deployUrl": "/",
-              "baseHref": "/",
               "proxyConfig": "proxy.conf.local.json"
             }
           }
