@@ -1,9 +1,0 @@
-<strong>Search Test</strong>
-<form [formGroup]="searchForm">
-  <div class="input-group-vertical">
-    <pr-form-input type="text" fieldName="query" placeholder="Search by name" [control]="searchForm.controls['query']"
-    [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-  </div>
-</form>
-<p *ngIf="results && !results.length">No archives found for <strong>{{searchForm.value['query']}}</strong></p>
-<pr-archive-small *ngFor="let archive of results" [archive]="archive" (click)="onArchiveClick(archive)"></pr-archive-small>

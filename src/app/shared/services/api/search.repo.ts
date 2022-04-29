@@ -14,16 +14,6 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>('/search/archiveByEmail', data, SearchResponse);
   }
 
-  public archiveByName(query: string): Promise<SearchResponse> {
-    const data = [{
-      SearchVO: {
-        query
-      }
-    }];
-
-    return this.http.sendRequestPromise<SearchResponse>('/search/archive', data, SearchResponse);
-  }
-
   public archiveByNameObservable(query: string): Observable<SearchResponse> {
     const data = [{
       SearchVO: {
