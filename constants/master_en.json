@@ -48,10 +48,6 @@
       "error": "Errored out"
     }
   },
-  "data_size": {
-    "minimal": "Minimal as possible",
-    "minimal_and_locn": "Minimal as possible and the locnVO"
-  },
   "error": {
     "api": {
       "dev_only": "This endpoint is still in development",
