@@ -11,7 +11,6 @@ import { CoreModule } from '@core/core.module';
 import { FileBrowserModule } from '@fileBrowser/file-browser.module';
 import { PublicComponent } from './components/public/public.component';
 import { ItemNotFoundComponent } from './components/item-not-found/item-not-found.component';
-import { SearchComponent } from './components/search/search.component';
 import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
@@ -22,7 +21,6 @@ import { DialogModule } from '../dialog/dialog.module';
   declarations: [
     PublicComponent,
     ItemNotFoundComponent,
-    SearchComponent,
     PublicArchiveComponent,
     SearchBoxComponent,
     PublicProfileComponent,
