@@ -92,11 +92,6 @@ constructor(
     }
   }
 
-  async search(query: string) {
-    const response = await this.api.search.archiveByName(query);
-    this.archiveResults = response.getArchiveVOs();
-  }
-
   async onArchiveClick(archive: ArchiveVO) {
     this.router.navigate(['/p', 'archive', archive.archiveNbr]);
     this.showResults = false;
