@@ -24,17 +24,6 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>('/search/archive', data, SearchResponse);
   }
 
-  public recordByNameObservable(query: string, limit?: number): Observable<SearchResponse> {
-    const data = [{
-      SearchVO: {
-        query,
-        numberOfResults: limit
-      }
-    }];
-
-    return this.http.sendRequest<SearchResponse>('/search/record', data, SearchResponse);
-  }
-
   public itemsByNameObservable(query: string, tags: TagVOData[] = [], limit?: number): Observable<SearchResponse> {
     const data = {
       SearchVO: {
