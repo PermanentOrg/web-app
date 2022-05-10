@@ -1047,7 +1047,6 @@
       "email_unregistered": "Email given wasn't found in the email table",
       "invalid_credentials": "The username/password combination were invalid",
       "keep_logged_in_token_unknown": "Couldn't preform auto login.  Enter your credentials manually",
-      "no_captcha_match": "The captcha was incorrect, please try again.",
       "no_invite_found": "Couldn't find a valid invitation for this email address",
       "no_local_storage": "Your browser does not support local storage. Permanent.org uses local storage to provide information about your account. You are probably seeing this because you are using private browsing mode. Please disable private browsing mode for the best permanent.org experience.",
       "remember_me_token_unknown": "Couldn't preform auto login. Enter you credentials manually",
