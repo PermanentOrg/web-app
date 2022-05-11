@@ -37,7 +37,8 @@
       "@models/*": ["src/app/models/*"],
       "@models": ["src/app/models"],
       "@root/*": ["src/*"],
-      "@onboarding/*": ["src/app/onboarding/*"]
+      "@onboarding/*": ["src/app/onboarding/*"],
+      "@announcement/*": ["src/app/announcement/*"]
     }
   },
   "angularCompilerOptions": {
