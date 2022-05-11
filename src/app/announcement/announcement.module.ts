@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AnnouncementComponent } from './announcement/announcement.component';
+import { AnnouncementComponent } from './components/announcement/announcement.component';
 
 
 

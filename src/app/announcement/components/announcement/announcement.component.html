@@ -1,0 +1,4 @@
+<div class="announcement" *ngIf="active">
+  <span [innerHTML]="event.message"></span>
+  <div class="dismiss-button" (click)="dismiss()">x</div>
+</div>
