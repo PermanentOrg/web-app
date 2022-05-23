@@ -11,6 +11,7 @@
       </div>
   </div>
 </div>
+<pr-announcement></pr-announcement>
 <div class="public-content" [ngClass]="{'navigating': isNavigating}">
   <router-outlet></router-outlet>
 </div>
@@ -18,7 +19,7 @@
   <div class="public-footer-content">
     <div class="public-footer-close"></div>
     <span (click)="onSignupClick()">
-        <strong>Try Permanent.org for free</strong> 
+        <strong>Try Permanent.org for free</strong>
     </span>
     <div class="public-footer-close" (click)="hideBottomBanner()">
       ×

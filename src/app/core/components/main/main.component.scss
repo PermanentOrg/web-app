@@ -13,27 +13,13 @@
   &.uploading {
     padding-bottom: 80px;
   }
-
-  // @include after($tablet-horizontal) {
-  //   padding: 0;
-  //   position: fixed;
-  //   top: $navbar-total-height-desktop;
-  //   bottom: 0;
-  //   left: $left-menu-width;
-  //   right: 0;
-  // // }
-
-  //   @include after($tablet-horizontal) {
-  //   padding: 0;
-  //   margin-left: $left-menu-width;
-  //   width: calc(100vw - #{$left-menu-width});
-  // }
 }
 
 @include desktop {
   :host {
     display: flex;
     height: 100vh;
+    overflow-y: hidden;
   }
 
   .main-panel {

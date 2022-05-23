@@ -1,3 +1,5 @@
-import { AnnouncementEvent } from "../models/announcement-event";
+import { AnnouncementEvent } from '../models/announcement-event';
 
-export const ANNOUNCEMENT_EVENTS: AnnouncementEvent[] = [];
+export const ANNOUNCEMENT_EVENTS: AnnouncementEvent[] = [
+
+];

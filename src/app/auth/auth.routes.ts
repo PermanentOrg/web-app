@@ -13,6 +13,7 @@ import { TermsComponent } from '@shared/components/terms/terms.component';
 import { ShareInviteResolveService } from './resolves/share-invite-resolve.service';
 
 import { AuthGuard } from './guards/auth.guard';
+import { AnnouncementModule } from '../announcement/announcement.module';
 
 const unauthenticatedRoutes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
@@ -45,7 +46,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    AnnouncementModule,
   ],
   declarations: [
     LoginComponent,
