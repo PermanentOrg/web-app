@@ -16,6 +16,7 @@ import { SearchBoxComponent } from './components/search-box/search-box.component
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { PublicProfileService } from './services/public-profile/public-profile.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { AnnouncementModule } from '../announcement/announcement.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { DialogModule } from '../dialog/dialog.module';
     PublicProfileComponent,
   ],
   imports: [
+    AnnouncementModule,
     CommonModule,
     RouterModule,
     PublicRoutingModule,

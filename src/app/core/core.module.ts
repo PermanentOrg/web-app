@@ -56,9 +56,11 @@ import { ArchiveSettingsDialogComponent } from './components/archive-settings-di
 import { ManageTagsComponent } from './components/manage-tags/manage-tags.component';
 import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
 import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
+import { AnnouncementModule } from '../announcement/announcement.module';
 
 @NgModule({
   imports: [
+    AnnouncementModule,
     CommonModule,
     SharedModule,
     CoreRoutingModule,
