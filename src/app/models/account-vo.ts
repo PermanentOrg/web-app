@@ -30,7 +30,6 @@ export interface AccountVOData extends BaseVOData {
   zip?: string;
   primaryPhone?: string;
   defaultArchiveId?: any;
-  level?: string;
   betaParticipant?: any;
   status?: any;
   type?: any;
@@ -73,7 +72,6 @@ export class AccountVO extends BaseVO {
   public zip;
   public primaryPhone;
   public defaultArchiveId;
-  public level;
   public betaParticipant;
   public status;
   public type;

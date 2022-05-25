@@ -15,7 +15,6 @@
             "zip": null,
             "primaryPhone": null,
             "defaultArchiveId": 1,
-            "level": null,
             "status": "status.auth.need_email",
             "type": "type.account.standard",
             "createdDT": "2018-07-16T21:41:01.000000",
