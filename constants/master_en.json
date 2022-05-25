@@ -10,18 +10,6 @@
       "editor": "Editor"
     }
   },
-  "account": {
-    "level": {
-      "benefactor": "Benefactor",
-      "founding_patron": "Founding Patron",
-      "innovators_circle": "Innovators Circle",
-      "none": "None",
-      "partner": "Partner",
-      "presidents_circle": "Presidents Circle",
-      "principals_circle": "Principals Circle",
-      "supporter": "Supporter"
-    }
-  },
   "activity": {
     "grouping": {
       "account": "Account",

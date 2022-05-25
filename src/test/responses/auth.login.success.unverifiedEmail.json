@@ -15,7 +15,6 @@
             "zip": null,
             "primaryPhone": null,
             "defaultArchiveId": 9175,
-            "level": null,
             "status": "status.auth.ok",
             "type": "type.account.standard",
             "emailStatus": "status.auth.unverified",
