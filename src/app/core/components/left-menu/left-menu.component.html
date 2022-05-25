@@ -12,25 +12,32 @@
       <div class="menu-header-desktop" [class.show-shadow]="showArchiveOptions">
         <div class="archive">
           <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
-          <div class="archive-name">The {{archive.fullName}} Archive</div>
-          <div class="archive-access">Access role: {{archive.accessRole | prConstants}}</div>
-          <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
+          <div class="archive-name-access">
+            <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
             [class.reverse]="showArchiveOptions">
-            <i class="material-icons">expand_more</i>
+              <div class="archive-name">The {{archive.fullName}} Archive</div>
+              <i class="material-icons">expand_more</i>
+            </div>
+            <div class="archive-access">Access role: {{archive.accessRole | prConstants}}</div>
           </div>
         </div>
       </div>
+      <hr class="hide-mobile" />
       <div class="archive-options" @ngIfScaleHeightAnimation *ngIf="showArchiveOptions">
         <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['profile']}}]">
+          <img src="assets/svg/left-menu/archive-profile-icon.svg" />
           Archive Profile
         </a>
         <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['connections']}}]">
+          <img src="assets/svg/left-menu/archive-connections-icon.svg" />
           Archive Connections
         </a>
         <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['members']}}]">
+          <img src="assets/svg/left-menu/archive-members-icon.svg" />
           Archive Members
         </a>
         <a class="archive-options-option" [routerLink]="[{ outlets: { dialog: ['settings']}}]">
+          <img src="assets/svg/left-menu/archive-settings-icon.svg" />
           Archive Settings
         </a>
       </div>
@@ -44,52 +51,60 @@
       [routerLink]="['/myfiles']"
       [class.active]="checkMenuItemActive('/myfiles')"
       prDragTargetRouterLink>
-        <i class="ion-md-folder"></i>
-        My Files
+        <img class="svg-icon" src="assets/svg/left-menu/private-files-icon.svg" />
+        Private Files
       </a>
       <a class="menu-item" [routerLink]="['/shares']" [class.active]="checkMenuItemActive('/shares')">
-        <i class="ion-md-share"></i>
-        Shares
+        <img class="svg-icon" src="assets/svg/left-menu/shared-files-icon.svg" />
+        Shared Files
       </a>
       <a class="menu-item"
         [routerLink]="['/public']"
         [class.active]="checkMenuItemActive('/public')"
         prDragTargetRouterLink>
-        <i class="ion-md-globe"></i>
-        Public
+        <img class="svg-icon" src="assets/svg/left-menu/public-files-icon.svg" />
+        Public Files
       </a>
-      <a class="menu-item" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
-        <i class="ion-md-swap"></i>
-        Apps
+      <hr class="hide-mobile" />
+      <div class="menu-item apps-menu hide-mobile" [class.active]="checkMenuItemActive('/apps')">
+        <a class="apps-link-main" [routerLink]="['/apps']">
+          <img class="svg-icon" src="assets/svg/left-menu/app-files-icon.svg" />
+          <span>App Files</span>
+        </a>
+        <div class="apps-toggle" [class.reverse]="showAppsSubfolders" (click)="showAppsSubfolders = !showAppsSubfolders">
+          <i class="material-icons">expand_more</i>
+        </div>
+      </div>
+      <a class="menu-item hide-desktop" [routerLink]="['/apps']" [class.active]="checkMenuItemActive('/apps')">
+        <img class="svg-icon" src="assets/svg/left-menu/app-files-icon.svg" />
+        App Files
       </a>
-      <div class="submenu hide-mobile" *ngIf="appsSubfolders?.length">
+      <div class="submenu hide-mobile" *ngIf="appsSubfolders?.length && showAppsSubfolders">
         <a class="submenu-item" *ngFor="let subfolder of appsSubfolders"
           [routerLink]="['/apps', subfolder.archiveNbr, subfolder.folder_linkId]">
-          {{subfolder.displayName}}
+          <img *ngIf="subfolder.displayName === 'FamilySearch'" src="assets/svg/left-menu/family-search-icon.svg" />
+          <span>{{subfolder.displayName}}</span>
         </a>
       </div>
+      <hr class="hide-desktop" />
       <a class="menu-item hide-desktop"
         [routerLink]="[{ outlets: { dialog: ['connections']}}]"
         [class.active]="checkMenuItemActive('/connections')">
-        <i class="ion-md-people"></i>
-        Connections
+        <img class="svg-icon" src="assets/svg/left-menu/archive-connections-icon.svg" />
+        Archive Connections
       </a>
       <a class="menu-item hide-desktop"
         [routerLink]="[{ outlets: { dialog: ['members']}}]"
         [class.active]="checkMenuItemActive('/members')">
-        <i class="ion-md-person-add"></i>
-        Members
+        <img class="svg-icon" src="assets/svg/left-menu/archive-members-icon.svg" />
+        Archive Members
       </a>
+      <hr class="hide-desktop" />
       <a class="menu-item hide-desktop"
         [routerLink]="[{ outlets: { dialog: ['invitations']}}]"
         [class.active]="checkMenuItemActive('/invitations')">
         <i class="ion-md-person-add"></i>
         Invitations
-      </a>
-      <a class="menu-item hide-desktop" [routerLink]="[{ outlets: { dialog: ['settings']}}]"
-      [class.active]="checkMenuItemActive('/settings')">
-        <i class="ion-md-settings"></i>
-        Settings
       </a>
       <a class="menu-item hide-desktop" [routerLink]="[{ outlets: { dialog: ['storage']}}]">
         <i class="ion-md-add-circle"></i>

@@ -29,6 +29,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public archive: ArchiveVO;
 
   public showArchiveOptions = false;
+  public showAppsSubfolders = false;
 
   public appsSubfolders: FolderVO[] = [];
 
