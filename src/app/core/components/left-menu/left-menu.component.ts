@@ -28,8 +28,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public archiveName: string;
   public archive: ArchiveVO;
 
-  public showArchiveOptions = false;
-  public showAppsSubfolders = false;
+  public showArchiveOptions = this.isMenuOpen('showArchiveOptions');
+  public showAppsSubfolders = this.isMenuOpen('showAppsSubfolders');
 
   public appsSubfolders: FolderVO[] = [];
 
@@ -64,9 +64,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(
       this.router.events.subscribe(event => {
-        if (event instanceof NavigationStart) {
-          this.showArchiveOptions = false;
-        } else if (event instanceof NavigationEnd) {
+        if (event instanceof NavigationEnd) {
           this.currentUrl = this.router.url;
           this.urlMatches.clear();
         }
@@ -174,5 +172,17 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public toggleArchiveOptions(): void {
+    this.showArchiveOptions = !this.showArchiveOptions;
+    window.sessionStorage.setItem('showArchiveOptions', (+this.showArchiveOptions).toString());
+  }
 
+  public toggleAppsSubfolders(): void {
+    this.showAppsSubfolders = !this.showAppsSubfolders;
+    window.sessionStorage.setItem('showAppsSubfolders', (+this.showAppsSubfolders).toString());
+  }
+
+  protected isMenuOpen(key: string): boolean {
+    return Boolean(window.sessionStorage.getItem(key));
+  }
 }

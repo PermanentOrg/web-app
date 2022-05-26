@@ -13,7 +13,7 @@
         <div class="archive">
           <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL500" [cover]="true"></div>
           <div class="archive-name-access">
-            <div class="archive-options-toggle" (click)="showArchiveOptions = !showArchiveOptions"
+            <div class="archive-options-toggle" (click)="toggleArchiveOptions()"
             [class.reverse]="showArchiveOptions">
               <div class="archive-name">The {{archive.fullName}} Archive</div>
               <i class="material-icons">expand_more</i>
@@ -71,7 +71,7 @@
           <img class="svg-icon" src="assets/svg/left-menu/app-files-icon.svg" />
           <span>App Files</span>
         </a>
-        <div class="apps-toggle" [class.reverse]="showAppsSubfolders" (click)="showAppsSubfolders = !showAppsSubfolders">
+        <div class="apps-toggle" *ngIf="appsSubfolders?.length > 0" [class.reverse]="showAppsSubfolders" (click)="toggleAppsSubfolders()">
           <i class="material-icons">expand_more</i>
         </div>
       </div>
