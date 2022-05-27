@@ -1,5 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+  ElementRef,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { find } from 'lodash';
 import * as Sentry from '@sentry/browser';
 import debug from 'debug';
@@ -24,15 +35,16 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isVisible = false;
   @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  @ViewChild('scroll') scrollElementRef: ElementRef;
+
   public showArchiveSelector: false;
   public archiveName: string;
   public archive: ArchiveVO;
 
-  public showArchiveOptions = false;
+  public showArchiveOptions = this.isMenuOpen('showArchiveOptions');
+  public showAppsSubfolders = this.isMenuOpen('showAppsSubfolders');
 
   public appsSubfolders: FolderVO[] = [];
-
-  @ViewChild('scroll') scrollElementRef: ElementRef;
 
   private subscriptions: Subscription[] = [];
   private currentUrl: string;
@@ -63,9 +75,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
     this.subscriptions.push(
       this.router.events.subscribe(event => {
-        if (event instanceof NavigationStart) {
-          this.showArchiveOptions = false;
-        } else if (event instanceof NavigationEnd) {
+        if (event instanceof NavigationEnd) {
           this.currentUrl = this.router.url;
           this.urlMatches.clear();
         }
@@ -138,7 +148,11 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onProfileClick() {
     await this.profile.fetchProfileItems();
-    this.dialog.open('ProfileEditComponent', null, { width: '100%', height: 'fullscreen', menuClass: 'profile-editor-dialog'});
+    this.dialog.open('ProfileEditComponent', null, {
+      width: '100%',
+      height: 'fullscreen',
+      menuClass: 'profile-editor-dialog'
+    });
     this.showArchiveOptions = false;
   }
 
@@ -164,7 +178,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   async loadAppsSubfolders() {
     try {
       const apps = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
-      const folderResponse = await this.api.folder.getWithChildren([new FolderVO(apps)])
+      const folderResponse = await this.api.folder.getWithChildren([new FolderVO(apps)]);
       const appsFolder = folderResponse.getFolderVO(true);
       this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
     } catch (err) {
@@ -173,5 +187,17 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public toggleArchiveOptions(): void {
+    this.showArchiveOptions = !this.showArchiveOptions;
+    window.sessionStorage.setItem('showArchiveOptions', (+this.showArchiveOptions).toString());
+  }
 
+  public toggleAppsSubfolders(): void {
+    this.showAppsSubfolders = !this.showAppsSubfolders;
+    window.sessionStorage.setItem('showAppsSubfolders', (+this.showAppsSubfolders).toString());
+  }
+
+  protected isMenuOpen(key: string): boolean {
+    return Boolean(window.sessionStorage.getItem(key));
+  }
 }
