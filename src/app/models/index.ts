@@ -7,7 +7,6 @@ export * from '@models/account-password-vo';
 export { AccountVO, NotificationPreferencesI } from '@models/account-vo';
 export { ArchiveVO } from '@models/archive-vo';
 export { AuthVO } from '@models/auth-vo';
-export { BillingCardVO } from '@models/billing-card-vo';
 export * from '@models/billing-payment-vo';
 export { ConnectorOverviewVO } from '@models/connector-overview-vo';
 export * from '@models/folder-vo';

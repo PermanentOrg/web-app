@@ -24,32 +24,4 @@ describe('BillingRepo', () => {
   afterEach(() => {
     httpMock.verify();
   });
-
-  it('should successfully return no saved cards', () => {
-    const expected = require('@root/test/responses/billing.getBillingCards.none.success.json');
-
-    repo.getCards()
-    .then((response: BillingResponse) => {
-      const cards = response.getBillingCardVOs();
-      expect(cards).toBeDefined();
-      expect(cards.length).toBe(0);
-    });
-
-    const req = httpMock.expectOne(`${environment.apiUrl}/billing/getBillingCards`);
-    req.flush(expected);
-  });
-
-  it('should successfully return one or more saved cards', () => {
-    const expected = require('@root/test/responses/billing.getBillingCards.multiple.success.json');
-
-    repo.getCards()
-    .then((response: BillingResponse) => {
-      const cards = response.getBillingCardVOs();
-      expect(cards).toBeDefined();
-      expect(cards.length).toBe(6);
-    });
-
-    const req = httpMock.expectOne(`${environment.apiUrl}/billing/getBillingCards`);
-    req.flush(expected);
-  });
 });
