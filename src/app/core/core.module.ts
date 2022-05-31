@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -21,7 +22,11 @@ import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
 import { InvitationsComponent } from './components/invitations/invitations.component';
 import { RelationshipsComponent } from './components/relationships/relationships.component';
-import { DialogModule, DialogChildComponentData, Dialog } from '@root/app/dialog/dialog.module';
+import {
+  DialogModule,
+  DialogChildComponentData,
+  Dialog,
+} from '@root/app/dialog/dialog.module';
 import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
@@ -116,63 +121,67 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     Uploader,
     EditService,
     DragService,
-    SidebarActionPortalService
-  ]
+    SidebarActionPortalService,
+  ],
 })
 export class CoreModule {
   private dialogComponents: DialogChildComponentData[] = [
     {
       token: 'SettingsDialogComponent',
-      component: SettingsDialogComponent
+      component: SettingsDialogComponent,
     },
     {
       token: 'ConnectionsDialogComponent',
-      component: ConnectionsDialogComponent
+      component: ConnectionsDialogComponent,
     },
     {
       token: 'ProfileEditComponent',
-      component: ProfileEditComponent
+      component: ProfileEditComponent,
     },
     {
       token: 'ProfileEditFirstTimeDialogComponent',
-      component: ProfileEditFirstTimeDialogComponent
+      component: ProfileEditFirstTimeDialogComponent,
     },
     {
       token: 'MembersDialogComponent',
-      component: MembersDialogComponent
+      component: MembersDialogComponent,
     },
     {
       token: 'MyArchivesDialogComponent',
-      component: MyArchivesDialogComponent
+      component: MyArchivesDialogComponent,
     },
     {
       token: 'InvitationsDialogComponent',
-      component: InvitationsDialogComponent
+      component: InvitationsDialogComponent,
     },
     {
       token: 'StorageDialogComponent',
-      component: StorageDialogComponent
+      component: StorageDialogComponent,
     },
     {
       token: 'ArchiveSettingsDialogComponent',
-      component: ArchiveSettingsDialogComponent
+      component: ArchiveSettingsDialogComponent,
     },
     {
       token: 'WelcomeDialogComponent',
-      component: WelcomeDialogComponent
+      component: WelcomeDialogComponent,
     },
     {
       token: 'WelcomeInvitationDialogComponent',
-      component: WelcomeInvitationDialogComponent
+      component: WelcomeInvitationDialogComponent,
     },
   ];
 
   constructor(
     @Optional() private dialog?: Dialog,
-    @Optional() private resolver?: ComponentFactoryResolver,
+    @Optional() private resolver?: ComponentFactoryResolver
   ) {
     if (this.dialog) {
-      this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
+      this.dialog.registerComponents(
+        this.dialogComponents,
+        this.resolver,
+        true
+      );
     }
   }
 }

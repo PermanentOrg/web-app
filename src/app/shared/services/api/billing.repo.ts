@@ -1,44 +1,74 @@
-import { LedgerNonfinancialVOData, LedgerFinancialVOData, AccountVO, PromoVOData } from '@root/app/models';
+/* @format */
+import {
+  LedgerNonfinancialVOData,
+  LedgerFinancialVOData,
+  AccountVO,
+  PromoVOData,
+} from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { BillingPaymentVO } from '@models';
 
 export class BillingRepo extends BaseRepo {
   public claimPledge(billingPaymentVO: BillingPaymentVO, pledgeId: string) {
-    const data = [{
-      BillingPaymentVO: billingPaymentVO,
-      SimpleVO: {
-        key: 'pledgeId',
-        value: pledgeId
-      }
-    }];
+    const data = [
+      {
+        BillingPaymentVO: billingPaymentVO,
+        SimpleVO: {
+          key: 'pledgeId',
+          value: pledgeId,
+        },
+      },
+    ];
 
-    return this.http.sendRequestPromise<BillingResponse>('/billing/claimPledge', data, BillingResponse);
+    return this.http.sendRequestPromise<BillingResponse>(
+      '/billing/claimPledge',
+      data,
+      BillingResponse
+    );
   }
 
   public getFileHistory(account: AccountVO) {
-    const data = [{
-      LedgerNonfinancialVO: {
-        fromAccountId: account.accountId
-      }
-    }];
-    return this.http.sendRequestPromise<BillingResponse>('/billing/getBillingLedgerNonfinancial', data, BillingResponse);
+    const data = [
+      {
+        LedgerNonfinancialVO: {
+          fromAccountId: account.accountId,
+        },
+      },
+    ];
+    return this.http.sendRequestPromise<BillingResponse>(
+      '/billing/getBillingLedgerNonfinancial',
+      data,
+      BillingResponse
+    );
   }
 
   public getTransactionHistory(account: AccountVO) {
-    const data = [{
-      LedgerFinancialVO: {
-        fromAccountId: account.accountId
-      }
-    }];
-    return this.http.sendRequestPromise<BillingResponse>('/billing/getBillingLedgerFinancial', data, BillingResponse);
+    const data = [
+      {
+        LedgerFinancialVO: {
+          fromAccountId: account.accountId,
+        },
+      },
+    ];
+    return this.http.sendRequestPromise<BillingResponse>(
+      '/billing/getBillingLedgerFinancial',
+      data,
+      BillingResponse
+    );
   }
 
   public redeemPromoCode(promo: PromoVOData) {
-    const data = [{
-      PromoVO: promo
-    }];
+    const data = [
+      {
+        PromoVO: promo,
+      },
+    ];
 
-    return this.http.sendRequestPromise<BillingResponse>('/promo/entry', data, BillingResponse);
+    return this.http.sendRequestPromise<BillingResponse>(
+      '/promo/entry',
+      data,
+      BillingResponse
+    );
   }
 }
 
@@ -49,7 +79,7 @@ export class BillingResponse extends BaseResponse {
       return [];
     }
 
-    return data[0].map(result => result.LedgerNonfinancialVO);
+    return data[0].map((result) => result.LedgerNonfinancialVO);
   }
 
   getLedgerFinancialVOs(): LedgerFinancialVOData[] {
@@ -58,7 +88,7 @@ export class BillingResponse extends BaseResponse {
       return [];
     }
 
-    return data[0].map(result => result.LedgerFinancialVO);
+    return data[0].map((result) => result.LedgerFinancialVO);
   }
 
   public getPromoVO() {

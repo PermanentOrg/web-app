@@ -1,3 +1,4 @@
+/* @format */
 import { RecordVO } from '@models/record-vo';
 import { FolderVO } from '@models/folder-vo';
 
@@ -14,7 +15,7 @@ export * from '@models/invite-vo';
 export * from './ledger-vo';
 export * from './locn-vo';
 export * from './promo-vo';
-export *  from '@models/record-vo';
+export * from '@models/record-vo';
 export { RequestVO } from '@models/request-vo';
 export { RelationVO } from '@models/relation-vo';
 export { ShareVO } from '@models/share-vo';
