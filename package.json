@@ -14,7 +14,8 @@
     "test": "npm run secrets && ng test --source-map=false",
     "test:build": "npm run secrets && ng test --source-map=false --watch=false --browsers chrome_headless_no_sandbox",
     "lint": "ng lint",
-    "jest": "jest"
+    "jest": "jest",
+    "prettier": "prettier"
   },
   "private": true,
   "dependencies": {
@@ -104,6 +105,7 @@
     "karma-junit-reporter": "^2.0.1",
     "karma-spec-reporter": "0.0.32",
     "karma-verbose-reporter": "0.0.6",
+    "prettier": "^2.6.2",
     "ts-jest": "^27.0.7",
     "ts-node": "~8.6.2",
     "tslib": "^2.0.0",
