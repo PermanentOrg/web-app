@@ -9,12 +9,10 @@ import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
-import { DonateResolveService} from '@core/resolves/donate-resolve.service';
 import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
 
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
-import { DonateComponent } from './components/donate/donate.component';
 import { MembersResolveService } from './resolves/members-resolve.service';
 import { RoutesWithData } from '../app.routes';
 import { AccountResolveService } from './resolves/account-resolve.service';
@@ -77,9 +75,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'donate',
-        component: DonateComponent,
-        data: { title: 'Add Storage'},
-        resolve: { cards: DonateResolveService }
+        redirectTo: '/app/(myfiles//dialog:storage)',
       },
       {
         path: 'invitations',
@@ -260,7 +256,6 @@ export const routes: RoutesWithData = [
     RootFolderResolveService,
     RecordResolveService,
     ArchivesResolveService,
-    DonateResolveService,
     RelationshipsResolveService,
     MembersResolveService,
     AccountResolveService,
