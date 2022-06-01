@@ -7,21 +7,6 @@ import { minDateValidator } from '@shared/utilities/forms';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { AccessRoleType } from '@models/access-role';
-const expMonths = [
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-];
-const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
 const prConstants: PrConstantsService = new PrConstantsService();
 
