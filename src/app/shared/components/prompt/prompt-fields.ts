@@ -1,3 +1,4 @@
+/* @format */
 import { PromptField } from '@shared/services/prompt/prompt.service';
 import { Validators } from '@angular/forms';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
@@ -6,27 +7,25 @@ import { minDateValidator } from '@shared/utilities/forms';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { AccessRoleType } from '@models/access-role';
-const expMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-const expYears = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
 const prConstants: PrConstantsService = new PrConstantsService();
 
 export const RELATION_OPTIONS = prConstants.getRelations().map((type) => {
   return {
     text: type.name,
-    value: type.type
+    value: type.type,
   };
 });
 
 export const FOLDER_VIEW_OPTIONS: FormInputSelectOption[] = [
   {
     text: 'Timeline',
-    value: FolderView.Timeline
+    value: FolderView.Timeline,
   },
   {
     text: 'Grid',
-    value: FolderView.Grid
-  }
+    value: FolderView.Grid,
+  },
 ];
 
 export const RELATIONSHIP_FIELD: PromptField = {
@@ -38,9 +37,9 @@ export const RELATIONSHIP_FIELD: PromptField = {
   config: {
     autocomplete: 'off',
     autocorrect: 'off',
-    autocapitalize: 'off'
+    autocapitalize: 'off',
   },
-  selectOptions: RELATION_OPTIONS
+  selectOptions: RELATION_OPTIONS,
 };
 
 export function RELATIONSHIP_FIELD_INITIAL(initialValue?: string): PromptField {
@@ -58,9 +57,9 @@ export const FOLDER_VIEW_FIELD: PromptField = {
   config: {
     autocapitalize: 'off',
     autocomplete: 'off',
-    autocorrect: 'off'
+    autocorrect: 'off',
   },
-  selectOptions: FOLDER_VIEW_OPTIONS
+  selectOptions: FOLDER_VIEW_OPTIONS,
 };
 
 export function FOLDER_VIEW_FIELD_INIIAL(initialValue?: string): PromptField {
@@ -69,7 +68,7 @@ export function FOLDER_VIEW_FIELD_INIIAL(initialValue?: string): PromptField {
   return initialized;
 }
 
-export const ACCESS_ROLE_FIELD: PromptField =  {
+export const ACCESS_ROLE_FIELD: PromptField = {
   fieldName: 'accessRole',
   placeholder: 'Access Level',
   type: 'select',
@@ -78,23 +77,25 @@ export const ACCESS_ROLE_FIELD: PromptField =  {
   config: {
     autocomplete: 'off',
     autocorrect: 'off',
-    autocapitalize: 'off'
+    autocapitalize: 'off',
   },
   selectOptions: prConstants.getAccessRoles().map((role) => {
     return {
       value: role.type as AccessRoleType,
-      text: role.name
+      text: role.name,
     };
-  })
+  }),
 };
 
-export function ACCESS_ROLE_FIELD_INITIAL(initialValue: AccessRoleType): PromptField {
+export function ACCESS_ROLE_FIELD_INITIAL(
+  initialValue: AccessRoleType
+): PromptField {
   const initialized = clone(ACCESS_ROLE_FIELD);
   initialized.initialValue = initialValue;
   return initialized;
 }
 
-export const SHARE_ACCESS_ROLE_FIELD: PromptField =  {
+export const SHARE_ACCESS_ROLE_FIELD: PromptField = {
   fieldName: 'accessRole',
   placeholder: 'Access Level',
   type: 'select',
@@ -103,17 +104,19 @@ export const SHARE_ACCESS_ROLE_FIELD: PromptField =  {
   config: {
     autocomplete: 'off',
     autocorrect: 'off',
-    autocapitalize: 'off'
+    autocapitalize: 'off',
   },
   selectOptions: prConstants.getShareAccessRoles().map((role) => {
     return {
       value: role.type as AccessRoleType,
-      text: role.name
+      text: role.name,
     };
-  })
+  }),
 };
 
-export function SHARE_ACCESS_ROLE_FIELD_INITIAL(initialValue: AccessRoleType): PromptField {
+export function SHARE_ACCESS_ROLE_FIELD_INITIAL(
+  initialValue: AccessRoleType
+): PromptField {
   const initialized = clone(SHARE_ACCESS_ROLE_FIELD);
   initialized.initialValue = initialValue;
   return initialized;
@@ -131,8 +134,8 @@ export function INVITATION_FIELDS(initialEmail?: string): PromptField[] {
         autocapitalize: 'off',
         autocorrect: 'off',
         autocomplete: 'off',
-        autoselect: false
-      }
+        autoselect: false,
+      },
     },
     {
       fieldName: 'name',
@@ -142,140 +145,13 @@ export function INVITATION_FIELDS(initialEmail?: string): PromptField[] {
       config: {
         autocapitalize: 'on',
         autocorrect: 'off',
-        autocomplete: 'off'
-      }
+        autocomplete: 'off',
+      },
     },
     RELATIONSHIP_FIELD,
   ];
   return fields;
 }
-
-export const CREDIT_CARD_FIELDS: PromptField[] = [
-  {
-    fieldName: 'cardNumber',
-    placeholder: 'Card number',
-    type: 'tel',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'cc-number',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-  {
-    fieldName: 'cardCvc',
-    placeholder: 'Security code',
-    type: 'tel',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'cc-csc',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-  {
-    fieldName: 'cardExpMonth',
-    placeholder: 'Expiration month',
-    type: 'select',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'cc-exp-month',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    },
-    selectOptions: expMonths.map((month) => {
-      return {
-        text: month,
-        value: month
-      };
-    })
-  },
-  {
-    fieldName: 'cardExpYear',
-    placeholder: 'Expiration year',
-    type: 'select',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'cc-exp-yeah',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    },
-    selectOptions: expYears.map((year) => {
-      return {
-        text: year,
-        value: year
-      };
-    })
-  },
-  {
-    fieldName: 'cardNickname',
-    placeholder: 'Card nickname',
-    type: 'text',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'off',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-];
-
-export const ADDRESS_FIELDS: PromptField[] = [
-  {
-    fieldName: 'address',
-    placeholder: 'Street address',
-    type: 'text',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'street-address address-line1',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-  {
-    fieldName: 'address2',
-    placeholder: 'Address line 2',
-    type: 'text',
-    config: {
-      autocomplete: 'street-address address-line2',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-  {
-    fieldName: 'city',
-    placeholder: 'City',
-    type: 'text',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'address-level2',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-  {
-    fieldName: 'state',
-    placeholder: 'State',
-    type: 'text',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'address-level1',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-  {
-    fieldName: 'zip',
-    placeholder: 'Zip code',
-    type: 'tel',
-    validators: [Validators.required],
-    config: {
-      autocomplete: 'postal-code',
-      autocorrect: 'off',
-      autocapitalize: 'off'
-    }
-  },
-];
 
 const ON_OFF_FIELD_DEFAULT: PromptField = {
   fieldName: 'onOff',
@@ -283,23 +159,27 @@ const ON_OFF_FIELD_DEFAULT: PromptField = {
   config: {
     autocomplete: 'off',
     autocorrect: 'off',
-    autocapitalize: 'off'
+    autocapitalize: 'off',
   },
   type: 'select',
   validators: [Validators.required],
   selectOptions: [
     {
       text: 'On',
-      value: 'on'
+      value: 'on',
     },
     {
       text: 'Off',
-      value: 'off'
-    }
-  ]
+      value: 'off',
+    },
+  ],
 };
 
-export function ON_OFF_FIELD(fieldName: string, placeholder: string, initialValue?: string | number) {
+export function ON_OFF_FIELD(
+  fieldName: string,
+  placeholder: string,
+  initialValue?: string | number
+) {
   const initial: PromptField = clone(ON_OFF_FIELD_DEFAULT);
   initial.fieldName = fieldName;
   initial.placeholder = placeholder;
@@ -313,13 +193,18 @@ const NUMBER_FIELD_DEFAULT: PromptField = {
   config: {
     autocomplete: 'off',
     autocorrect: 'off',
-    autocapitalize: 'off'
+    autocapitalize: 'off',
   },
   type: 'number',
-  validators: [Validators.required, Validators.min(0)]
+  validators: [Validators.required, Validators.min(0)],
 };
 
-export function NUMBER_FIELD(fieldName: string, placeholder: string, initialValue?: number, required = true) {
+export function NUMBER_FIELD(
+  fieldName: string,
+  placeholder: string,
+  initialValue?: number,
+  required = true
+) {
   const initial: PromptField = clone(NUMBER_FIELD_DEFAULT);
   initial.fieldName = fieldName;
   initial.placeholder = placeholder;
@@ -336,10 +221,10 @@ const DATE_FIELD_DEFAULT: PromptField = {
   config: {
     autocomplete: 'off',
     autocorrect: 'off',
-    autocapitalize: 'off'
+    autocapitalize: 'off',
   },
   type: 'date',
-  validators: []
+  validators: [],
 };
 
 export function DATE_FIELD(
@@ -348,7 +233,7 @@ export function DATE_FIELD(
   initialValue?: string | Date,
   minValue?: string | Date,
   required = false
-  ) {
+) {
   const initial: PromptField = clone(DATE_FIELD_DEFAULT);
   initial.fieldName = fieldName;
   initial.placeholder = placeholder;
@@ -371,13 +256,17 @@ const READ_ONLY_FIELD_DEFAULT: PromptField = {
     autocomplete: 'off',
     autocorrect: 'off',
     autocapitalize: 'off',
-    readOnly: true
+    readOnly: true,
   },
   type: 'text',
-  validators: []
+  validators: [],
 };
 
-export function READ_ONLY_FIELD(fieldName: string, placeholder: string, initialValue?: string) {
+export function READ_ONLY_FIELD(
+  fieldName: string,
+  placeholder: string,
+  initialValue?: string
+) {
   const initial: PromptField = clone(READ_ONLY_FIELD_DEFAULT);
   initial.fieldName = fieldName;
   initial.placeholder = placeholder;
