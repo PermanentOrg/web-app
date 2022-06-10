@@ -87,7 +87,6 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public LocnVO: LocnVOData;
   public TimezoneVO: TimezoneVOData;
   public FileVOs;
-  public DirectiveVOs;
   public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs: ArchiveVO[];
@@ -186,7 +185,6 @@ export interface RecordVOData extends BaseVOData {
   LocnVO?: any;
   TimezoneVO?: TimezoneVOData;
   FileVOs?: any;
-  DirectiveVOs?: any;
   TagVOs?: any;
   TextDataVOs?: any;
   ArchiveVOs?: ArchiveVO[];

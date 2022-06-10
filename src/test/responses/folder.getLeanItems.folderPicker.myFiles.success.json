@@ -110,7 +110,6 @@
                             "createdDT": "2017-05-26T00:00:00.000000",
                             "updatedDT": "2017-05-26T00:00:00.000000"
                         },
-                        "DirectiveVOs": null,
                         "TagVOs": [],
                         "SharedArchiveVOs": [],
                         "FolderSizeVO": null,
@@ -193,7 +192,6 @@
                                     "createdDT": "2017-07-30T21:50:33.000000",
                                     "updatedDT": "2018-09-25T22:32:52.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -302,7 +300,6 @@
                                     "createdDT": "2017-01-16T19:13:08.000000",
                                     "updatedDT": "2018-08-30T14:17:06.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -395,7 +392,6 @@
                                     "createdDT": "2017-01-16T19:13:07.000000",
                                     "updatedDT": "2017-10-19T18:51:41.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -488,7 +484,6 @@
                                     "createdDT": "2017-10-19T22:19:41.000000",
                                     "updatedDT": "2018-01-12T20:52:28.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -581,7 +576,6 @@
                                     "createdDT": "2017-07-07T15:50:38.000000",
                                     "updatedDT": "2018-09-25T22:32:52.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -674,7 +668,6 @@
                                     "createdDT": "2017-07-31T16:21:19.000000",
                                     "updatedDT": "2017-10-19T18:51:42.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -767,7 +760,6 @@
                                     "createdDT": "2017-10-30T20:25:46.000000",
                                     "updatedDT": "2018-09-25T22:32:52.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -860,7 +852,6 @@
                                     "createdDT": "2017-01-16T19:13:07.000000",
                                     "updatedDT": "2018-09-25T22:32:52.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -953,7 +944,6 @@
                                     "createdDT": "2017-01-16T19:13:08.000000",
                                     "updatedDT": "2017-10-19T18:51:41.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1046,7 +1036,6 @@
                                     "createdDT": "2017-07-31T16:22:44.000000",
                                     "updatedDT": "2017-10-19T18:51:42.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1123,7 +1112,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1200,7 +1188,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1293,7 +1280,6 @@
                                     "createdDT": "2017-09-12T19:46:22.000000",
                                     "updatedDT": "2017-10-09T23:30:23.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1386,7 +1372,6 @@
                                     "createdDT": "2017-07-31T15:58:16.000000",
                                     "updatedDT": "2017-10-09T23:30:23.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1479,7 +1464,6 @@
                                     "createdDT": "2017-02-21T21:16:35.000000",
                                     "updatedDT": "2018-08-30T14:17:06.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1572,7 +1556,6 @@
                                     "createdDT": "2017-01-31T02:10:55.000000",
                                     "updatedDT": "2018-09-21T17:47:08.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1681,7 +1664,6 @@
                                     "createdDT": "2017-01-16T19:13:08.000000",
                                     "updatedDT": "2018-09-05T20:41:38.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1790,7 +1772,6 @@
                                     "createdDT": "2017-01-16T19:13:08.000000",
                                     "updatedDT": "2018-08-12T04:01:22.000000"
                                 },
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1867,7 +1848,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -1944,7 +1924,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -2037,7 +2016,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -2114,7 +2092,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -2191,7 +2168,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -2268,7 +2244,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,
@@ -2345,7 +2320,6 @@
                                 "RecordVOs": [],
                                 "LocnVO": null,
                                 "TimezoneVO": null,
-                                "DirectiveVOs": null,
                                 "TagVOs": [],
                                 "SharedArchiveVOs": [],
                                 "FolderSizeVO": null,

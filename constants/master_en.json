@@ -17,7 +17,6 @@
       "auth": "Authorization",
       "contact": "Contact",
       "daemon": "Daemon",
-      "directive": "Directive",
       "download": "Download",
       "invite": "Invite",
       "locn": "Location",
@@ -111,13 +110,6 @@
     "daemon": {
       "queue_delete": "The queue failed on a deleting an item from itself.",
       "queue_non_complete": "The queue didn't complete the action in the requisite number of tries."
-    },
-    "directive": {
-      "bad_date": "Directives must be future dated",
-      "lookup": "Directive not found"
-    },
-    "directive_item": {
-      "lookup": "Data lookup failed (DI)"
     },
     "file": {
       "lookup": "File not found",
@@ -455,12 +447,6 @@
       "rejected": "Declined",
       "revoked": "Contact was revoked"
     },
-    "directive": {
-      "error": "There was an error during processing.",
-      "processed": "This file has been processed.",
-      "queued": "This directive is ready to be processed.",
-      "unprocessed": "This directive needs to be processed."
-    },
     "folder": {
       "genthumb": "The folder thumbnail is regenerating",
       "new": "The folder is new and needs to be processed",
@@ -553,12 +539,6 @@
     "count_archive_public_record_video": "",
     "count_archive_event_one_day": "",
     "count_archive_event_range": "",
-    "count_archive_directive_pending_public": "",
-    "count_archive_directive_pending_private": "",
-    "count_archive_directive_pending_delete": "",
-    "count_archive_directive_pending_share": "",
-    "count_archive_directive_pending_releasePrivate": "",
-    "count_archive_directive_pending_transfer": "",
     "count_archive_relation_have": "",
     "count_archive_relation_pending_in": "",
     "count_archive_relation_pending_out": "",
@@ -574,12 +554,6 @@
     "who_archive_activity_profile_view_last": "",
     "when_archive_first_event": "",
     "when_archive_last_event": "",
-    "when_archive_directive_pending_public_next": "",
-    "when_archive_directive_pending_private_next": "",
-    "when_archive_directive_pending_delete_next": "",
-    "when_archive_directive_pending_share_next": "",
-    "when_archive_directive_pending_releasePrivate_next": "",
-    "when_archive_directive_pending_transfer_next": "",
     "when_account_archive_last_access": ""
   },
   "type": {
@@ -683,13 +657,6 @@
     "daemon": {
       "facebook_retrieve_tagged": "Facebook retrieve tagged",
       "system_exception": "System Exception reporting"
-    },
-    "directive": {
-      "delete": "Delete this item",
-      "move": "Move this item",
-      "public": "Make this item public",
-      "share": "Share this item",
-      "transfer": "Transfer ownership of this item"
     },
     "email": {
       "home": "Home email address",
