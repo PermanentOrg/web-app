@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable } from '@angular/core';
 import debug from 'debug';
 
@@ -9,11 +10,13 @@ let secrets = {};
 try {
   secrets = require('@root/secrets').SECRETS;
 } catch (err) {
-  throw new Error('Unable to read secrets.ts - make sure to run `node secrets.js` before building!');
+  throw new Error(
+    'Unable to read secrets.ts - make sure to run `node secrets.js` before building!'
+  );
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SecretsService {
   private debug = debug('service:secretsService');
@@ -27,7 +30,10 @@ export class SecretsService {
       }
     }
 
-    this.debug('Loaded %d secrets from secrets.ts', Object.keys(secrets).length);
+    this.debug(
+      'Loaded %d secrets from secrets.ts',
+      Object.keys(secrets).length
+    );
 
     if (missingSecrets.length) {
       throw new Error('SecretsService: Missing required secrets.');
@@ -40,9 +46,15 @@ export class SecretsService {
 
   static getStatic(key: string) {
     if (secrets[key] === undefined) {
-      throw new Error(`Secret ${key} not found. Check your .env file and restart`);
+      throw new Error(
+        `Secret ${key} not found. Check your .env file and restart`
+      );
     }
 
     return secrets[key];
+  }
+
+  public static hasStatic(key: string): boolean {
+    return secrets[key] !== undefined;
   }
 }
