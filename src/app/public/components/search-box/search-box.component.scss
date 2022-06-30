@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 $min-input-width: 18rem;
@@ -35,10 +36,6 @@ form {
   }
 }
 
-.cancel-button {
-  // font-size: 16px;
-}
-
 .search-box-shadow {
   display: none;
 }
@@ -51,6 +48,22 @@ form {
     position: absolute;
     top: 9px;
     right: 0;
+  }
+  &.gallery {
+    min-width: auto;
+    form {
+      max-width: 100%;
+    }
+    input {
+      &::placeholder {
+        color: $PR-blue;
+      }
+      width: 100%;
+      outline: none;
+      color: $PR-blue;
+      box-shadow: none;
+      border-color: $PR-blue;
+    }
   }
 }
 
@@ -72,7 +85,7 @@ form {
   max-height: 400px;
   overflow: hidden;
   overflow-y: auto;
-  
+
   p {
     margin-bottom: 0;
   }
@@ -82,7 +95,8 @@ form {
     margin-right: -10px;
     padding: 5px 10px;
 
-    &.active, &:hover {
+    &.active,
+    &:hover {
       background: darken($PR-orange, 7%);
     }
   }
@@ -96,15 +110,11 @@ form {
     font-size: 0.7em;
     text-transform: uppercase;
     color: $PR-blue;
-    // color: $PR-orange;
-    // background: $PR-purple;
     letter-spacing: 0.1em;
     padding: 5px 10px;
     margin: 0px -10px 5px;
   }
 }
-
-
 
 .search-box-button {
   display: none;
@@ -125,11 +135,11 @@ form {
 }
 
 @media screen and (max-width: 767px) {
-  .search-box-button {
+  .search-box-button:not(.gallery) {
     display: flex;
   }
 
-  .search-box-input {
+  .search-box-input:not(.gallery) {
     display: none;
   }
 }
@@ -155,7 +165,6 @@ form {
     right: auto;
   }
 
-
   .search-box-input {
     display: block;
     flex: 1 1 auto;
@@ -166,7 +175,7 @@ form {
     display: flex;
   }
 
-  .search-box-button, 
+  .search-box-button,
   .search-box-input {
     animation-name: fadein;
     animation-duration: 0.35s;
@@ -191,6 +200,6 @@ form {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
   }
 }

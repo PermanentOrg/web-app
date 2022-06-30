@@ -4,7 +4,7 @@ import { PublicRoutingModule } from './public.routes';
 import { RouterModule } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { } from '@core/services/folder-picker/folder-picker.service';
+import {} from '@core/services/folder-picker/folder-picker.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
@@ -26,6 +26,7 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     SearchBoxComponent,
     PublicProfileComponent,
   ],
+  exports: [SearchBoxComponent],
   imports: [
     AnnouncementModule,
     CommonModule,
@@ -36,16 +37,10 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     DialogModule,
     CoreModule,
   ],
-  providers: [
-    DataService,
-    FolderViewService,
-    PublicProfileService
-  ]
+  providers: [DataService, FolderViewService, PublicProfileService],
 })
 export class PublicModule {
-  constructor(
-    folderView: FolderViewService,
-    ) {
+  constructor(folderView: FolderViewService) {
     folderView.setFolderView(FolderView.Grid, true);
   }
 }
