@@ -1,0 +1,189 @@
+/* @format */
+@import 'variables';
+
+.public-gallery {
+  overflow-x: hidden;
+  padding: 0 2em;
+  color: #131b4a;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  padding: 25px 83px 23px 24px;
+  border-radius: 5px;
+  border: solid 2px #131b4a;
+  padding-right: 24px;
+
+  @include desktop {
+    padding-right: 83px;
+  }
+
+  pr-search-box {
+    margin-left: 14px;
+    display: block;
+    width: 100%;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  position: relative;
+  padding-bottom: 2em;
+
+  .searchBox {
+    display: none;
+    flex: 0 1 50%;
+
+    @include desktop {
+      display: flex;
+    }
+  }
+
+  a.btn {
+    font-size: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    flex: 0 0 auto;
+  }
+
+  .archives-image {
+    display: block;
+
+    @include desktop {
+      display: none;
+    }
+  }
+
+  @include desktop {
+    flex-direction: row;
+  }
+}
+
+.description-search {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .archives-image {
+    display: none;
+    flex-grow: 0;
+    margin: 0 auto;
+    width: 350px;
+    height: 350px;
+
+    @include desktop {
+      display: flex;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .description {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @include desktop {
+      max-width: 50%;
+    }
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 800;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.13;
+    letter-spacing: normal;
+  }
+
+  p {
+    margin-top: 5px;
+    font-size: 28px;
+    line-height: 1.29;
+  }
+
+  .searchBox {
+    @include desktop {
+      display: none;
+    }
+  }
+
+  @include desktop {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.create-an-archive {
+  display: block;
+  width: 100%;
+  text-align: center;
+
+  @include desktop {
+    width: 45%;
+    display: inline-block;
+  }
+}
+
+.featured-archives {
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .featured-archives-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+
+    @include desktop {
+      justify-content: space-between;
+    }
+
+    pr-featured-archive {
+      flex: 0 1 100%;
+
+      @include desktop {
+        flex: 0 1 30%;
+      }
+    }
+  }
+
+  @include desktop {
+    margin-top: 70px;
+  }
+}
+
+.null-message,
+.dev-message {
+  & > p {
+    max-width: 100%;
+  }
+}
+
+.null-message {
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.dev-message {
+  font-size: 1rem;
+  border: 1px dashed #000;
+  border-radius: 1em;
+  padding: 1em;
+  margin: 0 auto;
+}
