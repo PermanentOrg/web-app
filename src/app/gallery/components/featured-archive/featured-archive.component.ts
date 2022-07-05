@@ -35,12 +35,12 @@ export class FeaturedArchiveComponent implements OnInit {
 
   public getClasses(): string[] {
     const classes = ['featured-archive'];
-    if (this.archive.type === 'type.archive.organization') {
-      classes.push('organization');
+    if (this.archive.type === 'type.archive.person') {
+      classes.push('personal');
     } else if (this.archive.type === 'type.archive.family') {
       classes.push('group');
     } else {
-      classes.push('personal');
+      classes.push('organization');
     }
     return classes;
   }
