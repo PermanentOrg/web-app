@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+/* @format */
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Inject,
+} from '@angular/core';
 import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
@@ -17,7 +24,7 @@ import { PublishIaData } from '@models/publish-ia-vo';
 @Component({
   selector: 'pr-publish',
   templateUrl: './publish.component.html',
-  styleUrls: ['./publish.component.scss']
+  styleUrls: ['./publish.component.scss'],
 })
 export class PublishComponent implements OnInit {
   public sourceItem: RecordVO | FolderVO = null;
@@ -49,13 +56,12 @@ export class PublishComponent implements OnInit {
 
     if (this.sourceItem.folder_linkType.includes('public')) {
       this.publicItem = this.sourceItem;
-      this.publicLink =  this.linkPipe.transform(this.publicItem);
+      this.publicLink = this.linkPipe.transform(this.publicItem);
       this.checkInternetArchiveLink();
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async publishItem() {
     if (this.sourceItem.type.includes('public')) {
@@ -66,19 +72,29 @@ export class PublishComponent implements OnInit {
 
     this.waiting = true;
     try {
-      const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
+      const publicRoot = find(
+        this.accountService.getRootFolder().ChildItemVOs,
+        { type: 'type.folder.root.public' }
+      ) as FolderVO;
       if (this.sourceItem instanceof FolderVO) {
-        const response = await this.api.folder.copy([this.sourceItem], publicRoot);
+        const response = await this.api.folder.copy(
+          [this.sourceItem],
+          publicRoot
+        );
         let tries = 0;
         while (!this.publicItem && tries++ < 10) {
-          const publicRootResponse = await this.api.folder.navigateLean(publicRoot).toPromise() as FolderResponse;
+          const publicRootResponse = (await this.api.folder
+            .navigateLean(publicRoot)
+            .toPromise()) as FolderResponse;
           const publicRootFull = publicRootResponse.getFolderVO(true);
-          const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(i => i instanceof FolderVO) as FolderVO[];
-          const latest = maxBy(publicFolders, folder => folder.updatedDT);
+          const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(
+            (i) => i instanceof FolderVO
+          ) as FolderVO[];
+          const latest = maxBy(publicFolders, (folder) => folder.updatedDT);
           if (latest && latest.displayName === this.sourceItem.displayName) {
             this.publicItem = latest;
           } else {
-            await new Promise(r => setTimeout(() => r(), 1000));
+            await new Promise<void>((r) => setTimeout(() => r(), 1000));
           }
         }
 
@@ -86,7 +102,10 @@ export class PublishComponent implements OnInit {
           this.publicItem = this.sourceItem;
         }
       } else {
-        const response = await this.api.record.copy([this.sourceItem], publicRoot);
+        const response = await this.api.record.copy(
+          [this.sourceItem],
+          publicRoot
+        );
         this.publicItem = response.getRecordVO();
       }
       this.publicLink = this.linkPipe.transform(this.publicItem);
@@ -124,16 +143,22 @@ export class PublishComponent implements OnInit {
 
   onViewOnWebClick() {
     this.close();
-    this.router.navigate(this.routePipe.transform(this.publicItem || this.sourceItem));
+    this.router.navigate(
+      this.routePipe.transform(this.publicItem || this.sourceItem)
+    );
   }
 
   async checkInternetArchiveLink() {
     this.waiting = true;
     try {
-      const response = await this.api.publish.getInternetArchiveLink({ folder_linkId: this.publicItem.folder_linkId });
+      const response = await this.api.publish.getInternetArchiveLink({
+        folder_linkId: this.publicItem.folder_linkId,
+      });
       this.publishIa = response.getPublishIaVO();
     } catch (err) {
-      this.messageService.showError('There was a problem loading the Internet Archive publish status of this item.');
+      this.messageService.showError(
+        'There was a problem loading the Internet Archive publish status of this item.'
+      );
     }
 
     this.waiting = false;
@@ -144,14 +169,16 @@ export class PublishComponent implements OnInit {
     try {
       const archive = this.account.getArchive();
       const account = this.account.getAccount();
-      const response = await this.api.publish.publishToInternetArchive({ 
+      const response = await this.api.publish.publishToInternetArchive({
         accountId: account.accountId,
         archiveId: archive.archiveId,
-        folder_linkId: this.publicItem.folder_linkId
+        folder_linkId: this.publicItem.folder_linkId,
       });
       this.publishIa = response.getPublishIaVO();
     } catch (err) {
-      this.messageService.showError('There was a problem publishing this item to the Internet Archive. Please try again later.');
+      this.messageService.showError(
+        'There was a problem publishing this item to the Internet Archive. Please try again later.'
+      );
     }
 
     this.waiting = false;

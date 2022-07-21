@@ -1,4 +1,4 @@
-import { version as release } from '../../package.json';
+import PackageJson from '../../package.json';
 
 export const environment = {
   production: true,
@@ -8,9 +8,9 @@ export const environment = {
     authDomain: 'prpledgeprod.firebaseapp.com',
     databaseURL: 'https://prpledgeprod.firebaseio.com',
     functionsURL: 'https://us-central1-prpledgeprod.cloudfunctions.net',
-    projectId: 'prpledgeprod'
+    projectId: 'prpledgeprod',
   },
   debug: false,
-  release,
-  environment: 'prod'
+  release: PackageJson.version,
+  environment: 'prod',
 };

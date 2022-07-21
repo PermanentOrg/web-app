@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,7 +27,17 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
-import { NgbDatepickerModule, NgbDatepickerConfig, NgbTimepickerModule, NgbTimepickerConfig, NgbTooltipModule, NgbTooltipConfig, NgbDropdownModule, NgbDropdownConfig, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDatepickerModule,
+  NgbDatepickerConfig,
+  NgbTimepickerModule,
+  NgbTimepickerConfig,
+  NgbTooltipModule,
+  NgbTooltipConfig,
+  NgbDropdownModule,
+  NgbDropdownConfig,
+  NgbPaginationModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
@@ -50,7 +61,10 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 import { NewArchiveFormComponent } from './components/new-archive-form/new-archive-form.component';
 
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
@@ -65,7 +79,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     NgbTooltipModule,
     NgbDropdownModule,
     NgbPaginationModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   exports: [
     CommonModule,
@@ -116,7 +130,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ItemTypeIconPipe,
     SafeHtmlPipe,
     ArchiveSearchBoxComponent,
-    NewArchiveFormComponent
+    NewArchiveFormComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -162,29 +176,24 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ItemTypeIconPipe,
     SafeHtmlPipe,
     ArchiveSearchBoxComponent,
-    NewArchiveFormComponent
+    NewArchiveFormComponent,
   ],
-  providers: [
-    PublicLinkPipe,
-    PublicRoutePipe,
-    PrLocationPipe,
-    DatePipe
-  ]
+  providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
 export class SharedModule {
   private dialogComponents: DialogChildComponentData[] = [
     {
       token: 'ArchivePickerComponent',
-      component: ArchivePickerComponent
+      component: ArchivePickerComponent,
     },
     {
       token: 'ArchiveSwitcherDialogComponent',
-      component: ArchiveSwitcherDialogComponent
+      component: ArchiveSwitcherDialogComponent,
     },
     {
       token: 'TimelineCompleteDialogComponent',
-      component: TimelineCompleteDialogComponent
-    }
+      component: TimelineCompleteDialogComponent,
+    },
   ];
 
   constructor(
@@ -194,16 +203,16 @@ export class SharedModule {
     private timePickerConfig: NgbTimepickerConfig,
     private tooltipConfig: NgbTooltipConfig,
     private dropdownConfig: NgbDropdownConfig,
-    private library: FaIconLibrary,
+    private library: FaIconLibrary
   ) {
     library.addIcons(faFileArchive);
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
-    this.datePickerConfig.showWeekdays = false;
+    this.datePickerConfig.weekdays = false;
     this.datePickerConfig.minDate = {
       year: 1,
       day: 1,
-      month: 1
+      month: 1,
     };
 
     this.timePickerConfig.spinners = false;
