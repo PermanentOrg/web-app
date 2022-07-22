@@ -1,8 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TimezoneVOData } from '@models';
 import { DatePipe } from '@angular/common';
-import { moment } from '@permanent.org/vis-timeline';
-import { checkOffsetFormat, getOffsetMomentFromDTString } from '@shared/utilities/dateTime';
+import { moment } from '@permanentorg/vis-timeline';
+import {
+  checkOffsetFormat,
+  getOffsetMomentFromDTString,
+} from '@shared/utilities/dateTime';
 
 export const MOMENT_DATE_FORMAT = {
   full: 'YYYY-MM-DD hh:mm A',

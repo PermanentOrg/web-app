@@ -1,6 +1,6 @@
 import { RecordVOData } from '@models/record-vo';
 import { FolderVOData } from '@models/folder-vo';
-import { moment } from '@permanent.org/vis-timeline';
+import { moment } from '@permanentorg/vis-timeline';
 import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export class BaseVO {

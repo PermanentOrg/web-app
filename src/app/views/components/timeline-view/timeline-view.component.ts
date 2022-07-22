@@ -1,6 +1,22 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy, HostListener, Inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+  HostListener,
+  Inject,
+} from '@angular/core';
 
-import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem, moment } from '@permanent.org/vis-timeline';
+import {
+  Timeline,
+  DataSet,
+  TimelineOptions,
+  TimelineEventPropertiesResult,
+  DataItem,
+  moment,
+} from '@permanentorg/vis-timeline';
 // import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO, ItemVO, TimezoneVO, TimezoneVOData } from '@models';
