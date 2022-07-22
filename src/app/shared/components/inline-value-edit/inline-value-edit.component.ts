@@ -1,7 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges, HostBinding } from '@angular/core';
 import { ngIfScaleAnimation, collapseAnimation } from '@shared/animations';
-import { NgbDate, NgbTimeStruct, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { moment } from '@permanent.org/vis-timeline';
+import {
+  NgbDate,
+  NgbTimeStruct,
+  NgbDatepicker,
+  NgbDateStruct,
+} from '@ng-bootstrap/ng-bootstrap';
+import { moment } from '@permanentorg/vis-timeline';
 import { ItemVO } from '@models';
 import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
 import { ENTER } from '@angular/cdk/keycodes';
