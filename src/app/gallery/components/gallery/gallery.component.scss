@@ -1,10 +1,18 @@
 /* @format */
 @import 'variables';
 
+@mixin wide-desktop {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
 .public-gallery {
   overflow-x: hidden;
   padding: 0 2em;
   color: #131b4a;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .searchBox {
@@ -24,6 +32,17 @@
     display: block;
     width: 100%;
   }
+}
+
+.archives-image {
+  background-size: cover;
+  box-shadow: inset 0 0 1.5em 2em #fff;
+}
+
+a.btn {
+  font-weight: normal !important;
+  min-width: auto;
+  width: auto;
 }
 
 .actions {
@@ -53,6 +72,7 @@
   }
 
   .archives-image {
+    height: 350px;
     display: block;
 
     @include desktop {
@@ -72,13 +92,10 @@
 
   .archives-image {
     display: none;
-    flex-grow: 0;
+    flex-grow: 1;
     margin: 0 auto;
-    width: 350px;
-    height: 350px;
 
     @include desktop {
-      display: flex;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -93,6 +110,12 @@
 
     @include desktop {
       max-width: 50%;
+
+      @include wide-desktop {
+        .wide-desktop-spacer-top {
+          height: calc((100vw - 1080px) / 15);
+        }
+      }
     }
   }
 
@@ -120,6 +143,7 @@
   @include desktop {
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 1em;
   }
 }
 
@@ -151,7 +175,7 @@
     align-items: stretch;
 
     @include desktop {
-      justify-content: space-between;
+      justify-content: flex-start;
     }
 
     pr-featured-archive {
@@ -159,12 +183,18 @@
 
       @include desktop {
         flex: 0 1 30%;
+        margin: 0 1.666%;
+      }
+
+      @include wide-desktop {
+        flex: 0 1 22%;
+        margin: 0 1.5%;
       }
     }
   }
 
   @include desktop {
-    margin-top: 70px;
+    margin-top: 50px;
   }
 }
 

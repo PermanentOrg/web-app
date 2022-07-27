@@ -43,6 +43,7 @@ nav {
     margin-left: $grid-unit / 2;
     margin-right: $grid-unit / 2;
     transition: background-color 0.3s, color 0.3s;
+    white-space: nowrap;
 
     @include desktop {
       line-height: 2;

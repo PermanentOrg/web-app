@@ -3,11 +3,13 @@
 <div class="public-gallery">
   <div class="description-search">
     <div class="description">
+      <div class="wide-desktop-spacer-top"></div>
       <h1>Welcome to the Permanent Public Gallery</h1>
       <p>
         Create your own public archive in minutes or explore archives created by
         our members.
       </p>
+      <div class="wide-desktop-spacer-top"></div>
     </div>
     <ng-container *ngTemplateOutlet="archivesImg"></ng-container>
     <ng-container *ngTemplateOutlet="searchBox"></ng-container>
@@ -15,7 +17,12 @@
   <div class="actions">
     <ng-container *ngTemplateOutlet="archivesImg"></ng-container>
     <ng-container *ngTemplateOutlet="searchBox"></ng-container>
-    <a [routerLink]="['/app']" class="btn btn-primary">Create An Archive</a>
+    <a
+      href="https://permanent.zohodesk.com/portal/en/kb/articles/public-archives"
+      target="_blank"
+      class="btn btn-primary"
+      >Create An Archive</a
+    >
   </div>
   <div class="featured-archives">
     <h2>Featured Archives</h2>
@@ -43,10 +50,9 @@
   </div>
 </ng-template>
 <ng-template #archivesImg>
-  <div class="archives-image">
-    <img
-      src="assets/img/gallery/Create-Your-Archive-Collage.jpg"
-      style="max-width: 100%"
-    />
-  </div>
+  <div
+    class="archives-image"
+    prBgImage
+    bgSrc="assets/img/gallery/Create-Your-Archive-Collage.jpg"
+  ></div>
 </ng-template>
