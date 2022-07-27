@@ -7,7 +7,7 @@
     <span class="archive-type">{{ getArchiveType() }} Archive</span>
     <span class="archive-name">{{ archive.name }}</span>
     <span class="archive-description">{{ archive.description }}</span>
-    <a [routerLink]="['/p', 'archive', archive.archiveNbr]" class="archive-link"
+    <a [href]="getArchiveLink()" class="archive-link"
       >Explore the archive &emsp;
       <fa-icon [icon]="['fas', 'arrow-right']"></fa-icon
     ></a>

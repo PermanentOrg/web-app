@@ -56,4 +56,8 @@ export class FeaturedArchiveComponent implements OnInit {
         return 'Organizational';
     }
   }
+
+  public getArchiveLink(): string {
+    return ['/p', 'archive', this.archive.archiveNbr].join('/');
+  }
 }
