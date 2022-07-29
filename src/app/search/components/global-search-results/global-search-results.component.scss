@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import 'variables';
 
 :host {
@@ -184,13 +186,13 @@ $result-gutter: 1rem;
   padding-top: 0.5rem;
   margin-left: -10px;
   margin-right: -10px;
-  padding: 0 $gutter / 2;
+  padding: 0 $gutter * 0.5;
 
   .item-result-wrapper {
     flex: 0 0 auto;
     width: 50%;
     margin: 0;
-    padding: $gutter / 2;
+    padding: $gutter * 0.5;
   }
 
   .item-result {
@@ -219,7 +221,7 @@ $result-gutter: 1rem;
   @for $i from 2 through 6 {
     @media screen and (min-width: ($i * $max-grid-width) + 1) and (max-width: $tablet-horizontal){
       .item-result-wrapper {
-        width: 100% / $i;
+        width: math.div(100%, $i);
       }
     }
   }
@@ -227,7 +229,7 @@ $result-gutter: 1rem;
   @for $i from 3 through 10 {
     @media screen and (min-width: ($i * $result-width-desktop) + $left-menu-width + 1){
       .item-result-wrapper {
-        width: 100% / $i;
+        width: math.div(100%, $i);
       }
     }
   }

@@ -56,10 +56,10 @@ $sidebar-thumb-height: 200px;
 }
 
 .sidebar-item {
-  padding: $grid-unit / 2 $grid-unit;
+  padding: $grid-unit * 0.5 $grid-unit;
   label {
     font-weight: 600;
-    margin-bottom: $grid-unit / 2;
+    margin-bottom: $grid-unit * 0.5;
   }
 
   .sidebar-item-content {

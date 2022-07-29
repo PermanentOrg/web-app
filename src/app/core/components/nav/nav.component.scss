@@ -140,11 +140,11 @@ nav.nav-desktop {
       &:after {
         position: absolute;
         top: 0;
-        right: -$grid-unit / 4;
+        right: -$grid-unit * 0.25;
         display: block;
         content: '';
-        height: $grid-unit / 2;
-        width: $grid-unit / 2;
+        height: $grid-unit * 0.5;
+        width: $grid-unit * 0.5;
         background: $red;
         border-radius: 50%;
 

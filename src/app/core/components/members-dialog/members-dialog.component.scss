@@ -58,6 +58,6 @@
   align-items: center;
   button {
     @include gridHeightButtonSmall;
-    margin-left: $grid-unit / 2;
+    margin-left: $grid-unit * 0.5;
   }
 }

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import 'variables';
 
 $row-height: $file-list-row-height;
@@ -18,19 +20,19 @@ $bg-transition-length: 0.075s;
     padding-bottom: 5px;
     @for $i from 3 through 10 {
       @media screen and (min-width: $i * $max-grid-width + 1){
-        width: 100% / $i;
+        width: math.div(100%, $i);
       }
     }
   }
 }
 
 :host.grid-view {
-  padding: 0 $file-list-grid-gutter / 2;
+  padding: 0 $file-list-grid-gutter * 0.5;
   margin-bottom: $file-list-grid-gutter;
 
   @include beforeDesktop {
-    padding: 0 $file-list-grid-gutter / 4;
-    margin-bottom: $file-list-grid-gutter / 2;
+    padding: 0 $file-list-grid-gutter * 0.25;
+    margin-bottom: $file-list-grid-gutter * 0.5;
   }
 
   .share-preview-content & {
@@ -43,7 +45,7 @@ $bg-transition-length: 0.075s;
     width: 50%;
     @for $i from 2 through 10 {
       @media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1){
-        width: 100% / $i;
+        width: math.div(100%, $i);
       }
     }
   }
@@ -51,7 +53,7 @@ $bg-transition-length: 0.075s;
   .public-content & {
     @for $i from 2 through 10 {
       @media screen and (min-width: ($i * $max-grid-width-public) + $profile-sidebar-width + 1){
-        width: 100% / $i;
+        width: math.div(100%, $i);
       }
     }
   }
@@ -129,8 +131,8 @@ $bg-transition-length: 0.075s;
 
   i, fa-icon {
     flex: 0 0 auto;
-    margin-left: $grid-unit / 2;
-    margin-right: $grid-unit / 2;
+    margin-left: $grid-unit * 0.5;
+    margin-right: $grid-unit * 0.5;
   }
 
   .second-row {
@@ -237,9 +239,9 @@ $bg-transition-length: 0.075s;
 }
 
 [prBgImage], .file-list-item-folder-icon {
-  height: $row-height - ($grid-unit / 2);
-  width: $row-height - ($grid-unit / 2);
-  flex: 0 0 $row-height - ($grid-unit / 2);
+  height: $row-height - ($grid-unit * 0.5);
+  width: $row-height - ($grid-unit * 0.5);
+  flex: 0 0 $row-height - ($grid-unit * 0.5);
   margin: pxToGrid(5px);
 
   .grid-view & {
@@ -249,7 +251,7 @@ $bg-transition-length: 0.075s;
     margin: 0px;
     box-shadow: inset 0px 0px 0px $grid-selected-border - 1px $gray-300;
     transition: box-shadow $bg-transition-length $tweaked-ease;
-    border-radius: $grid-unit / 2;
+    border-radius: $grid-unit * 0.5;
     overflow: hidden;
   }
 
@@ -292,7 +294,7 @@ $bg-transition-length: 0.075s;
 
 .grid-view .grid-item-type-icon {
   $diameter: $grid-unit * 2;
-  $margin: $grid-unit / 2;
+  $margin: $grid-unit * 0.5;
   position: absolute;
   bottom: $grid-info-section-height + $margin;
   right: $margin;

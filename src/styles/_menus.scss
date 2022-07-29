@@ -60,8 +60,8 @@ pr-dialog {
       overflow-y: auto;
 
       .page-subheading {
-        margin-right: $grid-unit / 2;
-        margin-left: $grid-unit / 2;
+        margin-right: $grid-unit * 0.5;
+        margin-left: $grid-unit * 0.5;
       }
     }
 

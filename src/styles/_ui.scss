@@ -1,3 +1,5 @@
+@use "sass:math";
+
 button.btn, a.btn {
   display: block;
   margin: 10px auto;
@@ -173,7 +175,7 @@ a {
   $size: 34px;
   background: rgba(white, 0.2);
   height: $size;
-  border-radius: $size / 2;
+  border-radius: $size * 0.5;
   color: $PR-orange;
   font-weight: 700;
   text-transform: uppercase;
@@ -296,7 +298,7 @@ $drag-outline-border: 5px;
     justify-content: center;
 
     min-width: 15rem;
-    max-width: $file-list-width-desktop / 3;
+    max-width: calc($file-list-width-desktop / 3);
     // transform-origin: 50% 50%;
 
     .drag-service-cursor-item, .drag-service-cursor-action {

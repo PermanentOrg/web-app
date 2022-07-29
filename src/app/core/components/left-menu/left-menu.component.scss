@@ -9,7 +9,7 @@ $active-color: $PR-orange;
 $active-indicator-color: lighten($active-color, 7%);
 
 $archive-options-shadow-color: rgba($black, .1);
-$archive-options-shadow-spread: $grid-unit / 4;
+$archive-options-shadow-spread: $grid-unit * 0.25;
 $archive-options-shadow-offset: 0.5rem;
 
 :host {
@@ -100,7 +100,7 @@ $archive-options-shadow-offset: 0.5rem;
     font-weight: 700;
     text-decoration: none;
 
-    transition: background-color $transition-length / 4 ease-in;
+    transition: background-color $transition-length * 0.25 ease-in;
 
     a {
       color: white;
@@ -242,7 +242,7 @@ $archive-options-shadow-offset: 0.5rem;
       .archive-name {
         padding: 0 !important;
         font-weight: bold;
-        padding: $grid-unit / 2;
+        padding: $grid-unit * 0.5;
       }
 
       .archive-access {
@@ -280,7 +280,7 @@ $archive-options-shadow-offset: 0.5rem;
         justify-content: center;
         cursor: pointer;
         background-color: $PR-blue;
-        transition: background-color $transition-length / 4 ease-in;
+        transition: background-color $transition-length * 0.25 ease-in;
 
         &:hover {
           background-color: $hover-color;
@@ -294,7 +294,7 @@ $archive-options-shadow-offset: 0.5rem;
       flex: 0 0 auto;
       background-color: $PR-blue;
       hr {
-        margin: $grid-unit / 2;
+        margin: $grid-unit * 0.5;
         border-color: white;
       }
       overflow-y: hidden;
@@ -302,7 +302,7 @@ $archive-options-shadow-offset: 0.5rem;
 
     .archive-options-option {
       height: 2 * $grid-unit;
-      padding: 0 $grid-unit / 2;
+      padding: 0 $grid-unit * 0.5;
       padding-left: $grid-unit * 1.5;
       display: flex;
       align-items: center;

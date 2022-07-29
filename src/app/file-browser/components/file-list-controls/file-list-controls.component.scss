@@ -16,7 +16,7 @@
   flex: 1 1 100%;
   display: flex;
   align-items: center;
-  height: $file-list-controls-height / 2;
+  height: $file-list-controls-height * 0.5;
 
   > * {
     font-weight: 600;
@@ -34,7 +34,7 @@
     .col-title::after {
       @include material-icon;
       content: 'expand_more';
-      margin-left: $grid-unit / 2;
+      margin-left: $grid-unit * 0.5;
       font-size: $font-size-lg;
       display: inline-flex;
       align-items: center;
@@ -61,7 +61,7 @@
     opacity: 0.5;
     cursor: pointer;
     font-size: 0.85em;
-    padding-left: $grid-unit / 2;
+    padding-left: $grid-unit * 0.5;
 
     &:hover {
       opacity: 0.8;
@@ -159,7 +159,7 @@
 
 .top-row {
   display: flex;
-  height: $file-list-controls-height / 2;
+  height: $file-list-controls-height * 0.5;
   align-items: center;
 
 }
@@ -203,7 +203,7 @@ pr-folder-view-toggle {
     @include until(1100px) {
       font-size: $font-size-sm;
       &:not(:last-child) {
-        margin-right: $grid-unit / 4;
+        margin-right: $grid-unit * 0.25;
       }
 
       i {
@@ -214,7 +214,7 @@ pr-folder-view-toggle {
 
     @include until (1200px) {
       &:not(:last-child) {
-        margin-right: $grid-unit / 2;
+        margin-right: $grid-unit * 0.5;
       }
     }
 
