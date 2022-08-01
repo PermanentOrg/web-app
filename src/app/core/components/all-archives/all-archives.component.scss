@@ -6,7 +6,7 @@
   @include hasFloatSidebar;
 
   @include beforeDesktop {
-    padding: 0 $grid-unit / 2;
+    padding: 0 $grid-unit * 0.5;
   } 
 }
 .sidebar {

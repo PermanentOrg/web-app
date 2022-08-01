@@ -26,7 +26,7 @@ button {
   text-overflow: ellipsis;
   
   > span {
-    margin-right: $grid-unit / 4;
+    margin-right: $grid-unit * 0.25;
   }
 
   i {
@@ -43,7 +43,7 @@ i.badge {
   color: $warning;
   font-size: $mat-icon-sm;
 
-  top: -$grid-unit / 4;
+  top: -$grid-unit * 0.25;
   right: 0;
   z-index: 3;
 
@@ -77,7 +77,7 @@ i.badge {
 
     i {
       font-size: $mat-icon-sm;
-      margin-right: $grid-unit / 2;
+      margin-right: $grid-unit * 0.5;
       animation:  fadeIn 125ms $tweaked-ease, pulse 2s $tweaked-ease infinite;
     }
   }

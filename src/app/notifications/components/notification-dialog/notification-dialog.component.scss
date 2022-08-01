@@ -25,7 +25,7 @@
 .footer {
   display: flex;
   justify-content: center;
-  padding: $grid-unit / 2;
+  padding: $grid-unit * 0.5;
   border-top: $file-list-border;
   .btn {
     @include gridHeightButtonSmall;

@@ -29,17 +29,17 @@ pr-file-list, pr-shares {
     &.grid-view {
       .file-list-scroll {
         padding-top: $file-list-grid-gutter;
-        margin: 0 (-$file-list-grid-gutter / 2);
-        margin-right: -($file-list-grid-gutter / 2) ;
+        margin: 0 (-$file-list-grid-gutter * 0.5);
+        margin-right: -($file-list-grid-gutter * 0.5) ;
   
         @include beforeDesktop {
-          margin: 0 (-$file-list-grid-gutter / 2);
+          margin: 0 (-$file-list-grid-gutter * 0.5);
         }
       }
 
       &.show-sidebar .file-list-scroll {
         margin-right: -$grid-unit;
-        padding-right: $grid-unit - ($file-list-grid-gutter/2);
+        padding-right: $grid-unit - ($file-list-grid-gutter*0.5);
       }
   
       .file-list-scroll:after {

@@ -54,7 +54,7 @@ $header-height: 3 * $grid-unit;
     position: relative;
     display: flex;
     align-items: center;
-    padding-left: $grid-unit / 2;
+    padding-left: $grid-unit * 0.5;
     cursor: pointer;
     user-select: none;
     font-size: $font-size-sm;
@@ -68,7 +68,7 @@ $header-height: 3 * $grid-unit;
       background-color: $gray-500;
       position: absolute;
       left: 0;
-      width: $grid-unit / 5;
+      width: $grid-unit * 0.2;
       top: 0;
       bottom: 0;
       opacity: 0;
@@ -94,14 +94,14 @@ $header-height: 3 * $grid-unit;
 
     i {
       font-size: $mat-icon-sm;
-      margin-left: $grid-unit / 2;
+      margin-left: $grid-unit * 0.5;
     }
   }
 }
 
 @mixin tabbedDialogPanel {
   flex: 1 1 auto;
-  padding: 0 $grid-unit / 2;
+  padding: 0 $grid-unit * 0.5;
   @include desktop {
     padding: $grid-unit;
     overflow-y: auto;
@@ -167,7 +167,7 @@ $header-height: 3 * $grid-unit;
       display: block;
 
       label {
-        margin-bottom: $grid-unit / 4;
+        margin-bottom: $grid-unit * 0.25;
       }
     }
   }
@@ -185,13 +185,13 @@ $header-height: 3 * $grid-unit;
       }
 
       &:not(:last-child) {
-        margin-right: $grid-unit / 2;
+        margin-right: $grid-unit * 0.5;
       }
     }
   }
 
   .form-control {
-    padding: $grid-unit / 2 $grid-unit / 5;
+    padding: $grid-unit * 0.5 $grid-unit * 0.2;
     height: auto;
   }
 
@@ -200,7 +200,7 @@ $header-height: 3 * $grid-unit;
   }
 
   .form-check:not(:last-child) {
-    margin-right: $grid-unit / 2;
+    margin-right: $grid-unit * 0.5;
   }
 
   button {

@@ -42,7 +42,7 @@ $profile-max-width: 1200px;
   @include profileField;
 
   &:last-child {
-    margin-bottom: $grid-unit / 2;
+    margin-bottom: $grid-unit * 0.5;
   }
 }
 
@@ -60,5 +60,5 @@ $profile-max-width: 1200px;
 }
 
 .profile-field-description {
-  margin-top: $grid-unit / 2;
+  margin-top: $grid-unit * 0.5;
 }

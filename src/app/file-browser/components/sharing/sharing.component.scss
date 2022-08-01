@@ -18,9 +18,9 @@
   $preview-height: $file-list-row-height;
 
   [prBgImage] {
-    height: $preview-height - ($grid-unit / 2);
-    width: $preview-height - ($grid-unit / 2);
-    flex: 0 0 $preview-height - ($grid-unit / 2);
+    height: $preview-height - ($grid-unit * 0.5);
+    width: $preview-height - ($grid-unit * 0.5);
+    flex: 0 0 $preview-height - ($grid-unit * 0.5);
     margin-right: 5px;
   }
 

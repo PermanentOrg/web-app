@@ -3,7 +3,7 @@
 :host {
   display: block;
   width: 100%;
-  padding: 0 $grid-unit / 2;
+  padding: 0 $grid-unit * 0.5;
 }
 
 $photo-desktop: pxToGrid(300px);
@@ -19,7 +19,7 @@ $profile-max-width: 1200px;
   position: relative;
 
   @include beforeDesktop {
-    margin: 0 -$grid-unit / 2;
+    margin: 0 -$grid-unit * 0.5;
   }
 }
 
@@ -99,7 +99,7 @@ $profile-max-width: 1200px;
 
     label {
       margin: 0;
-      margin-right: $grid-unit / 2;
+      margin-right: $grid-unit * 0.5;
       font-weight: $font-weight-semibold;
       white-space: nowrap;
     }
@@ -112,7 +112,7 @@ $profile-max-width: 1200px;
     }
 
     > * {
-      margin-bottom: $grid-unit / 2;
+      margin-bottom: $grid-unit * 0.5;
     }
   }
 }
@@ -125,7 +125,7 @@ $profile-max-width: 1200px;
   }
 
   @include beforeDesktop {
-    margin-top: $grid-unit / 2;
+    margin-top: $grid-unit * 0.5;
   }
 }
 

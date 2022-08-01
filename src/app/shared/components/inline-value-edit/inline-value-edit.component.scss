@@ -1,7 +1,7 @@
 @import 'variables';
 
-$inline-padding-x: $grid-unit / 5;
-$inline-padding-y: $grid-unit / 2;
+$inline-padding-x: $grid-unit * 0.2;
+$inline-padding-y: $grid-unit * 0.5;
 
 :host {
   display: block;

@@ -2,7 +2,7 @@
 
 :host {
   display: block;
-  padding: $grid-unit / 2;
+  padding: $grid-unit * 0.5;
   font-size: $font-size-xs;
   line-height: 1;
 
@@ -13,5 +13,5 @@
 
 .btn {
   width: auto;
-  margin: $grid-unit / 2 0 0px;
+  margin: $grid-unit * 0.5 0 0px;
 }

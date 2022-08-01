@@ -62,7 +62,7 @@ $thumb-size: 50px;
   button {
     margin: 0;
     @include gridHeightButtonSmall;
-    margin-left: $grid-unit / 2;
+    margin-left: $grid-unit * 0.5;
   }
 }
 $desktop-height: pxToGrid(60px);
@@ -104,11 +104,11 @@ $desktop-height: pxToGrid(60px);
         padding: 0px;
         > a {
           display: flex;
-          padding: $grid-unit / 4 $grid-unit / 2;
+          padding: $grid-unit * 0.25 $grid-unit * 0.5;
           align-items: center;
 
           > i {
-            margin-right: $grid-unit / 2;
+            margin-right: $grid-unit * 0.5;
           }
 
           &:hover {

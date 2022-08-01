@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import 'variables';
 
 :host {
@@ -81,8 +83,8 @@
   }
 
   .select-active {
-    height: $multi-select-radius * (2/3);
-    width: $multi-select-radius * (2/3);
+    height: $multi-select-radius * math.div(2, 3);
+    width: $multi-select-radius * math.div(2, 3);
     border-radius: 50%;
     background: $PR-blue;
     opacity: 0;

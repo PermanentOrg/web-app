@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import 'variables';
 
 @keyframes fadein {
@@ -166,7 +168,7 @@ $result-padding-y: 0.25rem;
       font-weight: 600;
 
       i {
-        font-size: $mat-icon-sm * (2/3);
+        font-size: $mat-icon-sm * math.div(2, 3);
         margin-right: 0.25em;
         position: relative;
         top: 0.1em;

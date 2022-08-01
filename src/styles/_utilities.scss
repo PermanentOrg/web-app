@@ -129,7 +129,7 @@
   color: #F7C985;
 
   i {
-    font-size: $height - ($grid-unit / 4);
+    font-size: $height - ($grid-unit * 0.25);
   }
 }
 
