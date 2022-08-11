@@ -37,6 +37,7 @@ $organization: #800080;
   border-left-style: solid;
   border-left-width: 7px;
   width: 100%;
+  height: 100%;
   box-shadow: 0 0 20px 0 #c9c9c9;
 
   &.personal {
@@ -77,6 +78,8 @@ $organization: #800080;
   margin: 24px 21px;
   display: flex;
   flex-direction: column;
+  height: calc(100% - 173px);
+  // 173px comes from the sum of: 125px header with 48px of margin space
 
   .archive-type {
     text-transform: uppercase;
@@ -105,5 +108,6 @@ $organization: #800080;
     font-size: 16px;
     margin-bottom: 1.5rem;
     text-decoration: none;
+    margin-top: auto;
   }
 }

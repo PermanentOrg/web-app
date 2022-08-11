@@ -11,7 +11,7 @@
   overflow-x: hidden;
   padding: 0 2em;
   color: #131b4a;
-  max-width: 1300px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -34,15 +34,19 @@
   }
 }
 
-.archives-image {
-  background-size: cover;
-  box-shadow: inset 0 0 1.5em 2em #fff;
-}
-
 a.btn {
   font-weight: normal !important;
   min-width: auto;
   width: auto;
+}
+
+.page-top {
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    flex-direction: row;
+  }
 }
 
 .actions {
@@ -53,17 +57,21 @@ a.btn {
   position: relative;
   padding-bottom: 2em;
 
-  .searchBox {
-    display: none;
-    flex: 0 1 50%;
-
-    @include desktop {
-      display: flex;
-    }
+  .button-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 150%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   a.btn {
     font-size: 24px;
+    padding: 1em 50px;
+    line-height: 1;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -72,16 +80,16 @@ a.btn {
   }
 
   .archives-image {
-    height: 350px;
     display: block;
+    text-align: center;
 
-    @include desktop {
-      display: none;
+    img {
+      width: 80%;
     }
   }
 
   @include desktop {
-    flex-direction: row;
+    width: 50%;
   }
 }
 
@@ -90,32 +98,14 @@ a.btn {
   flex-direction: column;
   width: 100%;
 
-  .archives-image {
-    display: none;
-    flex-grow: 1;
-    margin: 0 auto;
-
-    @include desktop {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
   .description {
     flex-grow: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 
     @include desktop {
-      max-width: 50%;
-
-      @include wide-desktop {
-        .wide-desktop-spacer-top {
-          height: calc((100vw - 1080px) / 15);
-        }
-      }
+      max-width: 95%;
     }
   }
 
@@ -134,27 +124,10 @@ a.btn {
     line-height: 1.29;
   }
 
-  .searchBox {
-    @include desktop {
-      display: none;
-    }
-  }
-
   @include desktop {
-    flex-direction: row;
-    justify-content: space-between;
+    width: 50%;
+    justify-content: flex-start;
     margin-bottom: 1em;
-  }
-}
-
-.create-an-archive {
-  display: block;
-  width: 100%;
-  text-align: center;
-
-  @include desktop {
-    width: 45%;
-    display: inline-block;
   }
 }
 
@@ -180,21 +153,17 @@ a.btn {
 
     pr-featured-archive {
       flex: 0 1 100%;
+      padding-bottom: 50px;
 
       @include desktop {
         flex: 0 1 30%;
         margin: 0 1.666%;
       }
-
-      @include wide-desktop {
-        flex: 0 1 22%;
-        margin: 0 1.5%;
-      }
     }
   }
 
   @include desktop {
-    margin-top: 50px;
+    margin-top: 35px;
   }
 }
 
