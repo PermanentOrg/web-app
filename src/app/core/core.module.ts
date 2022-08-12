@@ -34,7 +34,6 @@ import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
-import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 import { PortalModule } from '@angular/cdk/portal';
@@ -91,7 +90,6 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     AccountSettingsComponent,
     BillingSettingsComponent,
     NotificationPreferencesComponent,
-    ArchiveSelectorComponent,
     ProfileEditComponent,
     SettingsDialogComponent,
     AllArchivesComponent,
