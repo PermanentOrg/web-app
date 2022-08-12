@@ -1,7 +1,0 @@
-<div class="shares-empty-message" *ngIf="!sharedByMe.length">
-  You haven't shared any content with anyone
-</div>
-<pr-file-list-item [item]="share" *ngFor="let share of sharedByMe"
-[isShareRoot]="true"
-[showAccess]="true"
-(itemClicked)="onItemClick($event)"></pr-file-list-item>

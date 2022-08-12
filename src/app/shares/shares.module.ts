@@ -7,8 +7,6 @@ import { AppsRoutingModule } from '@shares/shares.routes';
 import { SharesComponent } from '@shares/components/shares/shares.component';
 import { SharedModule } from '@shared/shared.module';
 import { ShareComponent } from './components/share/share.component';
-import { ShareByMeComponent } from './components/share-by-me/share-by-me.component';
-import { ShareWithMeComponent } from './components/share-with-me/share-with-me.component';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 
 @NgModule({
@@ -22,8 +20,6 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
   declarations: [
     SharesComponent,
     ShareComponent,
-    ShareByMeComponent,
-    ShareWithMeComponent
   ],
   providers: [
   ]
