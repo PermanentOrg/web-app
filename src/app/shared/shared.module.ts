@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
-import { TermsComponent } from '@shared/components/terms/terms.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
@@ -87,7 +86,6 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ReactiveFormsModule,
     FormInputComponent,
     LogoComponent,
-    TermsComponent,
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
@@ -136,7 +134,6 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ThumbnailComponent,
     FormInputComponent,
     LogoComponent,
-    TermsComponent,
     BgImageSrcDirective,
     PromptComponent,
     ArchiveSmallComponent,
