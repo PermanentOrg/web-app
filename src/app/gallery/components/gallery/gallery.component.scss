@@ -1,0 +1,188 @@
+/* @format */
+@import 'variables';
+
+@mixin wide-desktop {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
+.public-gallery {
+  overflow-x: hidden;
+  padding: 0 2em;
+  color: #131b4a;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  padding: 25px 83px 23px 24px;
+  border-radius: 5px;
+  border: solid 2px #131b4a;
+  padding-right: 24px;
+
+  @include desktop {
+    padding-right: 83px;
+  }
+
+  pr-search-box {
+    margin-left: 14px;
+    display: block;
+    width: 100%;
+  }
+}
+
+a.btn {
+  font-weight: normal !important;
+  min-width: auto;
+  width: auto;
+}
+
+.page-top {
+  display: flex;
+  flex-direction: column;
+
+  @include desktop {
+    flex-direction: row;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  position: relative;
+  padding-bottom: 2em;
+
+  .button-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 150%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  a.btn {
+    font-size: 24px;
+    padding: 1em 50px;
+    line-height: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    flex: 0 0 auto;
+  }
+
+  .archives-image {
+    display: block;
+    text-align: center;
+
+    img {
+      width: 80%;
+    }
+  }
+
+  @include desktop {
+    width: 50%;
+  }
+}
+
+.description-search {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .description {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    @include desktop {
+      max-width: 95%;
+    }
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 800;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.13;
+    letter-spacing: normal;
+  }
+
+  p {
+    margin-top: 5px;
+    font-size: 28px;
+    line-height: 1.29;
+  }
+
+  @include desktop {
+    width: 50%;
+    justify-content: flex-start;
+    margin-bottom: 1em;
+  }
+}
+
+.featured-archives {
+  h2 {
+    font-size: 36px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .featured-archives-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+
+    @include desktop {
+      justify-content: flex-start;
+    }
+
+    pr-featured-archive {
+      flex: 0 1 100%;
+      padding-bottom: 50px;
+
+      @include desktop {
+        flex: 0 1 30%;
+        margin: 0 1.666%;
+      }
+    }
+  }
+
+  @include desktop {
+    margin-top: 35px;
+  }
+}
+
+.null-message,
+.dev-message {
+  & > p {
+    max-width: 100%;
+  }
+}
+
+.null-message {
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.dev-message {
+  font-size: 1rem;
+  border: 1px dashed #000;
+  border-radius: 1em;
+  padding: 1em;
+  margin: 0 auto;
+}

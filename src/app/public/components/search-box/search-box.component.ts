@@ -1,4 +1,15 @@
-import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild, AfterViewInit, HostBinding, Inject } from '@angular/core';
+/* @format */
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  HostBinding,
+  Input,
+} from '@angular/core';
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -12,9 +23,10 @@ const ANIMATION_DURATION = 1000;
 @Component({
   selector: 'pr-search-box',
   templateUrl: './search-box.component.html',
-  styleUrls: ['./search-box.component.scss']
+  styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit, AfterViewInit {
+  @Input() onPublicGallery = false;
   public searchForm: FormGroup;
 
   public archiveResults: ArchiveVO[];
@@ -29,41 +41,45 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   @ViewChild('searchInput', { static: true }) searchInputRef: ElementRef;
   @Output() searchBarFocusChange = new EventEmitter();
 
-constructor(
+  constructor(
     private api: ApiService,
     private fb: FormBuilder,
     private router: Router
   ) {
     this.searchForm = this.fb.group({
-      'query': [ '', [ Validators.required ]]
+      query: ['', [Validators.required]],
     });
   }
 
   ngOnInit() {
-    this.searchForm.valueChanges.pipe(
-      debounceTime(100),
-      switchMap((value) => {
-        if (value.query && value.query.length > 3) {
-          this.waiting = true;
-          return this.api.search.archiveByNameObservable(value.query);
+    this.searchForm.valueChanges
+      .pipe(
+        debounceTime(100),
+        switchMap((value) => {
+          if (value.query && value.query.length > 3) {
+            this.waiting = true;
+            return this.api.search.archiveByNameObservable(value.query);
+          } else {
+            return of(null);
+          }
+        })
+      )
+      .subscribe((response) => {
+        this.waiting = false;
+        if (response) {
+          this.archiveResults = response.getArchiveVOs();
         } else {
-          return of(null);
+          this.archiveResults = null;
         }
-      })
-    ).subscribe(response => {
-      this.waiting = false;
-      if (response) {
-        this.archiveResults = response.getArchiveVOs();
-      } else {
-        this.archiveResults = null;
-      }
-      this.activeResultIndex = -1;
-      this.showResults = this.archiveResults !== null;
-    });
+        this.activeResultIndex = -1;
+        this.showResults = this.archiveResults !== null;
+      });
   }
 
   ngAfterViewInit() {
-    this.searchInputRef.nativeElement.addEventListener('keydown', evt => this.onSearchInputKeydown(evt));
+    this.searchInputRef.nativeElement.addEventListener('keydown', (evt) =>
+      this.onSearchInputKeydown(evt)
+    );
   }
 
   archiveResultTrackByFn(index, archive: ArchiveVO) {
@@ -83,10 +99,18 @@ constructor(
 
   onSearchInputKeydown(event: KeyboardEvent) {
     const isArrow = event.keyCode === UP_ARROW || event.keyCode === DOWN_ARROW;
-    if (isArrow && !this.waiting && this.archiveResults && this.archiveResults.length) {
+    if (
+      isArrow &&
+      !this.waiting &&
+      this.archiveResults &&
+      this.archiveResults.length
+    ) {
       const direction = event.keyCode === DOWN_ARROW ? 1 : -1;
       const newActiveResultIndex = this.activeResultIndex + direction;
-      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), this.archiveResults.length - 1);
+      this.activeResultIndex = Math.min(
+        Math.max(-1, newActiveResultIndex),
+        this.archiveResults.length - 1
+      );
     } else if (event.keyCode === ENTER) {
       this.onArchiveClick(this.archiveResults[this.activeResultIndex]);
     }

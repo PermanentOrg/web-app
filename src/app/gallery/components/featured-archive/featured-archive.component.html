@@ -1,0 +1,15 @@
+<!-- @format -->
+<div [class]="getClasses()">
+  <div class="banner" prBgImage [bgSrc]="bannerURL">
+    <div class="profile-pic"><img [src]="thumbURL" /></div>
+  </div>
+  <div class="contents">
+    <span class="archive-type">{{ getArchiveType() }} Archive</span>
+    <span class="archive-name">{{ archive.name }}</span>
+    <span class="archive-description">{{ archive.description }}</span>
+    <a [href]="getArchiveLink()" class="archive-link"
+      >Explore the archive &emsp;
+      <fa-icon [icon]="['fas', 'arrow-right']"></fa-icon
+    ></a>
+  </div>
+</div>
