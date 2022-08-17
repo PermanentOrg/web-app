@@ -10,13 +10,14 @@ import { SecretsService } from '@shared/services/secrets/secrets.service';
   styleUrls: ['./gallery.component.scss'],
 })
 export class GalleryComponent implements OnInit {
+  public environment: string = '';
   public archives: FeaturedArchive[] = this.getFeaturedArchives();
-  public environment: string = environment.environment;
   constructor() {}
 
   ngOnInit(): void {}
 
   protected getFeaturedArchives(): FeaturedArchive[] {
+    this.environment = environment.environment;
     if (
       this.environment !== 'prod' &&
       SecretsService.hasStatic('FEATURED_ARCHIVES')
