@@ -17,7 +17,7 @@ export const featuredArchives: FeaturedArchive[] = [
     description: '',
   },
   {
-    archiveNbr: 'profile',
+    archiveNbr: '01dq-0000',
     name: 'The Maine Genealogy Archive',
     type: 'type.archive.family',
     description: '',
