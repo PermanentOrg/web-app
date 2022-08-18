@@ -26,7 +26,6 @@ import {
   DialogChildComponentData,
   Dialog,
 } from '@root/app/dialog/dialog.module';
-import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
 import { RouterModule } from '@angular/router';
@@ -83,7 +82,6 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     ArchiveSwitcherComponent,
     FolderPickerComponent,
     RelationshipsComponent,
-    MembersComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
     BillingSettingsComponent,
