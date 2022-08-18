@@ -7,7 +7,6 @@ import { DataService, SelectClickEvent, SelectedItemsSet } from '@shared/service
 
 import { ConnectorOverviewVO, FolderVO, RecordVO, ArchiveVO, ShareVO, ItemVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
-import { ShareComponent } from '@shares/components/share/share.component';
 import { DOCUMENT } from '@angular/common';
 import { MessageService } from '@shared/services/message/message.service';
 import { DeviceService } from '@shared/services/device/device.service';
@@ -26,8 +25,6 @@ import { filter } from 'rxjs/operators';
   animations: [ slideUpAnimation, fadeAnimation, ngIfScaleAnimationDynamic ]
 })
 export class SharesComponent implements OnInit, AfterViewInit, OnDestroy, FileListItemParent, HasSubscriptions {
-  @ViewChildren(ShareComponent) shareComponents: QueryList<ShareComponent>;
-
   @HostBinding('class.show-sidebar') showSidebar = true;
 
   sharesFolder: FolderVO;

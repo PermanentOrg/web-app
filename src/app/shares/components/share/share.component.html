@@ -1,8 +1,0 @@
-<div class="archive" [hidden]="!archive.ItemVOs || !archive.ItemVOs.length">
-  <div class="archive-thumb" prBgImage [bgSrc]="archive.thumbURL200"></div>
-  <div class="archive-name">
-    Shared by {{archive.fullName}}
-  </div>
-</div>
-<pr-file-list-item [item]="share" [isShareRoot]="true" [showAccess]="true"
-  *ngFor="let share of archive.ItemVOs" (itemUnshared)="onShareDeleted($event)"></pr-file-list-item>
