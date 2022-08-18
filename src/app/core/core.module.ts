@@ -20,7 +20,6 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
-import { RelationshipsComponent } from './components/relationships/relationships.component';
 import {
   DialogModule,
   DialogChildComponentData,
@@ -81,7 +80,6 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     UploadButtonComponent,
     ArchiveSwitcherComponent,
     FolderPickerComponent,
-    RelationshipsComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
     BillingSettingsComponent,
