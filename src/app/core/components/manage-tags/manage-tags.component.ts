@@ -43,20 +43,28 @@ export class ManageTagsComponent implements OnInit {
   }
 
   public async deleteTag(tag: TagVO): Promise<void> {
-    this.prompt.confirm(
+    return this.prompt
+    .confirm(
       'Delete',
       'Are you sure you want to delete this tag from all items in the current archive?'
-    ).then(async () => {
+    )
+    .then(async () => {
       this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
-      this.api.tag.delete(tag).then(() => {
-        this.refreshTags.emit();
-      }).catch(() => {
-        // Let's add the tag back to UI to show it isn't deleted.
-        this.tags.push(tag);
-        throw new Error('Manage Tags: Error accessing delete endpoint');
-      });
-    }).catch(() => {
-      // do nothing
+      return this.api.tag
+        .delete(tag)
+        .then(() => {
+          this.refreshTags.emit();
+        })
+        .catch(() => {
+          // Let's add the tag back to UI to show it isn't deleted.
+          this.tags.push(tag);
+          throw new Error('Manage Tags: Error accessing delete endpoint');
+        });
+    })
+    .catch((e: Error) => {
+      if (e) {
+        throw new Error(e.message);
+      }
     });
   }
 
