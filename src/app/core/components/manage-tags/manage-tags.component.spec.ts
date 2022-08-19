@@ -117,12 +117,15 @@ describe('ManageTagsComponent #manage-tags', () => {
   });
 
   it('should not delete a tag if an error happens', async () => {
-    const { find, fixture, outputs } = await defaultRender();
+    const { element } = await defaultRender();
     throwError = true;
-    find('.delete')[0].nativeElement.click();
-    await fixture.whenStable();
-    await fixture.detectChanges();
-    expect(find('.tag').length).toBe(2);
+    try {
+      await element.componentInstance.deleteTag(defaultTags[0]);
+    } catch {
+      // Catch error!
+    } finally {
+      expect(element.componentInstance.tags.length).toBe(2);
+    }
   });
 
   it('should have edit buttons for each tag', async () => {
