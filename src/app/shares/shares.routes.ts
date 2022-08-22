@@ -5,8 +5,6 @@ import { SharesComponent } from '@shares/components/shares/shares.component';
 import { SharesResolveService } from '@shares/resolves/shares-resolve.service';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
-import { ShareByMeComponent } from '@shares/components/share-by-me/share-by-me.component';
-import { ShareWithMeComponent } from '@shares/components/share-with-me/share-with-me.component';
 import { RoutesWithData } from '../app.routes';
 
 const sharesRootResolve = {

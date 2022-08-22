@@ -37,7 +37,6 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('scroll') scrollElementRef: ElementRef;
 
-  public showArchiveSelector: false;
   public archiveName: string;
   public archive: ArchiveVO;
 

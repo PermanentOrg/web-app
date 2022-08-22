@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
-import { TermsComponent } from '@shared/components/terms/terms.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
@@ -44,7 +43,6 @@ import { FolderContentsPipe } from './pipes/folder-contents.pipe';
 import { StaticMapComponent } from './components/static-map/static-map.component';
 import { PrLocationPipe } from './pipes/pr-location.pipe';
 import { TagsComponent } from './components/tags/tags.component';
-import { BetaToggleComponent } from './components/beta-toggle/beta-toggle.component';
 import { TooltipsPipe } from './pipes/tooltips.pipe';
 import { PublicViewLinkPipe } from './pipes/public-view-link.pipe';
 import { StorageMeterComponent } from './components/storage-meter/storage-meter.component';
@@ -87,7 +85,6 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ReactiveFormsModule,
     FormInputComponent,
     LogoComponent,
-    TermsComponent,
     BgImageSrcDirective,
     ArchiveSmallComponent,
     ArchivePickerComponent,
@@ -112,7 +109,6 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     FolderViewToggleComponent,
     StaticMapComponent,
     TagsComponent,
-    BetaToggleComponent,
     TooltipsPipe,
     NgbTooltipModule,
     NgbDropdownModule,
@@ -136,7 +132,6 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ThumbnailComponent,
     FormInputComponent,
     LogoComponent,
-    TermsComponent,
     BgImageSrcDirective,
     PromptComponent,
     ArchiveSmallComponent,
@@ -162,7 +157,6 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     FolderViewToggleComponent,
     StaticMapComponent,
     TagsComponent,
-    BetaToggleComponent,
     TooltipsPipe,
     PublicViewLinkPipe,
     StorageAmountPipe,

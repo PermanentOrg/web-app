@@ -20,21 +20,17 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
-import { InvitationsComponent } from './components/invitations/invitations.component';
-import { RelationshipsComponent } from './components/relationships/relationships.component';
 import {
   DialogModule,
   DialogChildComponentData,
   Dialog,
 } from '@root/app/dialog/dialog.module';
-import { MembersComponent } from './components/members/members.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
 import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
-import { ArchiveSelectorComponent } from './components/archive-selector/archive-selector.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 import { PortalModule } from '@angular/cdk/portal';
@@ -43,7 +39,6 @@ import { SettingsDialogComponent } from './components/settings-dialog/settings-d
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
-import { ProfileEditTopicComponent } from './components/profile-edit-topic/profile-edit-topic.component';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
@@ -85,21 +80,16 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     UploadButtonComponent,
     ArchiveSwitcherComponent,
     FolderPickerComponent,
-    InvitationsComponent,
-    RelationshipsComponent,
-    MembersComponent,
     MultiSelectStatusComponent,
     AccountSettingsComponent,
     BillingSettingsComponent,
     NotificationPreferencesComponent,
-    ArchiveSelectorComponent,
     ProfileEditComponent,
     SettingsDialogComponent,
     AllArchivesComponent,
     ConnectionsDialogComponent,
     MembersDialogComponent,
     InvitationsDialogComponent,
-    ProfileEditTopicComponent,
     MyArchivesDialogComponent,
     LoadingArchiveComponent,
     ProfileEditFirstTimeDialogComponent,

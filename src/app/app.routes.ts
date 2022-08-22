@@ -77,7 +77,6 @@ const routes: RoutesWithData = [
       { path: 'app/verify', redirectTo: 'app/auth/verify', pathMatch: 'full' },
       { path: 'app/forgot', redirectTo: 'app/auth/forgot', pathMatch: 'full' },
       { path: 'app/reset', redirectTo: 'app/auth/reset', pathMatch: 'full' },
-      { path: 'app/terms', redirectTo: 'app/auth/terms', pathMatch: 'full' },
       {
         path: 'app/signupEmbed',
         redirectTo: 'app/embed/signup',
