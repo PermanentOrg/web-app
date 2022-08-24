@@ -7,6 +7,21 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 const STORAGE_KEY = 'announcementDismissed';
 
+export const adjustLayoutForAnnouncement = (component: {elementRef: ElementRef}) => {
+  const self = component.elementRef.nativeElement as HTMLElement;
+  const adjustedElements = document.querySelectorAll('.adjust-for-announcement');
+  for (const element of Array.from(adjustedElements)) {
+    (element as HTMLElement).style.paddingTop = self.getBoundingClientRect().height + 'px';
+  }
+};
+
+export const resetLayoutForAnnouncement = () => {
+  const adjustedElements = document.querySelectorAll('.adjust-for-announcement');
+  for (const element of Array.from(adjustedElements)) {
+    (element as HTMLElement).style.paddingTop = '0px';
+  }
+};
+
 @Component({
   selector: 'pr-announcement',
   templateUrl: './announcement.component.html',
@@ -17,7 +32,7 @@ export class AnnouncementComponent implements OnInit, AfterViewInit {
   public active: boolean = false;
   public event: AnnouncementEvent;
   public faWindowClose = faWindowClose;
-  constructor(protected elementRef: ElementRef) {}
+  constructor(public elementRef: ElementRef) {}
 
   public ngOnInit(): void {
     if (!this.eventsList) {
@@ -29,11 +44,7 @@ export class AnnouncementComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit(): void {
     if (this.active) {
-      const self = this.elementRef.nativeElement as HTMLElement;
-      const adjustedElements = document.querySelectorAll('.adjust-for-announcement');
-      for (const element of Array.from(adjustedElements)) {
-        (element as HTMLElement).style.paddingTop = self.getBoundingClientRect().height + 'px';
-      }
+      adjustLayoutForAnnouncement(this);
     }
   }
 
@@ -41,10 +52,7 @@ export class AnnouncementComponent implements OnInit, AfterViewInit {
     this.active = false;
     window.localStorage.setItem(STORAGE_KEY, this.event.start.toString());
 
-    const adjustedElements = document.querySelectorAll('.adjust-for-announcement');
-    for (const element of Array.from(adjustedElements)) {
-      (element as HTMLElement).style.paddingTop = '0px';
-    }
+    resetLayoutForAnnouncement();
   }
 
   protected isDismissed(): boolean {
