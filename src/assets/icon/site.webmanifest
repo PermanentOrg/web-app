@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Permanent Archive",
+    "short_name": "Permanent",
     "icons": [
         {
             "src": "/icons/android-chrome-192x192.png",
@@ -13,7 +13,16 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
+    "start_url": "/app",
+    "scope": "/",
+    "theme_color": "#131b4a",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "standalone",
+    "prefer_related_applications": true,
+    "related_applications": [
+      {
+      "platform": "play",
+      "id": "org.permanent.PermanentArchive"
+      }
+    ]
 }
