@@ -1,9 +1,12 @@
 @import 'variables';
 
+$perm-blue: #131b4a;
+
 .android-app-notify {
   width: 100%;
-  background-color: #131b4a;
+  background-color: $perm-blue;
   color: #fff;
+  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,8 +18,12 @@
 }
 
 .prompt-button {
-  background-color: #fff;
-  color: #131b4a;
+  color: #fff !important;
+  background-color: $perm-blue !important;
+  border: 1px solid #fff !important;
+  padding: 0.5rem;
+  border-radius: 3em;
+  font-weight: normal !important;
   line-height: 1;
 }
 
