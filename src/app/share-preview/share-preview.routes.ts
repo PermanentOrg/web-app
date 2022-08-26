@@ -17,6 +17,7 @@ import { RelationshipShareResolveService } from './resolves/relationship-share-r
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from '../dialog/dialog.module';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
+import { AnnouncementModule } from '../announcement/announcement.module';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -104,7 +105,8 @@ export const routes: Routes = [
     CommonModule,
     FileBrowserComponentsModule,
     NgbModule,
-    DialogModule
+    DialogModule,
+    AnnouncementModule,
   ],
   declarations: [
     SharePreviewComponent,

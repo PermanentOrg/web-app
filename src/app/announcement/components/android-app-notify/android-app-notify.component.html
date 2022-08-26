@@ -1,0 +1,16 @@
+<!-- @format -->
+<div class="android-app-notify" *ngIf="active">
+  <div class="description">
+    <img src="assets/icon/favicon-32x32.png" alt="Permanent Archive" />
+    <div class="description-text">
+      <div class="app-name">Permanent Archive</div>
+      <div class="app-description">Open in the Permanent app</div>
+    </div>
+  </div>
+  <div class="buttons">
+    <div class="prompt-button btn" (click)="showPrompt()">Open</div>
+    <div class="dismiss-button" (click)="dismiss()">
+      <fa-icon [icon]="['fas', 'window-close']"></fa-icon>
+    </div>
+  </div>
+</div>
