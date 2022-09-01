@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
 import { RouterModule } from '@angular/router';
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { CountUpModule } from 'ngx-countup';
 import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';

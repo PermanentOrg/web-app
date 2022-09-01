@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { DataSnapshot, DatabaseReference } from '@angular/fire/database/interfaces';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { DataSnapshot, DatabaseReference } from '@angular/fire/compat/database/interfaces';
 import { merge } from 'lodash';
 
 import { AccountService } from '@shared/services/account/account.service';
