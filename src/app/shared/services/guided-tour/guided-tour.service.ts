@@ -28,7 +28,9 @@ export class GuidedTourService {
     this.shepherd.modal = true;
   }
   startTour(steps: ShepherdStep[]) {
-    this.shepherd.addSteps(steps);
+    // Convert to any type since angular-shepherd is expecting the StepOptions[]
+    // type but it does not expose this type at all so we can't use it.
+    this.shepherd.addSteps(steps as any);
     setTimeout(() => {
       this.shepherd.start();
     });
