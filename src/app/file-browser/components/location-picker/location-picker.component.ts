@@ -184,7 +184,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onMapClick(event: google.maps.MouseEvent) {
+  onMapClick(event: google.maps.MapMouseEvent) {
     this.setCurrentLocationToLatLng(event.latLng);
   }
 
