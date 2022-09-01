@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { UserData } from '@pledge/models/user-data';
-import * as firebase from 'firebase/app';
-import 'firebase/functions';
-import { AngularFireDatabase } from '@angular/fire/database';
+import firebase from 'firebase/compat/app';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
