@@ -40,8 +40,8 @@ nav {
     text-align: center;
     border-radius: 3px;
     border: solid 1px #fff;
-    margin-left: $grid-unit / 2;
-    margin-right: $grid-unit / 2;
+    margin-left: calc($grid-unit / 2);
+    margin-right: calc($grid-unit / 2);
     transition: background-color 0.3s, color 0.3s;
     white-space: nowrap;
 

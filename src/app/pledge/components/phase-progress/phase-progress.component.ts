@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleCh
 import ProgressBar from 'progressbar.js';
 
 import APP_CONFIG from '@root/app/app.config';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { ActivatedRoute } from '@angular/router';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 
