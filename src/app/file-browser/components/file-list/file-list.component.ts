@@ -4,6 +4,7 @@ import {
   OnInit,
   AfterViewInit,
   ElementRef,
+  EventEmitter,
   QueryList,
   ViewChildren,
   HostListener,
@@ -11,6 +12,7 @@ import {
   HostBinding,
   Input,
   Optional,
+  Output,
   ViewChild,
   NgZone,
   Renderer2
@@ -45,6 +47,7 @@ import { RouteHistoryService } from 'ngx-route-history';
 export interface ItemClickEvent {
   event?: MouseEvent;
   item: RecordVO | FolderVO;
+  selectable?: boolean;
 }
 
 export interface FileListItemParent {
@@ -75,6 +78,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   isRootFolder = false;
 
   @Input() allowNavigation = true;
+
+  @Output() itemClicked = new EventEmitter<ItemClickEvent>();
 
   private visibleItemsHandlerDebounced: Function;
   private mouseMoveHandlerThrottled: Function;
@@ -373,7 +378,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   onItemClick(itemClick: ItemClickEvent) {
-    if (!this.showSidebar) {
+    this.itemClicked.emit(itemClick); 
+
+    if (!this.showSidebar || !itemClick.selectable) {
       return;
     }
 

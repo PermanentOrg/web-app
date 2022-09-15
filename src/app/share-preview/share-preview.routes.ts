@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -10,12 +10,15 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
 import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
+import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
+import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
+import { DialogChildComponentData } from '@root/app/dialog/dialog.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DialogModule } from '../dialog/dialog.module';
+import { Dialog, DialogModule } from '../dialog/dialog.module';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
 
@@ -110,7 +113,8 @@ export const routes: Routes = [
   ],
   declarations: [
     SharePreviewComponent,
-    ShareNotFoundComponent
+    ShareNotFoundComponent,
+    CreateAccountDialogComponent,
   ],
   providers: [
     PreviewResolveService,
@@ -121,5 +125,22 @@ export const routes: Routes = [
     RelationshipShareResolveService
   ]
 })
-export class SharePreviewRoutingModule { }
+export class SharePreviewRoutingModule {
+  private dialogComponents: DialogChildComponentData[] =[
+    {
+      token: 'CreateAccountDialogComponent',
+      component: CreateAccountDialogComponent,
+    },
+  ]
 
+  constructor(
+    @Optional() private dialog?: Dialog,
+    @Optional() private resolver?: ComponentFactoryResolver
+  ) {
+    this.dialog.registerComponents(
+      this.dialogComponents,
+      this.resolver,
+      true
+    );
+  }
+}

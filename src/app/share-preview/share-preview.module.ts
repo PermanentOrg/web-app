@@ -8,6 +8,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from '../dialog/dialog.module';
+import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
 
 @NgModule({
   declarations: [
