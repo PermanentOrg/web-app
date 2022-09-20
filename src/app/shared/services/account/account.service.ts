@@ -268,8 +268,12 @@ export class AccountService {
   public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Promise<any> {
     this.skipSessionCheck = false;
 
-    if (rememberMe && this.cookies.check('rememberMe')) {
+    if (rememberMe) {
       this.cookies.set('rememberMe', email);
+    } else {
+      if (this.cookies.check('rememberMe')) {
+        this.cookies.delete('rememberMe');
+      }
     }
 
     const currentAccount = this.account;
