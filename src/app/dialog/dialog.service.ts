@@ -31,7 +31,8 @@ export type DialogComponentToken =
   'TimelineViewComponent' |
   'ArchiveSettingsDialogComponent' |
   'WelcomeDialogComponent' |
-  'WelcomeInvitationDialogComponent'
+  'WelcomeInvitationDialogComponent' |
+  'CreateAccountDialogComponent'
 ;
 
 export interface DialogChildComponentData {
@@ -42,6 +43,8 @@ export interface DialogChildComponentData {
 export interface DialogOptions {
   height?: 'auto' | 'fullscreen';
   width?: 'auto' | 'fullscreen' | any;
+  mobileWidth?: 'auto' | 'fullscreen' | string;
+  borderRadius?: string;
   menuClass?: string;
 }
 

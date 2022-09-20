@@ -1,5 +1,11 @@
+/* @format */
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationStart, NavigationEnd } from '@angular/router';
+import {
+  Router,
+  ActivatedRoute,
+  NavigationStart,
+  NavigationEnd,
+} from '@angular/router';
 import { ArchiveVO, AccountVO, FolderVO } from '@models';
 import { throttle, find } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
@@ -9,7 +15,11 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
-import { matchControlValidator, trimWhitespace, copyFromInputElement } from '@shared/utilities/forms';
+import {
+  matchControlValidator,
+  trimWhitespace,
+  copyFromInputElement,
+} from '@shared/utilities/forms';
 import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
 import { Subscription } from 'rxjs';
@@ -19,22 +29,22 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
+import { Dialog } from '@root/app/dialog/dialog.module';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
 enum FormType {
   Signup,
   Invite,
-  Login
+  Login,
 }
 
 @Component({
   selector: 'pr-share-preview',
   templateUrl: './share-preview.component.html',
-  styleUrls: ['./share-preview.component.scss']
+  styleUrls: ['./share-preview.component.scss'],
 })
 export class SharePreviewComponent implements OnInit, OnDestroy {
-
   // share data
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
@@ -52,8 +62,11 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   hasRequested = this.isLinkShare && !!this.sharePreviewVO.ShareVO;
   hasAccess = false;
-  canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
-  canShare = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+  canEdit =
+    this.hasAccess &&
+    !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+  canShare =
+    this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
 
   // component toggles
   showCover = false;
@@ -61,6 +74,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   waiting = false;
   isNavigating = false;
+  createAccountDialogIsOpen = false;
 
   archiveConfirmed = false;
   public chooseArchiveText: string;
@@ -73,11 +87,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   shareToken: string;
 
   hasScrollTriggered = false;
-  scrollHandlerDebounced = throttle(() => { this.scrollCoverToggle(); }, 500);
+  scrollHandlerDebounced = throttle(() => {
+    this.scrollCoverToggle();
+  }, 500);
 
   routerListener: Subscription;
   accountListener: Subscription;
   archiveListener: Subscription;
+  fileListClickListener: Subscription;
 
   constructor(
     private router: Router,
@@ -88,28 +105,43 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     private device: DeviceService,
     private fb: FormBuilder,
     private prompt: PromptService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    private dialog: Dialog
   ) {
     this.shareToken = this.route.snapshot.params.shareToken;
 
     this.signupForm = fb.group({
       invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
-      email: [this.sharePreviewVO.email, [trimWhitespace, Validators.required, Validators.email]],
+      email: [
+        this.sharePreviewVO.email,
+        [trimWhitespace, Validators.required, Validators.email],
+      ],
       name: [this.sharePreviewVO.fullName, Validators.required],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+      ],
       agreed: [true],
-      optIn: [true]
+      optIn: [true],
     });
 
     this.loginForm = fb.group({
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+      ],
     });
 
     this.routerListener = this.router.events
-      .pipe(filter((event) => {
-        return event instanceof NavigationStart || event instanceof NavigationEnd;
-      })).subscribe((event) => {
+      .pipe(
+        filter((event) => {
+          return (
+            event instanceof NavigationStart || event instanceof NavigationEnd
+          );
+        })
+      )
+      .subscribe((event) => {
         if (event instanceof NavigationStart) {
           this.isNavigating = true;
         } else if (event instanceof NavigationEnd) {
@@ -117,14 +149,15 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.accountListener = this.accountService.archiveChange
-      .subscribe(async archive => {
+    this.accountListener = this.accountService.archiveChange.subscribe(
+      async (archive) => {
         this.archive = archive;
         await this.reloadSharePreviewData();
-      });
+      }
+    );
 
-    this.archiveListener = this.accountService.accountChange
-      .subscribe(async account => {
+    this.archiveListener = this.accountService.accountChange.subscribe(
+      async (account) => {
         if (!account) {
           this.isLoggedIn = false;
 
@@ -134,7 +167,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           await this.reloadSharePreviewData();
           this.archiveConfirmed = false;
         }
-      });
+      }
+    );
 
     if (this.isLinkShare) {
       this.chooseArchiveText = 'Select archive to request access with:';
@@ -157,19 +191,38 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.isLinkShare && this.route.snapshot.queryParams.requestAccess && !this.hasRequested) {
+    if (
+      this.isLinkShare &&
+      this.route.snapshot.queryParams.requestAccess &&
+      !this.hasRequested
+    ) {
       try {
-        await this.accountService.promptForArchiveChange(this.chooseArchiveText);
+        await this.accountService.promptForArchiveChange(
+          this.chooseArchiveText
+        );
         this.archiveConfirmed = true;
         await this.reloadSharePreviewData();
         this.onRequestAccessClick();
-      } catch (err) {
-      }
-    } else if (this.isRelationshipShare && !this.hasAccess && !this.route.snapshot.queryParams.targetArchiveNbr) {
+      } catch (err) {}
+    } else if (
+      this.isRelationshipShare &&
+      !this.hasAccess &&
+      !this.route.snapshot.queryParams.targetArchiveNbr
+    ) {
       try {
-        await this.accountService.promptForArchiveChange(this.chooseArchiveText);
+        await this.accountService.promptForArchiveChange(
+          this.chooseArchiveText
+        );
         this.archiveConfirmed = true;
       } catch (err) {}
+    }
+  }
+
+  async ngAfterViewInit() {
+    if (!this.isLoggedIn) {
+      setTimeout(() => {
+        this.showCreateAccountDialog();
+      }, 1000);
     }
   }
 
@@ -192,29 +245,39 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     if (this.isLinkShare) {
       this.hasRequested = !!this.sharePreviewVO.ShareVO;
-      this.hasAccess = this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+      this.hasAccess =
+        this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
       if (this.sharePreviewVO?.autoApproveToggle === 1) {
         this.isAutoApprove = true;
       }
     }
 
     if (this.isInvite || this.isLinkShare) {
-      this.canEdit = this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
-      this.canShare = this.hasAccess && this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+      this.canEdit =
+        this.hasAccess &&
+        !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+      this.canShare =
+        this.hasAccess &&
+        this.sharePreviewVO.ShareVO.accessRole.includes('owner');
     }
 
     if (this.isRelationshipShare) {
       if (this.isLoggedIn) {
-        this.hasAccess = this.sharePreviewVO.archiveId === this.archive.archiveId;
-        this.canEdit = this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
-        this.canShare = this.hasAccess && this.sharePreviewVO.accessRole.includes('owner');
+        this.hasAccess =
+          this.sharePreviewVO.archiveId === this.archive.archiveId;
+        this.canEdit =
+          this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
+        this.canShare =
+          this.hasAccess && this.sharePreviewVO.accessRole.includes('owner');
       }
 
       this.formType = 2;
     }
 
     if (this.archive) {
-      this.isOriginalOwner = this.route.snapshot.data.currentFolder.archiveId === this.archive.archiveId;
+      this.isOriginalOwner =
+        this.route.snapshot.data.currentFolder.archiveId ===
+        this.archive.archiveId;
     } else {
       this.isOriginalOwner = false;
     }
@@ -226,12 +289,15 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     }
 
     if (this.hasAccess) {
-      if ( !this.route.snapshot.firstChild.data.sharePreviewView) {
+      if (!this.route.snapshot.firstChild.data.sharePreviewView) {
         // in preview, but they have access, send to full view
         this.router.navigate(['view'], { relativeTo: this.route });
       }
       this.sendGaEvent('viewed');
-    } else if (!this.hasAccess && this.route.snapshot.firstChild.data.sharePreviewView) {
+    } else if (
+      !this.hasAccess &&
+      this.route.snapshot.firstChild.data.sharePreviewView
+    ) {
       // inside full view, send back to preview
       this.router.navigate(['.'], { relativeTo: this.route.parent });
       this.showCover = false;
@@ -240,16 +306,18 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   reloadSharePreviewData() {
     if (this.isLinkShare) {
-      return this.api.share.checkShareLink(this.route.snapshot.params.shareToken)
-      .then((linkResponse: ShareResponse): any => {
-        if (linkResponse.isSuccessful) {
-          this.sharePreviewVO = linkResponse.getShareByUrlVO();
-          this.checkAccess();
-        }
-      });
+      return this.api.share
+        .checkShareLink(this.route.snapshot.params.shareToken)
+        .then((linkResponse: ShareResponse): any => {
+          if (linkResponse.isSuccessful) {
+            this.sharePreviewVO = linkResponse.getShareByUrlVO();
+            this.checkAccess();
+          }
+        });
     } else if (this.isRelationshipShare) {
       const params = this.route.snapshot.params;
-      return this.api.share.getShareForPreview(params.shareId, params.folder_linkId)
+      return this.api.share
+        .getShareForPreview(params.shareId, params.folder_linkId)
         .then((shareResponse: ShareResponse) => {
           this.sharePreviewVO = shareResponse.getShareVO();
           this.checkAccess();
@@ -294,9 +362,16 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     } else {
       const folder: FolderVO = this.sharePreviewVO.FolderVO;
       if (this.device.isMobile() || !this.device.didOptOut()) {
-        return this.router.navigate(['/shares', 'withme', folder.archiveNbr, folder.folder_linkId]);
+        return this.router.navigate([
+          '/shares',
+          'withme',
+          folder.archiveNbr,
+          folder.folder_linkId,
+        ]);
       } else {
-        window.location.assign(`/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`);
+        window.location.assign(
+          `/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`
+        );
       }
     }
   }
@@ -304,26 +379,36 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   onShareShareClick() {
     this.sendGaEvent('reshare');
     if (!this.isLinkShare && (this.isOriginalOwner || this.canShare)) {
-      const archiveNbr = this.sharePreviewVO.RecordVO ? this.sharePreviewVO.RecordVO.archiveNbr : this.sharePreviewVO.FolderVO.archiveNbr;
+      const archiveNbr = this.sharePreviewVO.RecordVO
+        ? this.sharePreviewVO.RecordVO.archiveNbr
+        : this.sharePreviewVO.FolderVO.archiveNbr;
       if (this.device.isMobile() || !this.device.didOptOut()) {
-        return this.router.navigate(['/shares'], { queryParams: { shareArchiveNbr: archiveNbr }});
+        return this.router.navigate(['/shares'], {
+          queryParams: { shareArchiveNbr: archiveNbr },
+        });
       } else {
         window.location.assign(`/app/shares?shareArchiveNbr=${archiveNbr}`);
       }
     } else if (this.isLinkShare) {
       const fields = [
-        READ_ONLY_FIELD('shareUrl', 'Share link', this.sharePreviewVO.shareUrl)
+        READ_ONLY_FIELD('shareUrl', 'Share link', this.sharePreviewVO.shareUrl),
       ];
 
       const deferred = new Deferred();
 
-      this.prompt.prompt(fields, 'Copy share link to share', deferred.promise, 'Copy link')
-      .then(() => {
-        const input = this.prompt.getInput('shareUrl');
-        copyFromInputElement(input);
-        deferred.resolve();
-      })
-      .catch(() => {});
+      this.prompt
+        .prompt(
+          fields,
+          'Copy share link to share',
+          deferred.promise,
+          'Copy link'
+        )
+        .then(() => {
+          const input = this.prompt.getInput('shareUrl');
+          copyFromInputElement(input);
+          deferred.resolve();
+        })
+        .catch(() => {});
     }
   }
 
@@ -347,17 +432,45 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
+  showCreateAccountDialog() {
+    if (!this.createAccountDialogIsOpen) {
+      const options = this.device.isMobileWidth()
+        ? ({
+            mobileWidth: '374px',
+            borderRadius: '4px',
+            height: 'auto',
+            menuClass: 'floating-mobile-dialog',
+          } as const)
+        : { width: '600px', borderRadius: '5px' };
+      this.dialog
+        .open(
+          'CreateAccountDialogComponent',
+          { sharerName: this.shareAccount.fullName },
+          options
+        )
+        .finally(() => {
+          this.createAccountDialogIsOpen = false;
+        });
+      this.createAccountDialogIsOpen = true;
+    }
+  }
+
   async onRequestAccessClick() {
     try {
       this.waiting = true;
       if (!this.archiveConfirmed) {
-        await this.accountService.promptForArchiveChange(this.chooseArchiveText);
+        await this.accountService.promptForArchiveChange(
+          this.chooseArchiveText
+        );
         this.archiveConfirmed = true;
       }
       const response = await this.api.share.requestShareAccess(this.shareToken);
       const shareVo = response.getShareVO();
       if (shareVo.status === 'status.generic.pending') {
-        this.message.showMessage(`Access requested. ${this.shareAccount.fullName} must approve your request.` , 'success');
+        this.message.showMessage(
+          `Access requested. ${this.shareAccount.fullName} must approve your request.`,
+          'success'
+        );
         this.showCover = false;
         this.hasRequested = true;
       } else {
@@ -368,9 +481,13 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       if (err instanceof ShareResponse) {
         if (err.messageIncludesPhrase('share.already_exists')) {
           this.hasRequested = true;
-          this.message.showError(`You have already requested access to this item.`);
+          this.message.showError(
+            `You have already requested access to this item.`
+          );
         } else if (err.messageIncludesPhrase('same')) {
-          this.message.showError(`You do not need to request access to your own item.`);
+          this.message.showError(
+            `You do not need to request access to your own item.`
+          );
         }
       }
     } finally {
@@ -381,20 +498,26 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   onSignupSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.signUp(
-      formValue.email,
-      formValue.name,
-      formValue.password,
-      formValue.password,
-      formValue.agreed,
-      formValue.optIn,
-      null,
-      formValue.invitation,
-      true,
-    )
+    this.accountService
+      .signUp(
+        formValue.email,
+        formValue.name,
+        formValue.password,
+        formValue.password,
+        formValue.agreed,
+        formValue.optIn,
+        null,
+        formValue.invitation,
+        true
+      )
       .then((response: AccountResponse) => {
         this.sendGaEvent('signup');
-        return this.accountService.logIn(formValue.email, formValue.password, true, true);
+        return this.accountService.logIn(
+          formValue.email,
+          formValue.password,
+          true,
+          true
+        );
       })
       .then(() => {
         // check if invite and show preview mode, or send access request
@@ -421,25 +544,47 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   onLoginSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, true, true)
+    this.accountService
+      .logIn(formValue.email, formValue.password, true, true)
       .then(async (response: AuthResponse) => {
         if (response.needsMFA()) {
           // send to mfa verification
           const queryParams = {};
           if (this.isLinkShare) {
-            this.accountService.setRedirect(['/share', this.shareToken], { queryParams: { requestAccess: true }});
+            this.accountService.setRedirect(['/share', this.shareToken], {
+              queryParams: { requestAccess: true },
+            });
           } else if (this.isRelationshipShare) {
             this.accountService.setRedirect(
-              ['/share', 'view' , this.sharePreviewVO.shareId, this.sharePreviewVO.folder_linkId, 'view'],
+              [
+                '/share',
+                'view',
+                this.sharePreviewVO.shareId,
+                this.sharePreviewVO.folder_linkId,
+                'view',
+              ],
               { queryParamsHandling: 'preserve' }
             );
           } else {
-            this.accountService.setRedirect(['/share', 'invite' , this.sharePreviewVO.token, 'view']);
+            this.accountService.setRedirect([
+              '/share',
+              'invite',
+              this.sharePreviewVO.token,
+              'view',
+            ]);
           }
 
-          this.router.navigate(['/app', 'auth', 'mfa'], { queryParamsHandling: 'preserve' })
+          this.router
+            .navigate(['/app', 'auth', 'mfa'], {
+              queryParamsHandling: 'preserve',
+            })
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+              this.message.showMessage(
+                `Verify to continue as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'warning'
+              );
             });
         } else {
           // hide cover
@@ -447,12 +592,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           this.showCover = false;
           this.loginForm.reset();
 
-
           // attempt to auto switch archives if link is tagged
           if (this.route.snapshot.queryParams.targetArchiveNbr) {
             await this.accountService.refreshArchives();
-            const targetArchiveNbr = this.route.snapshot.queryParams.targetArchiveNbr;
-            const targetArchive = find(this.accountService.getArchives(), {archiveNbr: targetArchiveNbr}) as ArchiveVO;
+            const targetArchiveNbr =
+              this.route.snapshot.queryParams.targetArchiveNbr;
+            const targetArchive = find(this.accountService.getArchives(), {
+              archiveNbr: targetArchiveNbr,
+            }) as ArchiveVO;
             if (targetArchive) {
               try {
                 await this.accountService.changeArchive(targetArchive);
@@ -487,12 +634,33 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password.', 'danger');
           this.loginForm.patchValue({
-            password: ''
+            password: '',
           });
         } else {
-          this.message.showMessage('Log in failed. Please try again.', 'danger');
+          this.message.showMessage(
+            'Log in failed. Please try again.',
+            'danger'
+          );
         }
       });
+  }
+
+  subscribeToItemClicks(componentReference) {
+    if (!('itemClicked' in componentReference)) {
+      return;
+    }
+
+    this.fileListClickListener = componentReference.itemClicked.subscribe(
+      () => {
+        this.showCreateAccountDialog();
+      }
+    );
+  }
+
+  unsubscribeFromItemClicks() {
+    if (this.fileListClickListener) {
+      this.fileListClickListener.unsubscribe();
+    }
   }
 
   stopPropagation(evt) {

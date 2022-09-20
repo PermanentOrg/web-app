@@ -116,6 +116,14 @@
     overflow: visible;
   }
 
+  .floating-mobile-dialog {
+    top: auto;
+    bottom: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(50%);
+  }
+
   &.visible {
     .profile-editor-dialog, .notification-dialog {
       transform: translateX(0);

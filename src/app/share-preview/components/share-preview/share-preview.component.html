@@ -30,9 +30,9 @@
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
 <div class="share-preview-content" [ngClass]="{'navigating': isNavigating}">
-  <router-outlet></router-outlet>
+  <router-outlet (activate)="subscribeToItemClicks($event)" (deactivate)="unsubscribeFromItemClicks()"></router-outlet>
 </div>
-<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="!hasAccess">
+<div class="share-preview-cover from-bottom" [ngClass]="{'share-preview-cover-visible': showCover}" (click)="toggleCover()" *ngIf="(!hasAccess && isLoggedIn)">
   <div class="share-preview-cover-content" (click)="stopPropagation($event)">
     <p *ngIf="!isLoggedIn">
       <span *ngIf="isInvite || (isLinkShare && formType === 0)">Get full access to {{shareAccount.fullName}}'s shared item and claim your free gigabyte of storage.</span>
@@ -102,7 +102,7 @@
     </div>
   </div>
 </div>
-<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}" *ngIf="!hasAccess">
+<div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}" *ngIf="!hasAccess && isLoggedIn">
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
       <strong *ngIf="!isLoggedIn">

@@ -11,6 +11,8 @@ export class DialogComponent implements AfterViewInit {
   public isVisible = false;
   public height = 'fullscreen';
   public width = 'fullscreen';
+  public mobileWidth: string;
+  public borderRadius = '0px';
 
   public menuClass: string;
 
@@ -41,6 +43,15 @@ export class DialogComponent implements AfterViewInit {
 
       if (options.width) {
         this.width = options.width;
+      }
+
+      if (options.mobileWidth) {
+        this.mobileWidth = options.mobileWidth;
+        this.width = this.width === options.width ? this.width : options.mobileWidth;
+      }
+
+      if (options.borderRadius) {
+        this.borderRadius = options.borderRadius;
       }
 
       if (options.menuClass) {

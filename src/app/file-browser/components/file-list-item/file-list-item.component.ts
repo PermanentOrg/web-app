@@ -419,6 +419,11 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   onItemClick(event: MouseEvent) {
     if (this.device.isMobileWidth() || !this.canSelect) {
       this.goToItem();
+      this.itemClicked.emit({
+        item: this.item,
+        event: event as MouseEvent,
+        selectable: false,
+      });
     } else {
       this.onItemSingleClick(event);
     }
@@ -502,7 +507,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     this.singleClickTimeout = setTimeout(() => {
       this.itemClicked.emit({
         item: this.item,
-        event: event as MouseEvent
+        event: event as MouseEvent,
+        selectable: true,
       });
     }, SINGLE_CLICK_DELAY);
 
