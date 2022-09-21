@@ -64,7 +64,7 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
       return false;
     }
 
-    if (this.routerLink.includes('/myfiles')) {
+    if (this.routerLink.includes('/private')) {
       if (folder.type.includes('root.private')) {
         return false;
       }
@@ -100,7 +100,7 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
   }
 
   getFolderTypeFromLink() {
-    if (this.routerLink.includes('/myfiles')) {
+    if (this.routerLink.includes('/private')) {
       return 'type.folder.root.private';
     } else if (this.routerLink.includes('/public')) {
       return 'type.folder.root.public';

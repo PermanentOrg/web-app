@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
     if (this.account.getAccount()?.accountId) {
       return this.account.hasOwnArchives().then((hasArchives) => {
         if (hasArchives) {
-          return this.router.parseUrl('/app/myfiles');
+          return this.router.parseUrl('/app/private');
         }
         return this.router.parseUrl('/app/onboarding');
       });

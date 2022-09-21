@@ -468,7 +468,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
     } else if (this.router.routerState.snapshot.url.includes('/public')) {
       rootUrl = '/public';
     } else {
-      rootUrl = '/myfiles';
+      rootUrl = '/private';
     }
 
     if (this.item.isFolder) {

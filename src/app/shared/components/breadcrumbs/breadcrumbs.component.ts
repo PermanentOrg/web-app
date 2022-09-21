@@ -24,7 +24,7 @@ export class Breadcrumb {
   getSpecialRouterPath(displayText) {
     switch (displayText) {
       case 'My Files':
-        return ['/myfiles'];
+        return ['/private'];
       case 'Public':
         return ['/public'];
       case 'Apps':
@@ -127,7 +127,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     } else if (this.router.routerState.snapshot.url.includes('/public')) {
       rootUrl = '/public';
     } else {
-      rootUrl = '/myfiles';
+      rootUrl = '/private';
     }
 
     if (!folder) {
