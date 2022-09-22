@@ -53,7 +53,7 @@ export class OnboardingComponent implements OnInit {
       if (ownArchives.length > 0 && false) {
         // This user already has archives. They don't need to onboard.
         this.showOnboarding = false;
-        this.router.navigate(['/app', 'myfiles']);
+        this.router.navigate(['/app', 'private']);
       } else {
         this.pendingArchives = pendingArchives;
         this.showOnboarding = true;

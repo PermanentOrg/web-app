@@ -66,20 +66,20 @@ describe('BreadcrumbsComponent', () => {
     });
     dataService.setCurrentFolder(testFolder);
     expect(component.breadcrumbs.length).toBe(testFolder.pathAsArchiveNbr.length);
-    const expectedUrl = `/myfiles/${testFolder.pathAsArchiveNbr[1]}/${testFolder.pathAsFolder_linkId[1]}`;
+    const expectedUrl = `/private/${testFolder.pathAsArchiveNbr[1]}/${testFolder.pathAsFolder_linkId[1]}`;
     expect(component.breadcrumbs[1].routerPath).toEqual(expectedUrl);
   });
 
   it('should link to My Files for folders in My Files', async () => {
-    await init('/myfiles');
+    await init('/private');
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['My Files', 'Test Folder Parent', 'Test Folder'],
       pathAsFolder_linkId: [1, 2, 3]
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
-    expect(component.breadcrumbs[0].routerPath).toEqual('/myfiles');
-    expect(component.breadcrumbs[1].routerPath).toContain('/myfiles');
+    expect(component.breadcrumbs[0].routerPath).toEqual('/private');
+    expect(component.breadcrumbs[1].routerPath).toContain('/private');
   });
 
   it('should link to Apps for folders in Apps', async () => {

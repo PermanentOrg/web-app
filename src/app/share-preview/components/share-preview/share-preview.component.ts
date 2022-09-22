@@ -413,7 +413,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   }
 
   onMyAccountClick() {
-    return this.router.navigate(['/app', 'myfiles']);
+    return this.router.navigate(['/app', 'private']);
   }
 
   async onArchiveThumbClick() {

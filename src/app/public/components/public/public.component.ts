@@ -84,7 +84,7 @@ export class PublicComponent implements OnInit, OnDestroy {
   }
 
   onArchiveThumbClick() {
-    this.router.navigate(['/app', 'myfiles']);
+    this.router.navigate(['/app', 'private']);
   }
 
   onMyAccountClick() {

@@ -24,6 +24,7 @@ import { TagsResolveService } from './resolves/tags.resolve.service';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
+import { MyfilesGuard } from './guards/myfiles.guard';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService,
@@ -39,12 +40,21 @@ export const routes: RoutesWithData = [
     children: [
       {
         path: 'myfiles',
+        children: [
+          {
+            path: '**',
+            canActivate: [MyfilesGuard],
+          }
+        ]
+      },
+      {
+        path: 'private',
         loadChildren: () =>
           import('../file-browser/file-browser.module').then(
             (m) => m.FileBrowserModule
           ),
         data: {
-          title: 'My Files',
+          title: 'Private Files',
           showSidebar: true,
           showFolderViewToggle: true,
         },
@@ -93,7 +103,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'donate',
-        redirectTo: '/app/(myfiles//dialog:storage)',
+        redirectTo: '/app/(private//dialog:storage)',
       },
       {
         path: 'invitations',
@@ -107,11 +117,11 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'invitations',
-        redirectTo: '/app/(myfiles//dialog:invitations)',
+        redirectTo: '/app/(private//dialog:invitations)',
       },
       {
         path: 'archive/sentInvites',
-        redirectTo: '/app/(myfiles//dialog:invitations)',
+        redirectTo: '/app/(private//dialog:invitations)',
       },
       {
         path: 'connections',
@@ -126,19 +136,19 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'connections',
-        redirectTo: '/app/(myfiles//dialog:connections)',
+        redirectTo: '/app/(private//dialog:connections)',
       },
       {
         path: 'relationships',
-        redirectTo: '/app/(myfiles//dialog:connections)',
+        redirectTo: '/app/(private//dialog:connections)',
       },
       {
         path: 'archive/relationships',
-        redirectTo: '/app/(myfiles//dialog:connections)',
+        redirectTo: '/app/(private//dialog:connections)',
       },
       {
         path: 'relationship_request/:email',
-        redirectTo: '/app/(myfiles//dialog:connections)',
+        redirectTo: '/app/(private//dialog:connections)',
       },
       {
         path: 'profile',
@@ -157,7 +167,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'profile',
-        redirectTo: '/app/(myfiles//dialog:profile)',
+        redirectTo: '/app/(private//dialog:profile)',
       },
       {
         path: 'account',
@@ -171,7 +181,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'account',
-        redirectTo: '/app/(myfiles//dialog:account)',
+        redirectTo: '/app/(private//dialog:account)',
       },
       {
         path: 'members',
@@ -186,11 +196,11 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'members',
-        redirectTo: '/app/(myfiles//dialog:members)',
+        redirectTo: '/app/(private//dialog:members)',
       },
       {
         path: 'archive/members',
-        redirectTo: '/app/(myfiles//dialog:members)',
+        redirectTo: '/app/(private//dialog:members)',
       },
       {
         path: 'settings',
@@ -204,7 +214,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'settings',
-        redirectTo: '/app/(myfiles//dialog:settings)',
+        redirectTo: '/app/(private//dialog:settings)',
       },
       {
         path: 'welcome',
@@ -218,7 +228,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'welcome',
-        redirectTo: '/app/(myfiles//dialog:welcome)',
+        redirectTo: '/app/(private//dialog:welcome)',
       },
       {
         path: 'welcomeinvitation',
@@ -232,7 +242,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'welcome-invitation',
-        redirectTo: '/app/(myfiles//dialog:welcomeinvitation)',
+        redirectTo: '/app/(private//dialog:welcomeinvitation)',
       },
       {
         path: 'storage',
@@ -246,7 +256,7 @@ export const routes: RoutesWithData = [
       },
       {
         path: 'storage',
-        redirectTo: '/app/(myfiles//dialog:storage)',
+        redirectTo: '/app/(private//dialog:storage)',
       },
       {
         path: 'search',
@@ -258,7 +268,7 @@ export const routes: RoutesWithData = [
         path: 'switching',
         component: LoadingArchiveComponent,
       },
-      { path: '**', redirectTo: 'myfiles' },
+      { path: '**', redirectTo: 'private' },
     ],
   },
   { path: 'm', redirectTo: 'app' },

@@ -209,9 +209,9 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
       }
     } else if (item.folder_linkType === 'type.folder_link.private') {
       if (item.parentArchiveNbr === privateRoot.archiveNbr) {
-        routerPath = ['/app', 'myfiles'];
+        routerPath = ['/app', 'private'];
       } else {
-        routerPath = ['/app', 'myfiles', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = ['/app', 'private', item.parentArchiveNbr, item.parentFolder_linkId];
       }
     }
 

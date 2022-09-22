@@ -111,7 +111,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
             })
             .then(() => {
               deferred.resolve();
-              this.router.navigate(['/myfiles']);
+              this.router.navigate(['/private']);
             })
             .catch((response: BaseResponse) => {
               deferred.resolve();

@@ -113,7 +113,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
             })
             .then(() => {
               deferred.resolve();
-              this.router.navigate(['/myfiles']);
+              this.router.navigate(['/private']);
             })
             .catch((response: BaseResponse) => {
               deferred.resolve();
@@ -128,7 +128,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
   async switchToArchive(archive: ArchiveVO) {
     try {
       await this.accountService.changeArchive(archive);
-      this.router.navigate(['/myfiles']);
+      this.router.navigate(['/private']);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         this.message.showError(err.getMessage(), true);

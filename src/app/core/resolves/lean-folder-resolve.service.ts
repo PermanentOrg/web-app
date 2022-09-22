@@ -67,7 +67,7 @@ export class LeanFolderResolveService implements Resolve<any> {
         } else if (state.url.includes('apps')) {
           this.router.navigate(['/apps']);
         } else {
-          this.router.navigate(['/myfiles']);
+          this.router.navigate(['/private']);
         }
         return Promise.reject(false);
       });

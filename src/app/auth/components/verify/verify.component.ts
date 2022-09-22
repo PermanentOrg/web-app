@@ -91,7 +91,7 @@ export class VerifyComponent implements OnInit {
       this.verifyingPhone = true;
       this.formTitle = 'Verify Phone Number';
     } else if (!this.needsEmail) {
-      this.router.navigate(['/myfiles'], { queryParamsHandling: 'preserve'});
+      this.router.navigate(['/private'], { queryParamsHandling: 'preserve'});
     }
 
   }

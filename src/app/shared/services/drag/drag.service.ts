@@ -301,7 +301,7 @@ export class DragService {
         });
       } else {
         switch (dropTarget.breadcrumb.routerPath) {
-          case '/myfiles':
+          case '/private':
             destination = this.accountService.getPrivateRoot();
             break;
           case '/public':
