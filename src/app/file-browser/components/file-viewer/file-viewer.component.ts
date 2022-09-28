@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, Inject, HostListener} from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Inject, HostListener, Optional} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
@@ -13,6 +13,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 
@@ -34,6 +35,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public isDocument = false;
   public showThumbnail = true;
   public isPublicArchive: boolean = false;
+  public allowDownloads: boolean = false;
 
   public documentUrl = null;
 
@@ -64,6 +66,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private accountService: AccountService,
     private editService: EditService,
+    @Optional() private publicProfile: PublicProfileService,
   ) {
     // store current scroll position in file list
     this.bodyScrollTop = window.scrollY;
@@ -87,6 +90,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
     if (route.snapshot.data?.isPublicArchive) {
       this.isPublicArchive = route.snapshot.data.isPublicArchive;
+    }
+
+    if (publicProfile) {
+      publicProfile.archive$().subscribe(archive => {
+        this.allowDownloads = archive.allowPublicDownload;
+      });
     }
 
     this.canEdit = this.accountService.checkMinimumAccess(this.currentRecord.accessRole, AccessRole.Editor) && !route.snapshot.data?.isPublicArchive;
