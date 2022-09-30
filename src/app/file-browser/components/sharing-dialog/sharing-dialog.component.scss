@@ -166,8 +166,8 @@ p {
   }
 }
 
-.share-link-settings {
-  .link-settings-item {
+.share-link-settings, .public-settings {
+  .link-settings-item, .settings-item {
     display: flex;
     align-items: center;
 
