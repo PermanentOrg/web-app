@@ -68,12 +68,6 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  public togglePublicDownload(): void {
-    const archive = this.account.getArchive();
-    archive.allowPublicDownload = !archive.allowPublicDownload;
-    this.api.archive.update(archive);
-  }
-
   protected bindTagsToArchive(): void {
     const archiveId = this.account.getArchive()?.archiveId;
     for (let i = 0; i < this.tags.length; i++) {

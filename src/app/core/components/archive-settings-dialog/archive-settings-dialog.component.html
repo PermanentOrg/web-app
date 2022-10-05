@@ -13,7 +13,7 @@
       </div>
       <div class="dialog-tab"
         (click)="setTab('public-settings')" [class.active]="activeTab === 'public-settings'">
-        Public Archive Settings
+        Public Gallery
       </div>
     </div>
     <div class="panel" #panel>
@@ -32,7 +32,7 @@
           </ng-template>
         </ng-container>
         <ng-container *ngSwitchCase="'public-settings'">
-          <div class="panel-title">Public Settings</div>
+          <div class="panel-title">Public Gallery Page Settings</div>
           <ng-container *ngIf="hasAccess ; else noAccess">
             <pr-public-settings [archive]="archive"></pr-public-settings>
           </ng-container>

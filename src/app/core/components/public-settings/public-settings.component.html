@@ -1,6 +1,6 @@
 <div class="public-settings">
   <div class="settings-item">
-    <label>Allow File Downloads</label>
+    <label>Show Download Button</label>
     <div class="form-check form-check-inline">
       <input
         class="form-check-input"
@@ -12,7 +12,7 @@
         [(ngModel)]="allowDownloadsToggle"
         (ngModelChange)="onAllowDownloadsChange()"
       />
-      <label class="form-check-label" for="allowDownloadsToggleOn">On</label>
+      <label class="form-check-label" for="allowDownloadsToggleOn">Show</label>
     </div>
     <div class="form-check form-check-inline">
       <input
@@ -25,15 +25,11 @@
         [(ngModel)]="allowDownloadsToggle"
         (ngModelChange)="onAllowDownloadsChange()"
       />
-      <label class="form-check-label" for="allowDownloadsToggleOff">Off</label>
+      <label class="form-check-label" for="allowDownloadsToggleOff">Hide</label>
     </div>
   </div>
-  <small class="text-muted" [ngSwitch]="allowDownloadsToggle">
-    <ng-container *ngSwitchCase="1">
-      Other users can download any files from your public archive.
-    </ng-container>
-    <ng-container *ngSwitchDefault>
-      Users cannot download any files from your public archive.
-    </ng-container>
+  <small class="text-muted">
+    Display a button that allows viewers of your published items to download a
+    copy of the source file to their device.
   </small>
 </div>
