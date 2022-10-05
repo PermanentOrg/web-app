@@ -9,21 +9,18 @@ import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from '../dialog/dialog.module';
 import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
+import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     SharePreviewRoutingModule,
     CommonModule,
     FormsModule,
     DialogModule,
-    NgbTooltipModule
+    NgbTooltipModule,
   ],
-  providers: [
-    DataService,
-    FolderViewService
-  ]
+  providers: [DataService, FolderViewService],
 })
 export class SharePreviewModule {
   constructor(folderView: FolderViewService) {
