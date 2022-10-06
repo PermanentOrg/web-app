@@ -35,6 +35,7 @@ export class ArchiveVO extends BaseVO implements DynamicListChild  {
   public type: ArchiveType;
   public isPendingAction: boolean;
   public isNewlyCreated: boolean;
+  public allowPublicDownload: boolean;
 
   constructor(voData: any) {
     super(voData);

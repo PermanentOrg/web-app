@@ -11,6 +11,10 @@
         (click)="setTab('manage-tags')" [class.active]="activeTab === 'manage-tags'">
         Manage Tags
       </div>
+      <div class="dialog-tab"
+        (click)="setTab('public-settings')" [class.active]="activeTab === 'public-settings'">
+        Public Gallery
+      </div>
     </div>
     <div class="panel" #panel>
       <ng-container [ngSwitch]="activeTab">
@@ -24,8 +28,14 @@
             </ng-template>
           </ng-container>
           <ng-template #noAccess>
-            <p>You do not have permission to manage tags for this archive. <a href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing" target="_blank">Learn more about permissions for managing tags here.</a></p>
+            <p>You do not have permission to manage settings for this archive. <a href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing" target="_blank">Learn more about permissions for managing archive settings here.</a></p>
           </ng-template>
+        </ng-container>
+        <ng-container *ngSwitchCase="'public-settings'">
+          <div class="panel-title">Public Gallery Page Settings</div>
+          <ng-container *ngIf="hasAccess ; else noAccess">
+            <pr-public-settings [archive]="archive"></pr-public-settings>
+          </ng-container>
         </ng-container>
       </ng-container>
     </div>

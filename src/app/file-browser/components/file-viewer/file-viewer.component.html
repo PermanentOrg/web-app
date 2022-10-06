@@ -45,7 +45,7 @@
       readOnlyEmptyMessage="No description"
       type="description-textarea"></pr-inline-value-edit>
     </div>
-    <div class="file-viewer-download" *ngIf="isPublicArchive">
+    <div class="file-viewer-download" *ngIf="isPublicArchive && allowDownloads">
       <button class="btn btn-primary"  (click)="onDownloadClick()">Download</button>
     </div>
     <table>

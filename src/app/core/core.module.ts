@@ -56,6 +56,7 @@ import { ManageTagsComponent } from './components/manage-tags/manage-tags.compon
 import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
 import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
+import { PublicSettingsComponent } from './components/public-settings/public-settings.component';
 
 @NgModule({
   imports: [
@@ -100,6 +101,7 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     ManageTagsComponent,
     WelcomeDialogComponent,
     WelcomeInvitationDialogComponent,
+    PublicSettingsComponent,
   ],
   providers: [
     DataService,

@@ -4,8 +4,9 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO } from '@models/tag-vo';
+import { ArchiveVO } from '@models/index';
 
-type ArchiveSettingsDialogTab = 'manage-tags';
+type ArchiveSettingsDialogTab = 'manage-tags' | 'public-settings';
 
 @Component({
   selector: 'pr-archive-settings-dialog',
@@ -18,6 +19,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasAccess: boolean;
+  public archive: ArchiveVO;
 
   protected fetchTagsAttempts: number = 0;
 
@@ -47,6 +49,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
         }, 1000);
      });
    }
+   this.archive = this.account.getArchive();
   }
 
   public refreshTags(): void {
@@ -61,8 +64,8 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  public setTab(tab: string): void {
-    // do nothing for now
+  public setTab(tab: ArchiveSettingsDialogTab): void {
+    this.activeTab = tab;
   }
 
   protected bindTagsToArchive(): void {
