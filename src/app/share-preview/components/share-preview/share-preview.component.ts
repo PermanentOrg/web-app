@@ -22,7 +22,7 @@ import {
 } from '@shared/utilities/forms';
 import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
@@ -95,6 +95,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   accountListener: Subscription;
   archiveListener: Subscription;
   fileListClickListener: Subscription;
+
+  public hideBannerSubject: Subject<void> = new Subject<void>();
+  public hideBannerObservable = this.hideBannerSubject.asObservable();
 
   constructor(
     private router: Router,
@@ -652,6 +655,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     this.fileListClickListener = componentReference.itemClicked.subscribe(
       () => {
+        this.dispatchBannerClose();
         this.showCreateAccountDialog();
       }
     );
@@ -665,5 +669,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   stopPropagation(evt) {
     evt.stopPropagation();
+  }
+
+  dispatchBannerClose(): void {
+    this.hideBannerSubject.next();
   }
 }

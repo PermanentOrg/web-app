@@ -21,26 +21,27 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Dialog, DialogModule } from '../dialog/dialog.module';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
+import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
-  currentFolder: PreviewFolderResolveService
+  currentFolder: PreviewFolderResolveService,
 };
 
 const previewResolve = {
-  currentFolder: PreviewResolveService
+  currentFolder: PreviewResolveService,
 };
 
 const shareResolve = {
-  sharePreviewVO: ShareUrlResolveService
+  sharePreviewVO: ShareUrlResolveService,
 };
 
 const shareInviteResolve = {
-  sharePreviewVO: InviteShareResolveService
+  sharePreviewVO: InviteShareResolveService,
 };
 
 const shareRelationshipResolve = {
-  sharePreviewVO: RelationshipShareResolveService
+  sharePreviewVO: RelationshipShareResolveService,
 };
 
 const sharePreviewChildren = [
@@ -50,7 +51,7 @@ const sharePreviewChildren = [
     component: SharePreviewComponent,
     data: {
       formDarkBg: true,
-      showFolderDescription: true
+      showFolderDescription: true,
     },
     children: [
       {
@@ -58,38 +59,38 @@ const sharePreviewChildren = [
         data: {
           noFileListNavigation: true,
         },
-        component: FileListComponent
+        component: FileListComponent,
       },
       {
         path: 'view',
         data: {
-          sharePreviewView: true
+          sharePreviewView: true,
         },
         loadChildren: LazyLoadFileBrowserSibling,
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 export const routes: Routes = [
   {
     path: 'error',
-    component: ShareNotFoundComponent
+    component: ShareNotFoundComponent,
   },
   {
     path: 'invite/:inviteCode',
     resolve: shareInviteResolve,
     data: {
-      noFileListPadding: true
+      noFileListPadding: true,
     },
-    children: sharePreviewChildren
+    children: sharePreviewChildren,
   },
   {
     path: 'view/:shareId/:folder_linkId',
     resolve: shareRelationshipResolve,
     data: {
-      noFileListPadding: true
+      noFileListPadding: true,
     },
-    children: sharePreviewChildren
+    children: sharePreviewChildren,
   },
   {
     path: ':shareToken',
@@ -97,9 +98,8 @@ export const routes: Routes = [
     data: {
       noFileListPadding: true,
     },
-    children: sharePreviewChildren
+    children: sharePreviewChildren,
   },
-
 ];
 @NgModule({
   imports: [
@@ -115,6 +115,7 @@ export const routes: Routes = [
     SharePreviewComponent,
     ShareNotFoundComponent,
     CreateAccountDialogComponent,
+    SharePreviewFooterComponent,
   ],
   providers: [
     PreviewResolveService,
@@ -122,25 +123,21 @@ export const routes: Routes = [
     PreviewFolderResolveService,
     ShareUrlResolveService,
     InviteShareResolveService,
-    RelationshipShareResolveService
-  ]
+    RelationshipShareResolveService,
+  ],
 })
 export class SharePreviewRoutingModule {
-  private dialogComponents: DialogChildComponentData[] =[
+  private dialogComponents: DialogChildComponentData[] = [
     {
       token: 'CreateAccountDialogComponent',
       component: CreateAccountDialogComponent,
     },
-  ]
+  ];
 
   constructor(
     @Optional() private dialog?: Dialog,
     @Optional() private resolver?: ComponentFactoryResolver
   ) {
-    this.dialog.registerComponents(
-      this.dialogComponents,
-      this.resolver,
-      true
-    );
+    this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
   }
 }
