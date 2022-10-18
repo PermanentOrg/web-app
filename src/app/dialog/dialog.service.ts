@@ -6,7 +6,6 @@ import { Deferred } from '@root/vendor/deferred';
 import { DialogRootComponent } from './dialog-root.component';
 import { DOCUMENT } from '@angular/common';
 import debug from 'debug';
-import { PortalOutlet } from '@angular/cdk/portal';
 import { ActivatedRoute } from '@angular/router';
 
 export type DialogComponentToken =
@@ -92,8 +91,6 @@ export class Dialog {
   private rootComponent: DialogRootComponent;
   private currentId = 0;
 
-  public portalOutlet: PortalOutlet;
-
   public registeredComponents: {[token: string]: any} = {};
   public componentResolvers: {[token: string]: any} = {};
 
@@ -151,24 +148,6 @@ export class Dialog {
     components.map((component) => {
       this.unregisterComponent(component);
     });
-  }
-
-  registerPortalOutlet(outlet: PortalOutlet) {
-    if (this.portalOutlet) {
-      throw new Error(`Dialog - portal outlet already registered. Make sure to unregister when destroying.`);
-    }
-
-    this.portalOutlet = outlet;
-    this.debug('portal outlet registered %o', outlet);
-  }
-
-  unregisterPortalOutlet(outlet: PortalOutlet) {
-    if (this.portalOutlet !== outlet) {
-      throw new Error(`Dialog - attempting to unregister incorrect portal outlet`);
-    }
-
-    this.portalOutlet = null;
-    this.debug('portal outlet unregistered %o', outlet);
   }
 
   open(

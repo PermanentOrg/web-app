@@ -105,19 +105,7 @@
 <div class="share-preview-footer" [ngClass]="{'share-preview-footer-visible': !showCover}" *ngIf="!hasAccess && isLoggedIn">
   <div class="share-preview-footer-content">
     <span (click)="toggleCover()">
-      <strong *ngIf="!isLoggedIn">
-        <span *ngIf="isInvite || isLinkShare">Get full access to {{shareAccount.fullName}}'s shared item and claim your free gigabyte of storage.</span>
-        <span *ngIf="isRelationshipShare">Get full access.</span>
-        <div *ngIf="isInvite">
-          <button class="btn btn-alternate">Sign up</button>
-        </div>
-        <div class="buttons" *ngIf="isLinkShare">
-          <button class="btn btn-alternate" (click)="formType = 0">Sign up</button>
-          <button class="btn btn-alternate btn-alternate-purple" (click)="formType = 2">Log in</button>
-        </div>
-        <button class="btn btn-alternate" *ngIf="isRelationshipShare">Log in</button>
-      </strong>
-      <strong *ngIf="isLinkShare && isLoggedIn && !hasRequested">
+      <strong *ngIf="isLinkShare && !hasRequested">
         <ng-container *ngIf="isAutoApprove ; else requestFullAccessText">
           Accept and view the share in your archive.
         </ng-container>
@@ -125,9 +113,9 @@
           Request full access from {{shareAccount.fullName}}.
         </ng-template>
       </strong>
-      <strong *ngIf="isLinkShare && isLoggedIn && hasRequested">Your request is awaiting approval from {{shareAccount.fullName}}.</strong>
-      <strong *ngIf="isRelationshipShare && isLoggedIn">Your current archive does not have access to this content. Switch to view or edit.</strong>
-      <div *ngIf="isLinkShare && isLoggedIn">
+      <strong *ngIf="isLinkShare && hasRequested">Your request is awaiting approval from {{shareAccount.fullName}}.</strong>
+      <strong *ngIf="isRelationshipShare">Your current archive does not have access to this content. Switch to view or edit.</strong>
+      <div *ngIf="isLinkShare">
         <button class="btn btn-alternate" (click)="onRequestAccessClick()" [disabled]="waiting || hasRequested" *ngIf="isLinkShare">
           <ng-container *ngIf="hasRequested ; else accessText">Access Requested</ng-container>
           <ng-template #accessText>
