@@ -43,6 +43,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   cardComplete = false;
 
   public static stripeCardInstance: any;
+  public static currentInstance: NewPledgeComponent;
 
   constructor(
     private api: ApiService,
@@ -55,6 +56,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private iframe: IFrameService,
     private pledgeService: PledgeService,
   ) {
+    NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
     const account = this.accountService.getAccount();
 
@@ -128,16 +130,17 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stripeElementsCard = elements.create('card', options);
 
     this.stripeElementsCard.addEventListener('change', event => {
+      const instance = NewPledgeComponent.currentInstance;
       if (event.error) {
-        this.cardError = event.error.message;
+        instance.cardError = event.error.message;
       } else {
-        this.cardError = null;
+        instance.cardError = null;
       }
 
       if (event.complete) {
-        this.cardComplete = true;
+        instance.cardComplete = true;
       } else {
-        this.cardComplete = false;
+        instance.cardComplete = false;
       }
     });
 
