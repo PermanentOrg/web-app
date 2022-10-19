@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { DataSnapshot, DatabaseReference } from '@angular/fire/compat/database/interfaces';
+import {
+  DataSnapshot,
+  DatabaseReference,
+} from '@angular/fire/compat/database/interfaces';
 import { merge } from 'lodash';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -15,10 +18,7 @@ export class PledgeService {
 
   public pledgesList = this.db.list('/pledges');
 
-  constructor(
-    private db: AngularFireDatabase,
-  ) {
-  }
+  constructor(private db: AngularFireDatabase) {}
 
   getPledgeId() {
     return this.currentPledge.key || null;
@@ -40,7 +40,7 @@ export class PledgeService {
 
     merge(this.currentPledgeData, pledgeData);
 
-    this.currentPledge.on('value', snapshot => {
+    this.currentPledge.on('value', (snapshot) => {
       merge(this.currentPledgeData, snapshot.val());
     });
 
@@ -67,7 +67,12 @@ export class PledgeService {
       donationMatchAmount: 0,
       storageAmount: this.currentPledgeData.dollarAmount,
       monetaryAmount: this.currentPledgeData.dollarAmount.toFixed(2),
-      spaceAmountInGb: Math.floor(this.currentPledgeData.dollarAmount / 10)
+      spaceAmountInGb: Math.floor(this.currentPledgeData.dollarAmount / 10),
     });
+  }
+
+  public reset(): void {
+    this.currentPledge = null;
+    this.currentPledgeData = {};
   }
 }

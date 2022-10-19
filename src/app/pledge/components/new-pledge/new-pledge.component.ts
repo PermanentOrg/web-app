@@ -242,6 +242,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         } catch (err) {
           this.waiting = false;
           throw err;
+        } finally {
+          this.pledgeService.reset();
         }
       } else {
         this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});
