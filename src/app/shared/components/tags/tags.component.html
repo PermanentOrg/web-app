@@ -1,5 +1,9 @@
-<div class="empty" *ngIf="!tags?.length">{{ canEdit && !isEditing ? 'Click to add tags' : 'No tags'}}</div>
+<div class="empty" *ngIf="!tags?.length">{{ canEdit && !isEditing ? 'Click to add' : 'No tags'}}</div>
 <ng-container *ngIf="tags?.length">
   <div class="tag" *ngFor="let tag of orderedTags; trackBy: tagTrackByFn"
-  [@ngIfScaleAnimationDynamic]="animate ? 'animate' : 'static'">{{tag.name}}</div>
+  [@ngIfScaleAnimationDynamic]="animate ? 'animate' : 'static'">
+    <span class="keyword" *ngIf="!tag.name.includes(':')">{{tag.name}}</span>
+    <span class="customMetadataField" *ngIf="tag.name.includes(':')">{{tag.name.split(':')[0]}}</span>
+    <span class="customMetadataValue" *ngIf="tag.name.includes(':')">{{tag.name.slice(tag.name.indexOf(':')+1)}}</span>
+  </div>
 </ng-container>

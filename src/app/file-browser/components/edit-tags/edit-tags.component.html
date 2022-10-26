@@ -2,8 +2,11 @@
   <pr-tags [tags]="itemTags" (click)="startEditing()" [readOnly]="false" [class.clickable]="canEdit && !isEditing"
     [canEdit]="canEdit" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
   <div class="input-group" *ngIf="isEditing" @ngIfScaleAnimation [class.has-tags]="allTags?.length">
-    <input type="text" class="new-tag form-control" placeholder="Add new tag"
-      [(ngModel)]="newTagName" (ngModelChange)="onTagType(newTagName)" (keydown.enter)="onInputEnter(newTagName)">
+    <input type="text" class="new-tag form-control" [placeholder]="placeholderText" [(ngModel)]="newTagName"
+    (ngModelChange)="onTagType(newTagName)" (keydown.enter)="onInputEnter(newTagName)">
+    <div *ngIf="newTagInputError" class="input-vertical-error">
+      {{this.tagType === 'keyword' ? "Tag cannot contain ':'" : "Format must be key:value"}}
+    </div>
     <div class="input-group-append">
       <button class="btn btn-primary" (click)="newTagName ? onInputEnter(newTagName) : endEditing()">{{ newTagName ? 'Add' : 'Done' }}</button>
     </div>
@@ -19,6 +22,10 @@
       </div>
     </div>
   </div>
+  <p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
+    <span class="manage-tags-link" (click)="onManageTagsClick()">
+      Manage {{this.tagType === 'keyword' ? "tags" : 'custom metadata'}}</span> in archive settings.
+  </p>
 </ng-container>
 <ng-container *ngIf="isDialog">
   <div class="dialog-content">
@@ -28,8 +35,11 @@
         <pr-tags [tags]="item.TagVOs" (click)="startEditing()"
           [canEdit]="true" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
         <div class="input-group">
-          <input type="text" class="new-tag form-control" placeholder="Add new tag" *ngIf="isEditing" @ngIfScaleAnimation
+          <input type="text" class="new-tag form-control" [placeholder]="placeholderText" *ngIf="isEditing" @ngIfScaleAnimation
             [(ngModel)]="newTagName" (keydown.enter)="onInputEnter(newTagName)" (ngModelChange)="onTagType(newTagName)">
+          <div *ngIf="newTagInputError" class="input-vertical-error">
+            {{this.tagType === 'keyword' ? "Tag cannot contain ':'" : "Format must be key:value"}}
+          </div>
           <div class="input-group-append">
             <button class="btn btn-primary" (click)="onInputEnter(newTagName)" [disabled]="!newTagName">Add</button>
           </div>
@@ -46,6 +56,10 @@
           </div>
           <div class="edit-tag" *ngIf="!matchingTags.length">No existing tags found</div>
         </div>
+        <p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
+          <span class="manage-tags-link" (click)="onManageTagsClick()">
+            Manage {{this.tagType === 'keyword' ? "tags" : 'custom metadata'}}</span> in archive settings.
+        </p>
     </div>
 
     </div>
