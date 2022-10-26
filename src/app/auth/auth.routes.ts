@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { RecaptchaModule } from 'ng-recaptcha';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { AuthComponent } from './components/auth/auth.component';
@@ -46,6 +48,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule,
     AnnouncementModule,
+    RecaptchaModule,
   ],
   declarations: [
     LoginComponent,

@@ -6,6 +6,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { AccountVO } from '@root/app/models';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
+import { RecaptchaErrorParameters } from 'ng-recaptcha';
 
 @Component({
   selector: 'pr-verify',
@@ -24,13 +26,23 @@ export class VerifyComponent implements OnInit {
   needsEmail: boolean;
   needsPhone: boolean;
 
+  public captchaEnabled: boolean;
+  public captchaSiteKey: string;
+  public captchaPassed: boolean;
+
+  public readonly showCaptchaForEmail = false;
+
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
     private router: Router,
     private message: MessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public secrets: SecretsService,
   ) {
+    this.captchaPassed = false;
+    this.captchaSiteKey = secrets.get('RECAPTCHA_API_KEY');
+    this.captchaEnabled = this.captchaSiteKey !== '';
 
     const account = this.accountService.getAccount();
 
@@ -39,20 +51,8 @@ export class VerifyComponent implements OnInit {
       return;
     }
 
-    const params = route.snapshot.params;
-    // if (params.email) {
-    //   const email = window.atob(params.email);
-    //   if (email !== account.primaryEmail) {
-    //     this.accountService.logOut();
-    //     account = new AccountVO(
-    //       {
-    //         primaryEmail: window.atob(params.email),
-    //         emailStatus: 'status.auth.unverified'
-    //       }
-    //     );
-    //     this.accountService.setAccount(account);
-    //   }
-    // }
+    this.needsEmail = account.emailNeedsVerification();
+    this.needsPhone = account.phoneNeedsVerification();
 
     const queryParams = route.snapshot.queryParams;
 
@@ -61,18 +61,22 @@ export class VerifyComponent implements OnInit {
     });
 
     if (queryParams) {
-      if (queryParams.sendEmail) {
-        this.accountService.resendEmailVerification();
+      if (this.canSendCodes('email')) {
+        if (queryParams.sendEmail) {
+          this.accountService.resendEmailVerification();
+        }
       }
 
-      if (queryParams.sendSms) {
-        this.accountService.resendPhoneVerification();
+      if (this.canSendCodes('phone')) {
+        if (queryParams.sendSms) {
+          this.accountService.resendPhoneVerification();
+        }
       }
     }
 
     if (queryParams.email) {
       // decode the url encoding from the php
-      var query_email = decodeURI(queryParams.email);
+      const query_email = decodeURI(queryParams.email);
       if (query_email !== account.primaryEmail) {
         this.message.showError(
           'Sorry, this verification code does not match your account.',
@@ -82,9 +86,6 @@ export class VerifyComponent implements OnInit {
         this.waiting = true;
       }
     }
-
-    this.needsEmail = account.emailNeedsVerification();
-    this.needsPhone = account.phoneNeedsVerification();
 
     if (!this.needsEmail && this.needsPhone) {
       this.verifyingEmail = false;
@@ -141,20 +142,26 @@ export class VerifyComponent implements OnInit {
       });
   }
 
-  resendCode() {
+  resendCode(showMessage = true) {
     this.waiting = true;
 
     let resendPromise: Promise<AuthResponse>;
     if (this.verifyingEmail) {
-      resendPromise = this.accountService.resendEmailVerification();
+      if (this.canSendCodes('email')) {
+        resendPromise = this.accountService.resendEmailVerification();
+      }
     } else {
-      resendPromise = this.accountService.resendPhoneVerification();
+      if (this.canSendCodes('phone')) {
+        resendPromise = this.accountService.resendPhoneVerification();
+      }
     }
 
     resendPromise
       .then((response: AuthResponse) => {
         this.waiting = false;
-        this.message.showMessage(response.getMessage(), null, true);
+        if (showMessage) {
+          this.message.showMessage(response.getMessage(), null, true);
+        }
       })
       .catch((response: AuthResponse) => {
         this.waiting = false;
@@ -181,4 +188,21 @@ export class VerifyComponent implements OnInit {
       });
   }
 
+  public resolveCaptcha(response: string): void {
+    this.captchaPassed = true;
+    if (this.canSendCodes('phone')) {
+      this.resendCode(false);
+    }
+  }
+
+  public onCaptchaError(error: RecaptchaErrorParameters): void {
+    this.captchaPassed = false;
+  }
+
+  public canSendCodes(codeType: 'email' | 'phone'): boolean {
+    if (codeType === 'email') {
+      return !this.showCaptchaForEmail || this.canSendCodes('phone');
+    }
+    return this.captchaEnabled ? this.captchaPassed : true;
+  }
 }
