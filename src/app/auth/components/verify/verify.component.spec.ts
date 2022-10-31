@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
@@ -24,7 +25,7 @@ describe('VerifyComponent', () => {
   let accountService: AccountService;
 
   async function init(authResponseData = defaultAuthData, queryParams = {}) {
-    const config = cloneDeep(Testing.BASE_TEST_CONFIG);
+    const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.declarations.push(VerifyComponent);
 
@@ -42,6 +43,9 @@ describe('VerifyComponent', () => {
         }
       }
     });
+
+    // Define the re-captcha element as a custom element so it's only mocked out
+    config.schemas = [CUSTOM_ELEMENTS_SCHEMA];
 
     await TestBed.configureTestingModule(config).compileComponents();
 
@@ -175,5 +179,21 @@ describe('VerifyComponent', () => {
     const verifyPhoneResponse = require('@root/test/responses/auth.verify.verifyPhone.success.json');
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
     req.flush(verifyPhoneResponse);
+  });
+
+  it('should show CAPTCHA before verifying phone', async () => {
+    const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+    await init(unverifiedPhoneData);
+
+    // Testing environments might not have the site key enabled,
+    // so force captchaEnabled to be true.
+    component.captchaEnabled = true;
+    expect(component.captchaPassed).toBeFalsy();
+    expect(component.canSendCodes('phone')).toBeFalsy();
+
+    component.resolveCaptcha('mock-captcha-success');
+
+    expect(component.captchaPassed).toBeTruthy();
+    expect(component.canSendCodes('phone')).toBeTruthy();
   });
 });
