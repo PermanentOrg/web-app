@@ -13,6 +13,7 @@
     [allowNavigation]="allowNavigation"
     [isSelected]="showSidebar ? selectedItems.has(item) : false"
     [canSelect]="showSidebar"
+    [showFolderThumbnails]="showFolderThumbnails"
     (itemClicked)="onItemClick($event)"
     (itemVisible)="onItemVisible($event)"
     (refreshView)="refreshView()"
