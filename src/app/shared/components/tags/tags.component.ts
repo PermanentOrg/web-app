@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, OnChanges, HostBinding } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  HostBinding,
+} from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import { orderBy } from 'lodash';
 import { ngIfScaleAnimationDynamic } from '@shared/animations';
@@ -7,7 +13,7 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
   selector: 'pr-tags',
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss'],
-  animations: [ ngIfScaleAnimationDynamic ]
+  animations: [ngIfScaleAnimationDynamic],
 })
 export class TagsComponent implements OnInit, OnChanges {
   @Input() tags: TagVOData[];
@@ -18,10 +24,9 @@ export class TagsComponent implements OnInit, OnChanges {
 
   orderedTags: TagVOData[] = [];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     if (!this.tags?.length) {
@@ -40,5 +45,4 @@ export class TagsComponent implements OnInit, OnChanges {
   tagTrackByFn(index, tag: TagVOData) {
     return tag.name;
   }
-
 }

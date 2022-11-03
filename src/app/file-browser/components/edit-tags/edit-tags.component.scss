@@ -42,7 +42,7 @@
 }
 
 .input-group {
-  margin-top: 0.25rem;
+  margin-top: 1.25rem;
 
   .btn {
     padding: 0.5rem;
@@ -99,4 +99,29 @@
 
 .edit-tags-dialog-body {
   padding: 0px 10px;
+}
+
+.input-vertical-error {
+    position: absolute;
+    font-size: 10px;
+    line-height: .85rem * 1.5;
+    background: none;
+    pointer-events: none;
+    opacity: 1;
+    transition: 0.1s ease-in opacity;
+    bottom: 0px;
+    right: 3.75rem;
+    color: $red;
+    z-index: 100;
+}
+
+.manage-tags-message {
+  margin-top: 1.125rem;
+
+  .manage-tags-link {
+    font-weight: 600;
+    color: black;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }

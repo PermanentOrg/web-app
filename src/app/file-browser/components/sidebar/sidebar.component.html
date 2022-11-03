@@ -45,7 +45,13 @@
     <div class="sidebar-item">
       <label>Tags</label>
       <div class="sidebar-item-content">
-        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit"></pr-edit-tags>
+        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit" tagType="keyword"></pr-edit-tags>
+      </div>
+    </div>
+    <div class="sidebar-item">
+      <label>Custom Metadata</label>
+      <div class="sidebar-item-content">
+        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit" tagType="customMetadata"></pr-edit-tags>
       </div>
     </div>
     <div class="sidebar-item">

@@ -18,12 +18,28 @@ $gutter-size: 0.25rem;
   }
 
   .tag {
-    padding: 0.25rem 0.5rem;
-    border-radius: $border-radius;
+    padding: 0.5rem 0rem;
+    border-radius: 0.5rem;
     margin-right: $gutter-size;
     margin-bottom: $gutter-size;
-    background: rgba($PR-purple, 0.2);
     user-select: none;
+    color: $gray-900;
+    .keyword, .customMetadataField, .customMetadataValue {
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+    }
+    .keyword {
+      background: rgba($PR-purple, 0.2);
+    }
+    .customMetadataField {
+      border-radius: 0.5rem 0rem 0rem 0.5rem;
+      color: #ffffff;
+      background: #5261b7;
+    }
+    .customMetadataValue {
+      border-radius: 0rem 0.5rem 0.5rem 0rem;
+      background: rgba(#5261b7, 0.2);
+    }
   }
 
   @include beforeDesktop {
@@ -35,6 +51,3 @@ $gutter-size: 0.25rem;
 .empty {
   margin-bottom: 0.25rem;
 }
-
-
-
