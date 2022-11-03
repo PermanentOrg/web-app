@@ -77,6 +77,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   showFolderDescription = false;
   isRootFolder = false;
 
+  public showFolderThumbnails = false;
+
   @Input() allowNavigation = true;
 
   @Output() itemClicked = new EventEmitter<ItemClickEvent>();
@@ -132,6 +134,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     if (this.route.snapshot.data.noFileListNavigation) {
       this.allowNavigation = false;
     }
+
+    this.showFolderThumbnails = this.route.snapshot.data?.isPublicArchive;
 
     this.dataService.setCurrentFolder(this.currentFolder);
 

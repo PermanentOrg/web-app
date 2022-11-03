@@ -132,6 +132,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   @Input() isSelected = false;
   @Input() showAccess = false;
   @Input() canSelect = true;
+  @Input() showFolderThumbnails = false;
 
   public isMultiSelected =  false;
   public isDragTarget = false;
@@ -841,6 +842,10 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   }
 
   private getFolderThumbnail(): void {
+    if (!this.showFolderThumbnails) {
+      this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+      return;
+    }
     const sortPriorities = [
       'type.record.image',
       'type.record.video',
