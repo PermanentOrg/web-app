@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 $gutter-size: 0.25rem;
 :host {
@@ -24,21 +25,30 @@ $gutter-size: 0.25rem;
     margin-bottom: $gutter-size;
     user-select: none;
     color: $gray-900;
-    .keyword, .customMetadataField, .customMetadataValue {
+    display: flex;
+    .keyword,
+    .customMetadataField,
+    .customMetadataValue {
       border-radius: 0.5rem;
       padding: 0.5rem 1rem;
+      overflow-wrap: break-word;
+      hyphens: auto;
     }
     .keyword {
       background: rgba($PR-purple, 0.2);
     }
     .customMetadataField {
+      float: left;
       border-radius: 0.5rem 0rem 0rem 0.5rem;
       color: #ffffff;
       background: #5261b7;
+      max-width: 6.5rem;
     }
     .customMetadataValue {
+      float: left;
       border-radius: 0rem 0.5rem 0.5rem 0rem;
       background: rgba(#5261b7, 0.2);
+      max-width: 6.5rem;
     }
   }
 
