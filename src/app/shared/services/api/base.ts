@@ -2,6 +2,10 @@ import { HttpService } from '@shared/services/http/http.service';
 import { SimpleVO, ResponseMessageType } from '@root/app/models';
 import { compact } from 'lodash';
 
+export interface CSRFResponse {
+  csrf: string;
+}
+
 export class BaseResponse {
   public isSuccessful: boolean;
   public isSystemUp: boolean;
