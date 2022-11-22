@@ -6,6 +6,7 @@ export interface TagVOData extends BaseVOData {
   name?: string;
   status?: string;
   type?: string;
+  archiveId?: number;
 }
 
 export interface TagLinkVOData extends BaseVOData {
