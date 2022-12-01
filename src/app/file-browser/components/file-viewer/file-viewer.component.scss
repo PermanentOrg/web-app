@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 $toolbar-height: 30px;
@@ -60,7 +61,6 @@ $button-size: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-
   }
 }
 
@@ -76,14 +76,19 @@ $button-size: 2rem;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
-  transform: translateY(0)
+  transform: translateY(0);
 }
 
-.file-viewer-name, .file-viewer-close {
+.file-viewer-name,
+.file-viewer-close {
   transition: transform $transition-length ease-in-out;
 }
 
-.file-viewer-image, pr-thumbnail, pr-video, pr-audio .thumb-preview, iframe {
+.file-viewer-image,
+pr-thumbnail,
+pr-video,
+pr-audio .thumb-preview,
+iframe {
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -143,7 +148,6 @@ $button-size: 2rem;
     display: none;
   }
 
-
   &.file-viewer-control-previous {
     left: 10px;
   }
@@ -179,18 +183,18 @@ $button-size: 2rem;
   display: none;
 }
 
-.editing-date pr-inline-value-edit[type="date"] {
+.editing-date pr-inline-value-edit[type='date'] {
   left: -20%;
   top: 3em;
   margin-bottom: 3em;
 }
 
 .can-edit {
-  pr-tags, .location-container {
+  pr-tags,
+  .location-container {
     cursor: pointer;
   }
 }
-
 
 // Desktop tweaks
 @media screen and (min-width: 801px) {
@@ -214,6 +218,12 @@ $button-size: 2rem;
     td:first-child {
       font-weight: bold;
       padding-right: 5px;
+    }
+
+    .metadata-table {
+      table-layout: fixed;
+      width: $metadata-width;
+      block-size: border-box;
     }
   }
 
