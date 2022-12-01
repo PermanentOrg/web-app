@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
 import { matchControlValidator } from '@shared/utilities/forms';
+import { PromptField, PromptService } from '@shared/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-account-settings',
@@ -35,7 +36,8 @@ export class AccountSettingsComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private message: MessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private prompt: PromptService,
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map(c => {
@@ -98,9 +100,32 @@ export class AccountSettingsComponent implements OnInit {
 
   async onChangePasswordFormSubmit(value: AccountPasswordVOData) {
     this.waiting = true;
+    let trustToken = null;
 
     try {
-      await this.api.auth.updatePassword(this.account, value);
+      try {
+        const loginResp = await this.accountService.checkForMFAWithLogin(
+          value.passwordOld,
+        );
+        if (loginResp.needsMFA()) {
+          try {
+            const mfa = await this.showMFAPrompt();
+            try {
+              const mfaResp = await this.accountService.verifyMfa(mfa.verificationCode);
+              trustToken = mfaResp.getTrustToken().value;
+            } catch (err) {
+              this.message.showError('Incorrect verification code entered');
+              throw err;
+            }
+          } catch(err) {
+            // They canceled out of the prompt, do nothing
+            throw err;
+          }
+        }
+      } catch (err) {
+        throw err;
+      }
+      await this.api.auth.updatePassword(this.account, value, trustToken);
       this.message.showMessage('Password updated.', 'success');
     } catch (err) {
       if (err instanceof AuthResponse) {
@@ -110,5 +135,18 @@ export class AccountSettingsComponent implements OnInit {
       this.waiting = false;
       this.changePasswordForm.reset();
     }
+  }
+
+  public async showMFAPrompt(): Promise<{verificationCode: string}> {
+    const mfaField: PromptField = {
+      fieldName: 'verificationCode',
+      placeholder: 'Verification Code',
+      initialValue: '',
+      type: 'text',
+    };
+    return this.prompt.prompt(
+      [mfaField],
+      'A verification code has been sent to your email address or phone number. Please enter it below to change your password.'
+    );
   }
 }

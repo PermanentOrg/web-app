@@ -1,5 +1,5 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, AccountPasswordVOData } from '@root/app/models';
-import { BaseResponse, BaseRepo } from '@shared/services/api/base';
+import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, AccountPasswordVOData, SimpleVO } from '@root/app/models';
+import { BaseResponse, BaseRepo, CSRFResponse } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -49,11 +49,22 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest<AuthResponse>('/auth/sendEmailForgotPassword', [{AccountVO: accountVO}], AuthResponse);
   }
 
-  public updatePassword(account: AccountVO, passwordVo: AccountPasswordVOData) {
+  public updatePassword(account: AccountVO, passwordVo: AccountPasswordVOData, trustToken?: string) {
     const data = [{
       AccountVO: account,
-      AccountPasswordVO: passwordVo
+      AccountPasswordVO: passwordVo,
     }];
+
+    if (trustToken) {
+      const v2data = {
+        accountId: parseInt(account.accountId, 10),
+        passwordOld: passwordVo.passwordOld,
+        password: passwordVo.password,
+        passwordVerify: passwordVo.passwordVerify,
+        trustToken
+      };
+      return this.http.sendV2RequestPromise<CSRFResponse>('/account/changePassword', v2data);
+    }
 
     return this.http.sendRequestPromise<AuthResponse>('/account/changePassword', data, AuthResponse);
   }
@@ -103,5 +114,14 @@ export class AuthResponse extends BaseResponse {
 
   public needsMFA() {
     return !this.isSuccessful && this.messageIncludes('warning.auth.mfaToken');
+  }
+
+  public getTrustToken() {
+    const data = this.getResultsData();
+    if (!data || !data.length) {
+      return null;
+    }
+
+    return new SimpleVO(data[0][0].SimpleVO);
   }
 }

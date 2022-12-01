@@ -301,6 +301,11 @@ export class AccountService {
       })).toPromise();
   }
 
+  public checkForMFAWithLogin(oldPassword: string): Promise<AuthResponse> {
+    return this.api.auth.logIn(this.account.primaryEmail, oldPassword, this.account.rememberMe, this.account.keepLoggedIn)
+      .toPromise();
+  }
+
   public logOut(): Promise<AuthResponse> {
     return this.api.auth.logOut()
       .pipe(map((response: AuthResponse) => {
@@ -321,7 +326,6 @@ export class AccountService {
       .pipe(map((response: AuthResponse) => {
         if (response.isSuccessful) {
           this.setAccount(response.getAccountVO());
-          this.setArchive(response.getArchiveVO());
 
           this.accountChange.emit(this.account);
           return response;

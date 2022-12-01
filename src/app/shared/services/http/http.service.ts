@@ -49,6 +49,29 @@ export class HttpService {
         return response;
       })).toPromise();
   }
+
+  public sendV2Request<T>(endpoint: string, data: any = {}): Observable<T> {
+    const requestBody = {
+      ...data,
+      csrf: this.storage.session.get(CSRF_KEY)
+    };
+    const url = this.apiUrl + endpoint;
+    return this.http.post(url, requestBody, {
+      headers: {
+        'Request-Version': '2',
+        'Content-Type': 'application/json',
+      }
+    }).pipe(map((response: any) => {
+      if (response?.csrf) {
+        this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
+      }
+      return response as T;
+    }));
+  }
+
+  public sendV2RequestPromise<T>(endpoint: string, data: any = {}): Promise<T> {
+    return this.sendV2Request<T>(endpoint, data).toPromise();
+  }
 }
 
 export { Observable };
