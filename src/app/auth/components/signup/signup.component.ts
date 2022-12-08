@@ -1,16 +1,26 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
-import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { AccountResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { ApiService } from '@shared/services/api/api.service';
-import { RecordVO, FolderVO, RecordVOData, FolderVOData, AccountVO } from '@models';
+import {
+  RecordVO,
+  FolderVO,
+  RecordVOData,
+  FolderVOData,
+  AccountVO,
+} from '@models';
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
@@ -21,7 +31,7 @@ const NEW_ONBOARDING_CHANCE = 1;
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
-  host: {'class': 'pr-auth-form'}
+  host: { class: 'pr-auth-form' },
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
@@ -75,35 +85,41 @@ export class SignupComponent implements OnInit {
           archiveNbr: responseData.recArchiveNbr,
           folder_linkId: responseData.folder_linkId,
           displayName: responseData.sharedItem,
-          thumbURL500: responseData.sharedThumb
+          thumbURL500: responseData.sharedThumb,
         };
 
         this.shareFromName = responseData.ShareArcName;
 
         this.shareItemIsRecord = params.tp === 'r';
-        this.shareItem = this.shareItemIsRecord ? new RecordVO(itemData) : new FolderVO(itemData);
+        this.shareItem = this.shareItemIsRecord
+          ? new RecordVO(itemData)
+          : new FolderVO(itemData);
       }
     }
 
     this.signupForm = fb.group({
       invitation: [inviteCode || ''],
-      email: [email || '', [trimWhitespace, Validators.required, Validators.email]],
+      email: [
+        email || '',
+        [trimWhitespace, Validators.required, Validators.email],
+      ],
       name: [name || '', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+      ],
       agreed: [false, [Validators.requiredTrue]],
-      optIn: [true]
+      optIn: [true],
     });
 
-    const confirmPasswordControl = new FormControl('',
-    [
+    const confirmPasswordControl = new FormControl('', [
       Validators.required,
-      matchControlValidator(this.signupForm.controls['password'])
+      matchControlValidator(this.signupForm.controls['password']),
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   shouldCreateDefaultArchive() {
     if (window.location.search.includes('createArchive')) {
@@ -121,50 +137,61 @@ export class SignupComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.signUp(
-      formValue.email,
-      formValue.name,
-      formValue.password,
-      formValue.confirm,
-      formValue.agreed,
-      formValue.optIn,
-      null,
-      formValue.invitation,
-      this.shouldCreateDefaultArchive(),
-    ).then((response: AccountResponse) => {
-        const account = response.getAccountVO();
+    this.accountService
+      .signUp(
+        formValue.email,
+        formValue.name,
+        formValue.password,
+        formValue.confirm,
+        formValue.agreed,
+        formValue.optIn,
+        null,
+        formValue.invitation,
+        this.shouldCreateDefaultArchive()
+      )
+      .then((account: AccountVO) => {
         if (account.needsVerification()) {
-          this.message.showMessage(`Verify to continue as ${account.primaryEmail}.`, 'warning');
-          this.router.navigate(['..', 'verify'], {relativeTo: this.route});
+          this.message.showMessage(
+            `Verify to continue as ${account.primaryEmail}.`,
+            'warning'
+          );
+          this.router.navigate(['..', 'verify'], { relativeTo: this.route });
         } else {
-          this.accountService.logIn(formValue.email, formValue.password, true, true)
+          this.accountService
+            .logIn(formValue.email, formValue.password, true, true)
             .then(() => {
               this.redirectUserFromSignup();
             });
         }
       })
-      .catch((response: AccountResponse) => {
-        this.message.showError(response.getMessage(), true);
+      .catch((err) => {
+        this.message.showError(err.error.message, true);
         this.waiting = false;
       });
   }
 
   public redirectUserFromSignup() {
-    this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+    this.message.showMessage(
+      `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
+      'success'
+    );
 
     if (this.route.snapshot.queryParams.eventCategory) {
       this.ga.sendEvent({
         hitType: 'event',
         eventCategory: this.route.snapshot.queryParams.eventCategory,
-        eventAction: 'signup'
+        eventAction: 'signup',
       });
     }
 
     if (this.route.snapshot.queryParams.shareByUrl) {
-      this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl]);
+      this.router.navigate([
+        '/share',
+        this.route.snapshot.queryParams.shareByUrl,
+      ]);
     } else if (this.route.snapshot.queryParams.cta === 'timeline') {
       if (this.device.isMobile() || !this.device.didOptOut()) {
-        this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
+        this.router.navigate(['/public'], { queryParams: { cta: 'timeline' } });
       } else {
         window.location.assign(`/app/public?cta=timeline`);
       }
@@ -180,7 +207,12 @@ export class SignupComponent implements OnInit {
       }, 500);
     } else {
       setTimeout(() => {
-        this.router.navigate(['/shares', 'withme', this.shareItem.archiveNbr, this.shareItem.folder_linkId]);
+        this.router.navigate([
+          '/shares',
+          'withme',
+          this.shareItem.archiveNbr,
+          this.shareItem.folder_linkId,
+        ]);
       }, 500);
     }
   }

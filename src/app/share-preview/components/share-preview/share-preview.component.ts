@@ -513,7 +513,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         formValue.invitation,
         true
       )
-      .then((response: AccountResponse) => {
+      .then((account: AccountVO) => {
         this.sendGaEvent('signup');
         return this.accountService.logIn(
           formValue.email,
@@ -521,6 +521,10 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           true,
           true
         );
+      })
+      .catch((err) => {
+        this.message.showError(err.error.message, true);
+        this.waiting = false;
       })
       .then(() => {
         // check if invite and show preview mode, or send access request
@@ -538,8 +542,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           this.onRequestAccessClick();
         }
       })
-      .catch((response: AccountResponse) => {
-        this.message.showError(response.getMessage(), true);
+      .catch((err) => {
+        this.message.showError(err, true);
         this.waiting = false;
       });
   }

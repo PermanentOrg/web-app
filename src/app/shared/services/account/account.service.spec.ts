@@ -1,187 +1,112 @@
-// import { TestBed, inject } from '@angular/core/testing';
-// import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-// import { CookieService } from 'ngx-cookie-service';
+/* @format */
+import { TestBed, inject } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { Shallow } from 'shallow-render';
+import { Observable } from 'rxjs';
 
-// import { last } from 'rxjs/operators';
-// import { concat } from 'rxjs';
+import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { AuthResponse } from '@shared/services/api/index.repo';
+import { CreateCredentialsResponse } from '@shared/services/api/auth.repo';
+import { AppModule } from '../../../app.module';
+import { AccountVO, ArchiveVO } from '@root/app/models';
 
-// import { AccountService } from '@shared/services/account/account.service';
-// import { TEST_DATA } from '@core/core.module.spec';
-// import { AuthResponse } from '@shared/services/api/auth.repo';
-// import { AccountVO, ArchiveVO } from '@root/app/models';
-// import { environment } from '@root/environments/environment';
-// import { AccountResponse } from '@shared/services/api/index.repo';
-// import { StorageService } from '@shared/services/storage/storage.service';
-// import { RouterTestingModule } from '@angular/router/testing';
+describe('AccountService', () => {
+  let shallow: Shallow<AccountService>;
 
-// describe('AccountService', () => {
-//   let httpMock: HttpTestingController;
-//   let service: AccountService;
-//   let storageService: StorageService;
+  beforeEach(() => {
+    shallow = new Shallow(AccountService, AppModule)
+      .mock(ApiService, {
+        auth: {
+          createCredentials: (
+            fullName: string,
+            email: string,
+            password: string,
+            passwordConfirm: string,
+            phone?: string
+          ) => Promise.resolve({ user: { id: 'test-subject' } }),
+          logOut: () =>
+            new Observable((observer) => {
+              observer.next(new AuthResponse({ isSuccessful: true }));
+              observer.complete();
+            }),
+        },
+        account: {
+          signUp: (
+            email: string,
+            fullName: string,
+            agreed: boolean,
+            optIn: boolean,
+            createDefaultArchive: boolean,
+            subject: string,
+            phone?: string,
+            inviteCode?: string
+          ) => {
+            return new Observable((observer) => {
+              observer.next(
+                new AccountVO({
+                  primaryEmail: 'test@permanent.org',
+                  fullName: 'Test User',
+                })
+              );
+              observer.complete();
+            });
+          },
+          get: (account: AccountVO) => Promise.reject({}),
+        },
+      })
+      .mock(Router, {
+        navigate: (route: string[]) => Promise.resolve(true),
+      });
+  });
 
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({
-//       imports: [
-//         HttpClientTestingModule,
-//         RouterTestingModule
-//       ],
-//       providers: [
-//         CookieService,
-//         AccountService,
-//         StorageService
-//       ]
-//     });
+  it('should be created', () => {
+    const { instance } = shallow.createService();
+    expect(instance).toBeTruthy();
+  });
 
-//     httpMock = TestBed.get(HttpTestingController);
-//     service = TestBed.get(AccountService);
-//     storageService = TestBed.get(StorageService);
+  it('should make the correct API calls during signUp', async () => {
+    const { instance, inject } = shallow.createService();
+    const apiService = inject(ApiService);
+    const authSpy = spyOn(apiService.auth, 'createCredentials').and.returnValue(
+      Promise.resolve({ user: { id: 'test-subject' } })
+    );
+    const account = await instance.signUp(
+      'test@permanent.org',
+      'Test User',
+      'password123',
+      'password123',
+      true,
+      true,
+      '',
+      '',
+      true
+    );
+    expect(authSpy).toHaveBeenCalled();
+    expect(account.primaryEmail).toEqual('test@permanent.org');
+  });
 
-//     storageService.local.clear();
-//     storageService.session.clear();
-//   });
-
-//   afterEach(() => {
-//     httpMock.verify();
-//     storageService.local.clear();
-//     storageService.session.clear();
-//   });
-
-//   it('should be created with no account or archive data', () => {
-//     expect(service.getAccount()).toBeUndefined();
-//     expect(service.getArchive()).toBeUndefined();
-//   });
-
-//   it('should log in to an account', () => {
-//     const result = service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
-//       .then((response: AuthResponse) => {
-//         const responseArchive = response.getArchiveVO();
-//         const responseAccount = response.getAccountVO();
-//         expect(response.isSuccessful).toBeTruthy();
-
-//         expect(responseAccount.accountId).toEqual(TEST_DATA.account.accountId);
-//         expect(responseArchive.archiveId).toEqual(TEST_DATA.archive.archiveId);
-
-//         expect(service.getAccount().accountId).toEqual(TEST_DATA.account.accountId);
-//         expect(service.getArchive().archiveId).toEqual(TEST_DATA.archive.archiveId);
-//       });
-
-//     const expected = new AuthResponse({isSuccessful: true});
-//     expected.setData([{
-//       AccountVO: new AccountVO(TEST_DATA.account),
-//       ArchiveVO: new ArchiveVO(TEST_DATA.archive)
-//     }]);
-
-//     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
-//     req.flush(expected);
-
-//     return result;
-//   });
-
-//   it('should detect need to verify MFA after login', () => {
-//     const expected = require('@root/test/responses/auth.login.verifyMfa.json');
-
-//     const result = service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
-//       .then((response: AuthResponse) => {
-//         expect(response.isSuccessful).toBeFalsy();
-
-//         expect(response.needsMFA()).toBeTruthy();
-//       });
-
-//     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
-//     req.flush(expected);
-
-//     return result;
-//   });
-
-//   it('should verify MFA', () => {
-//     const expected = require('@root/test/responses/auth.verify.success.json');
-
-//     service.setAccount(new AccountVO(TEST_DATA.account));
-
-//     const result = service.verifyMfa('1111')
-//       .then((response: AuthResponse) => {
-//         expect(response.isSuccessful).toBeTruthy();
-
-//         expect(service.getAccount().accountId).toEqual(TEST_DATA.account.accountId);
-//       });
-
-//     const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
-//     req.flush(expected);
-
-//     return result;
-//   });
-
-//   it('should detect need to verify email after login', () => {
-//     const expected = require('@root/test/responses/auth.login.verifyEmail.json');
-
-//     const result = service.logIn(TEST_DATA.user.email, TEST_DATA.user.password, true, true)
-//       .then((response: AuthResponse) => {
-//         expect(response.isSuccessful).toBeFalsy();
-//         expect(response.needsVerification()).toBeTruthy();
-//       });
-
-//     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
-//     req.flush(expected);
-
-//     return result;
-//   });
-
-//   it('should log out of an account', () => {
-//     service.setAccount(new AccountVO(TEST_DATA.account));
-//     service.setArchive(new ArchiveVO(TEST_DATA.archive));
-
-//     const result = service.logOut()
-//        .then((response: AuthResponse) => {
-//           expect(response.isSuccessful).toBeTruthy();
-
-//           expect(service.getAccount()).toBeUndefined();
-//           expect(service.getArchive()).toBeUndefined();
-//       });
-
-//     const expected = new AuthResponse({isSuccessful: true});
-//     const req = httpMock.expectOne(`${environment.apiUrl}/auth/logout`);
-//     req.flush(expected);
-
-//     return result;
-//   });
-
-//   it('should sign up for an account', () => {
-//     const expected = require('@root/test/responses/auth.signup.success.json');
-
-//     service.signUp(TEST_DATA.user.email, TEST_DATA.user.name, TEST_DATA.user.password, TEST_DATA.user.password,
-//       true, true, null, 'Permanent Archive')
-//       .then((response: AccountResponse) => {
-//         const responseAccount = response.getAccountVO();
-//         const serviceAccount = service.getAccount();
-
-//         expect(response.isSuccessful).toBeTruthy();
-
-//         expect(responseAccount.accountId).toEqual(TEST_DATA.account.accountId);
-//         expect(serviceAccount.accountId).toEqual(TEST_DATA.account.accountId);
-
-//         expect(service.getArchive()).toBeFalsy();
-
-//         expect(response.needsVerification()).toBeTruthy();
-//         expect(responseAccount.needsVerification()).toBeTruthy();
-//       });
-
-//     const req = httpMock.expectOne(`${environment.apiUrl}/account/post`);
-//     req.flush(expected);
-//   });
-
-//   it('should trigger catch on failed signup', () => {
-//     const expected = require('@root/test/responses/auth.signup.duplicate.json');
-
-//     service.signUp(TEST_DATA.user.email, TEST_DATA.user.name, TEST_DATA.user.password, TEST_DATA.user.password,
-//       true, true, null, 'Permanent Archive')
-//       .then((response: AccountResponse) => {
-//         fail();
-//       })
-//       .catch((response: AccountResponse) => {
-//         expect(response.isSuccessful).toBeFalsy();
-//       });
-
-//     const req = httpMock.expectOne(`${environment.apiUrl}/account/post`);
-//     req.flush(expected);
-//   });
-// });
+  it('should pass along errors encountered during signUp', async () => {
+    const { instance, inject } = shallow.createService();
+    const apiService = inject(ApiService);
+    const expectedError = 'Out of cheese error. Redo from start';
+    const authSpy = spyOn(apiService.auth, 'createCredentials').and.returnValue(
+      Promise.reject(expectedError)
+    );
+    try {
+      await instance.signUp(
+        'test@permanent.org',
+        'Test User',
+        'password123',
+        'password123',
+        true,
+        true,
+        '',
+        '',
+        true
+      );
+    } catch (error) {
+      expect(error).toEqual(expectedError);
+    }
+  });
+});

@@ -1,78 +1,100 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, SimpleVO } from '@root/app/models';
+/* @format */
+import {
+  AccountVO,
+  AccountPasswordVO,
+  ArchiveVO,
+  SimpleVO,
+} from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { Observable } from 'rxjs';
 
 export class AccountRepo extends BaseRepo {
   public get(accountVO: AccountVO) {
     const account = {
-      accountId: accountVO.accountId
+      accountId: accountVO.accountId,
     };
 
-    return this.http.sendRequestPromise<AccountResponse>('/account/get', [account], AccountResponse);
+    return this.http.sendRequestPromise<AccountResponse>(
+      '/account/get',
+      [account],
+      AccountResponse
+    );
   }
 
   public signUp(
     email: string,
     fullName: string,
-    password: string,
-    passwordConfirm: string,
     agreed: boolean,
     optIn: boolean,
-    phone: string,
-    inviteCode: string,
     createDefaultArchive: boolean,
+    subject: string,
+    phone?: string,
+    inviteCode?: string
   ) {
-    const accountVO = new AccountVO({
+    const requestBody = {
       primaryEmail: email,
       primaryPhone: phone,
       fullName: fullName,
       agreed: agreed,
       optIn: optIn,
-      inviteCode: inviteCode
-    });
+      inviteCode: inviteCode,
+      createArchive: createDefaultArchive,
+      subject: subject,
+    };
 
-    const accountPasswordVO = new AccountPasswordVO({
-      password: password,
-      passwordVerify: passwordConfirm
-    });
-
-    const data = [{
-      AccountVO: accountVO,
-      AccountPasswordVO: accountPasswordVO,
-      SimpleVO: new SimpleVO({key: 'createArchive', value: createDefaultArchive}),
-    }];
-
-    return this.http.sendRequest<AccountResponse>('/account/post', data, AccountResponse);
+    return this.http.sendV2Request<AccountVO>(
+      '/account/post',
+      requestBody,
+      AccountVO
+    );
   }
 
   public update(accountVO: AccountVO) {
     const clone = new AccountVO(accountVO);
     delete clone.notificationPreferences;
 
-    const data = [{
-      AccountVO: clone
-    }];
+    const data = [
+      {
+        AccountVO: clone,
+      },
+    ];
 
-    return this.http.sendRequestPromise<AccountResponse>('/account/update', data, AccountResponse);
+    return this.http.sendRequestPromise<AccountResponse>(
+      '/account/update',
+      data,
+      AccountResponse
+    );
   }
 
   public delete(accountVO: AccountVO) {
     const clone = new AccountVO(accountVO);
     delete clone.notificationPreferences;
 
-    const data = [{
-      AccountVO: clone
-    }];
+    const data = [
+      {
+        AccountVO: clone,
+      },
+    ];
 
-    return this.http.sendRequestPromise<AccountResponse>('/account/delete', data, AccountResponse);
+    return this.http.sendRequestPromise<AccountResponse>(
+      '/account/delete',
+      data,
+      AccountResponse
+    );
   }
 
   public updateNotificationPreference(preferencePath: string, value: boolean) {
-    const data = [{
-      SimpleVO: new SimpleVO({key: preferencePath, value})
-    }];
+    const data = [
+      {
+        SimpleVO: new SimpleVO({ key: preferencePath, value }),
+      },
+    ];
 
-    return this.http.sendRequestPromise<AccountResponse>('/account/updatePreference', data, AccountResponse);
+    return this.http.sendRequestPromise<AccountResponse>(
+      '/account/updatePreference',
+      data,
+      AccountResponse
+    );
   }
 }
 

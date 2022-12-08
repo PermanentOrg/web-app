@@ -1,3 +1,4 @@
+/* @format */
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -5,21 +6,22 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
-import { AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
+import { AccountVO } from '@models';
 
 @Component({
   selector: 'pr-newsletter-signup',
   templateUrl: './newsletter-signup.component.html',
-  styleUrls: ['./newsletter-signup.component.scss']
+  styleUrls: ['./newsletter-signup.component.scss'],
 })
 export class NewsletterSignupComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;
   @HostBinding('class.for-dark-bg') forDarkBg = false;
   @HostBinding('class.visible') visible = false;
 
-  mailchimpEndpoint = 'https://permanent.us12.list-manage.com/subscribe/post-json?u=2948a82c4a163d7ab43a13356&amp;id=487bd863fb&';
+  mailchimpEndpoint =
+    'https://permanent.us12.list-manage.com/subscribe/post-json?u=2948a82c4a163d7ab43a13356&amp;id=487bd863fb&';
   mailchimpForm: FormGroup;
   mailchimpError: string;
   mailchimpSent = false;
@@ -40,20 +42,25 @@ export class NewsletterSignupComponent implements OnInit {
     private message: MessageService,
     private accountService: AccountService
   ) {
-
     const queryParams = route.snapshot.queryParams;
 
     this.mailchimpForm = fb.group({
-      email: ['', [ Validators.required, Validators.email ]]
+      email: ['', [Validators.required, Validators.email]],
     });
 
     this.signupForm = fb.group({
       invitation: [queryParams.inviteCode || null],
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(APP_CONFIG.passwordMinLength),
+        ],
+      ],
       agreed: [true, [Validators.requiredTrue]],
-      optIn: [true]
+      optIn: [true],
     });
 
     this.forLightBg = this.route.snapshot.queryParams.theme === 'forLightBg';
@@ -80,10 +87,11 @@ export class NewsletterSignupComponent implements OnInit {
       .set('b_2948a82c4a163d7ab43a13356_487bd863fb', '');
 
     const url = this.mailchimpEndpoint + params.toString().replace('+', '%2B');
-    this.http.jsonp(url, 'c').subscribe((response: any) => {
+    this.http.jsonp(url, 'c').subscribe(
+      (response: any) => {
         this.waiting = false;
         this.signupForm.patchValue({
-          email: formValue.email
+          email: formValue.email,
         });
         if (response.msg.includes('already')) {
           this.mailchimpSent = true;
@@ -94,10 +102,12 @@ export class NewsletterSignupComponent implements OnInit {
           this.mailchimpError = null;
           this.mailchimpSent = true;
         }
-      }, error => {
+      },
+      (error) => {
         this.waiting = false;
         this.mailchimpSent = true;
-      });
+      }
+    );
   }
 
   onSignupSubmit(formValue) {
@@ -107,29 +117,30 @@ export class NewsletterSignupComponent implements OnInit {
 
     this.waiting = true;
 
-    this.accountService.signUp(
-      formValue.email,
-      formValue.name,
-      formValue.password,
-      formValue.password,
-      formValue.agreed,
-      false,
-      null,
-      formValue.invitation,
-      true,
-    ).then((response: AccountResponse) => {
-        return this.accountService.logIn(formValue.email, formValue.password, true, true)
+    this.accountService
+      .signUp(
+        formValue.email,
+        formValue.name,
+        formValue.password,
+        formValue.password,
+        formValue.agreed,
+        false,
+        null,
+        formValue.invitation,
+        true
+      )
+      .then((response: AccountVO) => {
+        return this.accountService
+          .logIn(formValue.email, formValue.password, true, true)
           .then(() => {
             this.waiting = false;
             this.done = true;
             window.location.assign('/app');
-            // this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
           });
       })
-      .catch((response: AccountResponse) => {
-        this.message.showError(response.getMessage(), true);
+      .catch((err) => {
+        this.message.showError(err.error.message, true);
         this.waiting = false;
       });
   }
-
 }

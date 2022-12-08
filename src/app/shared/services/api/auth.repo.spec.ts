@@ -1,10 +1,19 @@
+/* @format */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
 import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
-import { SimpleVO, AccountPasswordVO, AccountVO, ArchiveVO } from '@root/app/models';
+import {
+  SimpleVO,
+  AccountPasswordVO,
+  AccountVO,
+  ArchiveVO,
+} from '@root/app/models';
 
 describe('AuthRepo', () => {
   let repo: AuthRepo;
@@ -14,26 +23,24 @@ describe('AuthRepo', () => {
     email: 'tstr@permanent.org',
     password: 'Abc123!!!',
     name: 'Test Account',
-    rememberMe: true
+    rememberMe: true,
   };
 
   const testAccount = {
     accountId: 1,
     primaryEmail: testUser.email,
-    fullName: testUser.name
+    fullName: testUser.name,
   };
 
   const testArchive = {
     archiveId: 1,
-    fullName: testUser.name
+    fullName: testUser.name,
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [HttpService]
+      imports: [HttpClientTestingModule],
+      providers: [HttpService],
     });
 
     repo = new AuthRepo(TestBed.get(HttpService));
@@ -45,58 +52,89 @@ describe('AuthRepo', () => {
   });
 
   it('should check logged in status', () => {
-    const returnData = [{
-      SimpleVO: new SimpleVO({
-        key: 'bool',
-        value: true
-      })
-    }];
+    const returnData = [
+      {
+        SimpleVO: new SimpleVO({
+          key: 'bool',
+          value: true,
+        }),
+      },
+    ];
 
-    const expected = new AuthResponse({isSuccessful: true});
+    const expected = new AuthResponse({ isSuccessful: true });
     expected.setData(returnData);
 
-    repo.isLoggedIn()
-      .then(response => {
-        expect(response).toEqual(expected);
-      });
+    repo.isLoggedIn().then((response) => {
+      expect(response).toEqual(expected);
+    });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/loggedIn`);
     req.flush(expected);
   });
 
   it('should log in', () => {
-    const data = [{
-      AccountPasswordVO: new AccountPasswordVO({password: testUser.password}),
-      AccountVO: new AccountVO({primaryEmail: testUser.email, rememberMe: testUser.rememberMe})
-    }];
+    const data = [
+      {
+        AccountPasswordVO: new AccountPasswordVO({
+          password: testUser.password,
+        }),
+        AccountVO: new AccountVO({
+          primaryEmail: testUser.email,
+          rememberMe: testUser.rememberMe,
+        }),
+      },
+    ];
 
-    const returnData = [{
-      AccountVO: new AccountVO(testAccount),
-      ArchiveVO: new ArchiveVO(testArchive)
-    }];
+    const returnData = [
+      {
+        AccountVO: new AccountVO(testAccount),
+        ArchiveVO: new ArchiveVO(testArchive),
+      },
+    ];
 
-    const expected = new AuthResponse({isSuccessful: true});
+    const expected = new AuthResponse({ isSuccessful: true });
     expected.setData(returnData);
 
-    repo.logIn(testUser.email, testUser.password, testUser.rememberMe, true)
-    .subscribe(response => {
-      expect(response).toEqual(expected);
-    });
+    repo
+      .logIn(testUser.email, testUser.password, testUser.rememberMe, true)
+      .subscribe((response) => {
+        expect(response).toEqual(expected);
+      });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush(expected);
   });
 
   it('should send a forgot password email', () => {
-    const expected = require ('@root/test/responses/auth.forgotPassword.success.json');
+    const expected = require('@root/test/responses/auth.forgotPassword.success.json');
 
-    repo.forgotPassword(testUser.email)
-    .subscribe((response: AuthResponse) => {
+    repo.forgotPassword(testUser.email).subscribe((response: AuthResponse) => {
       expect(response.isSuccessful).toBeTruthy();
-      expect(response.getMessage()).toEqual('Change Password URL sent to email address provided');
+      expect(response.getMessage()).toEqual(
+        'Change Password URL sent to email address provided'
+      );
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/auth/sendEmailForgotPassword`);
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/auth/sendEmailForgotPassword`
+    );
+    req.flush(expected);
+  });
+
+  it('should create credentials', () => {
+    const expected = {
+      user: { id: 'test-subject' },
+    };
+
+    repo.createCredentials(
+      'Test User',
+      'test@permanent.org',
+      'password123',
+      'password123'
+    );
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/auth/createCredentials`
+    );
     req.flush(expected);
   });
 });

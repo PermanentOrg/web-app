@@ -1,14 +1,19 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
+import { AccountVO } from '@root/app/models';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
-import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { AccountResponse } from '@shared/services/api/index.repo';
 
 import * as FormUtilities from '@shared/utilities/forms';
 
@@ -18,7 +23,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-signup',
   templateUrl: './signup-embed.component.html',
   styleUrls: ['./signup-embed.component.scss'],
-  host: {'class': 'pr-auth-form'}
+  host: { class: 'pr-auth-form' },
 })
 export class SignupEmbedComponent implements OnInit {
   signupForm: FormGroup;
@@ -30,7 +35,7 @@ export class SignupEmbedComponent implements OnInit {
     invitation: false,
     email: false,
     password: false,
-    confirm: false
+    confirm: false,
   };
 
   constructor(
@@ -49,50 +54,55 @@ export class SignupEmbedComponent implements OnInit {
       invitation: [this.inviteCode ? this.inviteCode : ''],
       email: ['', [trimWhitespace, Validators.required, Validators.email]],
       name: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+      ],
       agreed: [false, [Validators.requiredTrue]],
-      optIn: [true]
+      optIn: [true],
     });
 
-    const confirmPasswordControl = new FormControl('',
-    [
+    const confirmPasswordControl = new FormControl('', [
       Validators.required,
-      matchControlValidator(this.signupForm.controls['password'])
+      matchControlValidator(this.signupForm.controls['password']),
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.signUp(
-      formValue.email,
-      formValue.name,
-      formValue.password,
-      formValue.confirm,
-      formValue.agreed,
-      formValue.optIn,
-      null,
-      formValue.invitation,
-      true,
-    ).then((response: AccountResponse) => {
-        const account = response.getAccountVO();
+    this.accountService
+      .signUp(
+        formValue.email,
+        formValue.name,
+        formValue.password,
+        formValue.confirm,
+        formValue.agreed,
+        formValue.optIn,
+        null,
+        formValue.invitation,
+        true
+      )
+      .then((account: AccountVO) => {
         if (account.needsVerification()) {
           this.router.navigate(['..', 'verify'], { relativeTo: this.route });
         } else {
-          this.accountService.logIn(formValue.email, formValue.password, true, true)
-          .then(() => {
-            this.router.navigate(['..', 'done'], { relativeTo: this.route, queryParams: { inviteCode: this.inviteCode } });
-          });
+          this.accountService
+            .logIn(formValue.email, formValue.password, true, true)
+            .then(() => {
+              this.router.navigate(['..', 'done'], {
+                relativeTo: this.route,
+                queryParams: { inviteCode: this.inviteCode },
+              });
+            });
         }
       })
-      .catch((response: AccountResponse) => {
-        this.message.showError(response.getMessage(), true);
+      .catch((err) => {
+        this.message.showError(err.error.message, true);
         this.waiting = false;
       });
   }
-
 }
