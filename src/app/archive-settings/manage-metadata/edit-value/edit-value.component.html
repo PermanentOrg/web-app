@@ -1,0 +1,26 @@
+<div class="value">
+  <div class="value-line" *ngIf="!editing; else valueEditor">
+    <span class="value-name">{{ tag.name | metadataValue }}</span>
+    <div class="edit-delete-trigger" (click)="menuOpen = true">...</div>
+  </div>
+  <ng-template #valueEditor>
+    <div class="value-editor">
+      <form (ngSubmit)="saveTag()">
+        <input
+          type="text"
+          name="newValueName"
+          id="newValueName"
+          [(ngModel)]="newValueName"
+          [ngModelOptions]="{ standalone: true }"
+          [placeholder]="originalTagName"
+          required
+          [disabled]="waiting"
+        />
+      </form>
+    </div>
+  </ng-template>
+  <div class="edit-delete-menu" *ngIf="menuOpen">
+    <div class="edit" (click)="openEditor()">edit</div>
+    <div class="delete" (click)="delete()">delete</div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="manage-custom-metadata">
+  <div class="category-list">
+    <div
+      *ngFor="let category of categories"
+      [class]="{ category: true, selected: activeCategory === category }"
+      (click)="setActiveCategory(category)"
+    >
+      {{ category }}
+    </div>
+    <div class="add-new-category">
+      <pr-metadata-add-new-category
+        (tagsUpdate)="refreshTagsInPlace()"
+      ></pr-metadata-add-new-category>
+    </div>
+  </div>
+  <div class="values-list">
+    <div *ngFor="let tag of values" class="value">
+      <pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>
+    </div>
+    <div *ngIf="activeCategory !== null" class="add-new-value">
+      <pr-metadata-add-new-value
+        [category]="activeCategory"
+        (tagsUpdate)="refreshTagsInPlace()"
+      ></pr-metadata-add-new-value>
+    </div>
+  </div>
+</div>
