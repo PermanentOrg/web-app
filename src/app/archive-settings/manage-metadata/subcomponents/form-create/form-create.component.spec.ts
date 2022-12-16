@@ -1,6 +1,6 @@
-import { CreationFormComponent } from './creation-form.component';
+import { FormCreateComponent } from './form-create.component';
 import { Shallow } from 'shallow-render';
-import { ManageMetadataModule } from '../manage-metadata.module';
+import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -8,7 +8,7 @@ import { TagVOData } from '@models/tag-vo';
 import { async } from '@firebase/util';
 
 fdescribe('AddNewValueComponent', () => {
-  let shallow: Shallow<CreationFormComponent>;
+  let shallow: Shallow<FormCreateComponent>;
 
   const defaultRender = async (
     c: (tagName: string) => Promise<void> = async () => {}
@@ -23,7 +23,7 @@ fdescribe('AddNewValueComponent', () => {
     );
 
   beforeEach(async () => {
-    shallow = new Shallow(CreationFormComponent, ManageMetadataModule).import(
+    shallow = new Shallow(FormCreateComponent, ManageMetadataModule).import(
       FormsModule
     );
     // .mock(MessageService, {

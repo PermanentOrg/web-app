@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 
 import { AddNewValueComponent } from './add-new-value.component';
 import { Shallow } from 'shallow-render';
-import { ManageMetadataModule } from '../manage-metadata.module';
+import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { TagVOData } from '@models/tag-vo';
-import { CreationFormComponent } from '../creation-form/creation-form.component';
+import { FormCreateComponent } from '../form-create/form-create.component';
 
 fdescribe('AddNewValueComponent', () => {
   let shallow: Shallow<AddNewValueComponent>;
@@ -34,7 +34,7 @@ fdescribe('AddNewValueComponent', () => {
     messageShown = false;
     shallow = new Shallow(AddNewValueComponent, ManageMetadataModule)
       .import(FormsModule)
-      .dontMock(CreationFormComponent)
+      .dontMock(FormCreateComponent)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;

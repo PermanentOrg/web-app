@@ -1,6 +1,6 @@
 <div class="value">
   <div class="value-line" *ngIf="!editing; else valueEditor">
-    <span class="value-name">{{ tag.name | metadataValue }}</span>
+    <span class="value-name">{{ displayName }}</span>
     <div class="edit-delete-trigger" (click)="menuOpen = true">...</div>
   </div>
   <ng-template #valueEditor>
@@ -12,7 +12,7 @@
           id="newValueName"
           [(ngModel)]="newValueName"
           [ngModelOptions]="{ standalone: true }"
-          [placeholder]="originalTagName"
+          [placeholder]="displayName"
           required
           [disabled]="waiting"
         />
@@ -21,6 +21,6 @@
   </ng-template>
   <div class="edit-delete-menu" *ngIf="menuOpen">
     <div class="edit" (click)="openEditor()">edit</div>
-    <div class="delete" (click)="delete()">delete</div>
+    <div class="delete" (click)="deleteTag()">delete</div>
   </div>
 </div>

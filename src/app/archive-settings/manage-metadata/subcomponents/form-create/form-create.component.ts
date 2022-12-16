@@ -2,10 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'pr-metadata-creation-form',
-  templateUrl: './creation-form.component.html',
-  styleUrls: ['./creation-form.component.scss'],
+  templateUrl: './form-create.component.html',
+  styleUrls: ['./form-create.component.scss'],
 })
-export class CreationFormComponent implements OnInit {
+export class FormCreateComponent implements OnInit {
   @Input() public placeholder = '';
   @Input() public submitCallback: (t: string) => Promise<void>;
 
