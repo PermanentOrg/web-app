@@ -14,8 +14,11 @@
     </div>
   </div>
   <div class="values-list">
-    <div *ngFor="let tag of values" class="value">
-      <pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>
+    <div *ngFor="let tag of values; trackBy: identifyTag" class="value">
+      <pr-metadata-edit-value
+        [tag]="tag"
+        (refreshTags)="refreshTagsInPlace()"
+      ></pr-metadata-edit-value>
     </div>
     <div *ngIf="activeCategory !== null" class="add-new-value">
       <pr-metadata-add-new-value

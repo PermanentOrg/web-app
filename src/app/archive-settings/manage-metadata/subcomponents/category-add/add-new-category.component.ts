@@ -23,6 +23,13 @@ export class AddNewCategoryComponent implements OnInit {
   ngOnInit(): void {}
 
   public async createNewCategory(categoryName: string) {
+    if (categoryName.includes(':')) {
+      this.msg.showError(
+        'A category name cannot contain the ":" character. Please use a different category name.'
+      );
+      throw new Error('Category name cannot contain ":"');
+    }
+
     const promptField: PromptField = {
       fieldName: 'valueName',
       placeholder: 'Value Name',
@@ -31,10 +38,10 @@ export class AddNewCategoryComponent implements OnInit {
     };
     let valueName: string;
     try {
-      valueName = await this.prompt.prompt(
+      ({ valueName } = await this.prompt.prompt(
         [promptField],
         'Please create a default value to go into the new category'
-      );
+      ));
     } catch {
       // They canceled out of the prompt, return out of the error without throwing.
       return;

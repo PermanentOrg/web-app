@@ -101,4 +101,11 @@ fdescribe('AddNewValueComponent', () => {
     expect(instance.waiting).toBe(false);
     expect(find('input').length).toBe(1);
   });
+
+  it('should blank out the form after submitting', async () => {
+    const { instance } = await defaultRender();
+    instance.newTagName = 'potato';
+    await instance.runSubmitCallback();
+    expect(instance.newTagName).toBe('');
+  });
 });

@@ -10,6 +10,7 @@
         [placeholder]="placeholder"
         required
         [disabled]="waiting"
+        (keydown.enter)="runSubmitCallback()"
       />
     </form>
   </div>

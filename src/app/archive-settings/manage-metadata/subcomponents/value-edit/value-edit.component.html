@@ -1,7 +1,7 @@
 <div class="value">
   <pr-metadata-form-edit
     displayName="{{ tag.name | metadataValue }}"
-    [delete]="delete"
-    [save]="save"
+    [delete]="delete.bind(this)"
+    [save]="save.bind(this)"
   ></pr-metadata-form-edit>
 </div>

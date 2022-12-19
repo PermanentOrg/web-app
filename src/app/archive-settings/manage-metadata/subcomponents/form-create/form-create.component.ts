@@ -21,7 +21,8 @@ export class FormCreateComponent implements OnInit {
     try {
       await this.submitCallback(this.newTagName);
       this.editing = false;
-    } catch {
+      this.newTagName = '';
+    } catch (c) {
       // do nothing
     } finally {
       this.waiting = false;

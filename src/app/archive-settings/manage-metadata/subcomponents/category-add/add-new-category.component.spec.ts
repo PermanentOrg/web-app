@@ -40,7 +40,7 @@ fdescribe('AddNewCategoryComponent', () => {
       .mock(PromptService, {
         prompt: async (message: string) => {
           if (acceptPrompt) {
-            return firstValueName;
+            return { valueName: firstValueName };
           } else {
             throw new Error('Promise rejection from canceling out of Prompt');
           }
@@ -74,6 +74,14 @@ fdescribe('AddNewCategoryComponent', () => {
     await instance.createNewCategory('vegetable');
     expect(createdTag.name).toBe('vegetable:potato');
     expect(outputs.tagsUpdate.emit).toHaveBeenCalled();
+  });
+
+  it('should reject category names containing a : character', async () => {
+    const { instance } = await shallow.render();
+    firstValueName = 'test';
+    await expectAsync(instance.createNewCategory('a:b')).toBeRejected();
+    expect(createdTag).toBeNull();
+    expect(messageShown).toBeTrue();
   });
 
   it('should be able to cancel out of creating a category', async () => {

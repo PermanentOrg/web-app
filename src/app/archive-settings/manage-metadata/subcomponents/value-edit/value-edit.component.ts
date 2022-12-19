@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { isThisQuarter } from 'date-fns';
 
 import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 
@@ -22,7 +21,6 @@ export class EditValueComponent implements OnInit {
   public async delete() {
     try {
       await this.api.tag.delete(this.tag);
-      console.log('flippy');
       this.refreshTags.emit();
     } catch {
       this.msg.showError(

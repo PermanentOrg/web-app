@@ -24,7 +24,25 @@ export class ManageCustomMetadataComponent implements OnInit {
     this.reloadTagMap();
   }
 
-  protected getTagsFromTagService(): void {
+  public setActiveCategory(category: string): void {
+    this.activeCategory = category;
+    this.values = this.tagMap.get(category);
+  }
+
+  public async refreshTagsInPlace() {
+    await this.tag.refreshTags();
+    this.getTagsFromTagService();
+    this.tagMap.clear();
+    this.reloadTagMap();
+    this.setActiveCategory(this.activeCategory);
+    console.log(this.values);
+  }
+
+  public identifyTag(index: number, item: TagVO): number {
+    return item.tagId;
+  }
+
+  protected getTagsFromTagService() {
     this.tagsList = this.tag
       .getTags()
       .map((data) => new TagVO(data))
@@ -55,18 +73,5 @@ export class ManageCustomMetadataComponent implements OnInit {
       }
     }
     this.categories = Array.from(this.tagMap.keys());
-  }
-
-  public setActiveCategory(category: string): void {
-    this.activeCategory = category;
-    this.values = this.tagMap.get(category);
-  }
-
-  public async refreshTagsInPlace() {
-    await this.tag.refreshTags();
-    this.getTagsFromTagService();
-    this.tagMap.clear();
-    this.reloadTagMap();
-    this.setActiveCategory(this.activeCategory);
   }
 }

@@ -1,6 +1,6 @@
 <div class="add-new-value">
   <pr-metadata-creation-form
     placeholder="Add New Tag"
-    [submitCallback]="createNewTag"
+    [submitCallback]="createNewTag.bind(this)"
   ></pr-metadata-creation-form>
 </div>
