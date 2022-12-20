@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -6,6 +6,7 @@ import {
   PromptService,
   PromptField,
 } from '@shared/services/prompt/prompt.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'pr-metadata-add-new-category',
@@ -13,7 +14,9 @@ import {
   styleUrls: ['./add-new-category.component.scss'],
 })
 export class AddNewCategoryComponent implements OnInit {
+  @Input() public dismissEvent: Subject<number>;
   @Output() public tagsUpdate = new EventEmitter<void>();
+  @Output() public newCategory = new EventEmitter<string>();
   constructor(
     private prompt: PromptService,
     private api: ApiService,
@@ -52,6 +55,7 @@ export class AddNewCategoryComponent implements OnInit {
     });
     try {
       await this.api.tag.create(newTag, {});
+      this.newCategory.emit(categoryName);
       this.tagsUpdate.emit();
     } catch (e) {
       this.msg.showError(

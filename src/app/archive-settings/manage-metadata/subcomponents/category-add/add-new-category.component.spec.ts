@@ -10,7 +10,7 @@ import { TagVOData } from '@models/tag-vo';
 import { FormCreateComponent } from '../form-create/form-create.component';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 
-fdescribe('AddNewCategoryComponent', () => {
+describe('AddNewCategoryComponent', () => {
   let shallow: Shallow<AddNewCategoryComponent>;
   let createdTag: TagVOData = null;
   let error = false;
@@ -74,6 +74,7 @@ fdescribe('AddNewCategoryComponent', () => {
     await instance.createNewCategory('vegetable');
     expect(createdTag.name).toBe('vegetable:potato');
     expect(outputs.tagsUpdate.emit).toHaveBeenCalled();
+    expect(outputs.newCategory.emit).toHaveBeenCalledWith('vegetable');
   });
 
   it('should reject category names containing a : character', async () => {

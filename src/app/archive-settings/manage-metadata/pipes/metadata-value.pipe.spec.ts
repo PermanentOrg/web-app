@@ -1,6 +1,6 @@
 import { MetadataValuePipe } from './metadata-value.pipe';
 
-fdescribe('MetadataValuePipe', () => {
+describe('MetadataValuePipe', () => {
   let pipe: MetadataValuePipe;
   beforeEach(() => {
     pipe = new MetadataValuePipe();

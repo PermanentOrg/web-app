@@ -9,7 +9,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { TagVOData } from '@models/tag-vo';
 import { FormCreateComponent } from '../form-create/form-create.component';
 
-fdescribe('AddNewValueComponent', () => {
+describe('AddNewValueComponent', () => {
   let shallow: Shallow<AddNewValueComponent>;
   let category: string = 'test';
   let createdTag: TagVOData = null;

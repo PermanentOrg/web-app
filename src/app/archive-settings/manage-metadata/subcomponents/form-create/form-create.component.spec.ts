@@ -6,8 +6,9 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { TagVOData } from '@models/tag-vo';
 import { async } from '@firebase/util';
+import { A11yModule } from '@angular/cdk/a11y';
 
-fdescribe('AddNewValueComponent', () => {
+describe('FormCreateComponent', () => {
   let shallow: Shallow<FormCreateComponent>;
 
   const defaultRender = async (
@@ -23,14 +24,9 @@ fdescribe('AddNewValueComponent', () => {
     );
 
   beforeEach(async () => {
-    shallow = new Shallow(FormCreateComponent, ManageMetadataModule).import(
-      FormsModule
-    );
-    // .mock(MessageService, {
-    //   showError: () => {
-    //     messageShown = true;
-    //   },
-    // });
+    shallow = new Shallow(FormCreateComponent, ManageMetadataModule)
+      .import(FormsModule)
+      .dontMock(A11yModule);
   });
 
   it('should create', async () => {

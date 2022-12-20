@@ -1,20 +1,42 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-metadata-creation-form',
   templateUrl: './form-create.component.html',
   styleUrls: ['./form-create.component.scss'],
 })
-export class FormCreateComponent implements OnInit {
+export class FormCreateComponent implements OnInit, OnDestroy {
   @Input() public placeholder = '';
   @Input() public submitCallback: (t: string) => Promise<void>;
+  @Input() public closeWindowEvent: Subject<number>;
 
   public editing = false;
   public waiting = false;
   public newTagName = '';
+
+  protected closeWindowSub: Subscription;
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.closeWindowSub = this.closeWindowEvent?.subscribe(() => {
+      if (!this.waiting) {
+        this.editing = false;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.closeWindowSub?.unsubscribe();
+  }
+
+  public reset(): void {
+    if (!this.waiting) {
+      this.editing = false;
+      this.newTagName = '';
+    }
+  }
 
   public async runSubmitCallback() {
     this.waiting = true;

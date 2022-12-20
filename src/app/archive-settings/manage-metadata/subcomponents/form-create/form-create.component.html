@@ -1,4 +1,4 @@
-<div class="add-new">
+<div class="add-new" (click)="$event.stopPropagation()">
   <div class="new-tag-input" *ngIf="editing; else addTagText">
     <form (ngSubmit)="runSubmitCallback()">
       <input
@@ -11,6 +11,9 @@
         required
         [disabled]="waiting"
         (keydown.enter)="runSubmitCallback()"
+        (keydown.escape)="reset()"
+        cdkTrapFocusAutoCapture
+        cdkTrapFocus
       />
     </form>
   </div>

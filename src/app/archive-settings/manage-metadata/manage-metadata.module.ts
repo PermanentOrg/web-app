@@ -9,6 +9,17 @@ import { EditValueComponent } from './subcomponents/value-edit/value-edit.compon
 import { FormCreateComponent } from './subcomponents/form-create/form-create.component';
 import { AddNewCategoryComponent } from './subcomponents/category-add/add-new-category.component';
 import { FormEditComponent } from './subcomponents/form-edit/form-edit.component';
+import { CategoryEditComponent } from './subcomponents/category-edit/category-edit.component';
+import { A11yModule } from '@angular/cdk/a11y';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
+import {
+  faEllipsisH,
+  faEdit,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
   declarations: [
@@ -19,8 +30,19 @@ import { FormEditComponent } from './subcomponents/form-edit/form-edit.component
     FormCreateComponent,
     AddNewCategoryComponent,
     FormEditComponent,
+    CategoryEditComponent,
   ],
-  imports: [CommonModule, SharedModule, FormsModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    FontAwesomeModule,
+    A11yModule,
+  ],
   exports: [ManageCustomMetadataComponent],
 })
-export class ManageMetadataModule {}
+export class ManageMetadataModule {
+  constructor(private library: FaIconLibrary) {
+    library.addIcons(faEllipsisH, faEdit, faTrash);
+  }
+}

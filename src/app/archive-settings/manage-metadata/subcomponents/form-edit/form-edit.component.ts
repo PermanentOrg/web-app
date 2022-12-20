@@ -1,26 +1,80 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-metadata-form-edit',
   templateUrl: './form-edit.component.html',
   styleUrls: ['./form-edit.component.scss'],
 })
-export class FormEditComponent implements OnInit {
+export class FormEditComponent implements OnInit, OnDestroy {
+  public static nextId = 0;
+
   @Input() public displayName: string;
   @Input() public delete: () => Promise<void>;
   @Input() public save: (newName: string) => Promise<void>;
+  @Input() public closeWindowEvent: Subject<number>;
+
   public menuOpen = false;
   public editing = false;
   public waiting = false;
   public newValueName = '';
+  public id: number;
 
-  constructor() {}
+  protected closeWindowSub: Subscription;
 
-  ngOnInit(): void {}
+  constructor() {
+    this.id = FormEditComponent.nextId++;
+  }
 
-  public openEditor(): void {
+  ngOnInit(): void {
+    if (this.closeWindowEvent) {
+      this.closeWindowSub = this.closeWindowEvent.subscribe((id) => {
+        if (this.id !== id) {
+          this.menuOpen = false;
+          if (!this.waiting) {
+            this.editing = false;
+          }
+        }
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.closeWindowSub?.unsubscribe();
+  }
+
+  public openMenu(event: MouseEvent): void {
+    if (event.target) {
+      event.stopPropagation();
+    }
+    this.menuOpen = true;
+    this.closeWindowEvent?.next(this.id);
+  }
+
+  public openEditor(event: MouseEvent): void {
+    if (event.target) {
+      event.stopPropagation();
+    }
     this.editing = true;
     this.menuOpen = false;
+  }
+
+  public reset() {
+    if (!this.waiting) {
+      this.editing = false;
+      this.newValueName = '';
+    }
+  }
+
+  public dismissAllEditors(e: MouseEvent): void {
+    this.closeWindowEvent?.next(-1);
   }
 
   public async saveTag() {
@@ -38,7 +92,10 @@ export class FormEditComponent implements OnInit {
     }
   }
 
-  public async deleteTag() {
+  public async deleteTag(event: MouseEvent) {
+    if (event.target) {
+      event.stopPropagation();
+    }
     this.menuOpen = false;
     if (this.waiting) {
       return;

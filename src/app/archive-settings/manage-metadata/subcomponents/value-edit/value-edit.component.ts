@@ -3,7 +3,7 @@ import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
-import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'pr-metadata-edit-value[tag]',
@@ -12,7 +12,10 @@ import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 })
 export class EditValueComponent implements OnInit {
   @Input() public tag: TagVO;
+  @Input() public dismissEvent: Subject<number>;
+
   @Output() public refreshTags: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public deletedTag: EventEmitter<TagVO> = new EventEmitter<TagVO>();
 
   constructor(private api: ApiService, private msg: MessageService) {}
 
@@ -21,6 +24,7 @@ export class EditValueComponent implements OnInit {
   public async delete() {
     try {
       await this.api.tag.delete(this.tag);
+      this.deletedTag.emit(this.tag);
       this.refreshTags.emit();
     } catch {
       this.msg.showError(

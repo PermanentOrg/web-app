@@ -7,17 +7,20 @@ import { TagVO, TagVOData } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
+import { Subject } from 'rxjs';
+import { A11yModule } from '@angular/cdk/a11y';
 
-fdescribe('FormEditComponent', () => {
+describe('FormEditComponent', () => {
   let shallow: Shallow<FormEditComponent>;
   let deleted = false;
   let updated = false;
   let newTagName: string;
   let callbackCalls: number;
+  let subject: Subject<number>;
 
   const defaultRender = async (name: string = 'test') =>
     await shallow.render(
-      '<pr-metadata-form-edit [displayName]="name" [delete]="delete" [save]="save"></pr-metadata-form-edit>',
+      '<pr-metadata-form-edit [displayName]="name" [delete]="delete" [save]="save" [closeWindowEvent]="subject"></pr-metadata-form-edit>',
       {
         bind: {
           name,
@@ -30,6 +33,7 @@ fdescribe('FormEditComponent', () => {
             updated = true;
             newTagName = n;
           },
+          subject,
         },
       }
     );
@@ -39,7 +43,9 @@ fdescribe('FormEditComponent', () => {
     updated = false;
     newTagName = null;
     callbackCalls = 0;
+    subject = new Subject<number>();
     shallow = new Shallow(FormEditComponent, ManageMetadataModule)
+      .dontMock(A11yModule)
       .import(FormsModule)
       .dontMock(MetadataValuePipe);
   });
@@ -137,5 +143,24 @@ fdescribe('FormEditComponent', () => {
     await fixture.whenStable();
     fixture.detectChanges();
     expect(callbackCalls).toBe(1);
+  });
+
+  it('should be able to subscribe to an event that closes the edit dialog', async () => {
+    const { find, fixture } = await defaultRender();
+    find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+    fixture.detectChanges();
+    subject.next(Infinity);
+    fixture.detectChanges();
+    expect(find('.edit-delete-menu').length).toBe(0);
+  });
+
+  it('should emit an event that closes other edit dialogs when another is opened', async () => {
+    let emitted = false;
+    subject.subscribe(() => {
+      emitted = true;
+    });
+    const { find, fixture } = await defaultRender();
+    find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
+    expect(emitted).toBeTrue();
   });
 });

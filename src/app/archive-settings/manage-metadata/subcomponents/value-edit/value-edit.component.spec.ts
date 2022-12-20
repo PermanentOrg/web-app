@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { FormEditComponent } from '../form-edit/form-edit.component';
 
-fdescribe('EditValueComponent', () => {
+describe('EditValueComponent', () => {
   let shallow: Shallow<EditValueComponent>;
   let deleted: boolean;
   let updated: boolean;
@@ -78,6 +78,7 @@ fdescribe('EditValueComponent', () => {
     await instance.delete();
     expect(deleted).toBeTrue();
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
+    expect(outputs.deletedTag.emit).toHaveBeenCalled();
   });
 
   it('should be able to edit a value', async () => {

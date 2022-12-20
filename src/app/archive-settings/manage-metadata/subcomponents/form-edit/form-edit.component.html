@@ -1,7 +1,13 @@
-<div class="value">
-  <div class="value-line" *ngIf="!editing; else valueEditor">
+<div #value class="value">
+  <div
+    class="value-line"
+    *ngIf="!editing; else valueEditor"
+    (click)="dismissAllEditors($event)"
+  >
     <span class="value-name">{{ displayName }}</span>
-    <div class="edit-delete-trigger" (click)="menuOpen = true">...</div>
+    <div class="edit-delete-trigger" (click)="openMenu($event)">
+      <fa-icon icon="ellipsis-h"></fa-icon>
+    </div>
   </div>
   <ng-template #valueEditor>
     <div class="value-editor">
@@ -15,12 +21,21 @@
           [placeholder]="displayName"
           required
           [disabled]="waiting"
+          (click)="$event.stopPropagation()"
+          (keydown.enter)="saveTag()"
+          (keydown.escape)="reset()"
+          cdkTrapFocusAutoCapture
+          cdkTrapFocus
         />
       </form>
     </div>
   </ng-template>
-  <div class="edit-delete-menu" *ngIf="menuOpen">
-    <div class="edit" (click)="openEditor()">edit</div>
-    <div class="delete" (click)="deleteTag()">delete</div>
+  <div #menu class="edit-delete-menu" *ngIf="menuOpen">
+    <div class="edit" (click)="openEditor($event)">
+      <fa-icon icon="edit"></fa-icon> Edit
+    </div>
+    <div class="delete" (click)="deleteTag($event)">
+      <fa-icon icon="trash"></fa-icon> Delete
+    </div>
   </div>
 </div>

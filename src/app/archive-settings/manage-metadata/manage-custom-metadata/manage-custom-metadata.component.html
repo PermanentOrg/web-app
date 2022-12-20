@@ -1,29 +1,39 @@
-<div class="manage-custom-metadata">
+<div #element class="manage-custom-metadata" (click)="dismissEvent.next(-1)">
   <div class="category-list">
     <div
       *ngFor="let category of categories"
       [class]="{ category: true, selected: activeCategory === category }"
       (click)="setActiveCategory(category)"
     >
-      {{ category }}
+      <pr-metadata-category-edit
+        (refreshTags)="refreshTagsInPlace()"
+        (deletedCategory)="addDeletedCategory($event)"
+        [category]="category"
+        [tags]="tagsList"
+        [dismissEvent]="dismissEvent"
+      ></pr-metadata-category-edit>
     </div>
     <div class="add-new-category">
       <pr-metadata-add-new-category
         (tagsUpdate)="refreshTagsInPlace()"
+        [dismissEvent]="dismissEvent"
       ></pr-metadata-add-new-category>
     </div>
   </div>
-  <div class="values-list">
+  <div class="value-list">
     <div *ngFor="let tag of values; trackBy: identifyTag" class="value">
       <pr-metadata-edit-value
         [tag]="tag"
         (refreshTags)="refreshTagsInPlace()"
+        (deletedTag)="addDeletedTag($event)"
+        [dismissEvent]="dismissEvent"
       ></pr-metadata-edit-value>
     </div>
     <div *ngIf="activeCategory !== null" class="add-new-value">
       <pr-metadata-add-new-value
         [category]="activeCategory"
         (tagsUpdate)="refreshTagsInPlace()"
+        [dismissEvent]="dismissEvent"
       ></pr-metadata-add-new-value>
     </div>
   </div>
