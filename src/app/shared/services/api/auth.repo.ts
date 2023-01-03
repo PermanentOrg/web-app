@@ -1,59 +1,97 @@
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO, AccountPasswordVOData, SimpleVO } from '@root/app/models';
-import { BaseResponse, BaseRepo, CSRFResponse } from '@shared/services/api/base';
+/* @format */
+import {
+  AccountVO,
+  AccountPasswordVO,
+  ArchiveVO,
+  AuthVO,
+  AccountPasswordVOData,
+  SimpleVO,
+} from '@root/app/models';
+import {
+  BaseResponse,
+  BaseRepo,
+  CSRFResponse,
+} from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class AuthRepo extends BaseRepo {
   public isLoggedIn(): Promise<AuthResponse> {
-    return this.http.sendRequestPromise('/auth/loggedIn', undefined, AuthResponse);
+    return this.http.sendRequestPromise(
+      '/auth/loggedIn',
+      undefined,
+      AuthResponse
+    );
   }
 
-  public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Observable<AuthResponse> {
+  public logIn(
+    email: string,
+    password: string,
+    rememberMe: boolean,
+    keepLoggedIn: boolean
+  ): Observable<AuthResponse> {
     const accountVO = new AccountVO({
       primaryEmail: email,
       rememberMe: rememberMe,
-      keepLoggedIn: keepLoggedIn
+      keepLoggedIn: keepLoggedIn,
     });
 
     const accountPasswordVO = new AccountPasswordVO({
-      password: password
+      password: password,
     });
 
-    return this.http.sendRequest<AuthResponse>('/auth/login', [{AccountVO: accountVO, AccountPasswordVO: accountPasswordVO}], AuthResponse);
+    return this.http.sendRequest<AuthResponse>(
+      '/auth/login',
+      [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
+      AuthResponse
+    );
   }
 
   public logOut() {
     return this.http.sendRequest<AuthResponse>('/auth/logout');
-
   }
 
   public verify(account: AccountVO, token: string, type: string) {
     const accountVO = new AccountVO({
       primaryEmail: account.primaryEmail,
-      accountId: account.accountId
+      accountId: account.accountId,
     });
 
     const authVO = new AuthVO({
       token: token,
-      type: type
+      type: type,
     });
 
-    return this.http.sendRequest<AuthResponse>('/auth/verify', [{AccountVO: accountVO, AuthVO: authVO}], AuthResponse);
+    return this.http.sendRequest<AuthResponse>(
+      '/auth/verify',
+      [{ AccountVO: accountVO, AuthVO: authVO }],
+      AuthResponse
+    );
   }
 
   public forgotPassword(email: string) {
     const accountVO = new AccountVO({
-      primaryEmail: email
+      primaryEmail: email,
     });
 
-    return this.http.sendRequest<AuthResponse>('/auth/sendEmailForgotPassword', [{AccountVO: accountVO}], AuthResponse);
+    return this.http.sendRequest<AuthResponse>(
+      '/auth/sendEmailForgotPassword',
+      [{ AccountVO: accountVO }],
+      AuthResponse
+    );
   }
 
-  public updatePassword(account: AccountVO, passwordVo: AccountPasswordVOData, trustToken?: string) {
-    const data = [{
-      AccountVO: account,
-      AccountPasswordVO: passwordVo,
-    }];
+  public updatePassword(
+    account: AccountVO,
+    passwordVo: AccountPasswordVOData,
+    trustToken?: string
+  ) {
+    const data = [
+      {
+        AccountVO: account,
+        AccountPasswordVO: passwordVo,
+      },
+    ];
 
     if (trustToken) {
       const v2data = {
@@ -61,32 +99,70 @@ export class AuthRepo extends BaseRepo {
         passwordOld: passwordVo.passwordOld,
         password: passwordVo.password,
         passwordVerify: passwordVo.passwordVerify,
-        trustToken
+        trustToken,
       };
-      return this.http.sendV2RequestPromise<CSRFResponse>('/account/changePassword', v2data);
+      return this.http.sendV2RequestPromise<CSRFResponse>(
+        '/account/changePassword',
+        v2data
+      );
     }
 
-    return this.http.sendRequestPromise<AuthResponse>('/account/changePassword', data, AuthResponse);
+    return this.http.sendRequestPromise<AuthResponse>(
+      '/account/changePassword',
+      data,
+      AuthResponse
+    );
   }
 
   public resendEmailVerification(accountVO: AccountVO) {
     const account = {
       primaryEmail: accountVO.primaryEmail,
-      accountId: accountVO.accountId
+      accountId: accountVO.accountId,
     };
 
-    return this.http.sendRequestPromise<AuthResponse>('/auth/resendMailCreatedAccount', [account], AuthResponse);
+    return this.http.sendRequestPromise<AuthResponse>(
+      '/auth/resendMailCreatedAccount',
+      [account],
+      AuthResponse
+    );
   }
 
   public resendPhoneVerification(accountVO: AccountVO) {
     const account = {
       primaryEmail: accountVO.primaryEmail,
-      accountId: accountVO.accountId
+      accountId: accountVO.accountId,
     };
 
-    return this.http.sendRequestPromise<AuthResponse>('/auth/resendTextCreatedAccount', [account], AuthResponse);
+    return this.http.sendRequestPromise<AuthResponse>(
+      '/auth/resendTextCreatedAccount',
+      [account],
+      AuthResponse
+    );
   }
 
+  public createCredentials(
+    fullName: string,
+    email: string,
+    password: string,
+    passwordConfirm: string,
+    phone?: string
+  ): Promise<CreateCredentialsResponse> {
+    const requestBody = {
+      fullName: fullName,
+      primaryEmail: email,
+      password: password,
+      passwordVerify: passwordConfirm,
+      primaryPhone: phone,
+    };
+    return this.http.sendV2RequestPromise<CreateCredentialsResponse>(
+      '/auth/createCredentials',
+      requestBody
+    );
+  }
+}
+
+export interface CreateCredentialsResponse {
+  user: { id: string };
 }
 
 export class AuthResponse extends BaseResponse {

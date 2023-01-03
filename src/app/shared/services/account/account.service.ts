@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
 import { map, min } from 'rxjs/operators';
 import { find, debounce } from 'lodash';
@@ -6,10 +7,19 @@ import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
-import { AuthResponse, AccountResponse, ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
+import {
+  AuthResponse,
+  AccountResponse,
+  ArchiveResponse,
+  FolderResponse,
+} from '@shared/services/api/index.repo';
 import { Router } from '@angular/router';
 import { Dialog } from '@root/app/dialog/dialog.module';
-import { AccessRole, AccessRoleType, checkMinimumAccess } from '@models/access-role';
+import {
+  AccessRole,
+  AccessRoleType,
+  checkMinimumAccess,
+} from '@models/access-role';
 
 import * as Sentry from '@sentry/browser';
 
@@ -18,7 +28,7 @@ const ARCHIVE_KEY = 'archive';
 const ROOT_KEY = 'root';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
   private account: AccountVO;
@@ -70,8 +80,8 @@ export class AccountService {
     this.storage.local.set(ACCOUNT_KEY, this.account);
 
     // set account data on Sentry scope
-    Sentry.configureScope(scope => {
-      scope.setUser({id: this.account.accountId});
+    Sentry.configureScope((scope) => {
+      scope.setUser({ id: this.account.accountId });
     });
   }
 
@@ -80,8 +90,11 @@ export class AccountService {
     this.storage.local.set(ARCHIVE_KEY, this.archive);
 
     // set archive data as 'archive' context on Sentry scope
-    Sentry.configureScope(scope => {
-      scope.setContext('archive', { archiveNbr: newArchive.archiveNbr, archiveId: newArchive.archiveId });
+    Sentry.configureScope((scope) => {
+      scope.setContext('archive', {
+        archiveNbr: newArchive.archiveNbr,
+        archiveId: newArchive.archiveId,
+      });
     });
   }
 
@@ -137,22 +150,27 @@ export class AccountService {
     this.clearArchive();
     this.clearRootFolder();
 
-    Sentry.configureScope(scope => {
+    Sentry.configureScope((scope) => {
       scope.setUser(null);
       scope.setContext('archive', null);
     });
   }
 
   public getPrivateRoot() {
-    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.private'}) as FolderVO;
+    return find(this.rootFolder.ChildItemVOs, {
+      type: 'type.folder.root.private',
+    }) as FolderVO;
   }
 
   public getPublicRoot() {
-    return find(this.rootFolder.ChildItemVOs, { type: 'type.folder.root.public'}) as FolderVO;
+    return find(this.rootFolder.ChildItemVOs, {
+      type: 'type.folder.root.public',
+    }) as FolderVO;
   }
 
   public refreshAccount() {
-    return this.api.account.get(this.account)
+    return this.api.account
+      .get(this.account)
       .then((response: AccountResponse) => {
         if (!response.isSuccessful) {
           throw response;
@@ -174,7 +192,8 @@ export class AccountService {
       return Promise.resolve();
     }
 
-    return this.api.archive.get([this.archive])
+    return this.api.archive
+      .get([this.archive])
       .then((response: ArchiveResponse) => {
         if (!response.isSuccessful) {
           throw response;
@@ -191,7 +210,8 @@ export class AccountService {
   }
 
   public refreshArchives() {
-    return this.api.archive.getAllArchives(this.account)
+    return this.api.archive
+      .getAllArchives(this.account)
       .then((response: ArchiveResponse) => {
         const archives = response.getArchiveVOs();
         this.setArchives(archives);
@@ -201,9 +221,7 @@ export class AccountService {
 
   public async hasOwnArchives() {
     const archives = await this.refreshArchives();
-    const ownArchives = archives.filter(
-      (archive) => !archive.isPending()
-    );
+    const ownArchives = archives.filter((archive) => !archive.isPending());
     return ownArchives.length > 0;
   }
 
@@ -217,7 +235,8 @@ export class AccountService {
     const updated = new AccountVO(this.account);
     updated.update(accountChanges);
 
-    return this.api.account.update(updated)
+    return this.api.account
+      .update(updated)
       .then((response: AccountResponse) => {
         const newAccount = response.getAccountVO();
         this.account.update(newAccount);
@@ -226,7 +245,8 @@ export class AccountService {
   }
 
   public changeArchive(archive: ArchiveVO) {
-    return this.api.archive.change(archive)
+    return this.api.archive
+      .change(archive)
       .then((response: ArchiveResponse) => {
         archive = response.getArchiveVO();
         this.setArchive(archive);
@@ -248,13 +268,12 @@ export class AccountService {
       return Promise.resolve(true);
     }
 
-    return this.api.auth.isLoggedIn()
-      .then((response: AuthResponse) => {
-        if (!response.isSuccessful) {
-          throw response;
-        }
-        return response.getSimpleVO().value;
-      });
+    return this.api.auth.isLoggedIn().then((response: AuthResponse) => {
+      if (!response.isSuccessful) {
+        throw response;
+      }
+      return response.getSimpleVO().value;
+    });
   }
 
   public isLoggedIn(): boolean {
@@ -262,10 +281,18 @@ export class AccountService {
   }
 
   public isEmailOrPhoneUnverified(): boolean {
-    return this.account?.emailStatus === 'status.auth.unverified' || this.account?.phoneStatus === 'status.auth.unverified';
+    return (
+      this.account?.emailStatus === 'status.auth.unverified' ||
+      this.account?.phoneStatus === 'status.auth.unverified'
+    );
   }
 
-  public logIn(email: string, password: string, rememberMe: boolean, keepLoggedIn: boolean): Promise<any> {
+  public logIn(
+    email: string,
+    password: string,
+    rememberMe: boolean,
+    keepLoggedIn: boolean
+  ): Promise<any> {
     this.skipSessionCheck = false;
 
     if (rememberMe) {
@@ -278,85 +305,114 @@ export class AccountService {
 
     const currentAccount = this.account;
 
-    return this.api.auth.logIn(email, password, rememberMe, keepLoggedIn)
-      .pipe(map((response: AuthResponse) => {
-        if (response.isSuccessful) {
-          const newAccount = response.getAccountVO();
-          if (currentAccount && newAccount.accountId === currentAccount.accountId) {
-            newAccount.isNew = currentAccount.isNew;
-          }
-          this.setAccount(newAccount);
-          if (response.getArchiveVO()?.archiveId) {
+    return this.api.auth
+      .logIn(email, password, rememberMe, keepLoggedIn)
+      .pipe(
+        map((response: AuthResponse) => {
+          if (response.isSuccessful) {
+            const newAccount = response.getAccountVO();
+            if (
+              currentAccount &&
+              newAccount.accountId === currentAccount.accountId
+            ) {
+              newAccount.isNew = currentAccount.isNew;
+            }
+            this.setAccount(newAccount);
+            if (response.getArchiveVO()?.archiveId) {
               this.setArchive(response.getArchiveVO());
-          }
-          this.skipSessionCheck = true;
+            }
+            this.skipSessionCheck = true;
 
-          this.accountChange.emit(this.account);
-        } else if (response.needsMFA() || response.needsVerification()) {
-          this.setAccount(new AccountVO({primaryEmail: email}));
-        } else {
-          throw response;
-        }
-        return response;
-      })).toPromise();
+            this.accountChange.emit(this.account);
+          } else if (response.needsMFA() || response.needsVerification()) {
+            this.setAccount(new AccountVO({ primaryEmail: email }));
+          } else {
+            throw response;
+          }
+          return response;
+        })
+      )
+      .toPromise();
   }
 
   public checkForMFAWithLogin(oldPassword: string): Promise<AuthResponse> {
-    return this.api.auth.logIn(this.account.primaryEmail, oldPassword, this.account.rememberMe, this.account.keepLoggedIn)
+    return this.api.auth
+      .logIn(
+        this.account.primaryEmail,
+        oldPassword,
+        this.account.rememberMe,
+        this.account.keepLoggedIn
+      )
       .toPromise();
   }
 
   public logOut(): Promise<AuthResponse> {
-    return this.api.auth.logOut()
-      .pipe(map((response: AuthResponse) => {
-        if ( response.isSuccessful) {
-          this.clearAccount();
-          this.clearArchive();
-          this.clearRootFolder();
+    return this.api.auth
+      .logOut()
+      .pipe(
+        map((response: AuthResponse) => {
+          if (response.isSuccessful) {
+            this.clearAccount();
+            this.clearArchive();
+            this.clearRootFolder();
 
-          this.accountChange.emit(null);
-        }
+            this.accountChange.emit(null);
+          }
 
-        return response;
-      })).toPromise();
+          return response;
+        })
+      )
+      .toPromise();
   }
 
   public verifyMfa(token: string): Promise<AuthResponse> {
-    return this.api.auth.verify(this.account, token, 'type.auth.mfaValidation')
-      .pipe(map((response: AuthResponse) => {
-        if (response.isSuccessful) {
-          this.setAccount(response.getAccountVO());
+    return this.api.auth
+      .verify(this.account, token, 'type.auth.mfaValidation')
+      .pipe(
+        map((response: AuthResponse) => {
+          if (response.isSuccessful) {
+            this.setAccount(response.getAccountVO());
 
-          this.accountChange.emit(this.account);
-          return response;
-        } else {
-          throw response;
-        }
-      })).toPromise();
+            this.accountChange.emit(this.account);
+            return response;
+          } else {
+            throw response;
+          }
+        })
+      )
+      .toPromise();
   }
 
   public verifyEmail(token: string): Promise<AuthResponse> {
-    return this.api.auth.verify(this.account, token, 'type.auth.email')
-      .pipe(map((response: AuthResponse) => {
-        if (response.isSuccessful) {
-          this.setAccount(response.getAccountVO());
-          return response;
-        } else {
-          throw response;
-        }
-      })).toPromise();
+    return this.api.auth
+      .verify(this.account, token, 'type.auth.email')
+      .pipe(
+        map((response: AuthResponse) => {
+          if (response.isSuccessful) {
+            this.setAccount(response.getAccountVO());
+            return response;
+          } else {
+            throw response;
+          }
+        })
+      )
+      .toPromise();
   }
 
   public verifyPhone(token: string): Promise<AuthResponse> {
-    return this.api.auth.verify(this.account, token, 'type.auth.phone')
-      .pipe(map((response: AuthResponse) => {
-        if (response.isSuccessful) {
-          this.setAccount(response.getAccountVO());
-          return response;
-        } else {
-          throw response;
-        }
-      })).toPromise();
+    return this.api.auth
+      .verify(this.account, token, 'type.auth.phone')
+      .pipe(
+        map((response: AuthResponse) => {
+          if (response.isSuccessful) {
+            this.setAccount(response.getAccountVO());
+            return response;
+          } else {
+            throw response;
+          }
+        })
+      )
+      .toPromise();
   }
 
   public resendEmailVerification(): Promise<AuthResponse> {
@@ -368,22 +424,35 @@ export class AccountService {
   }
 
   public switchToDefaultArchive(): Promise<ArchiveResponse> {
-    return this.api.archive.getAllArchives(this.account)
+    return this.api.archive
+      .getAllArchives(this.account)
       .then((response: ArchiveResponse) => {
         const archives = response.getArchiveVOs();
-        const defaultArchiveData = find(archives, {archiveId: this.account.defaultArchiveId});
+        const defaultArchiveData = find(archives, {
+          archiveId: this.account.defaultArchiveId,
+        });
         this.setArchive(new ArchiveVO(defaultArchiveData));
         this.archiveChange.emit(this.archive);
         return response;
       });
   }
 
-  public checkMinimumAccess(itemAccessRole: AccessRoleType, minimumAccess: AccessRole) {
-    return this.checkMinimumArchiveAccess(minimumAccess) && checkMinimumAccess(itemAccessRole, minimumAccess);
+  public checkMinimumAccess(
+    itemAccessRole: AccessRoleType,
+    minimumAccess: AccessRole
+  ) {
+    return (
+      this.checkMinimumArchiveAccess(minimumAccess) &&
+      checkMinimumAccess(itemAccessRole, minimumAccess)
+    );
   }
 
   public checkMinimumArchiveAccess(minimumAccess: AccessRole) {
-    return this.archive && this.isLoggedIn() && checkMinimumAccess(this.archive.accessRole, minimumAccess);
+    return (
+      this.archive &&
+      this.isLoggedIn() &&
+      checkMinimumAccess(this.archive.accessRole, minimumAccess)
+    );
   }
 
   public async signUp(
@@ -395,8 +464,8 @@ export class AccountService {
     optIn: boolean,
     phone: string,
     inviteCode: string,
-    createDefaultArchive: boolean,
-  ) {
+    createDefaultArchive: boolean
+  ): Promise<AccountVO> {
     this.skipSessionCheck = false;
 
     if (this.isLoggedIn()) {
@@ -405,27 +474,38 @@ export class AccountService {
       } catch (err) {}
     }
 
-    return this.api.account.signUp(
-      email,
-      fullName,
-      password,
-      passwordConfirm,
-      agreed,
-      optIn,
-      phone,
-      inviteCode,
-      createDefaultArchive,
-    )
-      .pipe(map((response: AccountResponse) => {
-        if (response.isSuccessful) {
-          const newAccount = response.getAccountVO();
-          newAccount.isNew = true;
-          this.setAccount(newAccount);
-          return response;
-        } else {
-          throw response;
-        }
-      })).toPromise();
+    try {
+      const credentials = await this.api.auth.createCredentials(
+        fullName,
+        email,
+        password,
+        passwordConfirm,
+        phone
+      );
+
+      return this.api.account
+        .signUp(
+          email,
+          fullName,
+          agreed,
+          optIn,
+          createDefaultArchive,
+          credentials.user.id,
+          phone,
+          inviteCode
+        )
+        .pipe(
+          map((response: AccountVO) => {
+            const newAccount = response;
+            newAccount.isNew = true;
+            this.setAccount(newAccount);
+            return newAccount;
+          })
+        )
+        .toPromise();
+    } catch (err) {
+      return new Promise((resolve, reject) => reject(err));
+    }
   }
 
   public setRedirect(path: string[], params?: any) {
@@ -452,8 +532,12 @@ export class AccountService {
 
   public async promptForArchiveChange(promptText = 'Choose archive:') {
     await this.refreshArchives();
-    if (this.archives.length > 1 ) {
-      return this.dialog.open('ArchiveSwitcherDialogComponent',  {promptText}, { height: 'auto', width: 'fullscreen' });
+    if (this.archives.length > 1) {
+      return this.dialog.open(
+        'ArchiveSwitcherDialogComponent',
+        { promptText },
+        { height: 'auto', width: 'fullscreen' }
+      );
     }
   }
 }
