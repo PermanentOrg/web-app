@@ -116,7 +116,16 @@
       <tr>
         <td>Tags</td>
         <td (click)="onTagsClick()">
-          <pr-tags [tags]="currentRecord.TagVOs"></pr-tags>
+          <pr-tags [tags]="keywords"></pr-tags>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Custom <br />
+          Metadata
+        </td>
+        <td (click)="onTagsClick()">
+          <pr-tags [tags]="customMetadata"></pr-tags>
         </td>
       </tr>
       <tr>
