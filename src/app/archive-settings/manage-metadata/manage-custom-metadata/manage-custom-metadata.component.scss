@@ -2,6 +2,16 @@
   max-height: 100%;
 }
 
+.custom-metadata-headers {
+  & > div {
+    flex: 0 0 50%;
+    margin: 0 5px;
+  }
+  display: flex;
+  flex-direction: row;
+  font-weight: bold;
+}
+
 .manage-custom-metadata {
   display: flex;
   flex-direction: row;
@@ -36,5 +46,5 @@
   max-height: 100%;
   margin: 5px;
   overflow-y: auto;
-  height: 35rem;
+  height: 32.5rem;
 }

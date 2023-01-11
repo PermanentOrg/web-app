@@ -62,6 +62,16 @@
         </ng-container>
         <ng-container *ngSwitchCase="'manage-metadata'">
           <div class="panel-title">Manage Custom Metadata</div>
+          <p>
+            Custom metadata allows you to add additional metadata fields and
+            values that are not currently included on Permanent.org. Manage the
+            fields and values on this page.
+            <a
+              href="https://permanent.zohodesk.com/portal/en/kb/articles/extended-metadata-options-with-tags"
+              target="_blank"
+              >Learn more.</a
+            >
+          </p>
           <ng-container *ngIf="hasAccess; else noAccess">
             <pr-manage-custom-metadata></pr-manage-custom-metadata>
           </ng-container>
