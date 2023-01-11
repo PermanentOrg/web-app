@@ -8,6 +8,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { FormEditComponent } from '../form-edit/form-edit.component';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 describe('EditValueComponent', () => {
   let shallow: Shallow<EditValueComponent>;
@@ -16,7 +17,7 @@ describe('EditValueComponent', () => {
   let newTagName: string;
   let error: boolean;
   let messageShown: boolean;
-  let apiCalls: number;
+  let rejectDelete: boolean;
 
   const defaultRender = async (
     tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' })
@@ -36,7 +37,7 @@ describe('EditValueComponent', () => {
     newTagName = '';
     error = false;
     messageShown = false;
-    apiCalls = 0;
+    rejectDelete = false;
 
     shallow = new Shallow(EditValueComponent, ManageMetadataModule)
       .import(FormsModule)
@@ -45,14 +46,12 @@ describe('EditValueComponent', () => {
       .mock(ApiService, {
         tag: {
           delete: async (tag: TagVO) => {
-            apiCalls++;
             if (error) {
               throw new Error('Test Error');
             }
             deleted = true;
           },
           update: async (tag: TagVO) => {
-            apiCalls++;
             if (error) {
               throw new Error('Test Error');
             }
@@ -64,6 +63,14 @@ describe('EditValueComponent', () => {
       .mock(MessageService, {
         showError: (message: string) => {
           messageShown = true;
+        },
+      })
+      .mock(PromptService, {
+        confirm: async () => {
+          if (rejectDelete) {
+            throw new Error('promise rejection');
+          }
+          return true;
         },
       });
   });
@@ -103,5 +110,12 @@ describe('EditValueComponent', () => {
     await expectAsync(instance.save('test')).toBeRejected();
     expect(messageShown).toBeTrue();
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+  });
+
+  it('should not do anything if they cancel out of the deletion confirmation prompt', async () => {
+    rejectDelete = true;
+    const { instance, outputs } = await defaultRender();
+    await instance.delete();
+    expect(outputs.deletedTag.emit).not.toHaveBeenCalled();
   });
 });

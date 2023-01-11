@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs';
+
+import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { TagVO } from '@models/tag-vo';
-import { Subject } from 'rxjs';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-metadata-category-edit',
@@ -17,12 +19,24 @@ export class CategoryEditComponent implements OnInit {
   @Output() public deletedCategory: EventEmitter<string> =
     new EventEmitter<string>();
 
-  constructor(private api: ApiService, private msg: MessageService) {}
+  constructor(
+    private api: ApiService,
+    private msg: MessageService,
+    private prompt: PromptService
+  ) {}
 
   ngOnInit(): void {}
 
   public async delete(): Promise<void> {
     const deleted = this.getMatchingMetadataTags();
+    try {
+      await this.prompt.confirm(
+        'Delete',
+        `Are you sure you want to delete the "${this.category}" field? (This will remove ${deleted.length} metadata values)`
+      );
+    } catch {
+      return;
+    }
     try {
       await this.api.tag.delete(deleted);
       this.deletedCategory.emit(this.category);

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 import { Subject } from 'rxjs';
 
@@ -17,11 +18,24 @@ export class EditValueComponent implements OnInit {
   @Output() public refreshTags: EventEmitter<void> = new EventEmitter<void>();
   @Output() public deletedTag: EventEmitter<TagVO> = new EventEmitter<TagVO>();
 
-  constructor(private api: ApiService, private msg: MessageService) {}
+  constructor(
+    private api: ApiService,
+    private msg: MessageService,
+    private prompt: PromptService
+  ) {}
 
   ngOnInit(): void {}
 
   public async delete() {
+    try {
+      await this.prompt.confirm(
+        'Delete',
+        `Are you sure you want to delete this metadata value? (${this.tag.name})`
+      );
+    } catch {
+      return;
+    }
+
     try {
       await this.api.tag.delete(this.tag);
       this.deletedTag.emit(this.tag);

@@ -5,6 +5,7 @@ import { FormEditComponent } from '../form-edit/form-edit.component';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { PromptService } from '@shared/services/prompt/prompt.service';
 
 describe('CategoryEditComponent', () => {
   let shallow: Shallow<CategoryEditComponent>;
@@ -14,6 +15,7 @@ describe('CategoryEditComponent', () => {
   let savedTags: TagVO[];
   let error: boolean;
   let messageShown: boolean;
+  let rejectDelete: boolean;
 
   const defaultRender = async () =>
     await shallow.render(
@@ -58,6 +60,7 @@ describe('CategoryEditComponent', () => {
     savedTags = [];
     error = false;
     messageShown = false;
+    rejectDelete = false;
     shallow = new Shallow(CategoryEditComponent, ManageMetadataModule)
       .dontMock(FormEditComponent)
       .mock(ApiService, {
@@ -79,6 +82,14 @@ describe('CategoryEditComponent', () => {
       .mock(MessageService, {
         showError: async (msg: string) => {
           messageShown = true;
+        },
+      })
+      .mock(PromptService, {
+        confirm: async () => {
+          if (rejectDelete) {
+            throw new Error('Rejected delete');
+          }
+          return true;
         },
       });
   });
@@ -123,5 +134,13 @@ describe('CategoryEditComponent', () => {
     await expectAsync(instance.save('potato')).toBeRejected();
     expect(messageShown).toBeTrue();
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
+  });
+
+  it('should not do anything if they cancel out of the deletion confirmation prompt', async () => {
+    rejectDelete = true;
+    const { instance, outputs } = await defaultRender();
+    await instance.delete();
+    expect(deletedTags.length).toBe(0);
+    expect(outputs.deletedCategory.emit).not.toHaveBeenCalled();
   });
 });
