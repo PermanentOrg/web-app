@@ -3,6 +3,7 @@
     class="value-line"
     *ngIf="!editing; else valueEditor"
     (click)="dismissAllEditors($event)"
+    (dblclick)="openEditor($event)"
   >
     <span class="value-name">{{ displayName }}</span>
     <div class="edit-delete-trigger" (click)="openMenu($event)">
@@ -26,6 +27,7 @@
           (keydown.escape)="reset()"
           cdkTrapFocusAutoCapture
           cdkTrapFocus
+          autocomplete="off"
         />
       </form>
     </div>

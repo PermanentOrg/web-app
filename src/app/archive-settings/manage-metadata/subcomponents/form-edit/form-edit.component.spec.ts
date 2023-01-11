@@ -163,4 +163,11 @@ describe('FormEditComponent', () => {
     find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
     expect(emitted).toBeTrue();
   });
+
+  it('should open the editor directly if double clicked', async () => {
+    const { find, fixture } = await defaultRender();
+    find('.value-line').triggerEventHandler('dblclick', {});
+    fixture.detectChanges();
+    expect(find('.value-editor input').length).toBe(1);
+  });
 });

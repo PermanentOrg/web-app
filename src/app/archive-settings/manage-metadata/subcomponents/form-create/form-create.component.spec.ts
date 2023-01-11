@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { TagVOData } from '@models/tag-vo';
-import { async } from '@firebase/util';
 import { A11yModule } from '@angular/cdk/a11y';
 
 describe('FormCreateComponent', () => {
