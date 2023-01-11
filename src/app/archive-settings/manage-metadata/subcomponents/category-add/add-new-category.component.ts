@@ -28,9 +28,9 @@ export class AddNewCategoryComponent implements OnInit {
   public async createNewCategory(categoryName: string) {
     if (categoryName.includes(':')) {
       this.msg.showError(
-        'A category name cannot contain the ":" character. Please use a different category name.'
+        'A field name cannot contain the ":" character. Please use a different field name.'
       );
-      throw new Error('Category name cannot contain ":"');
+      throw new Error('Field name cannot contain ":"');
     }
 
     const promptField: PromptField = {
@@ -43,7 +43,7 @@ export class AddNewCategoryComponent implements OnInit {
     try {
       ({ valueName } = await this.prompt.prompt(
         [promptField],
-        'Please create a default value to go into the new category'
+        'Please create a default value to go into the new field'
       ));
     } catch {
       // They canceled out of the prompt, return out of the error without throwing.
@@ -59,7 +59,7 @@ export class AddNewCategoryComponent implements OnInit {
       this.tagsUpdate.emit();
     } catch (e) {
       this.msg.showError(
-        'There was an error saving the new category. Please try again.'
+        'There was an error saving the new field. Please try again.'
       );
       throw e;
     }

@@ -20,12 +20,7 @@ describe('AddNewCategoryComponent', () => {
 
   const defaultRender = async () =>
     await shallow.render(
-      '<pr-metadata-add-new-value></pr-metadata-add-new-value>',
-      {
-        // bind: {
-        //   category: c,
-        // },
-      }
+      '<pr-metadata-add-new-value></pr-metadata-add-new-value>'
     );
 
   beforeEach(async () => {

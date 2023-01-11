@@ -43,10 +43,10 @@ export class CategoryEditComponent implements OnInit {
       this.refreshTags.emit();
     } catch {
       this.msg.showError(
-        'There was an error deleting the category. Please try again.'
+        'There was an error deleting the field. Please try again.'
       );
       throw new Error(
-        'There was an error deleting the category. Please try again.'
+        'There was an error deleting the field. Please try again.'
       );
     }
   }
@@ -64,11 +64,9 @@ export class CategoryEditComponent implements OnInit {
       this.refreshTags.emit();
     } catch {
       this.msg.showError(
-        'There was an error saving the category. Please try again.'
+        'There was an error saving the field. Please try again.'
       );
-      throw new Error(
-        'There was an error saving the category. Please try again.'
-      );
+      throw new Error('There was an error saving the field. Please try again.');
     }
   }
 
