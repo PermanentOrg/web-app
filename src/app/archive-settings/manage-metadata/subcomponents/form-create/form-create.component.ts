@@ -39,13 +39,17 @@ export class FormCreateComponent implements OnInit, OnDestroy {
   }
 
   public async runSubmitCallback() {
+    if (this.waiting) {
+      return;
+    }
     this.waiting = true;
     try {
       await this.submitCallback(this.newTagName);
       this.editing = false;
       this.newTagName = '';
     } catch (c) {
-      // do nothing
+      // Wait for next tick to keep waiting = false in case submit is run multiple times
+      await new Promise((resolve) => setTimeout(resolve));
     } finally {
       this.waiting = false;
     }

@@ -2,9 +2,6 @@ import { FormCreateComponent } from './form-create.component';
 import { Shallow } from 'shallow-render';
 import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from '@shared/services/message/message.service';
-import { ApiService } from '@shared/services/api/api.service';
-import { TagVOData } from '@models/tag-vo';
 import { A11yModule } from '@angular/cdk/a11y';
 
 describe('FormCreateComponent', () => {
@@ -78,7 +75,7 @@ describe('FormCreateComponent', () => {
     expect(find('.placeholder-text').length).toBe(1);
   });
 
-  it('should not close editor if callback promise is rejected', async () => {
+  it('should not close editor if callback promise is rejected', async (done) => {
     const { instance, find, fixture } = await defaultRender(async (tagName) => {
       throw new Error();
     });
@@ -93,8 +90,11 @@ describe('FormCreateComponent', () => {
     });
     await fixture.whenStable();
     fixture.detectChanges();
-    expect(instance.waiting).toBe(false);
     expect(find('input').length).toBe(1);
+    setTimeout(() => {
+      expect(instance.waiting).toBe(false);
+      done();
+    });
   });
 
   it('should blank out the form after submitting', async () => {
@@ -102,5 +102,26 @@ describe('FormCreateComponent', () => {
     instance.newTagName = 'potato';
     await instance.runSubmitCallback();
     expect(instance.newTagName).toBe('');
+  });
+
+  it('should not send multiple create requests', async () => {
+    let callbackCalls = 0;
+    const { find, fixture } = await defaultRender(async () => {
+      callbackCalls++;
+    });
+    find('.placeholder-text').triggerEventHandler('click', {});
+    fixture.detectChanges();
+    const input = find('input');
+    input.nativeElement.value = 'abc';
+    input.triggerEventHandler('input', { target: input.nativeElement });
+    fixture.detectChanges();
+    for (let i = 0; i < 3; i++) {
+      find('form').triggerEventHandler('submit', {
+        target: find('form').nativeElement,
+      });
+    }
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(callbackCalls).toBe(1);
   });
 });
