@@ -108,7 +108,7 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
       );
   }
 
-  protected addTagToTagMap(category: string, tag?: TagVO): void {
+  protected addTagToTagMap(category: string, tag: TagVO): void {
     if (this.tagMap.has(category)) {
       if (tag) {
         this.tagMap.get(category).push(tag);
@@ -116,8 +116,6 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
     } else {
       if (tag) {
         this.tagMap.set(category, [tag]);
-      } else {
-        this.tagMap.set(category, []);
       }
     }
   }
@@ -127,8 +125,6 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
       if (tag.name.includes(':')) {
         const [category, _value] = tag.name.split(':');
         this.addTagToTagMap(category, tag);
-      } else {
-        this.addTagToTagMap(tag.name);
       }
     }
     this.categories = Array.from(this.tagMap.keys());
