@@ -1,35 +1,34 @@
 <div #value class="value">
-  <div
-    class="value-line"
-    *ngIf="!editing; else valueEditor"
-    (click)="dismissAllEditors($event)"
-    (dblclick)="openEditor($event)"
-  >
-    <span class="value-name">{{ displayName }}</span>
-    <div class="edit-delete-trigger" (click)="openMenu($event)">
-      <fa-icon icon="ellipsis-h"></fa-icon>
-    </div>
+  <div class="value-editor" *ngIf="editing; else valueLine">
+    <form (ngSubmit)="saveTag()">
+      <input
+        type="text"
+        name="newValueName"
+        id="newValueName"
+        [(ngModel)]="newValueName"
+        [ngModelOptions]="{ standalone: true }"
+        [placeholder]="displayName"
+        required
+        [disabled]="waiting"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="saveTag()"
+        (keydown.escape)="reset()"
+        cdkTrapFocusAutoCapture
+        cdkTrapFocus
+        autocomplete="off"
+      />
+    </form>
   </div>
-  <ng-template #valueEditor>
-    <div class="value-editor">
-      <form (ngSubmit)="saveTag()">
-        <input
-          type="text"
-          name="newValueName"
-          id="newValueName"
-          [(ngModel)]="newValueName"
-          [ngModelOptions]="{ standalone: true }"
-          [placeholder]="displayName"
-          required
-          [disabled]="waiting"
-          (click)="$event.stopPropagation()"
-          (keydown.enter)="saveTag()"
-          (keydown.escape)="reset()"
-          cdkTrapFocusAutoCapture
-          cdkTrapFocus
-          autocomplete="off"
-        />
-      </form>
+  <ng-template #valueLine>
+    <div
+      class="value-line"
+      (click)="dismissAllEditors($event)"
+      (dblclick)="openEditor($event)"
+    >
+      <span class="value-name">{{ displayName }}</span>
+      <div class="edit-delete-trigger" (click)="openMenu($event)">
+        <fa-icon icon="ellipsis-h"></fa-icon>
+      </div>
     </div>
   </ng-template>
   <div #menu class="edit-delete-menu" *ngIf="menuOpen">
