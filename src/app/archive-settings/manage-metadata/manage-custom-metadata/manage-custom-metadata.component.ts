@@ -74,7 +74,7 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
     this.setActiveCategory(this.activeCategory);
   }
 
-  public identifyTag(index: number, item: TagVO): number {
+  public identifyTag(_index: number, item: TagVO): number {
     return item.tagId;
   }
 
@@ -124,8 +124,8 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
 
   protected reloadTagMap(): void {
     for (const tag of this.tagsList) {
-      if (tag.name.indexOf(':') !== -1) {
-        const [category, value] = tag.name.split(':');
+      if (tag.name.includes(':')) {
+        const [category, _value] = tag.name.split(':');
         this.addTagToTagMap(category, tag);
       } else {
         this.addTagToTagMap(tag.name);

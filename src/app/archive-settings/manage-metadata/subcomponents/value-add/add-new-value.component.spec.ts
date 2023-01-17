@@ -1,5 +1,3 @@
-import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
-
 import { AddNewValueComponent } from './add-new-value.component';
 import { Shallow } from 'shallow-render';
 import { ManageMetadataModule } from '../../manage-metadata.module';
@@ -16,16 +14,15 @@ describe('AddNewValueComponent', () => {
   let error: boolean = false;
   let messageShown: boolean = false;
 
-  async function defaultRender(c: string = category) {
-    return await shallow.render(
+  const defaultRender = async (categoryName: string = category) =>
+    await shallow.render(
       '<pr-metadata-add-new-value [category]="category"></pr-metadata-add-new-value>',
       {
         bind: {
-          category: c,
+          category: categoryName,
         },
       }
     );
-  }
 
   beforeEach(async () => {
     category = 'test';

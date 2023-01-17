@@ -9,8 +9,8 @@
     <div class="tabs">
       <div
         class="dialog-tab"
-        (click)="setTab('manage-tags')"
-        [class.active]="activeTab === 'manage-tags'"
+        (click)="setTab('manage-keywords')"
+        [class.active]="activeTab === 'manage-keywords'"
       >
         Manage Tags
       </div>
@@ -31,7 +31,7 @@
     </div>
     <div class="panel" #panel>
       <ng-container [ngSwitch]="activeTab">
-        <ng-container *ngSwitchCase="'manage-tags'">
+        <ng-container *ngSwitchCase="'manage-keywords'">
           <div class="panel-title">Manage Tags</div>
           <ng-container *ngIf="hasAccess; else noAccess">
             <pr-manage-tags

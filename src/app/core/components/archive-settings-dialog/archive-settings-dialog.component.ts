@@ -7,7 +7,7 @@ import { TagVO } from '@models/tag-vo';
 import { ArchiveVO } from '@models/index';
 
 type ArchiveSettingsDialogTab =
-  | 'manage-tags'
+  | 'manage-keywords'
   | 'manage-metadata'
   | 'public-settings';
 
@@ -18,7 +18,7 @@ type ArchiveSettingsDialogTab =
 })
 export class ArchiveSettingsDialogComponent implements OnInit {
   public readonly MAX_FETCH_ATTEMPTS: number = 5;
-  public activeTab: ArchiveSettingsDialogTab = 'manage-tags';
+  public activeTab: ArchiveSettingsDialogTab = 'manage-keywords';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasAccess: boolean;
