@@ -62,6 +62,7 @@ export class FormEditComponent implements OnInit, OnDestroy {
     if (event.target) {
       event.stopPropagation();
     }
+    this.newValueName = this.displayName;
     this.editing = true;
     this.menuOpen = false;
   }

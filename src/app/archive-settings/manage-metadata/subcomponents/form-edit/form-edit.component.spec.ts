@@ -3,10 +3,7 @@ import { FormEditComponent } from './form-edit.component';
 import { ManageMetadataModule } from '../../manage-metadata.module';
 import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 
-import { TagVO, TagVOData } from '@models/tag-vo';
-import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from '@shared/services/message/message.service';
 import { Subject } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
 
@@ -102,12 +99,13 @@ describe('FormEditComponent', () => {
   });
 
   it('should be able to edit a value', async () => {
-    const { find, fixture } = await defaultRender();
+    const { find, fixture, instance } = await defaultRender('testValue');
     find('.edit-delete-trigger')[0].triggerEventHandler('click', {});
     fixture.detectChanges();
     find('.edit')[0].triggerEventHandler('click', {});
     fixture.detectChanges();
     const input = find('.value-editor input');
+    expect(instance.newValueName).toBe('testValue');
     input.nativeElement.value = 'potato';
     input.triggerEventHandler('input', { target: input.nativeElement });
     find('form').triggerEventHandler('submit', {});
@@ -116,6 +114,7 @@ describe('FormEditComponent', () => {
     expect(find('.value-editor').length).toBe(0);
     expect(updated).toBeTrue();
     expect(newTagName).toBe('potato');
+    expect(instance.newValueName).toBe('potato');
   });
 
   it('should not send multiple delete calls', async () => {
