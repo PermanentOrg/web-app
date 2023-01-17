@@ -27,10 +27,10 @@ export class TagsService {
     debugSubscribable('getTags', this.debug, this.getTags$());
   }
 
-  resetTags() {
+  async resetTags() {
     this.debug('reset tags');
     this.tags.clear();
-    this.refreshTags();
+    await this.refreshTags();
   }
 
   async refreshTags() {

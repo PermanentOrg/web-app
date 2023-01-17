@@ -32,18 +32,34 @@ export class TagRepo extends BaseRepo {
     return this.http.sendRequestPromise<TagResponse>('/tag/getTagsByArchive', data, TagResponse);
   }
 
-  public delete(tag: TagVO): Promise<TagResponse> {
-    const data = [{
-      TagVO: new TagVO(tag),
-    }];
+  public delete(tag: TagVO | TagVO[]): Promise<TagResponse> {
+    let data: Array<{TagVO: TagVO}> = [];
+    if (Array.isArray(tag)) {
+      data = tag.map((t) => ({
+          TagVO: new TagVO(t),
+        }
+      ));
+    } else {
+      data.push({
+        TagVO: new TagVO(tag),
+      });
+    }
 
     return this.http.sendRequestPromise<TagResponse>('/tag/delete', data, TagResponse);
   }
 
-  public update(tag: TagVO): Promise<TagResponse> {
-    const data = [{
-      TagVO: new TagVO(tag),
-    }];
+  public update(tag: TagVO | TagVO[]): Promise<TagResponse> {
+    let data: Array<{TagVO: TagVO}> = [];
+    if (Array.isArray(tag)) {
+      data = tag.map((t) => ({
+          TagVO: new TagVO(t),
+        }
+      ));
+    } else {
+      data.push({
+        TagVO: new TagVO(tag),
+      });
+    }
 
     return this.http.sendRequestPromise<TagResponse>('/tag/updateTag', data, TagResponse);
   }

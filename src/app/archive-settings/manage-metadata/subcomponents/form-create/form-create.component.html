@@ -1,0 +1,26 @@
+<div class="add-new" (click)="$event.stopPropagation()">
+  <div class="new-tag-input" *ngIf="editing; else addTagText">
+    <form (ngSubmit)="runSubmitCallback()">
+      <input
+        type="text"
+        name="newTagName"
+        id="newTagName"
+        [(ngModel)]="newTagName"
+        [ngModelOptions]="{ standalone: true }"
+        [placeholder]="placeholder"
+        required
+        [disabled]="waiting"
+        (keydown.enter)="runSubmitCallback()"
+        (keydown.escape)="reset()"
+        cdkTrapFocusAutoCapture
+        cdkTrapFocus
+        autocomplete="off"
+      />
+    </form>
+  </div>
+  <ng-template #addTagText>
+    <div class="placeholder-text" (click)="editing = true">
+      {{ placeholder }}
+    </div>
+  </ng-template>
+</div>

@@ -6,16 +6,19 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO } from '@models/tag-vo';
 import { ArchiveVO } from '@models/index';
 
-type ArchiveSettingsDialogTab = 'manage-tags' | 'public-settings';
+type ArchiveSettingsDialogTab =
+  | 'manage-keywords'
+  | 'manage-metadata'
+  | 'public-settings';
 
 @Component({
   selector: 'pr-archive-settings-dialog',
   templateUrl: './archive-settings-dialog.component.html',
-  styleUrls: ['./archive-settings-dialog.component.scss']
+  styleUrls: ['./archive-settings-dialog.component.scss'],
 })
 export class ArchiveSettingsDialogComponent implements OnInit {
   public readonly MAX_FETCH_ATTEMPTS: number = 5;
-  public activeTab: ArchiveSettingsDialogTab = 'manage-tags';
+  public activeTab: ArchiveSettingsDialogTab = 'manage-keywords';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasAccess: boolean;
@@ -27,29 +30,36 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     private dialogRef: DialogRef,
     private api: ApiService,
     private account: AccountService,
-    private tagsService: TagsService,
-  ) { }
+    private tagsService: TagsService
+  ) {}
 
   public ngOnInit(): void {
     const accessRole = this.account.getArchive().accessRole;
-    this.hasAccess = accessRole === "access.role.owner" || accessRole === "access.role.manager";
+    this.hasAccess =
+      accessRole === 'access.role.owner' ||
+      accessRole === 'access.role.manager';
     if (this.hasAccess) {
-      this.api.tag.getTagsByArchive(this.account.getArchive()).then((response) => {
-        this.tags = response.getTagVOs();
-        this.bindTagsToArchive();
-        this.loadingTags = false;
-      }).catch(() => {
-        setTimeout(() => {
-          this.fetchTagsAttempts++;
-          if (this.fetchTagsAttempts < this.MAX_FETCH_ATTEMPTS) {
-            this.ngOnInit();
-          } else {
-            throw new Error("Archive Settings: Maximum number of tag fetch attempts reached.");
-          }
-        }, 1000);
-     });
-   }
-   this.archive = this.account.getArchive();
+      this.api.tag
+        .getTagsByArchive(this.account.getArchive())
+        .then((response) => {
+          this.tags = response.getTagVOs();
+          this.bindTagsToArchive();
+          this.loadingTags = false;
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.fetchTagsAttempts++;
+            if (this.fetchTagsAttempts < this.MAX_FETCH_ATTEMPTS) {
+              this.ngOnInit();
+            } else {
+              throw new Error(
+                'Archive Settings: Maximum number of tag fetch attempts reached.'
+              );
+            }
+          }, 1000);
+        });
+    }
+    this.archive = this.account.getArchive();
   }
 
   public refreshTags(): void {

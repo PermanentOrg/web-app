@@ -57,6 +57,7 @@ import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dial
 import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { PublicSettingsComponent } from './components/public-settings/public-settings.component';
+import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { PublicSettingsComponent } from './components/public-settings/public-set
     CountUpModule,
     NotificationsModule,
     PledgeModule,
+    ManageMetadataModule,
   ],
   declarations: [
     MainComponent,
