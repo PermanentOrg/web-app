@@ -28,8 +28,12 @@ export class ManageTagsComponent implements OnInit {
     return this.tags.filter((t) =>
       t.name.toLocaleLowerCase().includes(
         this.filter.trim().toLocaleLowerCase()
-      )
+      ) && !t.isCustomMetadata()
     ).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  public getTagCount(): number {
+    return this.tags.filter((t) => !t.isCustomMetadata()).length;
   }
 
   public onTagChange(tag: TagVO, newName: string): void {

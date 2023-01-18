@@ -1,6 +1,6 @@
 <div>
   <div *ngIf="tags.length > 0; else noTags">
-    <p>There are {{tags.length}} tags defined in the current archive.</p>
+    <p>There are {{getTagCount()}} tags defined in the current archive.</p>
     <input type="text" class="filter" placeholder="Search Tags..." (change)="filter = $event.target.value" (keyup)="filter = $event.target.value" />
     <div class="tagsList" *ngIf="getFilteredTags().length > 0; else noMatchedTags">
       <ng-container *ngFor="let tag of getFilteredTags();">

@@ -26,6 +26,6 @@ export class TagVO extends BaseVO implements TagVOData {
   }
 
   public isCustomMetadata(): boolean {
-    return this.type.includes('type.tag.metadata');
+    return this.type?.includes('type.tag.metadata');
   }
 }
