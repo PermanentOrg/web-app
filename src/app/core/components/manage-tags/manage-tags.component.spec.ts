@@ -84,6 +84,11 @@ describe('ManageTagsComponent #manage-tags', () => {
         name: 'Potato',
         tagId: 1,
       }),
+      new TagVO({
+        name: 'vegetable:potato',
+        tagId: 3,
+        type: 'type.tag.metadata.customField',
+      })
     ];
     shallow = new Shallow(ManageTagsComponent, DummyModule).mock(ApiService, mockApiService).mock(PromptService, mockPromptService);
   });
@@ -124,7 +129,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     } catch {
       // Catch error!
     } finally {
-      expect(element.componentInstance.tags.length).toBe(2);
+      expect(element.componentInstance.getFilteredTags().length).toBe(2);
     }
   });
 
