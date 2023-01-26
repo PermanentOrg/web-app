@@ -179,7 +179,8 @@ iframe {
   }
 }
 
-.file-viewer-metadata {
+.file-viewer-metadata,
+.file-viewer-metadata-wrapper {
   display: none;
 }
 
@@ -203,7 +204,7 @@ iframe {
     overflow: hidden;
   }
 
-  .file-viewer-metadata {
+  .file-viewer-metadata-wrapper {
     top: $toolbar-height;
     bottom: $toolbar-height;
     width: $metadata-width;
@@ -211,9 +212,11 @@ iframe {
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: stretch;
     padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     td:first-child {
       font-weight: bold;
@@ -222,9 +225,15 @@ iframe {
 
     .metadata-table {
       table-layout: fixed;
-      width: $metadata-width;
-      block-size: border-box;
+      width: calc($metadata-width - 20px);
     }
+  }
+
+  .file-viewer-metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: auto 0;
   }
 
   .file-viewer-name {

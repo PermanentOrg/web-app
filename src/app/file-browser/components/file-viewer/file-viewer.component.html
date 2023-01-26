@@ -54,93 +54,98 @@
     </div>
   </div>
   <div class="file-viewer-name">{{ currentRecord.displayName }}</div>
-  <div class="file-viewer-metadata">
-    <pr-inline-value-edit
-      [displayValue]="currentRecord.displayName"
-      [itemId]="currentRecord.folder_linkId"
-      [canEdit]="canEdit"
-      [required]="true"
-      (doneEditing)="onFinishEditing('displayName', $event)"
-      emptyMessage="Click to add name"
-      readOnlyEmptyMessage="No name"
-      type="text"
-      class="h5"
-    ></pr-inline-value-edit>
-    <div class="file-viewer-description">
+  <div class="file-viewer-metadata-wrapper">
+    <div class="file-viewer-metadata">
       <pr-inline-value-edit
-        *ngIf="canEdit || currentRecord.description"
-        [displayValue]="currentRecord.description"
+        [displayValue]="currentRecord.displayName"
         [itemId]="currentRecord.folder_linkId"
         [canEdit]="canEdit"
-        (doneEditing)="onFinishEditing('description', $event)"
-        emptyMessage="Click to add description"
-        readOnlyEmptyMessage="No description"
-        type="description-textarea"
+        [required]="true"
+        (doneEditing)="onFinishEditing('displayName', $event)"
+        emptyMessage="Click to add name"
+        readOnlyEmptyMessage="No name"
+        type="text"
+        class="h5"
       ></pr-inline-value-edit>
+      <div class="file-viewer-description">
+        <pr-inline-value-edit
+          *ngIf="canEdit || currentRecord.description"
+          [displayValue]="currentRecord.description"
+          [itemId]="currentRecord.folder_linkId"
+          [canEdit]="canEdit"
+          (doneEditing)="onFinishEditing('description', $event)"
+          emptyMessage="Click to add description"
+          readOnlyEmptyMessage="No description"
+          type="description-textarea"
+        ></pr-inline-value-edit>
+      </div>
+      <div
+        class="file-viewer-download"
+        *ngIf="isPublicArchive && allowDownloads"
+      >
+        <button class="btn btn-primary" (click)="onDownloadClick()">
+          Download
+        </button>
+      </div>
+      <table class="metadata-table">
+        <tr>
+          <td>Date</td>
+          <td>
+            <pr-inline-value-edit
+              [displayValue]="currentRecord.displayDT"
+              [canEdit]="canEdit"
+              [item]="currentRecord"
+              [itemId]="currentRecord.folder_linkId"
+              emptyMessage="Click to add date"
+              readOnlyEmptyMessage="No date"
+              (doneEditing)="onFinishEditing('displayDT', $event)"
+              (toggledDatePicker)="onDateToggle($event)"
+              type="date"
+              class="no-padding"
+            ></pr-inline-value-edit>
+          </td>
+        </tr>
+        <tr>
+          <td>Uploaded</td>
+          <td>{{ currentRecord.createdDT | date }}</td>
+        </tr>
+        <tr>
+          <td>Size</td>
+          <td>{{ currentRecord.size | dsFileSize }}</td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td>{{ currentRecord.type | prConstants | titlecase }}</td>
+        </tr>
+        <tr>
+          <td>Tags</td>
+          <td (click)="onTagsClick()">
+            <pr-tags [tags]="keywords"></pr-tags>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Custom <br />
+            Metadata
+          </td>
+          <td (click)="onTagsClick()">
+            <pr-tags [tags]="customMetadata"></pr-tags>
+          </td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td class="location-container" (click)="onLocationClick()">
+            <pr-static-map
+              [location]="currentRecord.LocnVO"
+              *ngIf="currentRecord.LocnVO"
+            ></pr-static-map>
+            <span *ngIf="currentRecord.LocnVO">{{
+              (currentRecord.LocnVO | prLocation)?.full
+            }}</span>
+            <span *ngIf="!currentRecord.LocnVO">No location</span>
+          </td>
+        </tr>
+      </table>
     </div>
-    <div class="file-viewer-download" *ngIf="isPublicArchive && allowDownloads">
-      <button class="btn btn-primary" (click)="onDownloadClick()">
-        Download
-      </button>
-    </div>
-    <table class="metadata-table">
-      <tr>
-        <td>Date</td>
-        <td>
-          <pr-inline-value-edit
-            [displayValue]="currentRecord.displayDT"
-            [canEdit]="canEdit"
-            [item]="currentRecord"
-            [itemId]="currentRecord.folder_linkId"
-            emptyMessage="Click to add date"
-            readOnlyEmptyMessage="No date"
-            (doneEditing)="onFinishEditing('displayDT', $event)"
-            (toggledDatePicker)="onDateToggle($event)"
-            type="date"
-            class="no-padding"
-          ></pr-inline-value-edit>
-        </td>
-      </tr>
-      <tr>
-        <td>Uploaded</td>
-        <td>{{ currentRecord.createdDT | date }}</td>
-      </tr>
-      <tr>
-        <td>Size</td>
-        <td>{{ currentRecord.size | dsFileSize }}</td>
-      </tr>
-      <tr>
-        <td>Type</td>
-        <td>{{ currentRecord.type | prConstants | titlecase }}</td>
-      </tr>
-      <tr>
-        <td>Tags</td>
-        <td (click)="onTagsClick()">
-          <pr-tags [tags]="keywords"></pr-tags>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Custom <br />
-          Metadata
-        </td>
-        <td (click)="onTagsClick()">
-          <pr-tags [tags]="customMetadata"></pr-tags>
-        </td>
-      </tr>
-      <tr>
-        <td>Location</td>
-        <td class="location-container" (click)="onLocationClick()">
-          <pr-static-map
-            [location]="currentRecord.LocnVO"
-            *ngIf="currentRecord.LocnVO"
-          ></pr-static-map>
-          <span *ngIf="currentRecord.LocnVO">{{
-            (currentRecord.LocnVO | prLocation)?.full
-          }}</span>
-          <span *ngIf="!currentRecord.LocnVO">No location</span>
-        </td>
-      </tr>
-    </table>
   </div>
 </div>
