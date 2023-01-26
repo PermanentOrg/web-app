@@ -10,6 +10,7 @@ import { AuthResponse } from '@shared/services/api/index.repo';
 import { CreateCredentialsResponse } from '@shared/services/api/auth.repo';
 import { AppModule } from '../../../app.module';
 import { AccountVO, ArchiveVO } from '@root/app/models';
+import { StorageService } from '../storage/storage.service';
 
 describe('AccountService', () => {
   let shallow: Shallow<AccountService>;
@@ -57,6 +58,12 @@ describe('AccountService', () => {
       })
       .mock(Router, {
         navigate: (route: string[]) => Promise.resolve(true),
+      })
+      .mock(StorageService, {
+        local: {
+          get: () => {},
+          set: () => {},
+        },
       });
   });
 
