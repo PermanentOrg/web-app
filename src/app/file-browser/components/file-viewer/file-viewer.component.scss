@@ -220,11 +220,9 @@ iframe {
 
     td:first-child {
       font-weight: bold;
-      padding-right: 5px;
     }
 
     .metadata-table {
-      table-layout: fixed;
       width: calc($metadata-width - 20px);
     }
   }
@@ -247,7 +245,13 @@ iframe {
     vertical-align: top;
 
     &:first-child {
-      padding-right: 5px;
+      padding-right: 15px;
+      vertical-align: middle;
+
+      &.top-align {
+        vertical-align: top;
+        padding-top: 0.5rem;
+      }
     }
   }
 
