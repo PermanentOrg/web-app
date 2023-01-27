@@ -28,7 +28,6 @@ $profile-sidebar-width: pxToGrid(360px);
   background-position: 50% 50%;
   position: relative;
   margin-left: 2 * $grid-unit;
-  margin-bottom: math.div(-$desktop-size * 2, 3) + $grid-unit;
   transform: translateY(-(math.div(2, 3) * 100%));
   cursor: pointer;
 
