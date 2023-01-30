@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import 'variables';
 
 :host {
@@ -9,9 +10,15 @@
 $photo-desktop: pxToGrid(300px);
 $photo-mobile: pxToGrid(80px);
 $profile-max-width: 1200px;
+$desktop-size: pxToGrid(200px);
 
 @mixin sidebarMargin {
   margin-right: $profile-sidebar-width + 3 * $grid-unit;
+}
+
+@mixin banner-margin-offset {
+  position: relative;
+  top: math.div(-$desktop-size * 2, 3) + $grid-unit;
 }
 
 .banner-section {
@@ -29,15 +36,17 @@ $profile-max-width: 1200px;
 }
 
 .profile-photo {
-  @include profilePhoto(pxToGrid(200px), $photo-mobile);
+  @include profilePhoto($desktop-size, $photo-mobile);
   cursor: initial;
 }
 
 .profile-about {
   margin-bottom: $grid-unit * 2;
+
   @include desktop {
     padding-left: $grid-unit;
     @include sidebarMargin;
+    @include banner-margin-offset;
   }
 }
 
@@ -119,9 +128,11 @@ $profile-max-width: 1200px;
 
 .profile-contents {
   min-height: 100vh;
+
   @include desktop {
     padding-left: $grid-unit;
     @include sidebarMargin;
+    @include banner-margin-offset;
   }
 
   @include beforeDesktop {
