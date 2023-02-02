@@ -11,7 +11,7 @@
       {{formTitle}}
     </h1>
     <p>
-      A verification code has been sent to your {{verifyingEmail ? 'email address' : 'mobile device'}}.
+      A verification code has been sent to your {{verifyingEmail ? 'email address' : 'mobile device'}}. <span *ngIf="!verifyingEmail">Permanent only supports US and Canada numbers.</span>
       <br>
       <br>
       Enter it below to continue.
