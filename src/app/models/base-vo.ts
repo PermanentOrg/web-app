@@ -1,6 +1,5 @@
 import { RecordVOData } from '@models/record-vo';
 import { FolderVOData } from '@models/folder-vo';
-import { moment } from '@permanentorg/vis-timeline';
 import { formatDateISOString } from '@shared/utilities/dateTime';
 
 export class BaseVO {
@@ -12,9 +11,9 @@ export class BaseVO {
   public createdDT: string;
   public updatedDT: string;
 
-  constructor (voData: any) {
+  constructor(voData: any) {
     if (voData) {
-      for ( const key in voData ) {
+      for (const key in voData) {
         if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
@@ -25,9 +24,9 @@ export class BaseVO {
     // this.updatedDT = formatDateISOString(this.updatedDT);
   }
 
-  public update (voData: any | RecordVOData | FolderVOData) {
+  public update(voData: any | RecordVOData | FolderVOData) {
     if (voData) {
-      for ( const key in voData ) {
+      for (const key in voData) {
         if (voData[key] !== undefined) {
           this[key] = voData[key];
         }
@@ -35,7 +34,7 @@ export class BaseVO {
     }
   }
 
-  public getCleanVO () {
+  public getCleanVO() {
     if (!this.cleanParams.length) {
       return this;
     } else {
@@ -50,7 +49,7 @@ export class BaseVO {
 
   toJSON() {
     const clone: any = {};
-    for ( const key in this ) {
+    for (const key in this) {
       if (this[key] !== undefined) {
         clone[key] = this[key];
       }

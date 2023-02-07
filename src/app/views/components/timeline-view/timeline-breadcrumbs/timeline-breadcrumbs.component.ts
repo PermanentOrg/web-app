@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef, Output, Eve
 import { DataService } from '@shared/services/data/data.service';
 import { TimelineGroupTimespan, GetTimespanFromRange, GroupByTimespan, TimelineGroup, TimelineItem, TimelineItemDataType, TimelineDataItem } from '../timeline-util';
 import { Subscription } from 'rxjs';
-import { DataItem } from '@permanentorg/vis-timeline';
+import { DataItem } from 'vis-timeline/standalone';
 import { debounce, minBy, remove } from 'lodash';
 import { Router, ActivatedRoute } from '@angular/router';
 

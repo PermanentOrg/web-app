@@ -6,7 +6,7 @@ import {
   NgbDatepicker,
   NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
-import { moment } from '@permanentorg/vis-timeline';
+import { moment } from 'vis-timeline/standalone';
 import { ItemVO } from '@models';
 import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
 import { ENTER } from '@angular/cdk/keycodes';
