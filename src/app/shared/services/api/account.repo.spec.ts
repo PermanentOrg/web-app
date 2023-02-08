@@ -38,10 +38,11 @@ describe('AccountRepo', () => {
       .signUp(
         'test@permanent.org',
         'Test User',
+        'password123',
+        'password123',
         true,
         true,
-        true,
-        'test-subject'
+        true
       )
       .subscribe((response) =>
         expect(response.primaryEmail).toEqual('test@permanent.org')

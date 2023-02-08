@@ -24,10 +24,11 @@ export class AccountRepo extends BaseRepo {
   public signUp(
     email: string,
     fullName: string,
+    password: string,
+    passwordConfirm: string,
     agreed: boolean,
     optIn: boolean,
     createDefaultArchive: boolean,
-    subject: string,
     phone?: string,
     inviteCode?: string
   ) {
@@ -37,9 +38,10 @@ export class AccountRepo extends BaseRepo {
       fullName: fullName,
       agreed: agreed,
       optIn: optIn,
+      password: password,
+      passwordVerify: passwordConfirm,
       inviteCode: inviteCode,
-      createArchive: createDefaultArchive,
-      subject: subject,
+      createArchive: createDefaultArchive
     };
 
     return this.http.sendV2Request<AccountVO>(

@@ -140,29 +140,6 @@ export class AuthRepo extends BaseRepo {
     );
   }
 
-  public createCredentials(
-    fullName: string,
-    email: string,
-    password: string,
-    passwordConfirm: string,
-    phone?: string
-  ): Promise<CreateCredentialsResponse> {
-    const requestBody = {
-      fullName: fullName,
-      primaryEmail: email,
-      password: password,
-      passwordVerify: passwordConfirm,
-      primaryPhone: phone,
-    };
-    return this.http.sendV2RequestPromise<CreateCredentialsResponse>(
-      '/auth/createCredentials',
-      requestBody
-    );
-  }
-}
-
-export interface CreateCredentialsResponse {
-  user: { id: string };
 }
 
 export class AuthResponse extends BaseResponse {

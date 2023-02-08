@@ -121,20 +121,4 @@ describe('AuthRepo', () => {
     req.flush(expected);
   });
 
-  it('should create credentials', () => {
-    const expected = {
-      user: { id: 'test-subject' },
-    };
-
-    repo.createCredentials(
-      'Test User',
-      'test@permanent.org',
-      'password123',
-      'password123'
-    );
-    const req = httpMock.expectOne(
-      `${environment.apiUrl}/auth/createCredentials`
-    );
-    req.flush(expected);
-  });
 });
