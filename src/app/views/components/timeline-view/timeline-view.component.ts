@@ -11,25 +11,53 @@ import {
 
 import {
   Timeline,
+  // @ts-ignore: DataSet is exported from index.js but not defined in index.d.ts
   DataSet,
   TimelineOptions,
   TimelineEventPropertiesResult,
   DataItem,
-  moment,
-} from '@permanentorg/vis-timeline';
-// import { Timeline, DataSet, TimelineOptions, TimelineEventPropertiesResult, DataItem } from '../../../../../../vis-timeline';
+} from 'vis-timeline/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FolderVO, RecordVO, ItemVO, TimezoneVO, TimezoneVOData } from '@models';
+import {
+  FolderVO,
+  RecordVO,
+  ItemVO,
+  TimezoneVO,
+  TimezoneVOData,
+} from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { remove, find, throttle, minBy, maxBy, debounce, countBy } from 'lodash';
-import {  TimelineGroup, TimelineItem, TimelineDataItem, TimelineGroupTimespan, Minute, Year,
-  GroupByTimespan, GetTimespanFromRange, getBestFitTimespanForItems
+import {
+  remove,
+  find,
+  throttle,
+  minBy,
+  maxBy,
+  debounce,
+  countBy,
+} from 'lodash';
+import {
+  TimelineGroup,
+  TimelineItem,
+  TimelineDataItem,
+  TimelineGroupTimespan,
+  Minute,
+  Year,
+  GroupByTimespan,
+  GetTimespanFromRange,
+  getBestFitTimespanForItems,
 } from './timeline-util';
-import { TimelineRecordTemplate, TimelineFolderTemplate, TimelineGroupTemplate } from './timeline-templates';
+import {
+  TimelineRecordTemplate,
+  TimelineFolderTemplate,
+  TimelineGroupTemplate,
+} from './timeline-templates';
 import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
 import { Subscription } from 'rxjs';
-import { TimelineBreadcrumbsComponent, TimelineBreadcrumb } from './timeline-breadcrumbs/timeline-breadcrumbs.component';
+import {
+  TimelineBreadcrumbsComponent,
+  TimelineBreadcrumb,
+} from './timeline-breadcrumbs/timeline-breadcrumbs.component';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { slideUpAnimation } from '@shared/animations';
@@ -50,7 +78,7 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
   selector: 'pr-timeline-view',
   templateUrl: './timeline-view.component.html',
   styleUrls: ['./timeline-view.component.scss'],
-  animations: [ slideUpAnimation ]
+  animations: [slideUpAnimation],
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating = false;
@@ -76,7 +104,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public currentTimezone: TimezoneVOData;
   public timezones: Map<number, TimezoneVOData> = new Map();
 
-  @ViewChild(TimelineBreadcrumbsComponent, { static: true }) breadcrumbs: TimelineBreadcrumbsComponent;
+  @ViewChild(TimelineBreadcrumbsComponent, { static: true })
+  breadcrumbs: TimelineBreadcrumbsComponent;
   @ViewChild('timelineContainer', { static: true }) timelineElemRef: ElementRef;
   public timeline: Timeline;
   private currentTimespan: TimelineGroupTimespan;
@@ -85,13 +114,12 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private timelineOptions: TimelineOptions = {
     zoomMin: Minute * 1,
     showCurrentTime: false,
-    pixelMargin: this.device.isMobileWidth() ? 10 : 100,
     height: '100%',
     selectable: false,
     zoomable: false,
     orientation: {
       axis: 'bottom',
-      item: 'center'
+      item: 'center',
     },
     format: {
       minorLabels: {
@@ -99,7 +127,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         hour: 'h A',
         weekday: 'Do',
         day: 'Do',
-        week: 'Do'
+        week: 'Do',
       },
       majorLabels: {
         second: DEFAULT_MAJOR_MINUTE_LABEL,
@@ -108,7 +136,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         weekday: 'MMMM Do, YYYY',
         day: 'MMMM Do, YYYY',
         week: 'MMMM YYYY',
-      }
+      },
     },
     template: (item: any, element: HTMLDivElement, data) => {
       switch ((item as TimelineDataItem).dataType) {
@@ -119,7 +147,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
         case 'group':
           return TimelineGroupTemplate(item);
       }
-    }
+    },
   };
   constructor(
     @Inject(DIALOG_DATA) public dialogData: any,
@@ -147,14 +175,16 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.onFolderChange();
-    this.dataServiceSubscription = this.dataService.currentFolderChange.subscribe(() => {
-      this.onFolderChange();
-    });
+    this.dataServiceSubscription =
+      this.dataService.currentFolderChange.subscribe(() => {
+        this.onFolderChange();
+      });
   }
 
   ngAfterViewInit() {
     this.initTimeline();
     this.setMaxZoom();
+    this.addPixelMargin();
     this.timeline.fit();
 
     const elem = this.elementRef.nativeElement as HTMLDivElement;
@@ -189,25 +219,30 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.groupTimelineItems(true, false);
     if (this.timeline) {
       this.setMaxZoom();
+      this.addPixelMargin();
       this.timeline.fit();
     }
   }
 
   initTimeline() {
     const container = this.timelineElemRef.nativeElement;
-    this.timeline = new Timeline(container, this.timelineItems, this.timelineOptions);
-    this.timeline.on('click', evt => {
+    this.timeline = new Timeline(
+      container,
+      this.timelineItems,
+      this.timelineOptions
+    );
+    this.timeline.on('click', (evt) => {
       this.onTimelineItemClick(evt);
     });
 
-    this.timeline.on('rangechanged', evt => {
+    this.timeline.on('rangechanged', (evt) => {
       this.breadcrumbs.debouncedZoomHandler(evt);
     });
   }
 
   findBestTimezone() {
     const counts = countBy(
-      this.dataService.currentFolder.ChildItemVOs.filter(i => i.TimezoneVO),
+      this.dataService.currentFolder.ChildItemVOs.filter((i) => i.TimezoneVO),
       (i: ItemVO) => {
         const id = i.TimezoneVO.timeZoneId;
         if (!this.timezones.has(id)) {
@@ -222,7 +257,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!ids.length) {
       this.currentTimezone = null;
     } else {
-      const mostCommonId = Number(maxBy(ids, o => counts[o]));
+      const mostCommonId = Number(maxBy(ids, (o) => counts[o]));
       this.currentTimezone = this.timezones.get(mostCommonId);
     }
 
@@ -230,11 +265,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       let hourLabel = DEFAULT_MAJOR_HOUR_LABEL;
       let minuteLabel = DEFAULT_MAJOR_MINUTE_LABEL;
       if (timezone) {
-      const split = timezone.stdAbbrev.split('');
-      split.unshift('');
-      const abbrev = split.join('\\');
-      minuteLabel = `${minuteLabel} ${abbrev}`;
-      hourLabel = `${hourLabel} ${abbrev}`;
+        const split = timezone.stdAbbrev.split('');
+        split.unshift('');
+        const abbrev = split.join('\\');
+        minuteLabel = `${minuteLabel} ${abbrev}`;
+        hourLabel = `${hourLabel} ${abbrev}`;
       }
       if (this.timeline) {
         const options: TimelineOptions = {
@@ -242,9 +277,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
             majorLabels: {
               minute: minuteLabel,
               second: minuteLabel,
-              hour: hourLabel
-            }
-          }
+              hour: hourLabel,
+            },
+          },
         };
 
         this.timeline.setOptions(options);
@@ -279,7 +314,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.timelineItems.length) {
       let ids = this.timelineItems.getIds();
       if (keepFolders) {
-        ids = ids.filter(id => {
+        ids = ids.filter((id) => {
           const item: any = this.timelineItems.get(id);
           return (item as TimelineDataItem).dataType !== 'folder';
         });
@@ -289,7 +324,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let timespan = this.currentTimespan;
     if (bestFitTimespan) {
-      timespan = getBestFitTimespanForItems(this.dataService.currentFolder.ChildItemVOs);
+      timespan = getBestFitTimespanForItems(
+        this.dataService.currentFolder.ChildItemVOs
+      );
     }
 
     let itemsToAdd: any[];
@@ -297,14 +334,21 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.timelineGroups.has(timespan)) {
       itemsToAdd = this.timelineGroups.get(timespan);
     } else {
-      const groupResult = GroupByTimespan(this.dataService.currentFolder.ChildItemVOs, this.currentTimespan, bestFitTimespan, this.currentTimezone);
+      const groupResult = GroupByTimespan(
+        this.dataService.currentFolder.ChildItemVOs,
+        this.currentTimespan,
+        bestFitTimespan,
+        this.currentTimezone
+      );
       this.currentTimespan = groupResult.timespan;
       this.timelineGroups.set(groupResult.timespan, groupResult.groupedItems);
       itemsToAdd = groupResult.groupedItems;
     }
 
     if (keepFolders) {
-      itemsToAdd = itemsToAdd.filter((x: TimelineDataItem) => x.dataType !== 'folder');
+      itemsToAdd = itemsToAdd.filter(
+        (x: TimelineDataItem) => x.dataType !== 'folder'
+      );
     }
 
     this.timelineItems.add(itemsToAdd);
@@ -312,7 +356,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   focusItemsWithBuffer(ids: (string | number)[], animate = true) {
     if (ids.length === 1) {
-      const item = this.timelineItems.get(ids[0]) as DataItem & TimelineDataItem;
+      const item = this.timelineItems.get(ids[0]) as DataItem &
+        TimelineDataItem;
       if (item.dataType !== 'group') {
         return this.timeline.focus(ids);
       } else {
@@ -344,7 +389,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (animate) {
       this.timeline.setWindow(start, end);
     } else {
-      this.timeline.setWindow(start, end, {animation: false});
+      this.timeline.setWindow(start, end, { animation: false });
     }
   }
 
@@ -369,7 +414,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const midpointWithMinDiff = midpoint - minDiff;
 
     let firstItemBefore: DataItem;
-    this.timelineItems.forEach(i => {
+    this.timelineItems.forEach((i) => {
       if (i.start < midpointWithMinDiff) {
         if (!firstItemBefore) {
           firstItemBefore = i;
@@ -380,7 +425,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (firstItemBefore) {
-      const newMidpoint = firstItemBefore.start as number - 10;
+      const newMidpoint = (firstItemBefore.start as number) - 10;
       this.timeline.moveTo(newMidpoint);
     } else {
       this.hasPrev = false;
@@ -396,7 +441,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const midpointWithMinDiff = midpoint + minDiff;
 
     let firstItemAfter: DataItem;
-    this.timelineItems.forEach(i => {
+    this.timelineItems.forEach((i) => {
       if (i.start > midpointWithMinDiff) {
         if (!firstItemAfter) {
           firstItemAfter = i;
@@ -407,12 +452,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (firstItemAfter) {
-      const newMidpoint = firstItemAfter.start as number + 10;
+      const newMidpoint = (firstItemAfter.start as number) + 10;
       this.timeline.moveTo(newMidpoint);
     } else {
       this.hasPrev = false;
     }
-
   }
 
   onTimelineZoom() {
@@ -430,7 +474,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.hasPrev = true;
   }
 
-  onTimelineItemClick(event: TimelineEventPropertiesResult & {isCluster: boolean}) {
+  onTimelineItemClick(
+    event: TimelineEventPropertiesResult & { isCluster: boolean }
+  ) {
     if (!event.isCluster && !this.isNavigating) {
       const timelineItem: any = this.timelineItems.get(event.item);
       switch ((timelineItem as TimelineDataItem).dataType) {
@@ -452,21 +498,29 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (folder.isFetching) {
       await folder.fetched;
     }
-    const folderResponse = await this.api.folder.navigateLean(folder).toPromise();
+    const folderResponse = await this.api.folder
+      .navigateLean(folder)
+      .toPromise();
     this.dataService.setCurrentFolder(folderResponse.getFolderVO(true));
     this.isNavigating = false;
   }
 
   async onRecordClick(record: RecordVO) {
     this.isNavigating = true;
-    await this.router.navigate(['record', record.archiveNbr], {relativeTo: this.route});
+    await this.router.navigate(['record', record.archiveNbr], {
+      relativeTo: this.route,
+    });
     this.isNavigating = false;
   }
 
   findItemsInRange(start: number, end: number) {
     const itemIds = [];
-    this.timelineItems.forEach(item => {
-      if (item.start >= start && (item.start <= end) && (!item.end || item.end <= end)) {
+    this.timelineItems.forEach((item) => {
+      if (
+        item.start >= start &&
+        item.start <= end &&
+        (!item.end || item.end <= end)
+      ) {
         itemIds.push(item.id);
       }
     });
@@ -498,23 +552,40 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   onBreadcrumbClick(breadcrumb: TimelineBreadcrumb) {
     this.showFolderDetails = false;
     if (breadcrumb.type === 'folder') {
-      if (breadcrumb.folder_linkId === this.dataService.currentFolder.folder_linkId) {
+      if (
+        breadcrumb.folder_linkId ===
+        this.dataService.currentFolder.folder_linkId
+      ) {
         this.groupTimelineItems(true, false);
+        this.addPixelMargin();
         this.timeline.fit();
         this.breadcrumbs.setTimeBreadcrumbs();
       } else {
-        this.onFolderClick(new FolderVO({
-          archiveNbr: breadcrumb.archiveNbr,
-          folder_linkId: breadcrumb.folder_linkId
-        }));
+        this.onFolderClick(
+          new FolderVO({
+            archiveNbr: breadcrumb.archiveNbr,
+            folder_linkId: breadcrumb.folder_linkId,
+          })
+        );
       }
     } else {
       const groups = this.timelineGroups.get(breadcrumb.timespan);
       const group = find(groups, (g: TimelineGroup | TimelineItem) => {
-        return g.dataType === 'group' && g.content === breadcrumb.text ;
+        return g.dataType === 'group' && g.content === breadcrumb.text;
       });
       this.onGroupClick(group as TimelineGroup);
     }
   }
 
+  protected addPixelMargin(): void {
+    // @ts-ignore: This is a hack to bypass maintaining a fork of vis-timeline
+    for (const uuid in this.timeline.itemSet.items) {
+      if (uuid.includes('-')) {
+        // @ts-ignore
+        const item = this.timeline.itemSet.items[uuid];
+        item.width += (this.device.isMobileWidth() ? 10 : 100) * 2;
+      }
+    }
+    this.debouncedResizeHandler();
+  }
 }

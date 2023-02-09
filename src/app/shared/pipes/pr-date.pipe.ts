@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TimezoneVOData } from '@models';
 import { DatePipe } from '@angular/common';
-import { moment } from '@permanentorg/vis-timeline';
+import { moment } from 'vis-timeline/standalone';
 import {
   checkOffsetFormat,
   getOffsetMomentFromDTString,

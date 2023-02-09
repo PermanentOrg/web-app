@@ -24,7 +24,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/@permanentorg/vis-timeline/dist/vis-timeline-graph2d.css",
+              "node_modules/vis-timeline/dist/vis-timeline-graph2d.css",
               "src/styles/main.scss"
             ],
             "stylePreprocessorOptions": {

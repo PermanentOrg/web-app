@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbDatepickerModule, NgbTimepickerModule, NgbDate, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
 
-import { moment } from '@permanentorg/vis-timeline';
+import { moment } from 'vis-timeline/standalone';
 import { RecordVO, RecordVOData } from '@models';
 import { getOffsetMomentFromDTString, formatDateISOString, getUtcMomentFromDTString, momentFormatNum, applyTimezoneOffset } from '@shared/utilities/dateTime';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
