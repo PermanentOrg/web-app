@@ -475,22 +475,15 @@ export class AccountService {
     }
 
     try {
-      const credentials = await this.api.auth.createCredentials(
-        fullName,
-        email,
-        password,
-        passwordConfirm,
-        phone
-      );
-
       return this.api.account
         .signUp(
           email,
           fullName,
+          password,
+          passwordConfirm,
           agreed,
           optIn,
           createDefaultArchive,
-          credentials.user.id,
           phone,
           inviteCode
         )
