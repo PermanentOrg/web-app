@@ -38,6 +38,8 @@ enum ExpirationDays {
   Year = 365,
 }
 
+type ShareByUrlProps = 'defaultAccessRole' | 'expiresDT' | 'autoApproveToggle' | 'previewToggle';
+
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(Expiration).map(x => {
   return {
     value: x,
@@ -66,6 +68,7 @@ export class SharingDialogComponent implements OnInit {
   public previewToggle: 0 | 1 = 1;
   public autoApproveToggle: 0 | 1 = 1;
   public expiration: Expiration;
+  public linkDefaultAccessRole: AccessRoleType = 'access.role.viewer';
 
   public updatingLink = false;
   public linkCopied = false;
@@ -128,18 +131,20 @@ export class SharingDialogComponent implements OnInit {
   }
 
   checkQueryParams() {
-    const params = this.route.snapshot.queryParamMap;
-    if (params.has('requestToken') && params.has('requestAction')) {
-      const pendingShare = find(this.pendingShares, { requestToken: params.get('requestToken') });
-      if (pendingShare) {
-        const action = params.get('requestAction');
-        switch (action) {
-          case 'approve':
-            this.approveShare(pendingShare);
-            break;
-          case 'deny':
-            this.removeShare(pendingShare);
-            break;
+    if (this.route.snapshot) {
+      const params = this.route.snapshot.queryParamMap;
+      if (params.has('requestToken') && params.has('requestAction')) {
+        const pendingShare = find(this.pendingShares, { requestToken: params.get('requestToken') });
+        if (pendingShare) {
+          const action = params.get('requestAction');
+          switch (action) {
+            case 'approve':
+              this.approveShare(pendingShare);
+              break;
+            case 'deny':
+              this.removeShare(pendingShare);
+              break;
+          }
         }
       }
     }
@@ -373,6 +378,7 @@ export class SharingDialogComponent implements OnInit {
       this.previewToggle = this.shareLink.previewToggle;
       this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
       this.expiration = this.getExpirationFromExpiresDT(this.shareLink.expiresDT);
+      this.linkDefaultAccessRole = this.shareLink.defaultAccessRole;
       this.expirationOptions = EXPIRATION_OPTIONS.filter(expiration => {
         switch (expiration.value) {
           case Expiration.Never:
@@ -445,48 +451,13 @@ export class SharingDialogComponent implements OnInit {
     }
   }
 
-  async onPreviewToggleChange() {
+  async onShareLinkPropChange(propName: ShareByUrlProps, value: any ) {
     this.updatingLink = true;
     try {
       const update = new ShareByUrlVO(this.shareLink);
-      update.previewToggle = this.previewToggle;
+      update[propName] = value;
       await this.api.share.updateShareLink(update);
-      this.shareLink.previewToggle = this.previewToggle;
-    } catch (err) {
-      if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
-      }
-      this.setShareLinkFormValue();
-    } finally {
-      this.updatingLink = false;
-    }
-  }
-
-  async onAutoApproveToggleChange() {
-    this.updatingLink = true;
-    try {
-      const update = new ShareByUrlVO(this.shareLink);
-      update.autoApproveToggle = this.autoApproveToggle;
-      await this.api.share.updateShareLink(update);
-      this.shareLink.autoApproveToggle = this.autoApproveToggle;
-    } catch (err) {
-      if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
-      }
-      this.setShareLinkFormValue();
-    } finally {
-      this.updatingLink = false;
-    }
-  }
-
-
-  async onExpirationChange() {
-    this.updatingLink = true;
-    try {
-      const update = new ShareByUrlVO(this.shareLink);
-      update.expiresDT = this.getExpiresDTFromExpiration(this.expiration);
-      await this.api.share.updateShareLink(update);
-      this.shareLink.expiresDT = update.expiresDT;
+      this.shareLink[propName] = update[propName];
     } catch (err) {
       if (err instanceof ShareResponse) {
         this.messageService.showError(err.getMessage(), true);
