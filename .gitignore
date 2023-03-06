@@ -48,3 +48,4 @@ cypress/screenshots
 
 .env
 src/secrets.ts
+documentation.json

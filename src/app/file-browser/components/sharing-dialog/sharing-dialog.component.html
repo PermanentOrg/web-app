@@ -130,13 +130,13 @@
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="sharePreviewToggle" id="sharePreviewToggleOn"
             [value]="1" [disabled]="updatingLink"
-            [(ngModel)]="previewToggle" (ngModelChange)="onPreviewToggleChange()">
+            [(ngModel)]="previewToggle" (ngModelChange)="onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)">
             <label class="form-check-label" for="sharePreviewToggleOn">On</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="sharePreviewToggle" id="sharePreviewToggleOff"
             [value]="0" [disabled]="updatingLink"
-            [(ngModel)]="previewToggle" (ngModelChange)="onPreviewToggleChange()">
+            [(ngModel)]="previewToggle" (ngModelChange)="onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)">
             <label class="form-check-label" for="sharePreviewToggleOff">Off</label>
           </div>
         </div>
@@ -153,13 +153,13 @@
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="autoApproveToggle" id="autoApproveToggleOn"
             [value]="1" [disabled]="updatingLink"
-            [(ngModel)]="autoApproveToggle" (ngModelChange)="onAutoApproveToggleChange()">
+            [(ngModel)]="autoApproveToggle" (ngModelChange)="onShareLinkPropChange('autoApproveToggle', autoApproveToggle)">
             <label class="form-check-label" for="autoApproveToggleOn">On</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="autoApproveToggle" id="autoApproveToggleOff"
             [value]="0" [disabled]="updatingLink"
-            [(ngModel)]="autoApproveToggle" (ngModelChange)="onAutoApproveToggleChange()">
+            [(ngModel)]="autoApproveToggle" (ngModelChange)="onShareLinkPropChange('autoApproveToggle', autoApproveToggle)">
             <label class="form-check-label" for="autoApproveToggleOff">Off</label>
           </div>
         </div>
@@ -172,9 +172,16 @@
           </ng-container>
         </small>
         <div class="link-settings-item">
+          <label>Default Share Role</label>
+          <select class="form-control" [disabled]="!canShare || updatingLink" [(ngModel)]="linkDefaultAccessRole" (ngModelChange)="onShareLinkPropChange('defaultAccessRole', linkDefaultAccessRole)">
+            <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+          </select>
+        </div>
+        <small class="text-muted">Archives joining this share are given this role by default. <a href="https://permanent.zohodesk.com/portal/en/kb/articles/what-do-the-different-access-permissions-mean" target="_blank">Learn More</a></small>
+        <div class="link-settings-item">
           <label>Link expires after</label>
           <select class="form-control" [disabled]="!canShare || updatingLink"
-            [(ngModel)]="expiration" (ngModelChange)="onExpirationChange()">
+            [(ngModel)]="expiration" (ngModelChange)="onShareLinkPropChange('expiresDT', getExpiresDTFromExpiration(expiration))">
             <option *ngFor="let option of expirationOptions" [value]="option.value" [hidden]="option.value === 'Other'">{{option.text}}</option>
           </select>
           <button class="btn btn-danger ml-auto" (click)="removeShareLink()">Remove link</button>

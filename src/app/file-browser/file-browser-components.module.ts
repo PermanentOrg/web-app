@@ -44,7 +44,8 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     SidebarComponent,
     FileListControlsComponent,
     EditTagsComponent,
-    LocationPickerComponent
+    LocationPickerComponent,
+    SharingDialogComponent,
   ],
   declarations: [
     FileListComponent,
