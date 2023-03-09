@@ -78,6 +78,16 @@ const routes: RoutesWithData = [
       { path: 'app/forgot', redirectTo: 'app/auth/forgot', pathMatch: 'full' },
       { path: 'app/reset', redirectTo: 'app/auth/reset', pathMatch: 'full' },
       {
+        path: 'app/fa-reset',
+        loadChildren: () =>
+        new Promise( () => {
+          const url = window.location.href;
+          const keyAndTenant = url.split('fa-reset')[1];
+          window.location.href = 'https://permanent-dev.fusionauth.io/password/change' + keyAndTenant;
+        }),
+        pathMatch: 'prefix'
+      },
+      {
         path: 'app/signupEmbed',
         redirectTo: 'app/embed/signup',
         pathMatch: 'full',
