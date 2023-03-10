@@ -3,6 +3,7 @@ export * from '@shared/services/api/account.repo';
 export * from '@shared/services/api/archive.repo';
 export * from '@shared/services/api/billing.repo';
 export * from '@shared/services/api/connector.repo';
+export * from '@shared/services/api/directive.repo';
 export * from '@shared/services/api/folder.repo';
 export * from '@shared/services/api/invite.repo';
 export * from '@shared/services/api/locn.repo';

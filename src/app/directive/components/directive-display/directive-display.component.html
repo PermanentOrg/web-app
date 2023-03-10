@@ -1,0 +1,61 @@
+<div>
+  <div class="panel-title">Manage the Legacy Plan for this Archive</div>
+  <p>
+    Your Legacy Plan determines what should happen to your materials on
+    Permanent.org in the event of your death or incapacitation. Your Legacy Plan
+    has two parts:
+  </p>
+  <ol>
+    <li>
+      Designate an account <strong>Legacy Contact </strong>
+      <a href="#">here.</a> This person will inform Permanent of your death or
+      incapacitation and activate your Legacy Plan as you have outlined it.
+    </li>
+    <li>
+      Designate an <strong>Archive Steward</strong> for this archive below. An
+      Archive Steward will assume ownership and management of this archive.
+    </li>
+  </ol>
+  <p>
+    We have additional support and resources about planning your legacy
+    <a href="#">here.</a>
+  </p>
+  <div class="archive-steward-header">Archive Steward: {{ archiveName }}</div>
+  <!--no plan warning will go here-->
+  <p class="archive-steward-description">
+    The Archive Steward for this archive will receive your note when your Legacy
+    Plan is activated.
+  </p>
+  <div class="error" *ngIf="error">
+    An error occured while trying to find the Archive Steward for the current
+    archive. Please reload the page and try again.
+  </div>
+  <div class="archive-steward-table" *ngIf="!error">
+    <div class="row">
+      <div>Archive Steward email</div>
+      <div
+        [class]="{
+          'archive-steward-email': true,
+          'not-assigned': !archiveStewardEmail
+        }"
+      >
+        {{ archiveStewardEmail ?? 'not assigned' }}
+      </div>
+    </div>
+    <div class="row">
+      <div>Note to Steward</div>
+      <div
+        [class]="{
+          'archive-steward-note': true,
+          'not-assigned': !directive?.note
+        }"
+      >
+        {{ directive?.note ?? 'none' }}
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" [disabled]="error">
+    Assign Archive Steward
+  </button>
+  <div>&nbsp;</div>
+</div>
