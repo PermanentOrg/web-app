@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AccountVO, Directive } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -9,17 +9,37 @@ import { ApiService } from '@shared/services/api/api.service';
   styleUrls: ['./directive-display.component.scss'],
 })
 export class DirectiveDisplayComponent implements OnInit {
+  @Input() public checkLegacyContact: boolean = true;
   public archiveName: string;
   public directive: Directive;
   public error: boolean;
+  public noPlan: boolean;
 
   constructor(private account: AccountService, private api: ApiService) {
     this.error = false;
+    this.noPlan = false;
   }
 
   async ngOnInit(): Promise<void> {
     this.archiveName = this.account.getArchive().fullName;
+    if (this.checkLegacyContact) {
+      await this.getLegacyContact();
+    }
     await this.getDirective();
+  }
+
+  protected async getLegacyContact(): Promise<void> {
+    try {
+      const legacyContact = await this.api.directive.getLegacyContact(
+        this.account.getAccount()
+      );
+      if (!legacyContact?.name || !legacyContact?.email) {
+        this.noPlan = true;
+      }
+    } catch {
+      this.error = true;
+      return;
+    }
   }
 
   protected async getDirective(): Promise<void> {

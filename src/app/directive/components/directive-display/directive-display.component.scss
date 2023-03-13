@@ -53,3 +53,26 @@
   margin: 1em;
   font-style: italic;
 }
+
+.no-plan-warning {
+  @extend .error;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .warning-icon {
+    padding-right: 1em;
+    fa-icon {
+      font-size: 2.5em;
+    }
+  }
+
+  .breadcrumb-link {
+    font-weight: bold;
+    color: #000;
+  }
+
+  a {
+    white-space: nowrap;
+  }
+}

@@ -1,6 +1,9 @@
-import { AccountVO, ArchiveVO, Directive } from '@models/index';
+import { AccountVO, ArchiveVO, Directive, LegacyContact } from '@models/index';
 
 export class MockAccountService {
+  public static mockAccount: AccountVO = new AccountVO({
+    accountId: 1,
+  });
   public static mockArchive: ArchiveVO = new ArchiveVO({
     archiveId: 1,
     fullName: 'The Testing Archive',
@@ -9,10 +12,17 @@ export class MockAccountService {
   public getArchive(): ArchiveVO {
     return MockAccountService.mockArchive;
   }
+
+  public getAccount(): AccountVO {
+    return MockAccountService.mockAccount;
+  }
 }
 
 export class MockDirectiveRepo {
   public static failRequest: boolean = false;
+  public static failLegacyRequest: boolean = false;
+  public static legacyContactName: string = null;
+  public static legacyContactEmail: string = null;
   public static mockStewardId: number = null;
   public static mockStewardEmail: string = null;
   public static mockNote: string = null;
@@ -22,6 +32,9 @@ export class MockDirectiveRepo {
     MockDirectiveRepo.mockStewardId = null;
     MockDirectiveRepo.mockNote = null;
     MockDirectiveRepo.mockStewardEmail = null;
+    MockDirectiveRepo.failLegacyRequest = false;
+    MockDirectiveRepo.legacyContactName = null;
+    MockDirectiveRepo.legacyContactEmail = null;
   }
 
   public async get(): Promise<Directive> {
@@ -45,6 +58,16 @@ export class MockDirectiveRepo {
       stewardEmail: MockDirectiveRepo.mockStewardEmail,
       note: MockDirectiveRepo.mockNote,
       executionDt: null,
+    };
+  }
+
+  public async getLegacyContact(): Promise<LegacyContact> {
+    if (MockDirectiveRepo.failLegacyRequest) {
+      throw new Error('Unit Testing: Forced Request Failure');
+    }
+    return {
+      name: MockDirectiveRepo.legacyContactName,
+      email: MockDirectiveRepo.legacyContactEmail,
     };
   }
 }
