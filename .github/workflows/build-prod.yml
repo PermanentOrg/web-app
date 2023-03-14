@@ -24,6 +24,7 @@ jobs:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_PROD }}
           STRIPE_API_KEY: ${{ secrets.STRIPE_LIVE_KEY }}
           RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY }}
+          FUSIONAUTH_HOST: ${{ secrets.FUSIONAUTH_PROD_HOST }}
         run: npm run build
       - name: Archive `dist`
         uses: actions/upload-artifact@v2

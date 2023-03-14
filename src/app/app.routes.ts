@@ -8,6 +8,7 @@ import { DialogComponentToken } from './dialog/dialog.module';
 import { DialogOptions } from './dialog/dialog.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderVO, RecordVO } from './models';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 export interface RouteData {
   title?: string;
@@ -39,6 +40,8 @@ export interface RouteWithData extends Route {
 }
 
 export type RoutesWithData = RouteWithData[];
+
+const fusionauthHost = SecretsService.getStatic('FUSIONAUTH_HOST');
 
 const routes: RoutesWithData = [
   {
@@ -83,7 +86,7 @@ const routes: RoutesWithData = [
         new Promise( () => {
           const url = window.location.href;
           const keyAndTenant = url.split('fa-reset')[1];
-          window.location.href = 'https://permanent-dev.fusionauth.io/password/change' + keyAndTenant;
+          window.location.href = fusionauthHost + '/password/change' + keyAndTenant;
         }),
         pathMatch: 'prefix'
       },
