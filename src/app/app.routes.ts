@@ -8,6 +8,7 @@ import { DialogComponentToken } from './dialog/dialog.module';
 import { DialogOptions } from './dialog/dialog.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderVO, RecordVO } from './models';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 export interface RouteData {
   title?: string;
@@ -39,6 +40,8 @@ export interface RouteWithData extends Route {
 }
 
 export type RoutesWithData = RouteWithData[];
+
+const fusionauthHost = SecretsService.getStatic('FUSIONAUTH_HOST');
 
 const routes: RoutesWithData = [
   {
@@ -77,6 +80,16 @@ const routes: RoutesWithData = [
       { path: 'app/verify', redirectTo: 'app/auth/verify', pathMatch: 'full' },
       { path: 'app/forgot', redirectTo: 'app/auth/forgot', pathMatch: 'full' },
       { path: 'app/reset', redirectTo: 'app/auth/reset', pathMatch: 'full' },
+      {
+        path: 'app/fa-reset',
+        loadChildren: () =>
+        new Promise( () => {
+          const url = window.location.href;
+          const keyAndTenant = url.split('fa-reset')[1];
+          window.location.href = fusionauthHost + '/password/change' + keyAndTenant;
+        }),
+        pathMatch: 'prefix'
+      },
       {
         path: 'app/signupEmbed',
         redirectTo: 'app/embed/signup',
