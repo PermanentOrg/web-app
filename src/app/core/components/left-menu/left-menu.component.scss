@@ -8,7 +8,7 @@ $hover-color: lighten($PR-blue, 4%);
 $active-color: $PR-orange;
 $active-indicator-color: lighten($active-color, 7%);
 
-$archive-options-shadow-color: rgba($black, .1);
+$archive-options-shadow-color: rgba($black, 0.1);
 $archive-options-shadow-spread: $grid-unit * 0.25;
 $archive-options-shadow-offset: 0.5rem;
 
@@ -53,7 +53,8 @@ $archive-options-shadow-offset: 0.5rem;
       display: flex;
       align-items: center;
 
-      i, img.svg-icon {
+      i,
+      img.svg-icon {
         flex: 0 0 $left-menu-icon-width;
         font-size: $mat-icon;
         text-align: center;
@@ -107,7 +108,8 @@ $archive-options-shadow-offset: 0.5rem;
       text-decoration: none;
     }
 
-    i, img.svg-icon {
+    i,
+    img.svg-icon {
       flex: 0 0 $left-menu-icon-width;
       font-size: $mat-icon;
       text-align: center;
@@ -129,7 +131,8 @@ $archive-options-shadow-offset: 0.5rem;
       position: relative;
     }
 
-    &.drop-target, &.drop-target:hover {
+    &.drop-target,
+    &.drop-target:hover {
       background-color: $PR-purple;
     }
   }
@@ -141,14 +144,14 @@ $archive-options-shadow-offset: 0.5rem;
     }
   }
 
-  .menu-header-desktop, .archive-options {
+  .menu-header-desktop,
+  .archive-options {
     display: none;
   }
 
   .menu-branding {
     display: none;
   }
-
 
   .menu-scroll {
     overflow: hidden;
@@ -194,7 +197,6 @@ $archive-options-shadow-offset: 0.5rem;
     }
   }
 }
-
 
 @include desktop {
   :host {
@@ -243,6 +245,13 @@ $archive-options-shadow-offset: 0.5rem;
         padding: 0 !important;
         font-weight: bold;
         padding: $grid-unit * 0.5;
+        display: -webkit-box;
+        margin: 0 !important;
+        width: 144px;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .archive-access {
@@ -356,9 +365,10 @@ $archive-options-shadow-offset: 0.5rem;
   @include beforeDesktop {
     .menu.hamburger-menu {
       --safe-area-inset-left: env(safe-area-inset-left);
-      width: calc(#{$left-menu-width + 4 * $grid-unit} + var(--safe-area-inset-left)) !important;
+      width: calc(
+        #{$left-menu-width + 4 * $grid-unit} + var(--safe-area-inset-left)
+      ) !important;
       padding-left: calc(var(--safe-area-inset-left)) !important;
     }
   }
-
 }
