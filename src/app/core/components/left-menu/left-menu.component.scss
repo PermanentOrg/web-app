@@ -254,6 +254,13 @@ $archive-options-shadow-offset: 0.5rem;
         text-overflow: ellipsis;
       }
 
+      .archive-name-expanded {
+        -webkit-line-clamp: initial;
+        -webkit-box-orient: vertical;
+        text-overflow: initial;
+        overflow: auto;
+      }
+
       .archive-access {
         padding: 9px 0;
         text-transform: uppercase;
@@ -264,7 +271,7 @@ $archive-options-shadow-offset: 0.5rem;
 
       .archive-options-toggle {
         cursor: pointer;
-        height: 2 * $grid-unit;
+        height: fit-content;
         display: flex;
         align-items: center;
         justify-content: space-between;
