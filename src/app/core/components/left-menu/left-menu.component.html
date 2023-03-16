@@ -78,6 +78,13 @@
         Public Files
       </a>
       <hr class="hide-mobile" />
+      <a class="menu-item"
+      [routerLink]="['/gallery']"
+      [class.active]="checkMenuItemActive('/gallery')">
+        <img class="svg-icon" src="assets/svg/left-menu/gallery-icon.svg" />
+        Public Gallery
+      </a>
+      <hr class="hide-mobile" />
       <div class="menu-item apps-menu hide-mobile"
         [class.active]="checkMenuItemActive('/apps')">
         <a class="apps-link-main" [routerLink]="['/apps']">
