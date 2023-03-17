@@ -2,6 +2,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
+import { ArchiveType } from '@models/archive-vo';
 
 @Component({
   selector: 'pr-public-settings',
@@ -16,19 +17,22 @@ export class PublicSettingsComponent implements OnInit {
   public archiveTypes:  {value:string,
                           name:string}[] = 
   [
-    {value:'family',name:'Group'},
+    {value:'type.archive.family',name:'Group'},
     {
-      value:'organization',name:'Organization'
+      value:'type.archive.organization',name:'Organization'
     },
     {
-      value:'person',name:'Person'
+      value:'type.archive.person',name:'Person'
     }
   ]
+
+  public archiveType: ArchiveType = 'type.archive.organization';
 
   constructor(private api: ApiService) {}
 
   ngOnInit(): void {
     this.allowDownloadsToggle = +this.archive.allowPublicDownload;
+    this.archiveType=this.archive.type;
   }
 
   public async onAllowDownloadsChange() {
@@ -39,6 +43,20 @@ export class PublicSettingsComponent implements OnInit {
     } catch {
       // fail silently
     } finally {
+      this.updating = false;
+    }
+  }
+
+  public async onArchiveTypeChange() {
+    this.archive.type = this.archiveType;
+    this.updating = true;
+    try {
+      await this.api.archive.update(this.archive);
+    }
+    catch {
+      // fail silently
+    }
+    finally {
       this.updating = false;
     }
   }
