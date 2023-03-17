@@ -13,7 +13,7 @@ export interface Directive {
   createdDt: Date;
   updatedDt: Date;
   trigger: DirectiveTrigger;
-  stewardAccountId?: number;
+  stewardEmail?: string;
   note?: string;
   executionDt?: Date;
 }

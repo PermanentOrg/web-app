@@ -14,12 +14,14 @@ export class MockAccountService {
 export class MockDirectiveRepo {
   public static failRequest: boolean = false;
   public static mockStewardId: number = null;
+  public static mockStewardEmail: string = null;
   public static mockNote: string = null;
 
   public static reset(): void {
-    this.failRequest = false;
-    this.mockStewardId = null;
-    this.mockNote = null;
+    MockDirectiveRepo.failRequest = false;
+    MockDirectiveRepo.mockStewardId = null;
+    MockDirectiveRepo.mockNote = null;
+    MockDirectiveRepo.mockStewardEmail = null;
   }
 
   public async get(): Promise<Directive> {
@@ -40,38 +42,13 @@ export class MockDirectiveRepo {
         createdDt: new Date(),
         updatedDt: new Date(),
       },
-      stewardAccountId: MockDirectiveRepo.mockStewardId,
+      stewardEmail: MockDirectiveRepo.mockStewardEmail,
       note: MockDirectiveRepo.mockNote,
       executionDt: null,
     };
   }
 }
 
-export class MockAccountRepo {
-  public static failRequest = false;
-  public static emailAddress = 'test@example.com';
-
-  public static reset(): void {
-    MockAccountRepo.failRequest = false;
-    MockAccountRepo.emailAddress = 'test@example.com';
-  }
-
-  public async get() {
-    if (MockAccountRepo.failRequest) {
-      throw new Error('Unit Testing: Forced Request Failure');
-    }
-    return {
-      getAccountVO() {
-        return new AccountVO({
-          accountId: 1000,
-          primaryEmail: MockAccountRepo.emailAddress,
-        });
-      },
-    };
-  }
-}
-
 export class MockApiService {
   public directive = new MockDirectiveRepo();
-  public account = new MockAccountRepo();
 }

@@ -36,10 +36,10 @@
       <div
         [class]="{
           'archive-steward-email': true,
-          'not-assigned': !archiveStewardEmail
+          'not-assigned': !directive?.stewardEmail
         }"
       >
-        {{ archiveStewardEmail ?? 'not assigned' }}
+        {{ directive?.stewardEmail ?? 'not assigned' }}
       </div>
     </div>
     <div class="row">

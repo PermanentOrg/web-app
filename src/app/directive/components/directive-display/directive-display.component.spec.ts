@@ -7,7 +7,6 @@ import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 
 import {
-  MockAccountRepo,
   MockAccountService,
   MockApiService,
   MockDirectiveRepo,
@@ -31,9 +30,8 @@ describe('DirectiveDisplayComponent', () => {
       archiveId: 1,
       fullName: 'The Test Archive',
     });
-    MockAccountRepo.reset();
     MockDirectiveRepo.reset();
-    MockDirectiveRepo.mockStewardId = 1;
+    MockDirectiveRepo.mockStewardEmail = 'test@example.com';
     MockDirectiveRepo.mockNote = 'Unit Testing!';
   });
 
@@ -56,17 +54,8 @@ describe('DirectiveDisplayComponent', () => {
     expect(find('.archive-steward-note')[0].nativeElement.innerText).toContain(
       'Unit Testing!'
     );
-  });
-
-  it('should fetch archive steward info from API', async () => {
-    MockDirectiveRepo.reset();
-    MockDirectiveRepo.mockStewardId = 1;
-    MockAccountRepo.emailAddress = 'unittesting@example.com';
-    const { find, fixture, instance } = await shallow.render();
-    await fixture.whenStable();
-    expect(instance.archiveStewardEmail).not.toBeUndefined();
     expect(find('.archive-steward-email')[0].nativeElement.innerText).toContain(
-      'unittesting@example.com'
+      'test@example.com'
     );
   });
 
@@ -83,14 +72,6 @@ describe('DirectiveDisplayComponent', () => {
 
   it('should be able to handle API errors when fetching Directive', async () => {
     MockDirectiveRepo.failRequest = true;
-    const { find } = await shallow.render();
-    expect(find('.error').length).toBe(1);
-    expect(find('.archive-steward-table').length).toBe(0);
-    expect(find('button').nativeElement.disabled).toBeTruthy();
-  });
-
-  it('should be able to handle API errors when fetching Archive Steward e-mail', async () => {
-    MockAccountRepo.failRequest = true;
     const { find } = await shallow.render();
     expect(find('.error').length).toBe(1);
     expect(find('.archive-steward-table').length).toBe(0);

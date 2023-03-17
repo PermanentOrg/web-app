@@ -11,7 +11,6 @@ import { ApiService } from '@shared/services/api/api.service';
 export class DirectiveDisplayComponent implements OnInit {
   public archiveName: string;
   public directive: Directive;
-  public archiveStewardEmail: string;
   public error: boolean;
 
   constructor(private account: AccountService, private api: ApiService) {
@@ -32,19 +31,6 @@ export class DirectiveDisplayComponent implements OnInit {
     }
     if (this.directive?.note) {
       this.directive.note = this.directive.note.trim();
-    }
-    if (this.directive.stewardAccountId) {
-      try {
-        const stewardAccount = (
-          await this.api.account.get(
-            new AccountVO({ accountId: this.directive.stewardAccountId })
-          )
-        ).getAccountVO();
-        this.archiveStewardEmail = stewardAccount?.primaryEmail;
-      } catch {
-        this.error = true;
-        return;
-      }
     }
   }
 }

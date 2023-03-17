@@ -1,13 +1,7 @@
-import {
-  componentWrapperDecorator,
-  Meta,
-  moduleMetadata,
-  Story,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 import {
-  MockAccountRepo,
   MockAccountService,
   MockApiService,
   MockDirectiveRepo,
@@ -66,12 +60,6 @@ export default {
       defaultValue: false,
       control: 'boolean',
     },
-    failStewardAccountFetch: {
-      description:
-        "Simulates a backend/network error when fetching the Archive Steward's e-mail address.",
-      defaultValue: false,
-      control: 'boolean',
-    },
   },
   component: DirectiveDisplayComponent,
 } as Meta;
@@ -84,9 +72,7 @@ const storyTemplate: Story = (args) => {
   MockDirectiveRepo.failRequest = args.failDirectivesFetch;
   MockDirectiveRepo.mockStewardId = args.hasArchiveSteward ? 1 : null;
   MockDirectiveRepo.mockNote = args.hasArchiveSteward ? args.note : null;
-  MockAccountRepo.reset();
-  MockAccountRepo.failRequest = args.failStewardAccountFetch;
-  MockAccountRepo.emailAddress = args.hasArchiveSteward
+  MockDirectiveRepo.mockStewardEmail = args.hasArchiveSteward
     ? args.archiveStewardEmail
     : null;
   return {
@@ -99,8 +85,7 @@ const storyTemplate: Story = (args) => {
             args.hasArchiveSteward +
             args.note +
             args.archiveStewardEmail +
-            args.failDirectivesFetch +
-            args.failStewardAccountFetch,
+            args.failDirectivesFetch,
         },
       ],
     },
@@ -120,5 +105,4 @@ NoPlan.args = {
 export const ApiError: Story = storyTemplate.bind({});
 ApiError.args = {
   failDirectivesFetch: true,
-  failStewardAccountFetch: true,
 };
