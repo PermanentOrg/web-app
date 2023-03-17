@@ -13,6 +13,18 @@ export class PublicSettingsComponent implements OnInit {
   public updating: boolean = false;
   public allowDownloadsToggle: number = 0;
 
+  public archiveTypes:  {value:string,
+                          name:string}[] = 
+  [
+    {value:'family',name:'Group'},
+    {
+      value:'organization',name:'Organization'
+    },
+    {
+      value:'person',name:'Person'
+    }
+  ]
+
   constructor(private api: ApiService) {}
 
   ngOnInit(): void {

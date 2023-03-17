@@ -32,4 +32,13 @@
     Display a button that allows viewers of your published items to download a
     copy of the source file to their device.
   </small>
+  <div class="settings-item">
+   <label>Archive Type</label>
+   <select [value]="'group'" class="custom-select">
+    <option *ngFor="let type of archiveTypes" value="type.value">
+      {{type.name}}
+    </option>
+   </select>
+  </div>
+  <small class="text-muted">The archive type reflects what the archive represents, such as a person, a group or family, or an organization.</small>
 </div>
