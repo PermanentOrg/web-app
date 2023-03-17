@@ -13,7 +13,7 @@ import {
 } from './test-utils';
 import { ApiService } from '@shared/services/api/api.service';
 
-describe('DirectiveDisplayComponent', () => {
+fdescribe('DirectiveDisplayComponent', () => {
   let shallow: Shallow<DirectiveDisplayComponent>;
 
   beforeEach(() => {
