@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveType } from '@models/archive-vo';
+import { Dialog } from '@root/app/dialog/dialog.service';
 
 @Component({
   selector: 'pr-public-settings',
@@ -26,9 +27,9 @@ export class PublicSettingsComponent implements OnInit {
     }
   ]
 
-  public archiveType: ArchiveType = 'type.archive.organization';
+  public archiveType: ArchiveType | any = 'type.archive.organization';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService,private dialog:Dialog) {}
 
   ngOnInit(): void {
     this.allowDownloadsToggle = +this.archive.allowPublicDownload;
@@ -47,17 +48,14 @@ export class PublicSettingsComponent implements OnInit {
     }
   }
 
+  public setArchiveType(value: ArchiveType) {
+    this.archiveType = value;
+  }
+
   public async onArchiveTypeChange() {
-    this.archive.type = this.archiveType;
-    this.updating = true;
-    try {
-      await this.api.archive.update(this.archive);
-    }
-    catch {
-      // fail silently
-    }
-    finally {
-      this.updating = false;
-    }
+   this.dialog.open('ArchiveTypeChangeDialogComponent', { archive:this.archive, archiveType:this.archiveType, setArchiveType:this.setArchiveType }, {
+     width: '1000px',
+   });
+
   }
 }

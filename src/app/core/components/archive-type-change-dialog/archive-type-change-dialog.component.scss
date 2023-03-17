@@ -1,0 +1,40 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader;
+}
+
+.content {
+  @include tabbedDialogContent;
+}
+
+.tabs {
+  @include tabbedDialogNav;
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}
+
+form {
+  @include tabbedDialogPanelForm;
+  max-width: 600px;
+  padding-top: 0;
+}
+
+pr-archive-small {
+  margin-bottom: $grid-unit;
+
+  &.waiting {
+    opacity: 0.7;
+  }
+}
