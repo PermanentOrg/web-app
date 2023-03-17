@@ -34,8 +34,8 @@
   </small>
   <div class="settings-item">
    <label>Archive Type</label>
-   <select [(ngModel)]="archiveType" (ngModelChange)="onArchiveTypeChange()" class="custom-select">
-    <option *ngFor="let type of archiveTypes" value={{type.value}}>
+   <select [(ngModel)]="archiveType" name="archiveType" id="archiveType" (ngModelChange)="onArchiveTypeChange()" [disabled]="archive.type === 'type.archive.nonprofit'" class="custom-select">
+    <option *ngFor="let type of archiveTypes" [ngValue]="type.value">
       {{type.name}}
     </option>
    </select>

@@ -2,6 +2,7 @@ import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { Component, Inject, OnInit } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { AnyCnameRecord } from 'dns';
 
 @Component({
   selector: 'pr-archive-type-change-dialog',
@@ -11,7 +12,7 @@ import { ApiService } from '@shared/services/api/api.service';
 export class ArchiveTypeChangeDialogComponent implements OnInit {
   archive: ArchiveVO;
   archiveType: ArchiveType;
-  setArchiveType:(value: string)=>void;
+  archiveClose:any
   public updating = false
 
   constructor(
@@ -21,15 +22,21 @@ export class ArchiveTypeChangeDialogComponent implements OnInit {
   ) {
     this.archive = this.data.archive;
     this.archiveType = this.data.archiveType;
-    this.setArchiveType = this.data.setArchiveType;
+    this.archiveClose = this.data.archiveClose;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+   
+  }
 
   public onDoneClick(): void {
-    this.setArchiveType(this.archive.type)
-    this.dialogRef.close();
+     this.archiveClose.subscribe(() => {
+       console.log('here');
+     });
+     this.dialogRef.close();
   }
+
+
 
   public async onConfirmClick(){
     this.archive.type = this.archiveType;

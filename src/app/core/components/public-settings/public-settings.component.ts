@@ -4,6 +4,7 @@ import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveType } from '@models/archive-vo';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pr-public-settings',
@@ -14,6 +15,11 @@ export class PublicSettingsComponent implements OnInit {
   @Input() public archive: ArchiveVO;
   public updating: boolean = false;
   public allowDownloadsToggle: number = 0;
+
+  //Observable to listen to the archive close
+  public archiveClose:any = new Observable(() => {
+    this.archiveType = this.archive.type
+  });
 
   public archiveTypes:  {value:string,
                           name:string}[] = 
@@ -48,13 +54,11 @@ export class PublicSettingsComponent implements OnInit {
     }
   }
 
-  public setArchiveType(value: ArchiveType) {
-    this.archiveType = value;
-  }
+ 
 
   public async onArchiveTypeChange() {
-   this.dialog.open('ArchiveTypeChangeDialogComponent', { archive:this.archive, archiveType:this.archiveType, setArchiveType:this.setArchiveType }, {
-     width: '1000px',
+   this.dialog.open('ArchiveTypeChangeDialogComponent', { archive:this.archive, archiveType:this.archiveType,archiveClose:this.archiveClose }, {
+     width: '700px',
    });
 
   }
