@@ -17,29 +17,29 @@ export class PublicSettingsComponent implements OnInit {
   public allowDownloadsToggle: number = 0;
 
   //Observable to listen to the archive close
-  public archiveClose:any = new Observable(() => {
-    this.archiveType = this.archive.type
+  public archiveClose: Observable<void> = new Observable(() => {
+    this.archiveType = this.archive.type;
   });
 
-  public archiveTypes:  {value:string,
-                          name:string}[] = 
-  [
-    {value:'type.archive.family',name:'Group'},
+  public archiveTypes: { value: string; name: string }[] = [
+    { value: 'type.archive.family', name: 'Group' },
     {
-      value:'type.archive.organization',name:'Organization'
+      value: 'type.archive.organization',
+      name: 'Organization',
     },
     {
-      value:'type.archive.person',name:'Person'
-    }
-  ]
+      value: 'type.archive.person',
+      name: 'Person',
+    },
+  ];
 
-  public archiveType: ArchiveType | any = 'type.archive.organization';
+  public archiveType: ArchiveType = 'type.archive.organization';
 
-  constructor(private api: ApiService,private dialog:Dialog) {}
+  constructor(private api: ApiService, private dialog: Dialog) {}
 
   ngOnInit(): void {
     this.allowDownloadsToggle = +this.archive.allowPublicDownload;
-    this.archiveType=this.archive.type;
+    this.archiveType = this.archive.type;
   }
 
   public async onAllowDownloadsChange() {
@@ -54,12 +54,17 @@ export class PublicSettingsComponent implements OnInit {
     }
   }
 
- 
-
   public async onArchiveTypeChange() {
-   this.dialog.open('ArchiveTypeChangeDialogComponent', { archive:this.archive, archiveType:this.archiveType,archiveClose:this.archiveClose }, {
-     width: '700px',
-   });
-
+    this.dialog.open(
+      'ArchiveTypeChangeDialogComponent',
+      {
+        archive: this.archive,
+        archiveType: this.archiveType,
+        archiveClose: this.archiveClose,
+      },
+      {
+        width: '700px',
+      }
+    );
   }
 }
