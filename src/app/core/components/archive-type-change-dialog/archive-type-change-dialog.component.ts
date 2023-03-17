@@ -30,9 +30,7 @@ export class ArchiveTypeChangeDialogComponent implements OnInit {
   }
 
   public onDoneClick(): void {
-     this.archiveClose.subscribe(() => {
-       console.log('here');
-     });
+     this.archiveClose.subscribe();
      this.dialogRef.close();
   }
 
