@@ -10,6 +10,7 @@ export { ArchiveVO } from '@models/archive-vo';
 export { AuthVO } from '@models/auth-vo';
 export * from '@models/billing-payment-vo';
 export { ConnectorOverviewVO } from '@models/connector-overview-vo';
+export * from './directive';
 export * from '@models/folder-vo';
 export * from '@models/invite-vo';
 export * from './ledger-vo';

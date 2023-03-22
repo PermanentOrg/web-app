@@ -1,0 +1,55 @@
+@import 'variables';
+
+.panel-title {
+  font-weight: bold;
+  font-size: 1.25em;
+  line-height: 2.5;
+}
+
+.archive-steward-header {
+  font-weight: bold;
+  font-size: 1.125rem;
+  color: $PR-purple;
+}
+
+.archive-steward-description {
+  font-style: italic;
+  color: $gray-dark;
+  display: block;
+}
+
+.archive-steward-table {
+  display: table;
+
+  .row {
+    display: table-row;
+    & > * {
+      &:first-child {
+        font-weight: bold;
+        padding-right: 1.5em;
+        padding-bottom: 0.5em;
+        white-space: nowrap;
+      }
+      &:last-child {
+        color: $gray-dark;
+        white-space: pre-wrap;
+      }
+      display: table-cell;
+    }
+  }
+}
+
+.not-assigned {
+  font-style: italic;
+}
+
+.btn {
+  margin-bottom: 1em;
+}
+
+.error {
+  background-color: #fff3cd;
+  padding: 1em;
+  margin: 1em;
+  font-style: italic;
+}

@@ -3,7 +3,7 @@ import { HttpService } from '@shared/services/http/http.service';
 import * as Repo from '@shared/services/api/index.repo';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   public auth: Repo.AuthRepo;
@@ -11,6 +11,7 @@ export class ApiService {
   public archive: Repo.ArchiveRepo;
   public billing: Repo.BillingRepo;
   public connector: Repo.ConnectorRepo;
+  public directive: Repo.DirectiveRepo;
   public folder: Repo.FolderRepo;
   public invite: Repo.InviteRepo;
   public locn: Repo.LocnRepo;
@@ -29,6 +30,7 @@ export class ApiService {
     this.archive = new Repo.ArchiveRepo(this.http);
     this.billing = new Repo.BillingRepo(this.http);
     this.connector = new Repo.ConnectorRepo(this.http);
+    this.directive = new Repo.DirectiveRepo(this.http);
     this.folder = new Repo.FolderRepo(this.http);
     this.invite = new Repo.InviteRepo(this.http);
     this.locn = new Repo.LocnRepo(this.http);
