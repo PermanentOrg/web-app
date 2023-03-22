@@ -17,3 +17,8 @@ export interface Directive {
   note?: string;
   executionDt?: Date;
 }
+
+export interface LegacyContact {
+  name: string;
+  email: string;
+}

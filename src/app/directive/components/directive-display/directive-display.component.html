@@ -21,7 +21,19 @@
     <a href="#">here.</a>
   </p>
   <div class="archive-steward-header">Archive Steward: {{ archiveName }}</div>
-  <!--no plan warning will go here-->
+  <div class="no-plan-warning" *ngIf="noPlan">
+    <div class="warning-icon">
+      <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+    </div>
+    <div class="text-contents">
+      You must designate a Legacy Contact before you can establish a Legacy Plan
+      for this archive. Go to
+      <a class="breadcrumb-link" href="#"
+        >Account Settings &gt; Legacy Planning</a
+      >
+      to designate a Legacy Contact. <a href="#">Learn more.</a>
+    </div>
+  </div>
   <p class="archive-steward-description">
     The Archive Steward for this archive will receive your note when your Legacy
     Plan is activated.
@@ -54,7 +66,7 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" [disabled]="error">
+  <button class="btn btn-primary" [disabled]="error || noPlan">
     Assign Archive Steward
   </button>
   <div>&nbsp;</div>

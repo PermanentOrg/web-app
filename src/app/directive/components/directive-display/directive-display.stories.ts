@@ -46,6 +46,16 @@ export default {
       defaultValue: true,
       control: 'boolean',
     },
+    hasLegacyContact: {
+      defaultValue: true,
+      control: 'boolean',
+    },
+    checkLegacyContact: {
+      defaultValue: true,
+      control: 'boolean',
+      description:
+        'If the UI should check for the presence of a Legacy Contact and show the "No Plan" warning if the account does not have one assigned.',
+    },
     archiveStewardEmail: {
       defaultValue: 'test@example.com',
       control: 'text',
@@ -70,10 +80,15 @@ const storyTemplate: Story = (args) => {
   });
   MockDirectiveRepo.reset();
   MockDirectiveRepo.failRequest = args.failDirectivesFetch;
-  MockDirectiveRepo.mockStewardId = args.hasArchiveSteward ? 1 : null;
-  MockDirectiveRepo.mockNote = args.hasArchiveSteward ? args.note : null;
   MockDirectiveRepo.mockStewardEmail = args.hasArchiveSteward
     ? args.archiveStewardEmail
+    : null;
+  MockDirectiveRepo.mockNote = args.hasArchiveSteward ? args.note : null;
+  MockDirectiveRepo.legacyContactEmail = args.hasLegacyContact
+    ? 'test@example.com'
+    : null;
+  MockDirectiveRepo.legacyContactName = args.hasLegacyContact
+    ? 'Unit Test'
     : null;
   return {
     moduleMetadata: {
@@ -85,21 +100,33 @@ const storyTemplate: Story = (args) => {
             args.hasArchiveSteward +
             args.note +
             args.archiveStewardEmail +
-            args.failDirectivesFetch,
+            args.failDirectivesFetch +
+            args.hasLegacyContact +
+            args.checkLegacyContact,
         },
       ],
+    },
+    props: {
+      checkLegacyContact: args.checkLegacyContact,
     },
   };
 };
 
-export const Default: Story = storyTemplate.bind({});
+export const WithDirective: Story = storyTemplate.bind({});
 
-export const NoPlan: Story = storyTemplate.bind({});
-NoPlan.args = {
+export const WithoutDirective: Story = storyTemplate.bind({});
+WithoutDirective.args = {
   archiveName: 'The Volunteer Firefighter Archive',
   hasArchiveSteward: false,
   archiveStewardEmail: 'test@example.com',
   note: 'Test note for Archive Steward',
+};
+
+export const NoPlan: Story = storyTemplate.bind({});
+NoPlan.args = {
+  hasArchiveSteward: false,
+  checkLegacyContact: true,
+  hasLegacyContact: false,
 };
 
 export const ApiError: Story = storyTemplate.bind({});

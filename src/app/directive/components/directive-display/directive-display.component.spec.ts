@@ -33,6 +33,8 @@ describe('DirectiveDisplayComponent', () => {
     MockDirectiveRepo.reset();
     MockDirectiveRepo.mockStewardEmail = 'test@example.com';
     MockDirectiveRepo.mockNote = 'Unit Testing!';
+    MockDirectiveRepo.legacyContactName = 'Test User';
+    MockDirectiveRepo.legacyContactEmail = 'test@example.com';
   });
 
   it('should create', async () => {
@@ -76,5 +78,37 @@ describe('DirectiveDisplayComponent', () => {
     expect(find('.error').length).toBe(1);
     expect(find('.archive-steward-table').length).toBe(0);
     expect(find('button').nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should show the "No Plan" warning if the user does not have a legacy contact', async () => {
+    MockDirectiveRepo.legacyContactName = null;
+    MockDirectiveRepo.legacyContactEmail = null;
+    const { find } = await shallow.render();
+    expect(find('.no-plan-warning').length).toBe(1);
+    expect(find('button').nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should not show the "No Plan" warning if the user does have a legacy contact', async () => {
+    const { find } = await shallow.render();
+    expect(find('.no-plan-warning').length).toBe(0);
+    expect(find('button').nativeElement.disabled).toBeFalsy();
+  });
+
+  it('should be able to handle API errors when fetching Legacy Contact', async () => {
+    MockDirectiveRepo.failLegacyRequest = true;
+    const { find } = await shallow.render();
+    expect(find('.error').length).toBe(1);
+    expect(find('.archive-steward-table').length).toBe(0);
+    expect(find('button').nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should be able to disable the Legacy Contact check through an input', async () => {
+    MockDirectiveRepo.legacyContactName = null;
+    MockDirectiveRepo.legacyContactEmail = null;
+    const { find } = await shallow.render(
+      '<pr-directive-display [checkLegacyContact]="false"></pr-directive-display>'
+    );
+    expect(find('.no-plan-warning').length).toBe(0);
+    expect(find('button').nativeElement.disabled).toBeFalsy();
   });
 });
