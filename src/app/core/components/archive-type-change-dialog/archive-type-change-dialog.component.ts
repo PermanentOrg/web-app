@@ -12,8 +12,8 @@ import { AnyCnameRecord } from 'dns';
 export class ArchiveTypeChangeDialogComponent implements OnInit {
   archive: ArchiveVO;
   archiveType: ArchiveType;
-  archiveClose:any
-  public updating = false
+  archiveClose: any;
+  public updating = false;
 
   constructor(
     private dialogRef: DialogRef,
@@ -25,27 +25,21 @@ export class ArchiveTypeChangeDialogComponent implements OnInit {
     this.archiveClose = this.data.archiveClose;
   }
 
-  ngOnInit(): void {
-   
-  }
+  ngOnInit(): void {}
 
   public onDoneClick(): void {
-     this.archiveClose.subscribe();
-     this.dialogRef.close();
+    this.archiveClose.subscribe();
+    this.dialogRef.close();
   }
 
-
-
-  public async onConfirmClick(){
+  public async onConfirmClick() {
     this.archive.type = this.archiveType;
     this.updating = true;
     try {
       await this.api.archive.update(this.archive);
-    }
-    catch {
+    } catch {
       // fail silently
-    }
-    finally {
+    } finally {
       this.updating = false;
       this.dialogRef.close();
     }
