@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { Component, Inject, OnInit } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
@@ -12,7 +13,7 @@ import { AnyCnameRecord } from 'dns';
 export class ArchiveTypeChangeDialogComponent implements OnInit {
   archive: ArchiveVO;
   archiveType: ArchiveType;
-  archiveClose: any;
+  archiveClose: Observable<void>;
   public updating = false;
 
   constructor(
