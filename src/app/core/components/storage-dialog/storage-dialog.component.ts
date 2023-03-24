@@ -1,3 +1,5 @@
+import { ActivatedRoute, ParamMap } from '@angular/router';
+// import { RouterStateSnapshot } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -28,6 +30,7 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
     private account: AccountService,
     private api: ApiService,
     private message: MessageService,
+    private route: ActivatedRoute,
   ) {
     this.promoForm = this.fb.group({
       code: ['', [ Validators.required ]]
@@ -35,6 +38,14 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   ngOnInit(): void {
+     this.route.paramMap.subscribe((params: ParamMap) => {
+      const path = params.get('path') as StorageDialogTab;
+      
+      if(path) {
+      this.activeTab = path;
+      }
+
+     });
   }
 
   setTab(tab: StorageDialogTab) {

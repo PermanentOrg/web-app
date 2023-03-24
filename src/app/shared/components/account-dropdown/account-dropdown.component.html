@@ -7,7 +7,7 @@
 <div class="account-dropdown-menu" *ngIf="showMenu" [@dropdownMenuAnimation]>
   <div *ngIf="showMenu" [@ngIfFadeInAnimationSlow]>
     <pr-storage-meter></pr-storage-meter>
-    <a [routerLink]="[{ outlets: { dialog: ['storage']}}]">Storage</a>
+    <a [routerLink]="[{ outlets: { dialog: ['storage','add']}}]">Storage</a>
     <a [routerLink]="[{ outlets: { dialog: ['account']}}]">
       <i class="material-icons text-warning" [ngbTooltip]="badgeTooltip" *ngIf="accountService.isEmailOrPhoneUnverified()">{{badgeIcon}}</i>
       Account
