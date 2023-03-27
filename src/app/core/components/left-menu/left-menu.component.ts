@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ElementRef,
   OnDestroy,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { find } from 'lodash';
@@ -17,9 +17,17 @@ import debug from 'debug';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ArchiveVO, AccountVO, FolderVO, ConnectorOverviewVO } from '@root/app/models';
+import {
+  ArchiveVO,
+  AccountVO,
+  FolderVO,
+  ConnectorOverviewVO,
+} from '@root/app/models';
 import { Subscription } from 'rxjs';
-import { ngIfSlideInAnimation, ngIfScaleHeightAnimation } from '@shared/animations';
+import {
+  ngIfSlideInAnimation,
+  ngIfScaleHeightAnimation,
+} from '@shared/animations';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
@@ -29,11 +37,12 @@ import { ProfileService } from '@shared/services/profile/profile.service';
   selector: 'pr-left-menu',
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss'],
-  animations: [ ngIfSlideInAnimation, ngIfScaleHeightAnimation ]
+  animations: [ngIfSlideInAnimation, ngIfScaleHeightAnimation],
 })
 export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isVisible = false;
-  @Output() isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() isVisibleChange: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
 
   @ViewChild('scroll') scrollElementRef: ElementRef;
 
@@ -44,6 +53,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public showAppsSubfolders = this.isMenuOpen('showAppsSubfolders');
 
   public appsSubfolders: FolderVO[] = [];
+
+  public hoverOverArchiveName: boolean = false;
 
   private subscriptions: Subscription[] = [];
   private currentUrl: string;
@@ -73,7 +84,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.router.events.subscribe(event => {
+      this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
           this.currentUrl = this.router.url;
           this.urlMatches.clear();
@@ -124,8 +135,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   logOut() {
-    this.accountService.logOut()
-    .then(() => {
+    this.accountService.logOut().then(() => {
       this.messageService.showMessage(`Logged out successfully`, 'success');
       this.router.navigate(['/login']);
     });
@@ -133,7 +143,10 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   checkMenuItemActive(urlSegment: string) {
     if (!this.urlMatches.has(urlSegment)) {
-      this.urlMatches.set(urlSegment, this.currentUrl?.replace(/[()]/g, '').includes(urlSegment));
+      this.urlMatches.set(
+        urlSegment,
+        this.currentUrl?.replace(/[()]/g, '').includes(urlSegment)
+      );
     }
 
     return this.urlMatches.get(urlSegment);
@@ -141,7 +154,11 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onConnectionsClick() {
     const connections = await this.relationshipService.get();
-    this.dialog.open('ConnectionsDialogComponent', { connections }, { width: '1000px'});
+    this.dialog.open(
+      'ConnectionsDialogComponent',
+      { connections },
+      { width: '1000px' }
+    );
     this.showArchiveOptions = false;
   }
 
@@ -150,50 +167,73 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.dialog.open('ProfileEditComponent', null, {
       width: '100%',
       height: 'fullscreen',
-      menuClass: 'profile-editor-dialog'
+      menuClass: 'profile-editor-dialog',
     });
     this.showArchiveOptions = false;
   }
 
   async onAllArchivesClick() {
     await this.accountService.refreshArchives();
-    this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px'});
+    this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px' });
     this.showArchiveOptions = false;
   }
 
   async onMembersClick() {
     const currentAccount = this.accountService.getAccount();
-    const response = await this.api.archive.getMembers(this.accountService.getArchive());
+    const response = await this.api.archive.getMembers(
+      this.accountService.getArchive()
+    );
     const members = response.getAccountVOs();
     members.forEach((member: AccountVO) => {
       if (member.accountId === currentAccount.accountId) {
         member.isCurrent = true;
       }
     });
-    this.dialog.open('MembersDialogComponent', { members }, { width: '800px'});
+    this.dialog.open('MembersDialogComponent', { members }, { width: '800px' });
     this.showArchiveOptions = false;
   }
 
   async loadAppsSubfolders() {
     try {
-      const apps = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
-      const folderResponse = await this.api.folder.getWithChildren([new FolderVO(apps)]);
+      const apps = find(this.accountService.getRootFolder().ChildItemVOs, {
+        type: 'type.folder.root.app',
+      });
+      const folderResponse = await this.api.folder.getWithChildren([
+        new FolderVO(apps),
+      ]);
       const appsFolder = folderResponse.getFolderVO(true);
       this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
     } catch (err) {
       Sentry.captureException(err);
-      this.leftMenuDebug('Error loading apps subfolders, silently failing', err);
+      this.leftMenuDebug(
+        'Error loading apps subfolders, silently failing',
+        err
+      );
     }
   }
 
   public toggleArchiveOptions(): void {
     this.showArchiveOptions = !this.showArchiveOptions;
-    window.sessionStorage.setItem('showArchiveOptions', (+this.showArchiveOptions).toString());
+    window.sessionStorage.setItem(
+      'showArchiveOptions',
+      (+this.showArchiveOptions).toString()
+    );
   }
 
   public toggleAppsSubfolders(): void {
     this.showAppsSubfolders = !this.showAppsSubfolders;
-    window.sessionStorage.setItem('showAppsSubfolders', (+this.showAppsSubfolders).toString());
+    window.sessionStorage.setItem(
+      'showAppsSubfolders',
+      (+this.showAppsSubfolders).toString()
+    );
+  }
+
+  public onHoverOverArchiveName(): void {
+    this.hoverOverArchiveName = true;
+  }
+
+  public onHoverOutArchiveName(): void {
+    this.hoverOverArchiveName = false;
   }
 
   protected isMenuOpen(key: string): boolean {
