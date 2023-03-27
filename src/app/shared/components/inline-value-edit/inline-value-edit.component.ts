@@ -1,4 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, SimpleChanges, OnChanges, HostBinding } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ElementRef,
+  ViewChild,
+  SimpleChanges,
+  OnChanges,
+  HostBinding,
+} from '@angular/core';
 import { ngIfScaleAnimation, collapseAnimation } from '@shared/animations';
 import {
   NgbDate,
@@ -8,26 +19,31 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { moment } from 'vis-timeline/standalone';
 import { ItemVO } from '@models';
-import { applyTimezoneOffset, getOffsetMomentFromDTString, zeroPad, momentFormatNum, getUtcMomentFromOffsetDTString } from '@shared/utilities/dateTime';
+import {
+  applyTimezoneOffset,
+  getOffsetMomentFromDTString,
+  zeroPad,
+  momentFormatNum,
+  getUtcMomentFromOffsetDTString,
+} from '@shared/utilities/dateTime';
 import { ENTER } from '@angular/cdk/keycodes';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { NgModel, FormControl, Validators } from '@angular/forms';
 import { getDate, getMonth, getYear } from 'date-fns';
 
 export type InlineValueEditType =
-  'text' |
-  'date' |
-  'textarea' |
-  'select' |
-  'external'
-  ;
+  | 'text'
+  | 'date'
+  | 'textarea'
+  | 'select'
+  | 'external';
 
 type ValueType = string | number;
 @Component({
   selector: 'pr-inline-value-edit',
   templateUrl: './inline-value-edit.component.html',
   styleUrls: ['./inline-value-edit.component.scss'],
-  animations: [ ngIfScaleAnimation, collapseAnimation ]
+  animations: [ngIfScaleAnimation, collapseAnimation],
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() displayValue: ValueType;
@@ -50,9 +66,12 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @HostBinding('class.always-show') @Input() alwaysShow = false;
-  @Output() doneEditing: EventEmitter<ValueType> = new EventEmitter<ValueType>();
-  @Output() externalEdit: EventEmitter<ValueType> = new EventEmitter<ValueType>();
-  @Output() toggledDatePicker: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() doneEditing: EventEmitter<ValueType> =
+    new EventEmitter<ValueType>();
+  @Output() externalEdit: EventEmitter<ValueType> =
+    new EventEmitter<ValueType>();
+  @Output() toggledDatePicker: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
 
   formControl: FormControl;
   @ViewChild('input') inputElementRef: ElementRef;
@@ -67,9 +86,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 
   public extraClasses: string[];
 
-  constructor(
-    private elementRef: ElementRef
-  ) {
+  constructor(private elementRef: ElementRef) {
     this.extraClasses = [];
   }
 
@@ -92,7 +109,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     }
 
     if (this.class) {
-      this.extraClasses = this.class.split(" ");
+      this.extraClasses = this.class.split(' ');
     }
   }
 
@@ -125,7 +142,10 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
 
     if (!this.noScroll) {
       setTimeout(() => {
-        (this.elementRef.nativeElement as HTMLElement).scrollIntoView({behavior: 'smooth', block: 'start'});
+        (this.elementRef.nativeElement as HTMLElement).scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
       });
     }
   }
@@ -156,7 +176,6 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     if (this.type === 'date') {
       this.toggledDatePicker.emit(false);
     }
-
     this.editValue = this.displayValue;
     this.isEditing = false;
     this.blurInput();
@@ -173,40 +192,55 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     this.ngbDate = NgbDate.from({
       year: momentFormatNum(date, 'YYYY'),
       month: momentFormatNum(date, 'M'),
-      day: momentFormatNum(date, 'D')
+      day: momentFormatNum(date, 'D'),
     });
     this.ngbTime = {
       hour: momentFormatNum(date, 'H'),
       minute: momentFormatNum(date, 'm'),
-      second: momentFormatNum(date, 's')
+      second: momentFormatNum(date, 's'),
     };
 
     const now = new Date();
     this.maxNgbDate = {
       year: getYear(now),
       month: getMonth(now) + 1,
-      day: getDate(now) + 1
+      day: getDate(now) + 1,
     };
   }
 
   onDateChange(date: NgbDate) {
     if (this.dateOnly) {
-      this.editValue = `${zeroPad(date.year, 4)}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}`;
+      this.editValue = `${zeroPad(date.year, 4)}-${zeroPad(
+        date.month,
+        2
+      )}-${zeroPad(date.day, 2)}`;
     } else {
-      const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
+      const currentOffset = getOffsetMomentFromDTString(
+        this.editValue as string,
+        this.item?.TimezoneVO
+      );
       const currentTime = currentOffset.format('HH:mm:ss');
       const tzOffset = currentOffset.format('Z');
-      const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(date.day, 2)}T${currentTime}${tzOffset}`;
+      const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(
+        date.day,
+        2
+      )}T${currentTime}${tzOffset}`;
       const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
       this.editValue = newOffset.toISOString();
     }
   }
 
   onTimeChange(time: NgbTimeStruct) {
-    const currentOffset = getOffsetMomentFromDTString(this.editValue as string, this.item?.TimezoneVO);
+    const currentOffset = getOffsetMomentFromDTString(
+      this.editValue as string,
+      this.item?.TimezoneVO
+    );
     const currentDate = currentOffset.format('YYYY-MM-DD');
     const tzOffset = currentOffset.format('Z');
-    const newOffsetString = `${currentDate}T${zeroPad(time.hour, 2)}:${zeroPad(time.minute, 2)}:${zeroPad(time.second, 2)}${tzOffset}`;
+    const newOffsetString = `${currentDate}T${zeroPad(time.hour, 2)}:${zeroPad(
+      time.minute,
+      2
+    )}:${zeroPad(time.second, 2)}${tzOffset}`;
     const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
     this.editValue = newOffset.toISOString();
   }
