@@ -23,6 +23,7 @@ export class GalleryComponent implements OnInit {
       SecretsService.hasStatic('FEATURED_ARCHIVES')
     ) {
       const envFeatured = SecretsService.getStatic('FEATURED_ARCHIVES');
+      console.log('envFeatured', envFeatured)
       if (envFeatured) {
         const archives = JSON.parse(envFeatured) as FeaturedArchive[];
         if (archives) {
