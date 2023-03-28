@@ -1,6 +1,6 @@
 <div class="file-list-item"
   (click)="onItemClick($event)"
-  [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction }"
+  [ngClass]="{'grid-view': inGridView, 'selected': isSelected, 'drag-target': isDragTarget, 'drop-target': isDropTarget, 'dragging': isDragging, 'disabled': item.isPendingAction, 'public-archive':isPublicArchive }"
   (mousedown)="onItemMouseDown($event)" (touchstart)="onItemTouchStart($event)" (touchend)="onItemTouchEnd($event)"
   (mouseenter)="onItemMouseEnterLeave($event)" (mouseleave)="onItemMouseEnterLeave($event, false)"
   (dragenter)="onItemMouseEnterLeave($event)" (dragleave)="onItemMouseEnterLeave($event, false)"
@@ -26,8 +26,9 @@
     <i class="material-icons">{{item | itemTypeIcon:item.view}}</i>
   </div>
   <div [ngClass]="{'name-expanded':isNameHovered && isTextOverflowing}" class="name">
-    <div class="first-row">
-      <p #name class="item-name" [ngClass]="{'item-name-hovered':isNameHovered}" (mouseenter)="onMouseOverName()" (mouseleave)="onMouseLeaveName()">{{item.displayName}}</p>
+    <div [ngClass]="{'public-archive-name-container':isPublicArchive}" class="first-row">
+      <span class="public-archive-date" *ngIf="isPublicArchive">{{date}}</span>
+      <p #name class="item-name" [ngClass]="{'item-name-hovered':isNameHovered, 'public-archive-name':isPublicArchive}" (mouseenter)="onMouseOverName()" (mouseleave)="onMouseLeaveName()">{{item.displayName}}</p>
       <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation [ngbTooltip]="'fileList.icons.share' | prTooltip"></i>
     </div>
     <div class="second-row">

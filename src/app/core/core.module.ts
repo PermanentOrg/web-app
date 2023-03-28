@@ -60,6 +60,8 @@ import { PublicSettingsComponent } from './components/public-settings/public-set
 import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
 import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
 
+
+
 @NgModule({
   imports: [
     AnnouncementModule,

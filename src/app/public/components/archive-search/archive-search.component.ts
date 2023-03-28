@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
@@ -11,6 +11,9 @@ import { debounceTime, switchMap } from 'rxjs/operators';
   styleUrls: ['./archive-search.component.scss'],
 })
 export class ArchiveSearchComponent implements OnInit {
+
+  @Output() search = new EventEmitter<string>()
+
   public searchForm: FormGroup;
 
   public waiting: boolean = false;
@@ -33,7 +36,6 @@ export class ArchiveSearchComponent implements OnInit {
         debounceTime(100),
         switchMap((value) => {
           if (value.query && value.query.length > 3) {
-            console.log(value)
             this.waiting = true;
             return this.api.search.archiveByNameObservable(value.query);
           } else {
@@ -56,4 +58,10 @@ export class ArchiveSearchComponent implements OnInit {
   public clearForm(): void {
     this.searchForm.reset();
   }
+
+  public onHandleSearch(): void {
+    this.search.emit(this.searchForm.value.query);
+  }
+
+ 
 }
