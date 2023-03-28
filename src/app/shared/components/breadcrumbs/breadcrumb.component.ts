@@ -11,9 +11,12 @@ import debug from 'debug';
 export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDestroy, OnInit {
   @Input() breadcrumb: Breadcrumb;
   @Input() last: boolean;
+  @Input() hideBreadcrumbText: boolean = false;
 
   @HostBinding('class.drag-target') public isDragTarget = false;
   @HostBinding('class.drop-target') public isDropTarget = false;
+
+
 
   private dragSubscription: Subscription;
   private debug = debug('component:breadcrumb');
