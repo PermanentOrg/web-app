@@ -6,7 +6,8 @@
   <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500">
   </div>
 </div>
-<div class="profile-about">
+<div class="profile-about-search">
+  <div>
   <div class="profile-name">
     The {{this.archive.fullName}} Archive
   </div>
@@ -17,6 +18,11 @@
     <div class="profile-description" *ngIf="hasSingleValueFor('description', 'textData1')"  [innerHTML]="this.profileItems.description[0].textData1">
     </div>
   </ng-container>
+  </div>
+   <div class="search-box-public-archive">
+    <fa-icon [icon]="['fas', 'search']"></fa-icon>
+    <pr-archive-search></pr-archive-search>
+  </div>
 </div>
 <div class="profile-sidebar adjust-for-announcement">
   <div class="profile-archive-link">

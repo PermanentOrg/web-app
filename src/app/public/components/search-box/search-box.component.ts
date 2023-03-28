@@ -32,6 +32,8 @@ const ANIMATION_DURATION = 1000;
 export class SearchBoxComponent implements OnInit, AfterViewInit {
   @Input() onPublicGallery = false;
   public searchForm: UntypedFormGroup;
+  @Input() hideBorder = false
+  @Input() displayIcon = false;
 
   public archiveResults: ArchiveVO[];
 
@@ -118,6 +120,11 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
     } else if (event.keyCode === ENTER) {
       this.onArchiveClick(this.archiveResults[this.activeResultIndex]);
     }
+  }
+
+  onClearText() {
+    this.searchForm.reset();
+    this.showResults = false;
   }
 
   async onArchiveClick(archive: ArchiveVO) {

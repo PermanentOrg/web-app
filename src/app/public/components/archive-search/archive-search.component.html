@@ -1,0 +1,19 @@
+<!-- @format -->
+<div class="search-box-input">
+  <form class="form-container" [formGroup]="searchForm">
+    <input
+      type="text"
+      class="form-control"
+      [placeholder]="'Search...'"
+      formControlName="query"
+      #searchInput
+    />
+    <fa-icon
+      (click)="clearForm()"
+      class="clear-icon"
+      *ngIf="searchForm.value.query"
+      [icon]="['fas', 'times-circle']"
+    ></fa-icon>
+  </form>
+  <div class="fade-ring-loader" *ngIf="waiting"></div>
+</div>
