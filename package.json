@@ -66,6 +66,7 @@
     "ngx-cookie-service": "^13.2.1",
     "ngx-countup": "^7.3.3",
     "ngx-route-history": "0.0.4",
+    "openseadragon": "^4.0.0",
     "progressbar.js": "1.0.1",
     "rxjs": "6.6.3",
     "sass": "^1.54.0",
