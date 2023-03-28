@@ -12,13 +12,18 @@
       [ngClass]="{ 'hide-border': hideBorder }"
       [placeholder]="
         onPublicGallery
-        ? 'Search for people, families, or organizations'
+          ? 'Search for people, families, or organizations'
           : 'Search archives by name'
       "
       formControlName="query"
       #searchInput
     />
-     <fa-icon (click)="onClearText()" class="clear-icon" *ngIf="displayIcon && searchForm.value.query" [icon]="['fas','times-circle']"></fa-icon>
+    <fa-icon
+      (click)="onClearText()"
+      class="clear-icon"
+      *ngIf="displayIcon && searchForm.value.query"
+      [icon]="['fas', 'times-circle']"
+    ></fa-icon>
   </form>
   <div class="fade-ring-loader" *ngIf="waiting"></div>
   <div class="search-box-results" *ngIf="showResults">
