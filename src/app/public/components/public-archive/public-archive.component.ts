@@ -70,6 +70,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   query: string = '';
 
+  query:string = '';
+
   isViewingProfile$ = merge(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -133,4 +135,9 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   public onBackToArchive(): void {
     this.query = '';
   }
+
+  public onHandleSearch(value:string): void {
+    this.query = value;
+  }
+
 }
