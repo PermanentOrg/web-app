@@ -9,7 +9,6 @@
     <input
       type="text"
       class="form-control"
-      [ngClass]="{ 'hide-border': hideBorder }"
       [placeholder]="
         onPublicGallery
           ? 'Search for people, families, or organizations'
@@ -18,12 +17,6 @@
       formControlName="query"
       #searchInput
     />
-    <fa-icon
-      (click)="onClearText()"
-      class="clear-icon"
-      *ngIf="displayIcon && searchForm.value.query"
-      [icon]="['fas', 'times-circle']"
-    ></fa-icon>
   </form>
   <div class="fade-ring-loader" *ngIf="waiting"></div>
   <div class="search-box-results" *ngIf="showResults">
