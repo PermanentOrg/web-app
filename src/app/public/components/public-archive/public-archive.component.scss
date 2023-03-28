@@ -40,7 +40,10 @@ $desktop-size: pxToGrid(200px);
   cursor: initial;
 }
 
-.profile-about {
+.profile-about-search {
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
   margin-bottom: $grid-unit * 2;
 
   @include desktop {
@@ -142,4 +145,19 @@ $desktop-size: pxToGrid(200px);
 
 .profile-description {
   white-space: pre-line;
+}
+
+.search-box-public-archive {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 5px;
+  border: solid 1px #d0d5dd;
+  height: 48px;
+
+  pr-archive-search {
+    margin-left: 14px;
+    display: block;
+    width: 340px;
+  }
 }
