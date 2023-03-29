@@ -140,4 +140,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     this.query = value;
   }
 
+  public onBackToArchive(): void {
+    this.query = ''
+  }
+
 }
