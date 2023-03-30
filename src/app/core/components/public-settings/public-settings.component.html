@@ -41,5 +41,7 @@
     </option>
    </select>
   </div>
-  <small class="text-muted">The archive type reflects what the archive represents, such as a person, a group or family, or an organization.</small>
+  <small *ngIf="archive.type !== 'type.archive.nonprofit'" class="text-muted">The archive type reflects what the archive represents, such as a person, a group or family, or an organization.</small>
+  <small *ngIf="archive.type === 'type.archive.nonprofit'" class="text-muted">This archive has been designated as a nonprofit archive. If you need to make a change please <a href="{{supportLink}}">contact support</a></small>
+
 </div>
