@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone, OnDestroy } from '@angular/core';
 
 import { debounce } from 'lodash';
 import debug from 'debug';
 
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import * as OpenSeaDragon from 'openseadragon';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
@@ -13,7 +14,7 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss']
 })
-export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
+export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy {
   @Input() item: ItemVO;
   @Input() maxWidth;
 
@@ -33,6 +34,11 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   private debug = debug('component:thumbnail');
 
   public isZip: boolean = false;
+  @Input() hideResizableImage:boolean = false;
+
+  viewer: OpenSeaDragon.Viewer;
+
+
 
   constructor(
     elementRef: ElementRef,
@@ -45,6 +51,14 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   }
 
   ngOnInit() {
+    this.viewer = OpenSeaDragon({
+      id: 'openseadragon',
+      prefixUrl: 'assets/openseadragon/images/',
+      tileSources: { type: 'image', url: this.item?.thumbURL500 },
+      visibilityRatio: 1.0,
+      constrainDuringPan: true,
+      maxZoomLevel:10
+    });
   }
 
   ngOnChanges() {
@@ -57,6 +71,12 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   ngDoCheck() {
     if (this.item.dataStatus !== this.lastItemDataStatus) {
       this.resetImage();
+    }
+  }
+
+  ngOnDestroy() {
+    if(this.viewer) {
+      this.viewer.destroy();
     }
   }
 

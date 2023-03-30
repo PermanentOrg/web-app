@@ -32,6 +32,7 @@
         <pr-thumbnail
           [item]="currentRecord"
           *ngIf="showThumbnail"
+          [hideResizableImage]="false"
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>

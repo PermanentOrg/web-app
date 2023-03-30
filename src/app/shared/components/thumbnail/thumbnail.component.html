@@ -1,4 +1,4 @@
-<!-- <div class="pr-thumbnail-image" [ngClass]="{'loaded': thumbLoaded}" [hidden]="item?.isFolder || isZip"></div> -->
+<div class="pr-thumbnail-image" [ngClass]="{'loaded': thumbLoaded}" [hidden]="item?.isFolder || isZip || !hideResizableImage"></div>
 <div class="pr-thumbnail-icon" [hidden]="!item?.isFolder">
   <i class="ion-md-folder"></i>
 </div>
@@ -6,3 +6,4 @@
   <fa-icon [icon]="['fas', 'file-archive']"></fa-icon>
 </div>
 <div class="pr-thumbnail-placeholder"></div>
+<div [hidden]="hideResizableImage" id="openseadragon" style="width:100%; height:100%"></div>
