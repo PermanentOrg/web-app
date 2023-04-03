@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone, OnDestroy, AfterContentInit,AfterViewInit } from '@angular/core';
 
 import { debounce } from 'lodash';
 import debug from 'debug';
@@ -12,9 +12,11 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
 @Component({
   selector: 'pr-thumbnail',
   templateUrl: './thumbnail.component.html',
-  styleUrls: ['./thumbnail.component.scss']
+  styleUrls: ['./thumbnail.component.scss'],
 })
-export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy {
+export class ThumbnailComponent
+  implements OnChanges, DoCheck, OnDestroy, AfterViewInit
+{
   @Input() item: ItemVO;
   @Input() maxWidth;
 
@@ -22,6 +24,7 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
 
   private element: Element;
   private imageElement: Element;
+  private resizableImageElement: Element;
 
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
@@ -34,11 +37,10 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
   private debug = debug('component:thumbnail');
 
   public isZip: boolean = false;
-  @Input() hideResizableImage:boolean = false;
+
+  @Input() hideResizableImage: boolean = true;
 
   viewer: OpenSeaDragon.Viewer;
-
-
 
   constructor(
     elementRef: ElementRef,
@@ -50,15 +52,19 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
     this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
   }
 
-  ngOnInit() {
-    this.viewer = OpenSeaDragon({
-      id: 'openseadragon',
-      prefixUrl: 'assets/openseadragon/images/',
-      tileSources: { type: 'image', url: this.item?.thumbURL500 },
-      visibilityRatio: 1.0,
-      constrainDuringPan: true,
-      maxZoomLevel:10
-    });
+  ngAfterViewInit() {
+    const resizableImageElement = this.element.querySelector('#openseadragon');
+    if (resizableImageElement) {
+      this.viewer = OpenSeaDragon({
+        element: resizableImageElement as HTMLElement,
+        prefixUrl: 'assets/openseadragon/images/',
+        tileSources: { type: 'image', url: this.item?.thumbURL500 },
+        visibilityRatio: 1.0,
+        constrainDuringPan: true,
+        maxZoomLevel: 10,
+      });
+    }
+   
   }
 
   ngOnChanges() {
@@ -75,7 +81,7 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
   }
 
   ngOnDestroy() {
-    if(this.viewer) {
+    if (this.viewer) {
       this.viewer.destroy();
     }
   }
@@ -99,7 +105,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
       this.targetThumbWidth = 200;
       this.lastItemDataStatus = this.item.dataStatus;
     }
-
   }
 
   @HostListener('window:resize', [])
@@ -109,7 +114,9 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
 
   checkElementWidth() {
     const elemSize = this.element.clientWidth * this.dpiScale;
-    const checkSize = this.maxWidth ? Math.min(this.maxWidth, elemSize) : elemSize;
+    const checkSize = this.maxWidth
+      ? Math.min(this.maxWidth, elemSize)
+      : elemSize;
     if (checkSize <= this.currentThumbWidth) {
       return;
     }
@@ -126,7 +133,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
         break;
       }
     }
-
 
     this.targetThumbWidth = targetWidth;
     this.checkItemThumbs();
@@ -152,12 +158,15 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck, OnDestroy
         this.thumbLoaded = true;
         this.renderer.removeClass(this.imageElement, 'image-loading');
         if (this.item.folder_linkId === targetFolderLinkId) {
-          this.renderer.setStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
-        }
-      };
+          this.renderer.setStyle(
+            this.imageElement,
+            'background-image',
+            `url(${imageUrl})`
+          );
+           
+          }}
+        
       imageLoader.src = imageUrl;
     }
   }
-
-
 }

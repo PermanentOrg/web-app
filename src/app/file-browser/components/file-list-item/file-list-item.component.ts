@@ -513,7 +513,6 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
       });
     }, SINGLE_CLICK_DELAY);
 
-    console.log(this.item)
 
     setTimeout(() => {
       this.waitingForDoubleClick = false;
