@@ -1,4 +1,17 @@
-import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone, OnDestroy, AfterContentInit,AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ElementRef,
+  HostListener,
+  DoCheck,
+  OnChanges,
+  Renderer2,
+  NgZone,
+  OnDestroy,
+  AfterContentInit,
+  AfterViewInit,
+} from '@angular/core';
 
 import { debounce } from 'lodash';
 import debug from 'debug';
@@ -64,7 +77,6 @@ export class ThumbnailComponent
         maxZoomLevel: 10,
       });
     }
-   
   }
 
   ngOnChanges() {
@@ -163,9 +175,9 @@ export class ThumbnailComponent
             'background-image',
             `url(${imageUrl})`
           );
-           
-          }}
-        
+        }
+      };
+
       imageLoader.src = imageUrl;
     }
   }

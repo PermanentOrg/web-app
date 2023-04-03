@@ -5,7 +5,8 @@
   position: relative;
 }
 
-.pr-thumbnail-image, .pr-thumbnail-icon {
+.pr-thumbnail-image,
+.pr-thumbnail-icon {
   background-size: contain;
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -35,8 +36,7 @@
   font-size: 7.8rem;
 }
 
-
-#openseadragon{
+#openseadragon {
   display: flex;
   justify-content: center;
   width: 100%;

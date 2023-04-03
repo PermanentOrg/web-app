@@ -3,9 +3,19 @@ import { map } from 'rxjs/operators';
 import { partition, remove, find, findIndex } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { FolderVO, RecordVO, ItemVO, FolderVOData, RecordVOData, SortType } from '@root/app/models';
+import {
+  FolderVO,
+  RecordVO,
+  ItemVO,
+  FolderVOData,
+  RecordVOData,
+  SortType,
+} from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
-import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
+import {
+  FolderResponse,
+  RecordResponse,
+} from '@shared/services/api/index.repo';
 import { EventEmitter } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import debug from 'debug';
@@ -33,7 +43,8 @@ export type SelectEvent = SelectClickEvent | SelectKeyEvent;
 @Injectable()
 export class DataService {
   public currentFolder: FolderVO;
-  public currentFolderChange: EventEmitter<FolderVO> = new EventEmitter<FolderVO>();
+  public currentFolderChange: EventEmitter<FolderVO> =
+    new EventEmitter<FolderVO>();
 
   public showBreadcrumbs = true;
   public showPublicArchiveDescription = true;
@@ -44,15 +55,16 @@ export class DataService {
   public multiSelectEnabled = false;
   public multiSelectChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  private byFolderLinkId: {[key: number]: ItemVO} = {};
-  private byArchiveNbr: {[key: string]: ItemVO} = {};
+  private byFolderLinkId: { [key: number]: ItemVO } = {};
+  private byArchiveNbr: { [key: string]: ItemVO } = {};
   private thumbRefreshQueue: Array<ItemVO> = [];
   private thumbRefreshTimeout;
 
   public multiclickItems: Map<number, ItemVO> = new Map();
 
   private selectedItems: SelectedItemsSet = new Set();
-  private selectedItemsSubject: BehaviorSubject<SelectedItemsSet> = new BehaviorSubject(this.selectedItems);
+  private selectedItemsSubject: BehaviorSubject<SelectedItemsSet> =
+    new BehaviorSubject(this.selectedItems);
   private lastManualclickItem: ItemVO;
   private lastArrowclickItem: ItemVO;
 
@@ -68,11 +80,12 @@ export class DataService {
 
   private debug = debug('service:dataService');
 
-  constructor(
-    private api: ApiService,
-    private tags: TagsService
-  ) {
-    debugSubscribable('currentFolderChange', this.debug, this.currentFolderChange);
+  constructor(private api: ApiService, private tags: TagsService) {
+    debugSubscribable(
+      'currentFolderChange',
+      this.debug,
+      this.currentFolderChange
+    );
     debugSubscribable('folderUpdate', this.debug, this.folderUpdate);
     debugSubscribable('selectedItems', this.debug, this.selectedItems$());
     debugSubscribable('showItem', this.debug, this.itemToShow$());
@@ -115,10 +128,15 @@ export class DataService {
   public hideItemsInCurrentFolder(items: Array<ItemVO> = []) {
     this.currentHiddenItems = this.currentHiddenItems.concat(items);
     this.debug('hideItemsInCurrentFolder %d requested', items.length);
-    const itemsInFolder = this.currentHiddenItems.filter(i => i.parentFolder_linkId === this.currentFolder.folder_linkId);
+    const itemsInFolder = this.currentHiddenItems.filter(
+      (i) => i.parentFolder_linkId === this.currentFolder.folder_linkId
+    );
 
     if (!itemsInFolder.length) {
-      this.debug('hideItemsInCurrentFolder no items match current folder', this.currentHiddenItems.length);
+      this.debug(
+        'hideItemsInCurrentFolder no items match current folder',
+        this.currentHiddenItems.length
+      );
       return;
     }
 
@@ -130,11 +148,16 @@ export class DataService {
 
     this.selectedItemsSubject.next(this.selectedItems);
 
-    remove(this.currentFolder.ChildItemVOs, x => hiddenFolderLinkIds.has(x.folder_linkId));
+    remove(this.currentFolder.ChildItemVOs, (x) =>
+      hiddenFolderLinkIds.has(x.folder_linkId)
+    );
     this.debug('hideItemsInCurrentFolder %d removed', itemsInFolder.length);
   }
 
-  public fetchLeanItems(items: Array<ItemVO>, currentFolder ?: FolderVO): Promise<number> {
+  public fetchLeanItems(
+    items: Array<ItemVO>,
+    currentFolder?: FolderVO
+  ): Promise<number> {
     this.debug('fetchLeanItems %d items requested', items.length);
 
     const itemResolves = [];
@@ -145,14 +168,15 @@ export class DataService {
       currentFolder = this.currentFolder;
     } else {
       handleItemRegistration = true;
-      items.map(item => {
+      items.map((item) => {
         this.registerItem(item);
       });
     }
     const folder = new FolderVO({
       archiveNbr: currentFolder.archiveNbr,
       folder_linkId: currentFolder.folder_linkId,
-      ChildItemVOs: items.filter((item) => {
+      ChildItemVOs: items
+        .filter((item) => {
           if (item.isFetching) {
             return false;
           }
@@ -163,11 +187,12 @@ export class DataService {
             itemRejects.push(reject);
           });
           return true;
-        }).map((item) => {
-          return {
-            folder_linkId: item.folder_linkId
-          };
         })
+        .map((item) => {
+          return {
+            folder_linkId: item.folder_linkId,
+          };
+        }),
     });
 
     if (!folder.ChildItemVOs.length) {
@@ -175,16 +200,20 @@ export class DataService {
       return Promise.resolve(0);
     }
 
-    return this.api.folder.getLeanItems([folder])
-      .pipe(map((response: FolderResponse) => {
-        if (!response.isSuccessful) {
-          throw response;
-        }
+    return this.api.folder
+      .getLeanItems([folder])
+      .pipe(
+        map((response: FolderResponse) => {
+          if (!response.isSuccessful) {
+            throw response;
+          }
 
-        const fetchedFolder = response.getFolderVO();
+          const fetchedFolder = response.getFolderVO();
 
-        return fetchedFolder.ChildItemVOs;
-      })).toPromise()
+          return fetchedFolder.ChildItemVOs;
+        })
+      )
+      .toPromise()
       .then((leanItems) => {
         leanItems.map((leanItem, index) => {
           const item = this.byFolderLinkId[leanItem.folder_linkId];
@@ -197,7 +226,10 @@ export class DataService {
             itemResolves[index]();
             item.fetched = null;
 
-            if (!item.thumbURL200 && item.parentFolderId === this.currentFolder.folderId) {
+            if (
+              !item.thumbURL200 &&
+              item.parentFolderId === this.currentFolder.folderId
+            ) {
               this.debug('thumbRefreshQueue push %s', item.archiveNbr);
               this.thumbRefreshQueue.push(item);
             }
@@ -205,7 +237,7 @@ export class DataService {
         });
 
         if (handleItemRegistration) {
-          items.map(item => {
+          items.map((item) => {
             this.unregisterItem(item);
           });
         }
@@ -249,76 +281,91 @@ export class DataService {
 
     const promises: Promise<any>[] = [];
 
-    promises.push(records.length ? this.api.record.get(records) : Promise.resolve());
+    promises.push(
+      records.length ? this.api.record.get(records) : Promise.resolve()
+    );
 
     if (!withChildren) {
-      promises.push(folders.length ? this.api.folder.get(folders) : Promise.resolve());
+      promises.push(
+        folders.length ? this.api.folder.get(folders) : Promise.resolve()
+      );
     } else {
-      promises.push(folders.length ? this.api.folder.getWithChildren(folders) : Promise.resolve());
+      promises.push(
+        folders.length
+          ? this.api.folder.getWithChildren(folders)
+          : Promise.resolve()
+      );
     }
 
     return Promise.all(promises)
-    .then((results) => {
-      let recordResponse: RecordResponse;
-      let folderResponse: FolderResponse;
+      .then((results) => {
+        let recordResponse: RecordResponse;
+        let folderResponse: FolderResponse;
 
-      [ recordResponse, folderResponse ] = results;
+        [recordResponse, folderResponse] = results;
 
-      let fullRecords: Array<any | RecordVO>;
-      let fullFolders: Array<any | FolderVO>;
+        let fullRecords: Array<any | RecordVO>;
+        let fullFolders: Array<any | FolderVO>;
 
-      if (recordResponse) {
-        fullRecords = recordResponse.getRecordVOs();
-      }
+        if (recordResponse) {
+          fullRecords = recordResponse.getRecordVOs();
+        }
 
-      if (folderResponse) {
-        fullFolders = folderResponse.getFolderVOs();
-      }
+        if (folderResponse) {
+          fullFolders = folderResponse.getFolderVOs();
+        }
 
-      for (let i = 0; i < records.length; i++) {
-        records[i].update(fullRecords[i]);
-        records[i].dataStatus = DataStatus.Full;
-        this.tags.checkTagsOnItem(records[i]);
-      }
+        for (let i = 0; i < records.length; i++) {
+          records[i].update(fullRecords[i]);
+          records[i].dataStatus = DataStatus.Full;
+          this.tags.checkTagsOnItem(records[i]);
+        }
 
-      for (let i = 0; i < folders.length; i++) {
-        const folder = folders[i] as FolderVO;
-        folder.update(fullFolders[i] as FolderVOData, folders[i] === this.currentFolder);
-        folder.dataStatus = DataStatus.Full;
-        this.tags.checkTagsOnItem(folders[i]);
-      }
+        for (let i = 0; i < folders.length; i++) {
+          const folder = folders[i] as FolderVO;
+          folder.update(
+            fullFolders[i] as FolderVOData,
+            folders[i] === this.currentFolder
+          );
+          folder.dataStatus = DataStatus.Full;
+          this.tags.checkTagsOnItem(folders[i]);
+        }
 
-      itemResolves.map((resolve, index) => {
-        items[index].fetched = null;
-        this.byArchiveNbr[items[index].archiveNbr] = items[index];
-        resolve();
+        itemResolves.map((resolve, index) => {
+          items[index].fetched = null;
+          this.byArchiveNbr[items[index].archiveNbr] = items[index];
+          resolve();
+        });
+
+        this.debug('fetchFullItems %d items fetched', items.length);
+
+        return Promise.resolve(true);
+      })
+      .catch(() => {
+        itemRejects.map((reject, index) => {
+          items[index].fetched = null;
+          reject();
+        });
       });
-
-      this.debug('fetchFullItems %d items fetched', items.length);
-
-      return Promise.resolve(true);
-    })
-    .catch(() => {
-      itemRejects.map((reject, index) => {
-        items[index].fetched = null;
-        reject();
-      });
-    });
   }
 
   public refreshCurrentFolder(sortOnly = false) {
     this.debug('refreshCurrentFolder (sortOnly = %o)', sortOnly);
 
-    return this.api.folder.navigate(this.currentFolder)
-      .pipe(map(((response: FolderResponse) => {
-        this.debug('refreshCurrentFolder data fetched', sortOnly);
+    return this.api.folder
+      .navigate(this.currentFolder)
+      .pipe(
+        map((response: FolderResponse) => {
+          this.debug('refreshCurrentFolder data fetched', sortOnly);
 
-        if (!response.isSuccessful) {
-          throw response;
-        }
+          if (!response.isSuccessful) {
+            throw response;
+          }
 
-        return response.getFolderVO(true);
-      }))).toPromise()
+          return response.getFolderVO(true);
+        })
+      )
+      .toPromise()
       .then((updatedFolder: FolderVO) => {
         this.updateChildItems(this.currentFolder, updatedFolder, sortOnly);
         this.hideItemsInCurrentFolder();
@@ -328,7 +375,11 @@ export class DataService {
       });
   }
 
-  public updateChildItems(folder1: FolderVO, folder2: FolderVO, sortOnly = false) {
+  public updateChildItems(
+    folder1: FolderVO,
+    folder2: FolderVO,
+    sortOnly = false
+  ) {
     this.debug('updateChildItems (sortOnly = %o)', sortOnly);
 
     if (!folder2.ChildItemVOs || !folder2.ChildItemVOs.length) {
@@ -350,7 +401,7 @@ export class DataService {
         originalItemsById.set(item.folder_linkId, item);
       }
 
-      const sortedItems: ItemVO[] = updated.map(item => {
+      const sortedItems: ItemVO[] = updated.map((item) => {
         return originalItemsById.get(item.folder_linkId);
       });
 
@@ -378,9 +429,11 @@ export class DataService {
         }
       }
 
-      const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map(id => {
+      const finalUpdatedItems: ItemVO[] = updatedOrderedIds.map((id) => {
         const isNew = !originalItemsById.has(id);
-        const item = !isNew ? originalItemsById.get(id) : updatedItemsById.get(id);
+        const item = !isNew
+          ? originalItemsById.get(id)
+          : updatedItemsById.get(id);
         if (isNew) {
           item.isNewlyCreated = true;
         }
@@ -405,10 +458,9 @@ export class DataService {
     const itemsToCheck = this.thumbRefreshQueue;
     this.thumbRefreshQueue = [];
     this.debug('checkMissingThumbs %d items', itemsToCheck.length);
-    this.fetchLeanItems(itemsToCheck)
-      .then(() => {
-        this.scheduleMissingThumbsCheck();
-      });
+    this.fetchLeanItems(itemsToCheck).then(() => {
+      this.scheduleMissingThumbsCheck();
+    });
   }
 
   public scheduleMissingThumbsCheck() {
@@ -425,8 +477,10 @@ export class DataService {
     return this.byFolderLinkId[folder_linkId];
   }
 
-  public getItemsByFolderLinkIds(folder_linkIds: (number | string)[]): Array<RecordVO | FolderVO> {
-    return folder_linkIds.map(id => {
+  public getItemsByFolderLinkIds(
+    folder_linkIds: (number | string)[]
+  ): Array<RecordVO | FolderVO> {
+    return folder_linkIds.map((id) => {
       return this.getItemByFolderLinkId(Number(id));
     });
   }
@@ -436,8 +490,7 @@ export class DataService {
       downloadOriginalFile(item);
       return Promise.resolve();
     } else {
-      return this.fetchFullItems([item])
-      .then(() => {
+      return this.fetchFullItems([item]).then(() => {
         downloadOriginalFile(item);
       });
     }
@@ -450,7 +503,7 @@ export class DataService {
     }
 
     function getOriginalFile(fileItem: RecordVO) {
-      return find(fileItem.FileVOs, {format: 'file.format.original'});
+      return find(fileItem.FileVOs, { format: 'file.format.original' });
     }
   }
 
@@ -474,7 +527,10 @@ export class DataService {
             this.clickItemSingle(selectEvent.item, false);
             break;
           case 'shift':
-            this.clickItemsBetweenItems(this.lastManualclickItem, selectEvent.item);
+            this.clickItemsBetweenItems(
+              this.lastManualclickItem,
+              selectEvent.item
+            );
             break;
           default:
             this.clickItemSingle(selectEvent.item);
@@ -485,7 +541,9 @@ export class DataService {
           case 'up':
           case 'down':
             const items = this.currentFolder.ChildItemVOs;
-            const index = this.lastManualclickItem ? findIndex(items, this.lastManualclickItem) : 0;
+            const index = this.lastManualclickItem
+              ? findIndex(items, this.lastManualclickItem)
+              : 0;
             if (!selectEvent.modifierKey) {
               let newIndex = index + (selectEvent.key === 'up' ? -1 : 1);
               newIndex = Math.max(0, newIndex);
@@ -498,7 +556,9 @@ export class DataService {
               if (!this.lastArrowclickItem) {
                 this.lastArrowclickItem = this.lastManualclickItem;
               }
-              const indexEnd = this.lastArrowclickItem ? findIndex(items, this.lastArrowclickItem) : 0;
+              const indexEnd = this.lastArrowclickItem
+                ? findIndex(items, this.lastArrowclickItem)
+                : 0;
               let newIndex = indexEnd + (selectEvent.key === 'up' ? -1 : 1);
               newIndex = Math.max(0, newIndex);
               newIndex = Math.min(items.length - 1, newIndex);
@@ -508,7 +568,10 @@ export class DataService {
             }
             break;
           case 'a':
-            this.clickItemsBetweenIndicies(0, this.currentFolder.ChildItemVOs.length - 1);
+            this.clickItemsBetweenIndicies(
+              0,
+              this.currentFolder.ChildItemVOs.length - 1
+            );
             break;
         }
         break;

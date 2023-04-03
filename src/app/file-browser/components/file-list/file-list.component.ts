@@ -217,7 +217,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     // register for select events
     this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
       this.selectedItems = selectedItems;
-      console.log(this.selectedItems)
     }));
 
     // register for 'show item' events
