@@ -33,6 +33,7 @@ import { RouteHistoryService } from 'ngx-route-history';
 import { InViewportModule } from 'ng-in-viewport';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+import { PublicArchiveWebLinksComponent } from './public-archive-web-links/public-archive-web-links.component';
 declare var ga: any;
 
 if (environment.environment !== 'local') {
@@ -137,6 +138,7 @@ export class PermErrorHandler implements ErrorHandler {
   declarations: [
     AppComponent,
     MessageComponent,
+    PublicArchiveWebLinksComponent,
   ],
   providers: [
     CookieService,
