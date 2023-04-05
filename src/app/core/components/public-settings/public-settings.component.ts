@@ -15,7 +15,8 @@ export class PublicSettingsComponent implements OnInit {
   @Input() public archive: ArchiveVO;
   public updating: boolean = false;
   public allowDownloadsToggle: number = 0;
-  public supportLink:string = 'https://permanent.zohodesk.com/portal/en/newticket'
+  public supportLink: string =
+    'https://permanent.zohodesk.com/portal/en/newticket';
 
   //Observable to listen to the archive close
   public archiveClose: Observable<void> = new Observable(() => {
