@@ -3,7 +3,7 @@ import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { Component, Inject, OnInit } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { AnyCnameRecord } from 'dns';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-archive-type-change-dialog',
@@ -19,7 +19,8 @@ export class ArchiveTypeChangeDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     private api: ApiService,
-    @Inject(DIALOG_DATA) public data: any
+    @Inject(DIALOG_DATA) public data: any,
+    private msg: MessageService
   ) {
     this.archive = this.data.archive;
     this.archiveType = this.data.archiveType;
@@ -39,7 +40,9 @@ export class ArchiveTypeChangeDialogComponent implements OnInit {
     try {
       await this.api.archive.update(this.archive);
     } catch {
-      // fail silently
+      this.msg.showError(
+        'There was an error changing the archive type. Please try again.'
+      );
     } finally {
       this.updating = false;
       this.dialogRef.close();
