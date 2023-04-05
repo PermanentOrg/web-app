@@ -44,8 +44,8 @@ export const routes: RoutesWithData = [
           {
             path: '**',
             canActivate: [MyfilesGuard],
-          }
-        ]
+          },
+        ],
       },
       {
         path: 'private',
@@ -245,7 +245,7 @@ export const routes: RoutesWithData = [
         redirectTo: '/app/(private//dialog:welcomeinvitation)',
       },
       {
-        path: 'storage',
+        path: 'storage/:path',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',
         data: {
@@ -255,8 +255,12 @@ export const routes: RoutesWithData = [
         },
       },
       {
+        path: 'storage/:path',
+        redirectTo: '/app/(private//dialog:storage/:path)',
+      },
+      {
         path: 'storage',
-        redirectTo: '/app/(private//dialog:storage)',
+        redirectTo: '/app/(private//dialog:storage/)',
       },
       {
         path: 'search',
