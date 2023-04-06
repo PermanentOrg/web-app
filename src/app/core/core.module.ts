@@ -58,6 +58,7 @@ import { WelcomeInvitationDialogComponent } from './components/welcome-invitatio
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { PublicSettingsComponent } from './components/public-settings/public-settings.component';
 import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
+import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
 
 @NgModule({
   imports: [
@@ -104,6 +105,7 @@ import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage
     WelcomeDialogComponent,
     WelcomeInvitationDialogComponent,
     PublicSettingsComponent,
+    ArchiveTypeChangeDialogComponent,
   ],
   providers: [
     DataService,
@@ -164,6 +166,10 @@ export class CoreModule {
       token: 'WelcomeInvitationDialogComponent',
       component: WelcomeInvitationDialogComponent,
     },
+    {
+      token: 'ArchiveTypeChangeDialogComponent',
+      component: ArchiveTypeChangeDialogComponent,
+    }
   ];
 
   constructor(

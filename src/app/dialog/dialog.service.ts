@@ -31,7 +31,8 @@ export type DialogComponentToken =
   'ArchiveSettingsDialogComponent' |
   'WelcomeDialogComponent' |
   'WelcomeInvitationDialogComponent' |
-  'CreateAccountDialogComponent'
+  'CreateAccountDialogComponent' | 
+  'ArchiveTypeChangeDialogComponent' 
 ;
 
 export interface DialogChildComponentData {

@@ -32,4 +32,16 @@
     Display a button that allows viewers of your published items to download a
     copy of the source file to their device.
   </small>
+  <div class="settings-item">
+   <label>Archive Type</label>
+   <label class="text-muted" *ngIf="archive.type === 'type.archive.nonprofit'">Nonprofit</label>
+   <select [(ngModel)]="archiveType" name="archiveType" id="archiveType" (ngModelChange)="onArchiveTypeChange()" *ngIf="archive.type !== 'type.archive.nonprofit'" class="custom-select">
+    <option *ngFor="let type of archiveTypes" [ngValue]="type.value">
+      {{type.name}}
+    </option>
+   </select>
+  </div>
+  <small *ngIf="archive.type !== 'type.archive.nonprofit'" class="text-muted">The archive type reflects what the archive represents, such as a person, a group or family, or an organization.</small>
+  <small *ngIf="archive.type === 'type.archive.nonprofit'" class="text-muted">This archive has been designated as a nonprofit archive. If you need to make a change please <a href="{{supportLink}}">contact support</a></small>
+
 </div>
