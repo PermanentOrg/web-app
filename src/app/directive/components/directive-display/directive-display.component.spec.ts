@@ -111,4 +111,17 @@ describe('DirectiveDisplayComponent', () => {
     expect(find('.no-plan-warning').length).toBe(0);
     expect(find('button').nativeElement.disabled).toBeFalsy();
   });
+
+  it('should say "Assign" for new directive', async () => {
+    MockDirectiveRepo.mockStewardEmail = null;
+    MockDirectiveRepo.mockNote = null;
+    const { find } = await shallow.render();
+    expect(find('button').nativeElement.innerText).toContain('Assign');
+    expect(find('button').nativeElement.innerText).not.toContain('Edit');
+  });
+
+  it('should say "Edit" for existing directive', async () => {
+    const { find } = await shallow.render();
+    expect(find('button').nativeElement.innerText).toContain('Edit');
+  });
 });
