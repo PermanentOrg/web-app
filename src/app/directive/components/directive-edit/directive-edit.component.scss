@@ -1,0 +1,25 @@
+@import '../directive-display/directive-display.component.scss';
+
+.steward-email-section {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.5em 2em;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    small {
+      font-style: italic;
+      color: #444;
+    }
+  }
+}
+
+.account-not-found {
+  display: block;
+  color: #f00;
+  text-align: center;
+  margin: 0.5em auto;
+}

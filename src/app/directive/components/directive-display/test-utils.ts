@@ -37,10 +37,7 @@ export class MockDirectiveRepo {
     MockDirectiveRepo.legacyContactEmail = null;
   }
 
-  public async get(): Promise<Directive> {
-    if (MockDirectiveRepo.failRequest) {
-      throw new Error('Unit Testing: Forced Request Failure');
-    }
+  public createDirective(): Directive {
     const testDirectiveId = '39b2a5fa-3508-4030-91b6-21dc6ec7a1ab';
     return {
       directiveId: testDirectiveId,
@@ -59,6 +56,13 @@ export class MockDirectiveRepo {
       note: MockDirectiveRepo.mockNote,
       executionDt: null,
     };
+  }
+
+  public async get(): Promise<Directive> {
+    if (MockDirectiveRepo.failRequest) {
+      throw new Error('Unit Testing: Forced Request Failure');
+    }
+    return this.createDirective();
   }
 
   public async getLegacyContact(): Promise<LegacyContact> {
