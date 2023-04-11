@@ -69,8 +69,8 @@ export class DirectiveEditComponent implements OnInit {
     }
   }
 
-  protected catchNotFoundError(response: any): void {
-    if (response.name === 'HttpErrorResponse') {
+  protected catchNotFoundError(response: unknown): void {
+    if (response instanceof HttpErrorResponse) {
       const error = response as HttpErrorResponse;
       if (error.status === 0) {
         throw new Error('Network/Client Error');
