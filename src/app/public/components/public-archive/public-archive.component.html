@@ -175,7 +175,7 @@
   <hr />
 </div>
 
-<div *ngIf="!query" class="profile-contents">
+<div *ngIf="!searchResults.length" class="profile-contents">
   <div>
     <div class="profile-name">The {{ this.archive.fullName }} Archive</div>
     <pr-breadcrumbs
@@ -191,7 +191,7 @@
   </div>
 </div>
 
-<div *ngIf="query" class="search-results-container">
+<div *ngIf="searchResults.length" class="search-results-container">
   <div>
     <div (click)="onBackToArchive()" class="back-to-archive-container">
       <svg
@@ -229,14 +229,14 @@
     <span class="search-results search-results-param">{{ query }}</span>
   </div>
   <div class="search-results-view">
-    <div class="result" *ngFor="let result of staticDataResult">
+    <div class="result" *ngFor="let result of searchResults">
       <div class="result-archive-image">
-        <img src="{{ result.image }}" />
+        <img src="{{ result.thumbURL200 }}" />
       </div>
       <div class="result-archive-info">
         <div class="result-archive-type-container">
           <svg
-            *ngIf="result.type === 'video'"
+            *ngIf="result.type === 'type.record.video'"
             width="16"
             height="16"
             viewBox="0 0 16 16"
@@ -257,7 +257,7 @@
             />
           </svg>
           <svg
-            *ngIf="result.type === 'document'"
+            *ngIf="result.type === 'type.folder.public' || result.type === 'type.folder.private'"
             width="16"
             height="16"
             viewBox="0 0 16 16"
@@ -272,9 +272,9 @@
             />
           </svg>
 
-          <p class="result-text result-archive-type">{{ result.type }}</p>
+          <p class="result-text result-archive-type">{{ types[result.type] }}</p>
         </div>
-        <p class="result-text result-archive-name">{{ result.name }}</p>
+        <p class="result-text result-archive-name">{{ result.displayName }}</p>
         <p class="result-text result-archive-description">
           {{ result.description }}
         </p>
