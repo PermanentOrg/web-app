@@ -16,7 +16,6 @@
             "outputPath": "dist/mdot",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "showCircularDependencies": false,
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
@@ -200,7 +199,6 @@
       }
     }
   },
-  "defaultProject": "mdot",
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"

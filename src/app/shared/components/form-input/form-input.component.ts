@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, AfterViewInit, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
 import { find } from 'lodash';
 
@@ -32,7 +32,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() type = 'text';
   @Input() fieldName: string;
   @Input() placeholder: string;
-  @Input() control: FormControl;
+  @Input() control: UntypedFormControl;
   @Input() errors: string;
   @Input() selectOptions: FormInputSelectOption[];
 

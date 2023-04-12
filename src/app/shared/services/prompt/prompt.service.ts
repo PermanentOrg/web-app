@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validator, ValidationErrors } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validator, ValidationErrors } from '@angular/forms';
 import debug from 'debug';
 
 import { FormInputConfig, FormInputSelectOption } from '@shared/components/form-input/form-input.component';
@@ -26,7 +26,7 @@ export interface PromptButton {
 }
 
 export interface PromptConfig {
-  form?: FormGroup;
+  form?: UntypedFormGroup;
   fields?: PromptField[];
   buttons?: PromptButton[];
   template?: string;
@@ -46,7 +46,7 @@ export class PromptService {
   private component: PromptComponent;
   private debug = debug('service:promptService');
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     this.debug('created');
   }
 

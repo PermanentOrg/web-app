@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,11 +13,11 @@ import { DeviceService } from '@shared/services/device/device.service';
   host: {'class': 'pr-auth-form'}
 })
 export class MfaComponent implements OnInit {
-  mfaForm: FormGroup;
+  mfaForm: UntypedFormGroup;
   waiting: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,

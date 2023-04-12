@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
@@ -10,14 +10,14 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
   styleUrls: ['./forgot-password-embed.component.scss']
 })
 export class ForgotPasswordEmbedComponent implements OnInit {
-  forgotForm: FormGroup;
+  forgotForm: UntypedFormGroup;
   formErrors: any = {};
 
   waiting: boolean;
   success: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private api: ApiService,
     private message: MessageService,
   ) {

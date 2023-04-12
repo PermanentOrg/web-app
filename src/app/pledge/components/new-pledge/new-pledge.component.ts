@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
@@ -26,7 +26,7 @@ const elements = stripe.elements();
 export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() inlineFlow: boolean = false;
   public waiting: boolean;
-  public pledgeForm: FormGroup;
+  public pledgeForm: UntypedFormGroup;
 
   public donationLevels = [10, 20, 50];
 
@@ -47,7 +47,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private api: ApiService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private accountService: AccountService,
     private route: ActivatedRoute,

@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy, ViewChildren, QueryList } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { PromptService, PromptField, PromptButton, PromptConfig } from '@shared/services/prompt/prompt.service';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
@@ -18,7 +18,7 @@ export class PromptComponent implements OnInit, OnDestroy {
   @ViewChildren(FormInputComponent) inputQuery: QueryList<FormInputComponent>;
 
   public waiting = false;
-  public editForm: FormGroup;
+  public editForm: UntypedFormGroup;
   public fields: any[] = [];
   public placeholderText = 'test';
   public title: string;
@@ -35,11 +35,11 @@ export class PromptComponent implements OnInit, OnDestroy {
   public doneResolve: Function;
   public doneReject: Function;
 
-  private defaultForm: FormGroup;
+  private defaultForm: UntypedFormGroup;
 
   private promptQueue: PromptConfig[] = [];
 
-  constructor(private service: PromptService, private fb: FormBuilder, private element: ElementRef) {
+  constructor(private service: PromptService, private fb: UntypedFormBuilder, private element: ElementRef) {
     this.service.registerComponent(this);
     this.defaultForm = fb.group({});
   }
@@ -60,7 +60,7 @@ export class PromptComponent implements OnInit, OnDestroy {
   }
 
   prompt(
-    form: FormGroup,
+    form: UntypedFormGroup,
     fields: PromptField[],
     title: string,
     savePromise?: Promise<any>,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -16,7 +16,7 @@ import { RecaptchaErrorParameters } from 'ng-recaptcha';
   host: {'class': 'pr-auth-form'}
 })
 export class VerifyComponent implements OnInit {
-  verifyForm: FormGroup;
+  verifyForm: UntypedFormGroup;
   formTitle = 'Verify Email';
   waiting: boolean;
 
@@ -33,7 +33,7 @@ export class VerifyComponent implements OnInit {
   public readonly showCaptchaForEmail = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private message: MessageService,

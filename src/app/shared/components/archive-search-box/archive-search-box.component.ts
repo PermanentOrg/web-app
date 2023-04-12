@@ -1,6 +1,6 @@
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Optional, Output, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ArchiveVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -24,7 +24,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
 
   public focused = false;
   public searchText = null;
-  public control = new FormControl('', [Validators.email]);
+  public control = new UntypedFormControl('', [Validators.email]);
   public placeholderText = 'Search by email or archive name';
 
   public searchResults$: Observable<ArchiveVO[]>;

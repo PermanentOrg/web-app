@@ -3,7 +3,7 @@ import { UserData } from '@pledge/models/user-data';
 import firebase from 'firebase/compat/app';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 
@@ -24,7 +24,7 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
   cardError: any;
   cardComplete = false;
 
-  nameControl = new FormControl('', [ Validators.required ]);
+  nameControl = new UntypedFormControl('', [ Validators.required ]);
 
   cardSaved = false;
   waiting = false;

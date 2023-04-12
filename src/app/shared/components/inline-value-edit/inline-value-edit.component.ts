@@ -28,7 +28,7 @@ import {
 } from '@shared/utilities/dateTime';
 import { ENTER } from '@angular/cdk/keycodes';
 import { FormInputSelectOption } from '../form-input/form-input.component';
-import { NgModel, FormControl, Validators } from '@angular/forms';
+import { NgModel, UntypedFormControl, Validators } from '@angular/forms';
 import { getDate, getMonth, getYear } from 'date-fns';
 
 export type InlineValueEditType =
@@ -73,7 +73,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Output() toggledDatePicker: EventEmitter<boolean> =
     new EventEmitter<boolean>();
 
-  formControl: FormControl;
+  formControl: UntypedFormControl;
   @ViewChild('input') inputElementRef: ElementRef;
   @ViewChild(NgModel) ngModel: NgModel;
   @ViewChild('datePicker') datePicker: NgbDatepicker;

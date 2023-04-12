@@ -1,10 +1,10 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
+  UntypedFormGroup,
+  UntypedFormBuilder,
   Validators,
-  FormControl,
+  UntypedFormControl,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -26,7 +26,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   host: { class: 'pr-auth-form' },
 })
 export class SignupEmbedComponent implements OnInit {
-  signupForm: FormGroup;
+  signupForm: UntypedFormGroup;
   waiting: boolean;
   inviteCode: string;
 
@@ -39,7 +39,7 @@ export class SignupEmbedComponent implements OnInit {
   };
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
@@ -62,7 +62,7 @@ export class SignupEmbedComponent implements OnInit {
       optIn: [true],
     });
 
-    const confirmPasswordControl = new FormControl('', [
+    const confirmPasswordControl = new UntypedFormControl('', [
       Validators.required,
       matchControlValidator(this.signupForm.controls['password']),
     ]);

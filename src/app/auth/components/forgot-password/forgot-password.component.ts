@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -15,14 +15,14 @@ import { ApiService } from '@shared/services/api/api.service';
   host: {'class': 'pr-auth-form'}
 })
 export class ForgotPasswordComponent implements OnInit {
-  forgotForm: FormGroup;
+  forgotForm: UntypedFormGroup;
   formErrors: any = {};
 
   waiting: boolean;
   success: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private api: ApiService,
     private router: Router,
     private message: MessageService,
