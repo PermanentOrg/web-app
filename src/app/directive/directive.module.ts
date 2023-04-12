@@ -6,10 +6,12 @@ import {
   FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { DirectiveEditComponent } from './components/directive-edit/directive-edit.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
-  exports: [DirectiveDisplayComponent],
-  declarations: [DirectiveDisplayComponent],
-  imports: [CommonModule, FontAwesomeModule],
+  exports: [DirectiveDisplayComponent, DirectiveEditComponent],
+  declarations: [DirectiveDisplayComponent, DirectiveEditComponent],
+  imports: [CommonModule, FontAwesomeModule, FormsModule],
 })
 export class DirectiveModule {
   constructor(private library: FaIconLibrary) {

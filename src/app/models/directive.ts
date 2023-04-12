@@ -22,3 +22,13 @@ export interface LegacyContact {
   name: string;
   email: string;
 }
+
+export interface DirectiveCreateRequest {
+  archiveId: number;
+  type: string;
+  trigger: {
+    type: string;
+  };
+  stewardEmail?: string;
+  note?: string;
+}

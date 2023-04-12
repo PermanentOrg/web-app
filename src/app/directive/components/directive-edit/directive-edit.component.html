@@ -1,0 +1,51 @@
+<div>
+  <div class="panel-title">Designate an Archive Steward: {{ archiveName }}</div>
+  <p>
+    Who should be the owner of this archive in the event of your death or
+    incapacitation? This person, your Archive Steward, must have a Permanent.org
+    account in order for you to designate that user. If they do not yet have a
+    Permanent account, you can invite them using your referral link.
+  </p>
+  <div class="steward-email-section">
+    <label>
+      <strong>Archive Steward Email</strong>
+      <small>Must match email associated with a Permanent.org account</small>
+    </label>
+    <input
+      [(ngModel)]="email"
+      type="text"
+      class="archive-steward-email input form-control"
+      [attr.disabled]="waiting || null"
+      #emailInput="ngModel"
+      required
+      pattern="\S+@\S+"
+      placeholder="Legacy contact email address"
+    />
+  </div>
+  <span *ngIf="!accountExists" class="account-not-found"
+    >User not found in Permanent database - invite user to create account</span
+  >
+  <p>
+    Your Archive Steward will receive an email with instructions from Permanent,
+    however, we strongly recommend that you also discuss your Legacy Plan with
+    this person. They will receive another email when your Legacy Plan is
+    activated with steps to accept the ownership of your archive. You may also
+    choose to write the Steward a note below with further instructions on what
+    to do with your archive when they assume ownership.
+  </p>
+  <strong>Note to Archive Steward of {{ archiveName }} (optional)</strong><br />
+  <textarea
+    [(ngModel)]="note"
+    class="archive-steward-note form-control"
+    [readonly]="waiting"
+    #noteInput="ngModel"
+    rows="6"
+  ></textarea>
+  <button
+    (click)="submitForm()"
+    class="btn btn-primary save-btn"
+    [disabled]="waiting || emailInput.invalid || noteInput.invalid"
+  >
+    Confirm
+  </button>
+</div>

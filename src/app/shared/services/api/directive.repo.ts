@@ -1,4 +1,10 @@
-import { AccountVO, ArchiveVO, Directive, LegacyContact } from '@models/index';
+import {
+  AccountVO,
+  ArchiveVO,
+  Directive,
+  DirectiveCreateRequest,
+  LegacyContact,
+} from '@models/index';
 import { BaseRepo } from './base';
 
 export class DirectiveRepo extends BaseRepo {
@@ -10,5 +16,15 @@ export class DirectiveRepo extends BaseRepo {
   public async getLegacyContact(account: AccountVO): Promise<LegacyContact> {
     console.warn('Directive API is currently unimplemented.');
     return {} as LegacyContact;
+  }
+
+  public async create(directive: DirectiveCreateRequest): Promise<Directive> {
+    console.warn('Directive API is currently unimplemented.');
+    return {} as Directive;
+  }
+
+  public async update(directive: Partial<Directive>): Promise<Directive> {
+    console.warn('Directive API is currently unimplemented.');
+    return {} as Directive;
   }
 }
