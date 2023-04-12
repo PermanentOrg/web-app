@@ -76,8 +76,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         return this.socialMedia;
       })
     );
-    console.log(this.archive);
-    console.log(this.publicRoot);
   }
 
   ngOnDestroy(): void {
@@ -102,7 +100,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         .subscribe((response) => {
           if (response) {
             this.searchResults = response[0].ChildItemVOs;
-            console.log(this.searchResults)
           }
         });
     } catch (err) {

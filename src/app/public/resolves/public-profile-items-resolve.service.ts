@@ -17,7 +17,6 @@ export class PublicProfileItemsResolveService implements Resolve<any> {
     const archiveNbr = route.params.publicArchiveNbr;
     const vo = new ArchiveVO({archiveNbr});
     const response = await this.api.archive.getAllProfileItems(vo);
-    console.log(response)
     const publicItems =  response.getProfileItemVOs().filter(i => i.publicDT);
     this.publicProfile.setProfileItems(publicItems);
   }

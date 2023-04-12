@@ -34,35 +34,7 @@ export class ArchiveSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchForm.valueChanges
-      .pipe(
-        debounceTime(100),
-        switchMap((value) => {
-          if (value.query && value.query.length > 3) {
-            this.waiting = true;
-            return this.searchService.getResultsInPublicArchive(
-              value.query,
-              [],
-              '13',
-              // 1000,
-            );
-          } else {
-            return of(null);
-          }
-        })
-      )
-      .subscribe((response) => {
-        this.waiting = false;
-        if (response) {
-          console.log(response)
-          // console.log(response.getArchiveVOs())
-          // this.archiveResults = response.getArchiveVOs();
-        } else {
-          // this.archiveResults = null;
-        }
-        // this.activeResultIndex = -1;
-        // this.showResults = this.archiveResults !== null;
-      });
+    
   }
 
   public clearForm(): void {
