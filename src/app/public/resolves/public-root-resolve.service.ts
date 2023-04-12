@@ -16,7 +16,6 @@ export class PublicRootResolveService implements Resolve<any> {
     const archiveNbr = route.params.publicArchiveNbr;
     try {
       const response = await this.api.folder.getPublicRoot(archiveNbr);
-      console.log(response)
       const publicRoot = response.getFolderVO();
       this.publicProfile.setPublicRoot(response.getFolderVO());
       return publicRoot;
