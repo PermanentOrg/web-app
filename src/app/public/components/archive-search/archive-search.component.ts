@@ -1,3 +1,5 @@
+import { query } from '@angular/animations';
+import { SearchService } from '@search/services/search.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,7 +25,8 @@ export class ArchiveSearchComponent implements OnInit {
   constructor(
     private api: ApiService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private searchService:SearchService
   ) {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
@@ -37,7 +40,12 @@ export class ArchiveSearchComponent implements OnInit {
         switchMap((value) => {
           if (value.query && value.query.length > 3) {
             this.waiting = true;
-            return this.api.search.archiveByNameObservable(value.query);
+            return this.searchService.getResultsInPublicArchive(
+              value.query,
+              [],
+              '13',
+              // 1000,
+            );
           } else {
             return of(null);
           }
@@ -46,6 +54,8 @@ export class ArchiveSearchComponent implements OnInit {
       .subscribe((response) => {
         this.waiting = false;
         if (response) {
+          console.log(response)
+          // console.log(response.getArchiveVOs())
           // this.archiveResults = response.getArchiveVOs();
         } else {
           // this.archiveResults = null;

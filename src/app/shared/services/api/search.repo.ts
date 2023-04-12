@@ -1,3 +1,4 @@
+import { query } from '@angular/animations';
 import { ArchiveVO, RecordVO, FolderVO, ItemVO, TagVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
@@ -5,35 +6,73 @@ import { Observable } from 'rxjs';
 
 export class SearchRepo extends BaseRepo {
   public archiveByEmail(email: string): Observable<SearchResponse> {
-    const data = [{
-      SearchVO: {
-        query: email
-      }
-    }];
+    const data = [
+      {
+        SearchVO: {
+          query: email,
+        },
+      },
+    ];
 
-    return this.http.sendRequest<SearchResponse>('/search/archiveByEmail', data, SearchResponse);
+    return this.http.sendRequest<SearchResponse>(
+      '/search/archiveByEmail',
+      data,
+      SearchResponse
+    );
   }
 
   public archiveByNameObservable(query: string): Observable<SearchResponse> {
-    const data = [{
-      SearchVO: {
-        query
-      }
-    }];
+    const data = [
+      {
+        SearchVO: {
+          query,
+        },
+      },
+    ];
 
-    return this.http.sendRequest<SearchResponse>('/search/archive', data, SearchResponse);
+    return this.http.sendRequest<SearchResponse>(
+      '/search/archive',
+      data,
+      SearchResponse
+    );
   }
 
-  public itemsByNameObservable(query: string, tags: TagVOData[] = [], limit?: number): Observable<SearchResponse> {
+  public itemsByNameObservable(
+    query: string,
+    tags: any[] = [],
+    limit?: number
+  ): Observable<SearchResponse> {
     const data = {
       SearchVO: {
-        query,
-        TagVOs: tags,
-        numberOfResults: limit
+      query,
+      tags: tags,
+      numberOfResults: limit,
       }
     };
 
-    return this.http.sendRequest<SearchResponse>('/search/folderAndRecord', [data], SearchResponse);
+    return this.http.sendV2Request<SearchResponse>(
+      '/search/folderAndRecord',
+      [data],
+      SearchResponse
+    );
+  }
+
+  public itemsByNameInPublicArchiveObservable(
+    query: string,
+    tags: any[] = [],
+    limit?: number
+  ): Observable<SearchResponse> {
+    const data = {
+      query,
+      tags:'',
+      archiveId: 13,
+    };
+
+    return this.http.getV2Request<SearchResponse>(
+      '/search/folderAndRecord',
+      data,
+      // SearchResponse
+    );
   }
 }
 

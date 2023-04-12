@@ -11,6 +11,7 @@ import { of, merge, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { SearchService } from '@search/services/search.service';
 
 @Component({
   selector: 'pr-public-archive',
@@ -23,50 +24,13 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   archive: ArchiveVO;
   profileItems: ProfileItemVODictionary = {};
   description: string;
-  socialMedia:Record<string,string> = {};
+  socialMedia: Record<string, string> = {};
+  searchResults: any[] = [];
 
-  staticDataResult = [
-    {
-      image:
-        'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-      type: 'document',
-      name: 'Jan Frisch Experience',
-      description:
-        'Jan Frisch describes her COVID-19 experience: her participation in daily minyans, her study of how to be an antiracist, her isolation from...',
-    },
-    {
-      image:
-        'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-      type: 'video',
-      name: 'Jan Frisch Experience',
-      description:
-        'Jan Frisch describes her COVID-19 experience: her participation in daily minyans, her study of how to be an antiracist, her isolation from...',
-    },
-    {
-      image:
-        'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-      type: 'document',
-      name: 'Jan Frisch Experience',
-      description:
-        'Jan Frisch describes her COVID-19 experience: her participation in daily minyans, her study of how to be an antiracist, her isolation from...',
-    },
-    {
-      image:
-        'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-      type: 'video',
-      name: 'Jan Frisch Experience',
-      description:
-        'Jan Frisch describes her COVID-19 experience: her participation in daily minyans, her study of how to be an antiracist, her isolation from...',
-    },
-    {
-      image:
-        'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
-      type: 'document',
-      name: 'Jan Frisch Experience',
-      description:
-        'Jan Frisch describes her COVID-19 experience: her participation in daily minyans, her study of how to be an antiracist, her isolation from...',
-    },
-  ];
+  types = {
+    'type.folder.private':'Folder',
+    'type.folder.public':'Folder',
+  }
 
   query: string = '';
 
@@ -85,7 +49,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
-    private publicProfile: PublicProfileService
+    private publicProfile: PublicProfileService,
+    private searchService: SearchService
   ) {}
 
   ngOnInit(): void {
@@ -104,17 +69,15 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         .subscribe(
           (items) => (this.description = items['description'][0].textData1)
         ),
-        this.publicProfile
-        .profileItemsDictionary$()
-        .subscribe(
-          (items) => {
-            this.socialMedia['email'] = items['email'][0].string1
-            this.socialMedia['socialMedia'] = items['social_media'][0].string1
+      this.publicProfile.profileItemsDictionary$().subscribe((items) => {
+        this.socialMedia['email'] = items['email'][0].string1;
+        this.socialMedia['socialMedia'] = items['social_media'][0].string1;
 
-            return this.socialMedia
-          })
+        return this.socialMedia;
+      })
     );
-
+    console.log(this.archive);
+    console.log(this.publicRoot);
   }
 
   ngOnDestroy(): void {
@@ -129,9 +92,26 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   public onHandleSearch(value: string): void {
     this.query = value;
+    try {
+      this.searchService
+        .getResultsInPublicArchive(
+          value,
+          [],
+          this.archive.archiveId
+        )
+        .subscribe((response) => {
+          if (response) {
+            this.searchResults = response[0].ChildItemVOs;
+            console.log(this.searchResults)
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   public onBackToArchive(): void {
     this.query = '';
+    this.searchResults = [];
   }
 }
