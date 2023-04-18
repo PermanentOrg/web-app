@@ -11,6 +11,8 @@ import {
   OnDestroy,
   AfterContentInit,
   AfterViewInit,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 
 import { debounce } from 'lodash';
@@ -39,12 +41,15 @@ export class ThumbnailComponent
   private imageElement: Element;
   private resizableImageElement: Element;
 
+  private INITIAL_ZOOM_LEVEL = 0.2963835165168812;
+
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
   private currentThumbUrl: string;
   private dpiScale = 1;
 
   private lastItemDataStatus: DataStatus;
+  private initialZoom = 0;
 
   private debouncedResize;
   private debug = debug('component:thumbnail');
@@ -52,6 +57,7 @@ export class ThumbnailComponent
   public isZip: boolean = false;
 
   @Input() hideResizableImage: boolean = true;
+  @Output() disableSwipe = new EventEmitter<boolean>(false);
 
   viewer: OpenSeaDragon.Viewer;
 
@@ -75,6 +81,16 @@ export class ThumbnailComponent
         visibilityRatio: 1.0,
         constrainDuringPan: true,
         maxZoomLevel: 10,
+      });
+
+      this.viewer.addHandler('zoom', (event: any) => {
+        const zoom = event.zoom;
+        
+      if(zoom > 1){
+        this.disableSwipe.emit(true);
+      } else {
+        this.disableSwipe.emit(false);
+      }
       });
     }
   }
