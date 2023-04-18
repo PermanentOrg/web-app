@@ -227,7 +227,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
     const queuedThumbs = document.querySelectorAll('.thumb-wrapper.queue');
 
-    console.log('here')
 
     const previous = evt.deltaX > 0;
     const next = evt.deltaX < 0;

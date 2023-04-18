@@ -21,6 +21,7 @@ import debug from 'debug';
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import * as OpenSeaDragon from 'openseadragon';
+import { ViewerEvent } from 'openseadragon';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
@@ -83,7 +84,8 @@ export class ThumbnailComponent
         maxZoomLevel: 10,
       });
 
-      this.viewer.addHandler('zoom', (event: any) => {
+      this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
+        console.log(event)
         const zoom = event.zoom;
         
       if(zoom > 1){
