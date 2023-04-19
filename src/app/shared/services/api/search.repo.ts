@@ -67,6 +67,7 @@ export class SearchRepo extends BaseRepo {
       query,
       tags:'',
       archiveId,
+      publicOnly:true
     };
 
     return this.http.getV2Request<SearchResponse>(

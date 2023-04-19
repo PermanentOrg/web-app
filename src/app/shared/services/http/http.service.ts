@@ -98,6 +98,8 @@ export class HttpService {
     
     const url = this.apiUrl + endpoint;
 
+    console.log(data)
+
     return this.http
       .request('GET',url,  {
         params: {
