@@ -60,18 +60,18 @@ export class SearchRepo extends BaseRepo {
   public itemsByNameInPublicArchiveObservable(
     query: string,
     tags: any[] = [],
-    limit?: number
+    archiveId: string,
+    limit?: number,
   ): Observable<SearchResponse> {
     const data = {
       query,
       tags:'',
-      archiveId: 13,
+      archiveId,
     };
 
     return this.http.getV2Request<SearchResponse>(
       '/search/folderAndRecord',
       data,
-      // SearchResponse
     );
   }
 }

@@ -100,7 +100,7 @@ export class SearchService {
     archiveId: string,
     limit?: number
   ): Observable<SearchResponse> {
-    return this.api.search.itemsByNameInPublicArchiveObservable(searchTerm, tags, limit);
+    return this.api.search.itemsByNameInPublicArchiveObservable(searchTerm, tags,archiveId, limit);
   }
 
   getTagResults(searchTerm: string, limit?: number) {
