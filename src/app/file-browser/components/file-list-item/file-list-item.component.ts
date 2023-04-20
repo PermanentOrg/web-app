@@ -151,6 +151,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   public isMyItem = true;
   public canEdit = true;
   public isZip = false;
+  public isNameHovered = false;
 
   private folderThumb200: string;
   private folderThumb500: string;
@@ -930,4 +931,12 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   private showFolderIcon(): boolean {
     return this.item.isFolder && this.folderContentsType !== FolderContentsType.NORMAL;
   }
+
+  public onMouseHoverOverName() {
+    this.isNameHovered = true;
+  }
+  public onMouseLeaveName() {
+    this.isNameHovered = false;
+  }
+
 }
