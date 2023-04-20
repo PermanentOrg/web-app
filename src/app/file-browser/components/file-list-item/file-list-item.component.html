@@ -25,9 +25,9 @@
     *ngIf="inGridView && item.isFolder ? item.view : true">
     <i class="material-icons">{{item | itemTypeIcon:item.view}}</i>
   </div>
-  <div class="name">
+  <div class="name" [ngClass]="{'name-expanded':isNameHovered}">
     <div class="first-row">
-      <span>{{item.displayName}}</span>
+      <p class="article-name" (mouseenter)="onMouseHoverOverName()" (mouseleave)="onMouseLeaveName()" [ngClass]="{'article-name-hovered':isNameHovered}">{{item.displayName}}</p>
       <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation [ngbTooltip]="'fileList.icons.share' | prTooltip"></i>
     </div>
     <div class="second-row">

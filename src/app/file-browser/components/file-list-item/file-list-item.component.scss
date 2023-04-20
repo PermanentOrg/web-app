@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import 'variables';
 
@@ -19,7 +19,7 @@ $bg-transition-length: 0.075s;
     float: left;
     padding-bottom: 5px;
     @for $i from 3 through 10 {
-      @media screen and (min-width: $i * $max-grid-width + 1){
+      @media screen and (min-width: $i * $max-grid-width + 1) {
         width: math.div(100%, $i);
       }
     }
@@ -44,7 +44,7 @@ $bg-transition-length: 0.075s;
   .show-sidebar & {
     width: 50%;
     @for $i from 2 through 10 {
-      @media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1){
+      @media screen and (min-width: ($i * $max-grid-width-sidebar) + $sidebar-width + $left-menu-width + 1) {
         width: math.div(100%, $i);
       }
     }
@@ -52,7 +52,7 @@ $bg-transition-length: 0.075s;
 
   .public-content & {
     @for $i from 2 through 10 {
-      @media screen and (min-width: ($i * $max-grid-width-public) + $profile-sidebar-width + 1){
+      @media screen and (min-width: ($i * $max-grid-width-public) + $profile-sidebar-width + 1) {
         width: math.div(100%, $i);
       }
     }
@@ -60,7 +60,6 @@ $bg-transition-length: 0.075s;
 }
 
 .file-list-item {
-
   display: flex;
   align-items: center;
   border-bottom: 1px solid $gray-300;
@@ -79,7 +78,8 @@ $bg-transition-length: 0.075s;
     position: relative;
   }
 
-  &.selected, &.selected:hover {
+  &.selected,
+  &.selected:hover {
     background-color: rgba($PR-orange, 0.2);
     transition: background-color 0s;
   }
@@ -92,12 +92,16 @@ $bg-transition-length: 0.075s;
     background-color: rgba($gray-100, 1);
   }
 
-  &.drop-target, &.drop-target:hover {
+  &.drop-target,
+  &.drop-target:hover {
     transition: background-color 0s;
     background-color: rgba($PR-purple, 0.3);
   }
 
-  &.dragging, &.dragging:hover, &.disabled, &.disabled:hover {
+  &.dragging,
+  &.dragging:hover,
+  &.disabled,
+  &.disabled:hover {
     opacity: 0.5;
     transition: opacity $bg-transition-length ease-in;
   }
@@ -107,7 +111,9 @@ $bg-transition-length: 0.075s;
   }
 }
 
-.name, .type, .date {
+.name,
+.type,
+.date {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -116,20 +122,36 @@ $bg-transition-length: 0.075s;
 .name {
   @include file-list-col-name;
 
+  &-expanded{
+    height: fit-content !important;
+  }
+
   > div {
     display: flex;
     line-height: 1.25;
-    max-width: 100%;
+    width: 100%;
 
-    span {
-      flex: 1 1 auto;
+    .article-name {
       white-space: nowrap;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .article-name-hovered{
+       -webkit-line-clamp: initial;
+        -webkit-box-orient: vertical;
+        text-overflow: initial;
+        overflow: auto;
+        white-space: initial;
+        overflow-wrap: break-word;
     }
   }
 
-  i, fa-icon {
+  i,
+  fa-icon {
     flex: 0 0 auto;
     margin-left: $grid-unit * 0.5;
     margin-right: $grid-unit * 0.5;
@@ -168,7 +190,8 @@ $bg-transition-length: 0.075s;
   }
 }
 
-.type, .date {
+.type,
+.date {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -238,7 +261,8 @@ $bg-transition-length: 0.075s;
   align-items: center;
 }
 
-[prBgImage], .file-list-item-folder-icon {
+[prBgImage],
+.file-list-item-folder-icon {
   height: $row-height - ($grid-unit * 0.5);
   width: $row-height - ($grid-unit * 0.5);
   flex: 0 0 $row-height - ($grid-unit * 0.5);
@@ -257,7 +281,8 @@ $bg-transition-length: 0.075s;
 
   .grid-view:hover & {
     transition: box-shadow 0ms $tweaked-ease;
-    box-shadow: inset 0px 0px 0px $grid-selected-border - 1px darken($gray-300, 10%);
+    box-shadow: inset 0px 0px 0px $grid-selected-border - 1px
+      darken($gray-300, 10%);
   }
 
   .grid-view.selected & {
@@ -272,7 +297,8 @@ $bg-transition-length: 0.075s;
   .grid-view & {
     position: relative;
     font-size: 8rem;
-    > i, > fa-icon {
+    > i,
+    > fa-icon {
       font-size: 7rem;
       position: absolute;
       top: 0;
@@ -325,10 +351,10 @@ $bg-transition-length: 0.075s;
     display: none;
   }
 
-  [prBgImage], .file-list-item-folder-icon {
+  [prBgImage],
+  .file-list-item-folder-icon {
     margin-right: pxToGrid(5px) + $grid-unit;
   }
-
 }
 
 @supports (padding-left: env(safe-area-inset-left)) {

@@ -139,6 +139,7 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   public isDropTarget = false;
   public isDragging = false;
   public isDisabled =  false;
+  public isNameHovered = false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -930,4 +931,14 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   private showFolderIcon(): boolean {
     return this.item.isFolder && this.folderContentsType !== FolderContentsType.NORMAL;
   }
+
+  public onMouseHoverOverName() {
+    this.isNameHovered = true;
+  }
+
+  public onMouseLeaveName() {
+    this.isNameHovered = false;
+  }
+
+
 }
