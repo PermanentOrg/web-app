@@ -119,18 +119,10 @@ const DRAG_MIN_Y = 1;
   selector: 'pr-file-list-item',
   templateUrl: './file-list-item.component.html',
   styleUrls: ['./file-list-item.component.scss'],
-  animations: [ngIfFadeInAnimation],
+  animations: [ ngIfFadeInAnimation ]
 })
-export class FileListItemComponent
-  implements
-    OnInit,
-    AfterViewInit,
-    OnChanges,
-    OnDestroy,
-    HasSubscriptions,
-    DraggableComponent,
-    DragTargetDroppableComponent
-{
+export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy,
+  HasSubscriptions, DraggableComponent, DragTargetDroppableComponent {
   @Input() item: ItemVO;
   @Input() folderView: FolderView;
 
@@ -142,11 +134,11 @@ export class FileListItemComponent
   @Input() canSelect = true;
   @Input() showFolderThumbnails = false;
 
-  public isMultiSelected = false;
+  public isMultiSelected =  false;
   public isDragTarget = false;
   public isDropTarget = false;
   public isDragging = false;
-  public isDisabled = false;
+  public isDisabled =  false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -160,8 +152,6 @@ export class FileListItemComponent
   public canEdit = true;
   public isZip = false;
   public isNameHovered = false;
-  public isOverflowing = false;
-  
 
   private folderThumb200: string;
   private folderThumb500: string;
@@ -179,11 +169,8 @@ export class FileListItemComponent
   private mouseDownDragTimeout: ReturnType<typeof setTimeout>;
   private waitingForDoubleClick = false;
   private touchStartEvent: TouchEvent;
-  private nameHeight: number;
 
   subscriptions: Subscription[] = [];
-
-  @ViewChild('name', { static: true }) name: ElementRef;
 
   constructor(
     private dataService: DataService,
@@ -201,7 +188,8 @@ export class FileListItemComponent
     @Optional() private drag: DragService,
     private storage: StorageService,
     @Inject(DOCUMENT) private document: Document
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.dataService.registerItem(this.item);
@@ -246,16 +234,10 @@ export class FileListItemComponent
 
     if (this.router.routerState.snapshot.url.includes('/shares')) {
       this.isInShares = true;
-      this.isMyItem =
-        this.accountService.getArchive().archiveId === this.item.archiveId;
+      this.isMyItem = this.accountService.getArchive().archiveId === this.item.archiveId;
     }
 
-    if (
-      !this.accountService.checkMinimumAccess(
-        this.item.accessRole,
-        AccessRole.Editor
-      )
-    ) {
+    if (!this.accountService.checkMinimumAccess(this.item.accessRole, AccessRole.Editor)) {
       this.canEdit = false;
     }
 
@@ -265,7 +247,7 @@ export class FileListItemComponent
 
     if (this.drag) {
       this.subscriptions.push(
-        this.drag.events().subscribe((dragEvent) => {
+        this.drag.events().subscribe(dragEvent => {
           this.onDragServiceEvent(dragEvent);
         })
       );
@@ -278,9 +260,6 @@ export class FileListItemComponent
         this.item.isNewlyCreated = false;
       });
     }
-
-    const nameContainer = this.name.nativeElement;
-    this.isOverflowing = nameContainer.scrollWidth > nameContainer.clientWidth;
   }
 
   ngOnChanges() {
@@ -311,14 +290,14 @@ export class FileListItemComponent
         itemsToMove = Array.from(selectedItems.keys());
         itemText = `${selectedItems.size} items`;
       } else {
-        itemsToMove = [this.item];
+        itemsToMove = [ this.item ];
         itemText = this.item.displayName;
       }
 
       try {
         await this.prompt.confirm(
           'Move',
-          `Move ${itemText} to ${destination.displayName}?`
+          `Move ${itemText} to ${destination.displayName}?`,
         );
         await this.edit.moveItems(itemsToMove, destination);
       } catch (err) {
@@ -394,7 +373,7 @@ export class FileListItemComponent
           type: 'end',
           srcComponent: this,
           event: mouseUpEvent,
-          targetTypes,
+          targetTypes
         });
         this.document.removeEventListener('mouseup', mouseUpHandler);
         setTimeout(() => {
@@ -404,15 +383,13 @@ export class FileListItemComponent
       const mouseMoveHandler = (mouseMoveEvent: MouseEvent) => {
         mouseMoveEvent.preventDefault();
         if (!isDragging) {
-          isDragging =
-            Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) >
-            DRAG_MIN_Y;
+          isDragging = Math.abs(mouseMoveEvent.clientY - mouseDownEvent.clientY) > DRAG_MIN_Y;
           if (isDragging) {
             this.drag.dispatch({
               type: 'start',
               srcComponent: this,
               event: mouseMoveEvent,
-              targetTypes,
+              targetTypes
             });
             this.isDragging = true;
             this.document.addEventListener('mouseup', mouseUpHandler);
@@ -432,14 +409,11 @@ export class FileListItemComponent
       } else {
         type = 'leave';
       }
-      this.drag.dispatch(
-        {
-          type,
-          srcComponent: this,
-          event,
-        },
-        event.type === 'dragenter' ? 1 : 0
-      );
+      this.drag.dispatch({
+        type,
+        srcComponent: this,
+        event
+      }, event.type === 'dragenter' ? 1 : 0);
       this.isDropTarget = enter;
     }
   }
@@ -506,39 +480,18 @@ export class FileListItemComponent
 
     if (this.item.isFolder) {
       if (this.checkFolderView && this.isFolderViewSet()) {
-        this.router.navigate([
-          rootUrl,
-          'view',
-          this.getFolderViewUrl(),
-          this.item.archiveNbr,
-          this.item.folder_linkId,
-        ]);
+        this.router.navigate([rootUrl, 'view', this.getFolderViewUrl(), this.item.archiveNbr, this.item.folder_linkId]);
       } else if (this.isInPublic && !this.isInPublicArchive) {
-        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {
-          relativeTo: this.route.parent.parent,
-        });
-      }
-      if (this.isInSharePreview || this.isInPublicArchive) {
-        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {
-          relativeTo: this.route.parent,
-        });
+        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent.parent});
+      } if (this.isInSharePreview || this.isInPublicArchive) {
+        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {relativeTo: this.route.parent});
       } else {
-        this.router.navigate([
-          rootUrl,
-          this.item.archiveNbr,
-          this.item.folder_linkId,
-        ]);
+        this.router.navigate([rootUrl, this.item.archiveNbr, this.item.folder_linkId]);
       }
-    } else if (
-      !this.isInSharePreview &&
-      !this.isMyItem &&
-      this.dataService.currentFolder.type === 'type.folder.root.share'
-    ) {
+    } else if (!this.isInSharePreview && !this.isMyItem && this.dataService.currentFolder.type === 'type.folder.root.share') {
       this.router.navigate(['/shares/record', this.item.archiveNbr]);
     } else {
-      this.router.navigate(['record', this.item.archiveNbr], {
-        relativeTo: this.route,
-      });
+      this.router.navigate(['record', this.item.archiveNbr], {relativeTo: this.route});
     }
   }
 
@@ -575,11 +528,7 @@ export class FileListItemComponent
       return;
     }
 
-    if (
-      (event.target as HTMLElement).classList.contains(
-        'right-menu-toggler-icon'
-      )
-    ) {
+    if ((event.target as HTMLElement).classList.contains('right-menu-toggler-icon')) {
       this.touchStartEvent = null;
       return;
     }
@@ -589,9 +538,7 @@ export class FileListItemComponent
     const endX = (event as TouchEvent).changedTouches.item(0).clientX;
     const startY = this.touchStartEvent.touches.item(0).clientY;
     const endY = (event as TouchEvent).changedTouches.item(0).clientY;
-    const distance = Math.sqrt(
-      Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2)
-    );
+    const distance = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2));
 
     if (distance > 15) {
       return;
@@ -633,14 +580,8 @@ export class FileListItemComponent
 
     const actionDeferred = new Deferred();
 
-    const isAtLeastCurator = this.accountService.checkMinimumAccess(
-      this.item.accessRole,
-      AccessRole.Curator
-    );
-    const isOwner = this.accountService.checkMinimumAccess(
-      this.item.accessRole,
-      AccessRole.Owner
-    );
+    const isAtLeastCurator = this.accountService.checkMinimumAccess(this.item.accessRole, AccessRole.Curator);
+    const isOwner = this.accountService.checkMinimumAccess(this.item.accessRole, AccessRole.Owner);
 
     if (this.canEdit) {
       actionButtons.push(ItemActions.Rename);
@@ -678,35 +619,21 @@ export class FileListItemComponent
 
     if (!this.isShareRoot && isAtLeastCurator) {
       actionButtons.push(ItemActions.Delete);
-    } else if (
-      this.isShareRoot &&
-      !this.isMyItem &&
-      this.accountService.checkMinimumArchiveAccess(AccessRole.Curator)
-    ) {
+    } else if (this.isShareRoot && !this.isMyItem && this.accountService.checkMinimumArchiveAccess(AccessRole.Curator)) {
       actionButtons.push(ItemActions.Unshare);
     }
 
     if (actionButtons.length) {
-      this.prompt
-        .promptButtons(
-          actionButtons,
-          this.item.displayName,
-          actionDeferred.promise
-        )
-        .then((value: ActionType) => {
-          this.onActionClick(value, actionDeferred);
-        })
-        .catch((err) => {});
+      this.prompt.promptButtons(actionButtons, this.item.displayName, actionDeferred.promise)
+      .then((value: ActionType) => {
+        this.onActionClick(value, actionDeferred);
+      })
+      .catch(err => {
+      });
     } else {
       try {
-        this.prompt.confirm(
-          'OK',
-          this.item.displayName,
-          null,
-          null,
-          `<p>No actions available</p>`
-        );
-      } catch (err) {}
+        this.prompt.confirm('OK', this.item.displayName, null, null, `<p>No actions available</p>`);
+      } catch (err) { }
     }
 
     return false;
@@ -729,19 +656,16 @@ export class FileListItemComponent
         this.openFolderPicker(FolderPickerOperations.Copy);
         break;
       case 'download':
-        this.dataService.downloadFile(this.item as RecordVO).then(() => {
-          actionDeferred.resolve();
-        });
+        this.dataService.downloadFile(this.item as RecordVO)
+          .then(() => {
+            actionDeferred.resolve();
+          });
         break;
       case 'share':
-        this.api.share
-          .getShareLink(this.item)
+        this.api.share.getShareLink(this.item)
           .then((response: ShareResponse) => {
             actionDeferred.resolve();
-            this.dialog.open('SharingComponent', {
-              item: this.item,
-              link: response.getShareByUrlVO(),
-            });
+            this.dialog.open('SharingComponent', { item: this.item, link: response.getShareByUrlVO() });
           });
         break;
       case 'unshare':
@@ -750,19 +674,11 @@ export class FileListItemComponent
         break;
       case 'publish':
         actionDeferred.resolve();
-        this.dialog.open(
-          'PublishComponent',
-          { item: this.item },
-          { height: 'auto' }
-        );
+        this.dialog.open('PublishComponent', { item: this.item }, { height: 'auto' });
         break;
       case 'tags':
         actionDeferred.resolve();
-        this.dialog.open(
-          'EditTagsComponent',
-          { item: this.item },
-          { height: 'auto' }
-        );
+        this.dialog.open('EditTagsComponent', { item: this.item }, { height: 'auto' });
         break;
       case 'setFolderView':
         actionDeferred.resolve();
@@ -776,8 +692,7 @@ export class FileListItemComponent
   }
 
   deleteItem(resolve: Function) {
-    return this.edit
-      .deleteItems([this.item])
+    return this.edit.deleteItems([this.item])
       .then(() => {
         this.dataService.refreshCurrentFolder();
         resolve();
@@ -798,7 +713,7 @@ export class FileListItemComponent
   async unshareItem() {
     const shareVO = new ShareVO({
       folder_linkId: this.item.folder_linkId,
-      archiveId: this.accountService.getArchive().archiveId,
+      archiveId: this.accountService.getArchive().archiveId
     });
     await this.api.share.remove(shareVO);
     this.message.showMessage('Item removed from shares.', 'success');
@@ -813,8 +728,7 @@ export class FileListItemComponent
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
 
-    this.folderPicker
-      .chooseFolder(rootFolder, operation, deferred.promise)
+    this.folderPicker.chooseFolder(rootFolder, operation, deferred.promise)
       .then((destination: FolderVO) => {
         switch (operation) {
           case FolderPickerOperations.Copy:
@@ -827,11 +741,7 @@ export class FileListItemComponent
         setTimeout(() => {
           deferred.resolve();
           // eslint-disable-next-line max-len
-          const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${
-            this.item.displayName
-          } ${
-            operation === FolderPickerOperations.Copy ? 'copied' : 'moved'
-          } successfully.`;
+          const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${this.item.displayName} ${operation === FolderPickerOperations.Copy ? 'copied' : 'moved'} successfully.`;
           this.message.showMessage(msg, 'success');
           if (operation === FolderPickerOperations.Move || this.item.isFolder) {
             this.dataService.refreshCurrentFolder();
@@ -846,7 +756,7 @@ export class FileListItemComponent
   }
 
   async promptForUpdate() {
-    const updateDeferred = new Deferred();
+    const updateDeferred = new Deferred;
 
     const fields: PromptField[] = [
       {
@@ -859,19 +769,14 @@ export class FileListItemComponent
           autocorrect: 'off',
           autocomplete: 'off',
           spellcheck: 'off',
-          autoselect: true,
-        },
-      },
+          autoselect: true
+        }
+      }
     ];
 
+
     try {
-      const values = await this.prompt.prompt(
-        fields,
-        `Rename "${this.item.displayName}"`,
-        updateDeferred.promise,
-        'Rename',
-        'Cancel'
-      );
+      const values = await this.prompt.prompt(fields, `Rename "${this.item.displayName}"`, updateDeferred.promise, 'Rename', 'Cancel');
       this.saveUpdates(values, updateDeferred);
     } catch (err) {
       if (err) {
@@ -881,18 +786,11 @@ export class FileListItemComponent
   }
 
   promptForFolderView() {
-    const updateDeferred = new Deferred();
+    const updateDeferred = new Deferred;
 
-    const fields = [FOLDER_VIEW_FIELD_INIIAL(this.item.view)];
+    const fields = [ FOLDER_VIEW_FIELD_INIIAL(this.item.view) ];
 
-    this.prompt
-      .prompt(
-        fields,
-        `Set folder view for "${this.item.displayName}"`,
-        updateDeferred.promise,
-        'Save',
-        'Cancel'
-      )
+    this.prompt.prompt(fields, `Set folder view for "${this.item.displayName}"`, updateDeferred.promise, 'Save', 'Cancel')
       .then((values) => {
         this.saveUpdates(values, updateDeferred);
       })
@@ -901,20 +799,20 @@ export class FileListItemComponent
 
   saveUpdates(changes: RecordVOData | FolderVOData, deferred: Deferred) {
     const originalData = {};
-    Object.keys(changes).forEach((key) => {
-      if (this.item[key] === changes[key]) {
-        delete changes[key];
-      } else {
-        originalData[key] = this.item[key];
-      }
-    });
+    Object.keys(changes)
+      .forEach((key) => {
+        if (this.item[key] === changes[key]) {
+          delete changes[key];
+        } else {
+          originalData[key] = this.item[key];
+        }
+      });
 
     if (!Object.keys(changes).length) {
       return deferred.resolve();
     } else {
       this.item.update(changes);
-      return this.edit
-        .updateItems([this.item])
+      return this.edit.updateItems([this.item])
         .then(() => {
           deferred.resolve();
         })
@@ -940,7 +838,7 @@ export class FileListItemComponent
     this.itemVisible.emit({
       visible,
       component: this,
-      element: this.element.nativeElement as HTMLElement,
+      element: this.element.nativeElement as HTMLElement
     });
   }
 
@@ -972,52 +870,45 @@ export class FileListItemComponent
       this.folderThumb200 = thumbs.folderThumb200;
       this.folderThumb500 = thumbs.folderThumb500;
     } else {
-      this.api.folder
-        .getWithChildren([this.item as FolderVO])
-        .then((resp) => {
-          if (resp.isSuccessful) {
-            const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
-            const allChildren = newFolderVO.ChildItemVOs;
-            const sortedItems = newFolderVO.ChildItemVOs.filter((item) =>
-              item.type.includes('type.record')
-            );
-            sortedItems.sort((a, b) => {
-              return calculateSortPriority(a) - calculateSortPriority(b);
-            });
-            const thumbnailItem = sortedItems.shift();
-            if (thumbnailItem) {
-              if (sortPriorities.includes(thumbnailItem.type)) {
-                if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
-                  this.folderThumb200 = thumbnailItem.thumbURL200;
-                  this.folderThumb500 = thumbnailItem.thumbURL500;
-                } else {
-                  this.folderContentsType =
-                    FolderContentsType.BROKEN_THUMBNAILS;
-                }
+      this.api.folder.getWithChildren([this.item as FolderVO]).then((resp) => {
+        if (resp.isSuccessful) {
+          const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
+          const allChildren = newFolderVO.ChildItemVOs;
+          const sortedItems = newFolderVO.ChildItemVOs.filter(item => item.type.includes('type.record'));
+          sortedItems.sort((a, b) => {
+            return calculateSortPriority(a) - calculateSortPriority(b);
+          });
+          const thumbnailItem = sortedItems.shift();
+          if (thumbnailItem) {
+            if (sortPriorities.includes(thumbnailItem.type)) {
+              if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
+                this.folderThumb200 = thumbnailItem.thumbURL200;
+                this.folderThumb500 = thumbnailItem.thumbURL500;
               } else {
-                this.folderContentsType = FolderContentsType.MIXED_FILES;
+                this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
               }
             } else {
-              if (allChildren.length === 0) {
-                this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
-              } else {
-                this.folderContentsType = FolderContentsType.SUBFOLDERS;
-              }
+              this.folderContentsType = FolderContentsType.MIXED_FILES;
             }
           } else {
-            this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+            if (allChildren.length === 0) {
+              this.folderContentsType = FolderContentsType.EMPTY_FOLDER;
+            } else {
+              this.folderContentsType = FolderContentsType.SUBFOLDERS;
+            }
           }
-        })
-        .catch((err) => {
+        } else {
           this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
-        })
-        .finally(() => {
-          cache.saveThumbnail(this.item, {
-            folderThumb200: this.folderThumb200,
-            folderThumb500: this.folderThumb500,
-            folderContentsType: this.folderContentsType,
-          });
+        }
+      }).catch((err) => {
+        this.folderContentsType = FolderContentsType.BROKEN_THUMBNAILS;
+      }).finally(() => {
+        cache.saveThumbnail(this.item, {
+          folderThumb200: this.folderThumb200,
+          folderThumb500: this.folderThumb500,
+          folderContentsType: this.folderContentsType,
         });
+      });
     }
   }
 
@@ -1038,10 +929,7 @@ export class FileListItemComponent
   }
 
   private showFolderIcon(): boolean {
-    return (
-      this.item.isFolder &&
-      this.folderContentsType !== FolderContentsType.NORMAL
-    );
+    return this.item.isFolder && this.folderContentsType !== FolderContentsType.NORMAL;
   }
 
   public onMouseHoverOverName() {
