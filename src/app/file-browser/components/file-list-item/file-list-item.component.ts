@@ -139,6 +139,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   public isDropTarget = false;
   public isDragging = false;
   public isDisabled =  false;
+  public isNameHovered = false;
+  public isTextOverflowing = false
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -146,6 +148,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
   @Output() itemClicked = new EventEmitter<ItemClickEvent>();
   @Output() itemVisible = new EventEmitter<FileListItemVisibleEvent>();
   @Output() refreshView = new EventEmitter<void>();
+
+  @ViewChild('name',{static:true}) name:ElementRef
 
   public allowActions = true;
   public isMyItem = true;
@@ -259,6 +263,8 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
         this.item.isNewlyCreated = false;
       });
     }
+    const nameContainer = this.name.nativeElement;
+    this.isTextOverflowing = nameContainer.scrollWidth > nameContainer.clientWidth;
   }
 
   ngOnChanges() {
@@ -929,5 +935,13 @@ export class FileListItemComponent implements OnInit, AfterViewInit, OnChanges, 
 
   private showFolderIcon(): boolean {
     return this.item.isFolder && this.folderContentsType !== FolderContentsType.NORMAL;
+  }
+
+  public onMouseOverName() {
+    this.isNameHovered = true;
+  }
+
+  public onMouseLeaveName() {
+    this.isNameHovered = false;
   }
 }

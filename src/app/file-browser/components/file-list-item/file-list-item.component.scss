@@ -116,16 +116,31 @@ $bg-transition-length: 0.075s;
 .name {
   @include file-list-col-name;
 
+  &-expanded{
+    height: fit-content !important;
+  }
+
   > div {
     display: flex;
     line-height: 1.25;
     max-width: 100%;
 
-    span {
-      flex: 1 1 auto;
+    .article-name {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      width: 100%;
+    }
+
+    .article-name-hovered{
+      -webkit-line-clamp: initial;
+      -webkit-box-orien: initial;
+      text-overflow: initial;
+      overflow: auto;
+      white-space: initial;
+      overflow-wrap:break-word;
     }
   }
 
