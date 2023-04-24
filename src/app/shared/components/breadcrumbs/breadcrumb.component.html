@@ -3,5 +3,5 @@
   <i class="ion-md-arrow-dropright"></i>
 </span>
 <span class="current" *ngIf="last">
-  {{breadcrumb.text}}
+  {{breadcrumb.text === 'My Files' ? 'Private' : breadcrumb.text}}
 </span>
