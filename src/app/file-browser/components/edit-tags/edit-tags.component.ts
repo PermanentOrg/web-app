@@ -66,6 +66,7 @@ export class EditTagsComponent
 
   private lastDataStatus: DataStatus;
   private lastFolderLinkId: number;
+  private hasTabKeyNavigation:boolean = false;
 
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
@@ -76,7 +77,7 @@ export class EditTagsComponent
     private api: ApiService,
     private dataService: DataService,
     private elementRef: ElementRef,
-    private dialog: Dialog
+    private dialog: Dialog,
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {

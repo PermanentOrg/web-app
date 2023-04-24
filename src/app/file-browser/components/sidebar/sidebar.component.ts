@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
+
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 
@@ -33,11 +34,12 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   canEdit: boolean;
   canShare: boolean;
   canUseViews: boolean;
+  hasTabKeyNavigation: boolean = false;
 
   constructor(
     private dataService: DataService,
     private editService: EditService,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {
     this.currentArchive = this.accountService.getArchive();
 
@@ -82,6 +84,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   }
 
   ngOnInit() {
+   
   }
 
   ngOnDestroy() {
@@ -147,5 +150,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
       }
     }
   }
+
+
+
 
 }

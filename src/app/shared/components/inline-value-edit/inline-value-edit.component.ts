@@ -30,6 +30,7 @@ import { ENTER } from '@angular/cdk/keycodes';
 import { FormInputSelectOption } from '../form-input/form-input.component';
 import { NgModel, FormControl, Validators } from '@angular/forms';
 import { getDate, getMonth, getYear } from 'date-fns';
+import { Router } from '@angular/router';
 
 export type InlineValueEditType =
   | 'text'
@@ -84,7 +85,15 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   ngbDate: NgbDate;
   maxNgbDate: NgbDateStruct;
 
+  typeToMetaData = {
+    text: 'name',
+    textarea: 'description',
+    date: 'date',
+  }
+
   public extraClasses: string[];
+  public hasTabKeyNavigation = false;
+  private metaDataField:string = ''
 
   constructor(private elementRef: ElementRef) {
     this.extraClasses = [];
@@ -120,6 +129,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       }
     }
   }
+
 
   startEdit() {
     if (!this.canEdit) {
@@ -248,6 +258,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   focusInput() {
     if (this.inputElementRef) {
       (this.inputElementRef.nativeElement as HTMLInputElement).focus();
+    }
+    if(this.datePicker){
+      this.datePicker.focusSelect();
     }
   }
 

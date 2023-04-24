@@ -28,7 +28,7 @@
         (doneEditing)="onFinishEditing('displayName', $event)"
         emptyMessage="Click to add name"
         readOnlyEmptyMessage="No name"
-        type='text'></pr-inline-value-edit>
+        type='text' tabindex="0"></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Description</label>
@@ -40,18 +40,18 @@
       (doneEditing)="onFinishEditing('description', $event)"
       emptyMessage="Click to add description"
       readOnlyEmptyMessage="No description"
-      type='textarea'></pr-inline-value-edit>
+      type='textarea' tabindex="0"></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Tags</label>
       <div class="sidebar-item-content">
-        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit" tagType="keyword"></pr-edit-tags>
+        <pr-edit-tags tabindex="0" [item]="selectedItem" [canEdit]="canEdit" tagType="keyword"></pr-edit-tags>
       </div>
     </div>
     <div class="sidebar-item">
       <label>Custom Metadata</label>
       <div class="sidebar-item-content">
-        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit" tagType="customMetadata"></pr-edit-tags>
+        <pr-edit-tags tabindex="0" [item]="selectedItem" [canEdit]="canEdit" tagType="customMetadata"></pr-edit-tags>
       </div>
     </div>
     <div class="sidebar-item">
@@ -64,7 +64,7 @@
         emptyMessage="Click to add date"
         [readOnlyEmptyMessage]="selectedItem.isFolder ? 'No start date' : 'No date'"
         (doneEditing)="onFinishEditing('displayDT', $event)"
-        type='date'></pr-inline-value-edit>
+        type='date' tabindex="0"></pr-inline-value-edit>
     </div>
     <div class="sidebar-item" *ngIf="selectedItem.isFolder">
       <label>End date</label>
@@ -75,8 +75,9 @@
         [itemId]="selectedItem.folder_linkId"
         emptyMessage="Click to add date"
         readOnlyEmptyMessage="No end date"
+        [metaDataField]="'date'"
         (doneEditing)="onFinishEditing('displayEndDT', $event)"
-        type='date'></pr-inline-value-edit>
+        type='date' tabindex="0"></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Location</label>
@@ -84,7 +85,7 @@
         <span *ngIf="selectedItem.LocnVO">{{(selectedItem.LocnVO | prLocation)?.full}}</span>
         <span *ngIf="!selectedItem.LocnVO" class="sidebar-item-content-empty">{{ canEdit ? 'Click to set location' : 'No location'}}</span>
       </div>
-      <div class="sidebar-item-content" (click)="onLocationClick()" [class.can-edit]="canEdit">
+      <div class="sidebar-item-content" (click)="onLocationClick()" tabindex="0" (focus)="onLocationClick()" [class.can-edit]="canEdit">
         <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
       </div>
     </div>
