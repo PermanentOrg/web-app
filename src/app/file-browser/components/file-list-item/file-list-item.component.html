@@ -27,7 +27,7 @@
   </div>
   <div [ngClass]="{'name-expanded':isNameHovered && isTextOverflowing}" class="name">
     <div class="first-row">
-      <p #name class="article-name" [ngClass]="{'article-name-hovered':isNameHovered}" (mouseenter)="onMouseOverName()" (mouseleave)="onMouseLeaveName()">{{item.displayName}}</p>
+      <p #name class="item-name" [ngClass]="{'item-name-hovered':isNameHovered}" (mouseenter)="onMouseOverName()" (mouseleave)="onMouseLeaveName()">{{item.displayName}}</p>
       <i class="ion-md-people" *ngIf="!showAccess && item.ShareVOs?.length" @ngIfFadeInAnimation [ngbTooltip]="'fileList.icons.share' | prTooltip"></i>
     </div>
     <div class="second-row">

@@ -125,7 +125,7 @@ $bg-transition-length: 0.075s;
     line-height: 1.25;
     max-width: 100%;
 
-    .article-name {
+    .item-name {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -134,7 +134,7 @@ $bg-transition-length: 0.075s;
       width: 100%;
     }
 
-    .article-name-hovered{
+    .item-name-hovered{
       -webkit-line-clamp: initial;
       -webkit-box-orien: initial;
       text-overflow: initial;
