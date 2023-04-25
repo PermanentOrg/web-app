@@ -42,7 +42,7 @@ export class ThumbnailComponent
   private imageElement: Element;
   private resizableImageElement: Element;
 
-  private INITIAL_ZOOM_LEVEL = 0.2963835165168812;
+  private initialZoom:number;
 
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
@@ -50,7 +50,6 @@ export class ThumbnailComponent
   private dpiScale = 1;
 
   private lastItemDataStatus: DataStatus;
-  private initialZoom = 0;
 
   private debouncedResize;
   private debug = debug('component:thumbnail');
@@ -85,10 +84,12 @@ export class ThumbnailComponent
       });
 
       this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
-        console.log(event)
         const zoom = event.zoom;
-        
-      if(zoom > 1){
+        if(!this.initialZoom){
+          this.initialZoom = zoom;
+        }
+              
+      if(zoom !== this.initialZoom){
         this.disableSwipe.emit(true);
       } else {
         this.disableSwipe.emit(false);
