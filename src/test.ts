@@ -9,6 +9,14 @@ import {
 import { Shallow } from 'shallow-render';
 import { RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import {
+  NgbDatepickerModule,
+  NgbDropdownModule,
+  NgbPaginationModule,
+  NgbTimepickerModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
+
 window['Stripe'] = () => {
   return {
     elements: () => {
@@ -33,6 +41,13 @@ window['doNotLoadGoogleMapsAPI'] = true;
 
 // Always Replace RouterModule with RouterTestingModule to avoid errors.
 Shallow.alwaysReplaceModule(RouterModule, RouterTestingModule);
+Shallow.neverMock(
+  NgbDatepickerModule,
+  NgbTimepickerModule,
+  NgbTooltipModule,
+  NgbDropdownModule,
+  NgbPaginationModule
+);
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
