@@ -9,8 +9,6 @@ import {
 import { Shallow } from 'shallow-render';
 import { RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
-declare const require: any;
 window['Stripe'] = () => {
   return {
     elements: () => {
@@ -44,7 +42,3 @@ getTestBed().initTestEnvironment(
     teardown: { destroyAfterEach: false },
   }
 );
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
