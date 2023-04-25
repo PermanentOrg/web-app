@@ -12,7 +12,11 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { UntypedFormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  Validators,
+  UntypedFormBuilder,
+} from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
 import {

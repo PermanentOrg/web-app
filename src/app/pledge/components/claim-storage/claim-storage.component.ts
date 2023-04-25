@@ -1,6 +1,10 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
