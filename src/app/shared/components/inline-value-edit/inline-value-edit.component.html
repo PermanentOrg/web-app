@@ -4,6 +4,7 @@
     <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <input
+          tabindex="0"
           (focus)="startEdit()"
           type="text" name="text" class="form-control" [class.is-editing]="isEditing" [(ngModel)]="editValue" #input #model="ngModel"
           [required]="required" [email]="email" [attr.minlength]="minLength > 0 ? minLength : null" [attr.maxlength]="maxLength > 0 ? maxLength : null" (blur)="onTextInputBlur()">
@@ -26,6 +27,7 @@
     <form novalidate>
       <div class="inline-value-container" [class.can-edit]="canEdit">
         <textarea 
+        tabindex="0"
         (focus)="startEdit()"
          name="textarea" class="form-control" [class.is-editing]="isEditing"
         [attr.maxlength]="maxLength > 0 ? maxLength : null"
