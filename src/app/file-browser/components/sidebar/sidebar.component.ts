@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
@@ -34,7 +34,6 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   canEdit: boolean;
   canShare: boolean;
   canUseViews: boolean;
-  hasTabKeyNavigation: boolean = false;
 
   constructor(
     private dataService: DataService,

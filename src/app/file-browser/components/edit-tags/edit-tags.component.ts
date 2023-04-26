@@ -66,7 +66,6 @@ export class EditTagsComponent
 
   private lastDataStatus: DataStatus;
   private lastFolderLinkId: number;
-  private hasTabKeyNavigation:boolean = false;
 
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
