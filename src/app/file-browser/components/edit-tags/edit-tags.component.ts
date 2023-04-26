@@ -76,7 +76,7 @@ export class EditTagsComponent
     private api: ApiService,
     private dataService: DataService,
     private elementRef: ElementRef,
-    private dialog: Dialog,
+    private dialog: Dialog
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {

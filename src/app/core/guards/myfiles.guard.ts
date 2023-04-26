@@ -26,6 +26,8 @@ export class MyfilesGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.router.parseUrl(state.url.replace(/^\/app\/myfiles/, '/app/private'));
+    return this.router.parseUrl(
+      state.url.replace(/^\/app\/myfiles/, '/app/private')
+    );
   }
 }

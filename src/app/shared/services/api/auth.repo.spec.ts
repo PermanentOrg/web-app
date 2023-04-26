@@ -120,5 +120,4 @@ describe('AuthRepo', () => {
     );
     req.flush(expected);
   });
-
 });

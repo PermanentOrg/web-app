@@ -17,7 +17,7 @@ describe('MyfilesGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule]
+      imports: [RouterTestingModule],
     });
     guard = TestBed.inject(MyfilesGuard);
   });
