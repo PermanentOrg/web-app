@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -16,11 +17,11 @@ import { RoutesWithData } from '../app.routes';
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
   profileItems: PublicProfileItemsResolveService,
-  publicRoot: PublicRootResolveService
+  publicRoot: PublicRootResolveService,
 };
 
 const publishResolve = {
-  publishedItem: PublishResolveService
+  publishedItem: PublishResolveService,
 };
 
 export const routes: RoutesWithData = [
@@ -28,12 +29,12 @@ export const routes: RoutesWithData = [
     path: '',
     component: PublicComponent,
     data: {
-      isPublic: true
+      isPublic: true,
     },
     children: [
       {
         path: 'error',
-        component: ItemNotFoundComponent
+        component: ItemNotFoundComponent,
       },
       {
         path: 'archive/:publicArchiveNbr',
@@ -51,30 +52,27 @@ export const routes: RoutesWithData = [
               noFileListPadding: true,
               isPublicArchive: true,
               checkFolderViewOnNavigate: true,
-              showFolderDescription: true
+              showFolderDescription: true,
             },
           },
-        ]
+        ],
       },
       {
         path: ':publishUrlToken',
         resolve: publishResolve,
-      }
-    ]
+        children: [],
+      },
+    ],
   },
-
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
+  imports: [RouterModule.forChild(routes)],
   providers: [
     PublishResolveService,
     PublishArchiveResolveService,
     PublicArchiveResolveService,
     PublicRootResolveService,
-    PublicProfileItemsResolveService
-  ]
+    PublicProfileItemsResolveService,
+  ],
 })
-export class PublicRoutingModule { }
-
+export class PublicRoutingModule {}
