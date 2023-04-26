@@ -17,9 +17,14 @@ Add your environment secrets to `.env`.
 Install the project dependencies with `npm install`.
 
 Then run the app using `npm run dev` to point the dev server against your `local.permanent.org` VM accessible at `https://ng.permanent.org:4200`
+
 - Note: You'll need to add a host file redirect to point ng.permanent.org to either localhost or 127.0.0.1
 
 If your development environment is missing the appropriate SSL certificates at `/etc/ssl`, you'll have to configure your browser and OS to trust the auto-generated SSL certificates. See [here](https://github.com/PermanentOrg/devenv/#readme) for more details about getting a local development environment set up.
+
+## Building
+
+To build the app for production you can run `npm run build`. For building a version of the app to be used in the Permanent devenv, run `npm run build:local`
 
 ## Adding new secrets
 
@@ -35,6 +40,18 @@ Run `ng generate component component-name` to generate a new component. You can 
 npm install
 npm run test
 ```
+
+Depending on your system configuration, the test runner (Karma) may start a web server and make you manually navigate to a URL to run tests in your actual browser. To run tests directly in the terminal, you may need to pass in a `CHROME_BIN` environment variable to point to your installation of Google Chrome.
+
+```
+CHROME_BIN=chromium npm run test
+```
+
+The exact value of `CHROME_BIN` may depend on your specific system.
+
+## Storybook
+
+This project uses [Storybook.](https://storybook.js.org/) Run `npm run storybook` to start Storybook locally. Run `npm run build-storybook` to build a copy of Storybook for deployment elsewhere.
 
 ## History
 
