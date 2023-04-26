@@ -84,7 +84,7 @@
         <span *ngIf="selectedItem.LocnVO">{{(selectedItem.LocnVO | prLocation)?.full}}</span>
         <span *ngIf="!selectedItem.LocnVO" class="sidebar-item-content-empty">{{ canEdit ? 'Click to set location' : 'No location'}}</span>
       </div>
-      <div class="sidebar-item-content" (click)="onLocationClick()" [class.can-edit]="canEdit">
+      <div class="sidebar-item-content" (click)="onLocationClick()" tabindex="0" (focus)="onLocationClick()" [class.can-edit]="canEdit">
         <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
       </div>
     </div>
