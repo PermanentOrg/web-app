@@ -137,6 +137,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
     if (showRootBreadcrumb) {
       this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
+      if(this.breadcrumbs[0].routerPath == '/private')
+        this.breadcrumbs[0].text = 'Private';
+
     }
 
     if (isInPublicArchive) {

@@ -1,4 +1,4 @@
-/* @format */ 
+/* @format */
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { DeviceService } from '@shared/services/device/device.service';

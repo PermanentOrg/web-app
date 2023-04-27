@@ -181,6 +181,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.setCurrentTags();
   }
 
+  toggleSwipe(value:boolean){
+    this.disableSwipes = value;
+
+  }
+
   getPdfUrl() {
     if (!this.isDocument) {
       return false;
@@ -221,6 +226,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     }
 
     const queuedThumbs = document.querySelectorAll('.thumb-wrapper.queue');
+
 
     const previous = evt.deltaX > 0;
     const next = evt.deltaX < 0;

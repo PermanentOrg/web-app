@@ -40,8 +40,15 @@ export class FolderRepo extends BaseRepo {
   }
 
   public navigate(folderVO: FolderVO): Observable<FolderResponse> {
+    const response = {
+      ...folderVO,
+    };
+    if (folderVO.type === 'type.folder.root.private') {
+      response.displayName = 'Private';
+    }
+
     const data = [{
-      FolderVO: new FolderVO(folderVO)
+      FolderVO: new FolderVO(response)
     }];
 
     return this.http.sendRequest<FolderResponse>('/folder/navigateMin', data, FolderResponse);

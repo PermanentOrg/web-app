@@ -83,12 +83,13 @@ const routes: RoutesWithData = [
       {
         path: 'app/fa-reset',
         loadChildren: () =>
-        new Promise( () => {
-          const url = window.location.href;
-          const keyAndTenant = url.split('fa-reset')[1];
-          window.location.href = fusionauthHost + '/password/change' + keyAndTenant;
-        }),
-        pathMatch: 'prefix'
+          new Promise(() => {
+            const url = window.location.href;
+            const keyAndTenant = url.split('fa-reset')[1];
+            window.location.href =
+              fusionauthHost + '/password/change' + keyAndTenant;
+          }),
+        pathMatch: 'prefix',
       },
       {
         path: 'app/signupEmbed',

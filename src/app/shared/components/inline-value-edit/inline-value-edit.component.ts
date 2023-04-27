@@ -121,6 +121,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     }
   }
 
+
   startEdit() {
     if (!this.canEdit) {
       return false;
@@ -248,6 +249,9 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   focusInput() {
     if (this.inputElementRef) {
       (this.inputElementRef.nativeElement as HTMLInputElement).focus();
+    }
+    if(this.datePicker){
+      this.datePicker.focusSelect();
     }
   }
 

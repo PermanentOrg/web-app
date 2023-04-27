@@ -1,4 +1,5 @@
-<div class="pr-thumbnail-image" [ngClass]="{'loaded': thumbLoaded}" [hidden]="item?.isFolder || isZip"></div>
+<div [hidden]="hideResizableImage" id="openseadragon"></div>
+<div class="pr-thumbnail-image" [ngClass]="{'loaded': thumbLoaded}" [hidden]="item?.isFolder || isZip || !hideResizableImage"></div>
 <div class="pr-thumbnail-icon" [hidden]="!item?.isFolder">
   <i class="ion-md-folder"></i>
 </div>
