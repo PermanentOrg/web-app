@@ -30,6 +30,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   types = {
     'type.folder.private':'Folder',
     'type.folder.public':'Folder',
+    'type.record.image':'Image',
+    'type.record.video':'Video',
   }
 
   query: string = '';
