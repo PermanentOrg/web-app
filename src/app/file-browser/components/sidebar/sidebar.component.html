@@ -15,7 +15,7 @@
   <ng-container *ngIf="selectedItem && !isRootFolder">
     <div class="sidebar-item" *ngIf="selectedItem">
       <div class="sidebar-thumbnail">
-        <pr-thumbnail [item]="selectedItem" [maxWidth]="500"></pr-thumbnail>
+        <pr-thumbnail [item]="selectedItem" [hideResizableImage]="true" [maxWidth]="500"></pr-thumbnail>
       </div>
     </div>
     <div class="sidebar-item">

@@ -1,19 +1,38 @@
-import { Component, OnInit, Input, ElementRef, HostListener, DoCheck, OnChanges, Renderer2, NgZone } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ElementRef,
+  HostListener,
+  DoCheck,
+  OnChanges,
+  Renderer2,
+  NgZone,
+  OnDestroy,
+  AfterContentInit,
+  AfterViewInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 
 import { debounce } from 'lodash';
 import debug from 'debug';
 
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
+import * as OpenSeaDragon from 'openseadragon';
+import { ViewerEvent } from 'openseadragon';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
 @Component({
   selector: 'pr-thumbnail',
   templateUrl: './thumbnail.component.html',
-  styleUrls: ['./thumbnail.component.scss']
+  styleUrls: ['./thumbnail.component.scss'],
 })
-export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
+export class ThumbnailComponent
+  implements OnChanges, DoCheck, OnDestroy, AfterViewInit
+{
   @Input() item: ItemVO;
   @Input() maxWidth;
 
@@ -21,6 +40,9 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   private element: Element;
   private imageElement: Element;
+  private resizableImageElement: Element;
+
+  private initialZoom:number;
 
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
@@ -34,6 +56,11 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   public isZip: boolean = false;
 
+  @Input() hideResizableImage: boolean = true;
+  @Output() disableSwipe = new EventEmitter<boolean>(false);
+
+  viewer: OpenSeaDragon.Viewer;
+
   constructor(
     elementRef: ElementRef,
     private renderer: Renderer2,
@@ -44,7 +71,31 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
     this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    const resizableImageElement = this.element.querySelector('#openseadragon');
+    if (resizableImageElement) {
+      this.viewer = OpenSeaDragon({
+        element: resizableImageElement as HTMLElement,
+        prefixUrl: 'assets/openseadragon/images/',
+        tileSources: { type: 'image', url: this.item?.thumbURL500 },
+        visibilityRatio: 1.0,
+        constrainDuringPan: true,
+        maxZoomLevel: 10,
+      });
+
+      this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
+        const zoom = event.zoom;
+        if(!this.initialZoom){
+          this.initialZoom = zoom;
+        }
+              
+      if(zoom !== this.initialZoom){
+        this.disableSwipe.emit(true);
+      } else {
+        this.disableSwipe.emit(false);
+      }
+      });
+    }
   }
 
   ngOnChanges() {
@@ -57,6 +108,12 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
   ngDoCheck() {
     if (this.item.dataStatus !== this.lastItemDataStatus) {
       this.resetImage();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.viewer) {
+      this.viewer.destroy();
     }
   }
 
@@ -79,7 +136,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
       this.targetThumbWidth = 200;
       this.lastItemDataStatus = this.item.dataStatus;
     }
-
   }
 
   @HostListener('window:resize', [])
@@ -89,7 +145,9 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
 
   checkElementWidth() {
     const elemSize = this.element.clientWidth * this.dpiScale;
-    const checkSize = this.maxWidth ? Math.min(this.maxWidth, elemSize) : elemSize;
+    const checkSize = this.maxWidth
+      ? Math.min(this.maxWidth, elemSize)
+      : elemSize;
     if (checkSize <= this.currentThumbWidth) {
       return;
     }
@@ -106,7 +164,6 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
         break;
       }
     }
-
 
     this.targetThumbWidth = targetWidth;
     this.checkItemThumbs();
@@ -132,12 +189,15 @@ export class ThumbnailComponent implements OnInit, OnChanges, DoCheck {
         this.thumbLoaded = true;
         this.renderer.removeClass(this.imageElement, 'image-loading');
         if (this.item.folder_linkId === targetFolderLinkId) {
-          this.renderer.setStyle(this.imageElement, 'background-image', `url(${imageUrl})`);
+          this.renderer.setStyle(
+            this.imageElement,
+            'background-image',
+            `url(${imageUrl})`
+          );
         }
       };
+
       imageLoader.src = imageUrl;
     }
   }
-
-
 }
