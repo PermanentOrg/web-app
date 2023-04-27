@@ -40,15 +40,12 @@ export class FolderRepo extends BaseRepo {
   }
 
   public navigate(folderVO: FolderVO): Observable<FolderResponse> {
-    console.log(folderVO)
-    let response = {
-      ...folderVO
+    const response = {
+      ...folderVO,
+    };
+    if (folderVO.type === 'type.folder.root.private') {
+      response.displayName = 'Private';
     }
-    if(folderVO.type === 'type.folder.root.private'){
-      response.displayName = 'Private'
-    }
-
-    console.log(response)
 
     const data = [{
       FolderVO: new FolderVO(response)
