@@ -143,7 +143,7 @@
   </ng-container>
   <ng-container *ngIf="selectedItem && isRootFolder">
     <div class="sidebar-item">
-      <label>{{selectedItem.displayName}}</label>
+      <label>{{selectedItem.displayName === 'My Files' ? 'Private' : selectedItem.displayName}}</label>
       <div class="sidebar-item-content">
         Select a file to view details
       </div>
