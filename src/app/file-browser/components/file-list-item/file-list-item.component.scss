@@ -141,6 +141,12 @@ $bg-transition-length: 0.075s;
       overflow: auto;
       white-space: initial;
       overflow-wrap:break-word;
+      -ms-overflow-style: none;  /* Internet Explorer 10+ */
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
+      }
     }
   }
 
