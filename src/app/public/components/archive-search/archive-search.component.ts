@@ -1,11 +1,5 @@
-import { query } from '@angular/animations';
-import { SearchService } from '@search/services/search.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ApiService } from '@shared/services/api/api.service';
-import { of } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'pr-archive-search',
@@ -23,10 +17,7 @@ export class ArchiveSearchComponent implements OnInit {
   public displayIcon: boolean = true;
 
   constructor(
-    private api: ApiService,
     private fb: FormBuilder,
-    private router: Router,
-    private searchService:SearchService
   ) {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
