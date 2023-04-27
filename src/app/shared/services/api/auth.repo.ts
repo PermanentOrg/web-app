@@ -139,7 +139,6 @@ export class AuthRepo extends BaseRepo {
       AuthResponse
     );
   }
-
 }
 
 export class AuthResponse extends BaseResponse {

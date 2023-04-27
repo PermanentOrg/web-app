@@ -41,7 +41,7 @@ export class AccountRepo extends BaseRepo {
       password: password,
       passwordVerify: passwordConfirm,
       inviteCode: inviteCode,
-      createArchive: createDefaultArchive
+      createArchive: createDefaultArchive,
     };
 
     return this.http.sendV2Request<AccountVO>(

@@ -169,7 +169,7 @@ export class CoreModule {
     {
       token: 'ArchiveTypeChangeDialogComponent',
       component: ArchiveTypeChangeDialogComponent,
-    }
+    },
   ];
 
   constructor(
