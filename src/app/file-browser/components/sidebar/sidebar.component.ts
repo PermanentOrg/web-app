@@ -1,3 +1,4 @@
+import { RecordVO } from '@root/app/models';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
@@ -6,7 +7,6 @@ import { some } from 'lodash';
 import { ItemVO, FolderVO, ArchiveVO, AccessRole } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { EditService } from '@core/services/edit/edit.service';
-import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 
 
@@ -34,6 +34,11 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   canEdit: boolean;
   canShare: boolean;
   canUseViews: boolean;
+
+  originalFileExtension:string = ''
+  permanentFileExtension:string = ''
+
+  
 
   constructor(
     private dataService: DataService,
@@ -78,11 +83,20 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
             this.isLoading = false;
           }
         }
+
+        
+        
+        if(this.selectedItem instanceof RecordVO){
+        this.originalFileExtension = this.selectedItem?.uploadFileName.split('.').pop()
+        this.permanentFileExtension = this.selectedItem?.downloadName.split('.').pop()
+
+        }
       })
     );
   }
 
   ngOnInit() {
+    
    
   }
 

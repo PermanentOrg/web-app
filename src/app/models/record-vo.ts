@@ -31,6 +31,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public note;
   public displayName;
   public uploadFileName;
+  public downloadName;
   public uploadAccountId;
   public size;
   public description;
