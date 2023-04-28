@@ -9,7 +9,7 @@ import { ArchiveResponse } from '@shared/services/api/archive.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { ArchiveType } from '@models/archive-vo';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { RELATION_OPTIONS, PromptService } from '@shared/services/prompt/prompt.service';
 
 export type MyArchivesTab = 'switch' | 'new' | 'pending';
@@ -49,7 +49,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
 
   archiveTypes = ARCHIVE_TYPES;
   relationTypes = RELATION_OPTIONS;
-  newArchiveForm: FormGroup;
+  newArchiveForm: UntypedFormGroup;
 
   activeTab: MyArchivesTab = 'switch';
   @ViewChild('panel') panelElem: ElementRef;
@@ -63,7 +63,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     private api: ApiService,
     private prompt: PromptService,
     private message: MessageService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
     this.newArchiveForm = this.fb.group({
       fullName: ['', [Validators.required]],

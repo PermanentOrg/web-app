@@ -13,7 +13,11 @@ import {
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  Validators,
+  UntypedFormBuilder,
+} from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -27,7 +31,7 @@ const ANIMATION_DURATION = 1000;
 })
 export class SearchBoxComponent implements OnInit, AfterViewInit {
   @Input() onPublicGallery = false;
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
 
   public archiveResults: ArchiveVO[];
 
@@ -43,7 +47,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   constructor(
     private api: ApiService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router
   ) {
     this.searchForm = this.fb.group({

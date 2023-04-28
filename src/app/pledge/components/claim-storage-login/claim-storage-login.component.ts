@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -21,8 +21,8 @@ export class ClaimStorageLoginComponent implements OnInit {
   public loggedIn = false;
   public needsMfa = false;
 
-  public loginForm: FormGroup;
-  public mfaForm: FormGroup;
+  public loginForm: UntypedFormGroup;
+  public mfaForm: UntypedFormGroup;
 
   constructor(
     private accountService: AccountService,
@@ -30,7 +30,7 @@ export class ClaimStorageLoginComponent implements OnInit {
     private pledgeService: PledgeService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private message: MessageService,
     private cookies: CookieService
   ) {

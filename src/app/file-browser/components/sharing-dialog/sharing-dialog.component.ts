@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgModel, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, NgModel, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
@@ -81,7 +81,7 @@ export class SharingDialogComponent implements OnInit {
 
   public sendingInvitation = false;
   public showInvitationForm = false;
-  public invitationForm: FormGroup;
+  public invitationForm: UntypedFormGroup;
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
@@ -93,7 +93,7 @@ export class SharingDialogComponent implements OnInit {
     private accountService: AccountService,
     private dialogRef: DialogRef,
     private promptService: PromptService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private api: ApiService,
     private messageService: MessageService,
     private relationshipService: RelationshipService,

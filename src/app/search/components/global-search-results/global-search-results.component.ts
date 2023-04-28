@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, TagVOData, RecordVO, ItemVO } from '@models';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { SearchService } from '@search/services/search.service';
 import { map, tap, debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { of, Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscript
 })
 export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubscriptions {
   @ViewChild('searchInput') inputElementRef: ElementRef;
-  public formControl: FormControl;
+  public formControl: UntypedFormControl;
 
   waiting = false;
   showResults = false;
@@ -34,7 +34,7 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
   subscriptions: Subscription[] = [];
   constructor(
     private data: DataService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private searchService: SearchService,
     private router: Router,
     private account: AccountService,

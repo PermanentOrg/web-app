@@ -1,7 +1,11 @@
 /* @format */
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +26,7 @@ export class NewsletterSignupComponent implements OnInit {
 
   mailchimpEndpoint =
     'https://permanent.us12.list-manage.com/subscribe/post-json?u=2948a82c4a163d7ab43a13356&amp;id=487bd863fb&';
-  mailchimpForm: FormGroup;
+  mailchimpForm: UntypedFormGroup;
   mailchimpError: string;
   mailchimpSent = false;
   existingMember = false;
@@ -31,12 +35,12 @@ export class NewsletterSignupComponent implements OnInit {
   waiting = false;
   done = false;
 
-  signupForm: FormGroup;
+  signupForm: UntypedFormGroup;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private iFrame: IFrameService,
     private router: Router,
     private message: MessageService,

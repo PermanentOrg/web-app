@@ -1,10 +1,10 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
+  UntypedFormGroup,
+  UntypedFormBuilder,
   Validators,
-  FormControl,
+  UntypedFormControl,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -34,7 +34,7 @@ const NEW_ONBOARDING_CHANCE = 1;
   host: { class: 'pr-auth-form' },
 })
 export class SignupComponent implements OnInit {
-  signupForm: FormGroup;
+  signupForm: UntypedFormGroup;
   waiting: boolean;
 
   showInviteCode = false;
@@ -48,7 +48,7 @@ export class SignupComponent implements OnInit {
   shareItemIsRecord = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private apiService: ApiService,
     private router: Router,
@@ -112,7 +112,7 @@ export class SignupComponent implements OnInit {
       optIn: [true],
     });
 
-    const confirmPasswordControl = new FormControl('', [
+    const confirmPasswordControl = new UntypedFormControl('', [
       Validators.required,
       matchControlValidator(this.signupForm.controls['password']),
     ]);

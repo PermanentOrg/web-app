@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, FormControl, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import APP_CONFIG from '@root/app/app.config';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { DeviceService } from '@shared/services/device/device.service';
@@ -58,7 +58,7 @@ export const FORM_ERROR_MESSAGES = {
   }
 };
 
-export function setFormErrors(form: FormGroup, errors: any) {
+export function setFormErrors(form: UntypedFormGroup, errors: any) {
   if (form.valid) {
     for (const key in errors) {
       if (errors.hasOwnProperty(key)) {

@@ -1,6 +1,10 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
@@ -18,14 +22,14 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   styleUrls: ['./claim-storage.component.scss'],
 })
 export class ClaimStorageComponent implements OnInit {
-  public signupForm: FormGroup;
+  public signupForm: UntypedFormGroup;
   public pledge: PledgeData = this.pledgeService.currentPledgeData;
 
   public waiting: boolean;
   public storageAmount: number;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,

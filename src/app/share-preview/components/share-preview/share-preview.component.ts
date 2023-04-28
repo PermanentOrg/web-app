@@ -12,7 +12,11 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  Validators,
+  UntypedFormBuilder,
+} from '@angular/forms';
 
 import APP_CONFIG from '@root/app/app.config';
 import {
@@ -81,8 +85,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   public isAutoApprove: boolean = false;
 
   formType: FormType = this.isInvite ? FormType.Invite : FormType.Signup;
-  signupForm: FormGroup;
-  loginForm: FormGroup;
+  signupForm: UntypedFormGroup;
+  loginForm: UntypedFormGroup;
 
   shareToken: string;
 
@@ -106,7 +110,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private message: MessageService,
     private device: DeviceService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
     private dialog: Dialog

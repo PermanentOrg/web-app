@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -18,15 +19,28 @@ import { AnnouncementModule } from '../announcement/announcement.module';
 
 const unauthenticatedRoutes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Log In' } },
-  { path: 'signup', component: SignupComponent, data: { title: 'Sign Up' }, resolve: { shareInviteData: ShareInviteResolveService }},
-  { path: 'mfa', component: MfaComponent, data: { title: 'Verify'} },
-  { path: 'forgot', component: ForgotPasswordComponent, data: { title: 'Forgot Password'} },
-  { path: '**', redirectTo: 'login'}
+  {
+    path: 'signup',
+    component: SignupComponent,
+    data: { title: 'Sign Up' },
+    resolve: { shareInviteData: ShareInviteResolveService },
+  },
+  { path: 'mfa', component: MfaComponent, data: { title: 'Verify' } },
+  {
+    path: 'forgot',
+    component: ForgotPasswordComponent,
+    data: { title: 'Forgot Password' },
+  },
+  { path: '**', redirectTo: 'login' },
 ];
 
 const verifyRoutes: Routes = [
-  { path: '', component: VerifyComponent, data: { title: 'Verify'} },
-  { path: '/:email/:code', component: VerifyComponent, data: { title: 'Verify'} },
+  { path: '', component: VerifyComponent, data: { title: 'Verify' } },
+  {
+    path: ':email/:code',
+    component: VerifyComponent,
+    data: { title: 'Verify' },
+  },
 ];
 
 const routes: Routes = [
@@ -37,7 +51,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     component: AuthComponent,
     children: unauthenticatedRoutes,
   },
@@ -58,8 +72,6 @@ const routes: Routes = [
     SignupComponent,
     ForgotPasswordComponent,
   ],
-  providers: [
-    ShareInviteResolveService
-  ]
+  providers: [ShareInviteResolveService],
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {}

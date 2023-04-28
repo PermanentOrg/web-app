@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { IsTabbedDialog, DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { InviteVOData, InviteVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';
@@ -15,7 +15,7 @@ type InvitationsTab = 'new' | 'pending' | 'accepted';
   styleUrls: ['./invitations-dialog.component.scss']
 })
 export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
-  newInviteForm: FormGroup;
+  newInviteForm: UntypedFormGroup;
   waiting = false;
 
   pendingInvites: InviteVO[];
@@ -25,7 +25,7 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   @ViewChild('panel') panelElem: ElementRef;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     private api: ApiService,

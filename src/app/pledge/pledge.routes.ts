@@ -18,55 +18,50 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: NewPledgeComponent
+        component: NewPledgeComponent,
       },
       {
         path: 'claim',
         component: ClaimStorageComponent,
         resolve: {
-          existingPledge: PledgeResolveService
-        }
+          existingPledge: PledgeResolveService,
+        },
       },
       {
         path: 'claimlogin',
-        component: ClaimStorageLoginComponent
+        component: ClaimStorageLoginComponent,
       },
       {
         path: 'done',
-        component: ClaimDoneComponent
+        component: ClaimDoneComponent,
       },
       {
         path: 'missing',
-        component: MissingPledgeComponent
-      }
-    ]
+        component: MissingPledgeComponent,
+      },
+    ],
   },
   {
     path: 'pledgeList',
-    component: PledgeListComponent
+    component: PledgeListComponent,
   },
   {
     path: 'progress',
-    component: PhaseProgressComponent
+    component: PhaseProgressComponent,
   },
   {
     path: 'update/:userId',
-    component: UpdateCardComponent
+    component: UpdateCardComponent,
   },
   {
     path: '',
-    redirectTo: 'pledge'
-  }
+    pathMatch: 'prefix',
+    redirectTo: 'pledge',
+  },
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-  ],
-  providers: [
-    PledgeResolveService
-  ],
-  declarations: [
-  ]
+  imports: [RouterModule.forChild(routes)],
+  providers: [PledgeResolveService],
+  declarations: [],
 })
-export class PledgeRoutingModule { }
-
+export class PledgeRoutingModule {}

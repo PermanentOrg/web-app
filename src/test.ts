@@ -4,10 +4,19 @@ import 'zone.js/testing';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
+  platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { Shallow } from 'shallow-render';
+import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import {
+  NgbDatepickerModule,
+  NgbDropdownModule,
+  NgbPaginationModule,
+  NgbTimepickerModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 
-declare const require: any;
 window['Stripe'] = () => {
   return {
     elements: () => {
@@ -22,22 +31,29 @@ window['Stripe'] = () => {
           address_zip: '12345',
         },
         error: false,
-      }
+      };
     },
-  }
+  };
 };
 
 // Disable loading of external Google Maps API
 window['doNotLoadGoogleMapsAPI'] = true;
 
+// Always Replace RouterModule with RouterTestingModule to avoid errors.
+Shallow.alwaysReplaceModule(RouterModule, RouterTestingModule);
+Shallow.neverMock(
+  NgbDatepickerModule,
+  NgbTimepickerModule,
+  NgbTooltipModule,
+  NgbDropdownModule,
+  NgbPaginationModule
+);
+
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting(), {
-    teardown: { destroyAfterEach: false }
-}
+  platformBrowserDynamicTesting(),
+  {
+    teardown: { destroyAfterEach: false },
+  }
 );
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);

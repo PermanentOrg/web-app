@@ -26,7 +26,7 @@ $desktop-size: pxToGrid(200px);
   position: relative;
 
   @include beforeDesktop {
-    margin: 0 -$grid-unit * 0.5;
+    margin: 0 - $grid-unit * 0.5;
   }
 }
 

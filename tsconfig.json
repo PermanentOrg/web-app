@@ -13,7 +13,7 @@
     "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2015",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -22,24 +22,59 @@
       "dom"
     ],
     "paths": {
-      "@core/*": ["src/app/core/*"],
-      "@apps/*": ["src/app/apps/*"],
-      "@shares/*": ["src/app/shares/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@fileBrowser/*": ["src/app/file-browser/*"],
-      "@auth/*": ["src/app/auth/*"],
-      "@pledge/*": ["src/app/pledge/*"],
-      "@public/*": ["src/app/public/*"],
-      "@share-preview/*": ["src/app/share-preview/*"],
-      "@embed/*": ["src/app/embed/*"],
-      "@search/*": ["src/app/search/*"],
-      "@search": ["src/app/search"],
-      "@models/*": ["src/app/models/*"],
-      "@models": ["src/app/models"],
-      "@root/*": ["src/*"],
-      "@onboarding/*": ["src/app/onboarding/*"],
-      "@announcement/*": ["src/app/announcement/*"]
-    }
+      "@core/*": [
+        "src/app/core/*"
+      ],
+      "@apps/*": [
+        "src/app/apps/*"
+      ],
+      "@shares/*": [
+        "src/app/shares/*"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@fileBrowser/*": [
+        "src/app/file-browser/*"
+      ],
+      "@auth/*": [
+        "src/app/auth/*"
+      ],
+      "@pledge/*": [
+        "src/app/pledge/*"
+      ],
+      "@public/*": [
+        "src/app/public/*"
+      ],
+      "@share-preview/*": [
+        "src/app/share-preview/*"
+      ],
+      "@embed/*": [
+        "src/app/embed/*"
+      ],
+      "@search/*": [
+        "src/app/search/*"
+      ],
+      "@search": [
+        "src/app/search"
+      ],
+      "@models/*": [
+        "src/app/models/*"
+      ],
+      "@models": [
+        "src/app/models"
+      ],
+      "@root/*": [
+        "src/*"
+      ],
+      "@onboarding/*": [
+        "src/app/onboarding/*"
+      ],
+      "@announcement/*": [
+        "src/app/announcement/*"
+      ]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "strictTemplates": false

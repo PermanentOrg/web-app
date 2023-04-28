@@ -43,9 +43,11 @@ export const routes: RoutesWithData = [
         children: [
           {
             path: '**',
+            children: [],
             canActivate: [MyfilesGuard],
           },
         ],
+        canActivate: [MyfilesGuard],
       },
       {
         path: 'private',

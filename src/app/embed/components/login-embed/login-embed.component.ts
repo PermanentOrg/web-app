@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import APP_CONFIG from '@root/app/app.config';
@@ -22,7 +22,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   host: {'class': 'pr-auth-form'}
 })
 export class LoginEmbedComponent implements OnInit {
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   waiting: boolean;
   inviteCode: string;
 
@@ -32,7 +32,7 @@ export class LoginEmbedComponent implements OnInit {
   };
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,

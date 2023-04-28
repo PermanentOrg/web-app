@@ -1,7 +1,7 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { PromoVOData } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { BillingResponse, AccountResponse } from '@shared/services/api/index.repo';
@@ -19,12 +19,12 @@ type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo';
 export class StorageDialogComponent implements OnInit, IsTabbedDialog {
   activeTab: StorageDialogTab = 'add';
 
-  promoForm: FormGroup;
+  promoForm: UntypedFormGroup;
 
   waiting: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: DialogRef,
     private account: AccountService,
     private api: ApiService,

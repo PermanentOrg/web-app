@@ -9,7 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
 import { matchControlValidator } from '@shared/utilities/forms';
 import { PromptField, PromptService } from '@shared/services/prompt/prompt.service';
@@ -24,7 +24,7 @@ export class AccountSettingsComponent implements OnInit {
   public countries: FormInputSelectOption[];
   public states: FormInputSelectOption[];
 
-  public changePasswordForm: FormGroup;
+  public changePasswordForm: UntypedFormGroup;
 
   public waiting = false;
 
@@ -36,7 +36,7 @@ export class AccountSettingsComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private message: MessageService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private prompt: PromptService,
   ) {
     this.account = this.accountService.getAccount();
@@ -58,7 +58,7 @@ export class AccountSettingsComponent implements OnInit {
       passwordOld: ['', [Validators.required, Validators.minLength(8)]],
     });
 
-    const verifyPasswordControl = new FormControl(
+    const verifyPasswordControl = new UntypedFormControl(
       '',
       [Validators.required, matchControlValidator(this.changePasswordForm.controls['password'])]
     );

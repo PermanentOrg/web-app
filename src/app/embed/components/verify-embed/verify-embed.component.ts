@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -12,11 +12,11 @@ import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services
   styleUrls: ['./verify-embed.component.scss']
 })
 export class VerifyEmbedComponent implements OnInit {
-  verifyForm: FormGroup;
+  verifyForm: UntypedFormGroup;
   waiting: boolean;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private message: MessageService,
