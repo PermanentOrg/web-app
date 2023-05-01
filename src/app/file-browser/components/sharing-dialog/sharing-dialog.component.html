@@ -1,7 +1,8 @@
+<!-- @format -->
 <div class="dialog-content">
   <div class="dialog-body">
     <div class="header">
-      <span>Sharing {{shareItem.displayName}}</span>
+      <span>Sharing {{ shareItem.displayName }}</span>
       <button class="btn" (click)="onDoneClick()">
         <i class="material-icons">close</i>
       </button>
@@ -11,37 +12,71 @@
         <form [formGroup]="invitationForm" class="dialog-form">
           <div class="dialog-form-field">
             <label for="name">Recipient Name</label>
-            <input type="text" class="form-control" id="newInviteName" name="name"
-              formControlName="fullName">
+            <input
+              type="text"
+              class="form-control"
+              id="newInviteName"
+              name="name"
+              formControlName="fullName"
+            />
           </div>
           <div class="dialog-form-field">
             <label for="email">Recipient Email</label>
-            <input type="email" class="form-control" id="newInviteEmail" name="email"
-              formControlName="email">
+            <input
+              type="email"
+              class="form-control"
+              id="newInviteEmail"
+              name="email"
+              formControlName="email"
+            />
           </div>
           <div class="dialog-form-field">
             <label for="inviteConnection">Connection</label>
-            <select class="form-control" name="inviteConnection" formControlName="relationship">
-              <option *ngFor="let option of relationOptions" [value]="option.value">{{option.text}}</option>
+            <select
+              class="form-control"
+              name="inviteConnection"
+              formControlName="relationship"
+            >
+              <option
+                *ngFor="let option of relationOptions"
+                [value]="option.value"
+              >
+                {{ option.text }}
+              </option>
             </select>
           </div>
           <div class="dialog-form-field">
             <label for="inviteAccessRole">Access Role</label>
-            <select class="form-control" name="inviteAccessRole" formControlName="accessRole">
-              <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+            <select
+              class="form-control"
+              name="inviteAccessRole"
+              formControlName="accessRole"
+            >
+              <option
+                *ngFor="let option of accessRoleOptions"
+                [value]="option.value"
+              >
+                {{ option.text }}
+              </option>
             </select>
           </div>
         </form>
       </ng-container>
       <ng-container *ngIf="!showInvitationForm">
         <div class="archive-search" *ngIf="canShare">
-          <pr-archive-search-box class="archive-search-box"
+          <pr-archive-search-box
+            class="archive-search-box"
             [filterFn]="archiveFilterFn"
             (archiveSelect)="onAddArchive($event)"
             (invite)="onAddInvite($event)"
           ></pr-archive-search-box>
           <select class="form-control" [(ngModel)]="newAccessRole">
-            <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+            <option
+              *ngFor="let option of accessRoleOptions"
+              [value]="option.value"
+            >
+              {{ option.text }}
+            </option>
           </select>
         </div>
         <ng-container *ngIf="!shares?.length && !pendingShares?.length">
@@ -50,32 +85,79 @@
         <ng-container *ngIf="shares?.length || pendingShares?.length">
           <div class="shares-title">Shared with</div>
           <div class="shares">
-            <div class="share-archive pending-share" *ngFor="let share of pendingShares"
-              [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
-              <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
-              <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive
-                <div class="subtitle">Requested {{share.createdDT | date}}</div>
+            <div
+              class="share-archive pending-share"
+              *ngFor="let share of pendingShares"
+              [@ngIfScaleAnimationDynamic]="
+                share.isPendingAction || share.isNewlyCreated
+                  ? 'animate'
+                  : 'static'
+              "
+            >
+              <div
+                class="archive-thumb"
+                prBgImage
+                [bgSrc]="share.ArchiveVO.thumbURL200"
+                [cover]="true"
+              ></div>
+              <div class="archive-name">
+                The {{ share.ArchiveVO.fullName }} Archive
+                <div class="subtitle">
+                  Requested {{ share.createdDT | date }}
+                </div>
               </div>
               <div class="archive-actions">
-                <button class="btn btn-primary"
+                <button
+                  class="btn btn-primary"
                   [disabled]="share.isPendingAction"
-                  (click)="approveShare(share)">
+                  (click)="approveShare(share)"
+                >
                   Approve
                 </button>
-                <button class="btn btn-danger"
+                <button
+                  class="btn btn-danger"
                   [disabled]="share.isPendingAction"
-                  (click)="removeShare(share)">
+                  (click)="removeShare(share)"
+                >
                   Deny
                 </button>
               </div>
             </div>
-            <div class="share-archive" *ngFor="let share of shares"
-              [@ngIfScaleAnimationDynamic]="(share.isPendingAction || share.isNewlyCreated) ? 'animate' : 'static'">
-              <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
-              <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
-              <select class="form-control" [disabled]="!canShare || share.accessRole === 'access.role.owner' || share.isPendingAction"
-                [(ngModel)]="share.accessRole" (ngModelChange)="onAccessChange(share, ctrl)" #ctrl="ngModel">
-                <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+            <div
+              class="share-archive"
+              *ngFor="let share of shares"
+              [@ngIfScaleAnimationDynamic]="
+                share.isPendingAction || share.isNewlyCreated
+                  ? 'animate'
+                  : 'static'
+              "
+            >
+              <div
+                class="archive-thumb"
+                prBgImage
+                [bgSrc]="share.ArchiveVO.thumbURL200"
+                [cover]="true"
+              ></div>
+              <div class="archive-name">
+                The {{ share.ArchiveVO.fullName }} Archive
+              </div>
+              <select
+                class="form-control"
+                [disabled]="
+                  !canShare ||
+                  share.accessRole === 'access.role.owner' ||
+                  share.isPendingAction
+                "
+                [(ngModel)]="share.accessRole"
+                (ngModelChange)="onAccessChange(share, ctrl)"
+                #ctrl="ngModel"
+              >
+                <option
+                  *ngFor="let option of accessRoleOptions"
+                  [value]="option.value"
+                >
+                  {{ option.text }}
+                </option>
                 <option value="remove">Remove</option>
               </select>
             </div>
@@ -83,18 +165,27 @@
         </ng-container>
       </ng-container>
       <div class="buttons">
-        <button class="btn btn-primary" *ngIf="!showInvitationForm"
-          (click)="onDoneClick()">
+        <button
+          class="btn btn-primary"
+          *ngIf="!showInvitationForm"
+          (click)="onDoneClick()"
+        >
           Done
         </button>
-        <button class="btn btn-secondary" *ngIf="showInvitationForm"
+        <button
+          class="btn btn-secondary"
+          *ngIf="showInvitationForm"
           (click)="showInvitationForm = false"
-          [disabled]="sendingInvitation">
+          [disabled]="sendingInvitation"
+        >
           Cancel
         </button>
-        <button class="btn btn-primary" *ngIf="showInvitationForm"
+        <button
+          class="btn btn-primary"
+          *ngIf="showInvitationForm"
           (click)="sendInvite(invitationForm.value)"
-          [disabled]="invitationForm.invalid || sendingInvitation">
+          [disabled]="invitationForm.invalid || sendingInvitation"
+        >
           Send invitation
         </button>
       </div>
@@ -105,43 +196,91 @@
     <div class="content">
       <div class="share-link">
         <div class="share-link-container" *ngIf="shareLink">
-          <input type="text" class="form-control" readonly [value]="shareLink.shareUrl" #shareUrlInput>
+          <input
+            type="text"
+            class="form-control"
+            readonly
+            [value]="shareLink.shareUrl"
+            #shareUrlInput
+          />
         </div>
-        <button class="btn btn-primary-light" *ngIf="shareLink" [disabled]="linkCopied" (click)="copyShareLink()">
-          {{ linkCopied ? 'Copied' : 'Copy'}}
+        <button
+          class="btn btn-primary-light"
+          *ngIf="shareLink"
+          [disabled]="linkCopied"
+          (click)="copyShareLink()"
+        >
+          {{ linkCopied ? 'Copied' : 'Copy' }}
         </button>
         <div class="share-link-container" *ngIf="!shareLink">
-          Generate a link to send via text or email to invite people to share this content.
+          Generate a link to send via text or email to invite people to share
+          this content.
         </div>
-        <button class="btn btn-primary-light" *ngIf="!shareLink"
+        <button
+          class="btn btn-primary-light"
+          *ngIf="!shareLink"
           (click)="generateShareLink()"
-          [disabled]="updatingLink">
+          [disabled]="updatingLink"
+        >
           Create
         </button>
       </div>
-      <div class="share-link-settings-toggle" *ngIf="shareLink" @ngIfScaleAnimation>
-        <button class="btn btn-link" (click)="showLinkSettings = !showLinkSettings">
-          {{showLinkSettings ? 'Hide' : 'Show'}} link settings
+      <div
+        class="share-link-settings-toggle"
+        *ngIf="shareLink"
+        @ngIfScaleAnimation
+      >
+        <button
+          class="btn btn-link"
+          (click)="showLinkSettings = !showLinkSettings"
+        >
+          {{ showLinkSettings ? 'Hide' : 'Show' }} link settings
         </button>
       </div>
-      <div class="share-link-settings" *ngIf="showLinkSettings && shareLink" @ngIfScaleAnimation>
+      <div
+        class="share-link-settings"
+        *ngIf="showLinkSettings && shareLink"
+        @ngIfScaleAnimation
+      >
         <div class="link-settings-item">
           <label>Share Preview</label>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="sharePreviewToggle" id="sharePreviewToggleOn"
-            [value]="1" [disabled]="updatingLink"
-            [(ngModel)]="previewToggle" (ngModelChange)="onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)">
-            <label class="form-check-label" for="sharePreviewToggleOn">On</label>
+            <input
+              class="form-check-input"
+              type="radio"
+              name="sharePreviewToggle"
+              id="sharePreviewToggleOn"
+              [value]="1"
+              [disabled]="updatingLink"
+              [(ngModel)]="previewToggle"
+              (ngModelChange)="
+                onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)
+              "
+            />
+            <label class="form-check-label" for="sharePreviewToggleOn"
+              >On</label
+            >
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="sharePreviewToggle" id="sharePreviewToggleOff"
-            [value]="0" [disabled]="updatingLink"
-            [(ngModel)]="previewToggle" (ngModelChange)="onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)">
-            <label class="form-check-label" for="sharePreviewToggleOff">Off</label>
+            <input
+              class="form-check-input"
+              type="radio"
+              name="sharePreviewToggle"
+              id="sharePreviewToggleOff"
+              [value]="0"
+              [disabled]="updatingLink"
+              [(ngModel)]="previewToggle"
+              (ngModelChange)="
+                onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)
+              "
+            />
+            <label class="form-check-label" for="sharePreviewToggleOff"
+              >Off</label
+            >
           </div>
         </div>
         <small class="text-muted" [ngSwitch]="previewToggle">
-            <ng-container *ngSwitchCase="1">
+          <ng-container *ngSwitchCase="1">
             Recipients can see a preview without being logged in.
           </ng-container>
           <ng-container *ngSwitchCase="0">
@@ -151,16 +290,36 @@
         <div class="link-settings-item">
           <label>Auto Approve</label>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="autoApproveToggle" id="autoApproveToggleOn"
-            [value]="1" [disabled]="updatingLink"
-            [(ngModel)]="autoApproveToggle" (ngModelChange)="onShareLinkPropChange('autoApproveToggle', autoApproveToggle)">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="autoApproveToggle"
+              id="autoApproveToggleOn"
+              [value]="1"
+              [disabled]="updatingLink"
+              [(ngModel)]="autoApproveToggle"
+              (ngModelChange)="
+                onShareLinkPropChange('autoApproveToggle', autoApproveToggle)
+              "
+            />
             <label class="form-check-label" for="autoApproveToggleOn">On</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="autoApproveToggle" id="autoApproveToggleOff"
-            [value]="0" [disabled]="updatingLink"
-            [(ngModel)]="autoApproveToggle" (ngModelChange)="onShareLinkPropChange('autoApproveToggle', autoApproveToggle)">
-            <label class="form-check-label" for="autoApproveToggleOff">Off</label>
+            <input
+              class="form-check-input"
+              type="radio"
+              name="autoApproveToggle"
+              id="autoApproveToggleOff"
+              [value]="0"
+              [disabled]="updatingLink"
+              [(ngModel)]="autoApproveToggle"
+              (ngModelChange)="
+                onShareLinkPropChange('autoApproveToggle', autoApproveToggle)
+              "
+            />
+            <label class="form-check-label" for="autoApproveToggleOff"
+              >Off</label
+            >
           </div>
         </div>
         <small class="text-muted" [ngSwitch]="autoApproveToggle">
@@ -173,25 +332,62 @@
         </small>
         <div class="link-settings-item">
           <label>Default Share Role</label>
-          <select class="form-control" [disabled]="!canShare || updatingLink" [(ngModel)]="linkDefaultAccessRole" (ngModelChange)="onShareLinkPropChange('defaultAccessRole', linkDefaultAccessRole)">
-            <option *ngFor="let option of accessRoleOptions" [value]="option.value">{{option.text}}</option>
+          <select
+            class="form-control"
+            [disabled]="!canShare || updatingLink"
+            [(ngModel)]="linkDefaultAccessRole"
+            (ngModelChange)="
+              onShareLinkPropChange('defaultAccessRole', linkDefaultAccessRole)
+            "
+          >
+            <option
+              *ngFor="let option of accessRoleOptions"
+              [value]="option.value"
+            >
+              {{ option.text }}
+            </option>
           </select>
         </div>
-        <small class="text-muted">Archives joining this share are given this role by default. <a href="https://permanent.zohodesk.com/portal/en/kb/articles/what-do-the-different-access-permissions-mean" target="_blank">Learn More</a></small>
+        <small class="text-muted"
+          >Archives joining this share are given this role by default.
+          <a
+            href="https://permanent.zohodesk.com/portal/en/kb/articles/what-do-the-different-access-permissions-mean"
+            target="_blank"
+            >Learn More</a
+          ></small
+        >
         <div class="link-settings-item">
           <label>Link expires after</label>
-          <select class="form-control" [disabled]="!canShare || updatingLink"
-            [(ngModel)]="expiration" (ngModelChange)="onShareLinkPropChange('expiresDT', getExpiresDTFromExpiration(expiration))">
-            <option *ngFor="let option of expirationOptions" [value]="option.value" [hidden]="option.value === 'Other'">{{option.text}}</option>
+          <select
+            class="form-control"
+            [disabled]="!canShare || updatingLink"
+            [(ngModel)]="expiration"
+            (ngModelChange)="
+              onShareLinkPropChange(
+                'expiresDT',
+                getExpiresDTFromExpiration(expiration)
+              )
+            "
+          >
+            <option
+              *ngFor="let option of expirationOptions"
+              [value]="option.value"
+              [hidden]="option.value === 'Other'"
+            >
+              {{ option.text }}
+            </option>
           </select>
-          <button class="btn btn-danger ml-auto" (click)="removeShareLink()">Remove link</button>
+          <button class="btn btn-danger ml-auto" (click)="removeShareLink()">
+            Remove link
+          </button>
         </div>
         <small class="text-muted" [ngSwitch]="shareLink.expiresDT">
           <ng-container *ngSwitchCase="null">
             This link will only expire if deleted
           </ng-container>
           <ng-container *ngSwitchDefault>
-            This link will expire {{shareLink.expiresDT | date: 'MMM d, y \'at\' h:mm:ss a'}}
+            This link will expire
+            {{ shareLink.expiresDT | date : "MMM d, y 'at' h:mm:ss a" }}
           </ng-container>
         </small>
       </div>
