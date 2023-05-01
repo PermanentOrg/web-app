@@ -254,7 +254,7 @@
               [disabled]="updatingLink"
               [(ngModel)]="previewToggle"
               (ngModelChange)="
-                onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)
+                onShareLinkPropChange('previewToggle', previewToggle)
               "
             />
             <label class="form-check-label" for="sharePreviewToggleOn"
@@ -271,7 +271,7 @@
               [disabled]="updatingLink"
               [(ngModel)]="previewToggle"
               (ngModelChange)="
-                onShareLinkPropChange('autoPreviewToggle', autoPreviewToggle)
+                onShareLinkPropChange('previewToggle', previewToggle)
               "
             />
             <label class="form-check-label" for="sharePreviewToggleOff"
@@ -387,7 +387,12 @@
           </ng-container>
           <ng-container *ngSwitchDefault>
             This link will expire
-            {{ shareLink.expiresDT | date : "MMM d, y 'at' h:mm:ss a" }}
+            {{
+              shareLink.expiresDT
+                | date
+                  : "MMM d, y 'at'
+            h:mm:ss a"
+            }}
           </ng-container>
         </small>
       </div>
