@@ -136,8 +136,11 @@
       <button class="btn btn-primary btn-sm" (click)="save()" type="submit">
         Save
       </button>
-      <button class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
+      <button [ngClass]="{'with-margin':!isFolder}" class="btn btn-secondary btn-sm" (click)="cancel()" type="button">
         Cancel
+      </button>
+      <button [disabled]="!displayValue" *ngIf="!isFolder" class="btn btn-secondary btn-sm" (click)="clearDate()" type="button">
+        Clear
       </button>
     </div>
   </ng-template>

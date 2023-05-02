@@ -64,7 +64,10 @@
         emptyMessage="Click to add date"
         [readOnlyEmptyMessage]="selectedItem.isFolder ? 'No start date' : 'No date'"
         (doneEditing)="onFinishEditing('displayDT', $event)"
-        type='date'></pr-inline-value-edit>
+        type='date'
+        (clearedDate)="onFinishEditing('displayDT', null)"
+        [isFolder]="selectedItem.isFolder"
+        ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item" *ngIf="selectedItem.isFolder">
       <label>End date</label>
@@ -76,7 +79,10 @@
         emptyMessage="Click to add date"
         readOnlyEmptyMessage="No end date"
         (doneEditing)="onFinishEditing('displayEndDT', $event)"
-        type='date'></pr-inline-value-edit>
+        (clearedDate)="onFinishEditing('displayEndDT', null)"
+        type='date'
+        [isFolder]="selectedItem.isFolder"
+       ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Location</label>
