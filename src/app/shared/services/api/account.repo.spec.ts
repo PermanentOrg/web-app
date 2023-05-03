@@ -9,6 +9,7 @@ import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { AccountRepo } from '@shared/services/api/account.repo';
 import { AccountVO } from '@root/app/models';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('AccountRepo', () => {
   let repo: AccountRepo;
@@ -20,8 +21,11 @@ describe('AccountRepo', () => {
       providers: [HttpService],
     });
 
-    repo = new AccountRepo(TestBed.get(HttpService));
-    httpMock = TestBed.get(HttpTestingController);
+    repo = new AccountRepo(
+      TestBed.inject(HttpService),
+      TestBed.inject(HttpV2Service)
+    );
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
@@ -48,6 +52,8 @@ describe('AccountRepo', () => {
         expect(response.primaryEmail).toEqual('test@permanent.org')
       );
     const req = httpMock.expectOne(`${environment.apiUrl}/account/post`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
     req.flush(expected);
   });
 });
