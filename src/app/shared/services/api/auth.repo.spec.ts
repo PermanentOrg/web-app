@@ -14,6 +14,7 @@ import {
   AccountVO,
   ArchiveVO,
 } from '@root/app/models';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('AuthRepo', () => {
   let repo: AuthRepo;
@@ -43,8 +44,11 @@ describe('AuthRepo', () => {
       providers: [HttpService],
     });
 
-    repo = new AuthRepo(TestBed.get(HttpService));
-    httpMock = TestBed.get(HttpTestingController);
+    repo = new AuthRepo(
+      TestBed.inject(HttpService),
+      TestBed.inject(HttpV2Service)
+    );
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
@@ -119,5 +123,39 @@ describe('AuthRepo', () => {
       `${environment.apiUrl}/auth/sendEmailForgotPassword`
     );
     req.flush(expected);
+  });
+
+  it('should send an update password "V1" request', () => {
+    repo.updatePassword(new AccountVO(testAccount), {
+      passwordOld: 'oldpass',
+      password: 'newpass',
+      passwordVerify: 'newpass',
+    });
+
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/account/changePassword`
+    );
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.has('Request-Version')).toBeFalse();
+    req.flush({});
+  });
+
+  it('should be able to send an update password V2 request with trust token', () => {
+    repo.updatePassword(
+      new AccountVO(testAccount),
+      {
+        passwordOld: 'oldpass',
+        password: 'newpass',
+        passwordVerify: 'newpass',
+      },
+      'trust_token'
+    );
+
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/account/changePassword`
+    );
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+    req.flush({});
   });
 });

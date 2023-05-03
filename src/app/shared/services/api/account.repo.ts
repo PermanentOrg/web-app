@@ -44,11 +44,7 @@ export class AccountRepo extends BaseRepo {
       createArchive: createDefaultArchive,
     };
 
-    return this.http.sendV2Request<AccountVO>(
-      '/account/post',
-      requestBody,
-      AccountVO
-    );
+    return this.httpV2.post<AccountVO>('/account/post', requestBody, AccountVO);
   }
 
   public update(accountVO: AccountVO) {
