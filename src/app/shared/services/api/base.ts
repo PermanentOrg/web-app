@@ -1,6 +1,7 @@
 import { HttpService } from '@shared/services/http/http.service';
 import { SimpleVO, ResponseMessageType } from '@root/app/models';
 import { compact } from 'lodash';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 export interface CSRFResponse {
   csrf: string;
@@ -40,7 +41,7 @@ export class BaseResponse {
   }
 
   public getResultsData(): any[] {
-    return compact(this.Results.map(result => result.data));
+    return compact(this.Results.map((result) => result.data));
   }
 
   public getSimpleVO(): SimpleVO {
@@ -78,8 +79,7 @@ export class BaseResponse {
 }
 
 export class BaseRepo {
-  constructor(public http: HttpService) { }
-
+  constructor(public http: HttpService, public httpV2?: HttpV2Service) {}
 }
 
 export const LeanWhitelist = [
