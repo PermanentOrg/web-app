@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Directive } from '@models/directive';
+import { DirectiveData } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -11,8 +11,8 @@ import { MessageService } from '@shared/services/message/message.service';
   styleUrls: ['./directive-edit.component.scss'],
 })
 export class DirectiveEditComponent implements OnInit {
-  @Output() public savedDirective = new EventEmitter<Directive>();
-  @Input() public directive: Directive;
+  @Output() public savedDirective = new EventEmitter<DirectiveData>();
+  @Input() public directive: DirectiveData;
   public email: string;
   public note: string;
   public waiting = false;

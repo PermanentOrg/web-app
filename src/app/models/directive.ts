@@ -6,7 +6,7 @@ export interface DirectiveTrigger {
   updatedDt: Date;
 }
 
-export interface Directive {
+export interface DirectiveData {
   directiveId: string;
   archiveId: number;
   type: string;
@@ -16,6 +16,26 @@ export interface Directive {
   stewardEmail?: string;
   note?: string;
   executionDt?: Date;
+}
+
+export class Directive implements DirectiveData {
+  public directiveId: string = '';
+  public archiveId: number;
+  public type: string;
+  public createdDt: Date;
+  public updatedDt: Date;
+  public trigger: DirectiveTrigger;
+  public stewardEmail: string;
+  public note: string;
+  public executionDt: Date | null;
+
+  constructor(data: any) {
+    for (const key in data) {
+      if (data[key] !== undefined && typeof data[key] !== 'function') {
+        this[key] = data[key];
+      }
+    }
+  }
 }
 
 export interface LegacyContact {
