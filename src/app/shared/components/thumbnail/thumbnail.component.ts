@@ -77,7 +77,7 @@ export class ThumbnailComponent
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
-        tileSources: { type: 'image', url: this.item?.thumbURL500 },
+        tileSources: { type: 'image', url: this.item?.thumbURL2000 },
         visibilityRatio: 1.0,
         constrainDuringPan: true,
         maxZoomLevel: 10,
