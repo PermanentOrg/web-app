@@ -109,7 +109,9 @@ export class AuthRepo extends BaseRepo {
         passwordVerify: passwordVo.passwordVerify,
         trustToken,
       };
-      return this.httpV2.post('/account/changePassword', v2data).toPromise();
+      return this.httpV2
+        .post('/account/changePassword', v2data, null, { csrf: true })
+        .toPromise();
     }
 
     return this.http.sendRequestPromise<AuthResponse>(

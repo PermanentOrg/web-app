@@ -4,13 +4,25 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpV2Service } from './http-v2.service';
+import { getFirst, HttpV2Service } from './http-v2.service';
 import { environment } from '@root/environments/environment';
 import { StorageService } from '../storage/storage.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 
-fdescribe('HttpV2Service', () => {
+class HealthResponse {
+  public status: 'unavailabe' | 'available';
+  public constructorCalled: boolean;
+
+  constructor(data: any) {
+    if (data?.status) {
+      this.status = data.status;
+    }
+    this.constructorCalled = true;
+  }
+}
+
+describe('HttpV2Service', () => {
   let service: HttpV2Service;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
@@ -26,6 +38,7 @@ fdescribe('HttpV2Service', () => {
     storage = TestBed.inject(StorageService);
 
     storage.session.set('CSRF', 'csrf_token');
+    service.clearAuthToken();
   });
 
   afterEach(() => {
@@ -37,8 +50,7 @@ fdescribe('HttpV2Service', () => {
   });
 
   it('should be able to make a request as a promise', (done) => {
-    service
-      .post('/api/v2/health', {})
+    getFirst(service.post('/api/v2/health', {}))
       .toPromise()
       .then((response: any) => {
         expect(response.status).toBe('available');
@@ -53,7 +65,7 @@ fdescribe('HttpV2Service', () => {
   });
 
   it('should be able to pass in CSRF token in POST requests', () => {
-    service.post('/api/v2/health', {}).toPromise();
+    service.post('/api/v2/health', {}, null, { csrf: true }).toPromise();
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
     expect(request.request.body.csrf).toBeDefined();
@@ -61,21 +73,11 @@ fdescribe('HttpV2Service', () => {
   });
 
   it('should be able to pass in a response class', (done) => {
-    class HealthResponse {
-      public status: 'unavailabe' | 'available';
-      public constructorCalled: boolean;
-
-      constructor(data: any) {
-        if (data?.status) {
-          this.status = data.status;
-        }
-        this.constructorCalled = true;
-      }
-    }
     service
       .post('/api/v2/health', {}, HealthResponse)
       .toPromise()
-      .then((resp) => {
+      .then((response) => {
+        const resp = response[0];
         expect(resp instanceof HealthResponse).toBeTrue();
         expect(resp.status).toBe('available');
         expect(resp.constructorCalled).toBeTrue();
@@ -172,5 +174,25 @@ fdescribe('HttpV2Service', () => {
       'Bearer auth_token'
     );
     request.flush({});
+  });
+
+  it('should be able to handle being passed an array', (done) => {
+    service
+      .get('/api/v2/health', {}, HealthResponse)
+      .toPromise()
+      .then((resp) => {
+        expect(resp.length).toBe(2);
+        done();
+      });
+
+    const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+    request.flush([{ status: 'available' }, { status: 'unavailable' }]);
+  });
+
+  it('can prevent csrf from being sent', () => {
+    service.post('/api/v2/health', {}, HealthResponse).toPromise();
+
+    const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+    expect(req.request.body.csrf).toBeUndefined();
   });
 });
