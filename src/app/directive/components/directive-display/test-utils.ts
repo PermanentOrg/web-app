@@ -1,4 +1,9 @@
-import { AccountVO, ArchiveVO, Directive, LegacyContact } from '@models/index';
+import {
+  AccountVO,
+  ArchiveVO,
+  DirectiveData,
+  LegacyContact,
+} from '@models/index';
 
 export class MockAccountService {
   public static mockAccount: AccountVO = new AccountVO({
@@ -37,7 +42,7 @@ export class MockDirectiveRepo {
     MockDirectiveRepo.legacyContactEmail = null;
   }
 
-  public createDirective(): Directive {
+  public createDirective(): DirectiveData {
     const testDirectiveId = '39b2a5fa-3508-4030-91b6-21dc6ec7a1ab';
     return {
       directiveId: testDirectiveId,
@@ -58,7 +63,7 @@ export class MockDirectiveRepo {
     };
   }
 
-  public async get(): Promise<Directive> {
+  public async get(): Promise<DirectiveData> {
     if (MockDirectiveRepo.failRequest) {
       throw new Error('Unit Testing: Forced Request Failure');
     }

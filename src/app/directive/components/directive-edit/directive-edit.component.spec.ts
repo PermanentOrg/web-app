@@ -1,5 +1,5 @@
 import { DebugElement, Type } from '@angular/core';
-import { Directive } from '@models/directive';
+import { DirectiveData } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
@@ -176,10 +176,10 @@ describe('DirectiveEditComponent', () => {
   });
   it('should emit an output when a directive is created', async () => {
     const { find, fixture, instance } = await shallow.render();
-    let savedDirective: Directive;
+    let savedDirective: DirectiveData;
     instance.savedDirective.emit = jasmine
       .createSpy()
-      .and.callFake((dir: Directive) => {
+      .and.callFake((dir: DirectiveData) => {
         savedDirective = dir;
       });
     fillOutForm(find, 'test@example.com', 'Test Memo');
@@ -199,10 +199,10 @@ describe('DirectiveEditComponent', () => {
         directive,
       },
     });
-    let savedDirective: Directive;
+    let savedDirective: DirectiveData;
     instance.savedDirective.emit = jasmine
       .createSpy()
-      .and.callFake((dir: Directive) => {
+      .and.callFake((dir: DirectiveData) => {
         savedDirective = dir;
       });
     fillOutForm(find, 'test@example.com', 'Test Memo');
