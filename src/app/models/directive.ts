@@ -44,7 +44,7 @@ export interface LegacyContact {
 }
 
 export interface DirectiveCreateRequest {
-  archiveId: number;
+  archiveId: string | number;
   type: string;
   trigger: {
     type: string;
