@@ -15,11 +15,12 @@ type ResponseClass<T> = new (data: any) => T;
   providedIn: 'root',
 })
 export class HttpV2Service {
-  protected static readonly HttpHeaders: HttpHeaders = new HttpHeaders({
+  protected static readonly HttpHeaders = new HttpHeaders({
     'Request-Version': '2',
     'Content-Type': 'application/json',
   });
   protected apiUrl = environment.apiUrl;
+  protected authToken: string;
 
   constructor(protected http: HttpClient, protected storage: StorageService) {}
 
@@ -65,8 +66,15 @@ export class HttpV2Service {
     );
   }
 
+  public setAuthToken(token: string): void {
+    this.authToken = token;
+  }
+
   protected getEndpointWithData(endpoint: string, data: any = {}): string {
     const params = new HttpParams().appendAll(data);
+    if (params.toString().length === 0) {
+      return endpoint;
+    }
     return `${endpoint}?${params.toString()}`;
   }
 
@@ -82,8 +90,12 @@ export class HttpV2Service {
   }
 
   protected getHeaders() {
+    let headers: HttpHeaders = HttpV2Service.HttpHeaders;
+    if (this.authToken) {
+      headers = headers.append('Authorization', `Bearer ${this.authToken}`);
+    }
     return {
-      headers: HttpV2Service.HttpHeaders,
+      headers,
     };
   }
 

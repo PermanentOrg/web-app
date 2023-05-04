@@ -93,6 +93,7 @@ describe('AuthRepo', () => {
       {
         AccountVO: new AccountVO(testAccount),
         ArchiveVO: new ArchiveVO(testArchive),
+        SimpleVO: new SimpleVO({ value: 'test_token' }),
       },
     ];
 
@@ -103,6 +104,11 @@ describe('AuthRepo', () => {
       .logIn(testUser.email, testUser.password, testUser.rememberMe, true)
       .subscribe((response) => {
         expect(response).toEqual(expected);
+        repo.httpV2.get('/v2/health').toPromise();
+        const req2 = httpMock.expectOne(`${environment.apiUrl}/v2/health`);
+        expect(req2.request.headers.get('Authorization')).toBe(
+          'Bearer test_token'
+        );
       });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
