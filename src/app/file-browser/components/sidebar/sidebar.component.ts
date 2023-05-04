@@ -110,7 +110,6 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           this.originalFileExtension = '';
           this.permanentFileExtension = '';
         }
-        
       })
     );
   }
