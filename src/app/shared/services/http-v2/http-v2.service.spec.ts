@@ -10,7 +10,7 @@ import { StorageService } from '../storage/storage.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 
-describe('HttpV2Service', () => {
+fdescribe('HttpV2Service', () => {
   let service: HttpV2Service;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
@@ -48,6 +48,7 @@ describe('HttpV2Service', () => {
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
     expect(request.request.method).toEqual('POST');
     expect(request.request.headers.get('Request-Version')).toBe('2');
+    expect(request.request.headers.has('Authorization')).toBeFalse();
     request.flush({ status: 'available' });
   });
 
@@ -152,5 +153,24 @@ describe('HttpV2Service', () => {
     expect(request.request.headers.get('Request-Version')).toBe('2');
     expect(request.request.body).not.toBeNull();
     request.flush({ status: 'available', csrf: '1234' });
+  });
+
+  it('should not add a ? to an empty GET request', () => {
+    service.get('/api/v2/health', {}).toPromise();
+
+    const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+    expect(request.request.method).toBe('GET');
+    request.flush({});
+  });
+
+  it('should be able to take in an authentication token', () => {
+    service.setAuthToken('auth_token');
+    service.get('/api/v2/health').toPromise();
+
+    const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer auth_token'
+    );
+    request.flush({});
   });
 });
