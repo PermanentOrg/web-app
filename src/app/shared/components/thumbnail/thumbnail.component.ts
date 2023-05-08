@@ -73,11 +73,11 @@ export class ThumbnailComponent
 
   ngAfterViewInit() {
     const resizableImageElement = this.element.querySelector('#openseadragon');
-    if (resizableImageElement) {
+    if (resizableImageElement && this.item instanceof RecordVO) {
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
-        tileSources: { type: 'image', url: this.item?.thumbURL2000 },
+        tileSources: { type: 'image', url: this.item?.FileVOs[0].fileURL },
         visibilityRatio: 1.0,
         constrainDuringPan: true,
         maxZoomLevel: 10,
@@ -95,8 +95,7 @@ export class ThumbnailComponent
         this.disableSwipe.emit(false);
       }
       });
-    }
-  }
+  }}
 
   ngOnChanges() {
     if (!this.imageElement) {
