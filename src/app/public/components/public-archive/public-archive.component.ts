@@ -101,7 +101,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         )
         .subscribe((response) => {
           if (response) {
-            this.searchResults = response[0].ChildItemVOs;
+            this.searchResults = response.ChildItemVOs;
           }
         });
     } catch (err) {
