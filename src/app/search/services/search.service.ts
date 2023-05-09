@@ -99,7 +99,7 @@ export class SearchService {
     tags: TagVOData[],
     archiveId: string,
     limit?: number
-  ): Observable<SearchResponse> {
+  ) {
     return this.api.search.itemsByNameInPublicArchiveObservable(searchTerm, tags,archiveId, limit);
   }
 

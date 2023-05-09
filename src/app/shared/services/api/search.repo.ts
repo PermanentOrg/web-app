@@ -3,6 +3,7 @@ import { ArchiveVO, RecordVO, FolderVO, ItemVO, TagVOData } from '@root/app/mode
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
+import { getFirst } from '../http-v2/http-v2.service';
 
 export class SearchRepo extends BaseRepo {
   public archiveByEmail(email: string): Observable<SearchResponse> {
@@ -50,7 +51,7 @@ export class SearchRepo extends BaseRepo {
       }
     };
 
-    return this.http.sendV2Request<SearchResponse>(
+    return this.http.sendRequest<SearchResponse>(
       '/search/folderAndRecord',
       [data],
       SearchResponse
@@ -62,7 +63,7 @@ export class SearchRepo extends BaseRepo {
     tags: any[] = [],
     archiveId: string,
     limit?: number,
-  ): Observable<SearchResponse> {
+  ) {
     const data = {
       query,
       tags:'',
@@ -70,10 +71,10 @@ export class SearchRepo extends BaseRepo {
       publicOnly:true
     };
 
-    return this.http.getV2Request<SearchResponse>(
+    return getFirst(this.httpV2.get<any>(
       '/search/folderAndRecord',
       data,
-    );
+    ));
   }
 }
 
