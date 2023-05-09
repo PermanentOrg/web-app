@@ -73,7 +73,7 @@ export class ThumbnailComponent
 
   ngAfterViewInit() {
     const resizableImageElement = this.element.querySelector('#openseadragon');
-    if (resizableImageElement && this.item instanceof RecordVO) {
+    if (resizableImageElement && this.item instanceof RecordVO && this.item.FileVOs) {
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
