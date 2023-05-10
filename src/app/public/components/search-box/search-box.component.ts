@@ -32,7 +32,7 @@ const ANIMATION_DURATION = 1000;
 export class SearchBoxComponent implements OnInit, AfterViewInit {
   @Input() onPublicGallery = false;
   public searchForm: UntypedFormGroup;
-  @Input() hideBorder = false
+  @Input() hideBorder = false;
   @Input() displayIcon = false;
 
   public archiveResults: ArchiveVO[];
