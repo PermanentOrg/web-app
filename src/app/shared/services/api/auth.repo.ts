@@ -40,11 +40,19 @@ export class AuthRepo extends BaseRepo {
       password: password,
     });
 
-    return this.http.sendRequest<AuthResponse>(
-      '/auth/login',
-      [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
-      AuthResponse
-    );
+    return this.http
+      .sendRequest<AuthResponse>(
+        '/auth/login',
+        [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
+        AuthResponse
+      )
+      .pipe(
+        map((resp) => {
+          const authToken = resp.getSimpleVO().value;
+          this.httpV2.setAuthToken(authToken);
+          return resp;
+        })
+      );
   }
 
   public logOut() {
@@ -101,10 +109,9 @@ export class AuthRepo extends BaseRepo {
         passwordVerify: passwordVo.passwordVerify,
         trustToken,
       };
-      return this.http.sendV2RequestPromise<CSRFResponse>(
-        '/account/changePassword',
-        v2data
-      );
+      return this.httpV2
+        .post('/account/changePassword', v2data, null, { csrf: true })
+        .toPromise();
     }
 
     return this.http.sendRequestPromise<AuthResponse>(

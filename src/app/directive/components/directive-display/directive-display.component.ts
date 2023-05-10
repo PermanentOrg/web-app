@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AccountVO, Directive } from '@models/index';
+import { AccountVO, DirectiveData } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 
@@ -11,7 +11,7 @@ import { ApiService } from '@shared/services/api/api.service';
 export class DirectiveDisplayComponent implements OnInit {
   @Input() public checkLegacyContact: boolean = true;
   public archiveName: string;
-  public directive: Directive;
+  public directive: DirectiveData;
   public error: boolean;
   public noPlan: boolean;
 

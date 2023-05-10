@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Directive, DirectiveCreateRequest } from '@models/directive';
+import { DirectiveData, DirectiveCreateRequest } from '@models/directive';
 import { MockDirectiveRepo as DirectiveGetRepo } from '../directive-display/test-utils';
 
 export const createDirective = (email: string, note: string) => {
@@ -24,8 +24,8 @@ export class MockMessageService {
 }
 
 export class MockDirectiveRepo {
-  public static createdDirective: Directive = null;
-  public static editedDirective: Partial<Directive> = null;
+  public static createdDirective: DirectiveData = null;
+  public static editedDirective: Partial<DirectiveData> = null;
   public static failRequest: boolean = false;
   public static errorDelay: number = 0;
   public static accountExists: boolean = true;
@@ -38,7 +38,9 @@ export class MockDirectiveRepo {
     MockDirectiveRepo.accountExists = true;
   }
 
-  public async create(directive: DirectiveCreateRequest): Promise<Directive> {
+  public async create(
+    directive: DirectiveCreateRequest
+  ): Promise<DirectiveData> {
     if (MockDirectiveRepo.failRequest) {
       await new Promise((resolve) =>
         setTimeout(resolve, MockDirectiveRepo.errorDelay)
@@ -52,13 +54,13 @@ export class MockDirectiveRepo {
         },
         status: 404,
         statusText: 'Steward account not found',
-      }) as any as Directive;
+      }) as any as DirectiveData;
       // Simulate returning an unexpected error from the HttpClient
     }
     const testDirectiveId = '39b2a5fa-3508-4030-91b6-21dc6ec7a1ab';
-    const newDirective: Directive = {
+    const newDirective: DirectiveData = {
       directiveId: testDirectiveId,
-      archiveId: directive.archiveId,
+      archiveId: parseInt(directive.archiveId.toString()),
       type: directive.type,
       createdDt: new Date(),
       updatedDt: new Date(),
@@ -77,7 +79,9 @@ export class MockDirectiveRepo {
     return newDirective;
   }
 
-  public async update(directive: Partial<Directive>): Promise<Directive> {
+  public async update(
+    directive: Partial<DirectiveData>
+  ): Promise<DirectiveData> {
     if (MockDirectiveRepo.failRequest) {
       await new Promise((resolve) =>
         setTimeout(resolve, MockDirectiveRepo.errorDelay)
@@ -91,10 +95,10 @@ export class MockDirectiveRepo {
         },
         status: 404,
         statusText: 'Steward account not found',
-      }) as any as Directive;
+      }) as any as DirectiveData;
       // Simulate returning an unexpected error from the HttpClient
     }
     MockDirectiveRepo.editedDirective = directive;
-    return directive as Directive;
+    return directive as DirectiveData;
   }
 }

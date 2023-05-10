@@ -6,7 +6,7 @@ import {
   SimpleVO,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { Observable } from 'rxjs';
+import { getFirst } from '../http-v2/http-v2.service';
 
 export class AccountRepo extends BaseRepo {
   public get(accountVO: AccountVO) {
@@ -44,10 +44,12 @@ export class AccountRepo extends BaseRepo {
       createArchive: createDefaultArchive,
     };
 
-    return this.http.sendV2Request<AccountVO>(
-      '/account/post',
-      requestBody,
-      AccountVO
+    this.httpV2.clearAuthToken();
+
+    return getFirst(
+      this.httpV2.post<AccountVO>('/account/post', requestBody, AccountVO, {
+        csrf: true,
+      })
     );
   }
 
