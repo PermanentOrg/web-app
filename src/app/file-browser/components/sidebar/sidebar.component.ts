@@ -89,8 +89,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
             this.isLoading = false;
           }
         }
-
-        if (this.selectedItem instanceof RecordVO) {
+        if (this.selectedItem instanceof RecordVO && this.selectedItem.FileVOs[0]) {
           const originalContentType = this.selectedItem.FileVOs[0].type
             .split('.')
             .pop();
@@ -106,7 +105,11 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
           this.originalFileExtension = originalContentType;
           this.permanentFileExtension = convertedContentType;
-        } else {
+        }else if(this.selectedItem instanceof RecordVO && !this.selectedItem.FileVOs[0]){
+          this.originalFileExtension = this.selectedItem.uploadFileName.split('.').pop();
+          this.permanentFileExtension = this.selectedItem.uploadFileName.split('.').pop();
+        }
+         else {
           this.originalFileExtension = '';
           this.permanentFileExtension = '';
         }
