@@ -21,7 +21,7 @@ export class HttpService {
   constructor(private http: HttpClient, private storage: StorageService) {}
 
   public sendRequest<T = BaseResponse>(
-    endpoint: string,x§
+    endpoint: string,
     data: any = [{}],
     responseClass?: any
   ): Observable<T> {
