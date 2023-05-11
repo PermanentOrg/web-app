@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, Optional, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, Optional, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription, Subject } from 'rxjs';
-import { min } from 'lodash';
+import { min, get } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ItemVO, AccessRole, SortType, FolderVO, RecordVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
@@ -28,6 +28,11 @@ interface FileListActions {
   publish: boolean;
   download: boolean;
   unshare: boolean;
+}
+
+interface Format{
+  name:string,
+  extension:string
 }
 
 type FileListColumn = 'name' | 'date' | 'type';
@@ -64,6 +69,12 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   isSavingSort = false;
   isSorting = false;
   canSaveSort = false;
+  displayDownloadDropdown = false;
+
+  downloadOptions:Format[] = []
+
+  @ViewChild('downloadButton') downloadButton: ElementRef;
+
 
   can: FileListActions = {
     delete: false,
@@ -110,10 +121,21 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   ngOnInit(): void {
+   
   }
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event) {
+    const clickedElement = event.target as HTMLElement;
+    const isClickedInside =
+      this.downloadButton.nativeElement.contains(clickedElement);
+    if (!isClickedInside && this.displayDownloadDropdown) {
+      this.displayDownloadDropdown = false;
+    }
   }
 
   @HostListener('window:keydown.delete', ['$event'])
@@ -339,8 +361,15 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    if (this.selectedItems.length === 1 && this.selectedItems[0] instanceof RecordVO) {
-      this.data.downloadFile(this.selectedItems[0]);
+    if(this.selectedItems.length === 1 && this.selectedItems[0] instanceof RecordVO){
+      if(!this.displayDownloadDropdown){
+       this.displayDownloadOptions()
+      }
+      else{
+        this.displayDownloadDropdown = false
+        this.downloadOptions = []
+      }
+
     } else {
       try {
         await this.data.createZipForDownload(this.selectedItems);
@@ -349,6 +378,11 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
         this.message.showError('There was a problem creating a zip file to download', false);
       }
     }
+  }
+
+  async onFileTypeClick(fileName:string){
+    if (this.selectedItems.length === 1 && this.selectedItems[0] instanceof RecordVO)
+     this.data.downloadFile(this.selectedItems[0],fileName);
   }
 
   getTooltipConstantForAction(action: keyof FileListActions) {
@@ -382,6 +416,15 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     }
 
     return `fileList.sort.${column}.${direction}`;
+  }
+
+  displayDownloadOptions (){
+    this.displayDownloadDropdown = true
+
+    const original = (this.selectedItems[0] as RecordVO).FileVOs.find(item => item.format === "file.format.original")
+    const converted =(this.selectedItems[0] as RecordVO).FileVOs.filter(item => item.format === "file.format.converted").map(item => ({name: item.type, extension: item.type.split('.').pop()}))
+
+    this.downloadOptions = [{name:original?.type, extension:original?.type.split('.').pop()},...converted]
   }
 
 }

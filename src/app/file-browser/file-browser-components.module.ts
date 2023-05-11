@@ -25,6 +25,7 @@ import { SharingDialogComponent } from './components/sharing-dialog/sharing-dial
 
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+import { DownloadButtonComponent } from './components/download-button/download-button.component';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     EditTagsComponent,
     LocationPickerComponent,
     SidebarViewOptionComponent,
-    SharingDialogComponent
+    SharingDialogComponent,
+    DownloadButtonComponent
   ]
 })
 export class FileBrowserComponentsModule {

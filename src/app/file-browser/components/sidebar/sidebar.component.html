@@ -114,6 +114,7 @@
             <div class="sidebar-detail-content">
               {{(selectedItem | asRecord).derivedCreatedDT | prDate}}
             </div>
+            
           </div>
         </ng-container>
         <ng-container *ngIf="selectedItem.isFolder">
@@ -143,6 +144,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="sidebar-item">
+      <pr-download-button [isFileView]="false" [selectedItem]="selectedItem"></pr-download-button>
     </div>
   </ng-container>
   <ng-container *ngIf="selectedItems">

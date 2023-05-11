@@ -30,13 +30,21 @@
       <i class="material-icons">public</i>
       <span>{{isPublic ? 'Get link' : 'Publish'}}</span>
     </div>
-    <div class="file-list-control" [class.disabled]="!can.download" (click)="onDownloadClick()"
+    <div #downloadButton class="file-list-control" [class.disabled]="!can.download"
     [ngbTooltip]="getTooltipConstantForAction('download') | prTooltip">
-      <i class="material-icons">cloud_download</i>
-      <span>Download</span>
+      <i (click)="onDownloadClick()" class="material-icons">cloud_download</i>
+      <span (click)="onDownloadClick()">Download</span>
+      <i *ngIf="selectedItems.length === 1 && !selectedItems[0].isFolder" (click)="onDownloadClick()" class="material-icons">keyboard_arrow_down</i>
+      <div *ngIf="displayDownloadDropdown" class="download-options">
+  
+      <div *ngFor="let item of downloadOptions; let i = index" class="download-option" (click)="onFileTypeClick(item?.name)">
+        <span>{{i === 0 ? 'Original Format:' : 'Permanent Format:'}}</span>
+        <span>.{{item?.extension}}</span>
+      </div>
     </div>
   </div>
   <pr-folder-view-toggle></pr-folder-view-toggle>
+  </div>
 </div>
 <div class="file-list-header"
   [ngClass]="{'is-sort-changed': isSortChanged(), 'is-sorting': isSorting, 'is-saving-sort': isSavingSort, 'hide-sort': !allowSort}">
@@ -89,3 +97,5 @@
     </ng-container>
   </ng-container>
 </div>
+
+

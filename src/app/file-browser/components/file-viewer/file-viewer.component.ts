@@ -377,7 +377,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   public onDownloadClick(): void {
-    this.dataService.downloadFile(this.currentRecord);
+    this.dataService.downloadFile(this.currentRecord, '');
   }
 
   private setCurrentTags(): void {
