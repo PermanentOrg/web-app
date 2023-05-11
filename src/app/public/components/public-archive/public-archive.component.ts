@@ -108,7 +108,11 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         .subscribe(
           (items) => {
             this.socialMedia['email'] = items['email'][0].string1
-            this.socialMedia['socialMedia'] = items['social_media'][0].string1
+            this.socialMedia['socialMedia'] = items['social_media'].find(item => !item.string1.includes('facebook')).string1
+            this.socialMedia['facebook'] = items['social_media'].find(item => item.string1.includes('facebook')).string1
+
+            
+            
 
             return this.socialMedia
           })
