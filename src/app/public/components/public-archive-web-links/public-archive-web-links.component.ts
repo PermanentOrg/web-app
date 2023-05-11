@@ -11,6 +11,7 @@ export class PublicArchiveWebLinksComponent implements OnInit {
   @Input() description: string = '';
   @Input() email: string = '';
   @Input() website: string = '';
+  @Input() facebook:string = '';
 
   constructor() {}
 
