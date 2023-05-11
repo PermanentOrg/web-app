@@ -90,21 +90,15 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           }
         }
         if (this.selectedItem instanceof RecordVO && this.selectedItem.FileVOs[0]) {
-          const originalContentType = this.selectedItem.FileVOs[0].type
+          this.originalFileExtension = this.selectedItem.FileVOs.find(item => item.format === 'file.format.original')?.type
             .split('.')
             .pop();
-          let convertedContentType = '';
-
-          if (this.selectedItem.FileVOs[1]) {
-            convertedContentType = this.selectedItem.FileVOs[1].type
+          
+           this.permanentFileExtension = this.selectedItem.FileVOs.find(item => item.format ==='file.format.converted')?.type
               .split('.')
-              .pop();
-          } else {
-            convertedContentType = originalContentType;
-          }
+              .pop() || this.originalFileExtension;
 
-          this.originalFileExtension = originalContentType;
-          this.permanentFileExtension = convertedContentType;
+         
         }
          else {
           this.originalFileExtension = '';
