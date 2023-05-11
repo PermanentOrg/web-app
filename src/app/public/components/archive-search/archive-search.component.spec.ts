@@ -1,4 +1,6 @@
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 
 import { ArchiveSearchComponent } from './archive-search.component';
 
@@ -8,7 +10,8 @@ describe('ArchiveSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArchiveSearchComponent ]
+      declarations: [ ArchiveSearchComponent ],
+      providers:[FormBuilder,HttpClient,HttpHandler]
     })
     .compileComponents();
   });
