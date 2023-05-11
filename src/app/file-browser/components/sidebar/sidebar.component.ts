@@ -105,9 +105,6 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
           this.originalFileExtension = originalContentType;
           this.permanentFileExtension = convertedContentType;
-        }else if(this.selectedItem instanceof RecordVO && !this.selectedItem.FileVOs[0]){
-          this.originalFileExtension = this.selectedItem.uploadFileName.split('.').pop();
-          this.permanentFileExtension = this.selectedItem.uploadFileName.split('.').pop();
         }
          else {
           this.originalFileExtension = '';
