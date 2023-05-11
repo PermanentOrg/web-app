@@ -1,7 +1,7 @@
 <div class="{{ componentName }}">
-  <div [ngClass]="componentName + '-contact'">
+  <div *ngIf="facebook || email || website" [ngClass]="componentName + '-contact'">
     <p class="title">Contact</p>
-    <div class="link-container">
+    <div *ngIf="email" class="link-container">
       <svg
         width="24"
         height="24"
@@ -32,7 +32,7 @@
       </p>
     </div>
 
-    <div class="link-container">
+    <div *ngIf="website" class="link-container">
       <svg
         width="24"
         height="24"
@@ -62,7 +62,7 @@
         {{ website }}
       </p>
     </div>
-    <div class="link-container">
+    <div *ngIf="facebook" class="link-container">
       <svg
         width="24"
         height="16"
@@ -93,10 +93,10 @@
           </clipPath>
         </defs>
       </svg>
-      <p class="link">facebook.com/jhsum</p>
+      <p class="link">{{facebook}}</p>
     </div>
   </div>
-  <div [ngClass]="componentName + '-about'">
+  <div *ngIf="description" [ngClass]="componentName + '-about'">
     <p class="title">About</p>
     <p class="description">
       {{ description }}
