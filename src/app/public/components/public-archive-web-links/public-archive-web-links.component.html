@@ -1,5 +1,5 @@
 <div class="{{ componentName }}">
-  <div *ngIf="facebook || email || website" [ngClass]="componentName + '-contact'">
+  <div *ngIf="email || website || facebook" [ngClass]="componentName + '-contact'">
     <p class="title">Contact</p>
     <div *ngIf="email" class="link-container">
       <svg
