@@ -71,14 +71,20 @@ export class SearchRepo extends BaseRepo {
       publicOnly:true
     };
 
-    return getFirst(this.httpV2.get<any>(
+    return getFirst(this.httpV2.get<SearchResponse>(
       '/search/folderAndRecord',
       data,
+      null,
+      {
+        authToken:false
+      }
     ));
   }
 }
 
 export class SearchResponse extends BaseResponse {
+  public ChildItemVOs: ItemVO[];
+
   public getArchiveVOs(): ArchiveVO[] {
     const data = this.getResultsData();
 
@@ -95,7 +101,7 @@ export class SearchResponse extends BaseResponse {
     return flatten(archives);
   }
 
-  public getItemVOs(initChildren?: boolean): ItemVO[] {
+  public getItemVOs(initChildren?: boolean): ItemVO[] {    
     const data = this.getResultsData();
 
     if (!data.length) {
