@@ -177,7 +177,6 @@ export class HttpV2Service {
     method: HttpMethod = 'post',
     options: RequestOptions = defaultOptions
   ): Observable<unknown> {
-    console.log(options);
     if (method === 'post' || method === 'put') {
       return this.getObservableWithBody(
         this.getFullUrl(endpoint),

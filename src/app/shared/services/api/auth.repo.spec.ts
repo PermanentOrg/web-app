@@ -143,7 +143,11 @@ describe('AuthRepo', () => {
     );
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.has('Request-Version')).toBeFalse();
-    req.flush({});
+    req.flush({
+      isSuccessful: true,
+      isSystemUp: true,
+      csrf: 'csrf',
+    });
   });
 
   it('should be able to send an update password V2 request with trust token', () => {
