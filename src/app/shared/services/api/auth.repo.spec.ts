@@ -4,6 +4,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { map } from 'rxjs/operators';
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
@@ -102,6 +103,12 @@ describe('AuthRepo', () => {
 
     repo
       .logIn(testUser.email, testUser.password, testUser.rememberMe, true)
+      .pipe(
+        map((response) => {
+          repo.httpV2.setAuthToken(response.getSimpleVO().value);
+          return response;
+        })
+      )
       .subscribe((response) => {
         expect(response).toEqual(expected);
         repo.httpV2.get('/v2/health').toPromise();
