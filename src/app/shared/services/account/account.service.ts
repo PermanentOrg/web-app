@@ -323,6 +323,11 @@ export class AccountService {
             }
             this.skipSessionCheck = true;
 
+            const authToken = response.getSimpleVO()?.value;
+            if (authToken) {
+              this.api.auth.httpV2.setAuthToken(authToken);
+            }
+
             this.accountChange.emit(this.account);
           } else if (response.needsMFA() || response.needsVerification()) {
             this.setAccount(new AccountVO({ primaryEmail: email }));
