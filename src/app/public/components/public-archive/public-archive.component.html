@@ -27,11 +27,16 @@
           {{ this.archive.fullName }}
         </div>
         <div class="profile-description">
-          <span class="profile-data"
+          <span
+            *ngIf="
+              hasSingleValueFor('birth_info', 'locnId1') ||
+              hasSingleValueFor('birth_info', 'day1') ||
+              hasSingleValueFor('established_info', 'locnId1') ||
+              hasSingleValueFor('established_info', 'locnId1')
+            "
+            class="profile-data"
             >{{
-              archive.type === 'type.archive.person'
-                ? 'Born on'
-                : 'Established on'
+              archive.type === 'type.archive.person' ? 'Born ' : 'Established '
             }}
           </span>
           <ng-container [ngSwitch]="archive.type">
@@ -40,7 +45,7 @@
                 class="profile-data profile-data-date"
                 *ngIf="hasSingleValueFor('birth_info', 'day1')"
               >
-                {{ profileItems.birth_info[0]?.day1 | date }}
+                on {{ profileItems.birth_info[0]?.day1 | date }}
               </span>
             </ng-container>
             <ng-container *ngSwitchDefault>
@@ -52,7 +57,12 @@
               </span>
             </ng-container>
           </ng-container>
-          <span class="profile-data"> in </span>
+          <span
+            *ngIf="hasSingleValueFor('birth_info', 'locnId1')"
+            class="profile-data"
+          >
+            in
+          </span>
           <ng-container [ngSwitch]="archive.type">
             <ng-container *ngSwitchCase="'type.archive.person'">
               <span
@@ -187,7 +197,12 @@
     <router-outlet></router-outlet>
   </div>
   <div>
-    <pr-public-archive-web-links [description]="description" [email]="socialMedia.email" [facebook]="socialMedia.facebook" [website]="socialMedia.socialMedia"></pr-public-archive-web-links>
+    <pr-public-archive-web-links
+      [description]="description"
+      [email]="socialMedia.email"
+      [facebook]="socialMedia.facebook"
+      [website]="socialMedia.socialMedia"
+    ></pr-public-archive-web-links>
   </div>
 </div>
 
