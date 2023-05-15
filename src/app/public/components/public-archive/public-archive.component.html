@@ -185,8 +185,8 @@
   <hr />
 </div>
 
-<div *ngIf="!searchResults.length" class="profile-contents">
-  <div>
+<div *ngIf="!query" class="profile-contents">
+  <div class="profile-container">
     <div class="profile-name">The {{ this.archive.fullName }} Archive</div>
     <pr-breadcrumbs
       *ngIf="!(isViewingProfile$ | async)"
