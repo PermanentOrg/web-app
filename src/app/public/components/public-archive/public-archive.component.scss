@@ -353,3 +353,11 @@ $desktop-size: pxToGrid(200px);
   opacity: 0.03;
   height: 200px;
 }
+
+.profile-container{
+  width: 60%;
+
+  @include beforeDesktop{
+    width: 100%;
+  }
+}
