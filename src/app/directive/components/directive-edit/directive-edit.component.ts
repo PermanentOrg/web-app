@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DirectiveData } from '@models/directive';
+import { Directive, DirectiveData } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -11,8 +11,8 @@ import { MessageService } from '@shared/services/message/message.service';
   styleUrls: ['./directive-edit.component.scss'],
 })
 export class DirectiveEditComponent implements OnInit {
-  @Output() public savedDirective = new EventEmitter<DirectiveData>();
-  @Input() public directive: DirectiveData;
+  @Output() public savedDirective = new EventEmitter<Directive>();
+  @Input() public directive: Directive;
   public email: string;
   public note: string;
   public waiting = false;
@@ -38,7 +38,8 @@ export class DirectiveEditComponent implements OnInit {
     this.accountExists = true;
     try {
       if (this.directive) {
-        const directive = Object.assign({}, this.directive);
+        const directive: Partial<DirectiveData> = {};
+        directive.directiveId = this.directive.directiveId;
         directive.stewardEmail = this.email;
         directive.note = this.note;
         const response = await this.api.directive.update(directive);
@@ -47,7 +48,7 @@ export class DirectiveEditComponent implements OnInit {
         this.savedDirective.emit(this.directive);
       } else {
         const savedDirective = await this.api.directive.create({
-          archiveId: this.account.getArchive().archiveId,
+          archiveId: this.account.getArchive().archiveId.toString(),
           type: 'transfer',
           trigger: {
             type: 'admin',

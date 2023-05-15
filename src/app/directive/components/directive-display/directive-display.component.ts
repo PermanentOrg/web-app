@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AccountVO, DirectiveData } from '@models/index';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AccountVO, Directive } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 
@@ -10,8 +10,11 @@ import { ApiService } from '@shared/services/api/api.service';
 })
 export class DirectiveDisplayComponent implements OnInit {
   @Input() public checkLegacyContact: boolean = true;
+  @Input() public initialDirective: Directive;
+  @Output() public loadedDirective = new EventEmitter<Directive>();
+  @Output() public beginEdit = new EventEmitter<Directive>();
   public archiveName: string;
-  public directive: DirectiveData;
+  public directive: Directive;
   public error: boolean;
   public noPlan: boolean;
 
@@ -21,6 +24,7 @@ export class DirectiveDisplayComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.directive = this.initialDirective;
     this.archiveName = this.account.getArchive().fullName;
     if (this.checkLegacyContact) {
       await this.getLegacyContact();
@@ -52,5 +56,6 @@ export class DirectiveDisplayComponent implements OnInit {
     if (this.directive?.note) {
       this.directive.note = this.directive.note.trim();
     }
+    this.loadedDirective.emit(this.directive);
   }
 }

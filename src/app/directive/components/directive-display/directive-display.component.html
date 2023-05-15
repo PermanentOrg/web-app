@@ -66,7 +66,11 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" [disabled]="error || noPlan">
+  <button
+    class="btn btn-primary"
+    [disabled]="error || noPlan"
+    (click)="beginEdit.emit(directive)"
+  >
     {{ directive?.stewardEmail ? 'Edit' : 'Assign' }} Archive Steward
   </button>
   <div>&nbsp;</div>
