@@ -42,10 +42,16 @@
           <ng-container [ngSwitch]="archive.type">
             <ng-container *ngSwitchCase="'type.archive.person'">
               <span
+              class="profile-data"
+              *ngIf="hasSingleValueFor('birth_info', 'day1')"
+            >
+              on 
+            </span>
+              <span
                 class="profile-data profile-data-date"
                 *ngIf="hasSingleValueFor('birth_info', 'day1')"
               >
-                on {{ profileItems.birth_info[0]?.day1 | date }}
+                {{ profileItems.birth_info[0]?.day1 | date }}
               </span>
             </ng-container>
             <ng-container *ngSwitchDefault>
