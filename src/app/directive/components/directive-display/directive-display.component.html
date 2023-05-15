@@ -20,7 +20,9 @@
     We have additional support and resources about planning your legacy
     <a href="#">here.</a>
   </p>
-  <div class="archive-steward-header">Archive Steward: {{ archiveName }}</div>
+  <div class="archive-steward-header">
+    Archive Steward: The {{ archiveName }} Archive
+  </div>
   <div class="no-plan-warning" *ngIf="noPlan">
     <div class="warning-icon">
       <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>

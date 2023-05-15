@@ -39,7 +39,7 @@ export default {
   },
   argTypes: {
     archiveName: {
-      defaultValue: 'The Volunteer Firefighter Archive',
+      defaultValue: 'Volunteer Firefighter',
       control: { type: 'text' },
     },
     hasArchiveSteward: {
@@ -76,7 +76,7 @@ export default {
 
 const storyTemplate: Story = (args) => {
   MockAccountService.mockArchive = new ArchiveVO({
-    fullName: args.archiveName,
+    fullName: args.archiveName ?? 'Volunteer Firefighter',
   });
   MockDirectiveRepo.reset();
   MockDirectiveRepo.failRequest = args.failDirectivesFetch;
@@ -116,7 +116,7 @@ export const WithDirective: Story = storyTemplate.bind({});
 
 export const WithoutDirective: Story = storyTemplate.bind({});
 WithoutDirective.args = {
-  archiveName: 'The Volunteer Firefighter Archive',
+  archiveName: 'Volunteer Firefighter',
   hasArchiveSteward: false,
   archiveStewardEmail: 'test@example.com',
   note: 'Test note for Archive Steward',
