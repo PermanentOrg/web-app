@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { FolderVO, RecordVO } from '@models/index';
 
 @Component({
   selector: 'pr-public-search-results',
@@ -62,7 +63,7 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  onSearchResultClick(item) {
+  onSearchResultClick(item: RecordVO | FolderVO) {
     if (item.type === 'type.folder.public') {
       this.router.navigate([item.archiveNbr, item.folder_linkId], {
         relativeTo: this.route.parent,
