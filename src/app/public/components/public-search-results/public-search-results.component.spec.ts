@@ -1,5 +1,5 @@
 /* @format */
-import { DataService } from './../shared/services/data/data.service';
+import { DataService } from '../../../shared/services/data/data.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';

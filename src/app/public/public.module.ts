@@ -17,13 +17,14 @@ import { PublicProfileComponent } from './components/public-profile/public-profi
 import { PublicProfileService } from './services/public-profile/public-profile.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
-import { FaIconLibrary,
+import {
+  FaIconLibrary,
   FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
 import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { ArchiveSearchComponent } from './components/archive-search/archive-search.component';
 import { PublicArchiveWebLinksComponent } from './components/public-archive-web-links/public-archive-web-links.component';
-import { PublicSearchResultsComponent } from '../public-search-results/public-search-results.component';
+import { PublicSearchResultsComponent } from './components/public-search-results/public-search-results.component';
 
 @NgModule({
   declarations: [

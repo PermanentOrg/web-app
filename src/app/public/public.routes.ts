@@ -13,7 +13,7 @@ import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 import { PublicProfileItemsResolveService } from './resolves/public-profile-items-resolve.service';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { RoutesWithData } from '../app.routes';
-import { PublicSearchResultsComponent } from '../public-search-results/public-search-results.component';
+import { PublicSearchResultsComponent } from './components/public-search-results/public-search-results.component';
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
