@@ -36,13 +36,13 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     //get the query param from the route
     if (this.route.params) {
       this.paramsSubscription = this.route.params.subscribe((params) => {
+        this.query = params.query;
         this.searchSubscription = this.searchService
           .getResultsInPublicArchive(params.query, [], params.archiveId)
           .subscribe((response) => {
             if (response) {
               this.searchResults = response.ChildItemVOs;
               this.waiting = false;
-              this.query = params.query;
             }
           });
       });
