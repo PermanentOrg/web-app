@@ -61,8 +61,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const data = this.route.snapshot.data as RouteData;
-    console.log(data)
-
     this.subscriptions.push(
       this.publicProfile
         .publicRoot$()
@@ -101,49 +99,12 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   public onHandleSearch(value: string): void {
     try {
-
       this.router.navigate(['search', this.archive.archiveId, value], {
         relativeTo: this.route,
       })
-      // this.searchService
-      //   .getResultsInPublicArchive(
-      //     value,
-      //     [],
-      //     this.archive.archiveId
-      //   )
-      //   .subscribe((response) => {
-      //     if (response) {
-      //       this.searchResults = response.ChildItemVOs;
-      //       this.waiting = false; 
-      //     }
-      //   });
     } catch (err) {
       console.log(err);
     }
-    finally {
-      this.query = value;
-    }
   }
-
-  public onBackToArchive(): void {
-    this.query = '';
-    this.searchResults = [];
-    this.waiting = true
-  }
-
-  public goToItem(result) : void{
-    if(result.type === 'type.folder.public'){
-      this.router.navigate([result.archiveNbr, result.folder_linkId], {
-        relativeTo: this.route,
-      });
-    }
-    else{
-    this.router.navigate(['record', result.archiveNbr], {
-      relativeTo: this.route,
-    });
-  }
-  }
-
-  
 }
 
