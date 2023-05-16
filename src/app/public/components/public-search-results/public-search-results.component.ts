@@ -23,6 +23,8 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     'type.record.video': 'Video',
   };
 
+  public archivePath = ['..', '..', '..'];
+
   protected searchSubscription: Subscription;
   protected paramsSubscription: Subscription;
 
@@ -37,6 +39,7 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     //get the query param from the route
     if (this.route.params) {
       this.paramsSubscription = this.route.params.subscribe((params) => {
+        this.archivePath = ['/p/archive', params.publicArchiveNbr];
         this.query = params.query;
         this.searchSubscription = this.searchService
           .getResultsInPublicArchive(params.query, [], params.archiveId)
@@ -57,10 +60,6 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
-  }
-
-  backToArchive() {
-    this.location.back();
   }
 
   onSearchResultClick(item: RecordVO | FolderVO) {

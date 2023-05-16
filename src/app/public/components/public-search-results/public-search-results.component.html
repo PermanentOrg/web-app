@@ -1,37 +1,7 @@
 <!-- @format -->
 <div *ngIf="searchResults.length && !waiting" class="search-results-container">
   <div>
-    <div (click)="backToArchive()" class="back-to-archive-container">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M6.00008 9.33341L2.66675 6.00008M2.66675 6.00008L6.00008 2.66675M2.66675 6.00008H6.93341C9.17362 6.00008 10.2937 6.00008 11.1494 6.43605C11.902 6.81955 12.5139 7.43147 12.8974 8.18412C13.3334 9.03976 13.3334 10.1599 13.3334 12.4001V13.3334"
-          stroke="url(#paint0_linear_512_9575)"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <defs>
-          <linearGradient
-            id="paint0_linear_512_9575"
-            x1="2.66675"
-            y1="2.66675"
-            x2="2.82821"
-            y2="13.4901"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="#131B4A" />
-            <stop offset="1" stop-color="#364493" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="back-to-archive">Back to archive</span>
-    </div>
+    <ng-container *ngTemplateOutlet="backToArchive"></ng-container>
     <br />
     <span class="search-results">Search results for </span>
     <span class="search-results search-results-param">{{ query }}</span>
@@ -106,11 +76,17 @@
 </div>
 
 <div
-  (click)="backToArchive()"
+  [routerLink]="archivePath"
   *ngIf="searchResults.length === 0 && waiting === false"
   class="search-results-container"
 >
-  <div (click)="backToArchive()" class="back-to-archive-container">
+  <ng-container *ngTemplateOutlet="backToArchive"></ng-container>
+  <br />
+  <span class="search-results">No search results for </span>
+  <span class="search-results search-results-param">{{ query }}</span>
+</div>
+<ng-template #backToArchive>
+  <div [routerLink]="archivePath" class="back-to-archive-container">
     <svg
       width="16"
       height="16"
@@ -140,8 +116,5 @@
       </defs>
     </svg>
     <span class="back-to-archive">Back to archive</span>
-    <br />
-    <span class="search-results">No search results for </span>
-    <span class="search-results search-results-param">{{ query }}</span>
   </div>
-</div>
+</ng-template>
