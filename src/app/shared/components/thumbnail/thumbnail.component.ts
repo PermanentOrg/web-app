@@ -80,6 +80,9 @@ export class ThumbnailComponent
       this.item.FileVOs
     ) {
       const fullSizeImage = this.chooseFullSizeImage(this.item);
+      if (fullSizeImage == null) {
+        return;
+      }
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
@@ -214,7 +217,7 @@ export class ThumbnailComponent
       ).fileURL;
       return convertedUrl;
     } else {
-      return record.FileVOs[0].fileURL;
+      return record.FileVOs[0]?.fileURL;
     }
   }
 }
