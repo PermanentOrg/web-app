@@ -1,3 +1,4 @@
+/* @format */
 import { SearchService } from '../search/services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';

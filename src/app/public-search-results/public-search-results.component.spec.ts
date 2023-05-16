@@ -1,3 +1,4 @@
+/* @format */
 import { DataService } from './../shared/services/data/data.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,21 +13,28 @@ describe('PublicSearchResultsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PublicSearchResultsComponent ],
-      providers:[{
-        provide: ActivatedRoute,
-        useValue: {
+      declarations: [PublicSearchResultsComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
             snapshot: {
-                paramMap: {
-                    get(): string {
-                        return '123';
-                    },
+              paramMap: {
+                get(): string {
+                  return '123';
                 },
+              },
             },
+          },
         },
-    },Router,SearchService,Location, HttpClient, HttpHandler, DataService]
-    })
-    .compileComponents();
+        Router,
+        SearchService,
+        Location,
+        HttpClient,
+        HttpHandler,
+        DataService,
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PublicSearchResultsComponent);
     component = fixture.componentInstance;
