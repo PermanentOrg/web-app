@@ -79,10 +79,11 @@ export class ThumbnailComponent
       this.item instanceof RecordVO &&
       this.item.FileVOs
     ) {
+      const fullSizeImage = this.chooseFullSizeImage(this.item);
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
-        tileSources: { type: 'image', url: this.item?.FileVOs[0].fileURL },
+        tileSources: { type: 'image', url: fullSizeImage },
         visibilityRatio: 1.0,
         constrainDuringPan: true,
         maxZoomLevel: 10,
@@ -203,6 +204,17 @@ export class ThumbnailComponent
       };
 
       imageLoader.src = imageUrl;
+    }
+  }
+
+  chooseFullSizeImage(record: RecordVO) {
+    if (record.FileVOs.length > 1) {
+      const convertedUrl = record.FileVOs.find(
+        (file) => file.format == 'file.format.converted'
+      ).fileURL;
+      return convertedUrl;
+    } else {
+      return record.FileVOs[0].fileURL;
     }
   }
 }
