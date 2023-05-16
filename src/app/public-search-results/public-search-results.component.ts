@@ -1,25 +1,28 @@
-import { query } from '@angular/animations';
 import { SearchService } from '../search/services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-public-search-results',
   templateUrl: './public-search-results.component.html',
   styleUrls: ['./public-search-results.component.scss'],
 })
-export class PublicSearchResultsComponent implements OnInit {
-  searchResults = [];
-  waiting = false;
-  query = '';
+export class PublicSearchResultsComponent implements OnInit, OnDestroy {
+  public searchResults = [];
+  public waiting = false;
+  public query = '';
 
-  types = {
+  public types = {
     'type.folder.private': 'Folder',
     'type.folder.public': 'Folder',
     'type.record.image': 'Image',
     'type.record.video': 'Video',
   };
+
+  protected searchSubscription: Subscription;
+  protected paramsSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -31,8 +34,8 @@ export class PublicSearchResultsComponent implements OnInit {
   ngOnInit(): void {
     //get the query param from the route
     if (this.route.params) {
-      this.route.params.subscribe((params) => {
-        this.searchService
+      this.paramsSubscription = this.route.params.subscribe((params) => {
+        this.searchSubscription = this.searchService
           .getResultsInPublicArchive(params.query, [], params.archiveId)
           .subscribe((response) => {
             if (response) {
@@ -42,6 +45,15 @@ export class PublicSearchResultsComponent implements OnInit {
             }
           });
       });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramsSubscription) {
+      this.paramsSubscription.unsubscribe();
+    }
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
     }
   }
 
