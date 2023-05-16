@@ -13,6 +13,7 @@ import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
 import { PublicProfileItemsResolveService } from './resolves/public-profile-items-resolve.service';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { RoutesWithData } from '../app.routes';
+import { PublicSearchResultsComponent } from '../public-search-results/public-search-results.component';
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
@@ -41,6 +42,10 @@ export const routes: RoutesWithData = [
         resolve: publicArchiveResolve,
         component: PublicArchiveComponent,
         children: [
+          {
+            path: 'search/:archiveId/:query',
+            component:PublicSearchResultsComponent
+          },
           {
             path: 'profile',
             component: PublicProfileComponent,

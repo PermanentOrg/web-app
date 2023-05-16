@@ -1,0 +1,127 @@
+<div *ngIf="searchResults.length && !waiting" class="search-results-container">
+  <div>
+    <div (click)="backToArchive()" class="back-to-archive-container">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.00008 9.33341L2.66675 6.00008M2.66675 6.00008L6.00008 2.66675M2.66675 6.00008H6.93341C9.17362 6.00008 10.2937 6.00008 11.1494 6.43605C11.902 6.81955 12.5139 7.43147 12.8974 8.18412C13.3334 9.03976 13.3334 10.1599 13.3334 12.4001V13.3334"
+          stroke="url(#paint0_linear_512_9575)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_512_9575"
+            x1="2.66675"
+            y1="2.66675"
+            x2="2.82821"
+            y2="13.4901"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#131B4A" />
+            <stop offset="1" stop-color="#364493" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="back-to-archive">Back to archive</span>
+    </div>
+    <br />
+    <span class="search-results">Search results for </span>
+    <span class="search-results search-results-param">{{ query }}</span>
+  </div>
+  <div class="search-results-view">
+    <div class="result" (click)="onSearchResultClick(result)" *ngFor="let result of searchResults">
+      <div class="result-archive-image">
+        <img class="result-nav" src="{{ result.thumbURL200 }}" />
+      </div>
+      <div class="result-archive-info">
+        <div class="result-archive-type-container">
+          <svg
+            *ngIf="result.type === 'type.record.video' || result.type === 'type.record.image'"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14.6666 5.95429C14.6666 5.55041 14.6666 5.34847 14.5867 5.25496C14.5174 5.17383 14.4135 5.13077 14.3071 5.13914C14.1845 5.14879 14.0417 5.29158 13.7561 5.57716L11.3333 8.00004L13.7561 10.4229C14.0417 10.7085 14.1845 10.8513 14.3071 10.8609C14.4135 10.8693 14.5174 10.8263 14.5867 10.7451C14.6666 10.6516 14.6666 10.4497 14.6666 10.0458V5.95429Z"
+              stroke="#131B4A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M1.33325 6.53337C1.33325 5.41327 1.33325 4.85322 1.55124 4.42539C1.74299 4.04907 2.04895 3.74311 2.42527 3.55136C2.85309 3.33337 3.41315 3.33337 4.53325 3.33337H8.13325C9.25336 3.33337 9.81341 3.33337 10.2412 3.55136C10.6176 3.74311 10.9235 4.04907 11.1153 4.42539C11.3333 4.85322 11.3333 5.41327 11.3333 6.53337V9.46671C11.3333 10.5868 11.3333 11.1469 11.1153 11.5747C10.9235 11.951 10.6176 12.257 10.2412 12.4487C9.81341 12.6667 9.25336 12.6667 8.13325 12.6667H4.53325C3.41315 12.6667 2.85309 12.6667 2.42527 12.4487C2.04895 12.257 1.74299 11.951 1.55124 11.5747C1.33325 11.1469 1.33325 10.5868 1.33325 9.46671V6.53337Z"
+              stroke="#131B4A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            *ngIf="result.type === 'type.folder.public' || result.type === 'type.folder.private'"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.33341 1.51301V4.26671C9.33341 4.64008 9.33341 4.82676 9.40608 4.96937C9.46999 5.09481 9.57198 5.1968 9.69742 5.26071C9.84003 5.33337 10.0267 5.33337 10.4001 5.33337H13.1538M13.3334 6.65886V11.4667C13.3334 12.5868 13.3334 13.1469 13.1154 13.5747C12.9237 13.951 12.6177 14.257 12.2414 14.4487C11.8136 14.6667 11.2535 14.6667 10.1334 14.6667H5.86675C4.74664 14.6667 4.18659 14.6667 3.75877 14.4487C3.38244 14.257 3.07648 13.951 2.88473 13.5747C2.66675 13.1469 2.66675 12.5868 2.66675 11.4667V4.53337C2.66675 3.41327 2.66675 2.85322 2.88473 2.42539C3.07648 2.04907 3.38244 1.74311 3.75877 1.55136C4.18659 1.33337 4.74664 1.33337 5.86675 1.33337H8.00793C8.49711 1.33337 8.7417 1.33337 8.97188 1.38863C9.17595 1.43763 9.37104 1.51844 9.54998 1.62809C9.75182 1.75178 9.92477 1.92473 10.2707 2.27063L12.3962 4.39612C12.7421 4.74202 12.915 4.91497 13.0387 5.1168C13.1484 5.29575 13.2292 5.49084 13.2782 5.69491C13.3334 5.92509 13.3334 6.16968 13.3334 6.65886Z"
+              stroke="#131B4A"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+          <p class="result-text result-archive-type">{{ types[result.type] }}</p>
+        </div>
+        <p class="result-nav result-text result-archive-name">{{ result.displayName }}</p>
+        <p class="result-text result-archive-description">
+          {{ result.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div (click)="backToArchive()" *ngIf="searchResults.length === 0 && waiting === false" class="search-results-container">
+  <div>
+    <div class="back-to-archive-container">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6.00008 9.33341L2.66675 6.00008M2.66675 6.00008L6.00008 2.66675M2.66675 6.00008H6.93341C9.17362 6.00008 10.2937 6.00008 11.1494 6.43605C11.902 6.81955 12.5139 7.43147 12.8974 8.18412C13.3334 9.03976 13.3334 10.1599 13.3334 12.4001V13.3334"
+          stroke="url(#paint0_linear_512_9575)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_512_9575"
+            x1="2.66675"
+            y1="2.66675"
+            x2="2.82821"
+            y2="13.4901"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#131B4A" />
+            <stop offset="1" stop-color="#364493" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="no-results back-to-archive">No search results for {{query}}, go back to archive</span>
+    </div>
+  </div>
+</div>

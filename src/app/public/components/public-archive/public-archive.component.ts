@@ -12,6 +12,7 @@ import { filter, map } from 'rxjs/operators';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { SearchService } from '@search/services/search.service';
+import { RouteData } from '@root/app/app.routes';
 
 @Component({
   selector: 'pr-public-archive',
@@ -59,6 +60,9 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    const data = this.route.snapshot.data as RouteData;
+    console.log(data)
+
     this.subscriptions.push(
       this.publicProfile
         .publicRoot$()
@@ -97,18 +101,22 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   public onHandleSearch(value: string): void {
     try {
-      this.searchService
-        .getResultsInPublicArchive(
-          value,
-          [],
-          this.archive.archiveId
-        )
-        .subscribe((response) => {
-          if (response) {
-            this.searchResults = response.ChildItemVOs;
-            this.waiting = false; 
-          }
-        });
+
+      this.router.navigate(['search', this.archive.archiveId, value], {
+        relativeTo: this.route,
+      })
+      // this.searchService
+      //   .getResultsInPublicArchive(
+      //     value,
+      //     [],
+      //     this.archive.archiveId
+      //   )
+      //   .subscribe((response) => {
+      //     if (response) {
+      //       this.searchResults = response.ChildItemVOs;
+      //       this.waiting = false; 
+      //     }
+      //   });
     } catch (err) {
       console.log(err);
     }
@@ -135,4 +143,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     });
   }
   }
+
+  
 }
+

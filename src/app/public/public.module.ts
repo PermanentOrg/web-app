@@ -23,6 +23,7 @@ import { FaIconLibrary,
 import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { ArchiveSearchComponent } from './components/archive-search/archive-search.component';
 import { PublicArchiveWebLinksComponent } from './components/public-archive-web-links/public-archive-web-links.component';
+import { PublicSearchResultsComponent } from '../public-search-results/public-search-results.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { PublicArchiveWebLinksComponent } from './components/public-archive-web-
     PublicProfileComponent,
     ArchiveSearchComponent,
     PublicArchiveWebLinksComponent,
+    PublicSearchResultsComponent,
   ],
   exports: [SearchBoxComponent],
   imports: [

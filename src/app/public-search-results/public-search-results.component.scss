@@ -1,0 +1,164 @@
+@use 'sass:math';
+@import 'variables';
+@import url('https://fonts.cdnfonts.com/css/usual');
+
+@mixin marginBottomSearchResults {
+  margin-bottom: $grid-unit * 0.7;
+}
+
+.search-results-container {
+
+  .search-results {
+    font-size: 1.75rem;
+    font-family: 'Usual';
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    color: #131b4a;
+
+    &-param {
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
+}
+
+.back-to-archive-container {
+  cursor: pointer;
+  .back-to-archive {
+    margin-left: 0.4rem;
+    font-family: Usual;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #131b4a;
+  }
+
+  .no-results{
+    font-size: 24px;
+  }
+}
+
+.search-results-view {
+  margin-top: 80px;
+}
+
+.result {
+  display: flex;
+  margin-bottom: 60px;
+
+  &-archive-image {
+    width: 10rem;
+    height: 10rem;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &-text {
+    font-family: Usual;
+    @include marginBottomSearchResults();
+  }
+
+  &-archive-info {
+    margin-left: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &-archive-type {
+    font-size: $font-size-base * 0.7;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: $darkBlue;
+    text-transform: uppercase;
+    margin: 0;
+    margin-left: 5px;
+
+    &-container {
+      @include marginBottomSearchResults();
+      background: linear-gradient(
+        179.15deg,
+        rgba(19, 27, 74, 0.08) 0%,
+        rgba(54, 68, 147, 0.08) 100%
+      );
+      border-radius: $border-radius;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0.4rem 0.5rem;
+      width: fit-content;
+      height: 1.5rem;
+    }
+  }
+
+  &-archive-name {
+    font-size: $font-size-base;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-align: left;
+    color: $black;
+  }
+
+  &-archive-description {
+    font-size: $font-size-base * 0.85;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-align: left;
+    color: #777777;
+  }
+}
+
+.profile-image-search {
+  display: flex;
+  align-items: flex-end;
+  padding-left: 3.5rem;
+
+  @include beforeDesktop {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 1rem;
+  }
+}
+
+.profile-controls {
+  display: flex;
+  flex-direction: row;
+  @include beforeDesktop {
+    flex-direction: column;
+  }
+}
+
+.profile-archive-link {
+  .btn-link {
+    font-weight: 600;
+    color: $darkBlue;
+    & > svg {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.result-rectangle {
+  background: linear-gradient(179.15deg, #131b4a 0%, #364493 100%);
+  opacity: 0.03;
+  height: 200px;
+  margin-top: 30px;
+}
+
+.profile-container{
+  width: 60%;
+
+  @include beforeDesktop{
+    width: 100%;
+  }
+}
+
+
+.result-nav{
+  cursor: pointer;
+}
