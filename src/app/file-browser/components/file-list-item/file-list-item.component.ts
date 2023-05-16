@@ -490,6 +490,7 @@ export class FileListItemComponent
 
   onItemClick(event: MouseEvent) {
     if (this.device.isMobileWidth() || !this.canSelect) {
+
       this.goToItem();
       this.itemClicked.emit({
         item: this.item,

@@ -73,9 +73,6 @@ form {
     display: flex;
   }
 
-  .search-box-input:not(.gallery) {
-    display: none;
-  }
 }
 
 :host.search-box-active {

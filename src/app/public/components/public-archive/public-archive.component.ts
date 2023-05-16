@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { ArchiveVO, FolderVO } from '@models';
 import { collapseAnimationCustom } from '@shared/animations';
 import {
@@ -27,6 +27,8 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   socialMedia: Record<string, string> = {};
   searchResults: any[] = [];
 
+  waiting = true
+
   types = {
     'type.folder.private':'Folder',
     'type.folder.public':'Folder',
@@ -51,6 +53,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private publicProfile: PublicProfileService,
     private searchService: SearchService
   ) {}
@@ -93,7 +96,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   }
 
   public onHandleSearch(value: string): void {
-    this.query = value;
     try {
       this.searchService
         .getResultsInPublicArchive(
@@ -104,15 +106,33 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         .subscribe((response) => {
           if (response) {
             this.searchResults = response.ChildItemVOs;
+            this.waiting = false; 
           }
         });
     } catch (err) {
       console.log(err);
+    }
+    finally {
+      this.query = value;
     }
   }
 
   public onBackToArchive(): void {
     this.query = '';
     this.searchResults = [];
+    this.waiting = true
+  }
+
+  public goToItem(result) : void{
+    if(result.type === 'type.folder.public'){
+      this.router.navigate([result.archiveNbr, result.folder_linkId], {
+        relativeTo: this.route,
+      });
+    }
+    else{
+    this.router.navigate(['record', result.archiveNbr], {
+      relativeTo: this.route,
+    });
+  }
   }
 }

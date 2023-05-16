@@ -217,6 +217,10 @@ $desktop-size: pxToGrid(200px);
 .search-results-container {
   margin-left: 120px;
 
+  @include beforeDesktop {
+    margin-left: 0;
+  }
+
   .search-results {
     font-size: 1.75rem;
     font-family: 'Usual';
@@ -242,6 +246,10 @@ $desktop-size: pxToGrid(200px);
     letter-spacing: 0em;
     text-align: left;
     color: #131b4a;
+  }
+
+  .no-results{
+    font-size: 24px;
   }
 }
 
@@ -352,6 +360,7 @@ $desktop-size: pxToGrid(200px);
   background: linear-gradient(179.15deg, #131b4a 0%, #364493 100%);
   opacity: 0.03;
   height: 200px;
+  margin-top: 30px;
 }
 
 .profile-container{
@@ -360,4 +369,9 @@ $desktop-size: pxToGrid(200px);
   @include beforeDesktop{
     width: 100%;
   }
+}
+
+
+.result-nav{
+  cursor: pointer;
 }
