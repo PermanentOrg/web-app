@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -42,7 +43,7 @@ export class ThumbnailComponent
   private imageElement: Element;
   private resizableImageElement: Element;
 
-  private initialZoom:number;
+  private initialZoom: number;
 
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
@@ -73,11 +74,19 @@ export class ThumbnailComponent
 
   ngAfterViewInit() {
     const resizableImageElement = this.element.querySelector('#openseadragon');
-    if (resizableImageElement && this.item instanceof RecordVO && this.item.FileVOs) {
+    if (
+      resizableImageElement &&
+      this.item instanceof RecordVO &&
+      this.item.FileVOs
+    ) {
+      const fullSizeImage = this.chooseFullSizeImage(this.item);
+      if (fullSizeImage == null) {
+        return;
+      }
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
-        tileSources: { type: 'image', url: this.item?.FileVOs[0].fileURL },
+        tileSources: { type: 'image', url: fullSizeImage },
         visibilityRatio: 1.0,
         constrainDuringPan: true,
         maxZoomLevel: 10,
@@ -85,17 +94,18 @@ export class ThumbnailComponent
 
       this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
         const zoom = event.zoom;
-        if(!this.initialZoom){
+        if (!this.initialZoom) {
           this.initialZoom = zoom;
         }
-              
-      if(zoom !== this.initialZoom){
-        this.disableSwipe.emit(true);
-      } else {
-        this.disableSwipe.emit(false);
-      }
+
+        if (zoom !== this.initialZoom) {
+          this.disableSwipe.emit(true);
+        } else {
+          this.disableSwipe.emit(false);
+        }
       });
-  }}
+    }
+  }
 
   ngOnChanges() {
     if (!this.imageElement) {
@@ -197,6 +207,17 @@ export class ThumbnailComponent
       };
 
       imageLoader.src = imageUrl;
+    }
+  }
+
+  chooseFullSizeImage(record: RecordVO) {
+    if (record.FileVOs.length > 1) {
+      const convertedUrl = record.FileVOs.find(
+        (file) => file.format == 'file.format.converted'
+      ).fileURL;
+      return convertedUrl;
+    } else {
+      return record.FileVOs[0]?.fileURL;
     }
   }
 }
