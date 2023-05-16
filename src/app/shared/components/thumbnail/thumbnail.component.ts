@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -42,7 +43,7 @@ export class ThumbnailComponent
   private imageElement: Element;
   private resizableImageElement: Element;
 
-  private initialZoom:number;
+  private initialZoom: number;
 
   private targetThumbWidth: number;
   private currentThumbWidth = 200;
@@ -73,7 +74,11 @@ export class ThumbnailComponent
 
   ngAfterViewInit() {
     const resizableImageElement = this.element.querySelector('#openseadragon');
-    if (resizableImageElement && this.item instanceof RecordVO && this.item.FileVOs) {
+    if (
+      resizableImageElement &&
+      this.item instanceof RecordVO &&
+      this.item.FileVOs
+    ) {
       this.viewer = OpenSeaDragon({
         element: resizableImageElement as HTMLElement,
         prefixUrl: 'assets/openseadragon/images/',
@@ -85,17 +90,18 @@ export class ThumbnailComponent
 
       this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
         const zoom = event.zoom;
-        if(!this.initialZoom){
+        if (!this.initialZoom) {
           this.initialZoom = zoom;
         }
-              
-      if(zoom !== this.initialZoom){
-        this.disableSwipe.emit(true);
-      } else {
-        this.disableSwipe.emit(false);
-      }
+
+        if (zoom !== this.initialZoom) {
+          this.disableSwipe.emit(true);
+        } else {
+          this.disableSwipe.emit(false);
+        }
       });
-  }}
+    }
+  }
 
   ngOnChanges() {
     if (!this.imageElement) {
