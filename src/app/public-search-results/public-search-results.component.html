@@ -36,14 +36,21 @@
     <span class="search-results search-results-param">{{ query }}</span>
   </div>
   <div class="search-results-view">
-    <div class="result" (click)="onSearchResultClick(result)" *ngFor="let result of searchResults">
+    <div
+      class="result"
+      (click)="onSearchResultClick(result)"
+      *ngFor="let result of searchResults"
+    >
       <div class="result-archive-image">
         <img class="result-nav" src="{{ result.thumbURL200 }}" />
       </div>
       <div class="result-archive-info">
         <div class="result-archive-type-container">
           <svg
-            *ngIf="result.type === 'type.record.video' || result.type === 'type.record.image'"
+            *ngIf="
+              result.type === 'type.record.video' ||
+              result.type === 'type.record.image'
+            "
             width="16"
             height="16"
             viewBox="0 0 16 16"
@@ -64,7 +71,10 @@
             />
           </svg>
           <svg
-            *ngIf="result.type === 'type.folder.public' || result.type === 'type.folder.private'"
+            *ngIf="
+              result.type === 'type.folder.public' ||
+              result.type === 'type.folder.private'
+            "
             width="16"
             height="16"
             viewBox="0 0 16 16"
@@ -79,9 +89,13 @@
             />
           </svg>
 
-          <p class="result-text result-archive-type">{{ types[result.type] }}</p>
+          <p class="result-text result-archive-type">
+            {{ types[result.type] }}
+          </p>
         </div>
-        <p class="result-nav result-text result-archive-name">{{ result.displayName }}</p>
+        <p class="result-nav result-text result-archive-name">
+          {{ result.displayName }}
+        </p>
         <p class="result-text result-archive-description">
           {{ result.description }}
         </p>
@@ -90,7 +104,11 @@
   </div>
 </div>
 
-<div (click)="backToArchive()" *ngIf="searchResults.length === 0 && waiting === false" class="search-results-container">
+<div
+  (click)="backToArchive()"
+  *ngIf="searchResults.length === 0 && waiting === false"
+  class="search-results-container"
+>
   <div>
     <div class="back-to-archive-container">
       <svg
@@ -121,7 +139,9 @@
           </linearGradient>
         </defs>
       </svg>
-      <span class="no-results back-to-archive">No search results for {{query}}, go back to archive</span>
+      <span class="no-results back-to-archive"
+        >No search results for {{ query }}, go back to archive</span
+      >
     </div>
   </div>
 </div>

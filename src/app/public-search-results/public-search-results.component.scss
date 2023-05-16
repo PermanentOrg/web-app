@@ -7,7 +7,6 @@
 }
 
 .search-results-container {
-
   .search-results {
     font-size: 1.75rem;
     font-family: 'Usual';
@@ -35,7 +34,7 @@
     color: #131b4a;
   }
 
-  .no-results{
+  .no-results {
     font-size: 24px;
   }
 }
@@ -150,15 +149,14 @@
   margin-top: 30px;
 }
 
-.profile-container{
+.profile-container {
   width: 60%;
 
-  @include beforeDesktop{
+  @include beforeDesktop {
     width: 100%;
   }
 }
 
-
-.result-nav{
+.result-nav {
   cursor: pointer;
 }

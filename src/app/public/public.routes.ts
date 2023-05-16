@@ -44,7 +44,7 @@ export const routes: RoutesWithData = [
         children: [
           {
             path: 'search/:archiveId/:query',
-            component:PublicSearchResultsComponent
+            component: PublicSearchResultsComponent,
           },
           {
             path: 'profile',
