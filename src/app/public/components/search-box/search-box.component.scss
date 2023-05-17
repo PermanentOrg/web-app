@@ -203,3 +203,16 @@ form {
     background: rgba(0, 0, 0, 0.3);
   }
 }
+
+.form-container {
+  display: flex;
+}
+
+.clear-icon {
+  cursor: pointer;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.hide-border {
+  border: none !important;
+}

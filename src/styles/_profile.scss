@@ -39,6 +39,7 @@ $profile-sidebar-width: pxToGrid(360px);
   }
 }
 
+
 @mixin profileSection {
   max-width: $profile-max-width;
   padding-top: $grid-unit;

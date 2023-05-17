@@ -11,13 +11,13 @@ import { TagsService } from '@core/services/tags/tags.service';
 export class SearchService {
   private fuseOptions: Fuse.IFuseOptions<ItemVO> = {
     keys: ['displayName'],
-    threshold: 0.1
+    threshold: 0.1,
   };
   private fuse = new Fuse([], this.fuseOptions);
 
   private tagsFuseOptions: Fuse.IFuseOptions<ItemVO> = {
     keys: ['name'],
-    threshold: 0.1
+    threshold: 0.1,
   };
   private tagsFuse = new Fuse([], this.tagsFuseOptions);
 
@@ -30,7 +30,7 @@ export class SearchService {
       this.indexCurrentFolder();
     });
 
-    this.tags.getTags$().subscribe(newTags => {
+    this.tags.getTags$().subscribe((newTags) => {
       this.indexTags(newTags);
     });
   }
@@ -46,7 +46,7 @@ export class SearchService {
       results = results.slice(0, limit);
     }
 
-    return results.map(i => {
+    return results.map((i) => {
       return i.item;
     });
   }
@@ -59,7 +59,7 @@ export class SearchService {
 
     if (termString.match(/tag:"(.*)"/)) {
       const queryParts = [];
-      const parts = termString.split(splitByTerm).filter(x => x && x !== '"');
+      const parts = termString.split(splitByTerm).filter((x) => x && x !== '"');
       for (const part of parts) {
         if (part.includes('tag:')) {
           const tagNames = part.match(getTagName) || [];
@@ -83,11 +83,24 @@ export class SearchService {
       queryString = termString;
     }
 
-    return [ queryString, parsedTags ];
+    return [queryString, parsedTags];
   }
 
-  getResultsInCurrentArchive(searchTerm: string, tags: TagVOData[], limit?: number): Observable<SearchResponse> {
+  getResultsInCurrentArchive(
+    searchTerm: string,
+    tags: TagVOData[],
+    limit?: number
+  ): Observable<SearchResponse> {
     return this.api.search.itemsByNameObservable(searchTerm, tags, limit);
+  }
+
+  getResultsInPublicArchive(
+    searchTerm: string,
+    tags: TagVOData[],
+    archiveId: string,
+    limit?: number
+  ) {
+    return this.api.search.itemsByNameInPublicArchiveObservable(searchTerm, tags,archiveId, limit);
   }
 
   getTagResults(searchTerm: string, limit?: number) {
@@ -101,7 +114,7 @@ export class SearchService {
       results = results.slice(0, limit);
     }
 
-    return results.map(i => {
+    return results.map((i) => {
       return i.item as TagVOData;
     });
   }

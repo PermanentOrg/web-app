@@ -15,6 +15,8 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute, RouterState } from '@angular/router';
 
+import { getFormattedDate } from '@shared/utilities/dateTime';
+
 import { clone, find } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
@@ -188,6 +190,7 @@ export class FileListItemComponent
   public isDisabled =  false;
   public isNameHovered = false;
   public isTextOverflowing = false
+  public isPublicArchive = false
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -202,6 +205,7 @@ export class FileListItemComponent
   public isMyItem = true;
   public canEdit = true;
   public isZip = false;
+  public date:string = ''
 
   private folderThumb200: string;
   private folderThumb500: string;
@@ -241,6 +245,9 @@ export class FileListItemComponent
   ) {}
 
   ngOnInit() {
+    const date = new Date(this.item.displayDT)
+    this.date = getFormattedDate(date);
+
     this.dataService.registerItem(this.item);
     if (this.item.type.includes('app')) {
       this.allowActions = false;
@@ -248,6 +255,7 @@ export class FileListItemComponent
 
     if (this.router.routerState.snapshot.url.includes('/p/')) {
       this.allowActions = false;
+      this.isPublicArchive = true;
     }
 
     if (this.router.routerState.snapshot.url.includes('/share/')) {
@@ -482,6 +490,7 @@ export class FileListItemComponent
 
   onItemClick(event: MouseEvent) {
     if (this.device.isMobileWidth() || !this.canSelect) {
+
       this.goToItem();
       this.itemClicked.emit({
         item: this.item,

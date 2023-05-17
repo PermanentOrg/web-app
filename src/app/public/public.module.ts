@@ -17,6 +17,14 @@ import { PublicProfileComponent } from './components/public-profile/public-profi
 import { PublicProfileService } from './services/public-profile/public-profile.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
+import {
+  FaIconLibrary,
+  FontAwesomeModule,
+} from '@fortawesome/angular-fontawesome';
+import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { ArchiveSearchComponent } from './components/archive-search/archive-search.component';
+import { PublicArchiveWebLinksComponent } from './components/public-archive-web-links/public-archive-web-links.component';
+import { PublicSearchResultsComponent } from './components/public-search-results/public-search-results.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +33,9 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     PublicArchiveComponent,
     SearchBoxComponent,
     PublicProfileComponent,
+    ArchiveSearchComponent,
+    PublicArchiveWebLinksComponent,
+    PublicSearchResultsComponent,
   ],
   exports: [SearchBoxComponent],
   imports: [
@@ -36,11 +47,13 @@ import { AnnouncementModule } from '../announcement/announcement.module';
     FileBrowserModule,
     DialogModule,
     CoreModule,
+    FontAwesomeModule,
   ],
   providers: [DataService, FolderViewService, PublicProfileService],
 })
 export class PublicModule {
-  constructor(folderView: FolderViewService) {
+  constructor(folderView: FolderViewService, private library: FaIconLibrary) {
+    this.library.addIcons(faSearch, faTimesCircle);
     folderView.setFolderView(FolderView.Grid, true);
   }
 }

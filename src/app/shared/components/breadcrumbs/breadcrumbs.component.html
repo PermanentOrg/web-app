@@ -1,6 +1,6 @@
 <div class="breadcrumbs" [hidden]="areBreadcrumbsHidden() || !currentFolder || !breadcrumbs || !breadcrumbs.length" [class.breadcrumbs-dark-text]="darkText"
   [class.breadcrumbs-large]="large">
-  <pr-breadcrumb class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last" [breadcrumb]="breadcrumb" [last]="last">
+  <pr-breadcrumb [hideBreadcrumbText]="hideBreadcrumbText" class="breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last" [breadcrumb]="breadcrumb" [last]="last">
   </pr-breadcrumb>
   <div class="breadcrumb-shares" *ngIf="currentFolder?.ShareVOs?.length">
     <i class="ion-md-people" (click)="onShareIconClick()"

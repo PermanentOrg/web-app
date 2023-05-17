@@ -22,6 +22,12 @@
   }
 }
 
+@mixin afterTabletBeforeDesktop {
+  @media screen and (min-width: $tablet-horizontal) and (max-width: 1200px) {
+    @content;
+  }
+}
+
 @mixin fullscreen {
   position: fixed;
   top: 0;
