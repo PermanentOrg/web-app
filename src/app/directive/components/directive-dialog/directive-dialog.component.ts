@@ -13,17 +13,17 @@ export class DirectiveDialogComponent {
   public mode: DialogState = 'display';
   public directive: Directive;
 
-  public setSavedDirective(d: Directive): void {
-    this.directive = d;
+  public setSavedDirective(directive: Directive): void {
+    this.directive = directive;
   }
 
-  public switchToEdit(d: Directive): void {
-    this.setSavedDirective(d);
+  public switchToEdit(directive: Directive): void {
+    this.setSavedDirective(directive);
     this.mode = 'edit';
   }
 
-  public saveEditedDirective(d: Directive): void {
-    this.setSavedDirective(d);
+  public saveEditedDirective(directive: Directive): void {
+    this.setSavedDirective(directive);
     this.mode = 'display';
   }
 }
