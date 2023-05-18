@@ -139,15 +139,13 @@
             <span *ngIf="!currentRecord.LocnVO">No location</span>
           </td>
         </tr>
-        <tr>
-        </tr>
+        <tr></tr>
       </table>
       <pr-download-button
-      *ngIf="!isPublicArchive || (isPublicArchive && allowDownloads)"
-      [selectedItem]="currentRecord"
-      [isFileView]="true"
-    ></pr-download-button>
+        *ngIf="!isPublicArchive || (isPublicArchive && allowDownloads)"
+        [selectedItem]="currentRecord"
+        [isFileView]="true"
+      ></pr-download-button>
     </div>
-   
   </div>
 </div>
