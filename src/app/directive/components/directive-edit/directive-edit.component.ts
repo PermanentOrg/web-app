@@ -41,7 +41,7 @@ export class DirectiveEditComponent implements OnInit {
         const directive: DirectiveUpdateRequest = {
           directiveId: this.directive.directiveId,
         };
-        directive.stewardEmail = this.directive.steward.email;
+        directive.stewardEmail = this.email;
         directive.note = this.note;
         const response = await this.api.directive.update(directive);
         this.catchNotFoundError(response);
