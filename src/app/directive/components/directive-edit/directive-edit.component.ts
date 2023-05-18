@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Directive, DirectiveData } from '@models/directive';
+import { Directive, DirectiveUpdateRequest } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -27,7 +27,7 @@ export class DirectiveEditComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.directive) {
-      this.email = this.directive.stewardEmail;
+      this.email = this.directive.steward.email;
       this.note = this.directive.note;
     }
     this.archiveName = this.account.getArchive().fullName;
@@ -38,9 +38,10 @@ export class DirectiveEditComponent implements OnInit {
     this.accountExists = true;
     try {
       if (this.directive) {
-        const directive: Partial<DirectiveData> = {};
-        directive.directiveId = this.directive.directiveId;
-        directive.stewardEmail = this.email;
+        const directive: DirectiveUpdateRequest = {
+          directiveId: this.directive.directiveId,
+        };
+        directive.stewardEmail = this.directive.steward.email;
         directive.note = this.note;
         const response = await this.api.directive.update(directive);
         this.catchNotFoundError(response);

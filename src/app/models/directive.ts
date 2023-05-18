@@ -6,6 +6,11 @@ export interface DirectiveTrigger {
   updatedDt: Date;
 }
 
+export interface ArchiveSteward {
+  name?: string;
+  email: string;
+}
+
 export interface DirectiveData {
   directiveId: string;
   archiveId: number;
@@ -13,7 +18,7 @@ export interface DirectiveData {
   createdDt: Date;
   updatedDt: Date;
   trigger: DirectiveTrigger;
-  stewardEmail?: string;
+  steward?: ArchiveSteward;
   note?: string;
   executionDt?: Date;
 }
@@ -25,7 +30,7 @@ export class Directive implements DirectiveData {
   public createdDt: Date;
   public updatedDt: Date;
   public trigger: DirectiveTrigger;
-  public stewardEmail: string;
+  public steward: ArchiveSteward;
   public note: string;
   public executionDt: Date | null;
 
@@ -51,4 +56,10 @@ export interface DirectiveCreateRequest {
   };
   stewardEmail?: string;
   note?: string;
+}
+
+export interface DirectiveUpdateRequest {
+  directiveId: string;
+  note?: string;
+  stewardEmail?: string;
 }

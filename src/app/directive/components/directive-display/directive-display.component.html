@@ -50,10 +50,10 @@
       <div
         [class]="{
           'archive-steward-email': true,
-          'not-assigned': !directive?.stewardEmail
+          'not-assigned': !directive?.steward?.email
         }"
       >
-        {{ directive?.stewardEmail ?? 'not assigned' }}
+        {{ directive?.steward?.email ?? 'not assigned' }}
       </div>
     </div>
     <div class="row">
@@ -73,7 +73,7 @@
     [disabled]="error || noPlan"
     (click)="beginEdit.emit(directive)"
   >
-    {{ directive?.stewardEmail ? 'Edit' : 'Assign' }} Archive Steward
+    {{ directive?.steward?.email ? 'Edit' : 'Assign' }} Archive Steward
   </button>
   <div>&nbsp;</div>
 </div>

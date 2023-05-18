@@ -13,7 +13,7 @@ import {
   ArchiveVO,
   Directive,
   DirectiveCreateRequest,
-  DirectiveData,
+  DirectiveUpdateRequest,
 } from '@models/index';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
@@ -97,7 +97,7 @@ describe('DirectiveRepo', () => {
   });
 
   it('can update an existing directive', (done) => {
-    const directiveUpdate: Partial<DirectiveData> = {
+    const directiveUpdate: DirectiveUpdateRequest = {
       directiveId: 'test-id',
       note: 'New Note',
     };
@@ -117,6 +117,8 @@ describe('DirectiveRepo', () => {
   });
 
   it('will throw an error if no directiveId is specified in update', async () => {
-    await expectAsync(repo.update({ note: 'New Note' })).toBeRejected();
+    await expectAsync(
+      repo.update({ note: 'New Note' } as DirectiveUpdateRequest)
+    ).toBeRejected();
   });
 });
