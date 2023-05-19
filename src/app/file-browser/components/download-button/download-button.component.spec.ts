@@ -12,10 +12,9 @@ describe('DownloadButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DownloadButtonComponent ],
-      providers:[DataService, MessageService, HttpClient,HttpHandler]
-    })
-    .compileComponents();
+      declarations: [DownloadButtonComponent],
+      providers: [DataService, MessageService, HttpClient, HttpHandler],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DownloadButtonComponent);
     component = fixture.componentInstance;
