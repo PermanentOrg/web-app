@@ -16,4 +16,8 @@ export class PublicArchiveWebLinksComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  navigate(url:string):void{
+    window.open(url, "_blank");
+  }
 }
