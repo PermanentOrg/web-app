@@ -485,31 +485,30 @@ export class DataService {
     });
   }
 
-  public downloadFile(item: RecordVO, fileName:string): Promise<any> {
+  public downloadFile(item: RecordVO, type: string): Promise<any> {
     if (item.FileVOs && item.FileVOs.length) {
-      downloadFile(item,fileName);
+      downloadFile(item, type);
       return Promise.resolve();
     } else {
       return this.fetchFullItems([item]).then(() => {
-        downloadFile(item,fileName);
+        downloadFile(item, type);
       });
     }
 
-    function downloadFile(fileItem: any,fileName?: string) {
-      let fileVO;
-      fileVO = getFile(fileItem,fileName) as any;
+    function downloadFile(fileItem: any, type?: string) {
+      const fileVO = getFile(fileItem, type) as any;
       const link = document.createElement('a');
       link.href = fileVO.downloadURL;
       link.click();
     }
 
-    function getFile(fileItem: RecordVO, fileName: string) {
-      if(fileName){
-      return find(fileItem.FileVOs, { type: fileName }); }
+    function getFile(fileItem: RecordVO, type: string) {
+      if (type) {
+        return find(fileItem.FileVOs, { type });
+      }
 
-      return find(fileItem.FileVOs,{format: "file.format.original"})
+      return find(fileItem.FileVOs, { format: 'file.format.original' });
     }
-
   }
 
   public async createZipForDownload(items: ItemVO[]): Promise<any> {
