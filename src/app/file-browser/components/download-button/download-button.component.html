@@ -12,7 +12,7 @@
     <i *ngIf="!selectedItem?.isFolder" class="material-icons">keyboard_arrow_down</i>
   </div>
 </div>
-<div *ngIf="displayDownloadDropdown" class="download-options" [ngClass]="{'download-options-file-viewer':isFileView}">
+<div #downloadButtonDropdown *ngIf="displayDownloadDropdown" class="download-options" [ngClass]="{'download-options-file-viewer':isFileView}">
   <div
     *ngFor="let item of downloadOptions; let i = index"
     class="download-option"

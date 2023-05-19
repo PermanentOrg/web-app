@@ -28,11 +28,10 @@ export class DownloadButtonComponent implements OnInit {
   @Input() isFileView = false;
 
   @ViewChild('downloadButton') downloadButton: ElementRef;
+  @ViewChild('downloadButtonDropdown', { static: false })
+  downloadButtonDropdown: ElementRef;
 
-  constructor(
-    private data: DataService,
-    private message: MessageService
-  ) {}
+  constructor(private data: DataService, private message: MessageService) {}
 
   ngOnInit(): void {}
 
@@ -50,6 +49,7 @@ export class DownloadButtonComponent implements OnInit {
     if (this.selectedItem instanceof RecordVO && this.selectedItem.FileVOs) {
       if (!this.displayDownloadDropdown) {
         this.displayDownloadOptions();
+        this.bringDropdownIntoView();
       } else {
         this.displayDownloadDropdown = false;
         this.downloadOptions = [];
@@ -89,5 +89,21 @@ export class DownloadButtonComponent implements OnInit {
       { name: original?.type, extension: original?.type.split('.').pop() },
       ...converted,
     ];
+  }
+
+  bringDropdownIntoView() {
+    if (this.downloadButtonDropdown) {
+      this.downloadButtonDropdown?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
+    } else {
+      this.downloadButton.nativeElement.parentElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
   }
 }
