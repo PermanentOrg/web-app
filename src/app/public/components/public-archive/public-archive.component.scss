@@ -85,6 +85,10 @@ $desktop-size: pxToGrid(200px);
 
   &-public-profile {
     @include banner-margin-offset-public-profile;
+
+    @media screen and (max-width: 1440px){
+      top: 0
+    }
   }
 }
 
