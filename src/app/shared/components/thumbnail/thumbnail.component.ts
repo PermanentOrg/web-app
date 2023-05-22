@@ -77,7 +77,8 @@ export class ThumbnailComponent
     if (
       resizableImageElement &&
       this.item instanceof RecordVO &&
-      this.item.FileVOs
+      this.item.FileVOs &&
+      this.item.type === 'type.record.image'
     ) {
       const fullSizeImage = this.chooseFullSizeImage(this.item);
       if (fullSizeImage == null) {
