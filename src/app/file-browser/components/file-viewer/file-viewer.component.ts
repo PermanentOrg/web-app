@@ -176,7 +176,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.isVideo = this.currentRecord.type.includes('video');
     this.isDocument =
       this.currentRecord.type.includes('document') ||
-      this.currentRecord.type.includes('pdf')
+      this.currentRecord.type.includes('pdf');
     this.documentUrl = this.getPdfUrl();
     this.setCurrentTags();
   }
