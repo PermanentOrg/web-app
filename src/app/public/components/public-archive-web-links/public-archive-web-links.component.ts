@@ -18,6 +18,9 @@ export class PublicArchiveWebLinksComponent implements OnInit {
   ngOnInit(): void {}
 
   navigate(url: string): void {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'http://' + url;
+    }
     window.open(url, '_blank');
   }
 }
