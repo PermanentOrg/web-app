@@ -1,7 +1,7 @@
 <div class="{{ componentName }}">
   <div *ngIf="email || website || facebook" [ngClass]="componentName + '-contact'">
     <p class="title">Contact</p>
-    <div (click)="navigate(email)" *ngIf="email" class="link-container">
+    <div (click)="navigateToMail(email)" *ngIf="email" class="link-container">
       <svg
         width="24"
         height="24"

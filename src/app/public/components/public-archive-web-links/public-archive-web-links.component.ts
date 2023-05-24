@@ -23,4 +23,8 @@ export class PublicArchiveWebLinksComponent implements OnInit {
     }
     window.open(url, '_blank');
   }
+
+  navigateToMail(mail:string): void {
+    window.open('mailto:' + mail, '_blank');
+  }
 }
