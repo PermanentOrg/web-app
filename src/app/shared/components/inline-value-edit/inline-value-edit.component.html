@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="description-textarea" [class.can-edit]="canEdit" *ngIf="!isEditing" (click)="startEdit()">
-        <div class="description-textarea-value" *ngIf="displayValue && displayValue.trim()" [innerHtml]="displayValue"></div>
+        <p class="description-textarea-value" *ngIf="displayValue && displayValue.trim()" [innerHtml]="displayValue"></p>
         <p *ngIf="!displayValue || !displayValue.trim()">{{emptyMessage}}</p>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
