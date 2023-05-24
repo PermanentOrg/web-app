@@ -200,9 +200,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     let url;
 
     if (!pdf) {
-      url = original.fileURL;
+      url = original?.fileURL;
     } else if (pdf) {
-      url = pdf.fileURL;
+      url = pdf?.fileURL;
     }
 
     if (!url) {
