@@ -77,8 +77,8 @@
           <div class="placeholder-line"></div>
         </div>
       </div>
-      <div *ngIf="!isEditing" (click)="startEdit()">
-        <p *ngIf="displayValue && displayValue.trim()">{{displayValue}}</p>
+      <div class="description-textarea" [class.can-edit]="canEdit" *ngIf="!isEditing" (click)="startEdit()">
+        <div class="description-textarea-value" *ngIf="displayValue && displayValue.trim()" [innerHtml]="displayValue"></div>
         <p *ngIf="!displayValue || !displayValue.trim()">{{emptyMessage}}</p>
       </div>
       <div class="inline-value-controls" *ngIf="isEditing" @ngIfScaleAnimation>
