@@ -19,7 +19,7 @@ export class PublicArchiveWebLinksComponent implements OnInit {
 
   navigate(url: string): void {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'http://' + url;
+        url = 'https://' + url;
     }
     window.open(url, '_blank');
   }
