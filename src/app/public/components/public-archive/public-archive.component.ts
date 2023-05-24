@@ -27,6 +27,9 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   description: string;
   socialMedia: Record<string, string> = {};
   searchResults: any[] = [];
+  showShortText = true;
+  characterLimit = 100;
+  shortText = '';
 
   waiting = true;
 
@@ -84,7 +87,16 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
           item.string1.includes('facebook')
         )?.string1;
         return this.socialMedia;
-      })
+      }),
+      this.publicProfile
+        .profileItemsDictionary$()
+        .subscribe(
+          (items) =>
+            (this.shortText = this.profileItems.description[0].textData1?.slice(
+              0,
+              this.characterLimit
+            ))
+        )
     );
   }
 
@@ -106,5 +118,9 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  toggleShowFullText(): void {
+    this.showShortText = !this.showShortText;
   }
 }
