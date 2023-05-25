@@ -9,8 +9,6 @@ export class PublicArchiveWebLinksComponent implements OnInit {
   componentName: string = 'public-archive-web-links';
 
   @Input() description: string = '';
-  
-
   @Input() emails: string[] = [];
   @Input() websites: string[] = [];
 

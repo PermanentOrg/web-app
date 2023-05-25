@@ -25,7 +25,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   archive: ArchiveVO;
   profileItems: ProfileItemVODictionary = {};
   description: string;
-  socialMedia: Record<string, string> = {};
   searchResults: any[] = [];
   showShortText = true;
   characterLimit = 100;
