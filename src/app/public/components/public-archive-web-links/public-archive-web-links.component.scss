@@ -30,7 +30,7 @@
   display: flex;
   margin-bottom: 2rem;
   & > svg {
-    margin-right: 1.2rem;
+    margin-right: 0.6rem;
   }
 }
 
@@ -43,6 +43,9 @@
   text-align: left;
   color: $darkBlue;
   margin-bottom: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 15rem;
 }
 
 .description {
