@@ -1,7 +1,14 @@
 <div class="{{ componentName }}">
-  <div *ngIf="email || website || facebook" [ngClass]="componentName + '-contact'">
+  <div
+    *ngIf="emails.length || websites.length"
+    [ngClass]="componentName + '-contact'"
+  >
     <p class="title">Contact</p>
-    <div (click)="navigateToMail(email)" *ngIf="email" class="link-container">
+    <div
+      (click)="navigateToMail(item)"
+      *ngFor="let item of emails"
+      class="link-container"
+    >
       <svg
         width="24"
         height="24"
@@ -28,11 +35,15 @@
         </defs>
       </svg>
       <p class="link">
-        {{ email }}
+        {{ item }}
       </p>
     </div>
 
-    <div (click)="navigate(website)" *ngIf="website" class="link-container">
+    <div
+      (click)="navigate(item)"
+      *ngFor="let item of websites"
+      class="link-container"
+    >
       <svg
         width="24"
         height="24"
@@ -59,41 +70,8 @@
         </defs>
       </svg>
       <p class="link">
-        {{ website }}
+        {{ item }}
       </p>
-    </div>
-    <div (click)="navigate(facebook)" *ngIf="facebook" class="link-container">
-      <svg
-        width="24"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g clip-path="url(#clip0_512_9450)">
-          <path
-            d="M15.75 8C15.75 3.71875 12.2812 0.25 8 0.25C3.71875 0.25 0.25 3.71875 0.25 8C0.25 11.8681 3.08406 15.0744 6.78906 15.6562V10.2403H4.82031V8H6.78906V6.2925C6.78906 4.35031 7.94531 3.2775 9.71625 3.2775C10.5644 3.2775 11.4513 3.42875 11.4513 3.42875V5.335H10.4738C9.51125 5.335 9.21094 5.9325 9.21094 6.54531V8H11.3603L11.0166 10.2403H9.21094V15.6562C12.9159 15.0744 15.75 11.8681 15.75 8Z"
-            fill="url(#paint0_linear_512_9450)"
-          />
-        </g>
-        <defs>
-          <linearGradient
-            id="paint0_linear_512_9450"
-            x1="0.25"
-            y1="0.25"
-            x2="15.656"
-            y2="15.7497"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="#8D0085" />
-            <stop offset="1" stop-color="#FF9400" />
-          </linearGradient>
-          <clipPath id="clip0_512_9450">
-            <rect width="16" height="16" fill="white" />
-          </clipPath>
-        </defs>
-      </svg>
-      <p class="link">{{facebook}}</p>
     </div>
   </div>
   <div *ngIf="description" [ngClass]="componentName + '-about'">
