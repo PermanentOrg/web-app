@@ -1,39 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO } from '@models/tag-vo';
 import { ArchiveVO } from '@models/index';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 type ArchiveSettingsDialogTab =
   | 'manage-keywords'
   | 'manage-metadata'
-  | 'public-settings';
+  | 'public-settings'
+  | 'legacy-planning';
 
 @Component({
   selector: 'pr-archive-settings-dialog',
   templateUrl: './archive-settings-dialog.component.html',
   styleUrls: ['./archive-settings-dialog.component.scss'],
 })
-export class ArchiveSettingsDialogComponent implements OnInit {
+export class ArchiveSettingsDialogComponent implements OnInit, OnDestroy {
   public readonly MAX_FETCH_ATTEMPTS: number = 5;
   public activeTab: ArchiveSettingsDialogTab = 'manage-keywords';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasAccess: boolean;
   public archive: ArchiveVO;
+  public legacyPlanningEnabled: boolean = false;
 
   protected fetchTagsAttempts: number = 0;
+  protected fragmentSubscription: Subscription;
 
   constructor(
     private dialogRef: DialogRef,
     private api: ApiService,
     private account: AccountService,
-    private tagsService: TagsService
+    private tagsService: TagsService,
+    public route: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {
+    this.fragmentSubscription = this.route.fragment.subscribe((fragment) => {
+      if (fragment === 'legacy-planning') {
+        this.legacyPlanningEnabled = true;
+        this.activeTab = 'legacy-planning';
+      }
+    });
     const accessRole = this.account.getArchive().accessRole;
     this.hasAccess =
       accessRole === 'access.role.owner' ||
@@ -60,6 +72,10 @@ export class ArchiveSettingsDialogComponent implements OnInit {
         });
     }
     this.archive = this.account.getArchive();
+  }
+
+  public ngOnDestroy(): void {
+    this.fragmentSubscription.unsubscribe();
   }
 
   public refreshTags(): void {

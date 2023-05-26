@@ -28,7 +28,7 @@ describe('DirectiveDisplayComponent', () => {
       });
     MockAccountService.mockArchive = new ArchiveVO({
       archiveId: 1,
-      fullName: 'The Test Archive',
+      fullName: 'Test',
     });
     MockDirectiveRepo.reset();
     MockDirectiveRepo.mockStewardEmail = 'test@example.com';

@@ -71,7 +71,10 @@ export class MockDirectiveRepo {
         createdDt: new Date(),
         updatedDt: new Date(),
       },
-      stewardEmail: directive.stewardEmail,
+      steward: {
+        email: directive.stewardEmail,
+        name: '',
+      },
       note: directive.note,
       executionDt: null,
     };

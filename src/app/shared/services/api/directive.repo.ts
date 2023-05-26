@@ -1,10 +1,10 @@
 import {
   AccountVO,
   ArchiveVO,
-  DirectiveData,
   DirectiveCreateRequest,
   LegacyContact,
   Directive,
+  DirectiveUpdateRequest,
 } from '@models/index';
 import { BaseRepo } from './base';
 import { getFirst } from '../http-v2/http-v2.service';
@@ -31,7 +31,7 @@ export class DirectiveRepo extends BaseRepo {
     ).toPromise();
   }
 
-  public async update(directive: Partial<DirectiveData>): Promise<Directive> {
+  public async update(directive: DirectiveUpdateRequest): Promise<Directive> {
     if (!directive.directiveId) {
       throw new Error(
         'directiveID is required to update an existing Directive.'

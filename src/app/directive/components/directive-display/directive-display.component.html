@@ -20,7 +20,9 @@
     We have additional support and resources about planning your legacy
     <a href="#">here.</a>
   </p>
-  <div class="archive-steward-header">Archive Steward: {{ archiveName }}</div>
+  <div class="archive-steward-header">
+    Archive Steward: The {{ archiveName }} Archive
+  </div>
   <div class="no-plan-warning" *ngIf="noPlan">
     <div class="warning-icon">
       <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
@@ -48,10 +50,10 @@
       <div
         [class]="{
           'archive-steward-email': true,
-          'not-assigned': !directive?.stewardEmail
+          'not-assigned': !directive?.steward?.email
         }"
       >
-        {{ directive?.stewardEmail ?? 'not assigned' }}
+        {{ directive?.steward?.email ?? 'not assigned' }}
       </div>
     </div>
     <div class="row">
@@ -66,8 +68,12 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" [disabled]="error || noPlan">
-    {{ directive?.stewardEmail ? 'Edit' : 'Assign' }} Archive Steward
+  <button
+    class="btn btn-primary"
+    [disabled]="error || noPlan"
+    (click)="beginEdit.emit(directive)"
+  >
+    {{ directive?.steward?.email ? 'Edit' : 'Assign' }} Archive Steward
   </button>
   <div>&nbsp;</div>
 </div>

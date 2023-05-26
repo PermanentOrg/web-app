@@ -28,6 +28,14 @@
       >
         Archive Settings
       </div>
+      <div
+        class="dialog-tab"
+        (click)="setTab('legacy-planning')"
+        [class.active]="activeTab === 'legacy-planning'"
+        *ngIf="legacyPlanningEnabled"
+      >
+        Legacy Planning
+      </div>
     </div>
     <div class="panel" #panel>
       <ng-container [ngSwitch]="activeTab">
@@ -75,6 +83,9 @@
           <ng-container *ngIf="hasAccess; else noAccess">
             <pr-manage-custom-metadata></pr-manage-custom-metadata>
           </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'legacy-planning'">
+          <pr-directive-dialog></pr-directive-dialog>
         </ng-container>
       </ng-container>
     </div>
