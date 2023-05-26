@@ -67,7 +67,8 @@ $desktop-size: pxToGrid(200px);
   @include desktop {
     flex-direction: row;
     padding-left: $grid-unit;
-    top: 0
+    top: 0;
+    margin-top: 10px;
   }
 
   @include beforeDesktop {
