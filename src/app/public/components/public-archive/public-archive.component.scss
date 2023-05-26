@@ -27,7 +27,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 @mixin banner-margin-offset-public-profile {
-  top: 1rem;
+  top: 0rem;
 }
 
 .banner-section {
@@ -67,16 +67,7 @@ $desktop-size: pxToGrid(200px);
   @include desktop {
     flex-direction: row;
     padding-left: $grid-unit;
-    @include banner-margin-offset;
-  }
-
-  @include afterTabletBeforeDesktop{
-    top: -5rem
-  }
-
-  @media screen and (min-width: 900px) and (max-width:1100px){
-    top: 0;
-    
+    top: 0
   }
 
   @include beforeDesktop {
