@@ -27,7 +27,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 @mixin banner-margin-offset-public-profile {
-  top: -2rem;
+  top: 0rem;
 }
 
 .banner-section {
@@ -67,16 +67,8 @@ $desktop-size: pxToGrid(200px);
   @include desktop {
     flex-direction: row;
     padding-left: $grid-unit;
-    @include banner-margin-offset;
-  }
-
-  @include afterTabletBeforeDesktop{
-    top: -5rem
-  }
-
-  @media screen and (min-width: 900px) and (max-width:1100px){
     top: 0;
-    
+    margin-top: 10px;
   }
 
   @include beforeDesktop {
@@ -85,6 +77,10 @@ $desktop-size: pxToGrid(200px);
 
   &-public-profile {
     @include banner-margin-offset-public-profile;
+
+    @media screen and (max-width: 1440px){
+      top: 0
+    }
   }
 }
 
@@ -328,7 +324,6 @@ $desktop-size: pxToGrid(200px);
 
 .profile-image-search {
   display: flex;
-  align-items: flex-end;
   padding-left: 3.5rem;
 
   @include beforeDesktop {
