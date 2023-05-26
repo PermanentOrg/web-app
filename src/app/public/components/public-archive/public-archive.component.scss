@@ -27,7 +27,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 @mixin banner-margin-offset-public-profile {
-  top: -2rem;
+  top: 1rem;
 }
 
 .banner-section {
@@ -332,7 +332,6 @@ $desktop-size: pxToGrid(200px);
 
 .profile-image-search {
   display: flex;
-  align-items: flex-end;
   padding-left: 3.5rem;
 
   @include beforeDesktop {
