@@ -12,16 +12,19 @@ import {
 import { DirectiveEditComponent } from './components/directive-edit/directive-edit.component';
 import { FormsModule } from '@angular/forms';
 import { DirectiveDialogComponent } from './components/directive-dialog/directive-dialog.component';
+import { LegacyContactDisplayComponent } from './components/legacy-contact-display/legacy-contact-display.component';
 @NgModule({
   exports: [
     DirectiveDisplayComponent,
     DirectiveEditComponent,
     DirectiveDialogComponent,
+    LegacyContactDisplayComponent,
   ],
   declarations: [
     DirectiveDisplayComponent,
     DirectiveEditComponent,
     DirectiveDialogComponent,
+    LegacyContactDisplayComponent,
   ],
   imports: [CommonModule, FontAwesomeModule, FormsModule],
 })
