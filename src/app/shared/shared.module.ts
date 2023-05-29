@@ -173,7 +173,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     SafeHtmlPipe,
     ArchiveSearchBoxComponent,
     NewArchiveFormComponent,
-    PrependProtocolPipe
+    PrependProtocolPipe,
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
