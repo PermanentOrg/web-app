@@ -58,6 +58,7 @@ import { ItemTypeIconPipe } from './pipes/item-type-icon.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ArchiveSearchBoxComponent } from './components/archive-search-box/archive-search-box.component';
 import { NewArchiveFormComponent } from './components/new-archive-form/new-archive-form.component';
+import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 
 import {
   FontAwesomeModule,
@@ -127,6 +128,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     SafeHtmlPipe,
     ArchiveSearchBoxComponent,
     NewArchiveFormComponent,
+    PrependProtocolPipe,
   ],
   declarations: [
     ThumbnailComponent,
@@ -171,6 +173,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     SafeHtmlPipe,
     ArchiveSearchBoxComponent,
     NewArchiveFormComponent,
+    PrependProtocolPipe
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })

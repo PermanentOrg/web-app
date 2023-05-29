@@ -13,7 +13,7 @@
     >
       {{ item }}
     </a>
-    <a [ngbTooltip]="item" class="link" [href]="item" target="_blank" *ngFor="let item of websites">
+    <a [ngbTooltip]="item" class="link" [href]="item | prependProtocol" target="_blank" *ngFor="let item of websites">
       {{ item }}
     </a>
   </div>
