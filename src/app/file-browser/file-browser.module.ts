@@ -25,7 +25,7 @@ export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-bro
     FileBrowserRoutingModule,
     SharedModule,
     DialogModule,
-    NgbTooltipModule,
+    NgbTooltipModule
   ],
   exports: [
     FileListComponent,

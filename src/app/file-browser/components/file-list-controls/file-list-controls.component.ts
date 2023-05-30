@@ -368,6 +368,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       else{
         this.displayDownloadDropdown = false
         this.downloadOptions = []
+        
       }
 
     } else {
