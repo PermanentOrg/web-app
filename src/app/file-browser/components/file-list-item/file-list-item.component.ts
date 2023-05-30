@@ -774,7 +774,7 @@ export class FileListItemComponent
         this.openFolderPicker(FolderPickerOperations.Copy);
         break;
       case 'download':
-        this.dataService.downloadFile(this.item as RecordVO,'').then(() => {
+        this.dataService.downloadFile(this.item as RecordVO,'type.format.original').then(() => {
           actionDeferred.resolve();
         });
         break;

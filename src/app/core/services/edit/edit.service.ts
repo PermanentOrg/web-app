@@ -208,7 +208,7 @@ export class EditService {
           if (items.length === 1) {
             const item = items[0];
             if (item instanceof RecordVO) {
-              this.dataService.downloadFile(item, '');
+              this.dataService.downloadFile(item);
             }
           }
           break;

@@ -485,7 +485,7 @@ export class DataService {
     });
   }
 
-  public downloadFile(item: RecordVO, type: string): Promise<any> {
+  public downloadFile(item: RecordVO, type?: string): Promise<any> {
     if (item.FileVOs && item.FileVOs.length) {
       downloadFile(item, type);
       return Promise.resolve();
@@ -502,7 +502,7 @@ export class DataService {
       link.click();
     }
 
-    function getFile(fileItem: RecordVO, type: string) {
+    function getFile(fileItem: RecordVO, type?: string) {
       if (type) {
         return find(fileItem.FileVOs, { type });
       }
