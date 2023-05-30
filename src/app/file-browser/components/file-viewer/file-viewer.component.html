@@ -34,6 +34,9 @@
           [item]="currentRecord"
           *ngIf="showThumbnail"
           [hideResizableImage]="false"
+          [records]="records"
+          (isFullScreenOutput)="toggleFullScreen($event)"
+          [isFullScreen]="isFullScreen"
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>

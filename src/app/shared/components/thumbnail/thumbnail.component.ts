@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 /* @format */
 import {
   Component,
@@ -22,7 +23,7 @@ import debug from 'debug';
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import * as OpenSeaDragon from 'openseadragon';
-import { ViewerEvent } from 'openseadragon';
+import { FullScreenEvent,ZoomEvent } from 'openseadragon';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
@@ -58,14 +59,20 @@ export class ThumbnailComponent
   public isZip: boolean = false;
 
   @Input() hideResizableImage: boolean = true;
+  @Input() records = []
   @Output() disableSwipe = new EventEmitter<boolean>(false);
+  @Output() isFullScreenOutput = new EventEmitter<boolean>(false);
+  @Input() isFullScreen: boolean = false;
 
+  currentRecordIndex: number = 0;
   viewer: OpenSeaDragon.Viewer;
 
   constructor(
     elementRef: ElementRef,
     private renderer: Renderer2,
-    private zone: NgZone
+    private zone: NgZone,
+    private router:Router,
+    private route:ActivatedRoute
   ) {
     this.element = elementRef.nativeElement;
     this.debouncedResize = debounce(this.checkElementWidth, 100);
@@ -92,7 +99,7 @@ export class ThumbnailComponent
         maxZoomLevel: 10,
       });
 
-      this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
+      this.viewer.addHandler('zoom', (event: ZoomEvent) => {
         const zoom = event.zoom;
         if (!this.initialZoom) {
           this.initialZoom = zoom;
@@ -104,6 +111,35 @@ export class ThumbnailComponent
           this.disableSwipe.emit(false);
         }
       });
+
+      this.viewer.addHandler('full-screen', (event: FullScreenEvent) => {
+        this.currentRecordIndex = this.records.findIndex(record => record.archiveNbr === this.item.archiveNbr);
+        const {fullScreen} = event;
+        this.isFullScreenOutput.emit(fullScreen);
+        this.isFullScreen = fullScreen
+        console.log(this.viewer.isFullPage())
+        console.log(this.currentRecordIndex)
+      });
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  imageNavigation(event: KeyboardEvent) {
+      switch(event.code) {
+        case "ArrowRight":
+        case "ArrowLeft":
+          if(this.isFullScreen){
+            if(this.item.type === 'type.record.image'){
+            this.viewer?.setFullPage(true)
+            }
+             else{
+            this.router.navigate(['../'], {
+              // relativeTo: this.route,
+            });
+          }
+        }
+            break;
+        
     }
   }
 
@@ -211,6 +247,7 @@ export class ThumbnailComponent
   }
 
   chooseFullSizeImage(record: RecordVO) {
+    console.log(record)
     if (record.FileVOs.length > 1) {
       const convertedUrl = record.FileVOs.find(
         (file) => file.format == 'file.format.converted'
