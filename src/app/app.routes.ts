@@ -45,6 +45,9 @@ const fusionauthHost = SecretsService.getStatic('FUSIONAUTH_HOST');
 
 const routes: RoutesWithData = [
   {
+    path:'wjma', redirectTo:'/p/archive/07r7-0000',pathMatch:'full'
+  },
+  {
     path: 'p',
     loadChildren: () =>
       import('./public/public.module').then((m) => m.PublicModule),
@@ -138,6 +141,7 @@ const routes: RoutesWithData = [
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ],
   },
+  
 ];
 
 @NgModule({
