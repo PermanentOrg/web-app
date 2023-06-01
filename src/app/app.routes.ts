@@ -42,8 +42,16 @@ export interface RouteWithData extends Route {
 export type RoutesWithData = RouteWithData[];
 
 const fusionauthHost = SecretsService.getStatic('FUSIONAUTH_HOST');
+const customRedirects: RoutesWithData = [
+  {
+    path: 'wjma',
+    redirectTo: '/p/archive/07r7-0000',
+    pathMatch: 'full',
+  },
+];
 
 const routes: RoutesWithData = [
+  ...customRedirects,
   {
     path: 'p',
     loadChildren: () =>
