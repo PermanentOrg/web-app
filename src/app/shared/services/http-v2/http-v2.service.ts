@@ -1,9 +1,10 @@
+/* @format */
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
 import { environment } from '@root/environments/environment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Location } from '@angular/common';
 
 const CSRF_KEY = 'CSRF';
@@ -38,6 +39,9 @@ export class HttpV2Service {
     'Request-Version': '2',
     'Content-Type': 'application/json',
   });
+
+  public tokenExpired: Subject<void> = new Subject<void>();
+
   protected apiUrl = environment.apiUrl;
   protected authToken: string | null;
 
@@ -217,6 +221,12 @@ export class HttpV2Service {
           return [new responseClass(response)];
         }
         return [response as T];
+      }),
+      catchError((err) => {
+        if (err.status === 401) {
+          this.tokenExpired.next();
+        }
+        return throwError(err);
       })
     );
   }
