@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DirectiveDisplayComponent } from './components/directive-display/directive-display.component';
@@ -13,18 +14,21 @@ import { DirectiveEditComponent } from './components/directive-edit/directive-ed
 import { FormsModule } from '@angular/forms';
 import { DirectiveDialogComponent } from './components/directive-dialog/directive-dialog.component';
 import { LegacyContactDisplayComponent } from './components/legacy-contact-display/legacy-contact-display.component';
+import { LegacyContactEditComponent } from './components/legacy-contact-edit/legacy-contact-edit.component';
 @NgModule({
   exports: [
     DirectiveDisplayComponent,
     DirectiveEditComponent,
     DirectiveDialogComponent,
     LegacyContactDisplayComponent,
+    LegacyContactEditComponent,
   ],
   declarations: [
     DirectiveDisplayComponent,
     DirectiveEditComponent,
     DirectiveDialogComponent,
     LegacyContactDisplayComponent,
+    LegacyContactEditComponent,
   ],
   imports: [CommonModule, FontAwesomeModule, FormsModule],
 })

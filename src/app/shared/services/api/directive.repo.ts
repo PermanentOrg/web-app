@@ -1,3 +1,4 @@
+/* @format */
 import {
   AccountVO,
   ArchiveVO,
@@ -21,6 +22,20 @@ export class DirectiveRepo extends BaseRepo {
   }
 
   public async getLegacyContact(account: AccountVO): Promise<LegacyContact> {
+    console.warn('Legacy Contact API is currently unimplemented.');
+    return {} as LegacyContact;
+  }
+
+  public async createLegacyContact(
+    legacyContact: LegacyContact
+  ): Promise<LegacyContact> {
+    console.warn('Legacy Contact API is currently unimplemented.');
+    return {} as LegacyContact;
+  }
+
+  public async updateLegacyContact(
+    legacyContact: LegacyContact
+  ): Promise<LegacyContact> {
     console.warn('Legacy Contact API is currently unimplemented.');
     return {} as LegacyContact;
   }

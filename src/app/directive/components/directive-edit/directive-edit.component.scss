@@ -12,9 +12,12 @@
     flex-direction: column;
     small {
       font-style: italic;
-      color: #444;
     }
   }
+}
+
+small {
+  color: #444;
 }
 
 .account-not-found {
