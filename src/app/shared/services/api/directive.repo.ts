@@ -1,6 +1,5 @@
 /* @format */
 import {
-  AccountVO,
   ArchiveVO,
   DirectiveCreateRequest,
   LegacyContact,
@@ -21,25 +20,6 @@ export class DirectiveRepo extends BaseRepo {
     ).toPromise();
   }
 
-  public async getLegacyContact(account: AccountVO): Promise<LegacyContact> {
-    console.warn('Legacy Contact API is currently unimplemented.');
-    return {} as LegacyContact;
-  }
-
-  public async createLegacyContact(
-    legacyContact: LegacyContact
-  ): Promise<LegacyContact> {
-    console.warn('Legacy Contact API is currently unimplemented.');
-    return {} as LegacyContact;
-  }
-
-  public async updateLegacyContact(
-    legacyContact: LegacyContact
-  ): Promise<LegacyContact> {
-    console.warn('Legacy Contact API is currently unimplemented.');
-    return {} as LegacyContact;
-  }
-
   public async create(directive: DirectiveCreateRequest): Promise<Directive> {
     return getFirst(
       this.httpV2.post('/v2/directive', directive, Directive)
@@ -57,5 +37,53 @@ export class DirectiveRepo extends BaseRepo {
     return getFirst(
       this.httpV2.put(`/v2/directive/${directive.directiveId}`, data, Directive)
     ).toPromise();
+  }
+
+  public async getLegacyContact(): Promise<LegacyContact> {
+    return getFirst(
+      this.httpV2.get('/v2/legacy-contact', {}, LegacyContactClass)
+    ).toPromise();
+  }
+
+  public async createLegacyContact(
+    legacyContact: LegacyContact
+  ): Promise<LegacyContact> {
+    return getFirst(
+      this.httpV2.post('/v2/legacy-contact', legacyContact, LegacyContactClass)
+    ).toPromise();
+  }
+
+  public async updateLegacyContact(
+    legacyContact: LegacyContact
+  ): Promise<LegacyContact> {
+    if (!legacyContact.legacyContactId) {
+      throw new Error(
+        'legacyContactId is required to update an existing Legacy Contact'
+      );
+    }
+    const data = {
+      name: legacyContact.name,
+      email: legacyContact.email,
+    };
+    return getFirst(
+      this.httpV2.put(
+        `/v2/legacy-contact/${legacyContact.legacyContactId}`,
+        data,
+        LegacyContactClass
+      )
+    ).toPromise();
+  }
+}
+
+class LegacyContactClass implements LegacyContact {
+  public name: string;
+  public email: string;
+  public legacyContactId: string;
+  public accountId: string;
+
+  constructor(props: Object) {
+    for (const prop in props) {
+      this[prop] = props[prop];
+    }
   }
 }

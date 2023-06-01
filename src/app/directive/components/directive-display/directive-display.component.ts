@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AccountVO, Directive } from '@models/index';
+import { Directive } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 
@@ -34,9 +34,7 @@ export class DirectiveDisplayComponent implements OnInit {
 
   protected async getLegacyContact(): Promise<void> {
     try {
-      const legacyContact = await this.api.directive.getLegacyContact(
-        this.account.getAccount()
-      );
+      const legacyContact = await this.api.directive.getLegacyContact();
       if (!legacyContact?.name || !legacyContact?.email) {
         this.noPlan = true;
       }

@@ -18,9 +18,7 @@ export class LegacyContactDisplayComponent implements OnInit {
 
   public async ngOnInit() {
     try {
-      this.legacyContact = await this.api.directive.getLegacyContact(
-        this.account.getAccount()
-      );
+      this.legacyContact = await this.api.directive.getLegacyContact();
     } catch {
       this.error = true;
     }
