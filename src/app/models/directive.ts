@@ -44,6 +44,8 @@ export class Directive implements DirectiveData {
 }
 
 export interface LegacyContact {
+  legacyContactId?: string;
+  accountId?: string;
   name: string;
   email: string;
 }

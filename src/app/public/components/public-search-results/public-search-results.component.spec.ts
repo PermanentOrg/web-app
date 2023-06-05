@@ -6,6 +6,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PublicSearchResultsComponent } from './public-search-results.component';
 import { SearchService } from '@search/services/search.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PublicSearchResultsComponent', () => {
   let component: PublicSearchResultsComponent;
@@ -30,10 +31,9 @@ describe('PublicSearchResultsComponent', () => {
         Router,
         SearchService,
         Location,
-        HttpClient,
-        HttpHandler,
         DataService,
       ],
+      imports: [HttpClientTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PublicSearchResultsComponent);
