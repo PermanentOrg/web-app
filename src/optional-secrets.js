@@ -13,7 +13,7 @@ const optionalSecrets = [
   },
   {
     name: 'STELA_DOMAIN',
-    default: null,
+    default: '',
   },
 ];
 

@@ -156,10 +156,19 @@ export class HttpV2Service {
     endpoint: string,
     options: RequestOptions
   ): string {
-    if (options.useStelaDomain && endpoint.match(/^\/*v2\//)) {
+    if (
+      options.useStelaDomain &&
+      endpoint.match(/^\/*v2\//) &&
+      this.isStelaDomainDefined()
+    ) {
       return this.secrets.get('STELA_DOMAIN') ?? this.apiUrl;
     }
     return this.apiUrl;
+  }
+
+  protected isStelaDomainDefined() {
+    const stelaDomain = this.secrets.get('STELA_DOMAIN') ?? '';
+    return stelaDomain.length > 0;
   }
 
   protected getHeaders(options: RequestOptions) {
