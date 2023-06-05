@@ -121,4 +121,91 @@ describe('DirectiveRepo', () => {
       repo.update({ note: 'New Note' } as DirectiveUpdateRequest)
     ).toBeRejected();
   });
+
+  it('can get a legacy contact', (done) => {
+    repo.getLegacyContact().then((legacyContact) => {
+      expect(legacyContact.legacyContactId).toBe('test-id');
+      expect(legacyContact.accountId).toBe('test-accountid');
+      expect(legacyContact.name).toBe('Test Legacy Contact');
+      expect(legacyContact.email).toBe('test@example.com');
+      done();
+    });
+
+    const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.has('Authorization')).toBeTrue();
+    req.flush([
+      {
+        legacyContactId: 'test-id',
+        accountId: 'test-accountid',
+        name: 'Test Legacy Contact',
+        email: 'test@example.com',
+      },
+    ]);
+  });
+
+  it('can create a legacy contact', (done) => {
+    repo
+      .createLegacyContact({
+        name: 'New User',
+        email: 'new@example.com',
+      })
+      .then((legacyContact) => {
+        expect(legacyContact.legacyContactId).toBe('test-id');
+        expect(legacyContact.accountId).toBe('test-accountid');
+        expect(legacyContact.name).toBe('New User');
+        expect(legacyContact.email).toBe('new@example.com');
+        done();
+      });
+
+    const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.has('Authorization')).toBeTrue();
+    expect(req.request.body.name).toBe('New User');
+    expect(req.request.body.email).toBe('new@example.com');
+    req.flush({
+      legacyContactId: 'test-id',
+      accountId: 'test-accountid',
+      name: 'New User',
+      email: 'new@example.com',
+    });
+  });
+
+  it('can update a legacy contact', (done) => {
+    repo
+      .updateLegacyContact({
+        legacyContactId: 'test-id',
+        name: 'Updated User',
+        email: 'updated@example.com',
+      })
+      .then((legacyContact) => {
+        expect(legacyContact.legacyContactId).toBe('test-id');
+        expect(legacyContact.accountId).toBe('test-accountid');
+        expect(legacyContact.name).toBe('Updated User');
+        expect(legacyContact.email).toBe('updated@example.com');
+        done();
+      });
+
+    const req = httpMock.expectOne(apiUrl('/v2/legacy-contact/test-id'));
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.headers.has('Authorization')).toBeTrue();
+    expect(req.request.body.name).toBe('Updated User');
+    expect(req.request.body.email).toBe('updated@example.com');
+    expect(req.request.body.legacyContactId).toBeUndefined();
+    req.flush({
+      legacyContactId: 'test-id',
+      accountId: 'test-accountid',
+      name: 'Updated User',
+      email: 'updated@example.com',
+    });
+  });
+
+  it('will throw an error if no legacyContactId is specified in update', async () => {
+    await expectAsync(
+      repo.updateLegacyContact({
+        name: 'throw error',
+        email: 'error@example.com',
+      })
+    ).toBeRejected();
+  });
 });
