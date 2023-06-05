@@ -8,6 +8,7 @@ import { TestBed } from '@angular/core/testing';
 import { getFirst, HttpV2Service } from './http-v2.service';
 import { environment } from '@root/environments/environment';
 import { StorageService } from '../storage/storage.service';
+import { SecretsService } from '../secrets/secrets.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 
@@ -23,6 +24,18 @@ class HealthResponse {
   }
 }
 
+class MockSecretService {
+  public static stelaDomain: string | undefined;
+
+  public static reset(): void {
+    MockSecretService.stelaDomain = undefined;
+  }
+
+  public get() {
+    return MockSecretService.stelaDomain;
+  }
+}
+
 describe('HttpV2Service', () => {
   let service: HttpV2Service;
   let httpClient: HttpClient;
@@ -30,8 +43,15 @@ describe('HttpV2Service', () => {
   let storage: StorageService;
 
   beforeEach(() => {
+    MockSecretService.reset();
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [
+        {
+          provide: SecretsService,
+          useClass: MockSecretService,
+        },
+      ],
     });
     service = TestBed.inject(HttpV2Service);
     httpClient = TestBed.inject(HttpClient);
@@ -219,6 +239,32 @@ describe('HttpV2Service', () => {
         status: 401,
         statusText: 'unauthorized',
       }
+    );
+  });
+  it('can have its stela domain configured', () => {
+    MockSecretService.stelaDomain = 'https://api.local.permanent.org/api/';
+
+    service.post('/v2/health', {}, HealthResponse).toPromise();
+    const req = httpTestingController.expectOne(
+      'https://api.local.permanent.org/api/v2/health'
+    );
+  });
+
+  it('uses the default api URL if no stela domain is defined', () => {
+    service.post('/v2/health', {}, HealthResponse).toPromise();
+    const req = httpTestingController.expectOne(
+      'https://local.permanent.org/api/v2/health'
+    );
+  });
+
+  it('can configure a request to not use the stela domain', () => {
+    MockSecretService.stelaDomain = 'https://api.local.permanent.org/api/';
+
+    service
+      .post('/v2/health', {}, HealthResponse, { useStelaDomain: false })
+      .toPromise();
+    const req = httpTestingController.expectOne(
+      'https://local.permanent.org/api/v2/health'
     );
   });
 });
