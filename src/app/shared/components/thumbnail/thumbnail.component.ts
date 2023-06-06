@@ -73,6 +73,7 @@ export class ThumbnailComponent
   }
 
   ngAfterViewInit() {
+    console.log(this.item)
     const resizableImageElement = this.element.querySelector('#openseadragon');
     if (
       resizableImageElement &&
@@ -189,6 +190,8 @@ export class ThumbnailComponent
 
   setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;
+
+    console.log(imageUrl)
 
     if (!imageUrl) {
       this.renderer.addClass(this.imageElement, 'image-loading');
