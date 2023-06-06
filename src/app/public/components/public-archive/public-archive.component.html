@@ -95,14 +95,14 @@
           <span
             class="profile-description"
             *ngIf="hasSingleValueFor('description', 'textData1') && !showShortText"
-            [innerHTML]="this.profileItems.description[0].textData1"
+            [innerHTML]="this.description"
           ></span>
           <span
           class="profile-description"
           *ngIf="hasSingleValueFor('description', 'textData1') && showShortText"
           [innerHTML]='this.shortText + "..."'
         ></span>
-          <span *ngIf="this.shortText.length !== this.profileItems.description[0].textData1" class="expand-text" (click)="toggleShowFullText()">{{showShortText ? ' See More' : ' See Less'}} </span>
+          <span *ngIf="this.description.length > 100" class="expand-text" (click)="toggleShowFullText()">{{showShortText ? ' See More' : ' See Less'}} </span>
         </ng-container>
       </div>
       <div class="profile-controls">

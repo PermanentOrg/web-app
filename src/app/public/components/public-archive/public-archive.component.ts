@@ -76,7 +76,10 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
       this.publicProfile
         .profileItemsDictionary$()
         .subscribe(
-          (items) => (this.description = items['description'][0].textData1)
+          (items) =>
+            (this.description = items['description']
+              ? items['description'][0].textData1
+              : '')
         ),
       this.publicProfile.profileItemsDictionary$().subscribe((items) => {
         this.socialMedia['email'] = items['email'][0].string1;
@@ -88,15 +91,16 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         )?.string1;
         return this.socialMedia;
       }),
-      this.publicProfile
-        .profileItemsDictionary$()
-        .subscribe(
-          (items) =>
-            (this.shortText = this.profileItems.description[0].textData1?.slice(
-              0,
-              this.characterLimit
-            ))
-        )
+      this.publicProfile.profileItemsDictionary$().subscribe((items) => {
+        if (this.description.length > this.characterLimit) {
+          this.shortText = this.description
+            ? this.description.slice(0, this.characterLimit)
+            : '';
+        }
+        else{
+          this.showShortText = false;
+        }
+      })
     );
   }
 
