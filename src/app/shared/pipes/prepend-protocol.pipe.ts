@@ -9,6 +9,6 @@ export class PrependProtocolPipe implements PipeTransform {
       value = 'https://' + value;
     }
 
-    return value
+    return value;
   }
 }
