@@ -190,7 +190,6 @@ export class ThumbnailComponent
   setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;
 
-
     if (!imageUrl) {
       this.renderer.addClass(this.imageElement, 'image-loading');
     } else {
