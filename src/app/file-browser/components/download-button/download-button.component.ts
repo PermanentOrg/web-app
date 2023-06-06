@@ -93,6 +93,6 @@ export class DownloadButtonComponent implements OnInit {
   }
 
   bringDropdownIntoView() {
-      this.downloadButton.nativeElement.scrollIntoView();
+    this.downloadButton.nativeElement.scrollIntoView();
   }
 }
