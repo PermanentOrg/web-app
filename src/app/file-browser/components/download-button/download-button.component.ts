@@ -93,18 +93,6 @@ export class DownloadButtonComponent implements OnInit {
   }
 
   bringDropdownIntoView() {
-    if (this.downloadButtonDropdown) {
-      this.downloadButtonDropdown?.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-        inline: 'nearest',
-      });
-    } else {
-      this.downloadButton.nativeElement.parentElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-        inline: 'nearest',
-      });
-    }
+      this.downloadButton.nativeElement.scrollIntoView();
   }
 }

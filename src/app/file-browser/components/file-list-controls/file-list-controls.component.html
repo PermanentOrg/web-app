@@ -39,7 +39,7 @@
   
       <div *ngFor="let item of downloadOptions; let i = index" class="download-option" (click)="onFileTypeClick(item?.name)">
         <span>{{i === 0 ? 'Original Format:' : 'Permanent Format:'}}</span>
-        <span>.{{item?.extension}}</span>
+        <span>{{item?.extension ? '.'+item?.extension : 'unknown'}}</span>
       </div>
     </div>
   </div>

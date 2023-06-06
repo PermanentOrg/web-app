@@ -244,6 +244,7 @@ pr-folder-view-toggle {
   justify-content: center;
   background-color: white;
   margin-left: 7rem;
+  z-index: 1000;
 
   @media screen and (max-width:1300px) {
     margin-left: 0;
