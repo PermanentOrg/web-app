@@ -77,6 +77,8 @@ export function addProfileItemToDictionary(dict: ProfileItemVODictionary, item: 
   } else {
     dict[fieldNameUIShort].push(item);
   }
+
+  console.log('dict', dict);
 }
 
 export function orderItemsInDictionary(dict: ProfileItemVODictionary, field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
@@ -120,9 +122,12 @@ export class ProfileService {
   }
 
   async fetchProfileItems() {
+    console.log('here')
     const currentArchive = this.account.getArchive();
     const profileResponse = await this.api.archive.getAllProfileItems(currentArchive);
+    console.log(profileResponse)
     const profileItems = profileResponse.getProfileItemVOs();
+    console.log(profileItems)
     this.profileItemDictionary = {};
 
     for (const item of profileItems) {
@@ -148,7 +153,8 @@ export class ProfileService {
     this.orderItems('milestone');
   }
 
-  getProfileItemDictionary() {
+   getProfileItemDictionary() {
+    console.log(this.profileItemDictionary)
     return this.profileItemDictionary;
   }
 

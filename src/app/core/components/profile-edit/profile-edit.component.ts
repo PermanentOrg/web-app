@@ -64,15 +64,16 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private message: MessageService,
     private cookies: CookieService
   ) {
+   
+  }
+
+   ngOnInit(): void {
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
 
     this.profileItems = this.profile.getProfileItemDictionary();
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
     this.checkProfilePublic();
-  }
-
-  ngOnInit(): void {
   }
 
   ngAfterViewInit() {

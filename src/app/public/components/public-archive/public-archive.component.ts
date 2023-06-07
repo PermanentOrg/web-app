@@ -23,7 +23,7 @@ import { RouteData } from '@root/app/app.routes';
 export class PublicArchiveComponent implements OnInit, OnDestroy {
   publicRoot: FolderVO;
   archive: ArchiveVO;
-  profileItems: ProfileItemVODictionary = {};
+  publicProfileItems: ProfileItemVODictionary = {};
   description: string;
   socialMedia: Record<string, string> = {};
   searchResults: any[] = [];
@@ -69,7 +69,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         .subscribe((archive) => (this.archive = archive)),
       this.publicProfile
         .profileItemsDictionary$()
-        .subscribe((items) => (this.profileItems = items)),
+        .subscribe((items) => (this.publicProfileItems = items)),
       this.publicProfile
         .profileItemsDictionary$()
         .subscribe(
@@ -94,7 +94,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   hasSingleValueFor(field: FieldNameUIShort, column: ProfileItemsDataCol) {
     return (
-      this.profileItems[field]?.length && this.profileItems[field][0][column]
+      this.publicProfileItems[field]?.length && this.publicProfileItems[field][0][column]
     );
   }
 
