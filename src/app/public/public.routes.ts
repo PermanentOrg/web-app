@@ -20,7 +20,7 @@ const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
   profileItems: ProfileItemsResolveService,
   publicProfileItems: PublicProfileItemsResolveService,
-  publicRoot: PublicRootResolveService
+  publicRoot: PublicRootResolveService,
 };
 
 const publishResolve = {
@@ -80,7 +80,7 @@ export const routes: RoutesWithData = [
     PublicArchiveResolveService,
     PublicRootResolveService,
     ProfileItemsResolveService,
-    PublicProfileItemsResolveService
+    PublicProfileItemsResolveService,
   ],
 })
 export class PublicRoutingModule {}

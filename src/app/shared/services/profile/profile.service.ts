@@ -77,7 +77,6 @@ export function addProfileItemToDictionary(dict: ProfileItemVODictionary, item: 
   } else {
     dict[fieldNameUIShort].push(item);
   }
-
 }
 
 export function orderItemsInDictionary(dict: ProfileItemVODictionary, field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
@@ -149,7 +148,7 @@ export class ProfileService {
     this.orderItems('milestone');
   }
 
-   getProfileItemDictionary() {
+  getProfileItemDictionary() {
     return this.profileItemDictionary;
   }
 
