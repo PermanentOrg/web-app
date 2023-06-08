@@ -20,6 +20,7 @@
         (click)="setTab('billing')" [class.active]="activeTab === 'billing'">
         Billing Info
       </div>
+      <div class="settings-tab" *ngIf="legacyContactEnabled" (click)="setTab('legacy-contact')" [class.active]="activeTab === 'legacy-contact'">Legacy Contact</div>
       <div class="settings-tab"
         (click)="setTab('delete')" [class.active]="activeTab === 'delete'">
         Delete Account
@@ -30,6 +31,7 @@
         <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
         <pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
         <pr-notification-preferences *ngSwitchCase="'notification'"></pr-notification-preferences>
+        <ng-container *ngSwitchCase="'legacy-contact'"><pr-legacy-contact-dialog></pr-legacy-contact-dialog></ng-container>
         <ng-container *ngSwitchCase="'delete'">
           <div class="panel-title">Delete Account</div>
           <p>

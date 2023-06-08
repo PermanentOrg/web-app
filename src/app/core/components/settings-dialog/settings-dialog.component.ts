@@ -1,29 +1,36 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
-export type SettingsTab = 'storage' | 'account' | 'notification' | 'billing' | 'delete';
+export type SettingsTab = 'storage' | 'account' | 'notification' | 'billing' | 'legacy-contact' | 'delete';
 
 @Component({
   selector: 'pr-settings-dialog',
   templateUrl: './settings-dialog.component.html',
   styleUrls: ['./settings-dialog.component.scss']
 })
-export class SettingsDialogComponent implements OnInit {
-  activeTab: SettingsTab = 'account';
+export class SettingsDialogComponent implements OnInit, OnDestroy {
+  public activeTab: SettingsTab = 'account';
 
-  verifyText = 'DELETE';
-  deleteVerify: string = null;
-  waiting = false;
+  public readonly verifyText = 'DELETE';
+  public deleteVerify: string = null;
+  public waiting = false;
+
+  public legacyContactEnabled = false;
+  
+  protected fragmentSubscription: Subscription;
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     public accountService: AccountService,
     private message: MessageService,
-    private api: ApiService
+    private api: ApiService,
+    public route: ActivatedRoute
   ) {
     if (data.tab) {
       this.activeTab = data.tab;
@@ -31,6 +38,16 @@ export class SettingsDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.fragmentSubscription = this.route.fragment.subscribe((fragment) => {
+      if (fragment === 'legacy-contact') {
+        this.legacyContactEnabled = true;
+        this.activeTab = 'legacy-contact';
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.fragmentSubscription.unsubscribe();
   }
 
   onDoneClick() {
