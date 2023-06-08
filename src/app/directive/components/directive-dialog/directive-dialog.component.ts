@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { Directive } from '@models/directive';
 
-type DialogState = 'display' | 'edit';
+export type DialogState = 'display' | 'edit';
 
 @Component({
   selector: 'pr-directive-dialog',
