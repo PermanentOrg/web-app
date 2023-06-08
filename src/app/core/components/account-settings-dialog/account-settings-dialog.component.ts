@@ -17,11 +17,11 @@ export type SettingsTab =
   | 'delete';
 
 @Component({
-  selector: 'pr-settings-dialog',
-  templateUrl: './settings-dialog.component.html',
-  styleUrls: ['./settings-dialog.component.scss'],
+  selector: 'pr-account-settings-dialog',
+  templateUrl: './account-settings-dialog.component.html',
+  styleUrls: ['./account-settings-dialog.component.scss'],
 })
-export class SettingsDialogComponent implements OnInit, OnDestroy {
+export class AccountSettingsDialogComponent implements OnInit, OnDestroy {
   public activeTab: SettingsTab = 'account';
 
   public readonly verifyText = 'DELETE';

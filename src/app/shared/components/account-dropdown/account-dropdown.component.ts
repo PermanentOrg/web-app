@@ -8,7 +8,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { ngIfFadeInAnimationSlow, TWEAKED } from '@shared/animations';
 import { trigger, transition, style, animate, group, query, animateChild } from '@angular/animations';
 import { Dialog } from '@root/app/dialog/dialog.module';
-import { SettingsTab } from '@core/components/settings-dialog/settings-dialog.component';
+import { SettingsTab } from '@core/components/account-settings-dialog/account-settings-dialog.component';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 
