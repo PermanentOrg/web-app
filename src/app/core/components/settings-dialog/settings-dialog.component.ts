@@ -1,3 +1,4 @@
+/* @format */
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
@@ -7,12 +8,18 @@ import { ApiService } from '@shared/services/api/api.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
-export type SettingsTab = 'storage' | 'account' | 'notification' | 'billing' | 'legacy-contact' | 'delete';
+export type SettingsTab =
+  | 'storage'
+  | 'account'
+  | 'notification'
+  | 'billing'
+  | 'legacy-contact'
+  | 'delete';
 
 @Component({
   selector: 'pr-settings-dialog',
   templateUrl: './settings-dialog.component.html',
-  styleUrls: ['./settings-dialog.component.scss']
+  styleUrls: ['./settings-dialog.component.scss'],
 })
 export class SettingsDialogComponent implements OnInit, OnDestroy {
   public activeTab: SettingsTab = 'account';
@@ -22,7 +29,7 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
   public waiting = false;
 
   public legacyContactEnabled = false;
-  
+
   protected fragmentSubscription: Subscription;
   constructor(
     @Inject(DIALOG_DATA) public data: any,
@@ -43,7 +50,7 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
         this.legacyContactEnabled = true;
         this.activeTab = 'legacy-contact';
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -73,11 +80,13 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
       if (err instanceof AccountResponse) {
         this.message.showError(err.getMessage(), true);
       } else {
-        this.message.showError('There was an error deleting the account.', false);
+        this.message.showError(
+          'There was an error deleting the account.',
+          false
+        );
       }
     } finally {
       this.waiting = false;
     }
   }
-
 }
