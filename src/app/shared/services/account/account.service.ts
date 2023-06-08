@@ -20,6 +20,7 @@ import {
   AccessRoleType,
   checkMinimumAccess,
 } from '@models/access-role';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 import * as Sentry from '@sentry/browser';
 
@@ -53,7 +54,8 @@ export class AccountService {
     private storage: StorageService,
     private cookies: CookieService,
     private dialog: Dialog,
-    private router: Router
+    private router: Router,
+    private httpv2: HttpV2Service
   ) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
@@ -73,6 +75,12 @@ export class AccountService {
       this.setRootFolder(new FolderVO(cachedRoot));
       this.refreshRoot();
     }
+
+    this.httpv2.tokenExpired.subscribe(() => {
+      this.logOut().then(() => {
+        window.location.reload();
+      });
+    });
   }
 
   public setAccount(newAccount: AccountVO) {

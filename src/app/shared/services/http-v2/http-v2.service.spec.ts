@@ -1,3 +1,4 @@
+/* @format */
 import { HttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
@@ -194,5 +195,30 @@ describe('HttpV2Service', () => {
 
     const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
     expect(req.request.body.csrf).toBeUndefined();
+  });
+
+  it('should emit an event on a 401 Unauthorized response code', (done) => {
+    let expirationObserved = false;
+    const subscription = service.tokenExpired.subscribe(() => {
+      expirationObserved = true;
+    });
+
+    service
+      .get('/api/v2/health', {}, HealthResponse)
+      .toPromise()
+      .catch(() => {
+        expect(expirationObserved).toBeTrue();
+        subscription.unsubscribe();
+        done();
+      });
+
+    const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+    request.flush(
+      { error: 'error message' },
+      {
+        status: 401,
+        statusText: 'unauthorized',
+      }
+    );
   });
 });
