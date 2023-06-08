@@ -8,6 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { MockMessageService } from '../directive-edit/test-utils';
 import { MockApiService, MockDirectiveRepo } from './test-utils';
+import { LegacyContact } from '@models/directive';
 
 describe('LegacyContactDisplayComponent', () => {
   let shallow: Shallow<LegacyContactDisplayComponent>;
@@ -64,5 +65,15 @@ describe('LegacyContactDisplayComponent', () => {
     expect(find('.legacy-contact-name').length).toBe(0);
     expect(find('.legacy-contact-email').length).toBe(0);
     expect(find('.error').length).toBe(1);
+  });
+  it('should emit an event when the edit button is pressed', async () => {
+    const { find, fixture, outputs } = await shallow.render();
+    find('button').nativeElement.dispatchEvent(new Event('click'));
+    expect(outputs.beginEdit.emit).toHaveBeenCalled();
+  });
+  it('should emit an event when the legacy contact is fetched', async () => {
+    const { fixture, outputs } = await shallow.render();
+    await fixture.whenStable();
+    expect(outputs.loadedLegacyContact.emit).toHaveBeenCalled();
   });
 });
