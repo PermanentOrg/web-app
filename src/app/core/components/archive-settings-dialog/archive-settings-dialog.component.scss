@@ -1,1 +1,10 @@
 @import '../storage-dialog/storage-dialog.component.scss';
+@import 'variables';
+
+.header {
+  @include tabbedDialogHeader($PR-blue-light);
+}
+
+.tabs {
+  @include tabbedDialogNav($PR-blue-light);
+}
