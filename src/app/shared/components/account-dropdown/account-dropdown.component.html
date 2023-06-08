@@ -1,19 +1,36 @@
-<button class="btn btn-wordpress" *ngIf="account" (click)="showMenu = !showMenu" [class.active]="showMenu"> 
-  <span>{{this.account.primaryEmail}}</span>
+<!-- @format -->
+<button
+  class="btn btn-wordpress"
+  *ngIf="account"
+  (click)="showMenu = !showMenu"
+  [class.active]="showMenu"
+>
+  <span>{{ this.account.primaryEmail }}</span>
   <i class="material-icons">expand_more</i>
 </button>
-<i class="material-icons badge" *ngIf="accountService.isEmailOrPhoneUnverified()"
-  [ngbTooltip]="badgeTooltip">{{badgeIcon}}</i>
+<i
+  class="material-icons badge"
+  *ngIf="accountService.isEmailOrPhoneUnverified()"
+  [ngbTooltip]="badgeTooltip"
+  >{{ badgeIcon }}</i
+>
 <div class="account-dropdown-menu" *ngIf="showMenu" [@dropdownMenuAnimation]>
   <div *ngIf="showMenu" [@ngIfFadeInAnimationSlow]>
     <pr-storage-meter></pr-storage-meter>
-    <a [routerLink]="[{ outlets: { dialog: ['storage','add']}}]">Storage</a>
-    <a [routerLink]="[{ outlets: { dialog: ['account']}}]">
-      <i class="material-icons text-warning" [ngbTooltip]="badgeTooltip" *ngIf="accountService.isEmailOrPhoneUnverified()">{{badgeIcon}}</i>
+    <a [routerLink]="[{ outlets: { dialog: ['storage', 'add'] } }]">Storage</a>
+    <a [routerLink]="[{ outlets: { dialog: ['account'] } }]">
+      <i
+        class="material-icons text-warning"
+        [ngbTooltip]="badgeTooltip"
+        *ngIf="accountService.isEmailOrPhoneUnverified()"
+        >{{ badgeIcon }}</i
+      >
       Account
     </a>
-    <a (click)="openArchivesDialog()" id="account-dropdown-archives-option">Archives</a>
-    <a [routerLink]="[{ outlets: { dialog: ['invitations']}}]">Invitations</a>
+    <a (click)="openArchivesDialog()" id="account-dropdown-archives-option"
+      >Archives</a
+    >
+    <a [routerLink]="[{ outlets: { dialog: ['invitations'] } }]">Invitations</a>
     <a (click)="onLogoutClick()">Log Out</a>
   </div>
 </div>
