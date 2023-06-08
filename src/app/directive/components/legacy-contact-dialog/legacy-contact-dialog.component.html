@@ -1,0 +1,18 @@
+<!-- @format -->
+<ng-container [ngSwitch]="mode">
+  <pr-legacy-contact-display
+    *ngSwitchDefault
+    (beginEdit)="mode = 'edit'"
+    (loadedLegacyContact)="setLegacyContact($event)"
+    [initialLegacyContact]="legacyContact"
+  ></pr-legacy-contact-display>
+  <ng-container *ngSwitchCase="'edit'">
+    <a class="edit-close" (click)="mode = 'display'">
+      <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>
+    </a>
+    <pr-legacy-contact-edit
+      [legacyContact]="legacyContact"
+      (savedLegacyContact)="saveEditedLegacyContact($event)"
+    ></pr-legacy-contact-edit>
+  </ng-container>
+</ng-container>
