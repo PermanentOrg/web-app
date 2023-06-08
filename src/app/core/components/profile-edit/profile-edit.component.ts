@@ -1,3 +1,4 @@
+/* @format */
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import {
