@@ -14,10 +14,12 @@ import { PublicProfileItemsResolveService } from './resolves/public-profile-item
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { RoutesWithData } from '../app.routes';
 import { PublicSearchResultsComponent } from './components/public-search-results/public-search-results.component';
+import { ProfileItemsResolveService } from '@core/resolves/profile-items-resolve.service';
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
-  profileItems: PublicProfileItemsResolveService,
+  profileItems: ProfileItemsResolveService,
+  publicProfileItems: PublicProfileItemsResolveService,
   publicRoot: PublicRootResolveService,
 };
 
@@ -77,6 +79,7 @@ export const routes: RoutesWithData = [
     PublishArchiveResolveService,
     PublicArchiveResolveService,
     PublicRootResolveService,
+    ProfileItemsResolveService,
     PublicProfileItemsResolveService,
   ],
 })

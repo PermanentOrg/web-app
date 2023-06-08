@@ -1,18 +1,37 @@
+/* @format */
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
-import { ProfileItemVOData, FieldNameUI, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
+import {
+  ProfileItemVOData,
+  FieldNameUI,
+  ProfileItemVODictionary,
+  FieldNameUIShort,
+} from '@models/profile-item-vo';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { ArchiveResponse, FolderResponse } from '@shared/services/api/index.repo';
+import {
+  ArchiveResponse,
+  FolderResponse,
+} from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { EditService } from '@core/services/edit/edit.service';
-import { ProfileService, ProfileItemsDataCol, ALWAYS_PUBLIC } from '@shared/services/profile/profile.service';
-import { collapseAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
+import {
+  ProfileService,
+  ProfileItemsDataCol,
+  ALWAYS_PUBLIC,
+} from '@shared/services/profile/profile.service';
+import {
+  collapseAnimation,
+  ngIfScaleAnimationDynamic,
+} from '@shared/animations';
 import debug from 'debug';
-import { PromptService, READ_ONLY_FIELD } from '@shared/services/prompt/prompt.service';
+import {
+  PromptService,
+  READ_ONLY_FIELD,
+} from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { some } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
@@ -23,7 +42,7 @@ import { copyFromInputElement } from '@shared/utilities/forms';
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.scss'],
-  animations: [ collapseAnimation, ngIfScaleAnimationDynamic ]
+  animations: [collapseAnimation, ngIfScaleAnimationDynamic],
 })
 export class ProfileEditComponent implements OnInit, AfterViewInit {
   archive: ArchiveVO;
@@ -47,7 +66,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     decimal: '.',
     duration: 1,
     suffix: '%',
-    startValue: 0
+    startValue: 0,
   };
 
   private debug = debug('component:profileEdit');
@@ -63,16 +82,15 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private prompt: PromptService,
     private message: MessageService,
     private cookies: CookieService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
 
     this.profileItems = this.profile.getProfileItemDictionary();
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
     this.checkProfilePublic();
-  }
-
-  ngOnInit(): void {
   }
 
   ngAfterViewInit() {
@@ -92,8 +110,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     }
 
     try {
-      this.dialog.open('ProfileEditFirstTimeDialogComponent', null, { width: '760px', height: 'auto'});
-    } catch (err) { }
+      this.dialog.open('ProfileEditFirstTimeDialogComponent', null, {
+        width: '760px',
+        height: 'auto',
+      });
+    } catch (err) {}
   }
 
   onDoneClick() {
@@ -105,7 +126,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   }
 
   getProgressTransform() {
-    return `transform: translateX(${(this.totalProgress * 100) - 100}%)`;
+    return `transform: translateX(${this.totalProgress * 100 - 100}%)`;
   }
 
   checkProfilePublic() {
@@ -119,12 +140,22 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   async chooseBannerPicture() {
     const originalValue = this.publicRoot.thumbArchiveNbr;
     try {
-      const record = await this.folderPicker.chooseRecord(this.account.getPrivateRoot());
+      const record = await this.folderPicker.chooseRecord(
+        this.account.getPrivateRoot()
+      );
       const updateFolder = new FolderVO(this.publicRoot);
       updateFolder.thumbArchiveNbr = record.archiveNbr;
-      await this.api.folder.updateRoot([updateFolder], ['thumbArchiveNbr', 'view', 'viewProperty']);
+      await this.api.folder.updateRoot(
+        [updateFolder],
+        ['thumbArchiveNbr', 'view', 'viewProperty']
+      );
       // borrow thumb URLs from record for now, until they can be regenerated
-      const thumbProps: Array<keyof (ArchiveVO|RecordVO)> = ['thumbURL200', 'thumbURL500', 'thumbURL1000', 'thumbURL2000'];
+      const thumbProps: Array<keyof (ArchiveVO | RecordVO)> = [
+        'thumbURL200',
+        'thumbURL500',
+        'thumbURL1000',
+        'thumbURL2000',
+      ];
       for (const prop of thumbProps) {
         this.publicRoot[prop] = record[prop] as never;
       }
@@ -136,7 +167,12 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async onSaveProfileItem(item: ProfileItemVOData, valueKey: ProfileItemsDataCol, newValue: any, refreshArchive = false) {
+  async onSaveProfileItem(
+    item: ProfileItemVOData,
+    valueKey: ProfileItemsDataCol,
+    newValue: any,
+    refreshArchive = false
+  ) {
     const originalValue = item[valueKey];
     item[valueKey] = newValue as never;
     item.isPendingAction = true;
@@ -204,7 +240,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   async chooseLocationForItem(item: ProfileItemVOData) {
     try {
-      await this.dialog.open('LocationPickerComponent', { profileItem: item }, { height: 'auto', width: '600px' } );
+      await this.dialog.open(
+        'LocationPickerComponent',
+        { profileItem: item },
+        { height: 'auto', width: '600px' }
+      );
     } finally {
       this.updateProgress();
     }
@@ -212,13 +252,16 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   async onShareClick() {
     const url = `https://${location.host}/p/archive/${this.archive.archiveNbr}/profile`;
-    const fields = [
-      READ_ONLY_FIELD('profileLink', 'Profile link', url)
-    ];
+    const fields = [READ_ONLY_FIELD('profileLink', 'Profile link', url)];
 
     const deferred = new Deferred();
 
-    await this.prompt.prompt(fields, 'Share profile link', deferred.promise, 'Copy link');
+    await this.prompt.prompt(
+      fields,
+      'Share profile link',
+      deferred.promise,
+      'Copy link'
+    );
     const input = this.prompt.getInput('profileLink');
     copyFromInputElement(input);
     deferred.resolve();

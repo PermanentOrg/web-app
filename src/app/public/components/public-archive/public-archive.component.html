@@ -45,7 +45,7 @@
                 class="profile-data profile-data-date"
                 *ngIf="hasSingleValueFor('birth_info', 'day1')"
               >
-                on {{ profileItems.birth_info[0]?.day1 | date }}
+                on {{ publicProfileItems.birth_info[0]?.day1 | date }}
               </span>
             </ng-container>
             <ng-container *ngSwitchDefault>
@@ -53,7 +53,7 @@
                 class="profile-data profile-data-date"
                 *ngIf="hasSingleValueFor('established_info', 'day1')"
               >
-                {{ profileItems.established_info[0]?.day1 | date }}
+                {{ publicProfileItems.established_info[0]?.day1 | date }}
               </span>
             </ng-container>
           </ng-container>
@@ -69,7 +69,7 @@
                 class="profile-data profile-data-date"
                 *ngIf="hasSingleValueFor('birth_info', 'locnId1')"
               >
-                {{ (profileItems.birth_info[0].LocnVOs[0] | prLocation).full }}
+                {{ (publicProfileItems.birth_info[0].LocnVOs[0] | prLocation).full }}
               </span>
             </ng-container>
             <ng-container *ngSwitchDefault>
@@ -78,7 +78,7 @@
                 *ngIf="hasSingleValueFor('established_info', 'locnId1')"
               >
                 {{
-                  (profileItems.established_info[0].LocnVOs[0] | prLocation)
+                  (publicProfileItems.established_info[0].LocnVOs[0] | prLocation)
                     .full
                 }}
               </span>
@@ -90,12 +90,12 @@
             class="profile-blurb"
             *ngIf="hasSingleValueFor('blurb', 'string1')"
           >
-            {{ this.profileItems.blurb[0].string1 }}
+            {{ this.publicProfileItems.blurb[0].string1 }}
           </div>
           <div
             class="profile-description"
             *ngIf="hasSingleValueFor('description', 'textData1')"
-            [innerHTML]="this.profileItems.description[0].textData1"
+            [innerHTML]="this.publicProfileItems.description[0].textData1"
           ></div>
         </ng-container>
       </div>
