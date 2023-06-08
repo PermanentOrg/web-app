@@ -29,6 +29,7 @@ jobs:
           STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
           FEATURED_ARCHIVES: ${{ secrets.FEATURED_ARCHIVES_DEV }}
           RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY_DEV }}
+          STELA_DOMAIN: ${{ secrets.STELA_DOMAIN_DEV }}
         run: npm run build:dev
 
       - name: Archive `dist`

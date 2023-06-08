@@ -111,7 +111,9 @@ describe('AuthRepo', () => {
       )
       .subscribe((response) => {
         expect(response).toEqual(expected);
-        repo.httpV2.get('/v2/health').toPromise();
+        repo.httpV2
+          .get('/v2/health', {}, Object, { useStelaDomain: false })
+          .toPromise();
         const req2 = httpMock.expectOne(`${environment.apiUrl}/v2/health`);
         expect(req2.request.headers.get('Authorization')).toBe(
           'Bearer test_token'

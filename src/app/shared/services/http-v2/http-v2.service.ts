@@ -6,6 +6,7 @@ import { environment } from '@root/environments/environment';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { SecretsService } from '../secrets/secrets.service';
 
 const CSRF_KEY = 'CSRF';
 const AUTH_KEY = 'AUTH_TOKEN';
@@ -16,11 +17,13 @@ type ResponseClass<T> = new (data: any) => T;
 interface RequestOptions {
   csrf?: boolean;
   authToken?: boolean;
+  useStelaDomain?: boolean;
 }
 
 const defaultOptions: RequestOptions = {
   csrf: false,
   authToken: true,
+  useStelaDomain: true,
 };
 
 export function getFirst<T>(observable: Observable<T[]>): Observable<T> {
@@ -45,7 +48,11 @@ export class HttpV2Service {
   protected apiUrl = environment.apiUrl;
   protected authToken: string | null;
 
-  constructor(protected http: HttpClient, protected storage: StorageService) {
+  constructor(
+    protected http: HttpClient,
+    protected storage: StorageService,
+    protected secrets: SecretsService
+  ) {
     this.authToken = this.storage.local.get(AUTH_KEY) ?? '';
   }
 
@@ -138,8 +145,30 @@ export class HttpV2Service {
     };
   }
 
-  protected getFullUrl(endpoint: string): string {
-    return Location.joinWithSlash(this.apiUrl, endpoint);
+  protected getFullUrl(endpoint: string, options: RequestOptions): string {
+    return Location.joinWithSlash(
+      this.getRequestDomain(endpoint, options),
+      endpoint
+    );
+  }
+
+  protected getRequestDomain(
+    endpoint: string,
+    options: RequestOptions
+  ): string {
+    if (
+      options.useStelaDomain &&
+      endpoint.match(/^\/*v2\//) &&
+      this.isStelaDomainDefined()
+    ) {
+      return this.secrets.get('STELA_DOMAIN') ?? this.apiUrl;
+    }
+    return this.apiUrl;
+  }
+
+  protected isStelaDomainDefined() {
+    const stelaDomain = this.secrets.get('STELA_DOMAIN') ?? '';
+    return stelaDomain.length > 0;
   }
 
   protected getHeaders(options: RequestOptions) {
@@ -183,14 +212,14 @@ export class HttpV2Service {
   ): Observable<unknown> {
     if (method === 'post' || method === 'put') {
       return this.getObservableWithBody(
-        this.getFullUrl(endpoint),
+        this.getFullUrl(endpoint, options),
         options.csrf ? this.appendCsrf(data) : data,
         method,
         options
       );
     }
     return this.getObservableWithNoBody(
-      this.getFullUrl(endpoint),
+      this.getFullUrl(endpoint, options),
       method,
       options
     );

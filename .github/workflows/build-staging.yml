@@ -25,6 +25,7 @@ jobs:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_STAGING }}
           STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
           RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY_DEV }}
+          STELA_DOMAIN: ${{ secrets.STELA_DOMAIN_STAGING }}
         run: npm run build:staging
       - name: Archive `dist`
         uses: actions/upload-artifact@v2

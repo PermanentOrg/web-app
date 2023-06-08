@@ -11,6 +11,10 @@ const optionalSecrets = [
     name: 'FUSIONAUTH_HOST',
     default: 'https://permanent-dev.fusionauth.io',
   },
+  {
+    name: 'STELA_DOMAIN',
+    default: '',
+  },
 ];
 
 module.exports = optionalSecrets;
