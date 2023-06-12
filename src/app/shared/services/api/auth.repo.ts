@@ -175,4 +175,19 @@ export class AuthResponse extends BaseResponse {
 
     return new SimpleVO(data[0][0].SimpleVO);
   }
+
+  public getAuthToken() {
+    const data = this.getResultsData();
+    if (!data || !data.length) {
+      return null;
+    }
+
+    for (const voType in data[0][0]) {
+      if (data[0][0][voType]?.key === 'authToken') {
+        return new SimpleVO(data[0][0][voType]);
+      }
+    }
+
+    return null;
+  }
 }
