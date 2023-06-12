@@ -186,6 +186,10 @@ export const routes: RoutesWithData = [
         redirectTo: '/app/(private//dialog:account)',
       },
       {
+        path: 'legacy-contact',
+        redirectTo: '/app/(private//dialog:account)#legacy-contact',
+      },
+      {
         path: 'members',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',

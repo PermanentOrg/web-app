@@ -19,7 +19,11 @@
     </li>
   </ol>
   <p>
-    We have additional support and resources about planning your legacy here.
+    We have additional support and resources about planning your legacy
+    <a
+      href="https://permanent.zohodesk.com/portal/en/kb/permanent-legacy-foundation/legacy-planning"
+      >here</a
+    >.
   </p>
   <div class="legacy-contact-header">Your Legacy Contact</div>
   <p class="legacy-contact-description">
@@ -51,7 +55,7 @@
     information. Please reload the page and try again. If the problem persists,
     try logging out and logging in again.
   </div>
-  <button class="btn btn-primary" [disabled]="error">
+  <button class="btn btn-primary" [disabled]="error" (click)="beginEdit.emit()">
     {{ legacyContact?.email ? 'Edit' : 'Assign' }} Legacy Contact
   </button>
 </div>

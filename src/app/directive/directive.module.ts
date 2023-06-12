@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { DirectiveDialogComponent } from './components/directive-dialog/directive-dialog.component';
 import { LegacyContactDisplayComponent } from './components/legacy-contact-display/legacy-contact-display.component';
 import { LegacyContactEditComponent } from './components/legacy-contact-edit/legacy-contact-edit.component';
+import { LegacyContactDialogComponent } from './components/legacy-contact-dialog/legacy-contact-dialog.component';
 @NgModule({
   exports: [
     DirectiveDisplayComponent,
@@ -22,6 +23,7 @@ import { LegacyContactEditComponent } from './components/legacy-contact-edit/leg
     DirectiveDialogComponent,
     LegacyContactDisplayComponent,
     LegacyContactEditComponent,
+    LegacyContactDialogComponent,
   ],
   declarations: [
     DirectiveDisplayComponent,
@@ -29,6 +31,7 @@ import { LegacyContactEditComponent } from './components/legacy-contact-edit/leg
     DirectiveDialogComponent,
     LegacyContactDisplayComponent,
     LegacyContactEditComponent,
+    LegacyContactDialogComponent,
   ],
   imports: [CommonModule, FontAwesomeModule, FormsModule],
 })

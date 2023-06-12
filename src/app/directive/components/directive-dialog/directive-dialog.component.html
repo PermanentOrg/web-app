@@ -2,7 +2,7 @@
 <ng-container [ngSwitch]="mode">
   <pr-directive-display
     *ngSwitchDefault
-    [checkLegacyContact]="false"
+    [checkLegacyContact]="true"
     [initialDirective]="directive"
     (loadedDirective)="setSavedDirective($event)"
     (beginEdit)="switchToEdit($event)"

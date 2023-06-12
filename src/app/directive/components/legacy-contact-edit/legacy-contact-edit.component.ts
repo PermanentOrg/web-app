@@ -29,6 +29,7 @@ export class LegacyContactEditComponent implements OnInit {
       let returnedLegacyContact: LegacyContact;
       if (this.isUpdating()) {
         returnedLegacyContact = await this.api.directive.updateLegacyContact({
+          legacyContactId: this.legacyContact.legacyContactId,
           name: this.name,
           email: this.email,
         });

@@ -35,7 +35,7 @@ import { ProfileEditComponent } from './components/profile-edit/profile-edit.com
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
-import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
+import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
@@ -91,7 +91,7 @@ import { DirectiveModule } from '../directive/directive.module';
     BillingSettingsComponent,
     NotificationPreferencesComponent,
     ProfileEditComponent,
-    SettingsDialogComponent,
+    AccountSettingsDialogComponent,
     AllArchivesComponent,
     ConnectionsDialogComponent,
     MembersDialogComponent,
@@ -126,7 +126,7 @@ export class CoreModule {
   private dialogComponents: DialogChildComponentData[] = [
     {
       token: 'SettingsDialogComponent',
-      component: SettingsDialogComponent,
+      component: AccountSettingsDialogComponent,
     },
     {
       token: 'ConnectionsDialogComponent',
