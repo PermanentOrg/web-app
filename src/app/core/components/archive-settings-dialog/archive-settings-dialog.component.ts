@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -19,17 +19,15 @@ type ArchiveSettingsDialogTab =
   templateUrl: './archive-settings-dialog.component.html',
   styleUrls: ['./archive-settings-dialog.component.scss'],
 })
-export class ArchiveSettingsDialogComponent implements OnInit, OnDestroy {
+export class ArchiveSettingsDialogComponent implements OnInit {
   public readonly MAX_FETCH_ATTEMPTS: number = 5;
   public activeTab: ArchiveSettingsDialogTab = 'manage-keywords';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasAccess: boolean;
   public archive: ArchiveVO;
-  public legacyPlanningEnabled: boolean = false;
 
   protected fetchTagsAttempts: number = 0;
-  protected fragmentSubscription: Subscription;
 
   constructor(
     private dialogRef: DialogRef,
@@ -40,12 +38,6 @@ export class ArchiveSettingsDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.fragmentSubscription = this.route.fragment.subscribe((fragment) => {
-      if (fragment === 'legacy-planning') {
-        this.legacyPlanningEnabled = true;
-        this.activeTab = 'legacy-planning';
-      }
-    });
     const accessRole = this.account.getArchive().accessRole;
     this.hasAccess =
       accessRole === 'access.role.owner' ||
@@ -72,10 +64,6 @@ export class ArchiveSettingsDialogComponent implements OnInit, OnDestroy {
         });
     }
     this.archive = this.account.getArchive();
-  }
-
-  public ngOnDestroy(): void {
-    this.fragmentSubscription.unsubscribe();
   }
 
   public refreshTags(): void {

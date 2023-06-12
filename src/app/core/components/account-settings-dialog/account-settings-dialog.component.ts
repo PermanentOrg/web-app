@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
@@ -21,16 +21,13 @@ export type SettingsTab =
   templateUrl: './account-settings-dialog.component.html',
   styleUrls: ['./account-settings-dialog.component.scss'],
 })
-export class AccountSettingsDialogComponent implements OnInit, OnDestroy {
+export class AccountSettingsDialogComponent implements OnInit {
   public activeTab: SettingsTab = 'account';
 
   public readonly verifyText = 'DELETE';
   public deleteVerify: string = null;
   public waiting = false;
 
-  public legacyContactEnabled = false;
-
-  protected fragmentSubscription: Subscription;
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
@@ -44,18 +41,7 @@ export class AccountSettingsDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    this.fragmentSubscription = this.route.fragment.subscribe((fragment) => {
-      if (fragment === 'legacy-contact') {
-        this.legacyContactEnabled = true;
-        this.activeTab = 'legacy-contact';
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.fragmentSubscription.unsubscribe();
-  }
+  ngOnInit(): void {}
 
   onDoneClick() {
     this.dialogRef.close();
