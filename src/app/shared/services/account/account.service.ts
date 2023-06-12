@@ -331,7 +331,7 @@ export class AccountService {
             }
             this.skipSessionCheck = true;
 
-            const authToken = response.getSimpleVO()?.value;
+            const authToken = response.getAuthToken()?.value;
             if (authToken) {
               this.api.auth.httpV2.setAuthToken(authToken);
             }
@@ -385,6 +385,11 @@ export class AccountService {
         map((response: AuthResponse) => {
           if (response.isSuccessful) {
             this.setAccount(response.getAccountVO());
+
+            const authToken = response.getAuthToken()?.value;
+            if (authToken) {
+              this.api.auth.httpV2.setAuthToken(authToken);
+            }
 
             this.accountChange.emit(this.account);
             return response;
