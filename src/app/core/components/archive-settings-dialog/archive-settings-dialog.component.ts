@@ -24,7 +24,8 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   public activeTab: ArchiveSettingsDialogTab = 'manage-keywords';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
-  public hasAccess: boolean;
+  public hasTagsAccess: boolean;
+  public hasStewardAccess: boolean;
   public archive: ArchiveVO;
 
   protected fetchTagsAttempts: number = 0;
@@ -39,10 +40,11 @@ export class ArchiveSettingsDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     const accessRole = this.account.getArchive().accessRole;
-    this.hasAccess =
+    this.hasTagsAccess =
       accessRole === 'access.role.owner' ||
       accessRole === 'access.role.manager';
-    if (this.hasAccess) {
+    this.hasStewardAccess = accessRole === 'access.role.owner';
+    if (this.hasTagsAccess) {
       this.api.tag
         .getTagsByArchive(this.account.getArchive())
         .then((response) => {
