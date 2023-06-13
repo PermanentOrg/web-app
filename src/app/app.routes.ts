@@ -32,6 +32,8 @@ export interface RouteData {
 
   currentFolder?: FolderVO;
   currentRecord?: RecordVO;
+
+  tab?: string;
 }
 
 export interface RouteWithData extends Route {
