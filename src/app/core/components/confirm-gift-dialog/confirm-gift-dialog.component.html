@@ -1,0 +1,24 @@
+<!-- @format -->
+<div class="dialog-content">
+  <div class="header">
+    <span>Gift storage</span>
+    <button class="btn" (click)="onDoneClick()">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <p class="popup-text">
+      <b
+        >Are you sure you would like to gift {{ amount }} GB of storage to
+        {{ email }}?</b
+      >
+    </p>
+    <p class="popup-text">
+      Once confirmed, the gift storage cannot be reclaimed.
+      <button class="btn btn-sm btn-primary" (click)="onConfirmClick()">
+        Confirm
+      </button>
+      <button class="btn btn-sm" (click)="onDoneClick()">Go back</button>
+    </p>
+  </div>
+</div>

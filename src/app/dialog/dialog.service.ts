@@ -46,6 +46,7 @@ export type DialogComponentToken =
   | 'CreateAccountDialogComponent'
   | 'ArchiveTypeChangeDialogComponent'
   | 'ConfirmPayerDialogComponent'
+  | 'ConfirmGiftDialogComponent'
   | 'SkipOnboardingDialogComponent';
 
 export interface DialogChildComponentData {

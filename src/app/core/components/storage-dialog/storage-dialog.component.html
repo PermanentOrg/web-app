@@ -17,6 +17,13 @@
       </div>
       <div
         class="dialog-tab"
+        (click)="setTab('gift')"
+        [class.active]="activeTab === 'gift'"
+      >
+        Gift Storage
+      </div>
+      <div
+        class="dialog-tab"
         (click)="setTab('promo')"
         [class.active]="activeTab === 'promo'"
       >
@@ -54,6 +61,9 @@
             >
           </p>
           <pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
+        </ng-container>
+        <ng-container *ngSwitchCase="'gift'">
+          <pr-gift-storage></pr-gift-storage>
         </ng-container>
         <ng-container *ngSwitchCase="'promo'">
           <div class="panel-title">Redeem Gift</div>
