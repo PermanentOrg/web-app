@@ -70,6 +70,15 @@ export class BillingRepo extends BaseRepo {
       BillingResponse
     );
   }
+
+  public giftStorage(recipientEmail, storageAmount) {
+    const data = {
+      recipientEmail,
+      storageAmount,
+    };
+
+    return this.httpV2.post('/billing/giftStorage', data).toPromise();
+  }
 }
 
 export class BillingResponse extends BaseResponse {

@@ -30,6 +30,8 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
 
   waiting: boolean;
 
+  tabs = ['add', 'gift', 'promo', 'transaction', 'file'];
+
   constructor(
     private fb: UntypedFormBuilder,
     private dialogRef: DialogRef,
@@ -47,8 +49,10 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const path = params.get('path') as StorageDialogTab;
 
-      if (path) {
+      if (path && this.tabs.includes(path)) {
         this.activeTab = path;
+      } else {
+        this.activeTab = 'add';
       }
     });
   }

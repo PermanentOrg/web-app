@@ -1,0 +1,87 @@
+/* @format */
+@import 'variables';
+
+.gift-storage {
+  & > form {
+    margin: 0;
+    max-width: 800px;
+  }
+}
+
+.dialog-form-field {
+  display: flex;
+  margin-bottom: 23px;
+
+  @include beforeDesktop {
+    flex-direction: column;
+
+    & > div {
+      margin-bottom: 10px;
+    }
+  }
+
+  & .text {
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  & .label {
+    font-weight: 700;
+    font-family: 'Open-Sans', sans-serif;
+    margin: 0;
+  }
+
+  & .label-info {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  & .gigabytes {
+    display: inline-flex;
+    align-items: center;
+
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 17px;
+    color: $gray-dark;
+    margin-left: 10px;
+
+    @include beforeDesktop {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+
+  & > input,
+  textarea {
+    width: 400px;
+    border: 1px solid $gray-light;
+    border-radius: 6px;
+    height: 42px;
+  }
+
+  & > textarea {
+    height: 150px;
+    resize: none;
+  }
+
+  & .btn {
+    width: 200px;
+
+    &-disabled {
+      background-color: $gray-light;
+      color: $gray-dark;
+      border-color: $gray-light;
+    }
+  }
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}
