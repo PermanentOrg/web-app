@@ -32,7 +32,6 @@
         class="dialog-tab"
         (click)="setTab('legacy-planning')"
         [class.active]="activeTab === 'legacy-planning'"
-        *ngIf="legacyPlanningEnabled"
       >
         Legacy Planning
       </div>
@@ -41,7 +40,7 @@
       <ng-container [ngSwitch]="activeTab">
         <ng-container *ngSwitchCase="'manage-keywords'">
           <div class="panel-title">Manage Tags</div>
-          <ng-container *ngIf="hasAccess; else noAccess">
+          <ng-container *ngIf="hasTagsAccess; else noAccess">
             <pr-manage-tags
               [tags]="tags"
               *ngIf="!loadingTags; else loadText"
@@ -64,7 +63,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'public-settings'">
           <div class="panel-title">Public Gallery Page Settings</div>
-          <ng-container *ngIf="hasAccess; else noAccess">
+          <ng-container *ngIf="hasTagsAccess; else noAccess">
             <pr-public-settings [archive]="archive"></pr-public-settings>
           </ng-container>
         </ng-container>
@@ -80,12 +79,22 @@
               >Learn more.</a
             >
           </p>
-          <ng-container *ngIf="hasAccess; else noAccess">
+          <ng-container *ngIf="hasTagsAccess; else noAccess">
             <pr-manage-custom-metadata></pr-manage-custom-metadata>
           </ng-container>
         </ng-container>
         <ng-container *ngSwitchCase="'legacy-planning'">
-          <pr-directive-dialog></pr-directive-dialog>
+          <ng-container *ngIf="hasStewardAccess; else noLegacyPlanningAccess">
+            <pr-directive-dialog></pr-directive-dialog>
+          </ng-container>
+          <ng-template #noLegacyPlanningAccess>
+            You do not have permission to set an Archive Steward for this
+            archive. Only owners can set an Archive Steward for an archive.
+            <a
+              href="https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing"
+              >Learn more.</a
+            >
+          </ng-template>
         </ng-container>
       </ng-container>
     </div>
