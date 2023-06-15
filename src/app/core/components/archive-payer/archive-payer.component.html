@@ -26,7 +26,7 @@
   <div class="toggler">
     <pr-switcher
       [data]="{
-        archiveId: this.archive.archiveId,
+        archiveId: this.archive?.archiveId,
         isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
         handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
         cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
