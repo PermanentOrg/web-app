@@ -47,7 +47,7 @@ export class DownloadButtonComponent implements OnInit {
   }
 
   async downloadClick() {
-    if (this.selectedItem instanceof RecordVO && this.selectedItem.FileVOs) {
+    if (this.selectedItem instanceof RecordVO) {
       if (!this.displayDownloadDropdown) {
         this.displayDownloadOptions();
         this.bringDropdownIntoView();
@@ -77,10 +77,10 @@ export class DownloadButtonComponent implements OnInit {
 
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
-    const original = (this.selectedItem as RecordVO).FileVOs.find(
+    const original = (this.selectedItem as RecordVO).FileVOs?.find(
       (item) => item.format === 'file.format.original'
     );
-    const converted = (this.selectedItem as RecordVO).FileVOs.filter(
+    const converted = (this.selectedItem as RecordVO).FileVOs?.filter(
       (item) => item.format === 'file.format.converted'
     ).map((item) => ({
       name: item.type,

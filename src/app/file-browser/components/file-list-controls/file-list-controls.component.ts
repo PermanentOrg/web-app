@@ -470,17 +470,15 @@ export class FileListControlsComponent
     if (this.currentSort === column && !this.sortDesc) {
       direction = 'desc';
     }
-
     return `fileList.sort.${column}.${direction}`;
   }
 
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
-
-    const original = (this.selectedItems[0] as RecordVO).FileVOs.find(
+    const original = (this.selectedItems[0] as RecordVO).FileVOs?.find(
       (item) => item.format === 'file.format.original'
     );
-    const converted = (this.selectedItems[0] as RecordVO).FileVOs.filter(
+    const converted = (this.selectedItems[0] as RecordVO).FileVOs?.filter(
       (item) => item.format === 'file.format.converted'
     ).map((item) => ({
       name: item.type,
