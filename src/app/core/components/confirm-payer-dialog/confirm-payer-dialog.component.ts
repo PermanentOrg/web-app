@@ -1,3 +1,4 @@
+import { Observable } from '@shared/services/http/http.service';
 import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -11,7 +12,8 @@ import { MessageService } from '@shared/services/message/message.service';
 export class ConfirmPayerDialogComponent {
   archiveId;
   isPayerDifferentThanLoggedUser: boolean;
-  handleAccountInfoChange: any;
+  handleAccountInfoChange: (val:boolean) => void;
+  cancelAccountPayerSet: () => void;
 
   constructor(
     private dialogRef: DialogRef,
@@ -21,9 +23,11 @@ export class ConfirmPayerDialogComponent {
     this.isPayerDifferentThanLoggedUser =
       this.data.isPayerDifferentThanLoggedUser;
     this.handleAccountInfoChange = this.data.handleAccountInfoChange;
+    this.cancelAccountPayerSet = this.data.cancelAccountPayerSet;
   }
 
   onDoneClick(): void {
+    this.cancelAccountPayerSet();
     this.dialogRef.close();
   }
 

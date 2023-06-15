@@ -25,6 +25,7 @@
     <div>
       <label class="switch">
         <input
+          #payerSet
           (change)="setArchivePayer()"
           [checked]="!isPayerDifferentThanLoggedUser"
           type="checkbox"
@@ -33,7 +34,7 @@
       </label>
     </div>
     <div>
-      <p
+      <p 
         *ngIf="!hasPayer || isPayerDifferentThanLoggedUser"
         class="assign-user"
       >

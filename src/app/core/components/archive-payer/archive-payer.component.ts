@@ -3,9 +3,10 @@ import { MessageService } from '../../../shared/services/message/message.service
 import { ApiService } from '../../../shared/services/api/api.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountVO } from '../../../models/account-vo';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pr-archive-payer',
@@ -20,6 +21,8 @@ export class ArchivePayerComponent implements OnInit {
     'access.role.owner': 'Owner',
     'access.role.manager': 'Manager',
   };
+
+  @ViewChild('payerSet') payerSet: ElementRef;
 
   email: string = '';
   name: string = '';
@@ -50,6 +53,7 @@ export class ArchivePayerComponent implements OnInit {
         archiveId: this.archive.archiveId,
         isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
         handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+        cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this),
       },
       { width: '550px' }
     );
@@ -65,5 +69,9 @@ export class ArchivePayerComponent implements OnInit {
       this.hasPayer = !val;
       this.isPayerDifferentThanLoggedUser = val;
     }
+  }
+
+  cancelAccountPayerSet() {
+    this.payerSet.nativeElement.checked = false;
   }
 }
