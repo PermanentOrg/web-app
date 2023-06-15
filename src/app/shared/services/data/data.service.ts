@@ -497,8 +497,6 @@ export class DataService {
 
     function downloadFile(fileItem: any, type?: string) {
       const fileVO = getFile(fileItem, type) as any;
-      console.log('downloadFile', fileVO);
-      console.log('downloadFile', fileItem);
       const link = document.createElement('a');
       link.href = fileVO.downloadURL;
       link.click();
