@@ -16,23 +16,24 @@
           <b>{{ payer.fullName }}</b>
         </p>
         <p class="payer-email">{{ payer.primaryEmail }}</p>
-        <p class="payer-access">Access: {{ roles[payer.accessRole] }}</p>
+        <p class="payer-access">
+          Access: {{ roles[payer.accessRole] }}
+        </p>
       </div>
       <p>Contact this member for archive storage requests.</p>
     </div>
   </div>
   <div class="toggler">
-    <div>
-      <label class="switch">
-        <input
-          #payerSet
-          (change)="setArchivePayer()"
-          [checked]="!isPayerDifferentThanLoggedUser"
-          type="checkbox"
-        />
-        <span class="slider"></span>
-      </label>
-    </div>
+    <pr-switcher
+      [data]="{
+        archiveId: this.archive.archiveId,
+        isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+        handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+        cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
+      }"
+      [isChecked]="!isPayerDifferentThanLoggedUser"
+      [change]="setArchivePayer"
+    ></pr-switcher>
     <div>
       <p class="assign-user">Assign myself as the payer</p>
     </div>

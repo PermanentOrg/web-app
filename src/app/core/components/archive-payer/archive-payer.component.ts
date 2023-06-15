@@ -6,7 +6,7 @@ import { AccountVO } from '../../../models/account-vo';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
-import { Observable } from 'rxjs';
+import { SwitcherComponent } from '@shared/components/switcher/switcher.component';
 
 @Component({
   selector: 'pr-archive-payer',
@@ -22,14 +22,11 @@ export class ArchivePayerComponent implements OnInit {
     'access.role.manager': 'Manager',
   };
 
-  @ViewChild('payerSet') payerSet: ElementRef;
+  @ViewChild(SwitcherComponent, { static: false }) payerSet: SwitcherComponent;
 
-  email: string = '';
-  name: string = '';
-  role: string = '';
-  account: AccountVO;
-  hasPayer: boolean = false;
-  isPayerDifferentThanLoggedUser: boolean = false;
+  public account: AccountVO;
+  public hasPayer: boolean = false;
+  public isPayerDifferentThanLoggedUser: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -46,14 +43,11 @@ export class ArchivePayerComponent implements OnInit {
       this.account?.accountId !== this.archive?.payerAccountId;
   }
 
-  setArchivePayer() {
+  setArchivePayer(data) {
     this.dialog.open(
       'ConfirmPayerDialogComponent',
       {
-        archiveId: this.archive.archiveId,
-        isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
-        handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
-        cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this),
+        ...data,
       },
       { width: '550px' }
     );
@@ -72,6 +66,6 @@ export class ArchivePayerComponent implements OnInit {
   }
 
   cancelAccountPayerSet() {
-    this.payerSet.nativeElement.checked = false;
+    this.payerSet.switch.nativeElement.checked = !this.isPayerDifferentThanLoggedUser;
   }
 }
