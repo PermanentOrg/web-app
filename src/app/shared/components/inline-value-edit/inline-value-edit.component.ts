@@ -63,6 +63,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() selectOptions: FormInputSelectOption[];
   @Input() dateOnly = false;
   @Input() class: string;
+  @Input() isFolder: boolean;
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @HostBinding('class.always-show') @Input() alwaysShow = false;
@@ -74,6 +75,8 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     new EventEmitter<boolean>();
 
   formControl: UntypedFormControl;
+  @Output() clearedDate: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   @ViewChild('input') inputElementRef: ElementRef;
   @ViewChild(NgModel) ngModel: NgModel;
   @ViewChild('datePicker') datePicker: NgbDatepicker;
@@ -271,5 +274,12 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     if (event.keyCode === ENTER) {
       this.save();
     }
+  }
+
+  clearDate(){
+   this.clearedDate.emit(true);
+   this.isEditing = false;
+   this.toggledDatePicker.emit(false);
+   this.blurInput();
   }
 }
