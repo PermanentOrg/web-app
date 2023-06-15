@@ -27,6 +27,10 @@
     (click)="onFileTypeClick(item?.name)"
   >
     <span>{{ i === 0 ? 'Original Format:' : 'Permanent Format:' }}</span>
-    <span>{{ item?.extension && item?.extension !== 'null' ? '.' + item?.extension : 'unknown' }}</span>
+    <span>{{
+      item?.extension && item?.extension !== 'null'
+        ? '.' + item?.extension
+        : 'unknown'
+    }}</span>
   </div>
 </div>
