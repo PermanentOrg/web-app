@@ -66,6 +66,7 @@ export class ArchivePayerComponent implements OnInit {
   }
 
   cancelAccountPayerSet() {
-    this.payerSet.switch.nativeElement.checked = !this.isPayerDifferentThanLoggedUser;
+    this.payerSet.switch.nativeElement.checked =
+      !this.isPayerDifferentThanLoggedUser;
   }
 }

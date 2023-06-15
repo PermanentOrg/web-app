@@ -130,7 +130,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ArchiveSearchBoxComponent,
     NewArchiveFormComponent,
     PrependProtocolPipe,
-    SwitcherComponent
+    SwitcherComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -176,7 +176,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
     ArchiveSearchBoxComponent,
     NewArchiveFormComponent,
     PrependProtocolPipe,
-    SwitcherComponent
+    SwitcherComponent,
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
