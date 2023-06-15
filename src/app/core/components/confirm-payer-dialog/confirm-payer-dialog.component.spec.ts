@@ -6,7 +6,6 @@ import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
 import { cloneDeep } from 'lodash';
 import { SharedModule } from './../../../shared/shared.module';
 
-
 describe('ConfirmPayerDialogComponent', () => {
   let component: ConfirmPayerDialogComponent;
   let fixture: ComponentFixture<ConfirmPayerDialogComponent>;
