@@ -60,6 +60,8 @@ import { PublicSettingsComponent } from './components/public-settings/public-set
 import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
 import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
 import { DirectiveModule } from '../directive/directive.module';
+import { ArchivePayerComponent } from './components/archive-payer/archive-payer.component';
+import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
 
 @NgModule({
   imports: [
@@ -108,6 +110,8 @@ import { DirectiveModule } from '../directive/directive.module';
     WelcomeInvitationDialogComponent,
     PublicSettingsComponent,
     ArchiveTypeChangeDialogComponent,
+    ArchivePayerComponent,
+    ConfirmPayerDialogComponent,
   ],
   providers: [
     DataService,
@@ -171,6 +175,10 @@ export class CoreModule {
     {
       token: 'ArchiveTypeChangeDialogComponent',
       component: ArchiveTypeChangeDialogComponent,
+    },
+    {
+      token: 'ConfirmPayerDialogComponent',
+      component: ConfirmPayerDialogComponent,
     },
   ];
 
