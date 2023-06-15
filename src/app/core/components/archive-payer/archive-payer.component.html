@@ -34,14 +34,10 @@
       </label>
     </div>
     <div>
-      <p 
-        *ngIf="!hasPayer || isPayerDifferentThanLoggedUser"
+      <p
         class="assign-user"
       >
         Assign myself as the payer
-      </p>
-      <p *ngIf="!isPayerDifferentThanLoggedUser" class="assign-user">
-        Unassign myself as the payer
       </p>
     </div>
   </div>

@@ -12,12 +12,12 @@ import { MessageService } from '@shared/services/message/message.service';
 export class ConfirmPayerDialogComponent {
   archiveId;
   isPayerDifferentThanLoggedUser: boolean;
-  handleAccountInfoChange: (val:boolean) => void;
+  handleAccountInfoChange: (val: boolean) => void;
   cancelAccountPayerSet: () => void;
 
   constructor(
     private dialogRef: DialogRef,
-    @Inject(DIALOG_DATA) public data: any,
+    @Inject(DIALOG_DATA) public data: any
   ) {
     this.archiveId = this.data.archiveId;
     this.isPayerDifferentThanLoggedUser =
@@ -32,7 +32,7 @@ export class ConfirmPayerDialogComponent {
   }
 
   onConfirmClick() {
-    this.handleAccountInfoChange(!this.isPayerDifferentThanLoggedUser)
+    this.handleAccountInfoChange(!this.isPayerDifferentThanLoggedUser);
     this.dialogRef.close();
   }
 }
