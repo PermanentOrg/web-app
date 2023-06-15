@@ -15,6 +15,7 @@ describe('ConfirmPayerDialogComponent', () => {
     archiveId: number;
     isPayerDifferentThanLoggedUser: boolean;
     handleAccountInfoChange: () => void;
+    cancelAccountPayerSet: () => void;
   };
 
   beforeEach(async() => {
@@ -24,6 +25,7 @@ describe('ConfirmPayerDialogComponent', () => {
       archiveId: 1,
       isPayerDifferentThanLoggedUser: false,
       handleAccountInfoChange: () => {},
+      cancelAccountPayerSet: () => {},
     };
 
     dialogRef = new DialogRef(1, null);
