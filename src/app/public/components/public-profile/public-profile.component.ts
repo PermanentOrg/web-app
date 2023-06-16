@@ -14,7 +14,7 @@ import { concat, orderBy } from 'lodash';
 })
 export class PublicProfileComponent implements OnInit, OnDestroy, HasSubscriptions {
   archive: ArchiveVO;
-  publicProfileItems: ProfileItemVODictionary = {};
+  profileItems: ProfileItemVODictionary = {};
   milestones$: Observable<ProfileItemVOData[]>;
 
   subscriptions: Subscription[] = [];
@@ -26,7 +26,7 @@ export class PublicProfileComponent implements OnInit, OnDestroy, HasSubscriptio
   ngOnInit(): void {
     this.subscriptions.push(
       this.publicProfile.archive$().subscribe(archive => this.archive = archive),
-      this.publicProfile.profileItemsDictionary$().subscribe(items => this.publicProfileItems = items)
+      this.publicProfile.profileItemsDictionary$().subscribe(items => this.profileItems = items)
     );
 
     this.milestones$ = this.publicProfile.profileItemsDictionary$().pipe(
