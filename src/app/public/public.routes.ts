@@ -18,9 +18,9 @@ import { PublicTagsResolveService } from './resolves/public-tags-resolve.service
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
-  profileItems: PublicProfileItemsResolveService,
   publicRoot: PublicRootResolveService,
   tags: PublicTagsResolveService,
+  publicProfileItems: PublicProfileItemsResolveService,
 };
 
 const publishResolve = {
