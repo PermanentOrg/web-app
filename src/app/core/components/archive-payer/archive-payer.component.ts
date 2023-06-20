@@ -57,12 +57,11 @@ export class ArchivePayerComponent implements OnInit {
     this.archive.payerAccountId = !val ? this.account.accountId : null;
     try {
       this.api.archive.update(this.archive);
-    } catch (e) {
-      this.msg.showError('Something went wrong. Please try again.');
-    } finally {
       this.hasPayer = !val;
       this.isPayerDifferentThanLoggedUser = val;
-    }
+    } catch (e) {
+      this.msg.showError('Something went wrong. Please try again.');
+    } 
   }
 
   cancelAccountPayerSet() {
