@@ -61,7 +61,7 @@ export class ArchivePayerComponent implements OnInit {
       this.isPayerDifferentThanLoggedUser = val;
     } catch (e) {
       this.msg.showError('Something went wrong. Please try again.');
-    } 
+    }
   }
 
   cancelAccountPayerSet() {
