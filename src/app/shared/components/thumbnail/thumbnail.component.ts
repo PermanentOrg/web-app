@@ -59,11 +59,9 @@ export class ThumbnailComponent
   public isZip: boolean = false;
 
   @Input() hideResizableImage: boolean = true;
-  @Input() records = []
   @Output() disableSwipe = new EventEmitter<boolean>(false);
   @Output() isFullScreen = new EventEmitter<boolean>(false);
 
-  currentRecordIndex: number = 0;
   viewer: OpenSeaDragon.Viewer;
 
   constructor(
@@ -112,7 +110,6 @@ export class ThumbnailComponent
       });
 
       this.viewer.addHandler('full-screen', (event: FullScreenEvent) => {
-        this.currentRecordIndex = this.records.findIndex(record => record.archiveNbr === this.item.archiveNbr);
         const {fullScreen} = event;
         this.isFullScreen.emit(fullScreen);
       });

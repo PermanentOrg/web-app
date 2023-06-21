@@ -162,7 +162,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   // Keyboard
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event) {
-    console.log(this.fullscreen)
     if (!this.fullscreen) {
       switch (event.key) {
         case Key.ArrowLeft:
@@ -190,7 +189,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   toggleFullscreen(value:boolean) {
-    console.log(value)
     this.fullscreen = value
   }
 
