@@ -162,13 +162,15 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   // Keyboard
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event) {
-    switch (event.key) {
-      case Key.ArrowLeft:
-        this.incrementCurrentRecord(true);
-        break;
-      case Key.ArrowRight:
-        this.incrementCurrentRecord();
-        break;
+    if (!this.disableSwipes) {
+      switch (event.key) {
+        case Key.ArrowLeft:
+          this.incrementCurrentRecord(true);
+          break;
+        case Key.ArrowRight:
+          this.incrementCurrentRecord();
+          break;
+      }
     }
   }
 
@@ -186,7 +188,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.disableSwipes = value;
   }
 
-  toggleFullScreen(value:boolean) {
+  toggleFullScreen(value: boolean) {
     this.isFullScreen = value;
   }
 

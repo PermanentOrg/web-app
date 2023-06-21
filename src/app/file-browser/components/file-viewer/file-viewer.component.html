@@ -30,6 +30,7 @@
       ></div>
       <div *ngIf="currentRecord == record" class="full" [ngSwitch]="">
         <pr-thumbnail
+          (isFullScreen)="toggleSwipe($event)"
           (disableSwipe)="toggleSwipe($event)"
           [item]="currentRecord"
           *ngIf="showThumbnail"

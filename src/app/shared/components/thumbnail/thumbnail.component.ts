@@ -61,8 +61,7 @@ export class ThumbnailComponent
   @Input() hideResizableImage: boolean = true;
   @Input() records = []
   @Output() disableSwipe = new EventEmitter<boolean>(false);
-  @Output() isFullScreenOutput = new EventEmitter<boolean>(false);
-  @Input() isFullScreen: boolean = false;
+  @Output() isFullScreen = new EventEmitter<boolean>(false);
 
   currentRecordIndex: number = 0;
   viewer: OpenSeaDragon.Viewer;
@@ -115,31 +114,8 @@ export class ThumbnailComponent
       this.viewer.addHandler('full-screen', (event: FullScreenEvent) => {
         this.currentRecordIndex = this.records.findIndex(record => record.archiveNbr === this.item.archiveNbr);
         const {fullScreen} = event;
-        this.isFullScreenOutput.emit(fullScreen);
-        this.isFullScreen = fullScreen
-        console.log(this.viewer.isFullPage())
-        console.log(this.currentRecordIndex)
+        this.isFullScreen.emit(fullScreen);
       });
-    }
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  imageNavigation(event: KeyboardEvent) {
-      switch(event.code) {
-        case "ArrowRight":
-        case "ArrowLeft":
-          if(this.isFullScreen){
-            if(this.item.type === 'type.record.image'){
-            this.viewer?.setFullPage(true)
-            }
-             else{
-            this.router.navigate(['../'], {
-              // relativeTo: this.route,
-            });
-          }
-        }
-            break;
-        
     }
   }
 
