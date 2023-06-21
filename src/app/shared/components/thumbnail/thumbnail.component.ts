@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 /* @format */
 import {
   Component,
@@ -22,7 +23,7 @@ import debug from 'debug';
 import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import * as OpenSeaDragon from 'openseadragon';
-import { ViewerEvent } from 'openseadragon';
+import { FullScreenEvent,ZoomEvent } from 'openseadragon';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
@@ -59,13 +60,16 @@ export class ThumbnailComponent
 
   @Input() hideResizableImage: boolean = true;
   @Output() disableSwipe = new EventEmitter<boolean>(false);
+  @Output() isFullScreen = new EventEmitter<boolean>(false);
 
   viewer: OpenSeaDragon.Viewer;
 
   constructor(
     elementRef: ElementRef,
     private renderer: Renderer2,
-    private zone: NgZone
+    private zone: NgZone,
+    private router:Router,
+    private route:ActivatedRoute
   ) {
     this.element = elementRef.nativeElement;
     this.debouncedResize = debounce(this.checkElementWidth, 100);
@@ -92,7 +96,7 @@ export class ThumbnailComponent
         maxZoomLevel: 10,
       });
 
-      this.viewer.addHandler('zoom', (event: OpenSeaDragon.ZoomEvent) => {
+      this.viewer.addHandler('zoom', (event: ZoomEvent) => {
         const zoom = event.zoom;
         if (!this.initialZoom) {
           this.initialZoom = zoom;
@@ -103,6 +107,11 @@ export class ThumbnailComponent
         } else {
           this.disableSwipe.emit(false);
         }
+      });
+
+      this.viewer.addHandler('full-screen', (event: FullScreenEvent) => {
+        const {fullScreen} = event;
+        this.isFullScreen.emit(fullScreen);
       });
     }
   }
