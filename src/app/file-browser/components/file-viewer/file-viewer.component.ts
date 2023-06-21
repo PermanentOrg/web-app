@@ -188,8 +188,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.disableSwipes = value;
   }
 
-  toggleFullscreen(value:boolean) {
-    this.fullscreen = value
+  toggleFullscreen(value: boolean) {
+    this.fullscreen = value;
   }
 
   getPdfUrl() {
