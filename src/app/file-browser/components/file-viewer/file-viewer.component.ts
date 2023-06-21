@@ -49,7 +49,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public allowDownloads: boolean = false;
   public keywords: TagVOData[];
   public customMetadata: TagVOData[];
-  public isFullScreen = false;
 
   public documentUrl = null;
 
@@ -186,10 +185,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   toggleSwipe(value: boolean) {
     this.disableSwipes = value;
-  }
-
-  toggleFullScreen(value: boolean) {
-    this.isFullScreen = value;
   }
 
   getPdfUrl() {
