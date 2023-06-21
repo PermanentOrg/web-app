@@ -223,7 +223,6 @@ export class ThumbnailComponent
   }
 
   chooseFullSizeImage(record: RecordVO) {
-    console.log(record)
     if (record.FileVOs.length > 1) {
       const convertedUrl = record.FileVOs.find(
         (file) => file.format == 'file.format.converted'

@@ -60,6 +60,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   private bodyScroll: number;
   private hammer: HammerManager;
   private disableSwipes: boolean;
+  private fullscreen: boolean;
   private velocityThreshold = 0.2;
   private screenWidth: number;
   private offscreenThreshold: number;
@@ -161,7 +162,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   // Keyboard
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event) {
-    if (!this.disableSwipes) {
+    console.log(this.fullscreen)
+    if (!this.fullscreen) {
       switch (event.key) {
         case Key.ArrowLeft:
           this.incrementCurrentRecord(true);
@@ -185,6 +187,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   toggleSwipe(value: boolean) {
     this.disableSwipes = value;
+  }
+
+  toggleFullscreen(value:boolean) {
+    console.log(value)
+    this.fullscreen = value
   }
 
   getPdfUrl() {
