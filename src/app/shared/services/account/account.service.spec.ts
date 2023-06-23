@@ -50,6 +50,10 @@ describe('AccountService', () => {
           get: () => {},
           set: () => {},
         },
+        session: {
+          get: () => {},
+          set: () => {},
+        },
       });
   });
 

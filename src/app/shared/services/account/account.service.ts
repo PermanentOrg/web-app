@@ -27,6 +27,7 @@ import * as Sentry from '@sentry/browser';
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
 const ROOT_KEY = 'root';
+const INVITE_KEY = 'INVITE_CODE';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +42,8 @@ export class AccountService {
   private redirectParams: any = null;
 
   private archives: ArchiveVO[] = [];
+
+  public inviteCode: string;
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
   public accountChange: EventEmitter<AccountVO> = new EventEmitter();
@@ -60,6 +63,7 @@ export class AccountService {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
     const cachedRoot = this.storage.local.get(ROOT_KEY);
+    this.inviteCode = this.storage.session.get(INVITE_KEY);
 
     if (cachedAccount) {
       this.setAccount(new AccountVO(cachedAccount));
@@ -491,6 +495,9 @@ export class AccountService {
         await this.logOut();
       } catch (err) {}
     }
+
+    this.inviteCode = inviteCode;
+    this.storage.session.set(INVITE_KEY, inviteCode);
 
     try {
       return this.api.account
