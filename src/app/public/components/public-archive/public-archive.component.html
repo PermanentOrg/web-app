@@ -92,11 +92,17 @@
           >
             {{ this.profileItems.blurb[0].string1 }}
           </div>
-          <div
+          <span
             class="profile-description"
-            *ngIf="hasSingleValueFor('description', 'textData1')"
-            [innerHTML]="this.profileItems.description[0].textData1"
-          ></div>
+            *ngIf="hasSingleValueFor('description', 'textData1') && !showShortText"
+            [innerHTML]="this.description"
+          ></span>
+          <span
+          class="profile-description"
+          *ngIf="hasSingleValueFor('description', 'textData1') && showShortText"
+          [innerHTML]='this.shortText + "..."'
+        ></span>
+          <span *ngIf="this.description.length > 100" class="expand-text" (click)="toggleShowFullText()">{{showShortText ? ' See More' : ' See Less'}} </span>
         </ng-container>
       </div>
       <div class="profile-controls">
