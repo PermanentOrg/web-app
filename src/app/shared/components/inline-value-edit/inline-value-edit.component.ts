@@ -111,6 +111,13 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     if (this.class) {
       this.extraClasses = this.class.split(' ');
     }
+
+    this.elementRef.nativeElement.addEventListener(
+      'keydown',
+      (event: KeyboardEvent) => {
+        event.stopPropagation();
+      }
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -120,7 +127,6 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       }
     }
   }
-
 
   startEdit() {
     if (!this.canEdit) {
@@ -250,7 +256,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     if (this.inputElementRef) {
       (this.inputElementRef.nativeElement as HTMLInputElement).focus();
     }
-    if(this.datePicker){
+    if (this.datePicker) {
       this.datePicker.focusSelect();
     }
   }
