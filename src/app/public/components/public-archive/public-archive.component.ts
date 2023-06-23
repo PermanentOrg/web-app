@@ -83,8 +83,12 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
               : '')
         ),
       this.publicProfile.profileItemsDictionary$().subscribe((items) => {
-        this.emails = items['email'].map((item) => item.string1);
-        this.websites = items['social_media'].map((item) => item.string1);
+        this.emails = items['email']
+          ? items['email'].map((item) => item.string1)
+          : [];
+        this.websites = items['social_media']
+          ? items['social_media'].map((item) => item.string1)
+          : [];
       }),
       this.publicProfile.profileItemsDictionary$().subscribe((items) => {
         if (this.description.length > this.characterLimit) {
