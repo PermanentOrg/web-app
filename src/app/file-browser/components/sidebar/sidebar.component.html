@@ -131,13 +131,19 @@
             </div>
           </div>
         </ng-container>
-        <div *ngIf="originalFileExtension" class="sidebar-detail">
+        <div *ngIf="originalFileExtension && originalFileExtension !== 'null'" class="sidebar-detail">
           <label>Original Format</label>
           <div class="sidebar-detail-content">
            .{{originalFileExtension}}
           </div>
         </div>
-        <div *ngIf="permanentFileExtension" class="sidebar-detail">
+        <div *ngIf="!originalFileExtension || originalFileExtension === 'null'" class="sidebar-detail">
+          <label>Original Format</label>
+          <div class="sidebar-detail-content">
+          unkown
+          </div>
+        </div>
+        <div *ngIf="permanentFileExtension && permanentFileExtension !== 'null'" class="sidebar-detail">
           <label>Permanent Format</label>
           <div class="sidebar-detail-content">
            .{{permanentFileExtension}}
