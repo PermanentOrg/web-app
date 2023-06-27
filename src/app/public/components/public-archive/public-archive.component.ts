@@ -25,11 +25,12 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   archive: ArchiveVO;
   profileItems: ProfileItemVODictionary = {};
   description: string;
-  socialMedia: Record<string, string> = {};
   searchResults: any[] = [];
   showShortText = true;
   characterLimit = 100;
   shortText = '';
+  emails: string[] = [];
+  websites: string[] = [];
 
   waiting = true;
 
@@ -82,22 +83,19 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
               : '')
         ),
       this.publicProfile.profileItemsDictionary$().subscribe((items) => {
-        this.socialMedia['email'] = items['email'][0].string1;
-        this.socialMedia['socialMedia'] = items['social_media'].find(
-          (item) => !item.string1.includes('facebook')
-        )?.string1;
-        this.socialMedia['facebook'] = items['social_media'].find((item) =>
-          item.string1.includes('facebook')
-        )?.string1;
-        return this.socialMedia;
+        this.emails = items['email']
+          ? items['email'].map((item) => item.string1)
+          : [];
+        this.websites = items['social_media']
+          ? items['social_media'].map((item) => item.string1)
+          : [];
       }),
       this.publicProfile.profileItemsDictionary$().subscribe((items) => {
         if (this.description.length > this.characterLimit) {
           this.shortText = this.description
             ? this.description.slice(0, this.characterLimit)
             : '';
-        }
-        else{
+        } else {
           this.showShortText = false;
         }
       })

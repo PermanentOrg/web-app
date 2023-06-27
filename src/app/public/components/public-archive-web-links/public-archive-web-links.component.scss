@@ -25,14 +25,6 @@
   margin-bottom: 10px;
 }
 
-.link-container {
-  display: flex;
-  margin-bottom: 2rem;
-  & > svg {
-    margin-right: 1.2rem;
-  }
-}
-
 .link {
   font-family: Usual;
   font-size: 14px;
@@ -42,6 +34,12 @@
   text-align: left;
   color: $darkBlue;
   margin-bottom: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 15rem;
+  display: block;
+  margin-bottom: 2rem;
+  text-decoration: none;
 }
 
 .description {
