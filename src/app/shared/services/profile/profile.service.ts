@@ -125,7 +125,7 @@ export class ProfileService {
     const profileItems = profileResponse?.getProfileItemVOs();
     this.profileItemDictionary = {};
 
-    if(profileItems){    for (const item of profileItems) {
+    for (const item of profileItems) {
       // override type to convert to milestone on update
       const fieldsToConvert: FieldNameUI[] = ['profile.home', 'profile.job', 'profile.location'];
 
@@ -139,15 +139,13 @@ export class ProfileService {
         item.fieldNameUI = 'profile.milestone';
       }
       addProfileItemToDictionary(this.profileItemDictionary, item);
-    }}
+    }
 
     // create stubs for the rest of the profile items so at least one exists for given profile item type
     this.stubEmptyProfileItems();
 
     // order things by start date that have a start date
     this.orderItems('milestone');
-
-    return this.profileItemDictionary
   }
 
   getProfileItemDictionary() {
