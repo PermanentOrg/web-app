@@ -1,3 +1,4 @@
+/* @format */
 @mixin flex {
   display: flex;
   align-items: center;
@@ -26,8 +27,6 @@
    
   }
 }
-
-/* @format */
 .download-options{
   width: 211px;
   height: fit-content;
