@@ -1,13 +1,30 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, Optional, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+  Output,
+  Input,
+  Optional,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
 import { Subscription, Subject } from 'rxjs';
-import { min } from 'lodash';
+import { min, get } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ItemVO, AccessRole, SortType, FolderVO, RecordVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
 import { fadeAnimation, ngIfFadeInAnimation } from '@shared/animations';
-import { FolderResponse, RecordResponse } from '@shared/services/api/index.repo';
+import {
+  FolderResponse,
+  RecordResponse,
+} from '@shared/services/api/index.repo';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
@@ -19,7 +36,6 @@ import { FolderViewService } from '@shared/services/folder-view/folder-view.serv
 import { isKeyEventFromBody } from '@shared/utilities/events';
 import debug from 'debug';
 
-
 interface FileListActions {
   delete: boolean;
   copy: boolean;
@@ -30,17 +46,22 @@ interface FileListActions {
   unshare: boolean;
 }
 
+interface Format {
+  name: string;
+  extension: string;
+}
+
 type FileListColumn = 'name' | 'date' | 'type';
 
 @Component({
   selector: 'pr-file-list-controls',
   templateUrl: './file-list-controls.component.html',
   styleUrls: ['./file-list-controls.component.scss'],
-  animations: [
-    ngIfFadeInAnimation
-  ]
+  animations: [ngIfFadeInAnimation],
 })
-export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscriptions {
+export class FileListControlsComponent
+  implements OnInit, OnDestroy, HasSubscriptions
+{
   public isSorting$ = new Subject<boolean>();
 
   @Input() allowSort = true;
@@ -52,7 +73,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   views = {
     list: FolderView.List,
     grid: FolderView.Grid,
-    timeline: FolderView.Timeline
+    timeline: FolderView.Timeline,
   };
 
   currentSort: FileListColumn;
@@ -64,6 +85,11 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   isSavingSort = false;
   isSorting = false;
   canSaveSort = false;
+  displayDownloadDropdown = false;
+
+  downloadOptions: Format[] = [];
+
+  @ViewChild('downloadButton') downloadButton: ElementRef;
 
   can: FileListActions = {
     delete: false,
@@ -72,7 +98,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     share: false,
     publish: false,
     download: false,
-    unshare: false
+    unshare: false,
   };
 
   subscriptions: Subscription[] = [];
@@ -93,27 +119,39 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     this.getSortFromCurrentFolder();
     this.initialSortType = this.data.currentFolder?.sort;
     this.subscriptions.push(
-      this.data.selectedItems$().subscribe(items => {
+      this.data.selectedItems$().subscribe((items) => {
         this.selectedItems = Array.from(items);
         this.setAvailableActions();
       })
     );
 
-    this.canSaveSort = this.account.checkMinimumAccess(this.data.currentFolder?.accessRole, AccessRole.Curator);
+    this.canSaveSort = this.account.checkMinimumAccess(
+      this.data.currentFolder?.accessRole,
+      AccessRole.Curator
+    );
 
     this.currentFolderView = this.folderView.folderView;
     this.subscriptions.push(
-      this.folderView.viewChange.subscribe(view => {
+      this.folderView.viewChange.subscribe((view) => {
         this.currentFolderView = view;
       })
     );
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event) {
+    const clickedElement = event.target as HTMLElement;
+    const isClickedInside =
+      this.downloadButton.nativeElement.contains(clickedElement);
+    if (!isClickedInside && this.displayDownloadDropdown) {
+      this.displayDownloadDropdown = false;
+    }
   }
 
   @HostListener('window:keydown.delete', ['$event'])
@@ -125,7 +163,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   setAvailableActions() {
-    this.isShareRoot = this.data.currentFolder.type === 'type.folder.root.share';
+    this.isShareRoot =
+      this.data.currentFolder.type === 'type.folder.root.share';
     this.isPublic = this.data.currentFolder.type.includes('public');
     this.setAllActions(false);
 
@@ -142,8 +181,8 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     }
 
     const minimumAccess = min([
-      ...this.selectedItems.map(i => getAccessAsEnum(i.accessRole)),
-      getAccessAsEnum(this.account.getArchive().accessRole)
+      ...this.selectedItems.map((i) => getAccessAsEnum(i.accessRole)),
+      getAccessAsEnum(this.account.getArchive().accessRole),
     ]);
 
     this.debug('minimum access for items & archive: %o', minimumAccess);
@@ -153,7 +192,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       case AccessRole.Editor:
       case AccessRole.Contributor:
         if (this.isShareRoot && isSingleItem) {
-          return this.can.unshare = true;
+          return (this.can.unshare = true);
         }
         return;
       case AccessRole.Curator:
@@ -165,12 +204,21 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       case AccessRole.Manager:
       case AccessRole.Owner:
         if (this.isShareRoot && isSingleItem) {
-          return this.setMultipleActions(['unshare', 'copy', 'move', 'share'], true);
+          return this.setMultipleActions(
+            ['unshare', 'copy', 'move', 'share'],
+            true
+          );
         } else if (isSingleItem) {
           if (!this.isPublic) {
-            return this.setMultipleActions(['delete', 'copy', 'move', 'share', 'publish'], true);
+            return this.setMultipleActions(
+              ['delete', 'copy', 'move', 'share', 'publish'],
+              true
+            );
           } else {
-            return this.setMultipleActions(['delete', 'copy', 'move', 'publish'], true);
+            return this.setMultipleActions(
+              ['delete', 'copy', 'move', 'publish'],
+              true
+            );
           }
         } else {
           return this.setMultipleActions(['delete', 'copy', 'move'], true);
@@ -179,7 +227,10 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
   }
 
   setAllActions(enabled: boolean) {
-    this.setMultipleActions(['delete', 'copy', 'move', 'share', 'publish', 'download'], enabled);
+    this.setMultipleActions(
+      ['delete', 'copy', 'move', 'share', 'publish', 'download'],
+      enabled
+    );
   }
 
   setMultipleActions(actions: (keyof FileListActions)[], enabled: boolean) {
@@ -237,7 +288,7 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
 
     this.isSorting = true;
     const originalSort = this.data.currentFolder.sort;
-    this.data.currentFolder.update({sort});
+    this.data.currentFolder.update({ sort });
     this.getSortFromCurrentFolder();
     try {
       this.isSorting$.next(true);
@@ -271,8 +322,16 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    const itemLabel = this.selectedItems.length > 1 ? `${this.selectedItems.length} items` : this.selectedItems[0].displayName;
-    if (await this.prompt.confirmBoolean('Delete', `Are you sure you want to delete ${itemLabel}?`)) {
+    const itemLabel =
+      this.selectedItems.length > 1
+        ? `${this.selectedItems.length} items`
+        : this.selectedItems[0].displayName;
+    if (
+      await this.prompt.confirmBoolean(
+        'Delete',
+        `Are you sure you want to delete ${itemLabel}?`
+      )
+    ) {
       try {
         this.edit.deleteItems(this.selectedItems);
       } catch (err) {
@@ -288,8 +347,11 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    if (await this.prompt.confirmBoolean('Unshare',
-       'Are you sure you wish to remove this from your shared items?')
+    if (
+      await this.prompt.confirmBoolean(
+        'Unshare',
+        'Are you sure you wish to remove this from your shared items?'
+      )
     ) {
       try {
         this.edit.unshareItem(this.selectedItems[0]);
@@ -305,7 +367,10 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     if (!this.can.move || !this.edit) {
       return;
     }
-    await this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Move);
+    await this.edit.openFolderPicker(
+      this.selectedItems,
+      FolderPickerOperations.Move
+    );
     this.refreshView.emit();
   }
 
@@ -314,7 +379,10 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    await this.edit.openFolderPicker(this.selectedItems, FolderPickerOperations.Copy);
+    await this.edit.openFolderPicker(
+      this.selectedItems,
+      FolderPickerOperations.Copy
+    );
     this.refreshView.emit();
   }
 
@@ -339,16 +407,38 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
       return;
     }
 
-    if (this.selectedItems.length === 1 && this.selectedItems[0] instanceof RecordVO) {
-      this.data.downloadFile(this.selectedItems[0]);
+    if (
+      this.selectedItems.length === 1 &&
+      this.selectedItems[0] instanceof RecordVO
+    ) {
+      if (!this.displayDownloadDropdown) {
+        this.displayDownloadOptions();
+      } else {
+        this.displayDownloadDropdown = false;
+        this.downloadOptions = [];
+      }
     } else {
       try {
         await this.data.createZipForDownload(this.selectedItems);
-        this.message.showMessage('Your zip file is being created. An in-app notification will let you know when it is ready to download.', 'success');
+        this.message.showMessage(
+          'Your zip file is being created. An in-app notification will let you know when it is ready to download.',
+          'success'
+        );
       } catch (err) {
-        this.message.showError('There was a problem creating a zip file to download', false);
+        this.message.showError(
+          'There was a problem creating a zip file to download',
+          false
+        );
       }
     }
+  }
+
+  async onFileTypeClick(fileName: string) {
+    if (
+      this.selectedItems.length === 1 &&
+      this.selectedItems[0] instanceof RecordVO
+    )
+      this.data.downloadFile(this.selectedItems[0], fileName);
   }
 
   getTooltipConstantForAction(action: keyof FileListActions) {
@@ -380,8 +470,24 @@ export class FileListControlsComponent implements OnInit, OnDestroy, HasSubscrip
     if (this.currentSort === column && !this.sortDesc) {
       direction = 'desc';
     }
-
     return `fileList.sort.${column}.${direction}`;
   }
 
+  displayDownloadOptions() {
+    this.displayDownloadDropdown = true;
+    const original = (this.selectedItems[0] as RecordVO).FileVOs?.find(
+      (item) => item.format === 'file.format.original'
+    );
+    const converted = (this.selectedItems[0] as RecordVO).FileVOs?.filter(
+      (item) => item.format === 'file.format.converted'
+    ).map((item) => ({
+      name: item.type,
+      extension: item.type.split('.').pop(),
+    }));
+
+    this.downloadOptions = [
+      { name: original?.type, extension: original?.type.split('.').pop() },
+      ...converted,
+    ];
+  }
 }

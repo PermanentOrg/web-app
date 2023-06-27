@@ -485,24 +485,28 @@ export class DataService {
     });
   }
 
-  public downloadFile(item: RecordVO): Promise<any> {
+  public downloadFile(item: RecordVO, type?: string): Promise<any> {
     if (item.FileVOs && item.FileVOs.length) {
-      downloadOriginalFile(item);
+      downloadFile(item, type);
       return Promise.resolve();
     } else {
       return this.fetchFullItems([item]).then(() => {
-        downloadOriginalFile(item);
+        downloadFile(item, type);
       });
     }
 
-    function downloadOriginalFile(fileItem: any) {
-      const fileVO = getOriginalFile(fileItem) as any;
+    function downloadFile(fileItem: any, type?: string) {
+      const fileVO = getFile(fileItem, type) as any;
       const link = document.createElement('a');
       link.href = fileVO.downloadURL;
       link.click();
     }
 
-    function getOriginalFile(fileItem: RecordVO) {
+    function getFile(fileItem: RecordVO, type?: string) {
+      if (type) {
+        return find(fileItem.FileVOs, { type });
+      }
+
       return find(fileItem.FileVOs, { format: 'file.format.original' });
     }
   }

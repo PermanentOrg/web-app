@@ -81,14 +81,6 @@
           type="description-textarea"
         ></pr-inline-value-edit>
       </div>
-      <div
-        class="file-viewer-download"
-        *ngIf="isPublicArchive && allowDownloads"
-      >
-        <button class="btn btn-primary" (click)="onDownloadClick()">
-          Download
-        </button>
-      </div>
       <table class="metadata-table">
         <tr>
           <td>Date</td>
@@ -147,7 +139,13 @@
             <span *ngIf="!currentRecord.LocnVO">No location</span>
           </td>
         </tr>
+        <tr></tr>
       </table>
+      <pr-download-button
+        *ngIf="!isPublicArchive || (isPublicArchive && allowDownloads)"
+        [selectedItem]="currentRecord"
+        [isFileView]="true"
+      ></pr-download-button>
     </div>
   </div>
 </div>

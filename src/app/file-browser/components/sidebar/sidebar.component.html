@@ -1,13 +1,33 @@
 <div class="sidebar-tabs">
-  <div class="sidebar-tab" [class.active]="currentTab === 'info'" (click)="setCurrentTab('info')">Info</div>
-  <div class="sidebar-tab" [class.active]="currentTab === 'sharing'" (click)="setCurrentTab('sharing')"
+  <div
+    class="sidebar-tab"
+    [class.active]="currentTab === 'info'"
+    (click)="setCurrentTab('info')"
+  >
+    Info
+  </div>
+  <div
+    class="sidebar-tab"
+    [class.active]="currentTab === 'sharing'"
+    (click)="setCurrentTab('sharing')"
     [class.disabled]="isRootFolder || isPublicItem"
-    [ngbTooltip]="isPublicItem ? ('sidebar.share.disabled.public' | prTooltip) : null">
+    [ngbTooltip]="
+      isPublicItem ? ('sidebar.share.disabled.public' | prTooltip) : null
+    "
+  >
     Sharing
   </div>
-  <div class="sidebar-tab" [class.active]="currentTab === 'views'" (click)="setCurrentTab('views')"
+  <div
+    class="sidebar-tab"
+    [class.active]="currentTab === 'views'"
+    (click)="setCurrentTab('views')"
     [class.disabled]="!canUseViews"
-    [ngbTooltip]="(!isPublicItem || selectedItem?.isRecord) ? ('sidebar.views.disabled.public' | prTooltip) : null">
+    [ngbTooltip]="
+      !isPublicItem || selectedItem?.isRecord
+        ? ('sidebar.views.disabled.public' | prTooltip)
+        : null
+    "
+  >
     Views
   </div>
 </div>
@@ -15,7 +35,11 @@
   <ng-container *ngIf="selectedItem && !isRootFolder">
     <div class="sidebar-item" *ngIf="selectedItem">
       <div class="sidebar-thumbnail">
-        <pr-thumbnail [item]="selectedItem" [hideResizableImage]="true" [maxWidth]="500"></pr-thumbnail>
+        <pr-thumbnail
+          [item]="selectedItem"
+          [hideResizableImage]="true"
+          [maxWidth]="500"
+        ></pr-thumbnail>
       </div>
     </div>
     <div class="sidebar-item">
@@ -28,43 +52,56 @@
         (doneEditing)="onFinishEditing('displayName', $event)"
         emptyMessage="Click to add name"
         readOnlyEmptyMessage="No name"
-        type='text'></pr-inline-value-edit>
+        type="text"
+      ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Description</label>
       <pr-inline-value-edit
-      [displayValue]="selectedItem.description"
-      [itemId]="selectedItem.folder_linkId"
-      [canEdit]="canEdit"
-      [loading]="isLoading"
-      (doneEditing)="onFinishEditing('description', $event)"
-      emptyMessage="Click to add description"
-      readOnlyEmptyMessage="No description"
-      type='textarea'></pr-inline-value-edit>
+        [displayValue]="selectedItem.description"
+        [itemId]="selectedItem.folder_linkId"
+        [canEdit]="canEdit"
+        [loading]="isLoading"
+        (doneEditing)="onFinishEditing('description', $event)"
+        emptyMessage="Click to add description"
+        readOnlyEmptyMessage="No description"
+        type="textarea"
+      ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Tags</label>
       <div class="sidebar-item-content">
-        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit" tagType="keyword"></pr-edit-tags>
+        <pr-edit-tags
+          [item]="selectedItem"
+          [canEdit]="canEdit"
+          tagType="keyword"
+        ></pr-edit-tags>
       </div>
     </div>
     <div class="sidebar-item">
       <label>Custom Metadata</label>
       <div class="sidebar-item-content">
-        <pr-edit-tags [item]="selectedItem" [canEdit]="canEdit" tagType="customMetadata"></pr-edit-tags>
+        <pr-edit-tags
+          [item]="selectedItem"
+          [canEdit]="canEdit"
+          tagType="customMetadata"
+        ></pr-edit-tags>
       </div>
     </div>
     <div class="sidebar-item">
-      <label>{{selectedItem.isFolder ? 'Start date' : 'Date'}}</label>
+      <label>{{ selectedItem.isFolder ? 'Start date' : 'Date' }}</label>
       <pr-inline-value-edit
         [displayValue]="selectedItem.displayDT"
         [canEdit]="canEdit"
         [item]="selectedItem"
         [itemId]="selectedItem.folder_linkId"
         emptyMessage="Click to add date"
-        [readOnlyEmptyMessage]="selectedItem.isFolder ? 'No start date' : 'No date'"
+        [readOnlyEmptyMessage]="
+          selectedItem.isFolder ? 'No start date' : 'No date'
+        "
         (doneEditing)="onFinishEditing('displayDT', $event)"
-        type='date'></pr-inline-value-edit>
+        type="date"
+      ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item" *ngIf="selectedItem.isFolder">
       <label>End date</label>
@@ -76,43 +113,58 @@
         emptyMessage="Click to add date"
         readOnlyEmptyMessage="No end date"
         (doneEditing)="onFinishEditing('displayEndDT', $event)"
-        type='date'></pr-inline-value-edit>
+        type="date"
+      ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">
       <label>Location</label>
-      <div class="sidebar-item-content" (click)="onLocationClick()" [class.can-edit]="canEdit">
-        <span *ngIf="selectedItem.LocnVO">{{(selectedItem.LocnVO | prLocation)?.full}}</span>
-        <span *ngIf="!selectedItem.LocnVO" class="sidebar-item-content-empty">{{ canEdit ? 'Click to set location' : 'No location'}}</span>
+      <div
+        class="sidebar-item-content"
+        (click)="onLocationClick()"
+        [class.can-edit]="canEdit"
+      >
+        <span *ngIf="selectedItem.LocnVO">{{
+          (selectedItem.LocnVO | prLocation)?.full
+        }}</span>
+        <span *ngIf="!selectedItem.LocnVO" class="sidebar-item-content-empty">{{
+          canEdit ? 'Click to set location' : 'No location'
+        }}</span>
       </div>
-      <div class="sidebar-item-content" (click)="onLocationClick()" tabindex="0" (focus)="onLocationClick()" [class.can-edit]="canEdit">
+      <div
+        class="sidebar-item-content"
+        (click)="onLocationClick()"
+        tabindex="0"
+        (focus)="onLocationClick()"
+        [class.can-edit]="canEdit"
+      >
         <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
       </div>
     </div>
     <div class="sidebar-item">
       <div class="sidebar-item-content">
         <div class="sidebar-detail">
-          <label>{{selectedItem.isRecord ? 'Uploaded' : 'Created'}}</label>
+          <label>{{ selectedItem.isRecord ? 'Uploaded' : 'Created' }}</label>
           <div class="sidebar-detail-content">
-            {{selectedItem.createdDT | prDate}}
+            {{ selectedItem.createdDT | prDate }}
           </div>
         </div>
         <div class="sidebar-detail">
           <label>Last modified</label>
           <div class="sidebar-detail-content">
-            {{selectedItem.updatedDT | prDate}}
+            {{ selectedItem.updatedDT | prDate }}
           </div>
         </div>
         <ng-container *ngIf="selectedItem.isRecord">
           <div class="sidebar-detail">
             <label>Size</label>
             <div class="sidebar-detail-content">
-              {{(selectedItem | asRecord).size| dsFileSize}}
+              {{ (selectedItem | asRecord).size | dsFileSize }}
             </div>
           </div>
           <div class="sidebar-detail">
             <label>File created</label>
             <div class="sidebar-detail-content">
-              {{(selectedItem | asRecord).derivedCreatedDT | prDate}}
+              {{ (selectedItem | asRecord).derivedCreatedDT | prDate }}
             </div>
           </div>
         </ng-container>
@@ -120,63 +172,108 @@
           <div class="sidebar-detail">
             <label>Size</label>
             <div class="sidebar-detail-content">
-              {{(selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep | dsFileSize}}
+              {{
+                (selectedItem | asFolder).FolderSizeVO?.allFileSizeDeep
+                  | dsFileSize
+              }}
             </div>
           </div>
           <div class="sidebar-detail">
             <label>Contents</label>
             <div class="sidebar-detail-content">
-              {{(selectedItem | asFolder).FolderSizeVO | folderContents}}
+              {{ (selectedItem | asFolder).FolderSizeVO | folderContents }}
             </div>
           </div>
         </ng-container>
-        <div *ngIf="originalFileExtension" class="sidebar-detail">
+        <div
+          *ngIf="originalFileExtension && originalFileExtension !== 'null'"
+          class="sidebar-detail"
+        >
           <label>Original Format</label>
-          <div class="sidebar-detail-content">
-           .{{originalFileExtension}}
-          </div>
+          <div class="sidebar-detail-content">.{{ originalFileExtension }}</div>
         </div>
-        <div *ngIf="permanentFileExtension" class="sidebar-detail">
+        <div
+          *ngIf="!originalFileExtension || originalFileExtension === 'null'"
+          class="sidebar-detail"
+        >
+          <label>Original Format</label>
+          <div class="sidebar-detail-content">unknown</div>
+        </div>
+        <div
+          *ngIf="permanentFileExtension && permanentFileExtension !== 'null'"
+          class="sidebar-detail"
+        >
           <label>Permanent Format</label>
           <div class="sidebar-detail-content">
-           .{{permanentFileExtension}}
+            .{{ permanentFileExtension }}
           </div>
         </div>
       </div>
+    </div>
+    <div class="sidebar-item">
+      <pr-download-button
+        [isFileView]="false"
+        [selectedItem]="selectedItem"
+      ></pr-download-button>
     </div>
   </ng-container>
   <ng-container *ngIf="selectedItems">
     <div class="sidebar-item">
       <label>Multiple items</label>
       <div class="sidebar-item-content">
-        {{selectedItems.length}} items selected
+        {{ selectedItems.length }} items selected
       </div>
     </div>
   </ng-container>
   <ng-container *ngIf="selectedItem && isRootFolder">
     <div class="sidebar-item">
-      <label>{{selectedItem.displayName === 'My Files' ? 'Private' : selectedItem.displayName}}</label>
-      <div class="sidebar-item-content">
-        Select a file to view details
-      </div>
+      <label>{{
+        selectedItem.displayName === 'My Files'
+          ? 'Private'
+          : selectedItem.displayName
+      }}</label>
+      <div class="sidebar-item-content">Select a file to view details</div>
     </div>
   </ng-container>
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'sharing'">
   <ng-container *ngIf="selectedItem">
     <div class="sidebar-item">
-      <button class="btn btn-primary" [disabled]="!canShare" (click)="onShareClick()"
-        [ngbTooltip]="canShare ? null : ((isPublicItem ? 'sidebar.share.disabled.public':'sidebar.share.disabled.access')|prTooltip)">
-        {{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share'}}
+      <button
+        class="btn btn-primary"
+        [disabled]="!canShare"
+        (click)="onShareClick()"
+        [ngbTooltip]="
+          canShare
+            ? null
+            : ((isPublicItem
+                ? 'sidebar.share.disabled.public'
+                : 'sidebar.share.disabled.access'
+              ) | prTooltip)
+        "
+      >
+        {{ selectedItem.ShareVOs?.length ? 'Manage' : 'Share' }}
       </button>
     </div>
     <div class="sidebar-item">
       <div class="sidebar-item-content" *ngIf="selectedItem.ShareVOs?.length">
-        <div class="shared-with-archive" *ngFor="let share of selectedItem.ShareVOs">
-          <div class="archive-thumb" prBgImage [bgSrc]="share.ArchiveVO.thumbURL200" [cover]="true"></div>
+        <div
+          class="shared-with-archive"
+          *ngFor="let share of selectedItem.ShareVOs"
+        >
+          <div
+            class="archive-thumb"
+            prBgImage
+            [bgSrc]="share.ArchiveVO.thumbURL200"
+            [cover]="true"
+          ></div>
           <div class="archive-info">
-            <div class="archive-name">The {{share.ArchiveVO.fullName}} Archive</div>
-            <div class="archive-role">Access: {{share.accessRole | prConstants | titlecase}}</div>
+            <div class="archive-name">
+              The {{ share.ArchiveVO.fullName }} Archive
+            </div>
+            <div class="archive-role">
+              Access: {{ share.accessRole | prConstants | titlecase }}
+            </div>
           </div>
         </div>
       </div>
@@ -185,11 +282,17 @@
 </div>
 <div class="sidebar-tab-content" [hidden]="currentTab !== 'views'">
   <ng-container *ngIf="selectedItem">
-    <pr-sidebar-view-option [folderView]="'folder.view.grid'" (setDefault)="onFinishEditing('view', $event)"
-      [folder]="selectedItem | asFolder">
+    <pr-sidebar-view-option
+      [folderView]="'folder.view.grid'"
+      (setDefault)="onFinishEditing('view', $event)"
+      [folder]="selectedItem | asFolder"
+    >
     </pr-sidebar-view-option>
-    <pr-sidebar-view-option [folderView]="'folder.view.timeline'" (setDefault)="onFinishEditing('view', $event)"
-      [folder]="selectedItem | asFolder">
+    <pr-sidebar-view-option
+      [folderView]="'folder.view.timeline'"
+      (setDefault)="onFinishEditing('view', $event)"
+      [folder]="selectedItem | asFolder"
+    >
     </pr-sidebar-view-option>
   </ng-container>
 </div>

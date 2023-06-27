@@ -1,0 +1,36 @@
+<!-- @format -->
+<div
+  #downloadButton
+  (click)="downloadClick()"
+  class="download-container"
+  [class.disabled]="false"
+>
+  <div class="download-icon-text">
+    <i class="material-icons">cloud_download</i>
+    <span>Download</span>
+  </div>
+  <div class="download-icon">
+    <i *ngIf="!selectedItem?.isFolder" class="material-icons"
+      >keyboard_arrow_down</i
+    >
+  </div>
+</div>
+<div
+  #downloadButtonDropdown
+  *ngIf="displayDownloadDropdown"
+  class="download-options"
+  [ngClass]="{ 'download-options-file-viewer': isFileView }"
+>
+  <div
+    *ngFor="let item of downloadOptions; let i = index"
+    class="download-option"
+    (click)="onFileTypeClick(item?.name)"
+  >
+    <span>{{ i === 0 ? 'Original Format:' : 'Permanent Format:' }}</span>
+    <span>{{
+      item?.extension && item?.extension !== 'null'
+        ? '.' + item?.extension
+        : 'unknown'
+    }}</span>
+  </div>
+</div>
