@@ -66,7 +66,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private cookies: CookieService
   ) {}
 
-
     async ngOnInit(): Promise<void> {
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
