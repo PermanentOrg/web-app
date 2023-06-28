@@ -60,13 +60,13 @@ describe('ArchivePayerComponent', () => {
     expect(divElement).toBeTruthy();
   });
 
-  it('displays the component even if no payer was found for unknown reasons',()=> {
+  it('displays the component even if no payer was found for unknown reasons', () => {
     component.hasPayer = true;
 
     fixture.detectChanges();
     const divElement = fixture.nativeElement.querySelector('#with-payer');
     expect(divElement).toBeTruthy();
-  })
+  });
 
   it('displays the current payer data if the logged account is different than the payer', () => {
     const payer = new AccountVO({});
