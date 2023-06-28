@@ -33,7 +33,12 @@
       [change]="setArchivePayer"
     ></pr-switcher>
     <div>
-      <p class="assign-user">Assign myself as the payer</p>
+      <p *ngIf="isPayerDifferentThanLoggedUser" class="assign-user">
+        Assign myself as the payer
+      </p>
+      <p *ngIf="!isPayerDifferentThanLoggedUser" class="assign-user">
+        Remove myself as the payer
+      </p>
     </div>
   </div>
 </div>
