@@ -15,10 +15,10 @@
       <p>This archive's payer is:</p>
       <div class="payer-info">
         <p class="payer-name">
-          <b>{{ payer.fullName }}</b>
+          <b>{{ payer?.fullName }}</b>
         </p>
-        <p class="payer-email">{{ payer.primaryEmail }}</p>
-        <p class="payer-access">Access: {{ roles[payer.accessRole] }}</p>
+        <p class="payer-email">{{ payer?.primaryEmail }}</p>
+        <p class="payer-access">Access: {{ roles[payer?.accessRole] }}</p>
       </div>
       <p>Contact this member for archive storage requests.</p>
     </div>
