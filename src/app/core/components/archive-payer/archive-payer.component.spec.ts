@@ -119,7 +119,7 @@ describe('ArchivePayerComponent', () => {
 
     component.archive = archive;
     component.payer = payer;
-    
+
     component.ngOnInit();
     fixture.detectChanges();
     expect(component.hasPayer).toEqual(false);

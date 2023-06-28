@@ -8,7 +8,9 @@
     <p>This archive does not currently have an assigned payer.</p>
   </div>
   <div id="with-payer" *ngIf="hasPayer">
-    <p id="is-payer" *ngIf="!isPayerDifferentThanLoggedUser">You are this archive's payer.</p>
+    <p id="is-payer" *ngIf="!isPayerDifferentThanLoggedUser">
+      You are this archive's payer.
+    </p>
     <div id="is-not-payer" *ngIf="isPayerDifferentThanLoggedUser">
       <p>This archive's payer is:</p>
       <div class="payer-info">
