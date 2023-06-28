@@ -46,7 +46,7 @@ export class SearchRepo extends BaseRepo {
     const data = {
       SearchVO: {
       query,
-      tags: tags,
+      TagVOs: tags,
       numberOfResults: limit,
       }
     };
