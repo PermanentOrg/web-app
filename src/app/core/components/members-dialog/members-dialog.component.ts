@@ -203,7 +203,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   confirmOwnershipTransfer() {
-    return this.promptService.confirm('Transfer ownership', 'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Curator');
+    return this.promptService.confirm('Transfer ownership', 'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Manager');
   }
 
   promptForInvite(member: AccountVO) {
