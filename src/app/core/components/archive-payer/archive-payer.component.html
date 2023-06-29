@@ -35,10 +35,32 @@
       [change]="setArchivePayer"
     ></pr-switcher>
     <div>
-      <p *ngIf="isPayerDifferentThanLoggedUser" class="assign-user">
+      <p
+        *ngIf="isPayerDifferentThanLoggedUser"
+        (click)="
+          setArchivePayer({
+            archiveId: this.archive?.archiveId,
+            isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+            handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+            cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
+          })
+        "
+        class="assign-user"
+      >
         Assign myself as the payer
       </p>
-      <p *ngIf="!isPayerDifferentThanLoggedUser" class="assign-user">
+      <p
+        (click)="
+          setArchivePayer({
+            archiveId: this.archive?.archiveId,
+            isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+            handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+            cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
+          })
+        "
+        *ngIf="!isPayerDifferentThanLoggedUser"
+        class="assign-user"
+      >
         Remove myself as the payer
       </p>
     </div>
