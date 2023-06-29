@@ -174,8 +174,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   initRecord() {
     this.isAudio = this.currentRecord.type.includes('audio');
     this.isVideo = this.currentRecord.type.includes('video');
-    this.isDocument = 
-    this.currentRecord.FileVOs?.some((obj:ItemVO) => obj.type.includes('pdf'))
+    this.isDocument = this.currentRecord.FileVOs?.some((obj: ItemVO) =>
+      obj.type.includes('pdf')
+    );
     this.documentUrl = this.getPdfUrl();
     this.setCurrentTags();
   }
@@ -203,7 +204,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     } else if (pdf) {
       url = pdf?.fileURL;
     }
-    
+
     if (!url) {
       return false;
     }
