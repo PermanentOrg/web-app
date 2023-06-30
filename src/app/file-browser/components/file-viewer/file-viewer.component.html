@@ -31,6 +31,7 @@
       <div *ngIf="currentRecord == record" class="full" [ngSwitch]="">
         <pr-thumbnail
           (disableSwipe)="toggleSwipe($event)"
+          (isFullScreen)="toggleFullscreen($event)"
           [item]="currentRecord"
           *ngIf="showThumbnail"
           [hideResizableImage]="false"
