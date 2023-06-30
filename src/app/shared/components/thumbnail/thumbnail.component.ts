@@ -75,6 +75,7 @@ export class ThumbnailComponent
 
   ngAfterViewInit() {
     const resizableImageElement = this.element.querySelector('#openseadragon');
+
     if (
       resizableImageElement &&
       this.item instanceof RecordVO &&
