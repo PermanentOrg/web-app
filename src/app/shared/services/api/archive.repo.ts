@@ -153,6 +153,10 @@ export class ArchiveRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<ArchiveResponse>('/profile_item/delete', data, ArchiveResponse);
   }
+
+  public getArchiveTags(archiveId: string) {
+    return this.httpV2.get<ArchiveResponse>(`v2/archive/${archiveId}/tags/public`).toPromise();
+  }
 }
 
 export class ArchiveResponse extends BaseResponse {

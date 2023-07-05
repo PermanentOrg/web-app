@@ -14,11 +14,13 @@ import { PublicProfileItemsResolveService } from './resolves/public-profile-item
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { RoutesWithData } from '../app.routes';
 import { PublicSearchResultsComponent } from './components/public-search-results/public-search-results.component';
+import { PublicTagsResolveService } from './resolves/public-tags-resolve.service';
 
 const publicArchiveResolve = {
   archive: PublicArchiveResolveService,
   profileItems: PublicProfileItemsResolveService,
   publicRoot: PublicRootResolveService,
+  tags: PublicTagsResolveService,
 };
 
 const publishResolve = {
@@ -78,6 +80,7 @@ export const routes: RoutesWithData = [
     PublicArchiveResolveService,
     PublicRootResolveService,
     PublicProfileItemsResolveService,
+    PublicTagsResolveService,
   ],
 })
 export class PublicRoutingModule {}
