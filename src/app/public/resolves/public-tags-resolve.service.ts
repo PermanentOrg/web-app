@@ -14,12 +14,11 @@ export class PublicTagsResolveService implements Resolve<any> {
   constructor(private api: ApiService) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let archiveId;
     const archiveNbr = route.params.publicArchiveNbr;
     const response = await this.api.archive.get([
       new ArchiveVO({ archiveNbr }),
     ]);
-    archiveId = response.getArchiveVO().archiveId;
+    const archiveId = response.getArchiveVO().archiveId;
     const res = await this.api.archive.getArchiveTags(archiveId);
     localStorage.setItem('tags', JSON.stringify(res));
   }
