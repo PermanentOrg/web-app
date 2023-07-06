@@ -6,9 +6,28 @@ import { Observable } from 'rxjs';
 
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
+import { getFirst } from '../http-v2/http-v2.service';
 
 const MIN_WHITELIST: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'folder_linkId'];
 const DEFAULT_WHITELIST: (keyof RecordVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT'];
+
+class MultipartUploadUrlsList {
+  public urls: string[] = [];
+  public uploadId: string;
+  public key: string;
+
+  protected isInstance(obj: unknown): obj is MultipartUploadUrlsList {
+    return (typeof obj === 'object' && typeof obj['urls'] === 'object' && typeof obj['urls'].length === 'number' && typeof obj['uploadId'] === 'string' && typeof obj['key'] === 'string');
+  }
+
+  constructor(obj: unknown) {
+    if (this.isInstance(obj)) {
+      this.urls = obj.urls;
+      this.uploadId = obj.uploadId;
+      this.key = obj.key;
+    }
+  }
+}
 
 export class RecordRepo extends BaseRepo {
   public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
@@ -61,6 +80,33 @@ export class RecordRepo extends BaseRepo {
         },
       },
     );
+  }
+
+  public getMultipartUploadURLs(size: number): Promise<MultipartUploadUrlsList> {
+    return getFirst(this.httpV2.post(
+      '/record/getMultipartUploadUrls',
+      {
+        fileSizeInBytes: size
+      },
+      MultipartUploadUrlsList
+    )).toPromise();
+  }
+
+  public async registerMultipartRecord(record: RecordVO, uploadId: string, key: string, eTags: string[]): Promise<void> {
+    await this.httpV2.post('/record/registerRecord', {
+      displayName: record.displayName,
+      parentFolderId: record.parentFolderId,
+      uploadFileName: record.uploadFileName,
+      size: record.size,
+      multipartUploadData: {
+        uploadId,
+        key,
+        parts: eTags.map((ETag, index) => ({
+          PartNumber: index + 1,
+          ETag
+        }))
+      }
+    }).toPromise();
   }
 
   public update(recordVOs: RecordVO[], whitelist = DEFAULT_WHITELIST): Promise<RecordResponse> {
