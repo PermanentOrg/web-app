@@ -1,3 +1,4 @@
+import { ApiService } from '@shared/services/api/api.service';
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import { DialogRef } from '@root/app/dialog/dialog.module';
@@ -17,15 +18,21 @@ export class WelcomeDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     private account: AccountService,
-    private constants: PrConstantsService
+    private constants: PrConstantsService,
+    private api: ApiService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    try {
+      const res = await this.api.auth.getInviteToken();
+      this.isEarlyBird = res.token === 'earlyb1rd';
+    } catch (error) {
+      console.log(error);
+    }
+
     const archive = this.account.getArchive();
     this.archiveName = archive.fullName;
     this.accessRole = this.constants.translate(archive.accessRole);
-    this.isEarlyBird =
-      !this.account.inviteCode || this.account.inviteCode === 'earlyb1rd';
   }
 
   public close(): void {

@@ -14,6 +14,7 @@ import {
 } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { getFirst } from '../http-v2/http-v2.service';
 
 export class AuthRepo extends BaseRepo {
   public isLoggedIn(): Promise<AuthResponse> {
@@ -137,6 +138,12 @@ export class AuthRepo extends BaseRepo {
       [account],
       AuthResponse
     );
+  }
+
+  public getInviteToken() {
+    return getFirst(
+      this.httpV2.get<{ token: string }>('v2/account/signup')
+    ).toPromise();
   }
 }
 
