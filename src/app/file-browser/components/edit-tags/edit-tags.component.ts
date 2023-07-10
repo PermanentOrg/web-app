@@ -62,10 +62,13 @@ export class EditTagsComponent
 
   public placeholderText: string;
 
+  public dialogTags: TagVOData[];
+
   subscriptions: Subscription[] = [];
 
   private lastDataStatus: DataStatus;
   private lastFolderLinkId: number;
+  private dialogTagSubscription: Subscription;
 
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
@@ -85,6 +88,7 @@ export class EditTagsComponent
           // Let's close the editor.
           this.endEditing();
         }
+
         this.allTags = this.filterTagsByType(tags);
         this.matchingTags = this.filterTagsByType(tags);
         this.checkItemTags();
@@ -95,7 +99,21 @@ export class EditTagsComponent
       this.isDialog = true;
       this.canEdit = true;
       this.item = this.dialogData.item;
+      this.tagType = this.dialogData.type;
       this.startEditing();
+      this.dialogTagSubscription = this.tagsService
+        .getItemTags$()
+        .subscribe((tags) => {
+          if (this.tagType === 'keyword') {
+            this.dialogTags = tags?.filter(
+              (tag) => !tag.type.includes('type.tag.metadata')
+            );
+          } else {
+            this.dialogTags = tags?.filter((tag) =>
+              tag.type.includes('type.tag.metadata')
+            );
+          }
+        });
     }
   }
 
@@ -112,6 +130,7 @@ export class EditTagsComponent
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
+    this.dialogTagSubscription?.unsubscribe();
   }
 
   ngDoCheck() {
@@ -211,7 +230,7 @@ export class EditTagsComponent
 
     this.itemTags = this.filterTagsByType(
       this.item.TagVOs.map((tag) =>
-        this.allTags.find((t) => t.tagId === tag.tagId)
+        this.allTags?.find((t) => t.tagId === tag.tagId)
       ).filter(
         // Filter out tags that are now null from deletion
         (tag) => tag?.name
@@ -225,6 +244,7 @@ export class EditTagsComponent
     for (const tag of this.itemTags) {
       this.itemTagsById.add(tag.tagId);
     }
+    this.tagsService.setItemTags(this.item.TagVOs);
   }
 
   onManageTagsClick() {

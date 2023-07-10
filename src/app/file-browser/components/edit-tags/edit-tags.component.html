@@ -32,7 +32,7 @@
     <div class="dialog-body">
       <div class="page-title break-all">{{item.displayName}}</div>
       <div class="edit-tags-dialog-body">
-        <pr-tags [tags]="item.TagVOs" (click)="startEditing()"
+        <pr-tags [tags]="dialogTags" (click)="startEditing()"
           [canEdit]="true" [animate]="isEditing" [isEditing]="isEditing"></pr-tags>
         <div class="input-group">
           <input type="text" class="new-tag form-control" [placeholder]="placeholderText" *ngIf="isEditing" @ngIfScaleAnimation
