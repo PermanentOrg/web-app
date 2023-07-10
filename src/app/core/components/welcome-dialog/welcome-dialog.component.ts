@@ -1,9 +1,9 @@
-import { ApiService } from '@shared/services/api/api.service';
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import { DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-welcome-dialog',
