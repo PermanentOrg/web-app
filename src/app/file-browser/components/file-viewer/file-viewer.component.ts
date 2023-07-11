@@ -131,8 +131,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       this.customMetadata = tags?.filter((tag) =>
         tag.type.includes('type.tag.metadata')
       );
-      this.keywords = tags?.filter((tag) =>
-        !tag.type.includes('type.tag.metadata')
+      this.keywords = tags?.filter(
+        (tag) => !tag.type.includes('type.tag.metadata')
       );
     });
   }
