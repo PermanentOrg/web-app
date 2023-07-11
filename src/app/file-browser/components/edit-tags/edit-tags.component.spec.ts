@@ -64,6 +64,7 @@ describe('EditTagsComponent', () => {
       .mock(TagsService, {
         getTags: () => defaultTagList,
         getTags$: () => new Observable<TagVOData[]>(),
+        setItemTags: () => {},
       })
       .mock(MessageService, { showError: () => {} })
       .mock(ApiService, {

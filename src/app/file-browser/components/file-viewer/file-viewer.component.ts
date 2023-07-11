@@ -116,7 +116,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     }
 
     if (publicProfile) {
-      publicProfile.archive$().subscribe((archive) => {
+      publicProfile.archive$()?.subscribe((archive) => {
         this.allowDownloads = archive.allowPublicDownload;
       });
     }
@@ -127,7 +127,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         AccessRole.Editor
       ) && !route.snapshot.data?.isPublicArchive;
 
-    this.tagSubscription = this.tagsService.getItemTags$().subscribe((tags) => {
+    this.tagSubscription = this.tagsService.getItemTags$()?.subscribe((tags) => {
       this.customMetadata = tags?.filter((tag) =>
         tag.type.includes('type.tag.metadata')
       );
@@ -135,6 +135,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         (tag) => !tag.type.includes('type.tag.metadata')
       );
     });
+  
   }
 
   ngOnInit() {
