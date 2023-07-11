@@ -127,15 +127,16 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         AccessRole.Editor
       ) && !route.snapshot.data?.isPublicArchive;
 
-    this.tagSubscription = this.tagsService.getItemTags$()?.subscribe((tags) => {
-      this.customMetadata = tags?.filter((tag) =>
-        tag.type.includes('type.tag.metadata')
-      );
-      this.keywords = tags?.filter(
-        (tag) => !tag.type.includes('type.tag.metadata')
-      );
-    });
-  
+    this.tagSubscription = this.tagsService
+      .getItemTags$()
+      ?.subscribe((tags) => {
+        this.customMetadata = tags?.filter((tag) =>
+          tag.type.includes('type.tag.metadata')
+        );
+        this.keywords = tags?.filter(
+          (tag) => !tag.type.includes('type.tag.metadata')
+        );
+      });
   }
 
   ngOnInit() {
