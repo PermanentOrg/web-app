@@ -53,6 +53,7 @@ module.exports = {
         'import/no-import-module-exports': 'off',
         'no-underscore-dangle': 'off',
         'max-classes-per-file': 'off',
+        'no-console': ['error', { allow: ['error'] }],
         // Below are rules we want to eventually enable:
         'import/newline-after-import': 'off',
         'import/no-cycle': 'off',
