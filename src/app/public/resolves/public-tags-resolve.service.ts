@@ -1,3 +1,4 @@
+import { StorageService } from '@shared/services/storage/storage.service';
 import {
   ActivatedRouteSnapshot,
   Resolve,
@@ -11,7 +12,7 @@ import { ArchiveVO } from '@models/index';
   providedIn: 'root',
 })
 export class PublicTagsResolveService implements Resolve<any> {
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private storage: StorageService) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const archiveNbr = route.params.publicArchiveNbr;
@@ -19,7 +20,7 @@ export class PublicTagsResolveService implements Resolve<any> {
       new ArchiveVO({ archiveNbr }),
     ]);
     const archiveId = response.getArchiveVO().archiveId;
-    const res = await this.api.archive.getArchiveTags(archiveId);
-    localStorage.setItem('tags', JSON.stringify(res));
+    const res = await this.api.archive.getPublicArchiveTags(archiveId);
+    this.storage.session.set('tags', JSON.stringify(res));
   }
 }
