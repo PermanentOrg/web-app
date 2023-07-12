@@ -1,33 +1,24 @@
-name: Unit tests
-
+name: Linting
 on:
   pull_request:
-
   workflow_dispatch:
-
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: '16'
-
+          node-version: "16"
       - uses: actions/cache@v2
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
-
       - name: Install dependencies
         run: npm install
-
-      - name: Run unit tests
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_DEV }}
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_DEV }}
-          STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
-        run: npm run test:build
+      - name: Run Prettier
+        run: npx prettier --check --require-pragma .
+      - name: Run eslint
+        run: npm run lint
