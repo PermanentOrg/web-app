@@ -1,14 +1,50 @@
+/* @format */
 import { RecordVO, FolderVO, RecordVOData, SimpleVO } from '@root/app/models';
-import { BaseResponse, BaseRepo, LeanWhitelist } from '@shared/services/api/base';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-
+import {
+  BaseResponse,
+  BaseRepo,
+  LeanWhitelist,
+} from '@shared/services/api/base';
 
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
+import { getFirst } from '../http-v2/http-v2.service';
 
-const MIN_WHITELIST: (keyof RecordVO)[] = ['recordId', 'archiveNbr', 'folder_linkId'];
-const DEFAULT_WHITELIST: (keyof RecordVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT'];
+const MIN_WHITELIST: (keyof RecordVO)[] = [
+  'recordId',
+  'archiveNbr',
+  'folder_linkId',
+];
+const DEFAULT_WHITELIST: (keyof RecordVO)[] = [
+  ...MIN_WHITELIST,
+  'displayName',
+  'description',
+  'displayDT',
+];
+
+class MultipartUploadUrlsList {
+  public urls: string[] = [];
+  public uploadId: string;
+  public key: string;
+
+  protected isInstance(obj: unknown): obj is MultipartUploadUrlsList {
+    return (
+      typeof obj === 'object' &&
+      typeof obj['urls'] === 'object' &&
+      typeof obj['urls'].length === 'number' &&
+      typeof obj['uploadId'] === 'string' &&
+      typeof obj['key'] === 'string'
+    );
+  }
+
+  constructor(obj: unknown) {
+    if (this.isInstance(obj)) {
+      this.urls = obj.urls;
+      this.uploadId = obj.uploadId;
+      this.key = obj.key;
+    }
+  }
+}
 
 export class RecordRepo extends BaseRepo {
   public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
@@ -17,53 +53,107 @@ export class RecordRepo extends BaseRepo {
         RecordVO: new RecordVO({
           folder_linkId: recordVO.folder_linkId,
           recordId: recordVO.recordId,
-          archiveNbr: recordVO.archiveNbr
-        })
+          archiveNbr: recordVO.archiveNbr,
+        }),
       };
     });
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/get', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>(
+      '/record/get',
+      data,
+      RecordResponse
+    );
   }
 
-  public getLean(recordVOs: RecordVO[], whitelist ?: string[]): Promise<RecordResponse> {
+  public getLean(
+    recordVOs: RecordVO[],
+    whitelist?: string[]
+  ): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       const newVO = new RecordVO(recordVO);
       newVO.dataWhitelist = whitelist || LeanWhitelist;
       return {
-        RecordVO: newVO
+        RecordVO: newVO,
       };
     });
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/getLean', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>(
+      '/record/getLean',
+      data,
+      RecordResponse
+    );
   }
 
-  public getPresignedUrl(recordVO: RecordVO, fileType: string): Promise<BaseResponse> {
-    return this.http.sendRequestPromise(
-      '/record/getPresignedUrl',
-      [{
+  public getPresignedUrl(
+    recordVO: RecordVO,
+    fileType: string
+  ): Promise<BaseResponse> {
+    return this.http.sendRequestPromise('/record/getPresignedUrl', [
+      {
         RecordVO: recordVO,
         SimpleVO: {
           key: 'type',
           value: fileType,
         },
-      }],
-    );
-  }
-
-  public registerRecord(recordVO: RecordVO, s3url: string): Promise<RecordResponse> {
-    return this.http.sendRequestPromise(
-      '/record/registerRecord',
-      {
-        RecordVO: recordVO,
-        SimpleVO: {
-          key: 's3url',
-          value: s3url,
-        },
       },
-    );
+    ]);
   }
 
-  public update(recordVOs: RecordVO[], whitelist = DEFAULT_WHITELIST): Promise<RecordResponse> {
+  public registerRecord(
+    recordVO: RecordVO,
+    s3url: string
+  ): Promise<RecordResponse> {
+    return this.http.sendRequestPromise('/record/registerRecord', {
+      RecordVO: recordVO,
+      SimpleVO: {
+        key: 's3url',
+        value: s3url,
+      },
+    });
+  }
+
+  public getMultipartUploadURLs(
+    size: number
+  ): Promise<MultipartUploadUrlsList> {
+    return getFirst(
+      this.httpV2.post(
+        '/record/getMultipartUploadUrls',
+        {
+          fileSizeInBytes: size,
+        },
+        MultipartUploadUrlsList
+      )
+    ).toPromise();
+  }
+
+  public async registerMultipartRecord(
+    record: RecordVO,
+    uploadId: string,
+    key: string,
+    eTags: string[]
+  ): Promise<void> {
+    await this.httpV2
+      .post('/record/registerRecord', {
+        displayName: record.displayName,
+        parentFolderId: record.parentFolderId,
+        uploadFileName: record.uploadFileName,
+        size: record.size,
+        multipartUploadData: {
+          uploadId,
+          key,
+          parts: eTags.map((ETag, index) => ({
+            PartNumber: index + 1,
+            ETag,
+          })),
+        },
+      })
+      .toPromise();
+  }
+
+  public update(
+    recordVOs: RecordVO[],
+    whitelist = DEFAULT_WHITELIST
+  ): Promise<RecordResponse> {
     if (whitelist !== DEFAULT_WHITELIST) {
       whitelist = [...whitelist, ...MIN_WHITELIST];
     }
@@ -77,17 +167,21 @@ export class RecordRepo extends BaseRepo {
       }
 
       return {
-        RecordVO: new RecordVO(updateData)
+        RecordVO: new RecordVO(updateData),
       };
     });
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/update', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>(
+      '/record/update',
+      data,
+      RecordResponse
+    );
   }
 
   public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
-        RecordVO: new RecordVO(recordVO).getCleanVO()
+        RecordVO: new RecordVO(recordVO).getCleanVO(),
       };
     });
 
@@ -98,16 +192,23 @@ export class RecordRepo extends BaseRepo {
       }
     }
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/delete', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>(
+      '/record/delete',
+      data,
+      RecordResponse
+    );
   }
 
-  public move(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
+  public move(
+    recordVOs: RecordVO[],
+    destination: FolderVO
+  ): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
         RecordVO: new RecordVO(recordVO).getCleanVO(),
         FolderDestVO: {
-          folder_linkId: destination.folder_linkId
-        }
+          folder_linkId: destination.folder_linkId,
+        },
       };
     });
 
@@ -115,16 +216,23 @@ export class RecordRepo extends BaseRepo {
       this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
     }
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/move', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>(
+      '/record/move',
+      data,
+      RecordResponse
+    );
   }
 
-  public copy(recordVOs: RecordVO[], destination: FolderVO): Promise<RecordResponse> {
+  public copy(
+    recordVOs: RecordVO[],
+    destination: FolderVO
+  ): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
         RecordVO: new RecordVO(recordVO).getCleanVO(),
         FolderDestVO: {
-          folder_linkId: destination.folder_linkId
-        }
+          folder_linkId: destination.folder_linkId,
+        },
       };
     });
 
@@ -132,7 +240,11 @@ export class RecordRepo extends BaseRepo {
       this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
     }
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/copy', data, RecordResponse);
+    return this.http.sendRequestPromise<RecordResponse>(
+      '/record/copy',
+      data,
+      RecordResponse
+    );
   }
 
   private getThumbnailCache(): ThumbnailCache {
