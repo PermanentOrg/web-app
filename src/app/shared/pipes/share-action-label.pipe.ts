@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { FolderVO, RecordVO } from '@models';
+
 @Pipe({
   name: 'shareActionLabel'
 })

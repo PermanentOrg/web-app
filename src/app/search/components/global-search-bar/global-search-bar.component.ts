@@ -12,6 +12,7 @@ import { DOCUMENT } from '@angular/common';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 import { remove } from 'lodash';
+
 const LOCAL_RESULTS_LIMIT = 5;
 
 type ResultsListType = 'local' | 'global' | 'tag';

@@ -33,6 +33,7 @@ import { RouteHistoryService } from 'ngx-route-history';
 import { InViewportModule } from 'ng-in-viewport';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+
 declare var ga: any;
 
 if (environment.environment !== 'local') {

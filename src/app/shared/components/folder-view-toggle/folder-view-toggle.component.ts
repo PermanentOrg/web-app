@@ -9,6 +9,7 @@ import { getLastChildRouteDataOperator } from '@shared/utilities/router';
 import { Subscription, Observable } from 'rxjs';
 import { unsubscribeAll, HasSubscriptions } from '@shared/utilities/hasSubscriptions';
 import { map } from 'rxjs/operators';
+
 interface FolderViewToggleOption {
   iconClass: 'reorder' | 'view_module';
   folderView: FolderView;
