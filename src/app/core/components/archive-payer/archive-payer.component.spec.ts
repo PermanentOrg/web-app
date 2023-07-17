@@ -85,7 +85,7 @@ describe('ArchivePayerComponent', () => {
     expect(div).toBeTruthy();
   });
 
-  it('displays the current payer data if the logged account is different than the payer', () => {
+  it('displays the current payer data if the logged account is the same as the payer', () => {
     component.hasPayer = true;
     component.isPayerDifferentThanLoggedUser = false;
 
