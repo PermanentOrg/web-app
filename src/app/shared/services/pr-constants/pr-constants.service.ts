@@ -8,6 +8,7 @@ import { getCodeList, overwrite } from 'country-list';
 declare var require: any;
 const SYNC_CONSTANTS = require('../../../../../constants/master_en.json');
 const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json');
+
 export interface Country {
   name: string;
   abbrev: string;

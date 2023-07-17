@@ -16,6 +16,7 @@ import { DirectiveDialogComponent } from './components/directive-dialog/directiv
 import { LegacyContactDisplayComponent } from './components/legacy-contact-display/legacy-contact-display.component';
 import { LegacyContactEditComponent } from './components/legacy-contact-edit/legacy-contact-edit.component';
 import { LegacyContactDialogComponent } from './components/legacy-contact-dialog/legacy-contact-dialog.component';
+
 @NgModule({
   exports: [
     DirectiveDisplayComponent,

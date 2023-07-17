@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { LocnVOData } from '@models';
+
 export interface LocnPipeOutput {
   line1?: string;
   line2?: string;
