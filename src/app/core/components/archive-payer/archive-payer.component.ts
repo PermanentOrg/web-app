@@ -38,7 +38,7 @@ export class ArchivePayerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hasPayer = !!this.archive?.payerAccountId;
+    this.hasPayer = !!this.payer;
     this.isPayerDifferentThanLoggedUser =
       this.account?.accountId !== this.archive?.payerAccountId;
   }
