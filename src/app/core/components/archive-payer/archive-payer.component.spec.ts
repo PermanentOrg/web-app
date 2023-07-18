@@ -120,10 +120,7 @@ describe('ArchivePayerComponent', () => {
     const archive = new ArchiveVO({});
     archive.payerAccountId = null;
 
-    const payer = new AccountVO({});
-    payer.fullName = 'Test name';
-    payer.primaryEmail = 'test@email.com';
-    payer.accessRole = 'access.role.owner';
+    const payer = undefined
 
     component.archive = archive;
     component.payer = payer;
