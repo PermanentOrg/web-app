@@ -27,7 +27,7 @@ export class WelcomeDialogComponent implements OnInit {
       const res = await this.api.auth.getInviteToken();
       this.isEarlyBird = res.token === 'earlyb1rd';
     } catch (error) {
-      console.log(error);
+      //fail silently
     }
 
     const archive = this.account.getArchive();
