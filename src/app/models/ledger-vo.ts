@@ -55,3 +55,16 @@ export interface LedgerNonfinancialVOData extends BaseVOData {
   type;
   status;
 }
+export interface AccountStorage {
+  accountSpaceId: string;
+  accountId: string;
+  spaceLeft: string;
+  spaceTotal: string;
+  filesLeft: string;
+  filesTotal: string;
+  status: string;
+  type: string;
+  createdDt: Date;
+  updatedDt: Date;
+}
+

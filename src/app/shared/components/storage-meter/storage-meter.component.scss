@@ -13,6 +13,10 @@ $meter-height: 12px;
   overflow: hidden;
   border-radius: 2px;
   background: rgba($PR-purple, 0.3);
+  &-archive {
+    background: #C8C8C8;
+    border-radius: 0px;
+  }
 
   .space-meter-inner {
     height: $meter-height;
@@ -20,6 +24,9 @@ $meter-height: 12px;
     width: 100%;
     transform: translateX(-100%);
     transition: transform 0.5s $tweaked-ease;
+    &-archive {
+      background: #5261B7;
+    }
   }
 }
 
@@ -32,4 +39,9 @@ $meter-height: 12px;
   font-size: $font-size-sm;
   text-align: right;
   font-weight: 500;
+  &-archive {
+    color: white;
+  }
 }
+
+
