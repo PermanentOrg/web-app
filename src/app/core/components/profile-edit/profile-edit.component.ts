@@ -74,11 +74,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     this.profileItems = this.profile.getProfileItemDictionary();
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
     this.checkProfilePublic();
+    this.updateProgress();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.updateProgress();
       this.showFirstTimeDialog();
     });
   }
