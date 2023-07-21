@@ -1,5 +1,5 @@
 import { UntypedFormGroup, FormControl, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { DeviceService } from '@shared/services/device/device.service';
 

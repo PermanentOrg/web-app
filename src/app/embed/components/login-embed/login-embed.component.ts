@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { matchControlValidator } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';

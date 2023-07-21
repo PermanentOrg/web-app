@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from '@shared/services/api/api.service';
 import { PledgeService } from '@pledge/services/pledge.service';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 

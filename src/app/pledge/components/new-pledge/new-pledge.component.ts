@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Inp
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
