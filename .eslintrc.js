@@ -57,7 +57,6 @@ module.exports = {
         'import/no-default-export': 'error',
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        'import/no-duplicates': 'off',
         'import/no-extraneous-dependencies': 'off',
         'import/no-self-import': 'off',
         'import/no-useless-path-segments': 'off',
@@ -151,8 +150,8 @@ module.exports = {
       files: ['*.stories.ts', 'src/stories/*.ts'],
       rules: {
         'import/no-default-export': 'off',
-      }
-    }
+      },
+    },
   ],
   extends: ['plugin:storybook/recommended'],
 };
