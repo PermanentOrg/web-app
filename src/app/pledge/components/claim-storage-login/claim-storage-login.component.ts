@@ -1,20 +1,29 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { PledgeService } from '@pledge/services/pledge.service';
 
 import { APP_CONFIG } from '@root/app/app.config';
-import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
+import {
+  AuthResponse,
+  ArchiveResponse,
+  AccountResponse,
+} from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-claim-storage-login',
   templateUrl: './claim-storage-login.component.html',
-  styleUrls: ['./claim-storage-login.component.scss']
+  styleUrls: ['./claim-storage-login.component.scss'],
 })
 export class ClaimStorageLoginComponent implements OnInit {
   public waiting = false;
@@ -35,7 +44,7 @@ export class ClaimStorageLoginComponent implements OnInit {
     private cookies: CookieService
   ) {
     if (!pledgeService.currentPledge) {
-      this.router.navigate(['..'], {relativeTo: this.route});
+      this.router.navigate(['..'], { relativeTo: this.route });
       return this;
     }
 
@@ -44,20 +53,27 @@ export class ClaimStorageLoginComponent implements OnInit {
     }
 
     this.loginForm = fb.group({
-      email: [this.cookies.get('rememberMe'), [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(APP_CONFIG.passwordMinLength)]],
+      email: [
+        this.cookies.get('rememberMe'),
+        [Validators.required, Validators.email],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(APP_CONFIG.passwordMinLength),
+        ],
+      ],
       rememberMe: [true],
-      keepLoggedIn: [true]
+      keepLoggedIn: [true],
     });
 
     this.mfaForm = fb.group({
-      'token': [],
+      token: [],
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   async logOut() {
     this.waiting = true;
@@ -76,12 +92,23 @@ export class ClaimStorageLoginComponent implements OnInit {
   async onLoginSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
+    this.accountService
+      .logIn(
+        formValue.email,
+        formValue.password,
+        formValue.rememberMe,
+        formValue.keepLoggedIn
+      )
       .then(async (response: AuthResponse) => {
         this.waiting = false;
         if (response.needsMFA()) {
           this.needsMfa = true;
-          this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+          this.message.showMessage(
+            `Verify to continue as ${
+              this.accountService.getAccount().primaryEmail
+            }.`,
+            'warning'
+          );
         } else {
           this.loggedIn = true;
         }
@@ -89,13 +116,19 @@ export class ClaimStorageLoginComponent implements OnInit {
       .catch((response: AuthResponse) => {
         this.waiting = false;
 
-        if (response.messageIncludes && response.messageIncludes('warning.signin.unknown')) {
+        if (
+          response.messageIncludes &&
+          response.messageIncludes('warning.signin.unknown')
+        ) {
           this.message.showMessage('Incorrect email or password.', 'danger');
           this.loginForm.patchValue({
-            password: ''
+            password: '',
           });
         } else {
-          this.message.showMessage('Log in failed. Please try again.', 'danger');
+          this.message.showMessage(
+            'Log in failed. Please try again.',
+            'danger'
+          );
         }
       });
   }
@@ -103,13 +136,17 @@ export class ClaimStorageLoginComponent implements OnInit {
   async onMfaSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.verifyMfa(formValue.token)
+    this.accountService
+      .verifyMfa(formValue.token)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
       .then(async (response: ArchiveResponse) => {
         this.waiting = false;
-        this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+        this.message.showMessage(
+          `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
+          'success'
+        );
         this.loggedIn = true;
         this.needsMfa = false;
       })
@@ -128,9 +165,12 @@ export class ClaimStorageLoginComponent implements OnInit {
 
     try {
       await this.pledgeService.linkAccount(account);
-      const billingResponse = await this.api.billing.claimPledge(payment, pledgeId);
+      const billingResponse = await this.api.billing.claimPledge(
+        payment,
+        pledgeId
+      );
       if (billingResponse.isSuccessful) {
-        this.router.navigate(['..', 'done'], {relativeTo: this.route});
+        this.router.navigate(['..', 'done'], { relativeTo: this.route });
       } else {
         throw billingResponse;
       }

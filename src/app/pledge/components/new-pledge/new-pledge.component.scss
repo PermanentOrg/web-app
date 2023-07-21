@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 :host {
@@ -42,7 +43,6 @@ button {
   overflow: hidden;
   border-radius: 0.25rem;
 
-
   .pledge-button {
     padding: 0.85rem 0;
     line-height: 1.5;
@@ -78,7 +78,7 @@ button {
     }
 
     &:focus {
-      box-shadow: 0 0 0 $btn-focus-width rgba($PR-orange, .5);
+      box-shadow: 0 0 0 $btn-focus-width rgba($PR-orange, 0.5);
     }
 
     input {

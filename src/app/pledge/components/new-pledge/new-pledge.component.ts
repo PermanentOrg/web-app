@@ -1,5 +1,18 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy, Input } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+/* @format */
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  Input,
+} from '@angular/core';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_CONFIG } from '@root/app/app.config';
@@ -35,7 +48,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public pricePerGb = 10;
 
-  @ViewChild('customDonationAmount', { static: true }) customDonationInput: ElementRef;
+  @ViewChild('customDonationAmount', { static: true })
+  customDonationInput: ElementRef;
 
   @ViewChild('card', { static: true }) elementsContainer: ElementRef;
   stripeElementsCard: any;
@@ -54,24 +68,27 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private message: MessageService,
     private http: HttpClient,
     private iframe: IFrameService,
-    private pledgeService: PledgeService,
+    private pledgeService: PledgeService
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
     const account = this.accountService.getAccount();
 
     this.pledgeForm = this.fb.group({
-      email: [account ? account.primaryEmail : '', [Validators.required, Validators.email]],
+      email: [
+        account ? account.primaryEmail : '',
+        [Validators.required, Validators.email],
+      ],
       customDonationAmount: [''],
       name: [account ? account.fullName : '', [Validators.required]],
-      anonymous: [false]
+      anonymous: [false],
     });
   }
 
   onPledgeClick(amount: number) {
     this.chooseDonationAmount('custom');
     this.pledgeForm.patchValue({
-      customDonationAmount: amount
+      customDonationAmount: amount,
     });
   }
 
@@ -90,7 +107,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         if (params.includes('amount')) {
           try {
             pledgeAmount = parseInt(params.split('=').pop(), 0);
-          } catch (err) { }
+          } catch (err) {}
         }
       }
     }
@@ -115,21 +132,22 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     const options = {
       classes: {
-        invalid: '.ng-invalid'
+        invalid: '.ng-invalid',
       },
       style: {
         base: {
           fontSize: '16px',
-          fontFamily: 'Open Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif',
+          fontFamily:
+            'Open Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif',
           '::placeholder:': {
-            color: '#6c757d'
-          }
-        }
-      }
+            color: '#6c757d',
+          },
+        },
+      },
     };
     this.stripeElementsCard = elements.create('card', options);
 
-    this.stripeElementsCard.addEventListener('change', event => {
+    this.stripeElementsCard.addEventListener('change', (event) => {
       const instance = NewPledgeComponent.currentInstance;
       if (event.error) {
         instance.cardError = event.error.message;
@@ -162,7 +180,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       if (!this.pledgeForm.value.customDonationAmount) {
         this.pledgeForm.patchValue({
-          customDonationAmount: this.donationAmount
+          customDonationAmount: this.donationAmount,
         });
       }
       this.customDonationInput.nativeElement.focus();
@@ -174,7 +192,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.waiting = true;
 
     const stripeResult = await stripe.createToken(this.stripeElementsCard, {
-      name: formValue.name
+      name: formValue.name,
     });
 
     if (stripeResult.error) {
@@ -185,19 +203,21 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let pledge: PledgeData = {
       email: formValue.email,
-      dollarAmount: this.donationSelection === 'custom' ? formValue.customDonationAmount : this.donationAmount,
+      dollarAmount:
+        this.donationSelection === 'custom'
+          ? formValue.customDonationAmount
+          : this.donationAmount,
       name: formValue.name,
       stripeToken: stripeResult.token.id,
       zip: stripeResult.token.card.address_zip,
       timestamp: new Date().getTime(),
-      anonymous: formValue.anonymous
+      anonymous: formValue.anonymous,
     };
 
     try {
-      const body = await this.http.post(
-        `${environment.firebase.functionsURL}/donation/charge`,
-        pledge,
-      ).toPromise();
+      const body = await this.http
+        .post(`${environment.firebase.functionsURL}/donation/charge`, pledge)
+        .toPromise();
       pledge = body as PledgeData;
     } catch (err) {
       this.waiting = false;
@@ -214,13 +234,13 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stripeElementsCard.clear();
     this.pledgeForm.patchValue({
       email: null,
-      name: null
+      name: null,
     });
     this.pledgeForm.reset();
 
     const isLoggedIn = await this.accountService.isLoggedIn();
     if (!isLoggedIn) {
-      this.router.navigate(['..', 'claim'], {relativeTo: this.route});
+      this.router.navigate(['..', 'claim'], { relativeTo: this.route });
     } else {
       if (this.inlineFlow) {
         this.waiting = true;
@@ -233,11 +253,19 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
 
         try {
           await this.pledgeService.linkAccount(account);
-          const billingResponse = await this.api.billing.claimPledge(payment, pledgeId);
+          const billingResponse = await this.api.billing.claimPledge(
+            payment,
+            pledgeId
+          );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
-            this.message.showMessage(`You just claimed ${this.getStorageAmount(pledge.dollarAmount)} GB of storage!`, 'success');
-            this.router.navigate(['..', 'done'], {relativeTo: this.route});
+            this.message.showMessage(
+              `You just claimed ${this.getStorageAmount(
+                pledge.dollarAmount
+              )} GB of storage!`,
+              'success'
+            );
+            this.router.navigate(['..', 'done'], { relativeTo: this.route });
           }
         } catch (err) {
           this.waiting = false;
@@ -246,7 +274,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           this.pledgeService.reset();
         }
       } else {
-        this.router.navigate(['..', 'claimlogin'], {relativeTo: this.route});
+        this.router.navigate(['..', 'claimlogin'], { relativeTo: this.route });
       }
     }
     this.waiting = false;
@@ -260,8 +288,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 }
 
 export interface PledgeData {

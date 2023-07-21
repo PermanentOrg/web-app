@@ -1,40 +1,104 @@
-
+<!-- @format -->
 <form (submit)="submitPledge(pledgeForm.value)" [formGroup]="pledgeForm">
   <div class="input-group-vertical">
     <div class="input-vertical pledge-buttons">
-      <div class="pledge-button" *ngFor="let level of donationLevels" [ngClass]="{'active': donationSelection === level}"
-        (click)="chooseDonationAmount(level)">
-        ${{level}}
-        <br><span>{{level / 10}} GB</span>
+      <div
+        class="pledge-button"
+        *ngFor="let level of donationLevels"
+        [ngClass]="{ active: donationSelection === level }"
+        (click)="chooseDonationAmount(level)"
+      >
+        ${{ level }} <br /><span>{{ level / 10 }} GB</span>
       </div>
-      <div class="pledge-button" [ngClass]="{'active': donationSelection === 'custom'}" (click)="chooseDonationAmount('custom')">
-        $<input #customDonationAmount type="number" class="form-control" [formControl]="pledgeForm.controls['customDonationAmount']" min="1" (keydown)="unfocusOnEnter($event)">
+      <div
+        class="pledge-button"
+        [ngClass]="{ active: donationSelection === 'custom' }"
+        (click)="chooseDonationAmount('custom')"
+      >
+        $<input
+          #customDonationAmount
+          type="number"
+          class="form-control"
+          [formControl]="pledgeForm.controls['customDonationAmount']"
+          min="1"
+          (keydown)="unfocusOnEnter($event)"
+        />
       </div>
     </div>
-    <pr-form-input type="email" fieldName="email" placeholder="Email" [control]="pledgeForm.controls['email']"
-      [config]="{autocomplete: 'username', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-    <pr-form-input fieldName="name" placeholder="Name" [control]="pledgeForm.controls['name']"
-      [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
-    <div class="input-vertical ng-touched" [ngClass]="{'ng-invalid': !!cardError}">
-        <div #card></div>
-        <div class="input-vertical-error" [ngClass]="{'hidden':!cardError}">{{cardError}}</div>
+    <pr-form-input
+      type="email"
+      fieldName="email"
+      placeholder="Email"
+      [control]="pledgeForm.controls['email']"
+      [config]="{
+        autocomplete: 'username',
+        autocorrect: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'off'
+      }"
+    ></pr-form-input>
+    <pr-form-input
+      fieldName="name"
+      placeholder="Name"
+      [control]="pledgeForm.controls['name']"
+      [config]="{
+        autocomplete: 'name',
+        autocorrect: 'off',
+        autocapitalize: 'yes',
+        spellcheck: 'off'
+      }"
+    ></pr-form-input>
+    <div
+      class="input-vertical ng-touched"
+      [ngClass]="{ 'ng-invalid': !!cardError }"
+    >
+      <div #card></div>
+      <div class="input-vertical-error" [ngClass]="{ hidden: !cardError }">
+        {{ cardError }}
+      </div>
     </div>
     <div class="input-vertical checkbox">
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="anonymous"
-          formControlName="anonymous">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="anonymous"
+          formControlName="anonymous"
+        />
         <label class="form-check-label" for="anonymous">
           Make my donation anonymous
         </label>
         <a href="https://stripe.com" target="_blank">
-          <img src="assets/img/powered_by_stripe@2x.png" alt="">
+          <img src="assets/img/powered_by_stripe@2x.png" alt="" />
         </a>
       </div>
     </div>
   </div>
-  <button class="btn btn-primary"
-    [disabled]="!cardComplete || (donationSelection === 'custom' && !pledgeForm.value.customDonationAmount) || !pledgeForm.valid || waiting">
-    Donate {{ (donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount) | currency:'USD':'symbol':'1.0-0'}} 
-    to endow {{ getStorageAmount(donationSelection === 'custom' ? pledgeForm.value.customDonationAmount : donationAmount ) | number:'1.0-0'}} GB
+  <button
+    class="btn btn-primary"
+    [disabled]="
+      !cardComplete ||
+      (donationSelection === 'custom' &&
+        !pledgeForm.value.customDonationAmount) ||
+      !pledgeForm.valid ||
+      waiting
+    "
+  >
+    Donate
+    {{
+      (donationSelection === 'custom'
+        ? pledgeForm.value.customDonationAmount
+        : donationAmount
+      ) | currency : 'USD' : 'symbol' : '1.0-0'
+    }}
+    to endow
+    {{
+      getStorageAmount(
+        donationSelection === 'custom'
+          ? pledgeForm.value.customDonationAmount
+          : donationAmount
+      ) | number : '1.0-0'
+    }}
+    GB
   </button>
 </form>

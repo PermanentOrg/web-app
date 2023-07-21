@@ -1,4 +1,15 @@
-import { Component, OnInit, ElementRef, ContentChild, Input, OnChanges, SimpleChanges, HostBinding, AfterViewInit } from '@angular/core';
+/* @format */
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ContentChild,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  HostBinding,
+  AfterViewInit,
+} from '@angular/core';
 import ProgressBar from 'progressbar.js';
 
 import { APP_CONFIG } from '@root/app/app.config';
@@ -17,7 +28,7 @@ export interface ProgressData {
 @Component({
   selector: 'pr-phase-progress',
   templateUrl: './phase-progress.component.html',
-  styleUrls: ['./phase-progress.component.scss']
+  styleUrls: ['./phase-progress.component.scss'],
 })
 export class PhaseProgressComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;
@@ -31,7 +42,7 @@ export class PhaseProgressComponent implements OnInit {
     totalDollarAmount: 0,
     goalDollarAmount: 150000,
     totalPledges: 0,
-    totalStorageAmount: 0
+    totalStorageAmount: 0,
   };
 
   public previousProgress: ProgressData = this.currentProgress;
@@ -42,7 +53,7 @@ export class PhaseProgressComponent implements OnInit {
     separator: ',',
     decimal: '.',
     prefix: '$',
-    startValue: 0
+    startValue: 0,
   };
 
   public percentCountUpOptions = {
@@ -51,7 +62,7 @@ export class PhaseProgressComponent implements OnInit {
     separator: ',',
     decimal: '.',
     suffix: '%',
-    startValue: 0
+    startValue: 0,
   };
 
   public storageCountUpOptions = {
@@ -60,7 +71,7 @@ export class PhaseProgressComponent implements OnInit {
     separator: ',',
     decimal: '.',
     suffix: ' GB',
-    startValue: 0
+    startValue: 0,
   };
 
   public pledgeCountUpOptions = {
@@ -68,7 +79,7 @@ export class PhaseProgressComponent implements OnInit {
     useGrouping: true,
     separator: ',',
     decimal: '.',
-    startValue: 0
+    startValue: 0,
   };
 
   public pricePerGb = APP_CONFIG.pricePerGb;
@@ -77,53 +88,63 @@ export class PhaseProgressComponent implements OnInit {
     private elementRef: ElementRef,
     private db: AngularFireDatabase,
     private route: ActivatedRoute,
-    public iFrame: IFrameService,
+    public iFrame: IFrameService
   ) {
-  db.list('/progress', ref => ref.orderByKey().limitToLast(1)).valueChanges()
-    .subscribe((listValue) => {
-      if (listValue && listValue.length) {
-        this.previousProgress = this.currentProgress;
-        this.currentProgress = listValue.pop() as ProgressData;
-        this.redrawProgress();
-      }
-    });
+    db.list('/progress', (ref) => ref.orderByKey().limitToLast(1))
+      .valueChanges()
+      .subscribe((listValue) => {
+        if (listValue && listValue.length) {
+          this.previousProgress = this.currentProgress;
+          this.currentProgress = listValue.pop() as ProgressData;
+          this.redrawProgress();
+        }
+      });
 
-  this.forLightBg = this.route.snapshot.queryParams.theme === 'forLightBg';
-  this.forDarkBg = this.route.snapshot.queryParams.theme === 'forDarkBg';
-  setTimeout(() => {
-    this.visible = true;
-  });
+    this.forLightBg = this.route.snapshot.queryParams.theme === 'forLightBg';
+    this.forDarkBg = this.route.snapshot.queryParams.theme === 'forDarkBg';
+    setTimeout(() => {
+      this.visible = true;
+    });
   }
 
   updateCountUpOptions() {
-    this.dollarCountUpOptions.startValue = this.previousProgress.totalDollarAmount;
+    this.dollarCountUpOptions.startValue =
+      this.previousProgress.totalDollarAmount;
     this.pledgeCountUpOptions.startValue = this.previousProgress.totalPledges;
-    this.storageCountUpOptions.startValue = this.previousProgress.totalStorageAmount;
-    this.percentCountUpOptions.startValue = 100 * this.previousProgress.totalDollarAmount / this.previousProgress.goalDollarAmount;
+    this.storageCountUpOptions.startValue =
+      this.previousProgress.totalStorageAmount;
+    this.percentCountUpOptions.startValue =
+      (100 * this.previousProgress.totalDollarAmount) /
+      this.previousProgress.goalDollarAmount;
   }
 
   ngOnInit() {
     try {
-      this.innerBar = new ProgressBar.Line(this.elementRef.nativeElement.querySelector('.progress-bar'), {
-        strokeWidth: 4,
-        easing: 'easeInOut',
-        duration: 1500,
-        offset: 0,
-        color: '#FF9933',
-        svgStyle: {width: '100%', height: '100%'}
-      });
+      this.innerBar = new ProgressBar.Line(
+        this.elementRef.nativeElement.querySelector('.progress-bar'),
+        {
+          strokeWidth: 4,
+          easing: 'easeInOut',
+          duration: 1500,
+          offset: 0,
+          color: '#FF9933',
+          svgStyle: { width: '100%', height: '100%' },
+        }
+      );
       this.redrawProgress();
     } catch (err) {}
   }
 
   redrawProgress() {
     if (this.innerBar) {
-      const percentage = Math.min(this.currentProgress.totalDollarAmount / this.currentProgress.goalDollarAmount, 1);
+      const percentage = Math.min(
+        this.currentProgress.totalDollarAmount /
+          this.currentProgress.goalDollarAmount,
+        1
+      );
       try {
         this.innerBar.animate(percentage);
-      } catch (err) {
-      }
+      } catch (err) {}
     }
   }
-
 }

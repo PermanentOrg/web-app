@@ -1,5 +1,10 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -18,7 +23,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  host: {'class': 'pr-auth-form'}
+  host: { class: 'pr-auth-form' },
 })
 export class LoginComponent implements OnInit {
   loginForm: UntypedFormGroup;
@@ -34,50 +39,93 @@ export class LoginComponent implements OnInit {
     private device: DeviceService
   ) {
     this.loginForm = fb.group({
-      email: [this.cookies.get('rememberMe'), [trimWhitespace, Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      email: [
+        this.cookies.get('rememberMe'),
+        [trimWhitespace, Validators.required, Validators.email],
+      ],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+      ],
       rememberMe: [true],
-      keepLoggedIn: [true]
+      keepLoggedIn: [true],
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
+    this.accountService
+      .logIn(
+        formValue.email,
+        formValue.password,
+        formValue.rememberMe,
+        formValue.keepLoggedIn
+      )
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
-          this.router.navigate(['..', 'mfa'], { queryParamsHandling: 'preserve', relativeTo: this.route})
+          this.router
+            .navigate(['..', 'mfa'], {
+              queryParamsHandling: 'preserve',
+              relativeTo: this.route,
+            })
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+              this.message.showMessage(
+                `Verify to continue as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'warning'
+              );
             });
         } else if (response.needsVerification()) {
-          this.router.navigate(['..', 'verify'], { queryParamsHandling: 'preserve', relativeTo: this.route})
+          this.router
+            .navigate(['..', 'verify'], {
+              queryParamsHandling: 'preserve',
+              relativeTo: this.route,
+            })
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+              this.message.showMessage(
+                `Verify to continue as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'warning'
+              );
             });
         } else if (this.route.snapshot.queryParams.shareByUrl) {
-          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
+          this.router
+            .navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
             .then(() => {
-              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+              this.message.showMessage(
+                `Logged in as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'success'
+              );
             });
         } else if (this.route.snapshot.queryParams.cta === 'timeline') {
           if (this.device.isMobile() || !this.device.didOptOut()) {
-            this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
+            this.router.navigate(['/public'], {
+              queryParams: { cta: 'timeline' },
+            });
           } else {
             window.location.assign(`/app/public?cta=timeline`);
           }
         } else {
-          const archives = this.accountService.getArchives().filter(
-            (archive) => !archive.isPending()
-          );
+          const archives = this.accountService
+            .getArchives()
+            .filter((archive) => !archive.isPending());
           if (archives.length > 0) {
-            this.router.navigate(['/'], { queryParamsHandling: 'preserve'})
+            this.router
+              .navigate(['/'], { queryParamsHandling: 'preserve' })
               .then(() => {
-                this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+                this.message.showMessage(
+                  `Logged in as ${
+                    this.accountService.getAccount().primaryEmail
+                  }.`,
+                  'success'
+                );
               });
           } else {
             this.router.navigate(['/app/onboarding']);
@@ -90,10 +138,13 @@ export class LoginComponent implements OnInit {
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password.', 'danger');
           this.loginForm.patchValue({
-            password: ''
+            password: '',
           });
         } else {
-          this.message.showMessage('Log in failed. Please try again.', 'danger');
+          this.message.showMessage(
+            'Log in failed. Please try again.',
+            'danger'
+          );
         }
       });
   }

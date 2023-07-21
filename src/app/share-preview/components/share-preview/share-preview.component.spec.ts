@@ -1,3 +1,4 @@
+/* @format */
 import {
   async,
   fakeAsync,
@@ -99,7 +100,7 @@ describe('SharePreviewComponent', () => {
   }));
 
   it('should open dialog when a thumbnail is clicked', fakeAsync(() => {
-    const dialogSpy = spyOn(dialog, 'open').and.returnValue(Promise.resolve());;
+    const dialogSpy = spyOn(dialog, 'open').and.returnValue(Promise.resolve());
 
     const mockFileList = { itemClicked: new EventEmitter<any>() };
 
