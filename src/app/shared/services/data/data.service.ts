@@ -1,4 +1,5 @@
-import { Injectable , EventEmitter } from '@angular/core';
+/* @format */
+import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { partition, remove, find, findIndex } from 'lodash';
 
