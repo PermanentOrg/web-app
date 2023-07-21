@@ -11,6 +11,7 @@ export enum UploadSessionStatus {
   Done,
   DefaultError,
   StorageError,
+  CreatingFolders,
 }
 
 export interface UploadProgressEvent {
@@ -72,6 +73,13 @@ export class UploadSession {
       });
       this.sentStart = true;
     }
+  }
+
+  public startFolders() {
+    this.progress.emit({
+      sessionStatus: UploadSessionStatus.CreatingFolders,
+      statistics: this.statistics
+    });
   }
 
   public queueFiles(parentFolder: FolderVO, files: File[]) {

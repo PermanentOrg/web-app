@@ -196,7 +196,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   async createFoldersAndUploadFiles(folders: Map<string, FileSystemFolder>, files: Map<string, FileWithPath[]>) {
-    const pathsByDepth = new Map<Number, FileSystemFolder[]>();
+    const pathsByDepth = new Map<number, FileSystemFolder[]>();
     for (const [path, folder] of folders) {
       const depth = path.split('/').length - 1;
       if (pathsByDepth.has(depth)) {
@@ -205,6 +205,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
         pathsByDepth.set(depth, [ folder ]);
       }
     }
+
+    this.uploadSession.startFolders();
 
     // group folder creation at each depth
     for (const [depth, foldersAtDepth] of pathsByDepth) {
@@ -222,18 +224,35 @@ export class UploadService implements HasSubscriptions, OnDestroy {
           }
         }
 
-        const response = await this.api.folder.post(needIds.map(f => f.folder));
-        const updatedFolders = response.getFolderVOs();
+        const maxFoldersPerBatch = 10;
+        const folderBatches = needIds.reduce<Array<FileSystemFolder[]>>((array, folder, index) => {
+          const batchIndex = Math.floor(index / maxFoldersPerBatch);
 
-        needIds.forEach((f, i) => {
-          f.folder.update(updatedFolders[i]);
-        });
+          if (array[batchIndex]) {
+            array[batchIndex].push(folder)
+          } else {
+            array[batchIndex] = [folder];
+          }
+
+          return array;
+        }, []);
+        
+        for (const batch of folderBatches) {
+          const response = await this.api.folder.post(batch.map(f => f.folder));
+          const updatedFolders = response.getFolderVOs();
+
+          batch.forEach((f, i) => {
+            f.folder.update(updatedFolders[i]);
+          });
+        }
       }
 
       if (needsRefresh) {
         this.dataService.refreshCurrentFolder();
       }
+    }
 
+    for (const [_depth, foldersAtDepth] of pathsByDepth) {
       // queue uploads for each folder
       for (const f of foldersAtDepth) {
         if (files.has(f.path)) {

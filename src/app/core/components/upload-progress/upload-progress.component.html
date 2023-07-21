@@ -3,6 +3,9 @@
   <div *ngIf="status === UploadSessionStatus.Start">
     Connecting...
   </div>
+  <div *ngIf="status === UploadSessionStatus.CreatingFolders">
+    Preparing folders...
+  </div>
   <div class="upload" *ngIf="status === UploadSessionStatus.InProgress && currentItem">
     <div class="current-file">{{currentItem.file.name}}</div>
     <div class="file-count">
