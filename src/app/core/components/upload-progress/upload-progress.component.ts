@@ -1,3 +1,4 @@
+/* @format */
 import { Component } from '@angular/core';
 
 import { UploadService } from '@core/services/upload/upload.service';
@@ -12,7 +13,7 @@ const UPLOAD_COMPLETE_HIDE_DELAY = 3000;
 @Component({
   selector: 'pr-upload-progress',
   templateUrl: './upload-progress.component.html',
-  styleUrls: ['./upload-progress.component.scss']
+  styleUrls: ['./upload-progress.component.scss'],
 })
 export class UploadProgressComponent {
   UploadSessionStatus = UploadSessionStatus;
@@ -31,29 +32,31 @@ export class UploadProgressComponent {
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
 
-    this.upload.uploadSession.progress.subscribe((progressEvent: UploadProgressEvent) => {
-      this.status = progressEvent.sessionStatus;
-      switch (progressEvent.sessionStatus) {
-        case UploadSessionStatus.Start:
-          this.upload.showProgress();
-          break;
-        case UploadSessionStatus.Done:
-          this.upload.dismissProgress();
-          break;
-        case UploadSessionStatus.DefaultError:
-          this.upload.dismissProgress();
-          break;
-        case UploadSessionStatus.StorageError:
-          this.upload.dismissProgress();
-          break;
-      }
+    this.upload.uploadSession.progress.subscribe(
+      (progressEvent: UploadProgressEvent) => {
+        this.status = progressEvent.sessionStatus;
+        switch (progressEvent.sessionStatus) {
+          case UploadSessionStatus.Start:
+            this.upload.showProgress();
+            break;
+          case UploadSessionStatus.Done:
+            this.upload.dismissProgress();
+            break;
+          case UploadSessionStatus.DefaultError:
+            this.upload.dismissProgress();
+            break;
+          case UploadSessionStatus.StorageError:
+            this.upload.dismissProgress();
+            break;
+        }
 
-      if (progressEvent.item) {
-        this.currentItem = progressEvent.item;
-      }
+        if (progressEvent.item) {
+          this.currentItem = progressEvent.item;
+        }
 
-      this.fileCount = progressEvent.statistics;
-    });
+        this.fileCount = progressEvent.statistics;
+      }
+    );
   }
 
   show() {

@@ -1,4 +1,5 @@
-import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
+/* @format */
+import { Injectable, EventEmitter } from '@angular/core';
 import { BaseResponse } from '@shared/services/api/base';
 import { FolderVO } from '@root/app/models';
 import { Uploader } from './uploader';
@@ -25,9 +26,8 @@ export interface UploadProgressEvent {
   };
 }
 
-const isOutOfStorageMessage = (response: BaseResponse) => (
-  response.messageIncludesPhrase('no_space_left')
-);
+const isOutOfStorageMessage = (response: BaseResponse) =>
+  response.messageIncludesPhrase('no_space_left');
 
 @Injectable()
 export class UploadSession {
@@ -45,25 +45,21 @@ export class UploadSession {
 
   private debug = debug('service:uploadSession');
 
-  constructor(
-    private uploader: Uploader,
-  ) {
-  }
+  constructor(private uploader: Uploader) {}
 
-  private emitProgress = (item: UploadItem) => this.progress.emit({
-    item,
-    sessionStatus: UploadSessionStatus.InProgress,
-    statistics: this.statistics,
-  });
+  private emitProgress = (item: UploadItem) =>
+    this.progress.emit({
+      item,
+      sessionStatus: UploadSessionStatus.InProgress,
+      statistics: this.statistics,
+    });
 
-  private emitError = (
-    error: UploadSessionStatus,
-    item: UploadItem,
-  ) => this.progress.emit({
-    item,
-    sessionStatus: error,
-    statistics: this.statistics,
-  });
+  private emitError = (error: UploadSessionStatus, item: UploadItem) =>
+    this.progress.emit({
+      item,
+      sessionStatus: error,
+      statistics: this.statistics,
+    });
 
   public startSession() {
     if (!this.sentStart) {
@@ -78,17 +74,21 @@ export class UploadSession {
   public startFolders() {
     this.progress.emit({
       sessionStatus: UploadSessionStatus.CreatingFolders,
-      statistics: this.statistics
+      statistics: this.statistics,
     });
   }
 
   public queueFiles(parentFolder: FolderVO, files: File[]) {
-    this.debug('UploadSession.queueFiles: %d files to folder %o', files.length, parentFolder);
+    this.debug(
+      'UploadSession.queueFiles: %d files to folder %o',
+      files.length,
+      parentFolder
+    );
     this.startSession();
 
     files
-      .map(file => new UploadItem(file, parentFolder))
-      .forEach(item => this.queue.push(item));
+      .map((file) => new UploadItem(file, parentFolder))
+      .forEach((item) => this.queue.push(item));
     this.statistics.total += files.length;
     this.debug('Queue: %o', this.queue);
 
@@ -126,15 +126,9 @@ export class UploadSession {
       this.statistics.error++;
 
       if (err instanceof BaseResponse && isOutOfStorageMessage(err)) {
-        this.emitError(
-          UploadSessionStatus.StorageError,
-          item,
-        );
+        this.emitError(UploadSessionStatus.StorageError, item);
       } else {
-        this.emitError(
-          UploadSessionStatus.DefaultError,
-          item,
-        );
+        this.emitError(UploadSessionStatus.DefaultError, item);
       }
     }
     setTimeout(this.uploadNextInQueue, 0);
