@@ -1,0 +1,29 @@
+/* @format */
+@import 'variables';
+
+.toggler {
+  display: flex;
+}
+
+.assign-user {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: $PR-blue-light;
+  margin-left: 1rem;
+  margin-top: 0.3rem;
+}
+
+.payer-info {
+  margin-left: 1rem;
+
+  & > p:not(:last-child) {
+    margin-bottom: 0;
+  }
+}
+
+.assign-user {
+  cursor: pointer;
+}

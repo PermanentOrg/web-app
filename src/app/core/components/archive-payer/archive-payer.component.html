@@ -1,0 +1,69 @@
+<!-- @format -->
+<div class="archive-payer">
+  <p>
+    When an Owner or Manager becomes the payer of an archive, any subsequent
+    uploads will count against their personal storage balance.
+  </p>
+  <div id="no-payer" *ngIf="!hasPayer">
+    <p>This archive does not currently have an assigned payer.</p>
+  </div>
+  <div id="with-payer" *ngIf="hasPayer">
+    <p id="is-payer" *ngIf="!isPayerDifferentThanLoggedUser">
+      You are this archive's payer.
+    </p>
+    <div id="is-not-payer" *ngIf="isPayerDifferentThanLoggedUser">
+      <p>This archive's payer is:</p>
+      <div class="payer-info">
+        <p class="payer-name">
+          <b>{{ payer?.fullName }}</b>
+        </p>
+        <p class="payer-email">{{ payer?.primaryEmail }}</p>
+        <p class="payer-access">Access: {{ roles[payer?.accessRole] }}</p>
+      </div>
+      <p>Contact this member for archive storage requests.</p>
+    </div>
+  </div>
+  <div class="toggler">
+    <pr-switcher
+      [data]="{
+        archiveId: this.archive?.archiveId,
+        isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+        handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+        cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
+      }"
+      [isChecked]="!isPayerDifferentThanLoggedUser"
+      [change]="setArchivePayer"
+    ></pr-switcher>
+    <div>
+      <p
+        *ngIf="isPayerDifferentThanLoggedUser"
+        (click)="
+          setArchivePayer({
+            archiveId: this.archive?.archiveId,
+            isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+            handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+            cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
+          })
+        "
+        class="assign-user"
+      >
+        Assign myself as the payer
+      </p>
+      <p
+        (click)="
+          setArchivePayer({
+            archiveId: this.archive?.archiveId,
+            isPayerDifferentThanLoggedUser: this.isPayerDifferentThanLoggedUser,
+            handleAccountInfoChange: this.handleAccountInfoChange.bind(this),
+            cancelAccountPayerSet: this.cancelAccountPayerSet.bind(this)
+          })
+        "
+        *ngIf="!isPayerDifferentThanLoggedUser"
+        class="assign-user"
+      >
+        Remove myself as the payer
+      </p>
+    </div>
+  </div>
+</div>
+<hr />

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { AccountVO } from './../../../models/account-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';
@@ -27,6 +28,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
   public hasTagsAccess: boolean;
   public hasStewardAccess: boolean;
   public archive: ArchiveVO;
+  public payer: AccountVO;
 
   protected fetchTagsAttempts: number = 0;
 
@@ -66,6 +68,12 @@ export class ArchiveSettingsDialogComponent implements OnInit {
         });
     }
     this.archive = this.account.getArchive();
+    this.api.archive.getMembers(this.archive).then((response) => {
+      const members = response.getAccountVOs();
+      this.payer = members.find(
+        (member) => member.accountId === this.archive.payerAccountId
+      );
+    });
   }
 
   public refreshTags(): void {

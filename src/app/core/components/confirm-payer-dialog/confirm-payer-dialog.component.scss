@@ -1,0 +1,65 @@
+/* @format */
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  @include tabbedDialogHeader;
+  background-color: white;
+
+  & > button > i {
+    color: $gray-light;
+  }
+}
+
+.content {
+  @include tabbedDialogContent;
+  flex-direction: column;
+  height: fit-content !important;
+}
+
+.tabs {
+  @include tabbedDialogNav;
+}
+
+.panel {
+  @include tabbedDialogPanel;
+}
+
+.panel-title {
+  @include tabbedDialogPanelTitle;
+}
+
+form {
+  @include tabbedDialogPanelForm;
+  max-width: 600px;
+  padding-top: 0;
+}
+
+pr-archive-small {
+  margin-bottom: $grid-unit;
+
+  &.waiting {
+    opacity: 0.7;
+  }
+}
+
+.popup-text {
+  padding: 0px 20px 20px 20px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 27px;
+}
+
+.buttons {
+  display: flex;
+
+  & > .btn {
+    width: 200px;
+  }
+}
