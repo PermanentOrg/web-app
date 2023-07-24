@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-welcome-dialog',
@@ -17,15 +18,21 @@ export class WelcomeDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     private account: AccountService,
-    private constants: PrConstantsService
+    private constants: PrConstantsService,
+    private api: ApiService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    try {
+      const res = await this.api.auth.getInviteToken();
+      this.isEarlyBird = res.token === 'earlyb1rd';
+    } catch (error) {
+      this.isEarlyBird = false;
+    }
+
     const archive = this.account.getArchive();
     this.archiveName = archive.fullName;
     this.accessRole = this.constants.translate(archive.accessRole);
-    this.isEarlyBird =
-      !this.account.inviteCode || this.account.inviteCode === 'earlyb1rd';
   }
 
   public close(): void {
