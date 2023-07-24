@@ -10,6 +10,9 @@ import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
+import { Observable } from '@shared/services/http/http.service';
+import { TagsService } from '@core/services/tags/tags.service';
+import { HttpClient } from '@angular/common/http';
 
 const defaultTagList: TagVOData[] = [
   {
@@ -66,7 +69,10 @@ describe('FileViewerComponent', () => {
       .mock(AccountService, {
         checkMinimumAccess: (itemAccessRole, minimumAccess) => true,
       })
-      .mock(EditService, {});
+      .mock(EditService, {})
+      .mock(TagsService, {
+        getItemTags$: () => new Observable<TagVOData[]>(),
+      });
   }));
 
   it('should create', async () => {

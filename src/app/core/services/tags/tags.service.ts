@@ -15,6 +15,7 @@ import { ApiService } from '@shared/services/api/api.service';
 export class TagsService {
   private tags: Map<number, TagVOData> = new Map();
   private tagsSubject: Subject<TagVOData[]> = new Subject();
+  private itemsTagsSubject: Subject<TagVOData[]> = new Subject();
   private debug = debug('service:tagsService');
   constructor(private account: AccountService, private api: ApiService) {
     this.refreshTags();
@@ -84,5 +85,13 @@ export class TagsService {
 
   getTags$() {
     return this.tagsSubject.asObservable();
+  }
+
+  getItemTags$() {
+    return this.itemsTagsSubject.asObservable();
+  }
+
+  setItemTags(tags: TagVOData[]) {
+    this.itemsTagsSubject.next(tags);
   }
 }

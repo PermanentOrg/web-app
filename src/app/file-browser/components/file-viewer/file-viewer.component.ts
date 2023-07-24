@@ -26,8 +26,10 @@ import { EditService } from '@core/services/edit/edit.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-
+import { TagsService } from './../../../core/services/tags/tags.service';
+import { OnChanges, SimpleChanges } from '@angular/core';
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -70,6 +72,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public useMinimalView = false;
   public editingDate: boolean = false;
   private bodyScrollTop: number;
+  private tagSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -80,6 +83,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private accountService: AccountService,
     private editService: EditService,
+    private tagsService: TagsService,
     @Optional() private publicProfile: PublicProfileService
   ) {
     // store current scroll position in file list
@@ -112,7 +116,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     }
 
     if (publicProfile) {
-      publicProfile.archive$().subscribe((archive) => {
+      publicProfile.archive$()?.subscribe((archive) => {
         this.allowDownloads = archive.allowPublicDownload;
       });
     }
@@ -122,6 +126,17 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         this.currentRecord.accessRole,
         AccessRole.Editor
       ) && !route.snapshot.data?.isPublicArchive;
+
+    this.tagSubscription = this.tagsService
+      .getItemTags$()
+      ?.subscribe((tags) => {
+        this.customMetadata = tags?.filter((tag) =>
+          tag.type.includes('type.tag.metadata')
+        );
+        this.keywords = tags?.filter(
+          (tag) => !tag.type.includes('type.tag.metadata')
+        );
+      });
   }
 
   ngOnInit() {
@@ -151,6 +166,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       window.scrollTo(0, this.bodyScrollTop);
     });
+    this.tagSubscription.unsubscribe();
   }
 
   @HostListener('window:resize', [])
@@ -372,9 +388,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onTagsClick(): void {
+  public onTagsClick(type: string): void {
     if (this.canEdit) {
-      this.editService.openTagsDialog(this.currentRecord as ItemVO);
+      this.editService.openTagsDialog(this.currentRecord as ItemVO, type);
     }
   }
 
