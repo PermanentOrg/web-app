@@ -3,6 +3,7 @@ import { ApiService } from './../../services/api/api.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO, ArchiveVO } from '@models';
+
 @Component({
   selector: 'pr-storage-meter',
   templateUrl: './storage-meter.component.html',
