@@ -44,7 +44,7 @@ export class ArchivePayerComponent implements OnInit {
 
   ngOnInit(): void {
     this.hasPayer = !!this.payer;
-    if(this.hasPayer){
+    if (this.hasPayer) {
       this.payerService.payerId = this.payer.accountId;
     }
     this.isPayerDifferentThanLoggedUser =
@@ -67,7 +67,7 @@ export class ArchivePayerComponent implements OnInit {
       this.api.archive.update(this.archive);
       this.hasPayer = !val;
       this.isPayerDifferentThanLoggedUser = val;
-      this.payerService.payerId = this.archive.payerAccountId
+      this.payerService.payerId = this.archive.payerAccountId;
     } catch (e) {
       this.msg.showError('Something went wrong. Please try again.');
     }

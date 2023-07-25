@@ -113,7 +113,7 @@ import { ArchiveStoragePayerComponent } from './components/archive-storage-payer
     ArchiveTypeChangeDialogComponent,
     ArchivePayerComponent,
     ConfirmPayerDialogComponent,
-    ArchiveStoragePayerComponent
+    ArchiveStoragePayerComponent,
   ],
   providers: [
     DataService,
