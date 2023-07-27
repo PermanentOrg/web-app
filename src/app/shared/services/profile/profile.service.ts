@@ -122,7 +122,7 @@ export class ProfileService {
   async fetchProfileItems() {
     const currentArchive = this.account.getArchive();
     const profileResponse = await this.api.archive.getAllProfileItems(currentArchive);
-    const profileItems = profileResponse.getProfileItemVOs();
+    const profileItems = profileResponse?.getProfileItemVOs();
     this.profileItemDictionary = {};
 
     for (const item of profileItems) {
@@ -162,14 +162,14 @@ export class ProfileService {
 
   createEmptyProfileItem(fieldNameShort: FieldNameUIShort) {
     const currentArchive = this.account.getArchive();
-    const shortType = currentArchive.type.split('.').pop();
+    const shortType = currentArchive?.type.split('.').pop();
     const template = this.constants.getProfileTemplate();
     const templateForType = template[shortType];
     const valueTemplate = templateForType[fieldNameShort];
 
     const item: ProfileItemVOData = {
-      archiveId: currentArchive.archiveId,
-      fieldNameUI: valueTemplate.field_name_ui
+      archiveId: currentArchive?.archiveId,
+      fieldNameUI: valueTemplate?.field_name_ui
     };
 
 
@@ -209,7 +209,7 @@ export class ProfileService {
 
   stubEmptyProfileItems() {
     const currentArchive = this.account.getArchive();
-    const shortType = currentArchive.type.split('.').pop();
+    const shortType = currentArchive?.type.split('.').pop();
     const template = this.constants.getProfileTemplate();
     const templateForType = template[shortType];
 

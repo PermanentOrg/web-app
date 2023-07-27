@@ -31,6 +31,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   profileItems: ProfileItemVODictionary;
 
   canEdit: boolean;
+  loading = true
 
   isPublic = true;
 
@@ -63,21 +64,21 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private prompt: PromptService,
     private message: MessageService,
     private cookies: CookieService
-  ) {
+  ) {}
+
+    async ngOnInit(): Promise<void> {
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
-
+    await this.profile.fetchProfileItems();
+    this.loading = false;
     this.profileItems = this.profile.getProfileItemDictionary();
     this.canEdit = this.account.checkMinimumArchiveAccess(AccessRole.Curator);
     this.checkProfilePublic();
-  }
-
-  ngOnInit(): void {
+    this.updateProgress();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.updateProgress();
       this.showFirstTimeDialog();
     });
   }

@@ -1,4 +1,7 @@
-<div class="dialog-content">
+<div *ngIf="loading" class="import-spinner">
+  <div class="lds-dual-ring"></div>
+</div>
+<div *ngIf="!loading" class="dialog-content">
   <div class="header">
     <button class="btn" (click)="onDoneClick()">
       <i class="material-icons">arrow_back</i>
