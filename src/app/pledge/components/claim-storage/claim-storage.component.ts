@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';

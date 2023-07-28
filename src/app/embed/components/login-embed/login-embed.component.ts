@@ -1,8 +1,14 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { matchControlValidator } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
@@ -19,7 +25,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-login',
   templateUrl: './login-embed.component.html',
   styleUrls: ['./login-embed.component.scss'],
-  host: {'class': 'pr-auth-form'}
+  host: { class: 'pr-auth-form' },
 })
 export class LoginEmbedComponent implements OnInit {
   loginForm: UntypedFormGroup;
@@ -28,7 +34,7 @@ export class LoginEmbedComponent implements OnInit {
 
   formErrors = {
     email: false,
-    password: false
+    password: false,
   };
 
   constructor(
@@ -45,10 +51,16 @@ export class LoginEmbedComponent implements OnInit {
     }
 
     this.loginForm = fb.group({
-      email: ['', [FormUtilities.trimWhitespace, Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)]],
+      email: [
+        '',
+        [FormUtilities.trimWhitespace, Validators.required, Validators.email],
+      ],
+      password: [
+        '',
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+      ],
       rememberMe: [true],
-      keepLoggedIn: [true]
+      keepLoggedIn: [true],
     });
 
     const currentAccount = this.accountService.getAccount();
@@ -57,23 +69,40 @@ export class LoginEmbedComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.logIn(formValue.email, formValue.password, formValue.rememberMe, formValue.keepLoggedIn)
+    this.accountService
+      .logIn(
+        formValue.email,
+        formValue.password,
+        formValue.rememberMe,
+        formValue.keepLoggedIn
+      )
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
-          this.router.navigate(['..', 'mfa'], {relativeTo: this.route})
+          this.router
+            .navigate(['..', 'mfa'], { relativeTo: this.route })
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+              this.message.showMessage(
+                `Verify to continue as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'warning'
+              );
             });
         } else if (response.needsVerification()) {
-          this.router.navigate(['..', 'verify'], {relativeTo: this.route})
+          this.router
+            .navigate(['..', 'verify'], { relativeTo: this.route })
             .then(() => {
-              this.message.showMessage(`Verify to continue as ${this.accountService.getAccount().primaryEmail}.`, 'warning');
+              this.message.showMessage(
+                `Verify to continue as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'warning'
+              );
             });
         } else {
           this.iFrame.setParentUrl('/app');
@@ -85,12 +114,14 @@ export class LoginEmbedComponent implements OnInit {
         if (response.messageIncludes('warning.signin.unknown')) {
           this.message.showMessage('Incorrect email or password.', 'danger');
           this.loginForm.patchValue({
-            password: ''
+            password: '',
           });
         } else {
-          this.message.showMessage('Log in failed. Please try again.', 'danger');
+          this.message.showMessage(
+            'Log in failed. Please try again.',
+            'danger'
+          );
         }
       });
   }
-
 }

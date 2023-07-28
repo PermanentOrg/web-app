@@ -1,5 +1,11 @@
+/* @format */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
@@ -19,15 +25,12 @@ describe('LoginEmbedComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        LoginEmbedComponent,
-        FormInputComponent
-      ],
+      declarations: [LoginEmbedComponent, FormInputComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
       providers: [
         CookieService,
@@ -38,21 +41,19 @@ describe('LoginEmbedComponent', () => {
           useValue: {
             snapshot: {
               queryParams: {
-                invite: 'invite'
-              }
-            }
-          }
+                invite: 'invite',
+              },
+            },
+          },
         },
         {
           provide: IFrameService,
           useValue: {
-            setParentUrl: function() {
-            }
-          }
-        }
-      ]
-    })
-    .compileComponents();
+            setParentUrl: function () {},
+          },
+        },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -83,7 +84,7 @@ describe('LoginEmbedComponent', () => {
   it('should set error for invalid email', () => {
     component.loginForm.get('email').markAsTouched();
     component.loginForm.patchValue({
-      email: 'lasld;f;aslkj'
+      email: 'lasld;f;aslkj',
     });
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.email).toBeTruthy();
@@ -104,7 +105,7 @@ describe('LoginEmbedComponent', () => {
   it('should set invalid for too short password', () => {
     component.loginForm.get('password').markAsTouched();
     component.loginForm.patchValue({
-      password: 'ass'
+      password: 'ass',
     });
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('password').errors.minlength).toBeTruthy();

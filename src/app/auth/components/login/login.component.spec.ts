@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -18,24 +19,15 @@ describe('LoginComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        LogoComponent,
-        LoginComponent,
-        FormInputComponent
-      ],
+      declarations: [LogoComponent, LoginComponent, FormInputComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
-      providers: [
-        CookieService,
-        MessageService,
-        AccountService
-      ]
-    })
-    .compileComponents();
+      providers: [CookieService, MessageService, AccountService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -51,14 +43,16 @@ describe('LoginComponent', () => {
   });
 
   it('should autofill with the email from cookies', () => {
-    expect(component.loginForm.value.email).toEqual(TEST_DATA.account.primaryEmail);
+    expect(component.loginForm.value.email).toEqual(
+      TEST_DATA.account.primaryEmail
+    );
   });
 
   it('should set error for missing email', () => {
     component.loginForm.get('email').markAsTouched();
     component.loginForm.patchValue({
       email: '',
-      password: TEST_DATA.user.password
+      password: TEST_DATA.user.password,
     });
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.required).toBeTruthy();
@@ -68,7 +62,7 @@ describe('LoginComponent', () => {
     component.loginForm.get('email').markAsTouched();
     component.loginForm.patchValue({
       email: 'lasld;f;aslkj',
-      password: TEST_DATA.user.password
+      password: TEST_DATA.user.password,
     });
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.email).toBeTruthy();
@@ -78,7 +72,7 @@ describe('LoginComponent', () => {
     component.loginForm.get('password').markAsTouched();
     component.loginForm.patchValue({
       email: TEST_DATA.user.email,
-      password: ''
+      password: '',
     });
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('password').errors.required).toBeTruthy();
@@ -88,7 +82,7 @@ describe('LoginComponent', () => {
     component.loginForm.get('password').markAsTouched();
     component.loginForm.patchValue({
       email: TEST_DATA.user.email,
-      password: 'short'
+      password: 'short',
     });
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('password').errors.minlength).toBeTruthy();
@@ -98,7 +92,7 @@ describe('LoginComponent', () => {
     component.loginForm.markAsTouched();
     component.loginForm.patchValue({
       email: TEST_DATA.user.email,
-      password: TEST_DATA.user.password
+      password: TEST_DATA.user.password,
     });
     expect(component.loginForm.valid).toBeTruthy();
   });

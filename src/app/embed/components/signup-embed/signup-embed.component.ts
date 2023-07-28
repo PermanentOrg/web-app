@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 

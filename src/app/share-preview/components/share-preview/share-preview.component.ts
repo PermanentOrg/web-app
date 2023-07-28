@@ -18,7 +18,7 @@ import {
   UntypedFormBuilder,
 } from '@angular/forms';
 
-import APP_CONFIG from '@root/app/app.config';
+import { APP_CONFIG } from '@root/app/app.config';
 import {
   matchControlValidator,
   trimWhitespace,

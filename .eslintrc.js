@@ -54,9 +54,9 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'max-classes-per-file': 'off',
         'no-console': ['error', { allow: ['error'] }],
+        'import/no-default-export': 'error',
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        'import/no-default-export': 'off',
         'import/no-duplicates': 'off',
         'import/no-extraneous-dependencies': 'off',
         'import/no-self-import': 'off',
@@ -147,6 +147,12 @@ module.exports = {
         '@angular-eslint/template/eqeqeq': 'off',
       },
     },
+    {
+      files: ['*.stories.ts', 'src/stories/*.ts'],
+      rules: {
+        'import/no-default-export': 'off',
+      }
+    }
   ],
   extends: ['plugin:storybook/recommended'],
 };

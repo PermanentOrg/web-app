@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 :host {
@@ -10,7 +11,7 @@
   }
 
   &.for-light-bg {
-    color:black;
+    color: black;
   }
 
   &.for-dark-bg {
@@ -77,5 +78,4 @@
       margin-bottom: 10px;
     }
   }
-
 }

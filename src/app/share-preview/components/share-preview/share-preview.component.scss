@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 $share-preview-max-width: 800px;
@@ -69,10 +70,10 @@ $share-preview-banner-height: 100px;
       display: none;
     }
   }
-
 }
 
-.banner-buttons, .share-preview-cover-buttons {
+.banner-buttons,
+.share-preview-cover-buttons {
   margin-left: auto;
   flex: 0 0 auto;
   display: flex;
@@ -107,7 +108,7 @@ $share-preview-banner-height: 100px;
   margin: 0 auto;
   width: 100%;
   opacity: 1;
-  
+
   &.navigating {
     opacity: 0.5;
     pointer-events: none;
@@ -171,9 +172,6 @@ $share-preview-banner-height: 100px;
         flex: 0 1 auto;
       }
     }
-
-
-
   }
 }
 
@@ -253,7 +251,8 @@ $share-preview-banner-height: 100px;
   bottom: 0;
   left: 0;
   right: 0;
-  transition:  background-color $transition-length ease-in, top 0s linear $transition-length;
+  transition: background-color $transition-length ease-in,
+    top 0s linear $transition-length;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -261,7 +260,7 @@ $share-preview-banner-height: 100px;
 
   .share-preview-cover-content {
     transform: translateY(100vh);
-    transition:  transform $transition-length ease-in;
+    transition: transform $transition-length ease-in;
 
     border-radius: 2rem;
     flex: 0 1 500px;
@@ -273,7 +272,6 @@ $share-preview-banner-height: 100px;
     @media screen and (min-width: 768px) {
       min-height: 45vh;
     }
-
   }
 
   &.from-bottom {
@@ -293,13 +291,13 @@ $share-preview-banner-height: 100px;
   }
 
   &.share-preview-cover-visible {
-    transition:  background-color $transition-length ease-out, top 0s linear 0s;
+    transition: background-color $transition-length ease-out, top 0s linear 0s;
     background: rgba(black, 0.4);
     top: 0;
 
     .share-preview-cover-content {
       transform: translateY(0);
-      transition:  transform $transition-length ease-out;
+      transition: transform $transition-length ease-out;
     }
   }
 

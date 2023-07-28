@@ -1,27 +1,91 @@
-<form [formGroup]="mailchimpForm" (submit)="onMailchimpSubmit(mailchimpForm.value)" *ngIf="!mailchimpSent">
+<!-- @format -->
+<form
+  [formGroup]="mailchimpForm"
+  (submit)="onMailchimpSubmit(mailchimpForm.value)"
+  *ngIf="!mailchimpSent"
+>
   <div class="input-group-vertical round">
-      <pr-form-input fieldName="email" placeholder="Your email address" [control]="mailchimpForm.controls['email']"
-        [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input
+      fieldName="email"
+      placeholder="Your email address"
+      [control]="mailchimpForm.controls['email']"
+      [config]="{
+        autocomplete: 'email',
+        autocorrect: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'off'
+      }"
+    ></pr-form-input>
   </div>
-  <p class="error" [hidden]="!mailchimpError">{{mailchimpError}}</p>
-  <button class="btn btn-alternate" [disabled]="!mailchimpForm.valid || waiting">
+  <p class="error" [hidden]="!mailchimpError">{{ mailchimpError }}</p>
+  <button
+    class="btn btn-alternate"
+    [disabled]="!mailchimpForm.valid || waiting"
+  >
     Sign up
   </button>
 </form>
-<form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit(signupForm.value)" *ngIf="mailchimpSent && !done">
+<form
+  [formGroup]="signupForm"
+  (ngSubmit)="onSignupSubmit(signupForm.value)"
+  *ngIf="mailchimpSent && !done"
+>
   <div class="input-group-vertical round">
-    <pr-form-input fieldName="email" placeholder="Email" [control]="signupForm.controls['email']"
-      [config]="{autocomplete: 'email', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
-    <pr-form-input fieldName="name" placeholder="Full name" [control]="signupForm.controls['name']"
-      [config]="{autocomplete: 'name', autocorrect: 'off', autocapitalize: 'yes', spellcheck: 'off'}"></pr-form-input>
-    <pr-form-input type="password" fieldName="password" placeholder="Password (min. 8 chars)" [control]="signupForm.controls['password']"
-      [config]="{autocomplete: 'new-password', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'off'}"></pr-form-input>
+    <pr-form-input
+      fieldName="email"
+      placeholder="Email"
+      [control]="signupForm.controls['email']"
+      [config]="{
+        autocomplete: 'email',
+        autocorrect: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'off'
+      }"
+    ></pr-form-input>
+    <pr-form-input
+      fieldName="name"
+      placeholder="Full name"
+      [control]="signupForm.controls['name']"
+      [config]="{
+        autocomplete: 'name',
+        autocorrect: 'off',
+        autocapitalize: 'yes',
+        spellcheck: 'off'
+      }"
+    ></pr-form-input>
+    <pr-form-input
+      type="password"
+      fieldName="password"
+      placeholder="Password (min. 8 chars)"
+      [control]="signupForm.controls['password']"
+      [config]="{
+        autocomplete: 'new-password',
+        autocorrect: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'off'
+      }"
+    ></pr-form-input>
   </div>
-  <button type="submit" class="btn btn-alternate" [disabled]="waiting || signupForm.invalid" (click)="onSignupSubmit(signupForm.value)">
+  <button
+    type="submit"
+    class="btn btn-alternate"
+    [disabled]="waiting || signupForm.invalid"
+    (click)="onSignupSubmit(signupForm.value)"
+  >
     Create Account
   </button>
-  <small>By creating an account, you agree to the <strong><a [routerLink]="['/terms']" target="_blank">terms</a></strong></small>
+  <small
+    >By creating an account, you agree to the
+    <strong
+      ><a [routerLink]="['/terms']" target="_blank">terms</a></strong
+    ></small
+  >
 </form>
-<a href="/app" target="_parent" class="btn btn-alternate no-margin" *ngIf="(mailchimpSent || existingUser) && done">
+<a
+  href="/app"
+  target="_parent"
+  class="btn btn-alternate no-margin"
+  *ngIf="(mailchimpSent || existingUser) && done"
+>
   Go to my account
 </a>
