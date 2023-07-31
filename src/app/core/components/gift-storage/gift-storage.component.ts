@@ -118,6 +118,7 @@ export class GiftStorageComponent implements OnDestroy {
     if (!control.value) {
       return of(null);
     }
+
     return timer(1000).pipe(
       map(() => {
         let emailValidationResult = Validators.email(control);
