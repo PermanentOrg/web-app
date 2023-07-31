@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+/* @format */
+import { Injectable, EventEmitter } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { partition, remove, find, findIndex } from 'lodash';
 
@@ -16,7 +17,6 @@ import {
   FolderResponse,
   RecordResponse,
 } from '@shared/services/api/index.repo';
-import { EventEmitter } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
