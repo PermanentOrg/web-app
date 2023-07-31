@@ -13,4 +13,5 @@ export const environment = {
   debug: false,
   release: PackageJson.version,
   environment: 'local',
-};
+  analyticsDebug: true,
+} as const;

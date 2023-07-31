@@ -15,6 +15,10 @@ const optionalSecrets = [
     name: 'STELA_DOMAIN',
     default: '',
   },
+  {
+    name: 'MIXPANEL_TOKEN',
+    default: '',
+  },
 ];
 
 module.exports = optionalSecrets;
