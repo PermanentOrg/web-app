@@ -34,14 +34,11 @@ export class ConfirmGiftDialogComponent {
 
   public async onConfirmClick() {
     try {
-      await this.api.billing.giftStorage(
-        this.email,
-        Number(this.amount)
-      );
-      this.giftResult.next(true)
+      await this.api.billing.giftStorage(this.email, Number(this.amount));
+      this.giftResult.next(true);
     } catch (e) {
       this.msg.showError('Something went wrong! Please try again.');
-      this.giftResult.next(false)
+      this.giftResult.next(false);
     }
     this.dialogRef?.close();
   }
