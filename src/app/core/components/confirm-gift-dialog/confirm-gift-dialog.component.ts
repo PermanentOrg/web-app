@@ -1,10 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
 /* @format */
-import { Observable, Subscription } from 'rxjs';
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'pr-confirm-gift-dialog',

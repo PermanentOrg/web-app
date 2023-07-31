@@ -1,9 +1,3 @@
-import {
-  AbstractControl,
-  AsyncValidatorFn,
-  FormControl,
-  ValidationErrors,
-} from '@angular/forms';
 /* @format */
 import { Dialog } from './../../../dialog/dialog.service';
 import { AccountService } from './../../../shared/services/account/account.service';
@@ -12,10 +6,14 @@ import {
   UntypedFormGroup,
   UntypedFormBuilder,
   Validators,
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { AccountVO } from '@models/index';
 import { Observable, BehaviorSubject, Subscription, of, timer } from 'rxjs';
-import { catchError, delay, map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'pr-gift-storage',
