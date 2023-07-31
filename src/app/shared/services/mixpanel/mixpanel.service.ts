@@ -34,4 +34,8 @@ export class MixpanelService {
       }
     }
   }
+
+  public isEnabled(): boolean {
+    return this.enabled;
+  }
 }
