@@ -58,17 +58,20 @@
     }
   }
 
-  & > input,
-  textarea {
+  & > .form-control {
     width: 400px;
     border: 1px solid $gray-light;
     border-radius: 6px;
     height: 42px;
   }
 
-  & > textarea {
+  & > .form-control-textarea {
     height: 150px;
     resize: none;
+  }
+
+  & > .form-control-error {
+    border-color: $red;
   }
 
   & .btn {
@@ -84,4 +87,8 @@
 
 .panel-title {
   @include tabbedDialogPanelTitle;
+}
+.input-error {
+  margin-bottom: 1rem;
+  color: $red;
 }

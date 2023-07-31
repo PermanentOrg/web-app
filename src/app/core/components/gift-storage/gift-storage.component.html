@@ -38,16 +38,22 @@
           name="amount"
           formControlName="amount"
           placeholder="0"
+          [ngClass]="{
+            'form-control-error': giftForm.get('amount').errors?.notInteger
+          }"
         />
         <span class="gigabytes">gigabytes</span>
       </div>
+      <p class="input-error" *ngIf="giftForm.get('amount').errors?.notInteger">
+        Storage can only be gifted in 1GB increments.
+      </p>
       <div class="dialog-form-field">
         <div class="text">
           <label class="label" for="amount">Note to recipient</label>
           <span class="label-info">Optional</span>
         </div>
         <textarea
-          class="form-control"
+          class="form-control form-control-textarea"
           id="message"
           name="message"
           formControlName="message"
