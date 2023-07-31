@@ -55,9 +55,12 @@ module.exports = {
         'max-classes-per-file': 'off',
         'no-console': ['error', { allow: ['error'] }],
         'import/no-default-export': 'error',
+        'import/no-extraneous-dependencies': [
+          'error',
+          { devDependencies: true },
+        ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        'import/no-extraneous-dependencies': 'off',
         'import/no-self-import': 'off',
         'import/no-useless-path-segments': 'off',
         'import/order': 'off',
@@ -150,6 +153,7 @@ module.exports = {
       files: ['*.stories.ts', 'src/stories/*.ts'],
       rules: {
         'import/no-default-export': 'off',
+        'import/no-extraneous-dependencies': 'off',
       },
     },
   ],
