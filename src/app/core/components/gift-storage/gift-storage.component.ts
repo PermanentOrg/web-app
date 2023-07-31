@@ -26,7 +26,7 @@ export class GiftStorageComponent implements OnDestroy {
   public giftResult: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
-  private sub:Subscription;
+  private sub: Subscription;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -48,6 +48,7 @@ export class GiftStorageComponent implements OnDestroy {
       ],
       message: ['', []],
     });
+
     this.sub = this.giftResult.subscribe((isSuccessful) => {
       this.isSuccessful = isSuccessful;
     });
@@ -89,7 +90,7 @@ export class GiftStorageComponent implements OnDestroy {
   integerValidator(control: FormControl) {
     const isInteger = Number.isInteger(Number(control.value));
     const hasDecimalPoint = control.value.toString().includes('.');
-  
+
     return isInteger && !hasDecimalPoint ? null : { notInteger: true };
   }
 }
