@@ -39,8 +39,7 @@ import {
 } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
-import mixpanel from 'mixpanel-browser';
-import { SecretsService } from '@shared/services/secrets/secrets.service';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 declare var ga: any;
 
@@ -164,7 +163,7 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
-    private secrets: SecretsService
+    private mixpanel: MixpanelService,
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {
@@ -179,14 +178,6 @@ export class AppModule {
           this.storage.local.set('debug', current + '-sockjs-client:*');
         }
       }
-    }
-
-    if (secrets.get('MIXPANEL_TOKEN')) {
-      mixpanel.init(secrets.get('MIXPANEL_TOKEN'), {
-        debug: environment.analyticsDebug,
-        persistence: 'localStorage',
-        track_pageview: true,
-      });
     }
 
     // router events for title and GA pageviews

@@ -1,3 +1,4 @@
+/* @format */
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
 import 'zone.js/testing';
@@ -38,6 +39,9 @@ window['Stripe'] = () => {
 
 // Disable loading of external Google Maps API
 window['doNotLoadGoogleMapsAPI'] = true;
+
+// Disable loading of MixPanel
+window['doNotLoadMixPanel'] = true;
 
 // Always Replace RouterModule with RouterTestingModule to avoid errors.
 Shallow.alwaysReplaceModule(RouterModule, RouterTestingModule);
