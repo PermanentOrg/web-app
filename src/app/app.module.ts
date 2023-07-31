@@ -163,7 +163,7 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
-    private mixpanel: MixpanelService,
+    private mixpanel: MixpanelService
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {

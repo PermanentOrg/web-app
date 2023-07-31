@@ -23,7 +23,6 @@ import {
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { MixpanelService } from '../mixpanel/mixpanel.service';
 
-
 import * as Sentry from '@sentry/browser';
 
 const ACCOUNT_KEY = 'account';
@@ -61,7 +60,7 @@ export class AccountService {
     private dialog: Dialog,
     private router: Router,
     private httpv2: HttpV2Service,
-    private mixpanel: MixpanelService,
+    private mixpanel: MixpanelService
   ) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
