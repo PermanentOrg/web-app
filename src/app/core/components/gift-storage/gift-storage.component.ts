@@ -1,4 +1,9 @@
-import { FormControl } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  ValidationErrors,
+} from '@angular/forms';
 /* @format */
 import { Dialog } from './../../../dialog/dialog.service';
 import { AccountService } from './../../../shared/services/account/account.service';
@@ -9,7 +14,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AccountVO } from '@models/index';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription, of, timer } from 'rxjs';
+import { catchError, delay, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'pr-gift-storage',
@@ -36,19 +42,27 @@ export class GiftStorageComponent implements OnDestroy {
     this.account = this.accountService.getAccount();
     this.availableSpace = this.bytesToGigabytes(this.account?.spaceLeft);
     this.giftForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        {
+          validators: [Validators.email],
+          asyncValidators: this.emailValidator,
+          updateOn: 'blur',
+        },
+      ],
       amount: [
         '',
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.max(Number(this.availableSpace)),
-          this.integerValidator,
-        ],
+        {
+          validators: [
+            Validators.required,
+            Validators.min(0),
+            Validators.max(Number(this.availableSpace)),
+            this.integerValidator,
+          ],
+        },
       ],
       message: ['', []],
     });
-
     this.sub = this.giftResult.subscribe((isSuccessful) => {
       this.isSuccessful = isSuccessful;
     });
@@ -88,9 +102,27 @@ export class GiftStorageComponent implements OnDestroy {
   }
 
   integerValidator(control: FormControl) {
+    if (control.value === '') {
+      return null;
+    }
+
     const isInteger = Number.isInteger(Number(control.value));
     const hasDecimalPoint = control.value.toString().includes('.');
 
     return isInteger && !hasDecimalPoint ? null : { notInteger: true };
   }
+
+  emailValidator: AsyncValidatorFn = (
+    control: AbstractControl
+  ): Observable<ValidationErrors | null> => {
+    if (!control.value) {
+      return of(null);
+    }
+    return timer(1000).pipe(
+      map(() => {
+        let emailValidationResult = Validators.email(control);
+        return emailValidationResult == null ? null : { email: true };
+      })
+    );
+  };
 }
