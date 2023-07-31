@@ -1,3 +1,4 @@
+/* @format */
 import PackageJson from '../../package.json';
 
 export const environment = {
