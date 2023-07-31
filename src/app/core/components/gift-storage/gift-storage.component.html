@@ -26,6 +26,9 @@
           placeholder="email@email.com"
         />
       </div>
+      <p class="input-error" *ngIf="giftForm.get('email').errors?.email">
+        The email you have entered is not valid.  
+      </p>
       <div class="dialog-form-field dialog-form-field-amount">
         <div class="text">
           <label class="label" for="amount">Storage Gift Amount</label>
@@ -37,7 +40,7 @@
           id="amount"
           name="amount"
           formControlName="amount"
-          placeholder="0"
+          placeholder="0 test"
           [ngClass]="{
             'form-control-error': giftForm.get('amount').errors?.notInteger
           }"
