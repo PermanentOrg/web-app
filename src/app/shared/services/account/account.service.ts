@@ -21,8 +21,11 @@ import {
   checkMinimumAccess,
 } from '@models/access-role';
 import { HttpV2Service } from '../http-v2/http-v2.service';
+import { SecretsService } from '../secrets/secrets.service';
+import { environment } from '@root/environments/environment';
 
 import * as Sentry from '@sentry/browser';
+import mixpanel from 'mixpanel-browser';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -58,7 +61,8 @@ export class AccountService {
     private cookies: CookieService,
     private dialog: Dialog,
     private router: Router,
-    private httpv2: HttpV2Service
+    private httpv2: HttpV2Service,
+    private secrets: SecretsService
   ) {
     const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
     const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
@@ -95,6 +99,16 @@ export class AccountService {
     Sentry.configureScope((scope) => {
       scope.setUser({ id: this.account.accountId });
     });
+
+    // set account data on mixpanel
+    if (this.secrets.get('MIXPANEL_TOKEN')) {
+      if (newAccount.accountId) {
+        const mixpanelIdentifier = environment.analyticsDebug
+          ? `${environment.environment}:${newAccount.accountId}`
+          : newAccount.accountId;
+        mixpanel.identify(mixpanelIdentifier);
+      }
+    }
   }
 
   public setArchive(newArchive: ArchiveVO) {
