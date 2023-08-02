@@ -31,6 +31,10 @@ export class MixpanelService {
           ? `${environment.environment}:${account.accountId}`
           : `${account.accountId}`;
         mixpanel.identify(mixpanelIdentifier);
+        mixpanel.people.set({
+          accountId: `${account.accountId}`,
+          environment: environment.environment,
+        });
       }
     }
   }
