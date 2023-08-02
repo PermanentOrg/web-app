@@ -27,9 +27,9 @@ export class MixpanelService {
   public identify(account: AccountVO): void {
     if (this.enabled) {
       if (account.accountId) {
-        const mixpanelIdentifier = environment.analyticsDebug
+        const mixpanelIdentifier: string = environment.analyticsDebug
           ? `${environment.environment}:${account.accountId}`
-          : account.accountId;
+          : `${account.accountId}`;
         mixpanel.identify(mixpanelIdentifier);
       }
     }
