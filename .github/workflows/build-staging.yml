@@ -26,7 +26,7 @@ jobs:
           STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
           RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY_DEV }}
           STELA_DOMAIN: ${{ secrets.STELA_DOMAIN_STAGING }}
-          MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
+          MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN_DEV }}
         run: npm run build:staging
       - name: Archive `dist`
         uses: actions/upload-artifact@v2
