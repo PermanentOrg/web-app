@@ -9,11 +9,12 @@ import { AccountVO } from '@models/account-vo';
   providedIn: 'root',
 })
 export class MixpanelService {
+  public static enableMixpanel = true;
   protected enabled = false;
   protected token: string;
 
   constructor(secrets: SecretsService) {
-    if (secrets.get('MIXPANEL_TOKEN') && !window['doNotLoadMixPanel']) {
+    if (secrets.get('MIXPANEL_TOKEN') && MixpanelService.enableMixpanel) {
       this.token = secrets.get('MIXPANEL_TOKEN');
       this.enabled = true;
       mixpanel.init(this.token, {
