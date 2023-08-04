@@ -9,7 +9,7 @@ import { ItemNotFoundComponent } from './components/item-not-found/item-not-foun
 import { PublicArchiveComponent } from './components/public-archive/public-archive.component';
 import { PublicArchiveResolveService } from './resolves/public-archive-resolve.service';
 import { PublicRootResolveService } from './resolves/public-root-resolve.service';
-import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
+import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 import { PublicProfileItemsResolveService } from './resolves/public-profile-items-resolve.service';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 import { RoutesWithData } from '../app.routes';
