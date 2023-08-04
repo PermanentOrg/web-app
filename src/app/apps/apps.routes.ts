@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -7,11 +8,11 @@ import { AppsGuard } from '@core/guards/apps.guard';
 import { AppsComponent } from '@apps/components/apps/apps.component';
 import { AppsFolderResolveService } from '@apps/resolves/apps-folder-resolve.service';
 
-import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
+import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 
 const appsRootResolve = {
   appsFolder: AppsFolderResolveService,
-  connectors: ConnectorsResolveService
+  connectors: ConnectorsResolveService,
 };
 
 export const routes: Routes = [
@@ -19,23 +20,17 @@ export const routes: Routes = [
     path: '',
     component: AppsComponent,
     resolve: appsRootResolve,
-    runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'always',
   },
   {
     path: ':archiveNbr/:folderLinkId',
     loadChildren: LazyLoadFileBrowserSibling,
-    canActivate: [ AppsGuard ],
-    canActivateChild: [ AppsGuard ],
+    canActivate: [AppsGuard],
+    canActivateChild: [AppsGuard],
   },
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  providers: [
-    AppsFolderResolveService,
-    ConnectorsResolveService
-  ]
+  imports: [RouterModule.forChild(routes)],
+  providers: [AppsFolderResolveService, ConnectorsResolveService],
 })
-export class AppsRoutingModule { }
-
+export class AppsRoutingModule {}

@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -14,12 +15,11 @@ import { CreateAccountDialogComponent } from './components/create-account-dialog
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
-import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { DialogChildComponentData } from '@root/app/dialog/dialog.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Dialog, DialogModule } from '../dialog/dialog.module';
-import { LazyLoadFileBrowserSibling } from '@fileBrowser/file-browser.module';
+import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 

@@ -1,3 +1,4 @@
+/* @format */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -12,10 +13,6 @@ import { VideoComponent } from '@shared/components/video/video.component';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { InViewportModule } from 'ng-in-viewport';
-
-
-export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule);
 
 @NgModule({
   imports: [
@@ -25,14 +22,13 @@ export const LazyLoadFileBrowserSibling = () => import('../file-browser/file-bro
     FileBrowserRoutingModule,
     SharedModule,
     DialogModule,
-    NgbTooltipModule
+    NgbTooltipModule,
   ],
   exports: [
     FileListComponent,
     FileListItemComponent,
     FileViewerComponent,
-    VideoComponent
-  ]
+    VideoComponent,
+  ],
 })
-export class FileBrowserModule {
-}
+export class FileBrowserModule {}
