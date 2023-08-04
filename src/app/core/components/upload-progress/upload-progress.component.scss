@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 $transition-length: 0.33s;
@@ -50,7 +51,8 @@ $progress-bar-height-desktop: 4px;
   padding-right: 5px;
 }
 
-.file-count, .actions {
+.file-count,
+.actions {
   flex: 0 0 auto;
   white-space: nowrap;
 }
@@ -64,7 +66,9 @@ $easing: $tweaked-ease;
 .upload-wrapper {
   padding: 10px 10px;
   transform: translateY(0);
-  transition: transform $transition-length $tweaked-ease $delay-length, opacity $transition-length $tweaked-ease $delay-length, visibility 0s linear $delay-length + $transition-length;
+  transition: transform $transition-length $tweaked-ease $delay-length,
+    opacity $transition-length $tweaked-ease $delay-length,
+    visibility 0s linear $delay-length + $transition-length;
   border-top: 1px $gray-500 solid;
   display: block;
   margin: 0 auto;
@@ -74,18 +78,22 @@ $easing: $tweaked-ease;
 
   &.visible {
     transform: translateY(-100%);
-    transition: transform $transition-length $easing, opacity $transition-length $easing, visibility 0s linear  0s;
+    transition: transform $transition-length $easing,
+      opacity $transition-length $easing, visibility 0s linear 0s;
     visibility: visible;
   }
 }
 
 .upload-wrapper.fade {
   opacity: 0;
-  transition: transform 0s linear $transition-length, opacity $transition-length ease-in 0s, visibility 0s linear $transition-length;
+  transition: transform 0s linear $transition-length,
+    opacity $transition-length ease-in 0s,
+    visibility 0s linear $transition-length;
 
   &.visible {
     opacity: 1;
-    transition: transform 0s, opacity $transition-length $easing, visibility 0s linear  0s;
+    transition: transform 0s, opacity $transition-length $easing,
+      visibility 0s linear 0s;
   }
 }
 

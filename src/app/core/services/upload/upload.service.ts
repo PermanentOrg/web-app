@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable, EventEmitter, OnDestroy } from '@angular/core';
 
 import { remove } from 'lodash';
@@ -14,7 +15,10 @@ import { UploadSession, UploadSessionStatus } from './upload.session';
 import { UploadItem, UploadStatus } from './uploadItem';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
 import debug from 'debug';
 import { AccountService } from '@shared/services/account/account.service';
 import { Deferred } from '@root/vendor/deferred';
@@ -48,35 +52,46 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     private message: MessageService,
     private dataService: DataService,
     private accountService: AccountService,
-    public uploadSession: UploadSession,
+    public uploadSession: UploadSession
   ) {
-    this.subscriptions.push(this.uploadSession.progress.subscribe((progressEvent) => {
-      if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
-        const parentFolderId = progressEvent.item.parentFolder.folderId;
-        if (dataService.currentFolder && dataService.currentFolder.folderId === parentFolderId) {
-          this.dataService.refreshCurrentFolder();
+    this.subscriptions.push(
+      this.uploadSession.progress.subscribe((progressEvent) => {
+        if (progressEvent.item?.uploadStatus === UploadStatus.Done) {
+          const parentFolderId = progressEvent.item.parentFolder.folderId;
+          if (
+            dataService.currentFolder &&
+            dataService.currentFolder.folderId === parentFolderId
+          ) {
+            this.dataService.refreshCurrentFolder();
+          }
+
+          this.accountService.refreshAccountDebounced();
         }
 
-        this.accountService.refreshAccountDebounced();
-      }
-
-      switch (progressEvent.sessionStatus) {
-        case UploadSessionStatus.Start:
-          this.message.showMessage('Please don\'t close your browser until the upload is complete.');
-          break;
-        case UploadSessionStatus.Done:
-          this.accountService.refreshAccountDebounced();
-          break;
-        case UploadSessionStatus.DefaultError:
-          this.message.showError('Oops, something went wrong! Please try again. If the issue persists, reach out to us at support@permanent.org.');
-          this.accountService.refreshAccountDebounced();
-          break;
-        case UploadSessionStatus.StorageError:
-          this.message.showError('You do not have enough storage available to upload these files.');
-          this.accountService.refreshAccountDebounced();
-          break;
-      }
-    }));
+        switch (progressEvent.sessionStatus) {
+          case UploadSessionStatus.Start:
+            this.message.showMessage(
+              "Please don't close your browser until the upload is complete."
+            );
+            break;
+          case UploadSessionStatus.Done:
+            this.accountService.refreshAccountDebounced();
+            break;
+          case UploadSessionStatus.DefaultError:
+            this.message.showError(
+              'Oops, something went wrong! Please try again. If the issue persists, reach out to us at support@permanent.org.'
+            );
+            this.accountService.refreshAccountDebounced();
+            break;
+          case UploadSessionStatus.StorageError:
+            this.message.showError(
+              'You do not have enough storage available to upload these files.'
+            );
+            this.accountService.refreshAccountDebounced();
+            break;
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -108,7 +123,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   async uploadFolders(parentFolder: FolderVO, items: DataTransferItem[]) {
-    this.debug('uploadFolders %d items to folder %o', items.length, parentFolder);
+    this.debug(
+      'uploadFolders %d items to folder %o',
+      items.length,
+      parentFolder
+    );
 
     this.uploadSession.startSession();
 
@@ -118,18 +137,21 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
     foldersByPath.set('', { path: '', folder: parentFolder });
 
-    const entries = items.map(i => i.webkitGetAsEntry());
+    const entries = items.map((i) => i.webkitGetAsEntry());
     await getItemsFromItemList(entries);
     this.createFoldersAndUploadFiles(foldersByPath, filesByPath);
 
     async function getItemsFromItemList(dirEntries: any[]) {
-      self.debug('uploadFolders getItemsFromItemList %d items in folder', entries.length);
+      self.debug(
+        'uploadFolders getItemsFromItemList %d items in folder',
+        entries.length
+      );
       const filePromises: Promise<any>[] = [];
       for (const entry of dirEntries) {
         if (entry.isFile) {
           const deferred = new Deferred();
           filePromises.push(deferred.promise);
-          entry.file(file => {
+          entry.file((file) => {
             if (FILENAME_BLACKLIST.includes((file as File).name)) {
               return deferred.resolve();
             }
@@ -142,13 +164,13 @@ export class UploadService implements HasSubscriptions, OnDestroy {
             const fileWithPath = {
               path: parentPath,
               file,
-              parentFolder: foldersByPath.get(parentPath).folder
+              parentFolder: foldersByPath.get(parentPath).folder,
             };
 
             if (filesByPath.has(parentPath)) {
               filesByPath.get(parentPath).push(fileWithPath);
             } else {
-              filesByPath.set(parentPath, [ fileWithPath ]);
+              filesByPath.set(parentPath, [fileWithPath]);
             }
 
             deferred.resolve();
@@ -162,7 +184,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
           const folder: FileSystemFolder = {
             path,
             folder: vo,
-            parentFolder: foldersByPath.get(parentPath).folder
+            parentFolder: foldersByPath.get(parentPath).folder,
           };
           foldersByPath.set(entry.fullPath, folder);
           const childEntries = await readDirectory(entry);
@@ -178,8 +200,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       let e = [];
 
       const deferred = new Deferred();
-      const getEntries = function() {
-        dirReader.readEntries(function(results) {
+      const getEntries = function () {
+        dirReader.readEntries(function (results) {
           if (results.length) {
             e = e.concat(Array.from(results));
             getEntries();
@@ -195,21 +217,26 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     }
   }
 
-  async createFoldersAndUploadFiles(folders: Map<string, FileSystemFolder>, files: Map<string, FileWithPath[]>) {
-    const pathsByDepth = new Map<Number, FileSystemFolder[]>();
+  async createFoldersAndUploadFiles(
+    folders: Map<string, FileSystemFolder>,
+    files: Map<string, FileWithPath[]>
+  ) {
+    const pathsByDepth = new Map<number, FileSystemFolder[]>();
     for (const [path, folder] of folders) {
       const depth = path.split('/').length - 1;
       if (pathsByDepth.has(depth)) {
         pathsByDepth.get(depth).push(folder);
       } else {
-        pathsByDepth.set(depth, [ folder ]);
+        pathsByDepth.set(depth, [folder]);
       }
     }
+
+    this.uploadSession.startFolders();
 
     // group folder creation at each depth
     for (const [depth, foldersAtDepth] of pathsByDepth) {
       // create folders if needed
-      const needIds = foldersAtDepth.filter(f => !f.folder.folderId);
+      const needIds = foldersAtDepth.filter((f) => !f.folder.folderId);
 
       let needsRefresh = false;
       if (needIds.length && depth > 0) {
@@ -217,32 +244,58 @@ export class UploadService implements HasSubscriptions, OnDestroy {
           f.folder.parentFolderId = f.parentFolder.folderId;
           f.folder.parentFolder_linkId = f.parentFolder.folder_linkId;
 
-          if (f.parentFolder.folderId === this.dataService.currentFolder.folderId) {
+          if (
+            f.parentFolder.folderId === this.dataService.currentFolder.folderId
+          ) {
             needsRefresh = true;
           }
         }
 
-        const response = await this.api.folder.post(needIds.map(f => f.folder));
-        const updatedFolders = response.getFolderVOs();
+        const maxFoldersPerBatch = 10;
+        const folderBatches = needIds.reduce<Array<FileSystemFolder[]>>(
+          (array, folder, index) => {
+            const batchIndex = Math.floor(index / maxFoldersPerBatch);
 
-        needIds.forEach((f, i) => {
-          f.folder.update(updatedFolders[i]);
-        });
+            if (array[batchIndex]) {
+              array[batchIndex].push(folder);
+            } else {
+              array[batchIndex] = [folder];
+            }
+
+            return array;
+          },
+          []
+        );
+
+        for (const batch of folderBatches) {
+          const response = await this.api.folder.post(
+            batch.map((f) => f.folder)
+          );
+          const updatedFolders = response.getFolderVOs();
+
+          batch.forEach((f, i) => {
+            f.folder.update(updatedFolders[i]);
+          });
+        }
       }
 
       if (needsRefresh) {
         this.dataService.refreshCurrentFolder();
       }
+    }
 
+    for (const [_depth, foldersAtDepth] of pathsByDepth) {
       // queue uploads for each folder
       for (const f of foldersAtDepth) {
         if (files.has(f.path)) {
           const filesForFolder = files.get(f.path);
-          this.uploadFiles(f.folder, filesForFolder.map(i => i.file));
+          this.uploadFiles(
+            f.folder,
+            filesForFolder.map((i) => i.file)
+          );
         }
       }
     }
-
   }
 
   showProgress() {
