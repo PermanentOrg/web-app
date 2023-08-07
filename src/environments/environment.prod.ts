@@ -1,7 +1,8 @@
 /* @format */
 import PackageJson from '../../package.json';
+import { Environment } from './environment-interface';
 
-export const environment = {
+export const environment: Environment = {
   production: true,
   apiUrl: 'https://www.permanent.org/api',
   hmr: false,
