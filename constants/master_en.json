@@ -389,7 +389,7 @@
     "supplier": "Supplier",
     "supporter": "Supporter",
     "volunteer": "Volunteer",
-    "family_member": "Family Member",
+    "family_member": "Group Member",
     "employee": "Employee",
     "employer": "Employer",
     "owner": "Owner",
@@ -575,7 +575,7 @@
     "archive": {
       "organization": "Organization",
       "person": "Person",
-      "family": "Family",
+      "family": "Group",
       "nonprofit": "Nonprofit"
     },
     "auth": {
