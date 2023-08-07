@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
-import { AccountVO } from './../../../models/account-vo';
+import { AccountVO } from "../../../models/account-vo";
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';

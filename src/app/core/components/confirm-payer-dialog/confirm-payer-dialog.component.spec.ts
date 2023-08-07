@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/tes
 import * as Testing from '@root/test/testbedConfig';
 import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
 import { cloneDeep } from 'lodash';
-import { SharedModule } from './../../../shared/shared.module';
+import { SharedModule } from "../../../shared/shared.module";
 
 describe('ConfirmPayerDialogComponent', () => {
   let component: ConfirmPayerDialogComponent;
