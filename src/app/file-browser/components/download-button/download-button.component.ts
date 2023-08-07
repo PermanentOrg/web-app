@@ -1,5 +1,5 @@
 /* @format */
-import { MessageService } from "../../../shared/services/message/message.service";
+import { MessageService } from '../../../shared/services/message/message.service';
 import {
   Component,
   Input,

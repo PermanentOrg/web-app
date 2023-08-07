@@ -1,3 +1,4 @@
+<!-- @format -->
 <div class="dialog-content">
   <div class="header">
     <span>Archive Settings</span>
@@ -63,7 +64,10 @@
         </ng-container>
         <ng-container *ngSwitchCase="'public-settings'">
           <div class="panel-title">Archive Storage</div>
-            <pr-archive-payer [payer]="payer" [archive]="archive"></pr-archive-payer>
+          <pr-archive-payer
+            [payer]="payer"
+            [archive]="archive"
+          ></pr-archive-payer>
           <div class="panel-title">Public Gallery Page Settings</div>
           <ng-container *ngIf="hasTagsAccess; else noAccess">
             <pr-public-settings [archive]="archive"></pr-public-settings>

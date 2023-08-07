@@ -1,10 +1,14 @@
-/* #format */
+/* @format */
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
-import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  TestModuleMetadata,
+} from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
 import { cloneDeep } from 'lodash';
-import { SharedModule } from "../../../shared/shared.module";
+import { SharedModule } from '../../../shared/shared.module';
 
 describe('ConfirmPayerDialogComponent', () => {
   let component: ConfirmPayerDialogComponent;
@@ -17,7 +21,7 @@ describe('ConfirmPayerDialogComponent', () => {
     cancelAccountPayerSet: () => void;
   };
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     dialogData = {
@@ -42,7 +46,7 @@ describe('ConfirmPayerDialogComponent', () => {
       useValue: dialogRef,
     });
     await TestBed.configureTestingModule(config).compileComponents();
-  })
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmPayerDialogComponent);
