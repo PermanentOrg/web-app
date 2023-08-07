@@ -1,3 +1,4 @@
+/* @format */
 import PackageJson from '../../package.json';
 
 export const environment = {
@@ -13,4 +14,5 @@ export const environment = {
   debug: true,
   release: PackageJson.version,
   environment: 'local',
-};
+  analyticsDebug: true,
+} as const;

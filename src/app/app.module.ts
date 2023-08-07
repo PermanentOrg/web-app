@@ -1,15 +1,17 @@
+/* @format */
 import { NgModule, Injectable, ErrorHandler, Injector } from '@angular/core';
 import {
   RouterModule,
   Router,
   NavigationEnd,
   ActivatedRoute,
-  DefaultUrlSerializer,
-  UrlSerializer,
-  UrlTree,
-  NavigationStart
+  NavigationStart,
 } from '@angular/router';
-import { HttpClientModule, HttpClientJsonpModule, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClientModule,
+  HttpClientJsonpModule,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subscription } from 'rxjs';
@@ -31,30 +33,33 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { environment } from '@root/environments/environment';
 import { RouteHistoryService } from 'ngx-route-history';
 import { InViewportModule } from 'ng-in-viewport';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 declare var ga: any;
 
 if (environment.environment !== 'local') {
   Sentry.init({
     dsn: 'https://5cb2f4943c954624913c336eb10da4c5@o360597.ingest.sentry.io/5285675"',
-    ignoreErrors: [
-      'ResizeObserver loop limit exceeded',
+    ignoreErrors: ['ResizeObserver loop limit exceeded'],
+    integrations: [
+      new Sentry.Integrations.TryCatch({
+        XMLHttpRequest: false,
+      }),
     ],
-    integrations: [new Sentry.Integrations.TryCatch({
-      XMLHttpRequest: false,
-    })],
     release: `mdot@${environment.release}`,
-    environment: environment.environment
+    environment: environment.environment,
   });
 }
 
-
-
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() { }
+  constructor() {}
 
   extractError(error) {
     // Try to unwrap zone.js error.
@@ -103,13 +108,12 @@ export class SentryErrorHandler implements ErrorHandler {
     if (!environment.production) {
       console.error(extractedError);
     }
-
   }
 }
 
 @Injectable()
 export class PermErrorHandler implements ErrorHandler {
-  constructor(private injector: Injector) { }
+  constructor(private injector: Injector) {}
   handleError(error: any) {
     console.error(error);
 
@@ -131,28 +135,24 @@ export class PermErrorHandler implements ErrorHandler {
     BrowserAnimationsModule,
     InViewportModule,
     DialogModule.forRoot(),
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
-  exports: [
-  ],
-  declarations: [
-    AppComponent,
-    MessageComponent,
-  ],
+  exports: [],
+  declarations: [AppComponent, MessageComponent],
   providers: [
     CookieService,
     MessageService,
     {
       provide: ErrorHandler,
-      useClass: SentryErrorHandler
+      useClass: SentryErrorHandler,
     },
     {
       provide: APP_BASE_HREF,
-      useValue: '/'
+      useValue: '/',
     },
-    RouteHistoryService
+    RouteHistoryService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   private routerListener: Subscription;
@@ -163,6 +163,7 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
+    private mixpanel: MixpanelService
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {
@@ -170,7 +171,10 @@ export class AppModule {
         this.storage.local.set('debug', '*,-sockjs-client:*');
       } else {
         const current = this.storage.local.get('debug');
-        if (!current.includes('-sockjs-client:') && !current.includes('sockjs-client:')) {
+        if (
+          !current.includes('-sockjs-client:') &&
+          !current.includes('sockjs-client:')
+        ) {
           this.storage.local.set('debug', current + '-sockjs-client:*');
         }
       }
@@ -178,12 +182,15 @@ export class AppModule {
 
     // router events for title and GA pageviews
     this.routerListener = this.router.events
-      .pipe(filter((event) => {
-        if (event instanceof NavigationStart) {
-          this.routerDebug('start navigate %s', event.url);
-        }
-        return event instanceof NavigationEnd;
-      })).subscribe((event) => {
+      .pipe(
+        filter((event) => {
+          if (event instanceof NavigationStart) {
+            this.routerDebug('start navigate %s', event.url);
+          }
+          return event instanceof NavigationEnd;
+        })
+      )
+      .subscribe((event) => {
         this.routerDebug('end navigate %s', this.router.url);
         let currentRoute = this.route;
         let currentTitle;
@@ -209,7 +216,6 @@ export class AppModule {
             break;
           }
         }
-
 
         if ('ga' in window && ga.getAll && !skipGaPageview) {
           const tracker = ga.getAll()[0];

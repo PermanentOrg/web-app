@@ -26,6 +26,7 @@ jobs:
           RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY }}
           FUSIONAUTH_HOST: ${{ secrets.FUSIONAUTH_PROD_HOST }}
           STELA_DOMAIN: ${{ secrets.STELA_DOMAIN_PROD }}
+          MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN_PROD }}
         run: npm run build
       - name: Archive `dist`
         uses: actions/upload-artifact@v2

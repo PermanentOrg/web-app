@@ -1,3 +1,4 @@
+/* @format */
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
 import 'zone.js/testing';
@@ -16,6 +17,7 @@ import {
   NgbTimepickerModule,
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 window['Stripe'] = () => {
   return {
@@ -38,6 +40,9 @@ window['Stripe'] = () => {
 
 // Disable loading of external Google Maps API
 window['doNotLoadGoogleMapsAPI'] = true;
+
+// Disable loading of MixPanel
+MixpanelService.enableMixpanel = false;
 
 // Always Replace RouterModule with RouterTestingModule to avoid errors.
 Shallow.alwaysReplaceModule(RouterModule, RouterTestingModule);
