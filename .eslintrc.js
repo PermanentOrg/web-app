@@ -61,7 +61,6 @@ module.exports = {
         ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        'import/no-useless-path-segments': 'off',
         'import/order': 'off',
         '@angular-eslint/component-selector': 'off',
         '@angular-eslint/directive-selector': 'off',

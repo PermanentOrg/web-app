@@ -26,7 +26,7 @@ import { EditService } from '@core/services/edit/edit.service';
 import { DataStatus } from '@models/data-status.enum';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-import { TagsService } from './../../../core/services/tags/tags.service';
+import { TagsService } from '../../../core/services/tags/tags.service';
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
 

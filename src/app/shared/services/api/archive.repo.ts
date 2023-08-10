@@ -1,5 +1,11 @@
-import { TagVOData } from './../../../models/tag-vo';
-import { AccountVO, AccountPasswordVO, ArchiveVO, AuthVO } from '@root/app/models';
+/* @format */
+import { TagVOData } from '../../../models/tag-vo';
+import {
+  AccountVO,
+  AccountPasswordVO,
+  ArchiveVO,
+  AuthVO,
+} from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
 import { ProfileItemVOData } from '@models/profile-item-vo';
@@ -227,7 +233,7 @@ export class ArchiveRepo extends BaseRepo {
     if (!archive?.archiveId && !archive?.archiveNbr) {
       return;
     }
-    
+
     return this.http.sendRequestPromise<ArchiveResponse>(
       endpoint,
       data,
@@ -264,7 +270,9 @@ export class ArchiveRepo extends BaseRepo {
   }
 
   public getPublicArchiveTags(archiveId: string) {
-    return this.httpV2.get<TagVOData>(`v2/archive/${archiveId}/tags/public`).toPromise();
+    return this.httpV2
+      .get<TagVOData>(`v2/archive/${archiveId}/tags/public`)
+      .toPromise();
   }
 }
 
