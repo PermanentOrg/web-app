@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@root/environments/environment';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { FeaturedArchive } from '../../types/featured-archive';
 import { featuredArchives } from '../../data/featured';
-import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 @Component({
   selector: 'pr-gallery',

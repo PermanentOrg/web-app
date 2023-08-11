@@ -19,16 +19,16 @@ import { RightMenuComponent } from '@core/components/right-menu/right-menu.compo
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { DialogComponent } from '@root/app/dialog/dialog.component';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { DialogModule } from '@root/app/dialog/dialog.module';
-import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-status.component';
 import { GlobalSearchBarComponent } from '@search/components/global-search-bar/global-search-bar.component';
 import { SearchService } from '@search/services/search.service';
 import { TagsService } from '@core/services/tags/tags.service';
+import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-status.component';
+import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
 
 const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
 

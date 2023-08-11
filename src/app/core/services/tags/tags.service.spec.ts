@@ -2,11 +2,11 @@
 import { TestBed } from '@angular/core/testing';
 import { Subscription } from 'rxjs';
 
-import { TagsService } from './tags.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService } from '@shared/services/api/api.service';
+import { TagsService } from './tags.service';
 
 describe('TagsService', () => {
   let service: TagsService;

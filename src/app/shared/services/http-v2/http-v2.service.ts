@@ -1,11 +1,11 @@
 /* @format */
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { StorageService } from '../storage/storage.service';
 import { environment } from '@root/environments/environment';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { StorageService } from '../storage/storage.service';
 import { SecretsService } from '../secrets/secrets.service';
 
 const CSRF_KEY = 'CSRF';

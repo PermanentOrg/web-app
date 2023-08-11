@@ -1,10 +1,10 @@
-import { PublicSettingsComponent } from './public-settings.component';
 
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
+import { PublicSettingsComponent } from './public-settings.component';
 
 @NgModule({
   declarations: [], // components your module owns.

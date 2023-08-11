@@ -4,15 +4,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Shallow } from 'shallow-render';
 
 import { RecordVO, ItemVO, TagVOData, AccessRole } from '@root/app/models';
-import { FileViewerComponent } from './file-viewer.component';
-import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
-import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { Observable } from '@shared/services/http/http.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { HttpClient } from '@angular/common/http';
+import { FileBrowserComponentsModule } from '../../file-browser-components.module';
+import { TagsComponent } from '../../../shared/components/tags/tags.component';
+import { FileViewerComponent } from './file-viewer.component';
 
 const defaultTagList: TagVOData[] = [
   {

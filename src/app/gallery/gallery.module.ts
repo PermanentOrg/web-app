@@ -2,9 +2,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { GalleryRoutingModule } from './gallery-routing.module';
-import { GalleryComponent } from './components/gallery/gallery.component';
-import { GalleryHeaderComponent } from './components/gallery-header/gallery-header.component';
 
 import { SharedModule } from '@shared/shared.module';
 import { AccountService } from '@shared/services/account/account.service';
@@ -14,6 +11,9 @@ import {
   FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
 import { faSearch, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { GalleryHeaderComponent } from './components/gallery-header/gallery-header.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
+import { GalleryRoutingModule } from './gallery-routing.module';
 import { FeaturedArchiveComponent } from './components/featured-archive/featured-archive.component';
 
 @NgModule({

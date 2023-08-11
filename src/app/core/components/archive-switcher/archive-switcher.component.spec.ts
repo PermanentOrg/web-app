@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { ArchiveSwitcherComponent } from './archive-switcher.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveVO } from '@root/app/models';
 import { ActivatedRoute } from '@angular/router';
+import { ArchiveSwitcherComponent } from './archive-switcher.component';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 

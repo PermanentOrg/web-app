@@ -5,8 +5,8 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 import { clone } from 'lodash';
 import { minDateValidator } from '@shared/utilities/forms';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
-import { FormInputSelectOption } from '../form-input/form-input.component';
 import { AccessRoleType } from '@models/access-role';
+import { FormInputSelectOption } from '../form-input/form-input.component';
 
 const prConstants: PrConstantsService = new PrConstantsService();
 

@@ -1,10 +1,10 @@
 /* @format */
-import { SearchService } from '../../../search/services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { FolderVO, RecordVO } from '@models/index';
+import { SearchService } from '../../../search/services/search.service';
 
 @Component({
   selector: 'pr-public-search-results',

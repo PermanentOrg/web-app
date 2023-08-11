@@ -11,8 +11,8 @@ import { AccountVO } from '@root/app/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { PledgeService } from '@pledge/services/pledge.service';
-import { PledgeData } from '../new-pledge/new-pledge.component';
 import { ApiService } from '@shared/services/api/api.service';
+import { PledgeData } from '../new-pledge/new-pledge.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 

@@ -1,14 +1,14 @@
 import { Shallow } from 'shallow-render';
-import { EditValueComponent } from './value-edit.component';
-import { ManageMetadataModule } from '../../manage-metadata.module';
-import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 
 import { TagVO, TagVOData } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
-import { FormEditComponent } from '../form-edit/form-edit.component';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { FormEditComponent } from '../form-edit/form-edit.component';
+import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
+import { ManageMetadataModule } from '../../manage-metadata.module';
+import { EditValueComponent } from './value-edit.component';
 
 describe('EditValueComponent', () => {
   let shallow: Shallow<EditValueComponent>;

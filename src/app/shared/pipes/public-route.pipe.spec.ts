@@ -1,5 +1,5 @@
-import { PublicRoutePipe } from './public-route.pipe';
 import { FolderVO, RecordVO } from '@models';
+import { PublicRoutePipe } from './public-route.pipe';
 
 describe('PublicRoutePipe', () => {
   it('create an instance', () => {

@@ -3,8 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Shallow } from 'shallow-render';
 import { Subject, Observable } from 'rxjs';
 
-import { EditTagsComponent, TagType } from './edit-tags.component';
-import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { ItemVO, TagVOData, RecordVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -14,6 +12,8 @@ import { SearchService } from '@search/services/search.service';
 import { TagResponse } from '@shared/services/api/tag.repo';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FileBrowserComponentsModule } from '../../file-browser-components.module';
+import { EditTagsComponent, TagType } from './edit-tags.component';
 
 const defaultTagList: TagVOData[] = [
   {

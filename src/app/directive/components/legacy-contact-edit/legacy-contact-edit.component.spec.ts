@@ -2,13 +2,13 @@
 import { Type, DebugElement } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
-import { LegacyContactEditComponent } from './legacy-contact-edit.component';
-import { DirectiveModule } from '../../directive.module';
 import { LegacyContact } from '@models/directive';
 import { ApiService } from '@shared/services/api/api.service';
-import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MessageService } from '@shared/services/message/message.service';
+import { DirectiveModule } from '../../directive.module';
+import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
+import { LegacyContactEditComponent } from './legacy-contact-edit.component';
 
 type Find = (
   cssOrDirective: string | Type<any>,

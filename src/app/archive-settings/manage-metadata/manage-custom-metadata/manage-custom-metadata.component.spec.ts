@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageCustomMetadataComponent } from './manage-custom-metadata.component';
 import { Shallow } from 'shallow-render';
-import { ManageMetadataModule } from '../manage-metadata.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { Observable } from 'rxjs';
 import { TagVO, TagVOData } from '@models/tag-vo';
 import { TagsService } from '@core/services/tags/tags.service';
-import { MetadataValuePipe } from '../pipes/metadata-value.pipe';
 import { find } from 'lodash';
+import { MetadataValuePipe } from '../pipes/metadata-value.pipe';
+import { ManageMetadataModule } from '../manage-metadata.module';
+import { ManageCustomMetadataComponent } from './manage-custom-metadata.component';
 
 describe('ManageCustomMetadataComponent #custom-metadata', () => {
   let shallow: Shallow<ManageCustomMetadataComponent>;

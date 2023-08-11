@@ -1,7 +1,7 @@
 import { Directive, QueryList, ContentChildren, AfterContentInit, ElementRef, HostListener } from '@angular/core';
-import { ScrollSectionDirective } from './scroll-section.directive';
 import debug from 'debug';
 import { find, throttle } from 'lodash';
+import { ScrollSectionDirective } from './scroll-section.directive';
 
 @Directive({
   selector: '[prScrollNav]',

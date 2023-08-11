@@ -10,9 +10,9 @@ import { FileListComponent } from '@fileBrowser/components/file-list/file-list.c
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { VideoComponent } from '@shared/components/video/video.component';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [

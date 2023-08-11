@@ -27,13 +27,13 @@ import {
 } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
-import { FolderPickerService } from '../folder-picker/folder-picker.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {

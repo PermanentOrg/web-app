@@ -1,11 +1,11 @@
 import { Shallow } from 'shallow-render';
-import { FormEditComponent } from './form-edit.component';
-import { ManageMetadataModule } from '../../manage-metadata.module';
-import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
-
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
+import { ManageMetadataModule } from '../../manage-metadata.module';
+import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
+import { FormEditComponent } from './form-edit.component';
+
 
 describe('FormEditComponent', () => {
   let shallow: Shallow<FormEditComponent>;

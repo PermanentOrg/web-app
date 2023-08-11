@@ -1,7 +1,7 @@
-import {ThumbnailCache, FolderThumbData} from './thumbnail-cache';
 import {StorageService} from '@shared/services/storage/storage.service';
 import {FolderVO} from '@models';
 import {FolderContentsType} from '@fileBrowser/components/file-list-item/file-list-item.component';
+import {ThumbnailCache, FolderThumbData} from './thumbnail-cache';
 
 describe('ThumbnailCache', () => {
   let cache: ThumbnailCache;

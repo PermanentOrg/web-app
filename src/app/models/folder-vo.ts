@@ -3,13 +3,13 @@ import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO, sortShareVOs } from '@models/share-vo';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { formatDateISOString } from '@shared/utilities/dateTime';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
-import { ItemVO, ArchiveVO } from '.';
 import { FolderType, SortType, FolderLinkType } from './vo-types';
-import { formatDateISOString } from '@shared/utilities/dateTime';
 import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
+import { ItemVO, ArchiveVO } from '.';
 
 export interface HasParentFolder {
   parentDisplayName?: string;

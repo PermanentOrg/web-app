@@ -1,11 +1,11 @@
-import { AddNewValueComponent } from './add-new-value.component';
 import { Shallow } from 'shallow-render';
-import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { TagVOData } from '@models/tag-vo';
+import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormCreateComponent } from '../form-create/form-create.component';
+import { AddNewValueComponent } from './add-new-value.component';
 
 describe('AddNewValueComponent', () => {
   let shallow: Shallow<AddNewValueComponent>;

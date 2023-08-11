@@ -1,6 +1,6 @@
+import { FolderVO, RecordVO } from '@models';
 import { PublicLinkPipe } from './public-link.pipe';
 import { PublicRoutePipe } from './public-route.pipe';
-import { FolderVO, RecordVO } from '@models';
 
 describe('PublicLinkPipe', () => {
   let pipe: PublicLinkPipe;

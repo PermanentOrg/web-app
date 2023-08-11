@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Shallow } from 'shallow-render';
 
-import { AnnouncementComponent } from './announcement.component';
 import { AnnouncementModule } from '@announcement/announcement.module';
 import { AnnouncementEvent } from '@announcement/models/announcement-event';
+import { AnnouncementComponent } from './announcement.component';
 
 const currentTestEvent: AnnouncementEvent = {
   start: Date.now(),

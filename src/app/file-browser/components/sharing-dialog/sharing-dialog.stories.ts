@@ -1,8 +1,6 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
-import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 
-import { SharingDialogComponent } from './sharing-dialog.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -11,6 +9,8 @@ import { ArchiveVO, RecordVO, ShareByUrlVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FileBrowserComponentsModule } from '../../file-browser-components.module';
+import { SharingDialogComponent } from './sharing-dialog.component';
 
 import {
   MockAccountService,

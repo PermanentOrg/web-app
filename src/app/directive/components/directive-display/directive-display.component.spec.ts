@@ -1,17 +1,17 @@
 import { Shallow } from 'shallow-render';
 
-import { DirectiveDisplayComponent } from './directive-display.component';
-import { DirectiveModule } from '../../directive.module';
-
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { DirectiveModule } from '../../directive.module';
+import { DirectiveDisplayComponent } from './directive-display.component';
+
 
 import {
   MockAccountService,
   MockApiService,
   MockDirectiveRepo,
 } from './test-utils';
-import { ApiService } from '@shared/services/api/api.service';
 
 describe('DirectiveDisplayComponent', () => {
   let shallow: Shallow<DirectiveDisplayComponent>;

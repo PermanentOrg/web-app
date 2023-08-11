@@ -1,6 +1,6 @@
 import { TimezoneVOData, TimezoneVO } from '@models';
-import { PrDatePipe } from './pr-date.pipe';
 import { formatDateISOString } from '@shared/utilities/dateTime';
+import { PrDatePipe } from './pr-date.pipe';
 
 describe('PrDatePipe', () => {
   it('create an instance', () => {

@@ -11,6 +11,8 @@ import { FileListItemComponent } from '@fileBrowser/components/file-list-item/fi
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { VideoComponent } from '@shared/components/video/video.component';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { FolderViewComponent } from './components/folder-view/folder-view.component';
@@ -23,8 +25,6 @@ import { LocationPickerComponent } from './components/location-picker/location-p
 import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
 import { SharingDialogComponent } from './components/sharing-dialog/sharing-dialog.component';
 
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 
 @NgModule({

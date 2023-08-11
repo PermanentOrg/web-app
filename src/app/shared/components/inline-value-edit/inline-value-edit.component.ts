@@ -27,9 +27,9 @@ import {
   getUtcMomentFromOffsetDTString,
 } from '@shared/utilities/dateTime';
 import { ENTER } from '@angular/cdk/keycodes';
-import { FormInputSelectOption } from '../form-input/form-input.component';
 import { NgModel, UntypedFormControl, Validators } from '@angular/forms';
 import { getDate, getMonth, getYear } from 'date-fns';
+import { FormInputSelectOption } from '../form-input/form-input.component';
 
 export type InlineValueEditType =
   | 'text'

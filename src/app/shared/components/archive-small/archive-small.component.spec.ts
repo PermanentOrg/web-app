@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { ArchiveSmallComponent } from './archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveVO } from '@root/app/models';
 import { TEST_DATA } from '@core/core.module.spec';
 import { AccountService } from '@shared/services/account/account.service';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { ArchiveSmallComponent } from './archive-small.component';
 
 describe('ArchiveSmallComponent', () => {
   let component: ArchiveSmallComponent;

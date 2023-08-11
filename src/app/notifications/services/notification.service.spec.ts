@@ -1,6 +1,5 @@
 import { TestBed, fakeAsync, flushMicrotasks, discardPeriodicTasks } from '@angular/core/testing';
 
-import { NotificationService } from './notification.service';
 import { SharedModule } from '@shared/shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -10,6 +9,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { NotificationResponse } from '@shared/services/api/index.repo';
 import { NotificationVOData } from '@models/notification-vo';
 import { cloneDeep } from 'lodash';
+import { NotificationService } from './notification.service';
 
 const allNotificationsData: NotificationVOData[] = [
   {

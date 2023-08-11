@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
-import { TimelineGroupTimespan, GetTimespanFromRange, GroupByTimespan, TimelineGroup, TimelineItem, TimelineItemDataType, TimelineDataItem } from '../timeline-util';
 import { Subscription } from 'rxjs';
 import { DataItem } from 'vis-timeline/standalone';
 import { debounce, minBy, remove } from 'lodash';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TimelineGroupTimespan, GetTimespanFromRange, GroupByTimespan, TimelineGroup, TimelineItem, TimelineItemDataType, TimelineDataItem } from '../timeline-util';
 
 export interface TimelineBreadcrumb {
   text: string;

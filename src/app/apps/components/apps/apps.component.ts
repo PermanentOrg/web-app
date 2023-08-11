@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { DataService } from '@shared/services/data/data.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ConnectorOverviewVO, FolderVO } from '@root/app/models';
-import { ConnectorComponent, FAMILYSEARCH_CONNECT_KEY } from '../connector/connector.component';
 import { find } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { HasSubscriptions } from '@shared/utilities/hasSubscriptions';
@@ -14,6 +13,7 @@ import { timeout } from '@shared/utilities/timeout';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import { CreateArchivesComplete } from '@shared/services/guided-tour/tours/familysearch.tour';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
+import { ConnectorComponent, FAMILYSEARCH_CONNECT_KEY } from '../connector/connector.component';
 
 @Component({
   selector: 'pr-apps',

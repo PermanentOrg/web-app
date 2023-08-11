@@ -20,10 +20,10 @@ import {
   AccessRoleType,
   checkMinimumAccess,
 } from '@models/access-role';
+import * as Sentry from '@sentry/browser';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { MixpanelService } from '../mixpanel/mixpanel.service';
 
-import * as Sentry from '@sentry/browser';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';

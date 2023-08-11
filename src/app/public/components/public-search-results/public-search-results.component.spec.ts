@@ -1,12 +1,12 @@
 /* @format */
-import { DataService } from '../../../shared/services/data/data.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublicSearchResultsComponent } from './public-search-results.component';
 import { SearchService } from '@search/services/search.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { DataService } from '../../../shared/services/data/data.service';
+import { PublicSearchResultsComponent } from './public-search-results.component';
 
 describe('PublicSearchResultsComponent', () => {
   let component: PublicSearchResultsComponent;

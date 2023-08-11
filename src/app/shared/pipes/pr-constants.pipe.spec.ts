@@ -1,5 +1,5 @@
-import { PrConstantsPipe } from './pr-constants.pipe';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { PrConstantsPipe } from './pr-constants.pipe';
 
 const prConstants = new PrConstantsService();
 

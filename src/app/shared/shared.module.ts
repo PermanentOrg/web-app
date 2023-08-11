@@ -7,11 +7,27 @@ import { FormInputComponent } from '@shared/components/form-input/form-input.com
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
-import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
+import { RouterModule, Scroll } from '@angular/router';
+import {
+  NgbDatepickerModule,
+  NgbDatepickerConfig,
+  NgbTimepickerModule,
+  NgbTimepickerConfig,
+  NgbTooltipModule,
+  NgbTooltipConfig,
+  NgbDropdownModule,
+  NgbDropdownConfig,
+  NgbPaginationModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
+import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
-import { RouterModule, Scroll } from '@angular/router';
 import { FileSizePipe } from './pipes/filesize.pipe';
 import { PrConstantsPipe } from './pipes/pr-constants.pipe';
 import { PromptComponent } from './components/prompt/prompt.component';
@@ -26,17 +42,6 @@ import { BreadcrumbComponent } from './components/breadcrumbs/breadcrumb.compone
 import { DragTargetRouterLinkDirective } from './directives/drag-target-router-link.directive';
 import { PublicRoutePipe } from './pipes/public-route.pipe';
 import { FolderViewToggleComponent } from './components/folder-view-toggle/folder-view-toggle.component';
-import {
-  NgbDatepickerModule,
-  NgbDatepickerConfig,
-  NgbTimepickerModule,
-  NgbTimepickerConfig,
-  NgbTooltipModule,
-  NgbTooltipConfig,
-  NgbDropdownModule,
-  NgbDropdownConfig,
-  NgbPaginationModule,
-} from '@ng-bootstrap/ng-bootstrap';
 import { PrDatePipe } from './pipes/pr-date.pipe';
 import { FolderCastPipe, RecordCastPipe } from './pipes/cast.pipe';
 import { FolderContentsPipe } from './pipes/folder-contents.pipe';
@@ -61,11 +66,6 @@ import { NewArchiveFormComponent } from './components/new-archive-form/new-archi
 import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
 
-import {
-  FontAwesomeModule,
-  FaIconLibrary,
-} from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
   imports: [
