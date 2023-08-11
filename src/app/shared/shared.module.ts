@@ -66,7 +66,6 @@ import { NewArchiveFormComponent } from './components/new-archive-form/new-archi
 import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
 
-
 @NgModule({
   imports: [
     CommonModule,

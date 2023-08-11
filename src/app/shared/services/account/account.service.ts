@@ -24,7 +24,6 @@ import * as Sentry from '@sentry/browser';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { MixpanelService } from '../mixpanel/mixpanel.service';
 
-
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
 const ROOT_KEY = 'root';
