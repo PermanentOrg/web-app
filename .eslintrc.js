@@ -59,9 +59,20 @@ module.exports = {
           'error',
           { devDependencies: true },
         ],
+        'import/order': [
+          'error',
+          {
+            groups: [
+              'builtin',
+              'external',
+              ['internal', 'parent'],
+              'sibling',
+              'index',
+            ],
+          },
+        ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        'import/order': 'off',
         '@angular-eslint/component-selector': 'off',
         '@angular-eslint/directive-selector': 'off',
         '@angular-eslint/no-conflicting-lifecycle': 'off',
