@@ -1,8 +1,13 @@
+import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { DataService } from '@shared/services/data/data.service';
+import { EditService } from '@core/services/edit/edit.service';
+import { UploadService } from '@core/services/upload/upload.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from './../../services/api/api.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { AccountVO, ArchiveVO } from '@models';
+import { AccountVO, ArchiveVO, FolderVO } from '@models';
+import { UploadSessionStatus } from '@core/services/upload/upload.session';
 
 @Component({
   selector: 'pr-storage-meter',
@@ -18,8 +23,17 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
   private archiveSpaceTotal: number = 0;
 
   private accountChangeSubscription: Subscription;
+  private deleteSubscription: Subscription;
 
-  constructor(private accountService: AccountService, private api: ApiService) {
+  subscriptions: Subscription[] = [];
+
+  constructor(
+    private accountService: AccountService,
+    private api: ApiService,
+    private upload: UploadService,
+    private edit: EditService,
+    private dataService: DataService
+  ) {
     this.account = this.accountService.getAccount();
   }
 
@@ -30,17 +44,26 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
     if (this.showForArchive) {
       this.getArchiveStorage();
 
-      this.accountChangeSubscription =
-        this.accountService.archiveChange.subscribe((archive: ArchiveVO) => {
+      this.subscriptions.push(
+        this.accountService.archiveChange.subscribe(() => {
           if (this.showForArchive) {
             this.getArchiveStorage();
           }
-        });
+        }),
+
+        this.dataService.folderUpdate.subscribe(() => {
+          this.getArchiveStorage();
+        }),
+
+        this.edit.deleteNotifier$.subscribe(() => {
+          this.getArchiveStorage();
+        }),
+      );
     }
   }
 
   ngOnDestroy(): void {
-    this.accountChangeSubscription?.unsubscribe()
+    unsubscribeAll(this.subscriptions);
   }
 
   getMeterWidth() {

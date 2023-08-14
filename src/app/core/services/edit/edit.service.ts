@@ -34,6 +34,7 @@ import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
+import { Subject } from 'rxjs';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
@@ -105,6 +106,9 @@ interface EditServiceClipboard {
 @Injectable()
 export class EditService {
   private clipboard: EditServiceClipboard;
+
+  private deleteSubject = new Subject<void>();
+  public deleteNotifier$ = this.deleteSubject.asObservable();
 
   private isGoogleMapsApiLoaded = false;
   private googleMapsLoadedDeferred: Deferred;
@@ -305,6 +309,7 @@ export class EditService {
       let folderResponse, recordResponse;
       [folderResponse, recordResponse] = results;
       this.dataService.hideItemsInCurrentFolder(items);
+      this.deleteSubject.next()
     } catch (err) {
       items.forEach((i) => (i.isPendingAction = false));
       throw err;
