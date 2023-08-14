@@ -1,7 +1,6 @@
 /* @format */
 import {
   AccountVO,
-  AccountPasswordVO,
   ArchiveVO,
   SimpleVO,
 } from '@root/app/models';
@@ -99,6 +98,11 @@ export class AccountRepo extends BaseRepo {
       data,
       AccountResponse
     );
+  }
+
+  public updateAccountTags(addTags: string[], removeTags: string[]) {
+    return this.httpV2.put<{}>(`/v2/account/tags`, { addTags, removeTags }, null,
+    ).toPromise()
   }
 }
 

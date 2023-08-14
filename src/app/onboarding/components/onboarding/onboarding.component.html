@@ -1,8 +1,9 @@
+<!-- format  -->
 <div class="perm-banner">
   <div class="banner-content">
-    <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
+    <img class="banner-logo" src="assets/img/logo/sideways_logo.png" />
     <div class="banner-logout">
-      <strong>{{accountName}}</strong>
+      <strong>{{ accountName }}</strong>
       <button class="btn btn-primary" (click)="logOut()">Log Out</button>
     </div>
   </div>
@@ -14,25 +15,31 @@
     </div>
   </div>
 </div>
-<div class="onboarding" *ngIf="showOnboarding ; else loading">
+<div class="onboarding" *ngIf="showOnboarding; else loading">
   <div class="progress-bar">
     <div [ngClass]="getProgressChunkClasses(0)"></div>
     <div [ngClass]="getProgressChunkClasses(1)"></div>
     <div [ngClass]="getProgressChunkClasses(2)"></div>
   </div>
   <ng-container [ngSwitch]="screen">
-    <pr-welcome-screen (nextScreen)="setScreen($event)" (acceptInvitation)="acceptArchiveInvitation($event)" [pendingArchives]="pendingArchives" *ngSwitchCase="OnboardingScreen.welcomeScreen"></pr-welcome-screen>
+    <pr-welcome-screen
+      (nextScreen)="setScreen($event)"
+      (acceptInvitation)="acceptArchiveInvitation($event)"
+      [pendingArchives]="pendingArchives"
+      *ngSwitchCase="OnboardingScreen.pendingArchives"
+    ></pr-welcome-screen>
     <pr-create-new-archive
-    (back)="setScreen(OnboardingScreen.welcomeScreen)"
-    (createdArchive)="setNewArchive($event)"
-    (progress)="setProgress($event)"
-    (error)="errorMessage = $event"
-    *ngSwitchCase="OnboardingScreen.newArchive"
+      (back)="setScreen(OnboardingScreen.welcomeScreen)"
+      (createdArchive)="setNewArchive($event)"
+      (progress)="setProgress($event)"
+      (error)="errorMessage = $event"
+      *ngSwitchCase="OnboardingScreen.welcomeScreen"
     ></pr-create-new-archive>
     <div *ngSwitchCase="OnboardingScreen.done" class="loading">Loading...</div>
     <div *ngSwitchDefault>Something went wrong.</div>
   </ng-container>
 </div>
 <ng-template #loading>
-    <div class="loading">Loading...</div>
+  <div class="loading">Loading...</div>
 </ng-template>
+<pr-dialog-root></pr-dialog-root>

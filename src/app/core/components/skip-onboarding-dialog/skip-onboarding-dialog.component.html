@@ -1,0 +1,22 @@
+<div class="dialog-content">
+  <div class="header">
+    <button (click)="onDoneClick()" class="btn">
+      <i class="material-icons">close</i>
+    </button>
+  </div>
+  <div class="content">
+    <p class="popup-text">
+      Are you sure you want your archive to be created for you?
+    </p>
+    <p class="popup-description">
+      Permanent will automatically generate your first archive as a personal
+      archive with your account name as the archive name.
+    </p>
+  </div>
+  <div class="buttons">
+    <button (click)="onDoneClick()" class="btn">No, cancel</button>
+    <button (click)="onConfirmClick()" class="btn btn-primary">
+      Yes, create my archive for me
+    </button>
+  </div>
+</div>

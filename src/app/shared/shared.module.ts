@@ -2,7 +2,6 @@
 import { NgModule, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
@@ -66,6 +65,7 @@ import { NewArchiveFormComponent } from './components/new-archive-form/new-archi
 import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
+import { ArchiveTypeSelectComponent } from './components/archive-type-select/archive-type-select.component';
 
 @NgModule({
   imports: [
@@ -132,6 +132,7 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
     PrependProtocolPipe,
     SwitcherComponent,
     GetAltTextPipe,
+    ArchiveTypeSelectComponent
   ],
   declarations: [
     ThumbnailComponent,
@@ -179,6 +180,7 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
     PrependProtocolPipe,
     SwitcherComponent,
     GetAltTextPipe,
+    ArchiveTypeSelectComponent
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })

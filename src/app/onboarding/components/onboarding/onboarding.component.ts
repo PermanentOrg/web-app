@@ -1,14 +1,14 @@
+/* format */
+import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
 import { AccountVO } from '@models/account-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-
 import { routes } from '@onboarding/onboarding.routes';
-
 import { partition as lodashPartition } from 'lodash';
 
 @Component({
@@ -16,7 +16,7 @@ import { partition as lodashPartition } from 'lodash';
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.scss']
 })
-export class OnboardingComponent implements OnInit {
+export class OnboardingComponent implements OnInit, OnDestroy {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;
   public currentArchive: ArchiveVO;
   public pendingArchives: ArchiveVO[] = [];
@@ -29,6 +29,7 @@ export class OnboardingComponent implements OnInit {
   public errorMessage: string = '';
 
   public acceptedInvite: boolean = false;
+  private subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,8 +58,22 @@ export class OnboardingComponent implements OnInit {
       } else {
         this.pendingArchives = pendingArchives;
         this.showOnboarding = true;
+        if (this.pendingArchives.length > 0) {
+          this.screen = OnboardingScreen.pendingArchives
+        }
       }
+
+      this.subscription = this.account.createAccountForMe$?.subscribe((archive: ArchiveVO) => {
+        if (archive.archiveId) {
+          this.setNewArchive(archive)
+        }
+      })
+
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public setScreen(screen: OnboardingScreen): void {
@@ -85,7 +100,7 @@ export class OnboardingComponent implements OnInit {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
-    const updateAccount = new AccountVO({defaultArchiveId: archive.archiveId});
+    const updateAccount = new AccountVO({ defaultArchiveId: archive.archiveId });
     this.account.updateAccount(updateAccount).then(() => {
       this.account.setArchive(archive);
       this.api.archive.change(archive).then(() => {

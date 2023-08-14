@@ -8,11 +8,10 @@
   <div class="dialog-body">
     <h3>Congratulations on your first archive!</h3>
     <p>
-      Your archive is <strong>The {{ archiveName }} Archive.</strong> You are
-      the {{ accessRole }} of this archive.
+      Your archive is <strong>The {{ archiveName }} Archive.</strong>
     </p>
     <ng-container *ngIf="isEarlyBird; else defaultWelcome">
-      <strong>Let's Get Started:</strong>
+      <strong class="get-started">Let's Get Started:</strong>
       <ol>
         <li>Check your email to redeem free storage.</li>
         <li>
@@ -20,7 +19,7 @@
         </li>
         <li>Begin preserving your digital legacy.</li>
       </ol>
-      <p>
+      <p class="learn-more">
         Learn more about your new archive by viewing our help articles through
         the "?" button in the lower right hand corner.
       </p>

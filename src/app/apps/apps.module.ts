@@ -8,7 +8,7 @@ import { AppsComponent } from '@apps/components/apps/apps.component';
 import { ConnectorComponent } from '@apps/components/connector/connector.component';
 import { FamilySearchImportComponent } from '@apps/components/family-search-import/family-search-import.component';
 import { SharedModule } from '@shared/shared.module';
-import { DialogChildComponentData, Dialog, DialogModule } from '../dialog/dialog.module';
+import { DialogChildComponentData, Dialog } from '../dialog/dialog.module';
 
 @NgModule({
   imports: [

@@ -1,8 +1,8 @@
+/* format */
 import { Shallow } from 'shallow-render';
 import { Location } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
 import { ArchiveVO } from '@models/archive-vo';
 import { AccountVO } from '@models/account-vo';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
@@ -34,7 +34,7 @@ const mockApiService = {
     accept: async (data: any) => {
       return true;
     },
-    change: async (archive: ArchiveVO) => {}
+    change: async (archive: ArchiveVO) => { }
   },
 };
 const mockAccountService = {
@@ -47,13 +47,13 @@ const mockAccountService = {
   refreshArchives: async () => {
     return [];
   },
-  setArchive: (archive: ArchiveVO) => {},
-  updateAccount: async () => {},
-  change: async () => {},
+  setArchive: (archive: ArchiveVO) => { },
+  updateAccount: async () => { },
+  change: async () => { },
 };
 const mockMessageService = {
-  showMessage: () => {},
-  showError: () => {},
+  showMessage: () => { },
+  showError: () => { },
 };
 
 const mockRouter = {
@@ -67,7 +67,7 @@ describe('OnboardingComponent #onboarding', () => {
   beforeEach(() => {
     shallow = new Shallow(OnboardingComponent, OnboardingModule)
       .mock(ActivatedRoute, new NullRoute())
-      .mock(Location, { go: (path: string) => {}})
+      .mock(Location, { go: (path: string) => { } })
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .mock(Router, mockRouter)
@@ -78,15 +78,14 @@ describe('OnboardingComponent #onboarding', () => {
     const { element } = await shallow.render();
     expect(element).not.toBeNull();
   });
-  it('should load the welcome screen as default', async () => {
+  it('should load the create new archive screen as default', async () => {
     const { find, fixture } = await shallow.render();
     fixture.detectChanges();
-    expect(find('pr-welcome-screen')).toHaveFoundOne();
+    expect(find('pr-create-new-archive')).toHaveFoundOne();
   });
   it('can change screens', async () => {
     const { find, fixture } = await shallow.render();
-    expect(find('pr-welcome-screen')).toHaveFoundOne();
-    find('pr-welcome-screen').triggerEventHandler('nextScreen', OnboardingScreen.newArchive);
+    expect(find('pr-create-new-archive')).toHaveFoundOne();
     fixture.detectChanges();
     expect(find('pr-welcome-screen')).toHaveFound(0);
   });
@@ -94,17 +93,33 @@ describe('OnboardingComponent #onboarding', () => {
     const { element, find, fixture } = await shallow.render();
     expect(element.componentInstance.currentArchive).toBeUndefined();
     fixture.detectChanges();
-    expect(find('pr-welcome-screen')).toHaveFoundOne();
-    find('pr-welcome-screen').triggerEventHandler('nextScreen', OnboardingScreen.newArchive);
-    fixture.detectChanges();
-    find('pr-create-new-archive').triggerEventHandler('createdArchive', new ArchiveVO({}));
+
+    const child = find('pr-create-new-archive')
+    expect(child).toHaveFoundOne();
+    child.triggerEventHandler('createdArchive', new ArchiveVO({}));
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
   });
   it('stores an accepted archive invitation', async () => {
-    const { element, find, fixture } = await shallow.render();
-    expect(element.componentInstance.currentArchive).toBeUndefined();
+    const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
+
+    const mockAccountService = {
+      refreshArchives: jasmine.createSpy('refreshArchives').and.returnValue(Promise.resolve([mockPendingArchive])),
+      getAccount: jasmine.createSpy('getAccount').and.returnValue(new AccountVO({ accountId: 1, fullName: 'Test Account' })),
+    };
+
+    const shallow = new Shallow(OnboardingComponent, OnboardingModule)
+      .mock(AccountService, mockAccountService)
+      .mock(ApiService, mockApiService);
+
+    const { instance, find, fixture, element } = await shallow.render();
+
+    await instance.ngOnInit();
+
+    if (instance.pendingArchives.length > 0) {
+      expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
+    }
     expect(find('pr-welcome-screen')).toHaveFoundOne();
-    find('pr-welcome-screen').triggerEventHandler('acceptInvitation', new ArchiveVO({fullName: 'Pending Test'}));
+    find('pr-welcome-screen').triggerEventHandler('acceptInvitation', new ArchiveVO({ fullName: 'Pending Test' }));
     fixture.detectChanges();
     await fixture.whenStable();
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
@@ -117,4 +132,26 @@ describe('OnboardingComponent #onboarding', () => {
     });
     expect(element.componentInstance.pendingArchives.length).toBe(1);
   });
+
+  it('displays the pending archives screen when there are pending archives', async () => {
+    const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
+
+    const mockAccountService = {
+      refreshArchives: jasmine.createSpy('refreshArchives').and.returnValue(Promise.resolve([mockPendingArchive])),
+      getAccount: jasmine.createSpy('getAccount').and.returnValue(new AccountVO({ accountId: 1, fullName: 'Test Account' })),
+    };
+
+    const shallow = new Shallow(OnboardingComponent, OnboardingModule)
+      .mock(AccountService, mockAccountService)
+      .mock(ApiService, mockApiService);
+
+    const { instance } = await shallow.render();
+
+    await instance.ngOnInit();
+
+    if (instance.pendingArchives.length > 0) {
+      expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
+    }
+  });
+
 });

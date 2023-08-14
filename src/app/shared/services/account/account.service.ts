@@ -3,7 +3,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { map, min } from 'rxjs/operators';
 import { find, debounce } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
-
 import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ArchiveVO, AccountVO, FolderVO } from '@root/app/models';
@@ -21,6 +20,7 @@ import {
   checkMinimumAccess,
 } from '@models/access-role';
 import * as Sentry from '@sentry/browser';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { MixpanelService } from '../mixpanel/mixpanel.service';
 
@@ -51,6 +51,9 @@ export class AccountService {
   public refreshAccountDebounced = debounce(() => {
     this.refreshAccount();
   }, 5000);
+
+  public createAccountForMe: BehaviorSubject<ArchiveVO> = new BehaviorSubject<ArchiveVO>(new ArchiveVO({}));
+  createAccountForMe$: Observable<{}> = this.createAccountForMe.asObservable();
 
   constructor(
     private api: ApiService,
@@ -522,7 +525,7 @@ export class AccountService {
     if (this.isLoggedIn()) {
       try {
         await this.logOut();
-      } catch (err) {}
+      } catch (err) { }
     }
 
     this.inviteCode = inviteCode;

@@ -1,5 +1,17 @@
 // eslint-disable-next-line max-len
-import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Injectable,
+  ApplicationRef,
+  ElementRef,
+  ComponentRef,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  Injector,
+  InjectionToken,
+  Inject,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
 import { Deferred } from '@root/vendor/deferred';
 import { DOCUMENT } from '@angular/common';
@@ -9,32 +21,32 @@ import { DialogRootComponent } from './dialog-root.component';
 import { DialogComponent } from './dialog.component';
 
 export type DialogComponentToken =
-  'FamilySearchImportComponent' |
-  'ArchivePickerComponent' |
-  'SharingComponent' |
-  'SharingDialogComponent' |
-  'ArchiveSwitcherDialogComponent' |
-  'SettingsDialogComponent' |
-  'ConnectionsDialogComponent' |
-  'TimelineCompleteDialogComponent' |
-  'LocationPickerComponent' |
-  'EditTagsComponent' |
-  'PublishComponent' |
-  'ProfileEditComponent' |
-  'MembersDialogComponent' |
-  'InvitationsDialogComponent' |
-  'MyArchivesDialogComponent' |
-  'ProfileEditFirstTimeDialogComponent' |
-  'StorageDialogComponent' |
-  'NotificationDialogComponent' |
-  'TimelineViewComponent' |
-  'ArchiveSettingsDialogComponent' |
-  'WelcomeDialogComponent' |
-  'WelcomeInvitationDialogComponent' |
-  'CreateAccountDialogComponent' | 
-  'ArchiveTypeChangeDialogComponent' |
-  'ConfirmPayerDialogComponent' 
-;
+  | 'FamilySearchImportComponent'
+  | 'ArchivePickerComponent'
+  | 'SharingComponent'
+  | 'SharingDialogComponent'
+  | 'ArchiveSwitcherDialogComponent'
+  | 'SettingsDialogComponent'
+  | 'ConnectionsDialogComponent'
+  | 'TimelineCompleteDialogComponent'
+  | 'LocationPickerComponent'
+  | 'EditTagsComponent'
+  | 'PublishComponent'
+  | 'ProfileEditComponent'
+  | 'MembersDialogComponent'
+  | 'InvitationsDialogComponent'
+  | 'MyArchivesDialogComponent'
+  | 'ProfileEditFirstTimeDialogComponent'
+  | 'StorageDialogComponent'
+  | 'NotificationDialogComponent'
+  | 'TimelineViewComponent'
+  | 'ArchiveSettingsDialogComponent'
+  | 'WelcomeDialogComponent'
+  | 'WelcomeInvitationDialogComponent'
+  | 'CreateAccountDialogComponent'
+  | 'ArchiveTypeChangeDialogComponent'
+  | 'ConfirmPayerDialogComponent'
+  | 'SkipOnboardingDialogComponent';
 
 export interface DialogChildComponentData {
   token: DialogComponentToken;
@@ -50,7 +62,7 @@ export interface DialogOptions {
 }
 
 const DEFAULT_OPTIONS: DialogOptions = {
-  height: 'fullscreen'
+  height: 'fullscreen',
 };
 
 export const DEFAULT_ANIMATION_LENGTH = 500;
@@ -85,7 +97,7 @@ export const DIALOG_DATA = new InjectionToken<any>('DialogData');
 export const OUTLET_TEMPLATE = new InjectionToken<any>('OutletTemplate');
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class Dialog {
   private dialogModuleResolver: ComponentFactoryResolver;
@@ -93,10 +105,10 @@ export class Dialog {
   private rootComponent: DialogRootComponent;
   private currentId = 0;
 
-  public registeredComponents: {[token: string]: any} = {};
-  public componentResolvers: {[token: string]: any} = {};
+  public registeredComponents: { [token: string]: any } = {};
+  public componentResolvers: { [token: string]: any } = {};
 
-  private dialogs: {[id: number]: DialogRef} = {};
+  private dialogs: { [id: number]: DialogRef } = {};
 
   private bodyScrollAllowed = true;
 
@@ -107,8 +119,7 @@ export class Dialog {
     private resolver: ComponentFactoryResolver,
     private injector: Injector,
     @Inject(DOCUMENT) private document: Document
-  ) {
-  }
+  ) {}
 
   setDialogModuleResolver(resolver: ComponentFactoryResolver) {
     this.dialogModuleResolver = resolver;
@@ -126,17 +137,27 @@ export class Dialog {
     delete this.rootComponent;
   }
 
-  registerComponent(componentData: DialogChildComponentData, resolver = this.resolver, allowDupes?: boolean) {
+  registerComponent(
+    componentData: DialogChildComponentData,
+    resolver = this.resolver,
+    allowDupes?: boolean
+  ) {
     if (!this.registeredComponents[componentData.token]) {
       this.registeredComponents[componentData.token] = componentData.component;
       this.componentResolvers[componentData.token] = resolver;
       this.debug('register component %s', componentData.token);
     } else if (!allowDupes) {
-      throw new Error(`Dialog - component with token ${componentData.token} already registered`);
+      throw new Error(
+        `Dialog - component with token ${componentData.token} already registered`
+      );
     }
   }
 
-  registerComponents(components: DialogChildComponentData[], resolver?: ComponentFactoryResolver, allowDupes?: boolean) {
+  registerComponents(
+    components: DialogChildComponentData[],
+    resolver?: ComponentFactoryResolver,
+    allowDupes?: boolean
+  ) {
     components.map((componentData) => {
       this.registerComponent(componentData, resolver, allowDupes);
     });
@@ -209,8 +230,14 @@ export class Dialog {
     this.dialogs[dialog.id] = dialog;
 
     // create new dialog component to wrap custom component
-    const dialogComponentFactory = this.dialogModuleResolver.resolveComponentFactory(DialogComponent);
-    dialog.dialogComponentRef = this.rootComponent.viewContainer.createComponent(dialogComponentFactory, undefined, this.injector);
+    const dialogComponentFactory =
+      this.dialogModuleResolver.resolveComponentFactory(DialogComponent);
+    dialog.dialogComponentRef =
+      this.rootComponent.viewContainer.createComponent(
+        dialogComponentFactory,
+        undefined,
+        this.injector
+      );
     dialog.dialogComponent = dialog.dialogComponentRef.instance;
 
     // set dialog options and ref
@@ -231,10 +258,16 @@ export class Dialog {
     }
 
     const injector = new PortalInjector(this.injector, customTokens);
-    const factory: ComponentFactory<any> = resolver.resolveComponentFactory(component);
+    const factory: ComponentFactory<any> =
+      resolver.resolveComponentFactory(component);
 
     // create custom component inside new dialog component
-    dialog.contentComponentRef = dialog.dialogComponent.viewContainer.createComponent(factory, undefined, injector);
+    dialog.contentComponentRef =
+      dialog.dialogComponent.viewContainer.createComponent(
+        factory,
+        undefined,
+        injector
+      );
 
     // toggle body scroll if needed
     if (this.bodyScrollAllowed) {
