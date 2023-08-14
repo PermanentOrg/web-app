@@ -1,16 +1,12 @@
-/* @format */
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { SwitcherComponent } from '@shared/components/switcher/switcher.component';
-<<<<<<< HEAD
 import { AccountVO } from '../../../models/account-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { MessageService } from '../../../shared/services/message/message.service';
-=======
 import { PayerService } from '@shared/services/payer/payer.service';
->>>>>>> f9c4286b (PER-9243)
 
 @Component({
   selector: 'pr-archive-payer',
