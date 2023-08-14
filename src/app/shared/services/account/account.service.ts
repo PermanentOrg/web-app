@@ -51,6 +51,7 @@ export class AccountService {
     this.refreshAccount();
   }, 5000);
 
+<<<<<<< HEAD
   public createAccountForMe: BehaviorSubject<{ name: string; action: string }> =
     new BehaviorSubject<{ name: string; action: string }>({
       name: null,
@@ -58,6 +59,10 @@ export class AccountService {
     });
   createAccountForMe$: Observable<{ name: string; action: string }> =
     this.createAccountForMe.asObservable();
+=======
+  public createAccountForMe: BehaviorSubject<ArchiveVO> = new BehaviorSubject<ArchiveVO>(new ArchiveVO({}));
+  createAccountForMe$: Observable<{}> = this.createAccountForMe.asObservable();
+>>>>>>> 87690145 (Create new onboarding flow)
 
   constructor(
     private api: ApiService,
@@ -529,7 +534,7 @@ export class AccountService {
     if (this.isLoggedIn()) {
       try {
         await this.logOut();
-      } catch (err) {}
+      } catch (err) { }
     }
 
     this.inviteCode = inviteCode;

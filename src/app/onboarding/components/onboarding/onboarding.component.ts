@@ -1,4 +1,5 @@
 /* @format */
+import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +16,7 @@ import { partition as lodashPartition } from 'lodash';
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.scss'],
 })
-export class OnboardingComponent implements OnInit {
+export class OnboardingComponent implements OnInit, OnDestroy {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;
   public currentArchive: ArchiveVO;
   public pendingArchives: ArchiveVO[] = [];
@@ -29,6 +30,7 @@ export class OnboardingComponent implements OnInit {
   public errorMessage: string = '';
 
   public acceptedInvite: boolean = false;
+  private subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,10 +60,25 @@ export class OnboardingComponent implements OnInit {
         this.pendingArchives = pendingArchives;
         this.showOnboarding = true;
         if (this.pendingArchives.length > 0) {
+<<<<<<< HEAD
           this.screen = OnboardingScreen.pendingArchives;
+=======
+          this.screen = OnboardingScreen.pendingArchives
+>>>>>>> 87690145 (Create new onboarding flow)
         }
       }
+
+      this.subscription = this.account.createAccountForMe$?.subscribe((archive: ArchiveVO) => {
+        if (archive.archiveId) {
+          this.setNewArchive(archive)
+        }
+      })
+
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public setScreen(screen: OnboardingScreen): void {
@@ -91,9 +108,13 @@ export class OnboardingComponent implements OnInit {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
+<<<<<<< HEAD
     const updateAccount = new AccountVO({
       defaultArchiveId: archive.archiveId,
     });
+=======
+    const updateAccount = new AccountVO({ defaultArchiveId: archive.archiveId });
+>>>>>>> 87690145 (Create new onboarding flow)
     this.account.updateAccount(updateAccount).then(() => {
       this.account.setArchive(archive);
       this.api.archive.change(archive).then(() => {

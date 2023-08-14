@@ -1,5 +1,13 @@
 /* @format */
+<<<<<<< HEAD
 import { AccountVO, ArchiveVO, SimpleVO } from '@root/app/models';
+=======
+import {
+  AccountVO,
+  ArchiveVO,
+  SimpleVO,
+} from '@root/app/models';
+>>>>>>> 87690145 (Create new onboarding flow)
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { getFirst } from '../http-v2/http-v2.service';
 
@@ -97,9 +105,14 @@ export class AccountRepo extends BaseRepo {
   }
 
   public updateAccountTags(addTags: string[], removeTags: string[]) {
+<<<<<<< HEAD
     return this.httpV2
       .put<{}>(`/v2/account/tags`, { addTags, removeTags }, null)
       .toPromise();
+=======
+    return this.httpV2.put<{}>(`/v2/account/tags`, { addTags, removeTags }, null,
+    ).toPromise()
+>>>>>>> 87690145 (Create new onboarding flow)
   }
 }
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* @format */
+=======
+/* format */
+>>>>>>> 87690145 (Create new onboarding flow)
 import { Shallow } from 'shallow-render';
 import { ArchiveVO } from '@models/archive-vo';
 import { OnboardingModule } from '../../onboarding.module';
@@ -7,6 +11,7 @@ import { WelcomeScreenComponent } from './welcome-screen.component';
 describe('WelcomeScreenComponent #onboarding', () => {
   let shallow: Shallow<WelcomeScreenComponent>;
   async function defaultRender(pendingArchives: ArchiveVO[] = []) {
+<<<<<<< HEAD
     return await shallow.render(
       `<pr-welcome-screen [pendingArchives]="pendingArchives"></pr-welcome-screen>`,
       {
@@ -15,6 +20,13 @@ describe('WelcomeScreenComponent #onboarding', () => {
         },
       }
     );
+=======
+    return await shallow.render(`<pr-welcome-screen [pendingArchives]="pendingArchives"></pr-welcome-screen>`, {
+      bind: {
+        pendingArchives,
+      }
+    });
+>>>>>>> 87690145 (Create new onboarding flow)
   }
   beforeEach(() => {
     shallow = new Shallow(WelcomeScreenComponent, OnboardingModule);

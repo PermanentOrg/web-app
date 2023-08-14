@@ -22,6 +22,7 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     CreateNewArchiveComponent,
     ArchiveTypeSelectComponent,
   ],
+<<<<<<< HEAD
   imports: [
     CommonModule,
     OnboardingRoutingModule,
@@ -29,6 +30,9 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     CoreModule,
     DialogModule,
   ],
+=======
+  imports: [CommonModule, OnboardingRoutingModule, SharedModule, CoreModule, DialogModule],
+>>>>>>> 87690145 (Create new onboarding flow)
 })
 export class OnboardingModule {
   private dialogComponents: DialogChildComponentData[] = [

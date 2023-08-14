@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <!-- @format  -->
+=======
+<!-- format  -->
+>>>>>>> 87690145 (Create new onboarding flow)
 <div class="perm-banner">
   <div class="banner-content">
     <img class="banner-logo" src="assets/img/logo/sideways_logo.png" />
@@ -24,17 +28,28 @@
   <ng-container [ngSwitch]="screen">
     <pr-welcome-screen
       (nextScreen)="setScreen($event)"
+<<<<<<< HEAD
       (selectInvitation)="selectArchiveInvitation($event)"
+=======
+      (acceptInvitation)="acceptArchiveInvitation($event)"
+>>>>>>> 87690145 (Create new onboarding flow)
       [pendingArchives]="pendingArchives"
       *ngSwitchCase="OnboardingScreen.pendingArchives"
     ></pr-welcome-screen>
     <pr-create-new-archive
+<<<<<<< HEAD
       (back)="setScreen(OnboardingScreen.pendingArchives)"
       (createdArchive)="setNewArchive($event)"
       (progress)="setProgress($event)"
       (error)="errorMessage = $event"
       [pendingArchives]="pendingArchives"
       [pendingArchive]="selectedPendingArchive"
+=======
+      (back)="setScreen(OnboardingScreen.welcomeScreen)"
+      (createdArchive)="setNewArchive($event)"
+      (progress)="setProgress($event)"
+      (error)="errorMessage = $event"
+>>>>>>> 87690145 (Create new onboarding flow)
       *ngSwitchCase="OnboardingScreen.welcomeScreen"
     ></pr-create-new-archive>
     <div *ngSwitchCase="OnboardingScreen.done" class="loading">Loading...</div>
