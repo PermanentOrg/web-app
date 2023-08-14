@@ -1,5 +1,5 @@
-import { AccountVO } from './../../../models/account-vo';
 import { Component, Input } from '@angular/core';
+import { AccountVO } from '../../../models/account-vo';
 
 @Component({
   selector: 'pr-archive-storage-payer',

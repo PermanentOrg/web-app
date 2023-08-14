@@ -2,11 +2,11 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
+import { PayerService } from '@shared/services/payer/payer.service';
 import { SwitcherComponent } from '@shared/components/switcher/switcher.component';
 import { AccountVO } from '../../../models/account-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { MessageService } from '../../../shared/services/message/message.service';
-import { PayerService } from '@shared/services/payer/payer.service';
 
 @Component({
   selector: 'pr-archive-payer',

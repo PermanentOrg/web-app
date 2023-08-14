@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { partition, remove, find } from 'lodash';
+import { Subject } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import debug from 'debug';
 
@@ -34,7 +35,6 @@ import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
-import { Subject } from 'rxjs';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {

@@ -3,11 +3,11 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { Subscription } from 'rxjs';
-import { ApiService } from './../../services/api/api.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO, ArchiveVO, FolderVO } from '@models';
 import { UploadSessionStatus } from '@core/services/upload/upload.session';
+import { ApiService } from '../../services/api/api.service';
 
 @Component({
   selector: 'pr-storage-meter',
