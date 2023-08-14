@@ -1,11 +1,11 @@
 import { Shallow } from 'shallow-render';
-import { CategoryEditComponent } from './category-edit.component';
-import { ManageMetadataModule } from '../../manage-metadata.module';
-import { FormEditComponent } from '../form-edit/form-edit.component';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { FormEditComponent } from '../form-edit/form-edit.component';
+import { ManageMetadataModule } from '../../manage-metadata.module';
+import { CategoryEditComponent } from './category-edit.component';
 
 describe('CategoryEditComponent', () => {
   let shallow: Shallow<CategoryEditComponent>;

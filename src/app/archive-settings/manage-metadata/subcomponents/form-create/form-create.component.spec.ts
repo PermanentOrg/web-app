@@ -1,8 +1,8 @@
-import { FormCreateComponent } from './form-create.component';
 import { Shallow } from 'shallow-render';
-import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormsModule } from '@angular/forms';
 import { A11yModule } from '@angular/cdk/a11y';
+import { ManageMetadataModule } from '../../manage-metadata.module';
+import { FormCreateComponent } from './form-create.component';
 
 describe('FormCreateComponent', () => {
   let shallow: Shallow<FormCreateComponent>;

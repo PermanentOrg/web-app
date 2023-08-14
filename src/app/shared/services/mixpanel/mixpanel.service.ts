@@ -1,9 +1,9 @@
 /* @format*/
 import { Injectable } from '@angular/core';
 import mixpanel from 'mixpanel-browser';
-import { SecretsService } from '../secrets/secrets.service';
 import { environment } from '@root/environments/environment';
 import { AccountVO } from '@models/account-vo';
+import { SecretsService } from '../secrets/secrets.service';
 
 @Injectable({
   providedIn: 'root',

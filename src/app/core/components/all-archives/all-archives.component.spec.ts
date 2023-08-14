@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { AllArchivesComponent } from './all-archives.component';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveVO } from '@root/app/models';
 import { ActivatedRoute } from '@angular/router';
+import { AllArchivesComponent } from './all-archives.component';
 
 const archiveResponseData = require('@root/test/responses/archive.get.multiple.success.json');
 

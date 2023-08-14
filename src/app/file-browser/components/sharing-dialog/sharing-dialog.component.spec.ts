@@ -8,7 +8,6 @@ import {
 import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash';
 import * as Testing from '@root/test/testbedConfig';
-import { SharingDialogComponent } from './sharing-dialog.component';
 import {
   DialogModule,
   DialogRef,
@@ -26,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
+import { SharingDialogComponent } from './sharing-dialog.component';
 import {
   MockAccountService,
   MockApiService,

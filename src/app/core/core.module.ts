@@ -18,48 +18,48 @@ import { LeftMenuComponent } from '@core/components/left-menu/left-menu.componen
 import { UploadProgressComponent } from '@core/components/upload-progress/upload-progress.component';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
-import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
 import {
   DialogModule,
   DialogChildComponentData,
   Dialog,
 } from '@root/app/dialog/dialog.module';
-import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
-import { EditService } from './services/edit/edit.service';
 import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
+import { PortalModule } from '@angular/cdk/portal';
+import { ProfileService } from '@shared/services/profile/profile.service';
+import { CountUpModule } from 'ngx-countup';
+import { NotificationsModule } from '../notifications/notifications.module';
+import { PledgeModule } from '../pledge/pledge.module';
+import { AnnouncementModule } from '../announcement/announcement.module';
+import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
+import { DirectiveModule } from '../directive/directive.module';
+import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
+import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
+import { EditService } from './services/edit/edit.service';
 import { AccountSettingsComponent } from './components/account-settings/account-settings.component';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { NotificationPreferencesComponent } from './components/notification-preferences/notification-preferences.component';
-import { PortalModule } from '@angular/cdk/portal';
 import { SidebarActionPortalService } from './services/sidebar-action-portal/sidebar-action-portal.service';
 import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
-import { ProfileService } from '@shared/services/profile/profile.service';
 import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
-import { CountUpModule } from 'ngx-countup';
 import { ProfileEditFirstTimeDialogComponent } from './components/profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 import { FileHistoryComponent } from './components/file-history/file-history.component';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { BillingSettingsComponent } from './components/billing-settings/billing-settings.component';
-import { NotificationsModule } from '../notifications/notifications.module';
-import { PledgeModule } from '../pledge/pledge.module';
 import { ArchiveSettingsDialogComponent } from './components/archive-settings-dialog/archive-settings-dialog.component';
 import { ManageTagsComponent } from './components/manage-tags/manage-tags.component';
 import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
 import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
-import { AnnouncementModule } from '../announcement/announcement.module';
 import { PublicSettingsComponent } from './components/public-settings/public-settings.component';
-import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
 import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
-import { DirectiveModule } from '../directive/directive.module';
 import { ArchivePayerComponent } from './components/archive-payer/archive-payer.component';
 import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
 

@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { UploadButtonComponent } from './upload-button.component';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { UploadButtonComponent } from './upload-button.component';
 
 describe('UploadButtonComponent', () => {
   let component: UploadButtonComponent;

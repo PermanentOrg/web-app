@@ -2,9 +2,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { BaseResponse } from '@shared/services/api/base';
 import { FolderVO } from '@root/app/models';
+import debug from 'debug';
 import { Uploader } from './uploader';
 import { UploadItem, UploadStatus } from './uploadItem';
-import debug from 'debug';
 
 export enum UploadSessionStatus {
   Start,

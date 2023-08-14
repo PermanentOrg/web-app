@@ -1,11 +1,11 @@
 /* @format */
 import { Shallow } from 'shallow-render';
 
+import { AnnouncementModule } from '@announcement/announcement.module';
 import {
   AndroidAppNotifyComponent,
   BeforeInstallPromptEvent,
 } from './android-app-notify.component';
-import { AnnouncementModule } from '@announcement/announcement.module';
 
 class DummyInstallPromptEvent
   extends Event

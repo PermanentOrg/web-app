@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject, ViewChildren, AfterViewInit, OnDestroy, ElementRef, QueryList } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
-import { NotificationService } from '../../services/notification.service';
-import { NotificationComponent } from '../notification/notification.component';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { NotificationVOData } from '@models/notification-vo';
+import { NotificationComponent } from '../notification/notification.component';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'pr-notification-dialog',

@@ -6,8 +6,9 @@ import { RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { CountUpModule } from 'ngx-countup';
-import { PledgeRoutingModule } from './pledge.routes';
 import { environment } from '@root/environments/environment';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
+import { PledgeRoutingModule } from './pledge.routes';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
 import { PledgeService } from './services/pledge.service';
 import { ClaimStorageLoginComponent } from './components/claim-storage-login/claim-storage-login.component';
@@ -18,7 +19,6 @@ import { ClaimStorageComponent } from './components/claim-storage/claim-storage.
 import { PledgeListComponent } from './components/pledge-list/pledge-list.component';
 import { MissingPledgeComponent } from './components/missing-pledge/missing-pledge.component';
 import { UpdateCardComponent } from './components/update-card/update-card.component';
-import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 @NgModule({
   imports: [

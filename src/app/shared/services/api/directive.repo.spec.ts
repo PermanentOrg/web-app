@@ -7,14 +7,14 @@ import {
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
-import { DirectiveRepo } from './directive.repo';
-import { HttpV2Service } from '../http-v2/http-v2.service';
 import {
   ArchiveVO,
   Directive,
   DirectiveCreateRequest,
   DirectiveUpdateRequest,
 } from '@models/index';
+import { HttpV2Service } from '../http-v2/http-v2.service';
+import { DirectiveRepo } from './directive.repo';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 

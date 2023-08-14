@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
-import { AppModule } from '../../../app.module';
 import { AccountVO, ArchiveVO } from '@root/app/models';
+import { AppModule } from '../../../app.module';
 import { StorageService } from '../storage/storage.service';
 
 describe('AccountService', () => {

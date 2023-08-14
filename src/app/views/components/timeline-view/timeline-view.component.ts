@@ -36,6 +36,22 @@ import {
   debounce,
   countBy,
 } from 'lodash';
+import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
+import { Subscription } from 'rxjs';
+import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { slideUpAnimation } from '@shared/animations';
+import { DIALOG_DATA, OUTLET_TEMPLATE } from '@root/app/dialog/dialog.module';
+import { RouteData } from '@root/app/app.routes';
+import {
+  TimelineBreadcrumbsComponent,
+  TimelineBreadcrumb,
+} from './timeline-breadcrumbs/timeline-breadcrumbs.component';
+import {
+  TimelineRecordTemplate,
+  TimelineFolderTemplate,
+  TimelineGroupTemplate,
+} from './timeline-templates';
 import {
   TimelineGroup,
   TimelineItem,
@@ -47,22 +63,6 @@ import {
   GetTimespanFromRange,
   getBestFitTimespanForItems,
 } from './timeline-util';
-import {
-  TimelineRecordTemplate,
-  TimelineFolderTemplate,
-  TimelineGroupTemplate,
-} from './timeline-templates';
-import { PrConstantsPipe } from '@shared/pipes/pr-constants.pipe';
-import { Subscription } from 'rxjs';
-import {
-  TimelineBreadcrumbsComponent,
-  TimelineBreadcrumb,
-} from './timeline-breadcrumbs/timeline-breadcrumbs.component';
-import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { slideUpAnimation } from '@shared/animations';
-import { DIALOG_DATA, OUTLET_TEMPLATE } from '@root/app/dialog/dialog.module';
-import { RouteData } from '@root/app/app.routes';
 
 interface VoDataItem extends DataItem {
   itemVO: ItemVO;

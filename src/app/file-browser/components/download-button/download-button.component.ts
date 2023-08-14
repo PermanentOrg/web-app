@@ -1,5 +1,4 @@
 /* @format */
-import { MessageService } from '../../../shared/services/message/message.service';
 import {
   Component,
   Input,
@@ -10,6 +9,7 @@ import {
 } from '@angular/core';
 import { RecordVO } from '@models/index';
 import { DataService } from '@shared/services/data/data.service';
+import { MessageService } from '../../../shared/services/message/message.service';
 
 interface Format {
   name: string;

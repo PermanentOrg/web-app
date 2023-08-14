@@ -5,6 +5,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
 import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
 
+import { MessageService } from '@shared/services/message/message.service';
 import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
 import { DirectiveEditComponent } from './directive-edit.component';
@@ -14,7 +15,6 @@ import {
   MockMessageService,
   createDirective,
 } from './test-utils';
-import { MessageService } from '@shared/services/message/message.service';
 
 class MockApiService {
   public directive = new MockDirectiveRepo();

@@ -55,7 +55,6 @@ import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 
-import { ItemClickEvent } from '../file-list/file-list.component';
 import {
   DragService,
   DragServiceEvent,
@@ -74,6 +73,7 @@ import { InViewportTrigger } from 'ng-in-viewport';
 import { RouteData } from '@root/app/app.routes';
 
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
+import { ItemClickEvent } from '../file-list/file-list.component';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {

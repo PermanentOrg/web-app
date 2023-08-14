@@ -1,7 +1,7 @@
 import { Shallow } from 'shallow-render';
-import { ArchiveFormData, NewArchiveFormComponent } from './new-archive-form.component';
 import { SharedModule } from '@shared/shared.module';
 import { ApiService } from '@shared/services/api/api.service';
+import { ArchiveFormData, NewArchiveFormComponent } from './new-archive-form.component';
 
 let created: boolean = false;
 let throwError: boolean = false;

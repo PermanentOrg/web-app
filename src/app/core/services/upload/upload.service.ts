@@ -11,8 +11,6 @@ import { MessageService } from '@shared/services/message/message.service';
 
 import { FolderVO } from '@root/app/models';
 
-import { UploadSession, UploadSessionStatus } from './upload.session';
-import { UploadItem, UploadStatus } from './uploadItem';
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { Subscription } from 'rxjs';
 import {
@@ -22,6 +20,8 @@ import {
 import debug from 'debug';
 import { AccountService } from '@shared/services/account/account.service';
 import { Deferred } from '@root/vendor/deferred';
+import { UploadItem, UploadStatus } from './uploadItem';
+import { UploadSession, UploadSessionStatus } from './upload.session';
 
 const FILENAME_BLACKLIST = ['.DS_Store'];
 

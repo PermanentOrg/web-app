@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
 
-import { InlineValueEditComponent } from './inline-value-edit.component';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgbDatepickerModule, NgbTimepickerModule, NgbDate, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -10,6 +9,7 @@ import { moment } from 'vis-timeline/standalone';
 import { RecordVO, RecordVOData } from '@models';
 import { getOffsetMomentFromDTString, formatDateISOString, getUtcMomentFromDTString, momentFormatNum, applyTimezoneOffset } from '@shared/utilities/dateTime';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { InlineValueEditComponent } from './inline-value-edit.component';
 
 describe('InlineValueEditComponent', () => {
   let component: InlineValueEditComponent;

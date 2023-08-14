@@ -7,13 +7,13 @@ import { ApiService } from '@shared/services/api/api.service';
 import { SearchResponse, InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { Validators } from '@angular/forms';
-import { FormInputSelectOption } from '../form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@shared/components/prompt/prompt-fields';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone } from 'lodash';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
+import { FormInputSelectOption } from '../form-input/form-input.component';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];

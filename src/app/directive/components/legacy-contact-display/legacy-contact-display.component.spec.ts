@@ -1,14 +1,14 @@
 /* @format */
 import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
-import { DirectiveModule } from '../../directive.module';
-import { LegacyContactDisplayComponent } from './legacy-contact-display.component';
-import { MockAccountService } from '../directive-display/test-utils';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { MockMessageService } from '../directive-edit/test-utils';
-import { MockApiService, MockDirectiveRepo } from './test-utils';
 import { LegacyContact } from '@models/directive';
+import { DirectiveModule } from '../../directive.module';
+import { MockAccountService } from '../directive-display/test-utils';
+import { MockMessageService } from '../directive-edit/test-utils';
+import { LegacyContactDisplayComponent } from './legacy-contact-display.component';
+import { MockApiService, MockDirectiveRepo } from './test-utils';
 
 describe('LegacyContactDisplayComponent', () => {
   let shallow: Shallow<LegacyContactDisplayComponent>;

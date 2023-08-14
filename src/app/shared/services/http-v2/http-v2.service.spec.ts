@@ -5,10 +5,10 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { getFirst, HttpV2Service } from './http-v2.service';
 import { environment } from '@root/environments/environment';
 import { StorageService } from '../storage/storage.service';
 import { SecretsService } from '../secrets/secrets.service';
+import { getFirst, HttpV2Service } from './http-v2.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
 

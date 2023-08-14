@@ -10,20 +10,20 @@ import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RootFolderResolveService } from '@core/resolves/root-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { ArchivesResolveService } from '@core/resolves/archives-resolve.service';
-import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
-
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
-import { MembersResolveService } from './resolves/members-resolve.service';
+import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
+import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { RoutesWithData } from '../app.routes';
+import { RelationshipsResolveService } from './resolves/relationships-resolve.service';
+
+import { MembersResolveService } from './resolves/members-resolve.service';
 import { AccountResolveService } from './resolves/account-resolve.service';
 import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
 import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
-import { GlobalSearchResultsComponent } from '@search/components/global-search-results/global-search-results.component';
 import { TagsResolveService } from './resolves/tags.resolve.service';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
-import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { MyfilesGuard } from './guards/myfiles.guard';
 
 const rootFolderResolve = {

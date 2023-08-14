@@ -1,10 +1,10 @@
 /* @format */
-import { MessageService } from '../../../shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ArchivePayerComponent } from './archive-payer.component';
 import { ArchiveVO, AccountVO } from '@models/index';
+import { MessageService } from '../../../shared/services/message/message.service';
+import { ArchivePayerComponent } from './archive-payer.component';
 
 describe('ArchivePayerComponent', () => {
   let component: ArchivePayerComponent;

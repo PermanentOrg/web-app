@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, Input, HostListener, HostBinding, Optional } from '@angular/core';
-import { Breadcrumb } from './breadcrumbs.component';
 import { DragTargetDroppableComponent, DragServiceEvent, DragService } from '@shared/services/drag/drag.service';
 import { Subscription } from 'rxjs';
 import debug from 'debug';
+import { Breadcrumb } from './breadcrumbs.component';
 
 @Component({
   selector: 'pr-breadcrumb',

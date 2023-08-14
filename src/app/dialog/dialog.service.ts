@@ -1,12 +1,12 @@
 // eslint-disable-next-line max-len
 import { Injectable, ApplicationRef, ElementRef, ComponentRef, ComponentFactory, ComponentFactoryResolver, Injector, InjectionToken, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { PortalInjector } from '@root/vendor/portal-injector';
-import { DialogComponent } from './dialog.component';
 import { Deferred } from '@root/vendor/deferred';
-import { DialogRootComponent } from './dialog-root.component';
 import { DOCUMENT } from '@angular/common';
 import debug from 'debug';
 import { ActivatedRoute } from '@angular/router';
+import { DialogRootComponent } from './dialog-root.component';
+import { DialogComponent } from './dialog.component';
 
 export type DialogComponentToken =
   'FamilySearchImportComponent' |

@@ -2,9 +2,9 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 import { FolderVO, RecordVO } from '@root/app/models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
-import { StorageService } from '../storage/storage.service';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
+import { StorageService } from '../storage/storage.service';
 
 const VIEW_STORAGE_KEY = 'folderView';
 

@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { PromptComponent } from './prompt.component';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
+import { PromptComponent } from './prompt.component';
 
 describe('PromptComponent', () => {
   let component: PromptComponent;

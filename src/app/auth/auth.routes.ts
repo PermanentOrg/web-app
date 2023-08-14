@@ -6,16 +6,16 @@ import { RecaptchaModule } from 'ng-recaptcha';
 
 import { SharedModule } from '@shared/shared.module';
 
-import { AuthComponent } from './components/auth/auth.component';
 import { SignupComponent } from '@auth/components/signup/signup.component';
 import { VerifyComponent } from '@auth/components/verify/verify.component';
 import { MfaComponent } from '@auth/components/mfa/mfa.component';
 import { LoginComponent } from '@auth/components/login/login.component';
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
+import { AnnouncementModule } from '../announcement/announcement.module';
+import { AuthComponent } from './components/auth/auth.component';
 import { ShareInviteResolveService } from './resolves/share-invite-resolve.service';
 
 import { AuthGuard } from './guards/auth.guard';
-import { AnnouncementModule } from '../announcement/announcement.module';
 
 const unauthenticatedRoutes: Routes = [
   { path: 'login', component: LoginComponent, data: { title: 'Log In' } },

@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { VideoComponent } from './video.component';
 import { RecordVO } from '@root/app/models';
+import { VideoComponent } from './video.component';
 
 describe('VideoComponent', () => {
   let component: VideoComponent;

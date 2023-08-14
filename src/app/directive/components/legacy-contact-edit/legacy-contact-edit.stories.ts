@@ -3,13 +3,13 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { MessageService } from '@shared/services/message/message.service';
+import { LegacyContact } from '@models/directive';
+import { action } from '@storybook/addon-actions';
 import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
 import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { LegacyContactEditComponent } from './legacy-contact-edit.component';
-import { MessageService } from '@shared/services/message/message.service';
-import { LegacyContact } from '@models/directive';
-import { action } from '@storybook/addon-actions';
 
 type Story = StoryObj<LegacyContactEditComponent>;
 

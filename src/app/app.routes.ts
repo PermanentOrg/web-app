@@ -4,11 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { DialogComponentToken } from './dialog/dialog.module';
 import { DialogOptions } from './dialog/dialog.service';
-import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderVO, RecordVO } from './models';
-import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 export interface RouteData {
   title?: string;

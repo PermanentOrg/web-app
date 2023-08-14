@@ -6,9 +6,9 @@ import {
   TestModuleMetadata,
 } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
 import { cloneDeep } from 'lodash';
 import { SharedModule } from '../../../shared/shared.module';
+import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
 
 describe('ConfirmPayerDialogComponent', () => {
   let component: ConfirmPayerDialogComponent;

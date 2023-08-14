@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { DialogOptions, DialogRef } from './dialog.service';
 import { DeviceService } from '@shared/services/device/device.service';
+import { DialogOptions, DialogRef } from './dialog.service';
 
 @Component({
   selector: 'pr-dialog',

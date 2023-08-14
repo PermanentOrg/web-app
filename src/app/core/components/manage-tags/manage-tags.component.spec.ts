@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { ManageTagsComponent } from './manage-tags.component';
 
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { ManageTagsComponent } from './manage-tags.component';
 
 @NgModule({
   declarations: [], // components your module owns.

@@ -6,8 +6,8 @@ import {
   Directive,
   DirectiveUpdateRequest,
 } from '@models/index';
-import { BaseRepo } from './base';
 import { getFirst } from '../http-v2/http-v2.service';
+import { BaseRepo } from './base';
 
 export class DirectiveRepo extends BaseRepo {
   public async get(archive: ArchiveVO): Promise<Directive> {

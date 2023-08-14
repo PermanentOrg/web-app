@@ -18,9 +18,9 @@ import { cloneDeep } from 'lodash';
 
 import { SharedModule } from '@shared/shared.module';
 import * as Testing from '@root/test/testbedConfig';
-import { SharePreviewComponent } from './share-preview.component';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { RecordVO } from '@root/app/models';
+import { SharePreviewComponent } from './share-preview.component';
 
 describe('SharePreviewComponent', () => {
   let component: SharePreviewComponent;

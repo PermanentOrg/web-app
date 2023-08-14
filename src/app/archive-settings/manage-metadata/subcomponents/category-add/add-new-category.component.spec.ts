@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 
-import { AddNewCategoryComponent } from './add-new-category.component';
 import { Shallow } from 'shallow-render';
-import { ManageMetadataModule } from '../../manage-metadata.module';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { TagVOData } from '@models/tag-vo';
-import { FormCreateComponent } from '../form-create/form-create.component';
 import { PromptService } from '@shared/services/prompt/prompt.service';
+import { FormCreateComponent } from '../form-create/form-create.component';
+import { ManageMetadataModule } from '../../manage-metadata.module';
+import { AddNewCategoryComponent } from './add-new-category.component';
 
 describe('AddNewCategoryComponent', () => {
   let shallow: Shallow<AddNewCategoryComponent>;

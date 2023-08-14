@@ -4,16 +4,16 @@ import { throttle, find } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumbs/breadcrumb.component';
 import { DOCUMENT } from '@angular/common';
-import { DataService } from '../data/data.service';
 import gsap from 'gsap';
-import { DeviceService } from '../device/device.service';
 import { DragTargetRouterLinkDirective } from '@shared/directives/drag-target-router-link.directive';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { MainComponent } from '@core/components/main/main.component';
 import { FolderVO } from '@models';
-import { AccountService } from '../account/account.service';
 import debug from 'debug';
 import { debugSubscribable } from '@shared/utilities/debug';
+import { AccountService } from '../account/account.service';
+import { DeviceService } from '../device/device.service';
+import { DataService } from '../data/data.service';
 
 export type DragTargetType = 'folder' | 'record';
 

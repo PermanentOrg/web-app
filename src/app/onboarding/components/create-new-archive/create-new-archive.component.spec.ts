@@ -1,10 +1,10 @@
 import { Shallow } from 'shallow-render';
 
-import { CreateNewArchiveComponent } from './create-new-archive.component';
 import { OnboardingModule } from '@onboarding/onboarding.module';
 
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
+import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
 let createdArchive: ArchiveVO | null;

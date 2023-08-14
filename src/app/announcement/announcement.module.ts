@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AnnouncementComponent } from './components/announcement/announcement.component';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { AnnouncementComponent } from './components/announcement/announcement.component';
 import { AndroidAppNotifyComponent } from './components/android-app-notify/android-app-notify.component';
 
 

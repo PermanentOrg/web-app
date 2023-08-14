@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { SharedModule } from '@shared/shared.module';
 import { OnboardingRoutingModule } from './onboarding.routes';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { CreateNewArchiveComponent } from './components/create-new-archive/create-new-archive.component';
 
-import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [

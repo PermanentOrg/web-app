@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
-import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
 import { LeanFolderResolveService } from '@core/resolves/lean-folder-resolve.service';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
@@ -10,8 +9,9 @@ import { FileListComponent } from '@fileBrowser/components/file-list/file-list.c
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 import { RoutedDialogWrapperComponent } from '@shared/components/routed-dialog-wrapper/routed-dialog-wrapper.component';
 import { SharedModule } from '@shared/shared.module';
-import { RoutesWithData } from '../app.routes';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
+import { RoutesWithData } from '../app.routes';
+import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
 
 const folderResolve = {
   currentFolder: FolderResolveService

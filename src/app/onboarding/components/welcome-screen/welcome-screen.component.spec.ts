@@ -1,8 +1,8 @@
 import { Shallow } from 'shallow-render';
-import { WelcomeScreenComponent } from './welcome-screen.component';
-import { OnboardingModule } from '../../onboarding.module';
-
 import { ArchiveVO } from '@models/archive-vo';
+import { OnboardingModule } from '../../onboarding.module';
+import { WelcomeScreenComponent } from './welcome-screen.component';
+
 
 describe('WelcomeScreenComponent #onboarding', () => {
   let shallow: Shallow<WelcomeScreenComponent>;

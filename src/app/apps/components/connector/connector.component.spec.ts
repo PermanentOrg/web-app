@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
-import { ConnectorComponent } from './connector.component';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { SharedModule } from '@shared/shared.module';
 import { ArchiveVO, ConnectorOverviewVO, FolderVO } from '@root/app/models';
 import { Component, ViewChild } from '@angular/core';
+import { ConnectorComponent } from './connector.component';
 
 @Component({
   selector: `pr-test-host-component`,

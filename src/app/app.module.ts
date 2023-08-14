@@ -26,7 +26,6 @@ import { AppRoutingModule } from '@root/app/app.routes';
 
 import { AppComponent } from '@root/app/app.component';
 import { MessageComponent } from '@shared/components/message/message.component';
-import { DialogModule } from './dialog/dialog.module';
 import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
@@ -40,6 +39,7 @@ import {
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
 import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
+import { DialogModule } from './dialog/dialog.module';
 
 declare var ga: any;
 

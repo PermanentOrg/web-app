@@ -1,5 +1,4 @@
 /* @format */
-import { TagVOData } from '../../../models/tag-vo';
 import {
   AccountVO,
   AccountPasswordVO,
@@ -9,6 +8,7 @@ import {
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
 import { ProfileItemVOData } from '@models/profile-item-vo';
+import { TagVOData } from '../../../models/tag-vo';
 
 export class ArchiveRepo extends BaseRepo {
   public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {

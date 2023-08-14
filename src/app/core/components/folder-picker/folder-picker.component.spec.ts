@@ -3,7 +3,6 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep, some, remove } from 'lodash';
 import { environment } from '@root/environments/environment';
 
-import { FolderPickerComponent } from './folder-picker.component';
 import { DataService } from '@shared/services/data/data.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
@@ -13,6 +12,7 @@ import { HttpTestingController, TestRequest } from '@angular/common/http/testing
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
 import { of } from 'rxjs';
+import { FolderPickerComponent } from './folder-picker.component';
 
 describe('FolderPickerComponent', () => {
   let component: FolderPickerComponent;

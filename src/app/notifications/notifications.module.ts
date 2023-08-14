@@ -1,10 +1,10 @@
 import { NgModule, Optional, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/shared.module';
+import { DialogChildComponentData, Dialog } from '../dialog/dialog.module';
 import { NotificationService } from './services/notification.service';
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
-import { DialogChildComponentData, Dialog } from '../dialog/dialog.module';
-import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [NotificationComponent, NotificationDialogComponent],

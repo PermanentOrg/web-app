@@ -3,24 +3,24 @@ import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+import { SharedModule } from '@shared/shared.module';
+import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
+import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
+import { DialogChildComponentData } from '@root/app/dialog/dialog.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
+import { Dialog, DialogModule } from '../dialog/dialog.module';
+import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
 import { PreviewResolveService } from './resolves/preview-resolve.service';
-import { SharedModule } from '@shared/shared.module';
-import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 import { PreviewFolderResolveService } from './resolves/preview-folder-resolve.service';
 import { ShareUrlResolveService } from './resolves/share-url-resolve.service';
 import { ShareNotFoundComponent } from './components/share-not-found/share-not-found.component';
 import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
-import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { InviteShareResolveService } from './resolves/invite-share-resolve.service';
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
-import { DialogChildComponentData } from '@root/app/dialog/dialog.module';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Dialog, DialogModule } from '../dialog/dialog.module';
-import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
-import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
 const archiveResolve = {

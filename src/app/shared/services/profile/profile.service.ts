@@ -4,10 +4,10 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { RecordVO, ArchiveVO } from '@models';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
-import { MessageService } from '../message/message.service';
 import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
-import { PrConstantsService } from '../pr-constants/pr-constants.service';
 import { remove, orderBy, some } from 'lodash';
+import { MessageService } from '../message/message.service';
+import { PrConstantsService } from '../pr-constants/pr-constants.service';
 
 type ProfileItemsStringDataCol =
 'string1' |

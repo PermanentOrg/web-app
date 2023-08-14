@@ -16,8 +16,8 @@ import { PromptService, READ_ONLY_FIELD } from '@shared/services/prompt/prompt.s
 import { Deferred } from '@root/vendor/deferred';
 import { some } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
-import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 import { copyFromInputElement } from '@shared/utilities/forms';
+import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
 @Component({
   selector: 'pr-profile-edit',

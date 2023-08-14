@@ -2,8 +2,6 @@ import { Shallow } from 'shallow-render';
 import { Location } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { OnboardingComponent } from './onboarding.component';
-import { OnboardingModule } from '../../onboarding.module';
 
 import { ArchiveVO } from '@models/archive-vo';
 import { AccountVO } from '@models/account-vo';
@@ -11,6 +9,8 @@ import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingComponent } from './onboarding.component';
 
 class NullRoute {
   public snapshot = {
