@@ -1,7 +1,7 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { PayerService } from './payer.service';
 import { AccountService } from '../account/account.service';
+import { PayerService } from './payer.service';
 
 describe('PayerService', () => {
   let service: PayerService;
