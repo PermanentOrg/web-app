@@ -78,7 +78,6 @@ export class DataService {
   private eventSubject: Subject<boolean> = new Subject<boolean>();
   public events: Observable<boolean> = this.eventSubject.asObservable();
 
-
   private debug = debug('service:dataService');
 
   constructor(private api: ApiService, private tags: TagsService) {

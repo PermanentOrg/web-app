@@ -5,7 +5,7 @@ import {
   ArchiveVO,
   AuthVO,
   AccountStorage,
-  TagVOData
+  TagVOData,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
@@ -273,7 +273,9 @@ export class ArchiveRepo extends BaseRepo {
 
   public getArchiveStorage(archiveId) {
     return getFirst(
-      this.httpV2.get<AccountStorage>(`v2/archive/${archiveId}/payer-account-storage`)
+      this.httpV2.get<AccountStorage>(
+        `v2/archive/${archiveId}/payer-account-storage`
+      )
     ).toPromise();
   }
 
