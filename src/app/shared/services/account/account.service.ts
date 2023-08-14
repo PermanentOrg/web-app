@@ -187,16 +187,27 @@ export class AccountService {
   public refreshAccount() {
     return this.api.account
       .get(this.account)
-      .then((response: AccountResponse) => {
+      .then(async (response: AccountResponse) => {
         if (!response.isSuccessful) {
           throw response;
         }
-
-        const newAccount = response.getAccountVO();
-        this.account.update(newAccount);
-        this.storage.local.set(ACCOUNT_KEY, this.account);
+        // Verify that server agrees that the user is logged in
+        try {
+          const loggedIn = await this.checkSession();
+          if (loggedIn) {
+            const newArchive = response.getArchiveVO();
+            this.archive.update(newArchive);
+            this.storage.local.set(ARCHIVE_KEY, this.archive);
+          } else {
+            throw loggedIn;
+          }
+        } catch {
+          this.logOut();
+          this.clear();
+          this.router.navigate(['/login']);
+        }
       })
-      .catch((response: AccountResponse | any) => {
+      .catch(() => {
         this.logOut();
         this.clear();
         this.router.navigate(['/login']);
