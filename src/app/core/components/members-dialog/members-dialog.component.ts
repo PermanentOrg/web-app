@@ -10,6 +10,7 @@ import { AccessRole, AccessRoleType } from '@models/access-role';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone, remove, partition } from 'lodash';
+import { PayerService } from '@shared/services/payer/payer.service';
 
 const MemberActions: {[key: string]: PromptButton} = {
   Edit: {
@@ -43,7 +44,8 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     private promptService: PromptService,
     private message: MessageService,
     private api: ApiService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private payerService: PayerService
   ) {
     [ this.members, this.pendingMembers ] = partition(this.data.members, { status: 'status.generic.ok' });
     this.canEdit = this.accountService.checkMinimumArchiveAccess(AccessRole.Manager);
@@ -122,6 +124,9 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
           remove(this.pendingMembers, member);
         } else {
           remove(this.members, member);
+          if(this.payerService.payerId === member.accountId){
+            this.payerService.payerId = ''
+          }
         }
         deferred.resolve();
       })

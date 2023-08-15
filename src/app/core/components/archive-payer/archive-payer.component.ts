@@ -1,8 +1,8 @@
-/* @format */
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
+import { PayerService } from '@shared/services/payer/payer.service';
 import { SwitcherComponent } from '@shared/components/switcher/switcher.component';
 import { AccountVO } from '../../../models/account-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
@@ -27,18 +27,28 @@ export class ArchivePayerComponent implements OnInit {
   public account: AccountVO;
   public hasPayer: boolean = false;
   public isPayerDifferentThanLoggedUser: boolean = false;
+  public hasAccess: boolean;
 
   constructor(
     private accountService: AccountService,
     private dialog: Dialog,
     private api: ApiService,
-    private msg: MessageService
+    private msg: MessageService,
+    private payerService: PayerService
   ) {
     this.account = this.accountService.getAccount();
   }
 
   ngOnInit(): void {
+    const accessRole = this.accountService.getArchive()?.accessRole;
+    this.hasAccess =
+      accessRole === 'access.role.owner' ||
+      accessRole === 'access.role.manager';
+      
     this.hasPayer = !!this.payer;
+    if (this.hasPayer) {
+      this.payerService.payerId = this.payer.accountId;
+    }
     this.isPayerDifferentThanLoggedUser =
       this.account?.accountId !== this.archive?.payerAccountId;
   }
@@ -59,6 +69,7 @@ export class ArchivePayerComponent implements OnInit {
       this.api.archive.update(this.archive);
       this.hasPayer = !val;
       this.isPayerDifferentThanLoggedUser = val;
+      this.payerService.payerId = this.archive.payerAccountId;
     } catch (e) {
       this.msg.showError('Something went wrong. Please try again.');
     }

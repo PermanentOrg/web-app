@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { partition, remove, find } from 'lodash';
+import { Subject } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import debug from 'debug';
 
@@ -105,6 +106,9 @@ interface EditServiceClipboard {
 @Injectable()
 export class EditService {
   private clipboard: EditServiceClipboard;
+
+  private deleteSubject = new Subject<void>();
+  public deleteNotifier$ = this.deleteSubject.asObservable();
 
   private isGoogleMapsApiLoaded = false;
   private googleMapsLoadedDeferred: Deferred;
@@ -305,6 +309,7 @@ export class EditService {
       let folderResponse, recordResponse;
       [folderResponse, recordResponse] = results;
       this.dataService.hideItemsInCurrentFolder(items);
+      this.deleteSubject.next()
     } catch (err) {
       items.forEach((i) => (i.isPendingAction = false));
       throw err;

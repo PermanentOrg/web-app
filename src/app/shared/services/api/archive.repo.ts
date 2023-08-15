@@ -4,11 +4,13 @@ import {
   AccountPasswordVO,
   ArchiveVO,
   AuthVO,
+  AccountStorage,
+  TagVOData,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, isArray } from 'lodash';
 import { ProfileItemVOData } from '@models/profile-item-vo';
-import { TagVOData } from '../../../models/tag-vo';
+import { getFirst } from '../http-v2/http-v2.service';
 
 export class ArchiveRepo extends BaseRepo {
   public get(archives: ArchiveVO[]): Promise<ArchiveResponse> {
@@ -220,8 +222,8 @@ export class ArchiveRepo extends BaseRepo {
     const data = [
       {
         Profile_itemVO: {
-          archiveId: archive?.archiveId,
-          archiveNbr: archive?.archiveNbr,
+          archiveId: archive.archiveId,
+          archiveNbr: archive.archiveNbr,
         },
       },
     ];
@@ -267,6 +269,14 @@ export class ArchiveRepo extends BaseRepo {
       data,
       ArchiveResponse
     );
+  }
+
+  public getArchiveStorage(archiveId) {
+    return getFirst(
+      this.httpV2.get<AccountStorage>(
+        `v2/archive/${archiveId}/payer-account-storage`
+      )
+    ).toPromise();
   }
 
   public getPublicArchiveTags(archiveId: string) {

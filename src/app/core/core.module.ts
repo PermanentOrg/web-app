@@ -62,6 +62,7 @@ import { PublicSettingsComponent } from './components/public-settings/public-set
 import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
 import { ArchivePayerComponent } from './components/archive-payer/archive-payer.component';
 import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
+import { ArchiveStoragePayerComponent } from './components/archive-storage-payer/archive-storage-payer.component';
 
 @NgModule({
   imports: [
@@ -112,6 +113,7 @@ import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/c
     ArchiveTypeChangeDialogComponent,
     ArchivePayerComponent,
     ConfirmPayerDialogComponent,
+    ArchiveStoragePayerComponent,
   ],
   providers: [
     DataService,

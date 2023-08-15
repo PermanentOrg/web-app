@@ -32,6 +32,7 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
+import { PayerService } from '@shared/services/payer/payer.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -48,6 +49,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   public archiveName: string;
   public archive: ArchiveVO;
+  public payer: AccountVO;
 
   public showArchiveOptions = this.isMenuOpen('showArchiveOptions');
   public showAppsSubfolders = this.isMenuOpen('showAppsSubfolders');
@@ -68,7 +70,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private relationshipService: RelationshipService,
     private dialog: Dialog,
-    private profile: ProfileService
+    private profile: ProfileService,
+    private payerService: PayerService
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
@@ -80,6 +83,11 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
         this.archive = archive;
         this.checkArchiveThumbnail();
         this.loadAppsSubfolders();
+        this.setPayer(archive.payerAccountId);
+      }),
+
+      this.payerService.payerIdObs.subscribe((id) => {
+        this.setPayer(id);
       })
     );
 
@@ -95,6 +103,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.checkArchiveThumbnail();
+    this.archive = this.accountService.getArchive();
   }
 
   checkArchiveThumbnail() {
@@ -238,5 +247,13 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   protected isMenuOpen(key: string): boolean {
     return Boolean(window.sessionStorage.getItem(key));
+  }
+
+  private setPayer(id) {
+    this.archive = this.accountService.getArchive();
+    this.api.archive.getMembers(this.archive).then((response) => {
+      const members = response.getAccountVOs();
+      this.payer = members.find((member) => member.accountId === id);
+    });
   }
 }

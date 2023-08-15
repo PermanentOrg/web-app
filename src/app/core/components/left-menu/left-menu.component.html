@@ -50,6 +50,7 @@
           <img src="assets/svg/left-menu/archive-settings-icon.svg" />
           Archive Settings
         </a>
+       <pr-archive-storage-payer *ngIf="payer" [payer]="payer"></pr-archive-storage-payer>
       </div>
       <a class="menu-item hide-desktop"
       [routerLink]="['/search']"
