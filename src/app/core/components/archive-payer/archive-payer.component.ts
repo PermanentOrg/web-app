@@ -40,7 +40,7 @@ export class ArchivePayerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const accessRole = this.accountService.getArchive().accessRole;
+    const accessRole = this.accountService.getArchive()?.accessRole;
     this.hasAccess =
       accessRole === 'access.role.owner' ||
       accessRole === 'access.role.manager';

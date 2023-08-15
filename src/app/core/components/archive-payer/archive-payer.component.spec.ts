@@ -16,7 +16,9 @@ describe('ArchivePayerComponent', () => {
       getAccount: jasmine
         .createSpy('getAccount')
         .and.returnValue({ accountId: '1' }),
-      getArchive: jasmine.createSpy('getArchive'),
+      getArchive: jasmine
+        .createSpy('getArchive')
+        .and.returnValue({ accessRole: 'access.role.manager' }),
     };
   });
 
