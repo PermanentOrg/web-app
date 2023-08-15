@@ -23,7 +23,7 @@
       <p>Contact this member for archive storage requests.</p>
     </div>
   </div>
-  <div class="toggler">
+  <div *ngIf="hasAccess; else noAccess" class="toggler">
     <pr-switcher
       [data]="{
         archiveId: this.archive?.archiveId,

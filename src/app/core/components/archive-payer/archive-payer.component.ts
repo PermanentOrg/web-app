@@ -27,6 +27,7 @@ export class ArchivePayerComponent implements OnInit {
   public account: AccountVO;
   public hasPayer: boolean = false;
   public isPayerDifferentThanLoggedUser: boolean = false;
+  public hasAccess: boolean;
 
   constructor(
     private accountService: AccountService,
@@ -39,6 +40,11 @@ export class ArchivePayerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const accessRole = this.accountService.getArchive().accessRole;
+    this.hasAccess =
+      accessRole === 'access.role.owner' ||
+      accessRole === 'access.role.manager';
+      
     this.hasPayer = !!this.payer;
     if (this.hasPayer) {
       this.payerService.payerId = this.payer.accountId;

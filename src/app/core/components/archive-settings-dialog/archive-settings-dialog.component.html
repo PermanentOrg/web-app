@@ -63,11 +63,8 @@
           </ng-template>
         </ng-container>
         <ng-container *ngSwitchCase="'public-settings'">
-          <div class="panel-title">
-            Archive Storage
-          </div>
+          <div class="panel-title">Archive Storage</div>
           <pr-archive-payer
-            *ngIf="hasTagsAccess; else noAccess"
             [payer]="payer"
             [archive]="archive"
           ></pr-archive-payer>
