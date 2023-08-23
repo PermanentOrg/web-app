@@ -5,14 +5,32 @@ import { FeaturedArchive } from '../types/featured-archive';
 
 export const featuredArchives: FeaturedArchive[] = [
   {
-    archiveNbr: '03pw-0000',
-    name: 'The Astoria Public Archive',
+    archiveNbr: '0861-0000',
+    name: 'The Stray Family Memorabilia Archive',
     type: 'type.archive.organization',
     description: '',
   },
   {
-    archiveNbr: '03z2-0000',
-    name: 'The Paxman - Moody Archive',
+    archiveNbr: '03zi-0000',
+    name: 'The Hawaiʻi Lit Production Co. Archive',
+    type: 'type.archive.organization',
+    description: '',
+  },
+  {
+    archiveNbr: '08he-0000',
+    name: 'The Inside Books Project Archive',
+    type: 'type.archive.family',
+    description: '',
+  },
+  {
+    archiveNbr: '07r7-0000',
+    name: 'The Washington Jewish Memory Archive',
+    type: 'type.archive.organization',
+    description: '',
+  },
+  {
+    archiveNbr: '03pw-0000',
+    name: 'The Astoria Public Archive',
     type: 'type.archive.organization',
     description: '',
   },
@@ -23,9 +41,21 @@ export const featuredArchives: FeaturedArchive[] = [
     description: '',
   },
   {
+    archiveNbr: '08pd-0000',
+    name: 'The Splinter Collective Archive',
+    type: 'type.archive.organization',
+    description: '',
+  },
+  {
     archiveNbr: '03fm-0000',
     name: 'The Pinson, Tarrant, Tuagilelagi Archive',
     type: 'type.archive.family',
+    description: '',
+  },
+  {
+    archiveNbr: '08pi-0000',
+    name: 'The "Lemuel Haynes\' Life In Granville, MA." Archive',
+    type: 'type.archive.organization',
     description: '',
   },
   {
@@ -43,12 +73,6 @@ export const featuredArchives: FeaturedArchive[] = [
   {
     archiveNbr: '0532-0000',
     name: 'The Soap Box Derby Archive',
-    type: 'type.archive.family',
-    description: '',
-  },
-  {
-    archiveNbr: '03fw-0000',
-    name: 'The Cape Cod Makers Archive',
     type: 'type.archive.family',
     description: '',
   },
