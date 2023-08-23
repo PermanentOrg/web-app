@@ -40,6 +40,12 @@ export class MixpanelService {
     }
   }
 
+  public track(eventName: string, data: Object): void {
+    if (this.enabled) {
+      mixpanel.track(eventName, data);
+    }
+  }
+
   public isEnabled(): boolean {
     return this.enabled;
   }
