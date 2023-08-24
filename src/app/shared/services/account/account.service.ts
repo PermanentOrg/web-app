@@ -41,7 +41,6 @@ export class AccountService {
   private redirectParams: any = null;
 
   private archives: ArchiveVO[] = [];
-
   public inviteCode: string;
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
