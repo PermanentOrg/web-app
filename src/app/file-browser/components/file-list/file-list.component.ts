@@ -43,7 +43,6 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from 'ngx-route-history';
-import { ApiService } from '../../../shared/services/api/api.service';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -126,7 +125,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private renderer: Renderer2,
     public device: DeviceService,
     private ngZone: NgZone,
-    private api: ApiService
   ) {
 
     this.currentFolder = this.route.snapshot.data.currentFolder;

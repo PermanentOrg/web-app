@@ -52,12 +52,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const { outputs } = await shallow.render();
     expect(outputs.progress.emit).toHaveBeenCalledWith(0);
   });
-  // it('should be able to exit out and go back', async () => {
-  //   const { find, outputs } = await shallow.render();
-  //   expect(outputs.back.emit).not.toHaveBeenCalled();
-  //   clickButton('.back-button', find);
-  //   expect(outputs.back.emit).toHaveBeenCalled();
-  // });
   it('should NOT show disabled-overlay when selectedValue is truthy', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.screen = 'create';

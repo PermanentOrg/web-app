@@ -198,6 +198,7 @@ h3 {
   height: 108px;
   color: black;
   height: 120px;
+  cursor: pointer;
 
   @include beforeDesktop {
     justify-content: center;

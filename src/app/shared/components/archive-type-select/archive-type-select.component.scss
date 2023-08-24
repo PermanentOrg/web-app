@@ -15,16 +15,6 @@
     color: #646464;
     font-family: Open Sans;
   }
-
-  & > select {
-    border: none;
-    border-bottom: 1px solid #c8c8c8;
-    width: 350px;
-
-    @include beforeDesktop {
-      width: 200px;
-    }
-  }
 }
 
 .archive-type-select {
