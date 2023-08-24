@@ -64,7 +64,10 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
 import { NewArchiveFormComponent } from './components/new-archive-form/new-archive-form.component';
 import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
+<<<<<<< HEAD
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
+=======
+>>>>>>> c596974b (Moved the archive type component to the onboarding module)
 
 @NgModule({
   imports: [
@@ -130,7 +133,10 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
     NewArchiveFormComponent,
     PrependProtocolPipe,
     SwitcherComponent,
+<<<<<<< HEAD
     GetAltTextPipe,
+=======
+>>>>>>> c596974b (Moved the archive type component to the onboarding module)
   ],
   declarations: [
     ThumbnailComponent,
@@ -177,7 +183,10 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
     NewArchiveFormComponent,
     PrependProtocolPipe,
     SwitcherComponent,
+<<<<<<< HEAD
     GetAltTextPipe,
+=======
+>>>>>>> c596974b (Moved the archive type component to the onboarding module)
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
