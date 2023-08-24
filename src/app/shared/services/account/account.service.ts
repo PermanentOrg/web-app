@@ -1,4 +1,3 @@
-/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
 import { map, min } from 'rxjs/operators';
 import { find, debounce } from 'lodash';
@@ -90,7 +89,9 @@ export class AccountService {
 
   public setAccount(newAccount: AccountVO) {
     this.account = newAccount;
-    this.storage.local.set(ACCOUNT_KEY, this.account);
+    if (this.account?.keepLoggedIn) {
+      this.storage.local.set(ACCOUNT_KEY, this.account);
+    }
 
     // set account data on Sentry scope
     Sentry.configureScope((scope) => {
@@ -103,7 +104,9 @@ export class AccountService {
 
   public setArchive(newArchive: ArchiveVO) {
     this.archive = newArchive;
-    this.storage.local.set(ARCHIVE_KEY, this.archive);
+    if (this.account?.keepLoggedIn) {
+      this.storage.local.set(ARCHIVE_KEY, this.archive);
+    }
 
     // set archive data as 'archive' context on Sentry scope
     Sentry.configureScope((scope) => {
@@ -508,7 +511,7 @@ export class AccountService {
     if (this.isLoggedIn()) {
       try {
         await this.logOut();
-      } catch (err) {}
+      } catch (err) { }
     }
 
     this.inviteCode = inviteCode;
