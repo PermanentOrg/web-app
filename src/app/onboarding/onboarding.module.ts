@@ -12,12 +12,14 @@ import { OnboardingRoutingModule } from './onboarding.routes';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { CreateNewArchiveComponent } from './components/create-new-archive/create-new-archive.component';
+import { ArchiveTypeSelectComponent } from './components/archive-type-select/archive-type-select.component';
 
 @NgModule({
   declarations: [
     OnboardingComponent,
     WelcomeScreenComponent,
     CreateNewArchiveComponent,
+    ArchiveTypeSelectComponent
   ],
   imports: [CommonModule, OnboardingRoutingModule, SharedModule, CoreModule, DialogModule],
 })
