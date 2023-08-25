@@ -3,7 +3,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { Dialog } from './dialog.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'pr-mock-app-root',
   template: ''
 })
 class MockAppComponent {
