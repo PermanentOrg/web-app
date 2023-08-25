@@ -79,9 +79,16 @@ module.exports = {
             type: 'element',
           },
         ],
+        '@angular-eslint/directive-selector': [
+          'error',
+          {
+            prefix: 'pr',
+            style: 'camelCase',
+            type: 'attribute',
+          },
+        ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        '@angular-eslint/directive-selector': 'off',
         '@angular-eslint/no-conflicting-lifecycle': 'off',
         '@angular-eslint/no-host-metadata-property': 'off',
         '@angular-eslint/no-output-native': 'off',
