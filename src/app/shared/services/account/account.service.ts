@@ -532,6 +532,7 @@ export class AccountService {
             const newAccount = response;
             newAccount.isNew = true;
             this.setAccount(newAccount);
+            this.mixpanel.track('Sign up', { accountId: newAccount.accountId });
             return newAccount;
           })
         )
