@@ -71,9 +71,16 @@ module.exports = {
             ],
           },
         ],
+        '@angular-eslint/component-selector': [
+          'error',
+          {
+            prefix: 'pr',
+            style: 'kebab-case',
+            type: 'element',
+          },
+        ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        '@angular-eslint/component-selector': 'off',
         '@angular-eslint/directive-selector': 'off',
         '@angular-eslint/no-conflicting-lifecycle': 'off',
         '@angular-eslint/no-host-metadata-property': 'off',
@@ -163,6 +170,7 @@ module.exports = {
       rules: {
         'import/no-default-export': 'off',
         'import/no-extraneous-dependencies': 'off',
+        '@angular-eslint/component-selector': 'off',
       },
     },
   ],
