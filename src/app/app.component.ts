@@ -6,7 +6,7 @@ import { MessageService } from '@shared/services/message/message.service';
 declare var iosInnerHeight: Function;
 
 @Component({
-  selector: 'app-root',
+  selector: 'pr-app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

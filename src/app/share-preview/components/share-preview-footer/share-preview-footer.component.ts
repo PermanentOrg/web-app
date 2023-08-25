@@ -55,7 +55,7 @@ export class SharePreviewFooterComponent implements OnInit, OnDestroy {
             if (tagName === 'pr-dialog') {
               return;
             }
-            if (tagName === 'app-root') {
+            if (tagName === 'pr-app-root') {
               break;
             }
             target = target.parentElement;
