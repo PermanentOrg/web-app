@@ -39,6 +39,7 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public displayEndDT;
   public derivedDT;
   public derivedEndDT;
+  public altText;
 
   public derivedCreatedDT;
   public locnId;

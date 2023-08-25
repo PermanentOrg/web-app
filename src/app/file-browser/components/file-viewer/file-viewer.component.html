@@ -38,7 +38,15 @@
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
-        <iframe [src]="documentUrl" *ngIf="isDocument && documentUrl"></iframe>
+        <iframe
+          [title]="
+            currentRecord.altText
+              ? currentRecord.altText
+              : currentRecord.displayName
+          "
+          [src]="documentUrl"
+          *ngIf="isDocument && documentUrl"
+        ></iframe>
       </div>
     </div>
     <div
@@ -112,14 +120,40 @@
           <td>Type</td>
           <td>{{ currentRecord.type | prConstants | titlecase }}</td>
         </tr>
+      </table>
+      <p class="alt-text">Alt Text</p>
+      <pr-inline-value-edit
+        [displayBorder]="true"
+        [displayValue]="
+          currentRecord.altText
+            ? currentRecord.altText
+            : currentRecord.displayName
+        "
+        [itemId]="currentRecord.folder_linkId"
+        [canEdit]="canEdit"
+        [required]="false"
+        (doneEditing)="onFinishEditing('altText', $event)"
+        [emptyMessage]="
+          currentRecord.displayName
+            ? currentRecord.displayName
+            : 'Click to add name'
+        "
+        [readOnlyEmptyMessage]="
+          currentRecord.displayName ? currentRecord.displayName : 'No alt text'
+        "
+        type="text"
+        class="h5"
+      >
+      </pr-inline-value-edit>
+      <table class="metadata-table">
         <tr>
-          <td>Tags</td>
+          <td class="title">Tags</td>
           <td (click)="onTagsClick('keyword')">
             <pr-tags [tags]="keywords"></pr-tags>
           </td>
         </tr>
         <tr>
-          <td class="top-align">
+          <td class="top-align title">
             Custom <br />
             Metadata
           </td>
@@ -128,7 +162,7 @@
           </td>
         </tr>
         <tr>
-          <td>Location</td>
+          <td class="title">Location</td>
           <td class="location-container" (click)="onLocationClick()">
             <pr-static-map
               [location]="currentRecord.LocnVO"

@@ -93,6 +93,11 @@ select {
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  &-with-border{
+    border: 1px solid $input-border-color;
+    border-radius: $border-radius;
+  }
+
   &.showing-empty-message {
     color: $text-muted;
   }

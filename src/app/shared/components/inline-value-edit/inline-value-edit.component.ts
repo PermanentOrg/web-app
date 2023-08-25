@@ -46,6 +46,7 @@ type ValueType = string | number;
   animations: [ngIfScaleAnimation, collapseAnimation],
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {
+  @Input() displayBorder:boolean = false;
   @Input() displayValue: ValueType;
   @Input() type: InlineValueEditType = 'text';
   @Input() emptyMessage: string;

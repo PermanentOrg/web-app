@@ -1,1 +1,6 @@
-<audio [src]="audioSrc" *ngIf="item" controls></audio>
+<audio
+  [attr.aria-label]="item.altText ? item.altText : item.displayName"
+  [src]="audioSrc"
+  *ngIf="item"
+  controls
+></audio>
