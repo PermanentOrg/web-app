@@ -1,28 +1,25 @@
+/* @format */
 import { Component, NgModule, ApplicationRef } from '@angular/core';
 import { TestBed, inject } from '@angular/core/testing';
 import { Dialog } from './dialog.service';
 
 @Component({
   selector: 'pr-mock-app-root',
-  template: ''
+  template: '',
 })
 class MockAppComponent {
-  constructor() {
-  }
+  constructor() {}
 }
 
 @NgModule({
-  declarations: [
-    MockAppComponent
-  ]
+  declarations: [MockAppComponent],
 })
 class MockAppModule {
-  constructor() {
-  }
+  constructor() {}
 }
 
 describe('Dialog', () => {
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [MockAppModule],
       providers: [Dialog],
@@ -34,7 +31,6 @@ describe('Dialog', () => {
     const fixture = TestBed.createComponent(MockAppComponent);
     appRef.components.push(fixture.componentRef);
   });
-
 
   it('should be created', inject([Dialog], (service: Dialog) => {
     expect(service).toBeTruthy();
