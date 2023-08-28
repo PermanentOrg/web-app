@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@onboarding/onboarding.module';
 import { ArchiveVO } from '@models/archive-vo';
+import { AccountVO } from '@models/account-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
@@ -26,10 +27,14 @@ const mockApiService = {
 };
 
 const mockAccountService = {
+<<<<<<< HEAD
   createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
     name: '',
     action: '',
   }),
+=======
+  getAccount: () => ({ accountId: '1234' }),
+>>>>>>> 9b7bddf8 (PER-9345)
 };
 
 let shallow: Shallow<CreateNewArchiveComponent>;
@@ -57,9 +62,13 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
       .mock(ApiService, mockApiService)
 <<<<<<< HEAD
+<<<<<<< HEAD
       .mock(AccountService, mockAccountService);
 =======
 >>>>>>> 87690145 (Create new onboarding flow)
+=======
+      .mock(AccountService, mockAccountService);
+>>>>>>> 9b7bddf8 (PER-9345)
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
