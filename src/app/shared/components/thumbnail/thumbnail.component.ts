@@ -1,16 +1,13 @@
 /* @format */
 import {
   Component,
-  OnInit,
   Input,
   ElementRef,
   HostListener,
   DoCheck,
-  OnChanges,
   Renderer2,
   NgZone,
   OnDestroy,
-  AfterContentInit,
   AfterViewInit,
   Output,
   EventEmitter,
@@ -19,10 +16,10 @@ import {
 import { debounce } from 'lodash';
 import debug from 'debug';
 
-import { FolderVO, RecordVO, ItemVO } from '@root/app/models';
+import { RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import * as OpenSeaDragon from 'openseadragon';
-import { ViewerEvent, ZoomEvent, FullScreenEvent } from 'openseadragon';
+import { ZoomEvent, FullScreenEvent } from 'openseadragon';
 
 const THUMB_SIZES = [200, 500, 1000, 2000];
 
@@ -31,13 +28,14 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss'],
 })
-export class ThumbnailComponent
-  implements OnChanges, DoCheck, OnDestroy, AfterViewInit
-{
+export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
   @Input() item: ItemVO;
   @Input() maxWidth;
 
   thumbLoaded = false;
+
+  private lastItemFolderLinkId: number;
+  private lastMaxWidth: number;
 
   private element: Element;
   private imageElement: Element;
@@ -115,17 +113,21 @@ export class ThumbnailComponent
     }
   }
 
-  ngOnChanges() {
+  ngDoCheck() {
     if (!this.imageElement) {
       this.getImageElement();
     }
-    this.resetImage();
-  }
-
-  ngDoCheck() {
-    if (this.item.dataStatus !== this.lastItemDataStatus) {
+    if (this.shouldResetImage()) {
       this.resetImage();
     }
+  }
+
+  private shouldResetImage(): boolean {
+    return (
+      this.item.folder_linkId !== this.lastItemFolderLinkId ||
+      this.maxWidth !== this.lastMaxWidth ||
+      this.item.dataStatus !== this.lastItemDataStatus
+    );
   }
 
   ngOnDestroy() {
@@ -139,6 +141,8 @@ export class ThumbnailComponent
   }
 
   resetImage() {
+    this.lastItemFolderLinkId = this.item.folder_linkId;
+    this.lastMaxWidth = this.maxWidth;
     if (!this.item.isFolder) {
       this.isZip = this.item.type === 'type.record.archive';
       this.setImageBg(this.item.thumbURL200);
