@@ -94,7 +94,7 @@ export class CreateNewArchiveComponent implements OnInit {
   }
 
   public onValueChange(value: { type: ArchiveType; tag: string }): void {
-    this.selectedValue = `${value.type}+${value.tag}`
+    this.selectedValue = `${value.type}+${value.tag}`;
     this.archiveType = value.type;
     this.archiveTypeTag = value.tag;
   }
