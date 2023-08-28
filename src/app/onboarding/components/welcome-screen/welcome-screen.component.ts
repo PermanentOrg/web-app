@@ -1,4 +1,4 @@
-/* format */
+/* @format */
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';

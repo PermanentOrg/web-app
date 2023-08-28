@@ -1,3 +1,4 @@
+/* @format */
 export enum OnboardingScreen {
   welcomeScreen = 'welcomeScreen',
   goals = 'goals',

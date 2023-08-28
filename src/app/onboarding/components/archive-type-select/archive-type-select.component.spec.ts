@@ -1,4 +1,4 @@
-/* format */
+/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArchiveTypeSelectComponent } from './archive-type-select.component';
 

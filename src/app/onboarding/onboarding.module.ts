@@ -1,3 +1,4 @@
+/* @format */
 import {
   Dialog,
   DialogChildComponentData,

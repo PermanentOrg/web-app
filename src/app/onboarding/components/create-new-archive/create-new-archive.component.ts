@@ -1,4 +1,4 @@
-/* format */
+/* @format */
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';

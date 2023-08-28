@@ -1,4 +1,4 @@
-/* format */
+/* @format */
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { archiveOptions, archiveDescriptions } from '@root/app/onboarding/shared/onboarding-screen';
 

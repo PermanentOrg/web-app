@@ -1,4 +1,4 @@
-/* format */
+/* @format */
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';

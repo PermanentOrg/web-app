@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
 import { map, min } from 'rxjs/operators';
 import { find, debounce } from 'lodash';
