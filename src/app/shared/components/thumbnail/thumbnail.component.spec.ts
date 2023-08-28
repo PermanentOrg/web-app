@@ -1,10 +1,10 @@
+/* @format */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { RecordVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { Component, ViewChild } from '@angular/core';
-import { By } from '@angular/platform-browser';
 
 const baseImageUrl = 'https://via.placeholder.com';
 
@@ -17,56 +17,70 @@ function addParam(url, param) {
   return `${url}?text=${param}`;
 }
 
-const minItem = new RecordVO({ folder_linkId: 1 }, false, DataStatus.Placeholder);
-const leanItem = new RecordVO({folder_linkId: 1, thumbURL200: image200 }, false, DataStatus.Lean);
+const minItem = new RecordVO(
+  { folder_linkId: 1 },
+  false,
+  DataStatus.Placeholder
+);
+const leanItem = new RecordVO(
+  { folder_linkId: 1, thumbURL200: image200 },
+  false,
+  DataStatus.Lean
+);
 const fullItem = new RecordVO(
-    {
-      folder_linkId: 1,
-      thumbURL200: image200,
-      thumbURL500: image500,
-      thumbURL1000: image1000,
-      type: 'type.record.image'
-    },
-    false,
-    DataStatus.Full
-  );
+  {
+    folder_linkId: 1,
+    thumbURL200: image200,
+    thumbURL500: image500,
+    thumbURL1000: image1000,
+    type: 'type.record.image',
+  },
+  false,
+  DataStatus.Full
+);
 
 const minItem2 = new RecordVO(
-    {
-      folder_linkId: 2,
-    },
-    false,
-    DataStatus.Placeholder
-  );
+  {
+    folder_linkId: 2,
+  },
+  false,
+  DataStatus.Placeholder
+);
 const leanItem2 = new RecordVO(
-    {
-      folder_linkId: 2,
-      thumbURL200: addParam(image200, 'item2')
-    },
-    false,
-    DataStatus.Lean
-  );
+  {
+    folder_linkId: 2,
+    thumbURL200: addParam(image200, 'item2'),
+  },
+  false,
+  DataStatus.Lean
+);
 const fullItem2 = new RecordVO(
-    {
-      folder_linkId: 2,
-      thumbURL200: addParam(image200, 'item2'),
-      thumbURL500: addParam(image500, 'item2'),
-      thumbURL1000: addParam(image500, 'item2')
-    },
-    false,
-    DataStatus.Full
-  );
+  {
+    folder_linkId: 2,
+    thumbURL200: addParam(image200, 'item2'),
+    thumbURL500: addParam(image500, 'item2'),
+    thumbURL1000: addParam(image500, 'item2'),
+  },
+  false,
+  DataStatus.Full
+);
 
 @Component({
   selector: `pr-test-host-component`,
-  template: `<pr-thumbnail [item]='item' [style.width]="size" [style.height]="size"></pr-thumbnail>`,
-  styles: [`
-  pr-thumbnail {
-    display: block;
-    width: 0px;
-    height: 0px;
-  }
-  `]
+  template: `<pr-thumbnail
+    [item]="item"
+    [style.width]="size"
+    [style.height]="size"
+  ></pr-thumbnail>`,
+  styles: [
+    `
+      pr-thumbnail {
+        display: block;
+        width: 0px;
+        height: 0px;
+      }
+    `,
+  ],
 })
 class TestHostComponent {
   @ViewChild(ThumbnailComponent) public component: ThumbnailComponent;
@@ -81,9 +95,8 @@ describe('ThumbnailComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ThumbnailComponent, TestHostComponent ]
-    })
-    .compileComponents();
+      declarations: [ThumbnailComponent, TestHostComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -174,6 +187,8 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
     expect(component['element'].querySelector('fa-icon')).not.toBeNull();
-    expect(component['element'].querySelector('.pr-thumbnail-image:not([hidden])')).toBeNull();
+    expect(
+      component['element'].querySelector('.pr-thumbnail-image:not([hidden])')
+    ).toBeNull();
   });
 });
