@@ -1,5 +1,6 @@
 /* @format */
 import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { ArchiveType } from '@models/archive-vo';
 import {
   archiveOptions,
   archiveDescriptions,
@@ -12,7 +13,10 @@ import {
 })
 export class ArchiveTypeSelectComponent {
   @Input() selectedValue: string = '';
-  @Output() valueChange = new EventEmitter<string>();
+  @Output() valueChange = new EventEmitter<{
+    type: ArchiveType;
+    tag: string;
+  }>();
 
   options = archiveOptions;
   descriptions = archiveDescriptions;
@@ -31,6 +35,8 @@ export class ArchiveTypeSelectComponent {
   };
 
   onSelectionChange(): void {
-    this.valueChange.emit(this.selectedValue);
+    const type = this.selectedValue.split('+')[0] as ArchiveType;
+    const tag = this.selectedValue.split('+')[1];
+    this.valueChange.emit({ type, tag });
   }
 }

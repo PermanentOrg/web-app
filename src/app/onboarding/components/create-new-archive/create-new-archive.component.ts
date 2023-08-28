@@ -4,6 +4,7 @@ import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { reasons, goals } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
+import { ArchiveType } from '../../../models/archive-vo';
 
 type NewArchiveScreen = 'goals' | 'reasons' | 'create';
 
@@ -29,6 +30,7 @@ export class CreateNewArchiveComponent implements OnInit {
   public name: string = '';
   public goals = goals;
   public reasons = reasons;
+  archiveTypeTag: string;
 
   constructor(private api: ApiService, private dialog: Dialog) {}
 
@@ -63,10 +65,10 @@ export class CreateNewArchiveComponent implements OnInit {
       this.loading = true;
       const archive = new ArchiveVO({
         fullName: this.name,
-        type: this.selectedValue.split('+')[0],
+        type: this.archiveType,
       });
       const tags = [
-        this.selectedValue.split('+')[1],
+        this.archiveTypeTag,
         ...this.selectedGoals,
         ...this.selectedReasons,
       ];
@@ -91,8 +93,10 @@ export class CreateNewArchiveComponent implements OnInit {
     }
   }
 
-  public onValueChange(value: string): void {
-    this.selectedValue = value;
+  public onValueChange(value: { type: ArchiveType; tag: string }): void {
+    this.selectedValue = `${value.type}+${value.tag}`
+    this.archiveType = value.type;
+    this.archiveTypeTag = value.tag;
   }
 
   public makeMyArchive(): void {
