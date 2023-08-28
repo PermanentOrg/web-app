@@ -2,7 +2,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
-import { reasons, goals } from '../../shared/onboarding-screen'
+import { reasons, goals } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 
 type NewArchiveScreen = 'goals' | 'reasons' | 'create';
@@ -10,7 +10,7 @@ type NewArchiveScreen = 'goals' | 'reasons' | 'create';
 @Component({
   selector: 'pr-create-new-archive',
   templateUrl: './create-new-archive.component.html',
-  styleUrls: ['./create-new-archive.component.scss']
+  styleUrls: ['./create-new-archive.component.scss'],
 })
 export class CreateNewArchiveComponent implements OnInit {
   @Output() back = new EventEmitter<void>();
@@ -29,13 +29,8 @@ export class CreateNewArchiveComponent implements OnInit {
   public name: string = '';
   public goals = goals;
   public reasons = reasons;
-  
 
-  constructor(
-    private api: ApiService,
-    private dialog: Dialog,
-  ) {
-  }
+  constructor(private api: ApiService, private dialog: Dialog) {}
 
   ngOnInit(): void {
     this.progress.emit(0);
@@ -43,11 +38,10 @@ export class CreateNewArchiveComponent implements OnInit {
 
   public onBackPress(): void {
     if (this.screen === 'goals') {
-      this.screen = 'create'
+      this.screen = 'create';
       this.progress.emit(0);
-    }
-    else {
-      this.screen = 'goals'
+    } else {
+      this.screen = 'goals';
       this.progress.emit(1);
     }
   }
@@ -59,12 +53,10 @@ export class CreateNewArchiveComponent implements OnInit {
       this.chartPathClicked.emit();
     } else if (screen === 'goals') {
       this.progress.emit(1);
-    }
-    else {
+    } else {
       this.progress.emit(0);
     }
   }
-
 
   public async onSubmit(): Promise<void> {
     try {
@@ -73,7 +65,11 @@ export class CreateNewArchiveComponent implements OnInit {
         fullName: this.name,
         type: this.selectedValue.split('+')[0],
       });
-      const tags = [this.selectedValue.split('+')[1], ...this.selectedGoals, ...this.selectedReasons];
+      const tags = [
+        this.selectedValue.split('+')[1],
+        ...this.selectedGoals,
+        ...this.selectedReasons,
+      ];
       const response = await this.api.archive.create(archive);
       const token = localStorage.getItem('AUTH_TOKEN');
       await this.api.account.updateAccountTags(tags, []);
@@ -81,7 +77,9 @@ export class CreateNewArchiveComponent implements OnInit {
       this.createdArchive.emit(createdArchive);
     } catch {
       this.loading = false;
-      this.error.emit('There was an error creating your new archive. Please try again.');
+      this.error.emit(
+        'There was an error creating your new archive. Please try again.'
+      );
     }
   }
 
@@ -91,7 +89,6 @@ export class CreateNewArchiveComponent implements OnInit {
     } else {
       values.push(value);
     }
-
   }
 
   public onValueChange(value: string): void {
@@ -99,18 +96,17 @@ export class CreateNewArchiveComponent implements OnInit {
   }
 
   public makeMyArchive(): void {
-    this.dialog.open('SkipOnboardingDialogComponent', null, { width: '600px' })
+    this.dialog.open('SkipOnboardingDialogComponent', null, { width: '600px' });
   }
 
   public skipStep(): void {
     if (this.screen === 'goals') {
-      this.screen = 'reasons'
+      this.screen = 'reasons';
       this.progress.emit(2);
       this.selectedGoals = [];
-    }
-    else if (this.screen === 'reasons') {
+    } else if (this.screen === 'reasons') {
       this.selectedReasons = [];
-      this.onSubmit()
+      this.onSubmit();
     }
   }
 }

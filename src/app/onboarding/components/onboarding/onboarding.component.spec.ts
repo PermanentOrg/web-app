@@ -14,7 +14,7 @@ import { OnboardingComponent } from './onboarding.component';
 
 class NullRoute {
   public snapshot = {
-    data: {}
+    data: {},
   };
 }
 
@@ -28,13 +28,13 @@ const mockApiService = {
       return {
         getArchiveVos: () => {
           return [];
-        }
-      }
+        },
+      };
     },
     accept: async (data: any) => {
       return true;
     },
-    change: async (archive: ArchiveVO) => { }
+    change: async (archive: ArchiveVO) => {},
   },
 };
 const mockAccountService = {
@@ -47,27 +47,27 @@ const mockAccountService = {
   refreshArchives: async () => {
     return [];
   },
-  setArchive: (archive: ArchiveVO) => { },
-  updateAccount: async () => { },
-  change: async () => { },
+  setArchive: (archive: ArchiveVO) => {},
+  updateAccount: async () => {},
+  change: async () => {},
 };
 const mockMessageService = {
-  showMessage: () => { },
-  showError: () => { },
+  showMessage: () => {},
+  showError: () => {},
 };
 
 const mockRouter = {
   async navigate(path: any[]) {
     return {};
-  }
-}
+  },
+};
 
 describe('OnboardingComponent #onboarding', () => {
   let shallow: Shallow<OnboardingComponent>;
   beforeEach(() => {
     shallow = new Shallow(OnboardingComponent, OnboardingModule)
       .mock(ActivatedRoute, new NullRoute())
-      .mock(Location, { go: (path: string) => { } })
+      .mock(Location, { go: (path: string) => {} })
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .mock(Router, mockRouter)
@@ -94,7 +94,7 @@ describe('OnboardingComponent #onboarding', () => {
     expect(element.componentInstance.currentArchive).toBeUndefined();
     fixture.detectChanges();
 
-    const child = find('pr-create-new-archive')
+    const child = find('pr-create-new-archive');
     expect(child).toHaveFoundOne();
     child.triggerEventHandler('createdArchive', new ArchiveVO({}));
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
@@ -103,8 +103,14 @@ describe('OnboardingComponent #onboarding', () => {
     const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
     const mockAccountService = {
-      refreshArchives: jasmine.createSpy('refreshArchives').and.returnValue(Promise.resolve([mockPendingArchive])),
-      getAccount: jasmine.createSpy('getAccount').and.returnValue(new AccountVO({ accountId: 1, fullName: 'Test Account' })),
+      refreshArchives: jasmine
+        .createSpy('refreshArchives')
+        .and.returnValue(Promise.resolve([mockPendingArchive])),
+      getAccount: jasmine
+        .createSpy('getAccount')
+        .and.returnValue(
+          new AccountVO({ accountId: 1, fullName: 'Test Account' })
+        ),
     };
 
     const shallow = new Shallow(OnboardingComponent, OnboardingModule)
@@ -119,7 +125,10 @@ describe('OnboardingComponent #onboarding', () => {
       expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
     }
     expect(find('pr-welcome-screen')).toHaveFoundOne();
-    find('pr-welcome-screen').triggerEventHandler('acceptInvitation', new ArchiveVO({ fullName: 'Pending Test' }));
+    find('pr-welcome-screen').triggerEventHandler(
+      'acceptInvitation',
+      new ArchiveVO({ fullName: 'Pending Test' })
+    );
     fixture.detectChanges();
     await fixture.whenStable();
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
@@ -128,7 +137,7 @@ describe('OnboardingComponent #onboarding', () => {
     const { element } = await shallow.render();
     expect(element.componentInstance.pendingArchives.length).toBe(0);
     element.componentInstance.setState({
-      pendingArchives: [new ArchiveVO({})]
+      pendingArchives: [new ArchiveVO({})],
     });
     expect(element.componentInstance.pendingArchives.length).toBe(1);
   });
@@ -137,8 +146,14 @@ describe('OnboardingComponent #onboarding', () => {
     const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
     const mockAccountService = {
-      refreshArchives: jasmine.createSpy('refreshArchives').and.returnValue(Promise.resolve([mockPendingArchive])),
-      getAccount: jasmine.createSpy('getAccount').and.returnValue(new AccountVO({ accountId: 1, fullName: 'Test Account' })),
+      refreshArchives: jasmine
+        .createSpy('refreshArchives')
+        .and.returnValue(Promise.resolve([mockPendingArchive])),
+      getAccount: jasmine
+        .createSpy('getAccount')
+        .and.returnValue(
+          new AccountVO({ accountId: 1, fullName: 'Test Account' })
+        ),
     };
 
     const shallow = new Shallow(OnboardingComponent, OnboardingModule)
@@ -153,5 +168,4 @@ describe('OnboardingComponent #onboarding', () => {
       expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
     }
   });
-
 });

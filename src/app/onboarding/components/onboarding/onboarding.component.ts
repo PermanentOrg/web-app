@@ -14,7 +14,7 @@ import { partition as lodashPartition } from 'lodash';
 @Component({
   selector: 'pr-onboarding',
   templateUrl: './onboarding.component.html',
-  styleUrls: ['./onboarding.component.scss']
+  styleUrls: ['./onboarding.component.scss'],
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;
@@ -37,7 +37,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     private router: Router,
     private api: ApiService,
     private account: AccountService,
-    private detector: ChangeDetectorRef,
+    private detector: ChangeDetectorRef
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -59,16 +59,17 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         this.pendingArchives = pendingArchives;
         this.showOnboarding = true;
         if (this.pendingArchives.length > 0) {
-          this.screen = OnboardingScreen.pendingArchives
+          this.screen = OnboardingScreen.pendingArchives;
         }
       }
 
-      this.subscription = this.account.createAccountForMe$?.subscribe((archive: ArchiveVO) => {
-        if (archive.archiveId) {
-          this.setNewArchive(archive)
+      this.subscription = this.account.createAccountForMe$?.subscribe(
+        (archive: ArchiveVO) => {
+          if (archive.archiveId) {
+            this.setNewArchive(archive);
+          }
         }
-      })
-
+      );
     });
   }
 
@@ -78,9 +79,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   public setScreen(screen: OnboardingScreen): void {
     this.screen = screen;
-    const correspondingRoute = routes.find(route => {
+    const correspondingRoute = routes.find((route) => {
       if (route.data?.onboardingScreen) {
-        if (route.data.onboardingScreen as OnboardingScreen === screen) {
+        if ((route.data.onboardingScreen as OnboardingScreen) === screen) {
           return true;
         }
       }
@@ -100,7 +101,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
-    const updateAccount = new AccountVO({ defaultArchiveId: archive.archiveId });
+    const updateAccount = new AccountVO({
+      defaultArchiveId: archive.archiveId,
+    });
     this.account.updateAccount(updateAccount).then(() => {
       this.account.setArchive(archive);
       this.api.archive.change(archive).then(() => {
@@ -124,7 +127,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   public getProgressChunkClasses(num: number) {
     return {
       'progress-chunk': true,
-      'completed': this.progress >= num,
+      completed: this.progress >= num,
     };
   }
 
@@ -137,16 +140,19 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   public acceptArchiveInvitation(archive: ArchiveVO): void {
     this.showOnboarding = false;
     this.progress = 1;
-    this.api.archive.accept(archive).then(() => {
-      this.progress = 2;
-      this.showOnboarding = true;
-      this.acceptedInvite = true;
-      this.setNewArchive(archive);
-    }).catch(() => {
-      this.progress = 0
-      this.showOnboarding = true;
-      this.errorMessage = `There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`;
-    });
+    this.api.archive
+      .accept(archive)
+      .then(() => {
+        this.progress = 2;
+        this.showOnboarding = true;
+        this.acceptedInvite = true;
+        this.setNewArchive(archive);
+      })
+      .catch(() => {
+        this.progress = 0;
+        this.showOnboarding = true;
+        this.errorMessage = `There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`;
+      });
   }
 
   public logOut(): void {

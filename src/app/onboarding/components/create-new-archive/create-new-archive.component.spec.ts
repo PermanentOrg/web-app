@@ -14,8 +14,8 @@ const mockApiService = {
       createdArchive = a;
       return {
         getArchiveVO: () => a,
-      }
-    }
+      };
+    },
   },
 };
 
@@ -41,8 +41,10 @@ describe('CreateNewArchiveComponent #onboarding', () => {
   beforeEach(() => {
     calledCreate = false;
     createdArchive = null;
-    shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
-      .mock(ApiService, mockApiService)
+    shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule).mock(
+      ApiService,
+      mockApiService
+    );
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
@@ -71,14 +73,13 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const childComponent = find('pr-archive-type-select').componentInstance;
     childComponent.valueChange.emit('Some Value');
 
-    instance.name = "Some Name"
+    instance.name = 'Some Name';
 
     fixture.detectChanges();
 
     const button = find('.chart-path').nativeElement;
     expect(button.disabled).toBe(false);
-  })
-
+  });
 
   it('should show disabled-overlay when selectedValue is falsy', async () => {
     const { find, instance } = await shallow.render();
@@ -109,7 +110,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const button = find('.goals-next').nativeElement;
 
     expect(button.disabled).toBe(true);
-  })
+  });
 
   it('should show the reasons screen after selecting goals and then clicking next', async () => {
     const { find, instance, fixture } = await shallow.render();
@@ -135,6 +136,5 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const button = find('.create-archive').nativeElement;
 
     expect(button.disabled).toBe(true);
-  })
-
+  });
 });

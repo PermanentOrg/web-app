@@ -1,6 +1,9 @@
 /* @format */
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { archiveOptions, archiveDescriptions } from '@root/app/onboarding/shared/onboarding-screen';
+import {
+  archiveOptions,
+  archiveDescriptions,
+} from '@root/app/onboarding/shared/onboarding-screen';
 
 @Component({
   selector: 'pr-archive-type-select',
@@ -11,8 +14,8 @@ export class ArchiveTypeSelectComponent {
   @Input() selectedValue: string = '';
   @Output() valueChange = new EventEmitter<string>();
 
-  options = archiveOptions
-  descriptions = archiveDescriptions
+  options = archiveOptions;
+  descriptions = archiveDescriptions;
 
   icons = {
     'type.archive.person': 'assets/svg/onboarding/archive-person.svg',

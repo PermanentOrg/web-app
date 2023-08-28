@@ -19,9 +19,9 @@ export class WelcomeScreenComponent implements OnInit {
 
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   public goToScreen(screen: OnboardingScreen): void {
     this.nextScreen.emit(screen);

@@ -51,7 +51,8 @@ export class AccountService {
     this.refreshAccount();
   }, 5000);
 
-  public createAccountForMe: BehaviorSubject<ArchiveVO> = new BehaviorSubject<ArchiveVO>(new ArchiveVO({}));
+  public createAccountForMe: BehaviorSubject<ArchiveVO> =
+    new BehaviorSubject<ArchiveVO>(new ArchiveVO({}));
   createAccountForMe$: Observable<{}> = this.createAccountForMe.asObservable();
 
   constructor(
@@ -524,7 +525,7 @@ export class AccountService {
     if (this.isLoggedIn()) {
       try {
         await this.logOut();
-      } catch (err) { }
+      } catch (err) {}
     }
 
     this.inviteCode = inviteCode;

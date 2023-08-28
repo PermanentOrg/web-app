@@ -20,9 +20,15 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     OnboardingComponent,
     WelcomeScreenComponent,
     CreateNewArchiveComponent,
-    ArchiveTypeSelectComponent
+    ArchiveTypeSelectComponent,
   ],
-  imports: [CommonModule, OnboardingRoutingModule, SharedModule, CoreModule, DialogModule],
+  imports: [
+    CommonModule,
+    OnboardingRoutingModule,
+    SharedModule,
+    CoreModule,
+    DialogModule,
+  ],
 })
 export class OnboardingModule {
   private dialogComponents: DialogChildComponentData[] = [

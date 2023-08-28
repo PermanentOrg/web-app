@@ -6,46 +6,45 @@ export enum OnboardingScreen {
   pendingArchives = 'pendingArchives',
 }
 
-
 export const reasons = [
   {
     tag: 'why:safe',
-    text: 'Access to a safe and secure digital storage platform'
+    text: 'Access to a safe and secure digital storage platform',
   },
   {
     tag: 'why:nonprofit',
-    text: 'Supporting a mission-driven nonprofit'
+    text: 'Supporting a mission-driven nonprofit',
   },
   {
     tag: 'why:genealogy',
-    text: 'Preserving family history or genealogy research'
+    text: 'Preserving family history or genealogy research',
   },
   {
     tag: 'why:professional',
-    text: 'Professional business needs/clients'
+    text: 'Professional business needs/clients',
   },
   {
     tag: 'why:colalborate',
-    text: 'Collaborate with a family member, friend, or colleague'
+    text: 'Collaborate with a family member, friend, or colleague',
   },
   {
     tag: 'why:digipres',
-    text: 'Interest in digital preservation solutions'
-  }
-]
+    text: 'Interest in digital preservation solutions',
+  },
+];
 
 export const goals = [
   {
     tag: 'goal:capture',
-    text: 'Capture and preserve memories for storytelling'
+    text: 'Capture and preserve memories for storytelling',
   },
   {
     tag: 'goal:digitize',
-    text: 'Digitize or transfer my materials securely'
+    text: 'Digitize or transfer my materials securely',
   },
   {
     tag: 'goal:collaborate',
-    text: 'Collaborate with others to build my archive'
+    text: 'Collaborate with others to build my archive',
   },
   {
     tag: 'goal:publish',
@@ -57,17 +56,17 @@ export const goals = [
   },
   {
     tag: 'goal:legacy',
-    text: 'Create a plan for passing on my digital materials '
+    text: 'Create a plan for passing on my digital materials ',
   },
   {
     tag: 'goal:organize',
-    text: 'Organize my materials'
+    text: 'Organize my materials',
   },
   {
     tag: 'goal:undefined',
-    text: 'Something else'
-  }
-]
+    text: 'Something else',
+  },
+];
 
 export const archiveOptions = [
   {
@@ -121,7 +120,8 @@ export const archiveDescriptions = {
     'Create an archive that preserves the memory of my ancestors, family history, or genealogy.',
   'type:community':
     'Create an archive that preserves the history of a community, group, or other association of people.',
-  'type:org': 'Create an archive that preserves the history of an organization or nonprofit.',
+  'type:org':
+    'Create an archive that preserves the history of an organization or nonprofit.',
   'type:other': '',
   'type:unsure': '',
 };

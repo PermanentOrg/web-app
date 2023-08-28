@@ -113,7 +113,7 @@ import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dial
     ArchivePayerComponent,
     ConfirmPayerDialogComponent,
     ArchiveStoragePayerComponent,
-    SkipOnboardingDialogComponent
+    SkipOnboardingDialogComponent,
   ],
   providers: [
     DataService,
