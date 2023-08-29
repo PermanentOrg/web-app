@@ -1,4 +1,7 @@
+import { OnDestroy } from '@angular/core';
 /* @format */
+import { Observable, Subscription } from 'rxjs';
+import { AccountService } from '@shared/services/account/account.service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
@@ -13,7 +16,7 @@ type NewArchiveScreen = 'goals' | 'reasons' | 'create';
   templateUrl: './create-new-archive.component.html',
   styleUrls: ['./create-new-archive.component.scss'],
 })
-export class CreateNewArchiveComponent implements OnInit {
+export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   @Output() back = new EventEmitter<void>();
   @Output() createdArchive = new EventEmitter<ArchiveVO>();
   @Output() error = new EventEmitter<string>();
@@ -32,10 +35,31 @@ export class CreateNewArchiveComponent implements OnInit {
   public reasons = reasons;
   archiveTypeTag: string;
 
-  constructor(private api: ApiService, private dialog: Dialog) {}
+  skipOnboarding: Observable<{ name: string }>;
+
+  subscription: Subscription;
+
+  constructor(
+    private api: ApiService,
+    private dialog: Dialog,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit(): void {
     this.progress.emit(0);
+    this.subscription = this.accountService.createAccountForMe.subscribe(
+      (name) => {
+        if (name) {
+          this.name = name;
+          this.archiveType = 'type.archive.person';
+          this.screen = 'goals';
+        }
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public onBackPress(): void {
@@ -73,7 +97,6 @@ export class CreateNewArchiveComponent implements OnInit {
         ...this.selectedReasons,
       ];
       const response = await this.api.archive.create(archive);
-      const token = localStorage.getItem('AUTH_TOKEN');
       await this.api.account.updateAccountTags(tags, []);
       const createdArchive = response.getArchiveVO();
       this.createdArchive.emit(createdArchive);
@@ -100,7 +123,11 @@ export class CreateNewArchiveComponent implements OnInit {
   }
 
   public makeMyArchive(): void {
-    this.dialog.open('SkipOnboardingDialogComponent', null, { width: '600px' });
+    this.dialog.open(
+      'SkipOnboardingDialogComponent',
+      { skipOnboarding: this.skipOnboarding },
+      { width: '600px' }
+    );
   }
 
   public skipStep(): void {

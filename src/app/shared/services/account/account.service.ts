@@ -51,8 +51,8 @@ export class AccountService {
     this.refreshAccount();
   }, 5000);
 
-  public createAccountForMe: BehaviorSubject<ArchiveVO> =
-    new BehaviorSubject<ArchiveVO>(new ArchiveVO({}));
+  public createAccountForMe: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
   createAccountForMe$: Observable<{}> = this.createAccountForMe.asObservable();
 
   constructor(
