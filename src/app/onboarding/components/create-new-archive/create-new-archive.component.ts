@@ -18,6 +18,7 @@ import {
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 import { ArchiveType } from '../../../models/archive-vo';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 type NewArchiveScreen = 'goals' | 'reasons' | 'create';
 
@@ -45,8 +46,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public name: string = '';
   public goals = goals;
   public reasons = reasons;
-<<<<<<< HEAD
   archiveTypeTag: OnboardingTypes;
+
 
   skipOnboarding: Observable<{ name: string }>;
 
@@ -55,7 +56,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private dialog: Dialog,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private mixpanelService: MixpanelService
   ) {}
 
   ngOnInit(): void {
@@ -81,25 +83,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-=======
-  archiveTypeTag: string;
-  private accountId: string;
-
-  constructor(
-    private api: ApiService,
-    private dialog: Dialog,
-    private mixpanelService: MixpanelService,
-    private account: AccountService
-  ) {}
-
-  ngOnInit(): void {
-    this.accountId = this.account.getAccount().fullName;
-
-    this.progress.emit(0);
-    this.mixpanelService.track('Onboarding: start', {
-      accountId: this.accountId,
-    });
->>>>>>> 9b7bddf8 (PER-9345)
   }
 
   public onBackPress(): void {
@@ -116,15 +99,10 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public setScreen(screen: NewArchiveScreen): void {
-<<<<<<< HEAD
     if (this.pendingArchive && screen === 'create') {
       this.goToInvitations();
     }
-=======
-    this.mixpanelService.track('Onboarding: ' + screen, {
-      accountId: this.accountId,
-    });
->>>>>>> 9b7bddf8 (PER-9345)
+    this.mixpanelService.track('Onboarding: ' + screen, null);
     this.screen = screen;
     if (screen === 'reasons') {
       this.progress.emit(2);
@@ -210,13 +188,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   public skipStep(): void {
     if (this.screen === 'goals') {
-<<<<<<< HEAD
       this.screen = 'reasons';
       this.progress.emit(2);
-=======
-      this.progress.emit(2);
-      this.setScreen('reasons');
->>>>>>> 9b7bddf8 (PER-9345)
       this.selectedGoals = [];
     } else if (this.screen === 'reasons') {
       this.selectedReasons = [];

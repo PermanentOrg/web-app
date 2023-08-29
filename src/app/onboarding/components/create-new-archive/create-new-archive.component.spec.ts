@@ -1,9 +1,15 @@
 <<<<<<< HEAD
 /* @format */
+<<<<<<< HEAD
 import { BehaviorSubject } from 'rxjs';
 =======
 /* format */
 >>>>>>> 87690145 (Create new onboarding flow)
+=======
+=======
+/* format */
+>>>>>>> de511c7f (PER-9345)
+>>>>>>> f64d8a0c (PER-9345)
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@onboarding/onboarding.module';
 import { ArchiveVO } from '@models/archive-vo';
