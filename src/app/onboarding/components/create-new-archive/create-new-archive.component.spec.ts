@@ -1,19 +1,8 @@
-<<<<<<< HEAD
 /* @format */
-<<<<<<< HEAD
 import { BehaviorSubject } from 'rxjs';
-=======
-/* format */
->>>>>>> 87690145 (Create new onboarding flow)
-=======
-=======
-/* format */
->>>>>>> de511c7f (PER-9345)
->>>>>>> f64d8a0c (PER-9345)
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@onboarding/onboarding.module';
 import { ArchiveVO } from '@models/archive-vo';
-import { AccountVO } from '@models/account-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
@@ -33,14 +22,10 @@ const mockApiService = {
 };
 
 const mockAccountService = {
-<<<<<<< HEAD
   createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
     name: '',
     action: '',
   }),
-=======
-  getAccount: () => ({ accountId: '1234' }),
->>>>>>> 9b7bddf8 (PER-9345)
 };
 
 let shallow: Shallow<CreateNewArchiveComponent>;
@@ -67,14 +52,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     createdArchive = null;
     shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
       .mock(ApiService, mockApiService)
-<<<<<<< HEAD
-<<<<<<< HEAD
       .mock(AccountService, mockAccountService);
-=======
->>>>>>> 87690145 (Create new onboarding flow)
-=======
-      .mock(AccountService, mockAccountService);
->>>>>>> 9b7bddf8 (PER-9345)
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
@@ -84,15 +62,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const { outputs } = await shallow.render();
     expect(outputs.progress.emit).toHaveBeenCalledWith(0);
   });
-<<<<<<< HEAD
-=======
-  // it('should be able to exit out and go back', async () => {
-  //   const { find, outputs } = await shallow.render();
-  //   expect(outputs.back.emit).not.toHaveBeenCalled();
-  //   clickButton('.back-button', find);
-  //   expect(outputs.back.emit).toHaveBeenCalled();
-  // });
->>>>>>> 87690145 (Create new onboarding flow)
   it('should NOT show disabled-overlay when selectedValue is truthy', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.screen = 'create';
@@ -112,17 +81,12 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const childComponent = find('pr-archive-type-select').componentInstance;
     childComponent.valueChange.emit('Some Value');
 
-<<<<<<< HEAD
     instance.name = 'Some Name';
-=======
-    instance.name = "Some Name"
->>>>>>> 87690145 (Create new onboarding flow)
 
     fixture.detectChanges();
 
     const button = find('.chart-path').nativeElement;
     expect(button.disabled).toBe(false);
-<<<<<<< HEAD
   });
 
   it('should show disabled-overlay when selectedValue is falsy', async () => {
@@ -144,30 +108,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     expect(instance.screen).toBe('goals');
   });
 
-=======
-  })
-
-
-  it('should show disabled-overlay when selectedValue is falsy', async () => {
-    const { find, instance } = await shallow.render();
-
-    instance.selectedValue = '';
-    const overlayDiv = find('.disabled-overlay');
-    expect(overlayDiv.length).toBe(1);
-  });
-
-  it('should show the goals screen after selecting a value and inputting a name and then clicking next', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'create';
-
-    find('.chart-path').triggerEventHandler('click', null);
-
-    fixture.detectChanges();
-
-    expect(instance.screen).toBe('goals');
-  });
-
->>>>>>> 87690145 (Create new onboarding flow)
   it('the next button should be disabled if no goals have been selected', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.screen = 'goals';
@@ -178,11 +118,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const button = find('.goals-next').nativeElement;
 
     expect(button.disabled).toBe(true);
-<<<<<<< HEAD
   });
-=======
-  })
->>>>>>> 87690145 (Create new onboarding flow)
 
   it('should show the reasons screen after selecting goals and then clicking next', async () => {
     const { find, instance, fixture } = await shallow.render();
@@ -196,7 +132,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     fixture.detectChanges();
 
     expect(instance.screen).toBe('reasons'); // Expecting the overlay to be present
-<<<<<<< HEAD
   });
 
   it('the create archive button should not work without any reasons selected', async () => {
@@ -209,8 +144,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const button = find('.create-archive').nativeElement;
 
     expect(button.disabled).toBe(true);
-=======
->>>>>>> 87690145 (Create new onboarding flow)
   });
 
   it('the create archive button should not work without any reasons selected', async () => {
