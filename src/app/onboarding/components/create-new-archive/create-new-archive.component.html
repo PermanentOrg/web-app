@@ -111,7 +111,7 @@
       <button
         (click)="onSubmit()"
         class="btn btn-primary next-button create-archive"
-        [disabled]="!selectedReasons.length"
+        [disabled]="!selectedReasons.length || loading"
       >
         Create my archive
       </button>

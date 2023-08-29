@@ -96,20 +96,33 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         fullName: this.name,
         type: this.archiveType,
       });
+
       const tags = [
         this.archiveTypeTag,
         ...this.selectedGoals,
         ...this.selectedReasons,
       ];
-      const response = await this.api.archive.create(archive);
-      await this.api.account.updateAccountTags(tags, []);
-      const createdArchive = response.getArchiveVO();
-      this.createdArchive.emit(createdArchive);
-    } catch {
+
+      let createdArchive;
+
+      try {
+        const response = await this.api.archive.create(archive);
+        createdArchive = response.getArchiveVO();
+      } catch (archiveError) {
+        this.error.emit('An error occurred. Please try again.');
+      }
+
+      try {
+        await this.api.account.updateAccountTags(tags, []);
+      } catch (tagsError) {}
+
+      if (createdArchive) {
+        this.createdArchive.emit(createdArchive);
+      }
+    } catch (error) {
+      this.error.emit('An error occurred. Please try again.');
+    } finally {
       this.loading = false;
-      this.error.emit(
-        'There was an error creating your new archive. Please try again.'
-      );
     }
   }
 
