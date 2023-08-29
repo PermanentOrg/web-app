@@ -12,12 +12,14 @@ export class SearchService {
   private fuseOptions: Fuse.IFuseOptions<ItemVO> = {
     keys: ['displayName'],
     threshold: 0.1,
+    ignoreLocation: true,
   };
   private fuse = new Fuse([], this.fuseOptions);
 
-  private tagsFuseOptions: Fuse.IFuseOptions<ItemVO> = {
+  private tagsFuseOptions: Fuse.IFuseOptions<TagVOData> = {
     keys: ['name'],
     threshold: 0.1,
+    ignoreLocation: true,
   };
   private tagsFuse = new Fuse([], this.tagsFuseOptions);
 
