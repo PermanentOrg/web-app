@@ -1,7 +1,13 @@
 /* @format */
 import { Observable, Subscription } from 'rxjs';
 import { AccountService } from '@shared/services/account/account.service';
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  OnDestroy,
+} from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { reasons, goals } from '../../shared/onboarding-screen';
