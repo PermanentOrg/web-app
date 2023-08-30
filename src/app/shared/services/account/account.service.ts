@@ -60,8 +60,12 @@ export class AccountService {
     private httpv2: HttpV2Service,
     private mixpanel: MixpanelService
   ) {
-    const cachedAccount = this.storage.local.get(ACCOUNT_KEY);
-    const cachedArchive = this.storage.local.get(ARCHIVE_KEY);
+    const cachedAccount =
+      this.storage.local.get(ACCOUNT_KEY) ||
+      this.storage.session.get(ACCOUNT_KEY);
+    const cachedArchive =
+      this.storage.local.get(ARCHIVE_KEY) ||
+      this.storage.session.get(ARCHIVE_KEY);
     const cachedRoot = this.storage.local.get(ROOT_KEY);
     this.inviteCode = this.storage.session.get(INVITE_KEY);
 
@@ -91,6 +95,8 @@ export class AccountService {
     this.account = newAccount;
     if (this.account?.keepLoggedIn) {
       this.storage.local.set(ACCOUNT_KEY, this.account);
+    } else {
+      this.storage.session.set(ACCOUNT_KEY, this.account);
     }
 
     // set account data on Sentry scope
@@ -106,6 +112,8 @@ export class AccountService {
     this.archive = newArchive;
     if (this.account?.keepLoggedIn) {
       this.storage.local.set(ARCHIVE_KEY, this.archive);
+    } else {
+      this.storage.session.set(ARCHIVE_KEY, this.archive);
     }
 
     // set archive data as 'archive' context on Sentry scope
@@ -200,7 +208,11 @@ export class AccountService {
           if (loggedIn) {
             const newArchive = response.getArchiveVO();
             this.archive.update(newArchive);
-            this.storage.local.set(ARCHIVE_KEY, this.archive);
+            if (this.account.keepLoggedIn) {
+              this.storage.local.set(ARCHIVE_KEY, this.archive);
+            } else {
+              this.storage.session.set(ARCHIVE_KEY, this.archive);
+            }
           } else {
             throw loggedIn;
           }
@@ -511,7 +523,7 @@ export class AccountService {
     if (this.isLoggedIn()) {
       try {
         await this.logOut();
-      } catch (err) { }
+      } catch (err) {}
     }
 
     this.inviteCode = inviteCode;
