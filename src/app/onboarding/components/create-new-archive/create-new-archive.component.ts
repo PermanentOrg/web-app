@@ -79,6 +79,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         }
       }
     );
+    this.progress.emit(0);
+    this.mixpanelService.track('Onboarding: start', {});
   }
 
   ngOnDestroy(): void {
