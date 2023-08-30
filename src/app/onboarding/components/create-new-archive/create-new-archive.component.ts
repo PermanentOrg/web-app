@@ -53,11 +53,18 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.progress.emit(0);
     this.subscription = this.accountService.createAccountForMe.subscribe(
-      (name) => {
-        if (name) {
-          this.name = name;
+      (value) => {
+        if (value.action === 'confirm') {
+          this.name = value.name;
           this.archiveType = 'type.archive.person';
+          this.archiveTypeTag = 'type:myself'
+          this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`
           this.screen = 'goals';
+        }
+
+        if (value.action === 'cancel') {
+          this.selectedValue = 'type.archive.person+type:myself';
+          this.archiveType = 'type.archive.person';
         }
       }
     );

@@ -90,7 +90,7 @@ export const archiveOptions = [
     type: 'type:famhist',
   },
   {
-    value: 'type.archive.organization',
+    value: 'type.archive.family',
     text: "A community I'm part of",
     type: 'type:community',
   },

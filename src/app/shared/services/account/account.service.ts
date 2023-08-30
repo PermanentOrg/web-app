@@ -51,9 +51,13 @@ export class AccountService {
     this.refreshAccount();
   }, 5000);
 
-  public createAccountForMe: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
-  createAccountForMe$: Observable<{}> = this.createAccountForMe.asObservable();
+  public createAccountForMe: BehaviorSubject<{ name: string; action: string }> =
+    new BehaviorSubject<{ name: string; action: string }>({
+      name: null,
+      action: null,
+    });
+  createAccountForMe$: Observable<{ name: string; action: string }> =
+    this.createAccountForMe.asObservable();
 
   constructor(
     private api: ApiService,

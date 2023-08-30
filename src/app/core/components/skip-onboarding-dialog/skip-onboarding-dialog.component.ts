@@ -11,12 +11,11 @@ import { ApiService } from '../../../shared/services/api/api.service';
 })
 export class SkipOnboardingDialogComponent implements OnInit {
   TYPE = 'type.archive.person';
+  CONFIRM = 'confirm';
+  CANCEL = 'cancel';
   name = '';
 
-  constructor(
-    private dialog: DialogRef,
-    private account: AccountService,
-  ) {}
+  constructor(private dialog: DialogRef, private account: AccountService) {}
 
   ngOnInit() {
     this.name = this.account.getAccount().fullName;
@@ -24,14 +23,17 @@ export class SkipOnboardingDialogComponent implements OnInit {
 
   onDoneClick(): void {
     this.dialog.close();
+    this.account.createAccountForMe.next({
+      name: '',
+      action: this.CANCEL,
+    });
   }
 
   async onConfirmClick() {
     this.dialog.close();
-    const archive = new ArchiveVO({
-      fullName: this.name,
-      type: this.TYPE,
+    this.account.createAccountForMe.next({
+      name: this.name,
+      action: this.CONFIRM,
     });
-    this.account.createAccountForMe.next(this.name);
   }
 }

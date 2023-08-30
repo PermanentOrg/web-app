@@ -22,7 +22,10 @@ const mockApiService = {
 };
 
 const mockAccountService = {
-  createAccountForMe: new BehaviorSubject<string>(null),
+  createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
+    name: '',
+    action: '',
+  }),
 };
 
 let shallow: Shallow<CreateNewArchiveComponent>;
