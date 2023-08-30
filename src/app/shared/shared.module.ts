@@ -131,7 +131,7 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
     NewArchiveFormComponent,
     PrependProtocolPipe,
     SwitcherComponent,
-    GetAltTextPipe
+    GetAltTextPipe,
   ],
   declarations: [
     ThumbnailComponent,
@@ -178,7 +178,7 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
     NewArchiveFormComponent,
     PrependProtocolPipe,
     SwitcherComponent,
-    GetAltTextPipe
+    GetAltTextPipe,
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
