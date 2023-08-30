@@ -65,6 +65,7 @@ import { ArchiveSearchBoxComponent } from './components/archive-search-box/archi
 import { NewArchiveFormComponent } from './components/new-archive-form/new-archive-form.component';
 import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
+import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 
 @NgModule({
   imports: [
@@ -130,6 +131,7 @@ import { SwitcherComponent } from './components/switcher/switcher.component';
     NewArchiveFormComponent,
     PrependProtocolPipe,
     SwitcherComponent,
+    GetAltTextPipe
   ],
   declarations: [
     ThumbnailComponent,
@@ -176,6 +178,7 @@ import { SwitcherComponent } from './components/switcher/switcher.component';
     NewArchiveFormComponent,
     PrependProtocolPipe,
     SwitcherComponent,
+    GetAltTextPipe
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })

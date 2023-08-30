@@ -124,11 +124,7 @@
       <p class="alt-text">Alt Text</p>
       <pr-inline-value-edit
         [displayBorder]="true"
-        [displayValue]="
-          currentRecord.altText
-            ? currentRecord.altText
-            : currentRecord.displayName
-        "
+        [displayValue]="currentRecord | getAltText"
         [itemId]="currentRecord.folder_linkId"
         [canEdit]="canEdit"
         [required]="false"
@@ -136,7 +132,7 @@
         [emptyMessage]="
           currentRecord.displayName
             ? currentRecord.displayName
-            : 'Click to add name'
+            : 'Click to add alt text'
         "
         [readOnlyEmptyMessage]="
           currentRecord.displayName ? currentRecord.displayName : 'No alt text'

@@ -72,7 +72,7 @@
       <label>Alt Text</label>
       <img class="alt-text-tooltip" src="assets/svg/info.svg" alt="Alt text tooltip" [ngbTooltip]="'Alt text should describe the image -- think of alt text as how you would read the page containing the image to someone over the phone.'" />
       <pr-inline-value-edit
-        [displayValue]="selectedItem.altText ? selectedItem.altText : selectedItem.displayName"
+        [displayValue]="selectedItem | getAltText"
         [itemId]="selectedItem.folder_linkId"
         [canEdit]="canEdit"
         [loading]="isLoading"
