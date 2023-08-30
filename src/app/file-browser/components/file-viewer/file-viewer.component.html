@@ -129,14 +129,8 @@
         [canEdit]="canEdit"
         [required]="false"
         (doneEditing)="onFinishEditing('altText', $event)"
-        [emptyMessage]="
-          currentRecord.displayName
-            ? currentRecord.displayName
-            : 'Click to add alt text'
-        "
-        [readOnlyEmptyMessage]="
-          currentRecord.displayName ? currentRecord.displayName : 'No alt text'
-        "
+        [emptyMessage]="currentRecord | getAltText"
+        [readOnlyEmptyMessage]="currentRecord | getAltText"
         type="text"
         class="h5"
       >
