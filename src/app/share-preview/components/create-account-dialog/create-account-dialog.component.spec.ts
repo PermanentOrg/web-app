@@ -4,12 +4,11 @@ import {
   TestBed,
   TestModuleMetadata,
 } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { cloneDeep } from 'lodash';
-
 import { SharedModule } from '@shared/shared.module';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import * as Testing from '@root/test/testbedConfig';
-import { InviteVO } from '@root/app/models';
 import { CreateAccountDialogComponent } from './create-account-dialog.component';
 
 describe('CreateAccountDialogComponent', () => {
@@ -28,6 +27,12 @@ describe('CreateAccountDialogComponent', () => {
     dialogRef = new DialogRef(1, null);
 
     config.imports.push(SharedModule);
+    config.imports.push(
+      RouterTestingModule.withRoutes([
+        { path: 'app/signup', redirectTo: '' },
+        { path: 'app/login', redirectTo: '' },
+      ])
+    );
     config.declarations.push(CreateAccountDialogComponent);
     config.providers.push({
       provide: DIALOG_DATA,
@@ -63,4 +68,38 @@ describe('CreateAccountDialogComponent', () => {
 
     expect(dialogRefSpy).toHaveBeenCalled();
   });
+
+  it('should call the close method when signup link is clicked', async () => {
+    const dialogRefSpy = spyOn(dialogRef, 'close');
+    const button = findLink(fixture, 'a.btn.btn-primary');
+
+    expectLinkClosesDialog(button, '/app/signup', dialogRefSpy);
+  });
+
+  it('should call the close method when login link is clicked', () => {
+    const dialogRefSpy = spyOn(dialogRef, 'close');
+    const link = findLink(fixture, '.login');
+
+    expectLinkClosesDialog(link, '/app/login', dialogRefSpy);
+  });
+
+  function findLink(
+    fixture: ComponentFixture<CreateAccountDialogComponent>,
+    selector: string
+  ) {
+    const element: HTMLElement = fixture.nativeElement;
+    const button = element.querySelector(selector) as HTMLAnchorElement;
+    expect(button).toBeTruthy();
+    return button;
+  }
+
+  function expectLinkClosesDialog(
+    link: HTMLAnchorElement,
+    expectedPath: string,
+    dialogRefSpy: jasmine.Spy<jasmine.Func>
+  ) {
+    expect(link.href).toContain(expectedPath);
+    link.click();
+    expect(dialogRefSpy).toHaveBeenCalled();
+  }
 });
