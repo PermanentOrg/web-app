@@ -57,8 +57,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         if (value.action === 'confirm') {
           this.name = value.name;
           this.archiveType = 'type.archive.person';
-          this.archiveTypeTag = 'type:myself'
-          this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`
+          this.archiveTypeTag = 'type:myself';
+          this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
           this.screen = 'goals';
         }
 
