@@ -21,10 +21,13 @@
         Learn more about Permanent
       </a>
     </p>
-    <a [routerLink]="['/app', 'signup']" class="btn btn-primary"
+    <a
+      [routerLink]="['/app', 'signup']"
+      (click)="close()"
+      class="btn btn-primary"
       >Create Account</a
     >
-    <a [routerLink]="['/app', 'login']" class="login"
+    <a [routerLink]="['/app', 'login']" (click)="close()" class="login"
       >Already have an account?</a
     >
   </div>
