@@ -123,7 +123,6 @@
       </table>
       <p class="alt-text">Alt Text</p>
       <pr-inline-value-edit
-        [displayBorder]="true"
         [displayValue]="currentRecord | getAltText"
         [itemId]="currentRecord.folder_linkId"
         [canEdit]="canEdit"
@@ -131,8 +130,7 @@
         (doneEditing)="onFinishEditing('altText', $event)"
         [emptyMessage]="currentRecord | getAltText"
         [readOnlyEmptyMessage]="currentRecord | getAltText"
-        type="text"
-        class="h5"
+        type="description-textarea"
       >
       </pr-inline-value-edit>
       <table class="metadata-table">
