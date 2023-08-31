@@ -19,6 +19,7 @@ export class OnboardingComponent implements OnInit {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;
   public currentArchive: ArchiveVO;
   public pendingArchives: ArchiveVO[] = [];
+  public selectedPendingArchive: ArchiveVO;
   public useApi: boolean = true;
   public progress: number = 0;
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
@@ -65,6 +66,9 @@ export class OnboardingComponent implements OnInit {
 
   public setScreen(screen: OnboardingScreen): void {
     this.screen = screen;
+    if (this.selectedPendingArchive) {
+      this.selectedPendingArchive = null;
+    }
     const correspondingRoute = routes.find((route) => {
       if (route.data?.onboardingScreen) {
         if ((route.data.onboardingScreen as OnboardingScreen) === screen) {
@@ -93,6 +97,9 @@ export class OnboardingComponent implements OnInit {
     this.account.updateAccount(updateAccount).then(() => {
       this.account.setArchive(archive);
       this.api.archive.change(archive).then(() => {
+        if (this.selectedPendingArchive) {
+          this.acceptedInvite = true;
+        }
         this.setScreen(OnboardingScreen.done);
       });
     });
@@ -123,22 +130,9 @@ export class OnboardingComponent implements OnInit {
     this.detector.detectChanges();
   }
 
-  public acceptArchiveInvitation(archive: ArchiveVO): void {
-    this.showOnboarding = false;
-    this.progress = 1;
-    this.api.archive
-      .accept(archive)
-      .then(() => {
-        this.progress = 2;
-        this.showOnboarding = true;
-        this.acceptedInvite = true;
-        this.setNewArchive(archive);
-      })
-      .catch(() => {
-        this.progress = 0;
-        this.showOnboarding = true;
-        this.errorMessage = `There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`;
-      });
+  public selectArchiveInvitation(archive: ArchiveVO): void {
+    this.selectedPendingArchive = archive;
+    this.screen = OnboardingScreen.welcomeScreen;
   }
 
   public logOut(): void {

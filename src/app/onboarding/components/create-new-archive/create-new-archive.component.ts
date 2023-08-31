@@ -7,6 +7,7 @@ import {
   OnInit,
   Output,
   OnDestroy,
+  Input,
 } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
@@ -27,6 +28,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   @Output() error = new EventEmitter<string>();
   @Output() progress = new EventEmitter<number>();
   @Output() chartPathClicked = new EventEmitter<void>();
+  @Input() pendingArchives: ArchiveVO[] = [];
+  @Input() pendingArchive: ArchiveVO;
 
   public archiveType: string;
   public archiveName: string = '';
@@ -51,7 +54,12 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.progress.emit(0);
+    if (this.pendingArchive) {
+      this.screen = 'goals';
+      this.progress.emit(1);
+    } else {
+      this.progress.emit(0);
+    }
     this.subscription = this.accountService.createAccountForMe.subscribe(
       (value) => {
         if (value.action === 'confirm') {
@@ -60,6 +68,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.archiveTypeTag = 'type:myself';
           this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
           this.screen = 'goals';
+          this.progress.emit(1);
         }
 
         if (value.action === 'cancel') {
@@ -75,6 +84,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public onBackPress(): void {
+    if (this.pendingArchive) {
+      this.goToInvitations();
+    }
     if (this.screen === 'goals') {
       this.screen = 'create';
       this.progress.emit(0);
@@ -85,6 +97,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public setScreen(screen: NewArchiveScreen): void {
+    if (this.pendingArchive && screen === 'create') {
+      this.goToInvitations();
+    }
     this.screen = screen;
     if (screen === 'reasons') {
       this.progress.emit(2);
@@ -108,13 +123,19 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         this.archiveTypeTag,
         ...this.selectedGoals,
         ...this.selectedReasons,
-      ];
+      ].filter((tag) => !!tag);
 
       let createdArchive;
 
       try {
-        const response = await this.api.archive.create(archive);
-        createdArchive = response.getArchiveVO();
+        let response;
+
+        if (this.pendingArchive) {
+          await this.api.archive.accept(this.pendingArchive);
+        } else {
+          response = await this.api.archive.create(archive);
+          createdArchive = response.getArchiveVO();
+        }
       } catch (archiveError) {
         this.error.emit('An error occurred. Please try again.');
       }
@@ -125,6 +146,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
       if (createdArchive) {
         this.createdArchive.emit(createdArchive);
+      }
+      if (this.pendingArchive) {
+        this.createdArchive.emit(this.pendingArchive);
       }
     } catch (error) {
       this.error.emit('An error occurred. Please try again.');
@@ -164,5 +188,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       this.selectedReasons = [];
       this.onSubmit();
     }
+  }
+
+  goToInvitations(): void {
+    this.back.emit();
   }
 }

@@ -38,8 +38,19 @@
         <div *ngIf="!selectedValue" class="disabled-overlay"></div>
       </div>
       <div class="buttons">
-        <button (click)="makeMyArchive()" class="btn btn-link">
+        <button
+          *ngIf="!pendingArchives.length"
+          (click)="makeMyArchive()"
+          class="btn btn-link"
+        >
           Make my archive for me
+        </button>
+        <button
+          *ngIf="pendingArchives.length"
+          (click)="goToInvitations()"
+          class="btn btn-link"
+        >
+          Go back
         </button>
         <button
           [class.btn-disabled]="!name"
@@ -50,6 +61,13 @@
           Next: Chart your path
         </button>
       </div>
+      <button
+        *ngIf="pendingArchives.length"
+        (click)="makeMyArchive()"
+        class="btn btn-link"
+      >
+        Make my archive for me
+      </button>
     </div>
   </div>
   <div class="goals" *ngIf="screen === 'goals'">

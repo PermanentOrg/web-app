@@ -12,7 +12,7 @@ import { ArchiveVO } from '@models/archive-vo';
 export class WelcomeScreenComponent implements OnInit {
   @Input() pendingArchives: ArchiveVO[] = [];
   @Output() nextScreen = new EventEmitter<OnboardingScreen>();
-  @Output() acceptInvitation = new EventEmitter<ArchiveVO>();
+  @Output() selectInvitation = new EventEmitter<ArchiveVO>();
 
   selectedValue: string = '';
   name: string = '';
@@ -27,7 +27,7 @@ export class WelcomeScreenComponent implements OnInit {
     this.nextScreen.emit(screen);
   }
 
-  public acceptPendingArchive(archive: ArchiveVO): void {
-    this.acceptInvitation.emit(archive);
+  public selectPendingArchive(archive: ArchiveVO): void {
+    this.selectInvitation.emit(archive);
   }
 }

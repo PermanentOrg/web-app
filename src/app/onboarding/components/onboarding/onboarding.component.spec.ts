@@ -131,7 +131,9 @@ describe('OnboardingComponent #onboarding', () => {
     );
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(element.componentInstance.currentArchive).not.toBeUndefined();
+    expect(
+      element.componentInstance.selectedPendingArchive
+    ).not.toBeUndefined();
   });
   it('can be tested with debugging component', async () => {
     const { element } = await shallow.render();
