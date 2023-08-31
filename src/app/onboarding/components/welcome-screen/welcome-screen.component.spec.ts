@@ -39,8 +39,8 @@ describe('WelcomeScreenComponent #onboarding', () => {
       }),
     ];
     const { element, find, outputs } = await defaultRender(pendingArchives);
-    element.componentInstance.acceptPendingArchive(pendingArchives[0]);
-    expect(outputs.acceptInvitation.emit).toHaveBeenCalledWith(
+    element.componentInstance.selectPendingArchive(pendingArchives[0]);
+    expect(outputs.selectInvitation.emit).toHaveBeenCalledWith(
       pendingArchives[0]
     );
   });

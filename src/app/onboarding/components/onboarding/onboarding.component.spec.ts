@@ -126,7 +126,7 @@ describe('OnboardingComponent #onboarding', () => {
     }
     expect(find('pr-welcome-screen')).toHaveFoundOne();
     find('pr-welcome-screen').triggerEventHandler(
-      'acceptInvitation',
+      'selectInvitation',
       new ArchiveVO({ fullName: 'Pending Test' })
     );
     fixture.detectChanges();
