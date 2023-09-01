@@ -1,19 +1,27 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import { Subject } from 'rxjs';
-
+import { Observable, Subject } from 'rxjs';
+import { TagsService } from '@core/services/tags/tags.service';
+import { TagVOData } from '@models/tag-vo';
+import { FolderVO, ItemVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
-import { TagsService } from '@core/services/tags/tags.service';
-import { TagVO, TagVOData } from '@models/tag-vo';
 import { SearchService } from './search.service';
-import { FolderVO, ItemVO, RecordVO } from '@models/index';
 
 interface ItemVOData {
   displayName: string;
 }
 
-class MockApiService {}
+class MockApiService {
+  public search = {
+    itemsByNameObservable() {
+      return new Observable<void>();
+    },
+    itemsByNameInPublicArchiveObservable() {
+      return new Observable<void>();
+    },
+  };
+}
 class MockDataService {
   public currentFolderChange = new Subject<void>();
   public currentFolder: FolderVO = new FolderVO({});
@@ -45,6 +53,7 @@ describe('SearchService', () => {
   let service: SearchService;
   let tags: MockTagsService;
   let data: MockDataService;
+  let api: MockApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,6 +65,7 @@ describe('SearchService', () => {
     service = TestBed.inject(SearchService);
     tags = TestBed.inject(TagsService) as any as MockTagsService;
     data = TestBed.inject(DataService) as any as MockDataService;
+    api = TestBed.inject(ApiService) as any as MockApiService;
   });
 
   it('should be created', () => {
@@ -213,5 +223,17 @@ describe('SearchService', () => {
     function search(term: string, limit?: number): TagVOData[] {
       return service.getTagResults(term, limit);
     }
+  });
+
+  it('can do a complete archive search', () => {
+    const apiSpy = spyOn(api.search, 'itemsByNameObservable');
+    service.getResultsInCurrentArchive('Test', []);
+    expect(apiSpy).toHaveBeenCalled();
+  });
+
+  it('can do a public archive search', () => {
+    const apiSpy = spyOn(api.search, 'itemsByNameInPublicArchiveObservable');
+    service.getResultsInPublicArchive('Test', [], '1');
+    expect(apiSpy).toHaveBeenCalled();
   });
 });
