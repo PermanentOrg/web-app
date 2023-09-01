@@ -89,7 +89,6 @@ module.exports = {
         ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
-        '@angular-eslint/no-host-metadata-property': 'off',
         '@angular-eslint/no-output-native': 'off',
         '@angular-eslint/no-output-on-prefix': 'off',
         '@angular-eslint/use-lifecycle-interface': 'off',
