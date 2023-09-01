@@ -100,6 +100,21 @@ describe('SearchService', () => {
       );
     });
 
+    it('removes quotation marks from tag names', () => {
+      /*
+        This test probably represents erroneous behavior that we want to change
+        at some point. For now, this represents the original functionality of
+        the SearchService as it was written.
+      */
+      tags.setTags([
+        { name: 'Potato', tagId: 0 },
+        { name: '"Potato"', tagId: 1 },
+      ]);
+      const searchTokens = service.parseSearchTerm('tag:""Potato""');
+      expect(searchTokens[1].length).toBe(1);
+      expect(searchTokens[1][0].tagId).toBe(0);
+    });
+
     it('handles tag edge cases', () => {
       tags.setTags([{ name: 'tag:Test' }]);
       expectSearchToBe(service.parseSearchTerm('tag:"tag:"Test""'), undefined, [
@@ -164,6 +179,39 @@ describe('SearchService', () => {
           ChildItemVOs: children.map((child) => new RecordVO(child)),
         })
       );
+    }
+  });
+
+  describe('getTagResults', () => {
+    it('handles an empty search term', () => {
+      expect(search('')).toEqual([]);
+    });
+
+    it('can search an empty tag registry', () => {
+      expect(search('Potato')).toEqual([]);
+    });
+
+    it('can search a populated tag service', () => {
+      tags.setTags([{ name: 'Potato' }, { name: 'DoNotMatch' }]);
+      const searchResults = search('Potato');
+      expect(searchResults.length).toBe(1);
+      expect(searchResults[0].name).toBe('Potato');
+    });
+
+    it('should ignore location in fuzzy searches', () => {
+      tags.setTags([
+        { name: 'VeryLongTagNameThatProbablyWontEvenHappenInProduction' },
+      ]);
+      expect(search('Production').length).toBe(1);
+    });
+
+    it('should limit results if limit is provided', () => {
+      tags.setTags([{ name: 'Potato' }, { name: 'Potato Two' }]);
+      expect(search('Potato', 1).length).toBe(1);
+    });
+
+    function search(term: string, limit?: number): TagVOData[] {
+      return service.getTagResults(term, limit);
     }
   });
 });
