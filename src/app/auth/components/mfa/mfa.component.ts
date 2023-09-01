@@ -1,5 +1,9 @@
 /* @format */
+<<<<<<< HEAD
 import { Component, HostBinding, OnInit } from '@angular/core';
+=======
+import { Component, OnInit } from '@angular/core';
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import {
@@ -15,6 +19,10 @@ import { DeviceService } from '@shared/services/device/device.service';
   selector: 'pr-mfa',
   templateUrl: './mfa.component.html',
   styleUrls: ['./mfa.component.scss'],
+<<<<<<< HEAD
+=======
+  host: { class: 'pr-auth-form' },
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
 })
 export class MfaComponent implements OnInit {
   @HostBinding('class.pr-auth-form') classBinding = true;
@@ -39,8 +47,15 @@ export class MfaComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
+<<<<<<< HEAD
     this.accountService
       .verifyMfa(formValue.token)
+=======
+    const keepLoggedIn = this.keepLoggedIn();
+
+    this.accountService
+      .verifyMfa(formValue.token, keepLoggedIn)
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
@@ -62,7 +77,11 @@ export class MfaComponent implements OnInit {
             `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
             'success'
           );
+<<<<<<< HEAD
           this.router.navigate(['/'], { queryParamsHandling: 'preserve' });
+=======
+          this.router.navigate(['/']);
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
         }
       })
       .catch((response: AuthResponse | AccountResponse) => {
@@ -70,4 +89,11 @@ export class MfaComponent implements OnInit {
         this.message.showError(response.getMessage(), true);
       });
   }
+<<<<<<< HEAD
+=======
+
+  private keepLoggedIn() {
+    return this.route.snapshot.queryParams.keepLoggedIn === 'true';
+  }
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
 }

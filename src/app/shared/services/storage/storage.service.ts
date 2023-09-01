@@ -1,7 +1,8 @@
+/* @format */
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
   public session: BaseStorage;
@@ -10,6 +11,14 @@ export class StorageService {
   constructor() {
     this.session = new BaseStorage(window.sessionStorage);
     this.local = new BaseStorage(window.localStorage);
+  }
+
+  getStorageByType({ key, condition }: { key?: string; condition?: boolean }) {
+    const isLocal = this.local.get(key) || condition ? true : false;
+    if (isLocal) {
+      return this.local;
+    }
+    return this.session;
   }
 }
 
@@ -30,11 +39,20 @@ class BaseStorage {
       const storeValue = this.storage.getItem(key);
       if (!storeValue || storeValue.length < 2) {
         return storeValue;
-      } else if (storeValue[0] === '[' && storeValue[storeValue.length - 1] === ']') {
+      } else if (
+        storeValue[0] === '[' &&
+        storeValue[storeValue.length - 1] === ']'
+      ) {
         return JSON.parse(storeValue);
-      } else if (storeValue[0] === '{' && storeValue[storeValue.length - 1] === '}') {
+      } else if (
+        storeValue[0] === '{' &&
+        storeValue[storeValue.length - 1] === '}'
+      ) {
         return JSON.parse(storeValue);
-      } else if (storeValue[0] === '"' && storeValue[storeValue.length - 1] === '"') {
+      } else if (
+        storeValue[0] === '"' &&
+        storeValue[storeValue.length - 1] === '"'
+      ) {
         return JSON.parse(storeValue);
       } else {
         return storeValue;

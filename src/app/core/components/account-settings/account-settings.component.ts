@@ -6,18 +6,29 @@ import { cloneDeep } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
-import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
+import {
+  PrConstantsService,
+  Country,
+} from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+  UntypedFormControl,
+} from '@angular/forms';
 import { AuthRepo, AuthResponse } from '@shared/services/api/auth.repo';
 import { matchControlValidator } from '@shared/utilities/forms';
-import { PromptField, PromptService } from '@shared/services/prompt/prompt.service';
+import {
+  PromptField,
+  PromptService,
+} from '@shared/services/prompt/prompt.service';
 
 @Component({
   selector: 'pr-account-settings',
   templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  styleUrls: ['./account-settings.component.scss'],
 })
 export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
@@ -37,36 +48,37 @@ export class AccountSettingsComponent implements OnInit {
     private api: ApiService,
     private message: MessageService,
     private fb: UntypedFormBuilder,
-    private prompt: PromptService,
+    private prompt: PromptService
   ) {
     this.account = this.accountService.getAccount();
-    this.countries = this.prConstants.getCountries().map(c => {
+    this.countries = this.prConstants.getCountries().map((c) => {
       return {
         text: c.name,
-        value: c.abbrev
+        value: c.abbrev,
       };
     });
-    this.states = Object.values(this.prConstants.getStates()).map((s: string) => {
-      return {
-        text: s,
-        value: s
-      };
-    });
+    this.states = Object.values(this.prConstants.getStates()).map(
+      (s: string) => {
+        return {
+          text: s,
+          value: s,
+        };
+      }
+    );
 
     this.changePasswordForm = fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordOld: ['', [Validators.required, Validators.minLength(8)]],
     });
 
-    const verifyPasswordControl = new UntypedFormControl(
-      '',
-      [Validators.required, matchControlValidator(this.changePasswordForm.controls['password'])]
-    );
+    const verifyPasswordControl = new UntypedFormControl('', [
+      Validators.required,
+      matchControlValidator(this.changePasswordForm.controls['password']),
+    ]);
     this.changePasswordForm.addControl('passwordVerify', verifyPasswordControl);
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   async onSaveProfileInfo(prop: keyof AccountVO, value: string) {
     const originalValue = this.account[prop];
@@ -90,12 +102,18 @@ export class AccountSettingsComponent implements OnInit {
 
   async onValidateEmailClick() {
     await this.router.navigate(['.'], { relativeTo: this.route.parent });
-    await this.router.navigate(['/app/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendEmail: true } });
+    await this.router.navigate(['/app/auth/verify'], {
+      relativeTo: this.route.parent,
+      queryParams: { sendEmail: true },
+    });
   }
 
   async onValidatePhoneClick() {
     await this.router.navigate(['.'], { relativeTo: this.route.parent });
-    await this.router.navigate(['/app/auth/verify'], { relativeTo: this.route.parent, queryParams: { sendSms: true } });
+    await this.router.navigate(['/app/auth/verify'], {
+      relativeTo: this.route.parent,
+      queryParams: { sendSms: true },
+    });
   }
 
   async onChangePasswordFormSubmit(value: AccountPasswordVOData) {
@@ -105,19 +123,24 @@ export class AccountSettingsComponent implements OnInit {
     try {
       try {
         const loginResp = await this.accountService.checkForMFAWithLogin(
-          value.passwordOld,
+          value.passwordOld
         );
         if (loginResp.needsMFA()) {
           try {
             const mfa = await this.showMFAPrompt();
             try {
-              const mfaResp = await this.accountService.verifyMfa(mfa.verificationCode);
+              const keepLoggedIn =
+                this.accountService.getAccount().keepLoggedIn;
+              const mfaResp = await this.accountService.verifyMfa(
+                mfa.verificationCode,
+                keepLoggedIn
+              );
               trustToken = mfaResp.getTrustToken().value;
             } catch (err) {
               this.message.showError('Incorrect verification code entered');
               throw err;
             }
-          } catch(err) {
+          } catch (err) {
             // They canceled out of the prompt, do nothing
             throw err;
           }
@@ -137,7 +160,7 @@ export class AccountSettingsComponent implements OnInit {
     }
   }
 
-  public async showMFAPrompt(): Promise<{verificationCode: string}> {
+  public async showMFAPrompt(): Promise<{ verificationCode: string }> {
     const mfaField: PromptField = {
       fieldName: 'verificationCode',
       placeholder: 'Verification Code',

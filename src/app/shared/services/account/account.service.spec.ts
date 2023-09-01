@@ -54,6 +54,12 @@ describe('AccountService', () => {
           get: () => {},
           set: () => {},
         },
+        getStorageByType: () => {
+          return {
+            get: () => {},
+            set: () => {},
+          };
+        },
       });
   });
 

@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable, EventEmitter } from '@angular/core';
 import { map, min } from 'rxjs/operators';
 import { find, debounce } from 'lodash';
@@ -60,12 +61,14 @@ export class AccountService {
     private httpv2: HttpV2Service,
     private mixpanel: MixpanelService
   ) {
-    const cachedAccount =
-      this.storage.local.get(ACCOUNT_KEY) ||
-      this.storage.session.get(ACCOUNT_KEY);
-    const cachedArchive =
-      this.storage.local.get(ARCHIVE_KEY) ||
-      this.storage.session.get(ARCHIVE_KEY);
+    const cachedAccount = this.storage
+      .getStorageByType({ key: ACCOUNT_KEY })
+      .get(ACCOUNT_KEY);
+
+    const cachedArchive = this.storage
+      .getStorageByType({ key: ARCHIVE_KEY })
+      .get(ARCHIVE_KEY);
+
     const cachedRoot = this.storage.local.get(ROOT_KEY);
     this.inviteCode = this.storage.session.get(INVITE_KEY);
 
@@ -93,11 +96,10 @@ export class AccountService {
 
   public setAccount(newAccount: AccountVO) {
     this.account = newAccount;
-    if (this.account?.keepLoggedIn) {
-      this.storage.local.set(ACCOUNT_KEY, this.account);
-    } else {
-      this.storage.session.set(ACCOUNT_KEY, this.account);
-    }
+
+    this.storage
+      .getStorageByType({ condition: this.account?.keepLoggedIn })
+      .set(ACCOUNT_KEY, this.account);
 
     // set account data on Sentry scope
     Sentry.configureScope((scope) => {
@@ -110,11 +112,9 @@ export class AccountService {
 
   public setArchive(newArchive: ArchiveVO) {
     this.archive = newArchive;
-    if (this.account?.keepLoggedIn) {
-      this.storage.local.set(ARCHIVE_KEY, this.archive);
-    } else {
-      this.storage.session.set(ARCHIVE_KEY, this.archive);
-    }
+    this.storage
+      .getStorageByType({ condition: this.account?.keepLoggedIn })
+      .set(ARCHIVE_KEY, this.archive);
 
     // set archive data as 'archive' context on Sentry scope
     Sentry.configureScope((scope) => {
@@ -412,13 +412,20 @@ export class AccountService {
       .toPromise();
   }
 
-  public verifyMfa(token: string): Promise<AuthResponse> {
+  public verifyMfa(
+    token: string,
+    keepLoggedIn?: boolean
+  ): Promise<AuthResponse> {
     return this.api.auth
       .verify(this.account, token, 'type.auth.mfaValidation')
       .pipe(
         map((response: AuthResponse) => {
           if (response.isSuccessful) {
-            this.setAccount(response.getAccountVO());
+            const newAccount = new AccountVO({
+              ...response.getAccountVO(),
+              keepLoggedIn,
+            });
+            this.setAccount(newAccount);
 
             const authToken = response.getAuthToken()?.value;
             if (authToken) {

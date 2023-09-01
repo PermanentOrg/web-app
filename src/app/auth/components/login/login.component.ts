@@ -68,7 +68,8 @@ export class LoginComponent implements OnInit {
         if (response.needsMFA()) {
           this.router
             .navigate(['..', 'mfa'], {
-              queryParamsHandling: 'preserve',
+              queryParamsHandling: 'merge',
+              queryParams: { keepLoggedIn: formValue.keepLoggedIn },
               relativeTo: this.route,
             })
             .then(() => {
@@ -82,8 +83,9 @@ export class LoginComponent implements OnInit {
         } else if (response.needsVerification()) {
           this.router
             .navigate(['..', 'verify'], {
-              queryParamsHandling: 'preserve',
+              queryParamsHandling: 'merge',
               relativeTo: this.route,
+              queryParams: { keepLoggedIn: formValue.keepLoggedIn },
             })
             .then(() => {
               this.message.showMessage(

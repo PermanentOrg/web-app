@@ -1,5 +1,9 @@
 /* @format */
+<<<<<<< HEAD
 import { Component, HostBinding, OnInit } from '@angular/core';
+=======
+import { Component, OnInit } from '@angular/core';
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -10,6 +14,10 @@ import {
   ArchiveResponse,
   AccountResponse,
 } from '@shared/services/api/index.repo';
+<<<<<<< HEAD
+=======
+import { AccountVO } from '@root/app/models';
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
 
@@ -17,6 +25,10 @@ import { RecaptchaErrorParameters } from 'ng-recaptcha';
   selector: 'pr-verify',
   templateUrl: './verify.component.html',
   styleUrls: ['./verify.component.scss'],
+<<<<<<< HEAD
+=======
+  host: { class: 'pr-auth-form' },
+>>>>>>> 493c643c (PER-8964-users-stay-logged-in)
 })
 export class VerifyComponent implements OnInit {
   @HostBinding('class.pr-auth-form') classBinding = true;
@@ -126,7 +138,11 @@ export class VerifyComponent implements OnInit {
 
         this.waiting = false;
 
-        const account = response.getAccountVO();
+        const keepLoggedIn = this.keepLoggedIn();
+        const account = new AccountVO({
+          ...response.getAccountVO(),
+          keepLoggedIn,
+        });
         this.accountService.setAccount(account);
 
         this.needsEmail = account.emailNeedsVerification();
@@ -219,5 +235,9 @@ export class VerifyComponent implements OnInit {
       return !this.showCaptchaForEmail || this.canSendCodes('phone');
     }
     return this.captchaEnabled ? this.captchaPassed : true;
+  }
+
+  private keepLoggedIn(): boolean {
+    return this.route.snapshot.queryParams.keepLoggedIn === 'true';
   }
 }
