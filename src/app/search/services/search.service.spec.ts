@@ -7,10 +7,21 @@ import { DataService } from '@shared/services/data/data.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO, TagVOData } from '@models/tag-vo';
 import { SearchService } from './search.service';
+import { FolderVO, ItemVO, RecordVO } from '@models/index';
+
+interface ItemVOData {
+  displayName: string;
+}
 
 class MockApiService {}
 class MockDataService {
   public currentFolderChange = new Subject<void>();
+  public currentFolder: FolderVO = new FolderVO({});
+
+  public setCurrentFolder(folder: FolderVO): void {
+    this.currentFolder = folder;
+    this.currentFolderChange.next();
+  }
 }
 class MockTagsService {
   private tags: TagVOData[] = [];
@@ -33,6 +44,7 @@ class MockTagsService {
 describe('SearchService', () => {
   let service: SearchService;
   let tags: MockTagsService;
+  let data: MockDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,6 +55,7 @@ describe('SearchService', () => {
     TestBed.overrideProvider(TagsService, { useValue: new MockTagsService() });
     service = TestBed.inject(SearchService);
     tags = TestBed.inject(TagsService) as any as MockTagsService;
+    data = TestBed.inject(DataService) as any as MockDataService;
   });
 
   it('should be created', () => {
@@ -101,6 +114,56 @@ describe('SearchService', () => {
     ) {
       expect(search[0]).toBe(expectedSearch);
       expect(search[1]).toEqual(expectedTags);
+    }
+  });
+
+  describe('getResultsInCurrentFolder', () => {
+    it('handles an empty search term', () => {
+      expect(search('')).toEqual([]);
+    });
+
+    it('can search an empty folder', () => {
+      expect(search('Potato')).toEqual([]);
+    });
+
+    it('can search a populated folder', () => {
+      setCurrentFolderChildren([
+        { displayName: 'Potato' },
+        { displayName: 'Do not match' },
+      ]);
+      const searchResults = search('Potato');
+      expect(searchResults.length).toBe(1);
+      expect(searchResults[0].displayName).toBe('Potato');
+    });
+
+    it('should ignore location in fuzzy searches', () => {
+      setCurrentFolderChildren([
+        {
+          displayName:
+            'VeryLongDisplayNameThatNeedsToUseFuzzySearchAndIgnoreLocationPortrait',
+        },
+      ]);
+      expect(search('Portrait').length).toBe(1);
+    });
+
+    it('should limit results if limit is provided', () => {
+      setCurrentFolderChildren([
+        { displayName: 'Potato' },
+        { displayName: 'Potato Two' },
+      ]);
+      expect(search('Potato', 1).length).toBe(1);
+    });
+
+    function search(term: string, limit?: number): ItemVO[] {
+      return service.getResultsInCurrentFolder(term, limit);
+    }
+
+    function setCurrentFolderChildren(children: ItemVOData[]): void {
+      data.setCurrentFolder(
+        new FolderVO({
+          ChildItemVOs: children.map((child) => new RecordVO(child)),
+        })
+      );
     }
   });
 });
