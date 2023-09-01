@@ -1,3 +1,4 @@
+<!-- @format -->
 <div class="sidebar-tabs">
   <div
     class="sidebar-tab"
@@ -70,7 +71,14 @@
     </div>
     <div class="sidebar-item">
       <label>Alt Text</label>
-      <img class="alt-text-tooltip" src="assets/svg/info.svg" alt="Alt text tooltip" [ngbTooltip]="'Alt text should describe the image -- think of alt text as how you would read the page containing the image to someone over the phone.'" />
+      <img
+        class="alt-text-tooltip"
+        src="assets/svg/info.svg"
+        alt="Alt text tooltip"
+        [ngbTooltip]="
+          'Alt text should describe the image -- think of alt text as how you would read the page containing the image to someone over the phone.'
+        "
+      />
       <pr-inline-value-edit
         [displayValue]="selectedItem | getAltText"
         [itemId]="selectedItem.folder_linkId"
@@ -79,7 +87,7 @@
         (doneEditing)="onFinishEditing('altText', $event)"
         emptyMessage="Click to add description"
         readOnlyEmptyMessage="No description"
-        type="text"
+        type="textarea"
       ></pr-inline-value-edit>
     </div>
     <div class="sidebar-item">

@@ -1,9 +1,11 @@
+<!-- @format -->
 <div
   class="pr-video-wrapper loading"
   [ngClass]="{ tall: item.imageRatio > 1, processing: isProcessing }"
 >
   <video
     [attr.aria-label]="item.altText ? item.altText : item.displayName"
+    [attr.aria-role]="'video'"
     [src]="videoSrc"
     controls
   ></video>
