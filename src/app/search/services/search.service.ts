@@ -38,7 +38,10 @@ export class SearchService {
     });
   }
 
-  getResultsInCurrentFolder(searchTerm: string, limit?: number): ItemVO[] {
+  public getResultsInCurrentFolder(
+    searchTerm: string,
+    limit?: number
+  ): ItemVO[] {
     if (!searchTerm) {
       return [];
     }
@@ -54,7 +57,7 @@ export class SearchService {
     });
   }
 
-  parseSearchTerm(termString: string): [string, TagVOData[]] {
+  public parseSearchTerm(termString: string): [string, TagVOData[]] {
     const splitByTerm = new RegExp(/\s(?=(?:[^"]+(["])[^"]+\1)*[^"]*$)/g);
     const getTagName = new RegExp(/"(.+)"/g);
     let queryString: string;
@@ -89,7 +92,7 @@ export class SearchService {
     return [queryString, parsedTags];
   }
 
-  getResultsInCurrentArchive(
+  public getResultsInCurrentArchive(
     searchTerm: string,
     tags: TagVOData[],
     limit?: number
@@ -97,7 +100,7 @@ export class SearchService {
     return this.api.search.itemsByNameObservable(searchTerm, tags, limit);
   }
 
-  getResultsInPublicArchive(
+  public getResultsInPublicArchive(
     searchTerm: string,
     tags: TagVOData[],
     archiveId: string,
@@ -111,7 +114,7 @@ export class SearchService {
     );
   }
 
-  getTagResults(searchTerm: string, limit?: number) {
+  public getTagResults(searchTerm: string, limit?: number) {
     if (!searchTerm) {
       return [];
     }
@@ -127,7 +130,7 @@ export class SearchService {
     });
   }
 
-  indexCurrentFolder() {
+  private indexCurrentFolder() {
     if (this.data.currentFolder?.ChildItemVOs) {
       this.fuse.setCollection(this.data.currentFolder.ChildItemVOs);
     } else {
@@ -135,7 +138,7 @@ export class SearchService {
     }
   }
 
-  indexTags(tags: TagVOData[]) {
+  private indexTags(tags: TagVOData[]) {
     if (!tags?.length) {
       this.tagsFuse.setCollection([]);
     } else {
