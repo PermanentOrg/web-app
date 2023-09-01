@@ -42,19 +42,11 @@ export class SearchService {
     searchTerm: string,
     limit?: number
   ): ItemVO[] {
-    if (!searchTerm) {
-      return [];
-    }
+    return this.searchWithFuse(this.fuse, searchTerm, limit);
+  }
 
-    let results = this.fuse.search(searchTerm);
-
-    if (limit) {
-      results = results.slice(0, limit);
-    }
-
-    return results.map((i) => {
-      return i.item;
-    });
+  public getTagResults(searchTerm: string, limit?: number): TagVOData[] {
+    return this.searchWithFuse(this.tagsFuse, searchTerm, limit);
   }
 
   public parseSearchTerm(termString: string): [string, TagVOData[]] {
@@ -114,20 +106,18 @@ export class SearchService {
     );
   }
 
-  public getTagResults(searchTerm: string, limit?: number) {
+  private searchWithFuse<T>(
+    fuse: Fuse<T>,
+    searchTerm: string,
+    limit?: number
+  ): T[] {
     if (!searchTerm) {
       return [];
     }
-
-    let results = this.tagsFuse.search(searchTerm);
-
-    if (limit) {
-      results = results.slice(0, limit);
-    }
-
-    return results.map((i) => {
-      return i.item as TagVOData;
-    });
+    return fuse
+      .search(searchTerm)
+      .slice(0, limit)
+      .map((i) => i.item);
   }
 
   private indexCurrentFolder() {
