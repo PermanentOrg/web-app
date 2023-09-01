@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, ElementRef, AfterViewInit, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
+/* @format */
+import {
+  Component,
+  OnInit,
+  Input,
+  ElementRef,
+  AfterViewInit,
+  HostBinding,
+} from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
 import { find } from 'lodash';
@@ -40,7 +48,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
 
   @Input() config: FormInputConfig;
 
-  constructor(private element: ElementRef) { }
+  constructor(private element: ElementRef) {}
 
   ngOnInit() {
     this.control.statusChanges.subscribe(() => {
@@ -57,7 +65,6 @@ export class FormInputComponent implements OnInit, AfterViewInit {
           // });
         });
       }
-
     }
   }
 
@@ -73,7 +80,8 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const inputField = this.element.nativeElement.querySelector('.form-control');
+    const inputField =
+      this.element.nativeElement.querySelector('.form-control');
 
     inputField.addEventListener('blur', (event) => {
       this.errors = getFormInputError(this);
@@ -116,5 +124,4 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   getOptionTextFromValue(value: string) {
     return find(this.selectOptions, { value })?.text;
   }
-
 }

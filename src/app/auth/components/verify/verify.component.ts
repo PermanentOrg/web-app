@@ -1,11 +1,15 @@
+/* @format */
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
-import { AccountVO } from '@root/app/models';
+import {
+  AuthResponse,
+  ArchiveResponse,
+  AccountResponse,
+} from '@shared/services/api/index.repo';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
 
@@ -38,7 +42,7 @@ export class VerifyComponent implements OnInit {
     private router: Router,
     private message: MessageService,
     private route: ActivatedRoute,
-    public secrets: SecretsService,
+    public secrets: SecretsService
   ) {
     this.captchaPassed = false;
     this.captchaSiteKey = secrets.get('RECAPTCHA_API_KEY');
@@ -47,7 +51,9 @@ export class VerifyComponent implements OnInit {
     const account = this.accountService.getAccount();
 
     if (!account) {
-      this.router.navigate(['/auth', 'login'], { queryParamsHandling: 'preserve'});
+      this.router.navigate(['/auth', 'login'], {
+        queryParamsHandling: 'preserve',
+      });
       return;
     }
 
@@ -57,7 +63,7 @@ export class VerifyComponent implements OnInit {
     const queryParams = route.snapshot.queryParams;
 
     this.verifyForm = fb.group({
-      'token': [queryParams.token || ''],
+      token: [queryParams.token || ''],
     });
 
     if (queryParams) {
@@ -80,9 +86,10 @@ export class VerifyComponent implements OnInit {
       if (query_email !== account.primaryEmail) {
         this.message.showError(
           'Sorry, this verification code does not match your account.',
-           true,
-           ['/auth/', 'login']);
-        this.verifyForm.patchValue({ 'token': ''});
+          true,
+          ['/auth/', 'login']
+        );
+        this.verifyForm.patchValue({ token: '' });
         this.waiting = true;
       }
     }
@@ -92,13 +99,11 @@ export class VerifyComponent implements OnInit {
       this.verifyingPhone = true;
       this.formTitle = 'Verify Phone Number';
     } else if (!this.needsEmail) {
-      this.router.navigate(['/private'], { queryParamsHandling: 'preserve'});
+      this.router.navigate(['/private'], { queryParamsHandling: 'preserve' });
     }
-
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
@@ -174,13 +179,23 @@ export class VerifyComponent implements OnInit {
   }
 
   finish() {
-    return this.accountService.switchToDefaultArchive()
+    return this.accountService
+      .switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
-        this.message.showMessage(`${this.verifyingEmail ? 'Email' : 'Phone number'} verified.`, 'success');
+        this.message.showMessage(
+          `${this.verifyingEmail ? 'Email' : 'Phone number'} verified.`,
+          'success'
+        );
         if (this.route.snapshot.queryParams.shareByUrl) {
-          this.router.navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
+          this.router
+            .navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
             .then(() => {
-              this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+              this.message.showMessage(
+                `Logged in as ${
+                  this.accountService.getAccount().primaryEmail
+                }.`,
+                'success'
+              );
             });
         } else {
           this.router.navigate(['/']);

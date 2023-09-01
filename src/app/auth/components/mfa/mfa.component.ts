@@ -1,7 +1,12 @@
+/* @format */
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
-import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
+import {
+  AuthResponse,
+  ArchiveResponse,
+  AccountResponse,
+} from '@shared/services/api/index.repo';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '@shared/services/message/message.service';
 import { DeviceService } from '@shared/services/device/device.service';
@@ -25,17 +30,17 @@ export class MfaComponent implements OnInit {
     private device: DeviceService
   ) {
     this.mfaForm = fb.group({
-      'token': [],
+      token: [],
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.verifyMfa(formValue.token)
+    this.accountService
+      .verifyMfa(formValue.token)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
@@ -46,12 +51,17 @@ export class MfaComponent implements OnInit {
           this.accountService.goToRedirect();
         } else if (this.route.snapshot.queryParams.cta === 'timeline') {
           if (this.device.isMobile() || !this.device.didOptOut()) {
-            this.router.navigate(['/public'], { queryParams: { cta: 'timeline' }});
+            this.router.navigate(['/public'], {
+              queryParams: { cta: 'timeline' },
+            });
           } else {
             window.location.assign(`/app/public?cta=timeline`);
           }
         } else {
-          this.message.showMessage(`Logged in as ${this.accountService.getAccount().primaryEmail}.`, 'success');
+          this.message.showMessage(
+            `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
+            'success'
+          );
           this.router.navigate(['/'], { queryParamsHandling: 'preserve' });
         }
       })
@@ -60,5 +70,4 @@ export class MfaComponent implements OnInit {
         this.message.showError(response.getMessage(), true);
       });
   }
-
 }

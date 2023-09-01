@@ -1,15 +1,24 @@
+<!-- @format -->
 <form [formGroup]="mfaForm" (ngSubmit)="onSubmit(mfaForm.value)">
-  <h1 class="form-title">
-    Verify Access
-  </h1>
+  <h1 class="form-title">Verify Access</h1>
   <p>
     A verification code has been sent to your email address or phone number.
-    <br>
-    <br>
+    <br />
+    <br />
     Enter it below to continue.
   </p>
-  <input type="tel" class="form-control" id="token" placeholder="Code"
+  <input
+    type="tel"
+    class="form-control"
+    id="token"
+    placeholder="Code"
     [formControl]="mfaForm.controls['token']"
-    autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false">
-  <button type="submit" class="btn btn-primary" [disabled]="waiting">Verify Access</button>
+    autocomplete="one-time-code"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false"
+  />
+  <button type="submit" class="btn btn-primary" [disabled]="waiting">
+    Verify Access
+  </button>
 </form>
