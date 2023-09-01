@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
@@ -10,9 +10,9 @@ import { DeviceService } from '@shared/services/device/device.service';
   selector: 'pr-mfa',
   templateUrl: './mfa.component.html',
   styleUrls: ['./mfa.component.scss'],
-  host: {'class': 'pr-auth-form'}
 })
 export class MfaComponent implements OnInit {
+  @HostBinding('class.pr-auth-form') classBinding = true;
   mfaForm: UntypedFormGroup;
   waiting: boolean;
 

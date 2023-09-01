@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -12,9 +12,9 @@ import { ApiService } from '@shared/services/api/api.service';
   selector: 'pr-login',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss'],
-  host: {'class': 'pr-auth-form'}
 })
 export class ForgotPasswordComponent implements OnInit {
+  @HostBinding('class.pr-auth-form') classBinding = true;
   forgotForm: UntypedFormGroup;
   formErrors: any = {};
 

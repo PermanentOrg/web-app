@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -31,9 +31,9 @@ const NEW_ONBOARDING_CHANCE = 1;
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
-  host: { class: 'pr-auth-form' },
 })
 export class SignupComponent implements OnInit {
+  @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
 

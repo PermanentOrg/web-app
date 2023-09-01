@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -13,9 +13,9 @@ import { RecaptchaErrorParameters } from 'ng-recaptcha';
   selector: 'pr-verify',
   templateUrl: './verify.component.html',
   styleUrls: ['./verify.component.scss'],
-  host: {'class': 'pr-auth-form'}
 })
 export class VerifyComponent implements OnInit {
+  @HostBinding('class.pr-auth-form') classBinding = true;
   verifyForm: UntypedFormGroup;
   formTitle = 'Verify Email';
   waiting: boolean;

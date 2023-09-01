@@ -26,7 +26,6 @@ export interface FormInputConfig {
   selector: 'pr-form-input',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
-  host: {'class': 'input-vertical'}
 })
 export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() type = 'text';
@@ -37,6 +36,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() selectOptions: FormInputSelectOption[];
 
   @HostBinding('class.right-align') rightAlign = false;
+  @HostBinding('class.input-vertical') inputVertical = true;
 
   @Input() config: FormInputConfig;
 
