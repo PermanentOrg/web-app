@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -12,12 +13,14 @@ export class SearchService {
   private fuseOptions: Fuse.IFuseOptions<ItemVO> = {
     keys: ['displayName'],
     threshold: 0.1,
+    ignoreLocation: true,
   };
   private fuse = new Fuse([], this.fuseOptions);
 
-  private tagsFuseOptions: Fuse.IFuseOptions<ItemVO> = {
+  private tagsFuseOptions: Fuse.IFuseOptions<TagVOData> = {
     keys: ['name'],
     threshold: 0.1,
+    ignoreLocation: true,
   };
   private tagsFuse = new Fuse([], this.tagsFuseOptions);
 
@@ -35,23 +38,18 @@ export class SearchService {
     });
   }
 
-  getResultsInCurrentFolder(searchTerm: string, limit?: number): ItemVO[] {
-    if (!searchTerm) {
-      return [];
-    }
-
-    let results = this.fuse.search(searchTerm);
-
-    if (limit) {
-      results = results.slice(0, limit);
-    }
-
-    return results.map((i) => {
-      return i.item;
-    });
+  public getResultsInCurrentFolder(
+    searchTerm: string,
+    limit?: number
+  ): ItemVO[] {
+    return this.searchWithFuse(this.fuse, searchTerm, limit);
   }
 
-  parseSearchTerm(termString: string): [string, TagVOData[]] {
+  public getTagResults(searchTerm: string, limit?: number): TagVOData[] {
+    return this.searchWithFuse(this.tagsFuse, searchTerm, limit);
+  }
+
+  public parseSearchTerm(termString: string): [string, TagVOData[]] {
     const splitByTerm = new RegExp(/\s(?=(?:[^"]+(["])[^"]+\1)*[^"]*$)/g);
     const getTagName = new RegExp(/"(.+)"/g);
     let queryString: string;
@@ -86,7 +84,7 @@ export class SearchService {
     return [queryString, parsedTags];
   }
 
-  getResultsInCurrentArchive(
+  public getResultsInCurrentArchive(
     searchTerm: string,
     tags: TagVOData[],
     limit?: number
@@ -94,32 +92,35 @@ export class SearchService {
     return this.api.search.itemsByNameObservable(searchTerm, tags, limit);
   }
 
-  getResultsInPublicArchive(
+  public getResultsInPublicArchive(
     searchTerm: string,
     tags: TagVOData[],
     archiveId: string,
     limit?: number
   ) {
-    return this.api.search.itemsByNameInPublicArchiveObservable(searchTerm, tags,archiveId, limit);
+    return this.api.search.itemsByNameInPublicArchiveObservable(
+      searchTerm,
+      tags,
+      archiveId,
+      limit
+    );
   }
 
-  getTagResults(searchTerm: string, limit?: number) {
+  private searchWithFuse<T>(
+    fuse: Fuse<T>,
+    searchTerm: string,
+    limit?: number
+  ): T[] {
     if (!searchTerm) {
       return [];
     }
-
-    let results = this.tagsFuse.search(searchTerm);
-
-    if (limit) {
-      results = results.slice(0, limit);
-    }
-
-    return results.map((i) => {
-      return i.item as TagVOData;
-    });
+    return fuse
+      .search(searchTerm)
+      .slice(0, limit)
+      .map((i) => i.item);
   }
 
-  indexCurrentFolder() {
+  private indexCurrentFolder() {
     if (this.data.currentFolder?.ChildItemVOs) {
       this.fuse.setCollection(this.data.currentFolder.ChildItemVOs);
     } else {
@@ -127,7 +128,7 @@ export class SearchService {
     }
   }
 
-  indexTags(tags: TagVOData[]) {
+  private indexTags(tags: TagVOData[]) {
     if (!tags?.length) {
       this.tagsFuse.setCollection([]);
     } else {
