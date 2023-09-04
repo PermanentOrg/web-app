@@ -6,64 +6,95 @@ export enum OnboardingScreen {
   pendingArchives = 'pendingArchives',
 }
 
+export enum OnboardingReasonsTags {
+  safe = 'why:safe',
+  nonprofit = 'why:nonprofit',
+  genealogy = 'why:genealogy',
+  professional = 'why:professional',
+  collaborate = 'why:collaborate',
+  digipres = 'why:digipres',
+}
+
+export enum OnboardingGoalsTags {
+  capture = 'goal:capture',
+  digitize = 'goal:digitize',
+  collaborate = 'goal:collaborate',
+  publish = 'goal:publish',
+  share = 'goal:share',
+  legacy = 'goal:legacy',
+  organize = 'goal:organize',
+  undefined = 'goal:undefined',
+}
+
+export enum OnboardingTypes {
+  myself = 'type:myself',
+  individual = 'type:individual',
+  family = 'type:family',
+  famhist = 'type:famhist',
+  community = 'type:community',
+  org = 'type:org',
+  other = 'type:other',
+  unsure = 'type:unsure',
+}
+
 export const reasons = [
   {
-    tag: 'why:safe',
+    tag: OnboardingReasonsTags.safe,
     text: 'Access to a safe and secure digital storage platform',
   },
   {
-    tag: 'why:nonprofit',
+    tag: OnboardingReasonsTags.nonprofit,
     text: 'Supporting a mission-driven nonprofit',
   },
   {
-    tag: 'why:genealogy',
+    tag: OnboardingReasonsTags.genealogy,
     text: 'Preserving family history or genealogy research',
   },
   {
-    tag: 'why:professional',
+    tag: OnboardingReasonsTags.professional,
     text: 'Professional business needs/clients',
   },
   {
-    tag: 'why:colalborate',
+    tag: OnboardingReasonsTags.collaborate,
     text: 'Collaborate with a family member, friend, or colleague',
   },
   {
-    tag: 'why:digipres',
+    tag: OnboardingReasonsTags.digipres,
     text: 'Interest in digital preservation solutions',
   },
 ];
 
 export const goals = [
   {
-    tag: 'goal:capture',
+    tag: OnboardingGoalsTags.capture,
     text: 'Capture and preserve memories for storytelling',
   },
   {
-    tag: 'goal:digitize',
+    tag: OnboardingGoalsTags.digitize,
     text: 'Digitize or transfer my materials securely',
   },
   {
-    tag: 'goal:collaborate',
+    tag: OnboardingGoalsTags.collaborate,
     text: 'Collaborate with others to build my archive',
   },
   {
-    tag: 'goal:publish',
+    tag: OnboardingGoalsTags.publish,
     text: 'Create a public archive to share a legacy',
   },
   {
-    tag: 'goal:share',
+    tag: OnboardingGoalsTags.share,
     text: 'Share my archive with others securely',
   },
   {
-    tag: 'goal:legacy',
+    tag: OnboardingGoalsTags.legacy,
     text: 'Create a plan for passing on my digital materials ',
   },
   {
-    tag: 'goal:organize',
+    tag: OnboardingGoalsTags.organize,
     text: 'Organize my materials',
   },
   {
-    tag: 'goal:undefined',
+    tag: OnboardingGoalsTags.undefined,
     text: 'Something else',
   },
 ];
@@ -72,42 +103,42 @@ export const archiveOptions = [
   {
     value: 'type.archive.person',
     text: 'Myself',
-    type: 'type:myself',
+    type: OnboardingTypes.myself,
   },
   {
     value: 'type.archive.person',
     text: 'An individual',
-    type: 'type:individual',
+    type: OnboardingTypes.individual,
   },
   {
     value: 'type.archive.family',
     text: 'My family in the present',
-    type: 'type:family',
+    type: OnboardingTypes.family,
   },
   {
     value: 'type.archive.family',
     text: "My family's history",
-    type: 'type:famhist',
+    type: OnboardingTypes.famhist,
   },
   {
     value: 'type.archive.family',
     text: "A community I'm part of",
-    type: 'type:community',
+    type: OnboardingTypes.community,
   },
   {
     value: 'type.archive.organization',
     text: 'An organization, company, or nonprofit',
-    type: 'type:org',
+    type: OnboardingTypes.org,
   },
   {
     value: 'type.archive.person',
     text: 'Something else',
-    type: 'type:other',
+    type: OnboardingTypes.other,
   },
   {
     value: 'type.archive.person',
     text: "I'm not sure yet",
-    type: 'type:unsure',
+    type: OnboardingTypes.unsure,
   },
 ];
 

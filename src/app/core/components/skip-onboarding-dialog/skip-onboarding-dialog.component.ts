@@ -1,8 +1,6 @@
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
-import { Component, Inject, OnInit } from '@angular/core';
-import { ArchiveVO } from '@models/index';
+import { DialogRef } from '@root/app/dialog/dialog.module';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../../shared/services/account/account.service';
-import { ApiService } from '../../../shared/services/api/api.service';
 
 @Component({
   selector: 'pr-skip-onboarding-dialog',

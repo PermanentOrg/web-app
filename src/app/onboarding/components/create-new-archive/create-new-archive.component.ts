@@ -11,7 +11,11 @@ import {
 } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
-import { reasons, goals } from '../../shared/onboarding-screen';
+import {
+  reasons,
+  goals,
+  OnboardingTypes,
+} from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 import { ArchiveType } from '../../../models/archive-vo';
 
@@ -41,7 +45,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public name: string = '';
   public goals = goals;
   public reasons = reasons;
-  archiveTypeTag: string;
+  archiveTypeTag: OnboardingTypes;
 
   skipOnboarding: Observable<{ name: string }>;
 
@@ -65,7 +69,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         if (value.action === 'confirm') {
           this.name = value.name;
           this.archiveType = 'type.archive.person';
-          this.archiveTypeTag = 'type:myself';
+          this.archiveTypeTag = OnboardingTypes.myself;
           this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
           this.screen = 'goals';
           this.progress.emit(1);
@@ -125,7 +129,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         ...this.selectedReasons,
       ].filter((tag) => !!tag);
 
-      let createdArchive;
+      let createdArchive: ArchiveVO;
 
       try {
         let response;
@@ -165,10 +169,14 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onValueChange(value: { type: ArchiveType; tag: string }): void {
+  public onValueChange(value: {
+    type: ArchiveType;
+    tag: OnboardingTypes;
+  }): void {
     this.selectedValue = `${value.type}+${value.tag}`;
     this.archiveType = value.type;
-    this.archiveTypeTag = value.tag;
+    this.archiveTypeTag = value.tag as OnboardingTypes;
+    this.setName(this.archiveTypeTag);
   }
 
   public makeMyArchive(): void {
@@ -192,5 +200,16 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   goToInvitations(): void {
     this.back.emit();
+  }
+
+  private setName(archiveTypeTag: OnboardingTypes): void {
+    switch (archiveTypeTag) {
+      case OnboardingTypes.unsure:
+        this.name = this.accountService.getAccount().fullName;
+        break;
+      default:
+        this.name = '';
+        break;
+    }
   }
 }

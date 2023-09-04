@@ -5,6 +5,7 @@ import {
   archiveOptions,
   archiveDescriptions,
 } from '@root/app/onboarding/shared/onboarding-screen';
+import { OnboardingTypes } from '../../shared/onboarding-screen';
 
 @Component({
   selector: 'pr-archive-type-select',
@@ -15,7 +16,7 @@ export class ArchiveTypeSelectComponent {
   @Input() selectedValue: string = '';
   @Output() valueChange = new EventEmitter<{
     type: ArchiveType;
-    tag: string;
+    tag: OnboardingTypes;
   }>();
 
   options = archiveOptions;
@@ -36,7 +37,7 @@ export class ArchiveTypeSelectComponent {
 
   onSelectionChange(): void {
     const type = this.selectedValue.split('+')[0] as ArchiveType;
-    const tag = this.selectedValue.split('+')[1];
+    const tag = this.selectedValue.split('+')[1] as OnboardingTypes;
     this.valueChange.emit({ type, tag });
   }
 }
