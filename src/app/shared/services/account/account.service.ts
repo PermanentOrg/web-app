@@ -61,13 +61,9 @@ export class AccountService {
     private httpv2: HttpV2Service,
     private mixpanel: MixpanelService
   ) {
-    const cachedAccount = this.storage
-      .getStorageByType({ key: ACCOUNT_KEY })
-      .get(ACCOUNT_KEY);
+    const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
-    const cachedArchive = this.storage
-      .getStorageByType({ key: ARCHIVE_KEY })
-      .get(ARCHIVE_KEY);
+    const cachedArchive = this.getStorage(ARCHIVE_KEY);
 
     const cachedRoot = this.storage.local.get(ROOT_KEY);
     this.inviteCode = this.storage.session.get(INVITE_KEY);
@@ -97,9 +93,7 @@ export class AccountService {
   public setAccount(newAccount: AccountVO) {
     this.account = newAccount;
 
-    this.storage
-      .getStorageByType({ condition: this.account?.keepLoggedIn })
-      .set(ACCOUNT_KEY, this.account);
+    this.setStorage(this.account?.keepLoggedIn, ACCOUNT_KEY, this.account);
 
     // set account data on Sentry scope
     Sentry.configureScope((scope) => {
@@ -112,9 +106,7 @@ export class AccountService {
 
   public setArchive(newArchive: ArchiveVO) {
     this.archive = newArchive;
-    this.storage
-      .getStorageByType({ condition: this.account?.keepLoggedIn })
-      .set(ARCHIVE_KEY, this.archive);
+    this.setStorage(this.account?.keepLoggedIn, ARCHIVE_KEY, this.archive);
 
     // set archive data as 'archive' context on Sentry scope
     Sentry.configureScope((scope) => {
@@ -595,5 +587,17 @@ export class AccountService {
         { height: 'auto', width: 'fullscreen' }
       );
     }
+  }
+
+  private setStorage(keepLoggedIn: boolean, key: string, value: any) {
+    if (keepLoggedIn) {
+      this.storage.local.set(key, value);
+    } else {
+      this.storage.session.set(key, value);
+    }
+  }
+
+  private getStorage(key) {
+    return this.storage.local.get(key) || this.storage.session.get(key);
   }
 }

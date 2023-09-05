@@ -12,14 +12,6 @@ export class StorageService {
     this.session = new BaseStorage(window.sessionStorage);
     this.local = new BaseStorage(window.localStorage);
   }
-
-  getStorageByType({ key, condition }: { key?: string; condition?: boolean }) {
-    const isLocal = this.local.get(key) || condition ? true : false;
-    if (isLocal) {
-      return this.local;
-    }
-    return this.session;
-  }
 }
 
 class BaseStorage {
