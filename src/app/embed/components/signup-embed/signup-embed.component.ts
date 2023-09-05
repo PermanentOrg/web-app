@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -23,9 +23,9 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   selector: 'pr-signup',
   templateUrl: './signup-embed.component.html',
   styleUrls: ['./signup-embed.component.scss'],
-  host: { class: 'pr-auth-form' },
 })
 export class SignupEmbedComponent implements OnInit {
+  @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
   inviteCode: string;
