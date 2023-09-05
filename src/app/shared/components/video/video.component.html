@@ -4,7 +4,7 @@
   [ngClass]="{ tall: item.imageRatio > 1, processing: isProcessing }"
 >
   <video
-    [attr.aria-label]="item.altText ? item.altText : item.displayName"
+    [attr.aria-label]="item | getAltText"
     [attr.aria-role]="'video'"
     [src]="videoSrc"
     controls

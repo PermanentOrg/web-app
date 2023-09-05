@@ -39,11 +39,7 @@
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
         <iframe
-          [title]="
-            currentRecord.altText
-              ? currentRecord.altText
-              : currentRecord.displayName
-          "
+          [title]="currentRecord | getAltText"
           [src]="documentUrl"
           *ngIf="isDocument && documentUrl"
         ></iframe>

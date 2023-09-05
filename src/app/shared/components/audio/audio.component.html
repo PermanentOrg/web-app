@@ -1,6 +1,6 @@
 <!-- @format -->
 <audio
-  [attr.aria-label]="item.altText ? item.altText : item.displayName"
+  [attr.aria-label]="item | getAltText"
   [attr.aria-role]="'audio'"
   [src]="audioSrc"
   *ngIf="item"

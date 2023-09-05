@@ -1,13 +1,13 @@
 <!-- @format -->
 <div
-  [attr.aria-label]="item.altText ? item.altText : item.displayName"
+  [attr.aria-label]="item | getAltText"
   [attr.aria-role]="'img'"
   [hidden]="hideResizableImage && item?.type === 'type.record.image'"
   id="openseadragon"
 ></div>
 <div
   class="pr-thumbnail-image"
-  [attr.aria-label]="item.altText ? item.altText : item.displayName"
+  [attr.aria-label]="item | getAltText"
   [attr.aria-role]="'img'"
   [ngClass]="{ loaded: thumbLoaded }"
   [hidden]="
