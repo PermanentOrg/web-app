@@ -2,7 +2,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 import debug from 'debug';
 import { Subscription, Observable } from 'rxjs';
@@ -43,9 +42,7 @@ export class FolderViewToggleComponent
 
   private debug = debug('component:folderViewToggle');
   subscriptions: Subscription[] = [];
-  constructor(
-    private folderView: FolderViewService,
-  ) {
+  constructor(private folderView: FolderViewService) {
     this.currentFolderView = this.folderView.folderView;
     this.debug('init view %o', this.currentFolderView);
 
