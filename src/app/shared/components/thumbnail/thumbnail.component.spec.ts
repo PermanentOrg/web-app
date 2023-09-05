@@ -1,10 +1,10 @@
 /* @format */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { RecordVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { Component, ViewChild } from '@angular/core';
+import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
 
 const baseImageUrl = 'https://via.placeholder.com';
 
@@ -95,7 +95,7 @@ describe('ThumbnailComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ThumbnailComponent, TestHostComponent],
+      declarations: [ThumbnailComponent, TestHostComponent, GetAltTextPipe],
     }).compileComponents();
   }));
 

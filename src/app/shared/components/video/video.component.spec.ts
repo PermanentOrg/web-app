@@ -3,6 +3,7 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep  } from 'lodash';
 
 import { RecordVO } from '@root/app/models';
+import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
 import { VideoComponent } from './video.component';
 
 describe('VideoComponent', () => {
@@ -13,6 +14,7 @@ describe('VideoComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.declarations.push(VideoComponent);
+    config.declarations.push(GetAltTextPipe)
 
     TestBed.configureTestingModule(config).compileComponents();
   }));
