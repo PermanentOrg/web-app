@@ -49,7 +49,11 @@ export class MfaComponent implements OnInit {
       .then((response: ArchiveResponse) => {
         this.waiting = false;
 
-        if (this.accountService.hasRedirect()) {
+        if (!response.getResultsData().length) {
+          this.router.navigate(['/app/onboarding'], {
+            queryParamsHandling: 'preserve',
+          });
+        } else if (this.accountService.hasRedirect()) {
           this.accountService.goToRedirect();
         } else if (this.route.snapshot.queryParams.cta === 'timeline') {
           if (this.device.isMobile() || !this.device.didOptOut()) {
