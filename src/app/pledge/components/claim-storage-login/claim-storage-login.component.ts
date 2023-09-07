@@ -137,7 +137,7 @@ export class ClaimStorageLoginComponent implements OnInit {
     this.waiting = true;
 
     this.accountService
-      .verifyMfa(formValue.token)
+      .verifyMfa(formValue.token, formValue.keepLoggedIn)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })

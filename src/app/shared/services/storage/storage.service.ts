@@ -1,7 +1,8 @@
+/* @format */
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
   public session: BaseStorage;
@@ -30,11 +31,20 @@ class BaseStorage {
       const storeValue = this.storage.getItem(key);
       if (!storeValue || storeValue.length < 2) {
         return storeValue;
-      } else if (storeValue[0] === '[' && storeValue[storeValue.length - 1] === ']') {
+      } else if (
+        storeValue[0] === '[' &&
+        storeValue[storeValue.length - 1] === ']'
+      ) {
         return JSON.parse(storeValue);
-      } else if (storeValue[0] === '{' && storeValue[storeValue.length - 1] === '}') {
+      } else if (
+        storeValue[0] === '{' &&
+        storeValue[storeValue.length - 1] === '}'
+      ) {
         return JSON.parse(storeValue);
-      } else if (storeValue[0] === '"' && storeValue[storeValue.length - 1] === '"') {
+      } else if (
+        storeValue[0] === '"' &&
+        storeValue[storeValue.length - 1] === '"'
+      ) {
         return JSON.parse(storeValue);
       } else {
         return storeValue;

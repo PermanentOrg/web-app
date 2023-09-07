@@ -10,6 +10,7 @@ import {
   ArchiveResponse,
   AccountResponse,
 } from '@shared/services/api/index.repo';
+import { AccountVO } from '@root/app/models';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
 
@@ -126,7 +127,11 @@ export class VerifyComponent implements OnInit {
 
         this.waiting = false;
 
-        const account = response.getAccountVO();
+        const keepLoggedIn = this.keepLoggedIn();
+        const account = new AccountVO({
+          ...response.getAccountVO(),
+          keepLoggedIn,
+        });
         this.accountService.setAccount(account);
 
         this.needsEmail = account.emailNeedsVerification();
@@ -219,5 +224,9 @@ export class VerifyComponent implements OnInit {
       return !this.showCaptchaForEmail || this.canSendCodes('phone');
     }
     return this.captchaEnabled ? this.captchaPassed : true;
+  }
+
+  private keepLoggedIn(): boolean {
+    return this.route.snapshot.queryParams.keepLoggedIn === 'true';
   }
 }

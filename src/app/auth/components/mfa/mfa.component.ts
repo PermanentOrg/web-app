@@ -39,8 +39,10 @@ export class MfaComponent implements OnInit {
   onSubmit(formValue: any) {
     this.waiting = true;
 
+    const keepLoggedIn = this.keepLoggedIn();
+
     this.accountService
-      .verifyMfa(formValue.token)
+      .verifyMfa(formValue.token, keepLoggedIn)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
@@ -62,12 +64,16 @@ export class MfaComponent implements OnInit {
             `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
             'success'
           );
-          this.router.navigate(['/'], { queryParamsHandling: 'preserve' });
+          this.router.navigate(['/']);
         }
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
         this.message.showError(response.getMessage(), true);
       });
+  }
+
+  private keepLoggedIn() {
+    return this.route.snapshot.queryParams.keepLoggedIn === 'true';
   }
 }
