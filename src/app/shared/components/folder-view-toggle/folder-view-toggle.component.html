@@ -1,8 +1,14 @@
-<ng-container *ngIf="showToggle">
-  <button class="btn btn-sm" *ngFor="let view of folderViews"
+<!-- @format -->
+<ng-container>
+  <button
+    class="btn btn-sm"
+    *ngFor="let view of folderViews"
     [class.active]="view.folderView === currentFolderView"
-    [ngbTooltip]="view.folderView === currentFolderView ? null : (view.tooltip | prTooltip)"
-    (click)="onFolderViewClick(view)">
-    <i class="material-icons">{{view.iconClass}}</i>
+    [ngbTooltip]="
+      view.folderView === currentFolderView ? null : (view.tooltip | prTooltip)
+    "
+    (click)="onFolderViewClick(view)"
+  >
+    <i class="material-icons">{{ view.iconClass }}</i>
   </button>
 </ng-container>
