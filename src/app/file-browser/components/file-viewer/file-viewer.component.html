@@ -33,7 +33,7 @@
           (disableSwipe)="toggleSwipe($event)"
           (isFullScreen)="toggleFullscreen($event)"
           [item]="currentRecord"
-          *ngIf="showThumbnail && !isDocument"
+          *ngIf="showThumbnail && !isDocument && !isVideo && !isAudio"
           [hideResizableImage]="false"
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
