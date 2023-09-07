@@ -1,9 +1,18 @@
-<div class="pr-video-wrapper loading" [ngClass]="{'tall': item.imageRatio > 1, 'processing': isProcessing}">
-  <video [src]="videoSrc" controls></video>
+<!-- @format -->
+<div
+  class="pr-video-wrapper loading"
+  [ngClass]="{ tall: item.imageRatio > 1, processing: isProcessing }"
+>
+  <video
+    [attr.aria-label]="item | getAltText"
+    [src]="videoSrc"
+    controls
+  ></video>
   <div class="lds-dual-ring loader"></div>
   <div class="message" *ngIf="isProcessing">
     This video is processing.
-    <br>
-    <br>
-    Please check back later.</div>
+    <br />
+    <br />
+    Please check back later.
+  </div>
 </div>

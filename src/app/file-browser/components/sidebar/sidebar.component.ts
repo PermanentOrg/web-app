@@ -1,5 +1,5 @@
 import { RecordVO } from '@root/app/models';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import {
   HasSubscriptions,
@@ -43,7 +43,8 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
   constructor(
     private dataService: DataService,
     private editService: EditService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private cdr: ChangeDetectorRef
   ) {
     this.currentArchive = this.accountService.getArchive();
 
@@ -89,18 +90,23 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
             this.isLoading = false;
           }
         }
-        if (this.selectedItem instanceof RecordVO && this.selectedItem.FileVOs[0]) {
-          this.originalFileExtension = this.selectedItem.FileVOs.find(item => item.format === 'file.format.original')?.type
-            .split('.')
+        if (
+          this.selectedItem instanceof RecordVO &&
+          this.selectedItem.FileVOs[0]
+        ) {
+          this.originalFileExtension = this.selectedItem.FileVOs.find(
+            (item) => item.format === 'file.format.original'
+          )
+            ?.type.split('.')
             .pop();
-          
-           this.permanentFileExtension = this.selectedItem.FileVOs.find(item => item.format ==='file.format.converted')?.type
-              .split('.')
-              .pop() || this.originalFileExtension;
 
-         
-        }
-         else {
+          this.permanentFileExtension =
+            this.selectedItem.FileVOs.find(
+              (item) => item.format === 'file.format.converted'
+            )
+              ?.type.split('.')
+              .pop() || this.originalFileExtension;
+        } else {
           this.originalFileExtension = '';
           this.permanentFileExtension = '';
         }
@@ -154,6 +160,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
 
   async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
     this.editService.saveItemVoProperty(this.selectedItem, property, value);
+    this.cdr.detectChanges();
   }
 
   onLocationClick() {

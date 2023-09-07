@@ -28,7 +28,7 @@ $sidebar-thumb-height: 200px;
       border-right: $sidebar-border;
     }
 
-    &:not(.active):not(.disabled)  {
+    &:not(.active):not(.disabled) {
       cursor: pointer;
       &:hover {
         background-color: $gray-100;
@@ -50,7 +50,9 @@ $sidebar-thumb-height: 200px;
 
 .sidebar-tab-content {
   padding-top: 5px;
-  max-height: calc(100vh - #{$navbar-total-height-desktop} - #{$sidebar-tab-height});
+  max-height: calc(
+    100vh - #{$navbar-total-height-desktop} - #{$sidebar-tab-height}
+  );
   overflow-y: auto;
   padding-bottom: 78px;
 }
@@ -122,4 +124,8 @@ $sidebar-thumb-height: 200px;
       line-height: 1;
     }
   }
+}
+
+.alt-text-tooltip {
+  margin-left: 10px;
 }

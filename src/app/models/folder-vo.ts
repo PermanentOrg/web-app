@@ -46,6 +46,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public displayEndDT;
   public derivedDT;
   public derivedEndDT;
+  public altText;
 
   public note;
   public description;

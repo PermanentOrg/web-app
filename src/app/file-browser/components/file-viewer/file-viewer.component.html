@@ -33,12 +33,16 @@
           (disableSwipe)="toggleSwipe($event)"
           (isFullScreen)="toggleFullscreen($event)"
           [item]="currentRecord"
-          *ngIf="showThumbnail && !isDocument"
+          *ngIf="showThumbnail && !isDocument && !isVideo && !isAudio"
           [hideResizableImage]="false"
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
-        <iframe [src]="documentUrl" *ngIf="isDocument && documentUrl"></iframe>
+        <iframe
+          [title]="currentRecord | getAltText"
+          [src]="documentUrl"
+          *ngIf="isDocument && documentUrl"
+        ></iframe>
       </div>
     </div>
     <div
@@ -112,14 +116,28 @@
           <td>Type</td>
           <td>{{ currentRecord.type | prConstants | titlecase }}</td>
         </tr>
+      </table>
+      <p class="alt-text">Alt Text</p>
+      <pr-inline-value-edit
+        [displayValue]="currentRecord | getAltText"
+        [itemId]="currentRecord.folder_linkId"
+        [canEdit]="canEdit"
+        [required]="false"
+        (doneEditing)="onFinishEditing('altText', $event)"
+        [emptyMessage]="currentRecord | getAltText"
+        [readOnlyEmptyMessage]="currentRecord | getAltText"
+        type="description-textarea"
+      >
+      </pr-inline-value-edit>
+      <table class="metadata-table">
         <tr>
-          <td>Tags</td>
+          <td class="title">Tags</td>
           <td (click)="onTagsClick('keyword')">
             <pr-tags [tags]="keywords"></pr-tags>
           </td>
         </tr>
         <tr>
-          <td class="top-align">
+          <td class="top-align title">
             Custom <br />
             Metadata
           </td>
@@ -128,7 +146,7 @@
           </td>
         </tr>
         <tr>
-          <td>Location</td>
+          <td class="title">Location</td>
           <td class="location-container" (click)="onLocationClick()">
             <pr-static-map
               [location]="currentRecord.LocnVO"
