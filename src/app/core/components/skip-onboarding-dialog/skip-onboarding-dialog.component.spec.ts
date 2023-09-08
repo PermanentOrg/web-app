@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
+/* @format */
+import {
+  ComponentFixture,
+  TestBed,
+  TestModuleMetadata,
+} from '@angular/core/testing';
 import { DialogRef } from '@root/app/dialog/dialog.service';
 import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash';
@@ -12,9 +17,10 @@ describe('SkipOnboardingDialogComponent', () => {
   let dialogRef: DialogRef;
 
   const mockAccountService = {
-    getAccount: jasmine.createSpy('getAccount').and.returnValue({ fullName: 'Mocked Name' })
+    getAccount: jasmine
+      .createSpy('getAccount')
+      .and.returnValue({ fullName: 'Mocked Name' }),
   };
-
 
   beforeEach(async () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -34,8 +40,7 @@ describe('SkipOnboardingDialogComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SkipOnboardingDialogComponent],
       providers: [{ provide: AccountService, useValue: mockAccountService }],
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SkipOnboardingDialogComponent);
     component = fixture.componentInstance;
