@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 <!-- @format -->
-=======
-<!-- format -->
->>>>>>> 87690145 (Create new onboarding flow)
 <div class="new-account-screens-container">
   <div *ngIf="screen === 'create'">
     <h2>Welcome! Let’s create your first archive together.</h2>
@@ -32,11 +28,7 @@
             <span>The</span>
             <input
               [(ngModel)]="name"
-<<<<<<< HEAD
               [placeholder]="'Archive Subject'"
-=======
-              [placeholder]="'archive subject'"
->>>>>>> 87690145 (Create new onboarding flow)
               [disabled]="!selectedValue"
               type="text"
             />
@@ -46,7 +38,6 @@
         <div *ngIf="!selectedValue" class="disabled-overlay"></div>
       </div>
       <div class="buttons">
-<<<<<<< HEAD
         <button
           *ngIf="!pendingArchives.length"
           (click)="makeMyArchive()"
@@ -62,12 +53,6 @@
           Go back
         </button>
         <button
-=======
-        <button (click)="makeMyArchive()" class="btn btn-link">
-          Make my archive for me
-        </button>
-        <button
->>>>>>> 87690145 (Create new onboarding flow)
           [class.btn-disabled]="!name"
           (click)="setScreen('goals')"
           [disabled]="!name"
@@ -76,7 +61,6 @@
           Next: Chart your path
         </button>
       </div>
-<<<<<<< HEAD
       <button
         *ngIf="pendingArchives.length"
         (click)="makeMyArchive()"
@@ -84,8 +68,6 @@
       >
         Make my archive for me
       </button>
-=======
->>>>>>> 87690145 (Create new onboarding flow)
     </div>
   </div>
   <div class="goals" *ngIf="screen === 'goals'">
@@ -147,15 +129,9 @@
       <button
         (click)="onSubmit()"
         class="btn btn-primary next-button create-archive"
-<<<<<<< HEAD
         [disabled]="!selectedReasons.length || loading"
       >
         Create my archive
-=======
-        [disabled]="!selectedReasons.length"
-      >
-        Create my archive.
->>>>>>> 87690145 (Create new onboarding flow)
       </button>
     </div>
   </div>

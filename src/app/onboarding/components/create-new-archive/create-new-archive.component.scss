@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /* @format */
-=======
-/* format */
->>>>>>> 87690145 (Create new onboarding flow)
 @import '../welcome-screen/welcome-screen.component.scss';
 @import 'variables';
 
@@ -153,10 +149,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
-<<<<<<< HEAD
   margin-bottom: 20px;
-=======
->>>>>>> 87690145 (Create new onboarding flow)
   & > .btn-link {
     text-decoration: underline;
   }
@@ -206,10 +199,7 @@ h3 {
   height: 108px;
   color: black;
   height: 120px;
-<<<<<<< HEAD
   cursor: pointer;
-=======
->>>>>>> 87690145 (Create new onboarding flow)
 
   @include beforeDesktop {
     justify-content: center;

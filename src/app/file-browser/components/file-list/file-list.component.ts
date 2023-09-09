@@ -126,10 +126,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     private renderer: Renderer2,
     public device: DeviceService,
     private ngZone: NgZone,
-<<<<<<< HEAD
-=======
-    private api: ApiService
->>>>>>> 87690145 (Create new onboarding flow)
   ) {
 
     this.currentFolder = this.route.snapshot.data.currentFolder;

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /* @format */
-=======
-/* format */
->>>>>>> 87690145 (Create new onboarding flow)
 import { Shallow } from 'shallow-render';
 import { Location } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
@@ -38,11 +34,7 @@ const mockApiService = {
     accept: async (data: any) => {
       return true;
     },
-<<<<<<< HEAD
     change: async (archive: ArchiveVO) => {},
-=======
-    change: async (archive: ArchiveVO) => { }
->>>>>>> 87690145 (Create new onboarding flow)
   },
 };
 const mockAccountService = {
@@ -55,13 +47,13 @@ const mockAccountService = {
   refreshArchives: async () => {
     return [];
   },
-  setArchive: (archive: ArchiveVO) => { },
-  updateAccount: async () => { },
-  change: async () => { },
+  setArchive: (archive: ArchiveVO) => {},
+  updateAccount: async () => {},
+  change: async () => {},
 };
 const mockMessageService = {
-  showMessage: () => { },
-  showError: () => { },
+  showMessage: () => {},
+  showError: () => {},
 };
 
 const mockRouter = {
@@ -75,11 +67,7 @@ describe('OnboardingComponent #onboarding', () => {
   beforeEach(() => {
     shallow = new Shallow(OnboardingComponent, OnboardingModule)
       .mock(ActivatedRoute, new NullRoute())
-<<<<<<< HEAD
       .mock(Location, { go: (path: string) => {} })
-=======
-      .mock(Location, { go: (path: string) => { } })
->>>>>>> 87690145 (Create new onboarding flow)
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .mock(Router, mockRouter)
@@ -106,11 +94,7 @@ describe('OnboardingComponent #onboarding', () => {
     expect(element.componentInstance.currentArchive).toBeUndefined();
     fixture.detectChanges();
 
-<<<<<<< HEAD
     const child = find('pr-create-new-archive');
-=======
-    const child = find('pr-create-new-archive')
->>>>>>> 87690145 (Create new onboarding flow)
     expect(child).toHaveFoundOne();
     child.triggerEventHandler('createdArchive', new ArchiveVO({}));
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
@@ -119,7 +103,6 @@ describe('OnboardingComponent #onboarding', () => {
     const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
     const mockAccountService = {
-<<<<<<< HEAD
       refreshArchives: jasmine
         .createSpy('refreshArchives')
         .and.returnValue(Promise.resolve([mockPendingArchive])),
@@ -128,10 +111,6 @@ describe('OnboardingComponent #onboarding', () => {
         .and.returnValue(
           new AccountVO({ accountId: 1, fullName: 'Test Account' })
         ),
-=======
-      refreshArchives: jasmine.createSpy('refreshArchives').and.returnValue(Promise.resolve([mockPendingArchive])),
-      getAccount: jasmine.createSpy('getAccount').and.returnValue(new AccountVO({ accountId: 1, fullName: 'Test Account' })),
->>>>>>> 87690145 (Create new onboarding flow)
     };
 
     const shallow = new Shallow(OnboardingComponent, OnboardingModule)
@@ -146,14 +125,10 @@ describe('OnboardingComponent #onboarding', () => {
       expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
     }
     expect(find('pr-welcome-screen')).toHaveFoundOne();
-<<<<<<< HEAD
     find('pr-welcome-screen').triggerEventHandler(
       'selectInvitation',
       new ArchiveVO({ fullName: 'Pending Test' })
     );
-=======
-    find('pr-welcome-screen').triggerEventHandler('acceptInvitation', new ArchiveVO({ fullName: 'Pending Test' }));
->>>>>>> 87690145 (Create new onboarding flow)
     fixture.detectChanges();
     await fixture.whenStable();
     expect(
@@ -173,7 +148,6 @@ describe('OnboardingComponent #onboarding', () => {
     const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
     const mockAccountService = {
-<<<<<<< HEAD
       refreshArchives: jasmine
         .createSpy('refreshArchives')
         .and.returnValue(Promise.resolve([mockPendingArchive])),
@@ -182,10 +156,6 @@ describe('OnboardingComponent #onboarding', () => {
         .and.returnValue(
           new AccountVO({ accountId: 1, fullName: 'Test Account' })
         ),
-=======
-      refreshArchives: jasmine.createSpy('refreshArchives').and.returnValue(Promise.resolve([mockPendingArchive])),
-      getAccount: jasmine.createSpy('getAccount').and.returnValue(new AccountVO({ accountId: 1, fullName: 'Test Account' })),
->>>>>>> 87690145 (Create new onboarding flow)
     };
 
     const shallow = new Shallow(OnboardingComponent, OnboardingModule)
@@ -200,8 +170,4 @@ describe('OnboardingComponent #onboarding', () => {
       expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
     }
   });
-<<<<<<< HEAD
-=======
-
->>>>>>> 87690145 (Create new onboarding flow)
 });

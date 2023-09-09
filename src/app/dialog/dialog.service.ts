@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /* @format */
-=======
-// eslint-disable-next-line max-len
->>>>>>> 87690145 (Create new onboarding flow)
 import {
   Injectable,
   ApplicationRef,

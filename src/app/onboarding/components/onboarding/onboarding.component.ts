@@ -60,20 +60,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         this.pendingArchives = pendingArchives;
         this.showOnboarding = true;
         if (this.pendingArchives.length > 0) {
-<<<<<<< HEAD
           this.screen = OnboardingScreen.pendingArchives;
-=======
-          this.screen = OnboardingScreen.pendingArchives
->>>>>>> 87690145 (Create new onboarding flow)
         }
       }
-
-      this.subscription = this.account.createAccountForMe$?.subscribe((archive: ArchiveVO) => {
-        if (archive.archiveId) {
-          this.setNewArchive(archive)
-        }
-      })
-
     });
   }
 
@@ -108,13 +97,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
-<<<<<<< HEAD
     const updateAccount = new AccountVO({
       defaultArchiveId: archive.archiveId,
     });
-=======
-    const updateAccount = new AccountVO({ defaultArchiveId: archive.archiveId });
->>>>>>> 87690145 (Create new onboarding flow)
     this.account.updateAccount(updateAccount).then(() => {
       this.account.setArchive(archive);
       this.api.archive.change(archive).then(() => {
