@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import {
   reasons,
   goals,
@@ -18,7 +19,6 @@ import {
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 import { ArchiveType } from '../../../models/archive-vo';
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 type NewArchiveScreen = 'goals' | 'reasons' | 'create';
 
