@@ -1,7 +1,6 @@
 /* @format */
-import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
@@ -16,7 +15,7 @@ import { partition as lodashPartition } from 'lodash';
   templateUrl: './onboarding.component.html',
   styleUrls: ['./onboarding.component.scss'],
 })
-export class OnboardingComponent implements OnInit, OnDestroy {
+export class OnboardingComponent implements OnInit {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;
   public currentArchive: ArchiveVO;
   public pendingArchives: ArchiveVO[] = [];
@@ -30,7 +29,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   public errorMessage: string = '';
 
   public acceptedInvite: boolean = false;
-  private subscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,10 +62,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         }
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   public setScreen(screen: OnboardingScreen): void {

@@ -43,7 +43,6 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from 'ngx-route-history';
-import { ApiService } from '../../../shared/services/api/api.service';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
