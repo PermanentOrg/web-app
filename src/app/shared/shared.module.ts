@@ -65,7 +65,6 @@ import { NewArchiveFormComponent } from './components/new-archive-form/new-archi
 import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
-import { ArchiveTypeSelectComponent } from './components/archive-type-select/archive-type-select.component';
 
 @NgModule({
   imports: [
@@ -132,7 +131,6 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     PrependProtocolPipe,
     SwitcherComponent,
     GetAltTextPipe,
-    ArchiveTypeSelectComponent
   ],
   declarations: [
     ThumbnailComponent,
@@ -180,7 +178,6 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     PrependProtocolPipe,
     SwitcherComponent,
     GetAltTextPipe,
-    ArchiveTypeSelectComponent
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
