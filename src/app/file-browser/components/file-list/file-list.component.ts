@@ -61,7 +61,7 @@ const DRAG_SCROLL_STEP = 20;
   selector: 'pr-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
-  animations: [ slideUpAnimation, ngIfScaleAnimationDynamic ]
+  animations: [slideUpAnimation, ngIfScaleAnimationDynamic]
 })
 export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions, FileListItemParent {
   @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
@@ -124,8 +124,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     @Optional() private drag: DragService,
     private renderer: Renderer2,
     public device: DeviceService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {
+
     this.currentFolder = this.route.snapshot.data.currentFolder;
     // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
@@ -177,7 +178,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   registerRouterEventHandlers() {
     // register for navigation events to reinit page on folder changes
     this.subscriptions.push(this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd ))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (event.url.includes('record')) {
           this.inFileView = true;
@@ -226,7 +227,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
           this.scrollToItem(item);
         });
       }
-    ));
+      ));
   }
 
   registerDragServiceHandlers() {
@@ -234,12 +235,12 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     if (this.drag) {
       this.subscriptions.push(
         this.drag.events().subscribe(dragEvent => {
-            switch (dragEvent.type) {
-              case 'start':
-              case 'end':
-                this.isDraggingInProgress = dragEvent.type === 'start';
-                break;
-            }
+          switch (dragEvent.type) {
+            case 'start':
+            case 'end':
+              this.isDraggingInProgress = dragEvent.type === 'start';
+              break;
+          }
         })
       );
 
@@ -328,7 +329,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   getScrollElement(): HTMLElement {
     return ((this.device.isMobileWidth() || !this.showSidebar)
-    ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
+      ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
   }
 
   onViewportMouseMove(event: MouseEvent) {
@@ -359,10 +360,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     if (top < event.clientY && event.clientY < (top + DRAG_SCROLL_THRESHOLD)) {
       if (currentScrollTop > 0) {
         let step = DRAG_SCROLL_STEP;
-        if (event.clientY < (top + (DRAG_SCROLL_THRESHOLD / 2 ))) {
+        if (event.clientY < (top + (DRAG_SCROLL_THRESHOLD / 2))) {
           step = step * 3;
         }
-        scrollElem.scrollBy({left: 0, top: -step, behavior: 'smooth'});
+        scrollElem.scrollBy({ left: 0, top: -step, behavior: 'smooth' });
         if (scrollElem.scrollTop > 0) {
           this.mouseMoveHandlerThrottled(event);
         }
@@ -370,10 +371,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     } else if (bottom > event.clientY && event.clientY > (bottom - DRAG_SCROLL_THRESHOLD)) {
       if (currentScrollTop < maxScrollTop) {
         let step = DRAG_SCROLL_STEP;
-        if (event.clientY > (maxScrollTop - (DRAG_SCROLL_THRESHOLD / 2 ))) {
+        if (event.clientY > (maxScrollTop - (DRAG_SCROLL_THRESHOLD / 2))) {
           step = step * 3;
         }
-        scrollElem.scrollBy({left: 0, top: step, behavior: 'smooth'});
+        scrollElem.scrollBy({ left: 0, top: step, behavior: 'smooth' });
         if (scrollElem.scrollTop < maxScrollTop) {
           this.mouseMoveHandlerThrottled(event);
         }
@@ -382,7 +383,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   onItemClick(itemClick: ItemClickEvent) {
-    this.itemClicked.emit(itemClick); 
+    this.itemClicked.emit(itemClick);
 
     if (!this.showSidebar || !itemClick.selectable) {
       return;
@@ -445,7 +446,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     return event.target === this.document.body && !this.router.url.includes('record');
   }
 
-  async loadVisibleItems(animate ?: boolean) {
+  async loadVisibleItems(animate?: boolean) {
     this.debug('loadVisibleItems %d items', this.visibleItems.size);
     if (!this.visibleItems.size) {
       return;

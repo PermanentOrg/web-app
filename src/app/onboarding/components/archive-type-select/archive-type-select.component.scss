@@ -1,0 +1,44 @@
+/* @format */
+@import 'variables';
+
+.archive-dropdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 18rem;
+
+  @include beforeDesktop {
+    width: 12rem;
+  }
+
+  & > .no-value {
+    color: #646464;
+    font-family: Open Sans;
+  }
+}
+
+.archive-type-select {
+  display: flex;
+}
+
+.archive-image {
+  width: 122px;
+  height: 122px;
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.archive-description {
+  width: 350px;
+  height: 50px;
+  color: #646464;
+  font-size: 12px;
+  line-height: 20px;
+  margin-top: 5px;
+
+  @include beforeDesktop {
+    width: 200px;
+  }
+}

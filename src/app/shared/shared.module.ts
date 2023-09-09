@@ -2,7 +2,6 @@
 import { NgModule, ComponentFactoryResolver } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';

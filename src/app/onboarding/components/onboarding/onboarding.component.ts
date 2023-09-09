@@ -1,25 +1,25 @@
+/* @format */
 import { Location } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
 import { AccountVO } from '@models/account-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-
 import { routes } from '@onboarding/onboarding.routes';
-
 import { partition as lodashPartition } from 'lodash';
 
 @Component({
   selector: 'pr-onboarding',
   templateUrl: './onboarding.component.html',
-  styleUrls: ['./onboarding.component.scss']
+  styleUrls: ['./onboarding.component.scss'],
 })
 export class OnboardingComponent implements OnInit {
   public screen: OnboardingScreen = OnboardingScreen.welcomeScreen;
   public currentArchive: ArchiveVO;
   public pendingArchives: ArchiveVO[] = [];
+  public selectedPendingArchive: ArchiveVO;
   public useApi: boolean = true;
   public progress: number = 0;
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
@@ -36,7 +36,7 @@ export class OnboardingComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private account: AccountService,
-    private detector: ChangeDetectorRef,
+    private detector: ChangeDetectorRef
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -57,15 +57,21 @@ export class OnboardingComponent implements OnInit {
       } else {
         this.pendingArchives = pendingArchives;
         this.showOnboarding = true;
+        if (this.pendingArchives.length > 0) {
+          this.screen = OnboardingScreen.pendingArchives;
+        }
       }
     });
   }
 
   public setScreen(screen: OnboardingScreen): void {
     this.screen = screen;
-    const correspondingRoute = routes.find(route => {
+    if (this.selectedPendingArchive) {
+      this.selectedPendingArchive = null;
+    }
+    const correspondingRoute = routes.find((route) => {
       if (route.data?.onboardingScreen) {
-        if (route.data.onboardingScreen as OnboardingScreen === screen) {
+        if ((route.data.onboardingScreen as OnboardingScreen) === screen) {
           return true;
         }
       }
@@ -85,10 +91,15 @@ export class OnboardingComponent implements OnInit {
 
   public setNewArchive(archive: ArchiveVO): void {
     this.currentArchive = archive;
-    const updateAccount = new AccountVO({defaultArchiveId: archive.archiveId});
+    const updateAccount = new AccountVO({
+      defaultArchiveId: archive.archiveId,
+    });
     this.account.updateAccount(updateAccount).then(() => {
       this.account.setArchive(archive);
       this.api.archive.change(archive).then(() => {
+        if (this.selectedPendingArchive) {
+          this.acceptedInvite = true;
+        }
         this.setScreen(OnboardingScreen.done);
       });
     });
@@ -109,7 +120,7 @@ export class OnboardingComponent implements OnInit {
   public getProgressChunkClasses(num: number) {
     return {
       'progress-chunk': true,
-      'completed': this.progress >= num,
+      completed: this.progress >= num,
     };
   }
 
@@ -119,19 +130,9 @@ export class OnboardingComponent implements OnInit {
     this.detector.detectChanges();
   }
 
-  public acceptArchiveInvitation(archive: ArchiveVO): void {
-    this.showOnboarding = false;
-    this.progress = 1;
-    this.api.archive.accept(archive).then(() => {
-      this.progress = 2;
-      this.showOnboarding = true;
-      this.acceptedInvite = true;
-      this.setNewArchive(archive);
-    }).catch(() => {
-      this.progress = 0
-      this.showOnboarding = true;
-      this.errorMessage = `There was an error trying to accept the invitation to The ${archive.fullName} Archive. Please try again.`;
-    });
+  public selectArchiveInvitation(archive: ArchiveVO): void {
+    this.selectedPendingArchive = archive;
+    this.screen = OnboardingScreen.welcomeScreen;
   }
 
   public logOut(): void {

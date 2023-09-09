@@ -1,3 +1,4 @@
+/* @format */
 $mobile-breakpoint: 950px;
 $mobile-transition-breakpoint: 1200px;
 
@@ -21,7 +22,7 @@ $mobile-transition-breakpoint: 1200px;
   .btn {
     padding: 0.5em;
     width: auto;
-    background-color: #41496E;
+    background-color: #41496e;
     margin: 0 auto;
   }
 }
@@ -35,18 +36,17 @@ $mobile-transition-breakpoint: 1200px;
 
 .progress-chunk {
   &.completed {
-    background-color: #5261B7;
+    background-color: #5261b7;
   }
   width: 30%;
   height: 10px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   transition: background-color 0.3s;
 }
 
 .loading {
   text-align: center;
 }
-
 
 $transition-length: 0.33s;
 
@@ -58,24 +58,34 @@ $transition-length: 0.33s;
 .alert-wrapper {
   padding: 10px 10px;
   transform: translateY(0);
-  transition: transform $transition-length ease-in 0s, visibility 0s linear $transition-length;
+  transition: transform $transition-length ease-in 0s,
+    visibility 0s linear $transition-length;
   display: block;
   margin: 0 auto;
   visibility: hidden;
 
   &.visible {
     transform: translateY(100%);
-    transition: transform $transition-length ease-out, visibility 0s linear  0s;
+    transition: transform $transition-length ease-out, visibility 0s linear 0s;
     visibility: visible;
   }
 }
 
 .alert-wrapper.fade {
   opacity: 0;
-  transition: transform 0s linear $transition-length, opacity $transition-length ease-in 0s, visibility 0s linear $transition-length;
+  transition: transform 0s linear $transition-length,
+    opacity $transition-length ease-in 0s,
+    visibility 0s linear $transition-length;
 
   &.visible {
     opacity: 1;
-    transition: transform 0s, opacity $transition-length ease-out, visibility 0s linear  0s;
+    transition: transform 0s, opacity $transition-length ease-out,
+      visibility 0s linear 0s;
   }
+}
+
+pr-create-new-archive {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }

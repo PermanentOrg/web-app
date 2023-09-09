@@ -1,93 +1,210 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+/* @format */
+import { Observable, Subscription } from 'rxjs';
+import { AccountService } from '@shared/services/account/account.service';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  OnDestroy,
+  Input,
+} from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
+import {
+  reasons,
+  goals,
+  OnboardingTypes,
+} from '../../shared/onboarding-screen';
+import { Dialog } from '../../../dialog/dialog.service';
+import { ArchiveType } from '../../../models/archive-vo';
 
-type NewArchiveScreen = 'type' | 'name';
+type NewArchiveScreen = 'goals' | 'reasons' | 'create';
 
 @Component({
   selector: 'pr-create-new-archive',
   templateUrl: './create-new-archive.component.html',
-  styleUrls: ['./create-new-archive.component.scss']
+  styleUrls: ['./create-new-archive.component.scss'],
 })
-export class CreateNewArchiveComponent implements OnInit {
+export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   @Output() back = new EventEmitter<void>();
   @Output() createdArchive = new EventEmitter<ArchiveVO>();
   @Output() error = new EventEmitter<string>();
   @Output() progress = new EventEmitter<number>();
+  @Output() chartPathClicked = new EventEmitter<void>();
+  @Input() pendingArchives: ArchiveVO[] = [];
+  @Input() pendingArchive: ArchiveVO;
 
   public archiveType: string;
   public archiveName: string = '';
-  public screen: NewArchiveScreen = 'type';
+  public screen: NewArchiveScreen = 'create';
   public loading: boolean = false;
+  public selectedGoals: string[] = [];
+  public selectedReasons: string[] = [];
+  public selectedValue: string = '';
+  public name: string = '';
+  public goals = goals;
+  public reasons = reasons;
+  archiveTypeTag: OnboardingTypes;
+
+  skipOnboarding: Observable<{ name: string }>;
+
+  subscription: Subscription;
 
   constructor(
     private api: ApiService,
+    private dialog: Dialog,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
-    this.progress.emit(1);
-  }
-
-  public setArchiveType(type: string): void {
-    this.archiveType = type;
-  }
-
-  public getArchiveTypeClasses(type: string) {
-    return {
-      'archive-type': true,
-      'selected': this.archiveType === type
-    };
-  }
-
-  public getArchiveNamePlaceholder(): string {
-    switch (this.archiveType) {
-      case 'type.archive.person':
-        return 'Person Name';
-      case 'type.archive.family':
-        return 'Group Name';
-      case 'type.archive.organization':
-        return 'Organization Name';
+    if (this.pendingArchive) {
+      this.screen = 'goals';
+      this.progress.emit(1);
+    } else {
+      this.progress.emit(0);
     }
-    return 'Name';
+    this.subscription = this.accountService.createAccountForMe.subscribe(
+      (value) => {
+        if (value.action === 'confirm') {
+          this.name = value.name;
+          this.archiveType = 'type.archive.person';
+          this.archiveTypeTag = OnboardingTypes.myself;
+          this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
+          this.screen = 'goals';
+          this.progress.emit(1);
+        }
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   public onBackPress(): void {
-    this.progress.emit(0);
-    this.back.emit();
-  }
-
-  public setScreen(screen: NewArchiveScreen): void {
-    this.screen = screen;
-    if (screen === 'name') {
-      this.progress.emit(2);
+    if (this.pendingArchive) {
+      this.goToInvitations();
+    }
+    if (this.screen === 'goals') {
+      this.screen = 'create';
+      this.progress.emit(0);
     } else {
+      this.screen = 'goals';
       this.progress.emit(1);
     }
   }
 
-  public isFormValid(): boolean {
-    return this.archiveType !== null && this.archiveName.trim().length > 0;
+  public setScreen(screen: NewArchiveScreen): void {
+    if (this.pendingArchive && screen === 'create') {
+      this.goToInvitations();
+    }
+    this.screen = screen;
+    if (screen === 'reasons') {
+      this.progress.emit(2);
+      this.chartPathClicked.emit();
+    } else if (screen === 'goals') {
+      this.progress.emit(1);
+    } else {
+      this.progress.emit(0);
+    }
   }
 
-  public async onSubmit(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!this.isFormValid()) {
-      const form = event.target as HTMLFormElement;
-      form.reportValidity();
-      return;
-    }
+  public async onSubmit(): Promise<void> {
     try {
       this.loading = true;
       const archive = new ArchiveVO({
-        fullName: this.archiveName,
+        fullName: this.name,
         type: this.archiveType,
       });
-      const response = await this.api.archive.create(archive);
-      const createdArchive = response.getArchiveVO();
-      this.createdArchive.emit(createdArchive);
-    } catch {
+
+      const tags = [
+        this.archiveTypeTag,
+        ...this.selectedGoals,
+        ...this.selectedReasons,
+      ].filter((tag) => !!tag);
+
+      let createdArchive: ArchiveVO;
+
+      try {
+        let response;
+
+        if (this.pendingArchive) {
+          await this.api.archive.accept(this.pendingArchive);
+        } else {
+          response = await this.api.archive.create(archive);
+          createdArchive = response.getArchiveVO();
+        }
+      } catch (archiveError) {
+        this.error.emit('An error occurred. Please try again.');
+      }
+
+      try {
+        await this.api.account.updateAccountTags(tags, []);
+      } catch (tagsError) {}
+
+      if (createdArchive) {
+        this.createdArchive.emit(createdArchive);
+      }
+      if (this.pendingArchive) {
+        this.createdArchive.emit(this.pendingArchive);
+      }
+    } catch (error) {
+      this.error.emit('An error occurred. Please try again.');
+    } finally {
       this.loading = false;
-      this.error.emit('There was an error creating your new archive. Please try again.');
+    }
+  }
+
+  public addValues(values: string[], value: string): void {
+    if (values.includes(value)) {
+      values.splice(values.indexOf(value), 1);
+    } else {
+      values.push(value);
+    }
+  }
+
+  public onValueChange(value: {
+    type: ArchiveType;
+    tag: OnboardingTypes;
+  }): void {
+    this.selectedValue = `${value.type}+${value.tag}`;
+    this.archiveType = value.type;
+    this.archiveTypeTag = value.tag as OnboardingTypes;
+    this.setName(this.archiveTypeTag);
+  }
+
+  public makeMyArchive(): void {
+    this.dialog.open(
+      'SkipOnboardingDialogComponent',
+      { skipOnboarding: this.skipOnboarding },
+      { width: '600px' }
+    );
+  }
+
+  public skipStep(): void {
+    if (this.screen === 'goals') {
+      this.screen = 'reasons';
+      this.progress.emit(2);
+      this.selectedGoals = [];
+    } else if (this.screen === 'reasons') {
+      this.selectedReasons = [];
+      this.onSubmit();
+    }
+  }
+
+  goToInvitations(): void {
+    this.back.emit();
+  }
+
+  private setName(archiveTypeTag: OnboardingTypes): void {
+    switch (archiveTypeTag) {
+      case OnboardingTypes.unsure:
+        this.name = this.accountService.getAccount().fullName;
+        break;
+      default:
+        this.name = '';
+        break;
     }
   }
 }

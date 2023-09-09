@@ -1,10 +1,8 @@
 /* @format */
 import { NgModule, ComponentFactoryResolver, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CoreRoutingModule } from '@core/core.routes';
 import { SharedModule } from '@shared/shared.module';
-
 import { DataService } from '@shared/services/data/data.service';
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadSession } from '@core/services/upload/upload.session';
@@ -63,6 +61,7 @@ import { ArchiveTypeChangeDialogComponent } from './components/archive-type-chan
 import { ArchivePayerComponent } from './components/archive-payer/archive-payer.component';
 import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
 import { ArchiveStoragePayerComponent } from './components/archive-storage-payer/archive-storage-payer.component';
+import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 
 @NgModule({
   imports: [
@@ -114,6 +113,7 @@ import { ArchiveStoragePayerComponent } from './components/archive-storage-payer
     ArchivePayerComponent,
     ConfirmPayerDialogComponent,
     ArchiveStoragePayerComponent,
+    SkipOnboardingDialogComponent,
   ],
   providers: [
     DataService,
@@ -181,6 +181,10 @@ export class CoreModule {
     {
       token: 'ConfirmPayerDialogComponent',
       component: ConfirmPayerDialogComponent,
+    },
+    {
+      token: 'SkipOnboardingDialogComponent',
+      component: SkipOnboardingDialogComponent,
     },
   ];
 

@@ -12,7 +12,7 @@
     margin: 0;
     flex: 0 0 auto;
   }
-  height: 3.75rem;
+  height: 2rem;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -30,4 +30,19 @@ h3 {
   font-weight: bold;
   font-size: 20px;
   line-height: 27px;
+}
+
+.learn-more {
+  color: #646464;
+}
+
+.get-started {
+  color: #5261b7;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.btn-primary {
+  width: 30%;
+  margin-top: 50px;
 }

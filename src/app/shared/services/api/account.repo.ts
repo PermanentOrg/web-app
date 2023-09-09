@@ -1,10 +1,5 @@
 /* @format */
-import {
-  AccountVO,
-  AccountPasswordVO,
-  ArchiveVO,
-  SimpleVO,
-} from '@root/app/models';
+import { AccountVO, ArchiveVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { getFirst } from '../http-v2/http-v2.service';
 
@@ -99,6 +94,12 @@ export class AccountRepo extends BaseRepo {
       data,
       AccountResponse
     );
+  }
+
+  public updateAccountTags(addTags: string[], removeTags: string[]) {
+    return this.httpV2
+      .put<{}>(`/v2/account/tags`, { addTags, removeTags }, null)
+      .toPromise();
   }
 }
 
