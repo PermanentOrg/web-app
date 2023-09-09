@@ -156,6 +156,5 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     const button = find('.create-archive').nativeElement;
 
     expect(button.disabled).toBe(true);
-  })
-
+  });
 });

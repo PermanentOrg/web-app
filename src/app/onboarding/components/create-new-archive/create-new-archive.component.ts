@@ -48,7 +48,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public reasons = reasons;
   archiveTypeTag: OnboardingTypes;
 
-
   skipOnboarding: Observable<{ name: string }>;
 
   subscription: Subscription;
