@@ -529,7 +529,7 @@ export class AccountService {
     if (this.isLoggedIn()) {
       try {
         await this.logOut();
-      } catch (err) { }
+      } catch (err) {}
     }
 
     this.inviteCode = inviteCode;
