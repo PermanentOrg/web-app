@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import {
   reasons,
   goals,
@@ -54,7 +55,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private dialog: Dialog,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private mixpanelService: MixpanelService
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +78,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         }
       }
     );
+    this.progress.emit(0);
+    this.mixpanelService.track('Onboarding: start', {});
   }
 
   ngOnDestroy(): void {
@@ -99,6 +103,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     if (this.pendingArchive && screen === 'create') {
       this.goToInvitations();
     }
+    this.mixpanelService.track('Onboarding: ' + screen, null);
     this.screen = screen;
     if (screen === 'reasons') {
       this.progress.emit(2);
