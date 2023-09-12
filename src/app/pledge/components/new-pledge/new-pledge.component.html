@@ -62,16 +62,23 @@
         <input
           class="form-check-input"
           type="checkbox"
-          id="anonymous"
-          formControlName="anonymous"
+          id="publishName"
+          formControlName="publishName"
         />
-        <label class="form-check-label" for="anonymous">
-          Make my donation anonymous
+        <label class="form-check-label" for="publishName">
+          Publish my name with my contribution
         </label>
         <a href="https://stripe.com" target="_blank">
           <img src="assets/img/powered_by_stripe@2x.png" alt="" />
         </a>
       </div>
+      <p class="form-check-description">
+        When you make a donation or endow storage on Permanent.org, we add your
+        name to our contributors list at
+        <a href="https://permanent.org/donate/">permanent.org/donate</a>. This
+        helps us build confidence in our nonprofit mission. If you uncheck this
+        option your contribution will be listed as anonymous.
+      </p>
     </div>
   </div>
   <button
@@ -84,14 +91,7 @@
       waiting
     "
   >
-    Donate
-    {{
-      (donationSelection === 'custom'
-        ? pledgeForm.value.customDonationAmount
-        : donationAmount
-      ) | currency : 'USD' : 'symbol' : '1.0-0'
-    }}
-    to endow
+    Purchase
     {{
       getStorageAmount(
         donationSelection === 'custom'
