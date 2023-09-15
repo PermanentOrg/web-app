@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -343,8 +344,6 @@ export class FileListControlsComponent
           );
         }, 0);
         this.account.updateAccountStorage(-sizeOfDeletedFiles);
-
-        console.log(sizeOfDeletedFiles);
       } catch (err) {
         if (err instanceof BaseResponse) {
           this.message.showError(err.getMessage(), true);

@@ -181,8 +181,6 @@ describe('AccountService', () => {
       new File([], 'test.txt'),
     ]);
     await instance.updateAccountStorage(200);
-    console.log(instance);
-
     expect(instance.getAccount().spaceLeft).toEqual(99800);
   });
   it('should add storage back after deleting an item', async () => {

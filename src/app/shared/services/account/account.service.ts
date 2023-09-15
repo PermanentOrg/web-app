@@ -622,7 +622,6 @@ export class AccountService {
   }
 
   public updateAccountStorage(amount) {
-    console.log(amount)
     this.account.spaceLeft -= amount;
     this.setAccount(this.account);
   }
