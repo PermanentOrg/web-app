@@ -1,4 +1,3 @@
-import { EditService } from './../../../core/services/edit/edit.service';
 import { UploadService } from '@core/services/upload/upload.service';
 /* @format */
 import { TestBed, inject } from '@angular/core/testing';
