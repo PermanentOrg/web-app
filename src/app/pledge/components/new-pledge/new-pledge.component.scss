@@ -127,3 +127,22 @@ button {
 .error {
   padding-top: $grid-unit * 0.5;
 }
+
+.form-check-description {
+  padding: 5px 0 5px 10px;
+  margin-bottom: 0px;
+}
+
+.contributors-link {
+  color: white;
+  &:visited {
+    color: white;
+  }
+  &:hover {
+    text-decoration-color: white;
+  }
+}
+
+.form-check-label {
+  width: 65%;
+}
