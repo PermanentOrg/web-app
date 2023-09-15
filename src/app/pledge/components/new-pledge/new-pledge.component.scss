@@ -132,3 +132,17 @@ button {
   padding: 5px 0 5px 10px;
   margin-bottom: 0px;
 }
+
+.contributors-link {
+  color: white;
+  &:visited {
+    color: white;
+  }
+  &:hover {
+    text-decoration-color: white;
+  }
+}
+
+form {
+  max-width: 525px;
+}
