@@ -302,7 +302,7 @@ export class EditTagsComponent
       event.preventDefault();
       this.setFocusToInputOrButton(`add-tag-${this.tagType}`);
     }
-    if(event.key === 'ArrowLeft'){
+    if (event.key === 'ArrowLeft') {
       event.preventDefault();
       this.setFocusToInputOrButton(`new-tag-${this.tagType}`);
     }
