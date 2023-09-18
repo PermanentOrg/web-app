@@ -172,7 +172,8 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   // Keyboard
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event) {
-    if (!this.fullscreen) {
+    const isTagsDialogShownOnScreen = !!document.querySelector('pr-edit-tags');
+    if (!this.fullscreen && !isTagsDialogShownOnScreen) {
       switch (event.key) {
         case Key.ArrowLeft:
           this.incrementCurrentRecord(true);

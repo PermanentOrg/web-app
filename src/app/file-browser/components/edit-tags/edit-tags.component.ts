@@ -69,6 +69,7 @@ export class EditTagsComponent
   private lastDataStatus: DataStatus;
   private lastFolderLinkId: number;
   private dialogTagSubscription: Subscription;
+  private currentIndex: number = 0;
 
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
@@ -268,5 +269,47 @@ export class EditTagsComponent
 
   close() {
     this.dialogRef.close();
+  }
+
+  onArrowNav(event: KeyboardEvent, index: number) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (index < this.matchingTags.length - 1) {
+        this.currentIndex++;
+        this.setFocusToCurrentIndex(index + 1);
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (index > 0) {
+        this.setFocusToCurrentIndex(index - 1);
+      } else if (index === 0) {
+        this.setFocusToInputOrButton(`new-tag-${this.tagType}`);
+      }
+    }
+  }
+
+  private setFocusToInputOrButton(inputClass) {
+    const input = document.querySelector(`.${inputClass}`);
+    (input as HTMLElement).focus();
+  }
+
+  public setFocusToFirstTagOrButton(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.setFocusToCurrentIndex(0);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.setFocusToInputOrButton(`add-tag-${this.tagType}`);
+    }
+    if(event.key === 'ArrowLeft'){
+      event.preventDefault();
+      this.setFocusToInputOrButton(`new-tag-${this.tagType}`);
+    }
+  }
+
+  private setFocusToCurrentIndex(index) {
+    const elements = document.querySelectorAll(`.edit-tag-${this.tagType}`);
+    (elements[index] as HTMLElement).focus();
   }
 }
