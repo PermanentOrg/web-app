@@ -1,9 +1,11 @@
+/* @format */
+import { Component, Inject, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { Component, OnInit } from '@angular/core';
-import { environment } from '@root/environments/environment';
-import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { FeaturedArchive } from '../../types/featured-archive';
-import { featuredArchives } from '../../data/featured';
+import {
+  FEATURED_ARCHIVE_API,
+  FeaturedArchiveApi,
+} from '../../types/featured-archive-api';
 
 @Component({
   selector: 'pr-gallery',
@@ -12,28 +14,21 @@ import { featuredArchives } from '../../data/featured';
 })
 export class GalleryComponent implements OnInit {
   public environment: string = '';
-  public archives: FeaturedArchive[] = this.getFeaturedArchives();
   public isLoggedIn: boolean;
-  constructor(private accountService:AccountService) {
+  public archives: FeaturedArchive[] = [];
+
+  constructor(
+    @Inject(FEATURED_ARCHIVE_API) private api: FeaturedArchiveApi,
+    private accountService: AccountService
+  ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
   }
 
-  ngOnInit(): void {}
+  async ngOnInit() {
+    this.archives = await this.getFeaturedArchives();
+  }
 
-  public getFeaturedArchives(): FeaturedArchive[] {
-    this.environment = environment.environment;
-    if (
-      this.environment !== 'prod' &&
-      SecretsService.hasStatic('FEATURED_ARCHIVES')
-    ) {
-      const envFeatured = SecretsService.getStatic('FEATURED_ARCHIVES');
-      if (envFeatured) {
-        const archives = JSON.parse(envFeatured) as FeaturedArchive[];
-        if (archives) {
-          return archives;
-        }
-      }
-    }
-    return featuredArchives;
+  public async getFeaturedArchives(): Promise<FeaturedArchive[]> {
+    return this.api.getFeaturedArchiveList();
   }
 }
