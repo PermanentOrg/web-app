@@ -7,24 +7,33 @@ import {
   FeaturedArchiveApi,
 } from '../../types/featured-archive-api';
 import { GalleryModule } from '../../gallery.module';
-import { Rendering } from 'shallow-render/dist/lib/models/rendering';
-import { DebugElement, Type } from '@angular/core';
-import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
-import { ComponentFixture } from '@angular/core/testing';
 
 class DummyFeaturedArchiveAPI implements FeaturedArchiveApi {
+  public static failRequest = false;
   public static FeaturedArchives: FeaturedArchive[] = [];
   public static reset(): void {
     DummyFeaturedArchiveAPI.FeaturedArchives = [];
+    DummyFeaturedArchiveAPI.failRequest = false;
   }
 
   public fetchedFromApi: boolean = false;
 
   public async getFeaturedArchiveList(): Promise<FeaturedArchive[]> {
+    if (DummyFeaturedArchiveAPI.failRequest) {
+      throw new Error('Forced unit test error');
+    }
     this.fetchedFromApi = true;
     return DummyFeaturedArchiveAPI.FeaturedArchives;
   }
 }
+
+const testArchive: FeaturedArchive = {
+  archiveNbr: '0000-0000',
+  name: 'Unit Testing',
+  type: 'type.archive.person',
+  thumbUrl: 'thumbUrl',
+  bannerUrl: 'bannerUrl',
+} as const;
 
 fdescribe('GalleryComponent', () => {
   let shallow: Shallow<GalleryComponent>;
@@ -52,15 +61,7 @@ fdescribe('GalleryComponent', () => {
   });
 
   it('displays the list of featured archives', async () => {
-    DummyFeaturedArchiveAPI.FeaturedArchives = [
-      {
-        archiveNbr: '0000-0000',
-        name: 'Unit Testing',
-        type: 'type.archive.person',
-        thumbUrl: 'thumbUrl',
-        bannerUrl: 'bannerUrl',
-      },
-    ];
+    DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
     const { fixture, find } = await shallow.render();
     await fixture.whenStable();
     expect(find('pr-featured-archive').length).toBe(1);
@@ -69,6 +70,13 @@ fdescribe('GalleryComponent', () => {
   it('displays an error message if no featured archives exist', async () => {
     const { find } = await shallow.render();
     expect(find('pr-featured-archive').length).toBe(0);
+    expect(find('.null-message').length).toBe(1);
+  });
+
+  it('displays an error message if the fetch failed', async () => {
+    DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
+    DummyFeaturedArchiveAPI.failRequest = true;
+    const { find } = await shallow.render();
     expect(find('.null-message').length).toBe(1);
   });
 });

@@ -24,7 +24,11 @@ export class GalleryComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.archives = await this.getFeaturedArchives();
+    try {
+      this.archives = await this.getFeaturedArchives();
+    } catch {
+      // do nothing
+    }
   }
 
   public async getFeaturedArchives(): Promise<FeaturedArchive[]> {
