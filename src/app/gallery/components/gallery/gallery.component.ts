@@ -13,7 +13,6 @@ import {
   styleUrls: ['./gallery.component.scss'],
 })
 export class GalleryComponent implements OnInit {
-  public environment: string = '';
   public isLoggedIn: boolean;
   public archives: FeaturedArchive[] = [];
 

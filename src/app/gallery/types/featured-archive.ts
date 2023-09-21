@@ -5,5 +5,6 @@ export interface FeaturedArchive {
   archiveNbr: string;
   name: string;
   type: ArchiveType;
-  description: string;
+  thumbUrl: string;
+  bannerUrl: string;
 }
