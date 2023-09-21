@@ -1,11 +1,24 @@
 /* @format */
 import { Pipe, PipeTransform } from '@angular/core';
+import { ArchiveType } from '@models/archive-vo';
 
 @Pipe({
   name: 'archiveTypeName',
 })
 export class ArchiveTypeNamePipe implements PipeTransform {
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+  public transform(type: ArchiveType): string {
+    return `${this.getName(type)} Archive`;
+  }
+
+  private getName(type: ArchiveType): string {
+    switch (type) {
+      case 'type.archive.person':
+        return 'Personal';
+      case 'type.archive.family':
+        return 'Group';
+      case 'type.archive.organization':
+      case 'type.archive.nonprofit':
+        return 'Organizational';
+    }
   }
 }
