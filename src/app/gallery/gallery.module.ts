@@ -15,6 +15,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { GalleryRoutingModule } from './gallery-routing.module';
 import { FeaturedArchiveComponent } from './components/featured-archive/featured-archive.component';
 import { PublicArchivesListComponent } from './components/public-archives-list/public-archives-list.component';
+import { ArchiveTypeNamePipe } from './pipes/archive-type-name.pipe';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PublicArchivesListComponent } from './components/public-archives-list/p
     GalleryHeaderComponent,
     FeaturedArchiveComponent,
     PublicArchivesListComponent,
+    ArchiveTypeNamePipe,
   ],
   imports: [
     CommonModule,
