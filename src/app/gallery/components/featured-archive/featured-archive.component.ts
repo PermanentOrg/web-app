@@ -13,24 +13,13 @@ export class FeaturedArchiveComponent implements OnInit {
   @Input() archive: FeaturedArchive;
   public thumbURL = '';
   public bannerURL = '';
+  public classNames: string[] = ['featured-archive'];
+  protected api: any;
 
-  constructor(protected api: ApiService) {}
+  constructor() {}
 
   async ngOnInit() {
-    const archiveVO = (
-      await this.api.archive.get([
-        new ArchiveVO({ archiveNbr: this.archive.archiveNbr }),
-      ])
-    ).getArchiveVO();
-    if (archiveVO.thumbURL200) {
-      this.thumbURL = archiveVO.thumbURL200;
-      const rootFolder = (
-        await this.api.folder.getPublicRoot(archiveVO.archiveNbr)
-      ).getFolderVO();
-      if (rootFolder.thumbArchiveNbr && rootFolder.thumbURL500) {
-        this.bannerURL = rootFolder.thumbURL500;
-      }
-    }
+    this.classNames = this.getClasses();
   }
 
   public getClasses(): string[] {
