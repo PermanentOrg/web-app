@@ -20,7 +20,7 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  protected getFeaturedArchives(): FeaturedArchive[] {
+  public getFeaturedArchives(): FeaturedArchive[] {
     this.environment = environment.environment;
     if (
       this.environment !== 'prod' &&

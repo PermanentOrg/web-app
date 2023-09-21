@@ -1,6 +1,5 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GalleryComponent } from './gallery.component';
 import { NgModule } from '@angular/core';
@@ -16,12 +15,13 @@ class DummyModule {}
 fdescribe('GalleryComponent', () => {
   let shallow: Shallow<GalleryComponent>;
   let component: GalleryComponent;
-  let fixture: ComponentFixture<GalleryComponent>;
 
-  it('should create', async () => {
+  beforeEach(async () => {
     shallow = new Shallow(GalleryComponent, DummyModule);
-    const rendering = await shallow.render();
-    component = rendering.instance;
-    expect(component).toBeTruthy();
+    component = (await shallow.render()).instance;
+  });
+
+  it('should be able to get a list of featured archives', async () => {
+    expect(component.getFeaturedArchives()).toBeTruthy();
   });
 });
