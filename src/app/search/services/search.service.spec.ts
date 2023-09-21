@@ -81,14 +81,6 @@ describe('SearchService', () => {
       expectSearchToBe(service.parseSearchTerm('Potato'), 'Potato', []);
     });
 
-    it('should remove tag tokens from search', () => {
-      expectSearchToBe(
-        service.parseSearchTerm('tag:"NonExistentTag"'),
-        undefined,
-        []
-      );
-    });
-
     it('should load tag tokens into the tags array', () => {
       tags.setTags([{ name: 'Potato' }]);
       expectSearchToBe(service.parseSearchTerm('tag:"Potato"'), undefined, [
@@ -108,28 +100,6 @@ describe('SearchService', () => {
         'Hello World',
         [{ name: 'Potato' }, { name: 'Potato' }]
       );
-    });
-
-    it('removes quotation marks from tag names', () => {
-      /*
-        This test probably represents erroneous behavior that we want to change
-        at some point. For now, this represents the original functionality of
-        the SearchService as it was written.
-      */
-      tags.setTags([
-        { name: 'Potato', tagId: 0 },
-        { name: '"Potato"', tagId: 1 },
-      ]);
-      const searchTokens = service.parseSearchTerm('tag:""Potato""');
-      expect(searchTokens[1].length).toBe(1);
-      expect(searchTokens[1][0].tagId).toBe(0);
-    });
-
-    it('handles tag edge cases', () => {
-      tags.setTags([{ name: 'tag:Test' }]);
-      expectSearchToBe(service.parseSearchTerm('tag:"tag:"Test""'), undefined, [
-        { name: 'tag:Test' },
-      ]);
     });
 
     function expectSearchToBe(

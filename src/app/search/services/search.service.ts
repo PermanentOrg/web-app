@@ -63,14 +63,14 @@ export class SearchService {
           const tagNames = part.match(getTagName) || [];
           for (const tagName of tagNames) {
             if (tagName) {
-              const name = this.removeFirstAndLastQuotes(tagName)
+              const name = this.removeFirstAndLastQuotes(tagName);
               const tag = this.tags.getTagByName(name);
               if (tag) {
                 parsedTags.push(tag);
               }
             }
           }
-          if(!parsedTags.length){
+          if (!parsedTags.length) {
             queryString = termString;
           }
         } else {
@@ -85,16 +85,16 @@ export class SearchService {
     }
     return [queryString, parsedTags];
   }
-  
+
   private removeFirstAndLastQuotes(str) {
     if (str.startsWith('"')) {
-        str = str.substr(1);
+      str = str.substr(1);
     }
     if (str.endsWith('"')) {
-        str = str.substring(0, str.length - 1);
+      str = str.substring(0, str.length - 1);
     }
     return str;
-}
+  }
 
   public getResultsInCurrentArchive(
     searchTerm: string,
