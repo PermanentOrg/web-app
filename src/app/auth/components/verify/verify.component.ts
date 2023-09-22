@@ -227,6 +227,6 @@ export class VerifyComponent implements OnInit {
   }
 
   private keepLoggedIn(): boolean {
-    return this.route.snapshot.queryParams.keepLoggedIn === 'true';
+    return this.accountService.getAccount().keepLoggedIn;
   }
 }
