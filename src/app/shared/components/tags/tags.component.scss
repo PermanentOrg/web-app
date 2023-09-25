@@ -1,7 +1,7 @@
 /* @format */
 @import 'variables';
 $gutter-size: 0.25rem;
-:host {
+.tags {
   display: flex;
   flex-wrap: wrap;
   height: auto;
@@ -65,6 +65,12 @@ $gutter-size: 0.25rem;
   }
 }
 
-.empty {
+.empty,
+.not-empty {
   margin-bottom: 0.25rem;
+}
+
+.not-empty {
+  color: $text-muted;
+  padding: 0.25rem 0rem;
 }
