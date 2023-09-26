@@ -288,7 +288,7 @@ export class EditTagsComponent
     }
   }
 
-  private setFocusToInputOrButton(inputClass) {
+  public setFocusToInputOrButton(inputClass) {
     const input = document.querySelector(`.${inputClass}`);
     (input as HTMLElement).focus();
   }
@@ -308,7 +308,7 @@ export class EditTagsComponent
     }
   }
 
-  private setFocusToCurrentIndex(index) {
+  public setFocusToCurrentIndex(index) {
     const elements = document.querySelectorAll(`.edit-tag-${this.tagType}`);
     (elements[index] as HTMLElement).focus();
   }
