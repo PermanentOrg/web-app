@@ -110,6 +110,32 @@ describe('SearchService', () => {
       expect(search[0]).toBe(expectedSearch);
       expect(search[1]).toEqual(expectedTags);
     }
+
+    it('removes the first and last quotation marks from tag names', () => {
+      tags.setTags([
+        { name: 'Potato', tagId: 0 },
+        { name: '"Potato"', tagId: 1 },
+      ]);
+      const searchTokens = service.parseSearchTerm('tag:""Potato""');
+      expect(searchTokens[1].length).toBe(1);
+      expect(searchTokens[1][0].tagId).toBe(1);
+    });
+
+    it('handles tag edge cases', () => {
+      tags.setTags([{ name: 'tag:Test' }]);
+      expectSearchToBe(
+        service.parseSearchTerm('tag:"tag:"Test""'),
+        'tag:"tag:"Test""',
+        []
+      );
+    });
+
+    it('handles returns the tags correctly if they have quotation marks', () => {
+      tags.setTags([{ name: 'tag:"Test"' }]);
+      expectSearchToBe(service.parseSearchTerm('tag:"tag:"Test""'), undefined, [
+        { name: 'tag:"Test"' },
+      ]);
+    });
   });
 
   describe('getResultsInCurrentFolder', () => {
