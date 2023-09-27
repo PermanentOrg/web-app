@@ -1,15 +1,18 @@
 /* @format */
 import {
   ComponentFixture,
+  fakeAsync,
   TestBed,
   TestModuleMetadata,
+  tick,
 } from '@angular/core/testing';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { SharedModule } from '@shared/shared.module';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
-import { Observable, Observer, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, Subject } from 'rxjs';
+import { ApiService } from '@shared/services/api/api.service';
 
 describe('ConfirmGiftDialogComponent', () => {
   let component: ConfirmGiftDialogComponent;
@@ -21,6 +24,16 @@ describe('ConfirmGiftDialogComponent', () => {
     message: string;
     giftResult: Observable<void>;
   };
+
+  const mockApiService = {
+    billing: {
+      giftStorage: jasmine
+        .createSpy('giftStorage')
+        .and.returnValue(Promise.resolve()),
+    },
+  };
+
+  const mockGiftResult = new BehaviorSubject<boolean>(false);
 
   beforeEach(async () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -42,13 +55,19 @@ describe('ConfirmGiftDialogComponent', () => {
         email: 'test@email.com',
         amount: 10,
         message: 'test message',
-        giftResult: new Observable(() => {}),
+        giftResult: mockGiftResult,
       },
     });
     config.providers.push({
       provide: DialogRef,
       useValue: dialogRef,
     });
+
+    config.providers.push({
+      provide: ApiService,
+      useValue: mockApiService,
+    });
+
     await TestBed.configureTestingModule(config).compileComponents();
   });
 
@@ -81,4 +100,16 @@ describe('ConfirmGiftDialogComponent', () => {
 
     expect(dialogRefSpy).toHaveBeenCalled();
   });
+
+  it('should close the dialog and send the data back when confirm method is called', fakeAsync(() => {
+    const dialogRefSpy = spyOn(dialogRef, 'close');
+    const giftResultSpy = spyOn(mockGiftResult, 'next');
+
+    component.onConfirmClick();
+
+    tick(); // simulates the passage of time until all pending asynchronous activities finish
+
+    expect(dialogRefSpy).toHaveBeenCalled();
+    expect(giftResultSpy).toHaveBeenCalledWith(true);
+  }));
 });
