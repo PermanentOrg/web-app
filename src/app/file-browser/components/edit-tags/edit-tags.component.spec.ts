@@ -12,9 +12,9 @@ import { SearchService } from '@search/services/search.service';
 import { TagResponse } from '@shared/services/api/tag.repo';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { EditTagsComponent, TagType } from './edit-tags.component';
-import { By } from '@angular/platform-browser';
 
 const defaultTagList: TagVOData[] = [
   {
