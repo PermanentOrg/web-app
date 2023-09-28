@@ -140,6 +140,7 @@ describe('AccountService', () => {
 
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().emailStatus).toBe('status.auth.verified');
+    expect(instance.getAccount().keepLoggedIn).toBeTrue();
   });
 
   it('should handle successful phone verification', async () => {
@@ -156,5 +157,6 @@ describe('AccountService', () => {
 
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
+    expect(instance.getAccount().keepLoggedIn).toBeTrue();
   });
 });
