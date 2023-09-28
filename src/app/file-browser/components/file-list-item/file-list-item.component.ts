@@ -825,7 +825,7 @@ export class FileListItemComponent
     return this.edit
       .deleteItems([this.item])
       .then(() => {
-        this.accountService.updateAccountStorage(-size);
+        this.accountService.deductAccountStorage(-size);
         this.dataService.refreshCurrentFolder();
         resolve();
       })
