@@ -70,8 +70,6 @@ export class EditTagsComponent
   private lastFolderLinkId: number;
   private dialogTagSubscription: Subscription;
 
-  currentIndex: number = 0;
-
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
     @Optional() private dialogRef: DialogRef,
@@ -270,42 +268,5 @@ export class EditTagsComponent
 
   close() {
     this.dialogRef.close();
-  }
-
-  onKeydown(event: KeyboardEvent) {
-    let focusBackOnInput = false;
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      if (this.currentIndex < this.matchingTags.length - 1) {
-        this.currentIndex++;
-      }
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      } else if (this.currentIndex === 0) {
-        focusBackOnInput = true;
-      }
-    }
-    this.setFocusToCurrentIndex(focusBackOnInput);
-  }
-
-  private setFocusToCurrentIndex(focusBackOnInput) {
-    if (focusBackOnInput) {
-      (document.querySelector('.new-tag') as HTMLElement).focus();
-    } else {
-      const elements = document.querySelectorAll('.edit-tag');
-      (elements[this.currentIndex] as HTMLElement).focus();
-    }
-  }
-
-  public async handleEnterOnTag(tag) {
-    await this.onTagClick(tag);
-  }
-
-  public onArrowDownOnInput(event: KeyboardEvent) {
-    event.preventDefault();
-    const element = document.querySelector('.edit-tag');
-    (element as HTMLElement).focus();
   }
 }
