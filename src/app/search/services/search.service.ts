@@ -86,14 +86,8 @@ export class SearchService {
     return [queryString, parsedTags];
   }
 
-  private removeFirstAndLastQuotes(str) {
-    if (str.startsWith('"')) {
-      str = str.substr(1);
-    }
-    if (str.endsWith('"')) {
-      str = str.substring(0, str.length - 1);
-    }
-    return str;
+  private removeFirstAndLastQuotes(str: string): string {
+    return str.replace(/^"|"$/g, '');
   }
 
   public getResultsInCurrentArchive(
