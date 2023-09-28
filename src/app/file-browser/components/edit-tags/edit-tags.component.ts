@@ -90,11 +90,9 @@ export class EditTagsComponent
           this.endEditing();
         }
 
-        console.log(tags);
 
         this.allTags = this.filterTagsByType(tags);
         this.matchingTags = this.filterTagsByType(tags);
-        console.log(this.matchingTags);
         this.checkItemTags();
       })
     );
@@ -127,7 +125,6 @@ export class EditTagsComponent
     this.allTags = this.filterTagsByType(this.tagsService.getTags());
     this.matchingTags = this.allTags;
 
-    console.log(this.matchingTags);
 
     this.checkItemTags();
     this.lastDataStatus = this.item?.dataStatus;

@@ -44,10 +44,7 @@
       </button>
     </div>
   </div>
-  <div
-    class="edit-tags"
-    *ngIf="isEditing && matchingTags?.length"
-  >
+  <div class="edit-tags" *ngIf="isEditing && matchingTags?.length">
     <div
       class="edit-tag"
       [ngClass]="'edit-tag-' + tagType"
