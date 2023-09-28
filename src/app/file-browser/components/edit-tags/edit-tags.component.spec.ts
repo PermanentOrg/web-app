@@ -1,7 +1,7 @@
 /* @format */
 import { async } from '@angular/core/testing';
 import { Shallow } from 'shallow-render';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { ItemVO, TagVOData, RecordVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -14,6 +14,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { EditTagsComponent, TagType } from './edit-tags.component';
+import { By } from '@angular/platform-browser';
 
 const defaultTagList: TagVOData[] = [
   {
@@ -63,7 +64,7 @@ describe('EditTagsComponent', () => {
       .mock(SearchService, { getTagResults: (tag) => defaultTagList })
       .mock(TagsService, {
         getTags: () => defaultTagList,
-        getTags$: () => new Observable<TagVOData[]>(),
+        getTags$: () => of(defaultTagList),
         setItemTags: () => {},
       })
       .mock(MessageService, { showError: () => {} })
@@ -208,7 +209,6 @@ describe('EditTagsComponent', () => {
       testIndex
     );
 
-    // expect(componentInstance.currentIndex).toBe(testIndex + 1);
     expect(componentInstance.setFocusToCurrentIndex).toHaveBeenCalledWith(
       testIndex + 1
     );
@@ -246,5 +246,58 @@ describe('EditTagsComponent', () => {
     expect(componentInstance.setFocusToCurrentIndex).toHaveBeenCalledWith(
       testIndex - 1
     );
+  });
+
+  it('should highlight the correct tag on key down', async () => {
+    const { fixture, element } = await defaultRender();
+
+    element.componentInstance.isEditing = true;
+
+    fixture.detectChanges();
+    const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
+
+    const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+    tags[0].nativeElement.dispatchEvent(arrowKeyDown);
+
+    fixture.detectChanges();
+
+    const focusedElement = document.activeElement as HTMLElement;
+    expect(focusedElement).toBe(tags[1].nativeElement);
+  });
+
+  it('should highlight the correct tag on key up', async () => {
+    const { fixture, element } = await defaultRender();
+
+    element.componentInstance.isEditing = true;
+
+    fixture.detectChanges();
+    const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
+
+    const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+    tags[1].nativeElement.dispatchEvent(arrowKeyDown);
+
+    fixture.detectChanges();
+
+    const focusedElement = document.activeElement as HTMLElement;
+    expect(focusedElement).toBe(tags[0].nativeElement);
+  });
+
+  it('should highlight the input on key up', async () => {
+    const { fixture, element } = await defaultRender();
+
+    element.componentInstance.isEditing = true;
+
+    fixture.detectChanges();
+    const tag = fixture.debugElement.query(By.css('.edit-tag'));
+
+    const arrowKeyUp = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+    const input = fixture.debugElement.query(By.css('.new-tag'));
+
+    tag.nativeElement.dispatchEvent(arrowKeyUp);
+
+    fixture.detectChanges();
+
+    const focusedElement = document.activeElement as HTMLElement;
+    expect(focusedElement).toEqual(input.nativeElement);
   });
 });

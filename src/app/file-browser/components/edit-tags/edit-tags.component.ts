@@ -84,14 +84,17 @@ export class EditTagsComponent
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {
-        if (this.allTags.length > tags.length) {
+        if (this.allTags?.length > tags?.length) {
           // The user deleted one of our tags in manage-tags.
           // Let's close the editor.
           this.endEditing();
         }
 
+        console.log(tags);
+
         this.allTags = this.filterTagsByType(tags);
         this.matchingTags = this.filterTagsByType(tags);
+        console.log(this.matchingTags);
         this.checkItemTags();
       })
     );
@@ -123,6 +126,8 @@ export class EditTagsComponent
       this.tagType === 'keyword' ? 'Add new tag' : 'Add new field:value';
     this.allTags = this.filterTagsByType(this.tagsService.getTags());
     this.matchingTags = this.allTags;
+
+    console.log(this.matchingTags);
 
     this.checkItemTags();
     this.lastDataStatus = this.item?.dataStatus;
@@ -230,15 +235,15 @@ export class EditTagsComponent
     this.itemTagsById.clear();
 
     this.itemTags = this.filterTagsByType(
-      this.item.TagVOs.map((tag) =>
-        this.allTags?.find((t) => t.tagId === tag.tagId)
-      ).filter(
-        // Filter out tags that are now null from deletion
-        (tag) => tag?.name
-      )
+      (this.item?.TagVOs || [])
+        .map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
+        .filter(
+          // Filter out tags that are now null from deletion
+          (tag) => tag?.name
+        )
     );
 
-    if (!this.item.TagVOs?.length) {
+    if (!this.item?.TagVOs?.length) {
       return;
     }
 
@@ -272,6 +277,7 @@ export class EditTagsComponent
   }
 
   onArrowNav(event: KeyboardEvent, index: number) {
+    event.stopPropagation();
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       if (index < this.matchingTags.length - 1) {
@@ -289,7 +295,7 @@ export class EditTagsComponent
   }
 
   public setFocusToInputOrButton(inputClass) {
-    const input = document.querySelector(`.${inputClass}`);
+    const input = this.elementRef.nativeElement.querySelector(`.${inputClass}`);
     (input as HTMLElement).focus();
   }
 
@@ -299,17 +305,21 @@ export class EditTagsComponent
       this.setFocusToCurrentIndex(0);
     }
     if (event.key === 'ArrowRight') {
+      event.stopPropagation();
       event.preventDefault();
       this.setFocusToInputOrButton(`add-tag-${this.tagType}`);
     }
     if (event.key === 'ArrowLeft') {
+      event.stopPropagation();
       event.preventDefault();
       this.setFocusToInputOrButton(`new-tag-${this.tagType}`);
     }
   }
 
   public setFocusToCurrentIndex(index) {
-    const elements = document.querySelectorAll(`.edit-tag-${this.tagType}`);
+    const elements = this.elementRef.nativeElement.querySelectorAll(
+      `.edit-tag-${this.tagType}`
+    );
     (elements[index] as HTMLElement).focus();
   }
 }
