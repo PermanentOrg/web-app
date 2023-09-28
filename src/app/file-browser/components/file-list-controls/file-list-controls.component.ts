@@ -343,7 +343,7 @@ export class FileListControlsComponent
               : item.FolderSizeVO.allFileSizeDeep)
           );
         }, 0);
-        this.account.updateAccountStorage(-sizeOfDeletedFiles);
+        this.account.deductAccountStorage(-sizeOfDeletedFiles);
       } catch (err) {
         if (err instanceof BaseResponse) {
           this.message.showError(err.getMessage(), true);

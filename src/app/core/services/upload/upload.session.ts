@@ -118,7 +118,7 @@ export class UploadSession {
       this.statistics.current++;
 
       await this.uploader.uploadFile(item, progressHandler);
-      this.account.updateAccountStorage(item.file.size);
+      this.account.deductAccountStorage(item.file.size);
 
       this.statistics.completed++;
       item.uploadStatus = UploadStatus.Done;

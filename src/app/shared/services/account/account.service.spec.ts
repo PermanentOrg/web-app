@@ -179,7 +179,7 @@ describe('AccountService', () => {
     await uploadService.uploadFiles(new FolderVO({}), [
       new File([], 'test.txt'),
     ]);
-    await instance.updateAccountStorage(200);
+    await instance.deductAccountStorage(200);
     expect(instance.getAccount().spaceLeft).toEqual(99800);
   });
   it('should add storage back after deleting an item', async () => {
@@ -202,7 +202,7 @@ describe('AccountService', () => {
     instance.setAccount(account);
     await editService.deleteItems(itemsToDelete);
 
-    await instance.updateAccountStorage(-sizeOfItemsToDelete);
+    await instance.deductAccountStorage(-sizeOfItemsToDelete);
 
     expect(instance.getAccount().spaceLeft).toEqual(100400);
   });
