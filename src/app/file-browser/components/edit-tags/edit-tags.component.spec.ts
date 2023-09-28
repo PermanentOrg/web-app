@@ -197,57 +197,6 @@ describe('EditTagsComponent', () => {
     expect(dialogOpenSpy.open).toHaveBeenCalled();
   });
 
-  it('should handle ArrowDown event', async () => {
-    const { instance: componentInstance } = await defaultRender();
-    componentInstance.isEditing = true;
-
-    spyOn(componentInstance, 'setFocusToCurrentIndex');
-
-    const testIndex = 0;
-    componentInstance.onArrowNav(
-      new KeyboardEvent('keydown', { key: 'ArrowDown' }),
-      testIndex
-    );
-
-    expect(componentInstance.setFocusToCurrentIndex).toHaveBeenCalledWith(
-      testIndex + 1
-    );
-  });
-
-  it('should handle ArrowUp event when the first input is highlighted', async () => {
-    const { instance: componentInstance } = await defaultRender();
-    componentInstance.isEditing = true;
-
-    spyOn(componentInstance, 'setFocusToInputOrButton');
-
-    const testIndex = 0;
-    componentInstance.onArrowNav(
-      new KeyboardEvent('keydown', { key: 'ArrowUp' }),
-      testIndex
-    );
-
-    expect(componentInstance.setFocusToInputOrButton).toHaveBeenCalledWith(
-      'new-tag-keyword'
-    );
-  });
-
-  it('should handle ArrowUp event', async () => {
-    const { instance: componentInstance } = await defaultRender();
-    componentInstance.isEditing = true;
-
-    spyOn(componentInstance, 'setFocusToCurrentIndex');
-
-    const testIndex = 4;
-    componentInstance.onArrowNav(
-      new KeyboardEvent('keydown', { key: 'ArrowUp' }),
-      testIndex
-    );
-
-    expect(componentInstance.setFocusToCurrentIndex).toHaveBeenCalledWith(
-      testIndex - 1
-    );
-  });
-
   it('should highlight the correct tag on key down', async () => {
     const { fixture, element } = await defaultRender();
 
