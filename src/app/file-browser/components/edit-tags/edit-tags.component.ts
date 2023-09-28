@@ -90,7 +90,6 @@ export class EditTagsComponent
           this.endEditing();
         }
 
-
         this.allTags = this.filterTagsByType(tags);
         this.matchingTags = this.filterTagsByType(tags);
         this.checkItemTags();
@@ -124,7 +123,6 @@ export class EditTagsComponent
       this.tagType === 'keyword' ? 'Add new tag' : 'Add new field:value';
     this.allTags = this.filterTagsByType(this.tagsService.getTags());
     this.matchingTags = this.allTags;
-
 
     this.checkItemTags();
     this.lastDataStatus = this.item?.dataStatus;
