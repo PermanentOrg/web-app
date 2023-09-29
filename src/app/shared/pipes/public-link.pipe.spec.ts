@@ -1,3 +1,4 @@
+/* @format */
 import { FolderVO, RecordVO } from '@models';
 import { PublicLinkPipe } from './public-link.pipe';
 import { PublicRoutePipe } from './public-route.pipe';
@@ -16,7 +17,7 @@ describe('PublicLinkPipe', () => {
   it('returns correct link for folder', () => {
     const folder = new FolderVO({
       folder_linkId: 100,
-      archiveNbr: '0001-00gh'
+      archiveNbr: '0001-00gh',
     });
     const route = pipe.transform(folder);
     expect(route).toBeDefined();
@@ -32,10 +33,33 @@ describe('PublicLinkPipe', () => {
         }),
       ],
       folder_linkId: 1001,
-      archiveNbr: '0001-00gp'
+      archiveNbr: '0001-00gp',
     });
     const route = pipe.transform(record);
     expect(route).toBeDefined();
-    expect(route.endsWith('/p/archive/0001-0000/0001-meow/1234/record/0001-00gp')).toBeTruthy();
+    expect(
+      route.endsWith('/p/archive/0001-0000/0001-meow/1234/record/0001-00gp')
+    ).toBeTruthy();
+  });
+
+  it('adds only one slash in the url before p/archive', () => {
+    const folder = new FolderVO({
+      folder_linkId: 100,
+      archiveNbr: '0001-00gh',
+    });
+
+    const route = pipe.transform(folder);
+
+    const pArchiveIndex = route.indexOf('p/archive');
+
+    if (pArchiveIndex === -1) {
+      fail('URL format is unexpected');
+      return;
+    }
+
+    const substringBefore = route.substring(0, pArchiveIndex);
+
+    expect(substringBefore.endsWith('/')).toBe(true);
+    expect(substringBefore.endsWith('//')).toBe(false);
   });
 });

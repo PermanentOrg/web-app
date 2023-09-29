@@ -54,7 +54,6 @@ export class PublishComponent implements OnInit {
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 
-    console.log(this.sourceItem.folder_linkType)
     if (this.sourceItem.folder_linkType.includes('public')) {
       this.publicItem = this.sourceItem;
       this.publicLink = this.linkPipe.transform(this.publicItem);
