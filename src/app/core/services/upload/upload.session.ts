@@ -3,6 +3,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { BaseResponse } from '@shared/services/api/base';
 import { FolderVO } from '@root/app/models';
 import debug from 'debug';
+import { AccountService } from '../../../shared/services/account/account.service';
 import { Uploader } from './uploader';
 import { UploadItem, UploadStatus } from './uploadItem';
 
@@ -45,7 +46,7 @@ export class UploadSession {
 
   private debug = debug('service:uploadSession');
 
-  constructor(private uploader: Uploader) {}
+  constructor(private uploader: Uploader, private account: AccountService) {}
 
   private emitProgress = (item: UploadItem) =>
     this.progress.emit({
@@ -117,6 +118,7 @@ export class UploadSession {
       this.statistics.current++;
 
       await this.uploader.uploadFile(item, progressHandler);
+      this.account.deductAccountStorage(item.file.size);
 
       this.statistics.completed++;
       item.uploadStatus = UploadStatus.Done;

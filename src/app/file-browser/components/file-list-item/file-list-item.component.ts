@@ -187,10 +187,10 @@ export class FileListItemComponent
   public isDragTarget = false;
   public isDropTarget = false;
   public isDragging = false;
-  public isDisabled =  false;
+  public isDisabled = false;
   public isNameHovered = false;
-  public isTextOverflowing = false
-  public isPublicArchive = false
+  public isTextOverflowing = false;
+  public isPublicArchive = false;
 
   @HostBinding('class.grid-view') inGridView = false;
 
@@ -199,13 +199,13 @@ export class FileListItemComponent
   @Output() itemVisible = new EventEmitter<FileListItemVisibleEvent>();
   @Output() refreshView = new EventEmitter<void>();
 
-  @ViewChild('name',{static:true}) name:ElementRef
+  @ViewChild('name', { static: true }) name: ElementRef;
 
   public allowActions = true;
   public isMyItem = true;
   public canEdit = true;
   public isZip = false;
-  public date:string = ''
+  public date: string = '';
 
   private folderThumb200: string;
   private folderThumb500: string;
@@ -245,7 +245,7 @@ export class FileListItemComponent
   ) {}
 
   ngOnInit() {
-    const date = new Date(this.item.displayDT)
+    const date = new Date(this.item.displayDT);
     this.date = getFormattedDate(date);
 
     this.dataService.registerItem(this.item);
@@ -324,7 +324,8 @@ export class FileListItemComponent
       });
     }
     const nameContainer = this.name.nativeElement;
-    this.isTextOverflowing = nameContainer.scrollWidth > nameContainer.clientWidth;
+    this.isTextOverflowing =
+      nameContainer.scrollWidth > nameContainer.clientWidth;
   }
 
   ngOnChanges() {
@@ -490,7 +491,6 @@ export class FileListItemComponent
 
   onItemClick(event: MouseEvent) {
     if (this.device.isMobileWidth() || !this.canSelect) {
-
       this.goToItem();
       this.itemClicked.emit({
         item: this.item,
@@ -821,15 +821,30 @@ export class FileListItemComponent
   }
 
   deleteItem(resolve: Function) {
+    const size = this.getFileOrFolderSize();
     return this.edit
       .deleteItems([this.item])
       .then(() => {
+        this.accountService.deductAccountStorage(-size);
         this.dataService.refreshCurrentFolder();
         resolve();
       })
       .catch(() => {
         resolve();
       });
+  }
+
+  getFileOrFolderSize(): number {
+    let size = 0;
+    if (this.item instanceof FolderVO) {
+      this.api.folder.get([this.item]).then((response: FolderResponse) => {
+        const folder = response.getFolderVO();
+        size = folder.FolderSizeVO.allFileSizeDeep;
+      });
+    } else {
+      size = this.item.size;
+    }
+    return size;
   }
 
   moveItem(destination: FolderVO) {

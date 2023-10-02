@@ -620,4 +620,9 @@ export class AccountService {
   private getStorage(key) {
     return this.storage.local.get(key) || this.storage.session.get(key);
   }
+
+  public deductAccountStorage(amount: number) {
+    this.account.spaceLeft -= amount;
+    this.setAccount(this.account);
+  }
 }

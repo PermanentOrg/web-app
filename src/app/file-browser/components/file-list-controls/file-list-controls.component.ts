@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -334,6 +335,15 @@ export class FileListControlsComponent
     ) {
       try {
         this.edit.deleteItems(this.selectedItems);
+        const sizeOfDeletedFiles = this.selectedItems.reduce((acc, item) => {
+          return (
+            acc +
+            (item instanceof RecordVO
+              ? item.size
+              : item.FolderSizeVO.allFileSizeDeep)
+          );
+        }, 0);
+        this.account.deductAccountStorage(-sizeOfDeletedFiles);
       } catch (err) {
         if (err instanceof BaseResponse) {
           this.message.showError(err.getMessage(), true);

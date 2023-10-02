@@ -3,13 +3,14 @@ import { TestBed, inject } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Shallow } from 'shallow-render';
 import { Observable } from 'rxjs';
-
+import { UploadService } from '@core/services/upload/upload.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
-import { AccountVO, ArchiveVO } from '@root/app/models';
+import { AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
 import { AppModule } from '../../../app.module';
 import { StorageService } from '../storage/storage.service';
+import { EditService } from '../../../core/services/edit/edit.service';
 
 describe('AccountService', () => {
   let shallow: Shallow<AccountService>;
@@ -80,6 +81,14 @@ describe('AccountService', () => {
           get: () => {},
           set: () => {},
         },
+      })
+      .mock(UploadService, {
+        uploadFiles: (parentFolder: FolderVO, files: File[]) => {
+          return Promise.resolve(true);
+        },
+      })
+      .mock(EditService, {
+        deleteItems: (items: any[]) => Promise.resolve(true),
       });
   });
 
@@ -158,5 +167,43 @@ describe('AccountService', () => {
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
+  });
+  it('should update the account storage when a file is uploaded successfully', async () => {
+    const { instance, inject } = shallow.createService();
+    const uploadService = inject(UploadService);
+    const account = new AccountVO({
+      spaceLeft: 100000,
+    });
+    instance.setAccount(account);
+
+    await uploadService.uploadFiles(new FolderVO({}), [
+      new File([], 'test.txt'),
+    ]);
+    await instance.deductAccountStorage(200);
+    expect(instance.getAccount().spaceLeft).toEqual(99800);
+  });
+  it('should add storage back after deleting an item', async () => {
+    const { instance, inject } = shallow.createService();
+    const editService = inject(EditService);
+    const account = new AccountVO({
+      spaceLeft: 100000,
+    });
+
+    const itemsToDelete = [
+      new RecordVO({ size: 100 }),
+      new RecordVO({ size: 300 }),
+    ];
+
+    const sizeOfItemsToDelete = itemsToDelete.reduce(
+      (acc, item) => acc + item.size,
+      0
+    );
+
+    instance.setAccount(account);
+    await editService.deleteItems(itemsToDelete);
+
+    await instance.deductAccountStorage(-sizeOfItemsToDelete);
+
+    expect(instance.getAccount().spaceLeft).toEqual(100400);
   });
 });
