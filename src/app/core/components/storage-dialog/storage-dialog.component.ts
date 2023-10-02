@@ -1,10 +1,17 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { PromoVOData } from '@models';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
+import { PromoVOData, AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
-import { BillingResponse, AccountResponse } from '@shared/services/api/index.repo';
+import {
+  BillingResponse,
+  AccountResponse,
+} from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
@@ -14,7 +21,7 @@ type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo';
 @Component({
   selector: 'pr-storage-dialog',
   templateUrl: './storage-dialog.component.html',
-  styleUrls: ['./storage-dialog.component.scss']
+  styleUrls: ['./storage-dialog.component.scss'],
 })
 export class StorageDialogComponent implements OnInit, IsTabbedDialog {
   activeTab: StorageDialogTab = 'add';
@@ -29,22 +36,21 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
     private account: AccountService,
     private api: ApiService,
     private message: MessageService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.promoForm = this.fb.group({
-      code: ['', [ Validators.required ]]
+      code: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
-     this.route.paramMap.subscribe((params: ParamMap) => {
+    this.route.paramMap.subscribe((params: ParamMap) => {
       const path = params.get('path') as StorageDialogTab;
-      
-      if(path) {
-      this.activeTab = path;
-      }
 
-     });
+      if (path) {
+        this.activeTab = path;
+      }
+    });
   }
 
   setTab(tab: StorageDialogTab) {
@@ -62,8 +68,13 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
       await this.account.refreshAccount();
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
+      const updatedAccount = this.updateStorageAfterRedeeming(bytes);
+      this.account.setAccount(updatedAccount);
       const pipe = new FileSizePipe();
-      this.message.showMessage(`Gift code redeemed for ${pipe.transform(bytes)} of storage`, 'success');
+      this.message.showMessage(
+        `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
+        'success'
+      );
       this.promoForm.reset();
     } catch (err) {
       if (err instanceof BillingResponse || err instanceof AccountResponse) {
@@ -74,5 +85,15 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
     } finally {
       this.waiting = false;
     }
+  }
+
+  public updateStorageAfterRedeeming(bytes: number): AccountVO {
+    const account = this.account.getAccount();
+    const updatedAccount = new AccountVO({
+      ...account,
+      spaceTotal: account.spaceTotal + bytes,
+      spaceLeft: account.spaceLeft + bytes,
+    });
+    return updatedAccount;
   }
 }

@@ -1,0 +1,89 @@
+/* @format */
+import { HttpClient } from '@angular/common/http';
+import { Shallow } from 'shallow-render';
+import { BillingPaymentVO } from '@models/billing-payment-vo';
+import { BillingResponse } from '@shared/services/api/billing.repo';
+import { AccountService } from '@shared/services/account/account.service';
+import { AccountVO } from '@models/account-vo';
+import { MessageService } from '@shared/services/message/message.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PledgeService } from '../../services/pledge.service';
+import { ApiService } from '../../../shared/services/api/api.service';
+import { PledgeModule } from '../../pledge.module';
+import { NewPledgeComponent } from './new-pledge.component';
+
+const mockPromoData = {
+  Results: [
+    {
+      data: [
+        {
+          PromoVO: {
+            promoId: 13,
+            code: 'promo9',
+            sizeInMB: 5000,
+          },
+        },
+      ],
+    },
+  ],
+  isSuccessful: true,
+};
+
+const mockAccountService = {
+  refreshAccount: (): Promise<void> => {
+    return Promise.resolve();
+  },
+  setAccount: (account: AccountVO): void => {},
+  getAccount: (): AccountVO => {
+    return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000 });
+  },
+  isLoggedIn: (): boolean => true,
+};
+
+const mockPledgeService = {
+  loadPledge: (id): Promise<any> => {
+    return Promise.resolve();
+  },
+  createBillingPaymentVo: (account: AccountVO): BillingPaymentVO => {
+    return new BillingPaymentVO({ spaceAmountInGb: 5 });
+  },
+  linkAccount: (account: AccountVO): Promise<void> => {
+    return Promise.resolve();
+  },
+};
+
+const mockApiService = {
+  billing: {
+    claimPledge: (
+      billingPaymentVO: BillingPaymentVO,
+      pledgeId: string
+    ): Promise<BillingResponse> => {
+      return Promise.resolve(new BillingResponse(mockPromoData));
+    },
+  },
+};
+
+describe('NewPledgeComponent', () => {
+  let shallow: Shallow<NewPledgeComponent>;
+  let messageShown = false;
+
+  beforeEach(() => {
+    shallow = new Shallow(NewPledgeComponent, PledgeModule)
+      .provide(HttpClient)
+      .replaceModule(HttpClient, HttpClientTestingModule)
+      .dontMock(HttpClientTestingModule)
+      .mock(ApiService, mockApiService)
+      .mock(AccountService, mockAccountService)
+      .mock(PledgeService, mockPledgeService)
+      .mock(MessageService, {
+        showError: () => {
+          messageShown = true;
+        },
+      });
+  });
+
+  it('should exist', async () => {
+    const { element } = await shallow.render();
+    expect(element).not.toBeNull();
+  });
+});
