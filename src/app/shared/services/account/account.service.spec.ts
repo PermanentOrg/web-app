@@ -41,6 +41,32 @@ describe('AccountService', () => {
           },
           get: (account: AccountVO) => Promise.reject({}),
         },
+        auth: {
+          verify: (account, token, type) => {
+            return new Observable((observer) => {
+              observer.next(
+                new AuthResponse({
+                  isSuccessful: true,
+                  Results: [
+                    {
+                      data: [
+                        {
+                          AccountVO: {
+                            primaryEmail: 'test@permanent.org',
+                            fullName: 'Test User',
+                            emailStatus: 'status.auth.verified',
+                            phoneStatus: 'status.auth.verified',
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                })
+              );
+              observer.complete();
+            });
+          },
+        },
       })
       .mock(Router, {
         navigate: (route: string[]) => Promise.resolve(true),
@@ -98,5 +124,39 @@ describe('AccountService', () => {
     } catch (error) {
       expect(error).toEqual(expectedError);
     }
+  });
+
+  it('should handle successful email verification', async () => {
+    const { instance } = shallow.createService();
+
+    const account = new AccountVO({
+      primaryEmail: 'test@permanent.org',
+      fullName: 'Test User',
+      keepLoggedIn: true,
+      emailStatus: 'status.auth.unverified',
+    });
+
+    instance.setAccount(account);
+
+    await instance.verifyEmail('sampleToken');
+    expect(instance.getAccount().emailStatus).toBe('status.auth.verified');
+    expect(instance.getAccount().keepLoggedIn).toBeTrue();
+  });
+
+  it('should handle successful phone verification', async () => {
+    const { instance } = shallow.createService();
+
+    const account = new AccountVO({
+      primaryEmail: 'test@permanent.org',
+      fullName: 'Test User',
+      keepLoggedIn: true,
+      phoneStatus: 'status.auth.unverified',
+    });
+
+    instance.setAccount(account);
+
+    await instance.verifyEmail('sampleToken');
+    expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
+    expect(instance.getAccount().keepLoggedIn).toBeTrue();
   });
 });

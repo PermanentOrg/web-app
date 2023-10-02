@@ -447,7 +447,12 @@ export class AccountService {
       .pipe(
         map((response: AuthResponse) => {
           if (response.isSuccessful) {
-            this.setAccount(response.getAccountVO());
+            const keepLoggedIn = this.account.keepLoggedIn;
+            const account = new AccountVO({
+              ...response.getAccountVO(),
+              keepLoggedIn,
+            });
+            this.setAccount(account);
             return response;
           } else {
             throw response;
@@ -463,7 +468,12 @@ export class AccountService {
       .pipe(
         map((response: AuthResponse) => {
           if (response.isSuccessful) {
-            this.setAccount(response.getAccountVO());
+            const keepLoggedIn = this.account.keepLoggedIn;
+            const account = new AccountVO({
+              ...response.getAccountVO(),
+              keepLoggedIn,
+            });
+            this.setAccount(account);
             return response;
           } else {
             throw response;
@@ -550,7 +560,10 @@ export class AccountService {
         )
         .pipe(
           map((response: AccountVO) => {
-            const newAccount = response;
+            const newAccount = new AccountVO({
+              ...response,
+              keepLoggedIn: true,
+            });
             newAccount.isNew = true;
             this.setAccount(newAccount);
             this.mixpanel.track('Sign up', { accountId: newAccount.accountId });
