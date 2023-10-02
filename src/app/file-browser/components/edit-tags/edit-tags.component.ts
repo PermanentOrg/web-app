@@ -69,6 +69,7 @@ export class EditTagsComponent
   private lastDataStatus: DataStatus;
   private lastFolderLinkId: number;
   private dialogTagSubscription: Subscription;
+  private currentIndex: number = 0;
 
   constructor(
     @Optional() @Inject(DIALOG_DATA) public dialogData: any,
@@ -83,7 +84,7 @@ export class EditTagsComponent
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {
-        if (this.allTags.length > tags.length) {
+        if (this.allTags?.length > tags?.length) {
           // The user deleted one of our tags in manage-tags.
           // Let's close the editor.
           this.endEditing();
@@ -229,15 +230,15 @@ export class EditTagsComponent
     this.itemTagsById.clear();
 
     this.itemTags = this.filterTagsByType(
-      this.item.TagVOs.map((tag) =>
-        this.allTags?.find((t) => t.tagId === tag.tagId)
-      ).filter(
-        // Filter out tags that are now null from deletion
-        (tag) => tag?.name
-      )
+      (this.item?.TagVOs || [])
+        .map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
+        .filter(
+          // Filter out tags that are now null from deletion
+          (tag) => tag?.name
+        )
     );
 
-    if (!this.item.TagVOs?.length) {
+    if (!this.item?.TagVOs?.length) {
       return;
     }
 
@@ -268,5 +269,52 @@ export class EditTagsComponent
 
   close() {
     this.dialogRef.close();
+  }
+
+  onArrowNav(event: KeyboardEvent, index: number) {
+    event.stopPropagation();
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (index < this.matchingTags.length - 1) {
+        this.currentIndex++;
+        this.setFocusToCurrentIndex(index + 1);
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (index > 0) {
+        this.setFocusToCurrentIndex(index - 1);
+      } else if (index === 0) {
+        this.setFocusToInputOrButton(`new-tag-${this.tagType}`);
+      }
+    }
+  }
+
+  public setFocusToInputOrButton(inputClass) {
+    const input = this.elementRef.nativeElement.querySelector(`.${inputClass}`);
+    (input as HTMLElement).focus();
+  }
+
+  public setFocusToFirstTagOrButton(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.setFocusToCurrentIndex(0);
+    }
+    if (event.key === 'ArrowRight') {
+      event.stopPropagation();
+      event.preventDefault();
+      this.setFocusToInputOrButton(`add-tag-${this.tagType}`);
+    }
+    if (event.key === 'ArrowLeft') {
+      event.stopPropagation();
+      event.preventDefault();
+      this.setFocusToInputOrButton(`new-tag-${this.tagType}`);
+    }
+  }
+
+  public setFocusToCurrentIndex(index) {
+    const elements = this.elementRef.nativeElement.querySelectorAll(
+      `.edit-tag-${this.tagType}`
+    );
+    (elements[index] as HTMLElement).focus();
   }
 }
