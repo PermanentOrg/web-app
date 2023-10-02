@@ -24,7 +24,7 @@ export class MessageComponent implements OnInit {
   style: string;
   queue: Message[] = [];
 
-  private displayTime = 3000;
+  private displayTime = 9000;
 
   constructor(
     private service: MessageService,
