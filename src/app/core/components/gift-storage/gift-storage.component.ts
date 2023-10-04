@@ -62,9 +62,26 @@ export class GiftStorageComponent implements OnDestroy {
       message: ['', []],
     });
     this.sub = this.giftResult.subscribe((isSuccessful) => {
+      const giftedAmount = Number(this.giftForm.value.amount);
+      const remainingSpaceAfterGift =
+        Number(this.availableSpace) - giftedAmount;
+      this.availableSpace = String(remainingSpaceAfterGift);
+
+      const remainingSpaceInBytes =
+        remainingSpaceAfterGift * this.bytesPerGigabyte;
+
+      const newAccount = new AccountVO({
+        ...this.account,
+        spaceLeft: remainingSpaceInBytes,
+        spaceTotal:
+          this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte,
+      });
+
+      this.accountService.setAccount(newAccount);
       this.isSuccessful = isSuccessful;
     });
   }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
@@ -87,11 +104,6 @@ export class GiftStorageComponent implements OnDestroy {
   }
 
   closeSuccessMessage() {
-    const remainingSpaceAfterGift =
-      Number(this.availableSpace) - Number(this.giftForm.value.amount);
-    this.availableSpace = this.bytesToGigabytes(
-      remainingSpaceAfterGift * this.bytesPerGigabyte
-    );
     this.isSuccessful = false;
   }
 
