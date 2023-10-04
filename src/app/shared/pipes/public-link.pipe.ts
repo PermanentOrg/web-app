@@ -16,7 +16,7 @@ export class PublicLinkPipe implements PipeTransform {
 
   transform(value: RecordVO | FolderVO, args?: any): string {
     const route = this.routePipe.transform(value, args).join("/");
-    return `${baseUrl}/${route}`;
+    return `${baseUrl}${route}`;
   }
 
 }
