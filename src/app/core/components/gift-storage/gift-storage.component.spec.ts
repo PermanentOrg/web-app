@@ -1,3 +1,4 @@
+import { AccountService } from '@shared/services/account/account.service';
 /* @format */
 import { Shallow } from 'shallow-render';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -20,6 +21,7 @@ describe('GiftStorageComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(GiftStorageComponent, CoreModule)
       .provide([HttpClient, HttpHandler])
+      .mock(AccountService, mockAccountService)
       .mock(Dialog, { open: (token, data, options) => Promise.resolve({}) });
   });
 
