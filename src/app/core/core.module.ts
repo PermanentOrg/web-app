@@ -60,13 +60,10 @@ import { PublicSettingsComponent } from './components/public-settings/public-set
 import { ArchiveTypeChangeDialogComponent } from './components/archive-type-change-dialog/archive-type-change-dialog.component';
 import { ArchivePayerComponent } from './components/archive-payer/archive-payer.component';
 import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
-<<<<<<< HEAD
 import { ArchiveStoragePayerComponent } from './components/archive-storage-payer/archive-storage-payer.component';
 import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dialog/skip-onboarding-dialog.component';
-=======
 import { GiftStorageComponent } from './components/gift-storage/gift-storage.component';
 import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/confirm-gift-dialog.component';
->>>>>>> 66a756cb (PER-9237 gift-storage-interface)
 
 @NgModule({
   imports: [
@@ -117,13 +114,10 @@ import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/con
     ArchiveTypeChangeDialogComponent,
     ArchivePayerComponent,
     ConfirmPayerDialogComponent,
-<<<<<<< HEAD
     ArchiveStoragePayerComponent,
     SkipOnboardingDialogComponent,
-=======
     GiftStorageComponent,
     ConfirmGiftDialogComponent,
->>>>>>> 66a756cb (PER-9237 gift-storage-interface)
   ],
   providers: [
     DataService,
@@ -193,13 +187,12 @@ export class CoreModule {
       component: ConfirmPayerDialogComponent,
     },
     {
-<<<<<<< HEAD
       token: 'SkipOnboardingDialogComponent',
       component: SkipOnboardingDialogComponent,
-=======
+    },
+    {
       token: 'ConfirmGiftDialogComponent',
       component: ConfirmGiftDialogComponent,
->>>>>>> 66a756cb (PER-9237 gift-storage-interface)
     },
   ];
 
