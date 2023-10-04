@@ -107,7 +107,7 @@ describe('ConfirmGiftDialogComponent', () => {
 
     component.onConfirmClick();
 
-    tick(); // simulates the passage of time until all pending asynchronous activities finish
+    tick();
 
     expect(dialogRefSpy).toHaveBeenCalled();
     expect(giftResultSpy).toHaveBeenCalledWith(true);
