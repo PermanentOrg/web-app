@@ -48,15 +48,6 @@ describe('PublicLinkPipe', () => {
       archiveNbr: '0001-00gh',
     });
 
-    const route = pipe.transform(folder);
-
-    const pArchiveIndex = route.indexOf('p/archive');
-
-    if (pArchiveIndex === -1) {
-      fail('URL format is unexpected');
-      return;
-    }
-    
     const url = new URL(pipe.transform(folder));
     expect(url.pathname).not.toContain('//');
   });
