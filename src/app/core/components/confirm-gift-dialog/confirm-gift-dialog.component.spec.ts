@@ -10,9 +10,9 @@ import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { SharedModule } from '@shared/shared.module';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
-import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
-import { BehaviorSubject, Observable, Observer, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
+import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
 
 describe('ConfirmGiftDialogComponent', () => {
   let component: ConfirmGiftDialogComponent;

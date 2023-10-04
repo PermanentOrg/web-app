@@ -1,11 +1,10 @@
 /* @format */
 import { Shallow } from 'shallow-render';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { GiftStorageComponent } from './gift-storage.component';
 import { CoreModule } from '@core/core.module';
-import { AccountVO } from './../../../models/account-vo';
-import { Validators } from '@angular/forms';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { AccountVO } from '../../../models/account-vo';
+import { GiftStorageComponent } from './gift-storage.component';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
