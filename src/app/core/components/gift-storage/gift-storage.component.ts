@@ -76,7 +76,7 @@ export class GiftStorageComponent implements OnDestroy {
           ...this.account,
           spaceLeft: remainingSpaceInBytes,
           spaceTotal:
-            this.account?.spaceTotal - giftedAmount * this.bytesPerGigabyte,
+            this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte,
         });
 
         this.accountService.setAccount(newAccount);
