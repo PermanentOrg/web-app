@@ -22,7 +22,6 @@ describe('GiftStorageComponent', () => {
     shallow = new Shallow(GiftStorageComponent, CoreModule)
       .provide([HttpClient, HttpHandler])
       .mock(Dialog, { open: (token, data, options) => Promise.resolve({}) });
-      // Provide any necessary services or tokens
   });
 
   it('should create', async () => {
@@ -66,7 +65,7 @@ describe('GiftStorageComponent', () => {
     const { instance } = await shallow.render();
 
     instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue(5); 
+    instance.giftForm.controls.amount.setValue(5);
     instance.giftForm.updateValueAndValidity();
 
     spyOn(instance, 'submitStorageGiftForm').and.callThrough();
