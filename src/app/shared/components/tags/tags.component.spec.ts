@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -43,5 +44,16 @@ describe('TagsComponent', () => {
       By.css('.customMetadataValue')
     );
     expect(debugValueElement).toBeTruthy();
+  });
+
+  it('should display the add tags button even if there are tags selected', () => {
+    const tags = [{ name: 'type:value' }];
+    component.isEditing = false;
+    component.tags = tags;
+    component.canEdit = true;
+    component.ngOnChanges();
+    fixture.detectChanges();
+    const addTags = fixture.debugElement.query(By.css('.not-empty'));
+    expect(addTags).toBeTruthy();
   });
 });
