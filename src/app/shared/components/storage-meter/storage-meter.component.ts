@@ -25,6 +25,9 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
   private accountChangeSubscription: Subscription;
   private deleteSubscription: Subscription;
 
+  accountSpaceTotal: number = 0;
+  accountSpaceLeft: number = 0;
+
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -35,6 +38,8 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
     private dataService: DataService
   ) {
     this.account = this.accountService.getAccount();
+    this.accountSpaceLeft = this.account.spaceLeft;
+    this.accountSpaceTotal = this.account.spaceTotal;
   }
 
   ngOnInit(): void {
@@ -57,7 +62,14 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
 
         this.edit.deleteNotifier$.subscribe(() => {
           this.getArchiveStorage();
-        }),
+        })
+      );
+    } else {
+      this.subscriptions.push(
+        this.accountService.accountStorageUpdate.subscribe((account) => {
+          this.accountSpaceTotal = account.spaceTotal;
+          this.accountSpaceLeft = account.spaceLeft;
+        })
       );
     }
   }
@@ -77,8 +89,8 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
       );
     } else {
       widthFraction = Math.min(
-        (this.account.spaceTotal - this.account.spaceLeft) /
-          this.account.spaceTotal,
+        (this.accountSpaceTotal - this.accountSpaceLeft) /
+          this.accountSpaceTotal,
         1
       );
     }
@@ -100,8 +112,8 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
       );
     } else {
       widthFraction = Math.min(
-        (this.account.spaceTotal - this.account.spaceLeft) /
-          this.account.spaceTotal,
+        (this.accountSpaceTotal - this.accountSpaceLeft) /
+          this.accountSpaceTotal,
         1
       );
     }

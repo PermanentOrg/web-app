@@ -46,6 +46,7 @@ export class AccountService {
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
   public accountChange: EventEmitter<AccountVO> = new EventEmitter();
+  public accountStorageUpdate: EventEmitter<AccountVO> = new EventEmitter();
 
   public refreshAccountDebounced = debounce(() => {
     this.refreshAccount();
