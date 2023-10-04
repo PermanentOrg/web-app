@@ -56,10 +56,8 @@ describe('PublicLinkPipe', () => {
       fail('URL format is unexpected');
       return;
     }
-
-    const substringBefore = route.substring(0, pArchiveIndex);
-
-    expect(substringBefore.endsWith('/')).toBe(true);
-    expect(substringBefore.endsWith('//')).toBe(false);
+    
+    const url = new URL(pipe.transform(folder));
+    expect(url.pathname).not.toContain('//');
   });
 });
