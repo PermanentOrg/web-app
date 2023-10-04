@@ -1,6 +1,4 @@
 /* @format */
-import { Dialog } from './../../../dialog/dialog.service';
-import { AccountService } from './../../../shared/services/account/account.service';
 import { Component, OnDestroy } from '@angular/core';
 import {
   UntypedFormGroup,
@@ -14,6 +12,8 @@ import {
 import { AccountVO } from '@models/index';
 import { Observable, BehaviorSubject, Subscription, of, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Dialog } from '../../../dialog/dialog.service';
+import { AccountService } from '../../../shared/services/account/account.service';
 
 @Component({
   selector: 'pr-gift-storage',
@@ -43,9 +43,9 @@ export class GiftStorageComponent implements OnDestroy {
       email: [
         '',
         {
-          validators: [Validators.email],
+          validators: [Validators.email, Validators.required],
           asyncValidators: this.emailValidator,
-          updateOn: 'blur',
+          updateOn: 'change',
         },
       ],
       amount: [
@@ -57,28 +57,31 @@ export class GiftStorageComponent implements OnDestroy {
             Validators.max(Number(this.availableSpace)),
             this.integerValidator,
           ],
+          updateOn: 'change',
         },
       ],
       message: ['', []],
     });
     this.sub = this.giftResult.subscribe((isSuccessful) => {
-      const giftedAmount = Number(this.giftForm.value.amount);
-      const remainingSpaceAfterGift =
-        Number(this.availableSpace) - giftedAmount;
-      this.availableSpace = String(remainingSpaceAfterGift);
+      if (isSuccessful) {
+        const giftedAmount = Number(this.giftForm.value.amount);
+        const remainingSpaceAfterGift =
+          Number(this.availableSpace) - giftedAmount;
+        this.availableSpace = String(remainingSpaceAfterGift);
 
-      const remainingSpaceInBytes =
-        remainingSpaceAfterGift * this.bytesPerGigabyte;
+        const remainingSpaceInBytes =
+          remainingSpaceAfterGift * this.bytesPerGigabyte;
 
-      const newAccount = new AccountVO({
-        ...this.account,
-        spaceLeft: remainingSpaceInBytes,
-        spaceTotal:
-          this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte,
-      });
+        const newAccount = new AccountVO({
+          ...this.account,
+          spaceLeft: remainingSpaceInBytes,
+          spaceTotal:
+            this.account?.spaceTotal - giftedAmount * this.bytesPerGigabyte,
+        });
 
-      this.accountService.setAccount(newAccount);
-      this.isSuccessful = isSuccessful;
+        this.accountService.setAccount(newAccount);
+        this.isSuccessful = isSuccessful;
+      }
     });
   }
 
