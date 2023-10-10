@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
@@ -59,7 +60,7 @@ describe('MessageComponent', () => {
 
     expect(component.dismiss).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledTimes(1);
-    expect(router.navigate).toHaveBeenCalledWith(testUrl, {queryParams: {}});
+    expect(router.navigate).toHaveBeenCalledWith(testUrl, { queryParams: {} });
   });
 
   it('should navigate and dismiss when clicked if navigation URL and param given', () => {
@@ -67,12 +68,25 @@ describe('MessageComponent', () => {
     spyOn(router, 'navigate');
     spyOn(component, 'dismiss');
 
-    component.display('test', null, testUrl, {testParam: true});
+    component.display('test', null, testUrl, { testParam: true });
 
     component.onClick();
 
     expect(component.dismiss).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledTimes(1);
-    expect(router.navigate).toHaveBeenCalledWith(testUrl, {queryParams: {testParam: true}});
+    expect(router.navigate).toHaveBeenCalledWith(testUrl, {
+      queryParams: { testParam: true },
+    });
+  });
+
+  it('should dismiss the component when clicking on the X icon', () => {
+    spyOn(component, 'dismiss');
+
+    const closeIcon =
+      fixture.debugElement.nativeElement.querySelector('.material-icons');
+    closeIcon.click();
+    fixture.detectChanges();
+
+    expect(component.dismiss).toHaveBeenCalledTimes(1);
   });
 });
