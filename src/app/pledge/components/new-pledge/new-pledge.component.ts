@@ -269,7 +269,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
               spaceTotal: account.spaceTotal + sizeInBytes,
             });
             this.accountService.setAccount(newAccount);
-            this.accountService.accountStorageUpdate.next(newAccount)
+            this.accountService.accountStorageUpdate.next(newAccount);
             this.message.showMessage(
               `You just claimed ${this.getStorageAmount(
                 pledge.dollarAmount

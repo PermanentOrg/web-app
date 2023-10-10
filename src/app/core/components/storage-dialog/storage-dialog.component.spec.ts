@@ -108,20 +108,15 @@ describe('StorageDialogComponent', () => {
     );
   });
 
-  it('should enable the button after adding a promo code',async() => {
+  it('should enable the button after adding a promo code', async () => {
     const { find, instance, fixture } = await shallow.render();
-
     instance.promoForm.patchValue({
       code: 'promo1',
     });
-
     instance.promoForm.updateValueAndValidity();
-    instance.activeTab = 'promo'
-
+    instance.activeTab = 'promo';
     fixture.detectChanges();
-
     const button = find('.btn-primary');
-
     expect(button.nativeElement.disabled).toBeFalsy();
-  })
+  });
 });
