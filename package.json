@@ -71,7 +71,7 @@
     "ngx-countup": "^7.3.3",
     "ngx-route-history": "0.0.4",
     "openseadragon": "^4.0.0",
-    "progressbar.js": "1.0.1",
+    "progressbar.js": "1.1.1",
     "rxjs": "6.6.3",
     "sass": "^1.54.0",
     "shallow-render": "15.0.2",
