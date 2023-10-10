@@ -1,4 +1,5 @@
-import { HttpClient, HttpHandler } from '@angular/common/http';
+/* @format */
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AccountService } from '../account/account.service';
 import { PayerService } from './payer.service';
@@ -8,7 +9,8 @@ describe('PayerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HttpClient, AccountService, HttpHandler],
+      imports: [HttpClientTestingModule],
+      providers: [AccountService],
     });
     service = TestBed.inject(PayerService);
   });

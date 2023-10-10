@@ -1,4 +1,5 @@
-import { HttpClient, HttpHandler } from '@angular/common/http';
+/* @format */
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,10 +12,10 @@ describe('ArchiveSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArchiveSearchComponent ],
-      providers:[FormBuilder,HttpClient,HttpHandler,Router]
-    })
-    .compileComponents();
+      declarations: [ArchiveSearchComponent],
+      imports: [HttpClientTestingModule],
+      providers: [FormBuilder, Router],
+    }).compileComponents();
   });
 
   beforeEach(() => {

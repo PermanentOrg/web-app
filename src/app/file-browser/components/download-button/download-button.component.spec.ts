@@ -1,5 +1,5 @@
 /* @format */
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -13,7 +13,8 @@ describe('DownloadButtonComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DownloadButtonComponent],
-      providers: [DataService, MessageService, HttpClient, HttpHandler],
+      imports: [HttpClientTestingModule],
+      providers: [DataService, MessageService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DownloadButtonComponent);
