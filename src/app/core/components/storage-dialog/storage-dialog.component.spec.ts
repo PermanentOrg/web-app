@@ -107,4 +107,21 @@ describe('StorageDialogComponent', () => {
       promo.sizeInMB * 1024 * 1024
     );
   });
+
+  it('should enable the button after adding a promo code',async() => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.promoForm.patchValue({
+      code: 'promo1',
+    });
+
+    instance.promoForm.updateValueAndValidity();
+    instance.activeTab = 'promo'
+
+    fixture.detectChanges();
+
+    const button = find('.btn-primary');
+
+    expect(button.nativeElement.disabled).toBeFalsy();
+  })
 });

@@ -86,4 +86,103 @@ describe('NewPledgeComponent', () => {
     const { element } = await shallow.render();
     expect(element).not.toBeNull();
   });
+
+  it('should enable the button if the data is correct', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    const button = find('.btn-primary');
+
+    instance.pledgeForm.patchValue({
+      email: 'test@example.com',
+      name: 'Test User',
+    });
+
+    instance.cardError = false;
+    instance.cardComplete = true;
+
+    instance.pledgeForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+
+    expect(button.nativeElement.disabled).toBeFalsy();
+  });
+
+  it('should disabled the button if there is card form is not complete', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    const button = find('.btn-primary');
+
+    instance.pledgeForm.patchValue({
+      email: 'test@example.com',
+      name: 'Test User',
+    });
+
+    instance.cardError = false;
+    instance.cardComplete = false;
+
+    instance.pledgeForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+
+    expect(button.nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should disabled the button if the email is invalid', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    const button = find('.btn-primary');
+
+    instance.pledgeForm.patchValue({
+      email: 'test',
+      name: 'Test User',
+    });
+
+    instance.cardError = false;
+    instance.cardComplete = true;
+
+    instance.pledgeForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+
+    expect(button.nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should disabled the button if no name was provided', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    const button = find('.btn-primary');
+
+    instance.pledgeForm.patchValue({
+      email: 'test@mail.com',
+    });
+
+    instance.cardError = false;
+    instance.cardComplete = true;
+
+    instance.pledgeForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+
+    expect(button.nativeElement.disabled).toBeTruthy();
+  });
+
+  it('should set the correct amount when clicking on a button', async () => {
+    const { find, instance } = await shallow.render();
+
+    const buttons = find('.pledge-button');
+
+    expect(buttons.length).toBe(4);
+
+    buttons[1].triggerEventHandler('click', null);
+
+    expect(instance.donationAmount).toBe(20);
+  });
+
+  it('should select the custom value for the last input when clicked on it', async () => {
+    const { find, instance } = await shallow.render();
+
+    const buttons = find('.pledge-button');
+
+    expect(buttons.length).toBe(4);
+
+    buttons[3].triggerEventHandler('click', null);
+
+    expect(instance.donationSelection).toBe('custom');
+  });
 });
