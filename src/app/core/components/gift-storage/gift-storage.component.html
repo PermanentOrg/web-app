@@ -50,6 +50,9 @@
       <p class="input-error" *ngIf="giftForm.get('amount').errors?.notInteger">
         Storage can only be gifted in 1GB increments.
       </p>
+      <p class="input-error" *ngIf="giftForm.get('amount').errors?.max">
+        Amount must be less than or equal to {{availableSpace}} GB.
+      </p>
       <div class="dialog-form-field">
         <div class="text">
           <label class="label" for="amount">Note to recipient</label>
