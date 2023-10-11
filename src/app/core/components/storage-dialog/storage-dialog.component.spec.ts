@@ -43,6 +43,7 @@ const mockAccountService = {
   getAccount: (): AccountVO => {
     return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000 });
   },
+  addStorageBytes: (sizeInBytes): void => {},
 };
 
 describe('StorageDialogComponent', () => {
@@ -85,14 +86,7 @@ describe('StorageDialogComponent', () => {
       mockApiService.billing,
       'redeemPromoCode'
     ).and.resolveTo(new BillingResponse(mockPromoData));
-    const spyRefreshAccount = spyOn(
-      mockAccountService,
-      'refreshAccount'
-    ).and.resolveTo(undefined);
-    const updateStorageAfterRedeemingSpy = spyOn(
-      instance,
-      'updateStorageAfterRedeeming'
-    ).and.callThrough();
+    const addStorageSpy = spyOn(mockAccountService, 'addStorageBytes').and.callThrough();
 
     const promoData: PromoVOData = { code: 'promo' };
 
@@ -101,9 +95,10 @@ describe('StorageDialogComponent', () => {
     expect(redeemPromoCodeSpy).toHaveBeenCalled();
 
     const response = await redeemPromoCodeSpy.calls.mostRecent().returnValue;
+
     const promo = response.getPromoVO();
 
-    expect(updateStorageAfterRedeemingSpy).toHaveBeenCalledWith(
+    expect(addStorageSpy).toHaveBeenCalledWith(
       promo.sizeInMB * 1024 * 1024
     );
   });

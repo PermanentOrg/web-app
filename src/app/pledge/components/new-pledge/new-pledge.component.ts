@@ -263,13 +263,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
-            const newAccount = new AccountVO({
-              ...account,
-              spaceLeft: account.spaceLeft + sizeInBytes,
-              spaceTotal: account.spaceTotal + sizeInBytes,
-            });
-            this.accountService.setAccount(newAccount);
-            this.accountService.accountStorageUpdate.next(newAccount);
+            this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage(
               `You just claimed ${this.getStorageAmount(
                 pledge.dollarAmount
@@ -299,7 +293,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getSizeInBytes(amount: number): number {
-    return Math.floor(amount / 10) * 1073741824;
+    const bytesInGiB = 1073741824;
+    return Math.floor(amount / 10) * bytesInGiB;
   }
 
   ngOnDestroy() {}

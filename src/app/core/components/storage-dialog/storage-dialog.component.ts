@@ -68,8 +68,7 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
       await this.account.refreshAccount();
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
-      const updatedAccount = this.updateStorageAfterRedeeming(bytes);
-      this.account.setAccount(updatedAccount);
+      this.account.addStorageBytes(bytes);
       const pipe = new FileSizePipe();
       this.message.showMessage(
         `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
@@ -86,14 +85,7 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
       this.waiting = false;
     }
   }
-
-  public updateStorageAfterRedeeming(bytes: number): AccountVO {
-    const account = this.account.getAccount();
-    const updatedAccount = new AccountVO({
-      ...account,
-      spaceTotal: account.spaceTotal + bytes,
-      spaceLeft: account.spaceLeft + bytes,
-    });
-    return updatedAccount;
+  public getAccountForTesting() {
+    return this.account;
   }
 }
