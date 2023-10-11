@@ -10,7 +10,7 @@ import { AccountVO } from '../../../models/account-vo';
 import { MessageService } from '../../../shared/services/message/message.service';
 import { StorageDialogComponent } from './storage-dialog.component';
 
-const mockPromoData = {
+const mockPromoResponse = {
   Results: [
     {
       data: [
@@ -27,40 +27,52 @@ const mockPromoData = {
   isSuccessful: true,
 };
 
-const mockApiService = {
-  billing: {
-    redeemPromoCode: (value: PromoVOData): Promise<BillingResponse> => {
-      return Promise.resolve(new BillingResponse(mockPromoData));
-    },
-  },
-};
+class MockBillingRepo {
+  public calledRedeemPromoCode = false;
+  public redeemPromoCode(_value: PromoVOData): Promise<BillingResponse> {
+    this.calledRedeemPromoCode = true;
+    return Promise.resolve(new BillingResponse(mockPromoResponse));
+  }
+}
 
-const mockAccountService = {
-  refreshAccount: (): Promise<void> => {
+interface MockApiService {
+  billing: MockBillingRepo;
+}
+class MockAccountService {
+  public addedStorage: number | undefined;
+  public refreshAccount(): Promise<void> {
     return Promise.resolve();
-  },
-  setAccount: (account: AccountVO): void => {},
-  getAccount: (): AccountVO => {
+  }
+  public setAccount(_account: AccountVO): void {}
+  public getAccount(): AccountVO {
     return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000 });
-  },
-  addStorageBytes: (sizeInBytes): void => {},
-};
+  }
+  public addStorageBytes(sizeInBytes: number): void {
+    this.addedStorage = sizeInBytes;
+  }
+}
 
 describe('StorageDialogComponent', () => {
   let shallow: Shallow<StorageDialogComponent>;
   let messageShown: boolean = false;
+  let mockAccountService: MockAccountService;
+  let mockApiService: MockApiService;
   const dialogRef = new DialogRef(1, null);
 
   beforeEach(() => {
+    mockAccountService = new MockAccountService();
+    mockApiService = { billing: new MockBillingRepo() };
     shallow = new Shallow(StorageDialogComponent, CoreModule)
-      .mock(ApiService, mockApiService)
+      .dontMock(AccountService)
+      .dontMock(ApiService)
       .mock(DialogRef, dialogRef)
-      .mock(AccountService, mockAccountService)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;
         },
-      });
+      })
+      .provide({ provide: AccountService, useValue: mockAccountService })
+      .provide({ provide: ApiService, useValue: mockApiService });
   });
 
   it('should exist', async () => {
@@ -68,39 +80,18 @@ describe('StorageDialogComponent', () => {
     expect(element).not.toBeNull();
   });
 
-  it('should return the correct size in MB', async () => {
-    const { inject } = await shallow.render();
-    const apiService = inject(ApiService);
-    const accountService = inject(AccountService);
-    const account = new AccountVO({ spaceLeft: 10000, spaceTotal: 10000 });
-    accountService.setAccount(account);
-    const promoVOData: PromoVOData = { code: 'promo4' };
-    const response = await apiService.billing.redeemPromoCode(promoVOData);
-    expect(response.getPromoVO().sizeInMB).toBe(5000);
+  it('should fetch dialog information from the API', async () => {
+    const { instance } = await shallow.render();
+    const promoData: PromoVOData = { code: 'promo' };
+    await instance.onPromoFormSubmit(promoData);
+    expect(mockApiService.billing.calledRedeemPromoCode).toBeTruthy();
   });
 
   it('should update the account after submititng the form ', async () => {
     const { instance } = await shallow.render();
-
-    const redeemPromoCodeSpy = spyOn(
-      mockApiService.billing,
-      'redeemPromoCode'
-    ).and.resolveTo(new BillingResponse(mockPromoData));
-    const addStorageSpy = spyOn(mockAccountService, 'addStorageBytes').and.callThrough();
-
     const promoData: PromoVOData = { code: 'promo' };
-
     await instance.onPromoFormSubmit(promoData);
-
-    expect(redeemPromoCodeSpy).toHaveBeenCalled();
-
-    const response = await redeemPromoCodeSpy.calls.mostRecent().returnValue;
-
-    const promo = response.getPromoVO();
-
-    expect(addStorageSpy).toHaveBeenCalledWith(
-      promo.sizeInMB * 1024 * 1024
-    );
+    expect(mockAccountService.addedStorage).toBe(5000 * 1024 * 1024);
   });
 
   it('should enable the button after adding a promo code', async () => {
