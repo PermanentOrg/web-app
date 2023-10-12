@@ -227,6 +227,7 @@ export class DataService {
             item.fetched = null;
 
             if (
+              !item.isFolder &&
               !item.thumbURL200 &&
               item.parentFolderId === this.currentFolder.folderId
             ) {
