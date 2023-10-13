@@ -5,6 +5,10 @@ on:
 
   workflow_dispatch:
 
+  push:
+    branches:
+      - main
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -30,4 +34,7 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_DEV }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_DEV }}
           STRIPE_API_KEY: ${{ secrets.STRIPE_TEST_KEY }}
-        run: npm run test:build
+        run: npm run coverage:ci
+
+      - name: Upload report to codecov
+        uses: codecov/codecov-action@v3
