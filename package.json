@@ -14,6 +14,7 @@
     "test": "npm run secrets && ng test --source-map=false",
     "test:build": "npm run secrets && ng test --source-map=false --watch=false --browsers chrome_headless_no_sandbox",
     "coverage": "npm run secrets && ng test --source-map --no-watch --code-coverage",
+    "coverage:ci": "npm run coverage -- --browsers chrome_headless_no_sandbox",
     "lint": "ng lint",
     "jest": "jest",
     "prettier": "prettier",
