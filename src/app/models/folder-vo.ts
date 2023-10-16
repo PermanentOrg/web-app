@@ -216,6 +216,7 @@ export interface FolderVOData extends BaseVOData {
   AccessVOs?: any;
   posStart?: any;
   posLimit?: any;
+  isFolder?: boolean;
 }
 
 export interface FolderSizeVOData {

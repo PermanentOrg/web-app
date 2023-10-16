@@ -691,4 +691,8 @@ export class DataService {
   public beginPreparingForNavigate() {
     this.eventSubject.next(true);
   }
+
+  public getThumbRefreshQueue(): Array<ItemVO> {
+    return this.thumbRefreshQueue;
+  }  
 }
