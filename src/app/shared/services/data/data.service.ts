@@ -694,5 +694,5 @@ export class DataService {
 
   public getThumbRefreshQueue(): Array<ItemVO> {
     return this.thumbRefreshQueue;
-  }  
+  }
 }
