@@ -6,7 +6,6 @@ import { Dialog } from '@root/app/dialog/dialog.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
-import { fakeAsync, tick } from '@angular/core/testing';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
