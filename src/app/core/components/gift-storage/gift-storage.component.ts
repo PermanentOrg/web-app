@@ -8,6 +8,7 @@ import {
   AsyncValidatorFn,
   FormControl,
   ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import { AccountVO } from '@models/index';
 import { Observable, BehaviorSubject, Subscription, of, timer } from 'rxjs';
@@ -31,6 +32,7 @@ export class GiftStorageComponent implements OnDestroy {
     false
   );
   private sub: Subscription;
+  isAsyncValidating: boolean;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -44,8 +46,8 @@ export class GiftStorageComponent implements OnDestroy {
         '',
         {
           validators: [Validators.email, Validators.required],
-          asyncValidators: this.emailValidator,
-          updateOn: 'change',
+          asyncValidators: [this.emailValidator()],
+          updateOn: 'blur',
         },
       ],
       amount: [
@@ -125,18 +127,22 @@ export class GiftStorageComponent implements OnDestroy {
     return isInteger && !hasDecimalPoint ? null : { notInteger: true };
   }
 
-  emailValidator: AsyncValidatorFn = (
-    control: AbstractControl
-  ): Observable<ValidationErrors | null> => {
-    if (!control.value) {
-      return of(null);
-    }
+  emailValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (!control.value) {
+        return of(null);
+      }
 
-    return timer(1000).pipe(
-      map(() => {
-        let emailValidationResult = Validators.email(control);
-        return emailValidationResult == null ? null : { email: true };
-      })
-    );
-  };
+      this.isAsyncValidating = true;
+
+      return timer(1000).pipe(
+        map(() => {
+          const emailValid = Validators.email(control);
+          this.isAsyncValidating = false;
+
+          return emailValid ? { email: true } : null;
+        })
+      );
+    };
+  }
 }

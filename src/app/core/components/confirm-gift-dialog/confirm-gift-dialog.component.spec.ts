@@ -39,7 +39,7 @@ describe('ConfirmGiftDialogComponent', () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     dialogData = {
-      email: 'test@email.com',
+      email: 'test@example.com',
       amount: '10',
       message: 'test message',
       giftResult: new Observable(() => {}),
@@ -52,7 +52,7 @@ describe('ConfirmGiftDialogComponent', () => {
     config.providers.push({
       provide: DIALOG_DATA,
       useValue: {
-        email: 'test@email.com',
+        email: 'test@example.com',
         amount: 10,
         message: 'test message',
         giftResult: mockGiftResult,
@@ -82,7 +82,7 @@ describe('ConfirmGiftDialogComponent', () => {
   });
 
   it('should take the email from the dialog data', () => {
-    expect(component.email).toEqual('test@email.com');
+    expect(component.email).toEqual('test@example.com');
   });
 
   it('should take the amount from the dialog data', () => {

@@ -68,9 +68,9 @@
       </div>
       <div class="dialog-form-field">
         <button
-          [disabled]="giftForm.invalid"
+          [disabled]="giftForm.invalid || isAsyncValidating"
           class="btn btn-primary"
-          [ngClass]="{ 'btn-disabled': giftForm.invalid }"
+          [ngClass]="{ 'btn-disabled': giftForm.invalid || isAsyncValidating }"
         >
           Send Gift Storage
         </button>

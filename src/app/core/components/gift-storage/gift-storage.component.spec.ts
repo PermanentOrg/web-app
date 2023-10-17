@@ -1,11 +1,12 @@
-import { AccountService } from '@shared/services/account/account.service';
 /* @format */
 import { Shallow } from 'shallow-render';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CoreModule } from '@core/core.module';
 import { Dialog } from '@root/app/dialog/dialog.service';
+import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
+import { fakeAsync, tick } from '@angular/core/testing';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
@@ -35,18 +36,21 @@ describe('GiftStorageComponent', () => {
 
     instance.availableSpace = '10';
 
-    instance.giftForm.controls.email.setValue('test@example.com');
+    await instance.giftForm.controls.email.setValue('test@example.com');
     instance.giftForm.controls.amount.setValue('1');
+
+    instance.isAsyncValidating = false;
 
     instance.giftForm.updateValueAndValidity();
     fixture.detectChanges();
+    await fixture.whenStable();
 
     const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
     expect(button.disabled).toBe(false);
   });
 
-  it('the button is disabled if the email is not valid', async () => {
+  it('disables the submit button if the email is not valid', async () => {
     const { find, instance, fixture } = await shallow.render();
 
     instance.availableSpace = '5';
@@ -56,6 +60,24 @@ describe('GiftStorageComponent', () => {
 
     instance.giftForm.updateValueAndValidity();
     fixture.detectChanges();
+
+    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+
+    expect(button.disabled).toBe(true);
+  });
+
+  it('disables the submit button if the amount entered exceeds the available amount', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.availableSpace = '5';
+
+    await instance.giftForm.controls.email.setValue('test@example.com');
+    instance.giftForm.controls.amount.setValue('10');
+
+    instance.giftForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
 
     const button: HTMLButtonElement = find('.btn-primary').nativeElement;
 
