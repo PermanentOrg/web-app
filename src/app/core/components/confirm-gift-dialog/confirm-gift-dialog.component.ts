@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./confirm-gift-dialog.component.scss'],
 })
 export class ConfirmGiftDialogComponent {
-  email: string;
+  emails: string[];
   amount: number;
   message: string;
   giftResult: BehaviorSubject<boolean>;
@@ -22,8 +22,8 @@ export class ConfirmGiftDialogComponent {
     @Inject(DIALOG_DATA) public data: any,
     private msg: MessageService
   ) {
-    this.email = this.data.email;
-    this.amount = this.data.amount;
+    this.emails = this.data.emails;
+    this.amount = this.data.fullAmount;
     this.message = this.data.message;
     this.giftResult = this.data.giftResult;
   }
@@ -34,7 +34,7 @@ export class ConfirmGiftDialogComponent {
 
   public async onConfirmClick() {
     try {
-      await this.api.billing.giftStorage(this.email, Number(this.amount));
+      await this.api.billing.giftStorage(this.emails, Number(this.amount));
       this.giftResult.next(true);
     } catch (e) {
       this.msg.showError('Something went wrong! Please try again.');

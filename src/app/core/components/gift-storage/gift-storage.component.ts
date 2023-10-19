@@ -11,8 +11,9 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { AccountVO } from '@models/index';
+import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Observable, BehaviorSubject, Subscription, of, timer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Dialog } from '../../../dialog/dialog.service';
 import { AccountService } from '../../../shared/services/account/account.service';
 
@@ -26,13 +27,14 @@ export class GiftStorageComponent implements OnDestroy {
   availableSpace: string;
   account: AccountVO;
   bytesPerGigabyte = 1073741824;
+  emailValidationErrors: string[] = [];
 
   public isSuccessful: boolean = false;
   public giftResult: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
-  private sub: Subscription;
-  isAsyncValidating: boolean;
+  private subscriptions: Subscription[] = [];
+  public isAsyncValidating: boolean;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -45,9 +47,9 @@ export class GiftStorageComponent implements OnDestroy {
       email: [
         '',
         {
-          validators: [Validators.email, Validators.required],
-          asyncValidators: [this.emailValidator()],
-          updateOn: 'blur',
+          validators: [Validators.required],
+          asyncValidators: [this.delayedEmailValidator()],
+          updateOn: 'change',
         },
       ],
       amount: [
@@ -58,37 +60,44 @@ export class GiftStorageComponent implements OnDestroy {
             Validators.min(0),
             Validators.max(Number(this.availableSpace)),
             this.integerValidator,
+            this.giftedAmountValidator(),
           ],
           updateOn: 'change',
         },
       ],
       message: ['', []],
     });
-    this.sub = this.giftResult.subscribe((isSuccessful) => {
-      if (isSuccessful) {
-        const giftedAmount = Number(this.giftForm.value.amount);
-        const remainingSpaceAfterGift =
-          Number(this.availableSpace) - giftedAmount;
-        this.availableSpace = String(remainingSpaceAfterGift.toFixed(2));
+    this.subscriptions.push(
+      this.giftResult.subscribe((isSuccessful) => {
+        if (isSuccessful) {
+          console.log(this.giftForm.value.email);
+          const giftedAmount = Number(this.giftForm.value.amount);
+          const remainingSpaceAfterGift =
+            Number(this.availableSpace) - giftedAmount;
+          this.availableSpace = String(remainingSpaceAfterGift);
 
-        const remainingSpaceInBytes =
-          remainingSpaceAfterGift * this.bytesPerGigabyte;
+          const remainingSpaceInBytes =
+            remainingSpaceAfterGift * this.bytesPerGigabyte;
 
-        const newAccount = new AccountVO({
-          ...this.account,
-          spaceLeft: remainingSpaceInBytes,
-          spaceTotal:
-            this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte,
-        });
+          const newAccount = new AccountVO({
+            ...this.account,
+            spaceLeft: remainingSpaceInBytes,
+            spaceTotal:
+              this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte,
+          });
 
-        this.accountService.setAccount(newAccount);
-        this.isSuccessful = isSuccessful;
-      }
-    });
+          this.accountService.setAccount(newAccount);
+          this.isSuccessful = isSuccessful;
+        }
+      })
+    ),
+      this.giftForm.get('email')?.valueChanges.subscribe(() => {
+        this.giftForm.get('amount')?.updateValueAndValidity();
+      });
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    unsubscribeAll(this.subscriptions);
   }
 
   submitStorageGiftForm(value: {
@@ -96,10 +105,14 @@ export class GiftStorageComponent implements OnDestroy {
     amount: number;
     message: string;
   }) {
+    const emails = this.parseEmailString(value.email);
+    const fullAmount = Number(value.amount) * emails.length;
     this.dialog.open(
       'ConfirmGiftDialogComponent',
       {
-        ...value,
+        emails,
+        fullAmount,
+        message: value.message,
         giftResult: this.giftResult,
       },
       {
@@ -128,22 +141,76 @@ export class GiftStorageComponent implements OnDestroy {
     return isInteger && !hasDecimalPoint ? null : { notInteger: true };
   }
 
-  emailValidator(): AsyncValidatorFn {
+  private validateEmails(controlValue: string): Observable<string[] | null> {
+    const emails = this.parseEmailString(controlValue);
+
+    const invalidEmails = emails.filter((email) => {
+      const tempEmailControl = new FormControl(email, Validators.email);
+      return tempEmailControl.invalid;
+    });
+
+    return of(invalidEmails.length ? invalidEmails : null);
+  }
+
+  private delayedEmailValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       if (!control.value) {
+        this.emailValidationErrors = [];
         return of(null);
       }
-
       this.isAsyncValidating = true;
 
       return timer(1000).pipe(
-        map(() => {
-          const emailValid = Validators.email(control);
+        switchMap(() => this.validateEmails(control.value)),
+        map((invalidEmails) => {
+          this.emailValidationErrors = invalidEmails || [];
           this.isAsyncValidating = false;
-
-          return emailValid ? { email: true } : null;
+          return invalidEmails ? { invalidEmails: invalidEmails } : null;
         })
       );
     };
+  }
+
+  private giftedAmountValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const emailControl = control.parent?.get('email');
+      if (!control.value || !emailControl.value) {
+        return null;
+      }
+
+      if (emailControl) {
+        const emails = this.parseEmailString(emailControl.value as string);
+        const numberOfEmails = emails.length;
+        const giftedAmount = numberOfEmails * Number(control.value);
+        const availableSpace = Number(this.availableSpace);
+        if (giftedAmount > availableSpace) {
+          return {
+            isGreaterThanAvailableSpace: true,
+            requiredSpace: giftedAmount,
+          };
+        }
+        if (giftedAmount <= availableSpace) {
+          return {
+            positiveValidation: true,
+            successMessage: `Total gifted storage: ${giftedAmount} GB`,
+          };
+        }
+      }
+
+      return null;
+    };
+  }
+
+  private parseEmailString(emailString: string): string[] {
+    return emailString.split(',').map((email) => email.trim());
+  }
+
+  public getAmountErrorMessage(): string | null {
+    const errors = this.giftForm.get('amount')?.errors;
+    if (errors?.isGreaterThanAvailableSpace) {
+      const requiredSpace = errors.requiredSpace;
+      return `You need at least ${requiredSpace} GB.`;
+    }
+    return null;
   }
 }

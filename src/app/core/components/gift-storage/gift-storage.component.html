@@ -29,9 +29,12 @@
           placeholder="email@email.com"
         />
       </div>
-      <p class="input-error" *ngIf="giftForm.get('email').errors?.email">
-        The email you have entered is not valid.
-      </p>
+      <div *ngFor="let invalidEmail of emailValidationErrors">
+        <img src="assets/svg/alert.svg" />
+        <span class="input-error"
+          >{{ invalidEmail }} is not a valid email address.</span
+        >
+      </div>
       <div class="dialog-form-field dialog-form-field-amount">
         <div class="text">
           <label class="label" for="amount">Storage Gift Amount</label>
@@ -56,10 +59,19 @@
       <p class="input-error" *ngIf="giftForm.get('amount').errors?.max">
         Amount must be less than or equal to {{ availableSpace }} GB.
       </p>
+      <p *ngIf="giftForm.get('amount').errors?.positiveValidation" class="success-message">
+        {{ giftForm.get('amount').errors?.successMessage }}
+      </p>
+      <div *ngIf="giftForm.get('amount').errors?.isGreaterThanAvailableSpace">
+        <img src="assets/svg/alert.svg" />
+        <span class="input-error">{{ getAmountErrorMessage() }}</span>
+      </div>
       <div class="dialog-form-field">
         <div class="text">
           <label class="label" for="amount">Note to recipient</label>
-          <span class="label-info optional">Optional; sent to all recipients</span>
+          <span class="label-info optional"
+            >Optional; sent to all recipients</span
+          >
         </div>
         <textarea
           class="form-control form-control-textarea"

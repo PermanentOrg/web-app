@@ -100,7 +100,7 @@ describe('ConfirmGiftDialogComponent', () => {
   });
 
   it('should take the email from the dialog data', () => {
-    expect(component.email).toEqual('test@example.com');
+    expect(component.emails).toEqual('test@example.com');
   });
 
   it('should take the amount from the dialog data', () => {
