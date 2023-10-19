@@ -32,12 +32,12 @@ describe('InvitationsDialog', () => {
       });
   });
 
-  it('should exist', async () => {
+  it('exists', async () => {
     const { element } = await shallow.render();
     expect(element).not.toBeNull();
   });
 
-  it('should display the pending invitations table if there are any invitations pending', async () => {
+  it('displays the pending invitations table if there are any invitations pending', async () => {
     const { fixture, find, instance } = await shallow.render();
     instance.activeTab = 'pending';
     instance.pendingInvites = [new InviteVO({ email: 'testEmail1@test.com' })];
@@ -49,7 +49,7 @@ describe('InvitationsDialog', () => {
     expect(table.length).toBe(instance.pendingInvites.length);
   });
 
-  it('should display the "no pending invites" message if there are no invites', async () => {
+  it('displays the "no pending invites" message if there are no invites', async () => {
     const { fixture, find, instance } = await shallow.render();
     instance.activeTab = 'pending';
     instance.pendingInvites = [];
@@ -61,7 +61,7 @@ describe('InvitationsDialog', () => {
     expect(message).not.toBeNull();
   });
 
-  it('should display the accepted invitations table if there are any accepted pending', async () => {
+  it('displays the accepted invitations table if there are any accepted pending', async () => {
     const { fixture, find, instance } = await shallow.render();
     instance.activeTab = 'accepted';
     instance.acceptedInvites = [new InviteVO({ email: 'testEmail1@test.com' })];
@@ -73,7 +73,7 @@ describe('InvitationsDialog', () => {
     expect(table.length).toBe(instance.acceptedInvites.length);
   });
 
-  it('should display the "no accepted invites" message if there are no invites', async () => {
+  it('displays the "no accepted invites" message if there are no invites', async () => {
     const { fixture, find, instance } = await shallow.render();
     instance.activeTab = 'accepted';
     instance.acceptedInvites = [];
@@ -83,5 +83,65 @@ describe('InvitationsDialog', () => {
     const message = find('.text-muted');
 
     expect(message).not.toBeNull();
+  });
+
+  it('displays the gifted amount in the table if there is any, otherwise display the "None Given" text', async () => {
+    const { fixture, find, instance } = await shallow.render();
+    instance.activeTab = 'pending';
+    instance.pendingInvites = [
+      new InviteVO({ email: 'test1@example.com', giftSizeInMB: 1024 }),
+      new InviteVO({ email: 'test2@example.com', giftSizeInMB: null }),
+      new InviteVO({ email: 'test3@example.com', giftSizeInMB: 1024 }),
+      new InviteVO({ email: 'test4@example.com', giftSizeInMB: null }),
+      new InviteVO({ email: 'test5@example.com', giftSizeInMB: 1024 }),
+    ];
+
+    fixture.detectChanges();
+
+    const invitesWithGift = find('.has-amount');
+    const invitesWithoutGift = find('.none');
+
+    expect(invitesWithGift.length).toBe(3);
+    expect(invitesWithoutGift.length).toBe(2);
+  });
+
+  it('displays the amount sent in the invite', async () => {
+    const { fixture, find, instance } = await shallow.render();
+    instance.activeTab = 'pending';
+    instance.pendingInvites = [
+      new InviteVO({ email: 'test1@example.com', giftSizeInMB: 1024 }),
+      new InviteVO({ email: 'test2@example.com', giftSizeInMB: 2048 }),
+      new InviteVO({ email: 'test3@example.com', giftSizeInMB: 1024 }),
+    ];
+
+    fixture.detectChanges();
+
+    const invitesWithGift = find('.has-amount');
+
+    const giftedAmount = invitesWithGift[1].nativeElement.textContent.trim();
+
+    const expectedText = `${instance.pendingInvites[1].giftSizeInMB / 1024} GB`;
+
+    expect(giftedAmount).toBe(expectedText);
+  });
+
+  it('displays the "None given" text if no amount was sent in the invite', async () => {
+    const { fixture, find, instance } = await shallow.render();
+    instance.activeTab = 'pending';
+    instance.pendingInvites = [
+      new InviteVO({ email: 'test1@example.com', giftSizeInMB: 1024 }),
+      new InviteVO({ email: 'test2@example.com', giftSizeInMB: null }),
+      new InviteVO({ email: 'test3@example.com', giftSizeInMB: 1024 }),
+    ];
+
+    fixture.detectChanges();
+
+    const invitesWithGift = find('.invitation .amount');
+
+    const giftedAmount = invitesWithGift[1].nativeElement.textContent.trim();
+
+    const expectedText = `None given`;
+
+    expect(giftedAmount).toBe(expectedText);
   });
 });

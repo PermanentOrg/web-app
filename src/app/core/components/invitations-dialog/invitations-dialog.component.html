@@ -95,10 +95,10 @@
               <div class="name" [hidden]="invite.fullName">
                 <em>None given</em>
               </div>
-              <div class="amount" [hidden]="invite.giftSizeInMB">
+              <div class="amount none" *ngIf="!invite.giftSizeInMB">
                 <em>None given</em>
               </div>
-              <div class="amount" [hidden]="!invite.giftSizeInMB">
+              <div class="amount has-amount" *ngIf="invite.giftSizeInMB">
                 {{ invite.giftSizeInMB / 1024 }} GB
               </div>
               <div class="actions">
@@ -134,10 +134,10 @@
               <div class="name" [hidden]="invite.fullName">
                 <em>None given</em>
               </div>
-              <div class="amount" [hidden]="invite.giftSizeInMB">
+              <div class="amount none" [hidden]="invite.giftSizeInMB">
                 <em>None given</em>
               </div>
-              <div class="amount" [hidden]="!invite.giftSizeInMB">
+              <div class="amount has-amount" [hidden]="!invite.giftSizeInMB">
                 {{ invite.giftSizeInMB / 1024 }} GB
               </div>
 
