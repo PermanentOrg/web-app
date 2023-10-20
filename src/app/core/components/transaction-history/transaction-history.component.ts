@@ -42,7 +42,7 @@ export class TransactionHistoryComponent implements OnInit {
       this.ledgerItemCount = ledgerItems.length;
       this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
     } catch (err) {
-      this.message.showError('There was a problem loading your file history.');
+      this.message.showError('There was a problem loading your transaction history.');
       this.error = true;
       throw err;
     } finally {
