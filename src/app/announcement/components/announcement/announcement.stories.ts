@@ -1,3 +1,4 @@
+/* @format */
 import {
   componentWrapperDecorator,
   Meta,

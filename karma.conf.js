@@ -35,7 +35,7 @@ module.exports = function (config) {
         { type: 'text-summary' },
       ],
     },
-    reporters: ['progress', 'coverage', 'kjhtml', 'junit', 'spec'],
+    reporters: ['progress', 'kjhtml', 'junit', 'spec'],
     browsers: ['ChromeHeadless'],
     restartOnFileChange: true,
     customLaunchers: {
