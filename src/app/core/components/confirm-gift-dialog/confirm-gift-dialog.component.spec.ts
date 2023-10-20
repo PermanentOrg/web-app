@@ -12,7 +12,20 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
+
+class MockMessageService {
+  public static errorShown: boolean = false;
+
+  public static reset(): void {
+    MockMessageService.errorShown = false;
+  }
+
+  public showError(_msg: string): void {
+    MockMessageService.errorShown = true;
+  }
+}
 
 describe('ConfirmGiftDialogComponent', () => {
   let component: ConfirmGiftDialogComponent;
@@ -68,6 +81,11 @@ describe('ConfirmGiftDialogComponent', () => {
       useValue: mockApiService,
     });
 
+    config.providers.push({
+      provide: MessageService,
+      useClass: MockMessageService,
+    });
+
     await TestBed.configureTestingModule(config).compileComponents();
   });
 
@@ -104,6 +122,7 @@ describe('ConfirmGiftDialogComponent', () => {
   it('should close the dialog and send the data back when confirm method is called', fakeAsync(() => {
     const dialogRefSpy = spyOn(dialogRef, 'close');
     const giftResultSpy = spyOn(mockGiftResult, 'next');
+    mockApiService.billing.giftStorage.and.returnValue(Promise.resolve());
 
     component.onConfirmClick();
 
@@ -111,5 +130,27 @@ describe('ConfirmGiftDialogComponent', () => {
 
     expect(dialogRefSpy).toHaveBeenCalled();
     expect(giftResultSpy).toHaveBeenCalledWith(true);
+  }));
+
+  it('should handle failure in onConfirmClick', fakeAsync(() => {
+    const errorResponse = 'Something went wrong!';
+    const giftResultSpy = spyOn(mockGiftResult, 'next');
+    const dialogRefSpy = spyOn(dialogRef, 'close');
+    mockApiService.billing.giftStorage.and.returnValue(
+      Promise.reject(errorResponse)
+    );
+
+    const messageService = TestBed.inject(MessageService);
+    const showErrorSpy = spyOn(messageService, 'showError');
+
+    component.onConfirmClick();
+    tick();
+
+    expect(showErrorSpy).toHaveBeenCalledWith(
+      'Something went wrong! Please try again.'
+    );
+    expect(giftResultSpy).toHaveBeenCalledWith(false);
+
+    expect(dialogRefSpy).toHaveBeenCalled();
   }));
 });
