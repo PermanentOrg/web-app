@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit } from '@angular/core';
+/* @format */
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 import { AnnouncementEvent } from '@announcement/models/announcement-event';
 import { ANNOUNCEMENT_EVENTS } from '@announcement/data/events';
@@ -7,16 +14,23 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 const STORAGE_KEY = 'announcementDismissed';
 
-export const adjustLayoutForAnnouncement = (component: {elementRef: ElementRef}) => {
+export const adjustLayoutForAnnouncement = (component: {
+  elementRef: ElementRef;
+}) => {
   const self = component.elementRef.nativeElement as HTMLElement;
-  const adjustedElements = document.querySelectorAll('.adjust-for-announcement');
+  const adjustedElements = document.querySelectorAll(
+    '.adjust-for-announcement'
+  );
   for (const element of Array.from(adjustedElements)) {
-    (element as HTMLElement).style.paddingTop = self.getBoundingClientRect().height + 'px';
+    (element as HTMLElement).style.paddingTop =
+      self.getBoundingClientRect().height + 'px';
   }
 };
 
 export const resetLayoutForAnnouncement = () => {
-  const adjustedElements = document.querySelectorAll('.adjust-for-announcement');
+  const adjustedElements = document.querySelectorAll(
+    '.adjust-for-announcement'
+  );
   for (const element of Array.from(adjustedElements)) {
     (element as HTMLElement).style.paddingTop = '0px';
   }
@@ -25,7 +39,7 @@ export const resetLayoutForAnnouncement = () => {
 @Component({
   selector: 'pr-announcement',
   templateUrl: './announcement.component.html',
-  styleUrls: ['./announcement.component.scss']
+  styleUrls: ['./announcement.component.scss'],
 })
 export class AnnouncementComponent implements OnInit, AfterViewInit {
   @Input() eventsList: AnnouncementEvent[] = ANNOUNCEMENT_EVENTS;
@@ -65,8 +79,8 @@ export class AnnouncementComponent implements OnInit, AfterViewInit {
 
   protected findActiveEvent(): AnnouncementEvent | undefined {
     const now = Date.now();
-    return this.eventsList.find((event) =>
-      now >= event.start && now < event.end
+    return this.eventsList.find(
+      (event) => now >= event.start && now < event.end
     );
   }
 }
