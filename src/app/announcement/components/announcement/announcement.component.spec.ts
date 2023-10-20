@@ -99,4 +99,31 @@ describe('AnnouncementComponent', () => {
     const {find} = await defaultRender();
     expect(find('.announcement').length).toBe(0);
   });
+  it('should adjust the page layout when it appears', async () => {
+    const {find} = await shallow.render(`<div class="adjust-for-announcement"></div><pr-announcement [eventsList]="events"></pr-announcement><div class="adjust-for-announcement"></div>`, {
+      bind: {
+        events: [currentTestEvent],
+      }
+    });
+    const adjustedElements = find('.adjust-for-announcement');
+    expect(adjustedElements.length).toBeGreaterThan(0);
+    adjustedElements.forEach((element) => {
+      expect(element.nativeElement.style.paddingTop).not.toBe('0px');
+      expect(element.nativeElement.style.paddingTop).not.toBeUndefined();
+    });
+  });
+  it('should readjust the page layout when it disappears', async() => {
+    const {find, fixture} = await shallow.render(`<div class="adjust-for-announcement"></div><pr-announcement [eventsList]="events"></pr-announcement><div class="adjust-for-announcement"></div>`, {
+      bind: {
+        events: [currentTestEvent],
+      }
+    });
+    const adjustedElements = find('.adjust-for-announcement');
+    expect(adjustedElements.length).toBeGreaterThan(0);
+    find('.dismiss-button').nativeElement.click();
+    fixture.detectChanges();
+    adjustedElements.forEach((element) => {
+      expect(element.nativeElement.style.paddingTop).toBe('0px');
+    });
+  });
 });
