@@ -27,6 +27,7 @@ import { PledgeService } from '@pledge/services/pledge.service';
 
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
+import { AccountVO } from '@models/account-vo';
 
 const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
@@ -147,7 +148,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     this.stripeElementsCard = elements.create('card', options);
 
-    this.stripeElementsCard.addEventListener('change', (event) => {
+    this.stripeElementsCard?.addEventListener('change', (event) => {
       const instance = NewPledgeComponent.currentInstance;
       if (event.error) {
         instance.cardError = event.error.message;
@@ -166,7 +167,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   bindStripeElements() {
-    this.stripeElementsCard.mount(this.elementsContainer.nativeElement);
+    this.stripeElementsCard?.mount(this.elementsContainer.nativeElement);
   }
 
   getStorageAmount(donationAmount: number) {
@@ -209,7 +210,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           : this.donationAmount,
       name: formValue.name,
       stripeToken: stripeResult.token.id,
-      zip: stripeResult.token.card.address_zip,
+      zip: stripeResult.token.card?.address_zip,
       timestamp: new Date().getTime(),
       anonymous: !formValue.publishName,
     };
@@ -218,6 +219,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       const body = await this.http
         .post(`${environment.firebase.functionsURL}/donation/charge`, pledge)
         .toPromise();
+
       pledge = body as PledgeData;
     } catch (err) {
       this.waiting = false;
@@ -250,6 +252,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         const pledgeId = pledge.id;
         const account = this.accountService.getAccount();
         const payment = this.pledgeService.createBillingPaymentVo(account);
+        const amount = pledge.dollarAmount;
+        const sizeInBytes = this.getSizeInBytes(amount);
 
         try {
           await this.pledgeService.linkAccount(account);
@@ -259,13 +263,13 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
+            this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage(
               `You just claimed ${this.getStorageAmount(
                 pledge.dollarAmount
               )} GB of storage!`,
               'success'
             );
-            this.router.navigate(['..', 'done'], { relativeTo: this.route });
           }
         } catch (err) {
           this.waiting = false;
@@ -286,6 +290,11 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       event.stopPropagation();
       event.preventDefault();
     }
+  }
+
+  private getSizeInBytes(amount: number): number {
+    const bytesInGiB = 1073741824;
+    return Math.floor(amount / 10) * bytesInGiB;
   }
 
   ngOnDestroy() {}

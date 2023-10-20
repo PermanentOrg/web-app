@@ -46,6 +46,7 @@ export class AccountService {
 
   public archiveChange: EventEmitter<ArchiveVO> = new EventEmitter();
   public accountChange: EventEmitter<AccountVO> = new EventEmitter();
+  public accountStorageUpdate: EventEmitter<AccountVO> = new EventEmitter();
 
   public refreshAccountDebounced = debounce(() => {
     this.refreshAccount();
@@ -624,5 +625,15 @@ export class AccountService {
   public deductAccountStorage(amount: number) {
     this.account.spaceLeft -= amount;
     this.setAccount(this.account);
+  }
+
+  public addStorageBytes(sizeInBytes): void {
+    const newAccount = new AccountVO({
+      ...this.getAccount(),
+      spaceLeft: this.account.spaceLeft + sizeInBytes,
+      spaceTotal: this.account.spaceTotal + sizeInBytes,
+    });
+    this.setAccount(newAccount);
+    this.accountStorageUpdate.next(newAccount);
   }
 }

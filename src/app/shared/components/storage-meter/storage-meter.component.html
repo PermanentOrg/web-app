@@ -3,8 +3,8 @@
   <div class="space-meter-inner" [ngClass]="{ 'space-meter-inner-archive': showForArchive }" [style]="getMeterTransform()"></div>
 </div>
 <div *ngIf="!showForArchive" class="space-label">
-  {{ account.spaceTotal - account.spaceLeft | prStorageAmount }} of
-  {{ account.spaceTotal | dsFileSize : 0 }} used
+  {{ accountSpaceTotal - accountSpaceLeft | prStorageAmount }} of
+  {{ accountSpaceTotal | dsFileSize : 0 }} used
 </div>
 <div *ngIf="showForArchive" class="space-label" [ngClass]="{ 'space-label-archive': showForArchive }">
   {{ archiveSpaceTotal - archiveSpaceLeft | prStorageAmount }} of
