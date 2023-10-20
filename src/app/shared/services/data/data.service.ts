@@ -227,6 +227,7 @@ export class DataService {
             item.fetched = null;
 
             if (
+              !item.isFolder &&
               !item.thumbURL200 &&
               item.parentFolderId === this.currentFolder.folderId
             ) {
@@ -689,5 +690,9 @@ export class DataService {
 
   public beginPreparingForNavigate() {
     this.eventSubject.next(true);
+  }
+
+  public getThumbRefreshQueue(): Array<ItemVO> {
+    return this.thumbRefreshQueue;
   }
 }

@@ -197,4 +197,5 @@ export interface RecordVOData extends BaseVOData {
   RecordExifVO?: any;
   ShareVOs?: any;
   AccessVO?: any;
+  isFolder?:boolean;
 }
