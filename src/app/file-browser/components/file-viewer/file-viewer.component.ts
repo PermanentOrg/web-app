@@ -74,7 +74,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private element: ElementRef,
     private dataService: DataService,
     @Inject(DOCUMENT) private document: any,
-    private sanitizer: DomSanitizer,
+    public sanitizer: DomSanitizer,
     private accountService: AccountService,
     private editService: EditService,
     private tagsService: TagsService,
@@ -111,7 +111,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
     if (publicProfile) {
       publicProfile.archive$()?.subscribe((archive) => {
-        this.allowDownloads = archive.allowPublicDownload;
+        this.allowDownloads = !!archive?.allowPublicDownload;
       });
     }
 
