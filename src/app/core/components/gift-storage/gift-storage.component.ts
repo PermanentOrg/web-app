@@ -35,6 +35,7 @@ export class GiftStorageComponent implements OnDestroy {
   );
   private subscriptions: Subscription[] = [];
   public isAsyncValidating: boolean;
+  public successMessage: string = '';
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -70,7 +71,6 @@ export class GiftStorageComponent implements OnDestroy {
     this.subscriptions.push(
       this.giftResult.subscribe((isSuccessful) => {
         if (isSuccessful) {
-          console.log(this.giftForm.value.email);
           const giftedAmount = Number(this.giftForm.value.amount);
           const remainingSpaceAfterGift =
             Number(this.availableSpace) - giftedAmount;
@@ -92,6 +92,7 @@ export class GiftStorageComponent implements OnDestroy {
       })
     ),
       this.giftForm.get('email')?.valueChanges.subscribe(() => {
+        this.successMessage = '';
         this.giftForm.get('amount')?.updateValueAndValidity();
       });
   }
@@ -165,7 +166,7 @@ export class GiftStorageComponent implements OnDestroy {
         map((invalidEmails) => {
           this.emailValidationErrors = invalidEmails || [];
           this.isAsyncValidating = false;
-          return invalidEmails ? { invalidEmails: invalidEmails } : null;
+          return invalidEmails ? { invalidEmails: true } : null;
         })
       );
     };
@@ -175,6 +176,7 @@ export class GiftStorageComponent implements OnDestroy {
     return (control: AbstractControl): ValidationErrors | null => {
       const emailControl = control.parent?.get('email');
       if (!control.value || !emailControl.value) {
+        this.successMessage = '';
         return null;
       }
 
@@ -184,16 +186,15 @@ export class GiftStorageComponent implements OnDestroy {
         const giftedAmount = numberOfEmails * Number(control.value);
         const availableSpace = Number(this.availableSpace);
         if (giftedAmount > availableSpace) {
+          this.successMessage = '';
+
           return {
             isGreaterThanAvailableSpace: true,
             requiredSpace: giftedAmount,
           };
         }
         if (giftedAmount <= availableSpace) {
-          return {
-            positiveValidation: true,
-            successMessage: `Total gifted storage: ${giftedAmount} GB`,
-          };
+          this.successMessage = `Total gifted storage: ${giftedAmount} GB`;
         }
       }
 

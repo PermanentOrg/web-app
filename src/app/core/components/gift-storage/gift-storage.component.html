@@ -29,7 +29,10 @@
           placeholder="email@email.com"
         />
       </div>
-      <div *ngFor="let invalidEmail of emailValidationErrors">
+      <div
+        class="error-message"
+        *ngFor="let invalidEmail of emailValidationErrors"
+      >
         <img src="assets/svg/alert.svg" />
         <span class="input-error"
           >{{ invalidEmail }} is not a valid email address.</span
@@ -53,16 +56,20 @@
         />
         <span class="gigabytes">gigabytes per recipient</span>
       </div>
-      <p class="input-error" *ngIf="giftForm.get('amount').errors?.notInteger">
-        Storage can only be gifted in 1GB increments.
+      <div
+        *ngIf="giftForm.get('amount').errors?.notInteger"
+        class="error-message"
+      >
+        <img src="assets/svg/alert.svg" />
+        <p class="input-error">Storage can only be gifted in 1GB increments.</p>
+      </div>
+      <p *ngIf="successMessage" class="error-message success-message">
+        {{ successMessage }}
       </p>
-      <p class="input-error" *ngIf="giftForm.get('amount').errors?.max">
-        Amount must be less than or equal to {{ availableSpace }} GB.
-      </p>
-      <p *ngIf="giftForm.get('amount').errors?.positiveValidation" class="success-message">
-        {{ giftForm.get('amount').errors?.successMessage }}
-      </p>
-      <div *ngIf="giftForm.get('amount').errors?.isGreaterThanAvailableSpace">
+      <div
+        class="error-message"
+        *ngIf="giftForm.get('amount').errors?.isGreaterThanAvailableSpace"
+      >
         <img src="assets/svg/alert.svg" />
         <span class="input-error">{{ getAmountErrorMessage() }}</span>
       </div>

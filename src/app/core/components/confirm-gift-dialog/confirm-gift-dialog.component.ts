@@ -23,7 +23,7 @@ export class ConfirmGiftDialogComponent {
     private msg: MessageService
   ) {
     this.emails = this.data.emails;
-    this.amount = this.data.fullAmount;
+    this.amount = this.data.amount;
     this.message = this.data.message;
     this.giftResult = this.data.giftResult;
   }
