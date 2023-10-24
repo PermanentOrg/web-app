@@ -13,7 +13,13 @@
       class="dialog-form"
       (submit)="submitStorageGiftForm(giftForm.value)"
     >
-      <div class="dialog-form-field">
+      <div
+        class="dialog-form-field dialog-form-field-emails"
+        [ngClass]="{
+          'dialog-form-field-with-error':
+            duplicateEmails.length || emailValidationErrors.length
+        }"
+      >
         <div class="text">
           <label class="label" for="email">Recipient Email(s)</label>
           <span class="label-info"
@@ -38,7 +44,11 @@
           >{{ invalidEmail }} is not a valid email address.</span
         >
       </div>
-      <div class="dialog-form-field dialog-form-field-amount">
+      <div class="error-message" *ngFor="let duplicate of duplicateEmails">
+        <img src="assets/svg/alert.svg" />
+        <span class="input-error">{{ duplicate }} has already been added.</span>
+      </div>
+      <div class="dialog-form-field dialog-form-field-amount" [ngClass]="">
         <div class="text">
           <label class="label" for="amount">Storage Gift Amount</label>
           <span class="label-info">{{ this.availableSpace }} GB available</span>
@@ -124,9 +134,13 @@
 
     <p class="panel-title">Storage successfully gifted</p>
     <p>
-      Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to
-      {{ giftForm.value.email }}.
+      Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to:
     </p>
+    <ul>
+      <li class="email" *ngFor="let email of emails">
+        {{ email }}
+      </li>
+    </ul>
     <p>
       You have
       {{ (+availableSpace).toFixed(2) }} GB of storage available.

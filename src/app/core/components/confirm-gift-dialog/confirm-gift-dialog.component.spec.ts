@@ -65,7 +65,7 @@ describe('ConfirmGiftDialogComponent', () => {
     config.providers.push({
       provide: DIALOG_DATA,
       useValue: {
-        email: 'test@example.com',
+        emails: ['test@example.com', 'test2@example.com'],
         amount: 10,
         message: 'test message',
         giftResult: mockGiftResult,
@@ -100,7 +100,7 @@ describe('ConfirmGiftDialogComponent', () => {
   });
 
   it('should take the email from the dialog data', () => {
-    expect(component.emails).toEqual('test@example.com');
+    expect(component.emails).toEqual(['test@example.com', 'test2@example.com']);
   });
 
   it('should take the amount from the dialog data', () => {
