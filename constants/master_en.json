@@ -608,7 +608,9 @@
         "invite_accepted_from": "Sent invitation accepted",
         "invite_accepted_to": "Invitation accepted",
         "promo_code": "Gift code entered",
-        "system_to_account": "Gift from system to account"
+        "system_to_account": "Gift from system to account",
+        "purchase": "Gift purchase",
+        "received": "Gift received"
       }
     },
     "board_member": {
