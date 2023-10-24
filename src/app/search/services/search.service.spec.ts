@@ -81,14 +81,6 @@ describe('SearchService', () => {
       expectSearchToBe(service.parseSearchTerm('Potato'), 'Potato', []);
     });
 
-    it('should remove tag tokens from search', () => {
-      expectSearchToBe(
-        service.parseSearchTerm('tag:"NonExistentTag"'),
-        undefined,
-        []
-      );
-    });
-
     it('should load tag tokens into the tags array', () => {
       tags.setTags([{ name: 'Potato' }]);
       expectSearchToBe(service.parseSearchTerm('tag:"Potato"'), undefined, [
@@ -110,36 +102,31 @@ describe('SearchService', () => {
       );
     });
 
-    it('removes quotation marks from tag names', () => {
-      /*
-        This test probably represents erroneous behavior that we want to change
-        at some point. For now, this represents the original functionality of
-        the SearchService as it was written.
-      */
+    it('handles quotation marks in tag names properly', () => {
       tags.setTags([
         { name: 'Potato', tagId: 0 },
         { name: '"Potato"', tagId: 1 },
       ]);
       const searchTokens = service.parseSearchTerm('tag:""Potato""');
       expect(searchTokens[1].length).toBe(1);
-      expect(searchTokens[1][0].tagId).toBe(0);
+      expect(searchTokens[1][0].tagId).toBe(1);
     });
 
     it('handles tag edge cases', () => {
       tags.setTags([{ name: 'tag:Test' }]);
-      expectSearchToBe(service.parseSearchTerm('tag:"tag:"Test""'), undefined, [
-        { name: 'tag:Test' },
-      ]);
+      expectSearchToBe(
+        service.parseSearchTerm('tag:"tag:"Test""'),
+        'tag:"tag:"Test""',
+        []
+      );
     });
 
-    function expectSearchToBe(
-      search: [string, TagVOData[]],
-      expectedSearch: string,
-      expectedTags: TagVOData[]
-    ) {
-      expect(search[0]).toBe(expectedSearch);
-      expect(search[1]).toEqual(expectedTags);
-    }
+    it('handles returns the tags correctly if they have quotation marks', () => {
+      tags.setTags([{ name: 'tag:"Test"' }]);
+      expectSearchToBe(service.parseSearchTerm('tag:"tag:"Test""'), undefined, [
+        { name: 'tag:"Test"' },
+      ]);
+    });
   });
 
   describe('getResultsInCurrentFolder', () => {
@@ -236,4 +223,21 @@ describe('SearchService', () => {
     service.getResultsInPublicArchive('Test', [], '1');
     expect(apiSpy).toHaveBeenCalled();
   });
+
+  it('cannot handle tags with quotation marks followed by search terms with quotation marks', () => {
+    tags.setTags([{ name: '"A Multiword Tag"', tagId: 0 }]);
+    const searchTokens = service.parseSearchTerm(
+      'tag:""A Multiword Tag"" "potato"'
+    );
+    expect(searchTokens[1].length).toBe(0);
+  });
+
+  function expectSearchToBe(
+    search: [string, TagVOData[]],
+    expectedSearch: string,
+    expectedTags: TagVOData[]
+  ) {
+    expect(search[0]).toBe(expectedSearch);
+    expect(search[1]).toEqual(expectedTags);
+  }
 });

@@ -63,12 +63,15 @@ export class SearchService {
           const tagNames = part.match(getTagName) || [];
           for (const tagName of tagNames) {
             if (tagName) {
-              const name = tagName.replace(/"/g, '');
+              const name = this.removeFirstAndLastQuotes(tagName);
               const tag = this.tags.getTagByName(name);
               if (tag) {
                 parsedTags.push(tag);
               }
             }
+          }
+          if (!parsedTags.length) {
+            queryString = termString;
           }
         } else {
           queryParts.push(part);
@@ -80,8 +83,11 @@ export class SearchService {
     } else {
       queryString = termString;
     }
-
     return [queryString, parsedTags];
+  }
+
+  private removeFirstAndLastQuotes(str: string): string {
+    return str.replace(/^"|"$/g, '');
   }
 
   public getResultsInCurrentArchive(
