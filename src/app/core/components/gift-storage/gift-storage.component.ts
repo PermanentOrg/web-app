@@ -109,6 +109,7 @@ export class GiftStorageComponent implements OnDestroy {
   }
 
   closeSuccessMessage() {
+    this.giftForm.reset();
     this.isSuccessful = false;
   }
 
@@ -117,7 +118,7 @@ export class GiftStorageComponent implements OnDestroy {
   }
 
   integerValidator(control: FormControl) {
-    if (control.value === '') {
+    if (!control.value) {
       return null;
     }
 
