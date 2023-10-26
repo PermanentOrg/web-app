@@ -1,4 +1,3 @@
-import { async } from '@angular/core/testing';
 /* @format */
 import { Shallow } from 'shallow-render';
 import { HttpClient, HttpHandler } from '@angular/common/http';
