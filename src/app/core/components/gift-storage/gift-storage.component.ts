@@ -271,7 +271,10 @@ export class GiftStorageComponent implements OnDestroy {
 
     Object.keys(emailCount).forEach((key) => {
       if (emailCount[key] > 1) {
-        duplicates.push(key);
+        const mailControl = new FormControl(key, Validators.email);
+        if (mailControl.valid) {
+          duplicates.push(key);
+        }
       }
     });
 
