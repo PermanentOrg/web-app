@@ -128,3 +128,10 @@
 .success-message {
   font-style: italic;
 }
+
+.not-integer {
+  display: flex;
+  & > p {
+    margin-bottom: 0px;
+  }
+}

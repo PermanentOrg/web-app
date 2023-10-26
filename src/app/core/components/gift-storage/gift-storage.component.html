@@ -68,12 +68,15 @@
       </div>
       <div
         *ngIf="giftForm.get('amount').errors?.notInteger"
-        class="error-message"
+        class="error-message not-integer"
       >
         <img src="assets/svg/alert.svg" />
         <p class="input-error">Storage can only be gifted in 1GB increments.</p>
       </div>
-      <p *ngIf="successMessage" class="error-message success-message">
+      <p
+        *ngIf="successMessage && !giftForm.get('amount').errors?.notInteger"
+        class="error-message success-message"
+      >
         {{ successMessage }}
       </p>
       <div
