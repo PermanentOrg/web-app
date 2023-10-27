@@ -17,7 +17,7 @@
           id="connector-connect"
           [hidden]="connected"
           (click)="connect()"
-          [disabled]="waiting || connector.type == 'type.connector.facebook'">
+          [disabled]="waiting || connector.type === 'type.connector.facebook'">
     {{ connectText || 'Connect' }}
   </button>
   <button class="btn btn-primary" [hidden]="!folder" (click)="goToFolder()" [disabled]="waiting"

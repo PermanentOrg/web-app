@@ -167,7 +167,6 @@ module.exports = {
       rules: {
         // We want to disable these rules eventually:
         '@angular-eslint/template/no-negated-async': 'off',
-        '@angular-eslint/template/eqeqeq': 'off',
       },
     },
     {
