@@ -41,6 +41,7 @@ export class GiftStorageComponent implements OnDestroy {
   ) {
     this.account = this.accountService.getAccount();
     this.availableSpace = this.bytesToGigabytes(this.account?.spaceLeft);
+    console.log(this.availableSpace);
     this.giftForm = this.fb.group({
       email: [
         '',
@@ -69,7 +70,7 @@ export class GiftStorageComponent implements OnDestroy {
         const giftedAmount = Number(this.giftForm.value.amount);
         const remainingSpaceAfterGift =
           Number(this.availableSpace) - giftedAmount;
-        this.availableSpace = String(remainingSpaceAfterGift);
+        this.availableSpace = String(remainingSpaceAfterGift.toFixed(2));
 
         const remainingSpaceInBytes =
           remainingSpaceAfterGift * this.bytesPerGigabyte;
