@@ -41,7 +41,6 @@ export class GiftStorageComponent implements OnDestroy {
   ) {
     this.account = this.accountService.getAccount();
     this.availableSpace = this.bytesToGigabytes(this.account?.spaceLeft);
-    console.log(this.availableSpace);
     this.giftForm = this.fb.group({
       email: [
         '',
