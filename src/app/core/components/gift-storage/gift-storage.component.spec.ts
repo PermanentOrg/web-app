@@ -103,14 +103,14 @@ describe('GiftStorageComponent', () => {
   });
   it('updates account details upon successful gift operation', async () => {
     const { instance } = await shallow.render();
-  
-    instance.availableSpace = '100'; 
-  
+
+    instance.availableSpace = '100';
+
     instance.giftForm.controls.email.setValue('test@example.com');
     instance.giftForm.controls.amount.setValue('50');
-  
+
     instance.giftResult.next(true);
-  
+
     expect(mockAccountService.setAccount).toHaveBeenCalled();
     expect(instance.availableSpace).toBe('50.00');
   });
