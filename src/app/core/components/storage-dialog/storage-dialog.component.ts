@@ -1,3 +1,4 @@
+/* @format */
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
@@ -16,7 +17,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 
-type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo';
+type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
 @Component({
   selector: 'pr-storage-dialog',
@@ -29,6 +30,8 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
   promoForm: UntypedFormGroup;
 
   waiting: boolean;
+
+  tabs = ['add', 'gift', 'promo', 'transaction', 'file'];
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -47,8 +50,10 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const path = params.get('path') as StorageDialogTab;
 
-      if (path) {
+      if (path && this.tabs.includes(path)) {
         this.activeTab = path;
+      } else {
+        this.activeTab = 'add';
       }
     });
   }

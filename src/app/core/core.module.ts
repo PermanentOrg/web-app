@@ -62,6 +62,8 @@ import { ArchivePayerComponent } from './components/archive-payer/archive-payer.
 import { ConfirmPayerDialogComponent } from './components/confirm-payer-dialog/confirm-payer-dialog.component';
 import { ArchiveStoragePayerComponent } from './components/archive-storage-payer/archive-storage-payer.component';
 import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dialog/skip-onboarding-dialog.component';
+import { GiftStorageComponent } from './components/gift-storage/gift-storage.component';
+import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/confirm-gift-dialog.component';
 
 @NgModule({
   imports: [
@@ -114,6 +116,8 @@ import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dial
     ConfirmPayerDialogComponent,
     ArchiveStoragePayerComponent,
     SkipOnboardingDialogComponent,
+    GiftStorageComponent,
+    ConfirmGiftDialogComponent,
   ],
   providers: [
     DataService,
@@ -185,6 +189,10 @@ export class CoreModule {
     {
       token: 'SkipOnboardingDialogComponent',
       component: SkipOnboardingDialogComponent,
+    },
+    {
+      token: 'ConfirmGiftDialogComponent',
+      component: ConfirmGiftDialogComponent,
     },
   ];
 

@@ -1,0 +1,113 @@
+<!-- @format -->
+<ng-container [ngSwitch]="isSuccessful">
+  <div *ngSwitchCase="false" class="gift-storage">
+    <p class="panel-title">Gift Storage</p>
+    <p>
+      Gift any amount of your unused storage to someone else. You can send
+      storage to both current Permanent users and those who do not yet have an
+      account. Those without an account must create an account in order to claim
+      their storage.
+    </p>
+    <form
+      [formGroup]="giftForm"
+      class="dialog-form"
+      (submit)="submitStorageGiftForm(giftForm.value)"
+    >
+      <div class="dialog-form-field">
+        <div class="text">
+          <label class="label" for="email">Recipient Email</label>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+          formControlName="email"
+          placeholder="email@email.com"
+        />
+      </div>
+      <p class="input-error" *ngIf="giftForm.get('email').errors?.email">
+        The email you have entered is not valid.
+      </p>
+      <div class="dialog-form-field dialog-form-field-amount">
+        <div class="text">
+          <label class="label" for="amount">Storage Gift Amount</label>
+          <span class="label-info">{{ this.availableSpace }} GB available</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          id="amount"
+          name="amount"
+          formControlName="amount"
+          placeholder="0"
+          [ngClass]="{
+            'form-control-error': giftForm.get('amount').errors?.notInteger
+          }"
+        />
+        <span class="gigabytes">gigabytes</span>
+      </div>
+      <p class="input-error" *ngIf="giftForm.get('amount').errors?.notInteger">
+        Storage can only be gifted in 1GB increments.
+      </p>
+      <p class="input-error" *ngIf="giftForm.get('amount').errors?.max">
+        Amount must be less than or equal to {{ availableSpace }} GB.
+      </p>
+      <div class="dialog-form-field">
+        <div class="text">
+          <label class="label" for="amount">Note to recipient</label>
+          <span class="label-info">Optional</span>
+        </div>
+        <textarea
+          class="form-control form-control-textarea"
+          id="message"
+          name="message"
+          formControlName="message"
+          placeholder="Write text here"
+        ></textarea>
+      </div>
+      <div class="dialog-form-field">
+        <button
+          [disabled]="giftForm.invalid || isAsyncValidating"
+          class="btn btn-primary"
+          [ngClass]="{ 'btn-disabled': giftForm.invalid || isAsyncValidating }"
+        >
+          Send Gift Storage
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="gift-storage" *ngSwitchCase="true">
+    <svg
+      style="cursor: pointer"
+      (click)="closeSuccessMessage()"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_30_1877)">
+        <path
+          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+          fill="#646464"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_30_1877">
+          <rect width="24" height="24" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+
+    <p class="panel-title">Storage successfully gifted</p>
+    <p>
+      Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to
+      {{ giftForm.value.email }}.
+    </p>
+    <p>
+      You have
+      {{ (+availableSpace).toFixed(2) }} GB of storage available.
+    </p>
+  </div>
+</ng-container>
