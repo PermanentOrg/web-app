@@ -112,6 +112,6 @@ describe('GiftStorageComponent', () => {
     instance.giftResult.next(true);
   
     expect(mockAccountService.setAccount).toHaveBeenCalled();
-    expect(instance.availableSpace).toBe('50');
+    expect(instance.availableSpace).toBe('50.00');
   });
 });
