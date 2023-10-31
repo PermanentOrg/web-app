@@ -135,8 +135,10 @@
       </defs>
     </svg>
 
-    <p class="panel-title">Storage successfully gifted</p>
-    <p>
+    <p *ngIf="emailsSentTo.length" class="panel-title">
+      Storage successfully gifted
+    </p>
+    <p *ngIf="emailsSentTo.length">
       Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to:
     </p>
     <ul>
