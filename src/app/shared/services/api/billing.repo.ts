@@ -71,13 +71,18 @@ export class BillingRepo extends BaseRepo {
     );
   }
 
-  public giftStorage(recipientEmail, storageAmount) {
+  public giftStorage(
+    recipientEmails: string[],
+    storageAmount: number,
+    note: string
+  ) {
     const data = {
-      recipientEmail,
+      recipientEmails,
       storageAmount,
+      note
     };
 
-    return this.httpV2.post('/billing/giftStorage', data).toPromise();
+    return this.httpV2.post('v2/billing/gift', data).toPromise();
   }
 }
 

@@ -34,9 +34,15 @@ export class ConfirmGiftDialogComponent {
 
   public async onConfirmClick() {
     try {
-      await this.api.billing.giftStorage(this.emails, Number(this.amount));
+      const res = await this.api.billing.giftStorage(
+        this.emails,
+        Number(this.amount),
+        this.message
+      );
+      console.log(res)
       this.giftResult.next(true);
     } catch (e) {
+      console.log(e)
       this.msg.showError('Something went wrong! Please try again.');
       this.giftResult.next(false);
     }
