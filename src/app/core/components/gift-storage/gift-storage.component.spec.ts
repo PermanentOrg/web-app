@@ -6,6 +6,7 @@ import { Dialog } from '@root/app/dialog/dialog.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
+import { GiftingResponse } from '@shared/services/api/billing.repo';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
@@ -165,7 +166,10 @@ describe('GiftStorageComponent', () => {
     instance.giftForm.controls.email.setValue('test@example.com');
     instance.giftForm.controls.amount.setValue('50');
 
-    instance.giftResult.next(true);
+    instance.giftResult.next({
+      isSuccessful: true,
+      response: new GiftingResponse({}),
+    });
 
     expect(mockAccountService.setAccount).toHaveBeenCalled();
     expect(instance.availableSpace).toBe('50.00');

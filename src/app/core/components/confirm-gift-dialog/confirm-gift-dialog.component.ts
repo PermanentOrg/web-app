@@ -4,6 +4,7 @@ import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { BehaviorSubject } from 'rxjs';
+import { GiftingResponse } from '@shared/services/api/billing.repo';
 
 @Component({
   selector: 'pr-confirm-gift-dialog',
@@ -14,7 +15,10 @@ export class ConfirmGiftDialogComponent {
   emails: string[];
   amount: number;
   message: string;
-  giftResult: BehaviorSubject<boolean>;
+  giftResult: BehaviorSubject<{
+    isSuccessful: boolean;
+    response: GiftingResponse | null;
+  }>;
 
   constructor(
     private dialogRef: DialogRef,
@@ -39,12 +43,16 @@ export class ConfirmGiftDialogComponent {
         Number(this.amount),
         this.message
       );
-      console.log(res)
-      this.giftResult.next(true);
+      console.log(res);
+      const response = {
+        isSuccessful: true,
+        response: res,
+      };
+      this.giftResult.next(response);
     } catch (e) {
-      console.log(e)
+      console.log(e);
       this.msg.showError('Something went wrong! Please try again.');
-      this.giftResult.next(false);
+      this.giftResult.next({ isSuccessful: false, response: null });
     }
     this.dialogRef?.close();
   }

@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { AccountVO } from '@models/index';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { GiftingResponse } from '@shared/services/api/billing.repo';
 import {
   Observable,
   BehaviorSubject,
@@ -38,13 +39,18 @@ export class GiftStorageComponent implements OnDestroy {
   duplicateEmails: string[] = [];
 
   public isSuccessful: boolean = false;
-  public giftResult: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
+  public giftResult: BehaviorSubject<{
+    isSuccessful: boolean;
+    response: GiftingResponse | null;
+  }> = new BehaviorSubject<{
+    isSuccessful: boolean;
+    response: GiftingResponse | null;
+  }>({ isSuccessful: false, response: null });
   private subscriptions: Subscription[] = [];
   public isAsyncValidating: boolean;
   public successMessage: string = '';
-  public emails: string[] = [];
+  public emailsSentTo: string[] = [];
+  public alreadyInvited: string[] = [];
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -78,12 +84,19 @@ export class GiftStorageComponent implements OnDestroy {
       message: ['', []],
     });
     this.subscriptions.push(
-      this.giftResult.subscribe((isSuccessful) => {
-        if (isSuccessful) {
-          const giftedAmount = Number(this.giftForm.value.amount);
-          this.emails = this.parseEmailString(this.giftForm.value.email);
+      this.giftResult.subscribe((response) => {
+        if (response.isSuccessful) {
+          this.emailsSentTo = [
+            ...new Set([
+              ...response.response.invitationSent,
+              ...response.response.invitationSent,
+            ]),
+          ];
+          this.alreadyInvited = response.response.alreadyInvited;
+          const giftedAmount = response.response.storageGifted;
           const remainingSpaceAfterGift =
-            Number(this.availableSpace) - this.emails.length * giftedAmount;
+            Number(this.availableSpace) -
+            this.emailsSentTo.length * giftedAmount;
           this.availableSpace = String(remainingSpaceAfterGift);
 
           const remainingSpaceInBytes =
@@ -91,7 +104,7 @@ export class GiftStorageComponent implements OnDestroy {
 
           const totalSpace =
             this.account.spaceTotal -
-            giftedAmount * this.emails.length * this.bytesPerGigabyte;
+            giftedAmount * this.emailsSentTo.length * this.bytesPerGigabyte;
 
           const newAccount = new AccountVO({
             ...this.account,
@@ -100,7 +113,7 @@ export class GiftStorageComponent implements OnDestroy {
           });
 
           this.accountService.setAccount(newAccount);
-          this.isSuccessful = isSuccessful;
+          this.isSuccessful = response.isSuccessful;
         }
       })
     ),

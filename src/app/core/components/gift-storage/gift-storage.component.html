@@ -140,7 +140,15 @@
       Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to:
     </p>
     <ul>
-      <li class="email" *ngFor="let email of emails">
+      <li class="email" *ngFor="let email of emailsSentTo">
+        {{ email }}
+      </li>
+    </ul>
+    <p *ngIf="alreadyInvited.length">
+      The following emails were already invited
+    </p>
+    <ul>
+      <li class="email" *ngFor="let email of alreadyInvited">
         {{ email }}
       </li>
     </ul>
