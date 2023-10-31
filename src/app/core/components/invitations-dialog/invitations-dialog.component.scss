@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 :host {
@@ -6,7 +7,7 @@
 }
 
 .header {
-  @include tabbedDialogHeader($PR-purple)
+  @include tabbedDialogHeader($PR-purple);
 }
 
 .content {
@@ -41,7 +42,8 @@ form {
 }
 
 .invitation-list {
-  .invitation, .list-header {
+  .invitation,
+  .list-header {
     display: flex;
     align-items: center;
     height: 3 * $grid-unit;
@@ -61,10 +63,16 @@ form {
     flex: 0 0 9rem;
   }
 
-  .name, .email {
+  .name,
+  .email,
+  .amount {
     flex: 0 1 50%;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .amount {
+    flex: 0 1 30%;
   }
 
   .actions {

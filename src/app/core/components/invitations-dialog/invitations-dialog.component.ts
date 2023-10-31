@@ -1,6 +1,20 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { IsTabbedDialog, DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import {
+  IsTabbedDialog,
+  DIALOG_DATA,
+  DialogRef,
+} from '@root/app/dialog/dialog.module';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { ApiService } from '@shared/services/api/api.service';
 import { InviteVOData, InviteVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';
@@ -12,7 +26,7 @@ type InvitationsTab = 'new' | 'pending' | 'accepted';
 @Component({
   selector: 'pr-invitations-dialog',
   templateUrl: './invitations-dialog.component.html',
-  styleUrls: ['./invitations-dialog.component.scss']
+  styleUrls: ['./invitations-dialog.component.scss'],
 })
 export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   newInviteForm: UntypedFormGroup;
@@ -33,7 +47,7 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
   ) {
     this.newInviteForm = this.fb.group({
       fullName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -45,8 +59,12 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
     try {
       const response = await this.api.invite.getInvites();
       const allInvites = response.getInviteVOs();
-      this.acceptedInvites = filter(allInvites, { status: 'status.invite.accepted' });
-      this.pendingInvites = filter(allInvites, { status: 'status.invite.pending' });
+      this.acceptedInvites = filter(allInvites, {
+        status: 'status.invite.accepted',
+      });
+      this.pendingInvites = filter(allInvites, {
+        status: 'status.invite.pending',
+      });
     } catch (err) {
       if (err instanceof InviteResponse) {
         this.messageService.showError(err.getMessage(), true);
@@ -96,5 +114,4 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
       this.waiting = false;
     }
   }
-
 }

@@ -1,3 +1,4 @@
+<!-- @format  -->
 <div class="dialog-content">
   <div class="header">
     <span>Invitations</span>
@@ -7,15 +8,25 @@
   </div>
   <div class="content">
     <div class="tabs">
-      <div class="dialog-tab"
-        (click)="setTab('new')" [class.active]="activeTab === 'new'">
+      <div
+        class="dialog-tab"
+        (click)="setTab('new')"
+        [class.active]="activeTab === 'new'"
+      >
         Send Invite
       </div>
-      <div class="dialog-tab"
-        (click)="setTab('pending')" [class.active]="activeTab === 'pending'">
+      <div
+        class="dialog-tab"
+        (click)="setTab('pending')"
+        [class.active]="activeTab === 'pending'"
+      >
         Pending Invites
       </div>
-      <div class="dialog-tab" (click)="setTab('accepted')" [class.active]="activeTab === 'accepted'">
+      <div
+        class="dialog-tab"
+        (click)="setTab('accepted')"
+        [class.active]="activeTab === 'accepted'"
+      >
         Accepted Invites
       </div>
     </div>
@@ -24,66 +35,117 @@
         <ng-container *ngSwitchCase="'new'">
           <div class="banner">
             <div>
-              <div class="banner-heading">
-                Give a gig, get a gig
-              </div>
+              <div class="banner-heading">Give a gig, get a gig</div>
               <div class="banner-text">
-                Invite your friends and family to sign up and both of your accounts will be credited with one free gigabyte of storage.
+                Invite your friends and family to sign up and both of your
+                accounts will be credited with one free gigabyte of storage.
               </div>
             </div>
           </div>
-          <form [formGroup]="newInviteForm" class="dialog-form" (submit)="onNewInviteFormSubmit(newInviteForm.value)">
+          <form
+            [formGroup]="newInviteForm"
+            class="dialog-form"
+            (submit)="onNewInviteFormSubmit(newInviteForm.value)"
+          >
             <div class="dialog-form-field">
               <label for="name">Recipient Name</label>
-              <input type="text" class="form-control" id="newInviteName" name="name"
-                formControlName="fullName">
+              <input
+                type="text"
+                class="form-control"
+                id="newInviteName"
+                name="name"
+                formControlName="fullName"
+              />
             </div>
             <div class="dialog-form-field">
               <label for="email">Recipient Email</label>
-              <input type="email" class="form-control" id="newInviteEmail" name="email"
-                formControlName="email">
+              <input
+                type="email"
+                class="form-control"
+                id="newInviteEmail"
+                name="email"
+                formControlName="email"
+              />
             </div>
             <div class="dialog-form-field">
-              <button class="btn btn-primary" [disabled]="newInviteForm.invalid || waiting">Send Invitation</button>
+              <button
+                class="btn btn-primary"
+                [disabled]="newInviteForm.invalid || waiting"
+              >
+                Send Invitation
+              </button>
             </div>
           </form>
         </ng-container>
         <ng-container *ngSwitchCase="'pending'">
-          <div class="invitation-list">
+          <div *ngIf="pendingInvites.length" class="invitation-list">
             <div class="list-header">
               <div class="date">Date Sent</div>
               <div class="email">Email</div>
               <div class="name">Name</div>
+              <div class="amount">Amount</div>
               <div class="actions">&nbsp;</div>
             </div>
             <div class="invitation" *ngFor="let invite of pendingInvites">
-              <div class="date">{{invite.updatedDT | date}}</div>
-              <div class="email">{{invite.email}}</div>
-              <div class="name" [hidden]="!invite.fullName">{{invite.fullName}}</div>
-              <div class="name" [hidden]="invite.fullName"><em>None given</em></div>
+              <div class="date">{{ invite.updatedDT | date }}</div>
+              <div class="email">{{ invite.email }}</div>
+              <div class="name" [hidden]="!invite.fullName">
+                {{ invite.fullName }}
+              </div>
+              <div class="name" [hidden]="invite.fullName">
+                <em>None given</em>
+              </div>
+              <div class="amount none" *ngIf="!invite.giftSizeInMB">
+                <em>None given</em>
+              </div>
+              <div class="amount has-amount" *ngIf="invite.giftSizeInMB">
+                {{ invite.giftSizeInMB / 1024 }} GB
+              </div>
               <div class="actions">
-                <button class="btn btn-primary" (click)="resendInvite(invite)" [disabled]="waiting">Resend</button>
+                <button
+                  class="btn btn-primary"
+                  (click)="resendInvite(invite)"
+                  [disabled]="waiting"
+                >
+                  Resend
+                </button>
               </div>
             </div>
-            <div class="text-muted">No invitations sent</div>
+          </div>
+          <div *ngIf="!pendingInvites.length" class="text-muted">
+            No invitations sent
           </div>
         </ng-container>
         <ng-container *ngSwitchCase="'accepted'">
-          <div class="invitation-list">
+          <div *ngIf="acceptedInvites.length" class="invitation-list">
             <div class="list-header">
               <div class="date">Date Accepted</div>
               <div class="email">Email</div>
               <div class="name">Name</div>
+              <div class="amount">Amount</div>
               <div class="actions">&nbsp;</div>
             </div>
             <div class="invitation" *ngFor="let invite of acceptedInvites">
-              <div class="date">{{invite.updatedDT | date}}</div>
-              <div class="email">{{invite.email}}</div>
-              <div class="name" [hidden]="!invite.fullName">{{invite.fullName}}</div>
-              <div class="name" [hidden]="invite.fullName"><em>None given</em></div>
+              <div class="date">{{ invite.updatedDT | date }}</div>
+              <div class="email">{{ invite.email }}</div>
+              <div class="name" [hidden]="!invite.fullName">
+                {{ invite.fullName }}
+              </div>
+              <div class="name" [hidden]="invite.fullName">
+                <em>None given</em>
+              </div>
+              <div class="amount none" [hidden]="invite.giftSizeInMB">
+                <em>None given</em>
+              </div>
+              <div class="amount has-amount" [hidden]="!invite.giftSizeInMB">
+                {{ invite.giftSizeInMB / 1024 }} GB
+              </div>
+
               <div class="actions">&nbsp;</div>
             </div>
-            <div class="text-muted">No invitations accepted</div>
+          </div>
+          <div *ngIf="!acceptedInvites.length" class="text-muted">
+            No invitations accepted
           </div>
         </ng-container>
       </ng-container>
