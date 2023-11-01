@@ -56,14 +56,14 @@ pr-archive-small {
     margin: 0 10px;
     width: 15%;
 
-    @include beforeDesktop{
+    @include beforeDesktop {
       width: 20%;
     }
   }
 
   & .btn-primary {
     width: 30%;
-    @include beforeDesktop{
+    @include beforeDesktop {
       width: 35%;
     }
   }
