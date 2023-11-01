@@ -147,7 +147,9 @@
       </li>
     </ul>
     <p *ngIf="alreadyInvited.length">
-      The following emails were already invited
+      The following emails have already been invited and were not sent storage.
+      They must accept their invitation before they can be sent additional
+      storage.
     </p>
     <ul>
       <li class="email" *ngFor="let email of alreadyInvited">

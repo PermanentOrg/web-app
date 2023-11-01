@@ -12,6 +12,7 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
+import { GiftingResponse } from '@shared/services/api/billing.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
 
@@ -46,7 +47,10 @@ describe('ConfirmGiftDialogComponent', () => {
     },
   };
 
-  const mockGiftResult = new BehaviorSubject<boolean>(false);
+  const mockGiftResult = new BehaviorSubject<{
+    isSuccessful: boolean;
+    response: GiftingResponse;
+  }>({ isSuccessful: false, response: null });
 
   beforeEach(async () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -122,14 +126,27 @@ describe('ConfirmGiftDialogComponent', () => {
   it('should close the dialog and send the data back when confirm method is called', fakeAsync(() => {
     const dialogRefSpy = spyOn(dialogRef, 'close');
     const giftResultSpy = spyOn(mockGiftResult, 'next');
-    mockApiService.billing.giftStorage.and.returnValue(Promise.resolve());
+    const giftingResponse = new GiftingResponse({
+      storageGifted: 10,
+      alreadyInvited: [],
+      invitationSent: [],
+      giftDelivered: [],
+    });
+
+    const response = mockApiService.billing.giftStorage.and.returnValue(
+      Promise.resolve(giftingResponse)
+    );
 
     component.onConfirmClick();
 
     tick();
 
     expect(dialogRefSpy).toHaveBeenCalled();
-    expect(giftResultSpy).toHaveBeenCalledWith(true);
+
+    expect(giftResultSpy).toHaveBeenCalledWith({
+      isSuccessful: true,
+      response: giftingResponse,
+    });
   }));
 
   it('should handle failure in onConfirmClick', fakeAsync(() => {
@@ -149,7 +166,10 @@ describe('ConfirmGiftDialogComponent', () => {
     expect(showErrorSpy).toHaveBeenCalledWith(
       'Something went wrong! Please try again.'
     );
-    expect(giftResultSpy).toHaveBeenCalledWith(false);
+    expect(giftResultSpy).toHaveBeenCalledWith({
+      isSuccessful: false,
+      response: null,
+    });
 
     expect(dialogRefSpy).toHaveBeenCalled();
   }));

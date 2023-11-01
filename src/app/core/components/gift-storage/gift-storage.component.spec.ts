@@ -168,7 +168,12 @@ describe('GiftStorageComponent', () => {
 
     instance.giftResult.next({
       isSuccessful: true,
-      response: new GiftingResponse({}),
+      response: new GiftingResponse({
+        storageGifted: 50,
+        giftDelivered: [],
+        invitationSent: [],
+        alreadyInvited: [],
+      }),
     });
 
     expect(mockAccountService.setAccount).toHaveBeenCalled();
@@ -197,5 +202,25 @@ describe('GiftStorageComponent', () => {
         expect(duplicates).toEqual(expectedDuplicates);
         done();
       });
+  });
+
+  it('filters out the duplicates from the giftDelivered and invitationSent of the response', async () => {
+    const { instance } = await shallow.render();
+
+    await instance.giftResult.next({
+      isSuccessful: true,
+      response: new GiftingResponse({
+        storageGifted: 50,
+        giftDelivered: ['test@example.com', 'test1@example.com'],
+        invitationSent: ['test@example.com', 'test2@example.com'],
+        alreadyInvited: [],
+      }),
+    });
+
+    expect(instance.emailsSentTo).toEqual([
+      'test@example.com',
+      'test2@example.com',
+      'test1@example.com',
+    ]);
   });
 });

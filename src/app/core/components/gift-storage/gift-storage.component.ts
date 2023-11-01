@@ -89,22 +89,20 @@ export class GiftStorageComponent implements OnDestroy {
           this.emailsSentTo = [
             ...new Set([
               ...response.response.invitationSent,
-              ...response.response.invitationSent,
+              ...response.response.giftDelivered,
             ]),
           ];
           this.alreadyInvited = response.response.alreadyInvited;
           const giftedAmount = response.response.storageGifted;
           const remainingSpaceAfterGift =
-            Number(this.availableSpace) -
-            this.emailsSentTo.length * giftedAmount;
-          this.availableSpace = String(remainingSpaceAfterGift);
+            Number(this.availableSpace) - giftedAmount;
+          this.availableSpace = String(remainingSpaceAfterGift.toFixed(2));
 
           const remainingSpaceInBytes =
             remainingSpaceAfterGift * this.bytesPerGigabyte;
 
           const totalSpace =
-            this.account.spaceTotal -
-            giftedAmount * this.emailsSentTo.length * this.bytesPerGigabyte;
+            this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte;
 
           const newAccount = new AccountVO({
             ...this.account,
