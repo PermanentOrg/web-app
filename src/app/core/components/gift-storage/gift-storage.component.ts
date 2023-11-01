@@ -113,8 +113,8 @@ export class GiftStorageComponent implements OnDestroy {
           this.accountService.setAccount(newAccount);
           this.isSuccessful = response.isSuccessful;
         }
-      })
-    ),
+      }),
+
       this.giftForm.get('email')?.valueChanges.subscribe((value) => {
         this.successMessage = '';
         this.giftForm.get('amount')?.updateValueAndValidity();
@@ -127,7 +127,8 @@ export class GiftStorageComponent implements OnDestroy {
             this.duplicateEmails = [];
           }
         }
-      });
+      })
+    );
   }
 
   ngOnDestroy(): void {
