@@ -43,14 +43,12 @@ export class ConfirmGiftDialogComponent {
         Number(this.amount),
         this.message
       );
-      console.log(res);
       const response = {
         isSuccessful: true,
         response: res,
       };
       this.giftResult.next(response);
     } catch (e) {
-      console.log(e);
       this.msg.showError('Something went wrong! Please try again.');
       this.giftResult.next({ isSuccessful: false, response: null });
     }
