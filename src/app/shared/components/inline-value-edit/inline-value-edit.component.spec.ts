@@ -1,13 +1,31 @@
-import { ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
+/* @format */
+import {
+  ComponentFixture,
+  TestBed,
+  tick,
+  fakeAsync,
+  waitForAsync,
+} from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { NgbDatepickerModule, NgbTimepickerModule, NgbDate, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDatepickerModule,
+  NgbTimepickerModule,
+  NgbDate,
+  NgbTimeStruct,
+} from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
 
 import { moment } from 'vis-timeline/standalone';
 import { RecordVO, RecordVOData } from '@models';
-import { getOffsetMomentFromDTString, formatDateISOString, getUtcMomentFromDTString, momentFormatNum, applyTimezoneOffset } from '@shared/utilities/dateTime';
+import {
+  getOffsetMomentFromDTString,
+  formatDateISOString,
+  getUtcMomentFromDTString,
+  momentFormatNum,
+  applyTimezoneOffset,
+} from '@shared/utilities/dateTime';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { InlineValueEditComponent } from './inline-value-edit.component';
 
@@ -17,22 +35,19 @@ describe('InlineValueEditComponent', () => {
 
   const TEST_TEXT = 'Test Name';
 
-  const mockDatePicker = {
-
-  };
+  const mockDatePicker = {};
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ InlineValueEditComponent ],
+      declarations: [InlineValueEditComponent],
       imports: [
         FormsModule,
         NgbDatepickerModule,
         NgbTimepickerModule,
         NoopAnimationsModule,
-        SharedModule
-      ]
-    })
-    .compileComponents();
+        SharedModule,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -53,7 +68,9 @@ describe('InlineValueEditComponent', () => {
   });
 
   it('should start editing with click', fakeAsync(() => {
-    const displayElement = fixture.debugElement.query(By.css('.inline-value-display'));
+    const displayElement = fixture.debugElement.query(
+      By.css('.inline-value-display')
+    );
     displayElement.triggerEventHandler('click', null);
     tick();
     expect(component.isEditing).toBeTruthy();
@@ -101,14 +118,17 @@ describe('InlineValueEditComponent', () => {
     component.displayValue = null;
     component.startEdit();
 
-    const inputElem = component.inputElementRef.nativeElement as HTMLInputElement;
+    const inputElem = component.inputElementRef
+      .nativeElement as HTMLInputElement;
     expect(document.activeElement).toBe(inputElem);
     inputElem.value = 'new value!';
 
     fixture.detectChanges();
 
     const rootElement = fixture.debugElement.nativeElement as HTMLElement;
-    const cancelButton = rootElement.querySelector('button[name=cancel]') as HTMLButtonElement;
+    const cancelButton = rootElement.querySelector(
+      'button[name=cancel]'
+    ) as HTMLButtonElement;
     cancelButton.dispatchEvent(new Event('mousedown'));
 
     fixture.detectChanges();
@@ -117,7 +137,6 @@ describe('InlineValueEditComponent', () => {
       expect(onBlurSpy).toHaveBeenCalledTimes(1);
       expect(doneEditingSpy).not.toHaveBeenCalled();
     });
-
   });
 
   it('should not allow editing if canEdit is false', async () => {
@@ -153,7 +172,7 @@ describe('InlineValueEditComponent', () => {
         dstOffset: '-07:00',
         stdAbbrev: 'PST',
         stdOffset: '-08:00',
-      }
+      },
     };
     const record = new RecordVO(voData);
     component.item = record;
@@ -163,7 +182,10 @@ describe('InlineValueEditComponent', () => {
 
     component.startEdit();
 
-    const offset = getOffsetMomentFromDTString(record.displayDT, record.TimezoneVO);
+    const offset = getOffsetMomentFromDTString(
+      record.displayDT,
+      record.TimezoneVO
+    );
 
     expect(component.ngbDate).toBeDefined();
     expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
@@ -180,7 +202,7 @@ describe('InlineValueEditComponent', () => {
         dstOffset: '-07:00',
         stdAbbrev: 'PST',
         stdOffset: '-08:00',
-      }
+      },
     };
     const record = new RecordVO(voData);
     component.item = record;
@@ -229,7 +251,7 @@ describe('InlineValueEditComponent', () => {
         dstOffset: '-07:00',
         stdAbbrev: 'PST',
         stdOffset: '-08:00',
-      }
+      },
     };
     const record = new RecordVO(voData);
     component.item = record;
@@ -239,11 +261,14 @@ describe('InlineValueEditComponent', () => {
 
     component.startEdit();
 
-    const offset = getOffsetMomentFromDTString(record.displayDT, record.TimezoneVO);
+    const offset = getOffsetMomentFromDTString(
+      record.displayDT,
+      record.TimezoneVO
+    );
 
     expect(component.ngbTime.hour).toBe(momentFormatNum(offset, 'H'));
 
-    const newDate = NgbDate.from({year: 2017, month: 5, day: 10});
+    const newDate = NgbDate.from({ year: 2017, month: 5, day: 10 });
     component.datePicker.dateSelect.emit(newDate);
 
     const utcDt = getUtcMomentFromDTString(component.editValue as string);
@@ -261,7 +286,7 @@ describe('InlineValueEditComponent', () => {
         dstOffset: '-07:00',
         stdAbbrev: 'PST',
         stdOffset: '-08:00',
-      }
+      },
     };
     const record = new RecordVO(voData);
     component.item = record;
@@ -285,7 +310,7 @@ describe('InlineValueEditComponent', () => {
         dstOffset: '-07:00',
         stdAbbrev: 'PST',
         stdOffset: '-08:00',
-      }
+      },
     };
     const record = new RecordVO(voData);
     component.item = record;
@@ -328,7 +353,7 @@ describe('InlineValueEditComponent', () => {
         dstOffset: '-07:00',
         stdAbbrev: 'PST',
         stdOffset: '-08:00',
-      }
+      },
     };
     const record = new RecordVO(voData);
     component.item = record;
@@ -338,14 +363,17 @@ describe('InlineValueEditComponent', () => {
 
     component.startEdit();
 
-    const offset = getOffsetMomentFromDTString(record.displayDT, record.TimezoneVO);
+    const offset = getOffsetMomentFromDTString(
+      record.displayDT,
+      record.TimezoneVO
+    );
 
     expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
 
     const newTime: NgbTimeStruct = {
       hour: 8,
       minute: 30,
-      second: 58
+      second: 58,
     };
 
     component.ngbTime = newTime;
@@ -356,5 +384,19 @@ describe('InlineValueEditComponent', () => {
     const utcDt = getUtcMomentFromDTString(component.editValue as string);
     expect(Number(utcDt.format('D'))).toEqual(13);
     expect(Number(utcDt.format('h'))).toEqual(3);
+  });
+
+  it('should expand the title when hovering with the mouse over it', () => {
+    component.type = 'text';
+    component.isPublicArchive = true;
+    fixture.detectChanges();
+    const nameContainer = fixture.debugElement.query(
+      By.css('.inline-value-text')
+    ).nativeElement;
+    nameContainer.dispatchEvent(new Event('mouseenter'));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(nameContainer.classList).toContain('is-name-hovered');
+    });
   });
 });
