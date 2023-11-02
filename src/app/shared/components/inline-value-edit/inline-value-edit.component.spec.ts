@@ -390,11 +390,13 @@ describe('InlineValueEditComponent', () => {
     component.type = 'text';
     component.isPublicArchive = true;
     fixture.detectChanges();
+
     const nameContainer = fixture.debugElement.query(
       By.css('.inline-value-text')
     ).nativeElement;
     nameContainer.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();
+    
     fixture.whenStable().then(() => {
       expect(nameContainer.classList).toContain('is-name-hovered');
     });

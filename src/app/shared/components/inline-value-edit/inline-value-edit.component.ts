@@ -282,13 +282,4 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       this.save();
     }
   }
-
-  onHoverOverName(): void {
-    console.log('here')
-    this.isNameHovered = true;
-  }
-
-  onMoveCursorOutsideName(): void {
-    this.isNameHovered = false;
-  }
 }
