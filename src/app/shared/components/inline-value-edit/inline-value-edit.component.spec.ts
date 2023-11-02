@@ -396,7 +396,7 @@ describe('InlineValueEditComponent', () => {
     ).nativeElement;
     nameContainer.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();
-    
+
     fixture.whenStable().then(() => {
       expect(nameContainer.classList).toContain('is-name-hovered');
     });
