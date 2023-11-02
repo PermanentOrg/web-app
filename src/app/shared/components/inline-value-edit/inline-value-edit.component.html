@@ -24,6 +24,9 @@
           [class.is-editing]="isEditing"
           [class.inline-value-text-with-border]="displayBorder"
           [class.showing-empty-message]="!displayValue && emptyMessage"
+          [class.is-name-hovered]="isNameHovered && isPublicArchive"
+          (mouseenter)="isNameHovered = true"
+          (mouseleave)="isNameHovered = false"
         >
           <span [ngClass]="extraClasses">{{
             displayValue ||
