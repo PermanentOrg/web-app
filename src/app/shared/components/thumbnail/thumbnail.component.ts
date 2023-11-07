@@ -104,6 +104,12 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
         } else {
           this.disableSwipe.emit(false);
         }
+
+        if (zoom <= 1) {
+          this.enablePanning(false);
+        } else {
+          this.enablePanning(true);
+        }
       });
 
       this.viewer.addHandler('full-screen', (event: FullScreenEvent) => {
@@ -231,5 +237,10 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
     } else {
       return record.FileVOs[0]?.fileURL;
     }
+  }
+
+  public enablePanning(flag: boolean): void {
+    (this.viewer as OpenSeaDragon.Options).panHorizontal = flag;
+    (this.viewer as OpenSeaDragon.Options).panVertical = flag;
   }
 }
