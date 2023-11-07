@@ -2,7 +2,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
 import { RecordVO } from '@models';
-import * as OpenSeaDragon from 'openseadragon';
 import { DataStatus } from '@models/data-status.enum';
 import { Component, ViewChild } from '@angular/core';
 import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
