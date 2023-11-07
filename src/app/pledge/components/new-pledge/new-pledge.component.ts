@@ -82,7 +82,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       ],
       customDonationAmount: [''],
       name: [account ? account.fullName : '', [Validators.required]],
-      publishName: [true],
     });
   }
 
@@ -212,7 +211,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
       stripeToken: stripeResult.token.id,
       zip: stripeResult.token.card?.address_zip,
       timestamp: new Date().getTime(),
-      anonymous: !formValue.publishName,
     };
 
     try {
