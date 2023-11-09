@@ -49,11 +49,13 @@ $desktop-size: pxToGrid(200px);
 .profile-banner {
   @include profileBanner($photo-desktop, $photo-mobile);
   cursor: initial;
+  height: 28rem;
 }
 
 .profile-photo {
   @include profilePhoto($desktop-size, $photo-mobile);
   transform: translateY(-(math.div(2, 3.5) * 100%));
+  border: 4px solid white;
 
   cursor: initial;
 }
@@ -68,7 +70,7 @@ $desktop-size: pxToGrid(200px);
     flex-direction: row;
     padding-left: $grid-unit;
     top: 0;
-    margin-top: 10px;
+    margin-top: 50px;
   }
 
   @include beforeDesktop {
@@ -97,7 +99,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 .profile-data {
-  font-size: $font-size-base;
+  font-size: $font-size-base * 0.90;
   font-weight: $font-weight-light;
   color: #777777;
   font-family: 'Usual';
