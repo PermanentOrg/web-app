@@ -180,7 +180,7 @@ describe('AccountService', () => {
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().emailStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
-    expect(trackerSpy).toHaveBeenCalled()
+    expect(trackerSpy).toHaveBeenCalled();
   });
 
   it('should handle successful phone verification', async () => {
@@ -199,7 +199,7 @@ describe('AccountService', () => {
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
-    expect(trackerSpy).toHaveBeenCalled()
+    expect(trackerSpy).toHaveBeenCalled();
   });
   it('should update the account storage when a file is uploaded successfully', async () => {
     const { instance, inject } = shallow.createService();
