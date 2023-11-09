@@ -417,6 +417,7 @@ $multi-select-radius: 30px;
 }
 
 .public-archive-name-container {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -424,8 +425,9 @@ $multi-select-radius: 30px;
 .public-archive-date {
   font-family: Usual;
   font-size: 0.7rem;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 24px;
+  font-style: normal;
   letter-spacing: 0.08em;
   text-align: left;
   color: #999999;

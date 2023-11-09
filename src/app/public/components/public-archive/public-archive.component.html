@@ -10,7 +10,10 @@
     "
     [class.show-gradient]="!this.publicRoot?.thumbArchiveNbr"
   ></div>
-  <div class="profile-image-search">
+  <div
+    class="profile-image-search"
+    [ngClass]="{ 'profile-image-search-archive': !(isViewingProfile$ | async) }"
+  >
     <div
       class="profile-photo"
       prBgImage
@@ -23,9 +26,7 @@
       }"
     >
       <div>
-        <div class="profile-name">
-         The {{ this.archive.fullName }} Archive
-        </div>
+        <div class="profile-name">The {{ this.archive.fullName }} Archive</div>
         <div class="profile-description">
           <span
             *ngIf="
@@ -94,15 +95,24 @@
           </div>
           <span
             class="profile-description"
-            *ngIf="hasSingleValueFor('description', 'textData1') && !showShortText"
+            *ngIf="
+              hasSingleValueFor('description', 'textData1') && !showShortText
+            "
             [innerHTML]="this.description"
           ></span>
           <span
-          class="profile-description"
-          *ngIf="hasSingleValueFor('description', 'textData1') && showShortText"
-          [innerHTML]='this.shortText + "..."'
-        ></span>
-          <span *ngIf="this.description.length > 100" class="expand-text" (click)="toggleShowFullText()">{{showShortText ? ' See More' : ' See Less'}} </span>
+            class="profile-description"
+            *ngIf="
+              hasSingleValueFor('description', 'textData1') && showShortText
+            "
+            [innerHTML]="this.shortText + '...'"
+          ></span>
+          <span
+            *ngIf="this.description.length > 100"
+            class="expand-text"
+            (click)="toggleShowFullText()"
+            >{{ showShortText ? ' See More' : ' See Less' }}
+          </span>
         </ng-container>
       </div>
       <div class="profile-controls">

@@ -70,7 +70,7 @@ $desktop-size: pxToGrid(200px);
     flex-direction: row;
     padding-left: $grid-unit;
     top: 0;
-    margin-top: 50px;
+    margin-top: 30px;
   }
 
   @include beforeDesktop {
@@ -327,6 +327,10 @@ $desktop-size: pxToGrid(200px);
 .profile-image-search {
   display: flex;
   padding-left: 3.5rem;
+
+  &-archive{
+    height: 150px;
+  }
 
   @include beforeDesktop {
     flex-direction: column;
