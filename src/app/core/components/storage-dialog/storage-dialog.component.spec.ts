@@ -132,7 +132,6 @@ describe('StorageDialogComponent', () => {
 
     paramMap.next(convertToParamMap({ path: 'add' }));
 
-
     expect(instance.activeTab).toBe('add');
   });
 });
