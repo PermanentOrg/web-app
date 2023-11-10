@@ -9,6 +9,8 @@ import { ApiService } from '../../../shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
 import { MessageService } from '../../../shared/services/message/message.service';
 import { StorageDialogComponent } from './storage-dialog.component';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 const mockPromoResponse = {
   Results: [
@@ -58,8 +60,15 @@ describe('StorageDialogComponent', () => {
   let mockAccountService: MockAccountService;
   let mockApiService: MockApiService;
   const dialogRef = new DialogRef(1, null);
+  let mockActivatedRoute;
+  const paramMap = new BehaviorSubject(convertToParamMap({}));
+  const queryParamMap = new BehaviorSubject(convertToParamMap({}));
 
   beforeEach(() => {
+    mockActivatedRoute = {
+      paramMap: paramMap.asObservable(),
+      queryParamMap: queryParamMap.asObservable(),
+    };
     mockAccountService = new MockAccountService();
     mockApiService = { billing: new MockBillingRepo() };
     shallow = new Shallow(StorageDialogComponent, CoreModule)
@@ -72,7 +81,8 @@ describe('StorageDialogComponent', () => {
         },
       })
       .provide({ provide: AccountService, useValue: mockAccountService })
-      .provide({ provide: ApiService, useValue: mockApiService });
+      .provide({ provide: ApiService, useValue: mockApiService })
+      .provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
   });
 
   it('should exist', async () => {
@@ -104,5 +114,25 @@ describe('StorageDialogComponent', () => {
     fixture.detectChanges();
     const button = find('.btn-primary');
     expect(button.nativeElement.disabled).toBeFalsy();
+  });
+
+  it('should handle route and query parameter changes', async () => {
+    const { instance } = await shallow.render();
+
+    paramMap.next(convertToParamMap({ path: 'promo' }));
+
+    queryParamMap.next(convertToParamMap({ promoCode: 'TellYourStory' }));
+
+    expect(instance.activeTab).toBe('promo');
+    expect(instance.promoForm.value).toEqual({ code: 'TellYourStory' });
+  });
+
+  it('should handle route changes', async () => {
+    const { instance } = await shallow.render();
+
+    paramMap.next(convertToParamMap({ path: 'add' }));
+
+
+    expect(instance.activeTab).toBe('add');
   });
 });
