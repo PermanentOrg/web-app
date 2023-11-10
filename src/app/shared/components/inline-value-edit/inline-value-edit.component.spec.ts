@@ -386,7 +386,7 @@ describe('InlineValueEditComponent', () => {
     expect(Number(utcDt.format('h'))).toEqual(3);
   });
 
-  it('should expand the title when hovering with the mouse over it', () => {
+  it('should expand the title when hovering with the mouse over it', async () => {
     component.type = 'text';
     component.isPublicArchive = true;
     fixture.detectChanges();
@@ -397,8 +397,7 @@ describe('InlineValueEditComponent', () => {
     nameContainer.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      expect(nameContainer.classList).toContain('is-name-hovered');
-    });
+    await fixture.whenStable();
+    expect(nameContainer.classList).toContain('is-name-hovered');
   });
 });
