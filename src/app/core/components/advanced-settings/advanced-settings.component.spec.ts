@@ -53,7 +53,9 @@ describe('AdvancedSettingsComponent', () => {
   it('updates account on calling onAllowSFTPDeletion', async () => {
     const { instance, inject } = await shallow.render();
     const apiService = inject(ApiService);
-    const spy = spyOn(apiService.account, 'update').and.returnValue(Promise.resolve(new AccountResponse({})));
+    const spy = spyOn(apiService.account, 'update').and.returnValue(
+      Promise.resolve(new AccountResponse({}))
+    );
 
     await instance.onAllowSFTPDeletion();
 
