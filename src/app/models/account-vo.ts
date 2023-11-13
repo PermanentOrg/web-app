@@ -49,6 +49,7 @@ export interface AccountVOData extends BaseVOData {
   emailStatus?: any;
   phoneStatus?: any;
   notificationPreferences?: NotificationPreferencesI;
+  allowSftpDeletion?: boolean
 }
 
 export interface NotificationPreferencesI {
@@ -91,6 +92,7 @@ export class AccountVO extends BaseVO {
   public emailStatus;
   public phoneStatus;
   public notificationPreferences: NotificationPreferencesI;
+  public allowSftpDeletion;
 
   constructor(voData: AccountVOData) {
     super(voData);

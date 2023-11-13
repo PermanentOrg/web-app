@@ -1,0 +1,14 @@
+/* @format */
+.title {
+  font-weight: 700;
+  height: 2.5rem;
+  line-height: 2.5rem;
+}
+
+.settings-item {
+  & > label {
+    font-weight: 600;
+    margin: 0;
+    margin-right: 1.25rem;
+  }
+}
