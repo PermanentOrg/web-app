@@ -29,7 +29,8 @@ form {
   }
 }
 
-.inline-value-display, select {
+.inline-value-display,
+select {
   width: calc(100% + #{2 * $inline-padding-x});
   height: auto;
   background-color: white;
@@ -93,7 +94,7 @@ select {
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  &-with-border{
+  &-with-border {
     border: 1px solid $input-border-color;
     border-radius: $border-radius;
   }
@@ -101,6 +102,12 @@ select {
   &.showing-empty-message {
     color: $text-muted;
   }
+}
+
+.is-name-hovered {
+  overflow: visible;
+  text-overflow: initial;
+  white-space: initial;
 }
 
 .inline-value-select {
@@ -129,7 +136,8 @@ div.form-control {
 }
 
 .inline-value-container {
-  & > input, & > textarea {
+  & > input,
+  & > textarea {
     position: absolute;
     top: 0px;
     left: -1 * $inline-padding-x;
@@ -150,14 +158,17 @@ div.form-control {
 
 .inline-value-container {
   &.can-edit {
-    .inline-value-display, select {
+    .inline-value-display,
+    select {
       cursor: pointer;
       &:hover {
         border-color: rgba($input-border-color, 0.75);
       }
     }
 
-    & > input, & > textarea, & > select {
+    & > input,
+    & > textarea,
+    & > select {
       display: initial;
     }
   }
@@ -188,14 +199,18 @@ div.form-control {
 }
 
 :host.always-show {
-  .inline-value-display, select {
+  .inline-value-display,
+  select {
     border-color: rgba($input-border-color, 0.75);
   }
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   &.ng-invalid {
-    &.ng-touched, &.ng-dirty {
+    &.ng-touched,
+    &.ng-dirty {
       background-color: rgba($danger, 0.2);
       border-color: $danger !important;
     }
@@ -206,10 +221,9 @@ input, select, textarea {
   padding: 0;
 }
 
-
-.description-textarea{
-  &.can-edit{
-    .description-textarea-value{
+.description-textarea {
+  &.can-edit {
+    .description-textarea-value {
       cursor: pointer;
       border: 1px solid transparent;
       &:hover {

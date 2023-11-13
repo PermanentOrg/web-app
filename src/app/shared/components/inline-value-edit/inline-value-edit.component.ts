@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -46,7 +47,7 @@ type ValueType = string | number;
   animations: [ngIfScaleAnimation, collapseAnimation],
 })
 export class InlineValueEditComponent implements OnInit, OnChanges {
-  @Input() displayBorder:boolean = false;
+  @Input() displayBorder: boolean = false;
   @Input() displayValue: ValueType;
   @Input() type: InlineValueEditType = 'text';
   @Input() emptyMessage: string;
@@ -64,6 +65,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   @Input() selectOptions: FormInputSelectOption[];
   @Input() dateOnly = false;
   @Input() class: string;
+  @Input() isPublicArchive = false;
 
   @HostBinding('class.horizontal-controls') @Input() horizontalControls = false;
   @HostBinding('class.always-show') @Input() alwaysShow = false;
@@ -84,6 +86,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   ngbTime: NgbTimeStruct;
   ngbDate: NgbDate;
   maxNgbDate: NgbDateStruct;
+  isNameHovered = false;
 
   public extraClasses: string[];
 
