@@ -119,7 +119,7 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
     SkipOnboardingDialogComponent,
     GiftStorageComponent,
     ConfirmGiftDialogComponent,
-    AdvancedSettingsComponent
+    AdvancedSettingsComponent,
   ],
   providers: [
     DataService,
