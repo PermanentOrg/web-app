@@ -68,8 +68,8 @@ export class StorageDialogComponent
 
       this.route.queryParamMap.subscribe((params) => {
         const param = params.get('promoCode');
-        if (this.activeTab === 'promo' && param === this.TELLYOURSTORY) {
-          this.promoForm.setValue({ code: this.TELLYOURSTORY });
+        if (this.activeTab === 'promo' && param) {
+          this.promoForm.setValue({ code: param });
         }
       })
     );
