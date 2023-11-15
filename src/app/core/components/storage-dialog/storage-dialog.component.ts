@@ -2,12 +2,13 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+
+import { PromoVOData, AccountVO } from '@models';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
   Validators,
 } from '@angular/forms';
-import { PromoVOData, AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import {
   BillingResponse,
@@ -75,6 +76,10 @@ export class StorageDialogComponent implements OnInit, IsTabbedDialog {
       const bytes = promo.sizeInMB * (1024 * 1024);
       this.account.addStorageBytes(bytes);
       const pipe = new FileSizePipe();
+      this.message.showMessage(
+        `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
+        'success'
+      );
       this.message.showMessage(
         `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
         'success'

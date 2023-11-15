@@ -12,6 +12,14 @@
   display: flex;
   margin-bottom: 23px;
 
+  &-with-error {
+    margin-bottom: 0px;
+
+    @include beforeDesktop {
+      margin-bottom: 10px;
+    }
+  }
+
   @include beforeDesktop {
     flex-direction: column;
 
@@ -40,17 +48,22 @@
     line-height: 17px;
   }
 
+  & .optional {
+    width: 100px;
+  }
+
   & .gigabytes {
     display: inline-flex;
     align-items: center;
 
     font-family: 'Open Sans';
-    font-style: normal;
+    font-style: italic;
     font-weight: 400;
     font-size: 16px;
     line-height: 17px;
     color: $gray-dark;
     margin-left: 10px;
+    width: 100px;
 
     @include beforeDesktop {
       margin-left: 0;
@@ -63,6 +76,16 @@
     border: 1px solid $gray-light;
     border-radius: 6px;
     height: 42px;
+  }
+
+  &-emails > .form-control {
+    @include beforeDesktop {
+      width: 350px;
+    }
+  }
+
+  &-amount > .form-control {
+    width: 300px;
   }
 
   & > .form-control-textarea {
@@ -91,4 +114,24 @@
 .input-error {
   margin-bottom: 1rem;
   color: $red;
+  font-style: italic;
+}
+.error-message {
+  margin-left: 200px;
+  margin-bottom: 20px;
+
+  @include beforeDesktop {
+    margin-left: 0px;
+  }
+}
+
+.success-message {
+  font-style: italic;
+}
+
+.not-integer {
+  display: flex;
+  & > p {
+    margin-bottom: 0px;
+  }
 }

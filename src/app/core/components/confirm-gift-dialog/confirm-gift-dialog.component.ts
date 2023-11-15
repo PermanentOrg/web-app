@@ -4,6 +4,7 @@ import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { BehaviorSubject } from 'rxjs';
+import { GiftingResponse } from '@shared/services/api/billing.repo';
 
 @Component({
   selector: 'pr-confirm-gift-dialog',
@@ -11,10 +12,13 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./confirm-gift-dialog.component.scss'],
 })
 export class ConfirmGiftDialogComponent {
-  email: string;
+  emails: string[];
   amount: number;
   message: string;
-  giftResult: BehaviorSubject<boolean>;
+  giftResult: BehaviorSubject<{
+    isSuccessful: boolean;
+    response: GiftingResponse | null;
+  }>;
 
   constructor(
     private dialogRef: DialogRef,
@@ -22,7 +26,7 @@ export class ConfirmGiftDialogComponent {
     @Inject(DIALOG_DATA) public data: any,
     private msg: MessageService
   ) {
-    this.email = this.data.email;
+    this.emails = this.data.emails;
     this.amount = this.data.amount;
     this.message = this.data.message;
     this.giftResult = this.data.giftResult;
@@ -34,11 +38,19 @@ export class ConfirmGiftDialogComponent {
 
   public async onConfirmClick() {
     try {
-      await this.api.billing.giftStorage(this.email, Number(this.amount));
-      this.giftResult.next(true);
+      const res = await this.api.billing.giftStorage(
+        this.emails,
+        Number(this.amount),
+        this.message
+      );
+      const response = {
+        isSuccessful: true,
+        response: res,
+      };
+      this.giftResult.next(response);
     } catch (e) {
       this.msg.showError('Something went wrong! Please try again.');
-      this.giftResult.next(false);
+      this.giftResult.next({ isSuccessful: false, response: null });
     }
     this.dialogRef?.close();
   }

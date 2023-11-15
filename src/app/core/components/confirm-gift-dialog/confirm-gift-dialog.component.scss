@@ -1,3 +1,4 @@
+/* @format */
 @import 'variables';
 
 :host {
@@ -11,7 +12,7 @@
 
 .content {
   @include tabbedDialogContent;
-  flex-direction: column
+  flex-direction: column;
 }
 
 .tabs {
@@ -43,4 +44,27 @@ pr-archive-small {
 .popup-text {
   text-align: center;
   padding: 20px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  & .btn {
+    padding: 10px;
+    border-radius: 4px;
+    margin: 0 10px;
+    width: 15%;
+
+    @include beforeDesktop {
+      width: 20%;
+    }
+  }
+
+  & .btn-primary {
+    width: 30%;
+    @include beforeDesktop {
+      width: 35%;
+    }
+  }
 }

@@ -4,6 +4,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CoreModule } from '@core/core.module';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { GiftingResponse } from '@shared/services/api/billing.repo';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
 
@@ -50,12 +51,30 @@ describe('GiftStorageComponent', () => {
     expect(button.disabled).toBe(false);
   });
 
-  it('disables the submit button if the email is not valid', async () => {
+  it('disables the submit button if at least one email is not valid', async () => {
     const { find, instance, fixture } = await shallow.render();
 
     instance.availableSpace = '5';
 
-    instance.giftForm.controls.email.setValue('test');
+    instance.giftForm.controls.email.setValue('test@example.com, test');
+    instance.giftForm.controls.amount.setValue('1');
+
+    instance.giftForm.updateValueAndValidity();
+    fixture.detectChanges();
+
+    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+
+    expect(button.disabled).toBe(true);
+  });
+
+  it('disables the submit button if the there is a duplicate email', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.availableSpace = '5';
+
+    instance.giftForm.controls.email.setValue(
+      'test@example.com, test@example.com'
+    );
     instance.giftForm.controls.amount.setValue('1');
 
     instance.giftForm.updateValueAndValidity();
@@ -73,6 +92,44 @@ describe('GiftStorageComponent', () => {
 
     await instance.giftForm.controls.email.setValue('test@example.com');
     instance.giftForm.controls.amount.setValue('10');
+
+    instance.giftForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const button: HTMLButtonElement = find('.btn-primary').nativeElement;
+
+    expect(button.disabled).toBe(true);
+  });
+
+  it('displays the total amount gifted based on the number of emails', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    instance.availableSpace = '5';
+
+    await instance.giftForm.controls.email.setValue(
+      'test@example.com,test1@example.com'
+    );
+    instance.giftForm.controls.amount.setValue('2');
+
+    instance.giftForm.updateValueAndValidity();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(instance.successMessage).toEqual('Total gifted storage: 4 GB');
+  });
+
+  it('disables the submit button if the amount multiplied by the number of emails exceeds the available amount', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.availableSpace = '5';
+
+    await instance.giftForm.controls.email.setValue(
+      'test@example.com,test1@example.com'
+    );
+    instance.giftForm.controls.amount.setValue('4');
 
     instance.giftForm.updateValueAndValidity();
 
@@ -109,9 +166,61 @@ describe('GiftStorageComponent', () => {
     instance.giftForm.controls.email.setValue('test@example.com');
     instance.giftForm.controls.amount.setValue('50');
 
-    instance.giftResult.next(true);
+    instance.giftResult.next({
+      isSuccessful: true,
+      response: new GiftingResponse({
+        storageGifted: 50,
+        giftDelivered: [],
+        invitationSent: [],
+        alreadyInvited: [],
+      }),
+    });
 
     expect(mockAccountService.setAccount).toHaveBeenCalled();
     expect(instance.availableSpace).toBe('50.00');
+  });
+  it('parses the email string correctly', async () => {
+    const { instance } = await shallow.render();
+
+    const result = instance.parseEmailString(
+      'test@example.com, test1@example.com'
+    );
+
+    expect(result).toEqual(['test@example.com', 'test1@example.com']);
+  });
+
+  it('returns all the duplicate emails', async (done) => {
+    const { instance } = await shallow.render();
+
+    const testEmailString =
+      'test@example.com,test@example.com,test2@example.com';
+    const expectedDuplicates = ['test@example.com'];
+
+    instance
+      .checkForDuplicateEmails(testEmailString)
+      .subscribe((duplicates) => {
+        expect(duplicates).toEqual(expectedDuplicates);
+        done();
+      });
+  });
+
+  it('filters out the duplicates from the giftDelivered and invitationSent of the response', async () => {
+    const { instance } = await shallow.render();
+
+    await instance.giftResult.next({
+      isSuccessful: true,
+      response: new GiftingResponse({
+        storageGifted: 50,
+        giftDelivered: ['test@example.com', 'test1@example.com'],
+        invitationSent: ['test@example.com', 'test2@example.com'],
+        alreadyInvited: [],
+      }),
+    });
+
+    expect(instance.emailsSentTo).toEqual([
+      'test@example.com',
+      'test2@example.com',
+      'test1@example.com',
+    ]);
   });
 });

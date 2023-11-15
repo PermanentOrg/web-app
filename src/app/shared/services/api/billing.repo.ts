@@ -7,6 +7,7 @@ import {
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { BillingPaymentVO } from '@models';
+import { getFirst } from '../http-v2/http-v2.service';
 
 export class BillingRepo extends BaseRepo {
   public claimPledge(billingPaymentVO: BillingPaymentVO, pledgeId: string) {
@@ -71,13 +72,20 @@ export class BillingRepo extends BaseRepo {
     );
   }
 
-  public giftStorage(recipientEmail, storageAmount) {
+  public giftStorage(
+    recipientEmails: string[],
+    storageAmount: number,
+    note?: string
+  ): Promise<GiftingResponse> {
     const data = {
-      recipientEmail,
+      recipientEmails,
       storageAmount,
+      ...(note ? { note } : {}),
     };
 
-    return this.httpV2.post('/billing/giftStorage', data).toPromise();
+    return getFirst(
+      this.httpV2.post('v2/billing/gift', data, GiftingResponse)
+    ).toPromise();
   }
 }
 
@@ -107,5 +115,18 @@ export class BillingResponse extends BaseResponse {
     }
 
     return data[0][0].PromoVO as PromoVOData;
+  }
+}
+
+export class GiftingResponse {
+  storageGifted: number;
+  giftDelivered: string[];
+  invitationSent: string[];
+  alreadyInvited: string[];
+
+  constructor(props: Object) {
+    for (const prop in props) {
+      this[prop] = props[prop];
+    }
   }
 }

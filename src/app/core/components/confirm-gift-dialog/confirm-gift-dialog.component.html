@@ -8,17 +8,19 @@
   </div>
   <div class="content">
     <p class="popup-text">
-      <b
-        >Are you sure you would like to gift {{ amount }} GB of storage to
-        {{ email }}?</b
-      >
+      <b> Are you sure you’d like to gift storage?</b>
     </p>
     <p class="popup-text">
-      Once confirmed, the gift storage cannot be reclaimed.
-      <button class="btn btn-sm btn-primary" (click)="onConfirmClick()">
-        Confirm
-      </button>
-      <button class="btn btn-sm" (click)="onDoneClick()">Go back</button>
+      Once you send gift storage to someone else, it can’t be reclaimed.
     </p>
+    <div class="buttons">
+      <button class="btn btn-sm btn-secondary" (click)="onDoneClick()">
+        Cancel
+      </button>
+
+      <button class="btn btn-sm btn-primary" (click)="onConfirmClick()">
+        Yes, gift storage
+      </button>
+    </div>
   </div>
 </div>

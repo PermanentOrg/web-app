@@ -13,9 +13,18 @@
       class="dialog-form"
       (submit)="submitStorageGiftForm(giftForm.value)"
     >
-      <div class="dialog-form-field">
+      <div
+        class="dialog-form-field dialog-form-field-emails"
+        [ngClass]="{
+          'dialog-form-field-with-error':
+            duplicateEmails.length || emailValidationErrors.length
+        }"
+      >
         <div class="text">
-          <label class="label" for="email">Recipient Email</label>
+          <label class="label" for="email">Recipient Email(s)</label>
+          <span class="label-info"
+            >Separate multiple email addresses with commas</span
+          >
         </div>
         <input
           type="text"
@@ -26,10 +35,20 @@
           placeholder="email@email.com"
         />
       </div>
-      <p class="input-error" *ngIf="giftForm.get('email').errors?.email">
-        The email you have entered is not valid.
-      </p>
-      <div class="dialog-form-field dialog-form-field-amount">
+      <div
+        class="error-message"
+        *ngFor="let invalidEmail of emailValidationErrors"
+      >
+        <img src="assets/svg/alert.svg" />
+        <span class="input-error"
+          >{{ invalidEmail }} is not a valid email address.</span
+        >
+      </div>
+      <div class="error-message" *ngFor="let duplicate of duplicateEmails">
+        <img src="assets/svg/alert.svg" />
+        <span class="input-error">{{ duplicate }} has already been added.</span>
+      </div>
+      <div class="dialog-form-field dialog-form-field-amount" [ngClass]="">
         <div class="text">
           <label class="label" for="amount">Storage Gift Amount</label>
           <span class="label-info">{{ this.availableSpace }} GB available</span>
@@ -45,18 +64,34 @@
             'form-control-error': giftForm.get('amount').errors?.notInteger
           }"
         />
-        <span class="gigabytes">gigabytes</span>
+        <span class="gigabytes">gigabytes per recipient</span>
       </div>
-      <p class="input-error" *ngIf="giftForm.get('amount').errors?.notInteger">
-        Storage can only be gifted in 1GB increments.
+      <div
+        *ngIf="giftForm.get('amount').errors?.notInteger"
+        class="error-message not-integer"
+      >
+        <img src="assets/svg/alert.svg" />
+        <p class="input-error">Storage can only be gifted in 1GB increments.</p>
+      </div>
+      <p
+        *ngIf="successMessage && !giftForm.get('amount').errors?.notInteger"
+        class="error-message success-message"
+      >
+        {{ successMessage }}
       </p>
-      <p class="input-error" *ngIf="giftForm.get('amount').errors?.max">
-        Amount must be less than or equal to {{ availableSpace }} GB.
-      </p>
+      <div
+        class="error-message"
+        *ngIf="giftForm.get('amount').errors?.isGreaterThanAvailableSpace"
+      >
+        <img src="assets/svg/alert.svg" />
+        <span class="input-error">{{ getAmountErrorMessage() }}</span>
+      </div>
       <div class="dialog-form-field">
         <div class="text">
           <label class="label" for="amount">Note to recipient</label>
-          <span class="label-info">Optional</span>
+          <span class="label-info optional"
+            >Optional; sent to all recipients</span
+          >
         </div>
         <textarea
           class="form-control form-control-textarea"
@@ -100,11 +135,27 @@
       </defs>
     </svg>
 
-    <p class="panel-title">Storage successfully gifted</p>
-    <p>
-      Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to
-      {{ giftForm.value.email }}.
+    <p *ngIf="emailsSentTo.length" class="panel-title">
+      Storage successfully gifted
     </p>
+    <p *ngIf="emailsSentTo.length">
+      Success! You sent {{ giftForm.value.amount }} GB of Permanent storage to:
+    </p>
+    <ul>
+      <li class="email" *ngFor="let email of emailsSentTo">
+        {{ email }}
+      </li>
+    </ul>
+    <p *ngIf="alreadyInvited.length">
+      The following emails have already been invited and were not sent storage.
+      They must accept their invitation before they can be sent additional
+      storage.
+    </p>
+    <ul>
+      <li class="email" *ngFor="let email of alreadyInvited">
+        {{ email }}
+      </li>
+    </ul>
     <p>
       You have
       {{ (+availableSpace).toFixed(2) }} GB of storage available.
