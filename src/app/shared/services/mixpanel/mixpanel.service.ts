@@ -33,6 +33,7 @@ export class MixpanelService {
           : `${account.accountId}`;
         mixpanel.identify(mixpanelIdentifier);
         mixpanel.people.set({
+          $email: account.primaryEmail,
           accountId: `${account.accountId}`,
           environment: environment.environment,
         });

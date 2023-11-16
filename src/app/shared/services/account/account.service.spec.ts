@@ -1,4 +1,5 @@
 /* @format */
+import { CookieService } from 'ngx-cookie-service';
 import { TestBed, inject } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Shallow } from 'shallow-render';
@@ -67,6 +68,33 @@ describe('AccountService', () => {
               observer.complete();
             });
           },
+          logIn: (
+            email: string,
+            password: string,
+            rememberMe: boolean,
+            keepLoggedIn: boolean
+          ) => {
+            return new Observable((observer) => {
+              observer.next(
+                new AuthResponse({
+                  isSuccessful: true,
+                  Results: [
+                    {
+                      data: [
+                        {
+                          AccountVO: {
+                            primaryEmail: 'test@permanent.org',
+                            fullName: 'Test User',
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                })
+              );
+              observer.complete();
+            });
+          },
         },
       })
       .mock(Router, {
@@ -89,7 +117,8 @@ describe('AccountService', () => {
       })
       .mock(EditService, {
         deleteItems: (items: any[]) => Promise.resolve(true),
-      });
+      })
+      .mock(CookieService, { set: (key: string, value: string) => {} });
   });
 
   it('should be created', () => {
@@ -137,6 +166,7 @@ describe('AccountService', () => {
 
   it('should handle successful email verification', async () => {
     const { instance } = shallow.createService();
+    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
 
     const account = new AccountVO({
       primaryEmail: 'test@permanent.org',
@@ -150,10 +180,12 @@ describe('AccountService', () => {
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().emailStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
+    expect(trackerSpy).toHaveBeenCalled();
   });
 
   it('should handle successful phone verification', async () => {
     const { instance } = shallow.createService();
+    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
 
     const account = new AccountVO({
       primaryEmail: 'test@permanent.org',
@@ -167,6 +199,7 @@ describe('AccountService', () => {
     await instance.verifyEmail('sampleToken');
     expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
+    expect(trackerSpy).toHaveBeenCalled();
   });
   it('should update the account storage when a file is uploaded successfully', async () => {
     const { instance, inject } = shallow.createService();
@@ -181,6 +214,39 @@ describe('AccountService', () => {
     ]);
     await instance.deductAccountStorage(200);
     expect(instance.getAccount().spaceLeft).toEqual(99800);
+  });
+
+  it('should send the account data to mixpanel after signing up', async () => {
+    const { instance, inject } = shallow.createService();
+    const apiService = inject(ApiService);
+    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
+    const account = await instance.signUp(
+      'test@permanent.org',
+      'Test User',
+      'password123',
+      'password123',
+      true,
+      true,
+      '',
+      '',
+      true
+    );
+
+    expect(trackerSpy).toHaveBeenCalled();
+  });
+
+  it('should send the account data to mixpanel after logging in', async () => {
+    const { instance, inject } = shallow.createService();
+    const apiService = inject(ApiService);
+    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
+    const account = await instance.logIn(
+      'test@permanent.org',
+      'password123',
+      true,
+      true
+    );
+
+    expect(trackerSpy).toHaveBeenCalled();
   });
   it('should add storage back after deleting an item', async () => {
     const { instance, inject } = shallow.createService();

@@ -360,6 +360,7 @@ export class AccountService {
               newAccount.isNew = currentAccount.isNew;
             }
             this.setAccount(newAccount);
+            this.trackAuthWithMixpanel('Sign In', newAccount);
             if (response.getArchiveVO()?.archiveId) {
               this.setArchive(response.getArchiveVO());
             }
@@ -426,6 +427,7 @@ export class AccountService {
               keepLoggedIn,
             });
             this.setAccount(newAccount);
+            this.trackAuthWithMixpanel('Verify multi-factor', newAccount);
 
             const authToken = response.getAuthToken()?.value;
             if (authToken) {
@@ -454,6 +456,7 @@ export class AccountService {
               keepLoggedIn,
             });
             this.setAccount(account);
+            this.trackAuthWithMixpanel('Verify email', account);
             return response;
           } else {
             throw response;
@@ -567,7 +570,7 @@ export class AccountService {
             });
             newAccount.isNew = true;
             this.setAccount(newAccount);
-            this.mixpanel.track('Sign up', { accountId: newAccount.accountId });
+            this.trackAuthWithMixpanel('Sign up', newAccount);
             return newAccount;
           })
         )
@@ -635,5 +638,12 @@ export class AccountService {
     });
     this.setAccount(newAccount);
     this.accountStorageUpdate.next(newAccount);
+  }
+
+  public trackAuthWithMixpanel(action: string, accountData: AccountVO): void {
+    this.mixpanel.track(action, {
+      accountId: accountData.accountId,
+      email: accountData.primaryEmail,
+    });
   }
 }
