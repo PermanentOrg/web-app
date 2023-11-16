@@ -99,7 +99,7 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
           this.initialZoom = zoom;
         }
 
-        if (zoom !== this.initialZoom) {
+        if (zoom > this.initialZoom) {
           this.disableSwipe.emit(true);
         } else {
           this.disableSwipe.emit(false);
