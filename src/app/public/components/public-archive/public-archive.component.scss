@@ -39,17 +39,20 @@ $desktop-size: pxToGrid(200px);
   }
   & hr {
     width: 90%;
+    @include beforeDesktop {
+      margin-top: 3rem;
+    }
   }
 
   @include beforeDesktop {
     margin: 0 - $grid-unit * 0.5;
+    margin-top: 3rem !important;
   }
 }
 
 .profile-banner {
   @include profileBanner($photo-desktop, $photo-mobile);
   cursor: initial;
-  height: 28rem;
 }
 
 .profile-photo {
@@ -73,15 +76,11 @@ $desktop-size: pxToGrid(200px);
     margin-top: 30px;
   }
 
-  @include beforeDesktop {
-    top: -3rem;
-  }
-
   &-public-profile {
     @include banner-margin-offset-public-profile;
 
-    @media screen and (max-width: 1440px){
-      top: 0
+    @media screen and (max-width: 1440px) {
+      top: 0;
     }
   }
 }
@@ -99,7 +98,7 @@ $desktop-size: pxToGrid(200px);
 }
 
 .profile-data {
-  font-size: $font-size-base * 0.90;
+  font-size: $font-size-base * 0.9;
   font-weight: $font-weight-light;
   color: #777777;
   font-family: 'Usual';
@@ -206,6 +205,10 @@ $desktop-size: pxToGrid(200px);
   border: solid 1px #d0d5dd;
   height: 48px;
 
+  @media screen and (max-width: 1300px) and (min-width: 900px) {
+    width: 60%;
+  }
+
   pr-archive-search {
     display: flex;
     width: 340px;
@@ -246,7 +249,7 @@ $desktop-size: pxToGrid(200px);
     color: #131b4a;
   }
 
-  .no-results{
+  .no-results {
     font-size: 24px;
   }
 }
@@ -328,8 +331,12 @@ $desktop-size: pxToGrid(200px);
   display: flex;
   padding-left: 3.5rem;
 
-  &-archive{
+  &-archive {
     height: 150px;
+
+    @include beforeDesktop {
+      height: auto;
+    }
   }
 
   @include beforeDesktop {
@@ -364,21 +371,19 @@ $desktop-size: pxToGrid(200px);
   margin-top: 30px;
 }
 
-.profile-container{
+.profile-container {
   width: 60%;
 
-  @include beforeDesktop{
+  @include beforeDesktop {
     width: 100%;
   }
 }
 
-
-.result-nav{
+.result-nav {
   cursor: pointer;
 }
 
-
-.expand-text{
+.expand-text {
   cursor: pointer;
-  color:gray
+  color: gray;
 }
