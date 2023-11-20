@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -8,7 +8,7 @@ import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { RecordVO, ArchiveVO } from '@models';
 
 @Injectable()
-export class PublishArchiveResolveService implements Resolve<any> {
+export class PublishArchiveResolveService  {
   constructor(
     private api: ApiService,
     private message: MessageService,

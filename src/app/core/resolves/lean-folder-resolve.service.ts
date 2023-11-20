@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { find, cloneDeep } from 'lodash';
@@ -12,7 +12,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
 
 @Injectable()
-export class LeanFolderResolveService implements Resolve<any> {
+export class LeanFolderResolveService  {
 
   constructor(
     private api: ApiService,

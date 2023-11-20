@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 
 @Injectable()
-export class AccountResolveService implements Resolve<any> {
+export class AccountResolveService  {
 
   constructor( private accountService: AccountService) { }
 

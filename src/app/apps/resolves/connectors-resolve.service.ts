@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -11,7 +11,7 @@ import { ConnectorResponse } from '@shared/services/api/index.repo';
 import { ConnectorOverviewVO } from '@root/app/models';
 
 @Injectable()
-export class ConnectorsResolveService implements Resolve<any> {
+export class ConnectorsResolveService  {
 
   constructor(private api: ApiService, private accountService: AccountService) { }
 

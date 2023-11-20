@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ import { RecordVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 
 @Injectable()
-export class RecordResolveService implements Resolve<any> {
+export class RecordResolveService  {
 
   constructor(private api: ApiService, private dataService: DataService, private message: MessageService) { }
 

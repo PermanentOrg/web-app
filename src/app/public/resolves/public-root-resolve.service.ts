@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 
 @Injectable()
-export class PublicRootResolveService implements Resolve<any> {
+export class PublicRootResolveService  {
   constructor(
     private api: ApiService,
     private router: Router,

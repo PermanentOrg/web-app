@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { FolderVO, RecordVO, RecordVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 
@@ -49,7 +49,7 @@ const dummyItems = blurredPhotos.map((filename, index) => {
 });
 
 @Injectable()
-export class PreviewFolderResolveService implements Resolve<any> {
+export class PreviewFolderResolveService  {
   constructor(
   ) { }
 

@@ -1,9 +1,5 @@
 import { StorageService } from '@shared/services/storage/storage.service';
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { Injectable } from '@angular/core';
 import { ArchiveVO } from '@models/index';
@@ -11,7 +7,7 @@ import { ArchiveVO } from '@models/index';
 @Injectable({
   providedIn: 'root',
 })
-export class PublicTagsResolveService implements Resolve<any> {
+export class PublicTagsResolveService  {
   constructor(private api: ApiService, private storage: StorageService) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
