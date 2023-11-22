@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   Inject,
@@ -15,26 +16,39 @@ import {
   Output,
   ViewChild,
   NgZone,
-  Renderer2
+  Renderer2,
 } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { UP_ARROW, DOWN_ARROW, CONTROL, META, SHIFT } from '@angular/cdk/keycodes';
+import { UP_ARROW, DOWN_ARROW } from '@angular/cdk/keycodes';
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { throttle, debounce, find, size } from 'lodash';
+import { throttle, debounce, find } from 'lodash';
 import { gsap } from 'gsap';
 
-import { FileListItemComponent, FileListItemVisibleEvent } from '@fileBrowser/components/file-list-item/file-list-item.component';
-import { DataService, SelectClickEvent, SelectedItemsSet, SelectKeyEvent } from '@shared/services/data/data.service';
+import {
+  FileListItemComponent,
+  FileListItemVisibleEvent,
+} from '@fileBrowser/components/file-list-item/file-list-item.component';
+import {
+  DataService,
+  SelectClickEvent,
+  SelectedItemsSet,
+  SelectKeyEvent,
+} from '@shared/services/data/data.service';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO, ItemVO } from '@root/app/models';
-import { DataStatus } from '@models/data-status.enum';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
-import { slideUpAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
+import {
+  slideUpAnimation,
+  ngIfScaleAnimationDynamic,
+} from '@shared/animations';
 import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import debug from 'debug';
@@ -61,10 +75,18 @@ const DRAG_SCROLL_STEP = 20;
   selector: 'pr-file-list',
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.scss'],
-  animations: [slideUpAnimation, ngIfScaleAnimationDynamic]
+  animations: [slideUpAnimation, ngIfScaleAnimationDynamic],
 })
-export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasSubscriptions, FileListItemParent {
-  @ViewChildren(FileListItemComponent) listItemsQuery: QueryList<FileListItemComponent>;
+export class FileListComponent
+  implements
+    OnInit,
+    AfterViewInit,
+    OnDestroy,
+    HasSubscriptions,
+    FileListItemParent
+{
+  @ViewChildren(FileListItemComponent)
+  listItemsQuery: QueryList<FileListItemComponent>;
 
   currentFolder: FolderVO;
   listItems: FileListItemComponent[] = [];
@@ -124,9 +146,8 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     @Optional() private drag: DragService,
     private renderer: Renderer2,
     public device: DeviceService,
-    private ngZone: NgZone,
+    private ngZone: NgZone
   ) {
-
     this.currentFolder = this.route.snapshot.data.currentFolder;
     // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
@@ -147,7 +168,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       this.setFolderView(folderView);
     });
 
-    this.visibleItemsHandlerDebounced = debounce(() => this.loadVisibleItems(), VISIBLE_DEBOUNCE);
+    this.visibleItemsHandlerDebounced = debounce(
+      () => this.loadVisibleItems(),
+      VISIBLE_DEBOUNCE
+    );
 
     this.registerArchiveChangeHandlers();
     this.registerRouterEventHandlers();
@@ -158,7 +182,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   registerArchiveChangeHandlers() {
     // register for archive change events to reload the root section
     this.subscriptions.push(
-      this.account.archiveChange.subscribe(async archive => {
+      this.account.archiveChange.subscribe(async (archive) => {
         // may be in a subfolder we don't have access to, reload just the 'root'
         const url = this.router.url;
         const urlParts = url.split('/').slice(0, 3);
@@ -177,64 +201,72 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
   registerRouterEventHandlers() {
     // register for navigation events to reinit page on folder changes
-    this.subscriptions.push(this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        if (event.url.includes('record')) {
-          this.inFileView = true;
-        }
+    this.subscriptions.push(
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+          if (event.url.includes('record')) {
+            this.inFileView = true;
+          }
 
-        if (routeHasDialog(event)) {
-          this.inDialog = true;
-        }
+          if (routeHasDialog(event)) {
+            this.inDialog = true;
+          }
 
-        if (this.reinit && !this.inFileView && !this.inDialog) {
-          this.refreshView();
-        }
+          if (this.reinit && !this.inFileView && !this.inDialog) {
+            this.refreshView();
+          }
 
-        if (!event.url.includes('record') && this.inFileView) {
-          this.inFileView = false;
-        }
+          if (!event.url.includes('record') && this.inFileView) {
+            this.inFileView = false;
+          }
 
-        if (!routeHasDialog(event) && this.inDialog) {
-          this.inDialog = false;
-        }
-      }));
+          if (!routeHasDialog(event) && this.inDialog) {
+            this.inDialog = false;
+          }
+        })
+    );
   }
 
   registerDataServiceHandlers() {
     // register for folder update events
-    this.subscriptions.push(this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
-      setTimeout(() => {
-        this.loadVisibleItems();
-      }, 500);
-    }));
+    this.subscriptions.push(
+      this.dataService.folderUpdate.subscribe((folder: FolderVO) => {
+        setTimeout(() => {
+          this.loadVisibleItems();
+        }, 500);
+      })
+    );
 
     // register for multi select events
-    this.subscriptions.push(this.dataService.multiSelectChange.subscribe(enabled => {
-      this.isMultiSelectEnabled = enabled;
-    }));
+    this.subscriptions.push(
+      this.dataService.multiSelectChange.subscribe((enabled) => {
+        this.isMultiSelectEnabled = enabled;
+      })
+    );
 
     // register for select events
-    this.subscriptions.push(this.dataService.selectedItems$().subscribe(selectedItems => {
-      this.selectedItems = selectedItems;
-    }));
+    this.subscriptions.push(
+      this.dataService.selectedItems$().subscribe((selectedItems) => {
+        this.selectedItems = selectedItems;
+      })
+    );
 
     // register for 'show item' events
     this.subscriptions.push(
-      this.dataService.itemToShow$().subscribe(item => {
+      this.dataService.itemToShow$().subscribe((item) => {
         setTimeout(() => {
           this.scrollToItem(item);
         });
-      }
-      ));
+      })
+    );
   }
 
   registerDragServiceHandlers() {
     // register for drag events to scroll if needed
     if (this.drag) {
       this.subscriptions.push(
-        this.drag.events().subscribe(dragEvent => {
+        this.drag.events().subscribe((dragEvent) => {
           switch (dragEvent.type) {
             case 'start':
             case 'end':
@@ -307,7 +339,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
         setTimeout(() => {
           this.dataService.onSelectEvent({
             type: 'click',
-            item
+            item,
           });
         });
       }
@@ -328,8 +360,11 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   getScrollElement(): HTMLElement {
-    return ((this.device.isMobileWidth() || !this.showSidebar)
-      ? this.document.documentElement : this.scrollElement.nativeElement) as HTMLElement;
+    return (
+      this.device.isMobileWidth() || !this.showSidebar
+        ? this.document.documentElement
+        : this.scrollElement.nativeElement
+    ) as HTMLElement;
   }
 
   onViewportMouseMove(event: MouseEvent) {
@@ -341,7 +376,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   scrollToItem(item: ItemVO) {
     this.debug('scroll to item %o', item);
     const folder_linkId = item.folder_linkId;
-    const listItem = find(this.listItemsQuery.toArray(), x => x.item.folder_linkId === folder_linkId);
+    const listItem = find(
+      this.listItemsQuery.toArray(),
+      (x) => x.item.folder_linkId === folder_linkId
+    );
     if (listItem) {
       const itemElem = listItem.element.nativeElement as HTMLElement;
       itemElem.scrollIntoView();
@@ -349,7 +387,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   checkDragScrolling(event: MouseEvent) {
-    const scrollElem = (this.scrollElement.nativeElement) as HTMLElement;
+    const scrollElem = this.scrollElement.nativeElement as HTMLElement;
     const bounds = scrollElem.getBoundingClientRect();
     const top = bounds.top;
     const bottom = top + bounds.height;
@@ -357,10 +395,10 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     const currentScrollHeight = scrollElem.scrollHeight;
     const maxScrollTop = currentScrollHeight - bounds.height;
 
-    if (top < event.clientY && event.clientY < (top + DRAG_SCROLL_THRESHOLD)) {
+    if (top < event.clientY && event.clientY < top + DRAG_SCROLL_THRESHOLD) {
       if (currentScrollTop > 0) {
         let step = DRAG_SCROLL_STEP;
-        if (event.clientY < (top + (DRAG_SCROLL_THRESHOLD / 2))) {
+        if (event.clientY < top + DRAG_SCROLL_THRESHOLD / 2) {
           step = step * 3;
         }
         scrollElem.scrollBy({ left: 0, top: -step, behavior: 'smooth' });
@@ -368,10 +406,13 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
           this.mouseMoveHandlerThrottled(event);
         }
       }
-    } else if (bottom > event.clientY && event.clientY > (bottom - DRAG_SCROLL_THRESHOLD)) {
+    } else if (
+      bottom > event.clientY &&
+      event.clientY > bottom - DRAG_SCROLL_THRESHOLD
+    ) {
       if (currentScrollTop < maxScrollTop) {
         let step = DRAG_SCROLL_STEP;
-        if (event.clientY > (maxScrollTop - (DRAG_SCROLL_THRESHOLD / 2))) {
+        if (event.clientY > maxScrollTop - DRAG_SCROLL_THRESHOLD / 2) {
           step = step * 3;
         }
         scrollElem.scrollBy({ left: 0, top: step, behavior: 'smooth' });
@@ -414,7 +455,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
         event.preventDefault();
         const selectEvent: SelectKeyEvent = {
           type: 'key',
-          key: event.keyCode === UP_ARROW ? 'up' : 'down'
+          key: event.keyCode === UP_ARROW ? 'up' : 'down',
         };
 
         if (event.shiftKey) {
@@ -423,7 +464,6 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
 
         this.dataService.onSelectEvent(selectEvent);
       }
-
     }
   }
 
@@ -435,7 +475,7 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       const selectEvent: SelectKeyEvent = {
         type: 'key',
         key: 'a',
-        modifierKey: 'ctrl'
+        modifierKey: 'ctrl',
       };
 
       this.dataService.onSelectEvent(selectEvent);
@@ -443,7 +483,9 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
   }
 
   checkKeyEvent(event: KeyboardEvent) {
-    return event.target === this.document.body && !this.router.url.includes('record');
+    return (
+      event.target === this.document.body && !this.router.url.includes('record')
+    );
   }
 
   async loadVisibleItems(animate?: boolean) {
@@ -455,22 +497,18 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
     const visibleListItems = Array.from(this.visibleItems);
     this.visibleItems.clear();
     if (animate) {
-      const targetElems = visibleListItems.map(c => c.element.nativeElement);
-      gsap.from(
-        targetElems,
-        0.25,
-        {
-          duration: 0.25,
-          opacity: 0,
-          ease: 'Power4.easeOut',
-          stagger: {
-            amount: 0.015
-          }
+      const targetElems = visibleListItems.map((c) => c.element.nativeElement);
+      gsap.from(targetElems, 0.25, {
+        duration: 0.25,
+        opacity: 0,
+        ease: 'Power4.easeOut',
+        stagger: {
+          amount: 0.015,
         },
-      );
+      });
     }
 
-    const itemsToFetch = visibleListItems.map(c => c.item);
+    const itemsToFetch = visibleListItems.map((c) => c.item);
 
     if (itemsToFetch.length) {
       await this.dataService.fetchLeanItems(itemsToFetch);
@@ -485,5 +523,4 @@ export class FileListComponent implements OnInit, AfterViewInit, OnDestroy, HasS
       this.visibleItems.delete(event.component);
     }
   }
-
 }

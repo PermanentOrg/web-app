@@ -1,9 +1,24 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, TemplateRef } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { DialogRef, Dialog, DialogComponentToken } from '@root/app/dialog/dialog.module';
+/* @format */
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  DialogRef,
+  Dialog,
+  DialogComponentToken,
+} from '@root/app/dialog/dialog.module';
 import { RouteData } from '@root/app/app.routes';
 import { DialogOptions } from '@root/app/dialog/dialog.service';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { Title } from '@angular/platform-browser';
@@ -11,15 +26,16 @@ import { slideUpAnimation } from '@shared/animations';
 
 @Component({
   selector: 'pr-routed-dialog-wrapper',
-  template: `
-  <ng-template #outletTemplate>
+  template: ` <ng-template #outletTemplate>
     <div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
       <router-outlet #o="outlet"></router-outlet>
     </div>
   </ng-template>`,
-  animations: [ slideUpAnimation ]
+  animations: [slideUpAnimation],
 })
-export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasSubscriptions, OnDestroy {
+export class RoutedDialogWrapperComponent
+  implements OnInit, AfterViewInit, HasSubscriptions, OnDestroy
+{
   private dialogToken: DialogComponentToken;
   private dialogOptions: DialogOptions;
   private dialogRef: DialogRef;
@@ -35,10 +51,9 @@ export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasS
     private dialog: Dialog,
     private routeHistory: RouteHistoryService,
     private title: Title
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
@@ -46,7 +61,9 @@ export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasS
     this.dialogToken = (this.route.snapshot.data as RouteData).dialogToken;
 
     if (!this.dialogToken) {
-      throw new Error('RoutedDialogWrapperComponent - missing dialog token on route data, can\'t open dialog');
+      throw new Error(
+        "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog"
+      );
     }
 
     this.dialogOptions = (this.route.snapshot.data as RouteData).dialogOptions;
@@ -54,10 +71,16 @@ export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasS
     const dialogData = {
       ...this.route.snapshot.data,
       activatedRoute: this.route,
-      outletTemplate: this.outletTemplate
+      outletTemplate: this.outletTemplate,
     };
 
-    this.dialogRef = this.dialog.createDialog(this.dialogToken, dialogData, this.dialogOptions, this.outletTemplate, this.route);
+    this.dialogRef = this.dialog.createDialog(
+      this.dialogToken,
+      dialogData,
+      this.dialogOptions,
+      this.outletTemplate,
+      this.route
+    );
 
     this.dialogRef.dialogComponent.show();
 
@@ -77,5 +100,4 @@ export class RoutedDialogWrapperComponent implements OnInit, AfterViewInit, HasS
     this.closedByNavigate = true;
     unsubscribeAll(this.subscriptions);
   }
-
 }

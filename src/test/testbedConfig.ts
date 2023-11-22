@@ -1,6 +1,6 @@
+/* @format */
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 import { UploadService } from '@core/services/upload/upload.service';
@@ -25,7 +25,7 @@ export const BASE_TEST_CONFIG = {
     HttpClientTestingModule,
     RouterTestingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ] as any[],
   providers: [
     CookieService,
@@ -43,9 +43,7 @@ export const BASE_TEST_CONFIG = {
     PrConstantsService,
     ProfileService,
     EditService,
-    RouteHistoryService
+    RouteHistoryService,
   ] as any[],
-  declarations: [
-    TooltipsPipe
-  ] as any[]
+  declarations: [TooltipsPipe] as any[],
 };
