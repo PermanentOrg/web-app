@@ -5,8 +5,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchService } from '@search/services/search.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DataService } from '../../../shared/services/data/data.service';
 import { PublicSearchResultsComponent } from './public-search-results.component';
+import { DataService } from '../../../shared/services/data/data.service';
 
 describe('PublicSearchResultsComponent', () => {
   let component: PublicSearchResultsComponent;
