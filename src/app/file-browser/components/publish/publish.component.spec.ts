@@ -57,7 +57,7 @@ describe('PublishComponent', () => {
   });
 
   it('should disaple the public to internet archive button if the user does not have the correct access role', async () => {
-    const { instance,find,fixture } = await shallow.render();
+    const { instance, find, fixture } = await shallow.render();
     instance.publicItem = new RecordVO({ recordId: 1 });
     instance.publishIa = null;
     instance.publicLink = null;
@@ -67,5 +67,5 @@ describe('PublishComponent', () => {
     const button = find('.publish-to-archive');
 
     expect(button.nativeElement.disabled).toBeTruthy();
-  })
+  });
 });
