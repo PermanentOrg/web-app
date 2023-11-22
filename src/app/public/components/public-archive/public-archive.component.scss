@@ -93,7 +93,7 @@ $desktop-size: pxToGrid(200px);
   font-family: 'Usual';
 
   @include beforeDesktop {
-    font-size: $font-size-base * 1.5;
+    font-size: $font-size-base;
   }
 }
 
@@ -195,6 +195,16 @@ $desktop-size: pxToGrid(200px);
 
 .profile-description {
   white-space: pre-line;
+
+  @include beforeDesktop {
+    display: none;
+  }
+
+  &-show {
+    @include beforeDesktop {
+      display: block;
+    }
+  }
 }
 
 .search-box-public-archive {
@@ -386,4 +396,30 @@ $desktop-size: pxToGrid(200px);
 .expand-text {
   cursor: pointer;
   color: gray;
+}
+
+.icon-expand {
+  display: none;
+
+  @include beforeDesktop {
+    display: inline-block;
+    font-size: $mat-icon-sm;
+    transition: transform 250ms $tweaked-ease;
+    cursor: pointer;
+    &.reverse {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.profile-info {
+  @include beforeDesktop {
+    display: none;
+  }
+
+  &-show {
+    @include beforeDesktop {
+      display: block;
+    }
+  }
 }
