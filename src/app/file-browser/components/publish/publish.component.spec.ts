@@ -1,6 +1,5 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { PublishComponent } from './publish.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { FolderVO, RecordVO } from '@models/index';
 import { FolderResponse } from '@shared/services/api/folder.repo';
@@ -10,6 +9,7 @@ import { ArchiveVO } from '../../../models/archive-vo';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { DialogRef, DIALOG_DATA } from '../../../dialog/dialog.service';
 import { ApiService } from '../../../shared/services/api/api.service';
+import { PublishComponent } from './publish.component';
 
 const mockAccountService = {
   getArchive: () => {
