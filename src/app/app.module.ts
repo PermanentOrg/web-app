@@ -30,7 +30,6 @@ import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { ApiService } from '@shared/services/api/api.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { environment } from '@root/environments/environment';
-import { RouteHistoryService } from './route-history/route-history.service';
 import { InViewportModule } from 'ng-in-viewport';
 import {
   FontAwesomeModule,
@@ -39,8 +38,8 @@ import {
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
 import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
-import { DialogModule } from './dialog/dialog.module';
 import { FormsModule } from '@angular/forms';
+import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
 
 declare var ga: any;

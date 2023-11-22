@@ -4,10 +4,10 @@ These tests were adapted from the tests of the ngx-route-history package:
 https://github.com/andrewatwood/ngx-route-history/blob/master/tests/services/route-history.service.spec.ts
 */
 import { TestBed } from '@angular/core/testing';
-import { RouteHistoryService } from './route-history.service';
 import { Component } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { RouteHistoryService } from './route-history.service';
 
 @Component({
   selector: 'pr-dummy',
