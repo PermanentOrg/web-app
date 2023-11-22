@@ -42,7 +42,7 @@ import { CdkPortal } from '@angular/cdk/portal';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
-import { RouteHistoryService } from 'ngx-route-history';
+import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 
 export interface ItemClickEvent {
   event?: MouseEvent;

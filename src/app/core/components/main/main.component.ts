@@ -21,7 +21,7 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { DraggableComponent, DragTargetDroppableComponent, DragService, DragServiceStartEndEvent, DragServiceEvent } from '@shared/services/drag/drag.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
-import { RouteHistoryService } from 'ngx-route-history';
+import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 
 @Component({
   selector: 'pr-main',

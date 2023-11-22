@@ -17,7 +17,7 @@ import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { ApiService } from '@shared/services/api/api.service';
 import { HttpService } from '@shared/services/http/http.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
-import { RouteHistoryService } from 'ngx-route-history';
+import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { DeviceService } from '@shared/services/device/device.service';
 
 export const BASE_TEST_CONFIG = {

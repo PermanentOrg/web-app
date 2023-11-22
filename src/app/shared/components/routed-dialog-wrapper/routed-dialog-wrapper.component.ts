@@ -5,7 +5,7 @@ import { RouteData } from '@root/app/app.routes';
 import { DialogOptions } from '@root/app/dialog/dialog.service';
 import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
-import { RouteHistoryService } from 'ngx-route-history';
+import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { Title } from '@angular/platform-browser';
 import { slideUpAnimation } from '@shared/animations';
 
