@@ -133,7 +133,6 @@ export class UploadSession {
       } else if (err instanceof BaseResponse && isOutOfStorageMessage(err)) {
         this.emitError(UploadSessionStatus.StorageError, item);
       } else {
-        console.log(err);
         this.emitError(UploadSessionStatus.DefaultError, item);
       }
     }
