@@ -2,11 +2,15 @@
 import { TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
-
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { UploadSession, UploadSessionStatus } from './upload.session';
+import { EventEmitter } from '@angular/core';
+import {
+  UploadProgressEvent,
+  UploadSession,
+  UploadSessionStatus,
+} from './upload.session';
 
 class TestUploadSession extends UploadSession {
   public emit(status: UploadSessionStatus): void {
@@ -45,9 +49,14 @@ class MessageStub {
   public showMessage(_msg: string): void {}
 }
 
+const uploadSessionMock = {
+  progress: new EventEmitter<UploadProgressEvent>(),
+};
+
 describe('UploadService', () => {
   let service: TestUploadService;
   let session: TestUploadSession;
+  let emittedSessionStatus;
 
   beforeEach(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -74,5 +83,21 @@ describe('UploadService', () => {
     session.emit(UploadSessionStatus.Start);
     session.emit(UploadSessionStatus.Done);
     expect(service.getElapsedUploadTime()).toBeGreaterThan(-1);
+  });
+
+  it('should handle FileNoBytesError correctly', async () => {
+    uploadSessionMock.progress.subscribe((event) => {
+      emittedSessionStatus = event.sessionStatus;
+    });
+
+    const mockEvent: UploadProgressEvent = {
+      item: null,
+      sessionStatus: UploadSessionStatus.FileNoBytesError,
+      statistics: { current: 0, total: 0, error: 0, completed: 0 },
+    };
+
+    uploadSessionMock.progress.emit(mockEvent);
+
+    expect(emittedSessionStatus).toBe(UploadSessionStatus.FileNoBytesError);
   });
 });

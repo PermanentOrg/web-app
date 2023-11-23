@@ -87,6 +87,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
             );
             this.accountService.refreshAccountDebounced();
             break;
+          case UploadSessionStatus.FileNoBytesError:
+            this.message.showError(
+              'This file cannot be uploaded because it is empty. Please check that the file is working and try again.'
+            );
+            this.accountService.refreshAccountDebounced();
           case UploadSessionStatus.StorageError:
             this.message.showError(
               'You do not have enough storage available to upload these files.'

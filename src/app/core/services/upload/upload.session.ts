@@ -14,6 +14,7 @@ export enum UploadSessionStatus {
   DefaultError,
   StorageError,
   CreatingFolders,
+  FileNoBytesError
 }
 
 export interface UploadProgressEvent {
@@ -127,9 +128,12 @@ export class UploadSession {
       item.uploadStatus = UploadStatus.Cancelled;
       this.statistics.error++;
 
-      if (err instanceof BaseResponse && isOutOfStorageMessage(err)) {
+      if (err instanceof BaseResponse && item.file.size === 0) {
+        this.emitError(UploadSessionStatus.FileNoBytesError, item);
+      } else if (err instanceof BaseResponse && isOutOfStorageMessage(err)) {
         this.emitError(UploadSessionStatus.StorageError, item);
       } else {
+        console.log(err);
         this.emitError(UploadSessionStatus.DefaultError, item);
       }
     }
