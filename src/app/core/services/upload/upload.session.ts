@@ -14,7 +14,7 @@ export enum UploadSessionStatus {
   DefaultError,
   StorageError,
   CreatingFolders,
-  FileNoBytesError
+  FileNoBytesError,
 }
 
 export interface UploadProgressEvent {
