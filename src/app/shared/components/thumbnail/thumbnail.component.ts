@@ -99,10 +99,16 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
           this.initialZoom = zoom;
         }
 
-        if (zoom !== this.initialZoom) {
+        if (zoom > this.initialZoom) {
           this.disableSwipe.emit(true);
         } else {
           this.disableSwipe.emit(false);
+        }
+
+        if (zoom <= 1) {
+          this.enablePanning(false);
+        } else {
+          this.enablePanning(true);
         }
       });
 
@@ -231,5 +237,10 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
     } else {
       return record.FileVOs[0]?.fileURL;
     }
+  }
+
+  public enablePanning(flag: boolean): void {
+    (this.viewer as OpenSeaDragon.Options).panHorizontal = flag;
+    (this.viewer as OpenSeaDragon.Options).panVertical = flag;
   }
 }
