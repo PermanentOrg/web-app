@@ -1,4 +1,3 @@
-import { inject } from '@angular/core/testing';
 /* @format */
 import { TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
@@ -12,7 +11,6 @@ import {
   UploadSession,
   UploadSessionStatus,
 } from './upload.session';
-import { fakeAsync, tick } from '@angular/core/testing';
 
 class TestUploadSession extends UploadSession {
   public emit(status: UploadSessionStatus): void {
