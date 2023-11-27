@@ -1,4 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Optional, HostBinding } from '@angular/core';
+/* @format */
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  Input,
+  Optional,
+  HostBinding,
+} from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO } from '@root/app/models';
@@ -7,17 +18,26 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { AccountService } from '@shared/services/account/account.service';
-import { DragService, DragTargetDroppableComponent, DragServiceEvent } from '@shared/services/drag/drag.service';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import {
+  DragService,
+  DragTargetDroppableComponent,
+  DragServiceEvent,
+} from '@shared/services/drag/drag.service';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { MainComponent } from '../main/main.component';
 
 @Component({
   selector: 'pr-upload-button',
   templateUrl: './upload-button.component.html',
-  styleUrls: ['./upload-button.component.scss']
+  styleUrls: ['./upload-button.component.scss'],
 })
-export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscriptions {
+export class UploadButtonComponent
+  implements OnInit, OnDestroy, HasSubscriptions
+{
   private files: File[];
   @Input() fullWidth: boolean;
 
@@ -36,7 +56,8 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     private account: AccountService,
     private dataService: DataService,
     private prompt: PromptService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
+    private mixpanel: MixpanelService
   ) {
     this.subscriptions.push(
       this.dataService.currentFolderChange.subscribe((currentFolder) => {
@@ -48,8 +69,7 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     this.upload.registerButtonComponent(this);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.upload.unregisterButtonComponent(this);
@@ -64,23 +84,37 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     if (!this.currentFolder) {
       this.hidden = true;
     } else {
-      this.hidden = 
-        this.currentFolder.type === 'type.folder.root.share'
-        || this.currentFolder.type === 'type.folder.root.app'
-        || this.currentFolder.type === 'page';
+      this.hidden =
+        this.currentFolder.type === 'type.folder.root.share' ||
+        this.currentFolder.type === 'type.folder.root.app' ||
+        this.currentFolder.type === 'page';
       this.disabled =
-        !checkMinimumAccess(this.currentFolder.accessRole, AccessRole.Contributor)
-        || !checkMinimumAccess(this.account.getArchive().accessRole, AccessRole.Contributor)
-        || (this.currentFolder.type.includes('app') && this.currentFolder.special !== 'familysearch.root.folder');
+        !checkMinimumAccess(
+          this.currentFolder.accessRole,
+          AccessRole.Contributor
+        ) ||
+        !checkMinimumAccess(
+          this.account.getArchive().accessRole,
+          AccessRole.Contributor
+        ) ||
+        (this.currentFolder.type.includes('app') &&
+          this.currentFolder.special !== 'familysearch.root.folder');
     }
   }
 
   async onFileChange(event) {
     this.files = Array.from(event.target.files);
     if (this.currentFolder) {
+      const workspace = this.currentFolder.type.includes('private')
+        ? 'Private'
+        : 'Public';
+      this.mixpanel.track('Finalize Upload', { workspace });
       if (this.currentFolder.type.includes('public')) {
         try {
-          await this.prompt.confirm('Upload to public', 'This is a public folder. Are you sure you want to upload here?');
+          await this.prompt.confirm(
+            'Upload to public',
+            'This is a public folder. Are you sure you want to upload here?'
+          );
           this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.uploaded.params);
           this.upload.uploadFiles(this.currentFolder, this.files);
         } catch (err) {}
@@ -90,7 +124,9 @@ export class UploadButtonComponent implements OnInit, OnDestroy, HasSubscription
     }
   }
 
-  onDragServiceEvent(dragEvent: DragServiceEvent) {
-
+  filePickerClick() {
+    this.mixpanel.track('Initiate Upload', {});
   }
+
+  onDragServiceEvent(dragEvent: DragServiceEvent) {}
 }

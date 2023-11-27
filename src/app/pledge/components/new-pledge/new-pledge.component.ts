@@ -1,3 +1,4 @@
+import { DeviceService } from '@shared/services/device/device.service';
 /* @format */
 import {
   Component,
@@ -28,6 +29,7 @@ import { PledgeService } from '@pledge/services/pledge.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
 import { AccountVO } from '@models/account-vo';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
@@ -69,7 +71,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private message: MessageService,
     private http: HttpClient,
     private iframe: IFrameService,
-    private pledgeService: PledgeService
+    private pledgeService: PledgeService,
+    private mixpanel: MixpanelService,
+    private deviceService: DeviceService
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
@@ -119,6 +123,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chooseDonationAmount('custom');
       }
     }
+    this.mixpanel.trackPageView('Storage');
   }
 
   ngAfterViewInit() {
@@ -261,6 +266,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
+            this.mixpanel.track('Purchase Storage', {});
             this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage(
               `You just claimed ${this.getStorageAmount(

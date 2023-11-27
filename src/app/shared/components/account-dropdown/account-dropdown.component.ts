@@ -29,6 +29,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { SettingsTab } from '@core/components/account-settings-dialog/account-settings-dialog.component';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   transition(
@@ -71,7 +72,8 @@ export class AccountDropdownComponent
     private router: Router,
     private element: ElementRef,
     private dialog: Dialog,
-    private guidedTour: GuidedTourService
+    private guidedTour: GuidedTourService,
+    private mixpanel: MixpanelService
   ) {}
 
   ngOnInit() {
@@ -157,5 +159,12 @@ export class AccountDropdownComponent
   async openArchivesDialog() {
     await this.accountService.refreshArchives();
     this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px' });
+  }
+  
+  handleOpenAccountMenu() {
+    this.showMenu = !this.showMenu;
+    if (this.showMenu) {
+      this.mixpanel.trackPageView('Account Menu');
+    }
   }
 }
