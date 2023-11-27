@@ -160,7 +160,7 @@ export class AccountDropdownComponent
     await this.accountService.refreshArchives();
     this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px' });
   }
-  
+
   handleOpenAccountMenu() {
     this.showMenu = !this.showMenu;
     if (this.showMenu) {
