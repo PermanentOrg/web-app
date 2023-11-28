@@ -388,14 +388,14 @@ export class MainComponent
   }
 
   // on file drop
-  onDrop(
+  async onDrop(
     dropTarget: DragTargetDroppableComponent,
     dragEvent: DragServiceEvent
   ) {
     const files = (dragEvent.event as DragEvent).dataTransfer.files;
     this.isDraggingFile = false;
 
-    if (!files.length) {
+    if (!files?.length) {
       return;
     }
 
@@ -407,6 +407,17 @@ export class MainComponent
       targetFolder = this.data.currentFolder;
     } else {
       targetFolder = this.drag.getDestinationFromDropTarget(dropTarget);
+    }
+
+    if (targetFolder.type.includes('public')) {
+      try {
+        await this.prompt.confirm(
+          'Upload to public',
+          'This is a public folder. Are you sure you want to upload here?'
+        );
+      } catch (error) {
+        return;
+      }
     }
 
     if (items?.length && items[0].webkitGetAsEntry != null) {
@@ -421,3 +432,5 @@ export class MainComponent
     document.body.style.cursor = this.isNavigating ? 'wait' : 'auto';
   }
 }
+
+

@@ -1,11 +1,7 @@
+/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
-
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { CookieService } from 'ngx-cookie-service';
-
 import { MainComponent } from '@core/components/main/main.component';
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
@@ -20,17 +16,22 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
-import { DialogComponent } from '@root/app/dialog/dialog.component';
-import { Dialog } from '@root/app/dialog/dialog.service';
 import { DialogModule } from '@root/app/dialog/dialog.module';
 import { GlobalSearchBarComponent } from '@search/components/global-search-bar/global-search-bar.component';
 import { SearchService } from '@search/services/search.service';
 import { TagsService } from '@core/services/tags/tags.service';
-import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-status.component';
+import {
+  DragServiceEvent,
+  DragService,
+} from '@shared/services/drag/drag.service';
+import { Subject } from 'rxjs';
 import { FolderPickerComponent } from '../folder-picker/folder-picker.component';
+import { MultiSelectStatusComponent } from '../multi-select-status/multi-select-status.component';
+import { FolderVO } from '../../../models/folder-vo';
+import { PromptService } from '../../../shared/services/prompt/prompt.service';
 
-const defaultAuthData = require('@root/test/responses/auth.login.success.json') as any;
+const defaultAuthData =
+  require('@root/test/responses/auth.login.success.json') as any;
 
 describe('MainComponent', () => {
   let component: MainComponent;
@@ -38,6 +39,9 @@ describe('MainComponent', () => {
 
   let accountService: AccountService;
   let messageService: MessageService;
+  let promptService: PromptService;
+  let mockDragService: jasmine.SpyObj<DragService>;
+  let mockDragEvents: Subject<DragServiceEvent>;
 
   async function init(authResponseData = defaultAuthData) {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -61,6 +65,7 @@ describe('MainComponent', () => {
     config.providers.push(FolderPickerService);
     config.providers.push(SearchService);
     config.providers.push(TagsService);
+    config.providers.push({ provide: DragService, useValue: mockDragService });
 
     await TestBed.configureTestingModule(config).compileComponents();
 
@@ -72,6 +77,19 @@ describe('MainComponent', () => {
 
     messageService = TestBed.inject(MessageService);
     spyOn(messageService, 'showMessage');
+
+    promptService = TestBed.inject(PromptService);
+    spyOn(promptService, 'confirm');
+
+    mockDragEvents = new Subject<DragServiceEvent>();
+    mockDragService = jasmine.createSpyObj('DragService', [
+      'getDestinationFromDropTarget',
+      'events',
+    ]);
+    mockDragService.events.and.returnValue(mockDragEvents.asObservable());
+    mockDragService.getDestinationFromDropTarget.and.returnValue(
+      new FolderVO({ type: 'type.folder.public' })
+    );
 
     fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
@@ -101,7 +119,7 @@ describe('MainComponent', () => {
       ['/app/auth/verify'],
       {
         sendEmail: true,
-        sendSms: true
+        sendSms: true,
       }
     );
   });
@@ -116,7 +134,7 @@ describe('MainComponent', () => {
       jasmine.anything(),
       ['/app/auth/verify'],
       {
-        sendEmail: true
+        sendEmail: true,
       }
     );
     expect(messageService.showMessage).not.toHaveBeenCalledWith(
@@ -137,7 +155,7 @@ describe('MainComponent', () => {
       jasmine.anything(),
       ['/app/auth/verify'],
       {
-        sendSms: true
+        sendSms: true,
       }
     );
     expect(messageService.showMessage).not.toHaveBeenCalledWith(
@@ -153,4 +171,44 @@ describe('MainComponent', () => {
     await init(data);
     expect(messageService.showMessage).toHaveBeenCalledTimes(0);
   });
+
+  it('should show a prompt when trying to upload a file or folder to the public workspace', async () => {
+    const data = require('@root/test/responses/auth.login.success.json');
+    await init(data);
+    const mockFiles = [new File([''], 'mockFile.txt')];
+    const mockDragEvent = createMockDragEvent(mockFiles);
+
+    const targetFolder = { isDropTarget: true };
+    mockDragService.getDestinationFromDropTarget.and.returnValue(
+      new FolderVO({ type: 'type.folder.public' })
+    );
+    await component.onDrop(targetFolder, mockDragEvent);
+
+    expect(promptService.confirm).toHaveBeenCalled();
+  });
 });
+
+function createMockDragEvent(files: File[]): DragServiceEvent {
+  const mockDragEvent = {
+    preventDefault: () => {},
+    stopPropagation: () => {},
+  };
+
+  Object.defineProperty(mockDragEvent, 'dataTransfer', {
+    value: {
+      files: files,
+      items: files.map((file) => ({
+        kind: 'file',
+        getAsFile: () => file,
+      })),
+    },
+    writable: true,
+  });
+
+  return {
+    event: mockDragEvent,
+    type: 'start',
+    srcComponent: { onDrop: () => {} },
+    targetTypes: ['folder'],
+  };
+}
