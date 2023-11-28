@@ -432,5 +432,3 @@ export class MainComponent
     document.body.style.cursor = this.isNavigating ? 'wait' : 'auto';
   }
 }
-
-
