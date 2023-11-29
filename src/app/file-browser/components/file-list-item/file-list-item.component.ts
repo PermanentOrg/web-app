@@ -69,7 +69,6 @@ import {
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { ngIfFadeInAnimation } from '@shared/animations';
-import { InViewportTrigger } from 'ng-in-viewport';
 import { RouteData } from '@root/app/app.routes';
 
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';

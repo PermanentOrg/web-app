@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { TagsService } from '@core/services/tags/tags.service';
 
 @Injectable()
-export class TagsResolveService implements Resolve<any> {
+export class TagsResolveService  {
 
   constructor(private tags: TagsService) { }
 

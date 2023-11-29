@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -9,7 +9,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { ShareResponse } from '@shared/services/api/index.repo';
 
 @Injectable()
-export class SharesResolveService implements Resolve<any> {
+export class SharesResolveService  {
   constructor(
     private api: ApiService,
     private accountService: AccountService,

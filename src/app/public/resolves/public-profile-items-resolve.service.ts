@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
@@ -7,7 +7,7 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import { ArchiveVO } from '@models';
 
 @Injectable()
-export class PublicProfileItemsResolveService implements Resolve<any> {
+export class PublicProfileItemsResolveService  {
   constructor(
     private api: ApiService,
     private publicProfile: PublicProfileService

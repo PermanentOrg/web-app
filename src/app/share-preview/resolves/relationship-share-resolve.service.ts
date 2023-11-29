@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { find } from 'lodash';
 
@@ -11,7 +11,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models';
 
 @Injectable()
-export class RelationshipShareResolveService implements Resolve<any> {
+export class RelationshipShareResolveService  {
   constructor(
     private api: ApiService,
     private account: AccountService,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -8,7 +8,7 @@ import { InviteResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 
 @Injectable()
-export class InviteShareResolveService implements Resolve<any> {
+export class InviteShareResolveService  {
   constructor(
     private api: ApiService,
     private account: AccountService,

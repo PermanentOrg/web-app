@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -53,7 +53,7 @@ const dummyItems = shuffle(blurredPhotos.map((filename, index) => {
 }));
 
 @Injectable()
-export class PreviewResolveService implements Resolve<any> {
+export class PreviewResolveService  {
   constructor(
   ) { }
 

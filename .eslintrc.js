@@ -29,8 +29,7 @@ module.exports = {
         createDefaultProgram: true,
       },
       extends: [
-        'plugin:@angular-eslint/ng-cli-compat',
-        'plugin:@angular-eslint/ng-cli-compat--formatting-add-on',
+        'plugin:@angular-eslint/recommended',
         'plugin:@angular-eslint/template/process-inline-templates',
         'airbnb-base',
         'airbnb-typescript/base',
@@ -89,6 +88,7 @@ module.exports = {
         ],
         // Below are rules we want to eventually enable:
         'import/no-cycle': 'off',
+        '@angular-eslint/no-empty-lifecycle-method': 'off',
         '@angular-eslint/no-output-native': 'off',
         '@angular-eslint/no-output-on-prefix': 'off',
         '@angular-eslint/use-lifecycle-interface': 'off',

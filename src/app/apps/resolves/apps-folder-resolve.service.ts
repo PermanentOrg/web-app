@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { find } from 'lodash';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -8,7 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { FolderVO } from '@root/app/models';
 
 @Injectable()
-export class AppsFolderResolveService implements Resolve<any> {
+export class AppsFolderResolveService  {
 
   constructor(
     private api: ApiService,
