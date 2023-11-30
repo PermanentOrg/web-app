@@ -317,7 +317,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   }
 
   protected reportUploadTime(): void {
-    const elapsedSeconds = (new Date().getTime() - this.uploadStart.getTime()) / 1000;
+    const elapsedSeconds =
+      (new Date().getTime() - this.uploadStart.getTime()) / 1000;
     // eslint-disable-next-line no-console
     console.log(`Total Upload Time: ${elapsedSeconds}s`);
   }

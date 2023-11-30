@@ -1,11 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+/* @format */
+import { TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { UploadService } from '@core/services/upload/upload.service';
 import { DataService } from '@shared/services/data/data.service';
-import { UploadSession, UploadSessionStatus } from './upload.session';
 import { MessageService } from '@shared/services/message/message.service';
+import { UploadSession, UploadSessionStatus } from './upload.session';
 
 class TestUploadSession extends UploadSession {
   public emit(status: UploadSessionStatus): void {
@@ -51,10 +52,10 @@ describe('UploadService', () => {
   beforeEach(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     const providers = config.providers as any[];
-    providers.push({provide: UploadService, useClass: TestUploadService});
+    providers.push({ provide: UploadService, useClass: TestUploadService });
     providers.push(DataService);
-    providers.push({provide: MessageService, useClass: MessageStub});
-    providers.push({provide: UploadSession, useClass: TestUploadSession});
+    providers.push({ provide: MessageService, useClass: MessageStub });
+    providers.push({ provide: UploadSession, useClass: TestUploadSession });
     TestBed.configureTestingModule(config);
     service = TestBed.inject(UploadService) as TestUploadService;
     session = TestBed.inject(UploadSession) as TestUploadSession;
