@@ -45,6 +45,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
+  protected uploadStart: Date;
+
   private debug = debug('service:upload');
 
   constructor(
@@ -73,9 +75,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
             this.message.showMessage(
               "Please don't close your browser until the upload is complete."
             );
+            this.uploadStart = new Date();
             break;
           case UploadSessionStatus.Done:
             this.accountService.refreshAccountDebounced();
+            this.reportUploadTime();
             break;
           case UploadSessionStatus.DefaultError:
             this.message.showError(
@@ -310,5 +314,11 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       this.component.dismiss();
     }
     this.progressVisible.emit(false);
+  }
+
+  protected reportUploadTime(): void {
+    const elapsedSeconds = (new Date().getTime() - this.uploadStart.getTime()) / 1000;
+    // eslint-disable-next-line no-console
+    console.log(`Total Upload Time: ${elapsedSeconds}s`);
   }
 }
