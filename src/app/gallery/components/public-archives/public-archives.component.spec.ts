@@ -10,6 +10,7 @@ import { PublicArchivesComponent } from './public-archives.component';
 const mockAccountService = {
   getAllPublicArchives: () => Promise.resolve([]),
 };
+
 describe('PublicArchivesComponent', () => {
   let shallow: Shallow<PublicArchivesComponent>;
   let messageShown = false;
