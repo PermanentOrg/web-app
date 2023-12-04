@@ -20,7 +20,6 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
-import { DeviceService } from '@shared/services/device/device.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
@@ -51,7 +50,6 @@ export class StorageDialogComponent
     private message: MessageService,
     private route: ActivatedRoute,
     private mixpanel: MixpanelService,
-    private deviceService: DeviceService
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],

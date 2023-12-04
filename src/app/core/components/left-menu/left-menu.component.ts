@@ -16,7 +16,6 @@ import { find } from 'lodash';
 import * as Sentry from '@sentry/browser';
 import debug from 'debug';
 
-import { DeviceService } from '@shared/services/device/device.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import {
@@ -75,8 +74,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private dialog: Dialog,
     private profile: ProfileService,
     private payerService: PayerService,
-    private mixpanel: MixpanelService,
-    private deviceService: DeviceService
+    private mixpanel: MixpanelService
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();

@@ -1,4 +1,3 @@
-import { DeviceService } from '@shared/services/device/device.service';
 /* @format */
 import {
   Component,
@@ -73,7 +72,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private iframe: IFrameService,
     private pledgeService: PledgeService,
     private mixpanel: MixpanelService,
-    private deviceService: DeviceService
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();

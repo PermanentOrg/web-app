@@ -11,7 +11,6 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
-import { DeviceService } from '@shared/services/device/device.service';
 import { ApiService } from '@shared/services/api/api.service';
 import {
   ArchiveResponse,
