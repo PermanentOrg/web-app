@@ -1,9 +1,9 @@
-import { MessageService } from './../../../shared/services/message/message.service';
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
+import { MessageService } from '../../../shared/services/message/message.service';
 
 @Component({
   selector: 'pr-public-archives',

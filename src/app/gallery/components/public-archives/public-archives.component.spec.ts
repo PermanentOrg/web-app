@@ -1,11 +1,11 @@
-import { ArchiveVO } from './../../../models/archive-vo';
 /* @format */
 import { PublicArchivesComponent } from './public-archives.component';
 import { Shallow } from 'shallow-render';
-import { GalleryModule } from '../../gallery.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
+import { ArchiveVO } from '../../../models/archive-vo';
+import { GalleryModule } from '../../gallery.module';
 
 const mockAccountService = {
   getAllPublicArchives: () => Promise.resolve([]),
