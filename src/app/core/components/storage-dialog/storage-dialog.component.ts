@@ -49,7 +49,7 @@ export class StorageDialogComponent
     private api: ApiService,
     private message: MessageService,
     private route: ActivatedRoute,
-    private mixpanel: MixpanelService,
+    private mixpanel: MixpanelService
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],

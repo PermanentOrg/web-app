@@ -71,7 +71,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private iframe: IFrameService,
     private pledgeService: PledgeService,
-    private mixpanel: MixpanelService,
+    private mixpanel: MixpanelService
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
