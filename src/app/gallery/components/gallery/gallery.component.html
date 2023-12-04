@@ -12,7 +12,7 @@
       </div>
       <ng-container *ngTemplateOutlet="searchBox"></ng-container>
     </div>
-    <div class="actions">
+    <div *ngIf="!isLoggedIn" class="actions">
       <ng-container *ngTemplateOutlet="archivesImg"></ng-container>
       <div class="button-container">
         <a
@@ -23,6 +23,7 @@
         >
       </div>
     </div>
+    <pr-public-archives *ngIf="isLoggedIn"></pr-public-archives>
   </div>
   <div class="featured-archives">
     <h2>Featured Archives</h2>
