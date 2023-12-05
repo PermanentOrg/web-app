@@ -218,6 +218,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
         );
       }
       await this.profile.deleteProfileItem(item);
+      this.trackProfileEdit();
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         this.message.showError(err.getMessage(), true);
@@ -244,6 +245,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     const empty = this.profile.createEmptyProfileItem(fieldNameShort);
     empty.isNewlyCreated = true;
     this.profile.addProfileItemToDictionary(empty);
+    this.trackProfileEdit();
   }
 
   async chooseLocationForItem(item: ProfileItemVOData) {
@@ -255,6 +257,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       );
     } finally {
       this.updateProgress();
+      this.trackProfileEdit();
     }
   }
 
