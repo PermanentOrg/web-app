@@ -48,9 +48,20 @@
       >
         Delete Account
       </div>
+      <div
+        class="settings-tab"
+        (click)="setTab('advanced-settings')"
+        [class.active]="activeTab === 'advanced-settings'"
+      >
+        Advanced Settings
+      </div>
     </div>
+
     <div class="settings-panel">
       <ng-container [ngSwitch]="activeTab">
+        <pr-advanced-settings
+          *ngSwitchCase="'advanced-settings'"
+        ></pr-advanced-settings>
         <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
         <pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
         <pr-notification-preferences

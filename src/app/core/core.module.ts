@@ -64,6 +64,7 @@ import { ArchiveStoragePayerComponent } from './components/archive-storage-payer
 import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import { GiftStorageComponent } from './components/gift-storage/gift-storage.component';
 import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/confirm-gift-dialog.component';
+import { AdvancedSettingsComponent } from './components/advanced-settings/advanced-settings.component';
 
 @NgModule({
   imports: [
@@ -118,6 +119,7 @@ import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/con
     SkipOnboardingDialogComponent,
     GiftStorageComponent,
     ConfirmGiftDialogComponent,
+    AdvancedSettingsComponent,
   ],
   providers: [
     DataService,
