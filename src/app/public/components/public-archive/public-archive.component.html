@@ -26,10 +26,6 @@
       }"
     >
       <div>
-<<<<<<< HEAD
-        <div class="profile-name">The {{ this.archive.fullName }} Archive</div>
-        <div class="profile-description">
-=======
         <div class="profile-name">
           The {{ this.archive.fullName }} Archive
           <fa-icon
@@ -43,7 +39,6 @@
           [ngClass]="{ 'profile-description-show': showProfileInformation }"
           class="profile-description"
         >
->>>>>>> 86e0bd3d (PER-8400-toggle-person-info-public-archive)
           <span
             *ngIf="
               hasSingleValueFor('birth_info', 'locnId1') ||
@@ -134,29 +129,6 @@
               >{{ showShortText ? ' See More' : ' See Less' }}
             </span>
           </div>
-<<<<<<< HEAD
-          <span
-            class="profile-description"
-            *ngIf="
-              hasSingleValueFor('description', 'textData1') && !showShortText
-            "
-            [innerHTML]="this.description"
-          ></span>
-          <span
-            class="profile-description"
-            *ngIf="
-              hasSingleValueFor('description', 'textData1') && showShortText
-            "
-            [innerHTML]="this.shortText + '...'"
-          ></span>
-          <span
-            *ngIf="this.description.length > 100"
-            class="expand-text"
-            (click)="toggleShowFullText()"
-            >{{ showShortText ? ' See More' : ' See Less' }}
-          </span>
-=======
->>>>>>> 86e0bd3d (PER-8400-toggle-person-info-public-archive)
         </ng-container>
       </div>
       <div class="profile-controls">
