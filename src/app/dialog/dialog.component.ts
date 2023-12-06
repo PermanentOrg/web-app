@@ -1,11 +1,18 @@
-import { Component, ViewContainerRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+/* @format */
+import {
+  Component,
+  ViewContainerRef,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { DeviceService } from '@shared/services/device/device.service';
 import { DialogOptions, DialogRef } from './dialog.service';
 
 @Component({
   selector: 'pr-dialog',
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+  styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent implements AfterViewInit {
   public isVisible = false;
@@ -18,16 +25,14 @@ export class DialogComponent implements AfterViewInit {
 
   private dialogRef: DialogRef;
 
-  @ViewChild('dialogContent', { read: ViewContainerRef, static: true }) viewContainer: ViewContainerRef;
-  @ViewChild('menuWrapper', { read: ElementRef, static: true }) menuWrapperElement: ElementRef;
+  @ViewChild('dialogContent', { read: ViewContainerRef, static: true })
+  viewContainer: ViewContainerRef;
+  @ViewChild('menuWrapper', { read: ElementRef, static: true })
+  menuWrapperElement: ElementRef;
 
-  constructor(
-    private device: DeviceService,
-  ) {
-  }
+  constructor(private device: DeviceService) {}
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   bindDialogRef(dialogRef: DialogRef) {
     if (!this.dialogRef) {
@@ -35,7 +40,7 @@ export class DialogComponent implements AfterViewInit {
     }
   }
 
-  setOptions(options ?: DialogOptions) {
+  setOptions(options?: DialogOptions) {
     if (options) {
       if (options.height) {
         this.height = options.height;
@@ -47,7 +52,8 @@ export class DialogComponent implements AfterViewInit {
 
       if (options.mobileWidth) {
         this.mobileWidth = options.mobileWidth;
-        this.width = this.width === options.width ? this.width : options.mobileWidth;
+        this.width =
+          this.width === options.width ? this.width : options.mobileWidth;
       }
 
       if (options.borderRadius) {
@@ -64,8 +70,7 @@ export class DialogComponent implements AfterViewInit {
     return this.device.isMobileWidth();
   }
 
-  onMenuClick(event) {
-  }
+  onMenuClick(event) {}
 
   onMenuWrapperClick(event: MouseEvent) {
     if (event.target === this.menuWrapperElement.nativeElement) {

@@ -1,11 +1,25 @@
-<div class="menu-wrapper"
-  [ngClass]="{'visible': isVisible, 'dialog-auto-height': height === 'auto', 'dialog-auto-width': width !== 'fullscreen'}"
-  #menuWrapper (click)="onMenuWrapperClick($event)">
-  <div 
-    class="menu" 
-    [ngStyle]="{'max-width': width === 'fullscreen' || (isMobile() && !mobileWidth) ? '' : (width ?? mobileWidth), 'borderRadius': borderRadius}"
+<!-- @format  -->
+<div
+  class="menu-wrapper"
+  [ngClass]="{
+    visible: isVisible,
+    'dialog-auto-height': height === 'auto',
+    'dialog-auto-width': width !== 'fullscreen'
+  }"
+  #menuWrapper
+  (mousedown)="onMenuWrapperClick($event)"
+>
+  <div
+    class="menu"
+    [ngStyle]="{
+      'max-width':
+        width === 'fullscreen' || (isMobile() && !mobileWidth)
+          ? ''
+          : width ?? mobileWidth,
+      borderRadius: borderRadius
+    }"
     [ngClass]="menuClass"
-  > 
+  >
     <ng-template #dialogContent></ng-template>
   </div>
 </div>
