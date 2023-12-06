@@ -2,7 +2,7 @@
 <button
   class="btn btn-wordpress"
   *ngIf="account"
-  (click)="showMenu = !showMenu"
+  (click)="handleOpenAccountMenu()"
   [class.active]="showMenu"
 >
   <span>{{ this.account.primaryEmail }}</span>

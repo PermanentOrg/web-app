@@ -19,6 +19,7 @@ import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
@@ -47,7 +48,8 @@ export class StorageDialogComponent
     private account: AccountService,
     private api: ApiService,
     private message: MessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private mixpanel: MixpanelService
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],
@@ -81,6 +83,9 @@ export class StorageDialogComponent
 
   setTab(tab: StorageDialogTab) {
     this.activeTab = tab;
+    if (tab === 'promo') {
+      this.mixpanel.trackPageView('Redeem Gift');
+    }
   }
 
   onDoneClick() {
@@ -91,15 +96,12 @@ export class StorageDialogComponent
     try {
       this.waiting = true;
       const response = await this.api.billing.redeemPromoCode(value);
+      this.mixpanel.track('Redeem Promo Code', {});
       await this.account.refreshAccount();
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
       this.account.addStorageBytes(bytes);
       const pipe = new FileSizePipe();
-      this.message.showMessage(
-        `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
-        'success'
-      );
       this.message.showMessage(
         `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
         'success'

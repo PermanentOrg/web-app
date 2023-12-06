@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -33,6 +34,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -71,7 +73,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private relationshipService: RelationshipService,
     private dialog: Dialog,
     private profile: ProfileService,
-    private payerService: PayerService
+    private payerService: PayerService,
+    private mixpanel: MixpanelService
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
@@ -223,6 +226,9 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleArchiveOptions(): void {
     this.showArchiveOptions = !this.showArchiveOptions;
+    if (this.showArchiveOptions) {
+      this.mixpanel.trackPageView('Archive Menu');
+    }
     window.sessionStorage.setItem(
       'showArchiveOptions',
       (+this.showArchiveOptions).toString()

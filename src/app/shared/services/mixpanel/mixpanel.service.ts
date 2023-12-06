@@ -1,4 +1,5 @@
 /* @format*/
+import { DeviceService } from '@shared/services/device/device.service';
 import { Injectable } from '@angular/core';
 import mixpanel from 'mixpanel-browser';
 import { environment } from '@root/environments/environment';
@@ -13,7 +14,7 @@ export class MixpanelService {
   protected enabled = false;
   protected token: string;
 
-  constructor(secrets: SecretsService) {
+  constructor(secrets: SecretsService, private deviceService: DeviceService) {
     if (secrets.get('MIXPANEL_TOKEN') && MixpanelService.enableMixpanel) {
       this.token = secrets.get('MIXPANEL_TOKEN');
       this.enabled = true;
@@ -49,5 +50,10 @@ export class MixpanelService {
 
   public isEnabled(): boolean {
     return this.enabled;
+  }
+
+  public trackPageView(page: string): void {
+    const trackMessage = this.deviceService.getViewMessageForEventTracking();
+    this.track(trackMessage, { page });
   }
 }

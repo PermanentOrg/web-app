@@ -1,4 +1,14 @@
-import { Component, OnInit, HostBinding, AfterViewInit, ViewChild, Optional, OnDestroy } from '@angular/core';
+/* @format */
+import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
+import {
+  Component,
+  OnInit,
+  HostBinding,
+  AfterViewInit,
+  ViewChild,
+  Optional,
+  OnDestroy,
+} from '@angular/core';
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
@@ -7,7 +17,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 @Component({
   selector: 'pr-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   hambugerMenuVisible: boolean;
@@ -16,14 +26,13 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   constructor(
+    private mixpanel: MixpanelService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog
-  ) {
-  }
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.portalService) {
@@ -38,6 +47,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showHamburgerMenu() {
+    this.mixpanel.trackPageView('Archive Menu');
     this.hambugerMenuVisible = true;
   }
 
@@ -55,9 +65,10 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showNotificationMenu() {
     try {
-      this.dialog.open('NotificationDialogComponent', null, { height: 'fullscreen', menuClass: 'notification-dialog'});
-    } catch (err) {
-    }
+      this.dialog.open('NotificationDialogComponent', null, {
+        height: 'fullscreen',
+        menuClass: 'notification-dialog',
+      });
+    } catch (err) {}
   }
-
 }
