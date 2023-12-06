@@ -43,13 +43,13 @@ $profile-sidebar-width: pxToGrid(360px);
 @mixin profileSection {
   max-width: $profile-max-width;
   padding-top: $grid-unit;
- 
+
    button {
      margin: 0;
      width: auto;
      @include gridHeightButton;
    }
- 
+
    & > button {
      margin: $grid-unit 0;
    }
@@ -109,13 +109,13 @@ $profile-sidebar-width: pxToGrid(360px);
     &.in-thirds > * {
       flex: 0 1 math.div(100% * 1, 3);
       max-width: math.div(100% * 1, 3);
-  
+
       &.two-thirds {
         flex: 0 1 68.9%;
         max-width: 68.9%
       }
     }
-  
+
     &.in-half > * {
       flex: 0 1 50%;
       max-width: 50%;
