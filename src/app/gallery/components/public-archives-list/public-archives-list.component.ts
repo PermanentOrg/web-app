@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 import { MessageService } from '../../../shared/services/message/message.service';
 
 @Component({
-  selector: 'pr-public-archives',
-  templateUrl: './public-archives.component.html',
-  styleUrls: ['./public-archives.component.scss'],
+  selector: 'pr-public-archives-list',
+  templateUrl: './public-archives-list.component.html',
+  styleUrls: ['./public-archives-list.component.scss'],
 })
-export class PublicArchivesComponent implements OnInit {
+export class PublicArchivesListComponent implements OnInit {
   public publicArchives: ArchiveVO[] = [];
   public waiting: boolean = true;
 

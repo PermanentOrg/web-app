@@ -5,18 +5,18 @@ import { MessageService } from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
 import { ArchiveVO } from '../../../models/archive-vo';
 import { GalleryModule } from '../../gallery.module';
-import { PublicArchivesComponent } from './public-archives.component';
+import { PublicArchivesListComponent } from './public-archives-list.component';
 
 const mockAccountService = {
   getAllPublicArchives: () => Promise.resolve([]),
 };
 
 describe('PublicArchivesComponent', () => {
-  let shallow: Shallow<PublicArchivesComponent>;
+  let shallow: Shallow<PublicArchivesListComponent>;
   let messageShown = false;
 
   beforeEach(async () => {
-    shallow = new Shallow(PublicArchivesComponent, GalleryModule)
+    shallow = new Shallow(PublicArchivesListComponent, GalleryModule)
       .mock(AccountService, mockAccountService)
       .mock(MessageService, {
         showError: () => {
