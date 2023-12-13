@@ -9,7 +9,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { trimWhitespace } from '@shared/utilities/forms';
 import { APP_CONFIG } from '@root/app/app.config';
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
@@ -35,7 +34,6 @@ export class LoginComponent implements OnInit {
     private message: MessageService,
     private cookies: CookieService,
     private device: DeviceService,
-    private mixpanel: MixpanelService
   ) {
     this.loginForm = fb.group({
       email: [
