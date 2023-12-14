@@ -205,21 +205,17 @@ export class AccountService {
           throw response;
         }
         // Verify that server agrees that the user is logged in
-        try {
-          const loggedIn = await this.checkSession();
-          if (loggedIn) {
-            const newArchive = response.getArchiveVO();
-            this.archive.update(newArchive);
-            if (this.account.keepLoggedIn) {
-              this.storage.local.set(ARCHIVE_KEY, this.archive);
-            } else {
-              this.storage.session.set(ARCHIVE_KEY, this.archive);
-            }
+        const loggedIn = await this.checkSession();
+        if (loggedIn) {
+          const newArchive = response.getArchiveVO();
+          this.archive.update(newArchive);
+          if (this.account.keepLoggedIn) {
+            this.storage.local.set(ARCHIVE_KEY, this.archive);
           } else {
-            throw loggedIn;
+            this.storage.session.set(ARCHIVE_KEY, this.archive);
           }
-        } catch {
-          this.logOutAndRedirectToLogin();
+        } else {
+          throw loggedIn;
         }
       })
       .catch(() => {
