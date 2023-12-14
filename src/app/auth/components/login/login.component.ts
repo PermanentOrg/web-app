@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private message: MessageService,
     private cookies: CookieService,
-    private device: DeviceService,
+    private device: DeviceService
   ) {
     this.loginForm = fb.group({
       email: [
