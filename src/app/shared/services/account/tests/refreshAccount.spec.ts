@@ -27,6 +27,7 @@ class AccountRepoStub {
               AccountVO: {
                 primaryEmail: 'test@permanent.org',
                 fullName: 'Test User',
+                keepLoggedIn: true,
               },
               ArchiveVO: {
                 archiveNbr: '0001-0000',
@@ -96,7 +97,8 @@ describe('AccountService: refreshAccount', () => {
         provide: ApiService,
         useValue: { auth: authRepo, account: accountRepo },
       })
-      .mock(StorageService, dummyStorageService);
+      .dontMock(StorageService)
+      .provide({ provide: StorageService, useValue: dummyStorageService });
   });
 
   function setUpSpies(
@@ -105,6 +107,7 @@ describe('AccountService: refreshAccount', () => {
       router: Router;
       location: LocationStrategy;
       instance: AccountService;
+      storage?: StorageService;
     },
     url: string = '/app/private'
   ) {
@@ -121,22 +124,29 @@ describe('AccountService: refreshAccount', () => {
     services.instance.setArchive(new ArchiveVO({}));
     services.instance.setAccount(new AccountVO({}));
 
-    return { logOutSpy };
+    let localStorageSpy;
+    if (services.storage) {
+      localStorageSpy = spyOn(services.storage.local, 'set').and.callThrough();
+    }
+
+    return { logOutSpy, localStorageSpy };
   }
   it('should be able to check if the user is logged in', async () => {
     const { instance, inject } = shallow.createService();
     const router = inject(Router);
 
-    const { logOutSpy } = setUpSpies({
+    const { logOutSpy, localStorageSpy } = setUpSpies({
       apiService: inject(ApiService),
       router,
       location: inject(LocationStrategy),
       instance,
+      storage: inject(StorageService),
     });
 
     await instance.refreshAccount();
     expect(logOutSpy).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
+    expect(localStorageSpy).toHaveBeenCalled();
   });
   it('should redirect the user to the login page if their session expires', async () => {
     const { instance, inject } = shallow.createService();

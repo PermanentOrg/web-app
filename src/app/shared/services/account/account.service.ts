@@ -208,12 +208,10 @@ export class AccountService {
         const loggedIn = await this.checkSession();
         if (loggedIn) {
           const newArchive = response.getArchiveVO();
+          const newAccount = response.getAccountVO();
+          this.account.update(newAccount);
           this.archive.update(newArchive);
-          if (this.account.keepLoggedIn) {
-            this.storage.local.set(ARCHIVE_KEY, this.archive);
-          } else {
-            this.storage.session.set(ARCHIVE_KEY, this.archive);
-          }
+          this.setStorage(this.account.keepLoggedIn, ARCHIVE_KEY, this.archive);
         } else {
           throw loggedIn;
         }
