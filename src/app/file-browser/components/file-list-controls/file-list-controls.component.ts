@@ -177,6 +177,10 @@ export class FileListControlsComponent
 
     this.can.download = true;
 
+    if (this.isPublic) {
+      this.can.publish = true;
+    }
+
     if (!this.account.checkMinimumArchiveAccess(AccessRole.Curator)) {
       return;
     }

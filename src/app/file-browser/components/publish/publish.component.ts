@@ -36,6 +36,7 @@ export class PublishComponent implements OnInit {
   public waiting = false;
   public linkCopied = false;
   public iaLinkCopied = false;
+  public isAtleastManager = false;
 
   @ViewChild('publicLinkInput', { static: false }) publicLinkInput: ElementRef;
   @ViewChild('iaLinkInput', { static: false }) iaLinkInput: ElementRef;
@@ -54,7 +55,10 @@ export class PublishComponent implements OnInit {
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 
-    if (this.sourceItem.folder_linkType.includes('public')) {
+    this.isAtleastManager =
+      this.getRole().includes('manager') || this.getRole().includes('owner');
+
+    if (this.sourceItem?.folder_linkType?.includes('public')) {
       this.publicItem = this.sourceItem;
       this.publicLink = this.linkPipe.transform(this.publicItem);
       this.checkInternetArchiveLink();
@@ -186,5 +190,9 @@ export class PublishComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  private getRole(): string {
+    return this.accountService.getArchive().accessRole;
   }
 }
