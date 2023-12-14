@@ -13,23 +13,40 @@ import { LocationStrategy } from '@angular/common';
 import { AccountService } from '../account.service';
 
 class AccountRepoStub {
-  public get(_account: AccountVO) {
-    return Promise.resolve();
+  public static failRequest: boolean = false;
+  public async get(_account: AccountVO) {
+    if (AccountRepoStub.failRequest) {
+      throw 'test error';
+    }
+    return new AccountResponse({
+      isSuccessful: true,
+      Results: [
+        {
+          data: [
+            {
+              AccountVO: {
+                primaryEmail: 'test@permanent.org',
+                fullName: 'Test User',
+              },
+              ArchiveVO: {
+                archiveNbr: '0001-0000',
+              },
+            },
+          ],
+        },
+      ],
+    });
   }
 }
 
 class AuthRepoStub {
   public static loggedIn: boolean = true;
-  public static failRequest: boolean = false;
 
   public logOut() {
     return new Observable<AuthResponse>();
   }
 
   public async isLoggedIn() {
-    if (AuthRepoStub.failRequest) {
-      throw 'test error';
-    }
     return new AuthResponse({
       isSuccessful: true,
       Results: [
@@ -70,7 +87,7 @@ describe('AccountService: refreshAccount', () => {
 
   beforeEach(() => {
     AuthRepoStub.loggedIn = true;
-    AuthRepoStub.failRequest = false;
+    AccountRepoStub.failRequest = false;
     accountRepo = new AccountRepoStub();
     authRepo = new AuthRepoStub();
     shallow = new Shallow(AccountService, AppModule)
@@ -103,26 +120,6 @@ describe('AccountService: refreshAccount', () => {
 
     services.instance.setArchive(new ArchiveVO({}));
     services.instance.setAccount(new AccountVO({}));
-    spyOn(services.apiService.account, 'get').and.resolveTo(
-      new AccountResponse({
-        isSuccessful: true,
-        Results: [
-          {
-            data: [
-              {
-                AccountVO: {
-                  primaryEmail: 'test@permanent.org',
-                  fullName: 'Test User',
-                },
-                ArchiveVO: {
-                  archiveNbr: '0001-0000',
-                },
-              },
-            ],
-          },
-        ],
-      })
-    );
 
     return { logOutSpy };
   }
@@ -195,7 +192,7 @@ describe('AccountService: refreshAccount', () => {
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
-  it('should redirect the user if the loggedIn call fails', async () => {
+  it('should redirect the user if the account/get call fails', async () => {
     const { instance, inject } = shallow.createService();
     const router = inject(Router);
 
@@ -206,12 +203,12 @@ describe('AccountService: refreshAccount', () => {
       instance,
     });
 
-    AuthRepoStub.failRequest = true;
+    AccountRepoStub.failRequest = true;
     await instance.refreshAccount();
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalled();
   });
-  it('should not redirect the user if the loggedIn call fails on the public archive', async () => {
+  it('should not redirect the user if the account/get call fails on the public archive', async () => {
     const { instance, inject } = shallow.createService();
     const router = inject(Router);
 
@@ -225,12 +222,12 @@ describe('AccountService: refreshAccount', () => {
       '/p/0001-0000/'
     );
 
-    AuthRepoStub.failRequest = true;
+    AccountRepoStub.failRequest = true;
     await instance.refreshAccount();
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
-  it('should not redirect the user if the loggedIn call fails on the public gallery', async () => {
+  it('should not redirect the user if the account/get call fails on the public gallery', async () => {
     const { instance, inject } = shallow.createService();
     const router = inject(Router);
 
@@ -244,7 +241,7 @@ describe('AccountService: refreshAccount', () => {
       '/gallery/'
     );
 
-    AuthRepoStub.failRequest = true;
+    AccountRepoStub.failRequest = true;
     await instance.refreshAccount();
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
