@@ -1,7 +1,5 @@
 /* @format */
 import { Component, OnInit, Input } from '@angular/core';
-import { ArchiveVO } from '@models';
-import { ApiService } from '@shared/services/api/api.service';
 import { FeaturedArchive } from '../../types/featured-archive';
 
 @Component({
