@@ -48,10 +48,9 @@ describe('AccountRepo', () => {
         true,
         true
       )
-      .subscribe((response) =>
-
-        expect(response.primaryEmail).toEqual('test@permanent.org')
-      );
+      .subscribe((response) => {
+        expect(response.primaryEmail).toEqual('test@permanent.org');
+      });
     const req = httpMock.expectOne(`${environment.apiUrl}/account/post`);
 
     expect(req.request.method).toBe('POST');
