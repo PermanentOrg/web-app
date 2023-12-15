@@ -9,8 +9,8 @@ const testArchive: FeaturedArchive = {
   archiveNbr: '0000-0000',
   name: 'Unit Testing',
   type: 'type.archive.person',
-  thumbUrl: 'thumbUrl',
-  bannerUrl: 'bannerUrl',
+  profileImage: 'thumbUrl',
+  bannerImage: 'bannerUrl',
 };
 
 describe('FeaturedArchiveComponent', () => {

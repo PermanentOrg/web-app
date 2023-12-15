@@ -29,10 +29,10 @@ describe('FeaturedArchiveService', () => {
     const expected: FeaturedArchive[] = [
       {
         archiveNbr: '0001-0000',
-        bannerUrl: 'image.jpg',
+        bannerImage: 'image.jpg',
         name: 'Unit Test',
+        profileImage: 'image.jpg',
         type: 'type.archive.person',
-        thumbUrl: 'image.jpg',
       },
     ];
 
