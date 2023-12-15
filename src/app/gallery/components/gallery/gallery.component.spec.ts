@@ -1,12 +1,12 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { GalleryComponent } from './gallery.component';
 import { FeaturedArchive } from '../../types/featured-archive';
 import {
   FEATURED_ARCHIVE_API,
   FeaturedArchiveApi,
 } from '../../types/featured-archive-api';
 import { GalleryModule } from '../../gallery.module';
+import { GalleryComponent } from './gallery.component';
 
 class DummyFeaturedArchiveAPI implements FeaturedArchiveApi {
   public static failRequest = false;
@@ -35,7 +35,7 @@ const testArchive: FeaturedArchive = {
   bannerUrl: 'bannerUrl',
 } as const;
 
-fdescribe('GalleryComponent', () => {
+describe('GalleryComponent', () => {
   let shallow: Shallow<GalleryComponent>;
   let dummyApi: DummyFeaturedArchiveAPI;
 
@@ -48,11 +48,6 @@ fdescribe('GalleryComponent', () => {
       useValue: dummyApi,
     });
     shallow.dontMock(FEATURED_ARCHIVE_API);
-  });
-
-  it('should be able to get a list of featured archives', async () => {
-    const { instance } = await shallow.render();
-    expect(await instance.getFeaturedArchives()).toBeTruthy();
   });
 
   it('should fetch featured archives from the API', async () => {

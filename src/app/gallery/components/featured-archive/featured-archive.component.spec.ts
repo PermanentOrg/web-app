@@ -1,9 +1,9 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { FeaturedArchiveComponent } from './featured-archive.component';
+import { ArchiveType } from '@models/archive-vo';
 import { FeaturedArchive } from '../../types/featured-archive';
 import { GalleryModule } from '../../gallery.module';
-import { ArchiveType } from '@models/archive-vo';
+import { FeaturedArchiveComponent } from './featured-archive.component';
 
 const testArchive: FeaturedArchive = {
   archiveNbr: '0000-0000',
@@ -13,7 +13,7 @@ const testArchive: FeaturedArchive = {
   bannerUrl: 'bannerUrl',
 };
 
-fdescribe('FeaturedArchiveComponent', () => {
+describe('FeaturedArchiveComponent', () => {
   let shallow: Shallow<FeaturedArchiveComponent>;
 
   const defaultRender = async () =>

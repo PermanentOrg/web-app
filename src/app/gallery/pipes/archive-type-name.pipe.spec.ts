@@ -2,7 +2,7 @@
 import { ArchiveType } from '@models/archive-vo';
 import { ArchiveTypeNamePipe } from './archive-type-name.pipe';
 
-fdescribe('ArchiveTypeNamePipe', () => {
+describe('ArchiveTypeNamePipe', () => {
   it('can create an instance', () => {
     const pipe = new ArchiveTypeNamePipe();
     expect(pipe).toBeTruthy();
