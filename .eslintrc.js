@@ -12,7 +12,6 @@ module.exports = {
       env: { jasmine: true },
       rules: {
         // We intend to enable these eventually:
-        'jasmine/new-line-before-expect': 'off',
         'jasmine/new-line-between-declarations': 'off',
         'jasmine/no-disabled-tests': 'off',
         'jasmine/no-promise-without-done-fail': 'off',
