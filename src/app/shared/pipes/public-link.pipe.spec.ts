@@ -20,6 +20,7 @@ describe('PublicLinkPipe', () => {
       archiveNbr: '0001-00gh',
     });
     const route = pipe.transform(folder);
+
     expect(route).toBeDefined();
     expect(route.endsWith('/p/archive/0001-0000/0001-00gh/100')).toBeTruthy();
   });
@@ -36,6 +37,7 @@ describe('PublicLinkPipe', () => {
       archiveNbr: '0001-00gp',
     });
     const route = pipe.transform(record);
+
     expect(route).toBeDefined();
     expect(
       route.endsWith('/p/archive/0001-0000/0001-meow/1234/record/0001-00gp')
@@ -49,6 +51,7 @@ describe('PublicLinkPipe', () => {
     });
 
     const url = new URL(pipe.transform(folder));
+
     expect(url.pathname).not.toContain('//');
   });
 });

@@ -51,6 +51,7 @@ describe('DirectiveRepo', () => {
     });
 
     const req = httpMock.expectOne(apiUrl('/v2/directive/archive/1234'));
+
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.has('Authorization')).toBeTrue();
     req.flush([
@@ -91,6 +92,7 @@ describe('DirectiveRepo', () => {
     });
 
     const req = httpMock.expectOne(apiUrl('/v2/directive'));
+
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.has('Authorization')).toBeTrue();
     req.flush(new Directive(newDirectiveData));
@@ -110,6 +112,7 @@ describe('DirectiveRepo', () => {
     });
 
     const req = httpMock.expectOne(apiUrl('/v2/directive/test-id'));
+
     expect(req.request.method).toBe('PUT');
     expect(req.request.headers.has('Authorization')).toBeTrue();
     expect(req.request.body.directiveId).toBeUndefined();
@@ -132,6 +135,7 @@ describe('DirectiveRepo', () => {
     });
 
     const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
+
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.has('Authorization')).toBeTrue();
     req.flush([
@@ -159,6 +163,7 @@ describe('DirectiveRepo', () => {
       });
 
     const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
+
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.has('Authorization')).toBeTrue();
     expect(req.request.body.name).toBe('New User');
@@ -187,6 +192,7 @@ describe('DirectiveRepo', () => {
       });
 
     const req = httpMock.expectOne(apiUrl('/v2/legacy-contact/test-id'));
+
     expect(req.request.method).toBe('PUT');
     expect(req.request.headers.has('Authorization')).toBeTrue();
     expect(req.request.body.name).toBe('Updated User');

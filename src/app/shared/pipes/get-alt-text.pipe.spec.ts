@@ -17,6 +17,7 @@ describe('GetAltTextPipe', () => {
     value.altText = 'alt text';
     value.displayName = 'display name';
     const result = pipe.transform(value);
+
     expect(result).toEqual('alt text');
   });
 
@@ -24,6 +25,7 @@ describe('GetAltTextPipe', () => {
     const value = new RecordVO({});
     value.displayName = 'display name';
     const result = pipe.transform(value);
+
     expect(result).toEqual('display name');
   });
 });

@@ -76,12 +76,14 @@ describe('UploadService', () => {
 
   it('should register upload session start time', () => {
     session.emit(UploadSessionStatus.Start);
+
     expect(service.getUploadStartTime()).not.toBeUndefined();
   });
 
   it('should output upload session elapsed time after upload is finished', () => {
     session.emit(UploadSessionStatus.Start);
     session.emit(UploadSessionStatus.Done);
+
     expect(service.getElapsedUploadTime()).toBeGreaterThan(-1);
   });
 

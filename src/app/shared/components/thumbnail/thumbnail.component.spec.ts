@@ -115,6 +115,7 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.update(leanItem);
     hostComponent.item.dataStatus = leanItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['currentThumbUrl']).toEqual(image200);
   });
 
@@ -126,6 +127,7 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.update(fullItem);
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['targetThumbWidth']).toEqual(200);
     expect(component['currentThumbUrl']).toEqual(image200);
   });
@@ -138,6 +140,7 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.update(fullItem);
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['targetThumbWidth']).toEqual(200);
     expect(component['currentThumbUrl']).toEqual(image200);
   });
@@ -150,6 +153,7 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.update(fullItem);
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['targetThumbWidth']).toEqual(200);
     expect(component['currentThumbUrl']).toEqual(image200);
   });
@@ -160,6 +164,7 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.update(fullItem);
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['targetThumbWidth']).toEqual(500);
     expect(component['currentThumbUrl']).toEqual(image500);
   });
@@ -170,11 +175,13 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.update(fullItem);
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['targetThumbWidth']).toEqual(500);
     expect(component['currentThumbUrl']).toEqual(image500);
 
     hostComponent.item = fullItem2;
     fixture.detectChanges();
+
     expect(component['targetThumbWidth']).toEqual(500);
     expect(component['currentThumbUrl']).toEqual(fullItem2.thumbURL500);
   });
@@ -186,6 +193,7 @@ describe('ThumbnailComponent', () => {
     hostComponent.item.type = 'type.record.archive';
     hostComponent.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
+
     expect(component['element'].querySelector('fa-icon')).not.toBeNull();
     expect(
       component['element'].querySelector('.pr-thumbnail-image:not([hidden])')

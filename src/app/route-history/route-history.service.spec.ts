@@ -45,6 +45,7 @@ describe('RouteHistoryService', () => {
   it('should provide the current route after navigation', async () => {
     expectRoutesToBeUndefined();
     await router.navigate(['/home']);
+
     expect(service.currentRoute).toEqual('/home');
     expect(service.previousRoute).toBeUndefined();
   });
@@ -53,6 +54,7 @@ describe('RouteHistoryService', () => {
     expectRoutesToBeUndefined();
     await router.navigate(['/home']);
     await router.navigate(['/profile']);
+
     expect(service.currentRoute).toEqual('/profile');
     expect(service.previousRoute).toEqual('/home');
   });

@@ -46,6 +46,7 @@ describe('ArchivePayerComponent', () => {
     component.hasPayer = false;
     fixture.detectChanges();
     const divElement = fixture.nativeElement.querySelector('#no-payer');
+
     expect(divElement).toBeTruthy();
   });
 
@@ -60,6 +61,7 @@ describe('ArchivePayerComponent', () => {
 
     fixture.detectChanges();
     const divElement = fixture.nativeElement.querySelector('#with-payer');
+
     expect(divElement).toBeTruthy();
   });
 
@@ -68,6 +70,7 @@ describe('ArchivePayerComponent', () => {
 
     fixture.detectChanges();
     const divElement = fixture.nativeElement.querySelector('#with-payer');
+
     expect(divElement).toBeTruthy();
   });
 
@@ -85,6 +88,7 @@ describe('ArchivePayerComponent', () => {
 
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector('#is-not-payer');
+
     expect(div).toBeTruthy();
   });
 
@@ -99,6 +103,7 @@ describe('ArchivePayerComponent', () => {
 
     fixture.detectChanges();
     const div = fixture.nativeElement.querySelector('#is-payer');
+
     expect(div).toBeTruthy();
   });
 
@@ -116,6 +121,7 @@ describe('ArchivePayerComponent', () => {
     component.ngOnInit();
 
     fixture.detectChanges();
+
     expect(component.hasPayer).toEqual(true);
   });
 
@@ -130,6 +136,7 @@ describe('ArchivePayerComponent', () => {
 
     component.ngOnInit();
     fixture.detectChanges();
+
     expect(component.hasPayer).toEqual(false);
   });
 

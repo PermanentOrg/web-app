@@ -21,6 +21,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
   });
   it('should exist', async () => {
     const { find } = await defaultRender();
+
     expect(find('.welcome-screen')).toHaveFoundOne();
   });
   it('should display a list of pending archives if they are available', async () => {
@@ -30,6 +31,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
       }),
     ];
     const { find } = await defaultRender(pendingArchives);
+
     expect(find('pr-archive-small')).toHaveFoundOne();
   });
   it('should pass up a selected archive', async () => {
@@ -40,6 +42,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
     ];
     const { element, find, outputs } = await defaultRender(pendingArchives);
     element.componentInstance.selectPendingArchive(pendingArchives[0]);
+
     expect(outputs.selectInvitation.emit).toHaveBeenCalledWith(
       pendingArchives[0]
     );

@@ -53,6 +53,7 @@ describe('PublishComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 

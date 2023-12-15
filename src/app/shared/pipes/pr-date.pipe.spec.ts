@@ -5,6 +5,7 @@ import { PrDatePipe } from './pr-date.pipe';
 describe('PrDatePipe', () => {
   it('create an instance', () => {
     const pipe = new PrDatePipe();
+
     expect(pipe).toBeTruthy();
   });
 

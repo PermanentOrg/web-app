@@ -47,6 +47,7 @@ describe('AdvancedSettingsComponent', () => {
 
   it('initializes allowSFTPDeletion from the account service', async () => {
     const { instance } = await shallow.render();
+
     expect(instance.allowSFTPDeletion).toEqual(1);
   });
 

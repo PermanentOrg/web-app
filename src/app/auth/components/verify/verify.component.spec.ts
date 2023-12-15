@@ -70,6 +70,7 @@ describe('VerifyComponent', () => {
 
   it('should create', async () => {
     await init();
+
     expect(component).toBeTruthy();
   });
 
@@ -85,6 +86,7 @@ describe('VerifyComponent', () => {
 
   it('should require only email verification if only email unverified', async () => {
     await init();
+
     expect(component.verifyingEmail).toBeTruthy();
     expect(component.needsEmail).toBeTruthy();
     expect(component.needsPhone).toBeFalsy();
@@ -93,6 +95,7 @@ describe('VerifyComponent', () => {
   it('should require only phone verification if only phone unverified', async () => {
     const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
     await init(unverifiedPhoneData);
+
     expect(component.verifyingPhone).toBeTruthy();
     expect(component.needsPhone).toBeTruthy();
     expect(component.needsEmail).toBeFalsy();
@@ -101,6 +104,7 @@ describe('VerifyComponent', () => {
   it('should require verification of both if both unverified, and verify email first', async () => {
     const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
     await init(unverifiedBothData);
+
     expect(component.verifyingEmail).toBeTruthy();
     expect(component.needsPhone).toBeTruthy();
     expect(component.needsEmail).toBeTruthy();
@@ -188,6 +192,7 @@ describe('VerifyComponent', () => {
     // Testing environments might not have the site key enabled,
     // so force captchaEnabled to be true.
     component.captchaEnabled = true;
+
     expect(component.captchaPassed).toBeFalsy();
     expect(component.canSendCodes('phone')).toBeFalsy();
 

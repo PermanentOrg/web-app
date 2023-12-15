@@ -77,6 +77,7 @@ describe('LoginEmbedComponent', () => {
       email: '',
       password: TEST_DATA.user.password,
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.required).toBeTruthy();
   });
@@ -86,6 +87,7 @@ describe('LoginEmbedComponent', () => {
     component.loginForm.patchValue({
       email: 'lasld;f;aslkj',
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.email).toBeTruthy();
   });
@@ -107,6 +109,7 @@ describe('LoginEmbedComponent', () => {
     component.loginForm.patchValue({
       password: 'ass',
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('password').errors.minlength).toBeTruthy();
   });
@@ -117,6 +120,7 @@ describe('LoginEmbedComponent', () => {
       email: TEST_DATA.user.email,
       password: TEST_DATA.user.password,
     });
+
     expect(component.loginForm.valid).toBeTruthy();
   });
 });

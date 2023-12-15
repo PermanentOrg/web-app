@@ -55,11 +55,13 @@ describe('LegacyContactEditComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 
   it('should be able to fill out legacy contact form', async () => {
     const { instance, find } = await shallow.render();
+
     expect(find('.legacy-contact-name').length).toBe(1);
     expect(find('.legacy-contact-email').length).toBe(1);
 
@@ -81,6 +83,7 @@ describe('LegacyContactEditComponent', () => {
     expect(find('*[disabled]').length).toBe(3);
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(find('*[disabled]').length).toBe(0);
 
     expect(MockDirectiveRepo.savedLegacyContact.email).toBe('save@example.com');
@@ -123,6 +126,7 @@ describe('LegacyContactEditComponent', () => {
     expect(MockDirectiveRepo.savedLegacyContact.name).toBe(
       'Existing Updated Contact'
     );
+
     expect(MockDirectiveRepo.createdLegacyContact).toBeFalse();
     expect(MockDirectiveRepo.updatedLegacyContact).toBeTrue();
   });
@@ -201,14 +205,17 @@ describe('LegacyContactEditComponent', () => {
 
     fillOutForm(find, '', 'Test No Submit');
     fixture.detectChanges();
+
     expect(find('.save-btn[disabled]').length).toBe(1);
 
     fillOutForm(find, 'no-submit@example.com', '');
     fixture.detectChanges();
+
     expect(find('.save-btn[disabled]').length).toBe(1);
 
     fillOutForm(find, 'submit@example.com', 'Submit Now Works');
     fixture.detectChanges();
+
     expect(find('.save-btn[disabled]').length).toBe(0);
   });
 });

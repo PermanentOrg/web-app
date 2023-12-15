@@ -4,6 +4,7 @@ import { PublicRoutePipe } from './public-route.pipe';
 describe('PublicRoutePipe', () => {
   it('create an instance', () => {
     const pipe = new PublicRoutePipe();
+
     expect(pipe).toBeTruthy();
   });
 
@@ -14,6 +15,7 @@ describe('PublicRoutePipe', () => {
       archiveNbr: '0001-00gh'
     });
     const route = pipe.transform(folder);
+
     expect(route).toBeDefined();
     expect(route).toEqual(['/p', 'archive', '0001-0000', folder.archiveNbr, folder.folder_linkId ]);
   });
@@ -31,6 +33,7 @@ describe('PublicRoutePipe', () => {
       archiveNbr: '0001-00gp'
     });
     const route = pipe.transform(record);
+
     expect(route).toBeDefined();
     expect(route).toEqual(['/p', 'archive', '0001-0000', '0001-meow', '1234', 'record', record.archiveNbr ]);
   });

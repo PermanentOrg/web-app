@@ -60,6 +60,7 @@ describe('AddNewCategoryComponent', () => {
 
   it('should create', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
 
@@ -67,6 +68,7 @@ describe('AddNewCategoryComponent', () => {
     const { instance, outputs } = await shallow.render();
     firstValueName = 'potato';
     await instance.createNewCategory('vegetable');
+
     expect(createdTag.name).toBe('vegetable:potato');
     expect(outputs.tagsUpdate.emit).toHaveBeenCalled();
     expect(outputs.newCategory.emit).toHaveBeenCalledWith('vegetable');
@@ -76,6 +78,7 @@ describe('AddNewCategoryComponent', () => {
     const { instance } = await shallow.render();
     firstValueName = 'test';
     await expectAsync(instance.createNewCategory('a:b')).toBeRejected();
+
     expect(createdTag).toBeNull();
     expect(messageShown).toBeTrue();
   });
@@ -85,6 +88,7 @@ describe('AddNewCategoryComponent', () => {
     acceptPrompt = false;
     firstValueName = 'test';
     await instance.createNewCategory('test');
+
     expect(createdTag).toBeNull();
     expect(outputs.tagsUpdate.emit).not.toHaveBeenCalled();
   });
@@ -94,6 +98,7 @@ describe('AddNewCategoryComponent', () => {
     error = true;
     firstValueName = 'potato';
     await expectAsync(instance.createNewCategory('abc')).toBeRejected();
+
     expect(createdTag).toBeNull();
     expect(messageShown).toBeTrue();
     expect(outputs.tagsUpdate.emit).not.toHaveBeenCalled();

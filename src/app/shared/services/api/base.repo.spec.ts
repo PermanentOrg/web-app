@@ -15,6 +15,7 @@ describe('BaseRepo', () => {
 
   it('should be initialized with HttpService ', inject([HttpService], (http: HttpService) => {
     const authRepo = new BaseRepo(http);
+
     expect(authRepo.http).toEqual(jasmine.any(HttpService));
   }));
 });

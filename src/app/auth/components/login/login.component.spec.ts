@@ -54,6 +54,7 @@ describe('LoginComponent', () => {
       email: '',
       password: TEST_DATA.user.password,
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.required).toBeTruthy();
   });
@@ -64,6 +65,7 @@ describe('LoginComponent', () => {
       email: 'lasld;f;aslkj',
       password: TEST_DATA.user.password,
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('email').errors.email).toBeTruthy();
   });
@@ -74,6 +76,7 @@ describe('LoginComponent', () => {
       email: TEST_DATA.user.email,
       password: '',
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('password').errors.required).toBeTruthy();
   });
@@ -84,6 +87,7 @@ describe('LoginComponent', () => {
       email: TEST_DATA.user.email,
       password: 'short',
     });
+
     expect(component.loginForm.invalid).toBeTruthy();
     expect(component.loginForm.get('password').errors.minlength).toBeTruthy();
   });
@@ -94,6 +98,7 @@ describe('LoginComponent', () => {
       email: TEST_DATA.user.email,
       password: TEST_DATA.user.password,
     });
+
     expect(component.loginForm.valid).toBeTruthy();
   });
 });

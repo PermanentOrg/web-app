@@ -57,31 +57,37 @@ describe('PublicSettingsComponent', () => {
 
   it('should exist', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
   describe('it should have the proper option checked by default', () => {
     it('on', async () => {
       const { element } = await defaultRender();
+
       expect(element.componentInstance.allowDownloadsToggle).toBeTruthy();
     });
     it('off', async () => {
       const { element } = await defaultRender({
         allowPublicDownload: false,
       } as ArchiveVO);
+
       expect(element.componentInstance.allowDownloadsToggle).toBeFalsy();
     });
   });
 
   it('should save the archive setting when changed', async () => {
     const { element } = await defaultRender();
+
     expect(updated).toBeFalse();
     element.componentInstance.allowDownloadsToggle = 0;
     await element.componentInstance.onAllowDownloadsChange();
+
     expect(updated).toBeTrue();
     expect(updatedDownload).toBeFalse();
     element.componentInstance.allowDownloadsToggle = 1;
     await element.componentInstance.onAllowDownloadsChange();
+
     expect(updatedDownload).toBeTrue();
   });
 
@@ -90,6 +96,7 @@ describe('PublicSettingsComponent', () => {
     throwError = true;
     element.componentInstance.allowDownloadsToggle = 0;
     await element.componentInstance.onAllowDownloadsChange();
+
     expect(updated).toBeFalse();
   });
 });

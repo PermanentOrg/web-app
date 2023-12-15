@@ -123,6 +123,7 @@ describe('AccountService', () => {
 
   it('should be created', () => {
     const { instance } = shallow.createService();
+
     expect(instance).toBeTruthy();
   });
 
@@ -140,6 +141,7 @@ describe('AccountService', () => {
       '',
       true
     );
+
     expect(account.primaryEmail).toEqual('test@permanent.org');
   });
 
@@ -178,6 +180,7 @@ describe('AccountService', () => {
     instance.setAccount(account);
 
     await instance.verifyEmail('sampleToken');
+
     expect(instance.getAccount().emailStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
     expect(trackerSpy).toHaveBeenCalled();
@@ -197,6 +200,7 @@ describe('AccountService', () => {
     instance.setAccount(account);
 
     await instance.verifyEmail('sampleToken');
+
     expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
     expect(instance.getAccount().keepLoggedIn).toBeTrue();
     expect(trackerSpy).toHaveBeenCalled();
@@ -213,6 +217,7 @@ describe('AccountService', () => {
       new File([], 'test.txt'),
     ]);
     await instance.deductAccountStorage(200);
+
     expect(instance.getAccount().spaceLeft).toEqual(99800);
   });
 

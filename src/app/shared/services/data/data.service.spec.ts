@@ -43,6 +43,7 @@ describe('DataService', () => {
     [DataService],
     (service: DataService) => {
       service.setCurrentFolder(testFolder);
+
       expect(service.currentFolder).toEqual(testFolder);
     }
   ));
@@ -51,6 +52,7 @@ describe('DataService', () => {
     [DataService],
     (service: DataService) => {
       service.setCurrentFolder(null);
+
       expect(service.currentFolder).toBeNull();
       const subscription = service.currentFolderChange.subscribe(
         (newFolder: FolderVO) => {
@@ -67,10 +69,12 @@ describe('DataService', () => {
     (service: DataService) => {
       service.setCurrentFolder(testFolder);
       service.registerItem(testRecord);
+
       expect(service.getItemByFolderLinkId(testRecord.folder_linkId)).toBe(
         testRecord
       );
       service.unregisterItem(testRecord);
+
       expect(
         service.getItemByFolderLinkId(testRecord.folder_linkId)
       ).toBeUndefined();

@@ -34,6 +34,7 @@ describe('InvitationsDialog', () => {
 
   it('exists', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
 

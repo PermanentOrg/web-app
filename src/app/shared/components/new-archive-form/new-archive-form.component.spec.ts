@@ -44,12 +44,15 @@ describe('NewArchiveFormComponent #onboarding', () => {
   });
   it('should create', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
   it('should not submit when form is invalid', async () => {
     const { find, fixture, outputs } = await shallow.render();
+
     expect(find('button').nativeElement.disabled).toBeFalsy();
     find('button').nativeElement.click();
+
     expect(outputs.success.emit).not.toHaveBeenCalled();
     expect(outputs.error.emit).not.toHaveBeenCalled();
   });
@@ -59,6 +62,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     fixture.detectChanges();
     find('button').nativeElement.click();
     fixture.detectChanges();
+
     expect(find('button').nativeElement.disabled).toBeTruthy();
   });
   it('should create a new archive on submit', async () => {
@@ -67,6 +71,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     fixture.detectChanges();
     find('button').nativeElement.click();
     fixture.detectChanges();
+
     expect(created).toBeTrue();
   });
   it('should output new archiveVO when submitted', async () => {
@@ -75,6 +80,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     fixture.detectChanges();
     find('button').nativeElement.click();
     await fixture.whenStable();
+
     expect(outputs.success.emit).toHaveBeenCalled();
     expect(createdArchive.fullName).toBe('Test User');
     expect(createdArchive.type).toBe('type.archive.person');
@@ -88,6 +94,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     fixture.detectChanges();
     find('button').nativeElement.click();
     await fixture.whenStable();
+
     expect(outputs.error.emit).toHaveBeenCalled();
     expect(outputs.success.emit).not.toHaveBeenCalled();
   });
@@ -95,9 +102,11 @@ describe('NewArchiveFormComponent #onboarding', () => {
     const { find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
     fillOutForm(find);
     fixture.detectChanges();
+
     expect(find('select[name="relation"]')).toHaveFoundOne();
     find('input[type="radio"]')[1].nativeElement.click();
     fixture.detectChanges();
+
     expect(find('select[name="relation"]')).not.toHaveFoundOne();
   });
   it('should submit relationType to API if it is enabled', async () => {
@@ -108,6 +117,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     element.componentInstance.formData.relationType = 'relation.other';
     find('button').nativeElement.click();
     await fixture.whenStable();
+
     expect(createdArchive.relationType).toBe('relation.other');
   });
 });

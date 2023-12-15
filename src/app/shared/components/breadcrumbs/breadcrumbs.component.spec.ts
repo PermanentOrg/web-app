@@ -40,11 +40,13 @@ describe('BreadcrumbsComponent', () => {
 
   it('should create', async () => {
     await init();
+
     expect(component).toBeTruthy();
   });
 
   it('should update the current folder when dataService is updated', async () => {
     await init();
+
     expect(component.currentFolder).toBeFalsy();
     const testFolder = new FolderVO({
       pathAsText: ['test'],
@@ -52,8 +54,10 @@ describe('BreadcrumbsComponent', () => {
       pathAsFolder_linkId: [1]
     });
     dataService.setCurrentFolder(testFolder);
+
     expect(component.currentFolder).toEqual(testFolder);
     dataService.setCurrentFolder();
+
     expect(component.currentFolder).toBeFalsy();
   });
 
@@ -65,8 +69,10 @@ describe('BreadcrumbsComponent', () => {
       pathAsFolder_linkId: [1, 2, 3]
     });
     dataService.setCurrentFolder(testFolder);
+
     expect(component.breadcrumbs.length).toBe(testFolder.pathAsArchiveNbr.length);
     const expectedUrl = `/private/${testFolder.pathAsArchiveNbr[1]}/${testFolder.pathAsFolder_linkId[1]}`;
+
     expect(component.breadcrumbs[1].routerPath).toEqual(expectedUrl);
   });
 
@@ -78,6 +84,7 @@ describe('BreadcrumbsComponent', () => {
       pathAsFolder_linkId: [1, 2, 3]
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
+
     expect(component.breadcrumbs[0].routerPath).toEqual('/private');
     expect(component.breadcrumbs[1].routerPath).toContain('/private');
   });
@@ -90,6 +97,7 @@ describe('BreadcrumbsComponent', () => {
       pathAsFolder_linkId: [1, 2, 3]
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
+
     expect(component.breadcrumbs[0].routerPath).toEqual('/apps');
     expect(component.breadcrumbs[1].routerPath).toContain('/apps');
   });
@@ -102,6 +110,7 @@ describe('BreadcrumbsComponent', () => {
       pathAsFolder_linkId: [1, 2, 3]
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
+
     expect(component.breadcrumbs[0].routerPath).toEqual('/shares');
     expect(component.breadcrumbs[0].text).toEqual('Shares');
     expect(component.breadcrumbs[1].routerPath).toContain('/shares/test2');

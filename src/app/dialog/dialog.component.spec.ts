@@ -13,6 +13,7 @@ describe('DialogComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 
@@ -20,14 +21,17 @@ describe('DialogComponent', () => {
     const { instance } = await shallow.render();
     instance.show();
     tick();
+
     expect(instance.isVisible).toBeTrue();
     instance.hide();
+
     expect(instance.isVisible).toBeFalse();
   }));
 
   it('sets options correctly', async () => {
     const { instance } = await shallow.render();
     instance.setOptions({ width: '100px', borderRadius: '10px' });
+
     expect(instance.width).toEqual('100px');
     expect(instance.borderRadius).toEqual('10px');
   });
@@ -35,6 +39,7 @@ describe('DialogComponent', () => {
     const { instance, find } = await shallow.render();
     spyOn(instance, 'onMenuWrapperClick').and.callThrough();
     find('.menu-wrapper').triggerEventHandler('mousedown', {});
+
     expect(instance.onMenuWrapperClick).toHaveBeenCalled();
   });
 });

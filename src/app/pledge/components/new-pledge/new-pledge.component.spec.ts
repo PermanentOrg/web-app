@@ -84,6 +84,7 @@ describe('NewPledgeComponent', () => {
 
   it('should exist', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
 

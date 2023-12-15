@@ -68,6 +68,7 @@ describe('LeftMenuComponent', () => {
     fixture.detectChanges();
 
     const prArchiveStoragePayerDebugElement = fixture.debugElement.query(By.directive(ArchiveStoragePayerComponent));
+
     expect(prArchiveStoragePayerDebugElement).toBeTruthy();
   }));
 
@@ -80,6 +81,7 @@ describe('LeftMenuComponent', () => {
     fixture.detectChanges();
 
     const prArchiveStoragePayerDebugElement = fixture.debugElement.query(By.directive(ArchiveStoragePayerComponent));
+
     expect(prArchiveStoragePayerDebugElement).toBeFalsy();
   });
 });

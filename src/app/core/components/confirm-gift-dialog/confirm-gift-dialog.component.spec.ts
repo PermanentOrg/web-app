@@ -166,6 +166,7 @@ describe('ConfirmGiftDialogComponent', () => {
     expect(showErrorSpy).toHaveBeenCalledWith(
       'Something went wrong! Please try again.'
     );
+
     expect(giftResultSpy).toHaveBeenCalledWith({
       isSuccessful: false,
       response: null,

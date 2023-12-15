@@ -89,6 +89,7 @@ describe('CreateAccountDialogComponent', () => {
   ) {
     const element: HTMLElement = fixture.nativeElement;
     const button = element.querySelector(selector) as HTMLAnchorElement;
+
     expect(button).toBeTruthy();
     return button;
   }
@@ -100,6 +101,7 @@ describe('CreateAccountDialogComponent', () => {
   ) {
     expect(link.href).toContain(expectedPath);
     link.click();
+
     expect(dialogRefSpy).toHaveBeenCalled();
   }
 });

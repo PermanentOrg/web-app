@@ -108,6 +108,7 @@ describe('SearchService', () => {
         { name: '"Potato"', tagId: 1 },
       ]);
       const searchTokens = service.parseSearchTerm('tag:""Potato""');
+
       expect(searchTokens[1].length).toBe(1);
       expect(searchTokens[1][0].tagId).toBe(1);
     });
@@ -144,6 +145,7 @@ describe('SearchService', () => {
         { displayName: 'Do not match' },
       ]);
       const searchResults = search('Potato');
+
       expect(searchResults.length).toBe(1);
       expect(searchResults[0].displayName).toBe('Potato');
     });
@@ -155,6 +157,7 @@ describe('SearchService', () => {
             'VeryLongDisplayNameThatNeedsToUseFuzzySearchAndIgnoreLocationPortrait',
         },
       ]);
+
       expect(search('Portrait').length).toBe(1);
     });
 
@@ -163,6 +166,7 @@ describe('SearchService', () => {
         { displayName: 'Potato' },
         { displayName: 'Potato Two' },
       ]);
+
       expect(search('Potato', 1).length).toBe(1);
     });
 
@@ -191,6 +195,7 @@ describe('SearchService', () => {
     it('can search a populated tag service', () => {
       tags.setTags([{ name: 'Potato' }, { name: 'DoNotMatch' }]);
       const searchResults = search('Potato');
+
       expect(searchResults.length).toBe(1);
       expect(searchResults[0].name).toBe('Potato');
     });
@@ -199,11 +204,13 @@ describe('SearchService', () => {
       tags.setTags([
         { name: 'VeryLongTagNameThatProbablyWontEvenHappenInProduction' },
       ]);
+
       expect(search('Production').length).toBe(1);
     });
 
     it('should limit results if limit is provided', () => {
       tags.setTags([{ name: 'Potato' }, { name: 'Potato Two' }]);
+
       expect(search('Potato', 1).length).toBe(1);
     });
 
@@ -215,12 +222,14 @@ describe('SearchService', () => {
   it('can do a complete archive search', () => {
     const apiSpy = spyOn(api.search, 'itemsByNameObservable');
     service.getResultsInCurrentArchive('Test', []);
+
     expect(apiSpy).toHaveBeenCalled();
   });
 
   it('can do a public archive search', () => {
     const apiSpy = spyOn(api.search, 'itemsByNameInPublicArchiveObservable');
     service.getResultsInPublicArchive('Test', [], '1');
+
     expect(apiSpy).toHaveBeenCalled();
   });
 
@@ -229,6 +238,7 @@ describe('SearchService', () => {
     const searchTokens = service.parseSearchTerm(
       'tag:""A Multiword Tag"" "potato"'
     );
+
     expect(searchTokens[1].length).toBe(0);
   });
 
