@@ -32,18 +32,6 @@ export class FeaturedArchiveComponent implements OnInit {
     return classes;
   }
 
-  public getArchiveType(): string {
-    switch (this.archive.type) {
-      case 'type.archive.person':
-        return 'Personal';
-      case 'type.archive.family':
-        return 'Group';
-      case 'type.archive.organization':
-      case 'type.archive.nonprofit':
-        return 'Organizational';
-    }
-  }
-
   public getArchiveLink(): string {
     return ['/p', 'archive', this.archive.archiveNbr].join('/');
   }
