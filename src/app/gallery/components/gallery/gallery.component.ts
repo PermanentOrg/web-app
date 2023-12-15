@@ -15,6 +15,7 @@ import {
 export class GalleryComponent implements OnInit {
   public isLoggedIn: boolean;
   public archives: FeaturedArchive[] = [];
+  public loading = true;
 
   constructor(
     @Inject(FEATURED_ARCHIVE_API) private api: FeaturedArchiveApi,
@@ -28,6 +29,8 @@ export class GalleryComponent implements OnInit {
       this.archives = await this.api.getFeaturedArchiveList();
     } catch {
       // do nothing
+    } finally {
+      this.loading = false;
     }
   }
 }

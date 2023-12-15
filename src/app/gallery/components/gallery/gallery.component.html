@@ -33,7 +33,7 @@
         [archive]="archive"
       ></pr-featured-archive>
     </div>
-    <div *ngIf="archives.length === 0" class="null-message">
+    <div *ngIf="!loading && archives.length === 0" class="null-message">
       <p>There are no featured archives at this time.</p>
     </div>
   </div>

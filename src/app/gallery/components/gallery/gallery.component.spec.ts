@@ -62,6 +62,13 @@ describe('GalleryComponent', () => {
     expect(find('pr-featured-archive').length).toBe(1);
   });
 
+  it('does not display the error message while loading the archives', async () => {
+    DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
+    const { find, instance } = await shallow.render();
+    instance.loading = true;
+    expect(find('.null-message').length).toBe(0);
+  });
+
   it('displays an error message if no featured archives exist', async () => {
     const { find } = await shallow.render();
     expect(find('pr-featured-archive').length).toBe(0);
