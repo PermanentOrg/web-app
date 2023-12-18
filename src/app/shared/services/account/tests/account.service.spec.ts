@@ -9,9 +9,9 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
 import { AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
-import { AppModule } from '../../../app.module';
-import { StorageService } from '../storage/storage.service';
-import { EditService } from '../../../core/services/edit/edit.service';
+import { AppModule } from '../../../../app.module';
+import { StorageService } from '../../storage/storage.service';
+import { EditService } from '../../../../core/services/edit/edit.service';
 
 describe('AccountService', () => {
   let shallow: Shallow<AccountService>;

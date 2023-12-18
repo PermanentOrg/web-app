@@ -12,6 +12,7 @@ import {
   ArchiveResponse,
   FolderResponse,
 } from '@shared/services/api/index.repo';
+import { LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import {
@@ -67,7 +68,8 @@ export class AccountService {
     private dialog: Dialog,
     private router: Router,
     private httpv2: HttpV2Service,
-    private mixpanel: MixpanelService
+    private mixpanel: MixpanelService,
+    private location: LocationStrategy
   ) {
     const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
@@ -203,30 +205,37 @@ export class AccountService {
           throw response;
         }
         // Verify that server agrees that the user is logged in
-        try {
-          const loggedIn = await this.checkSession();
-          if (loggedIn) {
-            const newArchive = response.getArchiveVO();
-            this.archive.update(newArchive);
-            if (this.account.keepLoggedIn) {
-              this.storage.local.set(ARCHIVE_KEY, this.archive);
-            } else {
-              this.storage.session.set(ARCHIVE_KEY, this.archive);
-            }
-          } else {
-            throw loggedIn;
-          }
-        } catch {
-          this.logOut();
-          this.clear();
-          this.router.navigate(['/login']);
+        const loggedIn = await this.checkSession();
+        if (loggedIn) {
+          const newArchive = response.getArchiveVO();
+          const newAccount = response.getAccountVO();
+          this.account.update(newAccount);
+          this.archive.update(newArchive);
+          this.setStorage(this.account.keepLoggedIn, ARCHIVE_KEY, this.archive);
+        } else {
+          throw loggedIn;
         }
       })
       .catch(() => {
-        this.logOut();
-        this.clear();
-        this.router.navigate(['/login']);
+        this.logOutAndRedirectToLogin();
       });
+  }
+
+  private logOutAndRedirectToLogin(): void {
+    this.logOut();
+    this.clear();
+    if (!this.isOnPublicGallery()) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  private isOnPublicGallery(): boolean {
+    const firstUrlPiece = this.location
+      .path()
+      .split('/')
+      .filter((p) => p)
+      .shift();
+    return firstUrlPiece === 'p' || firstUrlPiece === 'gallery';
   }
 
   public refreshArchive() {
