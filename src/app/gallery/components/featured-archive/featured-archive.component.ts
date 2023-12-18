@@ -9,10 +9,7 @@ import { FeaturedArchive } from '../../types/featured-archive';
 })
 export class FeaturedArchiveComponent implements OnInit {
   @Input() archive: FeaturedArchive;
-  public thumbURL = '';
-  public bannerURL = '';
   public classNames: string[] = ['featured-archive'];
-  protected api: any;
 
   constructor() {}
 
