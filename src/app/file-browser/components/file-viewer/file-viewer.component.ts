@@ -122,7 +122,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         AccessRole.Editor
       ) && !route.snapshot.data?.isPublicArchive;
 
-    this.canEditFieldsOnFullscreen = this.canEdit && this.canEditOnFullScreen()
+    this.canEditFieldsOnFullscreen = this.canEdit && this.canEditOnFullScreen();
 
     this.tagSubscription = this.tagsService
       .getItemTags$()

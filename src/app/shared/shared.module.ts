@@ -22,7 +22,11 @@ import {
   FontAwesomeModule,
   FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas, faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFileArchive,
+  fas,
+  faPenSquare,
+} from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';

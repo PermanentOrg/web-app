@@ -162,7 +162,10 @@
             <span *ngIf="currentRecord.LocnVO">{{
               (currentRecord.LocnVO | prLocation)?.full
             }}</span>
-            <span class="add-location" *ngIf="!currentRecord.LocnVO && canEditFieldsOnFullscreen">
+            <span
+              class="add-location"
+              *ngIf="!currentRecord.LocnVO && canEditFieldsOnFullscreen"
+            >
               <fa-icon
                 *ngIf="canEditFieldsOnFullscreen"
                 [icon]="['fas', 'pen-square']"
