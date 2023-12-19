@@ -102,6 +102,11 @@ describe('FileViewerComponent', () => {
           navigatedUrl = route;
           return Promise.resolve(true);
         },
+        routerState: {
+          snapshot: {
+            url: 'exampleUrl.com',
+          },
+        },
       })
       .mock(ActivatedRoute, {
         snapshot: {
@@ -443,6 +448,17 @@ describe('FileViewerComponent', () => {
       await fixture.whenStable();
 
       expect(downloaded).toBeTrue();
+    });
+
+    it('should display "Click to add location" on fullscreen view', async () => {
+      const { fixture, instance, find } = await defaultRender();
+      instance.canEditFieldsOnFullscreen = true;
+      await fixture.detectChanges();
+      const locationDiv = find('.add-location');
+
+      expect(locationDiv.nativeElement.textContent.trim()).toBe(
+        'Click to add location'
+      );
     });
   });
 });

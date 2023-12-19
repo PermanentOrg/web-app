@@ -59,4 +59,26 @@ describe('TagsComponent', () => {
 
     expect(addTags).toBeTruthy();
   });
+
+  it('should display the "Click to add" text when in fullscreen view', () => {
+    const tags = []
+    component.tags = tags;
+    component.isEditableFullscreen = true;
+    component.ngOnChanges();
+    fixture.detectChanges();
+    const div = fixture.debugElement.query(By.css('.empty'))
+
+    expect(div.nativeElement.textContent.trim()).toBe('Click to add')
+  })
+
+  it('should display the "No tags" text when in fullscreen view, but on the public archive', () => {
+    const tags = []
+    component.tags = tags;
+    component.isEditableFullscreen = false;
+    component.ngOnChanges();
+    fixture.detectChanges();
+    const div = fixture.debugElement.query(By.css('.empty'))
+
+    expect(div.nativeElement.textContent.trim()).toBe('No tags')
+  })
 });

@@ -4,7 +4,15 @@
 </div>
 <div class="tags">
   <div class="empty" *ngIf="!tags?.length">
-    {{ canEdit && !isEditing ? 'Click to add' : 'No tags' }}
+    <fa-icon
+      *ngIf="isEditableFullscreen"
+      [icon]="['fas', 'pen-square']"
+    ></fa-icon>
+    {{
+      (canEdit && !isEditing) || isEditableFullscreen
+        ? 'Click to add'
+        : 'No tags'
+    }}
   </div>
   <ng-container *ngIf="tags?.length">
     <div

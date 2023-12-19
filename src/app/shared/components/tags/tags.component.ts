@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -21,12 +22,17 @@ export class TagsComponent implements OnInit, OnChanges {
   @HostBinding('class.can-edit') @Input() canEdit: boolean;
   @Input() isEditing = false;
   @Input() animate = false;
+  @Input() isDialog = false;
+  @Input() canEditOnFullscreen: boolean = false;
 
   orderedTags: TagVOData[] = [];
+  public isEditableFullscreen: boolean = false;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isEditableFullscreen = this.canEditOnFullscreen && !this.isDialog;
+  }
 
   ngOnChanges() {
     if (!this.tags?.length) {
