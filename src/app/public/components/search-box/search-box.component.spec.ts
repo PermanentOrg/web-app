@@ -14,6 +14,7 @@ describe('SearchBoxComponent', () => {
 
   it('should exist', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 });

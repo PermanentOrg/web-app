@@ -43,6 +43,7 @@ describe('FeaturedArchiveService', () => {
     });
 
     const req = http.expectOne(`${environment.apiUrl}/v2/archive/featured`);
+
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Request-Version')).toBe('2');
     req.flush(expected);

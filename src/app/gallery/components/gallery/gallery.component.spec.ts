@@ -52,6 +52,7 @@ describe('GalleryComponent', () => {
 
   it('should fetch featured archives from the API', async () => {
     await shallow.render();
+
     expect(dummyApi.fetchedFromApi).toBeTrue();
   });
 
@@ -59,6 +60,7 @@ describe('GalleryComponent', () => {
     DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
     const { fixture, find } = await shallow.render();
     await fixture.whenStable();
+
     expect(find('pr-featured-archive').length).toBe(1);
   });
 
@@ -66,11 +68,13 @@ describe('GalleryComponent', () => {
     DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
     const { find, instance } = await shallow.render();
     instance.loading = true;
+
     expect(find('.null-message').length).toBe(0);
   });
 
   it('displays an error message if no featured archives exist', async () => {
     const { find } = await shallow.render();
+
     expect(find('pr-featured-archive').length).toBe(0);
     expect(find('.null-message').length).toBe(1);
   });
@@ -79,6 +83,7 @@ describe('GalleryComponent', () => {
     DummyFeaturedArchiveAPI.FeaturedArchives = [testArchive];
     DummyFeaturedArchiveAPI.failRequest = true;
     const { find } = await shallow.render();
+
     expect(find('.null-message').length).toBe(1);
   });
 });

@@ -32,11 +32,13 @@ describe('FeaturedArchiveComponent', () => {
 
   it('should exist', async () => {
     const { instance } = await defaultRender();
+
     expect(instance).toBeTruthy();
   });
 
   it('should include all archive information', async () => {
     const { find, element } = await defaultRender();
+
     expect(find('.profile-pic img').attributes.src).toBe('thumbUrl');
     expect(element.nativeElement.innerText).toContain(
       'The Unit Testing Archive'
@@ -51,6 +53,7 @@ describe('FeaturedArchiveComponent', () => {
     ) {
       instance.archive.type = archiveType;
       instance.ngOnInit();
+
       expect(instance.classNames).toContain(expectedClassname);
     }
 
@@ -72,6 +75,7 @@ describe('FeaturedArchiveComponent', () => {
     it('has specific label text for each link', async () => {
       const { find } = await defaultRender();
       const link = find('a');
+
       expect(link.attributes['aria-label']).toContain('Unit Testing');
     });
   });
