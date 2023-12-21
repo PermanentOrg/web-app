@@ -88,6 +88,7 @@ describe('NotificationService', () => {
     loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(false);
 
     service = TestBed.inject(NotificationService);
+
     expect(service).toBeTruthy();
   });
 
@@ -96,6 +97,7 @@ describe('NotificationService', () => {
     getNotificationsSpy = spyOn(apiService.notification, 'getNotifications');
 
     service = TestBed.inject(NotificationService);
+
     expect(service.notifications).toBeDefined();
     expect(service.notifications.length).toBe(0);
     expect(getNotificationsSpy).not.toHaveBeenCalled();
@@ -133,6 +135,7 @@ describe('NotificationService', () => {
     service = TestBed.inject(NotificationService);
 
     flushMicrotasks();
+
     expect(service.newNotificationCount).toBeGreaterThan(0);
     const countBeforeNew = service.newNotificationCount;
 
@@ -165,6 +168,7 @@ describe('NotificationService', () => {
     service = TestBed.inject(NotificationService);
 
     flushMicrotasks();
+
     expect(service.newNotificationCount).toBeGreaterThan(0);
     countBeforeMarkSeen = service.newNotificationCount;
 
@@ -197,6 +201,7 @@ describe('NotificationService', () => {
     service = TestBed.inject(NotificationService);
 
     flushMicrotasks();
+
     expect(service.newNotificationCount).toBeGreaterThan(0);
     countBeforeMarkSeen = service.newNotificationCount;
 

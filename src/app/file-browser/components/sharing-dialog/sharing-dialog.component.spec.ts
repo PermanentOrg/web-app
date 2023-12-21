@@ -209,6 +209,7 @@ describe('SharingDialogComponent', () => {
     component.approveShare(component.pendingShares[0]);
 
     tick();
+
     expect(apiSpy).toHaveBeenCalled();
     expect(showMessageSpy).toHaveBeenCalled();
     expect(component.pendingShares.length).toBe(0);
@@ -231,6 +232,7 @@ describe('SharingDialogComponent', () => {
     component.onAccessChange(share);
 
     tick();
+
     expect(confirmSpy).toHaveBeenCalled();
     expect(component.shares.length).toBe(1);
     expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
@@ -250,6 +252,7 @@ describe('SharingDialogComponent', () => {
     component.onAccessChange(share);
 
     tick();
+
     expect(confirmSpy).toHaveBeenCalled();
     expect(component.shares.length).toBe(1);
     expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
@@ -287,6 +290,7 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
     const { instance } = await shallow.render();
 
     await instance.generateShareLink();
+
     expect(instance.shareLink.shareUrl).toContain('example.com');
 
     instance.linkDefaultAccessRole = 'access.role.owner';
@@ -294,6 +298,7 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
       'defaultAccessRole',
       'access.role.owner'
     );
+
     expect(instance.shareLink.defaultAccessRole).toBe('access.role.owner');
   });
 });

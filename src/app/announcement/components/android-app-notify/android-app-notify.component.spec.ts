@@ -43,21 +43,25 @@ describe('AndroidAppNotifyComponent', () => {
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
   it('should be invisible before `beforeinstallprompt` event', async () => {
     const { find } = await shallow.render();
+
     expect(find('div').length).toBe(0);
   });
   it('should appear when the `beforeinstallprompt` fires', async () => {
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
+
     expect(find('div').length).toBeGreaterThan(0);
   });
   it('has a clickable button that shows the prompt', async () => {
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
     find('.prompt-button')[0].triggerEventHandler('click', {});
+
     expect(prompted).toBeTruthy();
   });
   it('should dismiss itself after the App Install Banner appears', async () => {
@@ -67,6 +71,7 @@ describe('AndroidAppNotifyComponent', () => {
     await fixture.whenStable();
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(find('div').length).toBe(0);
   });
   it('should be dismissable from a close button', async () => {
@@ -75,16 +80,19 @@ describe('AndroidAppNotifyComponent', () => {
     find('.dismiss-button')[0].triggerEventHandler('click', {});
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(find('div').length).toBe(0);
     const dismissed = localStorage.getItem(
       AndroidAppNotifyComponent.storageKey
     );
+
     expect(dismissed).toBeTruthy();
   });
   it('should not show up if previously dismissed', async () => {
     localStorage.setItem(AndroidAppNotifyComponent.storageKey, 'true');
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
+
     expect(find('div').length).toBe(0);
   });
 });

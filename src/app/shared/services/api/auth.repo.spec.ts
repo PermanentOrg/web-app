@@ -115,6 +115,7 @@ describe('AuthRepo', () => {
           .get('/v2/health', {}, Object, { useStelaDomain: false })
           .toPromise();
         const req2 = httpMock.expectOne(`${environment.apiUrl}/v2/health`);
+
         expect(req2.request.headers.get('Authorization')).toBe(
           'Bearer test_token'
         );
@@ -150,6 +151,7 @@ describe('AuthRepo', () => {
     const req = httpMock.expectOne(
       `${environment.apiUrl}/account/changePassword`
     );
+
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.has('Request-Version')).toBeFalse();
     req.flush({
@@ -173,6 +175,7 @@ describe('AuthRepo', () => {
     const req = httpMock.expectOne(
       `${environment.apiUrl}/account/changePassword`
     );
+
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('Request-Version')).toBe('2');
     req.flush({});

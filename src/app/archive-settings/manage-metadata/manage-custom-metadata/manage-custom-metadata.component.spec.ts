@@ -66,27 +66,33 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 
   it('should create', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
 
   it('should load custom metadata categories', async () => {
     const { find } = await shallow.render();
+
     expect(find('.category').length).toBe(3);
   });
 
   it('should be able to select a category', async () => {
     const { find, fixture } = await shallow.render();
+
     expect(find('.category.selected').length).toBe(0);
     find('.category')[0].triggerEventHandler('click', {});
     fixture.detectChanges();
+
     expect(find('.category.selected').length).toBe(1);
   });
 
   it('should be able to load tags by metadata category', async () => {
     const { find, fixture } = await shallow.render();
+
     expect(find('.value').length).toBe(0);
     find('.category')[0].triggerEventHandler('click', {});
     fixture.detectChanges();
+
     expect(find('.value').length).toBe(3);
   });
 
@@ -94,6 +100,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     const { find, fixture } = await shallow.render();
     find('.category')[0].triggerEventHandler('click', {});
     fixture.detectChanges();
+
     expect(find('.value').length).toBe(3);
     defaultTagList.push({
       tagId: 9,
@@ -103,6 +110,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     find('pr-metadata-add-new-value').triggerEventHandler('tagsUpdate', {});
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(find('.value').length).toBe(4);
   });
 
@@ -110,6 +118,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     const { instance } = await shallow.render();
     instance.addDeletedTag(new TagVO(defaultTagList[1]));
     await instance.refreshTagsInPlace();
+
     expect(instance.tagsList.length).toBe(4);
     expect(instance.tagsList.map((t) => t.tagId)).not.toContain(2);
   });
@@ -118,8 +127,10 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     const { instance } = await shallow.render();
     instance.addDeletedCategory('a');
     await instance.refreshTagsInPlace();
+
     expect(instance.tagsList.length).toBe(2);
     instance.tagsList.forEach((tag) =>
+
       expect(tag.name.startsWith('a:')).toBeFalse()
     );
   });
@@ -134,6 +145,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
       type: 'type.tag.metadata.customField',
     });
     await instance.refreshTagsInPlace();
+
     expect(instance.tagsList.length).toBe(3);
   });
 
@@ -141,6 +153,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     const { instance } = await shallow.render();
     instance.activeCategory = 'potato';
     instance.addDeletedCategory('potato');
+
     expect(instance.activeCategory).toBeNull();
   });
 
@@ -149,6 +162,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     instance.activeCategory = 'c';
     defaultTagList.pop();
     await instance.refreshTagsInPlace();
+
     expect(instance.activeCategory).toBeNull();
   });
 
@@ -156,9 +170,11 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     const { instance } = await shallow.render();
     instance.activeCategory = 'c';
     instance.addDeletedTag(new TagVO(defaultTagList.slice(-1).pop()));
+
     expect(instance.activeCategory).toBeNull();
     instance.activeCategory = 'a';
     instance.addDeletedTag(new TagVO(defaultTagList[1]));
+
     expect(instance.activeCategory).toBe('a');
   });
 });

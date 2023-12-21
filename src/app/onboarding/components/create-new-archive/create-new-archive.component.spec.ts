@@ -56,10 +56,12 @@ describe('CreateNewArchiveComponent #onboarding', () => {
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
   it('should emit a progress bar change event on mount', async () => {
     const { outputs } = await shallow.render();
+
     expect(outputs.progress.emit).toHaveBeenCalledWith(0);
   });
   it('should NOT show disabled-overlay when selectedValue is truthy', async () => {
@@ -72,6 +74,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     fixture.detectChanges();
 
     const overlayDiv = find('.disabled-overlay');
+
     expect(overlayDiv.length).toBe(0);
   });
 
@@ -86,6 +89,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     fixture.detectChanges();
 
     const button = find('.chart-path').nativeElement;
+
     expect(button.disabled).toBe(false);
   });
 
@@ -94,6 +98,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
     instance.selectedValue = '';
     const overlayDiv = find('.disabled-overlay');
+
     expect(overlayDiv.length).toBe(1);
   });
 

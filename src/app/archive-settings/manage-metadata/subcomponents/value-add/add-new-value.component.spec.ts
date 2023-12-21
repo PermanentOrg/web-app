@@ -51,13 +51,16 @@ describe('AddNewValueComponent', () => {
 
   it('should create', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
   it('should be able to create a new tag', async () => {
     const { instance, outputs } = await defaultRender();
+
     expect(outputs.tagsUpdate.emit).not.toHaveBeenCalled();
     await instance.createNewTag('abc');
+
     expect(createdTag?.name).toBe('test:abc');
     expect(outputs.tagsUpdate.emit).toHaveBeenCalled();
   });
@@ -66,6 +69,7 @@ describe('AddNewValueComponent', () => {
     const { instance, outputs } = await defaultRender();
     error = true;
     await expectAsync(instance.createNewTag('abc')).toBeRejected();
+
     expect(createdTag).toBeNull();
     expect(messageShown).toBeTrue();
     expect(outputs.tagsUpdate.emit).not.toHaveBeenCalled();

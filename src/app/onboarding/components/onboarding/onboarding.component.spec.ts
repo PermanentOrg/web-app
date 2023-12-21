@@ -76,27 +76,34 @@ describe('OnboardingComponent #onboarding', () => {
   });
   it('should exist', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
   it('should load the create new archive screen as default', async () => {
     const { find, fixture } = await shallow.render();
     fixture.detectChanges();
+
     expect(find('pr-create-new-archive')).toHaveFoundOne();
   });
   it('can change screens', async () => {
     const { find, fixture } = await shallow.render();
+
     expect(find('pr-create-new-archive')).toHaveFoundOne();
     fixture.detectChanges();
+
     expect(find('pr-welcome-screen')).toHaveFound(0);
   });
   it('stores the newly created archive', async () => {
     const { element, find, fixture } = await shallow.render();
+
     expect(element.componentInstance.currentArchive).toBeUndefined();
     fixture.detectChanges();
 
     const child = find('pr-create-new-archive');
+
     expect(child).toHaveFoundOne();
     child.triggerEventHandler('createdArchive', new ArchiveVO({}));
+
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
   });
   it('stores an accepted archive invitation', async () => {
@@ -124,6 +131,7 @@ describe('OnboardingComponent #onboarding', () => {
     if (instance.pendingArchives.length > 0) {
       expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
     }
+
     expect(find('pr-welcome-screen')).toHaveFoundOne();
     find('pr-welcome-screen').triggerEventHandler(
       'selectInvitation',
@@ -131,16 +139,19 @@ describe('OnboardingComponent #onboarding', () => {
     );
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(
       element.componentInstance.selectedPendingArchive
     ).not.toBeUndefined();
   });
   it('can be tested with debugging component', async () => {
     const { element } = await shallow.render();
+
     expect(element.componentInstance.pendingArchives.length).toBe(0);
     element.componentInstance.setState({
       pendingArchives: [new ArchiveVO({})],
     });
+
     expect(element.componentInstance.pendingArchives.length).toBe(1);
   });
 

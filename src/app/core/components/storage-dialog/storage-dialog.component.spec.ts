@@ -87,6 +87,7 @@ describe('StorageDialogComponent', () => {
 
   it('should exist', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
 
@@ -94,6 +95,7 @@ describe('StorageDialogComponent', () => {
     const { instance } = await shallow.render();
     const promoData: PromoVOData = { code: 'promo' };
     await instance.onPromoFormSubmit(promoData);
+
     expect(mockApiService.billing.calledRedeemPromoCode).toBeTruthy();
   });
 
@@ -101,6 +103,7 @@ describe('StorageDialogComponent', () => {
     const { instance } = await shallow.render();
     const promoData: PromoVOData = { code: 'promo' };
     await instance.onPromoFormSubmit(promoData);
+
     expect(mockAccountService.addedStorage).toBe(5000 * 1024 * 1024);
   });
 
@@ -113,6 +116,7 @@ describe('StorageDialogComponent', () => {
     instance.activeTab = 'promo';
     fixture.detectChanges();
     const button = find('.btn-primary');
+
     expect(button.nativeElement.disabled).toBeFalsy();
   });
 

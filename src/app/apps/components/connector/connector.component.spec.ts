@@ -66,6 +66,7 @@ describe('ConnectorComponent', () => {
       type: 'type.connector.facebook'
     });
     fixture.detectChanges();
+
     expect(hostComponent.component).toBeTruthy();
   });
 
@@ -80,6 +81,7 @@ describe('ConnectorComponent', () => {
 
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
     const button = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+
     expect(button).toBeDefined();
     expect(button.getAttribute('hidden')).toBeNull();
     expect(button.innerText).toBe('Connect');
@@ -96,6 +98,7 @@ describe('ConnectorComponent', () => {
 
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
     const button = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+
     expect(button).toBeDefined();
     expect(button.getAttribute('hidden')).toBeNull();
     expect(button.innerText).toBe('Sign In with FamilySearch');
@@ -114,9 +117,11 @@ describe('ConnectorComponent', () => {
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
     const connectButton = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
     const importButton = compiled.querySelector('button#facebook-import') as HTMLButtonElement;
+
     expect(importButton.getAttribute('hidden')).toBeNull();
   });
 
@@ -133,15 +138,19 @@ describe('ConnectorComponent', () => {
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
     const connectButton = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
     const importButton = compiled.querySelector('button#familysearch-tree-import') as HTMLButtonElement;
+
     expect(importButton.getAttribute('hidden')).toBeNull();
 
     const uploadButton = compiled.querySelector('button#familysearch-upload') as HTMLButtonElement;
+
     expect(uploadButton.getAttribute('hidden')).not.toBeNull();
 
     const downloadButton = compiled.querySelector('button#familysearch-download') as HTMLButtonElement;
+
     expect(downloadButton.getAttribute('hidden')).not.toBeNull();
   });
 
@@ -159,15 +168,19 @@ describe('ConnectorComponent', () => {
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
     const connectButton = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
     const importButton = compiled.querySelector('button#familysearch-tree-import') as HTMLButtonElement;
+
     expect(importButton.getAttribute('hidden')).toBeNull();
 
     const uploadButton = compiled.querySelector('button#familysearch-upload') as HTMLButtonElement;
+
     expect(uploadButton.getAttribute('hidden')).toBeNull();
 
     const downloadButton = compiled.querySelector('button#familysearch-download') as HTMLButtonElement;
+
     expect(downloadButton.getAttribute('hidden')).toBeNull();
   });
 });

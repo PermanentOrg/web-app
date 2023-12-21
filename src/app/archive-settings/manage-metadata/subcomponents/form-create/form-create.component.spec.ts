@@ -27,11 +27,13 @@ describe('FormCreateComponent', () => {
 
   it('should create', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
   it('should be a text label at first', async () => {
     const { find } = await defaultRender();
+
     expect(find('.placeholder-text').length).toBe(1);
     expect(find('input').length).toBe(0);
   });
@@ -40,16 +42,19 @@ describe('FormCreateComponent', () => {
     const { find, fixture } = await defaultRender();
     find('.placeholder-text').triggerEventHandler('click', {});
     fixture.detectChanges();
+
     expect(find('input').length).toBe(1);
   });
 
   it('should use specified placeholder text', async () => {
     const { find, fixture } = await defaultRender();
+
     expect(find('.placeholder-text').nativeElement.innerText).toBe(
       'Add New Test'
     );
     find('.placeholder-text').triggerEventHandler('click', {});
     fixture.detectChanges();
+
     expect(find('input').nativeElement.placeholder).toBe('Add New Test');
   });
 
@@ -67,9 +72,11 @@ describe('FormCreateComponent', () => {
     find('form').triggerEventHandler('submit', {
       target: find('form').nativeElement,
     });
+
     expect(instance.waiting).toBe(true);
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(createdTag).toBe('abc');
     expect(instance.waiting).toBe(false);
     expect(find('.placeholder-text').length).toBe(1);
@@ -90,6 +97,7 @@ describe('FormCreateComponent', () => {
     });
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(find('input').length).toBe(1);
     setTimeout(() => {
       expect(instance.waiting).toBe(false);
@@ -101,6 +109,7 @@ describe('FormCreateComponent', () => {
     const { instance } = await defaultRender();
     instance.newTagName = 'potato';
     await instance.runSubmitCallback();
+
     expect(instance.newTagName).toBe('');
   });
 
@@ -122,6 +131,7 @@ describe('FormCreateComponent', () => {
     }
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(callbackCalls).toBe(1);
   });
 });

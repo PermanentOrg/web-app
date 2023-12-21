@@ -25,11 +25,13 @@ describe('PrConstantsService', () => {
 
   it('should translate a constants string', () => {
     const translateString = 'warning.auth.token_does_not_match';
+
     expect(service.translate(translateString)).toEqual(CONSTANTS.warning.auth.token_does_not_match);
   });
 
   it('should return the original string if not found', () => {
     const translateString = 'fake.translate.string';
+
     expect(service.translate(translateString)).toEqual(translateString);
   });
 });

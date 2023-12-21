@@ -77,12 +77,14 @@ describe('EditValueComponent', () => {
 
   it('should create', async () => {
     const { element } = await defaultRender();
+
     expect(element).toBeTruthy();
   });
 
   it('should be able to delete a tag', async () => {
     const { instance, outputs } = await defaultRender();
     await instance.delete();
+
     expect(deleted).toBeTrue();
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
     expect(outputs.deletedTag.emit).toHaveBeenCalled();
@@ -91,6 +93,7 @@ describe('EditValueComponent', () => {
   it('should be able to edit a value', async () => {
     const { instance, outputs } = await defaultRender();
     await instance.save('potato');
+
     expect(updated).toBeTrue();
     expect(newTagName).toBe('abc:potato');
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
@@ -100,6 +103,7 @@ describe('EditValueComponent', () => {
     const { instance, outputs } = await defaultRender();
     error = true;
     await expectAsync(instance.delete()).toBeRejected();
+
     expect(messageShown).toBeTrue();
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
   });
@@ -108,6 +112,7 @@ describe('EditValueComponent', () => {
     const { instance, outputs } = await defaultRender();
     error = true;
     await expectAsync(instance.save('test')).toBeRejected();
+
     expect(messageShown).toBeTrue();
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
   });
@@ -116,6 +121,7 @@ describe('EditValueComponent', () => {
     rejectDelete = true;
     const { instance, outputs } = await defaultRender();
     await instance.delete();
+
     expect(outputs.deletedTag.emit).not.toHaveBeenCalled();
   });
 });

@@ -96,12 +96,14 @@ describe('CategoryEditComponent', () => {
 
   it('should exist', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
   it('should be able to delete a category', async () => {
     const { instance, outputs } = await defaultRender();
     await instance.delete();
+
     expect(deletedTags.length).toBe(2);
     deletedTags.forEach((tag) => expect(tag.name).toContain('test'));
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
@@ -112,6 +114,7 @@ describe('CategoryEditComponent', () => {
     const { instance, outputs } = await defaultRender();
     error = true;
     await expectAsync(instance.delete()).toBeRejected();
+
     expect(messageShown).toBeTrue();
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
     expect(outputs.deletedCategory.emit).not.toHaveBeenCalled();
@@ -120,11 +123,13 @@ describe('CategoryEditComponent', () => {
   it('should be able to save a category', async () => {
     const { instance, outputs } = await defaultRender();
     await instance.save('potato');
+
     expect(savedTags.length).toBe(2);
     savedTags.forEach((tag) => {
       expect(tag.name.startsWith('potato')).toBeTrue(); // Verify category name changed
       expect(tag.name.substring(6).includes('potato')).toBeFalse(); // Verify value name not changed
     });
+
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
   });
 
@@ -132,6 +137,7 @@ describe('CategoryEditComponent', () => {
     const { instance, outputs } = await defaultRender();
     error = true;
     await expectAsync(instance.save('potato')).toBeRejected();
+
     expect(messageShown).toBeTrue();
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
   });
@@ -140,6 +146,7 @@ describe('CategoryEditComponent', () => {
     rejectDelete = true;
     const { instance, outputs } = await defaultRender();
     await instance.delete();
+
     expect(deletedTags.length).toBe(0);
     expect(outputs.deletedCategory.emit).not.toHaveBeenCalled();
   });

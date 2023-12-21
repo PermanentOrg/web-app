@@ -62,6 +62,7 @@ describe('ArchiveSwitcherComponent', () => {
     expect(component.archives.length).toEqual(archives.length);
 
     const element = fixture.debugElement.nativeElement as HTMLElement;
+
     expect(element.querySelectorAll('.archive-list pr-archive-small').length).toEqual(component.archives.length);
   });
 });

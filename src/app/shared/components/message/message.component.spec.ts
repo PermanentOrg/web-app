@@ -32,6 +32,7 @@ describe('MessageComponent', () => {
 
   it('should accept a navigation url', () => {
     component.display('test', null, testUrl);
+
     expect(component.navigateTo).toEqual(testUrl);
   });
 
@@ -41,6 +42,7 @@ describe('MessageComponent', () => {
     spyOn(component, 'dismiss');
 
     component.display('test');
+
     expect(component.navigateTo).toBeFalsy();
 
     component.onClick();

@@ -71,11 +71,13 @@ describe('DirectiveEditComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).not.toBeNull();
   });
 
   it('should be able to fill out the directive form', async () => {
     const { instance, find } = await shallow.render();
+
     expect(find('.archive-steward-email').length).toBe(1);
     expect(find('.archive-steward-note').length).toBe(1);
 
@@ -97,6 +99,7 @@ describe('DirectiveEditComponent', () => {
     expect(find('*[disabled], *[readonly]').length).toBe(3);
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(find('*[disabled], *[readonly]').length).toBe(0);
 
     expect(find('.account-not-found').length).toBe(0);
@@ -134,9 +137,11 @@ describe('DirectiveEditComponent', () => {
 
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     fixture.detectChanges();
+
     expect(find('*[disabled], *[readonly]').length).toBe(3);
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(find('*[disabled], *[readonly]').length).toBe(0);
     expect(MockDirectiveRepo.createdDirective).toBeNull();
     expect(MockDirectiveRepo.editedDirective).not.toBeNull();
@@ -150,6 +155,7 @@ describe('DirectiveEditComponent', () => {
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(MockDirectiveRepo.createdDirective).toBeNull();
     expect(find('.account-not-found').length).toBe(0);
     expect(MockMessageService.errorShown).toBeTrue();
@@ -170,6 +176,7 @@ describe('DirectiveEditComponent', () => {
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(MockDirectiveRepo.editedDirective).toBeNull();
     expect(find('.account-not-found').length).toBe(0);
     expect(MockMessageService.errorShown).toBeTrue();
@@ -186,6 +193,7 @@ describe('DirectiveEditComponent', () => {
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(instance.savedDirective.emit).toHaveBeenCalled();
     expect(savedDirective).not.toBeUndefined();
   });
@@ -209,6 +217,7 @@ describe('DirectiveEditComponent', () => {
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     fixture.detectChanges();
     await fixture.whenStable();
+
     expect(instance.savedDirective.emit).toHaveBeenCalled();
     expect(savedDirective).not.toBeUndefined();
   });
@@ -216,22 +225,27 @@ describe('DirectiveEditComponent', () => {
     const { find, fixture } = await shallow.render();
     fillOutForm(find, '  ', 'Test Memo');
     fixture.detectChanges();
+
     expect(find('.save-btn').nativeElement.disabled).toBeTruthy();
     fillOutForm(find, 'email@example.com', '');
     fixture.detectChanges();
+
     expect(find('.save-btn').nativeElement.disabled).toBeFalsy();
     fillOutForm(find, 'email@example.com', 'memo');
     fixture.detectChanges();
+
     expect(find('.save-btn').nativeElement.disabled).toBeFalsy();
   });
   it('should show an error message if a user with the given email does not exist when creating a directive', async () => {
     MockDirectiveRepo.accountExists = false;
     const { find, fixture, outputs } = await shallow.render();
     fillOutForm(find, 'notfound@example.com', 'Test Memo');
+
     expect(find('.account-not-found').length).toBe(0);
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(MockDirectiveRepo.createdDirective).toBeNull();
     expect(outputs.savedDirective.emit).not.toHaveBeenCalled();
     expect(find('.account-not-found').length).toBe(1);
@@ -239,6 +253,7 @@ describe('DirectiveEditComponent', () => {
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(MockDirectiveRepo.createdDirective).not.toBeNull();
     expect(outputs.savedDirective.emit).toHaveBeenCalled();
     expect(find('.account-not-found').length).toBe(0);
@@ -253,10 +268,12 @@ describe('DirectiveEditComponent', () => {
       bind: { directive },
     });
     fillOutForm(find, 'notfound@example.com', 'Test Memo');
+
     expect(find('.account-not-found').length).toBe(0);
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(MockDirectiveRepo.editedDirective).toBeNull();
     expect(outputs.savedDirective.emit).not.toHaveBeenCalled();
     expect(find('.account-not-found').length).toBe(1);
@@ -264,6 +281,7 @@ describe('DirectiveEditComponent', () => {
     find('.save-btn').nativeElement.dispatchEvent(new Event('click'));
     await fixture.whenStable();
     fixture.detectChanges();
+
     expect(MockDirectiveRepo.editedDirective).not.toBeNull();
     expect(outputs.savedDirective.emit).toHaveBeenCalled();
     expect(find('.account-not-found').length).toBe(0);

@@ -73,6 +73,7 @@ describe('InlineValueEditComponent', () => {
     );
     displayElement.triggerEventHandler('click', null);
     tick();
+
     expect(component.isEditing).toBeTruthy();
   }));
 
@@ -80,6 +81,7 @@ describe('InlineValueEditComponent', () => {
     component.displayValue = TEST_TEXT;
     component.startEdit();
     const inputElement = fixture.debugElement.query(By.css('input'));
+
     expect(document.activeElement).toBe(inputElement.nativeElement);
   });
 
@@ -104,6 +106,7 @@ describe('InlineValueEditComponent', () => {
     const saveSpy = spyOn(component.doneEditing, 'emit');
     component.displayValue = TEST_TEXT;
     component.startEdit();
+
     expect(component.isEditing).toBeTruthy();
 
     component.cancel();
@@ -120,6 +123,7 @@ describe('InlineValueEditComponent', () => {
 
     const inputElem = component.inputElementRef
       .nativeElement as HTMLInputElement;
+
     expect(document.activeElement).toBe(inputElem);
     inputElem.value = 'new value!';
 
@@ -144,6 +148,7 @@ describe('InlineValueEditComponent', () => {
 
     fixture.detectChanges();
     component.startEdit();
+
     expect(component.isEditing).toBeFalsy();
   });
 
@@ -215,6 +220,7 @@ describe('InlineValueEditComponent', () => {
     const offset = applyTimezoneOffset(nowUtc, record.TimezoneVO);
 
     component.startEdit();
+
     expect(component.ngbDate).toBeDefined();
     expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
     expect(component.ngbTime).toBeDefined();
@@ -236,6 +242,7 @@ describe('InlineValueEditComponent', () => {
     const offset = moment.utc().local();
 
     component.startEdit();
+
     expect(component.ngbDate).toBeDefined();
     expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
     expect(component.ngbTime).toBeDefined();
@@ -272,6 +279,7 @@ describe('InlineValueEditComponent', () => {
     component.datePicker.dateSelect.emit(newDate);
 
     const utcDt = getUtcMomentFromDTString(component.editValue as string);
+
     expect(Number(utcDt.format('D'))).toEqual(11);
     expect(Number(utcDt.format('M'))).toEqual(newDate.month);
     expect(Number(utcDt.format('H'))).toEqual(2);
@@ -297,6 +305,7 @@ describe('InlineValueEditComponent', () => {
     fixture.detectChanges();
 
     const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
+
     expect(component.dateOnly).toBeFalse();
     expect(timePicker).toBeTruthy();
   });
@@ -323,6 +332,7 @@ describe('InlineValueEditComponent', () => {
     fixture.detectChanges();
 
     const timePicker = fixture.debugElement.query(By.css('ngb-timepicker'));
+
     expect(component.dateOnly).toBeTrue();
     expect(timePicker).toBeNull();
   });
@@ -382,6 +392,7 @@ describe('InlineValueEditComponent', () => {
     expect(component.editValue).not.toBe(component.displayValue);
 
     const utcDt = getUtcMomentFromDTString(component.editValue as string);
+
     expect(Number(utcDt.format('D'))).toEqual(13);
     expect(Number(utcDt.format('h'))).toEqual(3);
   });
@@ -398,6 +409,7 @@ describe('InlineValueEditComponent', () => {
     fixture.detectChanges();
 
     await fixture.whenStable();
+
     expect(nameContainer.classList).toContain('is-name-hovered');
   });
 });

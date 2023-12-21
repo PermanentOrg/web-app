@@ -95,17 +95,20 @@ describe('ManageTagsComponent #manage-tags', () => {
 
   it('should exist', async () => {
     const { element } = await shallow.render();
+
     expect(element).not.toBeNull();
   });
 
   it('should have a sorted list of tags', async () => {
     const { find, element } = await defaultRender();
+
     expect(find('.tag').length).toBe(2);
     expect(find('.tag')[0].nativeElement.textContent).toContain('Potato');
   });
 
   it('should have a delete button for each tag', async () => {
     const { find, outputs } = await defaultRender();
+
     expect(find('.delete').length).toBeGreaterThan(0);
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
   });
@@ -115,6 +118,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     find('.delete')[0].nativeElement.click();
     await fixture.whenStable();
     await fixture.detectChanges();
+
     expect(deleted).toBeTruthy();
     expect(deletedTag.name).toBe('Potato');
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
@@ -135,6 +139,7 @@ describe('ManageTagsComponent #manage-tags', () => {
 
   it('should have edit buttons for each tag', async () => {
     const { find } = await defaultRender();
+
     expect(find('.edit').length).toBeGreaterThan(0);
   });
 
@@ -142,6 +147,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     const { find, fixture } = await defaultRender();
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
+
     expect(find('.tag input').length).toBe(1);
     expect(find('.tag input').nativeElement.value).toBe('Potato');
   });
@@ -156,6 +162,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     find('.tag input').nativeElement.form.dispatchEvent(new Event('submit'));
     await fixture.whenStable();
     await fixture.detectChanges();
+
     expect(find('.tag input').length).toBe(0);
     expect(renamed).toBeTruthy();
     expect(renamedTag.name).toBe('Starchy Tuber');
@@ -170,12 +177,14 @@ describe('ManageTagsComponent #manage-tags', () => {
     find('.tag input').nativeElement.dispatchEvent(new Event('change'));
     find('.cancel').nativeElement.click();
     await fixture.detectChanges();
+
     expect(find('.cancel').length).toBe(0);
     expect(find('.tag')[0].nativeElement.textContent).not.toContain('Do Not Show Value');
   });
 
   it('should have a null state', async () => {
     const { find } = await defaultRender([]);
+
     expect(find('.tag').length).toBe(0);
     expect(find('.tagList').length).toBe(0);
   });
@@ -186,6 +195,7 @@ describe('ManageTagsComponent #manage-tags', () => {
       find('input.filter').nativeElement.value = val;
       find('input.filter').nativeElement.dispatchEvent(new Event('change'));
       await fixture.detectChanges();
+
       expect(find('.tag').length).toBe(expectedCount);
     }
     it('Trimming input', async () => {
@@ -211,6 +221,7 @@ describe('ManageTagsComponent #manage-tags', () => {
       confirm = clickConfirm;
       find('.delete')[0].nativeElement.click();
       await fixture.whenStable();
+
       expect(deleted).toBe(clickConfirm);
     }
     it('should not delete when you cancel out', async () => {

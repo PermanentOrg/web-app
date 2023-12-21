@@ -26,6 +26,7 @@ describe('StorageService', () => {
   it('should save a string value to SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       service.session.set(testKey, testValue);
+
       expect(window.sessionStorage.getItem(testKey)).toEqual(testValue);
     }
   }));
@@ -33,6 +34,7 @@ describe('StorageService', () => {
   it('should retrieve a string value from SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       window.sessionStorage.setItem(testKey, testValue);
+
       expect(service.session.get(testKey)).toEqual(testValue);
     }
   }));
@@ -40,6 +42,7 @@ describe('StorageService', () => {
   it('should save an object value to SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       service.session.set(testKey, testObject);
+
       expect(JSON.parse(window.sessionStorage.getItem(testKey))).toEqual(testObject);
     }
   }));
@@ -47,6 +50,7 @@ describe('StorageService', () => {
   it('should retrieve an object value from SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       window.sessionStorage.setItem(testKey, JSON.stringify(testObject));
+
       expect(service.session.get(testKey)).toEqual(testObject);
     }
   }));
@@ -60,9 +64,11 @@ describe('StorageService', () => {
   it('should handle storing a null-ish value to SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.sessionStorage) {
       service.session.set(testKey, null);
+
       expect(service.session.get(testKey)).toBeNull();
       service.session.delete(testKey);
       service.session.set(testKey, false);
+
       expect(service.session.get(testKey)).toBeFalsy();
     }
   }));
@@ -70,12 +76,14 @@ describe('StorageService', () => {
   it('should save a value to memory when SessionStorage not present', inject([StorageService], (service: StorageService) => {
     service.session.setStoreInMemory(true);
     service.session.set(testKey, testValue);
+
     expect(service.session.get(testKey)).toEqual(testValue);
   }));
 
   it('should save a string value to LocalStorage', inject([StorageService], (service: StorageService) => {
     if (window.localStorage) {
       service.local.set(testKey, testValue);
+
       expect(window.localStorage.getItem(testKey)).toEqual(testValue);
     }
   }));
@@ -83,6 +91,7 @@ describe('StorageService', () => {
   it('should retrieve a string value from LocalStorage', inject([StorageService], (service: StorageService) => {
     if (window.localStorage) {
       window.localStorage.setItem(testKey, testValue);
+
       expect(service.local.get(testKey)).toEqual(testValue);
     }
   }));
@@ -90,6 +99,7 @@ describe('StorageService', () => {
   it('should save an object value to SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.localStorage) {
       service.local.set(testKey, testObject);
+
       expect(JSON.parse(window.localStorage.getItem(testKey))).toEqual(testObject);
     }
   }));
@@ -97,6 +107,7 @@ describe('StorageService', () => {
   it('should retrieve an object value from SessionStorage', inject([StorageService], (service: StorageService) => {
     if (window.localStorage) {
       window.localStorage.setItem(testKey, JSON.stringify(testObject));
+
       expect(service.local.get(testKey)).toEqual(testObject);
     }
   }));
@@ -104,6 +115,7 @@ describe('StorageService', () => {
   it('should save a value to memory when LocalStorage not present', inject([StorageService], (service: StorageService) => {
     service.local.setStoreInMemory(true);
     service.local.set(testKey, testValue);
+
     expect(service.local.get(testKey)).toEqual(testValue);
   }));
 });

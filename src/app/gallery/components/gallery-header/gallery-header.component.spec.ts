@@ -37,10 +37,12 @@ describe('GalleryHeaderComponent', () => {
   });
   it('should render', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
   it('should render back button when logged in', async () => {
     const { find, element, fixture } = await defaultRender();
+
     expect(find('.return-btn').length).toBeGreaterThan(0);
   });
 });

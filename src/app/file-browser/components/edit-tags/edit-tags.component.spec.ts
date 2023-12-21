@@ -80,6 +80,7 @@ describe('EditTagsComponent', () => {
 
   it('should create', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
@@ -89,14 +90,17 @@ describe('EditTagsComponent', () => {
     expect(
       element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne')
     ).toBeTruthy();
+
     expect(
       element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo')
     ).toBeTruthy();
+
     expect(
       element.componentInstance.itemTags.find(
         (tag) => tag.name === 'customField:customValueOne'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.itemTags.find(
         (tag) => tag.name === 'customField:customValueTwo'
@@ -108,16 +112,19 @@ describe('EditTagsComponent', () => {
         (tag) => tag.name === 'tagOne'
       )
     ).toBeTruthy();
+
     expect(
       element.componentInstance.matchingTags.find(
         (tag) => tag.name === 'tagTwo'
       )
     ).toBeTruthy();
+
     expect(
       element.componentInstance.matchingTags.find(
         (tag) => tag.name === 'customField:customValueOne'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.matchingTags.find(
         (tag) => tag.name === 'customField:customValueTwo'
@@ -131,14 +138,17 @@ describe('EditTagsComponent', () => {
     expect(
       element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne')
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo')
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.itemTags.find(
         (tag) => tag.name === 'customField:customValueOne'
       )
     ).toBeTruthy();
+
     expect(
       element.componentInstance.itemTags.find(
         (tag) => tag.name === 'customField:customValueTwo'
@@ -150,16 +160,19 @@ describe('EditTagsComponent', () => {
         (tag) => tag.name === 'tagOne'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.matchingTags.find(
         (tag) => tag.name === 'tagTwo'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.matchingTags.find(
         (tag) => tag.name === 'customField:customValueOne'
       )
     ).toBeTruthy();
+
     expect(
       element.componentInstance.matchingTags.find(
         (tag) => tag.name === 'customField:customValueTwo'
@@ -171,6 +184,7 @@ describe('EditTagsComponent', () => {
     const { element } = await defaultRender();
     const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
     await element.componentInstance.onInputEnter('key:value');
+
     expect(element.componentInstance.newTagInputError).toBeTruthy();
     expect(tagCreateSpy).not.toHaveBeenCalled();
   });
@@ -179,6 +193,7 @@ describe('EditTagsComponent', () => {
     const { element } = await defaultRender(defaultItem, 'customMetadata');
     const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
     await element.componentInstance.onInputEnter('keyword');
+
     expect(element.componentInstance.newTagInputError).toBeTruthy();
     expect(tagCreateSpy).not.toHaveBeenCalled();
   });
@@ -194,6 +209,7 @@ describe('EditTagsComponent', () => {
       'click',
       {}
     );
+
     expect(dialogOpenSpy.open).toHaveBeenCalled();
   });
 
@@ -211,6 +227,7 @@ describe('EditTagsComponent', () => {
     fixture.detectChanges();
 
     const focusedElement = document.activeElement as HTMLElement;
+
     expect(focusedElement).toBe(tags[1].nativeElement);
   });
 
@@ -228,6 +245,7 @@ describe('EditTagsComponent', () => {
     fixture.detectChanges();
 
     const focusedElement = document.activeElement as HTMLElement;
+
     expect(focusedElement).toBe(tags[0].nativeElement);
   });
 
@@ -247,6 +265,7 @@ describe('EditTagsComponent', () => {
     fixture.detectChanges();
 
     const focusedElement = document.activeElement as HTMLElement;
+
     expect(focusedElement).toEqual(input.nativeElement);
   });
 });

@@ -31,6 +31,7 @@ describe('MyfilesGuard', () => {
       dummyRoute,
       dummyRouterState('/app/myfiles')
     ) as UrlTree;
+
     expect(tree.toString()).toBe('/app/private');
   });
 
@@ -39,6 +40,7 @@ describe('MyfilesGuard', () => {
       dummyRoute,
       dummyRouterState('/app/myfiles/0001-000m/22')
     ) as UrlTree;
+
     expect(tree.toString()).toBe('/app/private/0001-000m/22');
   });
 });

@@ -105,12 +105,14 @@ describe('MainComponent', () => {
 
   it('should create', async () => {
     await init();
+
     expect(component).toBeTruthy();
   });
 
   it('should show a prompt when both email and phone are unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
     await init(data);
+
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
     expect(messageService.showMessage).toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),
@@ -127,6 +129,7 @@ describe('MainComponent', () => {
   it('should show a prompt when only email is unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
     await init(data);
+
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
     expect(messageService.showMessage).toHaveBeenCalledWith(
       jasmine.stringMatching('email'),
@@ -137,6 +140,7 @@ describe('MainComponent', () => {
         sendEmail: true,
       }
     );
+
     expect(messageService.showMessage).not.toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),
       jasmine.anything(),
@@ -148,6 +152,7 @@ describe('MainComponent', () => {
   it('should show a prompt when only phone is unverified', async () => {
     const data = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
     await init(data);
+
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
     expect(messageService.showMessage).toHaveBeenCalledWith(
       jasmine.stringMatching('phone'),
@@ -158,6 +163,7 @@ describe('MainComponent', () => {
         sendSms: true,
       }
     );
+
     expect(messageService.showMessage).not.toHaveBeenCalledWith(
       jasmine.stringMatching('email and phone'),
       jasmine.anything(),
@@ -169,6 +175,7 @@ describe('MainComponent', () => {
   it('should show a prompt when nothing is unverified', async () => {
     const data = require('@root/test/responses/auth.login.success.json');
     await init(data);
+
     expect(messageService.showMessage).toHaveBeenCalledTimes(0);
   });
 

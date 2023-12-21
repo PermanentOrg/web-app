@@ -38,11 +38,13 @@ describe('TagsComponent', () => {
     const debugTypeElement = fixture.debugElement.query(
       By.css('.customMetadataField')
     );
+
     expect(debugTypeElement).toBeTruthy();
 
     const debugValueElement = fixture.debugElement.query(
       By.css('.customMetadataValue')
     );
+
     expect(debugValueElement).toBeTruthy();
   });
 
@@ -54,6 +56,7 @@ describe('TagsComponent', () => {
     component.ngOnChanges();
     fixture.detectChanges();
     const addTags = fixture.debugElement.query(By.css('.not-empty'));
+
     expect(addTags).toBeTruthy();
   });
 });

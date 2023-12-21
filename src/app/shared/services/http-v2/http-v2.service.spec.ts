@@ -79,6 +79,7 @@ describe('HttpV2Service', () => {
       });
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
     expect(request.request.method).toEqual('POST');
     expect(request.request.headers.get('Request-Version')).toBe('2');
     expect(request.request.headers.has('Authorization')).toBeFalse();
@@ -89,6 +90,7 @@ describe('HttpV2Service', () => {
     service.post('/api/v2/health', {}, null, { csrf: true }).toPromise();
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
     expect(request.request.body.csrf).toBeDefined();
     request.flush({ status: 'available' });
   });
@@ -99,6 +101,7 @@ describe('HttpV2Service', () => {
       .toPromise()
       .then((response) => {
         const resp = response[0];
+
         expect(resp instanceof HealthResponse).toBeTrue();
         expect(resp.status).toBe('available');
         expect(resp.constructorCalled).toBeTrue();
@@ -138,6 +141,7 @@ describe('HttpV2Service', () => {
     const request = httpTestingController.expectOne(
       apiUrl('/api/v2/health?test=potato')
     );
+
     expect(request.request.method).toBe('GET');
     expect(request.request.headers.get('Request-Version')).toBe('2');
     expect(request.request.body).toBeNull();
@@ -156,6 +160,7 @@ describe('HttpV2Service', () => {
     const request = httpTestingController.expectOne(
       apiUrl('/api/v2/health?id=32')
     );
+
     expect(request.request.method).toBe('DELETE');
     expect(request.request.headers.get('Request-Version')).toBe('2');
     expect(request.request.body).toBeNull();
@@ -172,6 +177,7 @@ describe('HttpV2Service', () => {
       });
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
     expect(request.request.method).toBe('PUT');
     expect(request.request.headers.get('Request-Version')).toBe('2');
     expect(request.request.body).not.toBeNull();
@@ -182,6 +188,7 @@ describe('HttpV2Service', () => {
     service.get('/api/v2/health', {}).toPromise();
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
     expect(request.request.method).toBe('GET');
     request.flush({});
   });
@@ -191,6 +198,7 @@ describe('HttpV2Service', () => {
     service.get('/api/v2/health').toPromise();
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
     expect(request.request.headers.get('Authorization')).toBe(
       'Bearer auth_token'
     );
@@ -214,6 +222,7 @@ describe('HttpV2Service', () => {
     service.post('/api/v2/health', {}, HealthResponse).toPromise();
 
     const req = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
     expect(req.request.body.csrf).toBeUndefined();
   });
 

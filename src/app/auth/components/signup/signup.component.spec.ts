@@ -91,6 +91,7 @@ describe('SignupComponent', () => {
       password: TEST_DATA.user.password,
       confirm: TEST_DATA.user.password,
     });
+
     expect(component.signupForm.invalid).toBeTruthy();
     expect(component.signupForm.get('email').errors.required).toBeTruthy();
   });
@@ -100,6 +101,7 @@ describe('SignupComponent', () => {
     component.signupForm.patchValue({
       email: 'lasld;f;aslkj',
     });
+
     expect(component.signupForm.invalid).toBeTruthy();
     expect(component.signupForm.get('email').errors.email).toBeTruthy();
   });
@@ -109,6 +111,7 @@ describe('SignupComponent', () => {
     component.signupForm.patchValue({
       name: '',
     });
+
     expect(component.signupForm.invalid).toBeTruthy();
     expect(component.signupForm.get('name').errors.required).toBeTruthy();
   });
@@ -137,6 +140,7 @@ describe('SignupComponent', () => {
       password: 'ass',
       confirm: 'ass',
     });
+
     expect(component.signupForm.invalid).toBeTruthy();
     expect(component.signupForm.get('password').errors.minlength).toBeTruthy();
   });
@@ -147,6 +151,7 @@ describe('SignupComponent', () => {
       password: 'longenough',
       confirm: 'longenougher',
     });
+
     expect(component.signupForm.invalid).toBeTruthy();
     expect(component.signupForm.get('confirm').errors.mismatch).toBeTruthy();
   });
@@ -162,6 +167,7 @@ describe('SignupComponent', () => {
       password: TEST_DATA.user.password,
       confirm: TEST_DATA.user.password,
     });
+
     expect(component.signupForm.valid).toBeTruthy();
   });
 });

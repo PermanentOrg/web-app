@@ -44,6 +44,7 @@ describe('UploadButtonComponent', () => {
 
   it('should be hidden when no current folder set', () => {
     const button = fixture.debugElement.nativeElement.querySelector('.btn');
+
     expect(button.hidden).toBeTruthy();
   });
 
@@ -53,6 +54,7 @@ describe('UploadButtonComponent', () => {
       accessRole: 'access.role.owner'
     }));
     await fixture.whenStable();
+
     expect(component.hidden).toBeFalsy();
     expect(component.disabled).toBeFalsy();
   });
@@ -63,6 +65,7 @@ describe('UploadButtonComponent', () => {
       type: 'type.folder.app'
     }));
     await fixture.whenStable();
+
     expect(component.hidden).toBeFalsy();
     expect(component.disabled).toBeTruthy();
   });
@@ -73,6 +76,7 @@ describe('UploadButtonComponent', () => {
       accessRole: 'access.role.viewer'
     }));
     await fixture.whenStable();
+
     expect(component.hidden).toBeFalsy();
     expect(component.disabled).toBeTruthy();
   });

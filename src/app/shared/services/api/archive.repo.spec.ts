@@ -46,6 +46,7 @@ describe('ArchiveRepo', () => {
     repo.get([TEST_DATA.archive, TEST_DATA_2.archive])
     .then((response) => {
       const archives = response.getArchiveVOs();
+
       expect(archives.length).toBe(2);
 
       expect(archives[0].archiveId).toEqual(TEST_DATA.archive.archiveId);
@@ -65,6 +66,7 @@ describe('ArchiveRepo', () => {
     .then((response: ArchiveResponse) => {
       const archives = response.getArchiveVOs();
       const count = expected.Results[0].data.length;
+
       expect(archives.length).toBe(count);
     });
 

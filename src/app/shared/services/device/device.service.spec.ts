@@ -15,6 +15,7 @@ describe('DeviceService', () => {
 
   it('should be created', async () => {
     const { instance } = await shallow.createService();
+
     expect(instance).toBeTruthy();
   });
 
@@ -26,6 +27,7 @@ describe('DeviceService', () => {
     });
 
     const { instance } = await shallow.createService();
+
     expect(instance.isMobileWidth()).toBeTrue();
   });
 
@@ -36,6 +38,7 @@ describe('DeviceService', () => {
     });
 
     const { instance } = await shallow.createService();
+
     expect(instance.isMobile()).toBeTrue();
   });
 
@@ -46,6 +49,7 @@ describe('DeviceService', () => {
     });
 
     const { instance } = await shallow.createService();
+
     expect(instance.isIos()).toBeTrue();
   });
 
@@ -56,6 +60,7 @@ describe('DeviceService', () => {
     shallow = shallow.mock(CookieService, cookieService);
 
     const { instance } = await shallow.createService();
+
     expect(instance.didOptOut()).toBeTrue();
   });
 
@@ -67,6 +72,7 @@ describe('DeviceService', () => {
     });
 
     const { instance } = await shallow.createService();
+
     expect(instance.getViewMessageForEventTracking()).toEqual('Screen View');
   });
 });

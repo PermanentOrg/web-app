@@ -141,11 +141,13 @@ describe('FileViewerComponent', () => {
 
   it('should create', async () => {
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
   it('should have two tags components', async () => {
     const { findComponent } = await defaultRender();
+
     expect(findComponent(TagsComponent)).toHaveFound(2);
   });
 
@@ -155,14 +157,17 @@ describe('FileViewerComponent', () => {
     expect(
       element.componentInstance.keywords.find((tag) => tag.name === 'tagOne')
     ).toBeTruthy();
+
     expect(
       element.componentInstance.keywords.find((tag) => tag.name === 'tagTwo')
     ).toBeTruthy();
+
     expect(
       element.componentInstance.keywords.find(
         (tag) => tag.name === 'customField:customValueOne'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.keywords.find(
         (tag) => tag.name === 'customField:customValueTwo'
@@ -174,16 +179,19 @@ describe('FileViewerComponent', () => {
         (tag) => tag.name === 'tagOne'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.customMetadata.find(
         (tag) => tag.name === 'tagTwo'
       )
     ).not.toBeTruthy();
+
     expect(
       element.componentInstance.customMetadata.find(
         (tag) => tag.name === 'customField:customValueOne'
       )
     ).toBeTruthy();
+
     expect(
       element.componentInstance.customMetadata.find(
         (tag) => tag.name === 'customField:customValueTwo'
@@ -194,6 +202,7 @@ describe('FileViewerComponent', () => {
   it('should be able to load multiple record in a folder', async () => {
     setUpMultipleRecords(defaultItem, secondItem);
     const { element } = await defaultRender();
+
     expect(element).not.toBeNull();
   });
 
@@ -203,6 +212,7 @@ describe('FileViewerComponent', () => {
       { type: 'type.tag.metadata.customField', name: 'test:metadta' },
       { type: 'type.generic.placeholder', name: 'test' },
     ]);
+
     expect(instance.keywords.length).toBe(1);
     expect(instance.customMetadata.length).toBe(1);
   });
@@ -211,6 +221,7 @@ describe('FileViewerComponent', () => {
     const { inject, instance } = await defaultRender();
     const publicProfile = inject(PublicProfileService);
     publicProfile.archiveBs.next(new ArchiveVO({ allowPublicDownload: true }));
+
     expect(instance.allowDownloads).toBeTruthy();
   });
 
@@ -219,6 +230,7 @@ describe('FileViewerComponent', () => {
     const publicProfile = inject(PublicProfileService);
     publicProfile.archiveBs.next(new ArchiveVO({ allowPublicDownload: true }));
     publicProfile.archiveBs.next(null);
+
     expect(instance.allowDownloads).toBeFalsy();
   });
 
@@ -233,6 +245,7 @@ describe('FileViewerComponent', () => {
       setUpMultipleRecords(defaultItem, secondItem);
       const { instance } = await defaultRender();
       keyDown(instance, 'ArrowRight');
+
       expect(instance.currentIndex).toBe(1);
     });
 
@@ -240,6 +253,7 @@ describe('FileViewerComponent', () => {
       setUpMultipleRecords(secondItem, defaultItem);
       const { instance } = await defaultRender();
       keyDown(instance, 'ArrowLeft');
+
       expect(instance.currentIndex).toBe(0);
     });
 
@@ -247,6 +261,7 @@ describe('FileViewerComponent', () => {
       setUpMultipleRecords(secondItem, defaultItem);
       const { instance } = await defaultRender();
       keyDown(instance, 'ArrowRight');
+
       expect(instance.currentIndex).toBe(1);
     });
 
@@ -254,6 +269,7 @@ describe('FileViewerComponent', () => {
       setUpMultipleRecords(defaultItem, secondItem);
       const { instance } = await defaultRender();
       keyDown(instance, 'ArrowLeft');
+
       expect(instance.currentIndex).toBe(0);
     });
 
@@ -266,6 +282,7 @@ describe('FileViewerComponent', () => {
       const { instance } = await defaultRender();
       keyDown(instance, 'ArrowRight');
       keyDown(instance, 'ArrowRight');
+
       expect(instance.currentIndex).toBe(1);
     });
 
@@ -278,6 +295,7 @@ describe('FileViewerComponent', () => {
         const { fixture, instance } = await defaultRender();
         keyDown(instance, 'ArrowRight');
         await fixture.whenStable();
+
         expect(navigatedUrl).toContain('1234-1234');
       });
       it('should navigate after the record has been fetched if it is still fetching', async () => {
@@ -292,6 +310,7 @@ describe('FileViewerComponent', () => {
         keyDown(instance, 'ArrowRight');
         secondItemFetching.archiveNbr = '1234-1234';
         await fixture.whenStable();
+
         expect(navigatedUrl).toContain('1234-1234');
       });
     });
@@ -330,6 +349,7 @@ describe('FileViewerComponent', () => {
       phrase: string
     ) {
       const url = instance.getPdfUrl();
+
       expect(url).toBeTruthy();
       expect(
         instance.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url)
@@ -349,12 +369,14 @@ describe('FileViewerComponent', () => {
 
     it('will have a falsy document URL if it is not a document', async () => {
       const { instance } = await defaultRender();
+
       expect(instance.getPdfUrl()).toBeFalsy();
     });
 
     it('will have a falsy document URL if the URL is falsy', async () => {
       setUpCurrentRecord('pdf', false);
       const { instance } = await defaultRender();
+
       expect(instance.getPdfUrl()).toBeFalsy();
     });
   });
@@ -367,12 +389,14 @@ describe('FileViewerComponent', () => {
     it('can close the file viewer', async () => {
       const { instance } = await defaultRender();
       instance.close();
+
       expect(navigatedUrl).toContain('.');
     });
 
     it('can finish editing', async () => {
       const { instance } = await defaultRender();
       await instance.onFinishEditing('displayName', 'Test');
+
       expect(savedProperty.name).toBe('displayName');
       expect(savedProperty.value).toBe('Test');
     });
@@ -382,6 +406,7 @@ describe('FileViewerComponent', () => {
       const { fixture, instance } = await defaultRender();
       instance.onLocationClick();
       await fixture.whenStable();
+
       expect(openedDialogs).toContain('location');
     });
 
@@ -390,6 +415,7 @@ describe('FileViewerComponent', () => {
       const { fixture, instance } = await defaultRender();
       instance.onLocationClick();
       await fixture.whenStable();
+
       expect(openedDialogs).not.toContain('location');
     });
 
@@ -398,6 +424,7 @@ describe('FileViewerComponent', () => {
       const { fixture, instance } = await defaultRender();
       instance.onTagsClick('keyword');
       await fixture.whenStable();
+
       expect(openedDialogs).toContain('tags');
     });
 
@@ -406,6 +433,7 @@ describe('FileViewerComponent', () => {
       const { fixture, instance } = await defaultRender();
       instance.onTagsClick('keyword');
       await fixture.whenStable();
+
       expect(openedDialogs).not.toContain('tags');
     });
 
@@ -413,6 +441,7 @@ describe('FileViewerComponent', () => {
       const { fixture, instance } = await defaultRender();
       instance.onDownloadClick();
       await fixture.whenStable();
+
       expect(downloaded).toBeTrue();
     });
   });

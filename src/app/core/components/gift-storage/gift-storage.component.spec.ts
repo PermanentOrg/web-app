@@ -28,7 +28,8 @@ describe('GiftStorageComponent', () => {
   });
 
   it('should create', async () => {
-    const { instance } = await shallow.render(); // Render the component
+    const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 
