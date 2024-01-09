@@ -7,9 +7,9 @@ import {
   UploadProgressEvent,
   UploadSessionStatus,
 } from '@core/services/upload/upload.session';
-import { UploadProgressComponent } from './upload-progress.component';
 import { UploadItem } from '@core/services/upload/uploadItem';
 import { FolderVO } from '@models/index';
+import { UploadProgressComponent } from './upload-progress.component';
 
 class MockUploadSession {
   public progress = new EventEmitter<UploadProgressEvent>();
@@ -32,12 +32,14 @@ describe('UploadProgressComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 
   it('should become visible when show() is called', async () => {
     const { instance } = await shallow.render();
     instance.show();
+
     expect(instance.visible).toBe(true);
   });
 
@@ -64,8 +66,11 @@ describe('UploadProgressComponent', () => {
     expect(find('.current-file').nativeElement.textContent).toContain(
       'testfile.txt'
     );
+
     const fileCountElements = find('.file-count strong');
+
     expect(fileCountElements[0].nativeElement.textContent).toEqual('1');
+
     expect(fileCountElements[1].nativeElement.textContent).toEqual('5');
   });
 
@@ -92,8 +97,11 @@ describe('UploadProgressComponent', () => {
     expect(find('.current-file').nativeElement.textContent.trim()).toBe(
       `Uploading ${progressEvent.item.file.name} to ${progressEvent.item.parentFolder.displayName}`
     );
+
     const fileCountElements = find('.file-count strong');
+
     expect(fileCountElements[0].nativeElement.textContent).toEqual('1');
+
     expect(fileCountElements[1].nativeElement.textContent).toEqual('5');
   });
 });
