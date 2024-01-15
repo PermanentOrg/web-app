@@ -17,7 +17,16 @@
   flex-direction: column;
   gap: 10px;
   max-height: 320px;
-  overflow: scroll;
+  overflow-x: auto;
+
+  @include beforeDesktop {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
 }
 
 .public-archive {
@@ -81,7 +90,7 @@
 
   & > p,
   & > a {
-    font-size: 28px;
+    font-size: 22px;
   }
   @include beforeDesktop {
     width: 390px;
@@ -91,7 +100,7 @@
 
     & > p,
     & > a {
-      font-size: 24px;
+      font-size: 22px;
     }
   }
 }
