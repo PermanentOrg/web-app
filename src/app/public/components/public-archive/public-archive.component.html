@@ -33,6 +33,7 @@
             class="icon-expand"
             [class.reverse]="showProfileInformation"
             [icon]="['fas', 'chevron-down']"
+            *ngIf="!(isViewingProfile$ | async)"
           ></fa-icon>
         </div>
         <div
@@ -138,6 +139,7 @@
               class="btn btn-link"
               [routerLink]="['/p', 'archive', archive.archiveNbr]"
               [hidden]="!(isViewingProfile$ | async)"
+              (click)="showProfileInformation = false"
             >
               View Public Archive
               <svg
@@ -173,6 +175,7 @@
               class="btn btn-link"
               [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']"
               [hidden]="isViewingProfile$ | async"
+              (click)="showProfileInformation = true"
             >
               View Public Profile
               <svg
