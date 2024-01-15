@@ -82,9 +82,10 @@ describe('PublicArchivesComponent', () => {
 
     expect(instance.expanded).toBeTrue();
 
-    const archiveList = find('.public-archives-list')
+    const archiveList = find('.public-archives-list');
 
-    expect(archiveList.nativeElement).toHaveClass('public-archives-list-expanded')
-
+    expect(archiveList.nativeElement).toHaveClass(
+      'public-archives-list-expanded'
+    );
   });
 });
