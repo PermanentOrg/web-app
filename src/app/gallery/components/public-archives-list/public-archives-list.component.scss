@@ -20,12 +20,12 @@
   overflow-x: auto;
 
   @include beforeDesktop {
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow: hidden;
 
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
+    &-expanded {
+      max-height: fit-content;
+      // overflow: visible;
+    }
   }
 }
 
@@ -114,4 +114,11 @@
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
+}
+
+.see-more {
+  display: none;
+  @include beforeDesktop {
+    display: inline;
+  }
 }

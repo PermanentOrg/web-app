@@ -4,7 +4,11 @@
 </div>
 <div *ngIf="!waiting" class="public-archives">
   <h3>My Public Archives</h3>
-  <div *ngIf="publicArchives.length" class="public-archives-list">
+  <div
+    *ngIf="publicArchives.length"
+    class="public-archives-list"
+    [ngClass]="{ 'public-archives-list-expanded': expanded  }"
+  >
     <div
       (click)="goToArchive(archive)"
       *ngFor="let archive of publicArchives"
@@ -17,6 +21,12 @@
       </div>
     </div>
   </div>
+  <span
+    (click)="toggleArchives()"
+    class="see-more"
+    *ngIf="publicArchives.length"
+    >{{ !expanded ? 'See more' : 'See less' }}</span
+  >
   <div class="no-archives" *ngIf="!publicArchives.length">
     <p class="no-archives-text">None of your archives are public.</p>
     <a

@@ -70,4 +70,21 @@ describe('PublicArchivesComponent', () => {
       archive.archiveNbr,
     ]);
   });
+
+  it('should expand the archives list when clicking "See more" on mobile', async () => {
+    const { instance, fixture, find } = await shallow.render();
+    instance.publicArchives = [
+      new ArchiveVO({ archiveNbr: 1, name: 'test', public: 1 }),
+      new ArchiveVO({ archiveNbr: 2, name: 'test2', public: 1 }),
+    ];
+    instance.toggleArchives();
+    fixture.detectChanges();
+
+    expect(instance.expanded).toBeTrue();
+
+    const archiveList = find('.public-archives-list')
+
+    expect(archiveList.nativeElement).toHaveClass('public-archives-list-expanded')
+
+  });
 });

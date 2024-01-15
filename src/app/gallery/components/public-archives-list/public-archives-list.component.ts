@@ -13,6 +13,7 @@ import { MessageService } from '../../../shared/services/message/message.service
 export class PublicArchivesListComponent implements OnInit {
   public publicArchives: ArchiveVO[] = [];
   public waiting: boolean = true;
+  public expanded: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -32,5 +33,9 @@ export class PublicArchivesListComponent implements OnInit {
 
   public goToArchive(archive: ArchiveVO): void {
     this.router.navigate(['/p/archive', archive.archiveNbr]);
+  }
+
+  public toggleArchives(): void {
+    this.expanded = !this.expanded;
   }
 }
