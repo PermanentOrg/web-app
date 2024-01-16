@@ -1,0 +1,29 @@
+@import 'variables';
+
+.banner {
+  display: none;
+
+  @include beforeDesktop {
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #5261b7;
+    border-radius: 12px;
+    padding: 12px;
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2147483646;
+    & > p,
+    > i {
+      color: white;
+    }
+    & > p {
+      margin: 0;
+      margin-left: 12px;
+    }
+  }
+}

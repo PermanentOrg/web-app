@@ -1,0 +1,6 @@
+<!-- @format  -->
+<div class="banner" *ngIf="this.bannerService.isVisible" @ngIfFadeInAnimation>
+  <img src="assets/svg/app-icon.svg" />
+  <p>Manage your archives in the Permanent Archive app for Android and iOS.</p>
+  <i (click)="closeBanner()" class="material-icons">close</i>
+</div>

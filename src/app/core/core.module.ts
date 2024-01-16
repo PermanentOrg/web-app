@@ -65,6 +65,7 @@ import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dial
 import { GiftStorageComponent } from './components/gift-storage/gift-storage.component';
 import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/confirm-gift-dialog.component';
 import { AdvancedSettingsComponent } from './components/advanced-settings/advanced-settings.component';
+import { BannerComponent } from '../banner/banner.component';
 
 @NgModule({
   imports: [
@@ -120,6 +121,7 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
     GiftStorageComponent,
     ConfirmGiftDialogComponent,
     AdvancedSettingsComponent,
+    BannerComponent
   ],
   providers: [
     DataService,
