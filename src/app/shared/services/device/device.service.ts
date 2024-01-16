@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 const MOBILE_USER_AGENT_MATCH =
   /android|blackberry|iphone|ipod|iemobile|opera mobile|palmos|webos|googlebot-mobile/i;
 const IOS_USER_AGENT_MATCH = /ipad|ipod|iphone/i;
+const ANDROID_USER_AGENT_MATCH = /android/i;
 
 export function isMobileWidth() {
   return !window.matchMedia('(min-width: 900px)').matches;
@@ -26,6 +27,10 @@ export class DeviceService {
 
   isIos() {
     return !!navigator.userAgent.match(IOS_USER_AGENT_MATCH);
+  }
+
+  isAndroid() {
+    return !!navigator.userAgent.match(ANDROID_USER_AGENT_MATCH);
   }
 
   didOptOut() {
