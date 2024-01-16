@@ -180,6 +180,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public makeMyArchive(): void {
+    this.mixpanelService.track('Skip Create archive', {});
     this.dialog.open(
       'SkipOnboardingDialogComponent',
       { skipOnboarding: this.skipOnboarding },
@@ -189,10 +190,12 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   public skipStep(): void {
     if (this.screen === 'goals') {
+      this.mixpanelService.track('Skip goals', {});
       this.screen = 'reasons';
       this.progress.emit(2);
       this.selectedGoals = [];
     } else if (this.screen === 'reasons') {
+      this.mixpanelService.track('Skip why permanent', {});
       this.selectedReasons = [];
       this.onSubmit();
     }
