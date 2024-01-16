@@ -415,7 +415,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let firstItemBefore: DataItem;
     this.timelineItems.forEach((i) => {
-      if (i.start < midpointWithMinDiff) {
+      if ((i.start as number) < midpointWithMinDiff) {
         if (!firstItemBefore) {
           firstItemBefore = i;
         } else if (firstItemBefore.start < i.start) {
@@ -442,7 +442,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let firstItemAfter: DataItem;
     this.timelineItems.forEach((i) => {
-      if (i.start > midpointWithMinDiff) {
+      if ((i.start as number) > midpointWithMinDiff) {
         if (!firstItemAfter) {
           firstItemAfter = i;
         } else if (firstItemAfter.start > i.start) {
@@ -517,9 +517,9 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const itemIds = [];
     this.timelineItems.forEach((item) => {
       if (
-        item.start >= start &&
-        item.start <= end &&
-        (!item.end || item.end <= end)
+        (item.start as number) >= start &&
+        (item.start as number) <= end &&
+        (!item.end || (item.end as number) <= end)
       ) {
         itemIds.push(item.id);
       }
