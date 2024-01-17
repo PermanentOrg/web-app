@@ -134,10 +134,7 @@
         <tr>
           <td class="title">Tags</td>
           <td (click)="onTagsClick('keyword')">
-            <pr-tags
-              [canEditOnFullscreen]="canEditFieldsOnFullscreen"
-              [tags]="keywords"
-            ></pr-tags>
+            <pr-tags [tags]="keywords" [canEdit]="canEdit"></pr-tags>
           </td>
         </tr>
         <tr>
@@ -146,10 +143,7 @@
             Metadata
           </td>
           <td (click)="onTagsClick('custom')">
-            <pr-tags
-              [canEditOnFullscreen]="canEditFieldsOnFullscreen"
-              [tags]="customMetadata"
-            ></pr-tags>
+            <pr-tags [tags]="customMetadata" [canEdit]="canEdit"></pr-tags>
           </td>
         </tr>
         <tr>
@@ -162,19 +156,11 @@
             <span *ngIf="currentRecord.LocnVO">{{
               (currentRecord.LocnVO | prLocation)?.full
             }}</span>
-            <span
-              class="add-location"
-              *ngIf="!currentRecord.LocnVO && canEditFieldsOnFullscreen"
-            >
-              <fa-icon
-                *ngIf="canEditFieldsOnFullscreen"
-                [icon]="['fas', 'pen-square']"
-              ></fa-icon>
+            <span class="add-location" *ngIf="!currentRecord.LocnVO && canEdit">
+              <fa-icon [icon]="['fas', 'pen-square']"></fa-icon>
               Click to add location</span
             >
-            <span *ngIf="!currentRecord.LocnVO && !canEditFieldsOnFullscreen"
-              >No location</span
-            >
+            <span *ngIf="!currentRecord.LocnVO && !canEdit">No location</span>
           </td>
         </tr>
         <tr></tr>

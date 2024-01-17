@@ -49,7 +49,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public documentUrl = null;
 
   public canEdit: boolean;
-  public canEditFieldsOnFullscreen = false;
 
   // Swiping
   private touchElement: HTMLElement;
@@ -121,8 +120,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
         this.currentRecord.accessRole,
         AccessRole.Editor
       ) && !route.snapshot.data?.isPublicArchive;
-
-    this.canEditFieldsOnFullscreen = this.canEdit && this.canEditOnFullScreen();
 
     this.tagSubscription = this.tagsService
       .getItemTags$()
@@ -405,14 +402,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     );
     this.customMetadata = this.currentRecord.TagVOs.filter((tag) =>
       tag.type.includes('type.tag.metadata')
-    );
-  }
-
-  private canEditOnFullScreen(): boolean {
-    return (
-      this.router.routerState.snapshot.url.includes('private/record') ||
-      this.router.routerState.snapshot.url.includes('public/record') ||
-      this.router.routerState.snapshot.url.includes('shares/record')
     );
   }
 }

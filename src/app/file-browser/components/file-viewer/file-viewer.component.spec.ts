@@ -452,7 +452,7 @@ describe('FileViewerComponent', () => {
 
     it('should display "Click to add location" on fullscreen view', async () => {
       const { fixture, instance, find } = await defaultRender();
-      instance.canEditFieldsOnFullscreen = true;
+      instance.canEdit = true;
       await fixture.detectChanges();
       const locationSpan = find('.add-location');
 

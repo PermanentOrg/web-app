@@ -19,19 +19,16 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
 export class TagsComponent implements OnInit, OnChanges {
   @Input() tags: TagVOData[];
   @HostBinding('class.read-only') @Input() readOnly = true;
-  @HostBinding('class.can-edit') @Input() canEdit: boolean;
+  @Input() canEdit = false;
   @Input() isEditing = false;
   @Input() animate = false;
   @Input() isDialog = false;
-  @Input() canEditOnFullscreen: boolean = false;
 
   orderedTags: TagVOData[] = [];
-  public isEditableFullscreen: boolean = false;
 
   constructor() {}
 
   ngOnInit(): void {
-    this.isEditableFullscreen = this.canEditOnFullscreen && !this.isDialog;
   }
 
   ngOnChanges() {
