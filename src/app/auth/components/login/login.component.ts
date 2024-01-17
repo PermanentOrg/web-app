@@ -7,11 +7,8 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-
 import { trimWhitespace } from '@shared/utilities/forms';
-
 import { APP_CONFIG } from '@root/app/app.config';
-
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';

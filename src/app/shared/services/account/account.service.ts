@@ -369,7 +369,7 @@ export class AccountService {
               newAccount.isNew = currentAccount.isNew;
             }
             this.setAccount(newAccount);
-            this.trackAuthWithMixpanel('Sign In', newAccount);
+            this.trackAuthWithMixpanel('Sign in', newAccount);
             if (response.getArchiveVO()?.archiveId) {
               this.setArchive(response.getArchiveVO());
             }
