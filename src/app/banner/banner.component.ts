@@ -14,7 +14,7 @@ export class BannerComponent {
   public url = '';
   constructor(public bannerService: BannerService) {
     this.displayBanner = this.bannerService.isVisible;
-    this.url = !this.bannerService.isIos
+    this.url = this.bannerService.isIos
       ? this.bannerService.appStoreUrl
       : this.bannerService.playStoreUrl;
   }
