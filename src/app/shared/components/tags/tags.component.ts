@@ -28,8 +28,7 @@ export class TagsComponent implements OnInit, OnChanges {
 
   constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     if (!this.tags?.length) {
