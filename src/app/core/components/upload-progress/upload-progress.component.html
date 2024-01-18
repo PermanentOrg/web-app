@@ -1,10 +1,9 @@
 <!-- @format -->
 <div
-  class="upload-wrapper"
+  class="upload-wrapper target-folder"
   [ngClass]="{
     visible: visible,
-    fade: useFade,
-    'target-folder': isUploadingInNestedFolder
+    fade: useFade
   }"
 >
   <div
@@ -20,10 +19,7 @@
     class="upload"
     *ngIf="status === UploadSessionStatus.InProgress && currentItem"
   >
-    <div *ngIf="!isUploadingInNestedFolder" class="current-file">
-      {{ currentItem.file.name }}
-    </div>
-    <div *ngIf="isUploadingInNestedFolder" class="current-file">
+    <div class="current-file">
       Uploading {{ currentItem.file.name }} to
       {{ currentItem.parentFolder.displayName }}
     </div>

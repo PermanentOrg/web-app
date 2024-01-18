@@ -28,7 +28,6 @@ export class UploadProgressComponent {
 
   public currentItem: UploadItem;
   public fileCount: any;
-  public isUploadingInNestedFolder: boolean = false;
 
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
@@ -53,9 +52,6 @@ export class UploadProgressComponent {
 
         if (progressEvent.item) {
           this.currentItem = progressEvent.item;
-          this.isUploadingInNestedFolder = this.uploadCheckInsideNestedFolder(
-            this.currentItem
-          );
         }
 
         this.fileCount = progressEvent.statistics;
@@ -77,9 +73,5 @@ export class UploadProgressComponent {
     } else {
       return 'scaleX(0)';
     }
-  }
-
-  uploadCheckInsideNestedFolder(item: UploadItem): boolean {
-    return item.parentFolder.pathAsArchiveNbr.length === 0;
   }
 }

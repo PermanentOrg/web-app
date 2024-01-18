@@ -43,37 +43,6 @@ describe('UploadProgressComponent', () => {
     expect(instance.visible).toBe(true);
   });
 
-  it('should display the correct file name and count', async () => {
-    const { find, instance, fixture } = await shallow.render();
-
-    const mockContent = new Uint8Array(10000);
-    const progressEvent = {
-      item: new UploadItem(
-        new File([mockContent], 'testfile.txt'),
-        new FolderVO({
-          displayName: 'testfolder',
-          pathAsArchiveNbr: ['1'],
-        })
-      ),
-      statistics: { current: 1, total: 5, completed: 0, error: 0 },
-      sessionStatus: UploadSessionStatus.InProgress,
-    };
-
-    mockUploadService.uploadSession.progress.emit(progressEvent);
-
-    fixture.detectChanges();
-
-    expect(find('.current-file').nativeElement.textContent).toContain(
-      'testfile.txt'
-    );
-
-    const fileCountElements = find('.file-count strong');
-
-    expect(fileCountElements[0].nativeElement.textContent).toEqual('1');
-
-    expect(fileCountElements[1].nativeElement.textContent).toEqual('5');
-  });
-
   it('should display the correct file name and the folder when dragging the file into a folder', async () => {
     const { find, instance, fixture } = await shallow.render();
 
