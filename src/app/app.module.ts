@@ -41,7 +41,6 @@ import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
-import { BannerComponent } from './banner/banner.component';
 
 declare var ga: any;
 

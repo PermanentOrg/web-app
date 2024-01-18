@@ -17,7 +17,7 @@ export class BannerService {
   constructor(private device: DeviceService) {
     this._isVisible = this.device.isAndroid() || this.device.isIos();
     if (this.device.isIos()) {
-      this._isIos = false;
+      this._isIos = true;
     }
   }
 
