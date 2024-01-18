@@ -1,8 +1,8 @@
 /* @format */
+import { SharedModule } from '@shared/shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Shallow } from 'shallow-render';
 import { BannerService } from '@shared/services/banner/banner.service';
-import { CoreModule } from '@core/core.module';
 import { BannerComponent } from './banner.component';
 
 const mockBannerService = {
@@ -25,7 +25,7 @@ describe('BannerComponent', () => {
   let shallow: Shallow<BannerComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(BannerComponent, CoreModule)
+    shallow = new Shallow(BannerComponent, SharedModule)
       .mock(BannerService, mockBannerService)
       .dontMock(NoopAnimationsModule)
       .import(NoopAnimationsModule);

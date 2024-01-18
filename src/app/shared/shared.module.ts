@@ -70,6 +70,7 @@ import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
+import { BannerComponent } from './components/banner/banner.component';
 
 @NgModule({
   imports: [
@@ -137,6 +138,7 @@ import { AccessRolePipe } from './pipes/access-role.pipe';
     SwitcherComponent,
     GetAltTextPipe,
     AccessRolePipe,
+    BannerComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -185,6 +187,7 @@ import { AccessRolePipe } from './pipes/access-role.pipe';
     SwitcherComponent,
     GetAltTextPipe,
     AccessRolePipe,
+    BannerComponent,
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })

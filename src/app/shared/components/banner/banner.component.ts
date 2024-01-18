@@ -27,35 +27,15 @@ export class BannerComponent {
   onClickBanner(): void {
     let attemptedToOpenApp = false;
 
-    try {
-      if (this.bannerService.isIos) {
-        // window.open('permanent://openapp', '_blank');
-       const test2 = window.open('permanent://openapp')
-      const test = window.open(this.url)
+    window.open('permanent://open.my.app', '_blank');
+    attemptedToOpenApp = true;
 
-       console.log(test)
-       console.log(test2)
-
-        attemptedToOpenApp = true;
-      } else {
-        // Android-specific logic
+    setTimeout(() => {
+      if (attemptedToOpenApp) {
+        if (document.hasFocus()) {
+          window.location.replace(this.url);
+        }
       }
-    } catch (error) {
-      console.log('here')
-      window.location.href = this.url; // Use href for redirection
-    }
-
-
-    // setTimeout(() => {
-    if (attemptedToOpenApp) {
-      // Check if the user is still on the same page
-      // Note: This is a heuristic approach and may not be 100% reliable
-      if (document.hasFocus()) {
-      }
-    }
-  }
-
-  onFallbackClick(): void {
-    window.location.replace(this.url);
+    }, 2500);
   }
 }
