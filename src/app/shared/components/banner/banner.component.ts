@@ -1,6 +1,7 @@
 /* @format */
+import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ngIfFadeInAnimation } from '@shared/animations';
-import { Component, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 import { BannerService } from '@shared/services/banner/banner.service';
 
 @Component({
@@ -10,32 +11,37 @@ import { BannerService } from '@shared/services/banner/banner.service';
   animations: [ngIfFadeInAnimation],
 })
 export class BannerComponent {
-  public showFallbackMessage = false;
-  public displayBanner = false;
   public url = '';
-  constructor(public bannerService: BannerService) {
-    this.displayBanner = this.bannerService.isVisible;
+  constructor(
+    public bannerService: BannerService,
+    private prompt: PromptService
+  ) {
     this.url = this.bannerService.isIos
       ? this.bannerService.appStoreUrl
       : this.bannerService.playStoreUrl;
   }
 
-  closeBanner(): void {
+  closeBanner(event): void {
+    event.stopPropagation();
     this.bannerService.hideBanner();
   }
 
   onClickBanner(): void {
-    let attemptedToOpenApp = false;
-
-    window.open('permanent://open.my.app', '_blank');
-    attemptedToOpenApp = true;
-
     setTimeout(() => {
-      if (attemptedToOpenApp) {
-        if (document.hasFocus()) {
-          window.location.replace(this.url);
-        }
-      }
-    }, 2500);
+      try {
+        this.prompt
+          .confirm(
+            'Yes',
+            `Would you like to navigate to the ${
+              this.bannerService.isIos ? 'App Store' : 'Google Play Store'
+            }?`
+          )
+          .then(() => {
+            window.location.href = this.url;
+          });
+      } catch (error) {}
+    }, 1500);
+
+    window.location.href = 'permanent://open.my.app';
   }
 }

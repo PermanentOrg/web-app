@@ -40,7 +40,7 @@ describe('BannerComponent', () => {
   it('should initialize with correct visibility and URL', async () => {
     const { instance } = await shallow.render();
 
-    expect(instance.displayBanner).toBe(mockBannerService.isVisible);
+    expect(instance.bannerService.isVisible).toBe(mockBannerService.isVisible);
 
     expect(instance.url).toBe(
       mockBannerService.isIos
@@ -66,8 +66,9 @@ describe('BannerComponent', () => {
 
   it('should close the banner when close icon is clicked', async () => {
     spyOn(mockBannerService, 'hideBanner');
+    const mockEvent = { stopPropagation: () => {} };
     const { find } = await shallow.render();
-    find('.material-icons').triggerEventHandler('click', null);
+    find('.material-icons').triggerEventHandler('click', mockEvent);
 
     expect(mockBannerService.hideBanner).toHaveBeenCalled();
   });
