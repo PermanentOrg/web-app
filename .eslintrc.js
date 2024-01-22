@@ -11,6 +11,7 @@ module.exports = {
       plugins: ['jasmine'],
       env: { jasmine: true },
       rules: {
+        'jasmine/new-line-before-expect': 'error',
         // We intend to enable these eventually:
         'jasmine/new-line-between-declarations': 'off',
         'jasmine/no-disabled-tests': 'off',
