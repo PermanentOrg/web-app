@@ -1,0 +1,18 @@
+<!-- @format  -->
+<button
+  [attr.type]="attr"
+  class="button"
+  [ngClass]="[
+    'button-' + variant,
+    'button-' + size,
+    'button-' + mode,
+    'button-' + height,
+    orientation === 'right' ? 'button-reverse' : ''
+  ]"
+  [disabled]="disabled"
+  (click)="onClick($event)"
+>
+  <img *ngIf="icon" class="icon" src="{{ 'assets/svg/' + icon + '.svg' }}" />
+  <fa-icon class="icon" *ngIf="faIcon" [icon]="['fas', faIcon]"></fa-icon>
+  <p class="button-text">{{ text }}</p>
+</button>
