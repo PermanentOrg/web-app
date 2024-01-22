@@ -193,7 +193,7 @@ $desktop-size: pxToGrid(200px);
   }
 }
 
-.profile-description {
+.archive-description {
   white-space: pre-line;
 
   @include beforeDesktop {
@@ -205,6 +205,10 @@ $desktop-size: pxToGrid(200px);
       display: block;
     }
   }
+}
+
+.profile-description {
+  white-space: pre-line;
 }
 
 .search-box-public-archive {
@@ -408,18 +412,6 @@ $desktop-size: pxToGrid(200px);
     cursor: pointer;
     &.reverse {
       transform: rotate(180deg);
-    }
-  }
-}
-
-.profile-info {
-  @include beforeDesktop {
-    display: none;
-  }
-
-  &-show {
-    @include beforeDesktop {
-      display: block;
     }
   }
 }

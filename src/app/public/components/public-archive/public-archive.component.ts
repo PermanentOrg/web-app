@@ -27,7 +27,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   description: string;
   searchResults: any[] = [];
   showShortText = true;
-  characterLimit = 100;
+  characterLimit = 10;
   shortText = '';
   emails: string[] = [];
   websites: string[] = [];

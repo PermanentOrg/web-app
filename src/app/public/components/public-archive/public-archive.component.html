@@ -37,8 +37,8 @@
           ></fa-icon>
         </div>
         <div
-          [ngClass]="{ 'profile-description-show': showProfileInformation }"
-          class="profile-description"
+          [ngClass]="{ 'archive-description-show': showProfileInformation }"
+          class="archive-description"
         >
           <span
             *ngIf="
@@ -99,10 +99,7 @@
           </ng-container>
         </div>
         <ng-container *ngIf="isViewingProfile$ | async">
-          <div
-            class="profile-info"
-            [ngClass]="{ 'profile-info-show': showProfileInformation }"
-          >
+          <div class="profile-info">
             <div
               class="profile-blurb"
               *ngIf="hasSingleValueFor('blurb', 'string1')"
