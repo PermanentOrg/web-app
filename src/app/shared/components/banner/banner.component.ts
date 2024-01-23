@@ -1,6 +1,6 @@
 /* @format */
 import { PromptService } from '@shared/services/prompt/prompt.service';
-import { ngIfFadeInAnimation } from '@shared/animations';
+import { ngIfSlideUpAnimation } from '@shared/animations';
 import { Component } from '@angular/core';
 import { BannerService } from '@shared/services/banner/banner.service';
 
@@ -8,7 +8,7 @@ import { BannerService } from '@shared/services/banner/banner.service';
   selector: 'pr-banner',
   templateUrl: './banner.component.html',
   styleUrls: ['./banner.component.scss'],
-  animations: [ngIfFadeInAnimation],
+  animations: [ngIfSlideUpAnimation],
 })
 export class BannerComponent {
   public url = '';

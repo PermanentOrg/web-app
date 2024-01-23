@@ -1,11 +1,19 @@
 <!-- @format  -->
-<div
-  (click)="onClickBanner()"
-  class="banner"
-  *ngIf="bannerService.isVisible"
-  @ngIfFadeInAnimation
->
-  <img src="assets/svg/app-icon.svg" />
-  <p>Manage your archives in the Permanent Archive app for Android and iOS.</p>
-  <i (click)="closeBanner($event)" class="material-icons">close</i>
+<div class="banner" *ngIf="bannerService.isVisible" @ngIfSlideUpAnimation>
+  <div class="icon">
+    <i (click)="closeBanner($event)" class="material-icons">close</i>
+  </div>
+  <div class="image"><img class="logo" src="assets/svg/app-icon.svg" /></div>
+  <div class="banner-text-container">
+    <h4>Permanent is better on the app.</h4>
+    <p>
+      Access and manage your archives from the convenience of your tablet or
+      smartphone.
+    </p>
+  </div>
+
+  <div class="banner-buttons">
+    <button class="btn btn-primary" (click)="onClickBanner()">Go to App</button>
+    <button class="btn btn-link" (click)="closeBanner($event)">Not now</button>
+  </div>
 </div>

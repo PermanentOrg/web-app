@@ -4,26 +4,62 @@
   display: none;
 
   @include beforeDesktop {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     background-color: #5261b7;
-    border-radius: 12px;
     padding: 12px;
     position: fixed;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2147483646;
-    & > p,
-    > i {
+    bottom: 0;
+    z-index: 10;
+
+    & > .icon {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      & > i {
+        color: white;
+      }
+    }
+
+    .image {
+      margin-top: 20px;
+    }
+
+    .banner-text-container > p,
+    h4 {
+      text-align: center;
       color: white;
     }
-    & > p {
-      margin: 0;
-      margin-left: 12px;
+
+    .banner-text-container > h4 {
+      font-weight: 700;
+      margin: 20px 0px;
     }
+
+    .banner-text-container > p {
+      margin-bottom: 5px;
+    }
+  }
+
+  &-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+
+    .btn-link {
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
   }
 }
