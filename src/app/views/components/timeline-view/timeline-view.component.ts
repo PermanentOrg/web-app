@@ -62,6 +62,7 @@ import {
   GroupByTimespan,
   GetTimespanFromRange,
   getBestFitTimespanForItems,
+  dateTypeToNumber,
 } from './timeline-util';
 
 interface VoDataItem extends DataItem {
@@ -415,7 +416,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let firstItemBefore: DataItem;
     this.timelineItems.forEach((i) => {
-      if ((i.start as number) < midpointWithMinDiff) {
+      if (dateTypeToNumber(i.start) < midpointWithMinDiff) {
         if (!firstItemBefore) {
           firstItemBefore = i;
         } else if (firstItemBefore.start < i.start) {
@@ -425,7 +426,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (firstItemBefore) {
-      const newMidpoint = (firstItemBefore.start as number) - 10;
+      const newMidpoint = dateTypeToNumber(firstItemBefore.start) - 10;
       this.timeline.moveTo(newMidpoint);
     } else {
       this.hasPrev = false;
@@ -442,7 +443,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let firstItemAfter: DataItem;
     this.timelineItems.forEach((i) => {
-      if ((i.start as number) > midpointWithMinDiff) {
+      if (dateTypeToNumber(i.start) > midpointWithMinDiff) {
         if (!firstItemAfter) {
           firstItemAfter = i;
         } else if (firstItemAfter.start > i.start) {
@@ -452,7 +453,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (firstItemAfter) {
-      const newMidpoint = (firstItemAfter.start as number) + 10;
+      const newMidpoint = dateTypeToNumber(firstItemAfter.start) + 10;
       this.timeline.moveTo(newMidpoint);
     } else {
       this.hasPrev = false;
@@ -516,10 +517,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   findItemsInRange(start: number, end: number) {
     const itemIds = [];
     this.timelineItems.forEach((item) => {
+      const itemStart = dateTypeToNumber(item.start);
       if (
-        (item.start as number) >= start &&
-        (item.start as number) <= end &&
-        (!item.end || (item.end as number) <= end)
+        itemStart >= start &&
+        itemStart <= end &&
+        (!item.end || dateTypeToNumber(item.end) <= end)
       ) {
         itemIds.push(item.id);
       }
