@@ -144,6 +144,7 @@ describe('AccountService: refreshAccount', () => {
     });
 
     await instance.refreshAccount();
+
     expect(logOutSpy).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
     expect(localStorageSpy).toHaveBeenCalled();
@@ -161,6 +162,7 @@ describe('AccountService: refreshAccount', () => {
 
     AuthRepoStub.loggedIn = false;
     await instance.refreshAccount();
+
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalled();
   });
@@ -180,6 +182,7 @@ describe('AccountService: refreshAccount', () => {
 
     AuthRepoStub.loggedIn = false;
     await instance.refreshAccount();
+
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
@@ -199,6 +202,7 @@ describe('AccountService: refreshAccount', () => {
 
     AuthRepoStub.loggedIn = false;
     await instance.refreshAccount();
+
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
@@ -215,6 +219,7 @@ describe('AccountService: refreshAccount', () => {
 
     AccountRepoStub.failRequest = true;
     await instance.refreshAccount();
+
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalled();
   });
@@ -234,6 +239,7 @@ describe('AccountService: refreshAccount', () => {
 
     AccountRepoStub.failRequest = true;
     await instance.refreshAccount();
+
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
@@ -253,6 +259,7 @@ describe('AccountService: refreshAccount', () => {
 
     AccountRepoStub.failRequest = true;
     await instance.refreshAccount();
+
     expect(logOutSpy).toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
