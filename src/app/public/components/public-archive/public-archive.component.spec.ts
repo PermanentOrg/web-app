@@ -49,18 +49,9 @@ describe('PublicArchiveComponent', () => {
 
     fixture.detectChanges();
 
-    expect(find('.profile-description').classes).toEqual({
-      'profile-description': true,
-      'profile-description-show': true,
-    });
-
-    instance.isViewingProfile$ = of(true);
-
-    fixture.detectChanges();
-
-    expect(find('.profile-info').classes).toEqual({
-      'profile-info': true,
-      'profile-info-show': true,
+    expect(find('.archive-description').classes).toEqual({
+      'archive-description': true,
+      'archive-description-show': true,
     });
   });
 });
