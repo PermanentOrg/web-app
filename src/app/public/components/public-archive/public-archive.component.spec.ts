@@ -24,11 +24,13 @@ describe('PublicArchiveComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 
   it('should have the information hidden as default', async () => {
     const { instance } = await shallow.render();
+
     expect(instance.showProfileInformation).toBe(false);
   });
 
@@ -36,6 +38,7 @@ describe('PublicArchiveComponent', () => {
     const { instance, find } = await shallow.render();
     const icon = find('.icon-expand');
     icon.nativeElement.click();
+
     expect(instance.showProfileInformation).toBe(true);
   });
 
