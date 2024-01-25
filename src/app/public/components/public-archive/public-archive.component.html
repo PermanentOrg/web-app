@@ -26,8 +26,20 @@
       }"
     >
       <div>
-        <div class="profile-name">The {{ this.archive.fullName }} Archive</div>
-        <div class="profile-description">
+        <div class="profile-name">
+          The {{ this.archive.fullName }} Archive
+          <fa-icon
+            (click)="toggleProfileInformation()"
+            class="icon-expand"
+            [class.reverse]="showProfileInformation"
+            [icon]="['fas', 'chevron-down']"
+            *ngIf="!(isViewingProfile$ | async)"
+          ></fa-icon>
+        </div>
+        <div
+          [ngClass]="{ 'archive-description-show': showProfileInformation }"
+          class="archive-description"
+        >
           <span
             *ngIf="
               hasSingleValueFor('birth_info', 'locnId1') ||
@@ -87,32 +99,34 @@
           </ng-container>
         </div>
         <ng-container *ngIf="isViewingProfile$ | async">
-          <div
-            class="profile-blurb"
-            *ngIf="hasSingleValueFor('blurb', 'string1')"
-          >
-            {{ this.profileItems.blurb[0].string1 }}
+          <div class="profile-info">
+            <div
+              class="profile-blurb"
+              *ngIf="hasSingleValueFor('blurb', 'string1')"
+            >
+              {{ this.profileItems.blurb[0].string1 }}
+            </div>
+            <span
+              class="profile-description"
+              *ngIf="
+                hasSingleValueFor('description', 'textData1') && !showShortText
+              "
+              [innerHTML]="this.description"
+            ></span>
+            <span
+              class="profile-description"
+              *ngIf="
+                hasSingleValueFor('description', 'textData1') && showShortText
+              "
+              [innerHTML]="this.shortText + '...'"
+            ></span>
+            <span
+              *ngIf="this.description.length > 100"
+              class="expand-text"
+              (click)="toggleShowFullText()"
+              >{{ showShortText ? ' See More' : ' See Less' }}
+            </span>
           </div>
-          <span
-            class="profile-description"
-            *ngIf="
-              hasSingleValueFor('description', 'textData1') && !showShortText
-            "
-            [innerHTML]="this.description"
-          ></span>
-          <span
-            class="profile-description"
-            *ngIf="
-              hasSingleValueFor('description', 'textData1') && showShortText
-            "
-            [innerHTML]="this.shortText + '...'"
-          ></span>
-          <span
-            *ngIf="this.description.length > 100"
-            class="expand-text"
-            (click)="toggleShowFullText()"
-            >{{ showShortText ? ' See More' : ' See Less' }}
-          </span>
         </ng-container>
       </div>
       <div class="profile-controls">
@@ -122,6 +136,7 @@
               class="btn btn-link"
               [routerLink]="['/p', 'archive', archive.archiveNbr]"
               [hidden]="!(isViewingProfile$ | async)"
+              (click)="showProfileInformation = false"
             >
               View Public Archive
               <svg
@@ -157,6 +172,7 @@
               class="btn btn-link"
               [routerLink]="['/p', 'archive', archive.archiveNbr, 'profile']"
               [hidden]="isViewingProfile$ | async"
+              (click)="showProfileInformation = true"
             >
               View Public Profile
               <svg

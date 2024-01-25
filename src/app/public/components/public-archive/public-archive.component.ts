@@ -31,6 +31,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   shortText = '';
   emails: string[] = [];
   websites: string[] = [];
+  showProfileInformation: boolean = false;
 
   waiting = true;
 
@@ -124,5 +125,9 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   toggleShowFullText(): void {
     this.showShortText = !this.showShortText;
+  }
+
+  toggleProfileInformation(): void {
+    this.showProfileInformation = !this.showProfileInformation;
   }
 }
