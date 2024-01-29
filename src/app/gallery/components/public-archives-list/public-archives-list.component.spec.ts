@@ -32,6 +32,7 @@ describe('PublicArchivesComponent', () => {
 
   it('should create', async () => {
     const { instance } = await shallow.render();
+
     expect(instance).toBeTruthy();
   });
 
@@ -54,6 +55,7 @@ describe('PublicArchivesComponent', () => {
     fixture.detectChanges();
 
     const element = find('.no-archives');
+
     expect(element.nativeElement).toBeTruthy();
   });
 
