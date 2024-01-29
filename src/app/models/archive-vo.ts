@@ -5,9 +5,13 @@ import { DataStatus } from '@models/data-status.enum';
 import { AccessRoleType } from './access-role';
 import { ItemVO } from '.';
 
-export type ArchiveType = 'type.archive.person' | 'type.archive.family' | 'type.archive.organization' | 'type.archive.nonprofit';
+export type ArchiveType =
+  | 'type.archive.person'
+  | 'type.archive.family'
+  | 'type.archive.organization'
+  | 'type.archive.nonprofit';
 
-export class ArchiveVO extends BaseVO implements DynamicListChild  {
+export class ArchiveVO extends BaseVO implements DynamicListChild {
   public archiveId;
   public archiveNbr;
   public ChildFolderVOs;
@@ -37,20 +41,22 @@ export class ArchiveVO extends BaseVO implements DynamicListChild  {
   public isNewlyCreated: boolean;
   public allowPublicDownload: boolean;
   public payerAccountId: string;
+  public public: number;
 
   constructor(voData: any) {
     super(voData);
 
     if (this.ItemVOs && this.ItemVOs.length) {
       // remove null items
-      this.ItemVOs = this.ItemVOs.filter((item) => item.type !== null)
-        .map((item) => {
-        if (item.type.includes('folder')) {
-          return new FolderVO(item, false, DataStatus.Lean);
-        } else {
-          return new RecordVO(item, false, DataStatus.Lean);
+      this.ItemVOs = this.ItemVOs.filter((item) => item.type !== null).map(
+        (item) => {
+          if (item.type.includes('folder')) {
+            return new FolderVO(item, false, DataStatus.Lean);
+          } else {
+            return new RecordVO(item, false, DataStatus.Lean);
+          }
         }
-      });
+      );
     }
   }
 

@@ -1,3 +1,4 @@
+import { AccountService } from '@shared/services/account/account.service';
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@root/environments/environment';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
@@ -12,7 +13,10 @@ import { featuredArchives } from '../../data/featured';
 export class GalleryComponent implements OnInit {
   public environment: string = '';
   public archives: FeaturedArchive[] = this.getFeaturedArchives();
-  constructor() {}
+  public isLoggedIn: boolean;
+  constructor(private accountService:AccountService) {
+    this.isLoggedIn = this.accountService.isLoggedIn();
+  }
 
   ngOnInit(): void {}
 

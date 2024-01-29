@@ -14,12 +14,14 @@ import { GalleryHeaderComponent } from './components/gallery-header/gallery-head
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { GalleryRoutingModule } from './gallery-routing.module';
 import { FeaturedArchiveComponent } from './components/featured-archive/featured-archive.component';
+import { PublicArchivesListComponent } from './components/public-archives-list/public-archives-list.component';
 
 @NgModule({
   declarations: [
     GalleryComponent,
     GalleryHeaderComponent,
     FeaturedArchiveComponent,
+    PublicArchivesListComponent,
   ],
   imports: [
     CommonModule,

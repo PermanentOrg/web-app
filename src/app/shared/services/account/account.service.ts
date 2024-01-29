@@ -270,6 +270,15 @@ export class AccountService {
       });
   }
 
+  public async getAllPublicArchives() {
+    return this.api.archive
+      .getAllArchives(this.account)
+      .then((response: ArchiveResponse) => {
+        const archives = response.getArchiveVOs();
+        return archives.filter((archive) => archive.public);
+      });
+  }
+
   public async hasOwnArchives() {
     const archives = await this.refreshArchives();
     const ownArchives = archives.filter((archive) => !archive.isPending());
