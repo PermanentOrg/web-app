@@ -1,9 +1,8 @@
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 /* @format */
 import { DeviceService } from '@shared/services/device/device.service';
 import { CoreModule } from '@core/core.module';
 import { Shallow } from 'shallow-render';
-import { BannerService } from './banner.service';
+import { MobileBannerService } from './mobile-banner.service';
 
 const mockAndroidDeviceService = {
   isAndroid: () => true,
@@ -15,11 +14,11 @@ const mockIosDeviceService = {
 };
 
 describe('BannerService', () => {
-  let shallow: Shallow<BannerService>;
+  let shallow: Shallow<MobileBannerService>;
 
   describe('when on an Android device', () => {
     beforeEach(() => {
-      shallow = new Shallow(BannerService, CoreModule).mock(
+      shallow = new Shallow(MobileBannerService, CoreModule).mock(
         DeviceService,
         mockAndroidDeviceService
       );
@@ -36,7 +35,7 @@ describe('BannerService', () => {
 
   describe('when on an iOS device', () => {
     beforeEach(() => {
-      shallow = new Shallow(BannerService, CoreModule).mock(
+      shallow = new Shallow(MobileBannerService, CoreModule).mock(
         DeviceService,
         mockIosDeviceService
       );
@@ -46,7 +45,7 @@ describe('BannerService', () => {
       const { instance } = await shallow.createService();
 
       expect(instance.isVisible).toBeTrue();
-      
+
       expect(instance.isIos).toBeTrue();
     });
   });

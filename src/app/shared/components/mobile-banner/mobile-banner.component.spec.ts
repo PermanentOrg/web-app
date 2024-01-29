@@ -2,8 +2,8 @@
 import { SharedModule } from '@shared/shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Shallow } from 'shallow-render';
-import { BannerService } from '@shared/services/banner/banner.service';
-import { BannerComponent } from './banner.component';
+import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banner.service';
+import { MobileBannerComponent } from './mobile-banner.component';
 
 const mockBannerService = {
   get isIos() {
@@ -21,12 +21,12 @@ const mockBannerService = {
   hideBanner() {},
 };
 
-describe('BannerComponent', () => {
-  let shallow: Shallow<BannerComponent>;
+describe('MobileBannerComponent', () => {
+  let shallow: Shallow<MobileBannerComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(BannerComponent, SharedModule)
-      .mock(BannerService, mockBannerService)
+    shallow = new Shallow(MobileBannerComponent, SharedModule)
+      .mock(MobileBannerService, mockBannerService)
       .dontMock(NoopAnimationsModule)
       .import(NoopAnimationsModule);
   });

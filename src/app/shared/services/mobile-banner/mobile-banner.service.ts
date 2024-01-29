@@ -5,12 +5,12 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class BannerService {
+export class MobileBannerService {
   private _isVisible = false;
-  private _appStoreUrl =
-    'https://apps.apple.com/app/permanent-archive/id1571883070' as const;
-  private _playStoreUrl =
-    'https://play.google.com/store/apps/details?id=org.permanent.PermanentArchive' as const;
+  private readonly _appStoreUrl =
+    'https://apps.apple.com/app/permanent-archive/id1571883070';
+  private readonly _playStoreUrl =
+    'https://play.google.com/store/apps/details?id=org.permanent.PermanentArchive';
 
   private _isIos = false;
 

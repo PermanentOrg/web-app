@@ -2,18 +2,18 @@
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { ngIfSlideUpAnimation } from '@shared/animations';
 import { Component } from '@angular/core';
-import { BannerService } from '@shared/services/banner/banner.service';
+import { MobileBannerService } from '@shared/services/mobile-banner/mobile-banner.service';
 
 @Component({
-  selector: 'pr-banner',
-  templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.scss'],
+  selector: 'pr-mobile-banner',
+  templateUrl: './mobile-banner.component.html',
+  styleUrls: ['./mobile-banner.component.scss'],
   animations: [ngIfSlideUpAnimation],
 })
-export class BannerComponent {
+export class MobileBannerComponent {
   public url = '';
   constructor(
-    public bannerService: BannerService,
+    public bannerService: MobileBannerService,
     private prompt: PromptService
   ) {
     this.url = this.bannerService.isIos
