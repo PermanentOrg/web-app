@@ -51,7 +51,11 @@ describe('ToggleComponent', () => {
 
     checkbox.click();
 
+<<<<<<< HEAD
     expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(true);
+=======
+    expect(instance.isCheckedChange.emit).toHaveBeenCalledWith('value');
+>>>>>>> ef230f5b (PER-9488-glam-checkbox)
   });
 
   it("should not emit any value when the checkbox is clicked and it's disabled ", async () => {
@@ -83,6 +87,7 @@ describe('ToggleComponent', () => {
 
     expect(checkbox.classList).toContain('checkbox-container-secondary');
   });
+<<<<<<< HEAD
 
   it('should be focusable and have correct ARIA attributes', async () => {
     const { find } = await shallow.render();
@@ -140,4 +145,6 @@ describe('ToggleComponent', () => {
 
     expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('true');
   });
+=======
+>>>>>>> ef230f5b (PER-9488-glam-checkbox)
 });
