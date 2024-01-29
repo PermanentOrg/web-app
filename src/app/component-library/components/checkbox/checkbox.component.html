@@ -1,0 +1,12 @@
+<!-- @format -->
+<div
+  class="checkbox-container"
+  [class.checkbox-container-disabled]="disabled"
+  [class.checkbox-container-enabled]="!disabled"
+  [class.checkbox-container-primary]="variant === 'primary'"
+  [class.checkbox-container-secondary]="variant === 'secondary'"
+  (click)="toggleCheck()"
+>
+  <div class="checkbox" [class.checked]="isChecked"></div>
+  <label>{{ text }}</label>
+</div>
