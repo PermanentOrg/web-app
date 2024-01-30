@@ -48,7 +48,7 @@ describe('ToggleComponent', () => {
     expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(false);
   });
 
-  it('should not emit when the toggle is disabled', async() => {
+  it('should not emit when the toggle is disabled', async () => {
     const { instance, find, fixture } = await shallow.render();
     instance.disabled = true;
     fixture.detectChanges();
@@ -56,5 +56,5 @@ describe('ToggleComponent', () => {
     toggle.click();
 
     expect(instance.isCheckedChange.emit).not.toHaveBeenCalled();
-  })
+  });
 });
