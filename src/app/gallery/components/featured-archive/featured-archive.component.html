@@ -1,13 +1,18 @@
 <!-- @format -->
-<div [class]="getClasses()">
-  <div class="banner" prBgImage [bgSrc]="bannerURL">
-    <div class="profile-pic"><img [src]="thumbURL" /></div>
+<div [class]="classNames">
+  <div class="banner" prBgImage [bgSrc]="archive.bannerImage">
+    <div class="profile-pic">
+      <img [src]="archive.profileImage" [alt]="archive.name" />
+    </div>
   </div>
   <div class="contents">
-    <span class="archive-type">{{ getArchiveType() }} Archive</span>
-    <span class="archive-name">{{ archive.name }}</span>
-    <span class="archive-description">{{ archive.description }}</span>
-    <a [href]="getArchiveLink()" class="archive-link"
+    <span class="archive-type">{{ archive.type | archiveTypeName }}</span>
+    <span class="archive-name">The {{ archive.name }} Archive</span>
+    <span class="archive-description"></span>
+    <a
+      [href]="getArchiveLink()"
+      class="archive-link"
+      [ariaLabel]="'Explore The ' + archive.name + ' Archive'"
       >Explore the archive &emsp;
       <fa-icon [icon]="['fas', 'arrow-right']"></fa-icon
     ></a>

@@ -1,7 +1,5 @@
 /* @format */
 import { Component, OnInit, Input } from '@angular/core';
-import { ArchiveVO } from '@models';
-import { ApiService } from '@shared/services/api/api.service';
 import { FeaturedArchive } from '../../types/featured-archive';
 
 @Component({
@@ -11,26 +9,12 @@ import { FeaturedArchive } from '../../types/featured-archive';
 })
 export class FeaturedArchiveComponent implements OnInit {
   @Input() archive: FeaturedArchive;
-  public thumbURL = '';
-  public bannerURL = '';
+  public classNames: string[] = ['featured-archive'];
 
-  constructor(protected api: ApiService) {}
+  constructor() {}
 
   async ngOnInit() {
-    const archiveVO = (
-      await this.api.archive.get([
-        new ArchiveVO({ archiveNbr: this.archive.archiveNbr }),
-      ])
-    ).getArchiveVO();
-    if (archiveVO.thumbURL200) {
-      this.thumbURL = archiveVO.thumbURL200;
-      const rootFolder = (
-        await this.api.folder.getPublicRoot(archiveVO.archiveNbr)
-      ).getFolderVO();
-      if (rootFolder.thumbArchiveNbr && rootFolder.thumbURL500) {
-        this.bannerURL = rootFolder.thumbURL500;
-      }
-    }
+    this.classNames = this.getClasses();
   }
 
   public getClasses(): string[] {
@@ -43,18 +27,6 @@ export class FeaturedArchiveComponent implements OnInit {
       classes.push('organization');
     }
     return classes;
-  }
-
-  public getArchiveType(): string {
-    switch (this.archive.type) {
-      case 'type.archive.person':
-        return 'Personal';
-      case 'type.archive.family':
-        return 'Group';
-      case 'type.archive.organization':
-      case 'type.archive.nonprofit':
-        return 'Organizational';
-    }
   }
 
   public getArchiveLink(): string {

@@ -1,16 +1,16 @@
 <!-- @format -->
 <div
   class="search-box-shadow"
-  [class.gallery]="onPublicGallery"
+  [class.gallery]="isPublicGallery"
   (click)="onCancelButtonClick()"
 ></div>
-<div class="search-box-input" [class.gallery]="onPublicGallery">
+<div class="search-box-input" [class.gallery]="isPublicGallery">
   <form class="form-container" [formGroup]="searchForm">
     <input
       type="text"
       class="form-control"
       [placeholder]="
-        onPublicGallery
+        isPublicGallery
           ? 'Search for people, families, or organizations'
           : 'Search archives by name'
       "
@@ -40,7 +40,7 @@
     </div>
   </div>
 </div>
-<div class="search-box-button" [class.gallery]="onPublicGallery">
+<div class="search-box-button" [class.gallery]="isPublicGallery">
   <button
     class="btn btn-wordpress"
     (click)="onSearchButtonClick()"

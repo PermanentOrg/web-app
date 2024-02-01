@@ -30,7 +30,7 @@ const ANIMATION_DURATION = 1000;
   styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit, AfterViewInit {
-  @Input() onPublicGallery = false;
+  @Input() isPublicGallery = false;
   public searchForm: UntypedFormGroup;
   @Input() hideBorder = false;
   @Input() displayIcon = false;

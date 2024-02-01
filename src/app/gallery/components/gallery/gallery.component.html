@@ -33,21 +33,15 @@
         [archive]="archive"
       ></pr-featured-archive>
     </div>
-    <div *ngIf="archives.length === 0" class="null-message">
+    <div *ngIf="!loading && archives.length === 0" class="null-message">
       <p>There are no featured archives at this time.</p>
-      <p *ngIf="environment.startsWith('local')" class="dev-message">
-        To set up featured archives on your local environment, add them to your
-        <kbd>.env</kbd> file as a JSON string. See the
-        <kbd>src/app/gallery/data/featured.ts</kbd> file to see how to format
-        the data.
-      </p>
     </div>
   </div>
 </div>
 <ng-template #searchBox>
   <div class="searchBox">
     <fa-icon [icon]="['fas', 'search']"></fa-icon>
-    <pr-search-box [onPublicGallery]="true"></pr-search-box>
+    <pr-search-box [isPublicGallery]="true"></pr-search-box>
   </div>
 </ng-template>
 <ng-template #archivesImg>
