@@ -82,7 +82,7 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
     PledgeModule,
     ManageMetadataModule,
     DirectiveModule,
-    ComponentsModule
+    ComponentsModule,
   ],
   declarations: [
     MainComponent,
