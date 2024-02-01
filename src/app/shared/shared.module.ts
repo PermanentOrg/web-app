@@ -29,6 +29,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { ComponentsModule } from '../component-library/components.module';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { FileSizePipe } from './pipes/filesize.pipe';
@@ -85,6 +86,7 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     NgbDropdownModule,
     NgbPaginationModule,
     FontAwesomeModule,
+    ComponentsModule,
   ],
   exports: [
     CommonModule,

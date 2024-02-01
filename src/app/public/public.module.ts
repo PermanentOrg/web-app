@@ -19,6 +19,7 @@ import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { DialogModule } from '../dialog/dialog.module';
+import { ComponentsModule } from '../component-library/components.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { PublicRoutingModule } from './public.routes';
 import {} from '@core/services/folder-picker/folder-picker.service';
@@ -54,6 +55,7 @@ import { PublicSearchResultsComponent } from './components/public-search-results
     DialogModule,
     CoreModule,
     FontAwesomeModule,
+    ComponentsModule,
   ],
   providers: [DataService, FolderViewService, PublicProfileService],
 })
