@@ -145,22 +145,22 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mdot:build"
+            "buildTarget": "mdot:build"
           },
           "configurations": {
             "local": {
               "host": "ng.permanent.org",
               "hmr": false,
               "ssl": true,
-              "browserTarget": "mdot:build:proxy_local",
-              "proxyConfig": "proxy.conf.local.json"
+              "proxyConfig": "proxy.conf.local.json",
+              "buildTarget": "mdot:build:proxy_local"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mdot:build"
+            "buildTarget": "mdot:build"
           }
         },
         "test": {
