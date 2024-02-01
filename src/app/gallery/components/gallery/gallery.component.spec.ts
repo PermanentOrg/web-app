@@ -1,5 +1,6 @@
 /* @format */
 import { Shallow } from 'shallow-render';
+import { AccountService } from '@shared/services/account/account.service';
 import { FeaturedArchive } from '../../types/featured-archive';
 import {
   FEATURED_ARCHIVE_API,
@@ -27,6 +28,14 @@ class DummyFeaturedArchiveAPI implements FeaturedArchiveApi {
   }
 }
 
+class DummyAccountService {
+  public static loggedIn: boolean = false;
+
+  public isLoggedIn(): boolean {
+    return DummyAccountService.loggedIn;
+  }
+}
+
 const testArchive: FeaturedArchive = {
   archiveNbr: '0000-0000',
   name: 'Unit Testing',
@@ -38,16 +47,24 @@ const testArchive: FeaturedArchive = {
 describe('GalleryComponent', () => {
   let shallow: Shallow<GalleryComponent>;
   let dummyApi: DummyFeaturedArchiveAPI;
+  let dummyAccount: DummyAccountService;
 
   beforeEach(async () => {
     DummyFeaturedArchiveAPI.reset();
+    DummyAccountService.loggedIn = false;
     dummyApi = new DummyFeaturedArchiveAPI();
+    dummyAccount = new DummyAccountService();
     shallow = new Shallow(GalleryComponent, GalleryModule);
-    shallow.provide({
-      provide: FEATURED_ARCHIVE_API,
-      useValue: dummyApi,
-    });
-    shallow.dontMock(FEATURED_ARCHIVE_API);
+    shallow
+      .provide({
+        provide: FEATURED_ARCHIVE_API,
+        useValue: dummyApi,
+      })
+      .provide({
+        provide: AccountService,
+        useValue: dummyAccount,
+      });
+    shallow.dontMock(FEATURED_ARCHIVE_API, AccountService);
   });
 
   it('should fetch featured archives from the API', async () => {
@@ -85,5 +102,18 @@ describe('GalleryComponent', () => {
     const { find } = await shallow.render();
 
     expect(find('.null-message').length).toBe(1);
+  });
+
+  it("does not display the user's public archives list if logged out", async () => {
+    const { find } = await shallow.render();
+
+    expect(find('pr-public-archives-list').length).toBe(0);
+  });
+
+  it("displays the user's public archives list if logged in", async () => {
+    DummyAccountService.loggedIn = true;
+    const { find } = await shallow.render();
+
+    expect(find('pr-public-archives-list').length).toBe(1);
   });
 });
