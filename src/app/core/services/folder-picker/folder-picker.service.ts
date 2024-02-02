@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FolderPickerComponent, FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { FolderVO, RecordVO } from '@root/app/models';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FolderPickerService {
   private component: FolderPickerComponent;
 
