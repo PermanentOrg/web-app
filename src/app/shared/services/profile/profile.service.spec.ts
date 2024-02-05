@@ -76,7 +76,7 @@ describe('ProfileService', () => {
     expect(instance).toBeTruthy();
   });
 
-  it('should return the correct completion value', async () => {
+  it('should return the correct completion value when not all the fields have a value', async () => {
     const mockDictionary = {
       birth_info: [
         {
@@ -86,8 +86,7 @@ describe('ProfileService', () => {
       ],
       description: [
         {
-          textData1:
-            'Description descripoton Description descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDes',
+          textData1: 'Description',
         },
       ],
       email: [
@@ -131,7 +130,7 @@ describe('ProfileService', () => {
     expect(progress).toBe(0.8);
   });
 
-  it('should return the correct completion value', async () => {
+  it('should 1 when at least one of each profile category has a value', async () => {
     const mockDictionary = {
       birth_info: [
         {
@@ -141,8 +140,7 @@ describe('ProfileService', () => {
       ],
       description: [
         {
-          textData1:
-            'Description descripoton Description descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDescription descripotonDes',
+          textData1: 'Description',
         },
       ],
       email: [
@@ -187,7 +185,7 @@ describe('ProfileService', () => {
     expect(progress).toBe(1);
   });
 
-  it('should return the correct completion value', async () => {
+  it('should return 0 when no fields have any values', async () => {
     const mockDictionary = {};
     const { instance } = await shallow.createService();
     (instance as any).profileItemDictionary = mockDictionary;
