@@ -9,7 +9,6 @@ import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
 import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import { DialogModule } from '../dialog/dialog.module';
-import { ComponentsModule } from '../component-library/components.module';
 import { OnboardingRoutingModule } from './onboarding.routes';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
@@ -29,7 +28,6 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     SharedModule,
     CoreModule,
     DialogModule,
-    ComponentsModule,
   ],
 })
 export class OnboardingModule {

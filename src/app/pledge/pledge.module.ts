@@ -8,7 +8,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { CountUpModule } from 'ngx-countup';
 import { environment } from '@root/environments/environment';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
-import { ComponentsModule } from '../component-library/components.module';
 import { PledgeRoutingModule } from './pledge.routes';
 import { NewPledgeComponent } from './components/new-pledge/new-pledge.component';
 import { PledgeService } from './services/pledge.service';
@@ -33,7 +32,6 @@ import { UpdateCardComponent } from './components/update-card/update-card.compon
     AngularFireDatabaseModule,
     PledgeRoutingModule,
     CountUpModule,
-    ComponentsModule,
   ],
   providers: [PledgeService],
   declarations: [
