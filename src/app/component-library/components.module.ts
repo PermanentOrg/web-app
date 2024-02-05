@@ -6,6 +6,6 @@ import { ToggleComponent } from './components/components/toggle/toggle.component
 @NgModule({
   declarations: [ToggleComponent],
   imports: [CommonModule],
-  exports:[ToggleComponent]
+  exports: [ToggleComponent],
 })
 export class ComponentsModule {}
