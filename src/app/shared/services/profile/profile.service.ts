@@ -408,8 +408,6 @@ export class ProfileService {
         const cols = CHECKLIST[fieldNameShort];
         totalEntries += cols.length;
 
-        console.log(this.profileItemDictionary);
-
         const itemToCheck = this.profileItemDictionary[fieldNameShort]?.[0];
         if (itemToCheck) {
           for (const col of cols) {

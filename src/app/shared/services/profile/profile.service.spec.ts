@@ -1,16 +1,16 @@
-import { RecordVO } from './../../../models/record-vo';
 /* @format */
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ArchiveVO, FolderVO } from '@models/index';
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
+import { ProfileItemVOData } from '@models/profile-item-vo';
+import { RecordVO } from '../../../models/record-vo';
+import { ArchiveResponse } from '../api/archive.repo';
 import { AccountService } from '../account/account.service';
 import { ApiService } from '../api/api.service';
 import { MessageService } from '../message/message.service';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
 import { ProfileService } from './profile.service';
-import { ProfileItemVOData } from '@models/profile-item-vo';
-import { ArchiveResponse } from '../api/archive.repo';
 
 const PROFILE_TEMPLATE = require('../../../../../constants/profile_template.json');
 
@@ -127,6 +127,7 @@ describe('ProfileService', () => {
     (instance as any).profileItemDictionary = mockDictionary;
 
     const progress = instance.calculateProfileProgress();
+
     expect(progress).toBe(0.8);
   });
 
@@ -182,6 +183,7 @@ describe('ProfileService', () => {
     (instance as any).profileItemDictionary = mockDictionary;
 
     const progress = instance.calculateProfileProgress();
+
     expect(progress).toBe(1);
   });
 
@@ -191,6 +193,7 @@ describe('ProfileService', () => {
     (instance as any).profileItemDictionary = mockDictionary;
 
     const progress = instance.calculateProfileProgress();
+
     expect(progress).toBe(0);
   });
 });
