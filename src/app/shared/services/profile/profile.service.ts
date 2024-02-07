@@ -1,37 +1,41 @@
+/* @format */
 import { Injectable, Optional } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { RecordVO, ArchiveVO } from '@models';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
-import { FieldNameUI, ProfileItemVOData, ProfileItemVODictionary, FieldNameUIShort } from '@models/profile-item-vo';
+import {
+  FieldNameUI,
+  ProfileItemVOData,
+  ProfileItemVODictionary,
+  FieldNameUIShort,
+} from '@models/profile-item-vo';
 import { remove, orderBy, some } from 'lodash';
 import { MessageService } from '../message/message.service';
 import { PrConstantsService } from '../pr-constants/pr-constants.service';
 
 type ProfileItemsStringDataCol =
-'string1' |
-'string2' |
-'string3' |
-'datetime1' |
-'datetime2' |
-'textData1' |
-'textData2' |
-'day1' |
-'day2'
-;
+  | 'string1'
+  | 'string2'
+  | 'string3'
+  | 'datetime1'
+  | 'datetime2'
+  | 'textData1'
+  | 'textData2'
+  | 'day1'
+  | 'day2';
 
 type ProfileItemsIntDataCol =
-'int1' |
-'int2' |
-'int3' |
-'locnId1' |
-'locnId2' |
-'otherId1' |
-'otherId2' |
-'text_dataId1' |
-'text_dataId2'
-;
+  | 'int1'
+  | 'int2'
+  | 'int3'
+  | 'locnId1'
+  | 'locnId2'
+  | 'otherId1'
+  | 'otherId2'
+  | 'text_dataId1'
+  | 'text_dataId2';
 
 const DATA_FIELDS: ProfileItemsDataCol[] = [
   'string1',
@@ -40,16 +44,19 @@ const DATA_FIELDS: ProfileItemsDataCol[] = [
   'day1',
   'day2',
   'textData1',
-  'locnId1'
+  'locnId1',
 ];
 
+export type ProfileItemsDataCol =
+  | ProfileItemsStringDataCol
+  | ProfileItemsIntDataCol;
 
-export type ProfileItemsDataCol = ProfileItemsStringDataCol | ProfileItemsIntDataCol;
-
-export type ProfileProgressChecklist = { [key in FieldNameUIShort]?: ProfileItemsDataCol[] };
+export type ProfileProgressChecklist = {
+  [key in FieldNameUIShort]?: ProfileItemsDataCol[];
+};
 
 const CHECKLIST: ProfileProgressChecklist = {
-  basic: ['string1', 'string2', 'string3'],
+  basic: ['string1'],
   blurb: ['string1'],
   description: ['textData1'],
   birth_info: ['day1', 'locnId1'],
@@ -57,35 +64,39 @@ const CHECKLIST: ProfileProgressChecklist = {
   gender: ['string1'],
   email: ['string1'],
   social_media: ['string1'],
-  home: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
-  location: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
-  job: ['day1', 'day2', 'string1', 'string2', 'string3', 'locnId1'],
-  milestone: ['day1', 'day2', 'string1', 'string2', 'locnId1'],
+  milestone: ['day1', 'string1', 'locnId1'],
 };
 
 export const ALWAYS_PUBLIC: FieldNameUI[] = [
   'profile.basic',
   'profile.description',
-  'profile.timezone'
+  'profile.timezone',
 ];
 
-export function addProfileItemToDictionary(dict: ProfileItemVODictionary, item: ProfileItemVOData) {
+export function addProfileItemToDictionary(
+  dict: ProfileItemVODictionary,
+  item: ProfileItemVOData
+) {
   const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
 
   if (!dict[fieldNameUIShort]) {
-    dict[fieldNameUIShort] = [ item ];
+    dict[fieldNameUIShort] = [item];
   } else {
     dict[fieldNameUIShort].push(item);
   }
 }
 
-export function orderItemsInDictionary(dict: ProfileItemVODictionary, field: FieldNameUIShort, column: ProfileItemsDataCol = 'day1') {
+export function orderItemsInDictionary(
+  dict: ProfileItemVODictionary,
+  field: FieldNameUIShort,
+  column: ProfileItemsDataCol = 'day1'
+) {
   if (dict[field]?.length > 1) {
     dict[field] = orderBy(dict[field], column);
   }
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ProfileService {
   private profileItemDictionary: ProfileItemVODictionary = {};
 
@@ -95,43 +106,60 @@ export class ProfileService {
     private account: AccountService,
     private folderPicker: FolderPickerService,
     private message: MessageService
-  ) { }
+  ) {}
 
   async promptForProfilePicture() {
     const privateRoot = this.account.getPrivateRoot();
     try {
       const currentArchive = this.account.getArchive();
-      const record = (await this.folderPicker.chooseRecord(privateRoot)) as RecordVO;
+      const record = (await this.folderPicker.chooseRecord(
+        privateRoot
+      )) as RecordVO;
       const updateArchive = new ArchiveVO(currentArchive);
       updateArchive.thumbArchiveNbr = record.archiveNbr;
       const updateResponse = await this.api.archive.update(updateArchive);
       currentArchive.update(updateResponse.getArchiveVO());
 
       // borrow thumb URLs from record for now, until they can be regenerated
-      const thumbProps: Array<keyof (ArchiveVO|RecordVO)> = ['thumbURL200', 'thumbURL500', 'thumbURL1000', 'thumbURL2000'];
+      const thumbProps: Array<keyof (ArchiveVO | RecordVO)> = [
+        'thumbURL200',
+        'thumbURL500',
+        'thumbURL1000',
+        'thumbURL2000',
+      ];
       for (const prop of thumbProps) {
         currentArchive[prop] = record[prop] as never;
       }
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError('There was a problem changing the archive profile picture.');
+        this.message.showError(
+          'There was a problem changing the archive profile picture.'
+        );
       }
     }
   }
 
   async fetchProfileItems() {
     const currentArchive = this.account.getArchive();
-    const profileResponse = await this.api.archive.getAllProfileItems(currentArchive);
+    const profileResponse = await this.api.archive.getAllProfileItems(
+      currentArchive
+    );
     const profileItems = profileResponse?.getProfileItemVOs();
     this.profileItemDictionary = {};
 
     for (const item of profileItems) {
       // override type to convert to milestone on update
-      const fieldsToConvert: FieldNameUI[] = ['profile.home', 'profile.job', 'profile.location'];
-
+      const fieldsToConvert: FieldNameUI[] = [
+        'profile.home',
+        'profile.job',
+        'profile.location',
+      ];
 
       // borrow description for title to overwrite phone nbr
-      if (item.fieldNameUI === 'profile.home' || item.fieldNameUI === 'profile.location') {
+      if (
+        item.fieldNameUI === 'profile.home' ||
+        item.fieldNameUI === 'profile.location'
+      ) {
         item.string2 = item.string1;
       }
 
@@ -169,9 +197,8 @@ export class ProfileService {
 
     const item: ProfileItemVOData = {
       archiveId: currentArchive?.archiveId,
-      fieldNameUI: valueTemplate?.field_name_ui
+      fieldNameUI: valueTemplate?.field_name_ui,
     };
-
 
     // completely useless type field but have to still set it for now
     switch (fieldNameShort) {
@@ -198,7 +225,9 @@ export class ProfileService {
     const allItems: ProfileItemVOData[] = [];
 
     for (const key in this.profileItemDictionary) {
-      if (Object.prototype.hasOwnProperty.call(this.profileItemDictionary, key)) {
+      if (
+        Object.prototype.hasOwnProperty.call(this.profileItemDictionary, key)
+      ) {
         const items = this.profileItemDictionary[key];
         allItems.push(...items);
       }
@@ -216,25 +245,29 @@ export class ProfileService {
     const fields = Object.keys(templateForType) as FieldNameUIShort[];
     for (const fieldNameShort of fields) {
       if (!this.profileItemDictionary[fieldNameShort]) {
-        this.profileItemDictionary[fieldNameShort] = [ this.createEmptyProfileItem(fieldNameShort) ];
+        this.profileItemDictionary[fieldNameShort] = [
+          this.createEmptyProfileItem(fieldNameShort),
+        ];
       }
     }
   }
 
   async setProfilePublic(setPublic = true) {
-    const allItems = this.getProfileItemsAsArray().filter(i => {
+    const allItems = this.getProfileItemsAsArray().filter((i) => {
       return !ALWAYS_PUBLIC.includes(i.fieldNameUI);
     });
     const originalValues = [];
 
-    const minItems = allItems.filter(i => i.profile_itemId).map(i => {
-      originalValues.push(i.publicDT);
-      const minItem: ProfileItemVOData = {
-        profile_itemId: i.profile_itemId,
-        publicDT: setPublic ? new Date().toISOString() : null
-      };
-      return minItem;
-    });
+    const minItems = allItems
+      .filter((i) => i.profile_itemId)
+      .map((i) => {
+        originalValues.push(i.publicDT);
+        const minItem: ProfileItemVOData = {
+          profile_itemId: i.profile_itemId,
+          publicDT: setPublic ? new Date().toISOString() : null,
+        };
+        return minItem;
+      });
 
     if (!minItems.length) {
       if (this.checkProfilePublic() === setPublic) {
@@ -246,7 +279,7 @@ export class ProfileService {
           fieldNameUI: 'profile.FORCE_PUBLIC_UPDATE',
           string1: setPublic ? 'true' : 'false',
           type: 'type.widget.string',
-          publicDT: setPublic ? new Date().toISOString() : null
+          publicDT: setPublic ? new Date().toISOString() : null,
         };
         minItems.push(publicDummy);
       }
@@ -270,7 +303,9 @@ export class ProfileService {
 
   checkProfilePublic() {
     const allItems = this.getProfileItemsAsArray();
-    const nonDefaultItems = allItems.filter(i => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId);
+    const nonDefaultItems = allItems.filter(
+      (i) => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId
+    );
     if (!nonDefaultItems.length) {
       return true;
     }
@@ -280,17 +315,28 @@ export class ProfileService {
     return isPublic;
   }
 
-  async saveProfileItem(item: ProfileItemVOData, valueWhitelist?: (keyof ProfileItemVOData)[]) {
+  async saveProfileItem(
+    item: ProfileItemVOData,
+    valueWhitelist?: (keyof ProfileItemVOData)[]
+  ) {
     const updateItem = item;
     if (valueWhitelist) {
-      const minWhitelist: (keyof ProfileItemVOData)[] = ['profile_itemId', 'fieldNameUI', 'archiveId'];
+      const minWhitelist: (keyof ProfileItemVOData)[] = [
+        'profile_itemId',
+        'fieldNameUI',
+        'archiveId',
+      ];
 
       for (const value of minWhitelist.concat(...valueWhitelist)) {
         (updateItem as any)[value] = item[value];
       }
     }
 
-    if (!updateItem.profile_itemId && (ALWAYS_PUBLIC.includes(updateItem.fieldNameUI) || this.checkProfilePublic())) {
+    if (
+      !updateItem.profile_itemId &&
+      (ALWAYS_PUBLIC.includes(updateItem.fieldNameUI) ||
+        this.checkProfilePublic())
+    ) {
       updateItem.publicDT = new Date().toISOString();
     }
 
@@ -317,7 +363,10 @@ export class ProfileService {
     }
   }
 
-  getSpecificFieldNameUIFromValueKey(field: FieldNameUI, valueKey: keyof ProfileItemVOData) {
+  getSpecificFieldNameUIFromValueKey(
+    field: FieldNameUI,
+    valueKey: keyof ProfileItemVOData
+  ) {
     const template = this.constants.getProfileTemplate();
     const currentArchive = this.account.getArchive();
     const shortType = currentArchive.type.split('.').pop();
@@ -343,7 +392,6 @@ export class ProfileService {
     orderItemsInDictionary(this.profileItemDictionary, field);
   }
 
-
   calculateProfileProgress(): number {
     let totalEntries = 0;
     let filledEntries = 0;
@@ -353,7 +401,10 @@ export class ProfileService {
     const templateForType = template[shortType];
 
     for (const fieldNameShort in CHECKLIST) {
-      if (Object.prototype.hasOwnProperty.call(CHECKLIST, fieldNameShort) && templateForType[fieldNameShort]) {
+      if (
+        Object.prototype.hasOwnProperty.call(CHECKLIST, fieldNameShort) &&
+        templateForType[fieldNameShort]
+      ) {
         const cols = CHECKLIST[fieldNameShort];
         totalEntries += cols.length;
 
