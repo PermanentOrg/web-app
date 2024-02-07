@@ -157,7 +157,6 @@
               (currentRecord.LocnVO | prLocation)?.full
             }}</span>
             <span class="add-location" *ngIf="!currentRecord.LocnVO && canEdit">
-              <fa-icon [icon]="['fas', 'pen-square']"></fa-icon>
               Click to add location</span
             >
             <span *ngIf="!currentRecord.LocnVO && !canEdit">No location</span>
