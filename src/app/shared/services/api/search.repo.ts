@@ -1,5 +1,11 @@
 import { query } from '@angular/animations';
-import { ArchiveVO, RecordVO, FolderVO, ItemVO, TagVOData } from '@root/app/models';
+import {
+  ArchiveVO,
+  RecordVO,
+  FolderVO,
+  ItemVO,
+  TagVOData,
+} from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
 import { Observable } from 'rxjs';
@@ -45,10 +51,10 @@ export class SearchRepo extends BaseRepo {
   ): Observable<SearchResponse> {
     const data = {
       SearchVO: {
-      query,
-      TagVOs: tags,
-      numberOfResults: limit,
-      }
+        query,
+        TagVOs: tags,
+        numberOfResults: limit,
+      },
     };
 
     return this.http.sendRequest<SearchResponse>(
@@ -60,25 +66,22 @@ export class SearchRepo extends BaseRepo {
 
   public itemsByNameInPublicArchiveObservable(
     query: string,
-    tags: any[] = [],
+    tags: TagVOData[] = [],
     archiveId: string,
-    limit?: number,
+    limit?: number
   ) {
     const data = {
       query,
-      tags:'',
+      tags,
       archiveId,
-      publicOnly:true
+      publicOnly: true,
     };
 
-    return getFirst(this.httpV2.get<SearchResponse>(
-      '/search/folderAndRecord',
-      data,
-      null,
-      {
-        authToken:false
-      }
-    ));
+    return getFirst(
+      this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
+        authToken: false,
+      })
+    );
   }
 }
 
@@ -101,7 +104,7 @@ export class SearchResponse extends BaseResponse {
     return flatten(archives);
   }
 
-  public getItemVOs(initChildren?: boolean): ItemVO[] {    
+  public getItemVOs(initChildren?: boolean): ItemVO[] {
     const data = this.getResultsData();
 
     if (!data.length) {
@@ -110,7 +113,7 @@ export class SearchResponse extends BaseResponse {
 
     const searchVO = data[0][0].SearchVO;
 
-    return searchVO.ChildItemVOs.map(i => {
+    return searchVO.ChildItemVOs.map((i) => {
       if (i.recordId) {
         return new RecordVO(i, initChildren);
       } else {
