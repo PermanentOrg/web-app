@@ -96,7 +96,7 @@ export function orderItemsInDictionary(
   }
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ProfileService {
   private profileItemDictionary: ProfileItemVODictionary = {};
 

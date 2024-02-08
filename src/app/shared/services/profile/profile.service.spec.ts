@@ -1,7 +1,7 @@
 /* @format */
+import { NgModule } from '@angular/core';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { ArchiveVO, FolderVO } from '@models/index';
-import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { ProfileItemVOData } from '@models/profile-item-vo';
 import { RecordVO } from '../../../models/record-vo';
@@ -46,12 +46,20 @@ const mockFolderPickerService = {
   },
 };
 
+@NgModule({
+  declarations: [ProfileService], // components your module owns.
+  imports: [], // other modules your module needs.
+  providers: [ProfileService], // providers available to your module.
+  bootstrap: [], // bootstrap this root component.
+})
+class DummyModule {}
+
 describe('ProfileService', () => {
   let shallow: Shallow<ProfileService>;
   let messageShown = false;
 
   beforeEach(() => {
-    shallow = new Shallow(ProfileService, SharedModule)
+    shallow = new Shallow(ProfileService, DummyModule)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;
