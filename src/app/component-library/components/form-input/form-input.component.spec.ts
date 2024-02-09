@@ -1,8 +1,8 @@
 /* @format */
 import { Shallow } from 'shallow-render';
+import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { ComponentsModule } from '../../components.module';
 import { FormInputComponent, FormInputConfig } from './form-input.component';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 
 type AttrOnOff = 'on' | 'off';
 
