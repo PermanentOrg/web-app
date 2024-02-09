@@ -154,7 +154,7 @@ describe('FormInputComponent', () => {
       },
     });
 
-    const errorMessage = instance.getInputErrorFromValue('aa')
+    const errorMessage = instance.getInputErrorFromValue('aa');
 
     expect(errorMessage).toBe('Must be at least 3 characters');
   });
