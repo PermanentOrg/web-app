@@ -85,6 +85,19 @@ export class UploadProgressComponent {
     this.isUploadingFolder =
       this.upload.getTargetFolderId() !==
       progressEvent.item?.parentFolder.folderId;
-    this.folderTargetName = this.upload.getTargetFolderName();
+    if (this.isUploadingFolder) {
+      this.folderTargetName = `${this.upload.getTargetFolderName()}/${
+        progressEvent.item?.parentFolder.displayName
+      }`;
+    } else {
+      if (
+        progressEvent.item?.parentFolder.displayName === 'My Files' &&
+        progressEvent.item?.parentFolder.pathAsArchiveNbr.length === 1
+      ) {
+        this.folderTargetName = 'Private';
+      } else {
+        this.folderTargetName = progressEvent.item?.parentFolder.displayName;
+      }
+    }
   }
 }
