@@ -43,6 +43,7 @@ describe('ArchiveRepo', () => {
       expect(response.getArchiveVO().archiveId).toEqual(
         TEST_DATA.archive.archiveId
       );
+
       expect(response.getArchiveVO().archiveNbr).toEqual(
         TEST_DATA.archive.archiveNbr
       );
