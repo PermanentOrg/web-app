@@ -48,6 +48,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
   protected uploadStart: Date;
 
   private debug = debug('service:upload');
+  private targetFolderName = '';
+  private targetFolderId: number;
 
   constructor(
     private api: ApiService,
@@ -241,6 +243,10 @@ export class UploadService implements HasSubscriptions, OnDestroy {
       }
     }
 
+    const parentFolder = pathsByDepth.get(0)[0].folder;
+
+    this.setTargetFolderNameAndId(parentFolder);
+
     this.uploadSession.startFolders();
 
     // group folder creation at each depth
@@ -306,6 +312,34 @@ export class UploadService implements HasSubscriptions, OnDestroy {
         }
       }
     }
+  }
+
+  private setTargetFolderName(folder: FolderVO): void {
+    if (
+      folder.displayName === 'My Files' &&
+      folder.pathAsArchiveNbr.length === 1
+    ) {
+      this.targetFolderName = 'Private';
+    } else {
+      this.targetFolderName = folder.displayName;
+    }
+  }
+
+  private setTargetFolderId(folderId: number): void {
+    this.targetFolderId = folderId;
+  }
+
+  private setTargetFolderNameAndId(folder: FolderVO) {
+    this.setTargetFolderName(folder);
+    this.setTargetFolderId(folder.folderId);
+  }
+
+  public getTargetFolderName(): string {
+    return this.targetFolderName;
+  }
+
+  public getTargetFolderId(): number {
+    return this.targetFolderId;
   }
 
   showProgress() {

@@ -29,6 +29,9 @@ export class UploadProgressComponent {
   public currentItem: UploadItem;
   public fileCount: any;
 
+  public isUploadingFolder = false;
+  public folderTargetName = '';
+
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
 
@@ -40,13 +43,16 @@ export class UploadProgressComponent {
             this.upload.showProgress();
             break;
           case UploadSessionStatus.Done:
-            this.upload.dismissProgress();
-            break;
           case UploadSessionStatus.DefaultError:
-            this.upload.dismissProgress();
-            break;
           case UploadSessionStatus.StorageError:
             this.upload.dismissProgress();
+            if (this.isUploadingFolder) {
+              this.isUploadingFolder = false;
+              this.folderTargetName = '';
+            }
+            break;
+          case UploadSessionStatus.InProgress:
+            this.displayFolderUploadDestination(progressEvent);
             break;
         }
 
@@ -72,6 +78,26 @@ export class UploadProgressComponent {
       return `scaleX(${this.currentItem.transferProgress})`;
     } else {
       return 'scaleX(0)';
+    }
+  }
+
+  displayFolderUploadDestination(progressEvent: UploadProgressEvent) {
+    this.isUploadingFolder =
+      this.upload.getTargetFolderId() !==
+      progressEvent.item?.parentFolder.folderId;
+    if (this.isUploadingFolder) {
+      this.folderTargetName = `${this.upload.getTargetFolderName()}/${
+        progressEvent.item?.parentFolder.displayName
+      }`;
+    } else {
+      if (
+        progressEvent.item?.parentFolder.displayName === 'My Files' &&
+        progressEvent.item?.parentFolder.pathAsArchiveNbr.length === 1
+      ) {
+        this.folderTargetName = 'Private';
+      } else {
+        this.folderTargetName = progressEvent.item?.parentFolder.displayName;
+      }
     }
   }
 }

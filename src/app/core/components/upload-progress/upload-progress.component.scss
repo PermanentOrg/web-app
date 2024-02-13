@@ -120,5 +120,11 @@ $easing: $tweaked-ease;
     &.visible {
       opacity: 1;
     }
+
+    &.target-folder {
+      width: fit-content;
+      padding: 1.5rem 5rem;
+      transform: translate(-40%, -100%);
+    }
   }
 }
