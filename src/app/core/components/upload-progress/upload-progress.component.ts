@@ -29,6 +29,9 @@ export class UploadProgressComponent {
   public currentItem: UploadItem;
   public fileCount: any;
 
+  public isUploadingFolder = false;
+  public folderTargetName = '';
+
   constructor(private upload: UploadService) {
     this.upload.registerComponent(this);
 
@@ -40,13 +43,16 @@ export class UploadProgressComponent {
             this.upload.showProgress();
             break;
           case UploadSessionStatus.Done:
-            this.upload.dismissProgress();
-            break;
           case UploadSessionStatus.DefaultError:
-            this.upload.dismissProgress();
-            break;
           case UploadSessionStatus.StorageError:
             this.upload.dismissProgress();
+            if (this.isUploadingFolder) {
+              this.isUploadingFolder = false;
+              this.folderTargetName = '';
+            }
+            break;
+          case UploadSessionStatus.InProgress:
+            this.displayFolderUploadDestination(progressEvent);
             break;
         }
 
@@ -73,5 +79,12 @@ export class UploadProgressComponent {
     } else {
       return 'scaleX(0)';
     }
+  }
+
+  displayFolderUploadDestination(progressEvent: UploadProgressEvent) {
+    this.isUploadingFolder =
+      this.upload.getTargetFolderId() !==
+      progressEvent.item?.parentFolder.folderId;
+    this.folderTargetName = this.upload.getTargetFolderName();
   }
 }

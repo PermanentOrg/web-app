@@ -21,7 +21,11 @@
   >
     <div class="current-file">
       Uploading {{ currentItem.file.name }} to
-      {{ currentItem.parentFolder.displayName }}
+      {{
+        isUploadingFolder
+          ? folderTargetName + '/' + currentItem.parentFolder.displayName
+          : currentItem.parentFolder.displayName
+      }}
     </div>
     <div class="file-count">
       <strong>{{ fileCount.current }}</strong> of
