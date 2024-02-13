@@ -7,7 +7,7 @@ import { ItemVO } from '.';
 
 export type ArchiveType =
   | 'type.archive.person'
-  | 'type.archive.family'
+  | 'type.archive.group'
   | 'type.archive.organization'
   | 'type.archive.nonprofit';
 

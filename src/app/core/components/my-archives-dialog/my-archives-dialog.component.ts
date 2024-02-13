@@ -26,8 +26,8 @@ const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
     value: 'type.archive.person'
   },
   {
-    text: 'Family',
-    value: 'type.archive.family'
+    text: 'Group',
+    value: 'type.archive.group'
   },
   {
     text: 'Organization',

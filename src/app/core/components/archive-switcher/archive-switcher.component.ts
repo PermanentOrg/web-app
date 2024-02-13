@@ -145,12 +145,12 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
         validators: [Validators.required],
         selectOptions: [
           {
-            text: 'Person',
-            value: 'type.archive.person'
+            text: 'Group',
+            value: 'type.archive.group'
           },
           {
             text: 'Family',
-            value: 'type.archive.family'
+            value: 'type.archive.group'
           },
           {
             text: 'Organization',

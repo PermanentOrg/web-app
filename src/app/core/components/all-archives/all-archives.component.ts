@@ -190,8 +190,8 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
             value: 'type.archive.person'
           },
           {
-            text: 'Family',
-            value: 'type.archive.family'
+            text: 'Group',
+            value: 'type.archive.group'
           },
           {
             text: 'Organization',

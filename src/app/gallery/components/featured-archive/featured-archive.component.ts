@@ -21,7 +21,7 @@ export class FeaturedArchiveComponent implements OnInit {
     const classes = ['featured-archive'];
     if (this.archive.type === 'type.archive.person') {
       classes.push('personal');
-    } else if (this.archive.type === 'type.archive.family') {
+    } else if (this.archive.type === 'type.archive.group') {
       classes.push('group');
     } else {
       classes.push('organization');

@@ -144,7 +144,7 @@
             <div class="profile-group in-thirds">
               <div class="profile-field">
                 <ng-container [ngSwitch]="archive.type">
-                  <label *ngSwitchCase="'type.archive.family'">This Family's Nickname</label>
+                  <label *ngSwitchCase="'type.archive.group'">This Group's Nickname</label>
                   <label *ngSwitchCase="'type.archive.organization'">This Organization's Legal Name</label>
                   <label *ngSwitchCase="'type.archive.nonprofit'">This Non-Profit's Legal Name</label>
                   <label *ngSwitchDefault>This Person's Full Name</label>
@@ -158,7 +158,7 @@
               </div>
               <div class="profile-field">
                 <ng-container [ngSwitch]="archive.type">
-                  <label *ngSwitchCase="'type.archive.family'">Previous Name</label>
+                  <label *ngSwitchCase="'type.archive.group'">Previous Name</label>
                   <label *ngSwitchCase="'type.archive.organization'">DBA Name</label>
                   <label *ngSwitchCase="'type.archive.nonprofit'">DBA Name</label>
                   <label *ngSwitchDefault>Also known as...</label>
@@ -255,7 +255,7 @@
                 <pr-inline-value-edit *ngFor="let profileItem of profileItems.social_media"
                 [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
                 [maxLength]="120"
-                [alwaysShow]="true" 
+                [alwaysShow]="true"
                 emptyMessage="www.website.com/user"
                 [displayValue]="profileItem?.string1"
                 (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"

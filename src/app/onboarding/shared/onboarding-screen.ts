@@ -111,17 +111,17 @@ export const archiveOptions = [
     type: OnboardingTypes.individual,
   },
   {
-    value: 'type.archive.family',
+    value: 'type.archive.group',
     text: 'My family in the present',
     type: OnboardingTypes.family,
   },
   {
-    value: 'type.archive.family',
+    value: 'type.archive.group',
     text: "My family's history",
     type: OnboardingTypes.famhist,
   },
   {
-    value: 'type.archive.family',
+    value: 'type.archive.group',
     text: "A community I'm part of",
     type: OnboardingTypes.community,
   },
