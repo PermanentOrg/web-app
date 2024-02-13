@@ -92,7 +92,9 @@ describe('ArchiveRepo', () => {
     const archive = new ArchiveVO({ archiveId: 1, type: 'type.archive.group' });
 
     repo.create(archive).then((response: ArchiveResponse) => {
-      expect(response.getArchiveVO().type).toEqual('type.archive.group');
+      const type = response.getArchiveVO().type;
+
+      expect(type).toEqual('type.archive.group');
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/archive/post`);
