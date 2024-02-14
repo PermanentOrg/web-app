@@ -42,7 +42,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() placeholder: string;
   @Input() control: UntypedFormControl;
   @Input() errors: string;
-   @Input() variant: Variant = 'light';
+  @Input() variant: Variant = 'light';
   @Input() validators: {
     validation: string;
     message: string;
