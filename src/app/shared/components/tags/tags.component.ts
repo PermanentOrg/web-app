@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -18,9 +19,10 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
 export class TagsComponent implements OnInit, OnChanges {
   @Input() tags: TagVOData[];
   @HostBinding('class.read-only') @Input() readOnly = true;
-  @HostBinding('class.can-edit') @Input() canEdit: boolean;
+  @Input() canEdit = false;
   @Input() isEditing = false;
   @Input() animate = false;
+  @Input() isDialog = false;
 
   orderedTags: TagVOData[] = [];
 

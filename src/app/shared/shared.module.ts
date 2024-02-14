@@ -22,7 +22,11 @@ import {
   FontAwesomeModule,
   FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFileArchive,
+  fas,
+  faPenSquare,
+} from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
@@ -209,7 +213,7 @@ export class SharedModule {
     private dropdownConfig: NgbDropdownConfig,
     private library: FaIconLibrary
   ) {
-    library.addIcons(faFileArchive);
+    library.addIcons(faFileArchive, faPenSquare);
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
     this.datePickerConfig.weekdays = false;
