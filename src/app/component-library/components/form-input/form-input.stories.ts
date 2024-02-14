@@ -1,7 +1,18 @@
 /* @format */
-import { Meta, StoryObj } from '@storybook/angular';
+import {
+  Meta,
+  StoryObj,
+  applicationConfig,
+  moduleMetadata,
+} from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
 import { FormInputComponent } from './form-input.component';
+import {
+  FaIconLibrary,
+  FontAwesomeModule,
+} from '@fortawesome/angular-fontawesome';
+import { APP_INITIALIZER } from '@angular/core';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 const backgrounds = {
   default: 'blueGradient',
@@ -19,6 +30,23 @@ const backgrounds = {
 
 const meta: Meta<FormInputComponent> = {
   title: 'Form Input',
+  decorators: [
+    applicationConfig({
+      providers: [
+        {
+          provide: APP_INITIALIZER,
+          useFactory: (iconLibrary: FaIconLibrary) => async () => {
+            iconLibrary.addIcons(faExclamationCircle);
+          },
+          deps: [FaIconLibrary],
+          multi: true,
+        },
+      ],
+    }),
+    moduleMetadata({
+      imports: [FontAwesomeModule],
+    }),
+  ],
   component: FormInputComponent,
   tags: ['autodocs'],
   render: (args: FormInputComponent) => ({
@@ -47,6 +75,10 @@ export default meta;
 type FormInputStory = StoryObj<FormInputComponent>;
 
 export const light: FormInputStory = {
+  args: { type: 'text', placeholder: 'Text', variant: 'light' },
+};
+
+export const lightDarkBackground: FormInputStory = {
   args: { type: 'text', placeholder: 'Text', variant: 'light' },
   parameters: { backgrounds },
 };

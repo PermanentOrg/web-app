@@ -16,7 +16,7 @@
   padding: 12px;
   height: 48px;
 
-  &-errors {
+  &-light.form-input-errors {
     background-color: $form-background-error;
     border: 1px solid $form-border-error;
   }
