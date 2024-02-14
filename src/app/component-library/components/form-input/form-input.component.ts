@@ -12,14 +12,8 @@ import {
 } from '@angular/core';
 import { UntypedFormControl, Validators, FormControl } from '@angular/forms';
 import { getFormInputError } from '@shared/utilities/forms';
-import { find } from 'lodash';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-
-export interface FormInputSelectOption {
-  text: string | number;
-  value: string | number;
-}
 
 type AttrOnOff = 'on' | 'off';
 
@@ -48,8 +42,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() placeholder: string;
   @Input() control: UntypedFormControl;
   @Input() errors: string;
-  @Input() selectOptions: FormInputSelectOption[];
-  @Input() variant: Variant = 'light';
+   @Input() variant: Variant = 'light';
   @Input() validators: {
     validation: string;
     message: string;
