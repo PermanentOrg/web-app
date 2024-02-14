@@ -20,7 +20,8 @@ export class ToggleComponent implements OnInit {
 
   toggleSwitch() {
     if (!this.disabled) {
-      this.isCheckedChange.emit(!this.isChecked);
+      this.isChecked = !this.isChecked;
+      this.isCheckedChange.emit(this.isChecked);
     }
   }
 }
