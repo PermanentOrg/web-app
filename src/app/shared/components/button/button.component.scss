@@ -67,16 +67,18 @@
     }
     &.button-dark {
       @include darkButton();
+      border: 1px solid rgba(255, 255, 255, 0.32);
     }
   }
 
   &-tertiary {
-    border: none;
-    &.button-light {
-      @include darkButton();
-    }
     &.button-dark {
+      @include darkButton();
+      border: 1px solid transparent;
+    }
+    &.button-light {
       @include lightButton();
+      border: 1px solid transparent;
     }
   }
 
@@ -86,6 +88,12 @@
 
   &-fill {
     width: 100%;
+    padding: 0px 24px;
+    height: 56px;
+  }
+
+  &-fill.button-large {
+    height: 64px;
   }
 
   &-text {
