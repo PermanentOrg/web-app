@@ -1,0 +1,264 @@
+[
+  {
+     "query":"test",
+     "starting":null,
+     "numberOfResults":null,
+     "FolderVOs":[
+
+     ],
+     "RecordVOs":[
+
+     ],
+     "ChildItemVOs":[
+        {
+           "recordId":179,
+           "archiveId":null,
+           "archiveNbr":"0005-007o",
+           "publicDT":null,
+           "note":null,
+           "displayName":"test",
+           "downloadName":null,
+           "downloadNameOk":null,
+           "uploadFileName":null,
+           "uploadAccountId":null,
+           "uploadPayerAccountId":null,
+           "size":null,
+           "description":null,
+           "displayDT":null,
+           "displayEndDT":null,
+           "derivedDT":null,
+           "derivedEndDT":null,
+           "derivedCreatedDT":null,
+           "locnId":null,
+           "timeZoneId":null,
+           "view":null,
+           "viewProperty":null,
+           "imageRatio":null,
+           "metaToken":null,
+           "refArchiveNbr":null,
+           "type":"type.record.image",
+           "altText":null,
+           "thumbStatus":null,
+           "thumbURL200":null,
+           "thumbURL500":null,
+           "thumbURL1000":null,
+           "thumbURL2000":null,
+           "thumbDT":null,
+           "fileStatus":null,
+           "status":null,
+           "processedDT":null,
+           "FolderLinkVOs":[
+
+           ],
+           "folder_linkId":300,
+           "parentFolderId":null,
+           "position":null,
+           "accessRole":null,
+           "folderArchiveId":null,
+           "folder_linkType":"type.folder_link.public",
+           "pathAsFolder_linkId":null,
+           "pathAsText":null,
+           "parentFolder_linkId":24,
+           "ParentFolderVOs":null,
+           "parentArchiveNbr":"0005-0004",
+           "parentDisplayName":"Public",
+           "pathAsArchiveNbr":null,
+           "LocnVO":null,
+           "TimezoneVO":null,
+           "FileVOs":null,
+           "TagVOs":[
+
+           ],
+           "TextDataVOs":[
+
+           ],
+           "ArchiveVOs":[
+
+           ],
+           "saveAs":null,
+           "uploadUri":null,
+           "fileDurationInSecs":null,
+           "RecordExifVO":null,
+           "ShareVOs":[
+
+           ],
+           "AccessVO":null,
+           "searchScore":"1",
+           "archiveArchiveNbr":null,
+           "createdDT":null,
+           "updatedDT":null
+        },
+        {
+           "folderId":103,
+           "archiveNbr":"0005-006v",
+           "archiveId":null,
+           "displayName":"test-upload",
+           "downloadName":null,
+           "downloadNameOk":null,
+           "displayDT":null,
+           "displayEndDT":null,
+           "derivedDT":null,
+           "derivedEndDT":null,
+           "note":null,
+           "description":null,
+           "special":null,
+           "sort":null,
+           "locnId":null,
+           "timeZoneId":null,
+           "view":null,
+           "viewProperty":null,
+           "thumbArchiveNbr":null,
+           "imageRatio":null,
+           "type":"type.folder.public",
+           "thumbStatus":null,
+           "thumbURL200":null,
+           "thumbURL500":null,
+           "thumbURL1000":null,
+           "thumbURL2000":null,
+           "thumbDT":null,
+           "status":null,
+           "publicDT":null,
+           "parentFolderId":null,
+           "folder_linkType":"type.folder_link.public",
+           "FolderLinkVOs":[
+
+           ],
+           "accessRole":null,
+           "position":null,
+           "shareDT":null,
+           "pathAsFolder_linkId":null,
+           "pathAsText":[
+
+           ],
+           "folder_linkId":271,
+           "parentFolder_linkId":24,
+           "ParentFolderVOs":[
+
+           ],
+           "parentArchiveNbr":"0005-0004",
+           "parentDisplayName":"Public",
+           "pathAsArchiveNbr":[
+
+           ],
+           "ChildFolderVOs":[
+
+           ],
+           "RecordVOs":[
+
+           ],
+           "LocnVO":null,
+           "TimezoneVO":null,
+           "TagVOs":[
+
+           ],
+           "SharedArchiveVOs":[
+
+           ],
+           "FolderSizeVO":null,
+           "ChildItemVOs":[
+
+           ],
+           "ShareVOs":[
+
+           ],
+           "AccessVO":null,
+           "AccessVOs":null,
+           "archiveArchiveNbr":null,
+           "returnDataSize":null,
+           "posStart":null,
+           "posLimit":null,
+           "searchScore":"1",
+           "createdDT":null,
+           "updatedDT":null
+        },
+        {
+           "folderId":104,
+           "archiveNbr":"0005-006w",
+           "archiveId":null,
+           "displayName":"test-upload",
+           "downloadName":null,
+           "downloadNameOk":null,
+           "displayDT":null,
+           "displayEndDT":null,
+           "derivedDT":null,
+           "derivedEndDT":null,
+           "note":null,
+           "description":null,
+           "special":null,
+           "sort":null,
+           "locnId":null,
+           "timeZoneId":null,
+           "view":null,
+           "viewProperty":null,
+           "thumbArchiveNbr":null,
+           "imageRatio":null,
+           "type":"type.folder.public",
+           "thumbStatus":null,
+           "thumbURL200":null,
+           "thumbURL500":null,
+           "thumbURL1000":null,
+           "thumbURL2000":null,
+           "thumbDT":null,
+           "status":null,
+           "publicDT":null,
+           "parentFolderId":null,
+           "folder_linkType":"type.folder_link.public",
+           "FolderLinkVOs":[
+
+           ],
+           "accessRole":null,
+           "position":null,
+           "shareDT":null,
+           "pathAsFolder_linkId":null,
+           "pathAsText":[
+
+           ],
+           "folder_linkId":272,
+           "parentFolder_linkId":24,
+           "ParentFolderVOs":[
+
+           ],
+           "parentArchiveNbr":"0005-0004",
+           "parentDisplayName":"Public",
+           "pathAsArchiveNbr":[
+
+           ],
+           "ChildFolderVOs":[
+
+           ],
+           "RecordVOs":[
+
+           ],
+           "LocnVO":null,
+           "TimezoneVO":null,
+           "TagVOs":[
+
+           ],
+           "SharedArchiveVOs":[
+
+           ],
+           "FolderSizeVO":null,
+           "ChildItemVOs":[
+
+           ],
+           "ShareVOs":[
+
+           ],
+           "AccessVO":null,
+           "AccessVOs":null,
+           "archiveArchiveNbr":null,
+           "returnDataSize":null,
+           "posStart":null,
+           "posLimit":null,
+           "searchScore":"1",
+           "createdDT":null,
+           "updatedDT":null
+        }
+     ],
+     "TagVOs":[
+
+     ],
+     "createdDT":null,
+     "updatedDT":null
+  }
+]
