@@ -33,7 +33,9 @@
           (disableSwipe)="toggleSwipe($event)"
           (isFullScreen)="toggleFullscreen($event)"
           [item]="currentRecord"
-          *ngIf="showThumbnail && !isDocument && !isVideo && !isAudio"
+          *ngIf="
+            showThumbnail && !isDocument && !isTxtFile && !isVideo && !isAudio
+          "
           [hideResizableImage]="false"
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
@@ -41,7 +43,7 @@
         <iframe
           [title]="currentRecord | getAltText"
           [src]="documentUrl"
-          *ngIf="isDocument && documentUrl"
+          *ngIf="isDocument  && documentUrl"
         ></iframe>
       </div>
     </div>
