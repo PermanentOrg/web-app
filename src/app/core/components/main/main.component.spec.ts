@@ -1,3 +1,4 @@
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 /* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
@@ -48,6 +49,7 @@ describe('MainComponent', () => {
 
     config.imports.push(SharedModule);
     config.imports.push(DialogModule.forRoot());
+    config.imports.push(NoopAnimationsModule);
 
     config.declarations.push(MainComponent);
     config.declarations.push(NavComponent);

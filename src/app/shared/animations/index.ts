@@ -1,10 +1,11 @@
+/* @format */
 import {
   trigger,
   animate,
   transition,
   style,
   query,
-  state
+  state,
 } from '@angular/animations';
 
 const animationLength = 750;
@@ -15,7 +16,7 @@ const FULLSCREEN = {
   left: 0,
   right: 0,
   bottom: 0,
-  'z-index': 10
+  'z-index': 10,
 };
 
 const EASE_IN_QUART = 'cubic-bezier(0.5, 0, 0.75, 0)';
@@ -33,9 +34,10 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
       ':leave',
       [
         style({ transform: 'translateY(0)' }),
-        animate(`${slideUpAnimationLength}ms ${TWEAKED}`,
+        animate(
+          `${slideUpAnimationLength}ms ${TWEAKED}`,
           style({ transform: 'translateY(100vh)' })
-        )
+        ),
       ],
       { optional: true }
     ),
@@ -43,13 +45,14 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
       ':enter',
       [
         style({ transform: 'translateY(100vh)' }),
-        animate(`${slideUpAnimationLength}ms ${TWEAKED}`,
+        animate(
+          `${slideUpAnimationLength}ms ${TWEAKED}`,
           style({ transform: 'translateY(0)' })
-        )
+        ),
       ],
       { optional: true }
-    )
-  ])
+    ),
+  ]),
 ]);
 
 export const fadeAnimation = trigger('fadeAnimation', [
@@ -71,147 +74,121 @@ export const fadeAnimation = trigger('fadeAnimation', [
       ':enter',
       [style({ opacity: 0 }), animate('0.3s', style({ opacity: 1 }))],
       { optional: true }
-    )
-  ])
+    ),
+  ]),
 ]);
 
 export const ngIfFadeInAnimation = trigger('ngIfFadeInAnimation', [
-  transition(
-    ':enter',
-    [
-      style({ opacity: 0 }),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 1 }))
-    ]
-  ),
-  transition(
-    ':leave',
-    [
-      style({ opacity: 1 }),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 0 }))
-    ]
-  )
+  transition(':enter', [
+    style({ opacity: 0 }),
+    animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
+  ]),
+  transition(':leave', [
+    style({ opacity: 1 }),
+    animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
+  ]),
 ]);
 
 export const ngIfFadeInAnimationSlow = trigger('ngIfFadeInAnimationSlow', [
-  transition(
-    ':enter',
-    [
-      style({ opacity: 0 }),
-      animate(`500ms ${TWEAKED}`, style({ opacity: '*' }))
-    ]
-  ),
-  transition(
-    ':leave',
-    [
-      style({ opacity: 1 }),
-      animate(`500ms ${TWEAKED}`, style({ opacity: '*' }))
-    ]
-  )
+  transition(':enter', [
+    style({ opacity: 0 }),
+    animate(`500ms ${TWEAKED}`, style({ opacity: '*' })),
+  ]),
+  transition(':leave', [
+    style({ opacity: 1 }),
+    animate(`500ms ${TWEAKED}`, style({ opacity: '*' })),
+  ]),
 ]);
 
 export const ngIfScaleAnimation = trigger('ngIfScaleAnimation', [
-  transition(
-    ':enter',
-    [
-      style({ height: '0px', width: '0px', opacity: 0 }),
-      animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
-    ]
-  ),
-  transition(
-    ':leave',
-    [
-      style({ height: '*', width: '*', opacity: '*' }),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
-      animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' }))
-    ]
-  )
+  transition(':enter', [
+    style({ height: '0px', width: '0px', opacity: 0 }),
+    animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
+    animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
+  ]),
+  transition(':leave', [
+    style({ height: '*', width: '*', opacity: '*' }),
+    animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
+    animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
+  ]),
 ]);
 
 export const ngIfScaleAnimationDynamic = trigger('ngIfScaleAnimationDynamic', [
-  transition(
-    'void => animate',
-    [
-      style({ height: '0px', width: '0px', opacity: 0 }),
-      animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
-    ]
-  ),
-  transition(
-    'animate => void',
-    [
-      style({ height: '*', width: '*', opacity: '*' }),
-      animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
-      animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' }))
-    ]
-  )
+  transition('void => animate', [
+    style({ height: '0px', width: '0px', opacity: 0 }),
+    animate(`125ms ${TWEAKED}`, style({ height: '*', width: '*' })),
+    animate(`125ms ${TWEAKED}`, style({ opacity: 1 })),
+  ]),
+  transition('animate => void', [
+    style({ height: '*', width: '*', opacity: '*' }),
+    animate(`125ms ${TWEAKED}`, style({ opacity: 0 })),
+    animate(`125ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
+  ]),
 ]);
 
 export function collapseAnimationCustom(ms: number) {
   return trigger('collapseAnimation', [
-    state('closed',
-      style({ height: '0px', display: 'none', overflow: 'hidden'})
+    state(
+      'closed',
+      style({ height: '0px', display: 'none', overflow: 'hidden' })
     ),
-    transition(
-      'closed => open',
-      [
-        style({ height: '0px', opacity: 0, display: 'block' }),
-        animate(`${ms}ms ${TWEAKED}`, style({ height: '*', width: '*' })),
-        animate(`${ms}ms ${TWEAKED}`, style({ opacity: 1 })),
-      ]
-    ),
-    transition(
-      'open => closed',
-      [
-        style({ height: '*', opacity: '*' }),
-        animate(`${ms}ms ${TWEAKED}`, style({ opacity: 0 })),
-        animate(`${ms}ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
-      ]
-    )
+    transition('closed => open', [
+      style({ height: '0px', opacity: 0, display: 'block' }),
+      animate(`${ms}ms ${TWEAKED}`, style({ height: '*', width: '*' })),
+      animate(`${ms}ms ${TWEAKED}`, style({ opacity: 1 })),
+    ]),
+    transition('open => closed', [
+      style({ height: '*', opacity: '*' }),
+      animate(`${ms}ms ${TWEAKED}`, style({ opacity: 0 })),
+      animate(`${ms}ms ${TWEAKED}`, style({ height: '0px', width: '0px' })),
+    ]),
   ]);
 }
 export const collapseAnimation = collapseAnimationCustom(125);
 
-export const ngIfScaleHeightEnterAnimation = trigger('ngIfScaleHeightEnterAnimation', [
-  transition(
-    ':enter',
-    [
+export const ngIfScaleHeightEnterAnimation = trigger(
+  'ngIfScaleHeightEnterAnimation',
+  [
+    transition(':enter', [
       style({ height: '0px', opacity: 0 }),
       animate(`125ms ${TWEAKED}`, style({ height: '*', opacity: 1 })),
-    ]
-  )
-]);
+    ]),
+  ]
+);
 
 export const ngIfScaleHeightAnimation = trigger('ngIfScaleHeightAnimation', [
-  transition(
-    ':enter',
-    [
-      style({ height: '0px' }),
-      animate(`250ms ${TWEAKED}`, style({ height: '*' })),
-    ]
-  ),
-  transition(
-    ':leave',
-    [
-      style({ height: '*' }),
-      animate(`250ms ${TWEAKED}`, style({ height: '0px' })),
-    ]
-  )
+  transition(':enter', [
+    style({ height: '0px' }),
+    animate(`250ms ${TWEAKED}`, style({ height: '*' })),
+  ]),
+  transition(':leave', [
+    style({ height: '*' }),
+    animate(`250ms ${TWEAKED}`, style({ height: '0px' })),
+  ]),
 ]);
 
 export const ngIfSlideInAnimation = trigger('ngIfSlideInAnimation', [
-  transition(
-    ':enter',
-    [
-      style({ transform: 'translateX(calc(-100% - 20px))' }),
-      animate(`250ms ${TWEAKED}`, style({ transform: '*'}))
-    ]
-  ),
-  transition(
-    ':leave',
-    [
-      style({ transform: '*' }),
-      animate(`250ms ${TWEAKED}`, style({ transform: 'translateX(calc(-100% - 20px))'})),
-    ]
-  )
+  transition(':enter', [
+    style({ transform: 'translateX(calc(-100% - 20px))' }),
+    animate(`250ms ${TWEAKED}`, style({ transform: '*' })),
+  ]),
+  transition(':leave', [
+    style({ transform: '*' }),
+    animate(
+      `250ms ${TWEAKED}`,
+      style({ transform: 'translateX(calc(-100% - 20px))' })
+    ),
+  ]),
+]);
+
+export const ngIfSlideUpAnimation = trigger('ngIfSlideUpAnimation', [
+  transition(':enter', [
+    style({ transform: 'translateY(100%)' }),
+    animate('250ms ease-in', style({ transform: 'translateY(0)' })),
+  ]),
+
+  transition(':leave', [
+    style({ transform: 'translateY(0)' }),
+    animate('250ms ease-out', style({ transform: 'translateY(100%)' })),
+  ]),
 ]);

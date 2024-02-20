@@ -44,7 +44,7 @@ export class ArchivePayerComponent implements OnInit {
     this.hasAccess =
       accessRole === 'access.role.owner' ||
       accessRole === 'access.role.manager';
-      
+
     this.hasPayer = !!this.payer;
     if (this.hasPayer) {
       this.payerService.payerId = this.payer.accountId;

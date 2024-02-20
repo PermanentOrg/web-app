@@ -1,0 +1,65 @@
+@import 'variables';
+
+.banner {
+  display: none;
+
+  @include beforeDesktop {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #5261b7;
+    padding: 12px;
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
+
+    & > .icon {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      & > i {
+        color: white;
+      }
+    }
+
+    .image {
+      margin-top: 20px;
+    }
+
+    .banner-text-container > p,
+    h4 {
+      text-align: center;
+      color: white;
+    }
+
+    .banner-text-container > h4 {
+      font-weight: 700;
+      margin: 20px 0px;
+    }
+
+    .banner-text-container > p {
+      margin-bottom: 20px;
+    }
+  }
+
+  &-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+
+    .btn-link {
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+}
