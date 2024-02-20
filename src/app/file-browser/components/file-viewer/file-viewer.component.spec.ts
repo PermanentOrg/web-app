@@ -353,7 +353,7 @@ describe('FileViewerComponent', () => {
       instance: FileViewerComponent,
       phrase: string
     ) {
-      const url = instance.getPdfUrl();
+      const url = instance.getDocumentUrl();
 
       expect(url).toBeTruthy();
       expect(
@@ -375,14 +375,14 @@ describe('FileViewerComponent', () => {
     it('will have a falsy document URL if it is not a document', async () => {
       const { instance } = await defaultRender();
 
-      expect(instance.getPdfUrl()).toBeFalsy();
+      expect(instance.getDocumentUrl()).toBeFalsy();
     });
 
     it('will have a falsy document URL if the URL is falsy', async () => {
       setUpCurrentRecord('pdf', false);
       const { instance } = await defaultRender();
 
-      expect(instance.getPdfUrl()).toBeFalsy();
+      expect(instance.getDocumentUrl()).toBeFalsy();
     });
   });
 
