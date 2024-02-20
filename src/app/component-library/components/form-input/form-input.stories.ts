@@ -6,13 +6,13 @@ import {
   moduleMetadata,
 } from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
-import { FormInputComponent } from './form-input.component';
 import {
   FaIconLibrary,
   FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
 import { APP_INITIALIZER } from '@angular/core';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { FormInputComponent } from './form-input.component';
 
 const backgrounds = {
   default: 'blueGradient',
