@@ -372,6 +372,12 @@ describe('FileViewerComponent', () => {
       expectSantizedUrlToContain(instance, 'original');
     });
 
+    it('will prefer the URL of the original if it is a TXT file', async () => {
+      setUpCurrentRecord('txt');
+      const { instance } = await defaultRender();
+      expectSantizedUrlToContain(instance, 'original');
+    });
+
     it('will have a falsy document URL if it is not a document', async () => {
       const { instance } = await defaultRender();
 
