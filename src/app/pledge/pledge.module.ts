@@ -27,15 +27,13 @@ import { UpdateCardComponent } from './components/update-card/update-card.compon
     RouterModule,
     AngularFireModule.initializeApp({
       ...environment.firebase,
-      apiKey: SecretsService.getStatic('FIREBASE_API_KEY')
+      apiKey: SecretsService.getStatic('FIREBASE_API_KEY'),
     }),
     AngularFireDatabaseModule,
     PledgeRoutingModule,
     CountUpModule,
   ],
-  providers: [
-    PledgeService
-  ],
+  providers: [PledgeService],
   declarations: [
     PledgeComponent,
     PhaseProgressComponent,
@@ -45,10 +43,8 @@ import { UpdateCardComponent } from './components/update-card/update-card.compon
     ClaimDoneComponent,
     PledgeListComponent,
     MissingPledgeComponent,
-    UpdateCardComponent
+    UpdateCardComponent,
   ],
-  exports: [
-    NewPledgeComponent,
-  ],
+  exports: [NewPledgeComponent],
 })
-export class PledgeModule { }
+export class PledgeModule {}

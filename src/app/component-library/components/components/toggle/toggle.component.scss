@@ -1,0 +1,48 @@
+/* @format */
+@import 'variables';
+
+.toggle-container {
+  padding: 5px;
+  display: flex;
+  width: fit-content;
+  align-items: center;
+
+  & > p {
+    margin-left: 10px;
+    margin-bottom: 0;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  & > .toggle-switch {
+    cursor: pointer;
+    width: 36px;
+    height: 20px;
+    border-radius: 25px;
+    position: relative;
+    background-color: $toggle;
+    transition: background-color 0.2s;
+
+    & > .toggle-knob {
+      width: 15px;
+      height: 15px;
+      background-color: $white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2.5px;
+      left: 2.5px;
+      transition: left 0.2s;
+    }
+  }
+
+  &.checked {
+    & > .toggle-switch {
+      background-color: $toggle-checked;
+      & > .toggle-knob {
+        left: 18.5px;
+      }
+    }
+  }
+}

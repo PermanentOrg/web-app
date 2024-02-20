@@ -1,0 +1,12 @@
+<!-- @format  -->
+<div
+  class="toggle-container"
+  [class.checked]="isChecked"
+  [class.disabled]="disabled"
+  (click)="toggleSwitch()"
+>
+  <div class="toggle-switch">
+    <div class="toggle-knob"></div>
+  </div>
+  <p>{{ text }}</p>
+</div>
