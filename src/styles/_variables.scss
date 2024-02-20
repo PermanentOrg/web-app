@@ -13,8 +13,9 @@ $font-weight-semibold: 600;
 $navbar-toggler-padding-y: 0px;
 $navbar-toggler-padding-x: 0px;
 
-$input-btn-padding-y: .85rem;
-$input-transition: border-color .15s ease-in-out, background-color .15s ease-in-out;
+$input-btn-padding-y: 0.85rem;
+$input-transition: border-color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out;
 
 $max-form-width: 400px;
 
@@ -26,7 +27,7 @@ $default-transition-length: 0.5s;
 $shadow-color: rgba(black, 0.15);
 $shadow-color-dark: rgba(black, 0.45);
 
-$wordpress-shadow: 0em 0em 0.65em rgba(0,0,0,0.8);
+$wordpress-shadow: 0em 0em 0.65em rgba(0, 0, 0, 0.8);
 
 $metadata-width: 350px;
 
@@ -34,7 +35,7 @@ $public-max-width: 800px;
 $public-banner-height: pxToGrid(100px);
 $public-archive-header-height: pxToGrid(70px);
 
-$breadcrumb-divider: quote(">");
+$breadcrumb-divider: quote('>');
 $breadcrumb-height: pxToGrid(34px);
 $breadcrumb-height-desktop: 4 * $grid-unit;
 $timeline-breadcrumb-height: $breadcrumb-height;
@@ -44,7 +45,8 @@ $left-menu-width: pxToGrid(220px);
 $navbar-height: pxToGrid(50px);
 $navbar-height-desktop: 4 * $grid-unit;
 $navbar-total-height: $navbar-height + $breadcrumb-height;
-$navbar-total-height-desktop: $navbar-height-desktop + $breadcrumb-height-desktop;
+$navbar-total-height-desktop: $navbar-height-desktop +
+  $breadcrumb-height-desktop;
 
 $navbar-button-icon-padding: 0.5rem;
 
@@ -64,8 +66,6 @@ $file-list-shared-by-col-width: 20rem;
 $file-list-shared-icon-col-width: 2rem;
 $file-list-grid-gutter: $grid-unit;
 
-
-
 $phone: 450px;
 $tablet: 768px;
 $tablet-horizontal: 900px;
@@ -73,8 +73,8 @@ $desktop: 1200px;
 
 $scrollbar-margin: pxToGrid(20px);
 
-$taylor-ease: cubic-bezier(.77, 0, .175, 1);
-$tweaked-ease: cubic-bezier(.63,.01,.3,1);
+$taylor-ease: cubic-bezier(0.77, 0, 0.175, 1);
+$tweaked-ease: cubic-bezier(0.63, 0.01, 0.3, 1);
 
 $slide-up-animation: slideUp;
 
@@ -83,6 +83,22 @@ $menu-open-ease: $menu-ease;
 $menu-close-ease: $menu-ease;
 $menu-transition-length: 0.45s;
 $menu-transition-length-desktop: 0.5s;
+
+$form-border: rgba(231, 232, 237, 1);
+
+$form-border-error: rgba(254, 228, 226, 1);
+$form-background-error: rgba(254, 228, 226, 0.25);
+
+$form-background-focus: rgba(244, 246, 253, 1);
+$form-border-focus: rgba(208, 209, 219, 1);
+
+$form-background-dark: #131b4a;
+
+$form-default-text-color: #5a5f80;
+
+$form-label-dark: rgba(255, 255, 255, 0.64);
+
+$form-error-red: rgba(240, 68, 56, 1);
 
 @mixin public-centered {
   max-width: $public-max-width;
@@ -104,7 +120,9 @@ $menu-transition-length-desktop: 0.5s;
     $ui-width-px: $left-menu-width + $sidebar-width - (4 * $grid-unit);
     $list-items-width-em: $file-list-type-col-width + $file-list-date-col-width;
     $list-items-width-px: $scrollbar-margin + $file-list-row-height + $grid-unit;
-    flex-basis: calc(100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em});
+    flex-basis: calc(
+      100vw - #{$ui-width-px + $list-items-width-px} - #{$list-items-width-em}
+    );
   }
 }
 
@@ -154,8 +172,6 @@ $menu-transition-length-desktop: 0.5s;
   }
 }
 
-
-
 $ionicons-font-path: 'https://unpkg.com/ionicons@4.6.3/dist/fonts';
 
 @import 'vendor/bootstrap/functions';
@@ -163,10 +179,10 @@ $ionicons-font-path: 'https://unpkg.com/ionicons@4.6.3/dist/fonts';
 @import 'utilities';
 
 // Customizations to Bootstrap Variables
-$link-color:                lighten(theme-color("primary"), 20%);
-$link-decoration:           underline;
-$link-hover-color:          lighten($link-color, 20%);
-$link-hover-decoration:     none;
+$link-color: lighten(theme-color('primary'), 20%);
+$link-decoration: underline;
+$link-hover-color: lighten($link-color, 20%);
+$link-hover-decoration: none;
 
 @import 'dialog';
 @import 'profile';
