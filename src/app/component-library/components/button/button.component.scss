@@ -1,0 +1,104 @@
+/* @format */
+@import 'variables';
+
+@mixin darkButton {
+  background-color: rgba(19, 27, 74, 1);
+  border: 1px solid rgba(19, 27, 74, 1);
+
+  & > .button-text {
+    color: white;
+    margin: 0;
+    @include bodyMedium;
+  }
+}
+
+@mixin lightButton {
+  background-color: $white;
+  border: 1px solid rgba(184, 187, 201, 1);
+  & > .button-text {
+    color: rgba(19, 27, 74, 1);
+    margin: 0;
+    @include bodyMedium;
+  }
+
+  & > .icon {
+    color: rgba(19, 27, 74, 1);
+  }
+}
+
+.button {
+  &:focus {
+    outline: none;
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  padding: 0px 24px;
+  gap: 16px;
+  cursor: pointer;
+
+  &-large {
+    height: 64px;
+  }
+
+  &-reverse {
+    flex-direction: row-reverse;
+  }
+
+  & > .icon {
+    color: white;
+  }
+
+  &-primary {
+    &.button-light {
+      //the button on a white background will be blue
+      @include darkButton();
+    }
+    &.button-dark {
+      @include lightButton();
+    }
+  }
+
+  &-secondary {
+    &.button-light {
+      @include lightButton();
+    }
+    &.button-dark {
+      @include darkButton();
+      border: 1px solid rgba(255, 255, 255, 0.32);
+    }
+  }
+
+  &-tertiary {
+    &.button-dark {
+      @include darkButton();
+      border: 1px solid transparent;
+    }
+    &.button-light {
+      @include lightButton();
+      border: 1px solid transparent;
+    }
+  }
+
+  &-hug {
+    padding: 16px 24px;
+  }
+
+  &-fill {
+    width: 100%;
+    padding: 0px 24px;
+    height: 56px;
+  }
+
+  &-fill.button-large {
+    height: 64px;
+  }
+
+  &-text {
+    color: white;
+    margin: 0;
+    @include bodyMedium;
+  }
+}

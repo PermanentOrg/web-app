@@ -1,4 +1,9 @@
-$font-family-base: 'Open Sans', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+@import url('https://fonts.cdnfonts.com/css/usual');
+
+
+$font-family-base: 'Open Sans', sans-serif, -apple-system, BlinkMacSystemFont,
+  'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol' !default;
 
 $base-size: 16px;
 $large-size: 1.25rem;
@@ -8,7 +13,7 @@ $xl-size: 1.875rem;
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px; /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -27,6 +32,22 @@ $xl-size: 1.875rem;
 
   /* Support for IE. */
   font-feature-settings: 'liga';
+}
+
+@mixin bodyMedium {
+  font-weight: 600;
+  font-family: 'Usual';
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  font-style: normal;
+}
+
+@mixin bodyRegular {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
 }
 
 $mat-icon-sm: 18px;
