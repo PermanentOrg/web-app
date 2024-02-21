@@ -1,3 +1,4 @@
+/* @format */
 $transition-length: 0.33s;
 
 :host {
@@ -58,4 +59,8 @@ $transition-length: 0.33s;
   & > i {
     padding-right: 1px;
   }
+}
+
+.link {
+  color: black;
 }

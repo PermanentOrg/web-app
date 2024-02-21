@@ -1,10 +1,16 @@
+<!-- format  -->
 <div>
   <div class="alert-wrapper" [ngClass]="{ visible: visible, fade: useFade }">
     <div class="alert alert-primary icon-container" [ngClass]="style">
-        <i (click)="dismiss()" class="material-icons">close</i>
+      <i (click)="dismiss()" class="material-icons">close</i>
     </div>
     <div (click)="onClick()" class="alert alert-primary" [ngClass]="style">
       {{ displayText }}
+      <span
+        class="link-body"
+        *ngIf="externalUrl"
+        [innerHtml]="externalUrl"
+      ></span>
     </div>
   </div>
 </div>

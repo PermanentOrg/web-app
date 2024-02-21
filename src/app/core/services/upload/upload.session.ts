@@ -15,6 +15,7 @@ export enum UploadSessionStatus {
   StorageError,
   CreatingFolders,
   FileNoBytesError,
+  NoAccessToUpload,
 }
 
 export interface UploadProgressEvent {
@@ -128,7 +129,11 @@ export class UploadSession {
       item.uploadStatus = UploadStatus.Cancelled;
       this.statistics.error++;
 
-      if (err instanceof BaseResponse && item.file.size === 0) {
+      const accessRole = this.account.getArchive().accessRole;
+
+      if (err instanceof BaseResponse && accessRole === 'access.role.viewer') {
+        this.emitError(UploadSessionStatus.NoAccessToUpload, item);
+      } else if (err instanceof BaseResponse && item.file.size === 0) {
         this.emitError(UploadSessionStatus.FileNoBytesError, item);
       } else if (err instanceof BaseResponse && isOutOfStorageMessage(err)) {
         this.emitError(UploadSessionStatus.StorageError, item);

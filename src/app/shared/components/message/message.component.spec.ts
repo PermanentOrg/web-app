@@ -91,4 +91,22 @@ describe('MessageComponent', () => {
 
     expect(component.dismiss).toHaveBeenCalledTimes(1);
   });
+
+  it('should display the external URL if it exists', () => {
+    component.externalUrl =
+      '<a class="test-link" href=https://www.example.com>Example</a>';
+    component.visible = true;
+    fixture.detectChanges();
+
+    const externalLinkBody =
+      fixture.debugElement.nativeElement.querySelector('.link-body');
+
+    expect(externalLinkBody).toBeTruthy();
+
+    const externalLink =
+      fixture.debugElement.nativeElement.querySelector('.test-link');
+
+    expect(externalLink).toBeTruthy();
+    expect(externalLink.href).toEqual('https://www.example.com/');
+  });
 });
