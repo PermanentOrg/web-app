@@ -70,11 +70,7 @@ import { PrependProtocolPipe } from './pipes/prepend-protocol.pipe';
 import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
-<<<<<<< HEAD
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
-=======
-import { ButtonComponent } from './components/button/button.component';
->>>>>>> fb6fa88b (PER-9445-button component)
 
 @NgModule({
   imports: [
@@ -142,11 +138,7 @@ import { ButtonComponent } from './components/button/button.component';
     SwitcherComponent,
     GetAltTextPipe,
     AccessRolePipe,
-<<<<<<< HEAD
     MobileBannerComponent,
-=======
-    ButtonComponent,
->>>>>>> fb6fa88b (PER-9445-button component)
   ],
   declarations: [
     ThumbnailComponent,
@@ -195,11 +187,7 @@ import { ButtonComponent } from './components/button/button.component';
     SwitcherComponent,
     GetAltTextPipe,
     AccessRolePipe,
-<<<<<<< HEAD
     MobileBannerComponent,
-=======
-    ButtonComponent,
->>>>>>> fb6fa88b (PER-9445-button component)
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
