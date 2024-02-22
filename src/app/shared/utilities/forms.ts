@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { APP_CONFIG } from '@root/app/app.config';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
+import { FormInputComponent as FormInput } from '@root/app/component-library/components/form-input/form-input.component';
 import { DeviceService } from '@shared/services/device/device.service';
 
 export function matchControlValidator(
@@ -97,7 +98,7 @@ export function setFormErrors(form: UntypedFormGroup, errors: any) {
   }
 }
 
-export function getFormInputError(formInput: FormInputComponent) {
+export function getFormInputError(formInput: FormInputComponent | FormInput) {
   const control = formInput.control;
 
   if (

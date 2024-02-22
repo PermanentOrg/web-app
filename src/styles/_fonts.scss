@@ -1,0 +1,84 @@
+@font-face {
+  font-family: 'UsualBold';
+  src: url('../assets/fonts/Usual/Usual-Bold.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-Bold.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UsualBoldItalic';
+  src: url('../assets/fonts/Usual/Usual-Bolditalic.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-BoldItalic.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'UsualExtraBold';
+  src: url('../assets/fonts/Usual/Usual-ExtraBold.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-ExtraBold.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-ExtraBold.ttf') format('truetype');
+  font-weight: bolder;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UsualExtraBoldItalic';
+  src: url('../assets/fonts/Usual/Usual-ExtraBoldItalic.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-ExtraBoldItalic.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: bolder;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'UsualItalic';
+  src: url('../assets/fonts/Usual/Usual-Italic.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-Italic.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'UsualLight';
+  src: url('../assets/fonts/Usual/Usual-Light.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-Light.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-Light.ttf') format('truetype');
+  font-weight: lighter;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UsualLightItalic';
+  src: url('../assets/fonts/Usual/Usual-LightItalic.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-LightItalic.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-LightItalic.ttf') format('truetype');
+  font-weight: lighter;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'UsualMedium';
+  src: url('../assets/fonts/Usual/Usual-Medium.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-Medium.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'UsualMediumItalic';
+  src: url('../assets/fonts/Usual/Usual-MediumItalic.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-MediumItalic.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-MediumItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'UsualRegular';
+  src: url('../assets/fonts/Usual/Usual-Regular.woff2') format('woff2'),
+    url('../assets/fonts/Usual/Usual-Regular.woff') format('woff'),
+    url('../assets/fonts/Usual/Usual-Regular.ttf') format('truetype');
+}

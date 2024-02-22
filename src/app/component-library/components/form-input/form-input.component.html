@@ -1,0 +1,32 @@
+<!-- @format -->
+<div
+  class="input-vertical-label"
+  [ngClass]="[
+    'input-vertical-label-' + variant,
+    isLabelHidden() ? 'hidden' : ''
+  ]"
+>
+  {{ placeholder }}
+</div>
+<fa-icon
+  *ngIf="errors"
+  class="error-icon"
+  [icon]="['fas', 'exclamation-circle']"
+></fa-icon>
+<input
+  [type]="type"
+  (input)="onInputChange($event.target.value)"
+  class="form-control form-input"
+  [ngClass]="[
+    'form-input-' + variant,
+    config && config.validateDirty ? 'validate-dirty' : '',
+    errors ? 'form-input-errors' : ''
+  ]"
+  [id]="fieldName"
+  [name]="fieldName"
+  [placeholder]="placeholder"
+  [formControl]="control"
+/>
+<div class="input-vertical-error" [ngClass]="{ hidden: !errors }">
+  {{ errors }}
+</div>

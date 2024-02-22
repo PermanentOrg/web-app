@@ -419,7 +419,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       if (dateTypeToNumber(i.start) < midpointWithMinDiff) {
         if (!firstItemBefore) {
           firstItemBefore = i;
-        } else if (firstItemBefore.start < i.start) {
+        } else if ((firstItemBefore.start as number) < (i.start as number)) {
           firstItemBefore = i;
         }
       }
@@ -446,7 +446,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
       if (dateTypeToNumber(i.start) > midpointWithMinDiff) {
         if (!firstItemAfter) {
           firstItemAfter = i;
-        } else if (firstItemAfter.start > i.start) {
+        } else if ((firstItemAfter.start as number) > Number(i.start)) {
           firstItemAfter = i;
         }
       }
@@ -516,6 +516,8 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   findItemsInRange(start: number, end: number) {
     const itemIds = [];
+    const startDate = new Date(start); // Convert start to a Date object
+    const endDate = new Date(end); // Convert end to a Date object
     this.timelineItems.forEach((item) => {
       const itemStart = dateTypeToNumber(item.start);
       if (
