@@ -21,7 +21,7 @@ import { ToggleComponent } from './components/toggle/toggle.component';
     ReactiveFormsModule,
     BrowserModule,
   ],
-  exports: [],
+  exports: [ToggleComponent, ButtonComponent, FormInputComponent],
 })
 export class ComponentsModule {
   constructor(private library: FaIconLibrary) {
