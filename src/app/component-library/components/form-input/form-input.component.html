@@ -1,10 +1,9 @@
 <!-- @format -->
 <div
   class="input-vertical-label"
-  [ngClass]="[
-    'input-vertical-label-' + variant,
-    isLabelHidden() ? 'hidden' : ''
-  ]"
+  [class.hidden]="isLabelHidden()"
+  [class.input-vertical-label-light]="variant === 'light'"
+  [class.input-vertical-label-dark]="variant === 'dark'"
 >
   {{ placeholder }}
 </div>
@@ -17,16 +16,14 @@
   [type]="type"
   (input)="onInputChange($event.target.value)"
   class="form-control form-input"
-  [ngClass]="[
-    'form-input-' + variant,
-    config && config.validateDirty ? 'validate-dirty' : '',
-    errors ? 'form-input-errors' : ''
-  ]"
   [id]="fieldName"
   [name]="fieldName"
   [placeholder]="placeholder"
-  [formControl]="control"
+  [class.validate-dirty]="config && config.validateDirty"
+  [class.form-input-errors]="errors"
+  [class.form-input-light]="variant === 'light'"
+  [class.form-input-dark]="variant === 'dark'"
 />
-<div class="input-vertical-error" [ngClass]="{ hidden: !errors }">
+<div class="input-vertical-error" [class.hidden]="!errors">
   {{ errors }}
 </div>

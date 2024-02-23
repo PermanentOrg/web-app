@@ -1,12 +1,9 @@
 /* @format */
 import {
-  componentWrapperDecorator,
   Meta,
-  moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
-import { ComponentsModule } from '../../components.module';
 import { ToggleComponent } from './toggle.component';
 
 const meta: Meta<ToggleComponent> = {
