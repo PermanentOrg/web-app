@@ -1,8 +1,5 @@
 /* @format */
-import {
-  Meta,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, StoryObj } from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
 import { ToggleComponent } from './toggle.component';
 
