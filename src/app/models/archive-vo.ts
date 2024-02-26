@@ -1,3 +1,4 @@
+/* @format */
 import { BaseVO, DynamicListChild } from '@models/base-vo';
 import { FolderVO } from '@models/folder-vo';
 import { RecordVO } from '@models/record-vo';
@@ -8,6 +9,7 @@ import { ItemVO } from '.';
 export type ArchiveType =
   | 'type.archive.person'
   | 'type.archive.group'
+  | 'type.archive.family'
   | 'type.archive.organization'
   | 'type.archive.nonprofit';
 

@@ -59,6 +59,7 @@ describe('FeaturedArchiveComponent', () => {
 
     expectClassnameForArchiveType('type.archive.person', 'personal');
     expectClassnameForArchiveType('type.archive.group', 'group');
+    expectClassnameForArchiveType('type.archive.family', 'group');
     expectClassnameForArchiveType('type.archive.organization', 'organization');
     expectClassnameForArchiveType('type.archive.nonprofit', 'organization');
   });

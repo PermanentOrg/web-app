@@ -25,6 +25,7 @@ export class PublicSettingsComponent implements OnInit {
 
   public archiveTypes: { value: string; name: string }[] = [
     { value: 'type.archive.group', name: 'Group' },
+    { value: 'type.archive.family', name: 'Group' },
     {
       value: 'type.archive.organization',
       name: 'Organization',

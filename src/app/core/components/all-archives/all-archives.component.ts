@@ -1,4 +1,13 @@
-import { Component, OnInit, AfterViewInit, QueryList, ViewChildren, Optional, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  QueryList,
+  ViewChildren,
+  Optional,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
 
@@ -6,7 +15,11 @@ import { remove, orderBy, partition } from 'lodash';
 import { Deferred } from '@root/vendor/deferred';
 
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
+import {
+  PromptService,
+  PromptButton,
+  PromptField,
+} from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveVO, FolderVO } from '@root/app/models';
@@ -22,7 +35,7 @@ import { CdkPortal } from '@angular/cdk/portal';
 @Component({
   selector: 'pr-all-archives',
   templateUrl: './all-archives.component.html',
-  styleUrls: ['./all-archives.component.scss']
+  styleUrls: ['./all-archives.component.scss'],
 })
 export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
   public currentArchive: ArchiveVO;
@@ -42,28 +55,36 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     @Optional() private portalService: SidebarActionPortalService
   ) {
-
-    this.data.setCurrentFolder(new FolderVO({
-      displayName: 'Archives',
-      pathAsText: ['Archives'],
-      type: 'page'
-    }));
+    this.data.setCurrentFolder(
+      new FolderVO({
+        displayName: 'Archives',
+        pathAsText: ['Archives'],
+        type: 'page',
+      })
+    );
     this.currentArchive = accountService.getArchive();
 
     const archivesData = this.route.snapshot.data['archives'] || [];
-    const archives = orderBy(archivesData.map((archiveData) => {
-      return new ArchiveVO(archiveData);
-    }), 'fullName');
-    const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;
+    const archives = orderBy(
+      archivesData.map((archiveData) => {
+        return new ArchiveVO(archiveData);
+      }),
+      'fullName'
+    );
+    const currentArchiveFetched = remove(archives, {
+      archiveId: this.currentArchive.archiveId,
+    })[0] as ArchiveVO;
 
     this.currentArchive.update(currentArchiveFetched);
     this.accountService.setArchive(this.currentArchive);
 
-    [ this.pendingArchives, this.archives ] = partition(archives as ArchiveVO[], a => a.isPending());
+    [this.pendingArchives, this.archives] = partition(
+      archives as ArchiveVO[],
+      (a) => a.isPending()
+    );
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.portalService) {
@@ -83,25 +104,33 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
     const buttons: PromptButton[] = [
       {
         buttonName: 'switch',
-        buttonText: archive.isPending() ? 'Accept and switch archive' : 'Switch archive'
+        buttonText: archive.isPending()
+          ? 'Accept and switch archive'
+          : 'Switch archive',
       },
       {
         buttonName: 'cancel',
         buttonText: 'Cancel',
-        class: 'btn-secondary'
-      }
+        class: 'btn-secondary',
+      },
     ];
 
     let message = `Switch to The ${archive.fullName} Archive?`;
 
     if (archive.isPending()) {
-      message = `You have been invited to collaborate on the ${archive.fullName} archive. Accept ${this.prConstants.translate(archive.accessRole)} access and switch?`;
+      message = `You have been invited to collaborate on the ${
+        archive.fullName
+      } archive. Accept ${this.prConstants.translate(
+        archive.accessRole
+      )} access and switch?`;
     }
 
-    this.prompt.promptButtons(buttons, message, deferred.promise)
+    this.prompt
+      .promptButtons(buttons, message, deferred.promise)
       .then((result) => {
         if (result === 'switch') {
-          let acceptIfNeeded: Promise<ArchiveResponse | any> = Promise.resolve();
+          let acceptIfNeeded: Promise<ArchiveResponse | any> =
+            Promise.resolve();
 
           if (archive.isPending()) {
             acceptIfNeeded = this.api.archive.accept(archive);
@@ -160,9 +189,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  async onRemoveClick(archive: ArchiveVO) {
-
-  }
+  async onRemoveClick(archive: ArchiveVO) {}
 
   onCreateArchiveClick() {
     const deferred = new Deferred();
@@ -175,9 +202,9 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
           autocapitalize: 'off',
           autocorrect: 'off',
           autocomplete: 'off',
-          spellcheck: 'off'
+          spellcheck: 'off',
         },
-        validators: [Validators.required]
+        validators: [Validators.required],
       },
       {
         fieldName: 'type',
@@ -187,22 +214,27 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
         selectOptions: [
           {
             text: 'Person',
-            value: 'type.archive.person'
+            value: 'type.archive.person',
           },
           {
             text: 'Group',
-            value: 'type.archive.group'
+            value: 'type.archive.group',
+          },
+          {
+            text: 'Group',
+            value: 'type.archive.family',
           },
           {
             text: 'Organization',
-            value: 'type.archive.organization'
-          }
-        ]
+            value: 'type.archive.organization',
+          },
+        ],
       },
-      RELATIONSHIP_FIELD
+      RELATIONSHIP_FIELD,
     ];
 
-    this.prompt.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
+    this.prompt
+      .prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
       .then((value) => {
         return this.api.archive.create(new ArchiveVO(value));
       })

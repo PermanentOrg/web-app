@@ -1,4 +1,10 @@
-import { Component, OnInit, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
 
@@ -7,7 +13,11 @@ import { Deferred } from '@root/vendor/deferred';
 import { gsap } from 'gsap';
 
 import { AccountService } from '@shared/services/account/account.service';
-import { PromptService, PromptButton, PromptField } from '@shared/services/prompt/prompt.service';
+import {
+  PromptService,
+  PromptButton,
+  PromptField,
+} from '@shared/services/prompt/prompt.service';
 import { MessageService } from '@shared/services/message/message.service';
 
 import { ArchiveVO, FolderVO } from '@root/app/models';
@@ -22,7 +32,7 @@ import { DataService } from '@shared/services/data/data.service';
 @Component({
   selector: 'pr-archive-switcher',
   templateUrl: './archive-switcher.component.html',
-  styleUrls: ['./archive-switcher.component.scss']
+  styleUrls: ['./archive-switcher.component.scss'],
 })
 export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
   public currentArchive: ArchiveVO;
@@ -37,19 +47,25 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     private message: MessageService,
     private router: Router
   ) {
-
-    this.data.setCurrentFolder(new FolderVO({
-      displayName: 'Archives',
-      pathAsText: ['Archives'],
-      type: 'page'
-    }));
+    this.data.setCurrentFolder(
+      new FolderVO({
+        displayName: 'Archives',
+        pathAsText: ['Archives'],
+        type: 'page',
+      })
+    );
     this.currentArchive = accountService.getArchive();
 
     const archivesData = this.route.snapshot.data['archives'] || [];
-    const archives = orderBy(archivesData.map((archiveData) => {
-      return new ArchiveVO(archiveData);
-    }), 'fullName');
-    const currentArchiveFetched = remove(archives, { archiveId: this.currentArchive.archiveId })[0] as ArchiveVO;
+    const archives = orderBy(
+      archivesData.map((archiveData) => {
+        return new ArchiveVO(archiveData);
+      }),
+      'fullName'
+    );
+    const currentArchiveFetched = remove(archives, {
+      archiveId: this.currentArchive.archiveId,
+    })[0] as ArchiveVO;
 
     this.currentArchive.update(currentArchiveFetched);
     this.accountService.setArchive(this.currentArchive);
@@ -57,22 +73,20 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     this.archives = archives as ArchiveVO[];
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
-      const targetElems = document.querySelectorAll('.archive-list pr-archive-small');
-      gsap.from(
-        targetElems,
-        {
-          duration: 0.75,
-          opacity: 0,
-          ease: 'Power4.easeOut',
-          stagger: {
-            amount: 0.5
-          }
-        }
-      );
+    const targetElems = document.querySelectorAll(
+      '.archive-list pr-archive-small'
+    );
+    gsap.from(targetElems, {
+      duration: 0.75,
+      opacity: 0,
+      ease: 'Power4.easeOut',
+      stagger: {
+        amount: 0.5,
+      },
+    });
   }
 
   archiveClick(archive: ArchiveVO) {
@@ -81,25 +95,33 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     const buttons: PromptButton[] = [
       {
         buttonName: 'switch',
-        buttonText: archive.isPending() ? 'Accept and switch archive' : 'Switch archive'
+        buttonText: archive.isPending()
+          ? 'Accept and switch archive'
+          : 'Switch archive',
       },
       {
         buttonName: 'cancel',
         buttonText: 'Cancel',
-        class: 'btn-secondary'
-      }
+        class: 'btn-secondary',
+      },
     ];
 
     let message = `Switch to The ${archive.fullName} Archive?`;
 
     if (archive.isPending()) {
-      message = `You have been invited to collaborate on the ${archive.fullName} archive. Accept ${this.prConstants.translate(archive.accessRole)} access and switch?`;
+      message = `You have been invited to collaborate on the ${
+        archive.fullName
+      } archive. Accept ${this.prConstants.translate(
+        archive.accessRole
+      )} access and switch?`;
     }
 
-    this.prompt.promptButtons(buttons, message, deferred.promise)
+    this.prompt
+      .promptButtons(buttons, message, deferred.promise)
       .then((result) => {
         if (result === 'switch') {
-          let acceptIfNeeded: Promise<ArchiveResponse | any> = Promise.resolve();
+          let acceptIfNeeded: Promise<ArchiveResponse | any> =
+            Promise.resolve();
 
           if (archive.isPending()) {
             acceptIfNeeded = this.api.archive.accept(archive);
@@ -134,9 +156,9 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
           autocapitalize: 'off',
           autocorrect: 'off',
           autocomplete: 'off',
-          spellcheck: 'off'
+          spellcheck: 'off',
         },
-        validators: [Validators.required]
+        validators: [Validators.required],
       },
       {
         fieldName: 'type',
@@ -146,22 +168,27 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
         selectOptions: [
           {
             text: 'Person',
-            value: 'type.archive.person'
+            value: 'type.archive.person',
           },
           {
             text: 'Group',
-            value: 'type.archive.group'
+            value: 'type.archive.group',
+          },
+          {
+            text: 'Group',
+            value: 'type.archive.family',
           },
           {
             text: 'Organization',
-            value: 'type.archive.organization'
-          }
-        ]
+            value: 'type.archive.organization',
+          },
+        ],
       },
-      RELATIONSHIP_FIELD
+      RELATIONSHIP_FIELD,
     ];
 
-    this.prompt.prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
+    this.prompt
+      .prompt(fields, 'Create new archive', deferred.promise, 'Create archive')
       .then((value) => {
         return this.api.archive.create(new ArchiveVO(value));
       })
