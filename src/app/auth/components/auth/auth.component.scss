@@ -1,0 +1,21 @@
+/* @format */
+@import 'variables';
+
+:host {
+  background: $linear-gradient-background;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding: 0px 64px;
+}
+
+.auth-container {
+  display: flex;
+  gap: 64px;
+  width: 100%;
+  align-items: center;
+}
+
+.image {
+  width: 65%;
+}
