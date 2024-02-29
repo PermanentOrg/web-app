@@ -89,7 +89,6 @@ $form-border: rgba(231, 232, 237, 1);
 $form-border-error: rgba(254, 228, 226, 1);
 $form-background-error: rgba(255, 251, 250, 1);
 
-
 $form-background-focus: rgba(244, 246, 253, 1);
 $form-border-focus: rgba(208, 209, 219, 1);
 
@@ -100,6 +99,8 @@ $form-default-text-color: #5a5f80;
 $form-label-dark: rgba(255, 255, 255, 0.64);
 
 $form-error-red: rgba(240, 68, 56, 1);
+
+$linear-gradient-background: linear-gradient(90deg, #131b4a 0%, #364493 100%);
 
 @mixin public-centered {
   max-width: $public-max-width;
