@@ -26,6 +26,8 @@ export class LoginComponent {
   loginForm: UntypedFormGroup;
   waiting: boolean;
 
+  rememberMe: boolean = true;
+
   constructor(
     fb: UntypedFormBuilder,
     private accountService: AccountService,
@@ -44,7 +46,6 @@ export class LoginComponent {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      rememberMe: [true],
       keepLoggedIn: [true],
     });
   }
@@ -61,8 +62,8 @@ export class LoginComponent {
       .logIn(
         formValue.email,
         formValue.password,
-        formValue.rememberMe,
-        formValue.keepLoggedIn,
+        this.rememberMe,
+        formValue.keepLoggedIn
       )
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
@@ -156,5 +157,13 @@ export class LoginComponent {
           });
         }
       });
+  }
+
+  onRegisterClick() {
+    console.log('onRegisterClick');
+    this.router.navigate(['../signup'], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+    });
   }
 }
