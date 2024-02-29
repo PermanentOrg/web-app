@@ -32,10 +32,10 @@
   </div>
   <div class="auth-options">
     <pr-checkbox
+      [variant]="'secondary'"
       [isChecked]="rememberMe"
       (isCheckedChange)="rememberMe = $event"
       [text]="'Remember me'"
-      [variant]="'secondary'"
     ></pr-checkbox>
     <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
       Forgot password?
@@ -52,17 +52,14 @@
       [orientation]="'right'"
       [disabled]="waiting || loginForm.invalid"
     ></pr-button>
-    <div class="or-divider">
-      <div class="line"></div>
-      <span class="or-text">OR</span>
-      <div class="line"></div>
-    </div>
+    <pr-or-divider></pr-or-divider>
     <pr-button
       [text]="'Register'"
       [variant]="'primary'"
       [size]="'fill'"
       [orientation]="'right'"
-      (buttonClick)="onRegisterClick()"
+      [routerLink]="['..', 'signup']"
+      queryParamsHandling="merge"
     ></pr-button>
   </div>
 </form>
