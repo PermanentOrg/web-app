@@ -151,12 +151,4 @@ export class LoginComponent implements OnInit {
         }
       });
   }
-
-  onRegisterClick() {
-    console.log('onRegisterClick');
-    this.router.navigate(['../signup'], {
-      relativeTo: this.route,
-      queryParamsHandling: 'merge',
-    });
-  }
 }
