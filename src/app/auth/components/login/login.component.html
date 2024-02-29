@@ -1,11 +1,16 @@
 <!-- @format -->
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
-  <h1 class="form-title">Log in to Permanent.org</h1>
-  <div class="input-group-vertical">
-    <pr-form-input
+<form
+  class="login-form"
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit(loginForm.value)"
+>
+  <h1 class="page-title">Sign in to your Account</h1>
+  <div class="email-input">
+    <pr-form-input-glam
       type="email"
       fieldName="email"
-      placeholder="Email"
+      [variant]="'dark'"
+      placeholder="Email Address"
       [control]="loginForm.controls['email']"
       [config]="{
         autocomplete: 'username',
@@ -13,46 +18,51 @@
         autocapitalize: 'off',
         spellcheck: 'off'
       }"
-    ></pr-form-input>
-    <pr-form-input
+    ></pr-form-input-glam>
+  </div>
+  <div class="password-input">
+    <pr-form-input-glam
       type="password"
+      [variant]="'dark'"
       fieldName="password"
       placeholder="Password"
       [control]="loginForm.controls['password']"
       [config]="{ autocomplete: 'current-password' }"
-    ></pr-form-input>
+    ></pr-form-input-glam>
   </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      id="rememberMe"
-      formControlName="rememberMe"
-    />
-    <label class="form-check-label" for="rememberMe"> Remember me </label>
+  <div class="auth-options">
+    <pr-checkbox
+      [isChecked]="rememberMe"
+      (isCheckedChange)="rememberMe = $event"
+      [text]="'Remember me'"
+      [variant]="'secondary'"
+    ></pr-checkbox>
+    <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
+      Forgot password?
+    </a>
   </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      id="keepLoggedIn"
-      formControlName="keepLoggedIn"
-    />
-    <label class="form-check-label" for="keepLoggedIn">
-      Keep me logged in
-    </label>
+
+  <div class="auth-buttons">
+    <pr-button
+      [attr]="'submit'"
+      [text]="'Sign in'"
+      [variant]="'secondary'"
+      [size]="'fill'"
+      [icon]="'/auth/sign-in'"
+      [orientation]="'right'"
+      [disabled]="waiting || loginForm.invalid"
+    ></pr-button>
+    <div class="or-divider">
+      <div class="line"></div>
+      <span class="or-text">OR</span>
+      <div class="line"></div>
+    </div>
+    <pr-button
+      [text]="'Register'"
+      [variant]="'primary'"
+      [size]="'fill'"
+      [orientation]="'right'"
+      (buttonClick)="onRegisterClick()"
+    ></pr-button>
   </div>
-  <button
-    type="submit"
-    class="btn btn-primary"
-    [disabled]="waiting || loginForm.invalid"
-  >
-    Log in
-  </button>
-  <a [routerLink]="['..', 'signup']" queryParamsHandling="merge">
-    Need to sign up?
-  </a>
-  <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
-    Forgot password?
-  </a>
 </form>
