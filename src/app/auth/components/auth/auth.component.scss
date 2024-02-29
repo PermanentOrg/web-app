@@ -14,8 +14,20 @@
   gap: 64px;
   width: 100%;
   align-items: center;
+
+  @include beforeDesktop {
+    justify-content: center;
+  }
 }
 
 .image {
   width: 65%;
+
+  @include beforeDesktop {
+    display: none;
+  }
+}
+
+.permanent-logo {
+  margin-bottom: 32px;
 }

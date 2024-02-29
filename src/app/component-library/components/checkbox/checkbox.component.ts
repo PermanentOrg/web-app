@@ -20,7 +20,7 @@ export class CheckboxComponent {
   toggleCheck() {
     if (!this.disabled) {
       this.isChecked = !this.isChecked;
-      this.isCheckedChange.emit(this.value);
+      this.isCheckedChange.emit(this.isChecked);
     }
   }
 }
