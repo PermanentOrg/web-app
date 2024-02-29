@@ -46,6 +46,7 @@ export class SignupComponent implements OnInit {
   shareItem: RecordVO | FolderVO;
   shareFromName: string;
   shareItemIsRecord = false;
+  agreedTerms = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -108,7 +109,6 @@ export class SignupComponent implements OnInit {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      agreed: [false, [Validators.requiredTrue]],
       optIn: [true],
     });
 
@@ -143,7 +143,7 @@ export class SignupComponent implements OnInit {
         formValue.name,
         formValue.password,
         formValue.confirm,
-        formValue.agreed,
+        this.agreedTerms,
         formValue.optIn,
         null,
         formValue.invitation,
