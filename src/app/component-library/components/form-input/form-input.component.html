@@ -20,6 +20,7 @@
   [name]="fieldName"
   [placeholder]="placeholder"
   [formControl]="control"
+  [class.form-input-with-text]="!isLabelHidden()"
   [class.validate-dirty]="config && config.validateDirty"
   [class.form-input-errors]="errors"
   [class.form-input-light]="variant === 'light'"
