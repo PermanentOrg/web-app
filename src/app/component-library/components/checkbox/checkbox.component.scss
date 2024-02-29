@@ -2,6 +2,26 @@
 @import 'variables';
 @import 'fonts';
 
+@mixin checkbox-before-and-after {
+  & > .checkbox::before {
+    height: 2px;
+    width: 7px;
+    left: 2.8px;
+    top: 5px;
+    bottom: 8px;
+    transform: rotate(-45deg);
+  }
+
+  & > .checkbox::after {
+    top: 6px;
+    height: 2px;
+    width: 4px;
+    left: 1.5px;
+    bottom: 12px;
+    transform: rotate(45deg);
+  }
+}
+
 .checkbox-container {
   display: flex;
   align-items: center;
@@ -9,8 +29,8 @@
   user-select: none;
 
   & > .checkbox {
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border-radius: 2px;
     margin-right: 12px;
     position: relative;
@@ -22,8 +42,8 @@
 
   & > label {
     font-family: 'UsualRegular', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 14px;
     line-height: 24px;
   }
 }
@@ -44,23 +64,7 @@
     border-radius: 2px;
   }
 
-  & > .checkbox::before {
-    height: 2px;
-    width: 12px;
-    left: 6.6px;
-    top: 9px;
-    bottom: 8px;
-    transform: rotate(-45deg);
-  }
-
-  & > .checkbox::after {
-    top: 10.9px;
-    height: 2px;
-    width: 6px;
-    left: 4px;
-    bottom: 12px;
-    transform: rotate(45deg);
-  }
+  @include checkbox-before-and-after;
 
   & > .checkbox.checked::before,
   & > .checkbox.checked::after {
@@ -88,23 +92,7 @@
     border-radius: 2px;
   }
 
-  & > .checkbox::before {
-    height: 2px;
-    width: 12px;
-    left: 6.6px;
-    top: 9px;
-    bottom: 8px;
-    transform: rotate(-45deg);
-  }
-
-  & > .checkbox::after {
-    top: 10.9px;
-    height: 2px;
-    width: 6px;
-    left: 4px;
-    bottom: 12px;
-    transform: rotate(45deg);
-  }
+  @include checkbox-before-and-after;
 
   & > .checkbox.checked::before,
   & > .checkbox.checked::after {
@@ -133,23 +121,7 @@
     border-radius: 2px;
   }
 
-  & > .checkbox::before {
-    height: 1.5px;
-    width: 12px;
-    left: 6.6px;
-    top: 11px;
-    bottom: 8px;
-    transform: rotate(-45deg);
-  }
-
-  & > .checkbox::after {
-    top: 13px;
-    height: 1.5px;
-    width: 6px;
-    left: 4px;
-    bottom: 12px;
-    transform: rotate(45deg);
-  }
+  @include checkbox-before-and-after;
 
   & > .checkbox {
     background-color: $gray-light;
@@ -183,23 +155,7 @@
     border-radius: 2px;
   }
 
-  & > .checkbox::before {
-    height: 1.5px;
-    width: 12px;
-    left: 6.6px;
-    top: 11px;
-    bottom: 8px;
-    transform: rotate(-45deg);
-  }
-
-  & > .checkbox::after {
-    top: 13px;
-    height: 1.5px;
-    width: 6px;
-    left: 4px;
-    bottom: 12px;
-    transform: rotate(45deg);
-  }
+  @include checkbox-before-and-after;
 
   & > .checkbox {
     background-color: $gray-light;

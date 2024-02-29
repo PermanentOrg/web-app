@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   loginForm: UntypedFormGroup;
   waiting: boolean;
 
+  rememberMe: boolean = true;
+
   constructor(
     private fb: UntypedFormBuilder,
     private accountService: AccountService,
@@ -44,7 +46,6 @@ export class LoginComponent implements OnInit {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      rememberMe: [true],
       keepLoggedIn: [true],
     });
   }
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit {
       .logIn(
         formValue.email,
         formValue.password,
-        formValue.rememberMe,
+        this.rememberMe,
         formValue.keepLoggedIn
       )
       .then((response: AuthResponse) => {
@@ -149,5 +150,13 @@ export class LoginComponent implements OnInit {
           });
         }
       });
+  }
+
+  onRegisterClick() {
+    console.log('onRegisterClick');
+    this.router.navigate(['../signup'], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+    });
   }
 }
