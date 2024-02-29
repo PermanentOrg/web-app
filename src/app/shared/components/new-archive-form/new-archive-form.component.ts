@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ArchiveVO, ArchiveType } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { RELATION_OPTIONS } from '@shared/services/prompt/prompt.service';
@@ -9,29 +17,25 @@ export interface ArchiveFormData {
   relationType?: string;
 }
 
-const ARCHIVE_TYPES: { text: string, value: ArchiveType }[] = [
+const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
   {
     text: 'Person',
-    value: 'type.archive.person'
+    value: 'type.archive.person',
   },
-  // {
-  //   text: 'Group',
-  //   value: 'type.archive.group'
-  // },
   {
     text: 'Group',
-    value: 'type.archive.family'
+    value: 'type.archive.group',
   },
   {
     text: 'Organization',
-    value: 'type.archive.organization'
+    value: 'type.archive.organization',
   },
 ];
 
 @Component({
   selector: 'pr-new-archive-form',
   templateUrl: './new-archive-form.component.html',
-  styleUrls: ['./new-archive-form.component.scss']
+  styleUrls: ['./new-archive-form.component.scss'],
 })
 export class NewArchiveFormComponent implements OnInit {
   @Input() showRelations: boolean = false;
@@ -43,9 +47,7 @@ export class NewArchiveFormComponent implements OnInit {
   public waiting: boolean = false;
   public formData: ArchiveFormData;
 
-  constructor(
-    private api: ApiService,
-  ) {
+  constructor(private api: ApiService) {
     this.formData = {
       fullName: '',
       type: null,
@@ -53,11 +55,13 @@ export class NewArchiveFormComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   public isFormValid() {
-    return this.fullNameRef?.nativeElement.validity.valid && this.formData.type !== null;
+    return (
+      this.fullNameRef?.nativeElement.validity.valid &&
+      this.formData.type !== null
+    );
   }
 
   public async onSubmit() {
@@ -66,7 +70,9 @@ export class NewArchiveFormComponent implements OnInit {
     }
     try {
       this.waiting = true;
-      const response = await this.api.archive.create(new ArchiveVO(this.formData));
+      const response = await this.api.archive.create(
+        new ArchiveVO(this.formData)
+      );
       const newArchive = response.getArchiveVO();
       this.success.emit(newArchive);
     } catch (err) {
@@ -75,5 +81,4 @@ export class NewArchiveFormComponent implements OnInit {
       this.waiting = false;
     }
   }
-
 }
