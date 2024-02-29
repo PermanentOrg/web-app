@@ -32,7 +32,7 @@ export interface FormInputConfig {
 }
 
 @Component({
-  selector: 'pr-form-input-comp',
+  selector: 'pr-form-input-glam',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
 })
@@ -157,7 +157,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
         inputField.setAttribute('spellcheck', this.config.spellcheck);
       }
 
-      if ((this.config.autoselect && this.control.value) || this.value) {
+      if (this.config.autoselect && (this.control.value || this.value)) {
         inputField.addEventListener('focus', (event) => {
           inputField.setSelectionRange(0, inputField.value.length);
         });

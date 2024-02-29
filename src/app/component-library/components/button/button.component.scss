@@ -2,8 +2,8 @@
 @import 'variables';
 
 @mixin darkButton {
-  background-color: rgba(19, 27, 74, 1);
-  border: 1px solid rgba(19, 27, 74, 1);
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0.32);
 
   & > .button-text {
     color: white;
@@ -88,8 +88,9 @@
 
   &-fill {
     width: 100%;
-    padding: 0px 24px;
+    padding: 12 24px;
     height: 56px;
+    justify-content: space-between;
   }
 
   &-fill.button-large {

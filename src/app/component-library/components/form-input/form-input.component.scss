@@ -41,7 +41,7 @@
   }
 
   &-dark {
-    background-color: $form-background-dark;
+    background: rgba(255, 255, 255, 0.08);
     opacity: 0.8;
     color: white;
     border: 1px solid transparent;
