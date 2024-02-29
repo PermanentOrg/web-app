@@ -228,7 +228,7 @@ export class SignupComponent implements OnInit {
   }
 
   navigateToAuth() {
-    this.router.navigate(['..','login'], {
+    this.router.navigate(['..', 'login'], {
       relativeTo: this.route,
     });
   }
