@@ -225,7 +225,7 @@ export class SignupComponent {
   }
 
   navigateToAuth() {
-    this.router.navigate(['..','login'], {
+    this.router.navigate(['..', 'login'], {
       relativeTo: this.route,
     });
   }
