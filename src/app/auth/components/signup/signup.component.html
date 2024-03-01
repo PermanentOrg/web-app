@@ -137,9 +137,10 @@
       [text]="'Decline'"
       [icon]="'decline'"
       [orientation]="'right'"
+      (buttonClick)="acceptTerms(false)"
     ></pr-button>
     <pr-button
-      (buttonClick)="acceptTerms()"
+      (buttonClick)="acceptTerms(true)"
       [text]="'Accept'"
       [icon]="'accept'"
       [orientation]="'right'"
