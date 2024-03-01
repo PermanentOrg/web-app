@@ -47,6 +47,7 @@ export class SignupComponent {
   shareFromName: string;
   shareItemIsRecord = false;
   agreedTerms = false;
+  showTerms: boolean = false;
 
   constructor(
     fb: UntypedFormBuilder,
@@ -212,5 +213,14 @@ export class SignupComponent {
         ]);
       }, 500);
     }
+  }
+
+  displayTerms() {
+    this.showTerms = true;
+  }
+
+  acceptTerms() {
+    this.agreedTerms = true;
+    this.showTerms = false;
   }
 }

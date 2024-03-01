@@ -1,6 +1,16 @@
 <!-- @format -->
-<form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
-  <h1 class="page-title" *ngIf="!isForShareInvite">Create your new Account</h1>
+<h1
+  [ngClass]="{ 'page-title-terms': displayTerms }"
+  class="page-title"
+  *ngIf="!isForShareInvite"
+>
+  Create your new Account
+</h1>
+<form
+  [hidden]="showTerms"
+  [formGroup]="signupForm"
+  (ngSubmit)="onSubmit(signupForm.value)"
+>
   <h1 class="page-title" *ngIf="isForShareInvite">
     {{ shareFromName }} has shared <em>{{ shareItem.displayName }}</em> with you
   </h1>
@@ -86,9 +96,7 @@
     ></pr-checkbox>
     <label class="form-check-label" for="terms">
       I agree with the
-      <a [routerLink]="['/terms']" target="_blank" queryParamsHandling="merge"
-        >terms</a
-      >
+      <span class="terms" (click)="displayTerms()">terms</span>
     </label>
   </div>
   <div class="buttons">
@@ -111,3 +119,31 @@
     ></pr-button>
   </div>
 </form>
+<div class="terms-container" [hidden]="!showTerms">
+  <p class="terms-title">Terms & Conditions</p>
+  <p class="terms-content">
+    Welcome to The Permanent Legacy Foundation. These terms and conditions
+    outline the rules and regulations for the use of The Permanent Legacy
+    Foundation's App. The Permanent Legacy Foundation is located at: 4611 Bee
+    Caves Road, Suite 109, Austin, TX 78746 United States. Please read these
+    Terms of Service ("Terms", "Terms of Service") carefully before using the
+    app (the "Service") operated by The Permanent Legacy Foundation. ("us",
+    "we", or "our"). Your access to and use of the Service is conditioned on
+    your acceptance of and compliance with these Terms. These Terms apply to all
+    visitors, users and others who access or use the Permanent App...
+  </p>
+  <div class="terms-buttons">
+    <pr-button
+      [text]="'Decline'"
+      [icon]="'decline'"
+      [orientation]="'right'"
+    ></pr-button>
+    <pr-button
+      (buttonClick)="acceptTerms()"
+      [text]="'Accept'"
+      [icon]="'accept'"
+      [orientation]="'right'"
+      [variant]="'secondary'"
+    ></pr-button>
+  </div>
+</div>
