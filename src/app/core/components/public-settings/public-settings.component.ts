@@ -41,7 +41,10 @@ export class PublicSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.allowDownloadsToggle = +this.archive.allowPublicDownload;
-    this.archiveType = this.archive.type;
+    this.archiveType =
+      this.archive.type === 'type.archive.family'
+        ? 'type.archive.group'
+        : this.archive.type;
   }
 
   public async onAllowDownloadsChange() {
