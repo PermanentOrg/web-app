@@ -215,12 +215,12 @@ export class SignupComponent {
     }
   }
 
-  displayTerms() {
+  displayTerms(): void {
     this.showTerms = true;
   }
 
-  acceptTerms() {
-    this.agreedTerms = true;
+  acceptTerms(accepted: boolean): void {
+    this.agreedTerms = accepted;
     this.showTerms = false;
   }
 }
