@@ -47,6 +47,7 @@ export class SignupComponent implements OnInit {
   shareFromName: string;
   shareItemIsRecord = false;
   agreedTerms = false;
+  showTerms: boolean = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -215,5 +216,14 @@ export class SignupComponent implements OnInit {
         ]);
       }, 500);
     }
+  }
+
+  displayTerms() {
+    this.showTerms = true;
+  }
+
+  acceptTerms() {
+    this.agreedTerms = true;
+    this.showTerms = false;
   }
 }
