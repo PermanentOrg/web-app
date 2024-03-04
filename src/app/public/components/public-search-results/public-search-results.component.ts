@@ -14,6 +14,7 @@ import { SearchService } from '../../../search/services/search.service';
 export class PublicSearchResultsComponent implements OnInit, OnDestroy {
   public searchResults = [];
   public waiting = false;
+  public query = '';
 
   public types = {
     'type.folder.private': 'Folder',
@@ -39,6 +40,7 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     if (this.route.params) {
       this.paramsSubscription = this.route.params.subscribe((params) => {
         this.archivePath = ['/p/archive', params.publicArchiveNbr];
+        this.query = params.query;
         this.searchSubscription = this.searchService
           .getResultsInPublicArchive(params.query, [], params.archiveId)
           .subscribe((response) => {
