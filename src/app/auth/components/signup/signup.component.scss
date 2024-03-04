@@ -1,18 +1,14 @@
 /* @format */
 @import 'variables';
-@import 'fonts';
+@import 'mixins';
+
+:host {
+  position: relative;
+}
 
 .page-title {
-  font-family: 'UsualLight', sans-serif;
-  font-size: 32px;
-  line-height: 32px;
-  color: white;
-  line-height: 48px;
-  font-weight: 350;
+  @include pageTitle;
   margin-bottom: 50px;
-  padding: 0;
-  width: 250px;
-  margin-left: 8px;
 }
 
 .input-container {
