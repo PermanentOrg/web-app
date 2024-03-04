@@ -1,24 +1,31 @@
 <!-- @format -->
 <form [formGroup]="mfaForm" (ngSubmit)="onSubmit(mfaForm.value)">
-  <h1 class="form-title">Verify Access</h1>
-  <p>
+  <h1 class="page-title">Verify Access</h1>
+  <p class="mfa-text">
     A verification code has been sent to your email address or phone number.
-    <br />
-    <br />
-    Enter it below to continue.
   </p>
-  <input
-    type="tel"
-    class="form-control"
-    id="token"
-    placeholder="Code"
-    [formControl]="mfaForm.controls['token']"
-    autocomplete="one-time-code"
-    autocorrect="off"
-    autocapitalize="off"
-    spellcheck="false"
-  />
-  <button type="submit" class="btn btn-primary" [disabled]="waiting">
-    Verify Access
-  </button>
+  <p class="mfa-text">Enter it below to continue.</p>
+  <div class="code-input">
+    <pr-form-input-glam
+      type="tel"
+      fieldName="token"
+      [variant]="'dark'"
+      placeholder="Code"
+      [control]="mfaForm.controls['token']"
+      [config]="{
+        autocomplete: 'one-time-code',
+        autocorrect: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'false'
+      }"
+    ></pr-form-input-glam>
+  </div>
+  <pr-button
+    [attr]="'submit'"
+    [text]="'Verify Access'"
+    [variant]="'secondary'"
+    [size]="'fill'"
+    [disabled]="waiting"
+  ></pr-button>
 </form>
+<pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>

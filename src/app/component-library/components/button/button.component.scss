@@ -97,6 +97,10 @@
     padding: 12 24px;
     height: 56px;
     justify-content: space-between;
+    &-no-icon{
+      justify-content: center;
+
+    }
   }
 
   &-fill.button-large {

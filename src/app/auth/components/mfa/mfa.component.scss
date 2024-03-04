@@ -1,0 +1,27 @@
+/* @format */
+@import 'fonts';
+
+.page-title {
+  font-family: 'UsualLight', sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  color: white;
+  line-height: 48px;
+  font-weight: 350;
+  margin-bottom: 122px;
+  padding: 0;
+  width: 250px;
+}
+
+.mfa-text {
+  font-family: 'UsualRegular', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  color: white;
+  margin-bottom: 36px;
+  width: 334px;
+}
+
+.code-input {
+  margin-bottom: 32px;
+}
