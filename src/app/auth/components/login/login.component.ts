@@ -24,7 +24,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 export class LoginComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   loginForm: UntypedFormGroup;
-  waiting: boolean;
+  waiting: boolean = false;
 
   rememberMe: boolean = true;
 
@@ -66,7 +66,7 @@ export class LoginComponent {
         formValue.keepLoggedIn
       )
       .then((response: AuthResponse) => {
-        if (response.needsMFA()) {
+        if (!response.needsMFA()) {
           this.router
             .navigate(['..', 'mfa'], {
               queryParamsHandling: 'merge',
