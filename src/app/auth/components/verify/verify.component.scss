@@ -1,9 +1,47 @@
+/* @format */
+@import 'fonts';
+
+:host{
+  position: relative;
+}
+
+form {
+  padding: 0;
+  margin: 0;
+}
+
+.page-title {
+  font-family: 'UsualLight', sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  color: white;
+  line-height: 48px;
+  font-weight: 350;
+  margin-bottom: 50px;
+  padding: 0;
+  width: 250px;
+  margin-left: 8px;
+}
+
+.verify-text {
+  font-family: 'UsualRegular', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  color: white;
+  margin-bottom: 36px;
+  width: 334px;
+}
+
 .captcha {
-  text-align: center;
+  text-align: left;
 
   re-captcha {
     display: flex;
     justify-content: center;
     align-items: center;
   }
+}
+
+.input-container {
+  margin-bottom: 32px;
 }
