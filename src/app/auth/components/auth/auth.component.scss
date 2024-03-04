@@ -20,8 +20,12 @@
   }
 }
 
-.auth{
+.auth {
   width: 25%;
+
+  @include beforeDesktop {
+    width: 100%;
+  }
 }
 
 .image {

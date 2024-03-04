@@ -38,6 +38,7 @@
 
 form {
   padding: 0;
+  margin: 0;
 }
 
 .terms {
@@ -62,7 +63,7 @@ form {
   line-height: 22px;
   color: white;
   margin-bottom: 36px;
-    width: 334px;
+  width: 334px;
 }
 
 .page-title-terms {
@@ -74,8 +75,7 @@ form {
   margin-left: 8px;
 }
 
-
-.terms-buttons{
+.terms-buttons {
   display: flex;
   gap: 16px;
 }
