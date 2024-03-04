@@ -1,6 +1,6 @@
 <!-- @format -->
 <h1
-  [ngClass]="{ 'page-title-terms': displayTerms }"
+  [ngClass]="{ 'page-title-terms': showTerms }"
   class="page-title"
   *ngIf="!isForShareInvite"
 >
@@ -148,3 +148,4 @@
     ></pr-button>
   </div>
 </div>
+<pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
