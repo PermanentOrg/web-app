@@ -52,10 +52,14 @@ describe('ToggleComponent', () => {
     checkbox.click();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(true);
 =======
     expect(instance.isCheckedChange.emit).toHaveBeenCalledWith('value');
 >>>>>>> ef230f5b (PER-9488-glam-checkbox)
+=======
+    expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(true);
+>>>>>>> 67b7e169 (PER-9491-new-sign-in)
   });
 
   it("should not emit any value when the checkbox is clicked and it's disabled ", async () => {
