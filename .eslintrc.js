@@ -173,6 +173,7 @@ module.exports = {
         'import/no-default-export': 'off',
         'import/no-extraneous-dependencies': 'off',
         '@angular-eslint/component-selector': 'off',
+        'storybook/prefer-pascal-case': 'error',
       },
     },
   ],
