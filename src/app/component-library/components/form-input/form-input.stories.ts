@@ -74,15 +74,15 @@ const meta: Meta<FormInputComponent> = {
 export default meta;
 type FormInputStory = StoryObj<FormInputComponent>;
 
-export const light: FormInputStory = {
+export const Light: FormInputStory = {
   args: { type: 'text', placeholder: 'Text', variant: 'light' },
 };
 
-export const lightDarkBackground: FormInputStory = {
+export const LightDarkBackground: FormInputStory = {
   args: { type: 'text', placeholder: 'Text', variant: 'light' },
   parameters: { backgrounds },
 };
 
-export const dark = {
+export const Dark = {
   args: { type: 'text', placeholder: 'Text', variant: 'dark' },
 };

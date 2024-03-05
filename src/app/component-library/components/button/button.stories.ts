@@ -66,44 +66,44 @@ const meta: Meta<ButtonComponent> = {
 export default meta;
 type ButtonStory = StoryObj<ButtonComponent>;
 
-export const primaryMedium: ButtonStory = {
+export const PrimaryMedium: ButtonStory = {
   args: { variant: 'primary', text: 'Primary' },
 };
 
-export const secondaryMedium: ButtonStory = {
+export const SecondaryMedium: ButtonStory = {
   args: { variant: 'secondary', text: 'Secondary' },
 };
 
-export const primaryLarge: ButtonStory = {
+export const PrimaryLarge: ButtonStory = {
   args: { variant: 'primary', text: 'Primary', height: 'large' },
 };
 
-export const secondaryLarge: ButtonStory = {
+export const SecondaryLarge: ButtonStory = {
   args: { variant: 'secondary', text: 'Secondary', height: 'large' },
 };
 
-export const primaryFill: ButtonStory = {
+export const PrimaryFill: ButtonStory = {
   args: { variant: 'primary', text: 'Primary', size: 'fill' },
 };
 
-export const secondaryFill: ButtonStory = {
+export const SecondaryFill: ButtonStory = {
   args: { variant: 'secondary', text: 'Secondary', size: 'fill' },
 };
 
-export const darkModePrimary: ButtonStory = {
+export const DarkModePrimary: ButtonStory = {
   args: { variant: 'primary', text: 'Primary', mode: 'dark' },
   parameters: {
     backgrounds,
   },
 };
 
-export const darkModeSecondary: ButtonStory = {
+export const DarkModeSecondary: ButtonStory = {
   args: { variant: 'secondary', text: 'Secondary', mode: 'dark' },
   parameters: {
     backgrounds,
   },
 };
 
-export const tertiaryButton: ButtonStory = {
+export const TertiaryButton: ButtonStory = {
   args: { variant: 'tertiary', text: 'Tertiary' },
 };
