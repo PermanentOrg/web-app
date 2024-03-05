@@ -1,4 +1,8 @@
-import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  TestModuleMetadata,
+} from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
@@ -39,9 +43,9 @@ describe('VerifyComponent', () => {
       useValue: {
         snapshot: {
           queryParams: queryParams,
-          params: {}
-        }
-      }
+          params: {},
+        },
+      },
     });
 
     // Define the re-captcha element as a custom element so it's only mocked out
@@ -118,14 +122,13 @@ describe('VerifyComponent', () => {
     expect(component.needsPhone).toBeTruthy();
     expect(component.needsEmail).toBeTruthy();
 
-    component.onSubmit(component.verifyForm.value)
-      .then(() => {
-        expect(component.waiting).toBeFalsy();
-        expect(component.verifyingEmail).toBeFalsy();
-        expect(component.needsEmail).toBeFalsy();
-        expect(component.needsPhone).toBeTruthy();
-        expect(component.verifyingPhone).toBeTruthy();
-      });
+    component.onSubmit(component.verifyForm.value).then(() => {
+      expect(component.waiting).toBeFalsy();
+      expect(component.verifyingEmail).toBeFalsy();
+      expect(component.needsEmail).toBeFalsy();
+      expect(component.needsPhone).toBeTruthy();
+      expect(component.verifyingPhone).toBeTruthy();
+    });
 
     expect(component.waiting).toBeTruthy();
 
@@ -144,13 +147,12 @@ describe('VerifyComponent', () => {
     expect(component.needsPhone).toBeFalsy();
     expect(component.needsEmail).toBeTruthy();
 
-    component.onSubmit(component.verifyForm.value)
-      .then(() => {
-        expect(component.waiting).toBeFalsy();
-        expect(component.needsEmail).toBeFalsy();
-        expect(component.needsPhone).toBeFalsy();
-        expect(finishSpy).toHaveBeenCalled();
-      });
+    component.onSubmit(component.verifyForm.value).then(() => {
+      expect(component.waiting).toBeFalsy();
+      expect(component.needsEmail).toBeFalsy();
+      expect(component.needsPhone).toBeFalsy();
+      expect(finishSpy).toHaveBeenCalled();
+    });
 
     expect(component.waiting).toBeTruthy();
 
@@ -170,13 +172,12 @@ describe('VerifyComponent', () => {
     expect(component.needsPhone).toBeTruthy();
     expect(component.needsEmail).toBeFalsy();
 
-    component.onSubmit(component.verifyForm.value)
-      .then(() => {
-        expect(component.waiting).toBeFalsy();
-        expect(component.needsEmail).toBeFalsy();
-        expect(component.needsPhone).toBeFalsy();
-        expect(finishSpy).toHaveBeenCalled();
-      });
+    component.onSubmit(component.verifyForm.value).then(() => {
+      expect(component.waiting).toBeFalsy();
+      expect(component.needsEmail).toBeFalsy();
+      expect(component.needsPhone).toBeFalsy();
+      expect(finishSpy).toHaveBeenCalled();
+    });
 
     expect(component.waiting).toBeTruthy();
 

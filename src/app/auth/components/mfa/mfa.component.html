@@ -25,7 +25,7 @@
     [text]="'Verify Access'"
     [variant]="'secondary'"
     [size]="'fill'"
-    [disabled]="waiting"
+    [disabled]="waiting || mfaForm.invalid"
   ></pr-button>
 </form>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
