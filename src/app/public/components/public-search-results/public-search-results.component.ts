@@ -68,9 +68,17 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
         relativeTo: this.route.parent,
       });
     } else {
-      this.router.navigate(['record', item.archiveNbr], {
-        relativeTo: this.route.parent,
-      });
+      this.router.navigate(
+        [
+          item.parentArchiveNbr,
+          item.parentFolder_linkId,
+          'record',
+          item.archiveNbr,
+        ],
+        {
+          relativeTo: this.route.parent,
+        }
+      );
     }
   }
 }
