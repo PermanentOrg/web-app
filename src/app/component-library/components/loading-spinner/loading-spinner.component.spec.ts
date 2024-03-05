@@ -9,9 +9,8 @@ describe('LoadingSpinnerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoadingSpinnerComponent]
-    })
-    .compileComponents();
+      declarations: [LoadingSpinnerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LoadingSpinnerComponent);
     component = fixture.componentInstance;
