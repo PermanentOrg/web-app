@@ -51,7 +51,7 @@ describe('ToggleComponent', () => {
 
     checkbox.click();
 
-    expect(instance.isCheckedChange.emit).toHaveBeenCalledWith('value');
+    expect(instance.isCheckedChange.emit).toHaveBeenCalledWith(true);
   });
 
   it("should not emit any value when the checkbox is clicked and it's disabled ", async () => {

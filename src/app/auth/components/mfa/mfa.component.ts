@@ -1,6 +1,10 @@
 /* @format */
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import {
   AuthResponse,
@@ -30,7 +34,7 @@ export class MfaComponent implements OnInit {
     private device: DeviceService
   ) {
     this.mfaForm = fb.group({
-      token: [],
+      token: ['', [Validators.required]],
     });
   }
 
