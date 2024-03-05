@@ -14,21 +14,15 @@ xdescribe('MfaComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ForgotPasswordComponent,
-        LogoComponent
-      ],
+      declarations: [ForgotPasswordComponent, LogoComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
-      providers: [
-        CookieService
-      ]
-    })
-    .compileComponents();
+      providers: [CookieService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -41,12 +35,32 @@ xdescribe('MfaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the loading spinner', ()=>{
+  it('should set error for missing email', () => {
+    component.forgotForm.get('email').markAsTouched();
+    component.forgotForm.patchValue({
+      email: '',
+    });
+
+    expect(component.forgotForm.invalid).toBeTruthy();
+    expect(component.forgotForm.get('email').errors.required).toBeTruthy();
+  });
+
+  it('should set error for invalid email', () => {
+    component.forgotForm.get('email').markAsTouched();
+    component.forgotForm.patchValue({
+      email: 'test',
+    });
+
+    expect(component.forgotForm.invalid).toBeTruthy();
+    expect(component.forgotForm.get('email').errors.email).toBeTruthy();
+  });
+
+  it('should display the loading spinner', () => {
     component.waiting = true;
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     const loadingSpinner = compiled.querySelector('pr-loading-spinner');
 
     expect(loadingSpinner).toBeTruthy();
-  })
+  });
 });
