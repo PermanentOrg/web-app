@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OrDividerComponent } from './or-divider.component';
@@ -8,10 +9,10 @@ describe('OrDividerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrDividerComponent]
-    })
-    .compileComponents();
-    
+      imports: [],
+      declarations: [OrDividerComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(OrDividerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

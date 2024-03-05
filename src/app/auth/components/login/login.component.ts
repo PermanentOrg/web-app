@@ -61,7 +61,7 @@ export class LoginComponent {
         formValue.keepLoggedIn
       )
       .then((response: AuthResponse) => {
-        if (!response.needsMFA()) {
+        if (response.needsMFA()) {
           this.router
             .navigate(['..', 'mfa'], {
               queryParamsHandling: 'merge',
