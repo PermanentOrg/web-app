@@ -64,7 +64,7 @@ const routes: Routes = [
     SharedModule,
     AnnouncementModule,
     RecaptchaModule,
-    ComponentsModule
+    ComponentsModule,
   ],
   declarations: [
     LoginComponent,
