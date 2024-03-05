@@ -2,10 +2,10 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { PromptService } from '@shared/services/prompt/prompt.service';
 
-xdescribe('PromptService', () => {
+describe('PromptService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PromptService]
+      providers: [PromptService],
     });
   });
 

@@ -6,28 +6,23 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { MfaComponent } from '@auth/components/mfa/mfa.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
+import { MessageService } from '@shared/services/message/message.service';
 
-xdescribe('MfaComponent', () => {
+describe('MfaComponent', () => {
   let component: MfaComponent;
   let fixture: ComponentFixture<MfaComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MfaComponent,
-        LogoComponent
-      ],
+      declarations: [MfaComponent, LogoComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
-      providers: [
-        CookieService
-      ]
-    })
-    .compileComponents();
+      providers: [CookieService, MessageService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
