@@ -101,4 +101,13 @@ describe('LoginComponent', () => {
 
     expect(component.loginForm.valid).toBeTruthy();
   });
+
+  it('should display the loading spinner', ()=>{
+    component.waiting = true;
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    const loadingSpinner = compiled.querySelector('pr-loading-spinner');
+
+    expect(loadingSpinner).toBeTruthy();
+  })
 });
