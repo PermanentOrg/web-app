@@ -152,7 +152,7 @@ describe('InlineValueEditComponent', () => {
     expect(component.isEditing).toBeFalsy();
   });
 
-  xit('should set initial date and time based on local time with no timezone passed', () => {
+  it('should set initial date and time based on local time with no timezone passed', () => {
     const displayDT = formatDateISOString('2017-05-13T16:36:29.000000');
     component.displayValue = displayDT;
     component.type = 'date';
@@ -168,7 +168,7 @@ describe('InlineValueEditComponent', () => {
     expect(component.ngbTime.hour).toBe(momentFormatNum(local, 'H'));
   });
 
-  xit('should set initial date and time based on timezone', () => {
+  it('should set initial date and time based on timezone', () => {
     const voData: RecordVOData = {
       accessRole: 'access.role.owner',
       displayDT: '2017-05-13T16:36:29.000000',
@@ -198,7 +198,7 @@ describe('InlineValueEditComponent', () => {
     expect(component.ngbTime.hour).toBe(momentFormatNum(offset, 'H'));
   });
 
-  xit('should default to current date and time based on timezone', () => {
+  it('should default to current date and time based on timezone', () => {
     const voData: RecordVOData = {
       accessRole: 'access.role.owner',
       displayDT: null,
@@ -227,7 +227,7 @@ describe('InlineValueEditComponent', () => {
     expect(component.ngbTime.hour).toBe(momentFormatNum(offset, 'H'));
   });
 
-  xit('should default to current date and time in local timezone when missing timezone', () => {
+  it('should default to current date and time in local timezone when missing timezone', () => {
     const voData: RecordVOData = {
       displayDT: null,
       accessRole: 'access.role.owner',
@@ -354,15 +354,16 @@ describe('InlineValueEditComponent', () => {
     expect((component.editValue as string).length).toBe(10);
   });
 
-  xit('should update edit value when time is changed', () => {
+  it('should update edit value when time is changed', () => {
     const voData: RecordVOData = {
       accessRole: 'access.role.owner',
       displayDT: '2017-05-14T02:36:29.000000',
       TimezoneVO: {
         dstAbbrev: 'PDT',
         dstOffset: '-07:00',
-        stdAbbrev: 'PST',
-        stdOffset: '-08:00',
+        stdAbbrev: 'PDT',
+        stdOffset: '-07:00',
+        // Do not use DST so that this test passes all year long.
       },
     };
     const record = new RecordVO(voData);

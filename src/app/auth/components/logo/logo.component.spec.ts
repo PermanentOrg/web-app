@@ -2,15 +2,14 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LogoComponent } from '@auth/components/logo/logo.component';
 
-xdescribe('LogoComponent', () => {
+describe('LogoComponent', () => {
   let component: LogoComponent;
   let fixture: ComponentFixture<LogoComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogoComponent ]
-    })
-    .compileComponents();
+      declarations: [LogoComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

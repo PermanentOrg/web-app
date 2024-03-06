@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { NavComponent } from '@core/components/nav/nav.component';
 import { LeftMenuComponent } from '@core/components/left-menu/left-menu.component';
+import { RightMenuComponent } from '../right-menu/right-menu.component';
 
-xdescribe('NavComponent', () => {
+describe('NavComponent', () => {
   let component: NavComponent;
   let fixture: ComponentFixture<NavComponent>;
 
@@ -14,6 +15,7 @@ xdescribe('NavComponent', () => {
 
     config.declarations.push(NavComponent);
     config.declarations.push(LeftMenuComponent);
+    config.declarations.push(RightMenuComponent);
 
     TestBed.configureTestingModule(config).compileComponents();
   }));

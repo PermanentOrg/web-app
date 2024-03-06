@@ -12,9 +12,9 @@ module.exports = {
       env: { jasmine: true },
       rules: {
         'jasmine/new-line-before-expect': 'error',
+        'jasmine/no-disabled-tests': 'error',
         // We intend to enable these eventually:
         'jasmine/new-line-between-declarations': 'off',
-        'jasmine/no-disabled-tests': 'off',
         'jasmine/no-promise-without-done-fail': 'off',
         'jasmine/no-spec-dupes': 'off',
         'jasmine/no-unsafe-spy': 'off',
