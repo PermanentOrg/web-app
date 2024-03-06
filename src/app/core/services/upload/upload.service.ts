@@ -102,7 +102,8 @@ export class UploadService implements HasSubscriptions, OnDestroy {
               false,
               [],
               {},
-              '<a class="link" href="https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing">Read More.</a>'
+              '"https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing"',
+              'Read More'
             );
             break;
           case UploadSessionStatus.StorageError:

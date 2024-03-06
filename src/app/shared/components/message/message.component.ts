@@ -10,6 +10,7 @@ interface Message {
   navigateTo?: string[];
   navigateParams?: any;
   externalUrl?: string;
+  externalMessage?: string;
 }
 
 @Component({
@@ -26,6 +27,7 @@ export class MessageComponent implements OnInit {
   style: string;
   queue: Message[] = [];
   externalUrl: string;
+  externalMessage: string;
 
   private displayTime = 9000;
 
@@ -44,7 +46,8 @@ export class MessageComponent implements OnInit {
     style?: string,
     navigateTo?: string[],
     navigateParams = {},
-    externalUrl?: string
+    externalUrl?: string,
+    externalMessage?: string
   ) {
     if (this.visible) {
       this.queue.push({
@@ -53,6 +56,7 @@ export class MessageComponent implements OnInit {
         navigateTo: navigateTo,
         navigateParams: navigateParams,
         externalUrl: externalUrl,
+        externalMessage: externalMessage,
       });
     } else {
       this.displayText = textToDisplay;
@@ -61,6 +65,7 @@ export class MessageComponent implements OnInit {
       this.style = style ? `alert-${style}` : null;
       this.visible = true;
       this.externalUrl = externalUrl;
+      this.externalMessage = externalMessage;
       setTimeout(this.dismiss.bind(this), this.displayTime);
     }
   }
@@ -86,7 +91,8 @@ export class MessageComponent implements OnInit {
             message.style,
             message.navigateTo,
             message.navigateParams,
-            message.externalUrl
+            message.externalUrl,
+            message.externalMessage
           ),
         500
       );

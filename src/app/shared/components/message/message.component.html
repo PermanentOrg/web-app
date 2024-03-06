@@ -6,11 +6,7 @@
     </div>
     <div (click)="onClick()" class="alert alert-primary" [ngClass]="style">
       {{ displayText }}
-      <span
-        class="link-body"
-        *ngIf="externalUrl"
-        [innerHtml]="externalUrl"
-      ></span>
+      <a *ngIf="externalMessage" [href]="externalUrl">{{ externalMessage }}</a>
     </div>
   </div>
 </div>

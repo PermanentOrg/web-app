@@ -23,7 +23,8 @@ export class MessageService {
     translate?: boolean,
     navigateTo?: string[],
     navigateParams?: any,
-    externalUrl?: string
+    externalUrl?: string,
+    externalMessage?: string
   ) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
@@ -35,7 +36,8 @@ export class MessageService {
         style,
         navigateTo,
         navigateParams,
-        externalUrl
+        externalUrl,
+        externalMessage
       );
     } else {
       this.component.display(
@@ -43,7 +45,8 @@ export class MessageService {
         style,
         navigateTo,
         navigateParams,
-        externalUrl
+        externalUrl,
+        externalMessage
       );
     }
   }
@@ -53,7 +56,8 @@ export class MessageService {
     translate?: boolean,
     navigateTo?: string[],
     navigateParams?: any,
-    externalUrl?: string
+    externalUrl?: string,
+    externalMessage?: string
   ) {
     return this.showMessage(
       message,
@@ -61,7 +65,8 @@ export class MessageService {
       translate,
       navigateTo,
       navigateParams,
-      externalUrl
+      externalUrl,
+      externalMessage
     );
   }
 }
