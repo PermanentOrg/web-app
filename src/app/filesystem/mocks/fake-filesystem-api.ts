@@ -8,10 +8,19 @@ import { ArchiveIdentifier } from '../types/archive-identifier';
 
 export class FakeFilesystemApi implements FilesystemApi {
   private calledMethods: string[] = [];
+  private folders: FolderVO[] = [];
 
   public async navigate(folder: FolderIdentifier) {
     this.logCall('navigate');
-    return new FolderVO({});
+    if ('folderId' in folder) {
+      const fetchedFolder = this.folders.find(
+        (f) => f.folderId === folder.folderId
+      );
+      if (fetchedFolder) {
+        return fetchedFolder;
+      }
+    }
+    return new FolderVO(folder);
   }
 
   public async getRoot(archive: ArchiveIdentifier) {
@@ -26,6 +35,10 @@ export class FakeFilesystemApi implements FilesystemApi {
 
   public methodWasCalled(name: string): boolean {
     return this.calledMethods.includes(name);
+  }
+
+  public addFolder(folder: FolderVO): void {
+    this.folders.push(folder);
   }
 
   private logCall(name: string) {
