@@ -45,6 +45,16 @@ describe('MainComponent', () => {
   let mockDragEvents: Subject<DragServiceEvent>;
 
   async function init(authResponseData = defaultAuthData) {
+    mockDragEvents = new Subject<DragServiceEvent>();
+    mockDragService = jasmine.createSpyObj('DragService', [
+      'getDestinationFromDropTarget',
+      'events',
+    ]);
+    mockDragService.events.and.returnValue(mockDragEvents.asObservable());
+    mockDragService.getDestinationFromDropTarget.and.returnValue(
+      new FolderVO({ type: 'type.folder.public' })
+    );
+
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);
@@ -82,16 +92,6 @@ describe('MainComponent', () => {
 
     promptService = TestBed.inject(PromptService);
     spyOn(promptService, 'confirm');
-
-    mockDragEvents = new Subject<DragServiceEvent>();
-    mockDragService = jasmine.createSpyObj('DragService', [
-      'getDestinationFromDropTarget',
-      'events',
-    ]);
-    mockDragService.events.and.returnValue(mockDragEvents.asObservable());
-    mockDragService.getDestinationFromDropTarget.and.returnValue(
-      new FolderVO({ type: 'type.folder.public' })
-    );
 
     fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
