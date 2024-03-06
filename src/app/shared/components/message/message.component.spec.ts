@@ -93,20 +93,15 @@ describe('MessageComponent', () => {
   });
 
   it('should display the external URL if it exists', () => {
-    component.externalUrl =
-      '<a class="test-link" href=https://www.example.com>Example</a>';
+    component.externalUrl = 'https://www.example.com';
+    component.externalMessage = 'test message';
     component.visible = true;
     fixture.detectChanges();
 
-    const externalLinkBody =
-      fixture.debugElement.nativeElement.querySelector('.link-body');
-
-    expect(externalLinkBody).toBeTruthy();
-
-    const externalLink =
-      fixture.debugElement.nativeElement.querySelector('.test-link');
+    const externalLink = fixture.debugElement.nativeElement.querySelector('a');
 
     expect(externalLink).toBeTruthy();
+
     expect(externalLink.href).toEqual('https://www.example.com/');
   });
 });
