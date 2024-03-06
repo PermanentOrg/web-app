@@ -102,7 +102,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
               false,
               [],
               {},
-              '"https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing"',
+              'https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing',
               'Read More'
             );
             break;
