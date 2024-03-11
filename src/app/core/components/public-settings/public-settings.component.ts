@@ -24,7 +24,7 @@ export class PublicSettingsComponent implements OnInit {
   });
 
   public archiveTypes: { value: string; name: string }[] = [
-    { value: 'type.archive.family', name: 'Group' },
+    { value: 'type.archive.group', name: 'Group' },
     {
       value: 'type.archive.organization',
       name: 'Organization',
@@ -41,7 +41,10 @@ export class PublicSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.allowDownloadsToggle = +this.archive.allowPublicDownload;
-    this.archiveType = this.archive.type;
+    this.archiveType =
+      this.archive.type === 'type.archive.family'
+        ? 'type.archive.group'
+        : this.archive.type;
   }
 
   public async onAllowDownloadsChange() {

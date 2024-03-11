@@ -24,6 +24,7 @@ export class ArchiveTypeSelectComponent {
 
   icons = {
     'type.archive.person': 'assets/svg/onboarding/archive-person.svg',
+    'type.archive.group': 'assets/svg/onboarding/archive-group.svg',
     'type.archive.family': 'assets/svg/onboarding/archive-group.svg',
     'type.archive.organization':
       'assets/svg/onboarding/archive-organization.svg',
@@ -31,7 +32,8 @@ export class ArchiveTypeSelectComponent {
 
   altTexts = {
     'type.archive.person': 'Person Archive',
-    'type.archive.family': 'Family Archive',
+    'type.archive.group': 'Group Archive',
+    'type.archive.family': 'Group Archive',
     'type.archive.organization': 'Organization Archive',
   };
 

@@ -14,6 +14,7 @@ export class ArchiveTypeNamePipe implements PipeTransform {
     switch (type) {
       case 'type.archive.person':
         return 'Personal';
+      case 'type.archive.group':
       case 'type.archive.family':
         return 'Group';
       case 'type.archive.organization':

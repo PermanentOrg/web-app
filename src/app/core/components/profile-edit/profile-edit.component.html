@@ -10,24 +10,32 @@
   </div>
   <div class="content">
     <div class="tabs">
-      <div class="dialog-tab"
+      <div
+        class="dialog-tab"
         (click)="scrollNav.scrollToSection('about')"
-        [class.active]="scrollNav.activeSectionId === 'about'">
+        [class.active]="scrollNav.activeSectionId === 'about'"
+      >
         About This Archive
       </div>
-      <div class="dialog-tab"
+      <div
+        class="dialog-tab"
         (click)="scrollNav.scrollToSection('info')"
-        [class.active]="scrollNav.activeSectionId === 'info'">
+        [class.active]="scrollNav.activeSectionId === 'info'"
+      >
         Person Information
       </div>
-      <div class="dialog-tab"
+      <div
+        class="dialog-tab"
         (click)="scrollNav.scrollToSection('online')"
-        [class.active]="scrollNav.activeSectionId === 'online'">
+        [class.active]="scrollNav.activeSectionId === 'online'"
+      >
         Online Presence
       </div>
-      <div class="dialog-tab"
+      <div
+        class="dialog-tab"
         (click)="scrollNav.scrollToSection('milestones')"
-        [class.active]="scrollNav.activeSectionId === 'milestones'">
+        [class.active]="scrollNav.activeSectionId === 'milestones'"
+      >
         Milestones
       </div>
     </div>
@@ -37,18 +45,26 @@
           <div class="profile-visibility">
             <div>Profile Visibility</div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="true"
+              <input
+                type="radio"
+                [(ngModel)]="isPublic"
+                [value]="true"
                 (ngModelChange)="onProfilePublicChange($event)"
-                id="profile-public-toggle">
+                id="profile-public-toggle"
+              />
               <label for="profile-public-toggle">
                 <div>Public</div>
                 <span>Anyone can see the page</span>
               </label>
             </div>
             <div class="visibility-option">
-              <input type="radio" [(ngModel)]="isPublic" [value]="false"
+              <input
+                type="radio"
+                [(ngModel)]="isPublic"
+                [value]="false"
                 (ngModelChange)="onProfilePublicChange($event)"
-                id="profile-private-toggle">
+                id="profile-private-toggle"
+              />
               <label for="profile-private-toggle">
                 <div>Private</div>
                 <span>Only contributors can see the page</span>
@@ -56,126 +72,214 @@
             </div>
           </div>
           <div class="buttons">
-            <a class="btn btn-alternate"
-              [routerLink]="['/p', 'archive', this.archive.archiveNbr, 'profile']"
+            <a
+              class="btn btn-alternate"
+              [routerLink]="[
+                '/p',
+                'archive',
+                this.archive.archiveNbr,
+                'profile'
+              ]"
               [class.disabled]="!isPublic"
-              >View On Web</a>
-            <button class="btn btn-primary" [disabled]="!isPublic" (click)="onShareClick()">Share Profile</button>
+              >View On Web</a
+            >
+            <button
+              class="btn btn-primary"
+              [disabled]="!isPublic"
+              (click)="onShareClick()"
+            >
+              Share Profile
+            </button>
           </div>
         </div>
         <div class="panel-header-bottom-row">
           <div class="profile-progress">
             <div class="title">
-              Profile&nbsp;<span [countUp]="totalProgress * 100" [options]="countUpOptions">0</span>&nbsp;complete
+              Profile&nbsp;<span
+                [countUp]="totalProgress * 100"
+                [options]="countUpOptions"
+                >0</span
+              >&nbsp;complete
               <div class="progress-bar">
-                <div class="progress-bar-progress" [style]="getProgressTransform()"></div>
+                <div
+                  class="progress-bar-progress"
+                  [style]="getProgressTransform()"
+                ></div>
               </div>
             </div>
-            <em>The more fields you fill out, the more likely others will be able to find you online.</em>
+            <em
+              >The more fields you fill out, the more likely others will be able
+              to find you online.</em
+            >
           </div>
         </div>
       </div>
       <div class="panel-scroll" prScrollNav #scrollNav="prScrollNav">
-        <div id='profile-section'>
-          <div class="profile-banner" prBgImage [bgSrc]="this.publicRoot.thumbArchiveNbr ? this.publicRoot.thumbURL2000 : null"
-            (click)="chooseBannerPicture()" prScrollSection='about' [class.show-gradient]="!this.publicRoot.thumbArchiveNbr">
+        <div id="profile-section">
+          <div
+            class="profile-banner"
+            prBgImage
+            [bgSrc]="
+              this.publicRoot.thumbArchiveNbr
+                ? this.publicRoot.thumbURL2000
+                : null
+            "
+            (click)="chooseBannerPicture()"
+            prScrollSection="about"
+            [class.show-gradient]="!this.publicRoot.thumbArchiveNbr"
+          >
             <div class="change-thumbnail">
-              <div>
-                <i class="material-icons">camera_alt</i> Change Banner
-              </div>
+              <div><i class="material-icons">camera_alt</i> Change Banner</div>
             </div>
           </div>
-          <div class="profile-photo" prBgImage [bgSrc]="this.archive.thumbURL500"
-          (click)="onProfilePictureClick()">
+          <div
+            class="profile-photo"
+            prBgImage
+            [bgSrc]="this.archive.thumbURL500"
+            (click)="onProfilePictureClick()"
+          >
             <div class="change-thumbnail">
-              <div>
-                <i class="material-icons">camera_alt</i> Change Photo
-              </div>
+              <div><i class="material-icons">camera_alt</i> Change Photo</div>
             </div>
           </div>
           <div class="profile-section">
-            <div class="profile-prompt">
-              The name of this Archive is…
-            </div>
+            <div class="profile-prompt">The name of this Archive is…</div>
             <div class="profile-group archive-name">
               <span>The</span>
               <div class="profile-field">
-                <pr-inline-value-edit [alwaysShow]="true"
+                <pr-inline-value-edit
+                  [alwaysShow]="true"
                   [displayValue]="this.profileItems.basic[0]?.string1"
                   [maxLength]="60"
                   [required]="true"
-                  (doneEditing)="onSaveProfileItem(this.profileItems.basic[0], 'string1', $event, true)"
-                  ></pr-inline-value-edit>
+                  (doneEditing)="
+                    onSaveProfileItem(
+                      this.profileItems.basic[0],
+                      'string1',
+                      $event,
+                      true
+                    )
+                  "
+                ></pr-inline-value-edit>
               </div>
               <span>Archive</span>
             </div>
           </div>
           <div class="profile-section">
-            <div class="profile-prompt">
-              What is this Archive for?
-            </div>
+            <div class="profile-prompt">What is this Archive for?</div>
             <div class="profile-field">
-              <pr-inline-value-edit [alwaysShow]="true"
+              <pr-inline-value-edit
+                [alwaysShow]="true"
                 [displayValue]="this.profileItems.blurb[0]?.string1"
                 [maxLength]="280"
                 emptyMessage="Add a short description about the purpose of this Archive."
-                (doneEditing)="onSaveProfileItem(this.profileItems.blurb[0], 'string1', $event)"></pr-inline-value-edit>
+                (doneEditing)="
+                  onSaveProfileItem(
+                    this.profileItems.blurb[0],
+                    'string1',
+                    $event
+                  )
+                "
+              ></pr-inline-value-edit>
             </div>
-            <div class="profile-field-subtitle">
-              280 character limit
-            </div>
+            <div class="profile-field-subtitle">280 character limit</div>
           </div>
           <div class="profile-section">
             <div class="profile-prompt">
-              Tell us about this {{this.archive.type | prConstants | titlecase}}
+              Tell us about this
+              {{ this.archive.type | prConstants | titlecase }}
             </div>
             <div class="profile-field">
-              <pr-inline-value-edit [alwaysShow]="true"
-                [displayValue]="this.profileItems.description[0]?.textData1" type="textarea"
-                (doneEditing)="onSaveProfileItem(this.profileItems.description[0], 'textData1', $event, true)"
-                emptyMessage="Tell the story of the {{this.archive.type | prConstants | titlecase}} this Archive is for.">
+              <pr-inline-value-edit
+                [alwaysShow]="true"
+                [displayValue]="this.profileItems.description[0]?.textData1"
+                type="textarea"
+                (doneEditing)="
+                  onSaveProfileItem(
+                    this.profileItems.description[0],
+                    'textData1',
+                    $event,
+                    true
+                  )
+                "
+                emptyMessage="Tell the story of the {{
+                  this.archive.type | prConstants | titlecase
+                }} this Archive is for."
+              >
               </pr-inline-value-edit>
             </div>
           </div>
           <div class="profile-section-header" prScrollSection="info">
-            {{this.archive.type | prConstants | titlecase}} Information
+            {{ this.archive.type | prConstants | titlecase }} Information
           </div>
           <div class="profile-section">
             <div class="profile-group in-thirds">
               <div class="profile-field">
                 <ng-container [ngSwitch]="archive.type">
-                  <label *ngSwitchCase="'type.archive.family'">This Family's Nickname</label>
-                  <label *ngSwitchCase="'type.archive.organization'">This Organization's Legal Name</label>
-                  <label *ngSwitchCase="'type.archive.nonprofit'">This Non-Profit's Legal Name</label>
+                  <label
+                    *ngSwitchCase="
+                      archive.type === 'type.archive.group' ||
+                      archive.type === 'type.archive.family'
+                    "
+                    >This Group's Nickname</label
+                  >
+                  <label *ngSwitchCase="'type.archive.organization'"
+                    >This Organization's Legal Name</label
+                  >
+                  <label *ngSwitchCase="'type.archive.nonprofit'"
+                    >This Non-Profit's Legal Name</label
+                  >
                   <label *ngSwitchDefault>This Person's Full Name</label>
                 </ng-container>
-                <pr-inline-value-edit [alwaysShow]="true"
-                emptyMessage="Full name"
-                [maxLength]="120"
-                [displayValue]="profileItems.basic[0]?.string2"
-                (doneEditing)="onSaveProfileItem(profileItems.basic[0], 'string2', $event)"
+                <pr-inline-value-edit
+                  [alwaysShow]="true"
+                  emptyMessage="Full name"
+                  [maxLength]="120"
+                  [displayValue]="profileItems.basic[0]?.string2"
+                  (doneEditing)="
+                    onSaveProfileItem(profileItems.basic[0], 'string2', $event)
+                  "
                 ></pr-inline-value-edit>
               </div>
               <div class="profile-field">
                 <ng-container [ngSwitch]="archive.type">
-                  <label *ngSwitchCase="'type.archive.family'">Previous Name</label>
-                  <label *ngSwitchCase="'type.archive.organization'">DBA Name</label>
-                  <label *ngSwitchCase="'type.archive.nonprofit'">DBA Name</label>
+                  <label
+                    *ngSwitchCase="
+                      archive.type === 'type.archive.group' ||
+                      archive.type === 'type.archive.family'
+                    "
+                    >Previous Name</label
+                  >
+                  <label *ngSwitchCase="'type.archive.organization'"
+                    >DBA Name</label
+                  >
+                  <label *ngSwitchCase="'type.archive.nonprofit'"
+                    >DBA Name</label
+                  >
                   <label *ngSwitchDefault>Also known as...</label>
                 </ng-container>
-                <pr-inline-value-edit [alwaysShow]="true"
-                emptyMessage="Aliases or nicknames"
-                [maxLength]="280"
-                [displayValue]="profileItems.basic[0]?.string3"
-                (doneEditing)="onSaveProfileItem(profileItems.basic[0], 'string3', $event)"
+                <pr-inline-value-edit
+                  [alwaysShow]="true"
+                  emptyMessage="Aliases or nicknames"
+                  [maxLength]="280"
+                  [displayValue]="profileItems.basic[0]?.string3"
+                  (doneEditing)="
+                    onSaveProfileItem(profileItems.basic[0], 'string3', $event)
+                  "
                 ></pr-inline-value-edit>
               </div>
-              <div class="profile-field" *ngIf="archive.type === 'type.archive.person'">
+              <div
+                class="profile-field"
+                *ngIf="archive.type === 'type.archive.person'"
+              >
                 <label>Gender</label>
-                <pr-inline-value-edit [alwaysShow]="true"
-                [maxLength]="120"
-                [displayValue]="profileItems.gender[0]?.string1"
-                (doneEditing)="onSaveProfileItem(profileItems.gender[0], 'string1', $event)"
+                <pr-inline-value-edit
+                  [alwaysShow]="true"
+                  [maxLength]="120"
+                  [displayValue]="profileItems.gender[0]?.string1"
+                  (doneEditing)="
+                    onSaveProfileItem(profileItems.gender[0], 'string1', $event)
+                  "
                 ></pr-inline-value-edit>
               </div>
             </div>
@@ -184,21 +288,36 @@
                 <div class="profile-group in-thirds">
                   <div class="profile-field">
                     <label>Date of Birth</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [displayValue]="profileItems.birth_info[0]?.day1"
-                    [dateOnly]="true"
-                    emptyMessage="YYYY-MM-DD"
-                    type='date'
-                    (doneEditing)="onSaveProfileItem(profileItems.birth_info[0], 'day1', $event)"
+                    <pr-inline-value-edit
+                      [alwaysShow]="true"
+                      [displayValue]="profileItems.birth_info[0]?.day1"
+                      [dateOnly]="true"
+                      emptyMessage="YYYY-MM-DD"
+                      type="date"
+                      (doneEditing)="
+                        onSaveProfileItem(
+                          profileItems.birth_info[0],
+                          'day1',
+                          $event
+                        )
+                      "
                     ></pr-inline-value-edit>
                   </div>
                   <div class="profile-field">
                     <label>Place of Birth</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    type='external'
-                    (externalEdit)="chooseLocationForItem(profileItems.birth_info[0])"
-                    [emptyMessage]="fieldPlacholders.address"
-                    [displayValue]="profileItems.birth_info[0].LocnVOs?.length ? (profileItems.birth_info[0].LocnVOs[0] | prLocation).full : null"
+                    <pr-inline-value-edit
+                      [alwaysShow]="true"
+                      type="external"
+                      (externalEdit)="
+                        chooseLocationForItem(profileItems.birth_info[0])
+                      "
+                      [emptyMessage]="fieldPlacholders.address"
+                      [displayValue]="
+                        profileItems.birth_info[0].LocnVOs?.length
+                          ? (profileItems.birth_info[0].LocnVOs[0] | prLocation)
+                              .full
+                          : null
+                      "
                     ></pr-inline-value-edit>
                   </div>
                   <div></div>
@@ -208,21 +327,38 @@
                 <div class="profile-group in-thirds">
                   <div class="profile-field">
                     <label>Date Established</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [displayValue]="profileItems.established_info[0]?.day1"
-                    [dateOnly]="true"
-                    emptyMessage="YYYY-MM-DD"
-                    type='date'
-                    (doneEditing)="onSaveProfileItem(profileItems.established_info[0], 'day1', $event)"
+                    <pr-inline-value-edit
+                      [alwaysShow]="true"
+                      [displayValue]="profileItems.established_info[0]?.day1"
+                      [dateOnly]="true"
+                      emptyMessage="YYYY-MM-DD"
+                      type="date"
+                      (doneEditing)="
+                        onSaveProfileItem(
+                          profileItems.established_info[0],
+                          'day1',
+                          $event
+                        )
+                      "
                     ></pr-inline-value-edit>
                   </div>
                   <div class="profile-field">
                     <label>Location Established</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    type='external'
-                    (externalEdit)="chooseLocationForItem(profileItems.established_info[0])"
-                    [emptyMessage]="fieldPlacholders.address"
-                    [displayValue]="profileItems.established_info[0].LocnVOs?.length ? (profileItems.established_info[0].LocnVOs[0] | prLocation).full : null"
+                    <pr-inline-value-edit
+                      [alwaysShow]="true"
+                      type="external"
+                      (externalEdit)="
+                        chooseLocationForItem(profileItems.established_info[0])
+                      "
+                      [emptyMessage]="fieldPlacholders.address"
+                      [displayValue]="
+                        profileItems.established_info[0].LocnVOs?.length
+                          ? (
+                              profileItems.established_info[0].LocnVOs[0]
+                              | prLocation
+                            ).full
+                          : null
+                      "
                     ></pr-inline-value-edit>
                   </div>
                   <div></div>
@@ -238,58 +374,104 @@
             <div class="profile-group in-thirds">
               <div class="profile-field">
                 <label>Email Address(es)</label>
-                <pr-inline-value-edit *ngFor="let profileItem of profileItems.email"
-                [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
-                [maxLength]="80"
-                [alwaysShow]="true"
-                emptyMessage="email@website.com"
-                [displayValue]="profileItem?.string1"
-                (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                <pr-inline-value-edit
+                  *ngFor="let profileItem of profileItems.email"
+                  [@ngIfScaleAnimationDynamic]="
+                    profileItem.isPendingAction || profileItem.isNewlyCreated
+                      ? 'animate'
+                      : 'static'
+                  "
+                  [maxLength]="80"
+                  [alwaysShow]="true"
+                  emptyMessage="email@website.com"
+                  [displayValue]="profileItem?.string1"
+                  (doneEditing)="
+                    onSaveProfileItem(profileItem, 'string1', $event)
+                  "
                 ></pr-inline-value-edit>
-                <button class="btn btn-primary" (click)="addEmptyProfileItem('email')">Add Email</button>
+                <button
+                  class="btn btn-primary"
+                  (click)="addEmptyProfileItem('email')"
+                >
+                  Add Email
+                </button>
               </div>
             </div>
             <div class="profile-group in-thirds">
               <div class="profile-field">
                 <label>Social Media</label>
-                <pr-inline-value-edit *ngFor="let profileItem of profileItems.social_media"
-                [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'"
-                [maxLength]="120"
-                [alwaysShow]="true" 
-                emptyMessage="www.website.com/user"
-                [displayValue]="profileItem?.string1"
-                (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                <pr-inline-value-edit
+                  *ngFor="let profileItem of profileItems.social_media"
+                  [@ngIfScaleAnimationDynamic]="
+                    profileItem.isPendingAction || profileItem.isNewlyCreated
+                      ? 'animate'
+                      : 'static'
+                  "
+                  [maxLength]="120"
+                  [alwaysShow]="true"
+                  emptyMessage="www.website.com/user"
+                  [displayValue]="profileItem?.string1"
+                  (doneEditing)="
+                    onSaveProfileItem(profileItem, 'string1', $event)
+                  "
                 ></pr-inline-value-edit>
-                <button class="btn btn-primary" (click)="addEmptyProfileItem('social_media')">Add Social Media</button>
+                <button
+                  class="btn btn-primary"
+                  (click)="addEmptyProfileItem('social_media')"
+                >
+                  Add Social Media
+                </button>
               </div>
             </div>
           </div>
-          <div class="profile-section-header" prScrollSection="milestones" [ngSwitch]="archive.type">
+          <div
+            class="profile-section-header"
+            prScrollSection="milestones"
+            [ngSwitch]="archive.type"
+          >
             Milestones
           </div>
           <div class="profile-section">
-            <em>Milestones capture any significant event in the history of this archive, and are ordered from most recent to least recent.</em>
+            <em
+              >Milestones capture any significant event in the history of this
+              archive, and are ordered from most recent to least recent.</em
+            >
           </div>
           <div class="profile-section">
-            <div class="profile-repeat-entry" *ngFor="let profileItem of profileItems.milestone"
-            [@ngIfScaleAnimationDynamic]="(profileItem.isPendingAction || profileItem.isNewlyCreated) ? 'animate' : 'static'">
+            <div
+              class="profile-repeat-entry"
+              *ngFor="let profileItem of profileItems.milestone"
+              [@ngIfScaleAnimationDynamic]="
+                profileItem.isPendingAction || profileItem.isNewlyCreated
+                  ? 'animate'
+                  : 'static'
+              "
+            >
               <div class="profile-group in-thirds">
                 <div class="profile-field">
                   <label>Title</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  [maxLength]="140"
-                  [displayValue]="profileItem.string1"
-                  [emptyMessage]="'What was this milestone?'"
-                  (doneEditing)="onSaveProfileItem(profileItem, 'string1', $event)"
+                  <pr-inline-value-edit
+                    [alwaysShow]="true"
+                    [maxLength]="140"
+                    [displayValue]="profileItem.string1"
+                    [emptyMessage]="'What was this milestone?'"
+                    (doneEditing)="
+                      onSaveProfileItem(profileItem, 'string1', $event)
+                    "
                   ></pr-inline-value-edit>
                 </div>
                 <div class="profile-field two-thirds">
                   <label>Location</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  type='external'
-                  (externalEdit)="chooseLocationForItem(profileItem)"
-                  [emptyMessage]="fieldPlacholders.address"
-                  [displayValue]="profileItem.LocnVOs?.length ? (profileItem.LocnVOs[0] | prLocation).full : null"
+                  <pr-inline-value-edit
+                    [alwaysShow]="true"
+                    type="external"
+                    (externalEdit)="chooseLocationForItem(profileItem)"
+                    [emptyMessage]="fieldPlacholders.address"
+                    [displayValue]="
+                      profileItem.LocnVOs?.length
+                        ? (profileItem.LocnVOs[0] | prLocation).full
+                        : null
+                    "
                   ></pr-inline-value-edit>
                 </div>
               </div>
@@ -297,46 +479,64 @@
                 <div class="profile-group in-half">
                   <div class="profile-field">
                     <label>Start Date</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [displayValue]="profileItem.day1"
-                    [dateOnly]="true"
-                    emptyMessage="YYYY-MM-DD"
-                    type='date'
-                    (doneEditing)="onSaveProfileItem(profileItem, 'day1', $event)"
+                    <pr-inline-value-edit
+                      [alwaysShow]="true"
+                      [displayValue]="profileItem.day1"
+                      [dateOnly]="true"
+                      emptyMessage="YYYY-MM-DD"
+                      type="date"
+                      (doneEditing)="
+                        onSaveProfileItem(profileItem, 'day1', $event)
+                      "
                     ></pr-inline-value-edit>
                   </div>
                   <div class="profile-field">
                     <label>End Date</label>
-                    <pr-inline-value-edit [alwaysShow]="true"
-                    [displayValue]="profileItem.day2"
-                    [dateOnly]="true"
-                    emptyMessage="YYYY-MM-DD"
-                    type='date'
-                    (doneEditing)="onSaveProfileItem(profileItem, 'day2', $event)"
+                    <pr-inline-value-edit
+                      [alwaysShow]="true"
+                      [displayValue]="profileItem.day2"
+                      [dateOnly]="true"
+                      emptyMessage="YYYY-MM-DD"
+                      type="date"
+                      (doneEditing)="
+                        onSaveProfileItem(profileItem, 'day2', $event)
+                      "
                     ></pr-inline-value-edit>
                   </div>
                 </div>
                 <div class="profile-field">
                   <label>Description</label>
-                  <pr-inline-value-edit [alwaysShow]="true"
-                  [maxLength]="200"
-                  [emptyMessage]="'More details and information about this milestone'"
-                  [displayValue]="profileItem.string2" type="textarea"
-                  (doneEditing)="onSaveProfileItem(profileItem, 'string2', $event)"
+                  <pr-inline-value-edit
+                    [alwaysShow]="true"
+                    [maxLength]="200"
+                    [emptyMessage]="
+                      'More details and information about this milestone'
+                    "
+                    [displayValue]="profileItem.string2"
+                    type="textarea"
+                    (doneEditing)="
+                      onSaveProfileItem(profileItem, 'string2', $event)
+                    "
                   ></pr-inline-value-edit>
-                  <div class="profile-field-subtitle">
-                    200 character limit
-                  </div>
+                  <div class="profile-field-subtitle">200 character limit</div>
                 </div>
               </div>
               <div class="profile-group align-right">
-                <button class="btn btn-secondary" (click)="onRemoveProfileItemClick(profileItem)">
+                <button
+                  class="btn btn-secondary"
+                  (click)="onRemoveProfileItemClick(profileItem)"
+                >
                   Remove Milestone
                 </button>
               </div>
             </div>
             <ng-container>
-              <button class="btn btn-primary" (click)="addEmptyProfileItem('milestone')">Add Milestone</button>
+              <button
+                class="btn btn-primary"
+                (click)="addEmptyProfileItem('milestone')"
+              >
+                Add Milestone
+              </button>
             </ng-container>
           </div>
         </div>

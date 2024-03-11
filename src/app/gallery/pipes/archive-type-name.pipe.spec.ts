@@ -16,6 +16,7 @@ describe('ArchiveTypeNamePipe', () => {
     }
 
     expectNameForType('type.archive.person', 'Personal Archive');
+    expectNameForType('type.archive.group', 'Group Archive');
     expectNameForType('type.archive.family', 'Group Archive');
     expectNameForType('type.archive.organization', 'Organizational Archive');
     expectNameForType('type.archive.nonprofit', 'Organizational Archive');
