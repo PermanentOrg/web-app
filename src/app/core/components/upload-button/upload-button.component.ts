@@ -1,5 +1,4 @@
 /* @format */
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import {
   Component,
   OnInit,
@@ -28,7 +27,8 @@ import {
   unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
-import { MainComponent } from '../main/main.component';
+import { ApiService } from '@shared/services/api/api.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-upload-button',
@@ -57,7 +57,7 @@ export class UploadButtonComponent
     private dataService: DataService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private mixpanel: MixpanelService
+    private analytics: AnalyticsService
   ) {
     this.subscriptions.push(
       this.dataService.currentFolderChange.subscribe((currentFolder) => {
@@ -105,10 +105,6 @@ export class UploadButtonComponent
   async onFileChange(event) {
     this.files = Array.from(event.target.files);
     if (this.currentFolder) {
-      const workspace = this.currentFolder.type.includes('private')
-        ? 'Private'
-        : 'Public';
-      this.mixpanel.track('Finalize Upload', { workspace });
       if (this.currentFolder.type.includes('public')) {
         try {
           await this.prompt.confirm(
@@ -124,8 +120,27 @@ export class UploadButtonComponent
     }
   }
 
-  filePickerClick() {
-    this.mixpanel.track('Initiate Upload', {});
+  async filePickerClick() {
+    const workspace = this.getFolderWorkspaceType(this.currentFolder);
+    const account = this.account.getAccount();
+    await this.analytics.notifyObservers({
+      entity: 'account',
+      action: 'initiate_upload',
+      version: 1,
+      entityId: account.accountId.toString(),
+      body: {
+        analytics: {
+          event: 'Initiate Upload',
+          data: {
+            workspace,
+          },
+        },
+      },
+    });
+  }
+
+  getFolderWorkspaceType(folder: FolderVO) {
+    return folder.type.includes('private') ? 'Private Files' : 'Public Files';
   }
 
   onDragServiceEvent(dragEvent: DragServiceEvent) {}

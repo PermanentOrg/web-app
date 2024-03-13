@@ -1,6 +1,7 @@
 /* @format */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyContact } from '@models/directive';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -16,7 +17,7 @@ export class LegacyContactEditComponent implements OnInit {
   public email: string;
   public waiting = false;
 
-  constructor(private api: ApiService, private message: MessageService) {}
+  constructor(private api: ApiService, private message: MessageService, private analytics:AnalyticsService) {}
 
   ngOnInit(): void {
     this.name = this.legacyContact?.name;
@@ -40,6 +41,18 @@ export class LegacyContactEditComponent implements OnInit {
         });
       }
       this.savedLegacyContact.emit(returnedLegacyContact);
+      await this.analytics.notifyObservers({
+        entity: 'legacy_contact',
+        action: this.isUpdating() ? 'update' : 'create',
+        version: 1,
+        entityId: returnedLegacyContact.legacyContactId.toString(),
+        body: {
+          analytics: {
+            event: 'Edit Legacy Contact',
+            data: {},
+          },
+        },
+      });
     } catch {
       this.message.showError(
         "An error occured when saving your account's Legacy Contact. Please try again."

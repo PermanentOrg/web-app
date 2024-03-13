@@ -17,7 +17,6 @@ import {
   NgbTimepickerModule,
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 
 window['Stripe'] = () => {
   return {
@@ -42,7 +41,6 @@ window['Stripe'] = () => {
 window['doNotLoadGoogleMapsAPI'] = true;
 
 // Disable loading of MixPanel
-MixpanelService.enableMixpanel = false;
 
 // Always Replace RouterModule with RouterTestingModule to avoid errors.
 Shallow.alwaysReplaceModule(RouterModule, RouterTestingModule);

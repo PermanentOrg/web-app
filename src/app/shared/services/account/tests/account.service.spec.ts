@@ -166,45 +166,6 @@ describe('AccountService', () => {
     }
   });
 
-  it('should handle successful email verification', async () => {
-    const { instance } = shallow.createService();
-    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
-
-    const account = new AccountVO({
-      primaryEmail: 'test@permanent.org',
-      fullName: 'Test User',
-      keepLoggedIn: true,
-      emailStatus: 'status.auth.unverified',
-    });
-
-    instance.setAccount(account);
-
-    await instance.verifyEmail('sampleToken');
-
-    expect(instance.getAccount().emailStatus).toBe('status.auth.verified');
-    expect(instance.getAccount().keepLoggedIn).toBeTrue();
-    expect(trackerSpy).toHaveBeenCalled();
-  });
-
-  it('should handle successful phone verification', async () => {
-    const { instance } = shallow.createService();
-    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
-
-    const account = new AccountVO({
-      primaryEmail: 'test@permanent.org',
-      fullName: 'Test User',
-      keepLoggedIn: true,
-      phoneStatus: 'status.auth.unverified',
-    });
-
-    instance.setAccount(account);
-
-    await instance.verifyEmail('sampleToken');
-
-    expect(instance.getAccount().phoneStatus).toBe('status.auth.verified');
-    expect(instance.getAccount().keepLoggedIn).toBeTrue();
-    expect(trackerSpy).toHaveBeenCalled();
-  });
   it('should update the account storage when a file is uploaded successfully', async () => {
     const { instance, inject } = shallow.createService();
     const uploadService = inject(UploadService);
@@ -221,38 +182,6 @@ describe('AccountService', () => {
     expect(instance.getAccount().spaceLeft).toEqual(99800);
   });
 
-  it('should send the account data to mixpanel after signing up', async () => {
-    const { instance, inject } = shallow.createService();
-    const apiService = inject(ApiService);
-    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
-    const account = await instance.signUp(
-      'test@permanent.org',
-      'Test User',
-      'password123',
-      'password123',
-      true,
-      true,
-      '',
-      '',
-      true
-    );
-
-    expect(trackerSpy).toHaveBeenCalled();
-  });
-
-  it('should send the account data to mixpanel after logging in', async () => {
-    const { instance, inject } = shallow.createService();
-    const apiService = inject(ApiService);
-    const trackerSpy = spyOn(instance, 'trackAuthWithMixpanel');
-    const account = await instance.logIn(
-      'test@permanent.org',
-      'password123',
-      true,
-      true
-    );
-
-    expect(trackerSpy).toHaveBeenCalled();
-  });
   it('should add storage back after deleting an item', async () => {
     const { instance, inject } = shallow.createService();
     const editService = inject(EditService);

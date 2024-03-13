@@ -6,6 +6,8 @@ import { CoreModule } from '@core/core.module';
 import { DialogRef } from '@root/app/dialog/dialog.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { EventData } from '@shared/services/google-analytics/google-analytics.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { PromoVOData } from '../../../models/promo-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
@@ -37,6 +39,10 @@ class MockBillingRepo {
   }
 }
 
+class MockAnalyticsService {
+  public notifiyObservers(data: EventData): void {}
+}
+
 interface MockApiService {
   billing: MockBillingRepo;
 }
@@ -59,6 +65,7 @@ describe('StorageDialogComponent', () => {
   let messageShown: boolean = false;
   let mockAccountService: MockAccountService;
   let mockApiService: MockApiService;
+  let mockAnalyticksService: MockAnalyticsService;
   const dialogRef = new DialogRef(1, null);
   let mockActivatedRoute;
   const paramMap = new BehaviorSubject(convertToParamMap({}));
@@ -70,7 +77,10 @@ describe('StorageDialogComponent', () => {
       queryParamMap: queryParamMap.asObservable(),
     };
     mockAccountService = new MockAccountService();
-    mockApiService = { billing: new MockBillingRepo() };
+    mockApiService = {
+      billing: new MockBillingRepo(),
+    };
+    mockAnalyticksService = new MockAnalyticsService();
     shallow = new Shallow(StorageDialogComponent, CoreModule)
       .dontMock(AccountService)
       .dontMock(ApiService)
@@ -82,6 +92,7 @@ describe('StorageDialogComponent', () => {
       })
       .provide({ provide: AccountService, useValue: mockAccountService })
       .provide({ provide: ApiService, useValue: mockApiService })
+      .provide({ provide: AnalyticsService, useValue: mockAnalyticksService })
       .provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
   });
 

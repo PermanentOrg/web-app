@@ -131,9 +131,9 @@ export class RecordRepo extends BaseRepo {
     uploadId: string,
     key: string,
     eTags: string[]
-  ): Promise<void> {
-    await this.httpV2
-      .post('/record/registerRecord', {
+  ): Promise<RecordResponse> {
+    return getFirst(
+      this.httpV2.post('/record/registerRecord', {
         displayName: record.displayName,
         parentFolderId: record.parentFolderId,
         uploadFileName: record.uploadFileName,
@@ -147,7 +147,7 @@ export class RecordRepo extends BaseRepo {
           })),
         },
       })
-      .toPromise();
+    ).toPromise() as unknown as RecordResponse;
   }
 
   public update(

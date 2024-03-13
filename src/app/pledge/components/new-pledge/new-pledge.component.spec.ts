@@ -7,6 +7,10 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {
+  AnalyticsService,
+  EventData,
+} from '@shared/services/analytics/analytics.service';
 import { PledgeService } from '../../services/pledge.service';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { PledgeModule } from '../../pledge.module';
@@ -35,7 +39,7 @@ const mockAccountService = {
   },
   setAccount: (account: AccountVO): void => {},
   getAccount: (): AccountVO => {
-    return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000 });
+    return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000, accountId: 1 });
   },
   isLoggedIn: (): boolean => true,
 };
@@ -63,6 +67,10 @@ const mockApiService = {
   },
 };
 
+const mockAnalyticsService = {
+  notifyObservers: (data: EventData) => {},
+};
+
 describe('NewPledgeComponent', () => {
   let shallow: Shallow<NewPledgeComponent>;
   let messageShown = false;
@@ -75,6 +83,7 @@ describe('NewPledgeComponent', () => {
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .mock(PledgeService, mockPledgeService)
+      .mock(AnalyticsService, mockAnalyticsService)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;

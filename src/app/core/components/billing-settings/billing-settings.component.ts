@@ -1,3 +1,4 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -6,13 +7,17 @@ import { cloneDeep } from 'lodash';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
-import { PrConstantsService, Country } from '@shared/services/pr-constants/pr-constants.service';
+import {
+  PrConstantsService,
+  Country,
+} from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-billing-settings',
   templateUrl: './billing-settings.component.html',
-  styleUrls: ['./billing-settings.component.scss']
+  styleUrls: ['./billing-settings.component.scss'],
 })
 export class BillingSettingsComponent implements OnInit {
   public account: AccountVO;
@@ -24,24 +29,41 @@ export class BillingSettingsComponent implements OnInit {
     private dataService: DataService,
     private prConstants: PrConstantsService,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
+    private analytics: AnalyticsService
   ) {
     this.account = this.accountService.getAccount();
-    this.countries = this.prConstants.getCountries().map(c => {
+    this.countries = this.prConstants.getCountries().map((c) => {
       return {
         text: c.name,
-        value: c.abbrev
+        value: c.abbrev,
       };
     });
-    this.states = Object.values(this.prConstants.getStates()).map((s: string) => {
-      return {
-        text: s,
-        value: s
-      };
-    });
+    this.states = Object.values(this.prConstants.getStates()).map(
+      (s: string) => {
+        return {
+          text: s,
+          value: s,
+        };
+      }
+    );
   }
 
   ngOnInit(): void {
+    this.analytics.notifyObservers({
+      action: 'open_billing_info',
+      entity: 'account',
+      version: 1,
+      entityId: this.account.accountId.toString(),
+      body: {
+        analytics: {
+          event: 'View Billing Info',
+          data: {
+            page: 'Billing Info',
+          },
+        },
+      },
+    });
   }
 
   async onSaveInfo(prop: keyof AccountVO, value: string) {
