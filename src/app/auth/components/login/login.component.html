@@ -45,22 +45,22 @@
   <div class="auth-buttons">
     <pr-button
       [attr]="'submit'"
-      [text]="'Sign in'"
       [variant]="'secondary'"
       [size]="'fill'"
       [icon]="'/auth/sign-in'"
       [orientation]="'right'"
       [disabled]="waiting || loginForm.invalid"
-    ></pr-button>
+      >Sign in</pr-button
+    >
     <pr-or-divider></pr-or-divider>
     <pr-button
-      [text]="'Register'"
       [variant]="'primary'"
       [size]="'fill'"
       [orientation]="'right'"
       [routerLink]="['..', 'signup']"
       queryParamsHandling="merge"
-    ></pr-button>
+      >Register</pr-button
+    >
   </div>
 </form>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>

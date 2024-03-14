@@ -47,20 +47,20 @@
     <div class="buttons">
       <pr-button
         [attr]="'submit'"
-        [text]="'Verify Access'"
         [variant]="'secondary'"
         [size]="'fill'"
         [disabled]="waiting"
-      ></pr-button>
+        >Verify Access</pr-button
+      >
       <pr-or-divider></pr-or-divider>
       <pr-button
-        [text]="'Resend Code'"
         [variant]="'primary'"
         [size]="'fill'"
         [orientation]="'right'"
         [disabled]="waiting"
         (click)="resendCode()"
-      ></pr-button>
+        >Resend Code</pr-button
+      >
     </div>
   </form>
 </ng-template>
