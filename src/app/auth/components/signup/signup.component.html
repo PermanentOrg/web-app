@@ -102,21 +102,21 @@
   <div class="buttons">
     <pr-button
       [attr]="'submit'"
-      [text]="'Register'"
       [variant]="'secondary'"
       [size]="'fill'"
       [icon]="'/auth/sign-up'"
       [orientation]="'right'"
       [disabled]="waiting || signupForm.invalid || !agreedTerms"
-    ></pr-button>
+      >Register</pr-button
+    >
     <pr-or-divider></pr-or-divider>
     <pr-button
-      [text]="'Sign in'"
       [size]="'fill'"
       [orientation]="'right'"
       [routerLink]="['..', 'login']"
       queryParamsHandling="merge"
-    ></pr-button>
+      >Sign in</pr-button
+    >
   </div>
 </form>
 <div class="terms-container" [hidden]="!showTerms">
@@ -134,18 +134,18 @@
   </p>
   <div class="terms-buttons">
     <pr-button
-      [text]="'Decline'"
       [icon]="'decline'"
       [orientation]="'right'"
       (buttonClick)="acceptTerms(false)"
-    ></pr-button>
+      >Decline</pr-button
+    >
     <pr-button
       (buttonClick)="acceptTerms(true)"
-      [text]="'Accept'"
       [icon]="'accept'"
       [orientation]="'right'"
       [variant]="'secondary'"
-    ></pr-button>
+      >Accept</pr-button
+    >
   </div>
 </div>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
