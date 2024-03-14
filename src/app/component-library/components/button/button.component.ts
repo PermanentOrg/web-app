@@ -15,7 +15,6 @@ type ATTR = 'submit' | 'reset' | 'button';
 })
 export class ButtonComponent {
   //Inputs
-  @Input() text: string = '';
   @Input() variant: VARIANT = 'primary';
   @Input() height: HEIGHT = 'medium';
   @Input() mode: MODE = 'light';
