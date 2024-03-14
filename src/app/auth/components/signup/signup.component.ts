@@ -223,4 +223,10 @@ export class SignupComponent {
     this.agreedTerms = accepted;
     this.showTerms = false;
   }
+
+  navigateToAuth() {
+    this.router.navigate(['..','login'], {
+      relativeTo: this.route,
+    });
+  }
 }
