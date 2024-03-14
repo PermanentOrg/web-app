@@ -6,6 +6,11 @@
   [class.checkbox-container-primary]="variant === 'primary'"
   [class.checkbox-container-secondary]="variant === 'secondary'"
   (click)="toggleCheck()"
+  (keydown)="handleKeyDown($event)"
+  role="checkbox"
+  [attr.tabindex]="disabled ? -1 : 0"
+  [attr.aria-checked]="isChecked"
+  [attr.aria-disabled]="disabled"
 >
   <div class="checkbox" [class.checked]="isChecked"></div>
   <label>{{ text }}</label>

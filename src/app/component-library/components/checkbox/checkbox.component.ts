@@ -23,4 +23,13 @@ export class CheckboxComponent {
       this.isCheckedChange.emit(this.isChecked);
     }
   }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.disabled) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.toggleCheck();
+      }
+    }
+  }
 }
