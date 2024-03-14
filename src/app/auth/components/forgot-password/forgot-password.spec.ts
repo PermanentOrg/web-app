@@ -7,8 +7,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 
 import { LogoComponent } from '@auth/components/logo/logo.component';
+import { MessageService } from '@shared/services/message/message.service';
 
-xdescribe('MfaComponent', () => {
+describe('MfaComponent', () => {
   let component: ForgotPasswordComponent;
   let fixture: ComponentFixture<ForgotPasswordComponent>;
 
@@ -21,7 +22,7 @@ xdescribe('MfaComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
       ],
-      providers: [CookieService],
+      providers: [CookieService, MessageService],
     }).compileComponents();
   }));
 
