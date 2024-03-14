@@ -102,4 +102,20 @@ describe('UploadService', () => {
 
     expect(emittedSessionStatus).toBe(UploadSessionStatus.FileNoBytesError);
   });
+
+  it('should handle NoAccessToUpload correctly', async () => {
+    uploadSessionMock.progress.subscribe((event) => {
+      emittedSessionStatus = event.sessionStatus;
+    });
+
+    const mockEvent: UploadProgressEvent = {
+      item: null,
+      sessionStatus: UploadSessionStatus.NoAccessToUpload,
+      statistics: { current: 0, total: 0, error: 0, completed: 0 },
+    };
+
+    uploadSessionMock.progress.emit(mockEvent);
+
+    expect(emittedSessionStatus).toBe(UploadSessionStatus.NoAccessToUpload);
+  });
 });

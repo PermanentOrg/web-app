@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable } from '@angular/core';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
@@ -6,7 +7,7 @@ import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.s
 export class MessageService {
   private component: MessageComponent;
 
-  constructor(private constants: PrConstantsService) { }
+  constructor(private constants: PrConstantsService) {}
 
   registerComponent(toRegister: MessageComponent) {
     if (this.component) {
@@ -18,24 +19,54 @@ export class MessageService {
 
   public showMessage(
     message: string,
-    style ?: 'success' | 'info' | 'warning' | 'danger',
-    translate ?: boolean,
-    navigateTo ?: string[],
-    navigateParams ?: any
+    style?: 'success' | 'info' | 'warning' | 'danger',
+    translate?: boolean,
+    navigateTo?: string[],
+    navigateParams?: any,
+    externalUrl?: string,
+    externalMessage?: string
   ) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
     }
 
     if (!translate) {
-      this.component.display(message, style, navigateTo, navigateParams);
+      this.component.display(
+        message,
+        style,
+        navigateTo,
+        navigateParams,
+        externalUrl,
+        externalMessage
+      );
     } else {
-      this.component.display(this.constants.translate(message), style, navigateTo, navigateParams);
+      this.component.display(
+        this.constants.translate(message),
+        style,
+        navigateTo,
+        navigateParams,
+        externalUrl,
+        externalMessage
+      );
     }
-
   }
 
-  public showError(message: string, translate ?: boolean, navigateTo ?: string[]) {
-    return this.showMessage(message, 'danger', translate, navigateTo);
+  public showError(
+    message: string,
+    translate?: boolean,
+    navigateTo?: string[],
+    navigateParams?: any,
+    externalUrl?: string,
+    externalMessage?: string
+  ) {
+    return this.showMessage(
+      message,
+      'danger',
+      translate,
+      navigateTo,
+      navigateParams,
+      externalUrl,
+      externalMessage
+    );
   }
 }

@@ -95,6 +95,17 @@ export class UploadService implements HasSubscriptions, OnDestroy {
             );
             this.accountService.refreshAccountDebounced();
             break;
+
+          case UploadSessionStatus.NoAccessToUpload:
+            this.message.showError(
+              'You do not have permission to upload to this archive.',
+              false,
+              [],
+              {},
+              'https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing',
+              'Read More'
+            );
+            break;
           case UploadSessionStatus.StorageError:
             this.message.showError(
               'You do not have enough storage available to upload these files.'
