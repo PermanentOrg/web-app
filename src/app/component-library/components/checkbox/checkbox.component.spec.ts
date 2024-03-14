@@ -83,4 +83,61 @@ describe('ToggleComponent', () => {
 
     expect(checkbox.classList).toContain('checkbox-container-secondary');
   });
+
+  it('should be focusable and have correct ARIA attributes', async () => {
+    const { find } = await shallow.render();
+    const checkboxContainer = find('.checkbox-container').nativeElement;
+
+    expect(checkboxContainer.getAttribute('role')).toEqual('checkbox');
+    expect(checkboxContainer.getAttribute('tabindex')).toEqual('0');
+    expect(checkboxContainer.getAttribute('aria-checked')).toEqual('false');
+    expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('false');
+  });
+
+  it('should toggle checked state on Enter key press', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    instance.isChecked = false;
+    fixture.detectChanges();
+
+    const checkboxContainer = find('.checkbox-container').nativeElement;
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    checkboxContainer.dispatchEvent(event);
+
+    expect(instance.isChecked).toBeTruthy();
+  });
+
+  it('should toggle checked state on Space key press', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    instance.isChecked = false;
+    fixture.detectChanges();
+
+    const checkboxContainer = find('.checkbox-container').nativeElement;
+    const event = new KeyboardEvent('keydown', { key: ' ' });
+    checkboxContainer.dispatchEvent(event);
+
+    expect(instance.isChecked).toBeTruthy();
+  });
+
+  it('should not toggle checked state when disabled and Enter key is pressed', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    instance.disabled = true;
+    fixture.detectChanges();
+
+    const checkboxContainer = find('.checkbox-container').nativeElement;
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    checkboxContainer.dispatchEvent(event);
+
+    // Since the component is disabled, the isChecked state should not change
+    expect(instance.isChecked).toBeFalsy();
+  });
+
+  it("should have aria-disabled set to 'true' when disabled", async () => {
+    const { find, instance, fixture } = await shallow.render({
+      bind: { disabled: true },
+    });
+    fixture.detectChanges();
+    const checkboxContainer = find('.checkbox-container').nativeElement;
+
+    expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('true');
+  });
 });
