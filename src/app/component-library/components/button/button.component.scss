@@ -69,6 +69,9 @@
   &-secondary {
     &.button-light {
       @include lightButton();
+      &:focus {
+        border: 2px solid black;
+      }
     }
     &.button-dark {
       @include darkButton();
