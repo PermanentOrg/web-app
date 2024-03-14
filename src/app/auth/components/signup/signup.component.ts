@@ -226,4 +226,10 @@ export class SignupComponent implements OnInit {
     this.agreedTerms = accepted;
     this.showTerms = false;
   }
+
+  navigateToAuth() {
+    this.router.navigate(['..','login'], {
+      relativeTo: this.route,
+    });
+  }
 }
