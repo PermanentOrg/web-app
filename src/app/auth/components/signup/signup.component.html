@@ -113,8 +113,7 @@
     <pr-button
       [size]="'fill'"
       [orientation]="'right'"
-      [routerLink]="['..', 'login']"
-      queryParamsHandling="merge"
+      (buttonClick)="navigateToAuth()"
       >Sign in</pr-button
     >
   </div>
