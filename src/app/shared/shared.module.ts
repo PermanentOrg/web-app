@@ -71,7 +71,6 @@ import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
-import { OrDividerComponent } from './components/or-divider/or-divider.component';
 
 @NgModule({
   imports: [
@@ -140,7 +139,6 @@ import { OrDividerComponent } from './components/or-divider/or-divider.component
     GetAltTextPipe,
     AccessRolePipe,
     MobileBannerComponent,
-    OrDividerComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -190,7 +188,6 @@ import { OrDividerComponent } from './components/or-divider/or-divider.component
     GetAltTextPipe,
     AccessRolePipe,
     MobileBannerComponent,
-    OrDividerComponent,
   ],
   providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
 })
