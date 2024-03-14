@@ -12,4 +12,4 @@ const meta: Meta<LoadingSpinnerComponent> = {
 export default meta;
 type SpinnerStory = StoryObj<LoadingSpinnerComponent>;
 
-export const spinner: SpinnerStory = {};
+export const Spinner: SpinnerStory = {};
