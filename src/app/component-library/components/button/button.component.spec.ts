@@ -105,12 +105,12 @@ describe('ButtonComponent', () => {
 
     expect(button.nativeElement.type).toEqual('button');
 
-    instance.attr = 'submit';
+    instance.buttonType = 'submit';
     fixture.detectChanges();
 
     expect(button.nativeElement.type).toEqual('submit');
 
-    instance.attr = 'reset';
+    instance.buttonType = 'reset';
     fixture.detectChanges();
 
     expect(button.nativeElement.type).toEqual('reset');

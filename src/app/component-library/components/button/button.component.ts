@@ -6,7 +6,7 @@ type MODE = 'light' | 'dark';
 type SIZE = 'hug' | 'fill';
 type ORIENTATION = 'left' | 'right';
 type HEIGHT = 'medium' | 'large';
-type ATTR = 'submit' | 'reset' | 'button';
+type TYPE = 'submit' | 'reset' | 'button';
 
 @Component({
   selector: 'pr-button',
@@ -23,7 +23,7 @@ export class ButtonComponent {
   @Input() icon: string = '';
   @Input() orientation: ORIENTATION = 'left';
   @Input() faIcon: string = '';
-  @Input() attr: ATTR = 'button';
+  @Input() buttonType: TYPE = 'button';
 
   //Outputs
   @Output() buttonClick = new EventEmitter<MouseEvent>();
