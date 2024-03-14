@@ -60,6 +60,9 @@
     &.button-light {
       //the button on a white background will be blue
       @include darkButton();
+      &:focus {
+        border: 2px solid white;
+      }
     }
     &.button-dark {
       @include lightButton();
