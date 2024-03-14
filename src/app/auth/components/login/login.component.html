@@ -54,11 +54,11 @@
     >
     <pr-or-divider></pr-or-divider>
     <pr-button
+      [attr]="'button'"
       [variant]="'primary'"
       [size]="'fill'"
       [orientation]="'right'"
-      [routerLink]="['..', 'signup']"
-      queryParamsHandling="merge"
+      (buttonClick)="navigateToRegister()"
       >Register</pr-button
     >
   </div>
