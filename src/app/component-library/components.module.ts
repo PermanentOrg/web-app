@@ -11,17 +11,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ToggleComponent } from './components/toggle/toggle.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 
 @NgModule({
-  declarations: [ToggleComponent, ButtonComponent, FormInputComponent],
-  imports: [
-    CommonModule,
-    FontAwesomeModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
+  declarations: [
+    FormInputComponent,
+    ToggleComponent,
+    ButtonComponent,
+    CheckboxComponent,
   ],
-  exports: [ToggleComponent, ButtonComponent, FormInputComponent],
+  imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
+  exports: [
+    FormInputComponent,
+    ToggleComponent,
+    ButtonComponent,
+    CheckboxComponent,
+  ],
 })
 export class ComponentsModule {
   constructor(private library: FaIconLibrary) {

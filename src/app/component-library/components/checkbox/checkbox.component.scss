@@ -1,0 +1,221 @@
+/* @format */
+@import 'variables';
+@import 'fonts';
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  & > .checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    margin-right: 12px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+  }
+
+  & > label {
+    font-family: 'UsualRegular', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 24px;
+  }
+}
+
+.checkbox-container-enabled.checkbox-container-primary {
+  & > .checkbox {
+    border: 2.5px solid rgba(19, 27, 74, 1);
+    transition: background-color 0.2s;
+    border-radius: 4px;
+  }
+  & > .checkbox::before,
+  & > .checkbox::after {
+    content: '';
+    position: absolute;
+    background-color: rgba(19, 27, 74, 1);
+    transition: opacity 0.2s;
+    opacity: 0;
+    border-radius: 2px;
+  }
+
+  & > .checkbox::before {
+    height: 2px;
+    width: 12px;
+    left: 6.6px;
+    top: 9px;
+    bottom: 8px;
+    transform: rotate(-45deg);
+  }
+
+  & > .checkbox::after {
+    top: 10.9px;
+    height: 2px;
+    width: 6px;
+    left: 4px;
+    bottom: 12px;
+    transform: rotate(45deg);
+  }
+
+  & > .checkbox.checked::before,
+  & > .checkbox.checked::after {
+    opacity: 1;
+  }
+
+  & > label {
+    color: rgba(19, 27, 74, 1);
+  }
+}
+
+.checkbox-container-enabled.checkbox-container-secondary {
+  & > .checkbox {
+    border: 2.5px solid white;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+  }
+  & > .checkbox::before,
+  & > .checkbox::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    transition: opacity 0.2s;
+    opacity: 0;
+    border-radius: 2px;
+  }
+
+  & > .checkbox::before {
+    height: 2px;
+    width: 12px;
+    left: 6.6px;
+    top: 9px;
+    bottom: 8px;
+    transform: rotate(-45deg);
+  }
+
+  & > .checkbox::after {
+    top: 10.9px;
+    height: 2px;
+    width: 6px;
+    left: 4px;
+    bottom: 12px;
+    transform: rotate(45deg);
+  }
+
+  & > .checkbox.checked::before,
+  & > .checkbox.checked::after {
+    opacity: 1;
+  }
+
+  & > label {
+    color: white;
+  }
+}
+
+.checkbox-container-disabled.checkbox-container-primary {
+  cursor: not-allowed;
+  & > .checkbox {
+    border: 1px solid #646464;
+    transition: background-color 0.2s;
+  }
+
+  & > .checkbox::before,
+  & > .checkbox::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    transition: opacity 0.2s;
+    opacity: 0;
+    border-radius: 2px;
+  }
+
+  & > .checkbox::before {
+    height: 1.5px;
+    width: 12px;
+    left: 6.6px;
+    top: 11px;
+    bottom: 8px;
+    transform: rotate(-45deg);
+  }
+
+  & > .checkbox::after {
+    top: 13px;
+    height: 1.5px;
+    width: 6px;
+    left: 4px;
+    bottom: 12px;
+    transform: rotate(45deg);
+  }
+
+  & > .checkbox {
+    background-color: $gray-light;
+    border: 1px solid #646464;
+  }
+
+  & > .checkbox::before,
+  & > .checkbox::after {
+    opacity: 0;
+  }
+
+  & > label {
+    color: $gray-light;
+  }
+}
+
+.checkbox-container-disabled.checkbox-container-secondary {
+  cursor: not-allowed;
+  & > .checkbox {
+    border: 1px solid #646464;
+    transition: background-color 0.2s;
+  }
+
+  & > .checkbox::before,
+  & > .checkbox::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    transition: opacity 0.2s;
+    opacity: 0;
+    border-radius: 2px;
+  }
+
+  & > .checkbox::before {
+    height: 1.5px;
+    width: 12px;
+    left: 6.6px;
+    top: 11px;
+    bottom: 8px;
+    transform: rotate(-45deg);
+  }
+
+  & > .checkbox::after {
+    top: 13px;
+    height: 1.5px;
+    width: 6px;
+    left: 4px;
+    bottom: 12px;
+    transform: rotate(45deg);
+  }
+
+  & > .checkbox {
+    background-color: $gray-light;
+    border: 1px solid #646464;
+  }
+
+  & > .checkbox::before,
+  & > .checkbox::after {
+    opacity: 0;
+  }
+
+  & > label {
+    color: $gray-light;
+  }
+}
+
+label {
+  margin: 0;
+}
