@@ -22,10 +22,10 @@
   </div>
   <pr-button
     [attr]="'submit'"
-    [text]="'Verify Access'"
     [variant]="'secondary'"
     [size]="'fill'"
     [disabled]="waiting || mfaForm.invalid"
-  ></pr-button>
+    >Verify Access</pr-button
+  >
 </form>
 <pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>
