@@ -149,4 +149,10 @@ export class LoginComponent {
         }
       });
   }
+
+  navigateToRegister() {
+    this.router.navigate(['..','signup'], {
+      relativeTo: this.route,
+    });
+  }
 }
