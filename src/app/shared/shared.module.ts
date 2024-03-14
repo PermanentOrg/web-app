@@ -72,7 +72,6 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
 import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/zooming-image-viewer.component';
-import { OrDividerComponent } from './components/or-divider/or-divider.component';
 
 @NgModule({
   imports: [
@@ -141,7 +140,6 @@ import { OrDividerComponent } from './components/or-divider/or-divider.component
     AccessRolePipe,
     MobileBannerComponent,
     ZoomingImageViewerComponent,
-    OrDividerComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -192,7 +190,6 @@ import { OrDividerComponent } from './components/or-divider/or-divider.component
     AccessRolePipe,
     MobileBannerComponent,
     ZoomingImageViewerComponent,
-    OrDividerComponent,
   ],
   providers: [
     PublicLinkPipe,
