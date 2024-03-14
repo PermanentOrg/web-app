@@ -39,11 +39,11 @@ const meta: Meta<CheckboxComponent> = {
 export default meta;
 type CheckboxStory = StoryObj<CheckboxComponent>;
 
-export const primary: CheckboxStory = {
+export const Primary: CheckboxStory = {
   args: { variant: 'primary', text: 'Primary' },
 };
 
-export const secondary: CheckboxStory = {
+export const Secondary: CheckboxStory = {
   args: { variant: 'secondary', text: 'Secondary' },
   parameters: { backgrounds },
 };
