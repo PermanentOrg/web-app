@@ -206,9 +206,11 @@ export class AccountService {
         if (loggedIn) {
           const newArchive = response.getArchiveVO();
           const newAccount = response.getAccountVO();
+          const account = this.getStorage('account');
+          newAccount.keepLoggedIn = account.keepLoggedIn;
           this.account.update(newAccount);
           this.archive.update(newArchive);
-          this.setStorage(this.account.keepLoggedIn, ARCHIVE_KEY, this.archive);
+          this.setStorage(newAccount.keepLoggedIn, ARCHIVE_KEY, this.archive);
         } else {
           throw loggedIn;
         }
