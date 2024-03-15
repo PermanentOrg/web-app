@@ -35,6 +35,11 @@
     width: 100%;
     align-items: center;
   }
+
+  @media screen and (max-width: 1300px) and (min-width: 900px) {
+    width: 40%;
+    padding-right: 20px;
+  }
 }
 
 .image {
