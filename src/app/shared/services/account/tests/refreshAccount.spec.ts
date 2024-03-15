@@ -127,6 +127,9 @@ describe('AccountService: refreshAccount', () => {
     let localStorageSpy;
     if (services.storage) {
       localStorageSpy = spyOn(services.storage.local, 'set').and.callThrough();
+      spyOn(services.instance, 'getStorage').and.returnValue(
+        new AccountVO({ keepLoggedIn: true })
+      );
     }
 
     return { logOutSpy, localStorageSpy };

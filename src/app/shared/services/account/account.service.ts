@@ -207,7 +207,7 @@ export class AccountService {
           const newArchive = response.getArchiveVO();
           const newAccount = response.getAccountVO();
           const account = this.getStorage('account');
-          newAccount.keepLoggedIn = account.keepLoggedIn;
+          newAccount.keepLoggedIn = account?.keepLoggedIn;
           this.account.update(newAccount);
           this.archive.update(newArchive);
           this.setStorage(newAccount.keepLoggedIn, ARCHIVE_KEY, this.archive);
@@ -646,7 +646,7 @@ export class AccountService {
     }
   }
 
-  private getStorage(key) {
+  public getStorage(key) {
     return this.storage.local.get(key) || this.storage.session.get(key);
   }
 
