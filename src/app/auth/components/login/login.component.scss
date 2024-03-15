@@ -15,6 +15,9 @@
 .page-title {
   @include pageTitle;
   margin-bottom: 175px;
+  @include beforeDesktop {
+    margin-bottom: 10%;
+  }
 }
 
 .email-input {
