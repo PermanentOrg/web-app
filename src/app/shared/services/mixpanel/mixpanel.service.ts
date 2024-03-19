@@ -66,11 +66,6 @@ export class MixpanelData {
   providedIn: 'root',
 })
 export class MixpanelService implements AnalyticsObserver {
-  public static enableMixpanel = true;
-  protected enabled = false;
-  protected token: string;
-  private mixpanelIdentifier: string;
-
   constructor(private httpV2: HttpV2Service) {}
 
   public async update(data: MixpanelData) {
@@ -88,18 +83,5 @@ export class MixpanelService implements AnalyticsObserver {
 
       return await firstValueFrom(this.httpV2.post('/v2/event', data, null));
     }
-  }
-  public setMixpanelIdentifier(account: AccountVO): void {
-    if (this.enabled) {
-      if (account.accountId) {
-        this.mixpanelIdentifier = environment.analyticsDebug
-          ? `${environment.environment}:${account.accountId}`
-          : `${account.accountId}`;
-      }
-    }
-  }
-
-  public getMixpanelIdentifier(): string {
-    return this.mixpanelIdentifier;
   }
 }

@@ -23,7 +23,6 @@ import {
 import * as Sentry from '@sentry/browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
-import { MixpanelService } from '../mixpanel/mixpanel.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 
 const ACCOUNT_KEY = 'account';
@@ -69,7 +68,6 @@ export class AccountService {
     private dialog: Dialog,
     private router: Router,
     private httpv2: HttpV2Service,
-    private mixpanel: MixpanelService,
     private location: LocationStrategy,
     private analytics: AnalyticsService
   ) {
@@ -111,9 +109,6 @@ export class AccountService {
     Sentry.configureScope((scope) => {
       scope.setUser({ id: this.account.accountId });
     });
-
-    // set account data on mixpanel
-    this.mixpanel.setMixpanelIdentifier(newAccount);
   }
 
   public setArchive(newArchive: ArchiveVO) {
