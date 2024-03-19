@@ -73,7 +73,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private iframe: IFrameService,
     private pledgeService: PledgeService,
     private deviceService: DeviceService,
-    private analytics:AnalyticsService
+    private analytics: AnalyticsService
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();

@@ -17,7 +17,11 @@ export class LegacyContactEditComponent implements OnInit {
   public email: string;
   public waiting = false;
 
-  constructor(private api: ApiService, private message: MessageService, private analytics:AnalyticsService) {}
+  constructor(
+    private api: ApiService,
+    private message: MessageService,
+    private analytics: AnalyticsService
+  ) {}
 
   ngOnInit(): void {
     this.name = this.legacyContact?.name;
