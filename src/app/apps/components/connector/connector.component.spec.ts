@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
@@ -8,17 +8,22 @@ import { SharedModule } from '@shared/shared.module';
 import { ArchiveVO, ConnectorOverviewVO, FolderVO } from '@root/app/models';
 import { Component, ViewChild } from '@angular/core';
 import { ConnectorComponent } from './connector.component';
+import { By } from '@angular/platform-browser';
 
 @Component({
   selector: `pr-test-host-component`,
-  template: `<pr-connector *ngIf="connector" [connector]="connector" [appsFolder]="appsFolder"></pr-connector>`
+  template: `<pr-connector
+    *ngIf="connector"
+    [connector]="connector"
+    [appsFolder]="appsFolder"
+  ></pr-connector>`,
 })
 class TestHostComponent {
   @ViewChild(ConnectorComponent) public component: ConnectorComponent;
   public connector: ConnectorOverviewVO;
   public appsFolder: FolderVO = new FolderVO({
     folderId: 1,
-    ChildItemVOs: []
+    ChildItemVOs: [],
   });
 }
 
@@ -27,7 +32,7 @@ describe('ConnectorComponent', () => {
   let component: ConnectorComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
-  const currentArchive = new ArchiveVO({archiveId: 1});
+  const currentArchive = new ArchiveVO({ archiveId: 1 });
 
   beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -36,8 +41,7 @@ describe('ConnectorComponent', () => {
     config.declarations.push(TestHostComponent);
     config.declarations.push(ConnectorComponent);
 
-    TestBed.configureTestingModule(config)
-    .compileComponents();
+    TestBed.configureTestingModule(config).compileComponents();
   }));
 
   beforeEach(() => {
@@ -63,66 +67,30 @@ describe('ConnectorComponent', () => {
     hostComponent.connector = new ConnectorOverviewVO({
       connector_overviewId: 1,
       archiveId: 1,
-      type: 'type.connector.facebook'
+      type: 'type.connector.facebook',
     });
     fixture.detectChanges();
 
     expect(hostComponent.component).toBeTruthy();
   });
 
-  it('should show the correct buttons for a disconnected Facebook connector', () => {
-    hostComponent.connector = new ConnectorOverviewVO({
-      connector_overviewId: 1,
-      archiveId: 1,
-      type: 'type.connector.facebook'
-    });
-    fixture.detectChanges();
-    component = hostComponent.component;
-
-    const compiled = fixture.debugElement.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
-
-    expect(button).toBeDefined();
-    expect(button.getAttribute('hidden')).toBeNull();
-    expect(button.innerText).toBe('Connect');
-  });
-
   it('should show the correct buttons for a disconnected FamilySearch connector', () => {
     hostComponent.connector = new ConnectorOverviewVO({
       connector_overviewId: 1,
       archiveId: 1,
-      type: 'type.connector.familysearch'
+      type: 'type.connector.familysearch',
     });
     fixture.detectChanges();
     component = hostComponent.component;
 
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+    const button = compiled.querySelector(
+      'button#connector-connect'
+    ) as HTMLButtonElement;
 
     expect(button).toBeDefined();
     expect(button.getAttribute('hidden')).toBeNull();
     expect(button.innerText).toBe('Sign In with FamilySearch');
-  });
-
-  it('should show the correct buttons for a connected Facebook connector', () => {
-    hostComponent.connector = new ConnectorOverviewVO({
-      connector_overviewId: 1,
-      archiveId: 1,
-      type: 'type.connector.facebook',
-      status: 'status.connector.connected'
-    });
-    fixture.detectChanges();
-    component = hostComponent.component;
-
-    const compiled = fixture.debugElement.nativeElement as HTMLElement;
-
-    const connectButton = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
-
-    expect(connectButton.getAttribute('hidden')).not.toBeNull();
-
-    const importButton = compiled.querySelector('button#facebook-import') as HTMLButtonElement;
-
-    expect(importButton.getAttribute('hidden')).toBeNull();
   });
 
   it('should show the correct buttons for a connected Familysearch connector in a regular archive', () => {
@@ -130,26 +98,34 @@ describe('ConnectorComponent', () => {
       connector_overviewId: 1,
       archiveId: 1,
       type: 'type.connector.familysearch',
-      status: 'status.connector.connected'
+      status: 'status.connector.connected',
     });
     fixture.detectChanges();
     component = hostComponent.component;
 
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
-    const connectButton = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+    const connectButton = compiled.querySelector(
+      'button#connector-connect'
+    ) as HTMLButtonElement;
 
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
-    const importButton = compiled.querySelector('button#familysearch-tree-import') as HTMLButtonElement;
+    const importButton = compiled.querySelector(
+      'button#familysearch-tree-import'
+    ) as HTMLButtonElement;
 
     expect(importButton.getAttribute('hidden')).toBeNull();
 
-    const uploadButton = compiled.querySelector('button#familysearch-upload') as HTMLButtonElement;
+    const uploadButton = compiled.querySelector(
+      'button#familysearch-upload'
+    ) as HTMLButtonElement;
 
     expect(uploadButton.getAttribute('hidden')).not.toBeNull();
 
-    const downloadButton = compiled.querySelector('button#familysearch-download') as HTMLButtonElement;
+    const downloadButton = compiled.querySelector(
+      'button#familysearch-download'
+    ) as HTMLButtonElement;
 
     expect(downloadButton.getAttribute('hidden')).not.toBeNull();
   });
@@ -160,27 +136,73 @@ describe('ConnectorComponent', () => {
       connector_overviewId: 1,
       archiveId: 1,
       type: 'type.connector.familysearch',
-      status: 'status.connector.connected'
+      status: 'status.connector.connected',
     });
     fixture.detectChanges();
     component = hostComponent.component;
 
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
-    const connectButton = compiled.querySelector('button#connector-connect') as HTMLButtonElement;
+    const connectButton = compiled.querySelector(
+      'button#connector-connect'
+    ) as HTMLButtonElement;
 
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
-    const importButton = compiled.querySelector('button#familysearch-tree-import') as HTMLButtonElement;
+    const importButton = compiled.querySelector(
+      'button#familysearch-tree-import'
+    ) as HTMLButtonElement;
 
     expect(importButton.getAttribute('hidden')).toBeNull();
 
-    const uploadButton = compiled.querySelector('button#familysearch-upload') as HTMLButtonElement;
+    const uploadButton = compiled.querySelector(
+      'button#familysearch-upload'
+    ) as HTMLButtonElement;
 
     expect(uploadButton.getAttribute('hidden')).toBeNull();
 
-    const downloadButton = compiled.querySelector('button#familysearch-download') as HTMLButtonElement;
+    const downloadButton = compiled.querySelector(
+      'button#familysearch-download'
+    ) as HTMLButtonElement;
 
     expect(downloadButton.getAttribute('hidden')).toBeNull();
+  });
+
+  it('should display correct connector class for FamilySearch connector', () => {
+    hostComponent.connector = new ConnectorOverviewVO({
+      type: 'type.connector.familysearch',
+    });
+    fixture.detectChanges();
+    const connectorComponentInstance = hostComponent.component;
+
+    expect(connectorComponentInstance).toBeDefined();
+
+    const connectorClass = connectorComponentInstance.getConnectorClass(
+      hostComponent.connector.type
+    );
+    const tooltip = connectorComponentInstance.getTooltip();
+
+    expect(connectorClass).toEqual('connector-familysearch');
+  });
+
+  it('should call connect() method when Connect button is clicked', () => {
+    hostComponent.connector = new ConnectorOverviewVO({
+      connector_overviewId: 2,
+      archiveId: 1,
+      type: 'type.connector.familysearch',
+    });
+    fixture.detectChanges();
+
+    const connectorComponentInstance = fixture.debugElement.query(
+      By.directive(ConnectorComponent)
+    ).componentInstance;
+    spyOn(connectorComponentInstance, 'connect');
+
+    const button = fixture.debugElement.nativeElement.querySelector(
+      'button#connector-connect'
+    );
+    button.click();
+
+    expect(connectorComponentInstance.connect).toHaveBeenCalled();
   });
 });
