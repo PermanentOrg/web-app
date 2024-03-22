@@ -45,9 +45,9 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
 import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import { FormsModule } from '@angular/forms';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 declare var ga: any;
 
