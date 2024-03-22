@@ -1,5 +1,11 @@
 /* @format */
-import { NgModule, Injectable, ErrorHandler, Injector } from '@angular/core';
+import {
+  NgModule,
+  Injectable,
+  ErrorHandler,
+  Injector,
+  APP_INITIALIZER,
+} from '@angular/core';
 import {
   RouterModule,
   Router,
@@ -41,8 +47,18 @@ import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 declare var ga: any;
+
+export function initializeAnalytics(
+  analyticsService: AnalyticsService,
+  mixpanelService: MixpanelService
+): () => void {
+  return () => {
+    analyticsService.addObserver(mixpanelService);
+  };
+}
 
 if (environment.environment !== 'local') {
   Sentry.init({
@@ -145,6 +161,13 @@ export class PermErrorHandler implements ErrorHandler {
   providers: [
     CookieService,
     MessageService,
+    MixpanelService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAnalytics,
+      deps: [AnalyticsService, MixpanelService],
+      multi: true,
+    },
     {
       provide: ErrorHandler,
       useClass: SentryErrorHandler,

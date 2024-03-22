@@ -14,9 +14,7 @@ export interface AnalyticsObserver {
 export class AnalyticsService {
   private observers: AnalyticsObserver[] = [];
 
-  constructor(private mixpanel: MixpanelService) {
-    this.addObserver(mixpanel);
-  }
+  constructor() {}
 
   public addObserver(observer: AnalyticsObserver): void {
     this.observers.push(observer);
