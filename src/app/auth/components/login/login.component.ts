@@ -24,7 +24,9 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 export class LoginComponent implements OnInit {
   @HostBinding('class.pr-auth-form') classBinding = true;
   loginForm: UntypedFormGroup;
-  waiting: boolean;
+  waiting: boolean = false;
+
+  rememberMe: boolean = true;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -44,7 +46,6 @@ export class LoginComponent implements OnInit {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      rememberMe: [true],
       keepLoggedIn: [true],
     });
   }
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit {
       .logIn(
         formValue.email,
         formValue.password,
-        formValue.rememberMe,
+        this.rememberMe,
         formValue.keepLoggedIn
       )
       .then((response: AuthResponse) => {
@@ -146,5 +147,11 @@ export class LoginComponent implements OnInit {
           );
         }
       });
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['..', 'signup'], {
+      relativeTo: this.route,
+    });
   }
 }

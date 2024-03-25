@@ -1,0 +1,62 @@
+/* @format */
+@import 'variables';
+
+:host {
+  background: $linear-gradient-background;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding: 0px 64px;
+
+  @media screen {
+    padding: 20px 0px;
+  }
+}
+
+.auth-container {
+  display: flex;
+  gap: 64px;
+  width: 100%;
+  align-items: center;
+  overflow-y: scroll;
+
+  @include beforeDesktop {
+    justify-content: center;
+  }
+}
+
+.auth {
+  width: 25%;
+  height: 70%;
+
+  @include beforeDesktop {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 1300px) and (min-width: 900px) {
+    width: 40%;
+    padding-right: 20px;
+  }
+}
+
+.image {
+  width: 65%;
+
+  @include beforeDesktop {
+    display: none;
+  }
+}
+
+.permanent-logo {
+  margin-bottom: 32px;
+  @include beforeDesktop {
+    width: 80%;
+
+    @media screen and (orientation: landscape) {
+      width: 40%;
+    }
+  }
+}

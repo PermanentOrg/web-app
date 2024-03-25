@@ -1,0 +1,28 @@
+/* @format */
+@import 'fonts';
+@import 'mixins';
+
+form {
+  padding: 0;
+  margin: 0;
+}
+
+.page-title {
+  @include pageTitle;
+  margin-bottom: 32px;
+}
+
+.mfa-text {
+  @include pageText;
+  &-continue {
+    margin-bottom: 50px;
+  }
+}
+
+.code-input {
+  margin-bottom: 32px;
+}
+
+:host {
+  position: relative;
+}

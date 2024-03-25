@@ -20,7 +20,16 @@ export class CheckboxComponent {
   toggleCheck() {
     if (!this.disabled) {
       this.isChecked = !this.isChecked;
-      this.isCheckedChange.emit(this.value);
+      this.isCheckedChange.emit(this.isChecked);
+    }
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.disabled) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.toggleCheck();
+      }
     }
   }
 }

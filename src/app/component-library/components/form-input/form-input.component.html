@@ -14,11 +14,13 @@
 ></fa-icon>
 <input
   [type]="type"
-  (input)="onInputChange($event.target.value)"
   class="form-control form-input"
+  (input)="onInputChange($event)"
   [id]="fieldName"
   [name]="fieldName"
   [placeholder]="placeholder"
+  [formControl]="control"
+  [class.form-input-with-text]="!isLabelHidden()"
   [class.validate-dirty]="config && config.validateDirty"
   [class.form-input-errors]="errors"
   [class.form-input-light]="variant === 'light'"
