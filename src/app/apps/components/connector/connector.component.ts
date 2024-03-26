@@ -72,11 +72,7 @@ export class ConnectorComponent implements OnInit {
     this.connectorName = this.prConstants.translate(this.connector.type);
     this.setStatus();
 
-    switch (type) {
-      case 'familysearch':
-        this.connectText = 'Sign In with FamilySearch';
-        break;
-    }
+    this.connectText = 'Sign In with FamilySearch';
   }
 
   setStatus() {
@@ -84,10 +80,7 @@ export class ConnectorComponent implements OnInit {
   }
 
   getConnectorClass(type: ConnectorType) {
-    switch (type) {
-      case 'type.connector.familysearch':
-        return 'connector-familysearch';
-    }
+    return 'connector-familysearch';
   }
 
   async familysearchUploadRequest() {
@@ -227,20 +220,16 @@ export class ConnectorComponent implements OnInit {
     archives for each of those persons. You'll find those
     memories saved in the apps section of those person archives.</p>
     `;
-    switch (this.connector.type) {
-      case 'type.connector.familysearch':
-        if (!this.connected) {
-          template = `
+    if (!this.connected) {
+      template = `
           <p>Connect to your FamilySearch account with the <strong>Sign In with FamilySearch</strong> option.</p>
           ${familySearchHelp}
           `;
-        } else {
-          template = `
+    } else {
+      template = `
           <p>Create separate, private Permanent Archives from your existing FamilySearch family tree data using the <strong>Import Family Tree</strong> option.</p>
           ${familySearchHelp}
           `;
-        }
-        break;
     }
 
     const done: string = 'Learn More';
@@ -255,12 +244,10 @@ export class ConnectorComponent implements OnInit {
           template
         )
         .then((val) => {
-          if (this.isFamilySearch()) {
-            window.open(
-              'https://desk.zoho.com/portal/permanent/en/kb/articles/import-persons-memories-familysearch',
-              '_blank'
-            );
-          }
+          window.open(
+            'https://desk.zoho.com/portal/permanent/en/kb/articles/import-persons-memories-familysearch',
+            '_blank'
+          );
         })
         .catch(() => {
           // Do nothing on "Cancel" press, but still catch the promise rejection.
@@ -285,24 +272,16 @@ export class ConnectorComponent implements OnInit {
       return '';
     }
 
-    switch (this.connector.type) {
-      case 'type.connector.familysearch':
-        return 'View imported memories and add new memories to upload';
-    }
+    return 'View imported memories and add new memories to upload';
   }
 
   connect() {
-    let connectRequest: Observable<any>;
     const archive = this.account.getArchive();
 
     this.waiting = true;
 
-    switch (this.connector.type) {
-      case 'type.connector.familysearch':
-        this.storage.local.set('familysearchConnect', true);
-        connectRequest = this.api.connector.familysearchConnect(archive);
-        break;
-    }
+    this.storage.local.set('familysearchConnect', true);
+    const connectRequest = this.api.connector.familysearchConnect(archive);
 
     if (connectRequest) {
       return connectRequest
@@ -327,16 +306,12 @@ export class ConnectorComponent implements OnInit {
   }
 
   disconnect() {
-    let disconnectRequest: Observable<any>;
     const archive = this.account.getArchive();
 
     this.waiting = true;
 
-    switch (this.connector.type) {
-      case 'type.connector.familysearch':
-        disconnectRequest = this.api.connector.familysearchDisconnect(archive);
-        break;
-    }
+    const disconnectRequest =
+      this.api.connector.familysearchDisconnect(archive);
 
     if (disconnectRequest) {
       return disconnectRequest
@@ -362,19 +337,14 @@ export class ConnectorComponent implements OnInit {
   }
 
   async authorize(code: string) {
-    let connectRequest: Promise<ConnectorResponse>;
     const archive = this.account.getArchive();
 
     this.waiting = true;
 
-    switch (this.connector.type) {
-      case 'type.connector.familysearch':
-        connectRequest = this.api.connector.familysearchAuthorize(
-          archive,
-          code
-        );
-        break;
-    }
+    const connectRequest = this.api.connector.familysearchAuthorize(
+      archive,
+      code
+    );
 
     if (connectRequest) {
       try {
@@ -407,9 +377,5 @@ export class ConnectorComponent implements OnInit {
       }
       this.waiting = false;
     }
-  }
-
-  private isFamilySearch(): boolean {
-    return this.connector.type === 'type.connector.familysearch';
   }
 }
