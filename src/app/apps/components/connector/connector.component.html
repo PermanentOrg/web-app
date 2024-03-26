@@ -12,11 +12,7 @@
     <div class="name">
       {{ connector.type | prConstants }}
     </div>
-    <div class="blurb" [ngSwitch]="connector.type">
-      <ng-container *ngSwitchCase="'type.connector.familysearch'"
-        >Connect your family memories</ng-container
-      >
-    </div>
+    <div class="blurb">Connect your family memories</div>
   </div>
 </div>
 <div class="connector-actions">
@@ -34,7 +30,6 @@
     [hidden]="!folder"
     (click)="goToFolder()"
     [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')"
   >
     View Memories
   </button>
@@ -44,7 +39,6 @@
     [hidden]="!connected"
     (click)="startFamilysearchTreeImport()"
     [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')"
   >
     Import family tree
   </button>
@@ -54,7 +48,6 @@
     [hidden]="!(connected && connector.ConnectorFamilysearchVO)"
     (click)="familysearchUploadRequest()"
     [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')"
   >
     Upload to FamilySearch
   </button>
@@ -64,7 +57,6 @@
     [hidden]="!(connected && connector.ConnectorFamilysearchVO)"
     (click)="familysearchDownloadRequest()"
     [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')"
   >
     Download from FamilySearch
   </button>
