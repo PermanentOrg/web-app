@@ -9,6 +9,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { routes } from '@onboarding/onboarding.routes';
 import { partition as lodashPartition } from 'lodash';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-onboarding',
@@ -36,7 +37,8 @@ export class OnboardingComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private account: AccountService,
-    private detector: ChangeDetectorRef
+    private detector: ChangeDetectorRef,
+    private analytics: AnalyticsService
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -61,6 +63,18 @@ export class OnboardingComponent implements OnInit {
           this.screen = OnboardingScreen.pendingArchives;
         }
       }
+    });
+    this.analytics.notifyObservers({
+      entity: 'account',
+      action: 'create',
+      entityId: this.account.getAccount().accountId.toString(),
+      version: 1,
+      body: {
+        analytics: {
+          event: 'Sign up',
+          data: {},
+        },
+      },
     });
   }
 

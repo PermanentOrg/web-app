@@ -9,6 +9,12 @@ import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {
+  EventData,
+  AnalyticsService,
+  AnalyticsObserver,
+} from '@shared/services/analytics/analytics.service';
 import { OnboardingModule } from '../../onboarding.module';
 import { OnboardingComponent } from './onboarding.component';
 
@@ -17,6 +23,11 @@ class NullRoute {
     data: {},
   };
 }
+
+const mockAnalyticsService = {
+  notifyObservers: (data: EventData) => {},
+  addObserver: (observer: AnalyticsObserver) => {},
+};
 
 let throwError: boolean = false;
 const mockApiService = {
@@ -72,6 +83,7 @@ describe('OnboardingComponent #onboarding', () => {
       .mock(AccountService, mockAccountService)
       .mock(Router, mockRouter)
       .mock(MessageService, mockMessageService)
+      .mock(AnalyticsService, mockAnalyticsService)
       .replaceModule(RouterModule, RouterTestingModule);
   });
   it('should exist', async () => {
@@ -122,7 +134,8 @@ describe('OnboardingComponent #onboarding', () => {
 
     const shallow = new Shallow(OnboardingComponent, OnboardingModule)
       .mock(AccountService, mockAccountService)
-      .mock(ApiService, mockApiService);
+      .mock(ApiService, mockApiService)
+      .import(HttpClientTestingModule);
 
     const { instance, find, fixture, element } = await shallow.render();
 
@@ -171,7 +184,8 @@ describe('OnboardingComponent #onboarding', () => {
 
     const shallow = new Shallow(OnboardingComponent, OnboardingModule)
       .mock(AccountService, mockAccountService)
-      .mock(ApiService, mockApiService);
+      .mock(ApiService, mockApiService)
+      .import(HttpClientTestingModule);
 
     const { instance } = await shallow.render();
 

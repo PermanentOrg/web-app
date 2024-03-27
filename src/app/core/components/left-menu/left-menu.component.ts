@@ -34,7 +34,8 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -74,7 +75,8 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private dialog: Dialog,
     private profile: ProfileService,
     private payerService: PayerService,
-    private mixpanel: MixpanelService
+    private deviceService: DeviceService,
+    private analytics: AnalyticsService
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
@@ -227,7 +229,20 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public toggleArchiveOptions(): void {
     this.showArchiveOptions = !this.showArchiveOptions;
     if (this.showArchiveOptions) {
-      this.mixpanel.trackPageView('Archive Menu');
+      const pageView = this.deviceService.getViewMessageForEventTracking();
+      const account = this.accountService.getAccount();
+      this.analytics.notifyObservers({
+        entity: 'account',
+        action: 'open_archive_menu',
+        version: 1,
+        entityId: account.accountId.toString(),
+        body: {
+          analytics: {
+            event: pageView,
+            data: { page: 'Archive Menu' },
+          },
+        },
+      });
     }
     window.sessionStorage.setItem(
       'showArchiveOptions',

@@ -1,5 +1,4 @@
 /* @format */
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import {
   Component,
   OnInit,
@@ -13,6 +12,10 @@ import { SidebarActionPortalService } from '@core/services/sidebar-action-portal
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
+import { ApiService } from '@shared/services/api/api.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-nav',
@@ -26,7 +29,9 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   constructor(
-    private mixpanel: MixpanelService,
+    private device: DeviceService,
+    private account: AccountService,
+    private analytics: AnalyticsService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog
@@ -47,7 +52,22 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showHamburgerMenu() {
-    this.mixpanel.trackPageView('Archive Menu');
+    const account = this.account.getAccount();
+    const pageView = this.device.getViewMessageForEventTracking();
+    this.analytics.notifyObservers({
+      action: 'open_archive_menu',
+      entity: 'account',
+      version: 1,
+      entityId: account.accountId.toString(),
+      body: {
+        analytics: {
+          event: pageView,
+          data: {
+            page: 'Archive Menu',
+          },
+        },
+      },
+    });
     this.hambugerMenuVisible = true;
   }
 

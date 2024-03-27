@@ -28,7 +28,8 @@ import { PledgeService } from '@pledge/services/pledge.service';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
 import { AccountVO } from '@models/account-vo';
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
@@ -71,7 +72,8 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private iframe: IFrameService,
     private pledgeService: PledgeService,
-    private mixpanel: MixpanelService
+    private deviceService: DeviceService,
+    private analytics: AnalyticsService
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
@@ -121,7 +123,20 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chooseDonationAmount('custom');
       }
     }
-    this.mixpanel.trackPageView('Storage');
+    const account = this.accountService.getAccount();
+    const pageView = this.deviceService.getViewMessageForEventTracking();
+    this.analytics.notifyObservers({
+      action: 'open_storage_modal',
+      entity: 'account',
+      version: 1,
+      entityId: account.accountId.toString(),
+      body: {
+        analytics: {
+          event: pageView,
+          data: { page: 'Storage' },
+        },
+      },
+    });
   }
 
   ngAfterViewInit() {
@@ -264,7 +279,18 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
-            this.mixpanel.track('Purchase Storage', {});
+            this.analytics.notifyObservers({
+              entity: 'account',
+              action: 'purchase_storage',
+              version: 1,
+              entityId: account.accountId.toString(),
+              body: {
+                analytics: {
+                  event: 'Purchase Storage',
+                  data: {},
+                },
+              },
+            });
             this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage(
               `You just claimed ${this.getStorageAmount(

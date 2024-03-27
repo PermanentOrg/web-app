@@ -13,6 +13,7 @@ import {
 import { AccountVO } from '@root/app/models';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-verify',
@@ -43,7 +44,8 @@ export class VerifyComponent implements OnInit {
     private router: Router,
     private message: MessageService,
     private route: ActivatedRoute,
-    public secrets: SecretsService
+    public secrets: SecretsService,
+    private analytics: AnalyticsService
   ) {
     this.captchaPassed = false;
     this.captchaSiteKey = secrets.get('RECAPTCHA_API_KEY');
@@ -104,7 +106,21 @@ export class VerifyComponent implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const account = this.accountService.getAccount();
+    this.analytics.notifyObservers({
+      entity: 'account',
+      action: 'open_verify_email',
+      version: 1,
+      entityId: account.accountId.toString(),
+      body: {
+        analytics: {
+          event: 'Verify Email',
+          data: {},
+        },
+      },
+    });
+  }
 
   onSubmit(formValue: any) {
     this.waiting = true;

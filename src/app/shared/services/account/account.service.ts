@@ -23,7 +23,7 @@ import {
 import * as Sentry from '@sentry/browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
-import { MixpanelService } from '../mixpanel/mixpanel.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -68,8 +68,8 @@ export class AccountService {
     private dialog: Dialog,
     private router: Router,
     private httpv2: HttpV2Service,
-    private mixpanel: MixpanelService,
-    private location: LocationStrategy
+    private location: LocationStrategy,
+    private analytics: AnalyticsService
   ) {
     const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
@@ -109,9 +109,6 @@ export class AccountService {
     Sentry.configureScope((scope) => {
       scope.setUser({ id: this.account.accountId });
     });
-
-    // set account data on mixpanel
-    this.mixpanel.identify(newAccount);
   }
 
   public setArchive(newArchive: ArchiveVO) {
@@ -378,7 +375,7 @@ export class AccountService {
               newAccount.isNew = currentAccount.isNew;
             }
             this.setAccount(newAccount);
-            this.trackAuthWithMixpanel('Sign in', newAccount);
+
             if (response.getArchiveVO()?.archiveId) {
               this.setArchive(response.getArchiveVO());
             }
@@ -388,6 +385,19 @@ export class AccountService {
             if (authToken) {
               this.api.auth.httpV2.setAuthToken(authToken);
             }
+
+            this.analytics.notifyObservers({
+              entity: 'account',
+              action: 'login',
+              version: 1,
+              entityId: newAccount.accountId.toString(),
+              body: {
+                analytics: {
+                  event: 'Sign in',
+                  data: {},
+                },
+              },
+            });
 
             this.accountChange.emit(this.account);
           } else if (response.needsMFA() || response.needsVerification()) {
@@ -412,7 +422,7 @@ export class AccountService {
       .toPromise();
   }
 
-  public logOut(): Promise<AuthResponse> {
+  public logOut(): any {
     return this.api.auth
       .logOut()
       .pipe(
@@ -421,10 +431,8 @@ export class AccountService {
             this.clearAccount();
             this.clearArchive();
             this.clearRootFolder();
-
             this.accountChange.emit(null);
           }
-
           return response;
         })
       )
@@ -445,7 +453,6 @@ export class AccountService {
               keepLoggedIn,
             });
             this.setAccount(newAccount);
-            this.trackAuthWithMixpanel('Verify multi-factor', newAccount);
 
             const authToken = response.getAuthToken()?.value;
             if (authToken) {
@@ -474,7 +481,6 @@ export class AccountService {
               keepLoggedIn,
             });
             this.setAccount(account);
-            this.trackAuthWithMixpanel('Verify email', account);
             return response;
           } else {
             throw response;
@@ -588,7 +594,6 @@ export class AccountService {
             });
             newAccount.isNew = true;
             this.setAccount(newAccount);
-            this.trackAuthWithMixpanel('Sign up', newAccount);
             return newAccount;
           })
         )
@@ -656,12 +661,5 @@ export class AccountService {
     });
     this.setAccount(newAccount);
     this.accountStorageUpdate.next(newAccount);
-  }
-
-  public trackAuthWithMixpanel(action: string, accountData: AccountVO): void {
-    this.mixpanel.track(action, {
-      accountId: accountData.accountId,
-      email: accountData.primaryEmail,
-    });
   }
 }

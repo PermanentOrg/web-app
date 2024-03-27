@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Directive, DirectiveUpdateRequest } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -22,7 +23,8 @@ export class DirectiveEditComponent implements OnInit {
   constructor(
     private api: ApiService,
     private account: AccountService,
-    private message: MessageService
+    private message: MessageService,
+    private analytics: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +49,18 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(response);
         this.directive = response;
         this.savedDirective.emit(this.directive);
+        this.analytics.notifyObservers({
+          entity: 'directive',
+          action: 'update',
+          version: 1,
+          entityId: this.directive.directiveId.toString(),
+          body: {
+            analytics: {
+              event: 'Edit Archive Steward',
+              data: {},
+            },
+          },
+        });
       } else {
         const savedDirective = await this.api.directive.create({
           archiveId: this.account.getArchive().archiveId.toString(),
@@ -57,8 +71,22 @@ export class DirectiveEditComponent implements OnInit {
           stewardEmail: this.email,
           note: this.note,
         });
+
         this.catchNotFoundError(savedDirective);
         this.savedDirective.emit(savedDirective);
+
+        this.analytics.notifyObservers({
+          entity: 'directive',
+          action: 'create',
+          version: 1,
+          entityId: savedDirective.directiveId.toString(),
+          body: {
+            analytics: {
+              event: 'Edit Archive Steward',
+              data: {},
+            },
+          },
+        });
       }
     } catch {
       if (this.accountExists) {

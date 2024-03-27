@@ -10,7 +10,6 @@ import {
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import { ApiService } from '@shared/services/api/api.service';
 import {
   ArchiveResponse,
@@ -18,11 +17,9 @@ import {
 } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
-import { EditService } from '@core/services/edit/edit.service';
 import {
   ProfileService,
   ProfileItemsDataCol,
-  ALWAYS_PUBLIC,
 } from '@shared/services/profile/profile.service';
 import {
   collapseAnimation,
@@ -34,9 +31,10 @@ import {
   READ_ONLY_FIELD,
 } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
-import { some } from 'lodash';
 import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
 @Component({
@@ -84,11 +82,27 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private prompt: PromptService,
     private message: MessageService,
     private cookies: CookieService,
-    private mixpanel: MixpanelService
+    private device: DeviceService,
+    private analytics: AnalyticsService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.mixpanel.trackPageView('Archive Profile');
+    const pageView = this.device.getViewMessageForEventTracking();
+    const account = this.account.getAccount();
+    this.analytics.notifyObservers({
+      entity: 'account',
+      action: 'open_archive_profile',
+      version: 1,
+      entityId: account.accountId.toString(),
+      body: {
+        analytics: {
+          event: pageView,
+          data: {
+            page: 'Archive Profile',
+          },
+        },
+      },
+    });
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
     await this.profile.fetchProfileItems();
@@ -165,7 +179,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
         this.publicRoot[prop] = record[prop] as never;
       }
       this.publicRoot.thumbArchiveNbr = record.archiveNbr;
-      this.trackProfileEdit();
     } catch (err) {
       if (err instanceof FolderResponse) {
         this.publicRoot.thumbArchiveNbr = originalValue;
@@ -190,11 +203,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
         }
       } else {
         await this.profile.saveProfileItem(item, [valueKey]);
+        await this.trackProfileEdit(item);
       }
       if (refreshArchive) {
         await this.account.refreshArchive();
       }
-      this.trackProfileEdit();
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         item[valueKey] = originalValue as never;
@@ -218,7 +231,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
         );
       }
       await this.profile.deleteProfileItem(item);
-      this.trackProfileEdit();
+      this.trackProfileEdit(item);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         this.message.showError(err.getMessage(), true);
@@ -232,7 +245,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   async onProfilePublicChange(isPublic: boolean) {
     try {
       await this.profile.setProfilePublic(isPublic);
-      this.trackProfileEdit();
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         this.message.showError(err.getMessage(), true);
@@ -245,7 +257,6 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     const empty = this.profile.createEmptyProfileItem(fieldNameShort);
     empty.isNewlyCreated = true;
     this.profile.addProfileItemToDictionary(empty);
-    this.trackProfileEdit();
   }
 
   async chooseLocationForItem(item: ProfileItemVOData) {
@@ -257,7 +268,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       );
     } finally {
       this.updateProgress();
-      this.trackProfileEdit();
+      this.trackProfileEdit(item);
     }
   }
 
@@ -278,7 +289,18 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     deferred.resolve();
   }
 
-  private trackProfileEdit() {
-    this.mixpanel.track('Edit Archive Profile', {});
+  private trackProfileEdit(item: ProfileItemVOData) {
+    this.analytics.notifyObservers({
+      action: 'update',
+      entity: 'profile_item',
+      version: 1,
+      entityId: item.profile_itemId.toString(),
+      body: {
+        analytics: {
+          event: 'Edit Archive Profile',
+          data: {},
+        },
+      },
+    });
   }
 }

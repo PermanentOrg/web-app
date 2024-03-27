@@ -5,6 +5,12 @@ import { OnboardingModule } from '@onboarding/onboarding.module';
 import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { AccountVO } from '@models/account-vo';
+import {
+  EventData,
+  AnalyticsService,
+  AnalyticsObserver,
+} from '@shared/services/analytics/analytics.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
@@ -21,7 +27,15 @@ const mockApiService = {
   },
 };
 
+const mockAnalyticsService = {
+  addObserver: (observer: AnalyticsObserver): void => {},
+  notifyObservers: (data: EventData): void => {},
+};
+
 const mockAccountService = {
+  getAccount: () => {
+    return new AccountVO({ accountId: 1 });
+  },
   createAccountForMe: new BehaviorSubject<{ name: string; action: string }>({
     name: '',
     action: '',
@@ -52,7 +66,8 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     createdArchive = null;
     shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
       .mock(ApiService, mockApiService)
-      .mock(AccountService, mockAccountService);
+      .mock(AccountService, mockAccountService)
+      .mock(AnalyticsService, mockAnalyticsService);
   });
   it('should exist', async () => {
     const { element } = await shallow.render();

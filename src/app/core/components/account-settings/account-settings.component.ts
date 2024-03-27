@@ -24,6 +24,7 @@ import {
   PromptField,
   PromptService,
 } from '@shared/services/prompt/prompt.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-account-settings',
@@ -48,7 +49,8 @@ export class AccountSettingsComponent implements OnInit {
     private api: ApiService,
     private message: MessageService,
     private fb: UntypedFormBuilder,
-    private prompt: PromptService
+    private prompt: PromptService,
+    private analytics: AnalyticsService
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map((c) => {
@@ -78,7 +80,22 @@ export class AccountSettingsComponent implements OnInit {
     this.changePasswordForm.addControl('passwordVerify', verifyPasswordControl);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.analytics.notifyObservers({
+      action: 'open_login_info',
+      entity: 'account',
+      version: 1,
+      entityId: this.account.accountId.toString(),
+      body: {
+        analytics: {
+          event: 'View Login Info',
+          data: {
+            page: 'Login info',
+          },
+        },
+      },
+    });
+  }
 
   async onSaveProfileInfo(prop: keyof AccountVO, value: string) {
     const originalValue = this.account[prop];

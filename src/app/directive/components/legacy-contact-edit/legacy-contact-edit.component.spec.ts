@@ -5,6 +5,10 @@ import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
 import { LegacyContact } from '@models/directive';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import {
+  EventData,
+  AnalyticsService,
+} from '@shared/services/analytics/analytics.service';
 import { DirectiveModule } from '../../directive.module';
 import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
@@ -19,6 +23,10 @@ type Find = (
 
 class MockApiService {
   public directive = new MockDirectiveRepo();
+}
+
+class MockAnalyticsService {
+  public notifiyObservers(data: EventData): void {}
 }
 
 describe('LegacyContactEditComponent', () => {
@@ -48,6 +56,10 @@ describe('LegacyContactEditComponent', () => {
       {
         provide: MessageService,
         useClass: MockMessageService,
+      },
+      {
+        provide: AnalyticsService,
+        useClass: MockAnalyticsService,
       }
     );
     MockDirectiveRepo.reset();
@@ -183,6 +195,7 @@ describe('LegacyContactEditComponent', () => {
     const { instance, find, fixture, outputs } = await shallow.render({
       bind: {
         legacyContact: {
+          id: '1',
           name: 'Test Output',
           email: 'output@example.com',
         },

@@ -1,9 +1,8 @@
 /* @format */
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { ApiService } from '@shared/services/api/api.service';
-
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { UploadItem } from './uploadItem';
 
 const buildForm = (fields: object, file: File) => {
@@ -23,7 +22,11 @@ const buildForm = (fields: object, file: File) => {
 export class Uploader {
   protected readonly tenMB = 10 * 1024 * 1024;
 
-  constructor(private api: ApiService, private httpClient: HttpClient) {}
+  constructor(
+    private api: ApiService,
+    private httpClient: HttpClient,
+    private analytics: AnalyticsService
+  ) {}
 
   private getUploadData = async (item: UploadItem) => {
     const response = await this.api.record.getPresignedUrl(
@@ -44,6 +47,27 @@ export class Uploader {
     if (registerResponse.isSuccessful !== true) {
       throw registerResponse;
     }
+
+    const record = registerResponse.Results[0].data[0].RecordVO;
+    const recordId = record.recordId;
+    const workspace = record.folder_linkType.includes('private')
+      ? 'Private'
+      : 'Public';
+
+    await this.analytics.notifyObservers({
+      action: 'submit',
+      entity: 'record',
+      version: 1,
+      entityId: recordId.toString(),
+      body: {
+        analytics: {
+          event: 'Finalize Upload',
+          data: {
+            workspace,
+          },
+        },
+      },
+    });
     return registerResponse;
   };
 
@@ -115,12 +139,35 @@ export class Uploader {
       emitProgress(progress);
     }
 
-    return this.api.record.registerMultipartRecord(
+    const response = await this.api.record.registerMultipartRecord(
       item.RecordVO,
       uploadId,
       key,
       eTags
     );
+
+    const record = response.getRecordVO();
+
+    const workspace = record.folder_linkType.includes('private')
+      ? 'Private'
+      : 'Public';
+
+    await this.analytics.notifyObservers({
+      action: 'submit',
+      entity: 'record',
+      version: 1,
+      entityId: record.recordId.toString(),
+      body: {
+        analytics: {
+          event: 'Finalize Upload',
+          data: {
+            workspace,
+          },
+        },
+      },
+    });
+
+    return response;
   };
 
   async uploadFile(
