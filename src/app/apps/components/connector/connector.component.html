@@ -1,35 +1,81 @@
-<div class="connector-about" [class.clickable]="folder" (click)="goToFolder()" [ngbTooltip]="getTooltip()">
+<!-- @format  -->
+<div
+  class="connector-about"
+  [class.clickable]="folder"
+  (click)="goToFolder()"
+  [ngbTooltip]="getTooltip()"
+>
   <div class="connector-logo" [ngClass]="getConnectorClass(connector.type)">
     <div class="logo-img"></div>
   </div>
   <div class="connector-info" (click)="goToFolder()">
     <div class="name">
-      {{connector.type | prConstants}}
+      {{ connector.type | prConstants }}
     </div>
-    <div class="blurb" [ngSwitch]="connector.type">
-      <ng-container *ngSwitchCase="'type.connector.familysearch'">Connect your family memories</ng-container>
-      <ng-container *ngSwitchCase="'type.connector.facebook'">Import your photo albums</ng-container>
-    </div>
+    <div class="blurb">Connect your family memories</div>
   </div>
 </div>
 <div class="connector-actions">
-  <button class="btn btn-primary"
-          id="connector-connect"
-          [hidden]="connected"
-          (click)="connect()"
-          [disabled]="waiting || connector.type === 'type.connector.facebook'">
+  <button
+    class="btn btn-primary"
+    id="connector-connect"
+    [hidden]="connected"
+    (click)="connect()"
+    [disabled]="waiting"
+  >
     {{ connectText || 'Connect' }}
   </button>
-  <button class="btn btn-primary" [hidden]="!folder" (click)="goToFolder()" [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')">View Memories</button>
-  <button class="btn btn-primary" id="facebook-import" [hidden]="!connected" (click)="importPrompt()" [disabled]="waiting"
-    *ngIf="connector.type.includes('facebook')">Import Photos</button>
-  <button class="btn btn-primary" id="familysearch-tree-import"[hidden]="!connected" (click)="startFamilysearchTreeImport()" [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')">Import family tree</button>
-  <button class="btn btn-primary" id="familysearch-upload" [hidden]="!(connected && connector.ConnectorFamilysearchVO)" (click)="familysearchUploadRequest()" [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')">Upload to FamilySearch</button>
-  <button class="btn btn-primary" id="familysearch-download" [hidden]="!(connected && connector.ConnectorFamilysearchVO)" (click)="familysearchDownloadRequest()" [disabled]="waiting"
-    *ngIf="connector.type.includes('familysearch')">Download from FamilySearch</button>
-  <button class="btn btn-primary" id="connector-disconnect" [hidden]="!connected" (click)="disconnect()" [disabled]="waiting">Disconnect</button>
-  <button class="btn btn-primary" id="connector-help" [hidden]="" (click)="showHelp()" [disabled]="waiting">Help</button>
+  <button
+    class="btn btn-primary"
+    [hidden]="!folder"
+    (click)="goToFolder()"
+    [disabled]="waiting"
+  >
+    View Memories
+  </button>
+  <button
+    class="btn btn-primary"
+    id="familysearch-tree-import"
+    [hidden]="!connected"
+    (click)="startFamilysearchTreeImport()"
+    [disabled]="waiting"
+  >
+    Import family tree
+  </button>
+  <button
+    class="btn btn-primary"
+    id="familysearch-upload"
+    [hidden]="!(connected && connector.ConnectorFamilysearchVO)"
+    (click)="familysearchUploadRequest()"
+    [disabled]="waiting"
+  >
+    Upload to FamilySearch
+  </button>
+  <button
+    class="btn btn-primary"
+    id="familysearch-download"
+    [hidden]="!(connected && connector.ConnectorFamilysearchVO)"
+    (click)="familysearchDownloadRequest()"
+    [disabled]="waiting"
+  >
+    Download from FamilySearch
+  </button>
+  <button
+    class="btn btn-primary"
+    id="connector-disconnect"
+    [hidden]="!connected"
+    (click)="disconnect()"
+    [disabled]="waiting"
+  >
+    Disconnect
+  </button>
+  <button
+    class="btn btn-primary"
+    id="connector-help"
+    [hidden]=""
+    (click)="showHelp()"
+    [disabled]="waiting"
+  >
+    Help
+  </button>
 </div>
