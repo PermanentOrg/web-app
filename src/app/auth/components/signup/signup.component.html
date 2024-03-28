@@ -96,7 +96,13 @@
     ></pr-checkbox>
     <label class="form-check-label" for="terms">
       I agree with the
-      <span class="terms" (click)="displayTerms()">terms</span>
+      <pr-button
+        [variant]="'link'"
+        [mode]="'dark'"
+        class="terms"
+        (click)="displayTerms()"
+        >terms</pr-button
+      >
     </label>
   </div>
   <div class="buttons">
