@@ -118,6 +118,7 @@ export class UploadButtonComponent
         this.upload.uploadFiles(this.currentFolder, this.files);
       }
     }
+    event.target.value = '';
   }
 
   async filePickerClick() {
