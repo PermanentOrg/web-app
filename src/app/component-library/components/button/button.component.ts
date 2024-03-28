@@ -1,7 +1,7 @@
 /* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-type VARIANT = 'primary' | 'secondary' | 'tertiary';
+type VARIANT = 'primary' | 'secondary' | 'tertiary' | 'link';
 type MODE = 'light' | 'dark';
 type SIZE = 'hug' | 'fill';
 type ORIENTATION = 'left' | 'right';
