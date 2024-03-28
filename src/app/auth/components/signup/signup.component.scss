@@ -75,3 +75,13 @@ form {
   display: flex;
   gap: 16px;
 }
+
+.form-check-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    padding: 0px;
+  }
+}
