@@ -17,6 +17,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderVO } from '@root/app/models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { findRouteData } from '@shared/utilities/router';
+import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 
 @Injectable()
 export class FolderResolveService {
@@ -25,14 +26,15 @@ export class FolderResolveService {
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private message: MessageService,
-    private router: Router
+    private router: Router,
+    private filesystem: FilesystemService
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> | Promise<any> {
-    let targetFolder;
+    let targetFolder: FolderVO;
 
     if (route.params.archiveNbr && route.params.folderLinkId) {
       targetFolder = new FolderVO({
@@ -73,37 +75,28 @@ export class FolderResolveService {
       targetFolder = new FolderVO(myFiles);
     }
 
-    return this.api.folder
-      .navigate(targetFolder)
-      .pipe(
-        map((response: FolderResponse) => {
-          if (!response.isSuccessful) {
-            throw response;
+    return this.filesystem
+      .getFolder(targetFolder)
+      .then((folder: FolderVO): any => {
+        if (
+          !folder.type.includes('root') &&
+          folder.view === FolderView.Timeline &&
+          !route.data.folderView
+        ) {
+          if (route.params.publicArchiveNbr) {
+            return this.router.navigate([
+              'p',
+              'archive',
+              route.params.publicArchiveNbr,
+              'view',
+              'timeline',
+              route.params.archiveNbr,
+              route.params.folderLinkId,
+            ]);
           }
-
-          const folder = response.getFolderVO(true);
-
-          if (
-            !folder.type.includes('root') &&
-            folder.view === FolderView.Timeline &&
-            !route.data.folderView
-          ) {
-            if (route.params.publicArchiveNbr) {
-              return this.router.navigate([
-                'p',
-                'archive',
-                route.params.publicArchiveNbr,
-                'view',
-                'timeline',
-                route.params.archiveNbr,
-                route.params.folderLinkId,
-              ]);
-            }
-          }
-          return folder;
-        })
-      )
-      .toPromise()
+        }
+        return folder;
+      })
       .catch((response: FolderResponse) => {
         this.message.showError({
           message: response.getMessage(),
