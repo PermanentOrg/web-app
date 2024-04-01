@@ -136,11 +136,10 @@ describe('InlineValueEditComponent', () => {
     cancelButton.dispatchEvent(new Event('mousedown'));
 
     fixture.detectChanges();
+    await fixture.whenStable();
 
-    setTimeout(() => {
-      expect(onBlurSpy).toHaveBeenCalledTimes(1);
-      expect(doneEditingSpy).not.toHaveBeenCalled();
-    });
+    expect(onBlurSpy).toHaveBeenCalledTimes(1);
+    expect(doneEditingSpy).not.toHaveBeenCalled();
   });
 
   it('should not allow editing if canEdit is false', async () => {
