@@ -23,7 +23,6 @@ import { ProfileEditComponent } from './components/profile-edit/profile-edit.com
 import { ProfileItemsResolveService } from './resolves/profile-items-resolve.service';
 import { TagsResolveService } from './resolves/tags.resolve.service';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
-import { LoadingArchiveComponent } from './components/loading-archive/loading-archive.component';
 import { MyfilesGuard } from './guards/myfiles.guard';
 
 const rootFolderResolve = {
@@ -284,10 +283,6 @@ export const routes: RoutesWithData = [
         component: GlobalSearchResultsComponent,
         data: { title: 'Search' },
         resolve: { loadTags: TagsResolveService },
-      },
-      {
-        path: 'switching',
-        component: LoadingArchiveComponent,
       },
       { path: '**', redirectTo: 'private' },
     ],
