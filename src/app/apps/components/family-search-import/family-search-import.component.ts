@@ -29,7 +29,7 @@ interface FamilyMember {
 @Component({
   selector: 'pr-family-search-import',
   templateUrl: './family-search-import.component.html',
-  styleUrls: ['./family-search-import.component.scss']
+  styleUrls: ['./family-search-import.component.scss'],
 })
 export class FamilySearchImportComponent implements OnInit {
   public stage: 'people' | 'memories' | 'importing' = 'people';
@@ -47,28 +47,32 @@ export class FamilySearchImportComponent implements OnInit {
     private guidedTour: GuidedTourService
   ) {
     this.currentUser = data.currentUserData;
-    this.familyMembers = filter(data.treeData, person => person.id !== this.currentUser.id);
+    this.familyMembers = filter(
+      data.treeData,
+      (person) => person.id !== this.currentUser.id
+    );
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   cancel() {
     this.dialogRef.close(null, true);
   }
 
   async startImport() {
-    const selected = this.familyMembers.filter(person => person.isSelected);
+    const selected = this.familyMembers.filter((person) => person.isSelected);
     if (!selected.length) {
       return this.cancel();
     }
 
     this.stage = 'importing';
-    const archivesToCreate = selected.map(person => {
+    const archivesToCreate = selected.map((person) => {
       return new ArchiveVO({
         fullName: person.display.name,
         type: 'type.archive.person',
-        relationType: this.getRelationshipFromAncestryNumber(person.display.ascendancyNumber)
+        relationType: this.getRelationshipFromAncestryNumber(
+          person.display.ascendancyNumber
+        ),
       });
     });
 
@@ -76,14 +80,13 @@ export class FamilySearchImportComponent implements OnInit {
 
     const total = archivesToCreate.length;
 
-    this.message.showMessage(
-      `Starting archive import for ${total} person(s). Do not close this window or refresh your browser.`,
-      'info'
-    );
+    this.message.showMessage({
+      message: `Starting archive import for ${total} person(s). Do not close this window or refresh your browser.`,
+      style: 'info',
+    });
 
     this.showImportSpinner = true;
     try {
-
       const response = await this.api.archive.create(archivesToCreate);
 
       const newArchives = response.getArchiveVOs();
@@ -92,20 +95,26 @@ export class FamilySearchImportComponent implements OnInit {
         personIds.push(selected[index].id);
       }
 
-      await this.api.connector.familysearchFactImportRequest(newArchives, personIds);
+      await this.api.connector.familysearchFactImportRequest(
+        newArchives,
+        personIds
+      );
 
       if (this.importMemories === 'yes') {
-        await this.api.connector.familysearchMemoryImportRequest(newArchives, personIds);
+        await this.api.connector.familysearchMemoryImportRequest(
+          newArchives,
+          personIds
+        );
       }
 
       this.showImportSpinner = false;
 
-      this.message.showMessage(
-        `Import complete. Tap here to view your new archives.`,
-        'success',
-        false,
-        ['/choosearchive']
-      );
+      this.message.showMessage({
+        message: `Import complete. Tap here to view your new archives.`,
+        style: 'success',
+        translate: false,
+        navigateTo: ['/choosearchive'],
+      });
 
       this.waiting = false;
       this.dialogRef.close();
@@ -120,22 +129,28 @@ export class FamilySearchImportComponent implements OnInit {
             },
             when: {
               show: () => {
-                this.guidedTour.markStepComplete('familysearch', 'switchArchives');
-              }
-            }
+                this.guidedTour.markStepComplete(
+                  'familysearch',
+                  'switchArchives'
+                );
+              },
+            },
           },
         ]);
       }
     } catch (err) {
       this.showImportSpinner = false;
       this.waiting = false;
-      this.message.showError('There was an error importing facts and memories. Please try again later.');
+      this.message.showError({
+        message:
+          'There was an error importing facts and memories. Please try again later.',
+      });
       this.dialogRef.close();
     }
   }
 
   getSelectedCount() {
-    return this.familyMembers.filter(person => person.isSelected).length;
+    return this.familyMembers.filter((person) => person.isSelected).length;
   }
 
   getRelationshipFromAncestryNumber(ancestryNumber: number) {

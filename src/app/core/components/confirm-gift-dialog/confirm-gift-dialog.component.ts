@@ -49,7 +49,9 @@ export class ConfirmGiftDialogComponent {
       };
       this.giftResult.next(response);
     } catch (e) {
-      this.msg.showError('Something went wrong! Please try again.');
+      this.msg.showError({
+        message: 'Something went wrong! Please try again.',
+      });
       this.giftResult.next({ isSuccessful: false, response: null });
     }
     this.dialogRef?.close();

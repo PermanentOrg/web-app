@@ -1,10 +1,22 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DIALOG_DATA, DialogRef, IsTabbedDialog } from '@root/app/dialog/dialog.module';
-import { PromptButton, PromptField, ACCESS_ROLE_FIELD_INITIAL, PromptService } from '@shared/services/prompt/prompt.service';
+import {
+  DIALOG_DATA,
+  DialogRef,
+  IsTabbedDialog,
+} from '@root/app/dialog/dialog.module';
+import {
+  PromptButton,
+  PromptField,
+  ACCESS_ROLE_FIELD_INITIAL,
+  PromptService,
+} from '@shared/services/prompt/prompt.service';
 import { AccountVO } from '@models';
 import { Deferred } from '@root/vendor/deferred';
 import { Validators } from '@angular/forms';
-import { ArchiveResponse, InviteResponse } from '@shared/services/api/index.repo';
+import {
+  ArchiveResponse,
+  InviteResponse,
+} from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccessRole, AccessRoleType } from '@models/access-role';
 import { ApiService } from '@shared/services/api/api.service';
@@ -12,16 +24,16 @@ import { AccountService } from '@shared/services/account/account.service';
 import { clone, remove, partition } from 'lodash';
 import { PayerService } from '@shared/services/payer/payer.service';
 
-const MemberActions: {[key: string]: PromptButton} = {
+const MemberActions: { [key: string]: PromptButton } = {
   Edit: {
     buttonName: 'edit',
-    buttonText: 'Edit'
+    buttonText: 'Edit',
   },
   Remove: {
     buttonName: 'remove',
     buttonText: 'Remove',
-    class: 'btn-danger'
-  }
+    class: 'btn-danger',
+  },
 };
 
 type MembersTab = 'members' | 'pending' | 'add';
@@ -29,7 +41,7 @@ type MembersTab = 'members' | 'pending' | 'add';
 @Component({
   selector: 'pr-members-dialog',
   templateUrl: './members-dialog.component.html',
-  styleUrls: ['./members-dialog.component.scss']
+  styleUrls: ['./members-dialog.component.scss'],
 })
 export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   members: AccountVO[];
@@ -47,12 +59,15 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     private accountService: AccountService,
     private payerService: PayerService
   ) {
-    [ this.members, this.pendingMembers ] = partition(this.data.members, { status: 'status.generic.ok' });
-    this.canEdit = this.accountService.checkMinimumArchiveAccess(AccessRole.Manager);
+    [this.members, this.pendingMembers] = partition(this.data.members, {
+      status: 'status.generic.ok',
+    });
+    this.canEdit = this.accountService.checkMinimumArchiveAccess(
+      AccessRole.Manager
+    );
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   setTab(tab: MembersTab) {
     this.activeTab = tab;
@@ -64,11 +79,12 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
 
   onMemberClick(member: AccountVO) {
     const buttons = [];
-    if (member.accessRole !== 'access.role.owner' ) {
+    if (member.accessRole !== 'access.role.owner') {
       buttons.push(MemberActions.Edit);
     }
     buttons.push(MemberActions.Remove);
-    this.promptService.promptButtons(buttons, `Member access for ${member.fullName}`)
+    this.promptService
+      .promptButtons(buttons, `Member access for ${member.fullName}`)
       .then((value: string) => {
         switch (value) {
           case 'edit':
@@ -83,28 +99,44 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
 
   async editMember(member: AccountVO) {
     const deferred = new Deferred();
-    const fields = [ ACCESS_ROLE_FIELD_INITIAL(member.accessRole) ];
-    const value: any = await this.promptService.prompt(fields, `Edit access for ${member.fullName}`, deferred.promise);
+    const fields = [ACCESS_ROLE_FIELD_INITIAL(member.accessRole)];
+    const value: any = await this.promptService.prompt(
+      fields,
+      `Edit access for ${member.fullName}`,
+      deferred.promise
+    );
     const updatedMember = clone(member);
     updatedMember.accessRole = value.accessRole as AccessRoleType;
     try {
       if (updatedMember.accessRole === 'access.role.owner') {
         deferred.resolve();
         await this.confirmOwnershipTransfer();
-        const response = await this.api.archive.transferOwnership(updatedMember, this.accountService.getArchive());
-        this.message.showMessage('Ownership transfer request sent.', 'success');
+        const response = await this.api.archive.transferOwnership(
+          updatedMember,
+          this.accountService.getArchive()
+        );
+        this.message.showMessage({
+          message: 'Ownership transfer request sent.',
+          style: 'success',
+        });
         const account = response.getAccountVOs().pop();
         member.accessRole = updatedMember.accessRole;
         member.status = account.status;
       } else {
-        const response = await this.api.archive.updateMember(updatedMember, this.accountService.getArchive());
-        this.message.showMessage('Member access saved successfully.', 'success');
+        const response = await this.api.archive.updateMember(
+          updatedMember,
+          this.accountService.getArchive()
+        );
+        this.message.showMessage({
+          message: 'Member access saved successfully.',
+          style: 'success',
+        });
         member.accessRole = updatedMember.accessRole;
         deferred.resolve();
       }
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
       deferred.resolve();
     }
@@ -112,20 +144,29 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
 
   removeMember(member: AccountVO) {
     const deferred = new Deferred();
-    const confirmTitle = `Remove ${member.fullName}'s access to The ${this.accountService.getArchive().fullName} Archive?`;
+    const confirmTitle = `Remove ${member.fullName}'s access to The ${
+      this.accountService.getArchive().fullName
+    } Archive?`;
 
-    return this.promptService.confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
+    return this.promptService
+      .confirm('Remove', confirmTitle, deferred.promise, 'btn-danger')
       .then(() => {
-        return this.api.archive.removeMember(member, this.accountService.getArchive());
+        return this.api.archive.removeMember(
+          member,
+          this.accountService.getArchive()
+        );
       })
       .then((response: ArchiveResponse) => {
-        this.message.showMessage('Member removed successfully.', 'success');
+        this.message.showMessage({
+          message: 'Member removed successfully.',
+          style: 'success',
+        });
         if (member.status.includes('pending')) {
           remove(this.pendingMembers, member);
         } else {
           remove(this.members, member);
-          if(this.payerService.payerId === member.accountId){
-            this.payerService.payerId = ''
+          if (this.payerService.payerId === member.accountId) {
+            this.payerService.payerId = '';
           }
         }
         deferred.resolve();
@@ -133,7 +174,10 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       .catch((response: ArchiveResponse) => {
         deferred.resolve();
         if (response) {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         }
       });
   }
@@ -141,7 +185,8 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   async onAddMemberClick() {
     const archive = this.accountService.getArchive();
     if (
-      archive.accessRole !== 'access.role.manager' && archive.accessRole !== 'access.role.owner'
+      archive.accessRole !== 'access.role.manager' &&
+      archive.accessRole !== 'access.role.owner'
     ) {
       try {
         await this.promptService.confirm(
@@ -151,7 +196,9 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
           null,
           `You do not have permission to add members to this archive.`
         );
-        window.open('https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing');
+        window.open(
+          'https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing'
+        );
       } catch {
         // Catch PromptService rejection, but do nothing on "Cancel" button press
       }
@@ -163,16 +210,23 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       fieldName: 'primaryEmail',
       placeholder: 'Member email',
       type: 'email',
-      validators: [ Validators.required, Validators.email ],
+      validators: [Validators.required, Validators.email],
       config: {
         autocapitalize: 'off',
         autocorrect: 'off',
         autocomplete: 'off',
-      }
+      },
     };
-    const fields = [ emailField, ACCESS_ROLE_FIELD_INITIAL('access.role.viewer') ];
+    const fields = [
+      emailField,
+      ACCESS_ROLE_FIELD_INITIAL('access.role.viewer'),
+    ];
 
-    const value = await this.promptService.prompt(fields, 'Add member', deferred.promise);
+    const value = await this.promptService.prompt(
+      fields,
+      'Add member',
+      deferred.promise
+    );
     member = value as AccountVO;
 
     try {
@@ -181,10 +235,16 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
         deferred.resolve();
         await this.confirmOwnershipTransfer();
         response = await this.api.archive.transferOwnership(member, archive);
-        this.message.showMessage('Ownership transfer request sent.', 'success');
+        this.message.showMessage({
+          message: 'Ownership transfer request sent.',
+          style: 'success',
+        });
       } else {
         response = await this.api.archive.addMember(member, archive);
-        this.message.showMessage('Member added successfully.', 'success');
+        this.message.showMessage({
+          message: 'Member added successfully.',
+          style: 'success',
+        });
         deferred.resolve();
       }
       const account = response.getAccountVOs().pop();
@@ -196,7 +256,10 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
         if (err.getMessage() === 'warning.archive.no_email_found') {
           this.promptForInvite(member);
         } else {
-          this.message.showError(err.getMessage(), true);
+          this.message.showError({
+            message: err.getMessage(),
+            translate: true,
+          });
         }
       }
       deferred.resolve();
@@ -208,39 +271,53 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   }
 
   confirmOwnershipTransfer() {
-    return this.promptService.confirm('Transfer ownership', 'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Manager');
+    return this.promptService.confirm(
+      'Transfer ownership',
+      'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Manager'
+    );
   }
 
   promptForInvite(member: AccountVO) {
     const deferred = new Deferred();
     const title = `No account found for ${member.primaryEmail}. Send invitation?`;
-    const fields: PromptField[] = [{
-      fieldName: 'fullName',
-      placeholder: 'Recipient name',
-      validators: [ Validators.required ],
-      type: 'text',
-      config: {
-        autocapitalize: 'on',
-        autocorrect: 'off',
-        autocomplete: 'off',
-      }
-    }];
+    const fields: PromptField[] = [
+      {
+        fieldName: 'fullName',
+        placeholder: 'Recipient name',
+        validators: [Validators.required],
+        type: 'text',
+        config: {
+          autocapitalize: 'on',
+          autocorrect: 'off',
+          autocomplete: 'off',
+        },
+      },
+    ];
 
-    this.promptService.prompt(fields, title, deferred.promise, 'Invite')
+    this.promptService
+      .prompt(fields, title, deferred.promise, 'Invite')
       .then((value: any) => {
         member.fullName = value.fullName;
-        return this.api.invite.sendMemberInvite(member, this.accountService.getArchive());
+        return this.api.invite.sendMemberInvite(
+          member,
+          this.accountService.getArchive()
+        );
       })
       .then((response: InviteResponse) => {
         deferred.resolve();
-        this.message.showMessage('Invite sent successfully.', 'success');
+        this.message.showMessage({
+          message: 'Invite sent successfully.',
+          style: 'success',
+        });
       })
       .catch((response: InviteResponse) => {
         deferred.resolve();
         if (response) {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         }
       });
   }
-
 }

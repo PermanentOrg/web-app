@@ -131,16 +131,18 @@ export class StorageDialogComponent
         },
       });
       const pipe = new FileSizePipe();
-      this.message.showMessage(
-        `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
-        'success'
-      );
+      this.message.showMessage({
+        message: `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
+        style: 'success',
+      });
       this.promoForm.reset();
     } catch (err) {
       if (err instanceof BillingResponse || err instanceof AccountResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       } else {
-        this.message.showError('There was an error redeeming your code.');
+        this.message.showError({
+          message: 'There was an error redeeming your code.',
+        });
       }
     } finally {
       this.waiting = false;

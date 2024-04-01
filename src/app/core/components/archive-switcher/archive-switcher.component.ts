@@ -137,7 +137,10 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
             })
             .catch((response: BaseResponse) => {
               deferred.resolve();
-              this.message.showError(response.getMessage(), true);
+              this.message.showError({
+                message: response.getMessage(),
+                translate: true,
+              });
             });
         } else {
           deferred.resolve();
@@ -200,7 +203,10 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
       })
       .catch((response: ArchiveResponse | BaseResponse) => {
         if (response) {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
           deferred.reject();
         }
       });

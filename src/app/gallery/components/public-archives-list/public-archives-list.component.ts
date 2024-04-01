@@ -27,7 +27,9 @@ export class PublicArchivesListComponent implements OnInit {
       this.waiting = false;
     } catch (error) {
       this.waiting = false;
-      this.messageService.showError('There was an error loading the archives');
+      this.messageService.showError({
+        message: 'There was an error loading the archives',
+      });
     }
   }
 

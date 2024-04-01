@@ -65,12 +65,12 @@ export class AccountSettingsDialogComponent implements OnInit {
       window.location.assign('/');
     } catch (err) {
       if (err instanceof AccountResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       } else {
-        this.message.showError(
-          'There was an error deleting the account.',
-          false
-        );
+        this.message.showError({
+          message: 'There was an error deleting the account.',
+          translate: false,
+        });
       }
     } finally {
       this.waiting = false;

@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  UntypedFormGroup,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { AuthResponse, ArchiveResponse, AccountResponse } from '@shared/services/api/index.repo';
+import {
+  AuthResponse,
+  ArchiveResponse,
+  AccountResponse,
+} from '@shared/services/api/index.repo';
 
 @Component({
   selector: 'pr-verify',
   templateUrl: './verify-embed.component.html',
-  styleUrls: ['./verify-embed.component.scss']
+  styleUrls: ['./verify-embed.component.scss'],
 })
 export class VerifyEmbedComponent implements OnInit {
   verifyForm: UntypedFormGroup;
@@ -23,17 +31,17 @@ export class VerifyEmbedComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.verifyForm = fb.group({
-      'token': ['', Validators.required],
+      token: ['', Validators.required],
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService.verifyEmail(formValue.token)
+    this.accountService
+      .verifyEmail(formValue.token)
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
@@ -43,8 +51,10 @@ export class VerifyEmbedComponent implements OnInit {
       })
       .catch((response: ArchiveResponse | AccountResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage(), true);
+        this.message.showError({
+          message: response.getMessage(),
+          translate: true,
+        });
       });
   }
-
 }

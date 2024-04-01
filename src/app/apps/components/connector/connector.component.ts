@@ -90,13 +90,14 @@ export class ConnectorComponent implements OnInit {
       const response = await this.api.connector.familysearchMemoryUploadRequest(
         archive
       );
-      this.message.showMessage(
-        'FamilySearch memory upload started in background. This may take a few moments.',
-        'success'
-      );
+      this.message.showMessage({
+        message:
+          'FamilySearch memory upload started in background. This may take a few moments.',
+        style: 'success',
+      });
     } catch (err) {
       if (err instanceof ConnectorResponse) {
-        this.message.showError(err.getMessage());
+        this.message.showError({ message: err.getMessage() });
       }
     } finally {
       this.waiting = false;
@@ -110,13 +111,14 @@ export class ConnectorComponent implements OnInit {
       const response = await this.api.connector.familysearchMemoryImportRequest(
         archive
       );
-      this.message.showMessage(
-        'FamilySearch memory download started in background. This may take a few moments.',
-        'success'
-      );
+      this.message.showMessage({
+        message:
+          'FamilySearch memory download started in background. This may take a few moments.',
+        style: 'success',
+      });
     } catch (err) {
       if (err instanceof ConnectorResponse) {
-        this.message.showError(err.getMessage());
+        this.message.showError({ message: err.getMessage() });
       }
     } finally {
       this.waiting = false;
@@ -130,13 +132,14 @@ export class ConnectorComponent implements OnInit {
       const response = await this.api.connector.familysearchMemorySyncRequest(
         archive
       );
-      this.message.showMessage(
-        'FamilySearch sync started in background. This may take a few moments.',
-        'success'
-      );
+      this.message.showMessage({
+        message:
+          'FamilySearch sync started in background. This may take a few moments.',
+        style: 'success',
+      });
     } catch (err) {
       if (err instanceof ConnectorResponse) {
-        this.message.showError(err.getMessage());
+        this.message.showError({ message: err.getMessage() });
       }
     } finally {
       this.waiting = false;
@@ -300,7 +303,10 @@ export class ConnectorComponent implements OnInit {
           location.assign(result.value);
         })
         .catch((response: ConnectorResponse) => {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         });
     }
   }
@@ -331,7 +337,10 @@ export class ConnectorComponent implements OnInit {
           this.setStatus();
         })
         .catch((response: ConnectorResponse) => {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         });
     }
   }
@@ -372,7 +381,10 @@ export class ConnectorComponent implements OnInit {
         }
       } catch (err) {
         if (err instanceof ConnectorResponse) {
-          this.message.showError(err.getMessage(), true);
+          this.message.showError({
+            message: err.getMessage(),
+            translate: true,
+          });
         }
       }
       this.waiting = false;

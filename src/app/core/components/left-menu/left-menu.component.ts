@@ -150,7 +150,10 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   logOut() {
     this.accountService.logOut().then(() => {
-      this.messageService.showMessage(`Logged out successfully`, 'success');
+      this.messageService.showMessage({
+        message: `Logged out successfully`,
+        style: 'success',
+      });
       this.router.navigate(['/login']);
     });
   }

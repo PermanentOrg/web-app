@@ -10,7 +10,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 @Component({
   selector: 'pr-file-history',
   templateUrl: './file-history.component.html',
-  styleUrls: ['./file-history.component.scss']
+  styleUrls: ['./file-history.component.scss'],
 })
 export class FileHistoryComponent implements OnInit {
   currentPage = 1;
@@ -37,17 +37,20 @@ export class FileHistoryComponent implements OnInit {
 
   async loadFileHistory() {
     try {
-      const response = await this.api.billing.getFileHistory(this.account.getAccount());
+      const response = await this.api.billing.getFileHistory(
+        this.account.getAccount()
+      );
       const ledgerItems = response.getLedgerNonfinancialVOs().reverse();
       this.ledgerItemCount = ledgerItems.length;
       this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
     } catch (err) {
-      this.message.showError('There was a problem loading your file history.');
+      this.message.showError({
+        message: 'There was a problem loading your file history.',
+      });
       this.error = true;
       throw err;
     } finally {
       this.loading = false;
     }
   }
-
 }

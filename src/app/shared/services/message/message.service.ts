@@ -3,6 +3,16 @@ import { Injectable } from '@angular/core';
 import { MessageComponent } from '@shared/components/message/message.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
+type MessageType = 'success' | 'info' | 'warning' | 'danger';
+export interface ShowMessage {
+  message: string;
+  style?: MessageType;
+  translate?: boolean;
+  navigateTo?: string[];
+  navigateParams?: any;
+  externalUrl?: string;
+  externalMessage?: string;
+}
 @Injectable()
 export class MessageService {
   private component: MessageComponent;
@@ -17,56 +27,24 @@ export class MessageService {
     this.component = toRegister;
   }
 
-  public showMessage(
-    message: string,
-    style?: 'success' | 'info' | 'warning' | 'danger',
-    translate?: boolean,
-    navigateTo?: string[],
-    navigateParams?: any,
-    externalUrl?: string,
-    externalMessage?: string
-  ) {
+  public showMessage(data: ShowMessage) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
     }
 
+    const { translate } = data;
+
     if (!translate) {
-      this.component.display(
-        message,
-        style,
-        navigateTo,
-        navigateParams,
-        externalUrl,
-        externalMessage
-      );
+      this.component.display(data);
     } else {
-      this.component.display(
-        this.constants.translate(message),
-        style,
-        navigateTo,
-        navigateParams,
-        externalUrl,
-        externalMessage
-      );
+      this.component.display({
+        message: this.constants.translate(data.message),
+        ...data,
+      });
     }
   }
 
-  public showError(
-    message: string,
-    translate?: boolean,
-    navigateTo?: string[],
-    navigateParams?: any,
-    externalUrl?: string,
-    externalMessage?: string
-  ) {
-    return this.showMessage(
-      message,
-      'danger',
-      translate,
-      navigateTo,
-      navigateParams,
-      externalUrl,
-      externalMessage
-    );
+  public showError(data: ShowMessage) {
+    return this.showMessage({ style: 'danger', ...data });
   }
 }

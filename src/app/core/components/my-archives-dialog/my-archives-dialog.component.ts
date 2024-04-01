@@ -161,10 +161,10 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       });
       await this.accountService.updateAccount(updateAccount);
     } catch (err) {
-      this.message.showError(
-        'There was a problem changing the default archive.',
-        false
-      );
+      this.message.showError({
+        message: 'There was a problem changing the default archive.',
+        translate: false,
+      });
     } finally {
       archive.isPendingAction = false;
     }
@@ -201,10 +201,10 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       await this.api.archive.delete(archive);
       remove(this.archives, archive);
     } catch (err) {
-      this.message.showError(
-        'There was a problem deleting this archive.',
-        false
-      );
+      this.message.showError({
+        message: 'There was a problem deleting this archive.',
+        translate: false,
+      });
       archive.isPendingAction = false;
     }
   }
@@ -220,7 +220,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       this.scrollToArchive(archive);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     } finally {
       archive.isPendingAction = false;
@@ -234,7 +234,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
       remove(this.pendingArchives, archive);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     } finally {
       archive.isPendingAction = false;
@@ -250,7 +250,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
 
   public onNewArchiveFormFailure(err): void {
     if (err instanceof ArchiveResponse) {
-      this.message.showError(err.getMessage(), true);
+      this.message.showError({ message: err.getMessage(), translate: true });
     }
     this.waiting = false;
   }

@@ -70,12 +70,12 @@ export class LoginComponent implements OnInit {
               relativeTo: this.route,
             })
             .then(() => {
-              this.message.showMessage(
-                `Verify to continue as ${
+              this.message.showMessage({
+                message: `Verify to continue as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'warning'
-              );
+                style: 'warning',
+              });
             });
         } else if (response.needsVerification()) {
           this.router
@@ -85,23 +85,23 @@ export class LoginComponent implements OnInit {
               queryParams: { keepLoggedIn: formValue.keepLoggedIn },
             })
             .then(() => {
-              this.message.showMessage(
-                `Verify to continue as ${
+              this.message.showMessage({
+                message: `Verify to continue as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'warning'
-              );
+                style: 'warning',
+              });
             });
         } else if (this.route.snapshot.queryParams.shareByUrl) {
           this.router
             .navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
             .then(() => {
-              this.message.showMessage(
-                `Logged in as ${
+              this.message.showMessage({
+                message: `Logged in as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'success'
-              );
+                style: 'success',
+              });
             });
         } else if (this.route.snapshot.queryParams.cta === 'timeline') {
           if (this.device.isMobile() || !this.device.didOptOut()) {
@@ -119,12 +119,12 @@ export class LoginComponent implements OnInit {
             this.router
               .navigate(['/'], { queryParamsHandling: 'preserve' })
               .then(() => {
-                this.message.showMessage(
-                  `Logged in as ${
+                this.message.showMessage({
+                  message: `Logged in as ${
                     this.accountService.getAccount().primaryEmail
                   }.`,
-                  'success'
-                );
+                  style: 'success',
+                });
               });
           } else {
             this.router.navigate(['/app/onboarding']);
@@ -135,15 +135,18 @@ export class LoginComponent implements OnInit {
         this.waiting = false;
 
         if (response.messageIncludes('warning.signin.unknown')) {
-          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.message.showMessage({
+            message: 'Incorrect email or password.',
+            style: 'danger',
+          });
           this.loginForm.patchValue({
             password: '',
           });
         } else {
-          this.message.showMessage(
-            'Log in failed. Please try again.',
-            'danger'
-          );
+          this.message.showMessage({
+            message: 'Log in failed. Please try again.',
+            style: 'danger',
+          });
         }
       });
   }

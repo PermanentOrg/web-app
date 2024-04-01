@@ -74,9 +74,10 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
         switch (progressEvent.sessionStatus) {
           case UploadSessionStatus.Start:
-            this.message.showMessage(
-              "Please don't close your browser until the upload is complete."
-            );
+            this.message.showMessage({
+              message:
+                "Please don't close your browser until the upload is complete.",
+            });
             this.uploadStart = new Date();
             break;
           case UploadSessionStatus.Done:
@@ -84,32 +85,33 @@ export class UploadService implements HasSubscriptions, OnDestroy {
             this.reportUploadTime();
             break;
           case UploadSessionStatus.DefaultError:
-            this.message.showError(
-              'Oops, something went wrong! Please try again. If the issue persists, reach out to us at support@permanent.org.'
-            );
+            this.message.showError({
+              message:
+                'Oops, something went wrong! Please try again. If the issue persists, reach out to us at support@permanent.org.',
+            });
             this.accountService.refreshAccountDebounced();
             break;
           case UploadSessionStatus.FileNoBytesError:
-            this.message.showError(
-              'This file cannot be uploaded because it is empty. Please check that the file is working and try again.'
-            );
+            this.message.showError({
+              message:
+                'This file cannot be uploaded because it is empty. Please check that the file is working and try again.',
+            });
             this.accountService.refreshAccountDebounced();
             break;
 
           case UploadSessionStatus.NoAccessToUpload:
-            this.message.showError(
-              'You do not have permission to upload to this archive.',
-              false,
-              [],
-              {},
-              'https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing',
-              'Read More'
-            );
+            this.message.showError({
+              message: 'You do not have permission to upload to this archive.',
+              externalUrl:
+                'https://permanent.zohodesk.com/portal/en/kb/articles/roles-for-collaboration-and-sharing',
+              externalMessage: 'Read More',
+            });
             break;
           case UploadSessionStatus.StorageError:
-            this.message.showError(
-              'You do not have enough storage available to upload these files.'
-            );
+            this.message.showError({
+              message:
+                'You do not have enough storage available to upload these files.',
+            });
             this.accountService.refreshAccountDebounced();
             break;
         }

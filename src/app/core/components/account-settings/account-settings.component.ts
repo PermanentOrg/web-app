@@ -108,12 +108,17 @@ export class AccountSettingsComponent implements OnInit {
       const response = await this.api.account.update(updateAccountVo);
       this.account.update(response.getAccountVO());
       this.accountService.setAccount(this.account);
-      this.message.showMessage('Account information saved.', 'success');
+      this.message.showMessage({
+        message: 'Account information saved.',
+        style: 'success',
+      });
     } catch (err) {
       const revertData: AccountVOData = {};
       revertData[prop] = originalValue;
       this.account.update(revertData);
-      this.message.showError('There was a problem saving your account changes');
+      this.message.showError({
+        message: 'There was a problem saving your account changes',
+      });
     }
   }
 
@@ -154,7 +159,9 @@ export class AccountSettingsComponent implements OnInit {
               );
               trustToken = mfaResp.getTrustToken().value;
             } catch (err) {
-              this.message.showError('Incorrect verification code entered');
+              this.message.showError({
+                message: 'Incorrect verification code entered',
+              });
               throw err;
             }
           } catch (err) {
@@ -166,10 +173,13 @@ export class AccountSettingsComponent implements OnInit {
         throw err;
       }
       await this.api.auth.updatePassword(this.account, value, trustToken);
-      this.message.showMessage('Password updated.', 'success');
+      this.message.showMessage({
+        message: 'Password updated.',
+        style: 'success',
+      });
     } catch (err) {
       if (err instanceof AuthResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     } finally {
       this.waiting = false;

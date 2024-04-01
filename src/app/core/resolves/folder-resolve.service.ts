@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+  ActivatedRoute,
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { find, cloneDeep } from 'lodash';
@@ -14,25 +19,32 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { findRouteData } from '@shared/utilities/router';
 
 @Injectable()
-export class FolderResolveService  {
-
+export class FolderResolveService {
   constructor(
     private api: ApiService,
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private message: MessageService,
     private router: Router
-  ) { }
+  ) {}
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<any>|Promise<any> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<any> | Promise<any> {
     let targetFolder;
 
     if (route.params.archiveNbr && route.params.folderLinkId) {
-      targetFolder = new FolderVO({archiveNbr: route.params.archiveNbr, folder_linkId: route.params.folderLinkId});
+      targetFolder = new FolderVO({
+        archiveNbr: route.params.archiveNbr,
+        folder_linkId: route.params.folderLinkId,
+      });
     } else if (state.url === '/apps') {
-      const apps = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.app'});
+      const apps = find(this.accountService.getRootFolder().ChildItemVOs, {
+        type: 'type.folder.root.app',
+      });
       targetFolder = new FolderVO(apps);
-    } else if (state.url.includes('/share/') ) {
+    } else if (state.url.includes('/share/')) {
       const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
       const sharedRecord = route.parent.data.sharePreviewVO.RecordVO;
       if (sharedFolder) {
@@ -42,52 +54,70 @@ export class FolderResolveService  {
         folder.pathAsArchiveNbr.unshift('0000-0000', '0000-0000');
         folder.pathAsText.unshift('Shares', 'Record');
         folder.pathAsFolder_linkId.unshift(0, 0);
-        folder.ChildItemVOs = [ sharedRecord ];
+        folder.ChildItemVOs = [sharedRecord];
         return Promise.resolve(folder);
       }
     } else if (state.url.includes('/p/archive/')) {
       const publicRoot = findRouteData(route, 'publicRoot');
       targetFolder = new FolderVO(publicRoot);
     } else if (state.url.includes('/public')) {
-      const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.public'});
+      const publicRoot = find(
+        this.accountService.getRootFolder().ChildItemVOs,
+        { type: 'type.folder.root.public' }
+      );
       targetFolder = new FolderVO(publicRoot);
-    } else  {
-      const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {type: 'type.folder.root.private'});
+    } else {
+      const myFiles = find(this.accountService.getRootFolder().ChildItemVOs, {
+        type: 'type.folder.root.private',
+      });
       targetFolder = new FolderVO(myFiles);
     }
 
-    return this.api.folder.navigate(targetFolder)
-      .pipe(map(((response: FolderResponse) => {
-        if (!response.isSuccessful) {
-          throw response;
-        }
-
-        const folder = response.getFolderVO(true);
-
-        if (!folder.type.includes('root') && folder.view === FolderView.Timeline && !route.data.folderView) {
-          if (route.params.publicArchiveNbr) {
-            return this.router.navigate([
-              'p',
-              'archive',
-              route.params.publicArchiveNbr,
-              'view',
-              'timeline',
-              route.params.archiveNbr,
-              route.params.folderLinkId
-            ]);
+    return this.api.folder
+      .navigate(targetFolder)
+      .pipe(
+        map((response: FolderResponse) => {
+          if (!response.isSuccessful) {
+            throw response;
           }
-        }
-        return folder;
-      }))).toPromise().catch((response: FolderResponse) => {
-        this.message.showError(response.getMessage(), true);
+
+          const folder = response.getFolderVO(true);
+
+          if (
+            !folder.type.includes('root') &&
+            folder.view === FolderView.Timeline &&
+            !route.data.folderView
+          ) {
+            if (route.params.publicArchiveNbr) {
+              return this.router.navigate([
+                'p',
+                'archive',
+                route.params.publicArchiveNbr,
+                'view',
+                'timeline',
+                route.params.archiveNbr,
+                route.params.folderLinkId,
+              ]);
+            }
+          }
+          return folder;
+        })
+      )
+      .toPromise()
+      .catch((response: FolderResponse) => {
+        this.message.showError({
+          message: response.getMessage(),
+          translate: true,
+        });
         if (targetFolder.type.includes('root')) {
-          this.accountService.logOut()
-          .then(() => {
-            this.router.navigate(['/login']);
-          })
-          .catch(() => {
-            this.router.navigate(['/login']);
-          });
+          this.accountService
+            .logOut()
+            .then(() => {
+              this.router.navigate(['/login']);
+            })
+            .catch(() => {
+              this.router.navigate(['/login']);
+            });
         } else if (state.url.includes('apps')) {
           this.router.navigate(['/apps']);
         } else {

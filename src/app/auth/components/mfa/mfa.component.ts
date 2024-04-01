@@ -64,16 +64,21 @@ export class MfaComponent implements OnInit {
             window.location.assign(`/app/public?cta=timeline`);
           }
         } else {
-          this.message.showMessage(
-            `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
-            'success'
-          );
+          this.message.showMessage({
+            message: `Logged in as ${
+              this.accountService.getAccount().primaryEmail
+            }.`,
+            style: 'success',
+          });
           this.router.navigate(['/']);
         }
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage(), true);
+        this.message.showError({
+          message: response.getMessage(),
+          translate: true,
+        });
       });
   }
 

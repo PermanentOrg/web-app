@@ -67,7 +67,10 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
       });
     } catch (err) {
       if (err instanceof InviteResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     }
   }
@@ -88,11 +91,14 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
       const newInvite = new InviteVO(value);
       await this.api.invite.send([newInvite]);
       const message = `Invitation to ${newInvite.email} successfully sent`;
-      this.messageService.showMessage(message, 'success');
+      this.messageService.showMessage({ message, style: 'success' });
       this.newInviteForm.reset();
     } catch (err) {
       if (err instanceof InviteResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     } finally {
       this.waiting = false;
@@ -105,10 +111,16 @@ export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
       const response = await this.api.invite.resendInvites([invite]);
       const updated = response.getInviteVO();
       invite.updatedDT = updated.updatedDT;
-      this.messageService.showMessage('Invitation re-sent.', 'success');
+      this.messageService.showMessage({
+        message: 'Invitation re-sent.',
+        style: 'success',
+      });
     } catch (err) {
       if (err instanceof InviteResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     } finally {
       this.waiting = false;

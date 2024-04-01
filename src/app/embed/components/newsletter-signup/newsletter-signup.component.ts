@@ -143,7 +143,7 @@ export class NewsletterSignupComponent implements OnInit {
           });
       })
       .catch((err) => {
-        this.message.showError(err.error.message, true);
+        this.message.showError({ message: err.error.message, translate: true });
         this.waiting = false;
       });
   }

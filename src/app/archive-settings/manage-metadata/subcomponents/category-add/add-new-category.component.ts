@@ -27,9 +27,10 @@ export class AddNewCategoryComponent implements OnInit {
 
   public async createNewCategory(categoryName: string) {
     if (categoryName.includes(':')) {
-      this.msg.showError(
-        'A field name cannot contain the ":" character. Please use a different field name.'
-      );
+      this.msg.showError({
+        message:
+          'A field name cannot contain the ":" character. Please use a different field name.',
+      });
       throw new Error('Field name cannot contain ":"');
     }
 
@@ -58,9 +59,9 @@ export class AddNewCategoryComponent implements OnInit {
       this.newCategory.emit(categoryName);
       this.tagsUpdate.emit();
     } catch (e) {
-      this.msg.showError(
-        'There was an error saving the new field. Please try again.'
-      );
+      this.msg.showError({
+        message: 'There was an error saving the new field. Please try again.',
+      });
       throw e;
     }
   }

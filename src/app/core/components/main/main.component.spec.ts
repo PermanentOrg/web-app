@@ -116,16 +116,17 @@ describe('MainComponent', () => {
     await init(data);
 
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
-    expect(messageService.showMessage).toHaveBeenCalledWith(
-      jasmine.stringMatching('email and phone'),
-      'info',
-      jasmine.anything(),
-      ['/app/auth/verify'],
-      {
+    expect(messageService.showMessage).toHaveBeenCalledWith({
+      message:
+        'Your email and phone number need verification. Tap this message to verify.',
+      translate: false,
+      style: 'info',
+      navigateTo: ['/app/auth/verify'],
+      navigateParams: {
         sendEmail: true,
         sendSms: true,
-      }
-    );
+      },
+    });
   });
 
   it('should show a prompt when only email is unverified', async () => {
@@ -133,22 +134,19 @@ describe('MainComponent', () => {
     await init(data);
 
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
-    expect(messageService.showMessage).toHaveBeenCalledWith(
-      jasmine.stringMatching('email'),
-      'info',
-      jasmine.anything(),
-      ['/app/auth/verify'],
-      {
+    expect(messageService.showMessage).toHaveBeenCalledWith({
+      message: 'Your email needs verification. Tap this message to verify.',
+      translate: false,
+      style: 'info',
+      navigateTo: ['/app/auth/verify'],
+      navigateParams: {
         sendEmail: true,
-      }
-    );
+      },
+    });
 
-    expect(messageService.showMessage).not.toHaveBeenCalledWith(
-      jasmine.stringMatching('email and phone'),
-      jasmine.anything(),
-      jasmine.anything(),
-      jasmine.anything()
-    );
+    expect(messageService.showMessage).not.toHaveBeenCalledWith({
+      message: 'email and phone',
+    });
   });
 
   it('should show a prompt when only phone is unverified', async () => {
@@ -156,22 +154,20 @@ describe('MainComponent', () => {
     await init(data);
 
     expect(messageService.showMessage).toHaveBeenCalledTimes(1);
-    expect(messageService.showMessage).toHaveBeenCalledWith(
-      jasmine.stringMatching('phone'),
-      'info',
-      jasmine.anything(),
-      ['/app/auth/verify'],
-      {
+    expect(messageService.showMessage).toHaveBeenCalledWith({
+      message:
+        'Your phone number needs verification. Tap this message to verify.',
+      style: 'info',
+      translate: false,
+      navigateTo: ['/app/auth/verify'],
+      navigateParams: {
         sendSms: true,
-      }
-    );
+      },
+    });
 
-    expect(messageService.showMessage).not.toHaveBeenCalledWith(
-      jasmine.stringMatching('email and phone'),
-      jasmine.anything(),
-      jasmine.anything(),
-      jasmine.anything()
-    );
+    expect(messageService.showMessage).not.toHaveBeenCalledWith({
+      message: jasmine.stringMatching('email and phone') as unknown as string,
+    });
   });
 
   it('should show a prompt when nothing is unverified', async () => {

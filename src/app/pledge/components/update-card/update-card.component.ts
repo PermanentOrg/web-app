@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { UserData } from '@pledge/models/user-data';
 import firebase from 'firebase/compat/app';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
@@ -13,7 +19,7 @@ const elements = stripe.elements();
 @Component({
   selector: 'pr-update-card',
   templateUrl: './update-card.component.html',
-  styleUrls: ['./update-card.component.scss']
+  styleUrls: ['./update-card.component.scss'],
 })
 export class UpdateCardComponent implements OnInit, AfterViewInit {
   userId: string;
@@ -24,7 +30,7 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
   cardError: any;
   cardComplete = false;
 
-  nameControl = new UntypedFormControl('', [ Validators.required ]);
+  nameControl = new UntypedFormControl('', [Validators.required]);
 
   cardSaved = false;
   waiting = false;
@@ -39,7 +45,9 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.userData = (await this.db.database.ref('/users').child(this.userId).once('value')).val() as UserData;
+    this.userData = (
+      await this.db.database.ref('/users').child(this.userId).once('value')
+    ).val() as UserData;
   }
 
   ngAfterViewInit() {
@@ -49,21 +57,22 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
   initStripeElements() {
     const options = {
       classes: {
-        invalid: '.ng-invalid'
+        invalid: '.ng-invalid',
       },
       style: {
         base: {
           fontSize: '16px',
-          fontFamily: 'Open Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif',
+          fontFamily:
+            'Open Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif',
           '::placeholder:': {
-            color: '#6c757d'
-          }
-        }
-      }
+            color: '#6c757d',
+          },
+        },
+      },
     };
     this.stripeElementsCard = elements.create('card', options);
 
-    this.stripeElementsCard.addEventListener('change', event => {
+    this.stripeElementsCard.addEventListener('change', (event) => {
       if (event.error) {
         this.cardError = event.error.message;
       } else {
@@ -86,7 +95,7 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
     this.waiting = true;
 
     const stripeResult = await stripe.createToken(this.stripeElementsCard, {
-      name: this.nameControl.value
+      name: this.nameControl.value,
     });
 
     if (stripeResult.error) {
@@ -97,17 +106,28 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
 
     const token = stripeResult.token.id;
 
-    const updateUser = firebase.functions().httpsCallable('updateUserPaymentMethod');
+    const updateUser = firebase
+      .functions()
+      .httpsCallable('updateUserPaymentMethod');
 
-    const result = await updateUser({userId: this.userId, email: this.userData.email, stripeToken: token});
+    const result = await updateUser({
+      userId: this.userId,
+      email: this.userData.email,
+      stripeToken: token,
+    });
     this.waiting = false;
     if (!result.data) {
-      this.message.showError('There was an issue saving your payment information. Please try again.');
+      this.message.showError({
+        message:
+          'There was an issue saving your payment information. Please try again.',
+      });
     } else {
-      this.message.showMessage('Payment method updated successfully.', 'success');
+      this.message.showMessage({
+        message: 'Payment method updated successfully.',
+        style: 'success',
+      });
       this.cardSaved = true;
       this.nameControl.reset();
     }
   }
-
 }

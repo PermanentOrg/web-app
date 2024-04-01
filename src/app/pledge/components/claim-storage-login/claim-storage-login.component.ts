@@ -103,12 +103,12 @@ export class ClaimStorageLoginComponent implements OnInit {
         this.waiting = false;
         if (response.needsMFA()) {
           this.needsMfa = true;
-          this.message.showMessage(
-            `Verify to continue as ${
+          this.message.showMessage({
+            message: `Verify to continue as ${
               this.accountService.getAccount().primaryEmail
             }.`,
-            'warning'
-          );
+            style: 'warning',
+          });
         } else {
           this.loggedIn = true;
         }
@@ -120,15 +120,18 @@ export class ClaimStorageLoginComponent implements OnInit {
           response.messageIncludes &&
           response.messageIncludes('warning.signin.unknown')
         ) {
-          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.message.showMessage({
+            message: 'Incorrect email or password.',
+            style: 'danger',
+          });
           this.loginForm.patchValue({
             password: '',
           });
         } else {
-          this.message.showMessage(
-            'Log in failed. Please try again.',
-            'danger'
-          );
+          this.message.showMessage({
+            message: 'Log in failed. Please try again.',
+            style: 'danger',
+          });
         }
       });
   }
@@ -143,16 +146,21 @@ export class ClaimStorageLoginComponent implements OnInit {
       })
       .then(async (response: ArchiveResponse) => {
         this.waiting = false;
-        this.message.showMessage(
-          `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
-          'success'
-        );
+        this.message.showMessage({
+          message: `Logged in as ${
+            this.accountService.getAccount().primaryEmail
+          }.`,
+          style: 'success',
+        });
         this.loggedIn = true;
         this.needsMfa = false;
       })
       .catch((response: AuthResponse | AccountResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage(), true);
+        this.message.showError({
+          message: response.getMessage(),
+          translate: true,
+        });
       });
   }
 

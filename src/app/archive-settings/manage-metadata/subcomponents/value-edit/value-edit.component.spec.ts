@@ -3,7 +3,10 @@ import { Shallow } from 'shallow-render';
 import { TagVO, TagVOData } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from '@shared/services/message/message.service';
+import {
+  MessageService,
+  ShowMessage,
+} from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FormEditComponent } from '../form-edit/form-edit.component';
 import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
@@ -61,7 +64,7 @@ describe('EditValueComponent', () => {
         },
       })
       .mock(MessageService, {
-        showError: (message: string) => {
+        showError: (message: ShowMessage) => {
           messageShown = true;
         },
       })

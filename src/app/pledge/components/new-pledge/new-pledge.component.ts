@@ -292,12 +292,12 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
               },
             });
             this.accountService.addStorageBytes(sizeInBytes);
-            this.message.showMessage(
-              `You just claimed ${this.getStorageAmount(
+            this.message.showMessage({
+              message: `You just claimed ${this.getStorageAmount(
                 pledge.dollarAmount
               )} GB of storage!`,
-              'success'
-            );
+              style: 'success',
+            });
           }
         } catch (err) {
           this.waiting = false;

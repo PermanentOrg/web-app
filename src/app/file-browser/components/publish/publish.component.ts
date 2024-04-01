@@ -160,9 +160,10 @@ export class PublishComponent implements OnInit {
       });
       this.publishIa = response.getPublishIaVO();
     } catch (err) {
-      this.messageService.showError(
-        'There was a problem loading the Internet Archive publish status of this item.'
-      );
+      this.messageService.showError({
+        message:
+          'There was a problem loading the Internet Archive publish status of this item.',
+      });
     }
 
     this.waiting = false;
@@ -180,9 +181,10 @@ export class PublishComponent implements OnInit {
       });
       this.publishIa = response.getPublishIaVO();
     } catch (err) {
-      this.messageService.showError(
-        'There was a problem publishing this item to the Internet Archive. Please try again later.'
-      );
+      this.messageService.showError({
+        message:
+          'There was a problem publishing this item to the Internet Archive. Please try again later.',
+      });
     }
 
     this.waiting = false;

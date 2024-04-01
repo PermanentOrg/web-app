@@ -71,7 +71,9 @@ export class ArchivePayerComponent implements OnInit {
       this.isPayerDifferentThanLoggedUser = val;
       this.payerService.payerId = this.archive.payerAccountId;
     } catch (e) {
-      this.msg.showError('Something went wrong. Please try again.');
+      this.msg.showError({
+        message: 'Something went wrong. Please try again.',
+      });
     }
   }
 

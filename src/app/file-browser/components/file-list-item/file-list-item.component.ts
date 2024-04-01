@@ -368,7 +368,7 @@ export class FileListItemComponent
       } catch (err) {
         this.isDisabled = false;
         if (err instanceof RecordResponse || err instanceof FolderResponse) {
-          this.message.showError(err.getMessage());
+          this.message.showError({ message: err.getMessage() });
         }
       }
     }
@@ -860,7 +860,10 @@ export class FileListItemComponent
       archiveId: this.accountService.getArchive().archiveId,
     });
     await this.api.share.remove(shareVO);
-    this.message.showMessage('Item removed from shares.', 'success');
+    this.message.showMessage({
+      message: 'Item removed from shares.',
+      style: 'success',
+    });
     this.itemUnshared.emit(this.item);
   }
 
@@ -886,12 +889,12 @@ export class FileListItemComponent
         setTimeout(() => {
           deferred.resolve();
           // eslint-disable-next-line max-len
-          const msg = `${this.item.isFolder ? 'Folder' : 'File'} ${
+          const message = `${this.item.isFolder ? 'Folder' : 'File'} ${
             this.item.displayName
           } ${
             operation === FolderPickerOperations.Copy ? 'copied' : 'moved'
           } successfully.`;
-          this.message.showMessage(msg, 'success');
+          this.message.showMessage({ message, style: 'success' });
           if (operation === FolderPickerOperations.Move || this.item.isFolder) {
             this.dataService.refreshCurrentFolder();
           }
@@ -900,7 +903,10 @@ export class FileListItemComponent
       })
       .catch((response: FolderResponse | RecordResponse) => {
         deferred.reject();
-        this.message.showError(response.getMessage(), true);
+        this.message.showError({
+          message: response.getMessage(),
+          translate: true,
+        });
       });
   }
 
@@ -981,7 +987,10 @@ export class FileListItemComponent
           deferred.reject();
           this.item.update(originalData);
           if (response.getMessage) {
-            this.message.showError(response.getMessage(), true);
+            this.message.showError({
+              message: response.getMessage(),
+              translate: true,
+            });
           }
         });
     }
