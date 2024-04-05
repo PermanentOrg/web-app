@@ -303,6 +303,7 @@ describe('FileViewerComponent', () => {
 
         expect(navigatedUrl).toContain('1234-1234');
       });
+
       it('should navigate after the record has been fetched if it is still fetching', async () => {
         const secondItemFetching = Object.assign({}, secondItem, {
           isFetching: true,

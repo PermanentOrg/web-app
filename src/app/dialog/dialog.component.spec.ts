@@ -35,6 +35,7 @@ describe('DialogComponent', () => {
     expect(instance.width).toEqual('100px');
     expect(instance.borderRadius).toEqual('10px');
   });
+
   it('closes dialog on menu wrapper click', async () => {
     const { instance, find } = await shallow.render();
     spyOn(instance, 'onMenuWrapperClick').and.callThrough();

@@ -173,6 +173,7 @@ describe('DirectiveEditComponent', () => {
     expect(find('.account-not-found').length).toBe(0);
     expect(MockMessageService.errorShown).toBeTrue();
   });
+
   it('should handle API errors on editing', async () => {
     MockDirectiveRepo.failRequest = true;
     const directive = await createDirective(
@@ -194,6 +195,7 @@ describe('DirectiveEditComponent', () => {
     expect(find('.account-not-found').length).toBe(0);
     expect(MockMessageService.errorShown).toBeTrue();
   });
+
   it('should emit an output when a directive is created', async () => {
     const { find, fixture, instance } = await shallow.render();
     let savedDirective: DirectiveData;
@@ -210,6 +212,7 @@ describe('DirectiveEditComponent', () => {
     expect(instance.savedDirective.emit).toHaveBeenCalled();
     expect(savedDirective).not.toBeUndefined();
   });
+
   it('should emit an output when a directive is edited', async () => {
     const directive = await createDirective(
       'existing@example.com',
@@ -234,6 +237,7 @@ describe('DirectiveEditComponent', () => {
     expect(instance.savedDirective.emit).toHaveBeenCalled();
     expect(savedDirective).not.toBeUndefined();
   });
+
   it('should not allow submitting a form until email is filled out', async () => {
     const { find, fixture } = await shallow.render();
     fillOutForm(find, '  ', 'Test Memo');
@@ -249,6 +253,7 @@ describe('DirectiveEditComponent', () => {
 
     expect(find('.save-btn').nativeElement.disabled).toBeFalsy();
   });
+
   it('should show an error message if a user with the given email does not exist when creating a directive', async () => {
     MockDirectiveRepo.accountExists = false;
     const { find, fixture, outputs } = await shallow.render();
@@ -271,6 +276,7 @@ describe('DirectiveEditComponent', () => {
     expect(outputs.savedDirective.emit).toHaveBeenCalled();
     expect(find('.account-not-found').length).toBe(0);
   });
+
   it('should show an error message if a user with the given email does not exist when editing', async () => {
     MockDirectiveRepo.accountExists = false;
     const directive = await createDirective(

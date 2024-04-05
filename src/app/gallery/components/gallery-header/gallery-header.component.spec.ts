@@ -35,11 +35,13 @@ describe('GalleryHeaderComponent', () => {
       accountMock
     );
   });
+
   it('should render', async () => {
     const { element } = await defaultRender();
 
     expect(element).not.toBeNull();
   });
+
   it('should render back button when logged in', async () => {
     const { find, element, fixture } = await defaultRender();
 

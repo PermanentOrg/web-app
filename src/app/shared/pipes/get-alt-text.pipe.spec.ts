@@ -8,6 +8,7 @@ describe('GetAltTextPipe', () => {
   beforeEach(() => {
     pipe = new GetAltTextPipe();
   });
+
   it('create an instance', () => {
     expect(pipe).toBeTruthy();
   });

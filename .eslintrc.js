@@ -13,8 +13,8 @@ module.exports = {
       rules: {
         'jasmine/new-line-before-expect': 'error',
         'jasmine/no-disabled-tests': 'error',
+        'jasmine/new-line-between-declarations': 'error',
         // We intend to enable these eventually:
-        'jasmine/new-line-between-declarations': 'off',
         'jasmine/no-promise-without-done-fail': 'off',
         'jasmine/no-spec-dupes': 'off',
         'jasmine/no-unsafe-spy': 'off',

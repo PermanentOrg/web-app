@@ -7,6 +7,7 @@ describe('GetAltTextPipe', () => {
   beforeEach(() => {
     pipe = new AccessRolePipe();
   });
+
   it('create an instance', () => {
     expect(pipe).toBeTruthy();
   });

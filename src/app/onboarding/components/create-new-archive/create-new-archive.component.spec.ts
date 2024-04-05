@@ -69,16 +69,19 @@ describe('CreateNewArchiveComponent #onboarding', () => {
       .mock(AccountService, mockAccountService)
       .mock(AnalyticsService, mockAnalyticsService);
   });
+
   it('should exist', async () => {
     const { element } = await shallow.render();
 
     expect(element).not.toBeNull();
   });
+
   it('should emit a progress bar change event on mount', async () => {
     const { outputs } = await shallow.render();
 
     expect(outputs.progress.emit).toHaveBeenCalledWith(0);
   });
+
   it('should NOT show disabled-overlay when selectedValue is truthy', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.screen = 'create';

@@ -86,17 +86,20 @@ describe('OnboardingComponent #onboarding', () => {
       .mock(AnalyticsService, mockAnalyticsService)
       .replaceModule(RouterModule, RouterTestingModule);
   });
+
   it('should exist', async () => {
     const { element } = await shallow.render();
 
     expect(element).not.toBeNull();
   });
+
   it('should load the create new archive screen as default', async () => {
     const { find, fixture } = await shallow.render();
     fixture.detectChanges();
 
     expect(find('pr-create-new-archive')).toHaveFoundOne();
   });
+
   it('can change screens', async () => {
     const { find, fixture } = await shallow.render();
 
@@ -105,6 +108,7 @@ describe('OnboardingComponent #onboarding', () => {
 
     expect(find('pr-welcome-screen')).toHaveFound(0);
   });
+
   it('stores the newly created archive', async () => {
     const { element, find, fixture } = await shallow.render();
 
@@ -118,6 +122,7 @@ describe('OnboardingComponent #onboarding', () => {
 
     expect(element.componentInstance.currentArchive).not.toBeUndefined();
   });
+
   it('stores an accepted archive invitation', async () => {
     const mockPendingArchive = new ArchiveVO({ status: 'someStatus-pending' });
 
@@ -157,6 +162,7 @@ describe('OnboardingComponent #onboarding', () => {
       element.componentInstance.selectedPendingArchive
     ).not.toBeUndefined();
   });
+
   it('can be tested with debugging component', async () => {
     const { element } = await shallow.render();
 

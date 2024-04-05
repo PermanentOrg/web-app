@@ -250,6 +250,7 @@ describe('HttpV2Service', () => {
       }
     );
   });
+
   it('can have its stela domain configured', () => {
     MockSecretService.stelaDomain = 'https://api.local.permanent.org/api/';
 

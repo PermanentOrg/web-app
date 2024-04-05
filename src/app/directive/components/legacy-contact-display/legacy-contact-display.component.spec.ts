@@ -36,6 +36,7 @@ describe('LegacyContactDisplayComponent', () => {
 
     expect(instance).toBeTruthy();
   });
+
   it('should list legacy contact information', async () => {
     MockDirectiveRepo.legacyContactName = 'Test User';
     MockDirectiveRepo.legacyContactEmail = 'test@example.com';
@@ -53,6 +54,7 @@ describe('LegacyContactDisplayComponent', () => {
 
     expect(find('.not-assigned').length).toBe(0);
   });
+
   it('should show "not assigned" if no legacy contact', async () => {
     const { find } = await shallow.render();
 
@@ -66,6 +68,7 @@ describe('LegacyContactDisplayComponent', () => {
 
     expect(find('.not-assigned').length).toBe(2);
   });
+
   it('should show an error message if there was an error fetching legacy contact', async () => {
     MockDirectiveRepo.throwError = true;
     const { find } = await shallow.render();
@@ -74,12 +77,14 @@ describe('LegacyContactDisplayComponent', () => {
     expect(find('.legacy-contact-email').length).toBe(0);
     expect(find('.error').length).toBe(1);
   });
+
   it('should emit an event when the edit button is pressed', async () => {
     const { find, fixture, outputs } = await shallow.render();
     find('button').nativeElement.dispatchEvent(new Event('click'));
 
     expect(outputs.beginEdit.emit).toHaveBeenCalled();
   });
+
   it('should emit an event when the legacy contact is fetched', async () => {
     const { fixture, outputs } = await shallow.render();
     await fixture.whenStable();
