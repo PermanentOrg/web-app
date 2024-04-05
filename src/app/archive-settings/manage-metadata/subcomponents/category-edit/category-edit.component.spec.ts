@@ -3,7 +3,7 @@ import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import {
   MessageService,
-  ShowMessage,
+  MessageDisplayOptions,
 } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FormEditComponent } from '../form-edit/form-edit.component';
@@ -83,7 +83,7 @@ describe('CategoryEditComponent', () => {
         },
       })
       .mock(MessageService, {
-        showError: async (msg: ShowMessage) => {
+        showError: async (msg: MessageDisplayOptions) => {
           messageShown = true;
         },
       })

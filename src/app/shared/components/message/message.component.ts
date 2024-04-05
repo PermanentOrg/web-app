@@ -1,9 +1,11 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '@shared/services/message/message.service';
+import {
+  MessageService,
+  MessageDisplayOptions,
+} from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
-import { ShowMessage } from '@shared/services/message/message.service';
 
 interface Message {
   text: string;
@@ -42,7 +44,7 @@ export class MessageComponent implements OnInit {
 
   ngOnInit() {}
 
-  display(data: ShowMessage) {
+  display(data: MessageDisplayOptions) {
     if (this.visible) {
       this.queue.push({
         text: data.message,

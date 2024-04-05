@@ -4,7 +4,8 @@ import { MessageComponent } from '@shared/components/message/message.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 
 type MessageType = 'success' | 'info' | 'warning' | 'danger';
-export interface ShowMessage {
+
+export interface MessageDisplayOptions {
   message: string;
   style?: MessageType;
   translate?: boolean;
@@ -13,6 +14,7 @@ export interface ShowMessage {
   externalUrl?: string;
   externalMessage?: string;
 }
+
 @Injectable()
 export class MessageService {
   private component: MessageComponent;
@@ -27,7 +29,7 @@ export class MessageService {
     this.component = toRegister;
   }
 
-  public showMessage(data: ShowMessage) {
+  public showMessage(data: MessageDisplayOptions) {
     if (!this.component) {
       throw new Error('MessageService - Missing component');
     }
@@ -44,7 +46,7 @@ export class MessageService {
     }
   }
 
-  public showError(data: ShowMessage) {
+  public showError(data: MessageDisplayOptions) {
     return this.showMessage({ style: 'danger', ...data });
   }
 }
