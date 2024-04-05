@@ -44,33 +44,40 @@ describe('AnnouncementComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(AnnouncementComponent, AnnouncementModule);
   });
+
   afterEach(() => {
     window.localStorage.clear();
   });
+
   it('should exist', async () => {
     expect(shallow).not.toBeNull();
   });
+
   it('should take in test data', async () => {
     const { element } = await defaultRender([currentTestEvent]);
 
     expect(element).not.toBeNull();
   });
+
   it('should display the message', async () => {
     const { find, element } = await defaultRender([currentTestEvent]);
 
     expect(find('.announcement').length).toBeGreaterThan(0);
     expect(element.nativeElement.innerText).toContain('Test Event!!!');
   });
+
   it('should hide itself if event is in the future', async () => {
     const { find } = await defaultRender([futureTestEvent]);
 
     expect(find('.announcement').length).toBe(0);
   });
+
   it('should hide itself if the event is already over', async () => {
     const { find } = await defaultRender([pastTestEvent]);
 
     expect(find('.announcement').length).toBe(0);
   });
+
   it('should support multiple event definitions', async () => {
     const { find, element } = await defaultRender([
       pastTestEvent,
@@ -81,6 +88,7 @@ describe('AnnouncementComponent', () => {
     expect(find('.announcement').length).toBe(1);
     expect(element.nativeElement.innerText).toContain('Test Event!!!');
   });
+
   it('should be dismissable', async () => {
     const { find, fixture, element } = await defaultRender([currentTestEvent]);
 
@@ -90,6 +98,7 @@ describe('AnnouncementComponent', () => {
 
     expect(find('.announcement').length).toBe(0);
   });
+
   it('should set dismissed setting in localStorage', async () => {
     const { find, fixture, instance } = await defaultRender([currentTestEvent]);
 
@@ -101,6 +110,7 @@ describe('AnnouncementComponent', () => {
       currentTestEvent.start.toString()
     );
   });
+
   it('should recall dismissed setting from localStorage', async () => {
     window.localStorage.setItem(
       'announcementDismissed',
@@ -110,22 +120,26 @@ describe('AnnouncementComponent', () => {
 
     expect(find('.announcement').length).toBe(0);
   });
+
   it('should still be able to show a new announcement after dismissing a previous one', async () => {
     window.localStorage.setItem('announcementDismissed', 'pastevent');
     const { find } = await defaultRender([currentTestEvent]);
 
     expect(find('.announcement').length).toBe(1);
   });
+
   it('should be able to handle an empty data array', async () => {
     const { find } = await defaultRender([]);
 
     expect(find('.announcement').length).toBe(0);
   });
+
   it('should be able to handle the null case', async () => {
     const { find } = await defaultRender();
 
     expect(find('.announcement').length).toBe(0);
   });
+
   describe('Layout Adjustment', () => {
     async function renderWithAdjustables() {
       return await shallow.render(
@@ -152,6 +166,7 @@ describe('AnnouncementComponent', () => {
         expect(element.nativeElement.style.paddingTop).not.toBeUndefined();
       });
     });
+
     it('should readjust the page layout when it disappears', async () => {
       const { find, fixture } = await renderWithAdjustables();
       find('.dismiss-button').nativeElement.click();

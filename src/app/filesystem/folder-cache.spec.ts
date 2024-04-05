@@ -6,20 +6,24 @@ describe('FolderCache', () => {
   beforeEach(() => {
     cache = new FolderCache();
   });
+
   it('should exist', () => {
     expect(cache).toBeTruthy();
   });
+
   it('should return null if a folder is not cached', () => {
     cache.saveFolder(new FolderVO({ folder_linkId: 10000 }));
 
     expect(cache.getFolder({ folder_linkId: 1 })).toBeNull();
   });
+
   it('should be able to save to the cache', () => {
     const folder = new FolderVO({ folder_linkId: 1 });
     cache.saveFolder(folder);
 
     expect(cache.getFolder({ folder_linkId: 1 })).toEqual(folder);
   });
+
   it('should be able to update an existing cache value', () => {
     const folder = new FolderVO({ folder_linkId: 1 });
     cache.saveFolder(folder);

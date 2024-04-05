@@ -8,6 +8,7 @@ describe('ArchiveTypeNamePipe', () => {
 
     expect(pipe).toBeTruthy();
   });
+
   it('transforms archive types to their proper names', () => {
     const pipe = new ArchiveTypeNamePipe();
 

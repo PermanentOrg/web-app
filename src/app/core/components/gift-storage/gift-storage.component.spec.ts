@@ -159,6 +159,7 @@ describe('GiftStorageComponent', () => {
       message: '',
     });
   });
+
   it('updates account details upon successful gift operation', async () => {
     const { instance } = await shallow.render();
 
@@ -180,6 +181,7 @@ describe('GiftStorageComponent', () => {
     expect(mockAccountService.setAccount).toHaveBeenCalled();
     expect(instance.availableSpace).toBe('50.00');
   });
+
   it('parses the email string correctly', async () => {
     const { instance } = await shallow.render();
 

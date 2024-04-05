@@ -67,6 +67,7 @@ describe('PublicSettingsComponent', () => {
 
       expect(element.componentInstance.allowDownloadsToggle).toBeTruthy();
     });
+
     it('off', async () => {
       const { element } = await defaultRender({
         allowPublicDownload: false,

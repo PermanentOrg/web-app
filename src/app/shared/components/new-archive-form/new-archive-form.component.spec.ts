@@ -42,11 +42,13 @@ describe('NewArchiveFormComponent #onboarding', () => {
     //@ts-ignore
     shallow = new Shallow(NewArchiveFormComponent, SharedModule).mock(ApiService, mockApiService);
   });
+
   it('should create', async () => {
     const { element } = await shallow.render();
 
     expect(element).not.toBeNull();
   });
+
   it('should not submit when form is invalid', async () => {
     const { find, fixture, outputs } = await shallow.render();
 
@@ -56,6 +58,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     expect(outputs.success.emit).not.toHaveBeenCalled();
     expect(outputs.error.emit).not.toHaveBeenCalled();
   });
+
   it('should disable button when form is waiting', async () => {
     const { find, fixture } = await shallow.render();
     fillOutForm(find);
@@ -65,6 +68,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 
     expect(find('button').nativeElement.disabled).toBeTruthy();
   });
+
   it('should create a new archive on submit', async () => {
     const { find, fixture } = await shallow.render();
     fillOutForm(find);
@@ -74,6 +78,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 
     expect(created).toBeTrue();
   });
+
   it('should output new archiveVO when submitted', async () => {
     const { find, fixture, outputs } = await shallow.render();
     fillOutForm(find);
@@ -87,6 +92,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     expect(createdArchive.relationType).toBeNull();
     expect(outputs.error.emit).not.toHaveBeenCalled();
   });
+
   it('should output errors if they occur', async () => {
     throwError = true;
     const { find, fixture, outputs } = await shallow.render();
@@ -98,6 +104,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
     expect(outputs.error.emit).toHaveBeenCalled();
     expect(outputs.success.emit).not.toHaveBeenCalled();
   });
+
   it('should have an input that enables relations', async () => {
     const { find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
     fillOutForm(find);
@@ -109,6 +116,7 @@ describe('NewArchiveFormComponent #onboarding', () => {
 
     expect(find('select[name="relation"]')).not.toHaveFoundOne();
   });
+
   it('should submit relationType to API if it is enabled', async () => {
     const { element, find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
     fillOutForm(find);

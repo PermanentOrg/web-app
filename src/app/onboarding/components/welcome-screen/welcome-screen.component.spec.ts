@@ -19,11 +19,13 @@ describe('WelcomeScreenComponent #onboarding', () => {
   beforeEach(() => {
     shallow = new Shallow(WelcomeScreenComponent, OnboardingModule);
   });
+
   it('should exist', async () => {
     const { find } = await defaultRender();
 
     expect(find('.welcome-screen')).toHaveFoundOne();
   });
+
   it('should display a list of pending archives if they are available', async () => {
     const pendingArchives: ArchiveVO[] = [
       new ArchiveVO({
@@ -34,6 +36,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
 
     expect(find('pr-archive-small')).toHaveFoundOne();
   });
+
   it('should pass up a selected archive', async () => {
     const pendingArchives: ArchiveVO[] = [
       new ArchiveVO({

@@ -201,15 +201,19 @@ describe('ManageTagsComponent #manage-tags', () => {
     it('Trimming input', async () => {
       testValue('  p ', 1);
     });
+
     it('Case-insensitivity', async () => {
       testValue('tOm', 1);
     });
+
     it('Searches anywhere in word', async () => {
       testValue('To', 2);
     });
+
     it('Completely invalid match', async () => {
       testValue('zzz', 0);
     });
+
     it('Null case', async () => {
       testValue('', 2);
     });
@@ -227,6 +231,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     it('should not delete when you cancel out', async () => {
       testConfirm(false);
     });
+
     it('should delete when you click confirm', async () => {
       testConfirm(true);
     });

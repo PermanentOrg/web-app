@@ -122,6 +122,7 @@ describe('FormInputComponent', () => {
 
     expect(instance.rightAlign).toBeTrue();
   });
+
   it('should bind the placeholder attribute to the input element', async () => {
     const mockControl = new UntypedFormControl('');
     const placeholderValue = 'Enter text here';

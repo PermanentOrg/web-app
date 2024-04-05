@@ -38,25 +38,30 @@ describe('AndroidAppNotifyComponent', () => {
     prompted = false;
     shallow = new Shallow(AndroidAppNotifyComponent, AnnouncementModule);
   });
+
   afterEach(() => {
     localStorage.clear();
   });
+
   it('should exist', async () => {
     const { element } = await shallow.render();
 
     expect(element).not.toBeNull();
   });
+
   it('should be invisible before `beforeinstallprompt` event', async () => {
     const { find } = await shallow.render();
 
     expect(find('div').length).toBe(0);
   });
+
   it('should appear when the `beforeinstallprompt` fires', async () => {
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
 
     expect(find('div').length).toBeGreaterThan(0);
   });
+
   it('has a clickable button that shows the prompt', async () => {
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
@@ -64,6 +69,7 @@ describe('AndroidAppNotifyComponent', () => {
 
     expect(prompted).toBeTruthy();
   });
+
   it('should dismiss itself after the App Install Banner appears', async () => {
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
@@ -74,6 +80,7 @@ describe('AndroidAppNotifyComponent', () => {
 
     expect(find('div').length).toBe(0);
   });
+
   it('should be dismissable from a close button', async () => {
     const { find, fixture } = await shallow.render();
     await waitForPromptEvent(fixture);
@@ -88,6 +95,7 @@ describe('AndroidAppNotifyComponent', () => {
 
     expect(dismissed).toBeTruthy();
   });
+
   it('should not show up if previously dismissed', async () => {
     localStorage.setItem(AndroidAppNotifyComponent.storageKey, 'true');
     const { find, fixture } = await shallow.render();
