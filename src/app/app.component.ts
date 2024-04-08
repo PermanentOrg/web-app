@@ -12,8 +12,7 @@ export class AppComponent implements OnInit {
   @HostBinding('class.mobile-safari') isMobileSafari = false;
   @HostBinding('class.mobile-safari-menu-bar-showing') isMenuBarShowing = false;
 
-  constructor(
-  ) {
+  constructor() {
     const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
     const iPhone =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window['MSStream'];
