@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, ArchiveVO } from '@root/app/models';
@@ -28,9 +28,11 @@ describe('UploadButtonComponent', () => {
 
   beforeEach(() => {
     accountService = TestBed.get(AccountService);
-    accountService.setArchive(new ArchiveVO({
-      accessRole: 'access.role.owner'
-    }));
+    accountService.setArchive(
+      new ArchiveVO({
+        accessRole: 'access.role.owner',
+      })
+    );
     dataService = TestBed.get(DataService);
 
     fixture = TestBed.createComponent(UploadButtonComponent);
@@ -49,10 +51,12 @@ describe('UploadButtonComponent', () => {
   });
 
   it('should be visible and enabled when current folder is not an apps folder', async () => {
-    dataService.setCurrentFolder(new FolderVO({
-      type: 'type.folder.private',
-      accessRole: 'access.role.owner'
-    }));
+    dataService.setCurrentFolder(
+      new FolderVO({
+        type: 'type.folder.private',
+        accessRole: 'access.role.owner',
+      })
+    );
     await fixture.whenStable();
 
     expect(component.hidden).toBeFalsy();
@@ -60,10 +64,12 @@ describe('UploadButtonComponent', () => {
   });
 
   it('should be disabled when current folder is an apps folder', async () => {
-    dataService.setCurrentFolder(new FolderVO({
-      accessRole: 'access.role.owner',
-      type: 'type.folder.app'
-    }));
+    dataService.setCurrentFolder(
+      new FolderVO({
+        accessRole: 'access.role.owner',
+        type: 'type.folder.app',
+      })
+    );
     await fixture.whenStable();
 
     expect(component.hidden).toBeFalsy();
@@ -71,13 +77,31 @@ describe('UploadButtonComponent', () => {
   });
 
   it('should be disabled when current folder does not have write access', async () => {
-    dataService.setCurrentFolder(new FolderVO({
-      type: 'type.folder.private',
-      accessRole: 'access.role.viewer'
-    }));
+    dataService.setCurrentFolder(
+      new FolderVO({
+        type: 'type.folder.private',
+        accessRole: 'access.role.viewer',
+      })
+    );
     await fixture.whenStable();
 
     expect(component.hidden).toBeFalsy();
     expect(component.disabled).toBeTruthy();
+  });
+
+  it('should reset file input after a file is selected', async () => {
+    const fileInput =
+      fixture.debugElement.nativeElement.querySelector('input[type="file"]');
+
+    const testFile = new File([''], 'test-file.txt');
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(testFile);
+    fileInput.files = dataTransfer.files;
+
+    fileInput.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fileInput.files.length).toEqual(0);
   });
 });
