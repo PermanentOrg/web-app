@@ -14,7 +14,6 @@ import { ArchiveVO } from './archive-vo';
 
 interface RecordVoOptions {
   dataStatus: DataStatus;
-  initChildren: boolean;
 }
 
 export class RecordVO
