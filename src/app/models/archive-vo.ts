@@ -55,7 +55,7 @@ export class ArchiveVO extends BaseVO implements DynamicListChild {
           if (item.type.includes('folder')) {
             return new FolderVO(item, false, DataStatus.Lean);
           } else {
-            return new RecordVO(item, false, DataStatus.Lean);
+            return new RecordVO(item, { dataStatus: DataStatus.Lean });
           }
         }
       );

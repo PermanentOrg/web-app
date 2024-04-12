@@ -260,14 +260,14 @@ export class RecordResponse extends BaseResponse {
       return null;
     }
 
-    return new RecordVO(data[0][0].RecordVO, initChildren);
+    return new RecordVO(data[0][0].RecordVO, { initChildren });
   }
 
   public getRecordVOs(initChildren?: boolean) {
     const data = this.getResultsData();
 
     return data.map((result) => {
-      return new RecordVO(result[0].RecordVO, initChildren);
+      return new RecordVO(result[0].RecordVO, { initChildren });
     });
   }
 }

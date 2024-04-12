@@ -69,7 +69,7 @@ describe('RecordVO', () => {
     ]);
   });
   it('can set a custom dataStatus', () => {
-    const record = new RecordVO({}, false, DataStatus.Full);
+    const record = new RecordVO({}, { dataStatus: DataStatus.Full });
 
     expect(record.dataStatus).toBe(DataStatus.Full);
   });

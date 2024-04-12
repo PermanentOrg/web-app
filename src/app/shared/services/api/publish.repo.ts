@@ -37,7 +37,7 @@ export class PublishResponse extends BaseResponse {
       return null;
     }
 
-    return new RecordVO(data[0][0].RecordVO, initChildren);
+    return new RecordVO(data[0][0].RecordVO, { initChildren });
   }
 
   public getFolderVO(initChildren?: boolean) {
