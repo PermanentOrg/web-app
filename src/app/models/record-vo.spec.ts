@@ -17,6 +17,7 @@ describe('RecordVO', () => {
   it('should exist', () => {
     expect(new RecordVO({})).toBeTruthy();
   });
+
   it('should sort ShareVOs by pending status', () => {
     const shares = new RecordVO({
       ShareVOs: [
@@ -32,6 +33,7 @@ describe('RecordVO', () => {
       'status.generic.ok',
     ]);
   });
+
   it('should sort ShareVOs by access role after pending status', () => {
     const shares = new RecordVO({
       ShareVOs: [
@@ -53,6 +55,7 @@ describe('RecordVO', () => {
       'access.role.viewer',
     ]);
   });
+
   it('should sort ShareVOs by Archive Name after access role', () => {
     const shares = new RecordVO({
       ShareVOs: [
@@ -68,11 +71,13 @@ describe('RecordVO', () => {
       'Zzz',
     ]);
   });
+
   it('can set a custom dataStatus', () => {
     const record = new RecordVO({}, { dataStatus: DataStatus.Full });
 
     expect(record.dataStatus).toBe(DataStatus.Full);
   });
+
   it('formats dates properly', () => {
     const record = new RecordVO({
       displayDT: '2023-01-19T19:33:03',
@@ -86,12 +91,14 @@ describe('RecordVO', () => {
     expect(record.derivedDT).toBe(null);
     expect(record.derivedEndDT).toBe(null);
   });
+
   it('can update a record', () => {
     const record = new RecordVO({ displayName: 'Unit Test' });
     record.update({ displayName: 'Potato' });
 
     expect(record.displayName).toBe('Potato');
   });
+
   it('initializes any ShareVOs provided when updated', () => {
     const record = new RecordVO({});
     record.update({ ShareVOs: [{}] });
