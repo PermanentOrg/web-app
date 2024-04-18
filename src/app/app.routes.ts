@@ -50,6 +50,11 @@ const customRedirects: RoutesWithData = [
     redirectTo: '/p/archive/07r7-0000',
     pathMatch: 'full',
   },
+  {
+    path: SecretsService.getStatic('HIDDEN_PATH'),
+    redirectTo: '/gallery',
+    pathMatch: 'prefix',
+  },
 ];
 
 const routes: RoutesWithData = [

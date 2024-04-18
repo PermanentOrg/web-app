@@ -15,6 +15,10 @@ const optionalSecrets = [
     name: 'MIXPANEL_TOKEN',
     default: '',
   },
+  {
+    name: 'HIDDEN_PATH',
+    default: '',
+  },
 ];
 
 module.exports = optionalSecrets;
