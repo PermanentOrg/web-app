@@ -15,7 +15,8 @@ export type SettingsTab =
   | 'billing'
   | 'legacy-contact'
   | 'delete'
-  | 'advanced-settings';
+  | 'advanced-settings'
+  | 'security';
 
 @Component({
   selector: 'pr-account-settings-dialog',
@@ -50,6 +51,7 @@ export class AccountSettingsDialogComponent implements OnInit {
 
   setTab(tab: SettingsTab) {
     this.activeTab = tab;
+    console.log(this.activeTab);
   }
 
   async onDeleteAccountConfirm() {
