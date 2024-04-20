@@ -35,9 +35,6 @@ export class AccountSettingsComponent implements OnInit {
   public account: AccountVO;
   public countries: FormInputSelectOption[];
   public states: FormInputSelectOption[];
-
-  public changePasswordForm: UntypedFormGroup;
-
   public waiting = false;
 
   constructor(
@@ -67,17 +64,6 @@ export class AccountSettingsComponent implements OnInit {
         };
       }
     );
-
-    this.changePasswordForm = fb.group({
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      passwordOld: ['', [Validators.required, Validators.minLength(8)]],
-    });
-
-    const verifyPasswordControl = new UntypedFormControl('', [
-      Validators.required,
-      matchControlValidator(this.changePasswordForm.controls['password']),
-    ]);
-    this.changePasswordForm.addControl('passwordVerify', verifyPasswordControl);
   }
 
   ngOnInit(): void {
@@ -136,67 +122,5 @@ export class AccountSettingsComponent implements OnInit {
       relativeTo: this.route.parent,
       queryParams: { sendSms: true },
     });
-  }
-
-  async onChangePasswordFormSubmit(value: AccountPasswordVOData) {
-    this.waiting = true;
-    let trustToken = null;
-
-    try {
-      try {
-        const loginResp = await this.accountService.checkForMFAWithLogin(
-          value.passwordOld
-        );
-        if (loginResp.needsMFA()) {
-          try {
-            const mfa = await this.showMFAPrompt();
-            try {
-              const keepLoggedIn =
-                this.accountService.getAccount().keepLoggedIn;
-              const mfaResp = await this.accountService.verifyMfa(
-                mfa.verificationCode,
-                keepLoggedIn
-              );
-              trustToken = mfaResp.getTrustToken().value;
-            } catch (err) {
-              this.message.showError({
-                message: 'Incorrect verification code entered',
-              });
-              throw err;
-            }
-          } catch (err) {
-            // They canceled out of the prompt, do nothing
-            throw err;
-          }
-        }
-      } catch (err) {
-        throw err;
-      }
-      await this.api.auth.updatePassword(this.account, value, trustToken);
-      this.message.showMessage({
-        message: 'Password updated.',
-        style: 'success',
-      });
-    } catch (err) {
-      if (err instanceof AuthResponse) {
-        this.message.showError({ message: err.getMessage(), translate: true });
-      }
-    } finally {
-      this.waiting = false;
-      this.changePasswordForm.reset();
-    }
-  }
-
-  public async showMFAPrompt(): Promise<{ verificationCode: string }> {
-    const mfaField: PromptField = {
-      fieldName: 'verificationCode',
-      placeholder: 'Verification Code',
-      initialValue: '',
-      type: 'text',
-    };
-    return this.prompt.prompt(
-      [mfaField],
-      'A verification code has been sent to your email address or phone number. Please enter it below to change your password.'
-    );
   }
 }
