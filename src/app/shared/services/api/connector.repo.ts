@@ -22,68 +22,6 @@ export class ConnectorRepo extends BaseRepo {
     );
   }
 
-  public facebookConnect(archive: ArchiveVO) {
-    const data = [
-      {
-        ArchiveVO: archive,
-      },
-    ];
-
-    return this.http.sendRequest<ConnectorResponse>(
-      '/connector/facebookSetup',
-      data,
-      ConnectorResponse
-    );
-  }
-
-  public facebookDisconnect(archive: ArchiveVO) {
-    const data = [
-      {
-        ArchiveVO: archive,
-      },
-    ];
-
-    return this.http.sendRequest<ConnectorResponse>(
-      '/connector/facebookDisconnect',
-      data,
-      ConnectorResponse
-    );
-  }
-
-  public facebookTaggedImport(archive: ArchiveVO) {
-    const data = [
-      {
-        ArchiveVO: archive,
-        ConnectorFacebookAlbumVO: {
-          discardContent: false,
-        },
-      },
-    ];
-
-    return this.http.sendRequest<ConnectorResponse>(
-      '/connector/facebookRetrieveRequest',
-      data,
-      ConnectorResponse
-    );
-  }
-
-  public facebookBulkImport(archive: ArchiveVO) {
-    const data = [
-      {
-        ArchiveVO: archive,
-        ConnectorFacebookAlbumVO: {
-          discardContent: false,
-        },
-      },
-    ];
-
-    return this.http.sendRequest<ConnectorResponse>(
-      '/connector/uploadFacebookBulkImport',
-      data,
-      ConnectorResponse
-    );
-  }
-
   public familysearchConnect(archive: ArchiveVO) {
     const data = [
       {
