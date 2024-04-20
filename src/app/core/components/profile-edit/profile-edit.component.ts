@@ -211,7 +211,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     } catch (err) {
       if (err instanceof ArchiveResponse) {
         item[valueKey] = originalValue as never;
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     } finally {
       item.isPendingAction = false;
@@ -234,7 +234,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       this.trackProfileEdit(item);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     } finally {
       deferred.resolve();
@@ -247,7 +247,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       await this.profile.setProfilePublic(isPublic);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
       this.isPublic = !isPublic;
     }

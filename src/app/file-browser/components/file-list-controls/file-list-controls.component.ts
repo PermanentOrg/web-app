@@ -350,7 +350,10 @@ export class FileListControlsComponent
         this.account.deductAccountStorage(-sizeOfDeletedFiles);
       } catch (err) {
         if (err instanceof BaseResponse) {
-          this.message.showError(err.getMessage(), true);
+          this.message.showError({
+            message: err.getMessage(),
+            translate: true,
+          });
         }
       }
     }
@@ -371,7 +374,10 @@ export class FileListControlsComponent
         this.edit.unshareItem(this.selectedItems[0]);
       } catch (err) {
         if (err instanceof BaseResponse) {
-          this.message.showError(err.getMessage(), true);
+          this.message.showError({
+            message: err.getMessage(),
+            translate: true,
+          });
         }
       }
     }
@@ -434,15 +440,16 @@ export class FileListControlsComponent
     } else {
       try {
         await this.data.createZipForDownload(this.selectedItems);
-        this.message.showMessage(
-          'Your zip file is being created. An in-app notification will let you know when it is ready to download.',
-          'success'
-        );
+        this.message.showMessage({
+          message:
+            'Your zip file is being created. An in-app notification will let you know when it is ready to download.',
+          style: 'success',
+        });
       } catch (err) {
-        this.message.showError(
-          'There was a problem creating a zip file to download',
-          false
-        );
+        this.message.showError({
+          message: 'There was a problem creating a zip file to download',
+          translate: false,
+        });
       }
     }
   }

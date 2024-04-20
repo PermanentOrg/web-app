@@ -1,7 +1,10 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { NotificationVOData, NotificationStatus } from '@models/notification-vo';
+import {
+  NotificationVOData,
+  NotificationStatus,
+} from '@models/notification-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { filter } from 'lodash';
 import debug from 'debug';
@@ -31,11 +34,11 @@ export class NotificationService {
   ) {
     this.reset();
 
-    this.account.accountChange.subscribe(account => {
+    this.account.accountChange.subscribe((account) => {
       this.reset();
     });
 
-    this.account.archiveChange.subscribe(account => {
+    this.account.archiveChange.subscribe((account) => {
       this.reset();
     });
   }
@@ -71,7 +74,10 @@ export class NotificationService {
       this.setNewNotificationCount();
       this.debug('got full list %d items', this.notifications.length);
     } catch (err) {
-      this.message.showError('There was an error fetching your notifications.', false);
+      this.message.showError({
+        message: 'There was an error fetching your notifications.',
+        translate: false,
+      });
       throw err;
     } finally {
       this.waiting = false;
@@ -86,7 +92,9 @@ export class NotificationService {
     this.waiting = true;
     try {
       if (this.notifications.length) {
-        const response = await this.api.notification.getNotificationsSince(this.notifications[0]);
+        const response = await this.api.notification.getNotificationsSince(
+          this.notifications[0]
+        );
         const newNotifications = response.getNotificationVOs();
         this.debug('got new notifications %d', newNotifications.length);
         if (newNotifications.length) {
@@ -98,7 +106,10 @@ export class NotificationService {
         this.loadLatestNotifications();
       }
     } catch (err) {
-      this.message.showError('There was an error fetching your notifications.', false);
+      this.message.showError({
+        message: 'There was an error fetching your notifications.',
+        translate: false,
+      });
       throw err;
     } finally {
       this.waiting = false;
@@ -106,17 +117,25 @@ export class NotificationService {
   }
 
   setNewNotificationCount() {
-    this.newNotificationCount = filter(this.notifications, n => n.status === 'status.notification.new' || n.status === 'status.notification.emailed').length;
+    this.newNotificationCount = filter(
+      this.notifications,
+      (n) =>
+        n.status === 'status.notification.new' ||
+        n.status === 'status.notification.emailed'
+    ).length;
   }
 
-  async setNotificationStatus(notifications: NotificationVOData[], status: NotificationStatus) {
-    const needsUpdate = notifications.filter(n => n.status !== status);
+  async setNotificationStatus(
+    notifications: NotificationVOData[],
+    status: NotificationStatus
+  ) {
+    const needsUpdate = notifications.filter((n) => n.status !== status);
 
     if (!needsUpdate.length) {
       return;
     }
 
-    const originalValues = needsUpdate.map(n => {
+    const originalValues = needsUpdate.map((n) => {
       const original = n.status;
       n.status = status;
       return original;
@@ -130,13 +149,18 @@ export class NotificationService {
         const notification = needsUpdate[i];
         notification.status = originalValues[i];
       }
-      this.message.showError('There was an error updating your notifications.', false);
+      this.message.showError({
+        message: 'There was an error updating your notifications.',
+        translate: false,
+      });
       throw err;
     }
   }
 
   markAsSeen() {
-    const notRead = this.notifications.filter(n => n.status !== 'status.notification.read');
+    const notRead = this.notifications.filter(
+      (n) => n.status !== 'status.notification.read'
+    );
     this.setNotificationStatus(notRead, 'status.notification.seen');
   }
 
@@ -154,10 +178,10 @@ export class NotificationService {
       if (notification.type === 'type.notification.relationship_request') {
         const tab: ConnectionsTab = 'pending';
         queryParams = {
-          tab
+          tab,
         };
       }
-      path = ['/app', { outlets: { dialog: ['connections']}}];
+      path = ['/app', { outlets: { dialog: ['connections'] } }];
     } else if (notification.type === 'type.notification.share') {
       path = ['/app', 'shares'];
     } else if (notification.type === 'type.notification.zip') {
@@ -167,15 +191,20 @@ export class NotificationService {
     } else if (notification.type.includes('type.notification.pa_')) {
       await this.account.refreshArchives();
       let data: any;
-      if (notification.type === 'type.notification.pa_transfer' || notification.type === 'type.notification.pa_share') {
+      if (
+        notification.type === 'type.notification.pa_transfer' ||
+        notification.type === 'type.notification.pa_share'
+      ) {
         const activeTab: MyArchivesTab = 'pending';
         data = {
-          activeTab
+          activeTab,
         };
       }
       try {
-        this.dialog.open('MyArchivesDialogComponent', data, { width: '1000px'});
-      } catch (err) { }
+        this.dialog.open('MyArchivesDialogComponent', data, {
+          width: '1000px',
+        });
+      } catch (err) {}
     }
 
     if (path) {

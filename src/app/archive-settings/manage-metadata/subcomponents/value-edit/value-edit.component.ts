@@ -41,9 +41,10 @@ export class EditValueComponent implements OnInit {
       this.deletedTag.emit(this.tag);
       this.refreshTags.emit();
     } catch {
-      this.msg.showError(
-        'There was an error deleting the custom value. Please try again.'
-      );
+      this.msg.showError({
+        message:
+          'There was an error deleting the custom value. Please try again.',
+      });
       throw new Error(
         'There was an error deleting the custom value. Please try again.'
       );
@@ -61,9 +62,10 @@ export class EditValueComponent implements OnInit {
       await this.api.tag.update(newTagVo);
       this.refreshTags.emit();
     } catch {
-      this.msg.showError(
-        'There was an error saving the custom value. Please try again.'
-      );
+      this.msg.showError({
+        message:
+          'There was an error saving the custom value. Please try again.',
+      });
       throw new Error(
         'There was an error saving the custom value. Please try again.'
       );

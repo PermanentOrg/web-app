@@ -10,7 +10,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 @Component({
   selector: 'pr-transaction-history',
   templateUrl: './transaction-history.component.html',
-  styleUrls: ['./transaction-history.component.scss']
+  styleUrls: ['./transaction-history.component.scss'],
 })
 export class TransactionHistoryComponent implements OnInit {
   currentPage = 1;
@@ -37,17 +37,20 @@ export class TransactionHistoryComponent implements OnInit {
 
   async loadTransactionHistory() {
     try {
-      const response = await this.api.billing.getTransactionHistory(this.account.getAccount());
+      const response = await this.api.billing.getTransactionHistory(
+        this.account.getAccount()
+      );
       const ledgerItems = response.getLedgerFinancialVOs().reverse();
       this.ledgerItemCount = ledgerItems.length;
       this.ledgerItemPages = chunk(ledgerItems, this.pageSize);
     } catch (err) {
-      this.message.showError('There was a problem loading your transaction history.');
+      this.message.showError({
+        message: 'There was a problem loading your transaction history.',
+      });
       this.error = true;
       throw err;
     } finally {
       this.loading = false;
     }
   }
-
 }

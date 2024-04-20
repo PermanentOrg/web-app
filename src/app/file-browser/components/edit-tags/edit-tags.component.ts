@@ -179,9 +179,9 @@ export class EditTagsComponent
       await this.dataService.fetchFullItems([this.item]);
     } catch (err) {
       if (err instanceof BaseResponse) {
-        this.message.showError(
-          'There was a problem saving tags for this item.'
-        );
+        this.message.showError({
+          message: 'There was a problem saving tags for this item.',
+        });
       }
     } finally {
       this.checkItemTags();

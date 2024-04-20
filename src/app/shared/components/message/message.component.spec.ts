@@ -31,7 +31,7 @@ describe('MessageComponent', () => {
   });
 
   it('should accept a navigation url', () => {
-    component.display('test', null, testUrl);
+    component.display({ message: 'test', navigateTo: testUrl });
 
     expect(component.navigateTo).toEqual(testUrl);
   });
@@ -41,7 +41,7 @@ describe('MessageComponent', () => {
     spyOn(router, 'navigate');
     spyOn(component, 'dismiss');
 
-    component.display('test');
+    component.display({ message: 'test' });
 
     expect(component.navigateTo).toBeFalsy();
 
@@ -56,13 +56,15 @@ describe('MessageComponent', () => {
     spyOn(router, 'navigate');
     spyOn(component, 'dismiss');
 
-    component.display('test', null, testUrl);
+    component.display({ message: 'test', navigateTo: testUrl });
 
     component.onClick();
 
     expect(component.dismiss).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledTimes(1);
-    expect(router.navigate).toHaveBeenCalledWith(testUrl, { queryParams: {} });
+    expect(router.navigate).toHaveBeenCalledWith(testUrl, {
+      queryParams: undefined,
+    });
   });
 
   it('should navigate and dismiss when clicked if navigation URL and param given', () => {
@@ -70,7 +72,11 @@ describe('MessageComponent', () => {
     spyOn(router, 'navigate');
     spyOn(component, 'dismiss');
 
-    component.display('test', null, testUrl, { testParam: true });
+    component.display({
+      message: 'test',
+      navigateTo: testUrl,
+      navigateParams: { testParam: true },
+    });
 
     component.onClick();
 

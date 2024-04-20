@@ -33,7 +33,7 @@ export class AdvancedSettingsComponent implements OnInit {
       await this.api.account.update(this.account);
       this.accountService.setAccount(this.account);
     } catch (error) {
-      this.messageService.showError('Something went wrong!');
+      this.messageService.showError({ message: 'Something went wrong!' });
     } finally {
       this.updating = false;
     }

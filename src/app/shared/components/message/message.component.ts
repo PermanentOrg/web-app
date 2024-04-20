@@ -1,12 +1,15 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '@shared/services/message/message.service';
+import {
+  MessageService,
+  MessageDisplayOptions,
+} from '@shared/services/message/message.service';
 import { Router } from '@angular/router';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 
 interface Message {
   text: string;
-  style: string;
+  style: any;
   navigateTo?: string[];
   navigateParams?: any;
   externalUrl?: string;
@@ -24,7 +27,7 @@ export class MessageComponent implements OnInit {
   navigateParams: any;
   visible: boolean;
   useFade = this.iFrame.isIFrame();
-  style: string;
+  style: any;
   queue: Message[] = [];
   externalUrl: string;
   externalMessage: string;
@@ -41,31 +44,24 @@ export class MessageComponent implements OnInit {
 
   ngOnInit() {}
 
-  display(
-    textToDisplay: string,
-    style?: string,
-    navigateTo?: string[],
-    navigateParams = {},
-    externalUrl?: string,
-    externalMessage?: string
-  ) {
+  display(data: MessageDisplayOptions) {
     if (this.visible) {
       this.queue.push({
-        text: textToDisplay,
-        style: style,
-        navigateTo: navigateTo,
-        navigateParams: navigateParams,
-        externalUrl: externalUrl,
-        externalMessage: externalMessage,
+        text: data.message,
+        style: data.style,
+        navigateTo: data.navigateTo,
+        navigateParams: data.navigateParams,
+        externalUrl: data.externalUrl,
+        externalMessage: data.externalMessage,
       });
     } else {
-      this.displayText = textToDisplay;
-      this.navigateTo = navigateTo;
-      this.navigateParams = navigateParams;
-      this.style = style ? `alert-${style}` : null;
+      this.displayText = data.message;
+      this.navigateTo = data.navigateTo;
+      this.navigateParams = data.navigateParams;
+      this.style = data.style ? `alert-${data.style}` : null;
       this.visible = true;
-      this.externalUrl = externalUrl;
-      this.externalMessage = externalMessage;
+      this.externalUrl = data.externalUrl;
+      this.externalMessage = data.externalMessage;
       setTimeout(this.dismiss.bind(this), this.displayTime);
     }
   }
@@ -86,14 +82,14 @@ export class MessageComponent implements OnInit {
       const message = this.queue.shift();
       setTimeout(
         () =>
-          this.display(
-            message.text,
-            message.style,
-            message.navigateTo,
-            message.navigateParams,
-            message.externalUrl,
-            message.externalMessage
-          ),
+          this.display({
+            message: message.text,
+            style: message.style,
+            navigateTo: message.navigateTo,
+            navigateParams: message.navigateParams,
+            externalUrl: message.externalUrl,
+            externalMessage: message.externalMessage,
+          }),
         500
       );
     }

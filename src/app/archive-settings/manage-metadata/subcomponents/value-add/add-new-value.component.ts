@@ -27,9 +27,10 @@ export class AddNewValueComponent implements OnInit {
       );
       this.tagsUpdate.emit();
     } catch {
-      this.msg.showError(
-        'There was an error creating the custom value. Please try again.'
-      );
+      this.msg.showError({
+        message:
+          'There was an error creating the custom value. Please try again.',
+      });
       throw new Error(
         'There was an error creating the custom value. Please try again.'
       );

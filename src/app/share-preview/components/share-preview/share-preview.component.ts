@@ -474,27 +474,30 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       const response = await this.api.share.requestShareAccess(this.shareToken);
       const shareVo = response.getShareVO();
       if (shareVo.status === 'status.generic.pending') {
-        this.message.showMessage(
-          `Access requested. ${this.shareAccount.fullName} must approve your request.`,
-          'success'
-        );
+        this.message.showMessage({
+          message: `Access requested. ${this.shareAccount.fullName} must approve your request.`,
+          style: 'success',
+        });
         this.showCover = false;
         this.hasRequested = true;
       } else {
-        this.message.showMessage('Access granted.', 'success');
+        this.message.showMessage({
+          message: 'Access granted.',
+          style: 'success',
+        });
         this.router.navigate(['/app', 'shares']);
       }
     } catch (err) {
       if (err instanceof ShareResponse) {
         if (err.messageIncludesPhrase('share.already_exists')) {
           this.hasRequested = true;
-          this.message.showError(
-            `You have already requested access to this item.`
-          );
+          this.message.showError({
+            message: `You have already requested access to this item.`,
+          });
         } else if (err.messageIncludesPhrase('same')) {
-          this.message.showError(
-            `You do not need to request access to your own item.`
-          );
+          this.message.showError({
+            message: `You do not need to request access to your own item.`,
+          });
         }
       }
     } finally {
@@ -527,7 +530,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         );
       })
       .catch((err) => {
-        this.message.showError(err.error.message, true);
+        this.message.showError({ message: err.error.message, translate: true });
         this.waiting = false;
       })
       .then(() => {
@@ -547,7 +550,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         }
       })
       .catch((err) => {
-        this.message.showError(err, true);
+        this.message.showError({ message: err, translate: true });
         this.waiting = false;
       });
   }
@@ -590,12 +593,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
               queryParamsHandling: 'preserve',
             })
             .then(() => {
-              this.message.showMessage(
-                `Verify to continue as ${
+              this.message.showMessage({
+                message: `Verify to continue as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'warning'
-              );
+                style: 'warning',
+              });
             });
         } else {
           // hide cover
@@ -643,15 +646,18 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         this.waiting = false;
 
         if (response.messageIncludes('warning.signin.unknown')) {
-          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.message.showMessage({
+            message: 'Incorrect email or password.',
+            style: 'danger',
+          });
           this.loginForm.patchValue({
             password: '',
           });
         } else {
-          this.message.showMessage(
-            'Log in failed. Please try again.',
-            'danger'
-          );
+          this.message.showMessage({
+            message: 'Log in failed. Please try again.',
+            style: 'danger',
+          });
         }
       });
   }

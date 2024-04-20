@@ -86,23 +86,23 @@ export class LoginEmbedComponent implements OnInit {
           this.router
             .navigate(['..', 'mfa'], { relativeTo: this.route })
             .then(() => {
-              this.message.showMessage(
-                `Verify to continue as ${
+              this.message.showMessage({
+                message: `Verify to continue as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'warning'
-              );
+                style: 'warning',
+              });
             });
         } else if (response.needsVerification()) {
           this.router
             .navigate(['..', 'verify'], { relativeTo: this.route })
             .then(() => {
-              this.message.showMessage(
-                `Verify to continue as ${
+              this.message.showMessage({
+                message: `Verify to continue as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'warning'
-              );
+                style: 'warning',
+              });
             });
         } else {
           this.iFrame.setParentUrl('/app');
@@ -112,15 +112,18 @@ export class LoginEmbedComponent implements OnInit {
         this.waiting = false;
 
         if (response.messageIncludes('warning.signin.unknown')) {
-          this.message.showMessage('Incorrect email or password.', 'danger');
+          this.message.showMessage({
+            message: 'Incorrect email or password.',
+            style: 'danger',
+          });
           this.loginForm.patchValue({
             password: '',
           });
         } else {
-          this.message.showMessage(
-            'Log in failed. Please try again.',
-            'danger'
-          );
+          this.message.showMessage({
+            message: 'Log in failed. Please try again.',
+            style: 'danger',
+          });
         }
       });
   }

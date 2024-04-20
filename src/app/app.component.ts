@@ -1,8 +1,5 @@
 /* @format */
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { ApiService } from '@shared/services/api/api.service';
-import { AccountService } from '@shared/services/account/account.service';
-import { MessageService } from '@shared/services/message/message.service';
 
 declare var iosInnerHeight: Function;
 
@@ -15,11 +12,7 @@ export class AppComponent implements OnInit {
   @HostBinding('class.mobile-safari') isMobileSafari = false;
   @HostBinding('class.mobile-safari-menu-bar-showing') isMenuBarShowing = false;
 
-  constructor(
-    private api: ApiService,
-    private account: AccountService,
-    private message: MessageService
-  ) {
+  constructor() {
     const isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
     const iPhone =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window['MSStream'];

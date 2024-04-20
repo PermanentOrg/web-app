@@ -257,7 +257,7 @@ export class EditService {
       }
     } catch (err) {
       if (err instanceof FolderResponse || err instanceof RecordResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
       actionDeferred.resolve();
     }
@@ -309,7 +309,7 @@ export class EditService {
       let folderResponse, recordResponse;
       [folderResponse, recordResponse] = results;
       this.dataService.hideItemsInCurrentFolder(items);
-      this.deleteSubject.next()
+      this.deleteSubject.next();
     } catch (err) {
       items.forEach((i) => (i.isPendingAction = false));
       throw err;
@@ -579,13 +579,16 @@ export class EditService {
             const msg = `${items.length} item(s) ${
               operation === FolderPickerOperations.Copy ? 'copied' : 'moved'
             } successfully.`;
-            this.message.showMessage(msg, 'success');
+            this.message.showMessage({ message: msg, style: 'success' });
             resolve();
           }, 500);
         })
         .catch((response: FolderResponse | RecordResponse) => {
           deferred.reject();
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         });
     });
   }

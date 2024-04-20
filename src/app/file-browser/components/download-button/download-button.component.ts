@@ -58,15 +58,16 @@ export class DownloadButtonComponent implements OnInit {
     } else {
       try {
         await this.data.createZipForDownload([this.selectedItem]);
-        this.message.showMessage(
-          'Your zip file is being created. An in-app notification will let you know when it is ready to download.',
-          'success'
-        );
+        this.message.showMessage({
+          message:
+            'Your zip file is being created. An in-app notification will let you know when it is ready to download.',
+          style: 'success',
+        });
       } catch (err) {
-        this.message.showError(
-          'There was a problem creating a zip file to download',
-          false
-        );
+        this.message.showError({
+          message: 'There was a problem creating a zip file to download',
+          translate: false,
+        });
       }
     }
   }

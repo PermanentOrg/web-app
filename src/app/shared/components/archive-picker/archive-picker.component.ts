@@ -1,14 +1,30 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
-import { PromptService, PromptField } from '@shared/services/prompt/prompt.service';
-import { RelationVO, ArchiveVO, InviteVO, FolderVO, RecordVO, ItemVO } from '@models';
+import {
+  PromptService,
+  PromptField,
+} from '@shared/services/prompt/prompt.service';
+import {
+  RelationVO,
+  ArchiveVO,
+  InviteVO,
+  FolderVO,
+  RecordVO,
+  ItemVO,
+} from '@models';
 import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
-import { SearchResponse, InviteResponse } from '@shared/services/api/index.repo';
+import {
+  SearchResponse,
+  InviteResponse,
+} from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { Validators } from '@angular/forms';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
-import { INVITATION_FIELDS, ACCESS_ROLE_FIELD } from '@shared/components/prompt/prompt-fields';
+import {
+  INVITATION_FIELDS,
+  ACCESS_ROLE_FIELD,
+} from '@shared/components/prompt/prompt-fields';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone } from 'lodash';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
@@ -25,7 +41,7 @@ export interface ArchivePickerComponentConfig {
 @Component({
   selector: 'pr-archive-picker',
   templateUrl: './archive-picker.component.html',
-  styleUrls: ['./archive-picker.component.scss']
+  styleUrls: ['./archive-picker.component.scss'],
 })
 export class ArchivePickerComponent implements OnInit {
   relations: RelationVO[];
@@ -49,32 +65,34 @@ export class ArchivePickerComponent implements OnInit {
     this.relationOptions = this.prConstants.getRelations().map((type) => {
       return {
         text: type.name,
-        value: type.type
+        value: type.type,
       };
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   searchByEmail() {
     const deferred = new Deferred();
-    const fields: PromptField[] = [{
-      fieldName: 'email',
-      validators: [Validators.required, Validators.email],
-      placeholder: 'Email',
-      type: 'text',
-      config: {
-        autocapitalize: 'off',
-        autocorrect: 'off',
-        autocomplete: 'off',
-        autoselect: false
-      }
-    }];
+    const fields: PromptField[] = [
+      {
+        fieldName: 'email',
+        validators: [Validators.required, Validators.email],
+        placeholder: 'Email',
+        type: 'text',
+        config: {
+          autocapitalize: 'off',
+          autocorrect: 'off',
+          autocomplete: 'off',
+          autoselect: false,
+        },
+      },
+    ];
 
     this.searchResults = null;
 
-    return this.prompt.prompt(fields, 'Search by email', deferred.promise, 'Search')
+    return this.prompt
+      .prompt(fields, 'Search by email', deferred.promise, 'Search')
       .then((value) => {
         this.searchEmail = value.email;
         return this.api.search.archiveByEmail(value.email).toPromise();
@@ -97,23 +115,35 @@ export class ArchivePickerComponent implements OnInit {
       fields.push(ACCESS_ROLE_FIELD);
     }
 
-    return this.prompt.prompt(fields, forShare ? 'Invite to share' : 'Send invitation', deferred.promise, 'Send')
+    return this.prompt
+      .prompt(
+        fields,
+        forShare ? 'Invite to share' : 'Send invitation',
+        deferred.promise,
+        'Send'
+      )
       .then((value) => {
         const invite = new InviteVO({
           email: value.email,
           fullName: value.name,
           byArchiveId: this.accountService.getArchive().archiveId,
           relationship: value.relationType,
-          accessRole: value.accessRole
+          accessRole: value.accessRole,
         });
         if (this.dialogData.shareItem) {
-          return this.api.invite.sendShareInvite([invite], this.dialogData.shareItem);
+          return this.api.invite.sendShareInvite(
+            [invite],
+            this.dialogData.shareItem
+          );
         } else {
           return this.api.invite.send([invite]);
         }
       })
       .then((response: InviteResponse) => {
-        this.message.showMessage('Invite sent succesfully.', 'success');
+        this.message.showMessage({
+          message: 'Invite sent succesfully.',
+          style: 'success',
+        });
         if (forShare) {
           this.ga.sendEvent(EVENTS.SHARE.ShareByInvite.initiated.params);
         }
@@ -123,7 +153,10 @@ export class ArchivePickerComponent implements OnInit {
       .catch((response: InviteResponse) => {
         if (response) {
           deferred.resolve();
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         }
       });
   }
@@ -135,5 +168,4 @@ export class ArchivePickerComponent implements OnInit {
   cancel() {
     this.dialogRef.close(null, true);
   }
-
 }

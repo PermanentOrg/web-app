@@ -1,4 +1,15 @@
-import { Component, OnInit, Input, Optional, Inject, ElementRef, AfterViewInit, ViewChild, HostListener, NgZone } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Optional,
+  Inject,
+  ElementRef,
+  AfterViewInit,
+  ViewChild,
+  HostListener,
+  NgZone,
+} from '@angular/core';
 import { ItemVO, ArchiveVO, LocnVOData } from '@models';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { MapInfoWindow, GoogleMap } from '@angular/google-maps';
@@ -14,14 +25,14 @@ import { ProfileService } from '@shared/services/profile/profile.service';
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER: google.maps.LatLngLiteral = {
   lat: 39.8333333,
-  lng: -98.585522
+  lng: -98.585522,
 };
 
 @Component({
   selector: 'pr-location-picker',
   templateUrl: './location-picker.component.html',
   styleUrls: ['./location-picker.component.scss'],
-  animations: [ ngIfFadeInAnimation ]
+  animations: [ngIfFadeInAnimation],
 })
 export class LocationPickerComponent implements OnInit, AfterViewInit {
   @Input() item: ItemVO;
@@ -33,7 +44,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     streetViewControl: false,
     fullscreenControl: false,
     mapTypeControl: false,
-    clickableIcons: false
+    clickableIcons: false,
   };
 
   zoom = 4;
@@ -72,7 +83,6 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   ngOnInit(): void {
     this.checkItemLocation();
   }
@@ -85,8 +95,15 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
   }
 
   initAutocomplete() {
-    this.autocomplete = new google.maps.places.Autocomplete(this.autocompleteInputRef.nativeElement);
-    this.autocomplete.setFields(['name', 'formatted_address', 'address_components', 'geometry']);
+    this.autocomplete = new google.maps.places.Autocomplete(
+      this.autocompleteInputRef.nativeElement
+    );
+    this.autocomplete.setFields([
+      'name',
+      'formatted_address',
+      'address_components',
+      'geometry',
+    ]);
     this.autocomplete.addListener('place_changed', () => {
       this.zone.run(() => {
         this.onAutocompletePlaceSelect();
@@ -96,7 +113,8 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   setMapDimensions() {
-    const height = (this.mapWrapperRef.nativeElement as HTMLElement).clientHeight;
+    const height = (this.mapWrapperRef.nativeElement as HTMLElement)
+      .clientHeight;
     const width = (this.mapWrapperRef.nativeElement as HTMLElement).clientWidth;
 
     this.height = `${height}px`;
@@ -113,18 +131,26 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
   async setCurrentLocationToLatLng(latLng: google.maps.LatLng) {
     this.currentLocation = null;
-    const response = await this.api.locn.geomapLatLng(latLng.lat(), latLng.lng());
+    const response = await this.api.locn.geomapLatLng(
+      latLng.lat(),
+      latLng.lng()
+    );
     if (response.isSuccessful) {
       this.setCurrentLocation(response.getLocnVO(), true);
       this.hasChanged = true;
     } else {
-      this.message.showError('There was an error in getting the current location.');
+      this.message.showError({
+        message: 'There was an error in getting the current location.',
+      });
     }
   }
 
-  setCurrentLocation(locn: LocnVOData, pan = false ) {
+  setCurrentLocation(locn: LocnVOData, pan = false) {
     this.currentLocation = locn;
-    this.currentLocationLatLng = new google.maps.LatLng({lat: Number(locn.latitude), lng: Number(locn.longitude)});
+    this.currentLocationLatLng = new google.maps.LatLng({
+      lat: Number(locn.latitude),
+      lng: Number(locn.longitude),
+    });
     this.currentLocationDisplay = this.locationPipe.transform(locn);
     if (!pan) {
       this.center = this.currentLocationLatLng;
@@ -145,18 +171,23 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
           await this.saveItem();
         }
         this.dialogRef.close();
-        this.message.showMessage('Location saved.', 'success');
+        this.message.showMessage({
+          message: 'Location saved.',
+          style: 'success',
+        });
       } catch (err) {
-        this.message.showError('There was a problem saving the location.');
+        this.message.showError({
+          message: 'There was a problem saving the location.',
+        });
         throw err;
-     } finally {
-       this.saving = false;
-     }
+      } finally {
+        this.saving = false;
+      }
     }
   }
 
   async saveItem() {
-    this.item.update({LocnVO: this.currentLocation});
+    this.item.update({ LocnVO: this.currentLocation });
     await this.editService.updateItems([this.item], ['LocnVO']);
   }
 
@@ -209,7 +240,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
       adminTwoName: getComponentName(addr, 'administrative_area_level_2'),
       adminTwoCode: getComponentName(addr, 'administrative_area_level_2', true),
       country: getComponentName(addr, 'country'),
-      countryCode: getComponentName(addr, 'country', true)
+      countryCode: getComponentName(addr, 'country', true),
     };
 
     if (!place.name.includes(locn.streetNumber)) {
@@ -218,9 +249,15 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
     return locn;
 
-    function getComponentName(address_components: google.maps.GeocoderAddressComponent[], type, getShortName = true) {
-      const component = find(address_components, c => c.types.includes(type));
-      return component ? component[getShortName ? 'short_name' : 'long_name'] : null;
+    function getComponentName(
+      address_components: google.maps.GeocoderAddressComponent[],
+      type,
+      getShortName = true
+    ) {
+      const component = find(address_components, (c) => c.types.includes(type));
+      return component
+        ? component[getShortName ? 'short_name' : 'long_name']
+        : null;
     }
   }
 }

@@ -40,9 +40,10 @@ export class ArchiveTypeChangeDialogComponent implements OnInit {
     try {
       await this.api.archive.update(this.archive);
     } catch {
-      this.msg.showError(
-        'There was an error changing the archive type. Please try again.'
-      );
+      this.msg.showError({
+        message:
+          'There was an error changing the archive type. Please try again.',
+      });
     } finally {
       this.updating = false;
       this.dialogRef.close();

@@ -78,9 +78,14 @@ export class BillingSettingsComponent implements OnInit {
       const revertData: AccountVOData = {};
       revertData[prop] = originalValue;
       this.account.update(revertData);
-      this.message.showError('There was a problem saving your account changes');
+      this.message.showError({
+        message: 'There was a problem saving your account changes',
+      });
     } else {
-      this.message.showMessage('Account information saved.', 'success');
+      this.message.showMessage({
+        message: 'Account information saved.',
+        style: 'success',
+      });
     }
   }
 }

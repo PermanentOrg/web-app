@@ -58,9 +58,10 @@ export class LegacyContactEditComponent implements OnInit {
         },
       });
     } catch {
-      this.message.showError(
-        "An error occured when saving your account's Legacy Contact. Please try again."
-      );
+      this.message.showError({
+        message:
+          "An error occured when saving your account's Legacy Contact. Please try again.",
+      });
     } finally {
       this.waiting = false;
     }

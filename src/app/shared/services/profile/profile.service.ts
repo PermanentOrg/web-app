@@ -132,9 +132,9 @@ export class ProfileService {
       }
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(
-          'There was a problem changing the archive profile picture.'
-        );
+        this.message.showError({
+          message: 'There was a problem changing the archive profile picture.',
+        });
       }
     }
   }

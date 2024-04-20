@@ -87,11 +87,11 @@ export class VerifyComponent implements OnInit {
       // decode the url encoding from the php
       const query_email = decodeURI(queryParams.email);
       if (query_email !== account.primaryEmail) {
-        this.message.showError(
-          'Sorry, this verification code does not match your account.',
-          true,
-          ['/auth/', 'login']
-        );
+        this.message.showError({
+          message: 'Sorry, this verification code does not match your account.',
+          translate: true,
+          navigateTo: ['/auth/', 'login'],
+        });
         this.verifyForm.patchValue({ token: '' });
         this.waiting = true;
       }
@@ -164,7 +164,10 @@ export class VerifyComponent implements OnInit {
       })
       .catch((response: AuthResponse | ArchiveResponse | AccountResponse) => {
         this.waiting = false;
-        this.message.showError(response.getMessage(), true);
+        this.message.showError({
+          message: response.getMessage(),
+          translate: true,
+        });
       });
   }
 
@@ -186,7 +189,10 @@ export class VerifyComponent implements OnInit {
       .then((response: AuthResponse) => {
         this.waiting = false;
         if (showMessage) {
-          this.message.showMessage(response.getMessage(), null, true);
+          this.message.showMessage({
+            message: response.getMessage(),
+            translate: true,
+          });
         }
       })
       .catch((response: AuthResponse) => {
@@ -195,7 +201,7 @@ export class VerifyComponent implements OnInit {
         if (translateString === 'error.auth.lookup') {
           translateString = 'warning.auth.token_does_not_match';
         }
-        this.message.showError(translateString, true);
+        this.message.showError({ message: translateString, translate: true });
       });
   }
 
@@ -203,20 +209,22 @@ export class VerifyComponent implements OnInit {
     return this.accountService
       .switchToDefaultArchive()
       .then((response: ArchiveResponse) => {
-        this.message.showMessage(
-          `${this.verifyingEmail ? 'Email' : 'Phone number'} verified.`,
-          'success'
-        );
+        this.message.showMessage({
+          message: `${
+            this.verifyingEmail ? 'Email' : 'Phone number'
+          } verified.`,
+          style: 'success',
+        });
         if (this.route.snapshot.queryParams.shareByUrl) {
           this.router
             .navigate(['/share', this.route.snapshot.queryParams.shareByUrl])
             .then(() => {
-              this.message.showMessage(
-                `Logged in as ${
+              this.message.showMessage({
+                message: `Logged in as ${
                   this.accountService.getAccount().primaryEmail
                 }.`,
-                'success'
-              );
+                style: 'success',
+              });
             });
         } else {
           this.router.navigate(['/']);

@@ -146,7 +146,10 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
             })
             .catch((response: BaseResponse) => {
               deferred.resolve();
-              this.message.showError(response.getMessage(), true);
+              this.message.showError({
+                message: response.getMessage(),
+                translate: true,
+              });
             });
         } else {
           deferred.resolve();
@@ -160,7 +163,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.router.navigate(['/private']);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     }
   }
@@ -173,7 +176,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.archives.push(archive);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     }
   }
@@ -184,7 +187,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
       remove(this.pendingArchives, archive);
     } catch (err) {
       if (err instanceof ArchiveResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       }
     }
   }
@@ -246,7 +249,10 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .catch((response: ArchiveResponse | BaseResponse) => {
         if (response) {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
           deferred.reject();
         }
       });

@@ -151,10 +151,10 @@ export class SignupComponent implements OnInit {
       )
       .then((account: AccountVO) => {
         if (account.needsVerification()) {
-          this.message.showMessage(
-            `Verify to continue as ${account.primaryEmail}.`,
-            'warning'
-          );
+          this.message.showMessage({
+            message: `Verify to continue as ${account.primaryEmail}.`,
+            style: 'warning',
+          });
           this.router.navigate(['..', 'verify'], { relativeTo: this.route });
         } else {
           this.accountService
@@ -165,16 +165,16 @@ export class SignupComponent implements OnInit {
         }
       })
       .catch((err) => {
-        this.message.showError(err.error.message, true);
+        this.message.showError({ message: err.error.message, translate: true });
         this.waiting = false;
       });
   }
 
   public redirectUserFromSignup() {
-    this.message.showMessage(
-      `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
-      'success'
-    );
+    this.message.showMessage({
+      message: `Logged in as ${this.accountService.getAccount().primaryEmail}.`,
+      style: 'success',
+    });
 
     if (this.route.snapshot.queryParams.eventCategory) {
       this.ga.sendEvent({

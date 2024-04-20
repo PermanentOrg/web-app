@@ -17,13 +17,13 @@ import { DEFAULT_ANIMATION_LENGTH } from '@root/app/dialog/dialog.service';
 export enum FolderPickerOperations {
   Move = 1,
   Copy,
-  ChooseRecord
+  ChooseRecord,
 }
 
 @Component({
   selector: 'pr-folder-picker',
   templateUrl: './folder-picker.component.html',
-  styleUrls: ['./folder-picker.component.scss']
+  styleUrls: ['./folder-picker.component.scss'],
 })
 export class FolderPickerComponent implements OnInit, OnDestroy {
   public currentFolder: FolderVO;
@@ -49,13 +49,12 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private message: MessageService,
     private folderPickerService: FolderPickerService,
-    private prompt: PromptService,
+    private prompt: PromptService
   ) {
     this.folderPickerService.registerComponent(this);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   show(
     startingFolder: FolderVO,
@@ -88,10 +87,9 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.setFolder(startingFolder)
-      .then(() => {
-        this.loadCurrentFolderChildData();
-      });
+    this.setFolder(startingFolder).then(() => {
+      this.loadCurrentFolderChildData();
+    });
 
     this.chooseFolderDeferred = new Deferred();
 
@@ -116,32 +114,42 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   showRecord(record: RecordVO) {
-    this.selectedRecord =  record;
+    this.selectedRecord = record;
   }
 
   async setFolder(folder: FolderVO) {
     this.waiting = true;
     try {
-
-    const folderResponse = await this.api.folder.navigate(new FolderVO({
-      folder_linkId: folder.folder_linkId,
-      folderId: folder.folderId,
-      archiveNbr: folder.archiveNbr
-    })).toPromise();
-    this.currentFolder = folderResponse.getFolderVO(true);
-    this.isRootFolder = this.currentFolder.type.includes('type.folder.root.root');
-    if (!this.allowRecords) {
-      remove(this.currentFolder.ChildItemVOs, 'isRecord');
-    }
-    if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
-      remove(this.currentFolder.ChildItemVOs, (f: ItemVO) => this.filterFolderLinkIds.includes(f.folder_linkId));
-    }
-    remove(this.currentFolder.ChildItemVOs, (item) => item.type.includes('type.folder.root.app'));
-    remove(this.currentFolder.ChildItemVOs, (item) => item.type.includes('type.folder.root.vault'));
-
+      const folderResponse = await this.api.folder
+        .navigate(
+          new FolderVO({
+            folder_linkId: folder.folder_linkId,
+            folderId: folder.folderId,
+            archiveNbr: folder.archiveNbr,
+          })
+        )
+        .toPromise();
+      this.currentFolder = folderResponse.getFolderVO(true);
+      this.isRootFolder = this.currentFolder.type.includes(
+        'type.folder.root.root'
+      );
+      if (!this.allowRecords) {
+        remove(this.currentFolder.ChildItemVOs, 'isRecord');
+      }
+      if (this.filterFolderLinkIds && this.filterFolderLinkIds.length) {
+        remove(this.currentFolder.ChildItemVOs, (f: ItemVO) =>
+          this.filterFolderLinkIds.includes(f.folder_linkId)
+        );
+      }
+      remove(this.currentFolder.ChildItemVOs, (item) =>
+        item.type.includes('type.folder.root.app')
+      );
+      remove(this.currentFolder.ChildItemVOs, (item) =>
+        item.type.includes('type.folder.root.vault')
+      );
     } catch (err) {
       if (err instanceof FolderResponse) {
-        this.message.showError(err.getMessage(), true);
+        this.message.showError({ message: err.getMessage(), translate: true });
       } else {
         throw err;
       }
@@ -161,23 +169,31 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   goToParentFolder() {
     const parentFolder = new FolderVO({
       folder_linkId: this.currentFolder.parentFolder_linkId,
-      folderId: this.currentFolder.parentFolderId
+      folderId: this.currentFolder.parentFolderId,
     });
     return this.setFolder(parentFolder);
   }
 
   loadCurrentFolderChildData() {
-    return this.dataService.fetchLeanItems(this.currentFolder.ChildItemVOs, this.currentFolder);
+    return this.dataService.fetchLeanItems(
+      this.currentFolder.ChildItemVOs,
+      this.currentFolder
+    );
   }
 
   chooseFolder() {
     if (this.shouldConfirmFolderSelection()) {
-      this.prompt.confirm('Yes',
-      `This folder is publicly accessible by others. Are you sure you would like to ${this.operationName.toLocaleLowerCase()} to this location?`).then(() => {
-        this.setChosenFolder();
-      }).catch(() => {
-        // Just exit out of confirm box
-      });
+      this.prompt
+        .confirm(
+          'Yes',
+          `This folder is publicly accessible by others. Are you sure you would like to ${this.operationName.toLocaleLowerCase()} to this location?`
+        )
+        .then(() => {
+          this.setChosenFolder();
+        })
+        .catch(() => {
+          // Just exit out of confirm box
+        });
     } else {
       this.setChosenFolder();
     }
@@ -200,7 +216,7 @@ export class FolderPickerComponent implements OnInit, OnDestroy {
   }
 
   public cannotCopyToFolder(): boolean {
-    return this.isRootFolder || (this.currentFolder?.type.includes('root.app'));
+    return this.isRootFolder || this.currentFolder?.type.includes('root.app');
   }
 
   protected setChosenFolder(): void {

@@ -1,5 +1,17 @@
-import { Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, NgModel, Validators } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  NgModel,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
@@ -7,7 +19,10 @@ import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
 import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
-import { ngIfScaleAnimation, ngIfScaleAnimationDynamic } from '@shared/animations';
+import {
+  ngIfScaleAnimation,
+  ngIfScaleAnimationDynamic,
+} from '@shared/animations';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -16,7 +31,11 @@ import { ShareResponse } from '@shared/services/api/share.repo';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { PromptService, RELATION_OPTIONS, SHARE_ACCESS_ROLE_FIELD } from '@shared/services/prompt/prompt.service';
+import {
+  PromptService,
+  RELATION_OPTIONS,
+  SHARE_ACCESS_ROLE_FIELD,
+} from '@shared/services/prompt/prompt.service';
 import { getSQLDateTime } from '@shared/utilities/dateTime';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { addDays, differenceInHours, isPast } from 'date-fns';
@@ -28,7 +47,7 @@ enum Expiration {
   Week = '1 week',
   Month = '1 month',
   Year = '1 year',
-  Other = 'Other'
+  Other = 'Other',
 }
 
 enum ExpirationDays {
@@ -38,12 +57,18 @@ enum ExpirationDays {
   Year = 365,
 }
 
-type ShareByUrlProps = 'defaultAccessRole' | 'expiresDT' | 'autoApproveToggle' | 'previewToggle';
+type ShareByUrlProps =
+  | 'defaultAccessRole'
+  | 'expiresDT'
+  | 'autoApproveToggle'
+  | 'previewToggle';
 
-const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(Expiration).map(x => {
+const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
+  Expiration
+).map((x) => {
   return {
     value: x,
-    text: x
+    text: x,
   };
 });
 
@@ -51,7 +76,7 @@ const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(Expiration).ma
   selector: 'pr-sharing-dialog',
   templateUrl: './sharing-dialog.component.html',
   styleUrls: ['./sharing-dialog.component.scss'],
-  animations: [ ngIfScaleAnimation, ngIfScaleAnimationDynamic ]
+  animations: [ngIfScaleAnimation, ngIfScaleAnimationDynamic],
 })
 export class SharingDialogComponent implements OnInit {
   public shareItem: ItemVO = null;
@@ -61,7 +86,6 @@ export class SharingDialogComponent implements OnInit {
 
   public shares: ShareVO[] = [];
   public pendingShares: ShareVO[] = [];
-
 
   public shareLink: ShareByUrlVO = null;
 
@@ -75,7 +99,8 @@ export class SharingDialogComponent implements OnInit {
   public showLinkSettings = false;
 
   public newAccessRole: AccessRoleType = 'access.role.viewer';
-  public accessRoleOptions: FormInputSelectOption[] = SHARE_ACCESS_ROLE_FIELD.selectOptions.reverse();
+  public accessRoleOptions: FormInputSelectOption[] =
+    SHARE_ACCESS_ROLE_FIELD.selectOptions.reverse();
   public expirationOptions: FormInputSelectOption[] = EXPIRATION_OPTIONS;
   public relationOptions: FormInputSelectOption[] = RELATION_OPTIONS;
 
@@ -86,8 +111,11 @@ export class SharingDialogComponent implements OnInit {
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
   public archiveFilterFn = (a: ArchiveVO) => {
-    return !find(this.shares, { archiveId: a.archiveId }) && !find(this.shares, { archiveId: a.archiveId});
-  }
+    return (
+      !find(this.shares, { archiveId: a.archiveId }) &&
+      !find(this.shares, { archiveId: a.archiveId })
+    );
+  };
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private accountService: AccountService,
@@ -104,7 +132,7 @@ export class SharingDialogComponent implements OnInit {
       fullName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       relationship: ['relation.friend', [Validators.required]],
-      accessRole: ['access.role.viewer', [Validators.required]]
+      accessRole: ['access.role.viewer', [Validators.required]],
     });
 
     this.shareItem = this.data.item as ItemVO;
@@ -117,7 +145,9 @@ export class SharingDialogComponent implements OnInit {
       for (const share of this.shareItem.ShareVOs) {
         this.originalRoles.set(share.shareId, share.accessRole);
       }
-      [ this.pendingShares, this.shares ] = partition(this.shareItem.ShareVOs, {status: 'status.generic.pending'}) as any;
+      [this.pendingShares, this.shares] = partition(this.shareItem.ShareVOs, {
+        status: 'status.generic.pending',
+      }) as any;
     }
 
     this.canShare = this.shareItem.accessRole === 'access.role.owner';
@@ -134,7 +164,9 @@ export class SharingDialogComponent implements OnInit {
     if (this.route.snapshot) {
       const params = this.route.snapshot.queryParamMap;
       if (params.has('requestToken') && params.has('requestAction')) {
-        const pendingShare = find(this.pendingShares, { requestToken: params.get('requestToken') });
+        const pendingShare = find(this.pendingShares, {
+          requestToken: params.get('requestToken'),
+        });
         if (pendingShare) {
           const action = params.get('requestAction');
           switch (action) {
@@ -164,7 +196,7 @@ export class SharingDialogComponent implements OnInit {
     this.invitationForm.patchValue({
       email,
       accessRole: this.newAccessRole,
-      relationship: 'relation.friend'
+      relationship: 'relation.friend',
     });
 
     this.showInvitationForm = true;
@@ -178,14 +210,20 @@ export class SharingDialogComponent implements OnInit {
         fullName: value.name,
         byArchiveId: this.accountService.getArchive().archiveId,
         relationship: 'relation.family.uncle',
-        accessRole: value.accessRole
+        accessRole: value.accessRole,
       });
       await this.api.invite.sendShareInvite([invite], this.shareItem);
-      this.messageService.showMessage('Share invitation sent.', 'success');
+      this.messageService.showMessage({
+        message: 'Share invitation sent.',
+        style: 'success',
+      });
       this.showInvitationForm = false;
     } catch (err) {
       if (err instanceof InviteResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     } finally {
       this.sendingInvitation = false;
@@ -195,7 +233,7 @@ export class SharingDialogComponent implements OnInit {
   confirmOwnerAdd(share: ShareVO) {
     return this.promptService.confirm(
       'Add owner',
-      `Are you sure you share this item with The ${share.ArchiveVO.fullName} Archive as an owner?`,
+      `Are you sure you share this item with The ${share.ArchiveVO.fullName} Archive as an owner?`
     );
   }
 
@@ -218,7 +256,7 @@ export class SharingDialogComponent implements OnInit {
   }
 
   onAccessChange(share: ShareVO) {
-    if (share.accessRole as any === 'remove') {
+    if ((share.accessRole as any) === 'remove') {
       this.removeShare(share);
     } else {
       this.updateShare(share);
@@ -226,12 +264,17 @@ export class SharingDialogComponent implements OnInit {
   }
 
   isArchiveSharedWith(archive: ArchiveVO) {
-    return find(this.shares, { archiveId: archive.archiveId}) || find(this.pendingShares, { archiveId: archive.archiveId});
+    return (
+      find(this.shares, { archiveId: archive.archiveId }) ||
+      find(this.pendingShares, { archiveId: archive.archiveId })
+    );
   }
 
   async createShare(archive: ArchiveVO, accessRole: AccessRoleType) {
     if (this.isArchiveSharedWith(archive)) {
-      this.messageService.showMessage('This archive has already been shared with');
+      this.messageService.showMessage({
+        message: 'This archive has already been shared with',
+      });
       return;
     }
 
@@ -260,7 +303,10 @@ export class SharingDialogComponent implements OnInit {
     } catch (err) {
       remove(this.shares, share);
       if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     }
   }
@@ -278,7 +324,10 @@ export class SharingDialogComponent implements OnInit {
       share.accessRole = this.originalRoles.get(share.shareId);
       this.shares = sortShareVOs(this.shares);
       if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     } finally {
       share.isPendingAction = false;
@@ -293,10 +342,16 @@ export class SharingDialogComponent implements OnInit {
     this.shares = sortShareVOs(this.shares);
     try {
       await this.api.share.upsert(share);
-      this.messageService.showMessage(`Share request approved for The ${share.ArchiveVO.fullName} Archive.`, 'success');
+      this.messageService.showMessage({
+        message: `Share request approved for The ${share.ArchiveVO.fullName} Archive.`,
+        style: 'success',
+      });
     } catch (err) {
       if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
       remove(this.shares, share);
       this.pendingShares.push(share);
@@ -333,7 +388,10 @@ export class SharingDialogComponent implements OnInit {
     } catch (err) {
       share.isPendingAction = false;
       if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     }
   }
@@ -343,7 +401,10 @@ export class SharingDialogComponent implements OnInit {
       return Expiration.Never;
     }
 
-    const diff = differenceInHours(new Date(expiresDT), new Date(this.shareLink.createdDT));
+    const diff = differenceInHours(
+      new Date(expiresDT),
+      new Date(this.shareLink.createdDT)
+    );
 
     if (diff <= 24 * ExpirationDays.Day) {
       return Expiration.Day;
@@ -377,15 +438,21 @@ export class SharingDialogComponent implements OnInit {
     if (this.shareLink) {
       this.previewToggle = this.shareLink.previewToggle;
       this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
-      this.expiration = this.getExpirationFromExpiresDT(this.shareLink.expiresDT);
+      this.expiration = this.getExpirationFromExpiresDT(
+        this.shareLink.expiresDT
+      );
       this.linkDefaultAccessRole = this.shareLink.defaultAccessRole;
-      this.expirationOptions = EXPIRATION_OPTIONS.filter(expiration => {
+      this.expirationOptions = EXPIRATION_OPTIONS.filter((expiration) => {
         switch (expiration.value) {
           case Expiration.Never:
           case Expiration.Other:
             return true;
           default:
-            return !isPast(new Date(this.getExpiresDTFromExpiration(expiration.value as Expiration)));
+            return !isPast(
+              new Date(
+                this.getExpiresDTFromExpiration(expiration.value as Expiration)
+              )
+            );
         }
       });
     } else {
@@ -409,12 +476,14 @@ export class SharingDialogComponent implements OnInit {
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     } catch (err) {
       if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
     } finally {
       this.updatingLink = false;
     }
-
   }
 
   copyShareLink() {
@@ -446,12 +515,12 @@ export class SharingDialogComponent implements OnInit {
     } catch (response) {
       deferred.resolve();
       if (response instanceof ShareResponse) {
-        this.messageService.showError(response.getMessage());
+        this.messageService.showError({ message: response.getMessage() });
       }
     }
   }
 
-  async onShareLinkPropChange(propName: ShareByUrlProps, value: any ) {
+  async onShareLinkPropChange(propName: ShareByUrlProps, value: any) {
     this.updatingLink = true;
     try {
       const update = new ShareByUrlVO(this.shareLink);
@@ -460,7 +529,10 @@ export class SharingDialogComponent implements OnInit {
       this.shareLink[propName] = update[propName];
     } catch (err) {
       if (err instanceof ShareResponse) {
-        this.messageService.showError(err.getMessage(), true);
+        this.messageService.showError({
+          message: err.getMessage(),
+          translate: true,
+        });
       }
       this.setShareLinkFormValue();
     } finally {

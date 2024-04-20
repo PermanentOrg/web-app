@@ -42,9 +42,9 @@ export class CategoryEditComponent implements OnInit {
       this.deletedCategory.emit(this.category);
       this.refreshTags.emit();
     } catch {
-      this.msg.showError(
-        'There was an error deleting the field. Please try again.'
-      );
+      this.msg.showError({
+        message: 'There was an error deleting the field. Please try again.',
+      });
       throw new Error(
         'There was an error deleting the field. Please try again.'
       );
@@ -63,9 +63,9 @@ export class CategoryEditComponent implements OnInit {
       await this.api.tag.update(updated);
       this.refreshTags.emit();
     } catch {
-      this.msg.showError(
-        'There was an error saving the field. Please try again.'
-      );
+      this.msg.showError({
+        message: 'There was an error saving the field. Please try again.',
+      });
       throw new Error('There was an error saving the field. Please try again.');
     }
   }

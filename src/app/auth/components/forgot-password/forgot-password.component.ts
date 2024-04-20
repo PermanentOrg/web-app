@@ -48,7 +48,10 @@ export class ForgotPasswordComponent implements OnInit {
         if (response.isSuccessful) {
           this.success = true;
         } else {
-          this.message.showError(response.getMessage(), true);
+          this.message.showError({
+            message: response.getMessage(),
+            translate: true,
+          });
         }
       });
   }

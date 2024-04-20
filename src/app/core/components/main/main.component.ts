@@ -120,36 +120,38 @@ export class MainComponent
   async ngOnInit() {
     const account = this.accountService.getAccount();
     if (account.emailNeedsVerification() && account.phoneNeedsVerification()) {
-      this.messageService.showMessage(
-        'Your email and phone number need verification. Tap this message to verify.',
-        'info',
-        false,
-        ['/app/auth/verify'],
-        {
+      this.messageService.showMessage({
+        message:
+          'Your email and phone number need verification. Tap this message to verify.',
+        style: 'info',
+        translate: false,
+        navigateTo: ['/app/auth/verify'],
+        navigateParams: {
           sendEmail: true,
           sendSms: true,
-        }
-      );
+        },
+      });
     } else if (account.emailNeedsVerification()) {
-      this.messageService.showMessage(
-        'Your email needs verification. Tap this message to verify.',
-        'info',
-        false,
-        ['/app/auth/verify'],
-        {
+      this.messageService.showMessage({
+        message: 'Your email needs verification. Tap this message to verify.',
+        style: 'info',
+        translate: false,
+        navigateTo: ['/app/auth/verify'],
+        navigateParams: {
           sendEmail: true,
-        }
-      );
+        },
+      });
     } else if (account.phoneNeedsVerification()) {
-      this.messageService.showMessage(
-        'Your phone number needs verification. Tap this message to verify.',
-        'info',
-        false,
-        ['/app/auth/verify'],
-        {
+      this.messageService.showMessage({
+        message:
+          'Your phone number needs verification. Tap this message to verify.',
+        style: 'info',
+        translate: false,
+        navigateTo: ['/app/auth/verify'],
+        navigateParams: {
           sendSms: true,
-        }
-      );
+        },
+      });
     }
     this.checkCta();
   }
@@ -297,18 +299,21 @@ export class MainComponent
             try {
               await this.api.share.requestShareAccess(shareUrlToken);
               deferred.resolve();
-              this.messageService.showMessage('Access requested.', 'success');
+              this.messageService.showMessage({
+                message: 'Access requested.',
+                style: 'success',
+              });
             } catch (err) {
               deferred.resolve();
               if (err instanceof ShareResponse) {
                 if (err.messageIncludesPhrase('share.already_exists')) {
-                  this.messageService.showError(
-                    `You have already requested access to this item.`
-                  );
+                  this.messageService.showError({
+                    message: `You have already requested access to this item.`,
+                  });
                 } else if (err.messageIncludesPhrase('same')) {
-                  this.messageService.showError(
-                    `You do not need to request access to your own item.`
-                  );
+                  this.messageService.showError({
+                    message: `You do not need to request access to your own item.`,
+                  });
                 }
               }
             }
@@ -343,7 +348,7 @@ export class MainComponent
       } catch (err) {
         if (err instanceof ShareResponse) {
           // checkLink failed for shareByUrl;
-          this.messageService.showError('Invalid share URL.');
+          this.messageService.showError({ message: 'Invalid share URL.' });
           this.router.navigate(['.'], {
             relativeTo: this.route,
             queryParams: { shareByUrl: null },

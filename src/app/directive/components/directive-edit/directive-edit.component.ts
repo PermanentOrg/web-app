@@ -90,9 +90,10 @@ export class DirectiveEditComponent implements OnInit {
       }
     } catch {
       if (this.accountExists) {
-        this.message.showError(
-          'There was an error trying to save the Archive Steward information. Please try again.'
-        );
+        this.message.showError({
+          message:
+            'There was an error trying to save the Archive Steward information. Please try again.',
+        });
       }
     } finally {
       this.waiting = false;
@@ -106,11 +107,12 @@ export class DirectiveEditComponent implements OnInit {
         throw new Error('Network/Client Error');
       } else {
         this.accountExists = false;
-        this.message.showError(
-          'The given e-mail address, "' +
+        this.message.showError({
+          message:
+            'The given e-mail address, "' +
             this.email +
-            '", is not currently registered to a user on Permanent'
-        );
+            '", is not currently registered to a user on Permanent',
+        });
         throw new Error(error.error.message);
       }
     }
