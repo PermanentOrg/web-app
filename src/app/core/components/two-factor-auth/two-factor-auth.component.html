@@ -1,1 +1,16 @@
-<p>two-factor-auth works!</p>
+<!-- @format -->
+<div class="panel-title">Two Factor Authentication</div>
+<p>
+  Enhance account security by requiring a login authentication code. If both
+  email and SMS text are enabled, it will default to SMS text.
+</p>
+<div class="button-container">
+  <button class="btn btn-primary" (click)="turnOn = true">Turn On</button>
+</div>
+<div *ngIf="turnOn">
+  <p>1. Please select your preferred 2FA method.</p>
+  <select class="form-control" [(ngModel)]="method">
+    <option value="email">Email</option>
+    <option value="sms">SMS</option>
+  </select>
+</div>
