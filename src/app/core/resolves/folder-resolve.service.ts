@@ -1,14 +1,12 @@
+/* @format */
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   Router,
-  ActivatedRoute,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { find, cloneDeep } from 'lodash';
-import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -22,9 +20,7 @@ import { FilesystemService } from '@root/app/filesystem/filesystem.service';
 @Injectable()
 export class FolderResolveService {
   constructor(
-    private api: ApiService,
     private accountService: AccountService,
-    private activatedRoute: ActivatedRoute,
     private message: MessageService,
     private router: Router,
     private filesystem: FilesystemService
