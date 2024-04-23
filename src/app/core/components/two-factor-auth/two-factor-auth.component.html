@@ -6,22 +6,20 @@
 </p>
 <p class="enabled-text" *ngIf="methods.length">Two Factor Auth is Enabled.</p>
 <div class="methods-table">
-  <div *ngFor="let method of methods" class="method">
+  <div *ngFor="let m of methods" class="method">
     <div class="details">
       <p>
-        Method: <b>{{ methodsDictionary[method.name] }}</b>
+        Method: <b>{{ methodsDictionary[m.method] }}</b>
       </p>
       <p>
-        {{ method.value === 'sms' ? 'Phone' : 'Email Address' }}
+        {{ m.value === 'sms' ? 'Phone' : 'Email Address' }}
         <b>
-          {{ method.value }}
+          {{ m.value }}
         </b>
       </p>
     </div>
     <div class="delete-button">
-      <button (click)="removeMethod(method)" class="btn btn-link">
-        Delete
-      </button>
+      <button (click)="removeMethod(m)" class="btn btn-link">Delete</button>
     </div>
   </div>
 </div>
@@ -34,9 +32,15 @@
     {{ methods.length ? 'Add Another Method' : 'Turn On' }}
   </button>
 </div>
-<div *ngIf="turnOn">
-  <p>1. Please select your preferred 2FA method.</p>
-  <select class="form-control" [(ngModel)]="method">
+<div *ngIf="turnOn || selectedMethodToDelete">
+  <p *ngIf="!selectedMethodToDelete">
+    1. Please select your preferred 2FA method.
+  </p>
+  <select
+    *ngIf="!selectedMethodToDelete"
+    class="form-control"
+    [(ngModel)]="method"
+  >
     <option value="email">Email</option>
     <option value="sms">SMS</option>
   </select>
@@ -83,8 +87,9 @@
           [control]="form.controls['code']"
         ></pr-form-input>
       </div>
-      <div class="button-container">
+      <div class="button-container button-group">
         <button class="btn btn-primary">Enable</button>
+        <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
       </div>
     </div>
   </form>

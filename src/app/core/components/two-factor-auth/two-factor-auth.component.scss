@@ -125,3 +125,10 @@ select {
 .send-code-button {
   margin-bottom: 32px;
 }
+
+.button-group{
+  display: flex;
+  & > .btn-secondary{
+    margin-left: 20px;
+  }
+}
