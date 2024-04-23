@@ -18,7 +18,7 @@ interface Method {
 export class TwoFactorAuthComponent {
   turnOn: boolean = false;
   method: string = '';
-  private form: UntypedFormGroup;
+  form: UntypedFormGroup;
   methods: Method[] = [];
   selectedMethodToDelete: Method;
   codeSent = false;
@@ -39,7 +39,7 @@ export class TwoFactorAuthComponent {
         id: 'sms',
         method: 'sms',
         value: '1234567890',
-      }
+      },
     ];
     this.form = fb.group({
       code: ['', Validators.required],
