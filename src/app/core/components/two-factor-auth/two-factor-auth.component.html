@@ -40,6 +40,7 @@
     *ngIf="!selectedMethodToDelete"
     class="form-control"
     [(ngModel)]="method"
+    (ngModelChange)="updateContactInfoValidators()"
   >
     <option value="email">Email</option>
     <option value="sms">SMS</option>
@@ -62,6 +63,15 @@
         }}"
         [control]="form.controls['contactInfo']"
       ></pr-form-input>
+      <small *ngIf="form.get('contactInfo').errors?.email" class="text-danger">
+        Please enter a valid email address.
+      </small>
+      <small
+        *ngIf="form.get('contactInfo').errors?.maxlength"
+        class="text-danger"
+      >
+        The number exceeds the maximum length of 10 characters.
+      </small>
     </div>
     <div class="send-code-button button-container">
       <button
