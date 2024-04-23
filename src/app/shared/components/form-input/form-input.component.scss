@@ -1,0 +1,5 @@
+.form-control[disabled], .form-control[readonly] {
+    cursor: not-allowed;
+    user-select: none;
+  }
+  
