@@ -7,7 +7,7 @@ import {
 
 interface Method {
   id: string;
-  name: string;
+  method: string;
   value: string;
 }
 @Component({
@@ -32,7 +32,7 @@ export class TwoFactorAuthComponent {
     this.methods = [
       {
         id: 'email',
-        name: 'email',
+        method: 'email',
         value: 'email',
       },
     ];
@@ -44,6 +44,12 @@ export class TwoFactorAuthComponent {
 
   removeMethod(method: Method): void {
     this.selectedMethodToDelete = method;
+    console.log(this.selectedMethodToDelete);
+    this.method = this.selectedMethodToDelete.method;
+    this.form.patchValue({ contactInfo: this.selectedMethodToDelete.value });
+
+    // Reset the value of the 'code' control to empty string
+    this.form.patchValue({ code: '' });
   }
 
   submitData(value) {
@@ -52,5 +58,12 @@ export class TwoFactorAuthComponent {
 
   sendCode() {
     this.codeSent = true;
+  }
+
+  cancel() {
+    this.selectedMethodToDelete = null;
+    this.method = '';
+    this.form.patchValue({ contactInfo: '', code: '' });
+    this.turnOn = false;
   }
 }
