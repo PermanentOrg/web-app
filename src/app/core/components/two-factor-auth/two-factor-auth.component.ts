@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 
 interface Method {
   id: string;
@@ -17,6 +21,7 @@ export class TwoFactorAuthComponent {
   private form: UntypedFormGroup;
   methods: Method[] = [];
   selectedMethodToDelete: Method;
+  codeSent = false;
 
   methodsDictionary = {
     sms: 'SMS Text',
@@ -32,12 +37,20 @@ export class TwoFactorAuthComponent {
       },
     ];
     this.form = fb.group({
-      code: [''],
-      contactInfo: [''],
+      code: ['', Validators.required],
+      contactInfo: ['', Validators.required],
     });
   }
 
   removeMethod(method: Method): void {
     this.selectedMethodToDelete = method;
+  }
+
+  submitData(value) {
+    console.log(value);
+  }
+
+  sendCode() {
+    this.codeSent = true;
   }
 }

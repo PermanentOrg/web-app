@@ -40,9 +40,9 @@
     <option value="email">Email</option>
     <option value="sms">SMS</option>
   </select>
-  <form [formGroup]="form">
+  <form *ngIf="method" [formGroup]="form" (submit)="submitData(form.value)">
     <p>
-      Enter your contact information for the preferred method below and click
+      2. Enter your contact information for the preferred method below and click
       the button to send a one-time use code.
       <span *ngIf="method === 'sms'">
         At this time, we can only accept North American cell phone numbers for
@@ -52,18 +52,31 @@
     <div class="input-group-vertical">
       <pr-form-input
         type="text"
-        fieldName="email"
-        placeholder="Email"
+        fieldName="contactInfo"
+        placeholder="{{
+          method === 'sms' ? '(XXX) XXX - XXXX' : 'ex. janedoe123@gmail.com'
+        }}"
         [control]="form.controls['contactInfo']"
       ></pr-form-input>
     </div>
-    <div class="button-container">
-      <button class="btn btn-primary">Send Code</button>
+    <div class="send-code-button button-container">
+      <button
+        [disabled]="!form.value.contactInfo"
+        (click)="sendCode()"
+        class="btn btn-primary"
+      >
+        Send Code
+      </button>
     </div>
+    <p class="expirty-time" *ngIf="codeSent">
+      <img src="/assets/svg/caution.svg" />
+      This code expires in X[amount of time]
+    </p>
     <div>
       <p>3. Enter the four digit code below</p>
       <div class="input-group-vertical">
         <pr-form-input
+          [disabled]="!codeSent"
           type="text"
           fieldName="email"
           placeholder="XXXX"
