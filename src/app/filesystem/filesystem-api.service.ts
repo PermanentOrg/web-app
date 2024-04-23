@@ -4,13 +4,13 @@ import { firstValueFrom } from 'rxjs';
 
 import { FolderVO, RecordVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
+import { DataStatus } from '@models/data-status.enum';
 import { FilesystemApi } from './types/filesystem-api';
 import {
   FolderIdentifier,
   RecordIdentifier,
 } from './types/filesystem-identifier';
 import { ArchiveIdentifier } from './types/archive-identifier';
-import { DataStatus } from '@models/data-status.enum';
 
 @Injectable({
   providedIn: 'root',
