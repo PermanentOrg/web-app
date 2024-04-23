@@ -323,11 +323,7 @@ export class FileListComponent
 
     if (this.showSidebar) {
       this.getScrollElement().scrollTo(0, 0);
-    } else {
-      // (this.scrollElement.nativeElement as HTMLElement).scrollIntoView(true);
     }
-
-    this.dataService.refreshCurrentFolder();
 
     const queryParams = this.route.snapshot.queryParamMap;
     if (queryParams.has('showItem')) {
