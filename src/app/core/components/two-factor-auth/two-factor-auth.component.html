@@ -4,8 +4,35 @@
   Enhance account security by requiring a login authentication code. If both
   email and SMS text are enabled, it will default to SMS text.
 </p>
+<p class="enabled-text" *ngIf="methods.length">Two Factor Auth is Enabled.</p>
+<div class="methods-table">
+  <div *ngFor="let method of methods" class="method">
+    <div class="details">
+      <p>
+        Method: <b>{{ methodsDictionary[method.name] }}</b>
+      </p>
+      <p>
+        {{ method.value === 'sms' ? 'Phone' : 'Email Address' }}
+        <b>
+          {{ method.value }}
+        </b>
+      </p>
+    </div>
+    <div class="delete-button">
+      <button (click)="removeMethod(method)" class="btn btn-link">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
 <div class="button-container">
-  <button class="btn btn-primary" (click)="turnOn = true">Turn On</button>
+  <button
+    class="btn btn-primary"
+    [disabled]="methods.length === 2"
+    (click)="turnOn = true"
+  >
+    {{ methods.length ? 'Add Another Method' : 'Turn On' }}
+  </button>
 </div>
 <div *ngIf="turnOn">
   <p>1. Please select your preferred 2FA method.</p>
@@ -13,4 +40,39 @@
     <option value="email">Email</option>
     <option value="sms">SMS</option>
   </select>
+  <form [formGroup]="form">
+    <p>
+      Enter your contact information for the preferred method below and click
+      the button to send a one-time use code.
+      <span *ngIf="method === 'sms'">
+        At this time, we can only accept North American cell phone numbers for
+        sms.</span
+      >
+    </p>
+    <div class="input-group-vertical">
+      <pr-form-input
+        type="text"
+        fieldName="email"
+        placeholder="Email"
+        [control]="form.controls['contactInfo']"
+      ></pr-form-input>
+    </div>
+    <div class="button-container">
+      <button class="btn btn-primary">Send Code</button>
+    </div>
+    <div>
+      <p>3. Enter the four digit code below</p>
+      <div class="input-group-vertical">
+        <pr-form-input
+          type="text"
+          fieldName="email"
+          placeholder="XXXX"
+          [control]="form.controls['code']"
+        ></pr-form-input>
+      </div>
+      <div class="button-container">
+        <button class="btn btn-primary">Enable</button>
+      </div>
+    </div>
+  </form>
 </div>

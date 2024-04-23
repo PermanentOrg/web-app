@@ -71,6 +71,7 @@ p {
 
 .verified {
   color: $success;
+  font-size: 16px;
 }
 
 form {
@@ -90,4 +91,27 @@ p {
   & > button {
     margin: 0;
   }
+}
+
+.enabled-text {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #31a04a;
+}
+
+.method {
+  width: 60%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.method:first-child:nth-last-child(2) {
+  border-bottom: 0.75px solid #c8c8c8;
+}
+
+.btn-link {
+  color: #018ef4;
+  font-weight: 600;
 }
