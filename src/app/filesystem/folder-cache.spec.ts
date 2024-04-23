@@ -33,6 +33,15 @@ describe('FolderCache', () => {
 
     expect(cache.getFolder({ folder_linkId: 1 }).displayName).toBe('Unit Test');
   });
+  it('should not update a folder if its API value equals its cached value', () => {
+    // This tests preventing unnecessary rerenders if no changes are found
+    const folder = new FolderVO({ folder_linkId: 1 });
+    const updateSpy = spyOn(folder, 'update').and.callThrough();
+    cache.saveFolder(folder);
+    cache.saveFolder(new FolderVO({ folder_linkId: 1 }));
+
+    expect(updateSpy).not.toHaveBeenCalled();
+  });
 
   describe('Folder Identifiers', () => {
     let folder: FolderVO;
