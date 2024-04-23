@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@root/environments/environment';
 import { AccountVO } from '@models/account-vo';
-import { firstValueFrom } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { AnalyticsObserver } from '../analytics/analytics.service';
 
@@ -68,7 +67,7 @@ export class MixpanelData {
 export class MixpanelService implements AnalyticsObserver {
   constructor(private httpV2: HttpV2Service) {}
 
-  public async update(data: MixpanelData) {
+  public update(data: MixpanelData) {
     const account =
       localStorage.getItem('account') || sessionStorage.getItem('account');
 
@@ -81,7 +80,7 @@ export class MixpanelService implements AnalyticsObserver {
         data.body.analytics.distinctId = mixpanelIdentifier;
       }
 
-      return await firstValueFrom(this.httpV2.post('/v2/event', data, null));
+      this.httpV2.post('/v2/event', data, null);
     }
   }
 }
