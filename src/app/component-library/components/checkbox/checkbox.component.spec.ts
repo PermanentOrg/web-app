@@ -86,11 +86,7 @@ describe('CheckboxCompoent', () => {
 
   it('should be focusable and have correct ARIA attributes', async () => {
     const { find } = await shallow.render();
-<<<<<<< HEAD
     const checkboxContainer = find('.checkbox').nativeElement;
-=======
-    const checkboxContainer = find('.checkbox-container').nativeElement;
->>>>>>> 127dd02e (PER-9491 new sign in)
 
     expect(checkboxContainer.getAttribute('role')).toEqual('checkbox');
     expect(checkboxContainer.getAttribute('tabindex')).toEqual('0');
@@ -140,25 +136,11 @@ describe('CheckboxCompoent', () => {
       bind: { disabled: true },
     });
     fixture.detectChanges();
-<<<<<<< HEAD
     const checkboxContainer = find('.checkbox').nativeElement;
-=======
-    const checkboxContainer = find('.checkbox-container').nativeElement;
->>>>>>> 127dd02e (PER-9491 new sign in)
 
     expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('true');
   });
 
-  it('should be focusable and have correct ARIA attributes', async () => {
-    const { find } = await shallow.render();
-    const checkboxContainer = find('.checkbox-container').nativeElement;
-
-    expect(checkboxContainer.getAttribute('role')).toEqual('checkbox');
-    expect(checkboxContainer.getAttribute('tabindex')).toEqual('0');
-    expect(checkboxContainer.getAttribute('aria-checked')).toEqual('false');
-    expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('false');
-  });
-
   it('should toggle checked state on Enter key press', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.isChecked = false;
@@ -201,7 +183,7 @@ describe('CheckboxCompoent', () => {
       bind: { disabled: true },
     });
     fixture.detectChanges();
-    const checkboxContainer = find('.checkbox-container').nativeElement;
+    const checkboxContainer = find('.checkbox').nativeElement;
 
     expect(checkboxContainer.getAttribute('aria-disabled')).toEqual('true');
   });
