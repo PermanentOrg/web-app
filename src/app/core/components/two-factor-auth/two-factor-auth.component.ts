@@ -35,11 +35,11 @@ export class TwoFactorAuthComponent {
         method: 'email',
         value: 'email',
       },
-      {
-        id: 'sms',
-        method: 'sms',
-        value: '1234567890',
-      },
+      // {
+      //   id: 'sms',
+      //   method: 'sms',
+      //   value: '1234567890',
+      // },
     ];
     this.form = fb.group({
       code: ['', Validators.required],
@@ -98,6 +98,7 @@ export class TwoFactorAuthComponent {
       contactInfoControl.setValidators([
         Validators.required,
         Validators.maxLength(18),
+        Validators.minLength(18),
       ]);
     }
     contactInfoControl.updateValueAndValidity();

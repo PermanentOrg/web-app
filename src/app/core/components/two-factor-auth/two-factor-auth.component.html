@@ -57,7 +57,7 @@
     <div class="input-group-vertical">
       <pr-form-input
         type="text"
-        fieldName="contactInfo"
+        fieldName="{{ method }}"
         placeholder="{{
           method === 'sms' ? '(XXX) XXX - XXXX' : 'ex. janedoe123@gmail.com'
         }}"
@@ -75,7 +75,7 @@
     </div>
     <div class="send-code-button button-container">
       <button
-        [disabled]="!form.value.contactInfo"
+        [disabled]="!form.value.contactInfo || form.get('contactInfo').errors"
         (click)="sendCode()"
         class="btn btn-primary"
       >
@@ -92,7 +92,6 @@
         <pr-form-input
           [disabled]="!codeSent"
           type="text"
-          fieldName="email"
           placeholder="XXXX"
           [control]="form.controls['code']"
         ></pr-form-input>

@@ -42,6 +42,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
   @Input() control: UntypedFormControl;
   @Input() errors: string;
   @Input() selectOptions: FormInputSelectOption[];
+  @Input() disabled = false;
 
   @HostBinding('class.right-align') rightAlign = false;
   @HostBinding('class.input-vertical') inputVertical = true;
