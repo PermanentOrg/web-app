@@ -1,10 +1,10 @@
 /* @format */
 import { Shallow } from 'shallow-render';
 
-import { TwoFactorAuthComponent } from './two-factor-auth.component';
 import { CoreModule } from '@core/core.module';
 import { MessageService } from '@shared/services/message/message.service';
 import { AbstractControl } from '@angular/forms';
+import { TwoFactorAuthComponent } from './two-factor-auth.component';
 
 describe('TwoFactorAuthComponent', () => {
   let shallow: Shallow<TwoFactorAuthComponent>;
@@ -23,6 +23,7 @@ describe('TwoFactorAuthComponent', () => {
 
     it('should create', async () => {
       const { instance } = await shallow.render();
+
       expect(instance).toBeTruthy();
     });
 
@@ -31,13 +32,14 @@ describe('TwoFactorAuthComponent', () => {
       instance.method = 'sms';
       instance.updateContactInfoValidators();
 
-      // Check if SMS validators are correctly set
       const control = instance.form.get('contactInfo');
+
       expect(control.validator).toBeTruthy();
       const result = control.validator({
         value: '(123) 456 - 7890',
       } as AbstractControl);
-      expect(result).toBeNull(); // Indicates valid input
+
+      expect(result).toBeNull();
     });
 
     it('should remove method and update form state', async () => {
@@ -64,7 +66,11 @@ describe('TwoFactorAuthComponent', () => {
 
     it('should set codeSent to true when sendCode is called', async () => {
       const { instance } = await shallow.render();
-      instance.sendCode();
+      const event = {
+        preventDefault: () => {},
+      };
+      instance.sendCode(event);
+
       expect(instance.codeSent).toBe(true);
     });
 
@@ -82,6 +88,7 @@ describe('TwoFactorAuthComponent', () => {
     it('should reset component state when cancel is called', async () => {
       const { instance } = await shallow.render();
       instance.cancel();
+
       expect(instance.method).toBe('');
       expect(instance.selectedMethodToDelete).toBeNull();
       expect(instance.turnOn).toBe(false);
@@ -98,8 +105,8 @@ describe('TwoFactorAuthComponent', () => {
       const { find } = await shallow.render({ bind: { methods } });
 
       const methodRows = find('.method');
-      expect(methodRows.length).toBe(methods.length);
 
+      expect(methodRows.length).toBe(methods.length);
       expect(methodRows[0].nativeElement.textContent).toContain('Email');
       expect(methodRows[0].nativeElement.textContent).toContain(
         'janedoe@example.com'
