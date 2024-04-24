@@ -48,13 +48,16 @@
     <option [disabled]="hasMethod('sms')" value="sms">SMS</option>
   </select>
   <form *ngIf="method" [formGroup]="form" (submit)="submitData(form.value)">
-    <p>
+    <p *ngIf="!selectedMethodToDelete">
       2. Enter your contact information for the preferred method below and click
       the button to send a one-time use code.
       <span *ngIf="method === 'sms'">
         At this time, we can only accept North American cell phone numbers for
         sms.</span
       >
+    </p>
+    <p *ngIf="selectedMethodToDelete">
+      Explanation regarding deletion of the code... this is a placeholder
     </p>
     <div class="input-group-vertical">
       <pr-form-input
