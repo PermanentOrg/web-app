@@ -33,13 +33,8 @@ export class TwoFactorAuthComponent {
       {
         id: 'email',
         method: 'email',
-        value: 'email',
+        value: 'email@example.com',
       },
-      // {
-      //   id: 'sms',
-      //   method: 'sms',
-      //   value: '1234567890',
-      // },
     ];
     this.form = fb.group({
       code: ['', Validators.required],
@@ -65,7 +60,6 @@ export class TwoFactorAuthComponent {
 
   removeMethod(method: Method): void {
     this.selectedMethodToDelete = method;
-    console.log(this.selectedMethodToDelete);
     this.method = this.selectedMethodToDelete.method;
     this.updateContactInfoValidators();
     this.form.patchValue({ contactInfo: this.selectedMethodToDelete.value });
@@ -74,10 +68,18 @@ export class TwoFactorAuthComponent {
   }
 
   submitData(value) {
-    console.log(value);
+    if (this.selectedMethodToDelete) {
+      // This is just for testing for the ui until the api is done
+      this.submitRemoveMethod();
+    } else {
+      // This is just for testing for the ui until the api is done
+      this.submitCreateMethod(value);
+    }
+    this.form.patchValue({ code: '', contactInfo: '' });
   }
 
-  sendCode() {
+  sendCode(e) {
+    e.preventDefault();
     this.codeSent = true;
   }
 
@@ -102,5 +104,32 @@ export class TwoFactorAuthComponent {
       ]);
     }
     contactInfoControl.updateValueAndValidity();
+  }
+
+  hasMethod(method: string): boolean {
+    return this.methods.some((m) => m.method === method);
+  }
+
+  submitRemoveMethod() {
+    try {
+      // api call here
+      this.methods = this.methods.filter(
+        (m) => m.id !== this.selectedMethodToDelete.id
+      );
+      this.selectedMethodToDelete = null;
+    } catch (error) {}
+  }
+
+  submitCreateMethod(value) {
+    try {
+      this.methods.push({
+        id: this.method,
+        method: this.method,
+        value: value.contactInfo,
+      });
+      this.method = null;
+      this.turnOn = false;
+      this.codeSent = false;
+    } catch (error) {}
   }
 }
