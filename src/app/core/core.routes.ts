@@ -185,6 +185,21 @@ export const routes: RoutesWithData = [
         redirectTo: '/app/(private//dialog:account)',
       },
       {
+        path: 'security',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Account',
+          dialogToken: 'SettingsDialogComponent',
+          tab: 'security',
+          dialogOptions: { width: '1000px' },
+        },
+      },
+      {
+        path: 'security',
+        redirectTo: '/app/(private//dialog:security)',
+      },
+      {
         path: 'legacy-contact',
         component: RoutedDialogWrapperComponent,
         outlet: 'dialog',

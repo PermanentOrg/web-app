@@ -28,6 +28,7 @@
     class="btn btn-primary"
     [disabled]="methods.length === 2"
     (click)="turnOn = true"
+    *ngIf="!turnOn && !selectedMethodToDelete"
   >
     {{ methods.length ? 'Add Another Method' : 'Turn On' }}
   </button>
@@ -42,8 +43,9 @@
     [(ngModel)]="method"
     (ngModelChange)="updateContactInfoValidators()"
   >
-    <option value="email">Email</option>
-    <option value="sms">SMS</option>
+    <option value="" disabled selected>Choose a method</option>
+    <option [disabled]="hasMethod('email')" value="email">Email</option>
+    <option [disabled]="hasMethod('sms')" value="sms">SMS</option>
   </select>
   <form *ngIf="method" [formGroup]="form" (submit)="submitData(form.value)">
     <p>
@@ -75,8 +77,9 @@
     </div>
     <div class="send-code-button button-container">
       <button
+        role="button"
         [disabled]="!form.value.contactInfo || form.get('contactInfo').errors"
-        (click)="sendCode()"
+        (click)="sendCode($event)"
         class="btn btn-primary"
       >
         Send Code
@@ -97,7 +100,13 @@
         ></pr-form-input>
       </div>
       <div class="button-container button-group">
-        <button class="btn btn-primary">Enable</button>
+        <button
+          type="submit"
+          [disabled]="!form.value.code"
+          class="btn btn-primary"
+        >
+          {{ selectedMethodToDelete ? 'Delete' : 'Enable' }}
+        </button>
         <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
       </div>
     </div>

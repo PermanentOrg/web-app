@@ -51,7 +51,6 @@ export class AccountSettingsDialogComponent implements OnInit {
 
   setTab(tab: SettingsTab) {
     this.activeTab = tab;
-    console.log(this.activeTab);
   }
 
   async onDeleteAccountConfirm() {
