@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChangePasswordComponent } from './change-password.component';
 import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ChangePasswordComponent } from './change-password.component';
 
 class MessageStub {
   public showMessage(_msg: string): void {}
