@@ -10,7 +10,10 @@ import { DataStatus } from '@models/data-status.enum';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
 import { RecordResponse } from '@shared/services/api/record.repo';
-import { MessageService } from '@shared/services/message/message.service';
+import {
+  MessageDisplayOptions,
+  MessageService,
+} from '@shared/services/message/message.service';
 
 describe('RecordResolveService', () => {
   let service: RecordResolveService;
@@ -104,7 +107,7 @@ describe('RecordResolveService', () => {
 
   it('should display an error message if an error is thrown', async () => {
     spyOn(data, 'getItemByArchiveNbr').and.returnValue(undefined);
-    const apiSpy = spyOn(api.record, 'get').and.rejectWith(
+    spyOn(api.record, 'get').and.rejectWith(
       new RecordResponse({
         isSuccessful: false,
         Results: [
@@ -115,8 +118,8 @@ describe('RecordResolveService', () => {
       })
     );
     let displayedErrorMessage: string;
-    spyOn(message, 'showError').and.callFake((message: string) => {
-      displayedErrorMessage = message;
+    spyOn(message, 'showError').and.callFake((data: MessageDisplayOptions) => {
+      displayedErrorMessage = data.message;
     });
 
     await expectAsync(service.resolve(route.snapshot, null)).toBeRejected();
