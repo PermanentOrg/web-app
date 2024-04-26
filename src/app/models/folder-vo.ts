@@ -114,7 +114,7 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, 
         if (item.folderId) {
           return new FolderVO(item, false, dataStatus);
         } else {
-          return new RecordVO(item, false, dataStatus);
+          return new RecordVO(item, {dataStatus});
         }
       });
     }
