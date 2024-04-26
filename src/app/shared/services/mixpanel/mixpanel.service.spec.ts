@@ -125,4 +125,31 @@ describe('MixpanelRepo', () => {
     expect(req.request.body.body.analytics.distinctId).toEqual('12345');
     req.flush({ success: true });
   });
+
+  it('should silently fail in case of HTTP error', (done) => {
+    prepareAccountStorage('12345', true);
+    environment.analyticsDebug = false;
+
+    const testData: MixpanelData = {
+      entity: 'account',
+      action: 'login',
+      version: 1,
+      entityId: 'testEntityId',
+      body: { analytics: { event: 'testEvent', data: {} } },
+    };
+
+    repo
+      .update(testData)
+      .catch(() => {
+        // Even though the request failed, our `update` function should not
+        // raise any errors
+        fail();
+      })
+      .finally(() => done());
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
+
+    expect(req.request.method).toEqual('POST');
+    req.error(new ProgressEvent('error'));
+  });
 });

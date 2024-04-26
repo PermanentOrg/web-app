@@ -80,7 +80,12 @@ export class MixpanelService implements AnalyticsObserver {
         data.body.analytics.distinctId = mixpanelIdentifier;
       }
 
-      await firstValueFrom(this.httpV2.post('/v2/event', data, null));
+      await firstValueFrom(this.httpV2.post('/v2/event', data, null)).catch(
+        () => {
+          // Silently ignore an HTTP error, since we don't want calling code to
+          // have to handle analytics errors.
+        }
+      );
     }
   }
 }
