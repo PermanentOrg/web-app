@@ -31,13 +31,13 @@ export class PublishRepo extends BaseRepo {
 }
 
 export class PublishResponse extends BaseResponse {
-  public getRecordVO(initChildren?: boolean) {
+  public getRecordVO() {
     const data = this.getResultsData();
     if (!data || !data.length || !data[0][0].RecordVO) {
       return null;
     }
 
-    return new RecordVO(data[0][0].RecordVO, initChildren);
+    return new RecordVO(data[0][0].RecordVO);
   }
 
   public getFolderVO(initChildren?: boolean) {

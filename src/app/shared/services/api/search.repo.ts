@@ -115,14 +115,14 @@ export class SearchResponse extends BaseResponse {
 
     return searchVO.ChildItemVOs.map((i) => {
       if (i.recordId) {
-        return new RecordVO(i, initChildren);
+        return new RecordVO(i);
       } else {
         return new FolderVO(i, initChildren);
       }
     });
   }
 
-  public getRecordVOs(initChildren?: boolean) {
+  public getRecordVOs() {
     const data = this.getResultsData();
 
     if (!data.length) {
@@ -130,7 +130,7 @@ export class SearchResponse extends BaseResponse {
     }
 
     return data[0].map((result) => {
-      return new RecordVO(result.RecordVO, initChildren);
+      return new RecordVO(result.RecordVO);
     });
   }
 }

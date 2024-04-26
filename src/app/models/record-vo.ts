@@ -1,3 +1,4 @@
+/* @format */
 import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO, sortShareVOs } from '@models/share-vo';
@@ -11,8 +12,22 @@ import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 
-export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, DynamicListChild {
-  public cleanParams = ['recordId', 'archiveNbr', 'folder_linkId', 'parentFolder_linkId', 'parentFolderId', 'uploadFileName'];
+interface RecordVoOptions {
+  dataStatus: DataStatus;
+}
+
+export class RecordVO
+  extends BaseVO
+  implements ChildItemData, HasParentFolder, DynamicListChild
+{
+  public cleanParams = [
+    'recordId',
+    'archiveNbr',
+    'folder_linkId',
+    'parentFolder_linkId',
+    'parentFolderId',
+    'uploadFileName',
+  ];
   public isRecord = true;
   public isFolder = false;
 
@@ -100,15 +115,17 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public ShareVOs: ShareVO[];
   public AccessVO;
 
-  constructor(voData: RecordVOData, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(voData: RecordVOData, options?: Partial<RecordVoOptions>) {
     super(voData);
 
     if (this.ShareVOs) {
-      this.ShareVOs = sortShareVOs(this.ShareVOs.map((data) => new ShareVO(data)));
+      this.ShareVOs = sortShareVOs(
+        this.ShareVOs.map((data) => new ShareVO(data))
+      );
     }
 
-    if (dataStatus) {
-      this.dataStatus = dataStatus;
+    if (options?.dataStatus) {
+      this.dataStatus = options.dataStatus;
     }
 
     this.formatDates();
@@ -121,9 +138,9 @@ export class RecordVO extends BaseVO implements ChildItemData, HasParentFolder, 
     this.derivedEndDT = formatDateISOString(this.derivedEndDT);
   }
 
-  public update (voData: RecordVOData | RecordVO): void {
+  public update(voData: RecordVOData | RecordVO): void {
     if (voData) {
-      for ( const key in voData ) {
+      for (const key in voData) {
         if (voData[key] !== undefined && typeof voData[key] !== 'function') {
           this[key] = voData[key];
         }
@@ -197,5 +214,5 @@ export interface RecordVOData extends BaseVOData {
   RecordExifVO?: any;
   ShareVOs?: any;
   AccessVO?: any;
-  isFolder?:boolean;
+  isFolder?: boolean;
 }

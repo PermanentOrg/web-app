@@ -254,20 +254,20 @@ export class RecordRepo extends BaseRepo {
 }
 
 export class RecordResponse extends BaseResponse {
-  public getRecordVO(initChildren?: boolean) {
+  public getRecordVO() {
     const data = this.getResultsData();
     if (!data || !data.length) {
       return null;
     }
 
-    return new RecordVO(data[0][0].RecordVO, initChildren);
+    return new RecordVO(data[0][0].RecordVO);
   }
 
-  public getRecordVOs(initChildren?: boolean) {
+  public getRecordVOs() {
     const data = this.getResultsData();
 
     return data.map((result) => {
-      return new RecordVO(result[0].RecordVO, initChildren);
+      return new RecordVO(result[0].RecordVO);
     });
   }
 }
