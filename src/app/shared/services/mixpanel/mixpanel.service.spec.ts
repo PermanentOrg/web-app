@@ -1,3 +1,4 @@
+/* @format */
 import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
@@ -50,11 +51,14 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo.update(testData).catch(() => {
-      fail();
-    }).finally(() => {
-      done();
-    });
+    repo
+      .update(testData)
+      .catch(() => {
+        fail();
+      })
+      .finally(() => {
+        done();
+      });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
 
@@ -75,11 +79,14 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo.update(testData).catch(() => {
-      fail();
-    }).finally(() => {
-      done();
-    });
+    repo
+      .update(testData)
+      .catch(() => {
+        fail();
+      })
+      .finally(() => {
+        done();
+      });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
 
@@ -103,11 +110,14 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo.update(testData).catch(() => {
-      fail();
-    }).finally(() => {
-      done();
-    });
+    repo
+      .update(testData)
+      .catch(() => {
+        fail();
+      })
+      .finally(() => {
+        done();
+      });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
 
