@@ -25,7 +25,7 @@ describe('AnalyticsService', () => {
   it('should add an observer', async () => {
     const { instance } = await shallow.createService();
     const mockObserver: AnalyticsObserver = {
-      update: (data: EventData) => {},
+      update: async (data: EventData) => {},
     };
 
     instance.addObserver(mockObserver);

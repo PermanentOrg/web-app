@@ -38,7 +38,7 @@ describe('MixpanelRepo', () => {
     }
   }
 
-  it('should send correct data with analyticsDebug=false', async () => {
+  it('should send correct data with analyticsDebug=false', (done) => {
     prepareAccountStorage('12345');
     environment.analyticsDebug = false;
 
@@ -50,18 +50,20 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo.update(testData).then((response) => {
-      expect(response).toBeTruthy();
+    repo.update(testData).catch(() => {
+      fail();
+    }).finally(() => {
+      done();
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
 
     expect(req.request.method).toEqual('POST');
     expect(req.request.body.body.analytics.distinctId).toEqual('12345');
-    req.flush({ success: true });
+    req.flush({});
   });
 
-  it('should send correct data with analyticsDebug=true', async () => {
+  it('should send correct data with analyticsDebug=true', (done) => {
     prepareAccountStorage('67890');
     environment.analyticsDebug = true;
 
@@ -73,8 +75,10 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo.update(testData).then((response) => {
-      expect(response).toBeTruthy();
+    repo.update(testData).catch(() => {
+      fail();
+    }).finally(() => {
+      done();
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
@@ -86,7 +90,7 @@ describe('MixpanelRepo', () => {
     req.flush({ success: true });
   });
 
-  it('should prefer localStorage over sessionStorage', async () => {
+  it('should prefer localStorage over sessionStorage', (done) => {
     prepareAccountStorage('12345', true); // localStorage
     prepareAccountStorage('67890', false); // sessionStorage
     environment.analyticsDebug = false;
@@ -99,8 +103,10 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo.update(testData).then((response) => {
-      expect(response).toBeTruthy();
+    repo.update(testData).catch(() => {
+      fail();
+    }).finally(() => {
+      done();
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/v2/event`);
