@@ -1,3 +1,4 @@
+/* @format */
 import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { RecordVO } from '@models/record-vo';
 import { DataStatus } from '@models/data-status.enum';
@@ -27,7 +28,10 @@ export interface ChildItemData {
   isNewlyCreated: boolean;
 }
 
-export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, DynamicListChild {
+export class FolderVO
+  extends BaseVO
+  implements ChildItemData, HasParentFolder, DynamicListChild
+{
   public isFolder = true;
   public isRecord = false;
 
@@ -106,7 +110,11 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, 
   public posStart;
   public posLimit;
 
-  constructor(voData: FolderVOData, initChildren?: boolean, dataStatus?: DataStatus) {
+  constructor(
+    voData: FolderVOData,
+    initChildren?: boolean,
+    dataStatus?: DataStatus
+  ) {
     super(voData);
 
     if (initChildren) {
@@ -114,13 +122,15 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, 
         if (item.folderId) {
           return new FolderVO(item, false, dataStatus);
         } else {
-          return new RecordVO(item, {dataStatus});
+          return new RecordVO(item, { dataStatus });
         }
       });
     }
 
     if (this.ShareVOs) {
-      this.ShareVOs = sortShareVOs(this.ShareVOs.map((data) => new ShareVO(data)));
+      this.ShareVOs = sortShareVOs(
+        this.ShareVOs.map((data) => new ShareVO(data))
+      );
     }
 
     if (dataStatus) {
@@ -137,9 +147,9 @@ export class FolderVO extends BaseVO implements ChildItemData, HasParentFolder, 
     this.derivedEndDT = formatDateISOString(this.derivedEndDT);
   }
 
-  public update (voData: FolderVOData | FolderVO, keepChildItems = false): void {
+  public update(voData: FolderVOData | FolderVO, keepChildItems = false): void {
     if (voData) {
-      for ( const key in voData ) {
+      for (const key in voData) {
         if (keepChildItems && key === 'ChildItemVOs') {
           continue;
         }
