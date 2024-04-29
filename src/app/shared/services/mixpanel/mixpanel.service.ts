@@ -1,8 +1,7 @@
 /* @format*/
 import { Injectable } from '@angular/core';
-import { environment } from '@root/environments/environment';
-import { AccountVO } from '@models/account-vo';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '@root/environments/environment';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { AnalyticsObserver } from '../analytics/analytics.service';
 
@@ -81,7 +80,12 @@ export class MixpanelService implements AnalyticsObserver {
         data.body.analytics.distinctId = mixpanelIdentifier;
       }
 
-      return await firstValueFrom(this.httpV2.post('/v2/event', data, null));
+      await firstValueFrom(this.httpV2.post('/v2/event', data, null)).catch(
+        () => {
+          // Silently ignore an HTTP error, since we don't want calling code to
+          // have to handle analytics errors.
+        }
+      );
     }
   }
 }

@@ -121,10 +121,10 @@ export class UploadButtonComponent
     event.target.value = '';
   }
 
-  async filePickerClick() {
+  filePickerClick(): boolean {
     const workspace = this.getFolderWorkspaceType(this.currentFolder);
     const account = this.account.getAccount();
-    await this.analytics.notifyObservers({
+    this.analytics.notifyObservers({
       entity: 'account',
       action: 'initiate_upload',
       version: 1,
@@ -138,9 +138,10 @@ export class UploadButtonComponent
         },
       },
     });
+    return true;
   }
 
-  getFolderWorkspaceType(folder: FolderVO) {
+  private getFolderWorkspaceType(folder: FolderVO) {
     return folder.type.includes('private') ? 'Private Files' : 'Public Files';
   }
 

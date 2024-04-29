@@ -3,7 +3,7 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, ArchiveVO } from '@root/app/models';
+import { FolderVO, ArchiveVO, AccountVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -103,5 +103,17 @@ describe('UploadButtonComponent', () => {
     await fixture.whenStable();
 
     expect(fileInput.files.length).toEqual(0);
+  });
+
+  it('will not block propagation of the file input click event', async () => {
+    dataService.setCurrentFolder(
+      new FolderVO({
+        type: 'type.folder.private',
+        accessRole: 'access.role.viewer',
+      })
+    );
+    accountService.setAccount(new AccountVO({ accountId: 1 }));
+
+    expect(component.filePickerClick()).not.toBeFalsy();
   });
 });

@@ -5,7 +5,7 @@ import { MixpanelData, MixpanelService } from '../mixpanel/mixpanel.service';
 export type EventData = MixpanelData;
 
 export interface AnalyticsObserver {
-  update(eventData: EventData): void;
+  update(eventData: EventData): Promise<void>;
 }
 
 @Injectable({
