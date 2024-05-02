@@ -47,6 +47,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@v2
@@ -67,8 +69,8 @@ jobs:
           cp -r dist/mdot dist/app
           cp -r dist/mdot dist/share
           cp -r dist/mdot dist/p
-          declare -x VERSION=mdot@$(jq -r '.version' package.json)
-          sentry-cli releases set-commits $VERSION --auto
+          declare -x VERSION=mdot@$(sentry-cli releases propose-version)
+          sentry-cli releases set-commits $VERSION --auto --ignore-missing
           sentry-cli releases files $VERSION upload-sourcemaps --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
 
   upload-code:
