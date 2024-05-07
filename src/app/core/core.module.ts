@@ -33,6 +33,7 @@ import { PledgeModule } from '../pledge/pledge.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
 import { DirectiveModule } from '../directive/directive.module';
+import { FilesystemModule } from '../filesystem/filesystem.module';
 import { ArchiveSwitcherComponent } from './components/archive-switcher/archive-switcher.component';
 import { MultiSelectStatusComponent } from './components/multi-select-status/multi-select-status.component';
 import { EditService } from './services/edit/edit.service';
@@ -80,6 +81,7 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
     PledgeModule,
     ManageMetadataModule,
     DirectiveModule,
+    FilesystemModule,
   ],
   declarations: [
     MainComponent,

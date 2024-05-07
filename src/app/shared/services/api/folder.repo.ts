@@ -2,6 +2,7 @@ import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { DataStatus } from '@models/data-status.enum';
 
 const MIN_WHITELIST: (keyof FolderVO)[] = ['folderId', 'archiveNbr', 'folder_linkId'];
 const DEFAULT_WHITELIST: (keyof FolderVO)[] = [...MIN_WHITELIST, 'displayName', 'description', 'displayDT', 'displayEndDT', 'view'];
@@ -196,13 +197,13 @@ export class FolderRepo extends BaseRepo {
 }
 
 export class FolderResponse extends BaseResponse {
-  public getFolderVO(initChildren?: boolean) {
+  public getFolderVO(initChildren?: boolean, dataStatus: DataStatus = DataStatus.Placeholder) {
     const data = this.getResultsData();
     if (!data || !data.length) {
       return null;
     }
 
-    return new FolderVO(data[0][0].FolderVO, initChildren);
+    return new FolderVO(data[0][0].FolderVO, initChildren, dataStatus);
   }
 
   public getFolderVOs(initChildren?: boolean) {
