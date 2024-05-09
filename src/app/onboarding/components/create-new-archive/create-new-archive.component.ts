@@ -21,7 +21,7 @@ import {
 import { Dialog } from '../../../dialog/dialog.service';
 import { ArchiveType } from '../../../models/archive-vo';
 
-type NewArchiveScreen = 'goals' | 'reasons' | 'create';
+type NewArchiveScreen = 'goals' | 'reasons' | 'create' | 'start';
 
 @Component({
   selector: 'pr-create-new-archive',
