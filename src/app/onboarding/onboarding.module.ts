@@ -5,6 +5,11 @@ import {
 } from '@root/app/dialog/dialog.module';
 import { ComponentFactoryResolver, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
 import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
@@ -30,6 +35,7 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     CoreModule,
     DialogModule,
     DialogCdkModule,
+    FontAwesomeModule,
   ],
 })
 export class OnboardingModule {
@@ -41,8 +47,10 @@ export class OnboardingModule {
   ];
   constructor(
     private dialog: Dialog,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private library: FaIconLibrary
   ) {
+    library.addIcons(faHeart);
     if (this.dialog) {
       this.dialog.registerComponents(
         this.dialogComponents,
