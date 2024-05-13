@@ -18,7 +18,7 @@ $mobile-transition-breakpoint: 1200px;
     width: auto;
     margin: 20px;
   }
-  width: 50%;
+  width: 70%;
   margin: 0 auto;
 }
 
@@ -43,11 +43,13 @@ $mobile-transition-breakpoint: 1200px;
 }
 
 .progress-chunk {
+  opacity: 0.1;
   &.completed {
-    background-color: #5261b7;
+    background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
+    opacity: 1;
   }
   width: 30%;
-  height: 10px;
+  height: 4px;
   background-color: #eaeaea;
   transition: background-color 0.3s;
 }
