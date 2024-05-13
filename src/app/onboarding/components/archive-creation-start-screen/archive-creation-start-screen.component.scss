@@ -1,0 +1,39 @@
+/* @format */
+@import 'fonts';
+
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 64px;
+}
+
+p {
+  color: white;
+}
+
+.greetings-container {
+  width: 50%;
+  & > p {
+    font-size: 50px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}
+
+.text-buttons-container {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  display: flex;
+  height: 80vh;
+
+  & > .text > p {
+    font-size: 16px;
+    font-family: 'UsualLight', sans-serif;
+  }
+
+  & > .buttons {
+    display: flex;
+    gap: 32px;
+  }
+}

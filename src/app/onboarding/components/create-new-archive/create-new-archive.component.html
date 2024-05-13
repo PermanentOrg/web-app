@@ -1,5 +1,10 @@
 <!-- @format -->
 <div class="new-account-screens-container">
+  <pr-archive-creation-start-screen
+    (getStartedOutput)="setScreen('create')"
+    (createArchiveForMeOutput)="makeMyArchive()"
+    *ngIf="screen === 'start'"
+  ></pr-archive-creation-start-screen>
   <div *ngIf="screen === 'create'">
     <h2>Welcome! Let’s create your first archive together.</h2>
     <div class="welcome-message no-invitations">
@@ -136,6 +141,6 @@
     </div>
   </div>
 </div>
-<div *ngIf="screen !== 'create'">
+<div *ngIf="screen !== 'create' && screen !== 'start'">
   <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
 </div>

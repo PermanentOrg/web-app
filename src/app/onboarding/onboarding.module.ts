@@ -13,6 +13,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
 import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
+import { ComponentsModule } from '../component-library/components.module';
 import { DialogModule } from '../dialog/dialog.module';
 import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
 import { OnboardingRoutingModule } from './onboarding.routes';
