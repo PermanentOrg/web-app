@@ -44,7 +44,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   public archiveType: string;
   public archiveName: string = '';
-  public screen: NewArchiveScreen = 'create';
+  public screen: NewArchiveScreen = 'start';
   public loading: boolean = false;
   public selectedGoals: string[] = [];
   public selectedReasons: string[] = [];

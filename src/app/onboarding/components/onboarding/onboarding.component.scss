@@ -1,6 +1,14 @@
 /* @format */
+@import 'variables';
+
 $mobile-breakpoint: 950px;
 $mobile-transition-breakpoint: 1200px;
+
+:host {
+  background: $linear-gradient-background;
+  display: block;
+  height: 100vh;
+}
 
 .onboarding {
   @media only screen and (max-width: $mobile-transition-breakpoint) {

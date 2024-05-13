@@ -1,1 +1,36 @@
-<p>archive-creation-start-screen works!</p>
+<!-- @format  -->
+<div class="greetings-container">
+  <p>
+    Hello, <b>{{ name   }}.</b>
+  </p>
+  <p>Welcome to Permanent!</p>
+</div>
+<div class="text-buttons-container">
+  <div class="text">
+    <p>We’re so glad you’re here!</p>
+    <p>
+      At Permanent, it is our mission to provide a safe and secure place to
+      store, preserve, and share the digital legacy of all people, whether
+      that's for you or for your friends, family, interests or organizations.
+    </p>
+    <p>
+      We know that starting this journey can sometimes be overwhelming, but
+      don’t worry. We’re here to help you every step of the way.
+    </p>
+  </div>
+  <div class="buttons">
+    <pr-button
+      [icon]="'/onboarding/plus'"
+      [orientation]="'right'"
+      (buttonClick)="createArchiveForMe()"
+      >Create archive for me</pr-button
+    >
+    <pr-button
+      [icon]="'/onboarding/arrow-right'"
+      [orientation]="'right'"
+      [variant]="'secondary'"
+      (buttonClick)="getStarted()"
+      >Get started</pr-button
+    >
+  </div>
+</div>
