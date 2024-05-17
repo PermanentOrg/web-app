@@ -1,3 +1,4 @@
+/* @format */
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpService } from '@shared/services/http/http.service';
@@ -32,6 +33,6 @@ describe('HttpService', () => {
     const headers = service.generateHeaders();
 
     expect(headers.keys().length).toBe(1);
-    expect(headers.get("Authorization")).toBe("Bearer testing_token");
+    expect(headers.get('Authorization')).toBe('Bearer testing_token');
   });
 });
