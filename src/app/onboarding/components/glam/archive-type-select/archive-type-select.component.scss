@@ -1,0 +1,41 @@
+.archive-type-select {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  padding: 32px;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(97deg, #8d0085 0%, #ff9400 100%);
+
+  font-family: 'UsualRegular', sans-serif;
+  font-style: normal;
+  color: #fff;
+}
+
+.archive-type {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 0 0;
+  font-style: normal;
+
+  .type-name {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .type-description {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px;
+  }
+}

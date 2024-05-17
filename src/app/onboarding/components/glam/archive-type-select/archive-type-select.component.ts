@@ -1,14 +1,16 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
 import { ArchiveTypeSelectDialogComponent } from '../archive-type-select-dialog/archive-type-select-dialog.component';
-
 import { archiveOptions, archiveDescriptions } from '../types/archive-types';
+import { ArchiveTypeIconComponent } from '../archive-type-icon/archive-type-icon.component';
 
 @Component({
   selector: 'pr-glam-archive-type-select',
   standalone: true,
-  imports: [],
+  imports: [FontAwesomeModule, ArchiveTypeIconComponent],
   templateUrl: './archive-type-select.component.html',
   styleUrl: './archive-type-select.component.scss',
 })
@@ -17,6 +19,7 @@ export class GlamArchiveTypeSelectComponent {
   public currentType: OnboardingTypes = OnboardingTypes.myself;
   public typeName: string;
   public typeDescription: string;
+  public chevronDown = faChevronDown;
 
   constructor(private dialog: DialogCdkService) {
     this.refreshArchiveTypeText();
