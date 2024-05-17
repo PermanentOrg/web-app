@@ -16,7 +16,7 @@
       (click)="selectType(option.type)"
     >
       <div class="icon">
-        <fa-icon [icon]="icons[option.type] ?? icons['type:myself']"></fa-icon>
+        <pr-archive-type-icon [type]="option.type"></pr-archive-type-icon>
       </div>
       <div class="text">
         <div class="type-name">{{ option.text }}</div>
