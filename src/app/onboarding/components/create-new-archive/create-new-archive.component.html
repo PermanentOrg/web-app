@@ -5,8 +5,8 @@
     (createArchiveForMeOutput)="makeMyArchive()"
     *ngIf="screen === 'start'"
   ></pr-archive-creation-start-screen>
-  <div *ngIf="screen === 'create'">
-    <h2>Welcome! Let’s create your first archive together.</h2>
+  <div *ngIf="screen === 'create' || screen === 'name-archive'">
+    <!-- <h2>Welcome! Let’s create your first archive together.</h2>
     <div class="welcome-message no-invitations">
       <p>
         In order to help you on this journey, we want to learn a little more
@@ -74,73 +74,118 @@
         Make my archive for me
       </button>
     </div>
-  </div>
-  <div class="goals" *ngIf="screen === 'goals'">
-    <h2>My goal is to...</h2>
-
-    <p class="explanation">
-      This will help us support you as you create your archive. Select all that
-      apply.
-    </p>
-
-    <div class="grid-container">
-      <div
-        (click)="addValues(selectedGoals, goal.tag)"
-        class="grid-item"
-        *ngFor="let goal of goals"
-        [class.grid-item-selected]="selectedGoals.includes(goal.tag)"
-      >
-        <span class="archive-type-description">{{ goal.text }}</span>
+  </div> -->
+    <div class="create-new-archive">
+      <div class="heading-container">
+        <h1 class="heading">Create your first <b>Archive</b></h1>
+      </div>
+      <div class="type-selection-container">
+        <div class="archive-type-selection">
+          <p *ngIf="screen === 'create'">
+            With my first archive, I plan to capture and preserve material
+            about…
+          </p>
+          <p *ngIf="screen === 'name-archive'">
+            Name your new archive. This is the legal or official name of the
+            person, family, group, or organization the archive is about. You can
+            edit the name later if needed.
+          </p>
+          <pr-archive-type-select
+            *ngIf="screen === 'create'"
+            (valueChange)="onValueChange($event)"
+            [selectedValue]="selectedValue"
+          ></pr-archive-type-select>
+          <div class="name-archive-input" *ngIf="screen === 'name-archive'">
+            <p class="the-text">The</p>
+            <pr-form-input-glam></pr-form-input-glam>
+            <p class="archive-text">Archive</p>
+          </div>
+        </div>
+        <div class="buttons">
+          <pr-button
+            [orientation]="'right'"
+            (buttonClick)="screen = 'start'"
+            [icon]="'/auth/back'"
+            >Back</pr-button
+          >
+          <pr-button
+            [orientation]="'right'"
+            [variant]="'secondary'"
+            [icon]="'/onboarding/arrow-right'"
+            [disabled]="!selectedValue"
+            (buttonClick)="setScreen('name-archive')"
+            >Let's create an archive</pr-button
+          >
+        </div>
       </div>
     </div>
+    <div class="goals" *ngIf="screen === 'goals'">
+      <h2>My goal is to...</h2>
 
-    <div class="two-buttons">
-      <button
-        class="btn btn-secondary back-button"
-        (click)="setScreen('create')"
-      >
-        Back
-      </button>
-      <button
-        class="btn btn-primary next-button goals-next"
-        [disabled]="!selectedGoals.length"
-        (click)="setScreen('reasons')"
-      >
-        Next: Tell us more
-      </button>
-    </div>
-  </div>
-  <div *ngIf="screen === 'reasons'">
-    <h2>Lastly, we’re curious -- what brought you to Permanent.org?</h2>
-    <p class="explanation">Select all that apply.</p>
-    <div class="grid-container">
-      <div
-        (click)="addValues(selectedReasons, reason.tag)"
-        class="grid-item"
-        *ngFor="let reason of reasons"
-        [class.grid-item-selected]="selectedReasons.includes(reason.tag)"
-      >
-        <span class="archive-type-description">{{ reason.text }}</span>
+      <p class="explanation">
+        This will help us support you as you create your archive. Select all
+        that apply.
+      </p>
+
+      <div class="grid-container">
+        <div
+          (click)="addValues(selectedGoals, goal.tag)"
+          class="grid-item"
+          *ngFor="let goal of goals"
+          [class.grid-item-selected]="selectedGoals.includes(goal.tag)"
+        >
+          <span class="archive-type-description">{{ goal.text }}</span>
+        </div>
+      </div>
+
+      <div class="two-buttons">
+        <button
+          class="btn btn-secondary back-button"
+          (click)="setScreen('create')"
+        >
+          Back
+        </button>
+        <button
+          class="btn btn-primary next-button goals-next"
+          [disabled]="!selectedGoals.length"
+          (click)="setScreen('reasons')"
+        >
+          Next: Tell us more
+        </button>
       </div>
     </div>
+    <div *ngIf="screen === 'reasons'">
+      <h2>Lastly, we’re curious -- what brought you to Permanent.org?</h2>
+      <p class="explanation">Select all that apply.</p>
+      <div class="grid-container">
+        <div
+          (click)="addValues(selectedReasons, reason.tag)"
+          class="grid-item"
+          *ngFor="let reason of reasons"
+          [class.grid-item-selected]="selectedReasons.includes(reason.tag)"
+        >
+          <span class="archive-type-description">{{ reason.text }}</span>
+        </div>
+      </div>
 
-    <div class="two-buttons">
-      <button
-        class="btn btn-secondary back-button"
-        (click)="setScreen('goals')"
-      >
-        Back
-      </button>
-      <button
-        (click)="onSubmit()"
-        class="btn btn-primary next-button create-archive"
-        [disabled]="!selectedReasons.length || loading"
-      >
-        Create my archive
-      </button>
+      <div class="two-buttons">
+        <button
+          class="btn btn-secondary back-button"
+          (click)="setScreen('goals')"
+        >
+          Back
+        </button>
+        <button
+          (click)="onSubmit()"
+          class="btn btn-primary next-button create-archive"
+          [disabled]="!selectedReasons.length || loading"
+        >
+          Create my archive
+        </button>
+      </div>
     </div>
   </div>
-</div>
-<div *ngIf="screen !== 'create' && screen !== 'start'">
-  <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
+  <div *ngIf="screen !== 'create' && screen !== 'start'">
+    <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
+  </div>
 </div>

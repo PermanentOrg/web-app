@@ -1,6 +1,7 @@
 /* @format */
 @import '../welcome-screen/welcome-screen.component.scss';
 @import 'variables';
+@import 'fonts';
 
 form {
   margin: 0;
@@ -229,4 +230,51 @@ h3 {
 
 .new-account-screens-container {
   width: 95%;
+}
+
+.heading-container {
+  & > .heading {
+    color: white;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}
+
+.create-new-archive {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+}
+
+.type-selection-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 75vh;
+  & > .archive-type-selection {
+    & > p {
+      color: white;
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 32px;
+    }
+  }
+}
+
+.name-archive-input {
+  position: relative;
+  & > p {
+    position: absolute;
+    color: white;
+    z-index: 1000;
+  }
+
+  & > .the-text{
+    left: 0;
+    top: 10px;
+  }
+  & > .archive-text{
+    right: 0;
+    top: 10px;
+  }
+
 }
