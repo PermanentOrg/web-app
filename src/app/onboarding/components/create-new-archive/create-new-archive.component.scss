@@ -243,6 +243,10 @@ h3 {
   display: flex;
   justify-content: space-between;
   margin-top: 64px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .type-selection-container {
@@ -264,17 +268,30 @@ h3 {
   position: relative;
   & > p {
     position: absolute;
-    color: white;
+    color: #898da4;
     z-index: 1000;
+    font-size: 24px;
+    font-family: 'UsualRegular', sans-serif;
   }
 
-  & > .the-text{
-    left: 0;
-    top: 10px;
+  & > .the-text {
+    left: 16px;
+    top: 5px;
   }
-  & > .archive-text{
-    right: 0;
-    top: 10px;
+  & > .archive-text {
+    right: 16px;
+    top: 5px;
+  }
+}
+
+.archive-naming {
+  width: 50%;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
   }
 
+  & > div > p {
+    color: white;
+  }
 }

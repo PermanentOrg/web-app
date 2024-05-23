@@ -48,6 +48,8 @@ export class FormInputComponent implements OnInit, AfterViewInit {
     message: string;
     value?: number | string;
   }[] = [];
+  @Input() styling = {};
+  @Input() hideLabel: boolean = false;
 
   @HostBinding('class.right-align') rightAlign = false;
   @HostBinding('class.input-vertical') inputVertical = true;
