@@ -39,6 +39,7 @@ import { ArchiveCreationStartScreenComponent } from './components/archive-creati
     DialogModule,
     DialogCdkModule,
     FontAwesomeModule,
+    ComponentsModule,
   ],
 })
 export class OnboardingModule {
