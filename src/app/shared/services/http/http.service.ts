@@ -1,6 +1,6 @@
 /* @format */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '@root/environments/environment';
@@ -28,18 +28,20 @@ export class HttpService {
     const requestVO = new RequestVO(this.storage.session.get(CSRF_KEY), data);
     const url = this.apiUrl + endpoint;
 
-    return this.http.post(url, { RequestVO: requestVO }).pipe(
-      map((response: any) => {
-        if (response) {
-          this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
-        }
-        if (responseClass) {
-          return new responseClass(response);
-        } else {
-          return new this.defaultResponseClass(response);
-        }
-      })
-    );
+    return this.http
+      .post(url, { RequestVO: requestVO }, { headers: this.generateHeaders() })
+      .pipe(
+        map((response: any) => {
+          if (response) {
+            this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
+          }
+          if (responseClass) {
+            return new responseClass(response);
+          } else {
+            return new this.defaultResponseClass(response);
+          }
+        })
+      );
   }
 
   public sendRequestPromise<T = BaseResponse>(
@@ -58,6 +60,14 @@ export class HttpService {
         })
       )
       .toPromise();
+  }
+
+  public generateHeaders(): HttpHeaders {
+    const authToken: string | undefined = this.storage.local.get('AUTH_TOKEN');
+    if (authToken) {
+      return new HttpHeaders({ Authorization: `Bearer ${authToken}` });
+    }
+    return new HttpHeaders();
   }
 }
 
