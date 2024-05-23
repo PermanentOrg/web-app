@@ -1,0 +1,10 @@
+<button class="archive-type-select" (click)="onClick()" type="button">
+  <div class="icon">
+    <pr-archive-type-icon [type]="currentType"></pr-archive-type-icon>
+  </div>
+  <div class="archive-type">
+    <div class="type-name">{{ typeName }}</div>
+    <div class="type-description">{{ typeDescription }}</div>
+  </div>
+  <div class="dropdown-arrow"><fa-icon [icon]="chevronDown"></fa-icon></div>
+</button>
