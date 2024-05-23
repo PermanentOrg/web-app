@@ -8,6 +8,10 @@ $mobile-transition-breakpoint: 1200px;
   background: $linear-gradient-background;
   display: block;
   height: 100vh;
+
+  @include beforeDesktop {
+    height: auto;
+  }
 }
 
 .onboarding {
@@ -98,4 +102,7 @@ pr-create-new-archive {
   display: flex;
   align-items: center;
   flex-direction: column;
+  @media screen and (max-width: 770px) {
+    flex-direction: column;
+  }
 }
