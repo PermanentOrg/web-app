@@ -200,6 +200,7 @@ export class FolderRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<FolderResponse>('/folder/move', data, {
       responseClass: FolderResponse,
+      useAuthorizationHeader: true,
     });
   }
 
@@ -218,6 +219,7 @@ export class FolderRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<FolderResponse>('/folder/copy', data, {
       responseClass: FolderResponse,
+      useAuthorizationHeader: true,
     });
   }
 

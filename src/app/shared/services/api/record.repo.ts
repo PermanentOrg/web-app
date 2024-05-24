@@ -216,6 +216,7 @@ export class RecordRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<RecordResponse>('/record/move', data, {
       responseClass: RecordResponse,
+      useAuthorizationHeader: true,
     });
   }
 
@@ -238,6 +239,7 @@ export class RecordRepo extends BaseRepo {
 
     return this.http.sendRequestPromise<RecordResponse>('/record/copy', data, {
       responseClass: RecordResponse,
+      useAuthorizationHeader: true,
     });
   }
 
