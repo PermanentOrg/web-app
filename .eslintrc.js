@@ -14,9 +14,9 @@ module.exports = {
         'jasmine/new-line-before-expect': 'error',
         'jasmine/no-disabled-tests': 'error',
         'jasmine/new-line-between-declarations': 'error',
+        'jasmine/no-spec-dupes': 'error',
         // We intend to enable these eventually:
         'jasmine/no-promise-without-done-fail': 'off',
-        'jasmine/no-spec-dupes': 'off',
         'jasmine/no-unsafe-spy': 'off',
         'jasmine/prefer-promise-strategies': 'off',
         'jasmine/prefer-toHaveBeenCalledWith': 'off',
