@@ -18,6 +18,10 @@ describe('HttpService', () => {
     storage.local.clear();
   });
 
+  afterAll(() => {
+    storage.local.clear();
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
@@ -30,9 +34,19 @@ describe('HttpService', () => {
 
   it('should make Authorization headers if an auth token is set', () => {
     storage.local.set('AUTH_TOKEN', 'testing_token');
-    const headers = service.generateHeaders();
+    const headers = service.generateHeaders({ useAuthorizationHeader: true });
 
     expect(headers.keys().length).toBe(1);
     expect(headers.get('Authorization')).toBe('Bearer testing_token');
+  });
+
+  it('should not make Authorization headers if not specified by options parameter', () => {
+    storage.local.set('AUTH_TOKEN', 'testing_token');
+
+    expect(service.generateHeaders().keys().length).toBe(0);
+    expect(service.generateHeaders({}).keys().length).toBe(0);
+    expect(
+      service.generateHeaders({ useAuthorizationHeader: false }).keys().length
+    ).toBe(0);
   });
 });

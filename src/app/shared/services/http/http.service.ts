@@ -34,7 +34,11 @@ export class HttpService {
     const url = this.apiUrl + endpoint;
 
     return this.http
-      .post(url, { RequestVO: requestVO }, { headers: this.generateHeaders() })
+      .post(
+        url,
+        { RequestVO: requestVO },
+        { headers: this.generateHeaders(options) }
+      )
       .pipe(
         map((response: any) => {
           if (response) {
@@ -67,9 +71,11 @@ export class HttpService {
       .toPromise();
   }
 
-  public generateHeaders(): HttpHeaders {
+  public generateHeaders(options?: {
+    useAuthorizationHeader?: boolean;
+  }): HttpHeaders {
     const authToken: string | undefined = this.storage.local.get('AUTH_TOKEN');
-    if (authToken) {
+    if (options?.useAuthorizationHeader && authToken) {
       return new HttpHeaders({ Authorization: `Bearer ${authToken}` });
     }
     return new HttpHeaders();
