@@ -12,7 +12,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/get',
       [account],
-      AccountResponse
+      { responseClass: AccountResponse }
     );
   }
 
@@ -61,7 +61,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/update',
       data,
-      AccountResponse
+      { responseClass: AccountResponse }
     );
   }
 
@@ -78,7 +78,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/delete',
       data,
-      AccountResponse
+      { responseClass: AccountResponse }
     );
   }
 
@@ -92,7 +92,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/updatePreference',
       data,
-      AccountResponse
+      { responseClass: AccountResponse }
     );
   }
 
