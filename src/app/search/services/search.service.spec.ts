@@ -184,7 +184,7 @@ describe('SearchService', () => {
   });
 
   describe('getTagResults', () => {
-    it('handles an empty search term', () => {
+    it('handles an empty tag search term', () => {
       expect(search('')).toEqual([]);
     });
 
@@ -200,7 +200,7 @@ describe('SearchService', () => {
       expect(searchResults[0].name).toBe('Potato');
     });
 
-    it('should ignore location in fuzzy searches', () => {
+    it('should ignore location in fuzzy tag searches', () => {
       tags.setTags([
         { name: 'VeryLongTagNameThatProbablyWontEvenHappenInProduction' },
       ]);
@@ -208,7 +208,7 @@ describe('SearchService', () => {
       expect(search('Production').length).toBe(1);
     });
 
-    it('should limit results if limit is provided', () => {
+    it('should limit results if tag limit is provided', () => {
       tags.setTags([{ name: 'Potato' }, { name: 'Potato Two' }]);
 
       expect(search('Potato', 1).length).toBe(1);
