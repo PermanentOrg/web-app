@@ -1,26 +1,43 @@
-import { FolderVO, ArchiveVO, ShareVO, RecordVO, ShareByUrlVO } from '@root/app/models';
+/* @format */
+import {
+  FolderVO,
+  ArchiveVO,
+  ShareVO,
+  RecordVO,
+  ShareByUrlVO,
+} from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten, compact } from 'lodash';
 
 export class ShareRepo extends BaseRepo {
   public getShares() {
-    return this.http.sendRequestPromise<ShareResponse>('/share/getShares', [], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>('/share/getShares', [], {
+      responseClass: ShareResponse,
+    });
   }
 
   public update(share: ShareVO) {
     const data = {
-      ShareVO: share
+      ShareVO: share,
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/update', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/update',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public upsert(share: ShareVO) {
     const data = {
-      ShareVO: share
+      ShareVO: share,
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/upsert', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/upsert',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public remove(share: ShareVO) {
@@ -28,11 +45,15 @@ export class ShareRepo extends BaseRepo {
       ShareVO: {
         shareId: share.shareId,
         folder_linkId: share.folder_linkId,
-        archiveId: share.archiveId
-      }
+        archiveId: share.archiveId,
+      },
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/delete', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/delete',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public generateShareLink(item: RecordVO | FolderVO) {
@@ -40,15 +61,19 @@ export class ShareRepo extends BaseRepo {
 
     if (item.isRecord) {
       data.RecordVO = {
-        folder_linkId: item.folder_linkId
+        folder_linkId: item.folder_linkId,
       };
     } else {
       data.FolderVO = {
-        folder_linkId: item.folder_linkId
+        folder_linkId: item.folder_linkId,
       };
     }
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/generateShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/generateShareLink',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public getShareLink(item: RecordVO | FolderVO) {
@@ -56,62 +81,86 @@ export class ShareRepo extends BaseRepo {
 
     if (item.isRecord) {
       data.RecordVO = {
-        folder_linkId: item.folder_linkId
+        folder_linkId: item.folder_linkId,
       };
     } else {
       data.FolderVO = {
-        folder_linkId: item.folder_linkId
+        folder_linkId: item.folder_linkId,
       };
     }
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/getLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/getLink',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public checkShareLink(urlToken: string) {
     const data = {
       Shareby_urlVO: {
-        urlToken
-      }
+        urlToken,
+      },
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/checkShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/checkShareLink',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public updateShareLink(vo: ShareByUrlVO) {
     const data = {
-      Shareby_urlVO: vo
+      Shareby_urlVO: vo,
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/updateShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/updateShareLink',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public removeShareLink(vo: ShareByUrlVO) {
     const data = {
-      Shareby_urlVO: vo
+      Shareby_urlVO: vo,
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/dropShareLink', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/dropShareLink',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public requestShareAccess(urlToken: string) {
     const data = {
       Shareby_urlVO: {
-        urlToken
-      }
+        urlToken,
+      },
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/requestShareAccess', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/requestShareAccess',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 
   public getShareForPreview(shareId, folder_linkId) {
     const data = {
       ShareVO: {
         shareId: parseInt(shareId, 10),
-        folder_linkId: parseInt(folder_linkId, 10)
-      }
+        folder_linkId: parseInt(folder_linkId, 10),
+      },
     };
 
-    return this.http.sendRequestPromise<ShareResponse>('/share/getShareForPreview', [data], ShareResponse);
+    return this.http.sendRequestPromise<ShareResponse>(
+      '/share/getShareForPreview',
+      [data],
+      { responseClass: ShareResponse }
+    );
   }
 }
 
@@ -142,7 +191,13 @@ export class ShareResponse extends BaseResponse {
 
   public getShareByUrlVO() {
     const data = this.getResultsData();
-    if (!data || !data.length || !data[0] || !data[0][0].Shareby_urlVO || !data[0][0].Shareby_urlVO.shareUrl) {
+    if (
+      !data ||
+      !data.length ||
+      !data[0] ||
+      !data[0][0].Shareby_urlVO ||
+      !data[0][0].Shareby_urlVO.shareUrl
+    ) {
       return null;
     }
 

@@ -3,65 +3,83 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 
 export class TagRepo extends BaseRepo {
   public create(tag: TagVOData, tagLink: TagLinkVOData) {
-    const data = [{
-      TagVO: {
-        name: tag.name
+    const data = [
+      {
+        TagVO: {
+          name: tag.name,
+        },
+        TagLinkVO: tagLink,
       },
-      TagLinkVO: tagLink
-    }];
+    ];
 
-    return this.http.sendRequestPromise<TagResponse>('/tag/post', data, TagResponse);
+    return this.http.sendRequestPromise<TagResponse>('/tag/post', data, {
+      responseClass: TagResponse,
+    });
   }
 
   public deleteTagLink(tag: TagVOData, tagLink: TagLinkVOData) {
-    const data = [{
-      TagVO: tag,
-      TagLinkVO: tagLink
-    }];
+    const data = [
+      {
+        TagVO: tag,
+        TagLinkVO: tagLink,
+      },
+    ];
 
-    return this.http.sendRequestPromise<TagResponse>('/tag/deleteTagLink', data, TagResponse);
+    return this.http.sendRequestPromise<TagResponse>(
+      '/tag/deleteTagLink',
+      data,
+      { responseClass: TagResponse }
+    );
   }
 
   public getTagsByArchive(archive: ArchiveVO): Promise<TagResponse> {
-    const data = [{
-      ArchiveVO: {
-        archiveId: archive.archiveId
-      }
-    }];
+    const data = [
+      {
+        ArchiveVO: {
+          archiveId: archive.archiveId,
+        },
+      },
+    ];
 
-    return this.http.sendRequestPromise<TagResponse>('/tag/getTagsByArchive', data, TagResponse);
+    return this.http.sendRequestPromise<TagResponse>(
+      '/tag/getTagsByArchive',
+      data,
+      { responseClass: TagResponse }
+    );
   }
 
   public delete(tag: TagVO | TagVO[]): Promise<TagResponse> {
-    let data: Array<{TagVO: TagVO}> = [];
+    let data: Array<{ TagVO: TagVO }> = [];
     if (Array.isArray(tag)) {
       data = tag.map((t) => ({
-          TagVO: new TagVO(t),
-        }
-      ));
+        TagVO: new TagVO(t),
+      }));
     } else {
       data.push({
         TagVO: new TagVO(tag),
       });
     }
 
-    return this.http.sendRequestPromise<TagResponse>('/tag/delete', data, TagResponse);
+    return this.http.sendRequestPromise<TagResponse>('/tag/delete', data, {
+      responseClass: TagResponse,
+    });
   }
 
   public update(tag: TagVO | TagVO[]): Promise<TagResponse> {
-    let data: Array<{TagVO: TagVO}> = [];
+    let data: Array<{ TagVO: TagVO }> = [];
     if (Array.isArray(tag)) {
       data = tag.map((t) => ({
-          TagVO: new TagVO(t),
-        }
-      ));
+        TagVO: new TagVO(t),
+      }));
     } else {
       data.push({
         TagVO: new TagVO(tag),
       });
     }
 
-    return this.http.sendRequestPromise<TagResponse>('/tag/updateTag', data, TagResponse);
+    return this.http.sendRequestPromise<TagResponse>('/tag/updateTag', data, {
+      responseClass: TagResponse,
+    });
   }
 }
 

@@ -11,6 +11,11 @@ import { StorageService } from '@shared/services/storage/storage.service';
 
 const CSRF_KEY = 'CSRF';
 
+interface RequestOptions {
+  responseClass?: any;
+  useAuthorizationHeader?: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -23,7 +28,7 @@ export class HttpService {
   public sendRequest<T = BaseResponse>(
     endpoint: string,
     data: any = [{}],
-    responseClass?: any
+    options?: RequestOptions
   ): Observable<T> {
     const requestVO = new RequestVO(this.storage.session.get(CSRF_KEY), data);
     const url = this.apiUrl + endpoint;
@@ -35,8 +40,8 @@ export class HttpService {
           if (response) {
             this.storage.session.set(CSRF_KEY, JSON.stringify(response.csrf));
           }
-          if (responseClass) {
-            return new responseClass(response);
+          if (options?.responseClass) {
+            return new options.responseClass(response);
           } else {
             return new this.defaultResponseClass(response);
           }
@@ -47,9 +52,9 @@ export class HttpService {
   public sendRequestPromise<T = BaseResponse>(
     endpoint: string,
     data: any = [{}],
-    responseClass?: any
+    options?: RequestOptions
   ): Promise<T> {
-    return this.sendRequest(endpoint, data, responseClass)
+    return this.sendRequest(endpoint, data, options)
       .pipe(
         map((response: any | BaseResponse) => {
           if (!response.isSuccessful) {
