@@ -1,34 +1,49 @@
-import { ArchiveVO, TagVOData, TagLinkVOData, LocnVOData } from '@root/app/models';
+/* @format */
+import { LocnVOData } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 
 export class LocnRepo extends BaseRepo {
   public geomapLatLng(lat: number, lng: number) {
     const vo: LocnVOData = {
       latitude: lat,
-      longitude: lng
+      longitude: lng,
     };
 
-    const data = [{
-      LocnVO: vo
-    }];
+    const data = [
+      {
+        LocnVO: vo,
+      },
+    ];
 
-    return this.http.sendRequestPromise<LocnResponse>('/locn/geomapLatLong', data, LocnResponse);
+    return this.http.sendRequestPromise<LocnResponse>(
+      '/locn/geomapLatLong',
+      data,
+      { responseClass: LocnResponse }
+    );
   }
 
   public create(locn: LocnVOData) {
-    const data = [{
-      LocnVO: locn
-    }];
+    const data = [
+      {
+        LocnVO: locn,
+      },
+    ];
 
-    return this.http.sendRequestPromise<LocnResponse>('/locn/post', data, LocnResponse);
+    return this.http.sendRequestPromise<LocnResponse>('/locn/post', data, {
+      responseClass: LocnResponse,
+    });
   }
 
   public update(locn: LocnVOData) {
-    const data = [{
-      LocnVO: locn
-    }];
+    const data = [
+      {
+        LocnVO: locn,
+      },
+    ];
 
-    return this.http.sendRequestPromise<LocnResponse>('/locn/update', data, LocnResponse);
+    return this.http.sendRequestPromise<LocnResponse>('/locn/update', data, {
+      responseClass: LocnResponse,
+    });
   }
 }
 

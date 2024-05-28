@@ -1,6 +1,5 @@
-import { ArchiveVO } from '@root/app/models';
+/* @format */
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
-import { flatten } from 'lodash';
 
 interface SystemExceptionVO {
   errorType;
@@ -10,8 +9,7 @@ interface SystemExceptionVO {
   detail;
 }
 
-export class SystemResponse extends BaseResponse {
-}
+export class SystemResponse extends BaseResponse {}
 
 export class SystemRepo extends BaseRepo {
   public logError(error: Error) {
@@ -20,14 +18,19 @@ export class SystemRepo extends BaseRepo {
       errorCode: 0,
       thrownBy: error.stack?.substr(0, 128),
       caughtBy: '',
-      detail: error.stack?.substr(0, 2000)
+      detail: error.stack?.substr(0, 2000),
     };
 
-    const data = [{
-      SystemExceptionVO: vo
-    }];
+    const data = [
+      {
+        SystemExceptionVO: vo,
+      },
+    ];
 
-    return this.http.sendRequestPromise<SystemResponse>('/system/logError', data, SystemResponse);
+    return this.http.sendRequestPromise<SystemResponse>(
+      '/system/logError',
+      data,
+      { responseClass: SystemResponse }
+    );
   }
 }
-

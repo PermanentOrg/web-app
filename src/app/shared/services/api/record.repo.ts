@@ -58,11 +58,9 @@ export class RecordRepo extends BaseRepo {
       };
     });
 
-    return this.http.sendRequestPromise<RecordResponse>(
-      '/record/get',
-      data,
-      RecordResponse
-    );
+    return this.http.sendRequestPromise<RecordResponse>('/record/get', data, {
+      responseClass: RecordResponse,
+    });
   }
 
   public getLean(
@@ -80,7 +78,7 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>(
       '/record/getLean',
       data,
-      RecordResponse
+      { responseClass: RecordResponse }
     );
   }
 
@@ -174,7 +172,7 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>(
       '/record/update',
       data,
-      RecordResponse
+      { responseClass: RecordResponse }
     );
   }
 
@@ -195,7 +193,7 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>(
       '/record/delete',
       data,
-      RecordResponse
+      { responseClass: RecordResponse }
     );
   }
 
@@ -216,11 +214,10 @@ export class RecordRepo extends BaseRepo {
       this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
     }
 
-    return this.http.sendRequestPromise<RecordResponse>(
-      '/record/move',
-      data,
-      RecordResponse
-    );
+    return this.http.sendRequestPromise<RecordResponse>('/record/move', data, {
+      responseClass: RecordResponse,
+      useAuthorizationHeader: true,
+    });
   }
 
   public copy(
@@ -240,11 +237,10 @@ export class RecordRepo extends BaseRepo {
       this.getThumbnailCache().invalidateFolder(destination.folder_linkId);
     }
 
-    return this.http.sendRequestPromise<RecordResponse>(
-      '/record/copy',
-      data,
-      RecordResponse
-    );
+    return this.http.sendRequestPromise<RecordResponse>('/record/copy', data, {
+      responseClass: RecordResponse,
+      useAuthorizationHeader: true,
+    });
   }
 
   private getThumbnailCache(): ThumbnailCache {
