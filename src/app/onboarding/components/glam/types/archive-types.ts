@@ -57,3 +57,73 @@ export const archiveDescriptions = {
   'type:other': '',
   'type:unsure': '',
 };
+
+export const archiveOptionsWithArticle = [
+  {
+    type: OnboardingTypes.myself,
+    text: 'a Personal',
+  },
+  {
+    type: OnboardingTypes.individual,
+    text: 'an Individual',
+  },
+  {
+    type: OnboardingTypes.family,
+    text: 'a Family',
+  },
+  {
+    type: OnboardingTypes.famhist,
+    text: 'a History',
+  },
+  {
+    type: OnboardingTypes.community,
+    text: 'a Community',
+  },
+  {
+    type: OnboardingTypes.org,
+    text: 'an Organization',
+  },
+  {
+    type: OnboardingTypes.other,
+    text: 'a Personal',
+  },
+  {
+    type: OnboardingTypes.unsure,
+    text: 'a Personal',
+  },
+];
+
+export const archiveCreationHeaderText = [
+  {
+    type: OnboardingTypes.myself,
+    text: 'Personal',
+  },
+  {
+    type: OnboardingTypes.individual,
+    text: 'Individual',
+  },
+  {
+    type: OnboardingTypes.family,
+    text: 'Family',
+  },
+  {
+    type: OnboardingTypes.famhist,
+    text: 'History',
+  },
+  {
+    type: OnboardingTypes.community,
+    text: 'Community',
+  },
+  {
+    type: OnboardingTypes.org,
+    text: 'Organization',
+  },
+  {
+    type: OnboardingTypes.other,
+    text: 'Personal',
+  },
+  {
+    type: OnboardingTypes.unsure,
+    text: 'Personal',
+  },
+];

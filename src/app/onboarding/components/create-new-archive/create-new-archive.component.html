@@ -77,7 +77,14 @@
   </div> -->
     <div class="create-new-archive">
       <div class="heading-container">
-        <h1 class="heading">Create your first <b>Archive</b></h1>
+        <h1 *ngIf="screen === 'create'" class="heading">
+          Create your first <b>Archive</b>
+        </h1>
+        <h1 *ngIf="screen === 'name-archive'" class="heading">
+          Create your first
+          <pr-archive-type-icon [type]="archiveTypeTag" />
+          <b>{{ headerText }}</b> Archive
+        </h1>
       </div>
       <div *ngIf="screen === 'create'" class="type-selection-container">
         <div class="archive-type-selection">
@@ -85,10 +92,7 @@
             With my first archive, I plan to capture and preserve material
             about…
           </p>
-          <pr-archive-type-select
-            (valueChange)="onValueChange($event)"
-            [selectedValue]="selectedValue"
-          ></pr-archive-type-select>
+          <pr-glam-archive-type-select (typeSelected)="onValueChange($event)" />
         </div>
         <div class="buttons">
           <pr-button
@@ -103,7 +107,8 @@
             [icon]="'/onboarding/arrow-right'"
             [disabled]="!selectedValue"
             (buttonClick)="setScreen('name-archive')"
-            >Let's create an archive</pr-button
+            >Let's create <b>{{ buttonText }}</b
+            > Archive</pr-button
           >
         </div>
       </div>
@@ -121,9 +126,9 @@
             <p class="the-text">The</p>
             <pr-form-input-glam
               type="text"
-              [value]="name"
-              fieldName="email"
+              fieldName="name"
               [variant]="'dark'"
+              [control]="nameForm.controls['name']"
               [styling]="{
                 height: '50px',
                 padding: '0px',
@@ -227,5 +232,3 @@
 >
   <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
 </div>
-<!-- </div> -->
-<!-- </div> -->
