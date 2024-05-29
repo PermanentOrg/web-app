@@ -20,6 +20,16 @@ import {
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 import { ArchiveType } from '../../../models/archive-vo';
+import {
+  archiveOptions,
+  archiveOptionsWithArticle,
+  archiveCreationHeaderText,
+} from '../glam/types/archive-types';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 
 type NewArchiveScreen =
   | 'goals'
@@ -54,21 +64,33 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public selectedGoals: string[] = [];
   public selectedReasons: string[] = [];
   public selectedValue: string = '';
-  public name: string = '';
+  public nameForm: UntypedFormGroup;
   public goals = goals;
   public reasons = reasons;
+  public headerText = 'Personal';
   archiveTypeTag: OnboardingTypes;
+  public buttonOptions = {
+    archiveType: 'Personal',
+    article: 'a',
+  };
+
+  public buttonText = '';
 
   skipOnboarding: Observable<{ name: string }>;
 
   subscription: Subscription;
 
   constructor(
+    private fb: UntypedFormBuilder,
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
     private analytics: AnalyticsService
-  ) {}
+  ) {
+    this.nameForm = fb.group({
+      name: ['', [Validators.required]],
+    });
+  }
 
   ngOnInit(): void {
     if (this.pendingArchive) {
@@ -80,7 +102,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.subscription = this.accountService.createAccountForMe.subscribe(
       (value) => {
         if (value.action === 'confirm') {
-          this.name = value.name;
+          this.nameForm.patchValue({ name: value.name });
           this.archiveType = 'type.archive.person';
           this.archiveTypeTag = OnboardingTypes.myself;
           this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
@@ -88,6 +110,10 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.progress.emit(1);
         }
       }
+    );
+    this.buttonText = this.generateElementText(
+      OnboardingTypes.myself,
+      archiveOptionsWithArticle
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();
@@ -153,8 +179,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public async onSubmit(): Promise<void> {
     try {
       this.loading = true;
+      const fullName = this.nameForm.get('name').value;
       const archive = new ArchiveVO({
-        fullName: this.name,
+        fullName,
         type: this.archiveType,
       });
 
@@ -204,13 +231,21 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onValueChange(value: {
-    type: ArchiveType;
-    tag: OnboardingTypes;
-  }): void {
-    this.selectedValue = `${value.type}+${value.tag}`;
-    this.archiveType = value.type;
-    this.archiveTypeTag = value.tag as OnboardingTypes;
+  public onValueChange(event: string): void {
+    const tag = event;
+    const type = archiveOptions.find((val) => val.type === tag).value;
+    this.selectedValue = `${type}+${tag}`;
+    this.archiveType = type;
+    console.log('archiveType', this.archiveType);
+    this.archiveTypeTag = tag as OnboardingTypes;
+    this.buttonText = this.generateElementText(
+      event,
+      archiveOptionsWithArticle
+    );
+    this.headerText = this.generateElementText(
+      event,
+      archiveCreationHeaderText
+    );
     this.setName(this.archiveTypeTag);
   }
 
@@ -267,11 +302,23 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   private setName(archiveTypeTag: OnboardingTypes): void {
     switch (archiveTypeTag) {
       case OnboardingTypes.unsure:
-        this.name = this.accountService.getAccount().fullName;
+        const name = this.accountService.getAccount().fullName;
+        this.nameForm.patchValue({ name });
         break;
       default:
-        this.name = '';
+        this.nameForm.patchValue({ name: '' });
         break;
     }
   }
+
+  private generateElementText(
+    type: string,
+    options: Record<string, string>[]
+  ): string {
+    return options.find((val) => val.type === type).text;
+  }
+
+  public getArchiveType = (type: string): string => {
+    return archiveOptions.find((val) => val.type === type).text;
+  };
 }

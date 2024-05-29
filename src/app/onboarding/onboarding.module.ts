@@ -22,6 +22,8 @@ import { WelcomeScreenComponent } from './components/welcome-screen/welcome-scre
 import { CreateNewArchiveComponent } from './components/create-new-archive/create-new-archive.component';
 import { ArchiveTypeSelectComponent } from './components/archive-type-select/archive-type-select.component';
 import { ArchiveCreationStartScreenComponent } from './components/archive-creation-start-screen/archive-creation-start-screen.component';
+import { GlamArchiveTypeSelectComponent } from './components/glam/archive-type-select/archive-type-select.component';
+import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/archive-type-icon.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { ArchiveCreationStartScreenComponent } from './components/archive-creati
     DialogCdkModule,
     FontAwesomeModule,
     ComponentsModule,
+    GlamArchiveTypeSelectComponent,
+    ArchiveTypeIconComponent,
   ],
 })
 export class OnboardingModule {
