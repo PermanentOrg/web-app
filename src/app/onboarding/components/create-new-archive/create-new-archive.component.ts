@@ -25,6 +25,7 @@ import {
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 import { archiveOptions } from '../glam/types/archive-types';
+import { generateElementText } from '../../utils/utils';
 
 type NewArchiveScreen =
   | 'goals'
@@ -91,7 +92,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.nameForm = fb.group({
       name: ['', [Validators.required]],
@@ -112,7 +113,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.subscription = this.accountService.createAccountForMe.subscribe(
       (value) => {
         if (value.action === 'confirm') {
-          this.name = value.name;
+          this.nameForm.patchValue({ name: value.name });
           this.archiveType = 'type.archive.person';
           this.archiveTypeTag = OnboardingTypes.myself;
           this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
@@ -120,6 +121,10 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.progress.emit(1);
         }
       },
+    );
+    this.buttonText = generateElementText(
+      OnboardingTypes.myself,
+      archiveOptions,
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();
@@ -255,7 +260,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       this.dialog.open(
         'SkipOnboardingDialogComponent',
         { skipOnboarding: this.skipOnboarding },
-        { width: '600px' }
+        { width: '600px' },
       );
     } else {
       this.screen = 'create-archive-for-me';
@@ -305,7 +310,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         this.name = name;
         break;
       default:
-        this.name = '';
+        this.nameForm.patchValue({ name: '' });
         break;
     }
   }
