@@ -74,6 +74,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     article: 'a',
   };
 
+  public name = '';
+
   public buttonText = '';
 
   skipOnboarding: Observable<{ name: string }>;
@@ -102,7 +104,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.subscription = this.accountService.createAccountForMe.subscribe(
       (value) => {
         if (value.action === 'confirm') {
-          this.nameForm.patchValue({ name: value.name });
+          this.name = value.name;
           this.archiveType = 'type.archive.person';
           this.archiveTypeTag = OnboardingTypes.myself;
           this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
@@ -110,10 +112,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.progress.emit(1);
         }
       }
-    );
-    this.buttonText = this.generateElementText(
-      OnboardingTypes.myself,
-      archiveOptionsWithArticle
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();
@@ -179,7 +177,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public async onSubmit(): Promise<void> {
     try {
       this.loading = true;
-      const fullName = this.nameForm.get('name').value;
+      const fullName = this.name;
       const archive = new ArchiveVO({
         fullName,
         type: this.archiveType,
@@ -229,24 +227,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     } else {
       values.push(value);
     }
-  }
-
-  public onValueChange(event: string): void {
-    const tag = event;
-    const type = archiveOptions.find((val) => val.type === tag).value;
-    this.selectedValue = `${type}+${tag}`;
-    this.archiveType = type;
-    console.log('archiveType', this.archiveType);
-    this.archiveTypeTag = tag as OnboardingTypes;
-    this.buttonText = this.generateElementText(
-      event,
-      archiveOptionsWithArticle
-    );
-    this.headerText = this.generateElementText(
-      event,
-      archiveCreationHeaderText
-    );
-    this.setName(this.archiveTypeTag);
   }
 
   public makeMyArchive(): void {
@@ -303,22 +283,33 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     switch (archiveTypeTag) {
       case OnboardingTypes.unsure:
         const name = this.accountService.getAccount().fullName;
-        this.nameForm.patchValue({ name });
+        this.name = name;
         break;
       default:
-        this.nameForm.patchValue({ name: '' });
+        this.name = '';
         break;
     }
-  }
-
-  private generateElementText(
-    type: string,
-    options: Record<string, string>[]
-  ): string {
-    return options.find((val) => val.type === type).text;
   }
 
   public getArchiveType = (type: string): string => {
     return archiveOptions.find((val) => val.type === type).text;
   };
+
+  public navigate(event): void {
+    console.log('event', event);
+    this.screen = event;
+  }
+
+  public handleCreationScreenEvents(event: Record<string, string>): void {
+    this.archiveTypeTag = event.tag as OnboardingTypes;
+    this.archiveType = event.type;
+    this.headerText = event.headerText;
+    this.screen = 'name-archive';
+    console.log(this.name);
+  }
+
+  public navigateToGoals(event: string) {
+    this.name = event;
+    this.screen = 'goals';
+  }
 }

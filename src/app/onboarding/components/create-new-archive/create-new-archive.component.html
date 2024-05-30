@@ -86,79 +86,18 @@
           <b>{{ headerText }}</b> Archive
         </h1>
       </div>
-      <div *ngIf="screen === 'create'" class="type-selection-container">
-        <div class="archive-type-selection">
-          <p *ngIf="screen === 'create'">
-            With my first archive, I plan to capture and preserve material
-            about…
-          </p>
-          <pr-glam-archive-type-select (typeSelected)="onValueChange($event)" />
-        </div>
-        <div class="buttons">
-          <pr-button
-            [orientation]="'right'"
-            (buttonClick)="screen = 'start'"
-            [icon]="'/auth/back'"
-            >Back</pr-button
-          >
-          <pr-button
-            [orientation]="'right'"
-            [variant]="'secondary'"
-            [icon]="'/onboarding/arrow-right'"
-            [disabled]="!selectedValue"
-            (buttonClick)="setScreen('name-archive')"
-            >Let's create <b>{{ buttonText }}</b
-            > Archive</pr-button
-          >
-        </div>
-      </div>
-      <div
-        class="archive-naming type-selection-container"
+      <pr-select-archive-type-screen
+        (navigationEmitter)="setScreen($event)"
+        (submitEmitter)="handleCreationScreenEvents($event)"
+        *ngIf="screen === 'create'"
+      ></pr-select-archive-type-screen>
+      `
+      <pr-name-archive-screen
         *ngIf="screen === 'name-archive'"
-      >
-        <div>
-          <p>
-            Name your new archive. This is the legal or official name of the
-            person, family, group, or organization the archive is about. You can
-            edit the name later if needed.
-          </p>
-          <div class="name-archive-input">
-            <p class="the-text">The</p>
-            <pr-form-input-glam
-              type="text"
-              fieldName="name"
-              [variant]="'dark'"
-              [control]="nameForm.controls['name']"
-              [styling]="{
-                height: '50px',
-                padding: '0px',
-                'padding-left': '80px',
-                'font-size': '24px'
-              }"
-              [hideLabel]="true"
-              placeholder="Archive Subject"
-            ></pr-form-input-glam>
-            <p class="archive-text">Archive</p>
-          </div>
-        </div>
-
-        <div class="buttons">
-          <pr-button
-            [orientation]="'right'"
-            (buttonClick)="screen = 'create'"
-            [icon]="'/auth/back'"
-            >Back</pr-button
-          >
-          <pr-button
-            [orientation]="'right'"
-            [variant]="'secondary'"
-            [icon]="'/onboarding/arrow-right'"
-            [disabled]="!selectedValue"
-            (buttonClick)="setScreen('goals')"
-            >Create the archive</pr-button
-          >
-        </div>
-      </div>
+        (backToCreate)="setScreen($event)"
+        (archiveCreatedEmitter)="navigateToGoals($event)"
+        [name]="name"
+      ></pr-name-archive-screen>
     </div>
   </div>
   <div class="goals" *ngIf="screen === 'goals'">
@@ -183,7 +122,7 @@
     <div class="two-buttons">
       <button
         class="btn btn-secondary back-button"
-        (click)="setScreen('create')"
+        (click)="setScreen('name-archive')"
       >
         Back
       </button>

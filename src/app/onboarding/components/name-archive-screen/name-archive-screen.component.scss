@@ -1,0 +1,83 @@
+/* @format */
+@import '../welcome-screen/welcome-screen.component.scss';
+@import 'variables';
+@import 'fonts';
+
+:host {
+  @media screen and (max-width: 900px) {
+    height: 100vh;
+  }
+}
+
+.two-buttons {
+  button {
+    @media only screen and (max-width: $mobile-breakpoint) {
+      width: 49%;
+    }
+    width: auto;
+    margin: 0;
+  }
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 2em 0;
+}
+
+.archive-type-name {
+  margin-bottom: 7px;
+  align-self: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  & > .btn-link {
+    text-decoration: underline;
+  }
+  & > .btn {
+    width: 250px;
+    margin: 0;
+  }
+
+  & > .btn-disabled {
+    background-color: #c8c8c8;
+    color: #646464;
+    border-color: #c8c8c8;
+  }
+}
+
+.archive-type {
+  margin-top: 50px;
+}
+
+.name-archive-input {
+  position: relative;
+  & > p {
+    position: absolute;
+    color: #898da4;
+    z-index: 1000;
+    font-size: 24px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+
+  & > .the-text {
+    left: 16px;
+    top: 5px;
+  }
+  & > .archive-text {
+    right: 16px;
+    top: 5px;
+  }
+}
+
+.archive-naming {
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
+
+  & > div > p {
+    color: white;
+  }
+}
