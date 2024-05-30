@@ -14,22 +14,20 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
 import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import {
   reasons,
   goals,
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import { ArchiveType } from '../../../models/archive-vo';
 import {
   archiveOptions,
-  archiveOptionsWithArticle,
-  archiveCreationHeaderText,
 } from '../glam/types/archive-types';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
+
 
 type NewArchiveScreen =
   | 'goals'
@@ -292,7 +290,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   };
 
   public navigate(event): void {
-    console.log('event', event);
     this.screen = event;
   }
 
@@ -301,7 +298,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.archiveType = event.type;
     this.headerText = event.headerText;
     this.screen = 'name-archive';
-    console.log(this.name);
   }
 
   public navigateToGoals(event: string) {

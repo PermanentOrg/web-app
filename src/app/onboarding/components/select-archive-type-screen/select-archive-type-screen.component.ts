@@ -15,15 +15,14 @@ import {
 export class SelectArchiveTypeScreenComponent {
   selectedValue = '';
   buttonText = '';
-  private headerText: string = '';
-  private tag: string = '';
-  private type: string = '';
+  public headerText: string = '';
+  public tag: string = '';
+  public type: string = '';
 
   @Output() navigationEmitter = new EventEmitter<string>();
   @Output() submitEmitter = new EventEmitter<Record<string, string>>();
 
   public navigate(screen) {
-    console.log(screen)
     if (screen === 'start') {
       this.navigationEmitter.emit(screen);
     } else {
