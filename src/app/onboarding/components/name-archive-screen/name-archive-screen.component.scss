@@ -1,0 +1,87 @@
+/* @format */
+@import '../welcome-screen/welcome-screen.component.scss';
+@import 'variables';
+@import 'fonts';
+
+:host {
+  width: 560px;
+
+  @media screen and (max-width: 592px) {
+    width: auto;
+  }
+}
+
+.archive-type-name {
+  margin-bottom: 7px;
+  align-self: center;
+}
+
+.buttons-container {
+  display: flex;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  gap: 32px;
+  & > .btn-link {
+    text-decoration: underline;
+  }
+  & > .btn {
+    width: 250px;
+    margin: 0;
+  }
+
+  & > .btn-disabled {
+    background-color: #c8c8c8;
+    color: #646464;
+    border-color: #c8c8c8;
+  }
+}
+
+.archive-type {
+  margin-top: 50px;
+}
+
+.name-archive-input {
+  position: relative;
+  & > p {
+    position: absolute;
+    color: #898da4;
+    z-index: 1000;
+    font-size: 24px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+
+  & > .the-text {
+    left: 16px;
+    top: 5px;
+  }
+  & > .archive-text {
+    right: 16px;
+    top: 5px;
+  }
+}
+
+.archive-naming {
+  display: flex;
+  height: 75vh;
+  flex-direction: column;
+  justify-content: space-between;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 65vh;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 900px) {
+    height: 81vh;
+  }
+
+  & > div > p {
+    color: white;
+  }
+}
+
+.create-archive-button {
+  width: 100%;
+}

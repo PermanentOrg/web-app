@@ -1,0 +1,60 @@
+/* @format */
+@import 'fonts';
+
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 64px;
+  margin-top: 64px;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+
+  @media screen and (min-width: 602px) and (max-width: 900px) {
+    height: 100vh;
+  }
+
+  @media screen and (max-width: 364px) {
+    height: 106vh;
+  }
+}
+
+p {
+  color: white;
+}
+
+.greetings-container {
+  width: 50%;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
+  & > p {
+    font-size: 50px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}
+
+.text-buttons-container {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  display: flex;
+  height: 75vh;
+
+  @media screen and (max-width: 600px) {
+    height: 60vh;
+  }
+
+  & > .text > p {
+    font-size: 16px;
+    font-family: 'UsualLight', sans-serif;
+  }
+
+  & > .buttons {
+    display: flex;
+    gap: 32px;
+  }
+}
