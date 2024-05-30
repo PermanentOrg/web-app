@@ -14,7 +14,7 @@ import {
 export class NameArchiveScreenComponent implements OnInit {
   public nameForm: UntypedFormGroup;
 
-  @Input() name;
+  @Input() name = '';
   @Output() backToCreateEmitter = new EventEmitter<string>();
   @Output() archiveCreatedEmitter = new EventEmitter<string>();
 
