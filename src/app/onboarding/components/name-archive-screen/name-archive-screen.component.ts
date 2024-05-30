@@ -1,3 +1,4 @@
+/* @format */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   UntypedFormBuilder,
@@ -14,7 +15,7 @@ export class NameArchiveScreenComponent implements OnInit {
   public nameForm: UntypedFormGroup;
 
   @Input() name;
-  @Output() backToCreateEmitter = new EventEmitter<void>();
+  @Output() backToCreateEmitter = new EventEmitter<string>();
   @Output() archiveCreatedEmitter = new EventEmitter<string>();
 
   constructor(private fb: UntypedFormBuilder) {
@@ -28,12 +29,10 @@ export class NameArchiveScreenComponent implements OnInit {
   }
 
   public backToCreate(): void {
-    this.backToCreateEmitter.emit();
+    this.backToCreateEmitter.emit('create');
   }
 
   public createArchive(): void {
-    console.log(this.nameForm.value);
-    console.log(this.nameForm.valid);
     if (this.nameForm.valid) {
       this.archiveCreatedEmitter.emit(this.nameForm.value.name);
     }

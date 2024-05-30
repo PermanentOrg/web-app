@@ -4,23 +4,11 @@
 @import 'fonts';
 
 :host {
-  @media screen and (max-width: 900px) {
-    height: 100vh;
-  }
-}
+  width: 560px;
 
-.two-buttons {
-  button {
-    @media only screen and (max-width: $mobile-breakpoint) {
-      width: 49%;
-    }
+  @media screen and (max-width: 592px) {
     width: auto;
-    margin: 0;
   }
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  margin: 2em 0;
 }
 
 .archive-type-name {
@@ -28,11 +16,11 @@
   align-self: center;
 }
 
-.buttons {
+.buttons-container {
   display: flex;
-  justify-content: space-between;
   margin-top: 50px;
   margin-bottom: 20px;
+  gap: 32px;
   & > .btn-link {
     text-decoration: underline;
   }
@@ -73,11 +61,27 @@
 }
 
 .archive-naming {
+  display: flex;
+  height: 75vh;
+  flex-direction: column;
+  justify-content: space-between;
   @media screen and (max-width: 600px) {
     width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 65vh;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 900px) {
+    height: 81vh;
   }
 
   & > div > p {
     color: white;
   }
+}
+
+.create-archive-button {
+  width: 100%;
 }

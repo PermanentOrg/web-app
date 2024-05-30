@@ -1,3 +1,4 @@
+/* @format */
 import { Component, Output, EventEmitter } from '@angular/core';
 import { generateElementText } from '../../utils/utils';
 import {
@@ -23,7 +24,7 @@ export class SelectArchiveTypeScreenComponent {
 
   public navigate(screen) {
     console.log(screen)
-    if (screen === 'create') {
+    if (screen === 'start') {
       this.navigationEmitter.emit(screen);
     } else {
       this.submitEmitter.emit({
