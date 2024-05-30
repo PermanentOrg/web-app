@@ -96,7 +96,7 @@ describe('NameArchiveScreenComponent', () => {
     );
 
     createButton.triggerEventHandler('buttonClick', null);
-    
+
     expect(instance.createArchive).toHaveBeenCalled();
   });
 });

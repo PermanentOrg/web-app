@@ -9,7 +9,7 @@ import {
   OnDestroy,
   Input,
 } from '@angular/core';
-import { ArchiveVO } from '@models/archive-vo';
+import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
@@ -24,10 +24,7 @@ import {
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import {
-  archiveOptions,
-} from '../glam/types/archive-types';
-
+import { archiveOptions } from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
@@ -72,6 +69,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     article: 'a',
   };
 
+  public isGlam = false;
+
   public name = '';
 
   public buttonText = '';
@@ -90,6 +89,11 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.nameForm = fb.group({
       name: ['', [Validators.required]],
     });
+    this.isGlam = localStorage.getItem('isGlam') === 'true';
+    if (!this.isGlam) {
+      this.screen = 'create';
+    }
+    console.log('isGlam', this.isGlam);
   }
 
   ngOnInit(): void {
@@ -307,5 +311,15 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public navigateToGoals(event: string) {
     this.name = event;
     this.screen = 'goals';
+  }
+
+  public onValueChange(value: {
+    type: ArchiveType;
+    tag: OnboardingTypes;
+  }): void {
+    this.selectedValue = `${value.type}+${value.tag}`;
+    this.archiveType = value.type;
+    this.archiveTypeTag = value.tag as OnboardingTypes;
+    this.setName(this.archiveTypeTag);
   }
 }
