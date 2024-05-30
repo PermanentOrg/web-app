@@ -93,7 +93,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     if (!this.isGlam) {
       this.screen = 'create';
     }
-    console.log('isGlam', this.isGlam);
   }
 
   ngOnInit(): void {
