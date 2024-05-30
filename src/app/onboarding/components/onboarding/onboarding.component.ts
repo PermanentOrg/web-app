@@ -1,6 +1,11 @@
 /* @format */
 import { Location } from '@angular/common';
-import { ChangeDetectorRef, Component, HostBinding, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
