@@ -84,8 +84,16 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService,
-  ) {}
+    private analytics: AnalyticsService
+  ) {
+    this.nameForm = fb.group({
+      name: ['', [Validators.required]],
+    });
+    this.isGlam = localStorage.getItem('isGlam') === 'true';
+    if (!this.isGlam) {
+      this.screen = 'create';
+    }
+  }
 
   ngOnInit(): void {
     if (this.pendingArchive) {
