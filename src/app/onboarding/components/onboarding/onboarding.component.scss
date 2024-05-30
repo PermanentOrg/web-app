@@ -4,7 +4,7 @@
 $mobile-breakpoint: 950px;
 $mobile-transition-breakpoint: 1200px;
 
-:host {
+:host(.glam) {
   background: $linear-gradient-background;
   display: block;
   height: 100vh;
@@ -49,6 +49,11 @@ $mobile-transition-breakpoint: 1200px;
 .progress-chunk {
   opacity: 0.1;
   &.completed {
+    background-color: #5261b7;
+    opacity: 1;
+  }
+
+  &.completed-glam {
     background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
     opacity: 1;
   }

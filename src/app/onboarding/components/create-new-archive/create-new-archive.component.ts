@@ -9,7 +9,7 @@ import {
   OnDestroy,
   Input,
 } from '@angular/core';
-import { ArchiveVO } from '@models/archive-vo';
+import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
@@ -24,10 +24,7 @@ import {
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import {
-  archiveOptions,
-} from '../glam/types/archive-types';
-
+import { archiveOptions } from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
@@ -71,6 +68,8 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     archiveType: 'Personal',
     article: 'a',
   };
+
+  public isGlam = false;
 
   public name = '';
 
@@ -303,5 +302,15 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public navigateToGoals(event: string) {
     this.name = event;
     this.screen = 'goals';
+  }
+
+  public onValueChange(value: {
+    type: ArchiveType;
+    tag: OnboardingTypes;
+  }): void {
+    this.selectedValue = `${value.type}+${value.tag}`;
+    this.archiveType = value.type;
+    this.archiveTypeTag = value.tag as OnboardingTypes;
+    this.setName(this.archiveTypeTag);
   }
 }

@@ -1,6 +1,6 @@
 /* @format */
 import { Location } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
@@ -31,6 +31,8 @@ export class OnboardingComponent implements OnInit {
 
   public acceptedInvite: boolean = false;
 
+  public isGlam = false;
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -43,6 +45,8 @@ export class OnboardingComponent implements OnInit {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
     }
+
+    this.isGlam = localStorage.getItem('isGlam') === 'true';
   }
 
   ngOnInit(): void {
@@ -76,6 +80,10 @@ export class OnboardingComponent implements OnInit {
         },
       },
     });
+  }
+
+  @HostBinding('class.glam') get glamClass() {
+    return this.isGlam;
   }
 
   public setScreen(screen: OnboardingScreen): void {
@@ -134,7 +142,8 @@ export class OnboardingComponent implements OnInit {
   public getProgressChunkClasses(num: number) {
     return {
       'progress-chunk': true,
-      completed: this.progress >= num,
+      completed: this.progress >= num && !this.isGlam,
+      'completed-glam': this.progress >= num && this.isGlam,
     };
   }
 
