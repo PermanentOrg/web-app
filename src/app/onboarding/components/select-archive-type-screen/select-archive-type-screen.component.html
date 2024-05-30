@@ -4,18 +4,20 @@
     <p>With my first archive, I plan to capture and preserve material about…</p>
     <pr-glam-archive-type-select (typeSelected)="onValueChange($event)" />
   </div>
-  <div class="buttons">
+  <div class="buttons-container">
     <pr-button
       [orientation]="'right'"
-      (buttonClick)="navigate('create')"
+      (buttonClick)="navigate('start')"
       [icon]="'/auth/back'"
       >Back</pr-button
     >
     <pr-button
+      class="create-archive-button"
       [orientation]="'right'"
       [variant]="'secondary'"
       [icon]="'/onboarding/arrow-right'"
       [disabled]="!selectedValue"
+      [size]="'fill'"
       (buttonClick)="navigate('name-archive')"
       >Let's create <b>{{ buttonText }}</b> Archive</pr-button
     >

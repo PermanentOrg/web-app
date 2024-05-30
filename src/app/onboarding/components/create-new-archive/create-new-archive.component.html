@@ -94,7 +94,7 @@
       `
       <pr-name-archive-screen
         *ngIf="screen === 'name-archive'"
-        (backToCreate)="setScreen($event)"
+        (backToCreateEmitter)="setScreen($event)"
         (archiveCreatedEmitter)="navigateToGoals($event)"
         [name]="name"
       ></pr-name-archive-screen>

@@ -11,6 +11,14 @@
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
+
+  @media screen and (min-width: 602px) and (max-width: 900px) {
+    height: 100vh;
+  }
+
+  @media screen and (max-width: 364px) {
+    height: 106vh;
+  }
 }
 
 p {
@@ -34,7 +42,7 @@ p {
   justify-content: space-between;
   width: 50%;
   display: flex;
-  height: 80vh;
+  height: 75vh;
 
   @media screen and (max-width: 600px) {
     height: 60vh;

@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class="buttons">
+  <div class="buttons-container">
     <pr-button
       [orientation]="'right'"
       (buttonClick)="backToCreate()"
@@ -38,6 +38,8 @@
       [icon]="'/onboarding/arrow-right'"
       [disabled]="!nameForm.valid"
       (buttonClick)="createArchive()"
+      [size]="'fill'"
+      class="create-archive-button"
       >Create the archive</pr-button
     >
   </div>
