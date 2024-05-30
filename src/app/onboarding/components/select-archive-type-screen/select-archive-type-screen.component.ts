@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* @format */
+=======
+>>>>>>> 7b0c4ec6 (Refactored the create-new-archive component)
 import { Component, Output, EventEmitter } from '@angular/core';
 import { generateElementText } from '../../utils/utils';
 import {

@@ -113,7 +113,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.subscription = this.accountService.createAccountForMe.subscribe(
       (value) => {
         if (value.action === 'confirm') {
-          this.nameForm.patchValue({ name: value.name });
+          this.name = value.name;
           this.archiveType = 'type.archive.person';
           this.archiveTypeTag = OnboardingTypes.myself;
           this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
@@ -310,7 +310,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         this.name = name;
         break;
       default:
-        this.nameForm.patchValue({ name: '' });
+        this.name = '';
         break;
     }
   }

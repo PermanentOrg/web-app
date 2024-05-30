@@ -24,12 +24,9 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
 import { ArchiveCreationStartScreenComponent } from './components/archive-creation-start-screen/archive-creation-start-screen.component';
 import { GlamArchiveTypeSelectComponent } from './components/glam/archive-type-select/archive-type-select.component';
 import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/archive-type-icon.component';
-<<<<<<< HEAD
 import { SelectArchiveTypeScreenComponent } from './components/select-archive-type-screen/select-archive-type-screen.component';
 import { NameArchiveScreenComponent } from './components/name-archive-screen/name-archive-screen.component';
 import { CreateArchiveForMeScreenComponent } from './components/create-archive-for-me-screen/create-archive-for-me-screen.component';
-=======
->>>>>>> 2821f7bf (Started integrating the new component)
 
 @NgModule({
   declarations: [
