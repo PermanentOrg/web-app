@@ -99,8 +99,8 @@ export class TwoFactorAuthComponent {
     } else if (this.method === 'sms') {
       contactInfoControl.setValidators([
         Validators.required,
-        Validators.maxLength(18),
-        Validators.minLength(18),
+        Validators.maxLength(17),
+        Validators.minLength(17),
       ]);
     }
     contactInfoControl.updateValueAndValidity();
