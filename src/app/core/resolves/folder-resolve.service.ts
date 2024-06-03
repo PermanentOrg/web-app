@@ -23,12 +23,12 @@ export class FolderResolveService {
     private accountService: AccountService,
     private message: MessageService,
     private router: Router,
-    private filesystem: FilesystemService
+    private filesystem: FilesystemService,
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<any> | Promise<any> {
     let targetFolder: FolderVO;
 
@@ -61,7 +61,7 @@ export class FolderResolveService {
     } else if (state.url.includes('/public')) {
       const publicRoot = find(
         this.accountService.getRootFolder().ChildItemVOs,
-        { type: 'type.folder.root.public' }
+        { type: 'type.folder.root.public' },
       );
       targetFolder = new FolderVO(publicRoot);
     } else {

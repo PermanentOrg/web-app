@@ -139,7 +139,7 @@ describe('HttpV2Service', () => {
       });
 
     const request = httpTestingController.expectOne(
-      apiUrl('/api/v2/health?test=potato')
+      apiUrl('/api/v2/health?test=potato'),
     );
 
     expect(request.request.method).toBe('GET');
@@ -158,7 +158,7 @@ describe('HttpV2Service', () => {
       });
 
     const request = httpTestingController.expectOne(
-      apiUrl('/api/v2/health?id=32')
+      apiUrl('/api/v2/health?id=32'),
     );
 
     expect(request.request.method).toBe('DELETE');
@@ -200,7 +200,7 @@ describe('HttpV2Service', () => {
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
     expect(request.request.headers.get('Authorization')).toBe(
-      'Bearer auth_token'
+      'Bearer auth_token',
     );
     request.flush({});
   });
@@ -247,7 +247,7 @@ describe('HttpV2Service', () => {
       {
         status: 401,
         statusText: 'unauthorized',
-      }
+      },
     );
   });
 
@@ -256,14 +256,14 @@ describe('HttpV2Service', () => {
 
     service.post('/v2/health', {}, HealthResponse).toPromise();
     const req = httpTestingController.expectOne(
-      'https://api.local.permanent.org/api/v2/health'
+      'https://api.local.permanent.org/api/v2/health',
     );
   });
 
   it('uses the default api URL if no stela domain is defined', () => {
     service.post('/v2/health', {}, HealthResponse).toPromise();
     const req = httpTestingController.expectOne(
-      'https://local.permanent.org/api/v2/health'
+      'https://local.permanent.org/api/v2/health',
     );
   });
 
@@ -274,7 +274,7 @@ describe('HttpV2Service', () => {
       .post('/v2/health', {}, HealthResponse, { useStelaDomain: false })
       .toPromise();
     const req = httpTestingController.expectOne(
-      'https://local.permanent.org/api/v2/health'
+      'https://local.permanent.org/api/v2/health',
     );
   });
 });

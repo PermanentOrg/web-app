@@ -15,12 +15,12 @@ import { ConnectorOverviewVO } from '@root/app/models';
 export class ConnectorsResolveService {
   constructor(
     private api: ApiService,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<any> | Promise<any> {
     const archiveId = this.accountService.getArchive().archiveId;
     const connectors = [
@@ -39,7 +39,7 @@ export class ConnectorsResolveService {
           }
 
           return response.getConnectorOverviewVOs();
-        })
+        }),
       )
       .toPromise();
   }

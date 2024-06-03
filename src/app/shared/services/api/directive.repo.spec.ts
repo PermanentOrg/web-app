@@ -31,7 +31,7 @@ describe('DirectiveRepo', () => {
 
     repo = new DirectiveRepo(
       TestBed.inject(HttpService),
-      TestBed.inject(HttpV2Service)
+      TestBed.inject(HttpV2Service),
     );
     httpMock = TestBed.inject(HttpTestingController);
 
@@ -121,7 +121,7 @@ describe('DirectiveRepo', () => {
 
   it('will throw an error if no directiveId is specified in update', async () => {
     await expectAsync(
-      repo.update({ note: 'New Note' } as DirectiveUpdateRequest)
+      repo.update({ note: 'New Note' } as DirectiveUpdateRequest),
     ).toBeRejected();
   });
 
@@ -211,7 +211,7 @@ describe('DirectiveRepo', () => {
       repo.updateLegacyContact({
         name: 'throw error',
         email: 'error@example.com',
-      })
+      }),
     ).toBeRejected();
   });
 });

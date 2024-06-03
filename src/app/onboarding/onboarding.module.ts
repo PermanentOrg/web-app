@@ -62,14 +62,14 @@ export class OnboardingModule {
   constructor(
     private dialog: Dialog,
     private resolver: ComponentFactoryResolver,
-    private library: FaIconLibrary
+    private library: FaIconLibrary,
   ) {
     library.addIcons(faHeart);
     if (this.dialog) {
       this.dialog.registerComponents(
         this.dialogComponents,
         this.resolver,
-        true
+        true,
       );
     }
   }

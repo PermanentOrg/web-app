@@ -24,7 +24,7 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>(
       '/search/archiveByEmail',
       data,
-      { responseClass: SearchResponse }
+      { responseClass: SearchResponse },
     );
   }
 
@@ -45,7 +45,7 @@ export class SearchRepo extends BaseRepo {
   public itemsByNameObservable(
     query: string,
     tags: any[] = [],
-    limit?: number
+    limit?: number,
   ): Observable<SearchResponse> {
     const data = {
       SearchVO: {
@@ -58,7 +58,7 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>(
       '/search/folderAndRecord',
       [data],
-      { responseClass: SearchResponse }
+      { responseClass: SearchResponse },
     );
   }
 
@@ -66,7 +66,7 @@ export class SearchRepo extends BaseRepo {
     query: string,
     tags: TagVOData[] = [],
     archiveId: string,
-    limit?: number
+    limit?: number,
   ) {
     const data = {
       query,
@@ -78,7 +78,7 @@ export class SearchRepo extends BaseRepo {
     return getFirst(
       this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
         authToken: false,
-      })
+      }),
     );
   }
 }

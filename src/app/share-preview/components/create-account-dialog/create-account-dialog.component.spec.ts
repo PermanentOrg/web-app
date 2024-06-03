@@ -31,7 +31,7 @@ describe('CreateAccountDialogComponent', () => {
       RouterTestingModule.withRoutes([
         { path: 'app/signup', redirectTo: '' },
         { path: 'app/login', redirectTo: '' },
-      ])
+      ]),
     );
     config.declarations.push(CreateAccountDialogComponent);
     config.providers.push({
@@ -85,7 +85,7 @@ describe('CreateAccountDialogComponent', () => {
 
   function findLink(
     fixture: ComponentFixture<CreateAccountDialogComponent>,
-    selector: string
+    selector: string,
   ) {
     const element: HTMLElement = fixture.nativeElement;
     const button = element.querySelector(selector) as HTMLAnchorElement;
@@ -97,7 +97,7 @@ describe('CreateAccountDialogComponent', () => {
   function expectLinkClosesDialog(
     link: HTMLAnchorElement,
     expectedPath: string,
-    dialogRefSpy: jasmine.Spy<jasmine.Func>
+    dialogRefSpy: jasmine.Spy<jasmine.Func>,
   ) {
     expect(link.href).toContain(expectedPath);
     link.click();

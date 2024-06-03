@@ -12,7 +12,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/get',
       [account],
-      { responseClass: AccountResponse }
+      { responseClass: AccountResponse },
     );
   }
 
@@ -25,7 +25,7 @@ export class AccountRepo extends BaseRepo {
     optIn: boolean,
     createDefaultArchive: boolean,
     phone?: string,
-    inviteCode?: string
+    inviteCode?: string,
   ) {
     const requestBody = {
       primaryEmail: email,
@@ -44,7 +44,7 @@ export class AccountRepo extends BaseRepo {
     return getFirst(
       this.httpV2.post<AccountVO>('/account/post', requestBody, AccountVO, {
         csrf: true,
-      })
+      }),
     );
   }
 
@@ -61,7 +61,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/update',
       data,
-      { responseClass: AccountResponse }
+      { responseClass: AccountResponse },
     );
   }
 
@@ -78,7 +78,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/delete',
       data,
-      { responseClass: AccountResponse }
+      { responseClass: AccountResponse },
     );
   }
 
@@ -92,7 +92,7 @@ export class AccountRepo extends BaseRepo {
     return this.http.sendRequestPromise<AccountResponse>(
       '/account/updatePreference',
       data,
-      { responseClass: AccountResponse }
+      { responseClass: AccountResponse },
     );
   }
 

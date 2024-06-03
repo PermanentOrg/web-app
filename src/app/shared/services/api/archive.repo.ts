@@ -40,7 +40,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/getAllArchives',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -54,7 +54,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/change',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -68,7 +68,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/update',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -82,7 +82,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/delete',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -98,7 +98,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/post',
       data,
-      { responseClass: ArchiveResponse, useAuthorizationHeader: true }
+      { responseClass: ArchiveResponse, useAuthorizationHeader: true },
     );
   }
 
@@ -112,7 +112,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/accept',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -126,7 +126,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/decline',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -140,13 +140,13 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/getShares',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
   public addMember(
     member: AccountVO,
-    archive: ArchiveVO
+    archive: ArchiveVO,
   ): Promise<ArchiveResponse> {
     const data = [
       {
@@ -158,13 +158,13 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/share',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
   public transferOwnership(
     member: AccountVO,
-    archive: ArchiveVO
+    archive: ArchiveVO,
   ): Promise<ArchiveResponse> {
     const data = [
       {
@@ -176,13 +176,13 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/transferOwnership',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
   public updateMember(
     member: AccountVO,
-    archive: ArchiveVO
+    archive: ArchiveVO,
   ): Promise<ArchiveResponse> {
     const data = [
       {
@@ -198,7 +198,7 @@ export class ArchiveRepo extends BaseRepo {
 
   public removeMember(
     member: AccountVO,
-    archive: ArchiveVO
+    archive: ArchiveVO,
   ): Promise<ArchiveResponse> {
     const data = [
       {
@@ -210,7 +210,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/archive/unshare',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -247,7 +247,7 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/profile_item/safeAddUpdate',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
@@ -261,15 +261,15 @@ export class ArchiveRepo extends BaseRepo {
     return this.http.sendRequestPromise<ArchiveResponse>(
       '/profile_item/delete',
       data,
-      { responseClass: ArchiveResponse }
+      { responseClass: ArchiveResponse },
     );
   }
 
   public getArchiveStorage(archiveId) {
     return getFirst(
       this.httpV2.get<AccountStorage>(
-        `v2/archive/${archiveId}/payer-account-storage`
-      )
+        `v2/archive/${archiveId}/payer-account-storage`,
+      ),
     ).toPromise();
   }
 

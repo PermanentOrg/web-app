@@ -65,7 +65,7 @@ export class RecordRepo extends BaseRepo {
 
   public getLean(
     recordVOs: RecordVO[],
-    whitelist?: string[]
+    whitelist?: string[],
   ): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       const newVO = new RecordVO(recordVO);
@@ -78,13 +78,13 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>(
       '/record/getLean',
       data,
-      { responseClass: RecordResponse }
+      { responseClass: RecordResponse },
     );
   }
 
   public getPresignedUrl(
     recordVO: RecordVO,
-    fileType: string
+    fileType: string,
   ): Promise<BaseResponse> {
     return this.http.sendRequestPromise('/record/getPresignedUrl', [
       {
@@ -99,7 +99,7 @@ export class RecordRepo extends BaseRepo {
 
   public registerRecord(
     recordVO: RecordVO,
-    s3url: string
+    s3url: string,
   ): Promise<RecordResponse> {
     return this.http.sendRequestPromise('/record/registerRecord', {
       RecordVO: recordVO,
@@ -111,7 +111,7 @@ export class RecordRepo extends BaseRepo {
   }
 
   public getMultipartUploadURLs(
-    size: number
+    size: number,
   ): Promise<MultipartUploadUrlsList> {
     return getFirst(
       this.httpV2.post(
@@ -119,8 +119,8 @@ export class RecordRepo extends BaseRepo {
         {
           fileSizeInBytes: size,
         },
-        MultipartUploadUrlsList
-      )
+        MultipartUploadUrlsList,
+      ),
     ).toPromise();
   }
 
@@ -128,7 +128,7 @@ export class RecordRepo extends BaseRepo {
     record: RecordVO,
     uploadId: string,
     key: string,
-    eTags: string[]
+    eTags: string[],
   ): Promise<RecordResponse> {
     return getFirst(
       this.httpV2.post('/record/registerRecord', {
@@ -144,13 +144,13 @@ export class RecordRepo extends BaseRepo {
             ETag,
           })),
         },
-      })
+      }),
     ).toPromise() as unknown as RecordResponse;
   }
 
   public update(
     recordVOs: RecordVO[],
-    whitelist = DEFAULT_WHITELIST
+    whitelist = DEFAULT_WHITELIST,
   ): Promise<RecordResponse> {
     if (whitelist !== DEFAULT_WHITELIST) {
       whitelist = [...whitelist, ...MIN_WHITELIST];
@@ -172,7 +172,7 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>(
       '/record/update',
       data,
-      { responseClass: RecordResponse }
+      { responseClass: RecordResponse },
     );
   }
 
@@ -193,13 +193,13 @@ export class RecordRepo extends BaseRepo {
     return this.http.sendRequestPromise<RecordResponse>(
       '/record/delete',
       data,
-      { responseClass: RecordResponse }
+      { responseClass: RecordResponse },
     );
   }
 
   public move(
     recordVOs: RecordVO[],
-    destination: FolderVO
+    destination: FolderVO,
   ): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {
@@ -222,7 +222,7 @@ export class RecordRepo extends BaseRepo {
 
   public copy(
     recordVOs: RecordVO[],
-    destination: FolderVO
+    destination: FolderVO,
   ): Promise<RecordResponse> {
     const data = recordVOs.map((recordVO) => {
       return {

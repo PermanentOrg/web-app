@@ -55,7 +55,7 @@ export class GiftStorageComponent implements OnDestroy {
   constructor(
     private fb: UntypedFormBuilder,
     private accountService: AccountService,
-    private dialog: Dialog
+    private dialog: Dialog,
   ) {
     this.account = this.accountService.getAccount();
     this.availableSpace = this.bytesToGigabytes(this.account?.spaceLeft);
@@ -127,7 +127,7 @@ export class GiftStorageComponent implements OnDestroy {
             this.duplicateEmails = [];
           }
         }
-      })
+      }),
     );
   }
 
@@ -151,7 +151,7 @@ export class GiftStorageComponent implements OnDestroy {
       },
       {
         width: '700px',
-      }
+      },
     );
   }
 
@@ -218,7 +218,7 @@ export class GiftStorageComponent implements OnDestroy {
           }
 
           return errors;
-        })
+        }),
       );
     };
   }
@@ -267,7 +267,7 @@ export class GiftStorageComponent implements OnDestroy {
   }
 
   public checkForDuplicateEmails(
-    emailsString: string
+    emailsString: string,
   ): Observable<string[] | null> {
     const emails = this.parseEmailString(emailsString);
     const emailCount = {};

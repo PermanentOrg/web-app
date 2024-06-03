@@ -87,7 +87,7 @@ describe('PublicArchivesComponent', () => {
     const archiveList = find('.public-archives-list');
 
     expect(archiveList.nativeElement).toHaveClass(
-      'public-archives-list-expanded'
+      'public-archives-list-expanded',
     );
   });
 });

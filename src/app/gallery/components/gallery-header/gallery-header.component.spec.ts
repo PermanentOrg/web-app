@@ -32,7 +32,7 @@ describe('GalleryHeaderComponent', () => {
     isLoggedIn = true;
     shallow = new Shallow(GalleryHeaderComponent, DummyModule).mock(
       AccountService,
-      accountMock
+      accountMock,
     );
   });
 

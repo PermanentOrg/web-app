@@ -37,7 +37,10 @@ export class PublicSettingsComponent implements OnInit {
 
   public archiveType: ArchiveType = 'type.archive.organization';
 
-  constructor(private api: ApiService, private dialog: Dialog) {}
+  constructor(
+    private api: ApiService,
+    private dialog: Dialog,
+  ) {}
 
   ngOnInit(): void {
     this.allowDownloadsToggle = +this.archive.allowPublicDownload;
@@ -69,7 +72,7 @@ export class PublicSettingsComponent implements OnInit {
       },
       {
         width: '700px',
-      }
+      },
     );
   }
 }

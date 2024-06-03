@@ -24,7 +24,7 @@ export class ConfirmGiftDialogComponent {
     private dialogRef: DialogRef,
     private api: ApiService,
     @Inject(DIALOG_DATA) public data: any,
-    private msg: MessageService
+    private msg: MessageService,
   ) {
     this.emails = this.data.emails;
     this.amount = this.data.amount;
@@ -41,7 +41,7 @@ export class ConfirmGiftDialogComponent {
       const res = await this.api.billing.giftStorage(
         this.emails,
         Number(this.amount),
-        this.message
+        this.message,
       );
       const response = {
         isSuccessful: true,

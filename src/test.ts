@@ -49,7 +49,7 @@ Shallow.neverMock(
   NgbTimepickerModule,
   NgbTooltipModule,
   NgbDropdownModule,
-  NgbPaginationModule
+  NgbPaginationModule,
 );
 
 // First, initialize the Angular testing environment.
@@ -58,5 +58,5 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
   {
     teardown: { destroyAfterEach: false },
-  }
+  },
 );

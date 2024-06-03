@@ -69,7 +69,7 @@ describe('InlineValueEditComponent', () => {
 
   it('should start editing with click', fakeAsync(() => {
     const displayElement = fixture.debugElement.query(
-      By.css('.inline-value-display')
+      By.css('.inline-value-display'),
     );
     displayElement.triggerEventHandler('click', null);
     tick();
@@ -131,7 +131,7 @@ describe('InlineValueEditComponent', () => {
 
     const rootElement = fixture.debugElement.nativeElement as HTMLElement;
     const cancelButton = rootElement.querySelector(
-      'button[name=cancel]'
+      'button[name=cancel]',
     ) as HTMLButtonElement;
     cancelButton.dispatchEvent(new Event('mousedown'));
 
@@ -188,7 +188,7 @@ describe('InlineValueEditComponent', () => {
 
     const offset = getOffsetMomentFromDTString(
       record.displayDT,
-      record.TimezoneVO
+      record.TimezoneVO,
     );
 
     expect(component.ngbDate).toBeDefined();
@@ -269,7 +269,7 @@ describe('InlineValueEditComponent', () => {
 
     const offset = getOffsetMomentFromDTString(
       record.displayDT,
-      record.TimezoneVO
+      record.TimezoneVO,
     );
 
     expect(component.ngbTime.hour).toBe(momentFormatNum(offset, 'H'));
@@ -375,7 +375,7 @@ describe('InlineValueEditComponent', () => {
 
     const offset = getOffsetMomentFromDTString(
       record.displayDT,
-      record.TimezoneVO
+      record.TimezoneVO,
     );
 
     expect(component.ngbDate.day).toBe(momentFormatNum(offset, 'D'));
@@ -403,7 +403,7 @@ describe('InlineValueEditComponent', () => {
     fixture.detectChanges();
 
     const nameContainer = fixture.debugElement.query(
-      By.css('.inline-value-text')
+      By.css('.inline-value-text'),
     ).nativeElement;
     nameContainer.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();

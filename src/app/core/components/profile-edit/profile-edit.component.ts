@@ -83,7 +83,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private message: MessageService,
     private cookies: CookieService,
     private device: DeviceService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -160,13 +160,13 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     const originalValue = this.publicRoot.thumbArchiveNbr;
     try {
       const record = await this.folderPicker.chooseRecord(
-        this.account.getPrivateRoot()
+        this.account.getPrivateRoot(),
       );
       const updateFolder = new FolderVO(this.publicRoot);
       updateFolder.thumbArchiveNbr = record.archiveNbr;
       await this.api.folder.updateRoot(
         [updateFolder],
-        ['thumbArchiveNbr', 'view', 'viewProperty']
+        ['thumbArchiveNbr', 'view', 'viewProperty'],
       );
       // borrow thumb URLs from record for now, until they can be regenerated
       const thumbProps: Array<keyof (ArchiveVO | RecordVO)> = [
@@ -190,7 +190,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     item: ProfileItemVOData,
     valueKey: ProfileItemsDataCol,
     newValue: any,
-    refreshArchive = false
+    refreshArchive = false,
   ) {
     const originalValue = item[valueKey];
     item[valueKey] = newValue as never;
@@ -227,7 +227,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
           'Remove',
           'Remove this item?',
           deferred.promise,
-          'btn-danger'
+          'btn-danger',
         );
       }
       await this.profile.deleteProfileItem(item);
@@ -264,7 +264,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       await this.dialog.open(
         'LocationPickerComponent',
         { profileItem: item },
-        { height: 'auto', width: '600px' }
+        { height: 'auto', width: '600px' },
       );
     } finally {
       this.updateProgress();
@@ -282,7 +282,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
       fields,
       'Share profile link',
       deferred.promise,
-      'Copy link'
+      'Copy link',
     );
     const input = this.prompt.getInput('profileLink');
     copyFromInputElement(input);

@@ -119,7 +119,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.screen = 'goals';
           this.progress.emit(1);
         }
-      }
+      },
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();

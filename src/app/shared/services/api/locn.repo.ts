@@ -18,7 +18,7 @@ export class LocnRepo extends BaseRepo {
     return this.http.sendRequestPromise<LocnResponse>(
       '/locn/geomapLatLong',
       data,
-      { responseClass: LocnResponse }
+      { responseClass: LocnResponse },
     );
   }
 

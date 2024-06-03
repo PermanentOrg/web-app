@@ -146,7 +146,7 @@ export class FileListComponent
     @Optional() private drag: DragService,
     private renderer: Renderer2,
     public device: DeviceService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -170,7 +170,7 @@ export class FileListComponent
 
     this.visibleItemsHandlerDebounced = debounce(
       () => this.loadVisibleItems(),
-      VISIBLE_DEBOUNCE
+      VISIBLE_DEBOUNCE,
     );
 
     this.registerArchiveChangeHandlers();
@@ -195,7 +195,7 @@ export class FileListComponent
           queryParams[timestamp] = '';
           this.router.navigate(['.'], { queryParams, relativeTo: this.route });
         }
-      })
+      }),
     );
   }
 
@@ -224,7 +224,7 @@ export class FileListComponent
           if (!routeHasDialog(event) && this.inDialog) {
             this.inDialog = false;
           }
-        })
+        }),
     );
   }
 
@@ -235,21 +235,21 @@ export class FileListComponent
         setTimeout(() => {
           this.loadVisibleItems();
         }, 500);
-      })
+      }),
     );
 
     // register for multi select events
     this.subscriptions.push(
       this.dataService.multiSelectChange.subscribe((enabled) => {
         this.isMultiSelectEnabled = enabled;
-      })
+      }),
     );
 
     // register for select events
     this.subscriptions.push(
       this.dataService.selectedItems$().subscribe((selectedItems) => {
         this.selectedItems = selectedItems;
-      })
+      }),
     );
 
     // register for 'show item' events
@@ -258,7 +258,7 @@ export class FileListComponent
         setTimeout(() => {
           this.scrollToItem(item);
         });
-      })
+      }),
     );
   }
 
@@ -273,7 +273,7 @@ export class FileListComponent
               this.isDraggingInProgress = dragEvent.type === 'start';
               break;
           }
-        })
+        }),
       );
 
       this.mouseMoveHandlerThrottled = throttle((event: MouseEvent) => {
@@ -288,7 +288,7 @@ export class FileListComponent
         this.unlistenMouseMove = this.renderer.listen(
           this.scrollElement.nativeElement,
           'mousemove',
-          (event) => this.onViewportMouseMove(event)
+          (event) => this.onViewportMouseMove(event),
         );
       });
     }
@@ -374,7 +374,7 @@ export class FileListComponent
     const folder_linkId = item.folder_linkId;
     const listItem = find(
       this.listItemsQuery.toArray(),
-      (x) => x.item.folder_linkId === folder_linkId
+      (x) => x.item.folder_linkId === folder_linkId,
     );
     if (listItem) {
       const itemElem = listItem.element.nativeElement as HTMLElement;
