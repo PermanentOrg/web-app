@@ -1,2 +1,5 @@
 <!-- @format -->
-<p>user-checklist works!</p>
+<div class="user-checklist"></div>
+@for (item of items; track item.id) {
+<div>{{ item.title }}</div>
+}
