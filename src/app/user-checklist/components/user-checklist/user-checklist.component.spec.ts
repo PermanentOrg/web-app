@@ -6,13 +6,18 @@ import { UserChecklistModule } from '../../user-checklist.module';
 import { UserChecklistComponent } from './user-checklist.component';
 
 class DummyChecklistApi implements ChecklistApi {
+  public static error: boolean = false;
   public static items: ChecklistItem[] = [];
 
   public static reset(): void {
     this.items = [];
+    this.error = false;
   }
 
   public async getChecklistItems(): Promise<ChecklistItem[]> {
+    if (DummyChecklistApi.error) {
+      throw new Error('Unit test forced error');
+    }
     return DummyChecklistApi.items;
   }
 }
@@ -31,7 +36,14 @@ fdescribe('UserChecklistComponent', () => {
     );
   }
 
+  function expectComponentToBeInvisible(find) {
+    expect(find('.user-checklist').length).toBe(0);
+    expect(find('.user-checklist-minimized').length).toBe(0);
+  }
+
   beforeEach(async () => {
+    DummyChecklistApi.reset();
+    DummyChecklistApi.items = [createTestTask()];
     shallow = new Shallow(
       UserChecklistComponent,
       UserChecklistModule
@@ -42,9 +54,10 @@ fdescribe('UserChecklistComponent', () => {
   });
 
   it('should create', async () => {
-    const { instance } = await shallow.render();
+    const { find, instance } = await shallow.render();
 
     expect(instance).toBeTruthy();
+    expect(find('.user-checklist').length).toBeGreaterThan(0);
   });
 
   it('should list all tasks received from the API', async () => {
@@ -78,6 +91,43 @@ fdescribe('UserChecklistComponent', () => {
     ).toBeFalse();
   });
 
+  it('should be able to handle an API error', async () => {
+    DummyChecklistApi.error = true;
+
+    const { fixture, find } = await shallow.render();
+    await fixture.whenStable();
+
+    expectComponentToBeInvisible(find);
+  });
+
+  it('can be minimized', async () => {
+    const { find, fixture } = await shallow.render();
+
+    find('.minimize-button').triggerEventHandler('click');
+    fixture.detectChanges();
+
+    expect(find('.user-checklist').length).toBe(0);
+  });
+
+  it('can be opened again after being minimized', async () => {
+    const { find, fixture } = await shallow.render();
+
+    find('.minimize-button').triggerEventHandler('click');
+    fixture.detectChanges();
+    find('.open-button').triggerEventHandler('click');
+    fixture.detectChanges();
+
+    expect(find('.user-checklist').length).toBeGreaterThan(0);
+  });
+
+  it('is hidden completely if no tasks come back from the API', async () => {
+    DummyChecklistApi.items = [];
+
+    const { find } = await shallow.render();
+
+    expectComponentToBeInvisible(find);
+  });
+
   describe('Percentage completion', () => {
     async function expectPercentage(
       completed: number,
@@ -99,10 +149,6 @@ fdescribe('UserChecklistComponent', () => {
         `${percentage}%`
       );
     }
-
-    it('should list 0% in a divide-by-zero case', async () => {
-      await expectPercentage(0, 0, 0);
-    });
 
     it('should list 0% for no tasks done', async () => {
       await expectPercentage(0, 1, 0);

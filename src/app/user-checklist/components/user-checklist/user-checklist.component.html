@@ -1,5 +1,7 @@
 <!-- @format -->
+@if (isDisplayed) { @if (isOpen) {
 <div class="user-checklist">
+  <button class="minimize-button" (click)="minimize()">-</button>
   <meter min="0" max="100" [value]="percentage"></meter>
   <span class="percent-value">{{ percentage | number : '1.0-0' }}%</span>
   @for (item of items; track item.id) {
@@ -11,3 +13,8 @@
   </div>
   }
 </div>
+} @else {
+<div class="user-checklist-minimized">
+  <button class="open-button" (click)="open()">icon</button>
+</div>
+} }
