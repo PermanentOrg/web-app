@@ -20,6 +20,17 @@ class DummyChecklistApi implements ChecklistApi {
 fdescribe('UserChecklistComponent', () => {
   let shallow: Shallow<UserChecklistComponent>;
 
+  function createTestTask(data?: Partial<ChecklistItem>): ChecklistItem {
+    return Object.assign(
+      {
+        id: 'test_task',
+        title: 'Write a unit test',
+        completed: true,
+      },
+      data ?? {}
+    );
+  }
+
   beforeEach(async () => {
     shallow = new Shallow(
       UserChecklistComponent,
@@ -38,20 +49,32 @@ fdescribe('UserChecklistComponent', () => {
 
   it('should list all tasks received from the API', async () => {
     DummyChecklistApi.items = [
-      {
-        id: 'test_task',
-        title: 'Write a unit test',
-        completed: true,
-      },
-      {
-        id: 'test_task2',
-        title: 'Write production code',
-        completed: false,
-      },
+      createTestTask({ title: 'Write a unit test' }),
+      createTestTask({ title: 'Write production code' }),
     ];
     const { element } = await shallow.render();
 
     expect(element.nativeElement.innerText).toContain('Write a unit test');
     expect(element.nativeElement.innerText).toContain('Write production code');
+  });
+
+  it('should mark completed status on completed tasks', async () => {
+    DummyChecklistApi.items = [createTestTask({ completed: true })];
+    const { find } = await shallow.render();
+
+    expect(find('.task-name.completed').length).toBe(1);
+    expect(
+      find('.task input[type="checkbox"]').nativeElement.checked
+    ).toBeTrue();
+  });
+
+  it('should not mark completed status on incomplete tasks', async () => {
+    DummyChecklistApi.items = [createTestTask({ completed: false })];
+    const { find } = await shallow.render();
+
+    expect(find('.task-name.completed').length).toBe(0);
+    expect(
+      find('.task input[type="checkbox"]').nativeElement.checked
+    ).toBeFalse();
   });
 });

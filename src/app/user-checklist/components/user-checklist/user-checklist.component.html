@@ -1,5 +1,11 @@
 <!-- @format -->
 <div class="user-checklist"></div>
 @for (item of items; track item.id) {
-<div>{{ item.title }}</div>
+<div class="task">
+  <span [class]="{ 'task-name': true, completed: item.completed }">{{
+    item.title
+  }}</span>
+  <input type="checkbox" [checked]="item.completed" />
+</div>
+
 }
