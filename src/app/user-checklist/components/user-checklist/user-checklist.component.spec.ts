@@ -1,23 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+/* @format */
+import { Shallow } from 'shallow-render';
+import { UserChecklistModule } from '../../user-checklist.module';
 import { UserChecklistComponent } from './user-checklist.component';
 
 describe('UserChecklistComponent', () => {
-  let component: UserChecklistComponent;
-  let fixture: ComponentFixture<UserChecklistComponent>;
+  let shallow: Shallow<UserChecklistComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [UserChecklistComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(UserChecklistComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    shallow = new Shallow(UserChecklistComponent, UserChecklistModule);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create', async () => {
+    const { instance } = await shallow.render();
+
+    expect(instance).toBeTruthy();
   });
 });
