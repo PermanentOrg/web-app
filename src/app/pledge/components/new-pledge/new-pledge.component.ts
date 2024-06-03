@@ -73,7 +73,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private iframe: IFrameService,
     private pledgeService: PledgeService,
     private deviceService: DeviceService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
@@ -275,7 +275,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           await this.pledgeService.linkAccount(account);
           const billingResponse = await this.api.billing.claimPledge(
             payment,
-            pledgeId
+            pledgeId,
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
@@ -294,7 +294,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
             this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage({
               message: `You just claimed ${this.getStorageAmount(
-                pledge.dollarAmount
+                pledge.dollarAmount,
               )} GB of storage!`,
               style: 'success',
             });

@@ -52,7 +52,7 @@ export const routes: RoutesWithData = [
         path: 'private',
         loadChildren: () =>
           import('../file-browser/file-browser.module').then(
-            (m) => m.FileBrowserModule
+            (m) => m.FileBrowserModule,
           ),
         data: {
           title: 'Private Files',
@@ -64,7 +64,7 @@ export const routes: RoutesWithData = [
         path: 'public',
         loadChildren: () =>
           import('../file-browser/file-browser.module').then(
-            (m) => m.FileBrowserModule
+            (m) => m.FileBrowserModule,
           ),
         data: {
           title: 'Public',

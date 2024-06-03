@@ -113,7 +113,7 @@ export class FolderVO
   constructor(
     voData: FolderVOData,
     initChildren?: boolean,
-    dataStatus?: DataStatus
+    dataStatus?: DataStatus,
   ) {
     super(voData);
 
@@ -129,7 +129,7 @@ export class FolderVO
 
     if (this.ShareVOs) {
       this.ShareVOs = sortShareVOs(
-        this.ShareVOs.map((data) => new ShareVO(data))
+        this.ShareVOs.map((data) => new ShareVO(data)),
       );
     }
 

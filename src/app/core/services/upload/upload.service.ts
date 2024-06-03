@@ -56,7 +56,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     private message: MessageService,
     private dataService: DataService,
     private accountService: AccountService,
-    public uploadSession: UploadSession
+    public uploadSession: UploadSession,
   ) {
     this.subscriptions.push(
       this.uploadSession.progress.subscribe((progressEvent) => {
@@ -115,7 +115,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
             this.accountService.refreshAccountDebounced();
             break;
         }
-      })
+      }),
     );
   }
 
@@ -151,7 +151,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     this.debug(
       'uploadFolders %d items to folder %o',
       items.length,
-      parentFolder
+      parentFolder,
     );
 
     this.uploadSession.startSession();
@@ -169,7 +169,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     async function getItemsFromItemList(dirEntries: any[]) {
       self.debug(
         'uploadFolders getItemsFromItemList %d items in folder',
-        entries.length
+        entries.length,
       );
       const filePromises: Promise<any>[] = [];
       for (const entry of dirEntries) {
@@ -244,7 +244,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
   async createFoldersAndUploadFiles(
     folders: Map<string, FileSystemFolder>,
-    files: Map<string, FileWithPath[]>
+    files: Map<string, FileWithPath[]>,
   ) {
     const pathsByDepth = new Map<number, FileSystemFolder[]>();
     for (const [path, folder] of folders) {
@@ -293,12 +293,12 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
             return array;
           },
-          []
+          [],
         );
 
         for (const batch of folderBatches) {
           const response = await this.api.folder.post(
-            batch.map((f) => f.folder)
+            batch.map((f) => f.folder),
           );
           const updatedFolders = response.getFolderVOs();
 
@@ -320,7 +320,7 @@ export class UploadService implements HasSubscriptions, OnDestroy {
           const filesForFolder = files.get(f.path);
           this.uploadFiles(
             f.folder,
-            filesForFolder.map((i) => i.file)
+            filesForFolder.map((i) => i.file),
           );
         }
       }

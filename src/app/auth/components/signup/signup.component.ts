@@ -55,7 +55,7 @@ export class SignupComponent implements OnInit {
     private route: ActivatedRoute,
     private message: MessageService,
     private device: DeviceService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
   ) {
     const params = route.snapshot.queryParams;
 
@@ -147,7 +147,7 @@ export class SignupComponent implements OnInit {
         formValue.optIn,
         null,
         formValue.invitation,
-        this.shouldCreateDefaultArchive()
+        this.shouldCreateDefaultArchive(),
       )
       .then((account: AccountVO) => {
         if (account.needsVerification()) {

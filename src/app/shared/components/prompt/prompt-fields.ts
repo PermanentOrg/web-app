@@ -88,7 +88,7 @@ export const ACCESS_ROLE_FIELD: PromptField = {
 };
 
 export function ACCESS_ROLE_FIELD_INITIAL(
-  initialValue: AccessRoleType
+  initialValue: AccessRoleType,
 ): PromptField {
   const initialized = clone(ACCESS_ROLE_FIELD);
   initialized.initialValue = initialValue;
@@ -115,7 +115,7 @@ export const SHARE_ACCESS_ROLE_FIELD: PromptField = {
 };
 
 export function SHARE_ACCESS_ROLE_FIELD_INITIAL(
-  initialValue: AccessRoleType
+  initialValue: AccessRoleType,
 ): PromptField {
   const initialized = clone(SHARE_ACCESS_ROLE_FIELD);
   initialized.initialValue = initialValue;
@@ -178,7 +178,7 @@ const ON_OFF_FIELD_DEFAULT: PromptField = {
 export function ON_OFF_FIELD(
   fieldName: string,
   placeholder: string,
-  initialValue?: string | number
+  initialValue?: string | number,
 ) {
   const initial: PromptField = clone(ON_OFF_FIELD_DEFAULT);
   initial.fieldName = fieldName;
@@ -203,7 +203,7 @@ export function NUMBER_FIELD(
   fieldName: string,
   placeholder: string,
   initialValue?: number,
-  required = true
+  required = true,
 ) {
   const initial: PromptField = clone(NUMBER_FIELD_DEFAULT);
   initial.fieldName = fieldName;
@@ -232,7 +232,7 @@ export function DATE_FIELD(
   placeholder: string,
   initialValue?: string | Date,
   minValue?: string | Date,
-  required = false
+  required = false,
 ) {
   const initial: PromptField = clone(DATE_FIELD_DEFAULT);
   initial.fieldName = fieldName;
@@ -265,7 +265,7 @@ const READ_ONLY_FIELD_DEFAULT: PromptField = {
 export function READ_ONLY_FIELD(
   fieldName: string,
   placeholder: string,
-  initialValue?: string
+  initialValue?: string,
 ) {
   const initial: PromptField = clone(READ_ONLY_FIELD_DEFAULT);
   initial.fieldName = fieldName;

@@ -78,7 +78,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private editService: EditService,
     private tagsService: TagsService,
-    @Optional() private publicProfile: PublicProfileService
+    @Optional() private publicProfile: PublicProfileService,
   ) {
     // store current scroll position in file list
     this.bodyScrollTop = window.scrollY;
@@ -92,7 +92,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     } else {
       this.records = filter(
         this.dataService.currentFolder.ChildItemVOs,
-        'isRecord'
+        'isRecord',
       ) as RecordVO[];
       this.currentIndex = findIndex(this.records, {
         folder_linkId: resolvedRecord.folder_linkId,
@@ -118,17 +118,17 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.canEdit =
       this.accountService.checkMinimumAccess(
         this.currentRecord.accessRole,
-        AccessRole.Editor
+        AccessRole.Editor,
       ) && !route.snapshot.data?.isPublicArchive;
 
     this.tagSubscription = this.tagsService
       .getItemTags$()
       ?.subscribe((tags) => {
         this.customMetadata = tags?.filter((tag) =>
-          tag.type.includes('type.tag.metadata')
+          tag.type.includes('type.tag.metadata'),
         );
         this.keywords = tags?.filter(
-          (tag) => !tag.type.includes('type.tag.metadata')
+          (tag) => !tag.type.includes('type.tag.metadata'),
         );
       });
   }
@@ -188,7 +188,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.isAudio = this.currentRecord.type.includes('audio');
     this.isVideo = this.currentRecord.type.includes('video');
     this.isDocument = this.currentRecord.FileVOs?.some(
-      (obj: ItemVO) => obj.type.includes('pdf') || obj.type.includes('txt')
+      (obj: ItemVO) => obj.type.includes('pdf') || obj.type.includes('txt'),
     );
     this.documentUrl = this.getDocumentUrl();
     this.setCurrentTags();
@@ -211,7 +211,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       format: 'file.format.original',
     }) as any;
     const pdf = find(this.currentRecord.FileVOs, (f) =>
-      f.type.includes('pdf')
+      f.type.includes('pdf'),
     ) as any;
 
     let url;
@@ -351,7 +351,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     const start = Math.max(this.currentIndex - surroundingCount, 0);
     const end = Math.min(
       this.currentIndex + surroundingCount + 1,
-      this.records.length
+      this.records.length,
     );
     const itemsToFetch = this.records
       .slice(start, end)
@@ -367,12 +367,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   public async onFinishEditing(
     property: KeysOfType<ItemVO, string>,
-    value: string
+    value: string,
   ): Promise<void> {
     this.editService.saveItemVoProperty(
       this.currentRecord as ItemVO,
       property,
-      value
+      value,
     );
   }
 
@@ -398,10 +398,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   private setCurrentTags(): void {
     this.keywords = this.currentRecord.TagVOs.filter(
-      (tag) => !tag.type.includes('type.tag.metadata')
+      (tag) => !tag.type.includes('type.tag.metadata'),
     );
     this.customMetadata = this.currentRecord.TagVOs.filter((tag) =>
-      tag.type.includes('type.tag.metadata')
+      tag.type.includes('type.tag.metadata'),
     );
   }
 }

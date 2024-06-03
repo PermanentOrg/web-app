@@ -38,7 +38,7 @@ export class OnboardingComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private detector: ChangeDetectorRef,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -50,7 +50,7 @@ export class OnboardingComponent implements OnInit {
     this.account.refreshArchives().then((archives) => {
       const [ownArchives, pendingArchives] = lodashPartition<ArchiveVO>(
         archives,
-        (archive) => !archive.status.endsWith('pending')
+        (archive) => !archive.status.endsWith('pending'),
       );
       if (ownArchives.length > 0 && false) {
         // This user already has archives. They don't need to onboard.

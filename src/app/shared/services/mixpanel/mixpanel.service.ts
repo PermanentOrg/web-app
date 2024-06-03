@@ -84,7 +84,7 @@ export class MixpanelService implements AnalyticsObserver {
         () => {
           // Silently ignore an HTTP error, since we don't want calling code to
           // have to handle analytics errors.
-        }
+        },
       );
     }
   }

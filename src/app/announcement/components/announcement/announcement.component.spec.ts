@@ -38,7 +38,7 @@ describe('AnnouncementComponent', () => {
         bind: {
           events,
         },
-      }
+      },
     );
   }
   beforeEach(() => {
@@ -107,14 +107,14 @@ describe('AnnouncementComponent', () => {
     fixture.detectChanges();
 
     expect(window.localStorage.getItem('announcementDismissed')).toBe(
-      currentTestEvent.start.toString()
+      currentTestEvent.start.toString(),
     );
   });
 
   it('should recall dismissed setting from localStorage', async () => {
     window.localStorage.setItem(
       'announcementDismissed',
-      currentTestEvent.start.toString()
+      currentTestEvent.start.toString(),
     );
     const { find } = await defaultRender([currentTestEvent]);
 
@@ -148,11 +148,11 @@ describe('AnnouncementComponent', () => {
           bind: {
             events: [currentTestEvent],
           },
-        }
+        },
       );
     }
     function getAdjustedElements(
-      find: (s: string) => QueryMatch<DebugElement>
+      find: (s: string) => QueryMatch<DebugElement>,
     ) {
       const adjustedElements = find('.adjust-for-announcement');
 

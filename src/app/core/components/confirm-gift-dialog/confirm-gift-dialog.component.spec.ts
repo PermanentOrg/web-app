@@ -134,7 +134,7 @@ describe('ConfirmGiftDialogComponent', () => {
     });
 
     const response = mockApiService.billing.giftStorage.and.returnValue(
-      Promise.resolve(giftingResponse)
+      Promise.resolve(giftingResponse),
     );
 
     component.onConfirmClick();
@@ -154,7 +154,7 @@ describe('ConfirmGiftDialogComponent', () => {
     const giftResultSpy = spyOn(mockGiftResult, 'next');
     const dialogRefSpy = spyOn(dialogRef, 'close');
     mockApiService.billing.giftStorage.and.returnValue(
-      Promise.reject(errorResponse)
+      Promise.reject(errorResponse),
     );
 
     const messageService = TestBed.inject(MessageService);

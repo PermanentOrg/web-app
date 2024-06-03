@@ -29,7 +29,7 @@ describe('MixpanelRepo', () => {
 
   function prepareAccountStorage(
     accountId: string,
-    useLocalStorage: boolean = true
+    useLocalStorage: boolean = true,
   ) {
     const accountInfo = JSON.stringify({ accountId });
     if (useLocalStorage) {
@@ -92,7 +92,7 @@ describe('MixpanelRepo', () => {
 
     expect(req.request.method).toEqual('POST');
     expect(req.request.body.body.analytics.distinctId).toEqual(
-      `${environment.environment}:67890`
+      `${environment.environment}:67890`,
     );
     req.flush({ success: true });
   });

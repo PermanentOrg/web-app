@@ -32,7 +32,7 @@ fdescribe('UserChecklistComponent', () => {
         title: 'Write a unit test',
         completed: true,
       },
-      data ?? {}
+      data ?? {},
     );
   }
 
@@ -46,7 +46,7 @@ fdescribe('UserChecklistComponent', () => {
     DummyChecklistApi.items = [createTestTask()];
     shallow = new Shallow(
       UserChecklistComponent,
-      UserChecklistModule
+      UserChecklistModule,
     ).provideMock({
       provide: CHECKLIST_API,
       useClass: DummyChecklistApi,
@@ -77,7 +77,7 @@ fdescribe('UserChecklistComponent', () => {
 
     expect(find('.task-name.completed').length).toBe(1);
     expect(
-      find('.task input[type="checkbox"]').nativeElement.checked
+      find('.task input[type="checkbox"]').nativeElement.checked,
     ).toBeTrue();
   });
 
@@ -87,7 +87,7 @@ fdescribe('UserChecklistComponent', () => {
 
     expect(find('.task-name.completed').length).toBe(0);
     expect(
-      find('.task input[type="checkbox"]').nativeElement.checked
+      find('.task input[type="checkbox"]').nativeElement.checked,
     ).toBeFalse();
   });
 
@@ -132,7 +132,7 @@ fdescribe('UserChecklistComponent', () => {
     async function expectPercentage(
       completed: number,
       incomplete: number,
-      percentage: number
+      percentage: number,
     ) {
       DummyChecklistApi.items = [];
       for (let i = 0; i < completed; i++) {
@@ -146,7 +146,7 @@ fdescribe('UserChecklistComponent', () => {
 
       expect(Math.round(meterValue)).toBe(percentage);
       expect(find('.percent-value').nativeElement.innerText).toContain(
-        `${percentage}%`
+        `${percentage}%`,
       );
     }
 

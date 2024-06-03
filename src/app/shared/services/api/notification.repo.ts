@@ -7,12 +7,12 @@ export class NotificationRepo extends BaseRepo {
     return this.http.sendRequestPromise<NotificationResponse>(
       '/notification/getMyNotifications',
       [{}],
-      { responseClass: NotificationResponse }
+      { responseClass: NotificationResponse },
     );
   }
 
   public getNotificationsSince(
-    lastNotification: NotificationVOData
+    lastNotification: NotificationVOData,
   ): Promise<NotificationResponse> {
     const data = {
       NotificationVO: lastNotification,
@@ -21,7 +21,7 @@ export class NotificationRepo extends BaseRepo {
     return this.http.sendRequestPromise<NotificationResponse>(
       '/notification/getMyNotificationsSince',
       [data],
-      { responseClass: NotificationResponse }
+      { responseClass: NotificationResponse },
     );
   }
 
@@ -35,7 +35,7 @@ export class NotificationRepo extends BaseRepo {
     return this.http.sendRequestPromise<NotificationResponse>(
       '/notification/updateNotification',
       data,
-      { responseClass: NotificationResponse }
+      { responseClass: NotificationResponse },
     );
   }
 }

@@ -16,7 +16,10 @@ export class LegacyContactDisplayComponent implements OnInit {
   public legacyContact: LegacyContact;
   public error: boolean = false;
 
-  constructor(protected account: AccountService, protected api: ApiService) {
+  constructor(
+    protected account: AccountService,
+    protected api: ApiService,
+  ) {
     this.legacyContact = this.initialLegacyContact;
   }
 

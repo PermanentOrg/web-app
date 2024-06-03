@@ -19,7 +19,7 @@ export class GalleryComponent implements OnInit {
 
   constructor(
     @Inject(FEATURED_ARCHIVE_API) private api: FeaturedArchiveApi,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
   }

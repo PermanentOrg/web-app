@@ -12,7 +12,7 @@ describe('AnalyticsService', () => {
   let shallow: Shallow<AnalyticsService>;
   beforeEach(() => {
     shallow = new Shallow(AnalyticsService, SharedModule).import(
-      HttpClientTestingModule
+      HttpClientTestingModule,
     );
   });
 

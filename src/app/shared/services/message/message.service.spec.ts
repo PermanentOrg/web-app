@@ -39,13 +39,13 @@ describe('MessageService', () => {
     const messageData: MessageDisplayOptions = { message: 'Test message' };
 
     expect(() => service.showMessage(messageData)).toThrowError(
-      'MessageService - Missing component'
+      'MessageService - Missing component',
     );
   });
 
   it('should register a component successfully', () => {
     expect(() =>
-      service.registerComponent(mockMessageComponent as MessageComponent)
+      service.registerComponent(mockMessageComponent as MessageComponent),
     ).not.toThrow();
   });
 
@@ -53,7 +53,7 @@ describe('MessageService', () => {
     service.registerComponent(mockMessageComponent as MessageComponent);
 
     expect(() =>
-      service.registerComponent(mockMessageComponent as MessageComponent)
+      service.registerComponent(mockMessageComponent as MessageComponent),
     ).toThrowError('MessageService - Message component already registered');
   });
 

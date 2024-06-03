@@ -200,13 +200,13 @@ export class CoreModule {
 
   constructor(
     @Optional() private dialog?: Dialog,
-    @Optional() private resolver?: ComponentFactoryResolver
+    @Optional() private resolver?: ComponentFactoryResolver,
   ) {
     if (this.dialog) {
       this.dialog.registerComponents(
         this.dialogComponents,
         this.resolver,
-        true
+        true,
       );
     }
   }

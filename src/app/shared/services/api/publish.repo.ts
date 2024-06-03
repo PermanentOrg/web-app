@@ -16,12 +16,12 @@ export class PublishRepo extends BaseRepo {
     return this.http.sendRequestPromise<PublishResponse>(
       '/publish/getResource',
       data,
-      { responseClass: PublishResponse }
+      { responseClass: PublishResponse },
     );
   }
 
   public publishToInternetArchive(
-    publishIa: PublishIaData
+    publishIa: PublishIaData,
   ): Promise<PublishResponse> {
     const data = [
       {
@@ -32,12 +32,12 @@ export class PublishRepo extends BaseRepo {
     return this.http.sendRequestPromise<PublishResponse>(
       '/publish_ia/publish',
       data,
-      { responseClass: PublishResponse }
+      { responseClass: PublishResponse },
     );
   }
 
   public getInternetArchiveLink(
-    publishIa: Pick<PublishIaData, 'folder_linkId'>
+    publishIa: Pick<PublishIaData, 'folder_linkId'>,
   ): Promise<PublishResponse> {
     const data = [
       {
@@ -48,7 +48,7 @@ export class PublishRepo extends BaseRepo {
     return this.http.sendRequestPromise<PublishResponse>(
       '/publish_ia/getLink',
       data,
-      { responseClass: PublishResponse }
+      { responseClass: PublishResponse },
     );
   }
 }

@@ -113,7 +113,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     private fb: UntypedFormBuilder,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private dialog: Dialog
+    private dialog: Dialog,
   ) {
     this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -146,7 +146,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           return (
             event instanceof NavigationStart || event instanceof NavigationEnd
           );
-        })
+        }),
       )
       .subscribe((event) => {
         if (event instanceof NavigationStart) {
@@ -160,7 +160,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       async (archive) => {
         this.archive = archive;
         await this.reloadSharePreviewData();
-      }
+      },
     );
 
     this.archiveListener = this.accountService.accountChange.subscribe(
@@ -174,7 +174,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           await this.reloadSharePreviewData();
           this.archiveConfirmed = false;
         }
-      }
+      },
     );
 
     if (this.isLinkShare) {
@@ -205,7 +205,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     ) {
       try {
         await this.accountService.promptForArchiveChange(
-          this.chooseArchiveText
+          this.chooseArchiveText,
         );
         this.archiveConfirmed = true;
         await this.reloadSharePreviewData();
@@ -218,7 +218,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     ) {
       try {
         await this.accountService.promptForArchiveChange(
-          this.chooseArchiveText
+          this.chooseArchiveText,
         );
         this.archiveConfirmed = true;
       } catch (err) {}
@@ -377,7 +377,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         ]);
       } else {
         window.location.assign(
-          `/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`
+          `/app/shares/${folder.archiveNbr}/${folder.folder_linkId}`,
         );
       }
     }
@@ -408,7 +408,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           fields,
           'Copy share link to share',
           deferred.promise,
-          'Copy link'
+          'Copy link',
         )
         .then(() => {
           const input = this.prompt.getInput('shareUrl');
@@ -453,7 +453,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         .open(
           'CreateAccountDialogComponent',
           { sharerName: this.shareAccount.fullName },
-          options
+          options,
         )
         .finally(() => {
           this.createAccountDialogIsOpen = false;
@@ -467,7 +467,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       this.waiting = true;
       if (!this.archiveConfirmed) {
         await this.accountService.promptForArchiveChange(
-          this.chooseArchiveText
+          this.chooseArchiveText,
         );
         this.archiveConfirmed = true;
       }
@@ -518,7 +518,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         formValue.optIn,
         null,
         formValue.invitation,
-        true
+        true,
       )
       .then((account: AccountVO) => {
         this.sendGaEvent('signup');
@@ -526,7 +526,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
           formValue.email,
           formValue.password,
           true,
-          true
+          true,
         );
       })
       .catch((err) => {
@@ -577,7 +577,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
                 this.sharePreviewVO.folder_linkId,
                 'view',
               ],
-              { queryParamsHandling: 'preserve' }
+              { queryParamsHandling: 'preserve' },
             );
           } else {
             this.accountService.setRedirect([
@@ -671,7 +671,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       () => {
         this.dispatchBannerClose();
         this.showCreateAccountDialog();
-      }
+      },
     );
   }
 

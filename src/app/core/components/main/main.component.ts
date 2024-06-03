@@ -81,7 +81,7 @@ export class MainComponent
     private dialog: Dialog,
     private ga: GoogleAnalyticsService,
     @Optional() private drag: DragService,
-    private data: DataService
+    private data: DataService,
   ) {
     this.routerListener = this.router.events
       .pipe(
@@ -89,7 +89,7 @@ export class MainComponent
           return (
             event instanceof NavigationStart || event instanceof NavigationEnd
           );
-        })
+        }),
       )
       .subscribe((event) => {
         if (event instanceof NavigationStart) {
@@ -183,7 +183,7 @@ export class MainComponent
       'Create your new timeline',
       null,
       null,
-      firstScreenTemplate
+      firstScreenTemplate,
     );
 
     const secondScreenTemplate = `
@@ -218,7 +218,7 @@ export class MainComponent
       folderCreate.promise,
       'Continue',
       null,
-      secondScreenTemplate
+      secondScreenTemplate,
     );
 
     const publicRoot = find(this.accountService.getRootFolder().ChildItemVOs, {
@@ -250,14 +250,14 @@ export class MainComponent
             await this.dialog.open(
               'TimelineCompleteDialogComponent',
               { folder: newFolder },
-              { height: 'auto' }
+              { height: 'auto' },
             );
           } catch (err) {}
           uploadListener.unsubscribe();
         } else if (progressEvent.sessionStatus > UploadSessionStatus.Done) {
           uploadListener.unsubscribe();
         }
-      }
+      },
     );
   }
 
@@ -294,7 +294,7 @@ export class MainComponent
             await this.prompt.confirm(
               'Request access',
               title,
-              deferred.promise
+              deferred.promise,
             );
             try {
               await this.api.share.requestShareAccess(shareUrlToken);
@@ -395,7 +395,7 @@ export class MainComponent
   // on file drop
   async onDrop(
     dropTarget: DragTargetDroppableComponent,
-    dragEvent: DragServiceEvent
+    dragEvent: DragServiceEvent,
   ) {
     const files = (dragEvent.event as DragEvent).dataTransfer.files;
     this.isDraggingFile = false;
@@ -418,7 +418,7 @@ export class MainComponent
       try {
         await this.prompt.confirm(
           'Upload to public',
-          'This is a public folder. Are you sure you want to upload here?'
+          'This is a public folder. Are you sure you want to upload here?',
         );
       } catch (error) {
         return;

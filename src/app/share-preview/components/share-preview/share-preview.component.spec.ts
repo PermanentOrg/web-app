@@ -51,7 +51,7 @@ describe('SharePreviewComponent', () => {
     let firstChild = new ActivatedRouteSnapshot();
     firstChild.data = { sharePreviewView: {} };
     spyOnProperty(mockRoute.snapshot, 'firstChild', 'get').and.returnValue(
-      firstChild
+      firstChild,
     );
 
     let parent = new ActivatedRoute();

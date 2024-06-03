@@ -23,12 +23,15 @@ export class HttpService {
   private apiUrl = environment.apiUrl;
   private defaultResponseClass = BaseResponse;
 
-  constructor(private http: HttpClient, private storage: StorageService) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+  ) {}
 
   public sendRequest<T = BaseResponse>(
     endpoint: string,
     data: any = [{}],
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Observable<T> {
     const requestVO = new RequestVO(this.storage.session.get(CSRF_KEY), data);
     const url = this.apiUrl + endpoint;
@@ -37,7 +40,7 @@ export class HttpService {
       .post(
         url,
         { RequestVO: requestVO },
-        { headers: this.generateHeaders(options) }
+        { headers: this.generateHeaders(options) },
       )
       .pipe(
         map((response: any) => {
@@ -49,14 +52,14 @@ export class HttpService {
           } else {
             return new this.defaultResponseClass(response);
           }
-        })
+        }),
       );
   }
 
   public sendRequestPromise<T = BaseResponse>(
     endpoint: string,
     data: any = [{}],
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<T> {
     return this.sendRequest(endpoint, data, options)
       .pipe(
@@ -66,7 +69,7 @@ export class HttpService {
           }
 
           return response;
-        })
+        }),
       )
       .toPromise();
   }

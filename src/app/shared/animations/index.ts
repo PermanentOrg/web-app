@@ -36,10 +36,10 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
         style({ transform: 'translateY(0)' }),
         animate(
           `${slideUpAnimationLength}ms ${TWEAKED}`,
-          style({ transform: 'translateY(100vh)' })
+          style({ transform: 'translateY(100vh)' }),
         ),
       ],
-      { optional: true }
+      { optional: true },
     ),
     query(
       ':enter',
@@ -47,10 +47,10 @@ export const slideUpAnimation = trigger('slideUpAnimation', [
         style({ transform: 'translateY(100vh)' }),
         animate(
           `${slideUpAnimationLength}ms ${TWEAKED}`,
-          style({ transform: 'translateY(0)' })
+          style({ transform: 'translateY(0)' }),
         ),
       ],
-      { optional: true }
+      { optional: true },
     ),
   ]),
 ]);
@@ -68,12 +68,12 @@ export const fadeAnimation = trigger('fadeAnimation', [
       ':leave',
       // here we apply a style and use the animate function to apply the style over 0.3 seconds
       [style({ opacity: 1 }), animate('0.3s', style({ opacity: 0 }))],
-      { optional: true }
+      { optional: true },
     ),
     query(
       ':enter',
       [style({ opacity: 0 }), animate('0.3s', style({ opacity: 1 }))],
-      { optional: true }
+      { optional: true },
     ),
   ]),
 ]);
@@ -130,7 +130,7 @@ export function collapseAnimationCustom(ms: number) {
   return trigger('collapseAnimation', [
     state(
       'closed',
-      style({ height: '0px', display: 'none', overflow: 'hidden' })
+      style({ height: '0px', display: 'none', overflow: 'hidden' }),
     ),
     transition('closed => open', [
       style({ height: '0px', opacity: 0, display: 'block' }),
@@ -153,7 +153,7 @@ export const ngIfScaleHeightEnterAnimation = trigger(
       style({ height: '0px', opacity: 0 }),
       animate(`125ms ${TWEAKED}`, style({ height: '*', opacity: 1 })),
     ]),
-  ]
+  ],
 );
 
 export const ngIfScaleHeightAnimation = trigger('ngIfScaleHeightAnimation', [
@@ -176,7 +176,7 @@ export const ngIfSlideInAnimation = trigger('ngIfSlideInAnimation', [
     style({ transform: '*' }),
     animate(
       `250ms ${TWEAKED}`,
-      style({ transform: 'translateX(calc(-100% - 20px))' })
+      style({ transform: 'translateX(calc(-100% - 20px))' }),
     ),
   ]),
 ]);

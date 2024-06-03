@@ -45,7 +45,7 @@ describe('MobileBannerComponent', () => {
     expect(instance.url).toBe(
       mockBannerService.isIos
         ? mockBannerService.appStoreUrl
-        : mockBannerService.playStoreUrl
+        : mockBannerService.playStoreUrl,
     );
   });
 

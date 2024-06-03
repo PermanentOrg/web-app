@@ -18,7 +18,7 @@ export class AdvancedSettingsComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private api: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   ngOnInit() {

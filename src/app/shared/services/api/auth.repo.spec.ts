@@ -47,7 +47,7 @@ describe('AuthRepo', () => {
 
     repo = new AuthRepo(
       TestBed.inject(HttpService),
-      TestBed.inject(HttpV2Service)
+      TestBed.inject(HttpV2Service),
     );
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -107,7 +107,7 @@ describe('AuthRepo', () => {
         map((response) => {
           repo.httpV2.setAuthToken(response.getSimpleVO().value);
           return response;
-        })
+        }),
       )
       .subscribe((response) => {
         expect(response).toEqual(expected);
@@ -117,7 +117,7 @@ describe('AuthRepo', () => {
         const req2 = httpMock.expectOne(`${environment.apiUrl}/v2/health`);
 
         expect(req2.request.headers.get('Authorization')).toBe(
-          'Bearer test_token'
+          'Bearer test_token',
         );
       });
 
@@ -131,12 +131,12 @@ describe('AuthRepo', () => {
     repo.forgotPassword(testUser.email).subscribe((response: AuthResponse) => {
       expect(response.isSuccessful).toBeTruthy();
       expect(response.getMessage()).toEqual(
-        'Change Password URL sent to email address provided'
+        'Change Password URL sent to email address provided',
       );
     });
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/auth/sendEmailForgotPassword`
+      `${environment.apiUrl}/auth/sendEmailForgotPassword`,
     );
     req.flush(expected);
   });
@@ -149,7 +149,7 @@ describe('AuthRepo', () => {
     });
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/account/changePassword`
+      `${environment.apiUrl}/account/changePassword`,
     );
 
     expect(req.request.method).toBe('POST');
@@ -169,11 +169,11 @@ describe('AuthRepo', () => {
         password: 'newpass',
         passwordVerify: 'newpass',
       },
-      'trust_token'
+      'trust_token',
     );
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/account/changePassword`
+      `${environment.apiUrl}/account/changePassword`,
     );
 
     expect(req.request.method).toBe('POST');

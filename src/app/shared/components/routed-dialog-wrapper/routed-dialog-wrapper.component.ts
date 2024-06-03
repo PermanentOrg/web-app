@@ -50,7 +50,7 @@ export class RoutedDialogWrapperComponent
     private router: Router,
     private dialog: Dialog,
     private routeHistory: RouteHistoryService,
-    private title: Title
+    private title: Title,
   ) {}
 
   ngOnInit(): void {}
@@ -62,7 +62,7 @@ export class RoutedDialogWrapperComponent
 
     if (!this.dialogToken) {
       throw new Error(
-        "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog"
+        "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog",
       );
     }
 
@@ -79,7 +79,7 @@ export class RoutedDialogWrapperComponent
       dialogData,
       this.dialogOptions,
       this.outletTemplate,
-      this.route
+      this.route,
     );
 
     this.dialogRef.dialogComponent.show();

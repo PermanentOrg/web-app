@@ -61,7 +61,7 @@ export class UploadProgressComponent {
         }
 
         this.fileCount = progressEvent.statistics;
-      }
+      },
     );
   }
 
@@ -86,9 +86,8 @@ export class UploadProgressComponent {
       this.upload.getTargetFolderId() !==
       progressEvent.item?.parentFolder.folderId;
     if (this.isUploadingFolder) {
-      this.folderTargetName = `${this.upload.getTargetFolderName()}/${
-        progressEvent.item?.parentFolder.displayName
-      }`;
+      this.folderTargetName = `${this.upload.getTargetFolderName()}/${progressEvent
+        .item?.parentFolder.displayName}`;
     } else {
       if (
         progressEvent.item?.parentFolder.displayName === 'My Files' &&
