@@ -2,17 +2,42 @@
 @if (isDisplayed) {
   @if (isOpen) {
     <div class="user-checklist">
-      <button class="minimize-button" (click)="minimize()">-</button>
-      <meter min="0" max="100" [value]="percentage"></meter>
-      <span class="percent-value">{{ percentage | number: '1.0-0' }}%</span>
-      @for (item of items; track item.id) {
-        <div class="task">
-          <span [class]="{ 'task-name': true, completed: item.completed }">{{
-            item.title
-          }}</span>
-          <input type="checkbox" [checked]="item.completed" />
+      <div class="button-header">
+        <button class="minimize-button" (click)="minimize()">-</button>
+      </div>
+      <div class="header">
+        <div class="header-title">Getting Started</div>
+        <div class="header-description">
+          Let's finish setting up your account
         </div>
-      }
+      </div>
+      <div class="meter">
+        <div
+          class="meter-container"
+          role="meter"
+          aria-labeledby="user-checklist-percentage-value"
+        >
+          <div class="meter-value" [style]="{ width: percentage + '%' }"></div>
+        </div>
+        <span id="user-checklist-percentage-value" class="percent-value"
+          >{{ percentage | number: '1.0-0' }}%</span
+        >
+      </div>
+      <br />
+      <ul>
+        @for (item of items; track item.id) {
+          <li class="task">
+            <span [class]="{ 'task-name': true, completed: item.completed }">{{
+              item.title
+            }}</span>
+            <div [class]="{ 'fake-checkbox': true, checked: item.completed }">
+              @if (item.completed) {
+                <span class="check">✔</span>
+              }
+            </div>
+          </li>
+        }
+      </ul>
     </div>
   } @else {
     <div class="user-checklist-minimized">

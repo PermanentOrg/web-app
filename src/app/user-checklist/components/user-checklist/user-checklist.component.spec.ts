@@ -60,9 +60,7 @@ describe('UserChecklistComponent', () => {
     const { find } = await shallow.render();
 
     expect(find('.task-name.completed').length).toBe(1);
-    expect(
-      find('.task input[type="checkbox"]').nativeElement.checked,
-    ).toBeTrue();
+    expect(find('.task .fake-checkbox.checked').length).toBeGreaterThan(0);
   });
 
   it('should not mark completed status on incomplete tasks', async () => {
@@ -70,9 +68,7 @@ describe('UserChecklistComponent', () => {
     const { find } = await shallow.render();
 
     expect(find('.task-name.completed').length).toBe(0);
-    expect(
-      find('.task input[type="checkbox"]').nativeElement.checked,
-    ).toBeFalse();
+    expect(find('.task .fake-checkbox.checked').length).toBe(0);
   });
 
   it('should be able to handle an API error', async () => {
@@ -126,7 +122,9 @@ describe('UserChecklistComponent', () => {
         DummyChecklistApi.items.push(createTestTask({ completed: false }));
       }
       const { find } = await shallow.render();
-      const meterValue = find('meter').nativeElement.value;
+      const meterValue = parseFloat(
+        find('.meter-value').nativeElement.style.width,
+      );
 
       expect(Math.round(meterValue)).toBe(percentage);
       expect(find('.percent-value').nativeElement.innerText).toContain(
