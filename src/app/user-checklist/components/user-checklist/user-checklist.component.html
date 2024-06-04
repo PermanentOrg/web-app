@@ -3,7 +3,9 @@
   @if (isOpen) {
     <div class="user-checklist">
       <div class="button-header">
-        <button class="minimize-button" (click)="minimize()">-</button>
+        <button class="minimize-button" (click)="minimize()">
+          <pr-minimize-icon></pr-minimize-icon>
+        </button>
       </div>
       <div class="header">
         <div class="header-title">Getting Started</div>
@@ -42,6 +44,9 @@
           </li>
         }
       </ul>
+      <div class="footer">
+        <button class="dont-show-again">Don't show me this again</button>
+      </div>
     </div>
   } @else {
     <div class="user-checklist-minimized">
