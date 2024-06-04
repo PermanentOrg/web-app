@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MinimizeIconComponent } from './minimize-icon.component';
@@ -8,10 +9,9 @@ describe('MinimizeIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MinimizeIconComponent]
-    })
-    .compileComponents();
-    
+      declarations: [MinimizeIconComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(MinimizeIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

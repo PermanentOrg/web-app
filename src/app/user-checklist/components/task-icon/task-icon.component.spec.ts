@@ -1,3 +1,4 @@
+/* @format */
 import { Shallow } from 'shallow-render';
 import { UserChecklistModule } from '../../user-checklist.module';
 import { TaskIconComponent } from './task-icon.component';

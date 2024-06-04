@@ -1,3 +1,4 @@
+/* @format */
 import { ChecklistApi } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
 
