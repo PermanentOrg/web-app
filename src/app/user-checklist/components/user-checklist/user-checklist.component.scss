@@ -123,6 +123,21 @@ ul {
   }
 }
 
+.footer {
+  padding: 0.5em;
+  padding-top: 0;
+
+  .dont-show-again {
+    border: none;
+    background: transparent;
+    color: #018ef4;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.75em;
+    line-height: 16.34px;
+  }
+}
+
 .open-button {
   background-color: #fff;
   box-shadow: 0px 2px 6px 0px #00000026;

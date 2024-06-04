@@ -8,6 +8,7 @@ import {
 import { CHECKLIST_API } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
 import { ChecklistIconComponent } from '../checklist-icon/checklist-icon.component';
+import { MinimizeIconComponent } from '../minimize-icon/minimize-icon.component';
 import { TaskIconComponent } from '../task-icon/task-icon.component';
 import { UserChecklistComponent } from './user-checklist.component';
 import { DummyChecklistApi } from './shared-mocks';
@@ -18,7 +19,11 @@ const meta: Meta<UserChecklistComponent> = {
   tags: ['checklist'],
   decorators: [
     moduleMetadata({
-      declarations: [ChecklistIconComponent, TaskIconComponent],
+      declarations: [
+        ChecklistIconComponent,
+        TaskIconComponent,
+        MinimizeIconComponent,
+      ],
     }),
     applicationConfig({
       providers: [
