@@ -27,6 +27,10 @@
       <ul>
         @for (item of items; track item.id) {
           <li class="task">
+            <pr-task-icon
+              [completed]="item.completed"
+              [icon]="item.id"
+            ></pr-task-icon>
             <span [class]="{ 'task-name': true, completed: item.completed }">{{
               item.title
             }}</span>

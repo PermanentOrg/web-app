@@ -1,0 +1,15 @@
+div:not(.completed) svg path {
+  fill: #131b4a;
+}
+
+div.completed svg path {
+  fill: #b5b5b5;
+}
+
+div {
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
