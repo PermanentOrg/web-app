@@ -121,3 +121,16 @@ ul {
     }
   }
 }
+
+.open-button {
+  background-color: #fff;
+  box-shadow: 0px 2px 6px 0px #00000026;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border: none;
+  cursor: pointer;
+}

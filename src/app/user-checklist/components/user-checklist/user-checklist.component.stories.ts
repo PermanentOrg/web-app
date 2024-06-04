@@ -1,11 +1,13 @@
 /* @format */
 import {
   applicationConfig,
+  moduleMetadata,
   type Meta,
   type StoryObj,
 } from '@storybook/angular';
 import { CHECKLIST_API } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
+import { ChecklistIconComponent } from '../checklist-icon/checklist-icon.component';
 import { UserChecklistComponent } from './user-checklist.component';
 import { DummyChecklistApi } from './shared-mocks';
 
@@ -14,6 +16,9 @@ const meta: Meta<UserChecklistComponent> = {
   component: UserChecklistComponent,
   tags: ['checklist'],
   decorators: [
+    moduleMetadata({
+      declarations: [ChecklistIconComponent],
+    }),
     applicationConfig({
       providers: [
         {
