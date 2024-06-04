@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChecklistIconComponent } from './checklist-icon.component';
@@ -8,10 +9,9 @@ describe('ChecklistIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChecklistIconComponent]
-    })
-    .compileComponents();
-    
+      declarations: [ChecklistIconComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ChecklistIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
