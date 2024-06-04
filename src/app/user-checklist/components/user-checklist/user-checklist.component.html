@@ -1,15 +1,20 @@
 <!-- @format -->
 @if (isDisplayed) {
   @if (isOpen) {
-    <div class="user-checklist">
+    <div
+      class="user-checklist"
+      role="dialog"
+      aria-labelledby="checklist-title"
+      aria-describedby="checklist-description"
+    >
       <div class="button-header">
         <button class="minimize-button" (click)="minimize()">
           <pr-minimize-icon></pr-minimize-icon>
         </button>
       </div>
       <div class="header">
-        <div class="header-title">Getting Started</div>
-        <div class="header-description">
+        <div id="checklist-title" class="header-title">Getting Started</div>
+        <div id="checklist-description" class="header-description">
           Let's finish setting up your account
         </div>
       </div>
@@ -32,13 +37,20 @@
             <pr-task-icon
               [completed]="item.completed"
               [icon]="item.id"
+              role="img"
+              [attr.aria-labeledby]="'label-' + item.id"
             ></pr-task-icon>
-            <span [class]="{ 'task-name': true, completed: item.completed }">{{
-              item.title
-            }}</span>
-            <div [class]="{ 'fake-checkbox': true, checked: item.completed }">
+            <span
+              [id]="'label-' + item.id"
+              [class]="{ 'task-name': true, completed: item.completed }"
+              >{{ item.title }}</span
+            >
+            <div
+              [class]="{ 'fake-checkbox': true, checked: item.completed }"
+              [ariaLabel]="item.completed ? 'Complete' : 'Incomplete'"
+            >
               @if (item.completed) {
-                <span class="check">✔</span>
+                <span class="check" role="presentation">✔</span>
               }
             </div>
           </li>
