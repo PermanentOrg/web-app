@@ -184,7 +184,7 @@ export class FormInputComponent implements OnInit, AfterViewInit {
       } else {
         control = new FormControl(
           value,
-          Validators[validator.validation](validator.value)
+          Validators[validator.validation](validator.value),
         );
       }
       if (control.invalid) {

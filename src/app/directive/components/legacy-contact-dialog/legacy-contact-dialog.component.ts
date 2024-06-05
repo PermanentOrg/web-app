@@ -15,7 +15,7 @@ export class LegacyContactDialogComponent {
   constructor(
     private api: ApiService,
     private accountService: AccountService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     const account = this.accountService.getAccount();
     this.analytics.notifyObservers({

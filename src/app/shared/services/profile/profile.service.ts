@@ -75,7 +75,7 @@ export const ALWAYS_PUBLIC: FieldNameUI[] = [
 
 export function addProfileItemToDictionary(
   dict: ProfileItemVODictionary,
-  item: ProfileItemVOData
+  item: ProfileItemVOData,
 ) {
   const fieldNameUIShort = item.fieldNameUI.replace('profile.', '');
 
@@ -89,7 +89,7 @@ export function addProfileItemToDictionary(
 export function orderItemsInDictionary(
   dict: ProfileItemVODictionary,
   field: FieldNameUIShort,
-  column: ProfileItemsDataCol = 'day1'
+  column: ProfileItemsDataCol = 'day1',
 ) {
   if (dict[field]?.length > 1) {
     dict[field] = orderBy(dict[field], column);
@@ -105,7 +105,7 @@ export class ProfileService {
     private constants: PrConstantsService,
     private account: AccountService,
     private folderPicker: FolderPickerService,
-    private message: MessageService
+    private message: MessageService,
   ) {}
 
   async promptForProfilePicture() {
@@ -113,7 +113,7 @@ export class ProfileService {
     try {
       const currentArchive = this.account.getArchive();
       const record = (await this.folderPicker.chooseRecord(
-        privateRoot
+        privateRoot,
       )) as RecordVO;
       const updateArchive = new ArchiveVO(currentArchive);
       updateArchive.thumbArchiveNbr = record.archiveNbr;
@@ -141,9 +141,8 @@ export class ProfileService {
 
   async fetchProfileItems() {
     const currentArchive = this.account.getArchive();
-    const profileResponse = await this.api.archive.getAllProfileItems(
-      currentArchive
-    );
+    const profileResponse =
+      await this.api.archive.getAllProfileItems(currentArchive);
     const profileItems = profileResponse?.getProfileItemVOs();
     this.profileItemDictionary = {};
 
@@ -304,7 +303,7 @@ export class ProfileService {
   checkProfilePublic() {
     const allItems = this.getProfileItemsAsArray();
     const nonDefaultItems = allItems.filter(
-      (i) => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId
+      (i) => !ALWAYS_PUBLIC.includes(i.fieldNameUI) && i.profile_itemId,
     );
     if (!nonDefaultItems.length) {
       return true;
@@ -317,7 +316,7 @@ export class ProfileService {
 
   async saveProfileItem(
     item: ProfileItemVOData,
-    valueWhitelist?: (keyof ProfileItemVOData)[]
+    valueWhitelist?: (keyof ProfileItemVOData)[],
   ) {
     const updateItem = item;
     if (valueWhitelist) {
@@ -365,7 +364,7 @@ export class ProfileService {
 
   getSpecificFieldNameUIFromValueKey(
     field: FieldNameUI,
-    valueKey: keyof ProfileItemVOData
+    valueKey: keyof ProfileItemVOData,
   ) {
     const template = this.constants.getProfileTemplate();
     const currentArchive = this.account.getArchive();

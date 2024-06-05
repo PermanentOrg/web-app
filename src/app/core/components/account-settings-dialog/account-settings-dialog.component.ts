@@ -35,7 +35,7 @@ export class AccountSettingsDialogComponent implements OnInit {
     public accountService: AccountService,
     private message: MessageService,
     private api: ApiService,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
   ) {
     if (data.tab) {
       this.activeTab = data.tab;

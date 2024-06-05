@@ -21,13 +21,13 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>(
       '/invite/inviteSend',
       data,
-      { responseClass: InviteResponse }
+      { responseClass: InviteResponse },
     );
   }
 
   public sendMemberInvite(
     member: AccountVO,
-    archive: ArchiveVO
+    archive: ArchiveVO,
   ): Promise<InviteResponse> {
     const data = [
       {
@@ -44,13 +44,13 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>(
       '/invite/byEmailAddress',
       data,
-      { responseClass: InviteResponse }
+      { responseClass: InviteResponse },
     );
   }
 
   public sendShareInvite(
     invites: InviteVO[],
-    itemToShare: ItemVO
+    itemToShare: ItemVO,
   ): Promise<InviteResponse> {
     const data = invites.map((invite) => {
       const vos: any = {
@@ -75,7 +75,7 @@ export class InviteRepo extends BaseRepo {
     inviteEmail: string,
     inviteCode: string,
     shareItemId: number,
-    shareItemType: 'r' | 'f'
+    shareItemType: 'r' | 'f',
   ) {
     const data = [
       {
@@ -89,7 +89,7 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>(
       '/invite/getShareInviteInfo',
       data,
-      { responseClass: InviteResponse }
+      { responseClass: InviteResponse },
     );
   }
 
@@ -103,7 +103,7 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>(
       '/invite/getFullShareInvite',
       data,
-      { responseClass: InviteResponse }
+      { responseClass: InviteResponse },
     );
   }
 
@@ -111,7 +111,7 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>(
       '/invite/getMyInvites',
       [{}],
-      { responseClass: InviteResponse }
+      { responseClass: InviteResponse },
     );
   }
 
@@ -125,7 +125,7 @@ export class InviteRepo extends BaseRepo {
     return this.http.sendRequestPromise<InviteResponse>(
       '/invite/inviteResend',
       data,
-      { responseClass: InviteResponse }
+      { responseClass: InviteResponse },
     );
   }
 }

@@ -36,13 +36,13 @@ describe('TagsComponent', () => {
     fixture.detectChanges();
 
     const debugTypeElement = fixture.debugElement.query(
-      By.css('.customMetadataField')
+      By.css('.customMetadataField'),
     );
 
     expect(debugTypeElement).toBeTruthy();
 
     const debugValueElement = fixture.debugElement.query(
-      By.css('.customMetadataValue')
+      By.css('.customMetadataValue'),
     );
 
     expect(debugValueElement).toBeTruthy();

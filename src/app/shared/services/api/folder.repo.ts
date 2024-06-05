@@ -56,7 +56,7 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>(
       '/folder/getWithChildren',
       data,
-      { responseClass: FolderResponse }
+      { responseClass: FolderResponse },
     );
   }
 
@@ -117,7 +117,7 @@ export class FolderRepo extends BaseRepo {
 
   public update(
     folderVOs: FolderVO[],
-    whitelist = DEFAULT_WHITELIST
+    whitelist = DEFAULT_WHITELIST,
   ): Promise<FolderResponse> {
     if (whitelist !== DEFAULT_WHITELIST) {
       whitelist = [...whitelist, ...MIN_WHITELIST];
@@ -139,13 +139,13 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>(
       '/folder/update',
       data,
-      { responseClass: FolderResponse }
+      { responseClass: FolderResponse },
     );
   }
 
   public updateRoot(
     folderVOs: FolderVO[],
-    whitelist = DEFAULT_WHITELIST
+    whitelist = DEFAULT_WHITELIST,
   ): Promise<FolderResponse> {
     if (whitelist !== DEFAULT_WHITELIST) {
       whitelist = [...whitelist, ...MIN_WHITELIST];
@@ -167,7 +167,7 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>(
       '/folder/updateRootColumns',
       data,
-      { responseClass: FolderResponse }
+      { responseClass: FolderResponse },
     );
   }
 
@@ -181,13 +181,13 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>(
       '/folder/delete',
       data,
-      { responseClass: FolderResponse }
+      { responseClass: FolderResponse },
     );
   }
 
   public move(
     folderVOs: FolderVO[],
-    destination: FolderVO
+    destination: FolderVO,
   ): Promise<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
@@ -206,7 +206,7 @@ export class FolderRepo extends BaseRepo {
 
   public copy(
     folderVOs: FolderVO[],
-    destination: FolderVO
+    destination: FolderVO,
   ): Promise<FolderResponse> {
     const data = folderVOs.map((folderVO) => {
       return {
@@ -235,7 +235,7 @@ export class FolderRepo extends BaseRepo {
     return this.http.sendRequestPromise<FolderResponse>(
       '/folder/getPublicRoot',
       data,
-      { responseClass: FolderResponse }
+      { responseClass: FolderResponse },
     );
   }
 
@@ -272,7 +272,7 @@ export class FolderRepo extends BaseRepo {
 export class FolderResponse extends BaseResponse {
   public getFolderVO(
     initChildren?: boolean,
-    dataStatus: DataStatus = DataStatus.Placeholder
+    dataStatus: DataStatus = DataStatus.Placeholder,
   ) {
     const data = this.getResultsData();
     if (!data || !data.length) {

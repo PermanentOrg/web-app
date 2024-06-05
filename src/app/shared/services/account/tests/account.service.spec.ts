@@ -29,14 +29,14 @@ describe('AccountService', () => {
             optIn: boolean,
             createDefaultArchive: boolean,
             phone?: string,
-            inviteCode?: string
+            inviteCode?: string,
           ) => {
             return new Observable((observer) => {
               observer.next(
                 new AccountVO({
                   primaryEmail: 'test@permanent.org',
                   fullName: 'Test User',
-                })
+                }),
               );
               observer.complete();
             });
@@ -63,7 +63,7 @@ describe('AccountService', () => {
                       ],
                     },
                   ],
-                })
+                }),
               );
               observer.complete();
             });
@@ -72,7 +72,7 @@ describe('AccountService', () => {
             email: string,
             password: string,
             rememberMe: boolean,
-            keepLoggedIn: boolean
+            keepLoggedIn: boolean,
           ) => {
             return new Observable((observer) => {
               observer.next(
@@ -90,7 +90,7 @@ describe('AccountService', () => {
                       ],
                     },
                   ],
-                })
+                }),
               );
               observer.complete();
             });
@@ -139,7 +139,7 @@ describe('AccountService', () => {
       true,
       '',
       '',
-      true
+      true,
     );
 
     expect(account.primaryEmail).toEqual('test@permanent.org');
@@ -159,7 +159,7 @@ describe('AccountService', () => {
         true,
         '',
         '',
-        true
+        true,
       );
     } catch (error) {
       expect(error).toEqual(expectedError);
@@ -196,7 +196,7 @@ describe('AccountService', () => {
 
     const sizeOfItemsToDelete = itemsToDelete.reduce(
       (acc, item) => acc + item.size,
-      0
+      0,
     );
 
     instance.setAccount(account);

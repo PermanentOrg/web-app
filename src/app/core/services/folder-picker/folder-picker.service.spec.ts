@@ -13,7 +13,7 @@ class FakeComponent {
     operation: FolderPickerOperations,
     savePromise?: Promise<any>,
     filterFolderLinkIds: number[] = null,
-    allowRecords = false
+    allowRecords = false,
   ) {
     return {
       startingFolder,
@@ -45,7 +45,7 @@ describe('FolderPickerService', () => {
     service.unregisterComponent();
 
     expect(() =>
-      service.chooseFolder(new FolderVO({}), FolderPickerOperations.Move)
+      service.chooseFolder(new FolderVO({}), FolderPickerOperations.Move),
     ).toThrow();
   });
 
@@ -57,7 +57,7 @@ describe('FolderPickerService', () => {
 
   it('cannot register a FolderPickerComponent twice', () => {
     expect(() =>
-      service.registerComponent(component as FolderPickerComponent)
+      service.registerComponent(component as FolderPickerComponent),
     ).toThrow();
   });
 
@@ -65,7 +65,7 @@ describe('FolderPickerService', () => {
     service.unregisterComponent();
 
     expect(() =>
-      service.registerComponent(component as FolderPickerComponent)
+      service.registerComponent(component as FolderPickerComponent),
     ).not.toThrow();
   });
 
@@ -79,7 +79,7 @@ describe('FolderPickerService', () => {
     };
     const result = await service.chooseFolder(
       params.startingFolder,
-      params.operation
+      params.operation,
     );
 
     expect(result).toEqual(params);

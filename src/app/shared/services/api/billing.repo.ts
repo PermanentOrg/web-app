@@ -24,7 +24,7 @@ export class BillingRepo extends BaseRepo {
     return this.http.sendRequestPromise<BillingResponse>(
       '/billing/claimPledge',
       data,
-      { responseClass: BillingResponse }
+      { responseClass: BillingResponse },
     );
   }
 
@@ -39,7 +39,7 @@ export class BillingRepo extends BaseRepo {
     return this.http.sendRequestPromise<BillingResponse>(
       '/billing/getBillingLedgerNonfinancial',
       data,
-      { responseClass: BillingResponse }
+      { responseClass: BillingResponse },
     );
   }
 
@@ -54,7 +54,7 @@ export class BillingRepo extends BaseRepo {
     return this.http.sendRequestPromise<BillingResponse>(
       '/billing/getBillingLedgerFinancial',
       data,
-      { responseClass: BillingResponse }
+      { responseClass: BillingResponse },
     );
   }
 
@@ -73,7 +73,7 @@ export class BillingRepo extends BaseRepo {
   public giftStorage(
     recipientEmails: string[],
     storageAmount: number,
-    note?: string
+    note?: string,
   ): Promise<GiftingResponse> {
     const data = {
       recipientEmails,
@@ -82,7 +82,7 @@ export class BillingRepo extends BaseRepo {
     };
 
     return getFirst(
-      this.httpV2.post('v2/billing/gift', data, GiftingResponse)
+      this.httpV2.post('v2/billing/gift', data, GiftingResponse),
     ).toPromise();
   }
 }

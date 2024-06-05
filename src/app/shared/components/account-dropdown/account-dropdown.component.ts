@@ -40,7 +40,7 @@ const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
       query('@ngIfFadeInAnimationSlow', [animateChild()]),
       style({ height: '0px' }),
       animate(`250ms ${TWEAKED}`, style({ height: '*' })),
-    ])
+    ]),
   ),
   transition(':leave', [
     style({ height: '*', opacity: 0 }),
@@ -77,7 +77,7 @@ export class AccountDropdownComponent
     private guidedTour: GuidedTourService,
     private api: ApiService,
     private deviceService: DeviceService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {}
 
   ngOnInit() {
@@ -86,26 +86,26 @@ export class AccountDropdownComponent
     this.subscriptions.push(
       this.accountService.accountChange.subscribe((account) => {
         this.account = account;
-      })
+      }),
     );
     this.subscriptions.push(
       this.accountService.archiveChange.subscribe((archive) => {
         this.archive = archive;
-      })
+      }),
     );
     this.subscriptions.push(
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationStart) {
           this.showMenu = false;
         }
-      })
+      }),
     );
     this.subscriptions.push(
       this.guidedTour.events$().subscribe((event) => {
         if (event === GuidedTourEvent.RequestAccountDropdownOpen) {
           this.showMenu = true;
         }
-      })
+      }),
     );
   }
 
@@ -122,15 +122,15 @@ export class AccountDropdownComponent
   onWindowClick(event: PointerEvent) {
     // check if it's an element without the dropdown as a parent
     const outsideClick = !(this.element.nativeElement as HTMLElement).contains(
-      event.target as Node
+      event.target as Node,
     );
 
     // check if it's an element used by GuidedTourService and Shepherd.js to display a step, i
     const tourBackdropClick = (event.target as HTMLElement).closest(
-      '.shepherd-modal-overlay-container'
+      '.shepherd-modal-overlay-container',
     );
     const tourPopupClick = (event.target as HTMLElement).closest(
-      '.shepherd-element'
+      '.shepherd-element',
     );
     if (
       this.showMenu &&
@@ -148,7 +148,7 @@ export class AccountDropdownComponent
       this.dialog.open(
         'SettingsDialogComponent',
         { tab: activeTab },
-        { width: '1000px' }
+        { width: '1000px' },
       );
     } catch (err) {}
   }

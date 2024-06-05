@@ -80,7 +80,7 @@ export class EditTagsComponent
     private api: ApiService,
     private dataService: DataService,
     private elementRef: ElementRef,
-    private dialog: Dialog
+    private dialog: Dialog,
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {
@@ -93,7 +93,7 @@ export class EditTagsComponent
         this.allTags = this.filterTagsByType(tags);
         this.matchingTags = this.filterTagsByType(tags);
         this.checkItemTags();
-      })
+      }),
     );
 
     if (this.dialogData) {
@@ -107,11 +107,11 @@ export class EditTagsComponent
         .subscribe((tags) => {
           if (this.tagType === 'keyword') {
             this.dialogTags = tags?.filter(
-              (tag) => !tag.type.includes('type.tag.metadata')
+              (tag) => !tag.type.includes('type.tag.metadata'),
             );
           } else {
             this.dialogTags = tags?.filter((tag) =>
-              tag.type.includes('type.tag.metadata')
+              tag.type.includes('type.tag.metadata'),
             );
           }
         });
@@ -194,7 +194,7 @@ export class EditTagsComponent
   onTagType(tag: string) {
     if (tag) {
       this.matchingTags = this.filterTagsByType(
-        this.searchService.getTagResults(tag)
+        this.searchService.getTagResults(tag),
       );
 
       if (this.isNewTagInputValid(tag)) {
@@ -234,8 +234,8 @@ export class EditTagsComponent
         .map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
         .filter(
           // Filter out tags that are now null from deletion
-          (tag) => tag?.name
-        )
+          (tag) => tag?.name,
+        ),
     );
 
     if (!this.item?.TagVOs?.length) {
@@ -313,7 +313,7 @@ export class EditTagsComponent
 
   public setFocusToCurrentIndex(index) {
     const elements = this.elementRef.nativeElement.querySelectorAll(
-      `.edit-tag-${this.tagType}`
+      `.edit-tag-${this.tagType}`,
     );
     (elements[index] as HTMLElement).focus();
   }

@@ -80,11 +80,14 @@ export class DataService {
 
   private debug = debug('service:dataService');
 
-  constructor(private api: ApiService, private tags: TagsService) {
+  constructor(
+    private api: ApiService,
+    private tags: TagsService,
+  ) {
     debugSubscribable(
       'currentFolderChange',
       this.debug,
-      this.currentFolderChange
+      this.currentFolderChange,
     );
     debugSubscribable('folderUpdate', this.debug, this.folderUpdate);
     debugSubscribable('selectedItems', this.debug, this.selectedItems$());
@@ -129,13 +132,13 @@ export class DataService {
     this.currentHiddenItems = this.currentHiddenItems.concat(items);
     this.debug('hideItemsInCurrentFolder %d requested', items.length);
     const itemsInFolder = this.currentHiddenItems.filter(
-      (i) => i.parentFolder_linkId === this.currentFolder.folder_linkId
+      (i) => i.parentFolder_linkId === this.currentFolder.folder_linkId,
     );
 
     if (!itemsInFolder.length) {
       this.debug(
         'hideItemsInCurrentFolder no items match current folder',
-        this.currentHiddenItems.length
+        this.currentHiddenItems.length,
       );
       return;
     }
@@ -149,14 +152,14 @@ export class DataService {
     this.selectedItemsSubject.next(this.selectedItems);
 
     remove(this.currentFolder.ChildItemVOs, (x) =>
-      hiddenFolderLinkIds.has(x.folder_linkId)
+      hiddenFolderLinkIds.has(x.folder_linkId),
     );
     this.debug('hideItemsInCurrentFolder %d removed', itemsInFolder.length);
   }
 
   public fetchLeanItems(
     items: Array<ItemVO>,
-    currentFolder?: FolderVO
+    currentFolder?: FolderVO,
   ): Promise<number> {
     this.debug('fetchLeanItems %d items requested', items.length);
 
@@ -211,7 +214,7 @@ export class DataService {
           const fetchedFolder = response.getFolderVO();
 
           return fetchedFolder.ChildItemVOs;
-        })
+        }),
       )
       .toPromise()
       .then((leanItems) => {
@@ -283,18 +286,18 @@ export class DataService {
     const promises: Promise<any>[] = [];
 
     promises.push(
-      records.length ? this.api.record.get(records) : Promise.resolve()
+      records.length ? this.api.record.get(records) : Promise.resolve(),
     );
 
     if (!withChildren) {
       promises.push(
-        folders.length ? this.api.folder.get(folders) : Promise.resolve()
+        folders.length ? this.api.folder.get(folders) : Promise.resolve(),
       );
     } else {
       promises.push(
         folders.length
           ? this.api.folder.getWithChildren(folders)
-          : Promise.resolve()
+          : Promise.resolve(),
       );
     }
 
@@ -326,7 +329,7 @@ export class DataService {
           const folder = folders[i] as FolderVO;
           folder.update(
             fullFolders[i] as FolderVOData,
-            folders[i] === this.currentFolder
+            folders[i] === this.currentFolder,
           );
           folder.dataStatus = DataStatus.Full;
           this.tags.checkTagsOnItem(folders[i]);
@@ -364,7 +367,7 @@ export class DataService {
           }
 
           return response.getFolderVO(true);
-        })
+        }),
       )
       .toPromise()
       .then((updatedFolder: FolderVO) => {
@@ -379,7 +382,7 @@ export class DataService {
   public updateChildItems(
     folder1: FolderVO,
     folder2: FolderVO,
-    sortOnly = false
+    sortOnly = false,
   ) {
     this.debug('updateChildItems (sortOnly = %o)', sortOnly);
 
@@ -479,7 +482,7 @@ export class DataService {
   }
 
   public getItemsByFolderLinkIds(
-    folder_linkIds: (number | string)[]
+    folder_linkIds: (number | string)[],
   ): Array<RecordVO | FolderVO> {
     return folder_linkIds.map((id) => {
       return this.getItemByFolderLinkId(Number(id));
@@ -534,7 +537,7 @@ export class DataService {
           case 'shift':
             this.clickItemsBetweenItems(
               this.lastManualclickItem,
-              selectEvent.item
+              selectEvent.item,
             );
             break;
           default:
@@ -575,7 +578,7 @@ export class DataService {
           case 'a':
             this.clickItemsBetweenIndicies(
               0,
-              this.currentFolder.ChildItemVOs.length - 1
+              this.currentFolder.ChildItemVOs.length - 1,
             );
             break;
         }

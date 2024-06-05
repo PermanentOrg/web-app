@@ -27,7 +27,7 @@ export class MfaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private message: MessageService,
-    private device: DeviceService
+    private device: DeviceService,
   ) {
     this.mfaForm = fb.group({
       token: [],

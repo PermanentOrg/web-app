@@ -19,7 +19,7 @@ export const adjustLayoutForAnnouncement = (component: {
 }) => {
   const self = component.elementRef.nativeElement as HTMLElement;
   const adjustedElements = document.querySelectorAll(
-    '.adjust-for-announcement'
+    '.adjust-for-announcement',
   );
   for (const element of Array.from(adjustedElements)) {
     (element as HTMLElement).style.paddingTop =
@@ -29,7 +29,7 @@ export const adjustLayoutForAnnouncement = (component: {
 
 export const resetLayoutForAnnouncement = () => {
   const adjustedElements = document.querySelectorAll(
-    '.adjust-for-announcement'
+    '.adjust-for-announcement',
   );
   for (const element of Array.from(adjustedElements)) {
     (element as HTMLElement).style.paddingTop = '0px';
@@ -80,7 +80,7 @@ export class AnnouncementComponent implements OnInit, AfterViewInit {
   protected findActiveEvent(): AnnouncementEvent | undefined {
     const now = Date.now();
     return this.eventsList.find(
-      (event) => now >= event.start && now < event.end
+      (event) => now >= event.start && now < event.end,
     );
   }
 }

@@ -115,7 +115,7 @@ export class FileListControlsComponent
     private message: MessageService,
     private account: AccountService,
     private api: ApiService,
-    private folderView: FolderViewService
+    private folderView: FolderViewService,
   ) {
     this.getSortFromCurrentFolder();
     this.initialSortType = this.data.currentFolder?.sort;
@@ -123,19 +123,19 @@ export class FileListControlsComponent
       this.data.selectedItems$().subscribe((items) => {
         this.selectedItems = Array.from(items);
         this.setAvailableActions();
-      })
+      }),
     );
 
     this.canSaveSort = this.account.checkMinimumAccess(
       this.data.currentFolder?.accessRole,
-      AccessRole.Curator
+      AccessRole.Curator,
     );
 
     this.currentFolderView = this.folderView.folderView;
     this.subscriptions.push(
       this.folderView.viewChange.subscribe((view) => {
         this.currentFolderView = view;
-      })
+      }),
     );
   }
 
@@ -211,18 +211,18 @@ export class FileListControlsComponent
         if (this.isShareRoot && isSingleItem) {
           return this.setMultipleActions(
             ['unshare', 'copy', 'move', 'share'],
-            true
+            true,
           );
         } else if (isSingleItem) {
           if (!this.isPublic) {
             return this.setMultipleActions(
               ['delete', 'copy', 'move', 'share', 'publish'],
-              true
+              true,
             );
           } else {
             return this.setMultipleActions(
               ['delete', 'copy', 'move', 'publish'],
-              true
+              true,
             );
           }
         } else {
@@ -234,7 +234,7 @@ export class FileListControlsComponent
   setAllActions(enabled: boolean) {
     this.setMultipleActions(
       ['delete', 'copy', 'move', 'share', 'publish', 'download'],
-      enabled
+      enabled,
     );
   }
 
@@ -334,7 +334,7 @@ export class FileListControlsComponent
     if (
       await this.prompt.confirmBoolean(
         'Delete',
-        `Are you sure you want to delete ${itemLabel}?`
+        `Are you sure you want to delete ${itemLabel}?`,
       )
     ) {
       try {
@@ -367,7 +367,7 @@ export class FileListControlsComponent
     if (
       await this.prompt.confirmBoolean(
         'Unshare',
-        'Are you sure you wish to remove this from your shared items?'
+        'Are you sure you wish to remove this from your shared items?',
       )
     ) {
       try {
@@ -389,7 +389,7 @@ export class FileListControlsComponent
     }
     await this.edit.openFolderPicker(
       this.selectedItems,
-      FolderPickerOperations.Move
+      FolderPickerOperations.Move,
     );
     this.refreshView.emit();
   }
@@ -401,7 +401,7 @@ export class FileListControlsComponent
 
     await this.edit.openFolderPicker(
       this.selectedItems,
-      FolderPickerOperations.Copy
+      FolderPickerOperations.Copy,
     );
     this.refreshView.emit();
   }
@@ -497,10 +497,10 @@ export class FileListControlsComponent
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
     const original = (this.selectedItems[0] as RecordVO).FileVOs?.find(
-      (item) => item.format === 'file.format.original'
+      (item) => item.format === 'file.format.original',
     );
     const converted = (this.selectedItems[0] as RecordVO).FileVOs?.filter(
-      (item) => item.format === 'file.format.converted'
+      (item) => item.format === 'file.format.converted',
     ).map((item) => ({
       name: item.type,
       extension: item.type.split('.').pop(),

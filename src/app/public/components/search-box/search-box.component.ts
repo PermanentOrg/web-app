@@ -50,7 +50,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
   constructor(
     private api: ApiService,
     private fb: UntypedFormBuilder,
-    private router: Router
+    private router: Router,
   ) {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
@@ -68,7 +68,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
           } else {
             return of(null);
           }
-        })
+        }),
       )
       .subscribe((response) => {
         this.waiting = false;
@@ -84,7 +84,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.searchInputRef.nativeElement.addEventListener('keydown', (evt) =>
-      this.onSearchInputKeydown(evt)
+      this.onSearchInputKeydown(evt),
     );
   }
 
@@ -115,7 +115,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       const newActiveResultIndex = this.activeResultIndex + direction;
       this.activeResultIndex = Math.min(
         Math.max(-1, newActiveResultIndex),
-        this.archiveResults.length - 1
+        this.archiveResults.length - 1,
       );
     } else if (event.keyCode === ENTER) {
       this.onArchiveClick(this.archiveResults[this.activeResultIndex]);

@@ -160,47 +160,47 @@ describe('FileViewerComponent', () => {
     const { element } = await defaultRender();
 
     expect(
-      element.componentInstance.keywords.find((tag) => tag.name === 'tagOne')
+      element.componentInstance.keywords.find((tag) => tag.name === 'tagOne'),
     ).toBeTruthy();
 
     expect(
-      element.componentInstance.keywords.find((tag) => tag.name === 'tagTwo')
+      element.componentInstance.keywords.find((tag) => tag.name === 'tagTwo'),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.keywords.find(
-        (tag) => tag.name === 'customField:customValueOne'
-      )
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.keywords.find(
-        (tag) => tag.name === 'customField:customValueTwo'
-      )
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.customMetadata.find(
-        (tag) => tag.name === 'tagOne'
-      )
+        (tag) => tag.name === 'tagOne',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.customMetadata.find(
-        (tag) => tag.name === 'tagTwo'
-      )
+        (tag) => tag.name === 'tagTwo',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.customMetadata.find(
-        (tag) => tag.name === 'customField:customValueOne'
-      )
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.customMetadata.find(
-        (tag) => tag.name === 'customField:customValueTwo'
-      )
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
     ).toBeTruthy();
   });
 
@@ -242,7 +242,7 @@ describe('FileViewerComponent', () => {
   describe('Keyboard Input', () => {
     function keyDown(
       instance: FileViewerComponent,
-      key: 'ArrowRight' | 'ArrowLeft'
+      key: 'ArrowRight' | 'ArrowLeft',
     ) {
       instance.onKeyDown(new KeyboardEvent('keydown', { key }));
     }
@@ -282,7 +282,7 @@ describe('FileViewerComponent', () => {
       setUpMultipleRecords(
         defaultItem,
         secondItem,
-        new RecordVO({ folder_linkId: 2 })
+        new RecordVO({ folder_linkId: 2 }),
       );
       const { instance } = await defaultRender();
       keyDown(instance, 'ArrowRight');
@@ -325,7 +325,7 @@ describe('FileViewerComponent', () => {
   describe('URLs of PDF files', () => {
     function setUpCurrentRecord(
       typeOfOriginal: string,
-      fileURLOfOriginal: string | false = 'http://example.com/original'
+      fileURLOfOriginal: string | false = 'http://example.com/original',
     ) {
       activatedRouteData.currentRecord = new RecordVO({
         type: 'document',
@@ -352,13 +352,13 @@ describe('FileViewerComponent', () => {
     }
     function expectSantizedUrlToContain(
       instance: FileViewerComponent,
-      phrase: string
+      phrase: string,
     ) {
       const url = instance.getDocumentUrl();
 
       expect(url).toBeTruthy();
       expect(
-        instance.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url)
+        instance.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url),
       ).toContain(phrase);
     }
     it('can get the URL of a document', async () => {
@@ -464,7 +464,7 @@ describe('FileViewerComponent', () => {
       const locationSpan = find('.add-location');
 
       expect(locationSpan.nativeElement.textContent.trim()).toBe(
-        'Click to add location'
+        'Click to add location',
       );
     });
   });

@@ -18,7 +18,7 @@ type Find = (
   cssOrDirective: string | Type<any>,
   options?: {
     query?: string;
-  }
+  },
 ) => QueryMatch<DebugElement>;
 
 class MockApiService {
@@ -47,7 +47,7 @@ describe('LegacyContactEditComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(
       LegacyContactEditComponent,
-      DirectiveModule
+      DirectiveModule,
     ).provideMock(
       {
         provide: ApiService,
@@ -60,7 +60,7 @@ describe('LegacyContactEditComponent', () => {
       {
         provide: AnalyticsService,
         useClass: MockAnalyticsService,
-      }
+      },
     );
     MockDirectiveRepo.reset();
   });
@@ -136,7 +136,7 @@ describe('LegacyContactEditComponent', () => {
     fixture.detectChanges();
 
     expect(MockDirectiveRepo.savedLegacyContact.name).toBe(
-      'Existing Updated Contact'
+      'Existing Updated Contact',
     );
 
     expect(MockDirectiveRepo.createdLegacyContact).toBeFalse();

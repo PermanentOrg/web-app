@@ -7,5 +7,5 @@ export interface FeaturedArchiveApi {
 }
 
 export const FEATURED_ARCHIVE_API = new InjectionToken<FeaturedArchiveApi>(
-  'FeaturedArchiveApi'
+  'FeaturedArchiveApi',
 );

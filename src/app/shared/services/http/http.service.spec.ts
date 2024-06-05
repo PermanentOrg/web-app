@@ -46,7 +46,7 @@ describe('HttpService', () => {
     expect(service.generateHeaders().keys().length).toBe(0);
     expect(service.generateHeaders({}).keys().length).toBe(0);
     expect(
-      service.generateHeaders({ useAuthorizationHeader: false }).keys().length
+      service.generateHeaders({ useAuthorizationHeader: false }).keys().length,
     ).toBe(0);
   });
 });

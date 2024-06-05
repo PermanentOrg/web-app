@@ -40,7 +40,7 @@ describe('PublicLinkPipe', () => {
 
     expect(route).toBeDefined();
     expect(
-      route.endsWith('/p/archive/0001-0000/0001-meow/1234/record/0001-00gp')
+      route.endsWith('/p/archive/0001-0000/0001-meow/1234/record/0001-00gp'),
     ).toBeTruthy();
   });
 

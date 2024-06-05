@@ -57,7 +57,7 @@ export class ArchiveVO extends BaseVO implements DynamicListChild {
           } else {
             return new RecordVO(item, { dataStatus: DataStatus.Lean });
           }
-        }
+        },
       );
     }
   }

@@ -38,7 +38,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private tagsService: TagsService,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
   ) {}
 
   public ngOnInit(): void {
@@ -62,7 +62,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
               this.ngOnInit();
             } else {
               throw new Error(
-                'Archive Settings: Maximum number of tag fetch attempts reached.'
+                'Archive Settings: Maximum number of tag fetch attempts reached.',
               );
             }
           }, 1000);
@@ -72,7 +72,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     this.api.archive.getMembers(this.archive).then((response) => {
       const members = response.getAccountVOs();
       this.payer = members.find(
-        (member) => member.accountId === this.archive.payerAccountId
+        (member) => member.accountId === this.archive.payerAccountId,
       );
     });
   }

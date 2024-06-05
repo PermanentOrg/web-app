@@ -19,14 +19,14 @@ export class MyfilesGuard {
 
   canActivate(
     _route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
     return this.router.parseUrl(
-      state.url.replace(/^\/app\/myfiles/, '/app/private')
+      state.url.replace(/^\/app\/myfiles/, '/app/private'),
     );
   }
 }

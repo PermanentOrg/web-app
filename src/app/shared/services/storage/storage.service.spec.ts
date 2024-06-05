@@ -24,7 +24,7 @@ describe('StorageService', () => {
     [StorageService],
     (service: StorageService) => {
       expect(service).toBeTruthy();
-    }
+    },
   ));
 
   it('should save a string value to SessionStorage', inject(
@@ -35,7 +35,7 @@ describe('StorageService', () => {
 
         expect(window.sessionStorage.getItem(testKey)).toEqual(testValue);
       }
-    }
+    },
   ));
 
   it('should retrieve a string value from SessionStorage', inject(
@@ -46,7 +46,7 @@ describe('StorageService', () => {
 
         expect(service.session.get(testKey)).toEqual(testValue);
       }
-    }
+    },
   ));
 
   it('should save an object value to SessionStorage', inject(
@@ -56,10 +56,10 @@ describe('StorageService', () => {
         service.session.set(testKey, testObject);
 
         expect(JSON.parse(window.sessionStorage.getItem(testKey))).toEqual(
-          testObject
+          testObject,
         );
       }
-    }
+    },
   ));
 
   it('should retrieve an object value from SessionStorage', inject(
@@ -70,7 +70,7 @@ describe('StorageService', () => {
 
         expect(service.session.get(testKey)).toEqual(testObject);
       }
-    }
+    },
   ));
 
   it('should handle an undefined value from SessionStorage', inject(
@@ -79,7 +79,7 @@ describe('StorageService', () => {
       if (window.sessionStorage) {
         expect(service.session.get(testKey)).toBeFalsy();
       }
-    }
+    },
   ));
 
   it('should handle storing a null-ish value to SessionStorage', inject(
@@ -94,7 +94,7 @@ describe('StorageService', () => {
 
         expect(service.session.get(testKey)).toBeFalsy();
       }
-    }
+    },
   ));
 
   it('should save a value to memory when SessionStorage not present', inject(
@@ -104,7 +104,7 @@ describe('StorageService', () => {
       service.session.set(testKey, testValue);
 
       expect(service.session.get(testKey)).toEqual(testValue);
-    }
+    },
   ));
 
   it('should save a string value to LocalStorage', inject(
@@ -115,7 +115,7 @@ describe('StorageService', () => {
 
         expect(window.localStorage.getItem(testKey)).toEqual(testValue);
       }
-    }
+    },
   ));
 
   it('should retrieve a string value from LocalStorage', inject(
@@ -126,7 +126,7 @@ describe('StorageService', () => {
 
         expect(service.local.get(testKey)).toEqual(testValue);
       }
-    }
+    },
   ));
 
   it('should save an object value to LocalStorage', inject(
@@ -136,10 +136,10 @@ describe('StorageService', () => {
         service.local.set(testKey, testObject);
 
         expect(JSON.parse(window.localStorage.getItem(testKey))).toEqual(
-          testObject
+          testObject,
         );
       }
-    }
+    },
   ));
 
   it('should retrieve an object value from LocalStorage', inject(
@@ -150,7 +150,7 @@ describe('StorageService', () => {
 
         expect(service.local.get(testKey)).toEqual(testObject);
       }
-    }
+    },
   ));
 
   it('should save a value to memory when LocalStorage not present', inject(
@@ -160,6 +160,6 @@ describe('StorageService', () => {
       service.local.set(testKey, testValue);
 
       expect(service.local.get(testKey)).toEqual(testValue);
-    }
+    },
   ));
 });

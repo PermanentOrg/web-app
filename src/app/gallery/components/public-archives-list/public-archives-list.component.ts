@@ -18,7 +18,7 @@ export class PublicArchivesListComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   async ngOnInit(): Promise<void> {

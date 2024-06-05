@@ -58,7 +58,10 @@ import { PublicSearchResultsComponent } from './components/public-search-results
   providers: [DataService, FolderViewService, PublicProfileService],
 })
 export class PublicModule {
-  constructor(folderView: FolderViewService, private library: FaIconLibrary) {
+  constructor(
+    folderView: FolderViewService,
+    private library: FaIconLibrary,
+  ) {
     this.library.addIcons(faSearch, faTimesCircle, faChevronDown, faChevronUp);
     folderView.setFolderView(FolderView.Grid, true);
   }

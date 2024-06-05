@@ -51,7 +51,7 @@ export class PublishComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private linkPipe: PublicLinkPipe,
-    private routePipe: PublicRoutePipe
+    private routePipe: PublicRoutePipe,
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 
@@ -78,12 +78,12 @@ export class PublishComponent implements OnInit {
     try {
       const publicRoot = find(
         this.accountService.getRootFolder().ChildItemVOs,
-        { type: 'type.folder.root.public' }
+        { type: 'type.folder.root.public' },
       ) as FolderVO;
       if (this.sourceItem instanceof FolderVO) {
         const response = await this.api.folder.copy(
           [this.sourceItem],
-          publicRoot
+          publicRoot,
         );
         let tries = 0;
         while (!this.publicItem && tries++ < 10) {
@@ -92,7 +92,7 @@ export class PublishComponent implements OnInit {
             .toPromise()) as FolderResponse;
           const publicRootFull = publicRootResponse.getFolderVO(true);
           const publicFolders: FolderVO[] = publicRootFull.ChildItemVOs.filter(
-            (i) => i instanceof FolderVO
+            (i) => i instanceof FolderVO,
           ) as FolderVO[];
           const latest = maxBy(publicFolders, (folder) => folder.updatedDT);
           if (latest && latest.displayName === this.sourceItem.displayName) {
@@ -108,7 +108,7 @@ export class PublishComponent implements OnInit {
       } else {
         const response = await this.api.record.copy(
           [this.sourceItem],
-          publicRoot
+          publicRoot,
         );
         this.publicItem = response.getRecordVO();
       }
@@ -148,7 +148,7 @@ export class PublishComponent implements OnInit {
   onViewOnWebClick() {
     this.close();
     this.router.navigate(
-      this.routePipe.transform(this.publicItem || this.sourceItem)
+      this.routePipe.transform(this.publicItem || this.sourceItem),
     );
   }
 

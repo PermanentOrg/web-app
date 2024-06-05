@@ -32,7 +32,10 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
 
   protected windowListener: () => void;
 
-  constructor(private renderer: Renderer2, private tag: TagsService) {
+  constructor(
+    private renderer: Renderer2,
+    private tag: TagsService,
+  ) {
     this.windowListener = this.renderer.listen(
       'window',
       'click',
@@ -40,7 +43,7 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
         if (e.target && !this.element.nativeElement.contains(e.target)) {
           this.dismissEvent.next(-1);
         }
-      }
+      },
     );
   }
 
@@ -104,7 +107,7 @@ export class ManageCustomMetadataComponent implements OnInit, OnDestroy {
       .map((data) => new TagVO(data))
       .filter(
         (tag) =>
-          tag.isCustomMetadata() && !this.deletedTagIds.includes(tag.tagId)
+          tag.isCustomMetadata() && !this.deletedTagIds.includes(tag.tagId),
       );
   }
 

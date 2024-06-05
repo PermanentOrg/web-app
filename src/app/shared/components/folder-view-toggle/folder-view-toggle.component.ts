@@ -49,7 +49,7 @@ export class FolderViewToggleComponent
     this.subscriptions.push(
       folderView.viewChange.subscribe((view) => {
         this.currentFolderView = view;
-      })
+      }),
     );
   }
 
