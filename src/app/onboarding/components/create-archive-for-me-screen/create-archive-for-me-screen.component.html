@@ -1,0 +1,44 @@
+<!-- @format -->
+<div class="create-archive-for-me">
+  <div class="title">
+    <p>Are you sure you want your archive to be created for you?</p>
+  </div>
+  <div class="content">
+    <div class="header">
+      <p class="description">
+        Permanent will automatically generate your first archive as a person
+        archive with your account name as the archive name.
+      </p>
+      <div class="archive-type">
+        <div class="img">
+          <img
+            src="/assets/svg/onboarding/default-archive.svg"
+            alt="Custom Archive Icon"
+          />
+        </div>
+        <div class="archive-info">
+          <p class="archive-type">PERSONAL</p>
+          <p class="archive-name">
+            The <b>{{ name }}</b> Archive
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <pr-button
+        [icon]="'/auth/back'"
+        (buttonClick)="goBack()"
+        class="back-button"
+        >Back</pr-button
+      >
+      <pr-button
+        [icon]="'/onboarding/arrow-right'"
+        [variant]="'secondary'"
+        [orientation]="'right'"
+        (buttonClick)="continute()"
+        class="continue-button"
+        >Yes, create archive</pr-button
+      >
+    </div>
+  </div>
+</div>

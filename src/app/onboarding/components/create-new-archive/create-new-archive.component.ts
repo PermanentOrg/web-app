@@ -31,7 +31,8 @@ type NewArchiveScreen =
   | 'reasons'
   | 'create'
   | 'start'
-  | 'name-archive';
+  | 'name-archive'
+  | 'create-archive-for-me';
 
 @Component({
   selector: 'pr-create-new-archive',
@@ -52,6 +53,12 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     reasons: 'skip_why_permanent',
   };
 
+  public omittedScreens = [
+    'start',
+    'create',
+    'name-archive',
+    'create-archive-for-me',
+  ];
   public archiveType: string;
   public archiveName: string = '';
   public screen: NewArchiveScreen = 'start';
@@ -244,11 +251,22 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         },
       },
     });
-    this.dialog.open(
-      'SkipOnboardingDialogComponent',
-      { skipOnboarding: this.skipOnboarding },
-      { width: '600px' },
-    );
+    if (!this.isGlam) {
+      this.dialog.open(
+        'SkipOnboardingDialogComponent',
+        { skipOnboarding: this.skipOnboarding },
+        { width: '600px' }
+      );
+    } else {
+      this.screen = 'create-archive-for-me';
+    }
+  }
+
+  public navToGoals(event: Record<string, string>): void {
+    this.name = event.name;
+    this.archiveType = event.type;
+    this.archiveTypeTag = OnboardingTypes.myself;
+    this.screen = 'goals';
   }
 
   public skipStep(): void {

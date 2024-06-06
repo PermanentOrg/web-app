@@ -5,6 +5,11 @@
     (createArchiveForMeOutput)="makeMyArchive()"
     *ngIf="screen === 'start' && isGlam"
   ></pr-archive-creation-start-screen>
+  <pr-create-archive-for-me-screen
+    (goBackOutput)="setScreen($event)"
+    (continueOutput)="navToGoals($event)"
+    *ngIf="screen === 'create-archive-for-me' && isGlam"
+  ></pr-create-archive-for-me-screen>
   <div *ngIf="screen === 'create' || screen === 'name-archive'">
     <h2 *ngIf="!isGlam">Welcome! Let’s create your first archive together.</h2>
     <div *ngIf="!isGlam" class="welcome-message no-invitations">
@@ -162,8 +167,8 @@
     </button>
   </div>
 </div>
-<div
-  *ngIf="screen !== 'create' && screen !== 'start' && screen !== 'name-archive'"
->
+@if (!omittedScreens.includes(screen)) {
+<div>
   <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
 </div>
+}
