@@ -23,6 +23,10 @@ export class CreateArchiveForMeScreenComponent {
   }
 
   public continute(): void {
-    this.continueOutput.emit({ screen: 'goals', type: this.TYPE, name: this.name });
+    this.continueOutput.emit({
+      screen: 'goals',
+      type: this.TYPE,
+      name: this.name,
+    });
   }
 }

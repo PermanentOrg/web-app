@@ -37,7 +37,7 @@ import { CreateArchiveForMeScreenComponent } from './components/create-archive-f
     ArchiveCreationStartScreenComponent,
     SelectArchiveTypeScreenComponent,
     NameArchiveScreenComponent,
-    CreateArchiveForMeScreenComponent
+    CreateArchiveForMeScreenComponent,
   ],
   imports: [
     CommonModule,
