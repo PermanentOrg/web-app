@@ -5,6 +5,8 @@ import { UserChecklistComponent } from './components/user-checklist/user-checkli
 import { ChecklistIconComponent } from './components/checklist-icon/checklist-icon.component';
 import { TaskIconComponent } from './components/task-icon/task-icon.component';
 import { MinimizeIconComponent } from './components/minimize-icon/minimize-icon.component';
+import { CHECKLIST_API } from './types/checklist-api';
+import { UserChecklistService } from './services/user-checklist.service';
 
 @NgModule({
   declarations: [
@@ -15,5 +17,11 @@ import { MinimizeIconComponent } from './components/minimize-icon/minimize-icon.
   ],
   exports: [UserChecklistComponent],
   imports: [CommonModule],
+  providers: [
+    {
+      provide: CHECKLIST_API,
+      useClass: UserChecklistService,
+    },
+  ],
 })
 export class UserChecklistModule {}
