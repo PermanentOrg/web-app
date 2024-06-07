@@ -41,9 +41,10 @@ describe('UserChecklistService', () => {
       .then((items) => {
         expect(items.length).toBe(1);
         expect(items[0]).toEqual(expected[0]);
-      })
-      .finally(() => {
         done();
+      })
+      .catch(() => {
+        done.fail();
       });
 
     const req = http.expectOne(`${environment.apiUrl}/v2/event/checklist`);
