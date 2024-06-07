@@ -117,6 +117,8 @@ export class TwoFactorAuthComponent {
         (m) => m.id !== this.selectedMethodToDelete.id
       );
       this.selectedMethodToDelete = null;
+      this.codeSent = false;
+      this.method = null;
     } catch (error) {}
   }
 
