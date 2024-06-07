@@ -12,7 +12,7 @@
         Method: <b>{{ methodsDictionary[m.method] }}</b>
       </p>
       <p>
-        {{ m.value === 'sms' ? 'Phone' : 'Email Address' }}
+        {{ m.method === 'sms' ? 'Phone Number:' : 'Email Address:' }}
         <b>
           {{ m.value }}
         </b>
@@ -67,6 +67,7 @@
           method === 'sms' ? '(XXX) XXX - XXXX' : 'ex. janedoe123@gmail.com'
         }}"
         [control]="form.controls['contactInfo']"
+        [disabled]="!!selectedMethodToDelete"
       ></pr-form-input>
       <small *ngIf="form.get('contactInfo').errors?.email" class="text-danger">
         Please enter a valid email address.
@@ -92,7 +93,7 @@
       <img src="/assets/svg/caution.svg" />
       This code expires in X[amount of time]
     </p>
-    <div>
+    <div class="code-container" *ngIf="codeSent">
       <p>3. Enter the four digit code below</p>
       <div class="input-group-vertical">
         <pr-form-input

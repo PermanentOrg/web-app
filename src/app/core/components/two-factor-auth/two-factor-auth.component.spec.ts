@@ -106,4 +106,29 @@ describe('TwoFactorAuthComponent', () => {
     expect(methodRows[1].nativeElement.textContent).toContain('SMS Text');
     expect(methodRows[1].nativeElement.textContent).toContain('(123) 456-7890');
   });
+
+  it('should display the code input after the code was sent', async () => {
+    const { instance, find, fixture } = await shallow.render();
+
+    instance.codeSent = true;
+    instance.turnOn = true;
+    instance.method = 'sms';
+    fixture.detectChanges();
+
+    const codeContaier = find('.code-container');
+
+    expect(codeContaier.length).toBe(1);
+  });
+
+  it('should not display the code input if the code was not sent', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.turnOn = true;
+    instance.method = 'sms';
+    fixture.detectChanges();
+
+    const codeContainer = find('.code-container');
+
+    expect(codeContainer.length).toBe(0);
+  });
 });
