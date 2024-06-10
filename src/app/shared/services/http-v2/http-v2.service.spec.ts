@@ -76,7 +76,8 @@ describe('HttpV2Service', () => {
       .then((response: any) => {
         expect(response.status).toBe('available');
         done();
-      });
+      })
+      .catch(done.fail);
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
@@ -106,7 +107,8 @@ describe('HttpV2Service', () => {
         expect(resp.status).toBe('available');
         expect(resp.constructorCalled).toBeTrue();
         done();
-      });
+      })
+      .catch(done.fail);
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
     request.flush({ status: 'available' });
@@ -124,7 +126,8 @@ describe('HttpV2Service', () => {
       .then(() => {
         expect(storage.session.get('CSRF')).toBe('potato');
         done();
-      });
+      })
+      .catch(done.fail);
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
     request.flush(response);
   });
@@ -136,7 +139,8 @@ describe('HttpV2Service', () => {
       .then(() => {
         expect(storage.session.get('CSRF')).toBe('csrf_token');
         done();
-      });
+      })
+      .catch(done.fail);
 
     const request = httpTestingController.expectOne(
       apiUrl('/api/v2/health?test=potato'),
@@ -155,7 +159,8 @@ describe('HttpV2Service', () => {
       .then(() => {
         expect(storage.session.get('CSRF')).toBe('csrf_token');
         done();
-      });
+      })
+      .catch(done.fail);
 
     const request = httpTestingController.expectOne(
       apiUrl('/api/v2/health?id=32'),
@@ -174,7 +179,8 @@ describe('HttpV2Service', () => {
       .then(() => {
         expect(storage.session.get('CSRF')).toBe('1234');
         done();
-      });
+      })
+      .catch(done.fail);
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
 
@@ -212,7 +218,8 @@ describe('HttpV2Service', () => {
       .then((resp) => {
         expect(resp.length).toBe(2);
         done();
-      });
+      })
+      .catch(done.fail);
 
     const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
     request.flush([{ status: 'available' }, { status: 'unavailable' }]);

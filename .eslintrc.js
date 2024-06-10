@@ -15,8 +15,8 @@ module.exports = {
         'jasmine/no-disabled-tests': 'error',
         'jasmine/new-line-between-declarations': 'error',
         'jasmine/no-spec-dupes': 'error',
+        'jasmine/no-promise-without-done-fail': 'error',
         // We intend to enable these eventually:
-        'jasmine/no-promise-without-done-fail': 'off',
         'jasmine/no-unsafe-spy': 'off',
         'jasmine/prefer-promise-strategies': 'off',
         'jasmine/prefer-toHaveBeenCalledWith': 'off',

@@ -44,11 +44,14 @@ describe('DirectiveRepo', () => {
 
   it('can get a Directive from an Archive', (done) => {
     repo.httpV2.setAuthToken('test_token');
-    repo.get(testArchive).then((directive) => {
-      expect(directive).not.toBeNull();
-      expect(directive.note).toBe('Test Note');
-      done();
-    });
+    repo
+      .get(testArchive)
+      .then((directive) => {
+        expect(directive).not.toBeNull();
+        expect(directive.note).toBe('Test Note');
+        done();
+      })
+      .catch(done.fail);
 
     const req = httpMock.expectOne(apiUrl('/v2/directive/archive/1234'));
 
@@ -85,11 +88,14 @@ describe('DirectiveRepo', () => {
         type: 'admin',
       },
     };
-    repo.create(newDirectiveData).then((directive) => {
-      expect(directive instanceof Directive).toBeTrue();
-      expect(directive.archiveId).toBe(1);
-      done();
-    });
+    repo
+      .create(newDirectiveData)
+      .then((directive) => {
+        expect(directive instanceof Directive).toBeTrue();
+        expect(directive.archiveId).toBe(1);
+        done();
+      })
+      .catch(done.fail);
 
     const req = httpMock.expectOne(apiUrl('/v2/directive'));
 
@@ -104,12 +110,15 @@ describe('DirectiveRepo', () => {
       note: 'New Note',
     };
 
-    repo.update(directiveUpdate).then((directive) => {
-      expect(directive instanceof Directive).toBeTrue();
-      expect(directive.directiveId).toBe('test-id');
-      expect(directive.note).toBe('New Note');
-      done();
-    });
+    repo
+      .update(directiveUpdate)
+      .then((directive) => {
+        expect(directive instanceof Directive).toBeTrue();
+        expect(directive.directiveId).toBe('test-id');
+        expect(directive.note).toBe('New Note');
+        done();
+      })
+      .catch(done.fail);
 
     const req = httpMock.expectOne(apiUrl('/v2/directive/test-id'));
 
@@ -126,13 +135,16 @@ describe('DirectiveRepo', () => {
   });
 
   it('can get a legacy contact', (done) => {
-    repo.getLegacyContact().then((legacyContact) => {
-      expect(legacyContact.legacyContactId).toBe('test-id');
-      expect(legacyContact.accountId).toBe('test-accountid');
-      expect(legacyContact.name).toBe('Test Legacy Contact');
-      expect(legacyContact.email).toBe('test@example.com');
-      done();
-    });
+    repo
+      .getLegacyContact()
+      .then((legacyContact) => {
+        expect(legacyContact.legacyContactId).toBe('test-id');
+        expect(legacyContact.accountId).toBe('test-accountid');
+        expect(legacyContact.name).toBe('Test Legacy Contact');
+        expect(legacyContact.email).toBe('test@example.com');
+        done();
+      })
+      .catch(done.fail);
 
     const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
 
@@ -160,7 +172,8 @@ describe('DirectiveRepo', () => {
         expect(legacyContact.name).toBe('New User');
         expect(legacyContact.email).toBe('new@example.com');
         done();
-      });
+      })
+      .catch(done.fail);
 
     const req = httpMock.expectOne(apiUrl('/v2/legacy-contact'));
 
@@ -189,7 +202,8 @@ describe('DirectiveRepo', () => {
         expect(legacyContact.name).toBe('Updated User');
         expect(legacyContact.email).toBe('updated@example.com');
         done();
-      });
+      })
+      .catch(done.fail);
 
     const req = httpMock.expectOne(apiUrl('/v2/legacy-contact/test-id'));
 
