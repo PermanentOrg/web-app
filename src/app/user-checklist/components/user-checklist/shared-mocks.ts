@@ -7,10 +7,12 @@ import { ChecklistItem } from '../../types/checklist-item';
 export class DummyChecklistApi implements ChecklistApi {
   public static error: boolean = false;
   public static items: ChecklistItem[] = [];
+  public static accountHidden: boolean = false;
 
   public static reset(): void {
     this.items = [];
     this.error = false;
+    this.accountHidden = false;
   }
 
   public async getChecklistItems(): Promise<ChecklistItem[]> {
@@ -19,20 +21,8 @@ export class DummyChecklistApi implements ChecklistApi {
     }
     return DummyChecklistApi.items;
   }
-}
 
-export class DummyAccountService {
-  public static accountVoData: Partial<AccountVOData> = {};
-
-  public static reset(): void {
-    this.accountVoData = {};
-  }
-
-  public getAccount(): AccountVO {
-    return new AccountVO(DummyAccountService.accountVoData);
-  }
-
-  public getArchive(): ArchiveVO {
-    return new ArchiveVO({});
+  public isAccountHidingChecklist(): boolean {
+    return DummyChecklistApi.accountHidden;
   }
 }
