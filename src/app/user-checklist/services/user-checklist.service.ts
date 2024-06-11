@@ -29,5 +29,9 @@ export class UserChecklistService implements ChecklistApi {
     return this.account.checkMinimumArchiveAccess(AccessRole.Owner);
   }
 
-  public async setChecklistHidden(): Promise<void> {}
+  public async setChecklistHidden(): Promise<void> {
+    const updatedAccount = this.account.getAccount();
+    updatedAccount.hideChecklist = true;
+    await this.account.updateAccount(updatedAccount);
+  }
 }
