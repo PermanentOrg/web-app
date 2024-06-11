@@ -88,4 +88,38 @@ describe('UserChecklistService', () => {
 
     expect(service.isArchiveOwnedByAccount()).toBeTrue();
   });
+
+  it('can update the current account to hide the checklist', (done) => {
+    account.setAccount(new AccountVO({ hideChecklist: false }));
+
+    service
+      .setChecklistHidden()
+      .catch(() => {
+        done.fail();
+      })
+      .finally(() => {
+        done();
+      });
+
+    const req = http.expectOne(`${environment.apiUrl}/account/update`);
+
+    expect(req.request.method).toBe('POST');
+    expect(
+      req.request.body.RequestVO.data[0].AccountVO.hideChecklist,
+    ).toBeTrue();
+    req.flush({
+      Results: [
+        {
+          data: [
+            {
+              AccountVO: {
+                hideChecklist: true,
+              },
+            },
+          ],
+        },
+      ],
+      isSuccessful: true,
+    });
+  });
 });
