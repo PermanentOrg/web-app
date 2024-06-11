@@ -15,4 +15,8 @@ export class UserChecklistService implements ChecklistApi {
       this.httpv2.get<ChecklistItem>('/v2/event/checklist'),
     );
   }
+
+  public isAccountHidingChecklist(): boolean {
+    return true;
+  }
 }
