@@ -23,4 +23,6 @@ export class UserChecklistService implements ChecklistApi {
   public isArchiveOwnedByAccount(): boolean {
     return false;
   }
+
+  public async setChecklistHidden(): Promise<void> {}
 }

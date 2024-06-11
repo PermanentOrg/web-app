@@ -8,12 +8,14 @@ export class DummyChecklistApi implements ChecklistApi {
   public static items: ChecklistItem[] = [];
   public static accountHidden: boolean = false;
   public static archiveAccess: AccessRoleType = 'access.role.owner';
+  public static savedAccount: boolean = false;
 
   public static reset(): void {
     this.items = [];
     this.error = false;
     this.accountHidden = false;
     this.archiveAccess = 'access.role.owner';
+    this.savedAccount = false;
   }
 
   public async getChecklistItems(): Promise<ChecklistItem[]> {
@@ -21,6 +23,13 @@ export class DummyChecklistApi implements ChecklistApi {
       throw new Error('Unit test forced error');
     }
     return DummyChecklistApi.items;
+  }
+
+  public async setChecklistHidden(): Promise<void> {
+    if (DummyChecklistApi.error) {
+      throw new Error('Unit test forced error');
+    }
+    DummyChecklistApi.savedAccount = true;
   }
 
   public isAccountHidingChecklist(): boolean {

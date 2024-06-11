@@ -124,6 +124,29 @@ describe('UserChecklistComponent', () => {
     expectComponentToBeInvisible(find);
   });
 
+  it('should hide itself and save account property when clicking the dismiss button', async () => {
+    const { find, fixture } = await shallow.render();
+
+    find('.dont-show-again').triggerEventHandler('click');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expectComponentToBeInvisible(find);
+
+    expect(DummyChecklistApi.savedAccount).toBeTrue();
+  });
+
+  it('should fail silently if the account save fails', async () => {
+    const { instance, inject } = await shallow.render();
+
+    DummyChecklistApi.error = true;
+
+    await expectAsync(
+      inject(CHECKLIST_API).setChecklistHidden(),
+    ).toBeRejected();
+    await expectAsync(instance.hideChecklistForever()).not.toBeRejected();
+  });
+
   describe('Percentage completion', () => {
     async function expectPercentage(
       completed: number,
