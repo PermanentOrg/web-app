@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { AccountService } from '@shared/services/account/account.service';
+import { AccessRole } from '@models/access-role';
 import { ChecklistApi } from '../types/checklist-api';
 import { ChecklistItem } from '../types/checklist-item';
 
@@ -25,7 +26,7 @@ export class UserChecklistService implements ChecklistApi {
   }
 
   public isArchiveOwnedByAccount(): boolean {
-    return false;
+    return this.account.checkMinimumArchiveAccess(AccessRole.Owner);
   }
 
   public async setChecklistHidden(): Promise<void> {}

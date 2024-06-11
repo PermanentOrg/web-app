@@ -8,6 +8,7 @@ import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
+import { ArchiveVO } from '@models/index';
 import { ChecklistItem } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
 
@@ -74,5 +75,17 @@ describe('UserChecklistService', () => {
     account.clear();
 
     expect(service.isAccountHidingChecklist()).toBeTrue();
+  });
+
+  it('can check if the current account has Owner access to the current archive', () => {
+    account.setAccount(new AccountVO({ hideChecklist: false }));
+
+    account.setArchive(new ArchiveVO({ accessRole: 'access.role.viewer' }));
+
+    expect(service.isArchiveOwnedByAccount()).toBeFalse();
+
+    account.setArchive(new ArchiveVO({ accessRole: 'access.role.owner' }));
+
+    expect(service.isArchiveOwnedByAccount()).toBeTrue();
   });
 });
