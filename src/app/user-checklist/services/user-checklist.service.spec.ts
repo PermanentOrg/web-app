@@ -6,20 +6,25 @@ import {
 } from '@angular/common/http/testing';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
+import { AccountService } from '@shared/services/account/account.service';
+import { AccountVO } from '@models/account-vo';
 import { ChecklistItem } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
 
 describe('UserChecklistService', () => {
   let service: UserChecklistService;
   let http: HttpTestingController;
+  let account: AccountService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [HttpV2Service],
+      providers: [HttpV2Service, AccountService],
     });
     service = TestBed.inject(UserChecklistService);
     http = TestBed.inject(HttpTestingController);
+    account = TestBed.inject(AccountService);
+    account.clear();
     TestBed.inject(HttpV2Service).setAuthToken('test');
   });
 
@@ -53,5 +58,21 @@ describe('UserChecklistService', () => {
     expect(req.request.headers.get('Request-Version')).toBe('2');
     expect(req.request.headers.get('Authorization')).not.toBeNull();
     req.flush(expected);
+  });
+
+  it('can check if the user is hiding the checklist', () => {
+    account.setAccount(new AccountVO({ hideChecklist: false }));
+
+    expect(service.isAccountHidingChecklist()).toBeFalse();
+
+    account.setAccount(new AccountVO({ hideChecklist: true }));
+
+    expect(service.isAccountHidingChecklist()).toBeTrue();
+  });
+
+  it('will hide the checklist if the account is not set', () => {
+    account.clear();
+
+    expect(service.isAccountHidingChecklist()).toBeTrue();
   });
 });
