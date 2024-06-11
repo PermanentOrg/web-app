@@ -19,4 +19,8 @@ export class UserChecklistService implements ChecklistApi {
   public isAccountHidingChecklist(): boolean {
     return true;
   }
+
+  public isArchiveOwnedByAccount(): boolean {
+    return false;
+  }
 }

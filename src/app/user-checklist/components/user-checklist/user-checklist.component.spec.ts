@@ -116,6 +116,14 @@ describe('UserChecklistComponent', () => {
     expectComponentToBeInvisible(find);
   });
 
+  it('is hidden if the account does not own the archive', async () => {
+    DummyChecklistApi.archiveAccess = 'access.role.viewer';
+
+    const { find } = await shallow.render();
+
+    expectComponentToBeInvisible(find);
+  });
+
   describe('Percentage completion', () => {
     async function expectPercentage(
       completed: number,
