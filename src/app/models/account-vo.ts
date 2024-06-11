@@ -1,6 +1,6 @@
+/* @format */
 import { BaseVO, BaseVOData } from '@models/base-vo';
 import { AccessRoleType } from './access-role';
-
 
 interface NotificationTypes {
   alerts?: boolean;
@@ -49,7 +49,8 @@ export interface AccountVOData extends BaseVOData {
   emailStatus?: any;
   phoneStatus?: any;
   notificationPreferences?: NotificationPreferencesI;
-  allowSftpDeletion?: boolean
+  allowSftpDeletion?: boolean;
+  hideChecklist?: boolean;
 }
 
 export interface NotificationPreferencesI {
@@ -93,11 +94,15 @@ export class AccountVO extends BaseVO {
   public phoneStatus;
   public notificationPreferences: NotificationPreferencesI;
   public allowSftpDeletion;
+  public hideChecklist: boolean;
 
   constructor(voData: AccountVOData) {
     super(voData);
 
-    if (this.notificationPreferences && typeof this.notificationPreferences === 'string') {
+    if (
+      this.notificationPreferences &&
+      typeof this.notificationPreferences === 'string'
+    ) {
       this.notificationPreferences = JSON.parse(this.notificationPreferences);
     }
   }
