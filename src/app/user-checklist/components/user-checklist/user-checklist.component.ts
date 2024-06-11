@@ -1,5 +1,6 @@
 /* @format */
 import { Component, Inject, OnInit } from '@angular/core';
+import { AccountService } from '@shared/services/account/account.service';
 import { CHECKLIST_API, ChecklistApi } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
 
@@ -14,9 +15,17 @@ export class UserChecklistComponent implements OnInit {
   public isOpen: boolean = true;
   public isDisplayed: boolean = true;
 
-  constructor(@Inject(CHECKLIST_API) private api: ChecklistApi) {}
+  constructor(
+    @Inject(CHECKLIST_API) private api: ChecklistApi,
+    private account: AccountService,
+  ) {}
 
   public ngOnInit(): void {
+    if (this.account.getAccount().hideChecklist) {
+      this.isDisplayed = false;
+      return;
+    }
+
     this.api
       .getChecklistItems()
       .then((items) => {

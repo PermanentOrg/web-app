@@ -1,10 +1,11 @@
 /* @format */
 import { Shallow } from 'shallow-render';
+import { AccountService } from '@shared/services/account/account.service';
 import { CHECKLIST_API } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
 import { UserChecklistModule } from '../../user-checklist.module';
 import { UserChecklistComponent } from './user-checklist.component';
-import { DummyChecklistApi } from './shared-mocks';
+import { DummyAccountService, DummyChecklistApi } from './shared-mocks';
 
 describe('UserChecklistComponent', () => {
   let shallow: Shallow<UserChecklistComponent>;
@@ -26,15 +27,18 @@ describe('UserChecklistComponent', () => {
   }
 
   beforeEach(async () => {
+    DummyAccountService.reset();
     DummyChecklistApi.reset();
     DummyChecklistApi.items = [createTestTask()];
-    shallow = new Shallow(
-      UserChecklistComponent,
-      UserChecklistModule,
-    ).provideMock({
-      provide: CHECKLIST_API,
-      useClass: DummyChecklistApi,
-    });
+    shallow = new Shallow(UserChecklistComponent, UserChecklistModule)
+      .provideMock({
+        provide: CHECKLIST_API,
+        useClass: DummyChecklistApi,
+      })
+      .provideMock({
+        provide: AccountService,
+        useClass: DummyAccountService,
+      });
   });
 
   it('should create', async () => {
@@ -102,6 +106,14 @@ describe('UserChecklistComponent', () => {
 
   it('is hidden completely if no tasks come back from the API', async () => {
     DummyChecklistApi.items = [];
+
+    const { find } = await shallow.render();
+
+    expectComponentToBeInvisible(find);
+  });
+
+  it('is hidden if the account has the hideChecklist setting enabled', async () => {
+    DummyAccountService.accountVoData = { hideChecklist: true };
 
     const { find } = await shallow.render();
 
