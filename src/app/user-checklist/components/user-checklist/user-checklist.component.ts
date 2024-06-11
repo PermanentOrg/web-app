@@ -53,4 +53,13 @@ export class UserChecklistComponent implements OnInit {
   public open(): void {
     this.isOpen = true;
   }
+
+  public async hideChecklistForever(): Promise<void> {
+    this.isDisplayed = false;
+    try {
+      await this.api.setChecklistHidden();
+    } catch {
+      // Fail silently
+    }
+  }
 }

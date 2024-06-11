@@ -6,6 +6,7 @@ export interface ChecklistApi {
   getChecklistItems(): Promise<ChecklistItem[]>;
   isAccountHidingChecklist(): boolean;
   isArchiveOwnedByAccount(): boolean;
+  setChecklistHidden(): Promise<void>;
 }
 
 export const CHECKLIST_API = new InjectionToken<ChecklistApi>('ChecklistApi');
