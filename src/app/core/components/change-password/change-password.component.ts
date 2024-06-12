@@ -34,7 +34,7 @@ export class ChangePasswordComponent {
     private message: MessageService,
     private api: ApiService,
     private accountService: AccountService,
-    private prompt: PromptService
+    private prompt: PromptService,
   ) {
     this.account = this.accountService.getAccount();
 
@@ -57,7 +57,7 @@ export class ChangePasswordComponent {
     try {
       try {
         const loginResp = await this.accountService.checkForMFAWithLogin(
-          value.passwordOld
+          value.passwordOld,
         );
         if (loginResp.needsMFA()) {
           try {
@@ -67,7 +67,7 @@ export class ChangePasswordComponent {
                 this.accountService.getAccount().keepLoggedIn;
               const mfaResp = await this.accountService.verifyMfa(
                 mfa.verificationCode,
-                keepLoggedIn
+                keepLoggedIn,
               );
               trustToken = mfaResp.getTrustToken().value;
             } catch (err) {
@@ -108,7 +108,7 @@ export class ChangePasswordComponent {
     };
     return this.prompt.prompt(
       [mfaField],
-      'A verification code has been sent to your email address or phone number. Please enter it below to change your password.'
+      'A verification code has been sent to your email address or phone number. Please enter it below to change your password.',
     );
   }
 }
