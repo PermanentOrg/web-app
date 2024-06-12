@@ -1,4 +1,6 @@
-<div [ngClass]="{ selected: selected }" class="square">
-  <pr-checkbox></pr-checkbox>
-  <p>{{ text }}</p>
+<div (click)="select()" class="square" [class.selected]="selected">
+  <div class="checkbox">
+    <pr-checkbox [isChecked]="selected" [variant]="'secondary'" />
+  </div>
+  <p class="text">{{ text }}</p>
 </div>

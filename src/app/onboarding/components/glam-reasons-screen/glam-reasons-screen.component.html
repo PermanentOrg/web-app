@@ -1,0 +1,30 @@
+<div>
+  <div class="text-container">
+    <p class="what-is-important">Chart your <b>path</b> to success</p>
+    <p class="text">
+      Let’s set some goals. Everyone has unique goals for preserving their
+      legacy. We want to learn more about how we can help you achieve yours.
+    </p>
+  </div>
+  <div class="reasons">
+    @for (item of reasons; track $index) {
+      <div class="reason-container">
+        <pr-glam-user-survey-square
+          [text]="item.text"
+          [tag]="item.tag"
+        ></pr-glam-user-survey-square>
+      </div>
+    }
+  </div>
+  <div class="buttons">
+    <pr-button (buttonClick)="backToGoals()" [icon]="'/auth/back'"
+      >Back</pr-button
+    >
+    <pr-button
+      (buttonClick)="finalizeArchive()"
+      [orientation]="'right'"
+      [icon]="'/onboarding/arrow-right'"
+      >Next</pr-button
+    >
+  </div>
+</div>

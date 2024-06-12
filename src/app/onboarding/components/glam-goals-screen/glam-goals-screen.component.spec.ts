@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserSurveyComponent } from './user-survey.component';
+import { GlamGoalsScreenComponent } from './glam-goals-screen.component';
 
-describe('UserSurveyComponent', () => {
-  let component: UserSurveyComponent;
-  let fixture: ComponentFixture<UserSurveyComponent>;
+describe('GlamGoalsScreenComponent', () => {
+  let component: GlamGoalsScreenComponent;
+  let fixture: ComponentFixture<GlamGoalsScreenComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserSurveyComponent]
+      imports: [GlamGoalsScreenComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(UserSurveyComponent);
+    fixture = TestBed.createComponent(GlamGoalsScreenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

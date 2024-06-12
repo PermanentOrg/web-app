@@ -19,10 +19,9 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     FormInputComponent,
     ToggleComponent,
     ButtonComponent,
-    CheckboxComponent,
     LoadingSpinnerComponent,
   ],
-  imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule, CheckboxComponent],
   exports: [
     FormInputComponent,
     ToggleComponent,

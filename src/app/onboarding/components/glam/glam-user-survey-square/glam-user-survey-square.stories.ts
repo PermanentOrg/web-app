@@ -1,29 +1,54 @@
-import { StoryObj, argsToTemplate, Meta } from "@storybook/angular";
+import {
+  StoryObj,
+  argsToTemplate,
+  Meta,
+  moduleMetadata,
+} from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
 import { withActions } from '@storybook/addon-actions/decorator';
-import { GlamUserSurveySquareComponent } from "./glam-user-survey-square.component";
+import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';
+import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
 
-const typeSelected = action('typeSelected');
+const selectedChange = action('selectedChange');
 
 const meta: Meta<GlamUserSurveySquareComponent> = {
-    title: 'Glam Onboarding: Archive Type Select',
-    component: GlamUserSurveySquareComponent,
-    tags: ['onboarding', 'glam'],
-    render: (args: GlamUserSurveySquareComponent) => ({
-      props: {
-        ...args,
-        typeSelected,
-      },
-      template: `<pr-glam-user-survey-square ${argsToTemplate({
-        ...args,
-        typeSelected,
-      })}></pr-glam-user-survey-square>`,
+  title: 'Glam Onboarding: Survey Square',
+  component: GlamUserSurveySquareComponent,
+  tags: ['autodocs'],
+  decorators: [
+    moduleMetadata({
+      imports: [GlamUserSurveySquareComponent, CheckboxComponent], // Import the necessary standalone components
     }),
-  };
-  
-  export default meta;
-  type Story = StoryObj<GlamUserSurveySquareComponent>;
-  
-  export const Default: Story = {
-    args: {},
-  };
+  ],
+  render: (args: GlamUserSurveySquareComponent) => ({
+    props: {
+      ...args,
+      selected:true,
+      text: 'Digitize or transfer my materials securely.',
+    },
+    argTypes: {
+      selected: { control: 'boolean' },
+      text: { control: 'text' },
+      tag: { control: 'text' },
+    },
+  }),
+};
+
+export default meta;
+type Story = StoryObj<GlamUserSurveySquareComponent>;
+
+export const Primary: Story = {
+  args: {
+    text: 'Digitize or transfer my materials securely.',
+    tag: 'square',
+    selected: false,
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    text: 'Digitize or transfer my materials securddely.',
+    tag: 'square',
+    selected: true,
+  },
+};
