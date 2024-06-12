@@ -17,7 +17,7 @@ describe('TwoFactorAuthComponent', () => {
         showError: () => {
           messageShown = true;
         },
-      }
+      },
     );
   });
 
@@ -100,7 +100,7 @@ describe('TwoFactorAuthComponent', () => {
     expect(methodRows.length).toBe(methods.length);
     expect(methodRows[0].nativeElement.textContent).toContain('Email');
     expect(methodRows[0].nativeElement.textContent).toContain(
-      'janedoe@example.com'
+      'janedoe@example.com',
     );
 
     expect(methodRows[1].nativeElement.textContent).toContain('SMS Text');
