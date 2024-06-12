@@ -27,7 +27,7 @@ import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/ar
 import { SelectArchiveTypeScreenComponent } from './components/select-archive-type-screen/select-archive-type-screen.component';
 import { NameArchiveScreenComponent } from './components/name-archive-screen/name-archive-screen.component';
 import { CreateArchiveForMeScreenComponent } from './components/create-archive-for-me-screen/create-archive-for-me-screen.component';
-
+import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
 @NgModule({
   declarations: [
     OnboardingComponent,
@@ -38,6 +38,7 @@ import { CreateArchiveForMeScreenComponent } from './components/create-archive-f
     SelectArchiveTypeScreenComponent,
     NameArchiveScreenComponent,
     CreateArchiveForMeScreenComponent,
+    GlamUserSurveySquareComponent,
   ],
   imports: [
     CommonModule,
