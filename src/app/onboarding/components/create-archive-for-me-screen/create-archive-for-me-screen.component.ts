@@ -2,6 +2,12 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 
+interface ArchiveCreateEvent {
+  screen: string;
+  type: string;
+  name: string;
+}
+
 @Component({
   selector: 'pr-create-archive-for-me-screen',
   templateUrl: './create-archive-for-me-screen.component.html',
@@ -12,7 +18,7 @@ export class CreateArchiveForMeScreenComponent {
   public name = '';
 
   @Output() goBackOutput = new EventEmitter<string>();
-  @Output() continueOutput = new EventEmitter<Record<string, string>>();
+  @Output() continueOutput = new EventEmitter<ArchiveCreateEvent>();
 
   constructor(private account: AccountService) {
     this.name = this.account.getAccount().fullName;
