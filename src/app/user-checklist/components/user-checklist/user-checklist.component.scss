@@ -1,4 +1,9 @@
 /* @format */
+:host {
+  position: absolute;
+  bottom: 0;
+}
+
 .user-checklist {
   width: 22.5em;
   border-radius: 5px;
@@ -149,4 +154,5 @@ ul {
   height: 68px;
   border: none;
   cursor: pointer;
+  margin: 1em;
 }
