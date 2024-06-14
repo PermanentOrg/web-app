@@ -4,7 +4,7 @@ import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role';
 import { ChecklistApi } from '../types/checklist-api';
-import { ChecklistItem } from '../types/checklist-item';
+import { ChecklistApiResponse, ChecklistItem } from '../types/checklist-item';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +15,12 @@ export class UserChecklistService implements ChecklistApi {
     private account: AccountService,
   ) {}
 
-  public getChecklistItems(): Promise<ChecklistItem[]> {
-    return firstValueFrom(
-      this.httpv2.get<ChecklistItem>('/v2/event/checklist'),
-    );
+  public async getChecklistItems(): Promise<ChecklistItem[]> {
+    return (
+      await firstValueFrom(
+        this.httpv2.get<ChecklistApiResponse>('/v2/event/checklist'),
+      )
+    )[0].checklistItems;
   }
 
   public isAccountHidingChecklist(): boolean {
