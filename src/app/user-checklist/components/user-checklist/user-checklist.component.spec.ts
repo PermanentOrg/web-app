@@ -108,6 +108,45 @@ describe('UserChecklistComponent', () => {
     expectComponentToBeInvisible(find);
   });
 
+  it('is hidden if the account has the hideChecklist setting enabled', async () => {
+    DummyChecklistApi.accountHidden = true;
+
+    const { find } = await shallow.render();
+
+    expectComponentToBeInvisible(find);
+  });
+
+  it('is hidden if the account does not own the archive', async () => {
+    DummyChecklistApi.archiveAccess = 'access.role.viewer';
+
+    const { find } = await shallow.render();
+
+    expectComponentToBeInvisible(find);
+  });
+
+  it('should hide itself and save account property when clicking the dismiss button', async () => {
+    const { find, fixture } = await shallow.render();
+
+    find('.dont-show-again').triggerEventHandler('click');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expectComponentToBeInvisible(find);
+
+    expect(DummyChecklistApi.savedAccount).toBeTrue();
+  });
+
+  it('should fail silently if the account save fails', async () => {
+    const { instance, inject } = await shallow.render();
+
+    DummyChecklistApi.error = true;
+
+    await expectAsync(
+      inject(CHECKLIST_API).setChecklistHidden(),
+    ).toBeRejected();
+    await expectAsync(instance.hideChecklistForever()).not.toBeRejected();
+  });
+
   describe('Percentage completion', () => {
     async function expectPercentage(
       completed: number,

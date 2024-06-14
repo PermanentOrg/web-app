@@ -57,7 +57,9 @@
         }
       </ul>
       <div class="footer">
-        <button class="dont-show-again">Don't show me this again</button>
+        <button class="dont-show-again" (click)="hideChecklistForever()">
+          Don't show me this again
+        </button>
       </div>
     </div>
   } @else {
