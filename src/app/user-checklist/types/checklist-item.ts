@@ -4,3 +4,7 @@ export interface ChecklistItem {
   title: string;
   completed: boolean;
 }
+
+export interface ChecklistApiResponse {
+  checklistItems: ChecklistItem[];
+}

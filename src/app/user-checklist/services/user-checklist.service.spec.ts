@@ -9,7 +9,7 @@ import { environment } from '@root/environments/environment';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { ArchiveVO } from '@models/index';
-import { ChecklistItem } from '../types/checklist-item';
+import { ChecklistApiResponse } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
 
 describe('UserChecklistService', () => {
@@ -34,19 +34,21 @@ describe('UserChecklistService', () => {
   });
 
   it('can fetch the checklist contents', (done) => {
-    const expected: ChecklistItem[] = [
-      {
-        id: 'test_item',
-        title: 'Test the checklist API service',
-        completed: true,
-      },
-    ];
+    const expected: ChecklistApiResponse = {
+      checklistItems: [
+        {
+          id: 'test_item',
+          title: 'Test the checklist API service',
+          completed: true,
+        },
+      ],
+    };
 
     service
       .getChecklistItems()
       .then((items) => {
         expect(items.length).toBe(1);
-        expect(items[0]).toEqual(expected[0]);
+        expect(items[0]).toEqual(expected.checklistItems[0]);
         done();
       })
       .catch(() => {
