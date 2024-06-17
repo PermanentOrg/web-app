@@ -1,0 +1,78 @@
+/* @format */
+@import 'variables';
+@import 'fonts';
+
+p {
+  color: white;
+}
+
+.create-archive-for-me {
+  margin-top: 64px;
+  display: flex;
+  gap: 64px;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 900px) {
+    height: 85vh;
+  }
+
+  & > .title {
+    font-size: 56px;
+    font-family: 'UsualRegular', sans-serif;
+
+    @media screen and (max-width: 1440px) {
+      width: 100%;
+    }
+  }
+
+  & .description {
+    font-size: 16px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+  & .archive-type {
+    color: rgba(255, 255, 255, 0.64);
+    font-family: 'UsualRegular', sans-serif;
+    font-size: 10px;
+  }
+
+  & .archive-name {
+    font-size: 16px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+
+  & .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 498px;
+
+    @media screen and (max-width: 1000px) {
+      gap: 200px;
+    }
+  }
+
+  & .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  & .archive-type {
+    display: flex;
+  }
+
+  & img {
+    width: 48px;
+    height: 48px;
+  }
+
+  & .archive-info {
+    margin-left: 16px;
+
+    & > p {
+      margin-bottom: 8px;
+    }
+  }
+}

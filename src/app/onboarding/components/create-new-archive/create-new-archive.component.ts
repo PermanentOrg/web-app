@@ -24,14 +24,18 @@ import {
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import { archiveOptions } from '../glam/types/archive-types';
+import {
+  ArchiveCreateEvent,
+  archiveOptions,
+} from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
   | 'reasons'
   | 'create'
   | 'start'
-  | 'name-archive';
+  | 'name-archive'
+  | 'create-archive-for-me';
 
 @Component({
   selector: 'pr-create-new-archive',
@@ -52,6 +56,12 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     reasons: 'skip_why_permanent',
   };
 
+  public omittedScreens = [
+    'start',
+    'create',
+    'name-archive',
+    'create-archive-for-me',
+  ];
   public archiveType: string;
   public archiveName: string = '';
   public screen: NewArchiveScreen = 'start';
@@ -84,7 +94,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.nameForm = fb.group({
       name: ['', [Validators.required]],
@@ -112,7 +122,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.screen = 'goals';
           this.progress.emit(1);
         }
-      }
+      },
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();
@@ -244,11 +254,22 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         },
       },
     });
-    this.dialog.open(
-      'SkipOnboardingDialogComponent',
-      { skipOnboarding: this.skipOnboarding },
-      { width: '600px' }
-    );
+    if (!this.isGlam) {
+      this.dialog.open(
+        'SkipOnboardingDialogComponent',
+        { skipOnboarding: this.skipOnboarding },
+        { width: '600px' },
+      );
+    } else {
+      this.screen = 'create-archive-for-me';
+    }
+  }
+
+  public navToGoals(event: ArchiveCreateEvent): void {
+    this.name = event.name;
+    this.archiveType = event.type;
+    this.archiveTypeTag = OnboardingTypes.myself;
+    this.screen = 'goals';
   }
 
   public skipStep(): void {
@@ -300,7 +321,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.screen = event;
   }
 
-  public handleCreationScreenEvents(event: Record<string, string>): void {
+  public handleCreationScreenEvents(event: ArchiveCreateEvent): void {
     this.archiveTypeTag = event.tag as OnboardingTypes;
     this.archiveType = event.type;
     this.headerText = event.headerText;
