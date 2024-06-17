@@ -24,7 +24,10 @@ import {
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import { ArchiveCreateEvent, archiveOptions } from '../glam/types/archive-types';
+import {
+  ArchiveCreateEvent,
+  archiveOptions,
+} from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
@@ -91,7 +94,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.nameForm = fb.group({
       name: ['', [Validators.required]],
@@ -255,7 +258,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       this.dialog.open(
         'SkipOnboardingDialogComponent',
         { skipOnboarding: this.skipOnboarding },
-        { width: '600px' }
+        { width: '600px' },
       );
     } else {
       this.screen = 'create-archive-for-me';
