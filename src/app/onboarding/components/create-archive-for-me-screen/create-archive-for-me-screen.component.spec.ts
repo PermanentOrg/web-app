@@ -15,7 +15,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
   beforeEach(async () => {
     shallow = new Shallow(
       CreateArchiveForMeScreenComponent,
-      OnboardingModule
+      OnboardingModule,
     ).mock(AccountService, mockAccountService);
   });
 
@@ -50,7 +50,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
   it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', async () => {
     const { outputs, fixture } = await shallow.render();
     const continueButton = fixture.debugElement.query(
-      By.css('.continue-button')
+      By.css('.continue-button'),
     );
 
     continueButton.triggerEventHandler('buttonClick', null);

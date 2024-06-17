@@ -5,14 +5,14 @@ import { reasons } from '../../shared/onboarding-screen';
 import { GlamReasonsScreenComponent } from './glam-reasons-screen.component';
 
 describe('GlamReasonsScreenComponent', () => {
-  let shallow:Shallow<GlamReasonsScreenComponent>
+  let shallow: Shallow<GlamReasonsScreenComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(GlamReasonsScreenComponent, OnboardingModule)
+    shallow = new Shallow(GlamReasonsScreenComponent, OnboardingModule);
   });
 
-  it('should create', async() => {
-    const {instance} = await shallow.render()
+  it('should create', async () => {
+    const { instance } = await shallow.render();
 
     expect(instance).toBeTruthy();
   });
@@ -52,7 +52,7 @@ describe('GlamReasonsScreenComponent', () => {
     const reason = 'Test Reason';
     instance.addReason(reason);
     instance.finalizeArchive();
-    
+
     expect(outputs.finalizeArchiveOutput.emit).toHaveBeenCalledWith({
       screen: 'finalize',
       reasons: [reason],

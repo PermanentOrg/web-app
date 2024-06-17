@@ -4,24 +4,29 @@ import { OnboardingModule } from '../../onboarding.module';
 import { FinalizeArchiveCreationScreenComponent } from './finalize-archive-creation-screen.component';
 
 describe('FinalizeArchiveCreationScreenComponent', () => {
-  let shallow:Shallow<FinalizeArchiveCreationScreenComponent>
+  let shallow: Shallow<FinalizeArchiveCreationScreenComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(FinalizeArchiveCreationScreenComponent, OnboardingModule)
+    shallow = new Shallow(
+      FinalizeArchiveCreationScreenComponent,
+      OnboardingModule,
+    );
   });
 
-  it('should create', async() => {
-    const {instance} = await shallow.render()
+  it('should create', async () => {
+    const { instance } = await shallow.render();
 
     expect(instance).toBeTruthy();
   });
-  
+
   it('should display the archive name correctly', async () => {
     const name = 'Test Archive';
     const { fixture, find } = await shallow.render({ bind: { name } });
     const archiveNameElement = find('.archive-info p');
 
-    expect(archiveNameElement.nativeElement.textContent).toContain(`The ${name} Archive`);
+    expect(archiveNameElement.nativeElement.textContent).toContain(
+      `The ${name} Archive`,
+    );
   });
 
   it('should emit finalizeArchiveOutput when finalizeArchive is called', async () => {

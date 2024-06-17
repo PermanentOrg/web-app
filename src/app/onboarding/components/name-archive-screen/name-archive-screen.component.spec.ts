@@ -10,7 +10,7 @@ describe('NameArchiveScreenComponent', () => {
 
   beforeEach(async () => {
     shallow = new Shallow(NameArchiveScreenComponent, OnboardingModule).import(
-      ReactiveFormsModule
+      ReactiveFormsModule,
     );
   });
 
@@ -49,7 +49,7 @@ describe('NameArchiveScreenComponent', () => {
     instance.createArchive();
 
     expect(outputs.archiveCreatedEmitter.emit).toHaveBeenCalledWith(
-      'Valid Archive Name'
+      'Valid Archive Name',
     );
   });
 
@@ -77,7 +77,7 @@ describe('NameArchiveScreenComponent', () => {
     fixture.detectChanges();
 
     const createButton = fixture.debugElement.query(
-      By.css('.create-archive-button')
+      By.css('.create-archive-button'),
     );
     createButton.triggerEventHandler('buttonClick', null);
 
@@ -92,7 +92,7 @@ describe('NameArchiveScreenComponent', () => {
     spyOn(instance, 'createArchive');
 
     const createButton = fixture.debugElement.query(
-      By.css('.create-archive-button')
+      By.css('.create-archive-button'),
     );
 
     createButton.triggerEventHandler('buttonClick', null);

@@ -1,12 +1,7 @@
 /* @format */
-import {
-  StoryObj,
-  Meta,
-  moduleMetadata,
-} from '@storybook/angular';
+import { StoryObj, Meta, moduleMetadata } from '@storybook/angular';
 import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
 import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';
-
 
 const meta: Meta<GlamUserSurveySquareComponent> = {
   title: 'Glam Onboarding: Survey Square',
@@ -20,7 +15,7 @@ const meta: Meta<GlamUserSurveySquareComponent> = {
   render: (args: GlamUserSurveySquareComponent) => ({
     props: {
       ...args,
-      selected:true,
+      selected: true,
       text: 'Digitize or transfer my materials securely.',
     },
     argTypes: {

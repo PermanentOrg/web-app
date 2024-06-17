@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
 
   rememberMe: boolean = true;
 
-
   constructor(
     private fb: UntypedFormBuilder,
     private accountService: AccountService,
@@ -61,7 +60,7 @@ export class LoginComponent implements OnInit {
         formValue.email,
         formValue.password,
         this.rememberMe,
-        formValue.keepLoggedIn
+        formValue.keepLoggedIn,
       )
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {

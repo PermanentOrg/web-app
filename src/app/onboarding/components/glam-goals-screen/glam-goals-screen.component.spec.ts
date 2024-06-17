@@ -5,14 +5,14 @@ import { goals } from '../../shared/onboarding-screen';
 import { GlamGoalsScreenComponent } from './glam-goals-screen.component';
 
 describe('GlamGoalsScreenComponent', () => {
-  let shallow:Shallow<GlamGoalsScreenComponent>
+  let shallow: Shallow<GlamGoalsScreenComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(GlamGoalsScreenComponent, OnboardingModule)
+    shallow = new Shallow(GlamGoalsScreenComponent, OnboardingModule);
   });
 
-  it('should create', async() => {
-    const {instance} = await shallow.render()
+  it('should create', async () => {
+    const { instance } = await shallow.render();
 
     expect(instance).toBeTruthy();
   });
@@ -44,7 +44,9 @@ describe('GlamGoalsScreenComponent', () => {
     const { instance, outputs } = await shallow.render();
     instance.backToNameArchive();
 
-    expect(outputs.backToNameArchiveOutput.emit).toHaveBeenCalledWith('name-archive');
+    expect(outputs.backToNameArchiveOutput.emit).toHaveBeenCalledWith(
+      'name-archive',
+    );
   });
 
   it('should emit goToNextReasonsOutput with selectedGoals when goToNextReasons is called', async () => {

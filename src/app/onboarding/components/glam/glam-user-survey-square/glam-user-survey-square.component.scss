@@ -21,7 +21,11 @@
 }
 
 .selected {
-  background: linear-gradient(to right, rgba(184, 67, 166, 1), rgba(128, 0, 128, 1));
+  background: linear-gradient(
+    to right,
+    rgba(184, 67, 166, 1),
+    rgba(128, 0, 128, 1)
+  );
 }
 
 .checkbox {

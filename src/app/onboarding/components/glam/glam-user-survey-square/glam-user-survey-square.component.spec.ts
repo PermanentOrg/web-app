@@ -15,7 +15,7 @@ describe('GlamUserSurveySquareComponent', () => {
 
     expect(instance).toBeTruthy();
   });
-  
+
   it('should display the text correctly', async () => {
     const text = 'Test Text';
     const { fixture, find } = await shallow.render({ bind: { text } });

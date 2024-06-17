@@ -20,7 +20,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     ToggleComponent,
     ButtonComponent,
     LoadingSpinnerComponent,
-    CheckboxComponent
+    CheckboxComponent,
   ],
   imports: [CommonModule, FontAwesomeModule, FormsModule, ReactiveFormsModule],
   exports: [

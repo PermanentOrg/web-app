@@ -45,7 +45,7 @@ import { FinalizeArchiveCreationScreenComponent } from './components/finalize-ar
     GlamReasonsScreenComponent,
     GlamGoalsScreenComponent,
     GlamUserSurveySquareComponent,
-    FinalizeArchiveCreationScreenComponent
+    FinalizeArchiveCreationScreenComponent,
   ],
   imports: [
     CommonModule,
