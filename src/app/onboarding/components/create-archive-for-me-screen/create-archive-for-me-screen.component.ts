@@ -3,8 +3,6 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveCreateEvent } from '../glam/types/archive-types';
 
-
-
 @Component({
   selector: 'pr-create-archive-for-me-screen',
   templateUrl: './create-archive-for-me-screen.component.html',
