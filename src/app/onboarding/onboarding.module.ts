@@ -30,6 +30,8 @@ import { CreateArchiveForMeScreenComponent } from './components/create-archive-f
 import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
 import { GlamReasonsScreenComponent } from './components/glam-reasons-screen/glam-reasons-screen.component';
 import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-goals-screen.component';
+import { FinalizeArchiveCreationScreenComponent } from './components/finalize-archive-creation-screen/finalize-archive-creation-screen.component';
+
 @NgModule({
   declarations: [
     OnboardingComponent,
@@ -41,7 +43,9 @@ import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-go
     NameArchiveScreenComponent,
     CreateArchiveForMeScreenComponent,
     GlamReasonsScreenComponent,
-    GlamGoalsScreenComponent
+    GlamGoalsScreenComponent,
+    GlamUserSurveySquareComponent,
+    FinalizeArchiveCreationScreenComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +58,6 @@ import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-go
     GlamArchiveTypeSelectComponent,
     ArchiveTypeIconComponent,
     ComponentsModule,
-    GlamUserSurveySquareComponent,
   ],
 })
 export class OnboardingModule {

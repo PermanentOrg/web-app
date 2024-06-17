@@ -1,3 +1,4 @@
+<!-- @format -->
 <div>
   <div class="text-container">
     <p class="chart-path">Chart your <b>path</b> to success</p>
@@ -12,6 +13,8 @@
         <pr-glam-user-survey-square
           [text]="item.text"
           [tag]="item.tag"
+          [selected]="selectedGoals.includes(item.tag)"
+          (selectedChange)="addGoal(item.tag)"
         ></pr-glam-user-survey-square>
       </div>
     }
@@ -24,6 +27,8 @@
       (buttonClick)="goToNextReasons()"
       [orientation]="'right'"
       [icon]="'/onboarding/arrow-right'"
+      [variant]="'secondary'"
+      [disabled]="!selectedGoals.length"
       >Next</pr-button
     >
   </div>

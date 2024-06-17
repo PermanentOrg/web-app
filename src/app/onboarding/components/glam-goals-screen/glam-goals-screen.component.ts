@@ -1,3 +1,4 @@
+/* @format */
 import { Component, EventEmitter, Output } from '@angular/core';
 import { goals } from '../../shared/onboarding-screen';
 
@@ -8,9 +9,13 @@ import { goals } from '../../shared/onboarding-screen';
 })
 export class GlamGoalsScreenComponent {
   public goals = [];
+  public selectedGoals: string[] = [];
 
   @Output() backToNameArchiveOutput = new EventEmitter<string>();
-  @Output() goToNextReasonsOutput = new EventEmitter<string>();
+  @Output() goToNextReasonsOutput = new EventEmitter<{
+    screen: string;
+    goals: string[];
+  }>();
 
   constructor() {
     this.goals = goals;
@@ -21,6 +26,17 @@ export class GlamGoalsScreenComponent {
   }
 
   goToNextReasons() {
-    this.goToNextReasonsOutput.emit('reasons');
+    this.goToNextReasonsOutput.emit({
+      screen: 'reasons',
+      goals: this.selectedGoals,
+    });
+  }
+
+  public addGoal(goal: string): void {
+    if (this.selectedGoals.includes(goal)) {
+      this.selectedGoals = this.selectedGoals.filter((g) => g !== goal);
+    } else {
+      this.selectedGoals.push(goal);
+    }
   }
 }

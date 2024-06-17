@@ -1,15 +1,12 @@
+/* @format */
 import {
   StoryObj,
-  argsToTemplate,
   Meta,
   moduleMetadata,
 } from '@storybook/angular';
-import { action } from '@storybook/addon-actions';
-import { withActions } from '@storybook/addon-actions/decorator';
-import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';
 import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
+import { GlamUserSurveySquareComponent } from './glam-user-survey-square.component';
 
-const selectedChange = action('selectedChange');
 
 const meta: Meta<GlamUserSurveySquareComponent> = {
   title: 'Glam Onboarding: Survey Square',

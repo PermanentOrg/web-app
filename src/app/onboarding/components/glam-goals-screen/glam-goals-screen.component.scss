@@ -1,5 +1,8 @@
+/* @format */
 @import 'fonts';
+
 .goals {
+  margin-bottom: 64px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -13,20 +16,53 @@
   }
 }
 
-.chart-your-path {
+.chart-path {
   font-family: 'UsualRegular', sans-serif;
   font-size: 56px;
-  font-weight: 600px;
-  line-height: 72px;
+  width: 500px;
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+  }
 }
 
 .text {
   font-family: 'UsualRegular', sans-serif;
   font-size: 16px;
-  font-weight: 400px;
-  line-height: 72px;
+  width: 300px;
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+  }
 }
 
 p {
   color: white;
+}
+
+.text-container {
+  margin: 64px 0px;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 854px) {
+    flex-direction: column;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    justify-content: space-between;
+  }
+}
+
+.goal-container {
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+  }
 }

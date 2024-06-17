@@ -1,0 +1,40 @@
+<!-- @format -->
+<div class="finalize-archive">
+  <div class="title-container">
+    <p class="title">Congratulations on your first Archive!</p>
+  </div>
+  <div class="content-container">
+    <div>
+      <div class="archive-info">
+        <div>
+          <img
+            src="/assets/svg/onboarding/default-archive.svg"
+            alt="Custom Archive Icon"
+          />
+        </div>
+        <p>
+          The <b>{{ name }}</b> Archive
+        </p>
+        <div class="square">
+          <span>OWNER</span>
+        </div>
+      </div>
+      <hr />
+      <p>
+        Get started by uploading your first files, or learn more about your new
+        archive by viewing our help articles through the ‘?’ button in the lower
+        right-hand corner.
+      </p>
+    </div>
+    <div class="button-container">
+      <pr-button
+        [orientation]="'right'"
+        [variant]="'secondary'"
+        [icon]="'/accept'"
+        [size]="'fill'"
+        (buttonClick)="finalizeArchive()"
+        >Done</pr-button
+      >
+    </div>
+  </div>
+</div>

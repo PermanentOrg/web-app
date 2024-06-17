@@ -33,7 +33,8 @@ type NewArchiveScreen =
   | 'create'
   | 'start'
   | 'name-archive'
-  | 'create-archive-for-me';
+  | 'create-archive-for-me'
+  | 'finalize';
 
 @Component({
   selector: 'pr-create-new-archive',
@@ -271,7 +272,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.name = event.name;
     this.archiveType = event.type;
     this.archiveTypeTag = OnboardingTypes.myself;
-    this.screen = 'goals';
+    this.setScreen('goals');
   }
 
   public skipStep(): void {
@@ -332,7 +333,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   public navigateToGoals(event: string) {
     this.name = event;
-    this.screen = 'goals';
+    this.setScreen('goals');
   }
 
   public onValueChange(value: {
@@ -343,5 +344,15 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.archiveType = value.type;
     this.archiveTypeTag = value.tag as OnboardingTypes;
     this.setName(this.archiveTypeTag);
+  }
+
+  public goToReasons(event): void {
+    this.selectedGoals = event.goals;
+    this.setScreen('reasons');
+  }
+
+  public finalizeArchive(event): void {
+    this.selectedReasons = event.reasons;
+    this.screen = 'finalize';
   }
 }

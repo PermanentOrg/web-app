@@ -8,8 +8,6 @@ type Variant = 'primary' | 'secondary';
   selector: 'pr-checkbox',
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss'],
-  imports: [],
-  standalone: true,
 })
 export class CheckboxComponent {
   @Input() isChecked: boolean = false;
