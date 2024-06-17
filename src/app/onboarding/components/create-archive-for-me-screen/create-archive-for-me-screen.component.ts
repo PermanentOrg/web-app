@@ -1,12 +1,9 @@
 /* @format */
 import { Component, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
+import { ArchiveCreateEvent } from '../glam/types/archive-types';
 
-interface ArchiveCreateEvent {
-  screen: string;
-  type: string;
-  name: string;
-}
+
 
 @Component({
   selector: 'pr-create-archive-for-me-screen',

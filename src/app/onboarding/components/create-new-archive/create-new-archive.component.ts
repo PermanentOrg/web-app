@@ -24,7 +24,7 @@ import {
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import { archiveOptions } from '../glam/types/archive-types';
+import { ArchiveCreateEvent, archiveOptions } from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
@@ -262,7 +262,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     }
   }
 
-  public navToGoals(event: Record<string, string>): void {
+  public navToGoals(event: ArchiveCreateEvent): void {
     this.name = event.name;
     this.archiveType = event.type;
     this.archiveTypeTag = OnboardingTypes.myself;
@@ -318,7 +318,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.screen = event;
   }
 
-  public handleCreationScreenEvents(event: Record<string, string>): void {
+  public handleCreationScreenEvents(event: ArchiveCreateEvent): void {
     this.archiveTypeTag = event.tag as OnboardingTypes;
     this.archiveType = event.type;
     this.headerText = event.headerText;
