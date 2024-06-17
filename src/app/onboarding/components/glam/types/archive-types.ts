@@ -127,3 +127,11 @@ export const archiveCreationHeaderText = [
     text: 'Personal',
   },
 ];
+
+export interface ArchiveCreateEvent {
+  screen: string;
+  type: string;
+  name?: string;
+  tag?: string;
+  headerText?: string;
+}

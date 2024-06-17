@@ -5,6 +5,7 @@ import {
   archiveOptionsWithArticle,
   archiveCreationHeaderText,
   archiveOptions,
+  ArchiveCreateEvent,
 } from '../glam/types/archive-types';
 
 @Component({
@@ -20,7 +21,7 @@ export class SelectArchiveTypeScreenComponent {
   public type: string = '';
 
   @Output() navigationEmitter = new EventEmitter<string>();
-  @Output() submitEmitter = new EventEmitter<Record<string, string>>();
+  @Output() submitEmitter = new EventEmitter<ArchiveCreateEvent>();
 
   public navigate(screen) {
     if (screen === 'start') {
