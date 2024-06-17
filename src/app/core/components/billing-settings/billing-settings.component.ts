@@ -30,7 +30,7 @@ export class BillingSettingsComponent implements OnInit {
     private prConstants: PrConstantsService,
     private api: ApiService,
     private message: MessageService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map((c) => {
@@ -45,7 +45,7 @@ export class BillingSettingsComponent implements OnInit {
           text: s,
           value: s,
         };
-      }
+      },
     );
   }
 

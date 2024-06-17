@@ -22,7 +22,7 @@ describe('SearchRepo', () => {
 
     repo = new SearchRepo(
       TestBed.inject(HttpService),
-      TestBed.inject(HttpV2Service)
+      TestBed.inject(HttpV2Service),
     );
     httpMock = TestBed.get(HttpTestingController);
   });
@@ -41,7 +41,7 @@ describe('SearchRepo', () => {
       });
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/search/folderAndRecord?query=test&archiveId=1&publicOnly=true`
+      `${environment.apiUrl}/search/folderAndRecord?query=test&archiveId=1&publicOnly=true`,
     );
     req.flush(expected);
   });

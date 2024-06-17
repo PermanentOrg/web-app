@@ -136,7 +136,7 @@ export class SharePreviewRoutingModule {
 
   constructor(
     @Optional() private dialog?: Dialog,
-    @Optional() private resolver?: ComponentFactoryResolver
+    @Optional() private resolver?: ComponentFactoryResolver,
   ) {
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
   }

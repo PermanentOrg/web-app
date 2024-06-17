@@ -88,7 +88,7 @@ export class PhaseProgressComponent implements OnInit {
     private elementRef: ElementRef,
     private db: AngularFireDatabase,
     private route: ActivatedRoute,
-    public iFrame: IFrameService
+    public iFrame: IFrameService,
   ) {
     db.list('/progress', (ref) => ref.orderByKey().limitToLast(1))
       .valueChanges()
@@ -129,7 +129,7 @@ export class PhaseProgressComponent implements OnInit {
           offset: 0,
           color: '#FF9933',
           svgStyle: { width: '100%', height: '100%' },
-        }
+        },
       );
       this.redrawProgress();
     } catch (err) {}
@@ -140,7 +140,7 @@ export class PhaseProgressComponent implements OnInit {
       const percentage = Math.min(
         this.currentProgress.totalDollarAmount /
           this.currentProgress.goalDollarAmount,
-        1
+        1,
       );
       try {
         this.innerBar.animate(percentage);

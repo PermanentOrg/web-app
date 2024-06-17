@@ -15,50 +15,54 @@ export class DirectiveRepo extends BaseRepo {
       this.httpV2.get(
         `/v2/directive/archive/${archive.archiveId}`,
         {},
-        Directive
-      )
+        Directive,
+      ),
     ).toPromise();
   }
 
   public async create(directive: DirectiveCreateRequest): Promise<Directive> {
     return getFirst(
-      this.httpV2.post('/v2/directive', directive, Directive)
+      this.httpV2.post('/v2/directive', directive, Directive),
     ).toPromise();
   }
 
   public async update(directive: DirectiveUpdateRequest): Promise<Directive> {
     if (!directive.directiveId) {
       throw new Error(
-        'directiveID is required to update an existing Directive.'
+        'directiveID is required to update an existing Directive.',
       );
     }
     const data = Object.assign({}, directive);
     delete data.directiveId;
     return getFirst(
-      this.httpV2.put(`/v2/directive/${directive.directiveId}`, data, Directive)
+      this.httpV2.put(
+        `/v2/directive/${directive.directiveId}`,
+        data,
+        Directive,
+      ),
     ).toPromise();
   }
 
   public async getLegacyContact(): Promise<LegacyContact> {
     return getFirst(
-      this.httpV2.get('/v2/legacy-contact', {}, LegacyContactClass)
+      this.httpV2.get('/v2/legacy-contact', {}, LegacyContactClass),
     ).toPromise();
   }
 
   public async createLegacyContact(
-    legacyContact: LegacyContact
+    legacyContact: LegacyContact,
   ): Promise<LegacyContact> {
     return getFirst(
-      this.httpV2.post('/v2/legacy-contact', legacyContact, LegacyContactClass)
+      this.httpV2.post('/v2/legacy-contact', legacyContact, LegacyContactClass),
     ).toPromise();
   }
 
   public async updateLegacyContact(
-    legacyContact: LegacyContact
+    legacyContact: LegacyContact,
   ): Promise<LegacyContact> {
     if (!legacyContact.legacyContactId) {
       throw new Error(
-        'legacyContactId is required to update an existing Legacy Contact'
+        'legacyContactId is required to update an existing Legacy Contact',
       );
     }
     const data = {
@@ -69,8 +73,8 @@ export class DirectiveRepo extends BaseRepo {
       this.httpV2.put(
         `/v2/legacy-contact/${legacyContact.legacyContactId}`,
         data,
-        LegacyContactClass
-      )
+        LegacyContactClass,
+      ),
     ).toPromise();
   }
 }

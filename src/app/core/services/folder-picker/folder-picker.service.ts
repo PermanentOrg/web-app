@@ -15,7 +15,7 @@ export class FolderPickerService {
   registerComponent(toRegister: FolderPickerComponent) {
     if (this.component) {
       throw new Error(
-        'FolderPickerService - Folder picker component already registered'
+        'FolderPickerService - Folder picker component already registered',
       );
     }
 
@@ -30,7 +30,7 @@ export class FolderPickerService {
     startingFolder: FolderVO,
     operation: FolderPickerOperations,
     savePromise?: Promise<any>,
-    filterFolderLinkIds: number[] = null
+    filterFolderLinkIds: number[] = null,
   ) {
     if (!this.component) {
       throw new Error('FolderPickerService - Folder picker component missing');
@@ -40,7 +40,7 @@ export class FolderPickerService {
       startingFolder,
       operation,
       savePromise,
-      filterFolderLinkIds
+      filterFolderLinkIds,
     );
   }
 
@@ -54,7 +54,7 @@ export class FolderPickerService {
       FolderPickerOperations.ChooseRecord,
       null,
       null,
-      true
+      true,
     );
   }
 }

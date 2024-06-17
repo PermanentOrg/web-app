@@ -13,7 +13,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
         bind: {
           pendingArchives,
         },
-      }
+      },
     );
   }
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe('WelcomeScreenComponent #onboarding', () => {
     element.componentInstance.selectPendingArchive(pendingArchives[0]);
 
     expect(outputs.selectInvitation.emit).toHaveBeenCalledWith(
-      pendingArchives[0]
+      pendingArchives[0],
     );
   });
 });

@@ -214,7 +214,7 @@ export class SharedModule {
     private timePickerConfig: NgbTimepickerConfig,
     private tooltipConfig: NgbTooltipConfig,
     private dropdownConfig: NgbDropdownConfig,
-    private library: FaIconLibrary
+    private library: FaIconLibrary,
   ) {
     library.addIcons(faFileArchive, faPenSquare);
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);

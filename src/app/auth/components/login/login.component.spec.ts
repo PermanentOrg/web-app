@@ -44,7 +44,7 @@ describe('LoginComponent', () => {
 
   it('should autofill with the email from cookies', () => {
     expect(component.loginForm.value.email).toEqual(
-      TEST_DATA.account.primaryEmail
+      TEST_DATA.account.primaryEmail,
     );
   });
 

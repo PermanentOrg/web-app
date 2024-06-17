@@ -17,7 +17,10 @@ export class TagsService {
   private tagsSubject: Subject<TagVOData[]> = new Subject();
   private itemsTagsSubject: Subject<TagVOData[]> = new Subject();
   private debug = debug('service:tagsService');
-  constructor(private account: AccountService, private api: ApiService) {
+  constructor(
+    private account: AccountService,
+    private api: ApiService,
+  ) {
     this.refreshTags();
 
     this.account.archiveChange.subscribe(() => {
@@ -37,7 +40,7 @@ export class TagsService {
   async refreshTags() {
     if (this.account.getArchive()) {
       const response = await this.api.tag.getTagsByArchive(
-        this.account.getArchive()
+        this.account.getArchive(),
       );
       const tags = response.getTagVOsData().filter((t) => t.name);
       for (const tag of tags) {

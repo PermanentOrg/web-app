@@ -19,11 +19,11 @@ function addParam(url, param) {
 
 const minItem = new RecordVO(
   { folder_linkId: 1 },
-  { dataStatus: DataStatus.Placeholder }
+  { dataStatus: DataStatus.Placeholder },
 );
 const leanItem = new RecordVO(
   { folder_linkId: 1, thumbURL200: image200 },
-  { dataStatus: DataStatus.Lean }
+  { dataStatus: DataStatus.Lean },
 );
 const fullItem = new RecordVO(
   {
@@ -33,21 +33,21 @@ const fullItem = new RecordVO(
     thumbURL1000: image1000,
     type: 'type.record.image',
   },
-  { dataStatus: DataStatus.Full }
+  { dataStatus: DataStatus.Full },
 );
 
 const minItem2 = new RecordVO(
   {
     folder_linkId: 2,
   },
-  { dataStatus: DataStatus.Placeholder }
+  { dataStatus: DataStatus.Placeholder },
 );
 const leanItem2 = new RecordVO(
   {
     folder_linkId: 2,
     thumbURL200: addParam(image200, 'item2'),
   },
-  { dataStatus: DataStatus.Lean }
+  { dataStatus: DataStatus.Lean },
 );
 const fullItem2 = new RecordVO(
   {
@@ -56,7 +56,7 @@ const fullItem2 = new RecordVO(
     thumbURL500: addParam(image500, 'item2'),
     thumbURL1000: addParam(image500, 'item2'),
   },
-  { dataStatus: DataStatus.Full }
+  { dataStatus: DataStatus.Full },
 );
 
 @Component({
@@ -190,7 +190,7 @@ describe('ThumbnailComponent', () => {
 
     expect(component['element'].querySelector('fa-icon')).not.toBeNull();
     expect(
-      component['element'].querySelector('.pr-thumbnail-image:not([hidden])')
+      component['element'].querySelector('.pr-thumbnail-image:not([hidden])'),
     ).toBeNull();
   });
 });

@@ -12,10 +12,10 @@ import { FormInputComponent as FormInput } from '@root/app/component-library/com
 import { DeviceService } from '@shared/services/device/device.service';
 
 export function matchControlValidator(
-  controlToMatch: AbstractControl
+  controlToMatch: AbstractControl,
 ): ValidatorFn {
   return function validator(
-    controlToValidate: AbstractControl
+    controlToValidate: AbstractControl,
   ): { [key: string]: boolean } | null {
     if (
       controlToValidate.value &&
@@ -33,7 +33,7 @@ export function matchControlValidator(
 
 export function minDateValidator(minDate: string | Date) {
   return function validator(
-    controlToValidate: AbstractControl
+    controlToValidate: AbstractControl,
   ): { [key: string]: boolean } | null {
     if (!(minDate instanceof Date)) {
       minDate = new Date(minDate);
@@ -120,7 +120,7 @@ export function getFormInputError(formInput: FormInputComponent | FormInput) {
 }
 
 export function trimWhitespace(
-  control: AbstractControl
+  control: AbstractControl,
 ): { [key: string]: boolean } | null {
   if (
     control &&

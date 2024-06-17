@@ -14,7 +14,7 @@ export class MobileBannerComponent {
   public url = '';
   constructor(
     public bannerService: MobileBannerService,
-    private prompt: PromptService
+    private prompt: PromptService,
   ) {
     this.url = this.bannerService.isIos
       ? this.bannerService.appStoreUrl
@@ -34,7 +34,7 @@ export class MobileBannerComponent {
             'Yes',
             `Would you like to navigate to the ${
               this.bannerService.isIos ? 'App Store' : 'Google Play Store'
-            }?`
+            }?`,
           )
           .then(() => {
             window.location.href = this.url;

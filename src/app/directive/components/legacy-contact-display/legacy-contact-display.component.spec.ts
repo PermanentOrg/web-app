@@ -44,12 +44,12 @@ describe('LegacyContactDisplayComponent', () => {
 
     expect(find('.legacy-contact-name').length).toBe(1);
     expect(find('.legacy-contact-name')[0].nativeElement.innerText).toContain(
-      'Test User'
+      'Test User',
     );
 
     expect(find('.legacy-contact-email').length).toBe(1);
     expect(find('.legacy-contact-email')[0].nativeElement.innerText).toContain(
-      'test@example.com'
+      'test@example.com',
     );
 
     expect(find('.not-assigned').length).toBe(0);
@@ -59,11 +59,11 @@ describe('LegacyContactDisplayComponent', () => {
     const { find } = await shallow.render();
 
     expect(find('.legacy-contact-name')[0].nativeElement.innerText).toContain(
-      'not assigned'
+      'not assigned',
     );
 
     expect(find('.legacy-contact-email')[0].nativeElement.innerText).toContain(
-      'not assigned'
+      'not assigned',
     );
 
     expect(find('.not-assigned').length).toBe(2);

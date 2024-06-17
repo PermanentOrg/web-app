@@ -64,7 +64,7 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
   constructor(
     elementRef: ElementRef,
     private renderer: Renderer2,
-    private zone: NgZone
+    private zone: NgZone,
   ) {
     this.element = elementRef.nativeElement;
     this.debouncedResize = debounce(this.checkElementWidth, 100);
@@ -219,7 +219,7 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
           this.renderer.setStyle(
             this.imageElement,
             'background-image',
-            `url(${imageUrl})`
+            `url(${imageUrl})`,
           );
         }
       };
@@ -231,7 +231,7 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
   chooseFullSizeImage(record: RecordVO) {
     if (record.FileVOs.length > 1) {
       const convertedUrl = record.FileVOs.find(
-        (file) => file.format == 'file.format.converted'
+        (file) => file.format == 'file.format.converted',
       ).fileURL;
       return convertedUrl;
     } else {

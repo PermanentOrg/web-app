@@ -14,7 +14,7 @@ export type DialogState = 'display' | 'edit';
 export class DirectiveDialogComponent {
   constructor(
     private accountService: AccountService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     const account = this.accountService.getAccount();
     this.analytics.notifyObservers({

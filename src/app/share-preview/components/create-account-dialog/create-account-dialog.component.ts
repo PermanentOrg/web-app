@@ -14,7 +14,7 @@ export class CreateAccountDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     private device: DeviceService,
-    @Inject(DIALOG_DATA) public data: any
+    @Inject(DIALOG_DATA) public data: any,
   ) {}
 
   ngOnInit(): void {}

@@ -74,7 +74,7 @@ const routes: RoutesWithData = [
     path: 'share',
     loadChildren: () =>
       import('./share-preview/share-preview.module').then(
-        (m) => m.SharePreviewModule
+        (m) => m.SharePreviewModule,
       ),
     data: {
       title: 'Sharing',
@@ -130,7 +130,7 @@ const routes: RoutesWithData = [
         path: 'app/onboarding',
         loadChildren: () =>
           import('./onboarding/onboarding.module').then(
-            (m) => m.OnboardingModule
+            (m) => m.OnboardingModule,
           ),
       },
       {

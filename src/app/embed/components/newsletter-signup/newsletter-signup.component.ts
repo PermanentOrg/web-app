@@ -44,7 +44,7 @@ export class NewsletterSignupComponent implements OnInit {
     private iFrame: IFrameService,
     private router: Router,
     private message: MessageService,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {
     const queryParams = route.snapshot.queryParams;
 
@@ -110,7 +110,7 @@ export class NewsletterSignupComponent implements OnInit {
       (error) => {
         this.waiting = false;
         this.mailchimpSent = true;
-      }
+      },
     );
   }
 
@@ -131,7 +131,7 @@ export class NewsletterSignupComponent implements OnInit {
         false,
         null,
         formValue.invitation,
-        true
+        true,
       )
       .then((response: AccountVO) => {
         return this.accountService

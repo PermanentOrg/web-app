@@ -13,7 +13,7 @@ describe('MyfilesGuard', () => {
   let guard: MyfilesGuard;
   const dummyRoute = {} as ActivatedRouteSnapshot;
   const dummyRouterState: (s: string) => RouterStateSnapshot = (url: string) =>
-    ({ url } as RouterStateSnapshot);
+    ({ url }) as RouterStateSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,7 +29,7 @@ describe('MyfilesGuard', () => {
   it('should redirect /app/myfiles to /app/private', () => {
     const tree: UrlTree = guard.canActivate(
       dummyRoute,
-      dummyRouterState('/app/myfiles')
+      dummyRouterState('/app/myfiles'),
     ) as UrlTree;
 
     expect(tree.toString()).toBe('/app/private');
@@ -38,7 +38,7 @@ describe('MyfilesGuard', () => {
   it('should redirect a myfiles subdirectory to /app/private/*', () => {
     const tree: UrlTree = guard.canActivate(
       dummyRoute,
-      dummyRouterState('/app/myfiles/0001-000m/22')
+      dummyRouterState('/app/myfiles/0001-000m/22'),
     ) as UrlTree;
 
     expect(tree.toString()).toBe('/app/private/0001-000m/22');

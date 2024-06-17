@@ -74,7 +74,7 @@ describe('GiftStorageComponent', () => {
     instance.availableSpace = '5';
 
     instance.giftForm.controls.email.setValue(
-      'test@example.com, test@example.com'
+      'test@example.com, test@example.com',
     );
     instance.giftForm.controls.amount.setValue('1');
 
@@ -110,7 +110,7 @@ describe('GiftStorageComponent', () => {
     instance.availableSpace = '5';
 
     await instance.giftForm.controls.email.setValue(
-      'test@example.com,test1@example.com'
+      'test@example.com,test1@example.com',
     );
     instance.giftForm.controls.amount.setValue('2');
 
@@ -128,7 +128,7 @@ describe('GiftStorageComponent', () => {
     instance.availableSpace = '5';
 
     await instance.giftForm.controls.email.setValue(
-      'test@example.com,test1@example.com'
+      'test@example.com,test1@example.com',
     );
     instance.giftForm.controls.amount.setValue('4');
 
@@ -186,7 +186,7 @@ describe('GiftStorageComponent', () => {
     const { instance } = await shallow.render();
 
     const result = instance.parseEmailString(
-      'test@example.com, test1@example.com'
+      'test@example.com, test1@example.com',
     );
 
     expect(result).toEqual(['test@example.com', 'test1@example.com']);

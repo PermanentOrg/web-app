@@ -29,7 +29,7 @@ export class ForgotPasswordComponent implements OnInit {
     private api: ApiService,
     private router: Router,
     private message: MessageService,
-    private cookies: CookieService
+    private cookies: CookieService,
   ) {
     this.forgotForm = fb.group({
       email: ['', [Validators.required, Validators.email]],

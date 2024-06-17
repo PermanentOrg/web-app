@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
 
   rememberMe: boolean = true;
 
+
   constructor(
     private fb: UntypedFormBuilder,
     private accountService: AccountService,
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private message: MessageService,
     private cookies: CookieService,
-    private device: DeviceService
+    private device: DeviceService,
   ) {
     this.loginForm = fb.group({
       email: [

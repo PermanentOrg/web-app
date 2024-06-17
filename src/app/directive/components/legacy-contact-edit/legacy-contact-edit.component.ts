@@ -20,7 +20,7 @@ export class LegacyContactEditComponent implements OnInit {
   constructor(
     private api: ApiService,
     private message: MessageService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {}
 
   ngOnInit(): void {

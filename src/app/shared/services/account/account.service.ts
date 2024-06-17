@@ -69,7 +69,7 @@ export class AccountService {
     private router: Router,
     private httpv2: HttpV2Service,
     private location: LocationStrategy,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
@@ -350,7 +350,7 @@ export class AccountService {
     email: string,
     password: string,
     rememberMe: boolean,
-    keepLoggedIn: boolean
+    keepLoggedIn: boolean,
   ): Promise<any> {
     this.skipSessionCheck = false;
 
@@ -408,7 +408,7 @@ export class AccountService {
             throw response;
           }
           return response;
-        })
+        }),
       )
       .toPromise();
   }
@@ -419,7 +419,7 @@ export class AccountService {
         this.account.primaryEmail,
         oldPassword,
         this.account.rememberMe,
-        this.account.keepLoggedIn
+        this.account.keepLoggedIn,
       )
       .toPromise();
   }
@@ -436,14 +436,14 @@ export class AccountService {
             this.accountChange.emit(null);
           }
           return response;
-        })
+        }),
       )
       .toPromise();
   }
 
   public verifyMfa(
     token: string,
-    keepLoggedIn?: boolean
+    keepLoggedIn?: boolean,
   ): Promise<AuthResponse> {
     return this.api.auth
       .verify(this.account, token, 'type.auth.mfaValidation')
@@ -466,7 +466,7 @@ export class AccountService {
           } else {
             throw response;
           }
-        })
+        }),
       )
       .toPromise();
   }
@@ -487,7 +487,7 @@ export class AccountService {
           } else {
             throw response;
           }
-        })
+        }),
       )
       .toPromise();
   }
@@ -508,7 +508,7 @@ export class AccountService {
           } else {
             throw response;
           }
-        })
+        }),
       )
       .toPromise();
   }
@@ -537,7 +537,7 @@ export class AccountService {
 
   public checkMinimumAccess(
     itemAccessRole: AccessRoleType,
-    minimumAccess: AccessRole
+    minimumAccess: AccessRole,
   ) {
     return (
       this.checkMinimumArchiveAccess(minimumAccess) &&
@@ -562,7 +562,7 @@ export class AccountService {
     optIn: boolean,
     phone: string,
     inviteCode: string,
-    createDefaultArchive: boolean
+    createDefaultArchive: boolean,
   ): Promise<AccountVO> {
     this.skipSessionCheck = false;
 
@@ -586,7 +586,7 @@ export class AccountService {
           optIn,
           createDefaultArchive,
           phone,
-          inviteCode
+          inviteCode,
         )
         .pipe(
           map((response: AccountVO) => {
@@ -597,7 +597,7 @@ export class AccountService {
             newAccount.isNew = true;
             this.setAccount(newAccount);
             return newAccount;
-          })
+          }),
         )
         .toPromise();
     } catch (err) {
@@ -633,7 +633,7 @@ export class AccountService {
       return this.dialog.open(
         'ArchiveSwitcherDialogComponent',
         { promptText },
-        { height: 'auto', width: 'fullscreen' }
+        { height: 'auto', width: 'fullscreen' },
       );
     }
   }

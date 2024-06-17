@@ -53,7 +53,7 @@ declare var ga: any;
 
 export function initializeAnalytics(
   analyticsService: AnalyticsService,
-  mixpanelService: MixpanelService
+  mixpanelService: MixpanelService,
 ): () => void {
   return () => {
     analyticsService.addObserver(mixpanelService);
@@ -188,7 +188,7 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
-    private mixpanel: MixpanelService
+    private mixpanel: MixpanelService,
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {
@@ -213,7 +213,7 @@ export class AppModule {
             this.routerDebug('start navigate %s', event.url);
           }
           return event instanceof NavigationEnd;
-        })
+        }),
       )
       .subscribe((event) => {
         this.routerDebug('end navigate %s', this.router.url);

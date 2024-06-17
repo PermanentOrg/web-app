@@ -60,7 +60,7 @@ const mockApiService = {
   billing: {
     claimPledge: (
       billingPaymentVO: BillingPaymentVO,
-      pledgeId: string
+      pledgeId: string,
     ): Promise<BillingResponse> => {
       return Promise.resolve(new BillingResponse(mockPromoData));
     },

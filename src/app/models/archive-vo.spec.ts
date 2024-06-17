@@ -11,15 +11,15 @@ describe('ArchiveVO', () => {
     expect(new ArchiveVO({}).isPending()).toBeFalse();
 
     expect(
-      new ArchiveVO({ status: 'status.generic.ok' }).isPending()
+      new ArchiveVO({ status: 'status.generic.ok' }).isPending(),
     ).toBeFalse();
 
     expect(
-      new ArchiveVO({ status: 'status.generic.deleted' }).isPending()
+      new ArchiveVO({ status: 'status.generic.deleted' }).isPending(),
     ).toBeFalse();
 
     expect(
-      new ArchiveVO({ status: 'status.generic.pending' }).isPending()
+      new ArchiveVO({ status: 'status.generic.pending' }).isPending(),
     ).toBeTrue();
   });
 
@@ -34,13 +34,14 @@ describe('ArchiveVO', () => {
 
     it('should ignore items without a type', () => {
       expect(new ArchiveVO({ ItemVOs: [{ type: null }] }).ItemVOs.length).toBe(
-        0
+        0,
       );
     });
 
     it('should initialize folder items as folderVos', () => {
       expect(
-        new ArchiveVO({ ItemVOs: [{ type: 'type.folder.private' }] }).ItemVOs[0]
+        new ArchiveVO({ ItemVOs: [{ type: 'type.folder.private' }] })
+          .ItemVOs[0],
       ).toBeInstanceOf(FolderVO);
     });
 

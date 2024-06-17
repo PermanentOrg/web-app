@@ -76,7 +76,10 @@ export class DialogRef {
   closeDeferred?: Deferred = new Deferred();
   closePromise: Promise<any>;
 
-  constructor(public id: number, private dialog: Dialog) {
+  constructor(
+    public id: number,
+    private dialog: Dialog,
+  ) {
     this.closePromise = this.closeDeferred.promise;
   }
 
@@ -119,7 +122,7 @@ export class Dialog {
     private app: ApplicationRef,
     private resolver: ComponentFactoryResolver,
     private injector: Injector,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
   ) {}
 
   setDialogModuleResolver(resolver: ComponentFactoryResolver) {
@@ -141,7 +144,7 @@ export class Dialog {
   registerComponent(
     componentData: DialogChildComponentData,
     resolver = this.resolver,
-    allowDupes?: boolean
+    allowDupes?: boolean,
   ) {
     if (!this.registeredComponents[componentData.token]) {
       this.registeredComponents[componentData.token] = componentData.component;
@@ -149,7 +152,7 @@ export class Dialog {
       this.debug('register component %s', componentData.token);
     } else if (!allowDupes) {
       throw new Error(
-        `Dialog - component with token ${componentData.token} already registered`
+        `Dialog - component with token ${componentData.token} already registered`,
       );
     }
   }
@@ -157,7 +160,7 @@ export class Dialog {
   registerComponents(
     components: DialogChildComponentData[],
     resolver?: ComponentFactoryResolver,
-    allowDupes?: boolean
+    allowDupes?: boolean,
   ) {
     components.map((componentData) => {
       this.registerComponent(componentData, resolver, allowDupes);
@@ -179,7 +182,7 @@ export class Dialog {
     data?: any,
     options = DEFAULT_OPTIONS,
     outlet?: TemplateRef<any>,
-    route?: ActivatedRoute
+    route?: ActivatedRoute,
   ): Promise<any> {
     if (!this.rootComponent) {
       throw new Error(`Dialog - root component not found`);
@@ -224,7 +227,7 @@ export class Dialog {
     data: any = {},
     options = DEFAULT_OPTIONS,
     outlet: TemplateRef<any>,
-    route?: ActivatedRoute
+    route?: ActivatedRoute,
   ): DialogRef {
     // create new dialog metadata
     const dialog = new DialogRef(this.currentId++, this);
@@ -237,7 +240,7 @@ export class Dialog {
       this.rootComponent.viewContainer.createComponent(
         dialogComponentFactory,
         undefined,
-        this.injector
+        this.injector,
       );
     dialog.dialogComponent = dialog.dialogComponentRef.instance;
 
@@ -267,7 +270,7 @@ export class Dialog {
       dialog.dialogComponent.viewContainer.createComponent(
         factory,
         undefined,
-        injector
+        injector,
       );
 
     // toggle body scroll if needed

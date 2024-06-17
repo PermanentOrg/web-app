@@ -27,7 +27,7 @@ export class SearchService {
   constructor(
     private api: ApiService,
     private data: DataService,
-    private tags: TagsService
+    private tags: TagsService,
   ) {
     this.data.currentFolderChange.subscribe(() => {
       this.indexCurrentFolder();
@@ -40,7 +40,7 @@ export class SearchService {
 
   public getResultsInCurrentFolder(
     searchTerm: string,
-    limit?: number
+    limit?: number,
   ): ItemVO[] {
     return this.searchWithFuse(this.fuse, searchTerm, limit);
   }
@@ -93,7 +93,7 @@ export class SearchService {
   public getResultsInCurrentArchive(
     searchTerm: string,
     tags: TagVOData[],
-    limit?: number
+    limit?: number,
   ): Observable<SearchResponse> {
     return this.api.search.itemsByNameObservable(searchTerm, tags, limit);
   }
@@ -102,20 +102,20 @@ export class SearchService {
     searchTerm: string,
     tags: TagVOData[],
     archiveId: string,
-    limit?: number
+    limit?: number,
   ) {
     return this.api.search.itemsByNameInPublicArchiveObservable(
       searchTerm,
       tags,
       archiveId,
-      limit
+      limit,
     );
   }
 
   private searchWithFuse<T>(
     fuse: Fuse<T>,
     searchTerm: string,
-    limit?: number
+    limit?: number,
   ): T[] {
     if (!searchTerm) {
       return [];

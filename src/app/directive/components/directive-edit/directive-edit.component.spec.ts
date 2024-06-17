@@ -31,7 +31,7 @@ type Find = (
   cssOrDirective: string | Type<any>,
   options?: {
     query?: string;
-  }
+  },
 ) => QueryMatch<DebugElement>;
 
 describe('DirectiveEditComponent', () => {
@@ -54,7 +54,7 @@ describe('DirectiveEditComponent', () => {
     MockMessageService.reset();
     shallow = new Shallow<DirectiveEditComponent>(
       DirectiveEditComponent,
-      DirectiveModule
+      DirectiveModule,
     )
       .provideMock([
         {
@@ -122,7 +122,7 @@ describe('DirectiveEditComponent', () => {
   it('should be able to have existing directive data passed in', async () => {
     const directive = await createDirective(
       'existing@example.com',
-      'already existing directive'
+      'already existing directive',
     );
     const { instance } = await shallow.render({
       bind: {
@@ -137,7 +137,7 @@ describe('DirectiveEditComponent', () => {
   it('should send an edit call if the directive already exists', async () => {
     const directive = await createDirective(
       'existing@example.com',
-      'already existing directive'
+      'already existing directive',
     );
 
     const { find, fixture } = await shallow.render({
@@ -178,7 +178,7 @@ describe('DirectiveEditComponent', () => {
     MockDirectiveRepo.failRequest = true;
     const directive = await createDirective(
       'existing@example.com',
-      'already existing directive'
+      'already existing directive',
     );
     const { find, fixture } = await shallow.render({
       bind: {
@@ -216,7 +216,7 @@ describe('DirectiveEditComponent', () => {
   it('should emit an output when a directive is edited', async () => {
     const directive = await createDirective(
       'existing@example.com',
-      'already existing directive'
+      'already existing directive',
     );
     const { instance, find, fixture } = await shallow.render({
       bind: {
@@ -281,7 +281,7 @@ describe('DirectiveEditComponent', () => {
     MockDirectiveRepo.accountExists = false;
     const directive = await createDirective(
       'existing@example.com',
-      'already existing directive'
+      'already existing directive',
     );
     const { find, fixture, outputs } = await shallow.render({
       bind: { directive },

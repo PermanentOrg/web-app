@@ -19,7 +19,7 @@ export class WelcomeDialogComponent implements OnInit {
     private dialogRef: DialogRef,
     private account: AccountService,
     private constants: PrConstantsService,
-    private api: ApiService
+    private api: ApiService,
   ) {}
 
   async ngOnInit(): Promise<void> {

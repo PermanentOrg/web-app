@@ -251,7 +251,8 @@ $share-preview-banner-height: 100px;
   bottom: 0;
   left: 0;
   right: 0;
-  transition: background-color $transition-length ease-in,
+  transition:
+    background-color $transition-length ease-in,
     top 0s linear $transition-length;
   display: flex;
   align-items: center;
@@ -291,7 +292,9 @@ $share-preview-banner-height: 100px;
   }
 
   &.share-preview-cover-visible {
-    transition: background-color $transition-length ease-out, top 0s linear 0s;
+    transition:
+      background-color $transition-length ease-out,
+      top 0s linear 0s;
     background: rgba(black, 0.4);
     top: 0;
 

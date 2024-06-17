@@ -37,7 +37,7 @@ export class MessageComponent implements OnInit {
   constructor(
     private service: MessageService,
     private router: Router,
-    private iFrame: IFrameService
+    private iFrame: IFrameService,
   ) {
     this.service.registerComponent(this);
   }
@@ -90,7 +90,7 @@ export class MessageComponent implements OnInit {
             externalUrl: message.externalUrl,
             externalMessage: message.externalMessage,
           }),
-        500
+        500,
       );
     }
     return false;

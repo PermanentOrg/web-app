@@ -32,7 +32,10 @@ export class DownloadButtonComponent implements OnInit {
   @ViewChild('downloadButtonDropdown', { static: false })
   downloadButtonDropdown: ElementRef;
 
-  constructor(private data: DataService, private message: MessageService) {}
+  constructor(
+    private data: DataService,
+    private message: MessageService,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -79,10 +82,10 @@ export class DownloadButtonComponent implements OnInit {
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
     const original = (this.selectedItem as RecordVO).FileVOs?.find(
-      (item) => item.format === 'file.format.original'
+      (item) => item.format === 'file.format.original',
     );
     const converted = (this.selectedItem as RecordVO).FileVOs?.filter(
-      (item) => item.format === 'file.format.converted'
+      (item) => item.format === 'file.format.converted',
     ).map((item) => ({
       name: item.type,
       extension: item.type.split('.').pop(),

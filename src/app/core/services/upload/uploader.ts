@@ -12,7 +12,7 @@ const buildForm = (fields: object, file: File) => {
   }
   formData.append(
     'Content-Type',
-    file.type ? file.type : 'application/octet-stream'
+    file.type ? file.type : 'application/octet-stream',
   );
   formData.append('file', file);
   return formData;
@@ -25,13 +25,13 @@ export class Uploader {
   constructor(
     private api: ApiService,
     private httpClient: HttpClient,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {}
 
   private getUploadData = async (item: UploadItem) => {
     const response = await this.api.record.getPresignedUrl(
       item.RecordVO,
-      item.file.type ? item.file.type : 'application/octet-stream'
+      item.file.type ? item.file.type : 'application/octet-stream',
     );
     if (response.isSuccessful !== true) {
       throw response;
@@ -42,7 +42,7 @@ export class Uploader {
   private registerRecord = async (item: UploadItem, destinationUrl: string) => {
     const registerResponse = await this.api.record.registerRecord(
       item.RecordVO,
-      destinationUrl
+      destinationUrl,
     );
     if (registerResponse.isSuccessful !== true) {
       throw registerResponse;
@@ -73,7 +73,7 @@ export class Uploader {
 
   private upload = async (
     item: UploadItem,
-    emitUploadProgress: (e: HttpEvent<any>) => void
+    emitUploadProgress: (e: HttpEvent<any>) => void,
   ) => {
     const { destinationUrl, presignedPost } = await this.getUploadData(item);
 
@@ -93,7 +93,7 @@ export class Uploader {
     url: string,
     item: UploadItem,
     filePointer: number,
-    eTags: string[]
+    eTags: string[],
   ) => {
     const response = await this.httpClient
       .put(url, item.file.slice(filePointer, filePointer + this.tenMB), {
@@ -113,7 +113,7 @@ export class Uploader {
 
   private uploadMultipart = async (
     item: UploadItem,
-    emitProgress: (n: number) => void
+    emitProgress: (n: number) => void,
   ) => {
     const size = item.file.size;
     const { urls, uploadId, key } =
@@ -143,7 +143,7 @@ export class Uploader {
       item.RecordVO,
       uploadId,
       key,
-      eTags
+      eTags,
     );
 
     const record = response.getRecordVO();
@@ -172,7 +172,7 @@ export class Uploader {
 
   async uploadFile(
     item: UploadItem,
-    emitUploadProgress: (e: number) => void
+    emitUploadProgress: (e: number) => void,
   ): Promise<any> {
     const multiPartSize = 100 * 1024 * 1024; // 100 MB
     emitUploadProgress(0);

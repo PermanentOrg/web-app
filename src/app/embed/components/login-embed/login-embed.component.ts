@@ -43,7 +43,7 @@ export class LoginEmbedComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private message: MessageService,
-    private iFrame: IFrameService
+    private iFrame: IFrameService,
   ) {
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams.invite) {
@@ -79,7 +79,7 @@ export class LoginEmbedComponent implements OnInit {
         formValue.email,
         formValue.password,
         formValue.rememberMe,
-        formValue.keepLoggedIn
+        formValue.keepLoggedIn,
       )
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {

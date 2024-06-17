@@ -23,7 +23,7 @@ describe('AccountRepo', () => {
 
     repo = new AccountRepo(
       TestBed.inject(HttpService),
-      TestBed.inject(HttpV2Service)
+      TestBed.inject(HttpV2Service),
     );
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -46,7 +46,7 @@ describe('AccountRepo', () => {
         'password123',
         true,
         true,
-        true
+        true,
       )
       .subscribe((response) => {
         expect(response.primaryEmail).toEqual('test@permanent.org');

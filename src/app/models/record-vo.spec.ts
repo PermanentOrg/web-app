@@ -5,7 +5,7 @@ import { RecordVO, ShareVO } from '.';
 describe('RecordVO', () => {
   function extendBaseShareVO(
     share: Partial<ShareVO>,
-    fullName: string = 'Unit Test'
+    fullName: string = 'Unit Test',
   ): ShareVO {
     return new ShareVO({
       status: 'status.generic.ok',

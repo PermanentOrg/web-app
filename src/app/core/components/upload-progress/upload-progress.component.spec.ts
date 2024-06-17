@@ -32,7 +32,7 @@ describe('UploadProgressComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(UploadProgressComponent, CoreModule).mock(
       UploadService,
-      mockUploadService
+      mockUploadService,
     );
   });
 
@@ -60,7 +60,7 @@ describe('UploadProgressComponent', () => {
           displayName: 'testfolder',
           pathAsArchiveNbr: [],
           folderId: 10,
-        })
+        }),
       ),
       statistics: { current: 1, total: 5, completed: 0, error: 0 },
       sessionStatus: UploadSessionStatus.InProgress,
@@ -71,7 +71,7 @@ describe('UploadProgressComponent', () => {
     fixture.detectChanges();
 
     expect(find('.current-file').nativeElement.textContent.trim()).toBe(
-      `Uploading ${progressEvent.item.file.name} to ${progressEvent.item.parentFolder.displayName}`
+      `Uploading ${progressEvent.item.file.name} to ${progressEvent.item.parentFolder.displayName}`,
     );
 
     const fileCountElements = find('.file-count strong');
@@ -92,7 +92,7 @@ describe('UploadProgressComponent', () => {
           displayName: 'testfolder1',
           pathAsArchiveNbr: [],
           folderId: 9,
-        })
+        }),
       ),
       statistics: { current: 1, total: 5, completed: 0, error: 0 },
       sessionStatus: UploadSessionStatus.InProgress,
@@ -103,7 +103,7 @@ describe('UploadProgressComponent', () => {
     fixture.detectChanges();
 
     expect(find('.current-file').nativeElement.textContent.trim()).toBe(
-      `Uploading ${progressEvent.item.file.name} to testfolder/${progressEvent.item.parentFolder.displayName}`
+      `Uploading ${progressEvent.item.file.name} to testfolder/${progressEvent.item.parentFolder.displayName}`,
     );
 
     const fileCountElements = find('.file-count strong');

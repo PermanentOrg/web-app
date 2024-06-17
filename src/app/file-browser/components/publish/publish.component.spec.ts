@@ -22,7 +22,7 @@ const mockApiService = {
   folder: {
     copy: (
       folderVOs: FolderVO[],
-      destination: FolderVO
+      destination: FolderVO,
     ): Promise<FolderResponse> => {
       return Promise.resolve(new FolderResponse({}));
     },

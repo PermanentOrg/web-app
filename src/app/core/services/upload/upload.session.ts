@@ -48,7 +48,10 @@ export class UploadSession {
 
   private debug = debug('service:uploadSession');
 
-  constructor(private uploader: Uploader, private account: AccountService) {}
+  constructor(
+    private uploader: Uploader,
+    private account: AccountService,
+  ) {}
 
   private emitProgress = (item: UploadItem) =>
     this.progress.emit({
@@ -85,7 +88,7 @@ export class UploadSession {
     this.debug(
       'UploadSession.queueFiles: %d files to folder %o',
       files.length,
-      parentFolder
+      parentFolder,
     );
     this.startSession();
 

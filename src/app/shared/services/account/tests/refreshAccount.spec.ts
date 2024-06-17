@@ -109,7 +109,7 @@ describe('AccountService: refreshAccount', () => {
       instance: AccountService;
       storage?: StorageService;
     },
-    url: string = '/app/private'
+    url: string = '/app/private',
   ) {
     services.router.navigate = jasmine
       .createSpy('router.navigate')
@@ -117,7 +117,7 @@ describe('AccountService: refreshAccount', () => {
 
     const logOutSpy = spyOn(
       services.apiService.auth,
-      'logOut'
+      'logOut',
     ).and.callThrough();
     spyOn(services.location, 'path').and.returnValue(url);
 
@@ -128,7 +128,7 @@ describe('AccountService: refreshAccount', () => {
     if (services.storage) {
       localStorageSpy = spyOn(services.storage.local, 'set').and.callThrough();
       spyOn(services.instance, 'getStorage').and.returnValue(
-        new AccountVO({ keepLoggedIn: true })
+        new AccountVO({ keepLoggedIn: true }),
       );
     }
 
@@ -182,7 +182,7 @@ describe('AccountService: refreshAccount', () => {
         location: inject(LocationStrategy),
         instance,
       },
-      '///p/0001-0000/?ksljflkasjlf'
+      '///p/0001-0000/?ksljflkasjlf',
     );
 
     AuthRepoStub.loggedIn = false;
@@ -203,7 +203,7 @@ describe('AccountService: refreshAccount', () => {
         location: inject(LocationStrategy),
         instance,
       },
-      '///gallery/////'
+      '///gallery/////',
     );
 
     AuthRepoStub.loggedIn = false;
@@ -242,7 +242,7 @@ describe('AccountService: refreshAccount', () => {
         location: inject(LocationStrategy),
         instance,
       },
-      '/p/0001-0000/'
+      '/p/0001-0000/',
     );
 
     AccountRepoStub.failRequest = true;
@@ -263,7 +263,7 @@ describe('AccountService: refreshAccount', () => {
         location: inject(LocationStrategy),
         instance,
       },
-      '/gallery/'
+      '/gallery/',
     );
 
     AccountRepoStub.failRequest = true;

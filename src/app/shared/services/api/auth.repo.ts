@@ -18,18 +18,16 @@ import { getFirst } from '../http-v2/http-v2.service';
 
 export class AuthRepo extends BaseRepo {
   public isLoggedIn(): Promise<AuthResponse> {
-    return this.http.sendRequestPromise(
-      '/auth/loggedIn',
-      undefined,
-      AuthResponse
-    );
+    return this.http.sendRequestPromise('/auth/loggedIn', undefined, {
+      responseClass: AuthResponse,
+    });
   }
 
   public logIn(
     email: string,
     password: string,
     rememberMe: boolean,
-    keepLoggedIn: boolean
+    keepLoggedIn: boolean,
   ): Observable<AuthResponse> {
     const accountVO = new AccountVO({
       primaryEmail: email,
@@ -44,7 +42,7 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest<AuthResponse>(
       '/auth/login',
       [{ AccountVO: accountVO, AccountPasswordVO: accountPasswordVO }],
-      AuthResponse
+      { responseClass: AuthResponse },
     );
   }
 
@@ -66,7 +64,7 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest<AuthResponse>(
       '/auth/verify',
       [{ AccountVO: accountVO, AuthVO: authVO }],
-      AuthResponse
+      { responseClass: AuthResponse },
     );
   }
 
@@ -78,14 +76,14 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequest<AuthResponse>(
       '/auth/sendEmailForgotPassword',
       [{ AccountVO: accountVO }],
-      AuthResponse
+      { responseClass: AuthResponse },
     );
   }
 
   public updatePassword(
     account: AccountVO,
     passwordVo: AccountPasswordVOData,
-    trustToken?: string
+    trustToken?: string,
   ) {
     const data = [
       {
@@ -110,7 +108,7 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequestPromise<AuthResponse>(
       '/account/changePassword',
       data,
-      AuthResponse
+      { responseClass: AuthResponse },
     );
   }
 
@@ -123,7 +121,7 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequestPromise<AuthResponse>(
       '/auth/resendMailCreatedAccount',
       [account],
-      AuthResponse
+      { responseClass: AuthResponse },
     );
   }
 
@@ -136,13 +134,13 @@ export class AuthRepo extends BaseRepo {
     return this.http.sendRequestPromise<AuthResponse>(
       '/auth/resendTextCreatedAccount',
       [account],
-      AuthResponse
+      { responseClass: AuthResponse },
     );
   }
 
   public getInviteToken() {
     return getFirst(
-      this.httpV2.get<{ token: string }>('v2/account/signup')
+      this.httpV2.get<{ token: string }>('v2/account/signup'),
     ).toPromise();
   }
 }

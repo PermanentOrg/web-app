@@ -93,12 +93,12 @@ describe('SearchService', () => {
       expectSearchToBe(
         service.parseSearchTerm('Hello tag:"Potato" World'),
         'Hello World',
-        [{ name: 'Potato' }]
+        [{ name: 'Potato' }],
       );
       expectSearchToBe(
         service.parseSearchTerm('tag:"Potato" Hello World tag:"Potato"'),
         'Hello World',
-        [{ name: 'Potato' }, { name: 'Potato' }]
+        [{ name: 'Potato' }, { name: 'Potato' }],
       );
     });
 
@@ -118,7 +118,7 @@ describe('SearchService', () => {
       expectSearchToBe(
         service.parseSearchTerm('tag:"tag:"Test""'),
         'tag:"tag:"Test""',
-        []
+        [],
       );
     });
 
@@ -178,13 +178,13 @@ describe('SearchService', () => {
       data.setCurrentFolder(
         new FolderVO({
           ChildItemVOs: children.map((child) => new RecordVO(child)),
-        })
+        }),
       );
     }
   });
 
   describe('getTagResults', () => {
-    it('handles an empty search term', () => {
+    it('handles an empty tag search term', () => {
       expect(search('')).toEqual([]);
     });
 
@@ -200,7 +200,7 @@ describe('SearchService', () => {
       expect(searchResults[0].name).toBe('Potato');
     });
 
-    it('should ignore location in fuzzy searches', () => {
+    it('should ignore location in fuzzy tag searches', () => {
       tags.setTags([
         { name: 'VeryLongTagNameThatProbablyWontEvenHappenInProduction' },
       ]);
@@ -208,7 +208,7 @@ describe('SearchService', () => {
       expect(search('Production').length).toBe(1);
     });
 
-    it('should limit results if limit is provided', () => {
+    it('should limit results if tag limit is provided', () => {
       tags.setTags([{ name: 'Potato' }, { name: 'Potato Two' }]);
 
       expect(search('Potato', 1).length).toBe(1);
@@ -236,7 +236,7 @@ describe('SearchService', () => {
   it('cannot handle tags with quotation marks followed by search terms with quotation marks', () => {
     tags.setTags([{ name: '"A Multiword Tag"', tagId: 0 }]);
     const searchTokens = service.parseSearchTerm(
-      'tag:""A Multiword Tag"" "potato"'
+      'tag:""A Multiword Tag"" "potato"',
     );
 
     expect(searchTokens[1].length).toBe(0);
@@ -245,7 +245,7 @@ describe('SearchService', () => {
   function expectSearchToBe(
     search: [string, TagVOData[]],
     expectedSearch: string,
-    expectedTags: TagVOData[]
+    expectedTags: TagVOData[],
   ) {
     expect(search[0]).toBe(expectedSearch);
     expect(search[1]).toEqual(expectedTags);

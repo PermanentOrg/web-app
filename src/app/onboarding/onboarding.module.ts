@@ -27,6 +27,10 @@ import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/ar
 import { SelectArchiveTypeScreenComponent } from './components/select-archive-type-screen/select-archive-type-screen.component';
 import { NameArchiveScreenComponent } from './components/name-archive-screen/name-archive-screen.component';
 import { CreateArchiveForMeScreenComponent } from './components/create-archive-for-me-screen/create-archive-for-me-screen.component';
+import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
+import { GlamReasonsScreenComponent } from './components/glam-reasons-screen/glam-reasons-screen.component';
+import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-goals-screen.component';
+import { FinalizeArchiveCreationScreenComponent } from './components/finalize-archive-creation-screen/finalize-archive-creation-screen.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +42,10 @@ import { CreateArchiveForMeScreenComponent } from './components/create-archive-f
     SelectArchiveTypeScreenComponent,
     NameArchiveScreenComponent,
     CreateArchiveForMeScreenComponent,
+    GlamReasonsScreenComponent,
+    GlamGoalsScreenComponent,
+    GlamUserSurveySquareComponent,
+    FinalizeArchiveCreationScreenComponent
   ],
   imports: [
     CommonModule,
@@ -47,9 +55,9 @@ import { CreateArchiveForMeScreenComponent } from './components/create-archive-f
     DialogModule,
     DialogCdkModule,
     FontAwesomeModule,
-    ComponentsModule,
     GlamArchiveTypeSelectComponent,
     ArchiveTypeIconComponent,
+    ComponentsModule,
   ],
 })
 export class OnboardingModule {
@@ -62,14 +70,14 @@ export class OnboardingModule {
   constructor(
     private dialog: Dialog,
     private resolver: ComponentFactoryResolver,
-    private library: FaIconLibrary
+    private library: FaIconLibrary,
   ) {
     library.addIcons(faHeart);
     if (this.dialog) {
       this.dialog.registerComponents(
         this.dialogComponents,
         this.resolver,
-        true
+        true,
       );
     }
   }

@@ -14,7 +14,10 @@ export class SkipOnboardingDialogComponent implements OnInit {
   CANCEL = 'cancel';
   name = '';
 
-  constructor(private dialog: DialogRef, private account: AccountService) {}
+  constructor(
+    private dialog: DialogRef,
+    private account: AccountService,
+  ) {}
 
   ngOnInit() {
     this.name = this.account.getAccount().fullName;

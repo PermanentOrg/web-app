@@ -45,7 +45,7 @@ export class VerifyComponent implements OnInit {
     private message: MessageService,
     private route: ActivatedRoute,
     public secrets: SecretsService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.captchaPassed = false;
     this.captchaSiteKey = secrets.get('RECAPTCHA_API_KEY');

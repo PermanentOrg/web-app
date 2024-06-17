@@ -34,7 +34,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
     private analytics: AnalyticsService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
-    @Optional() private dialog: Dialog
+    @Optional() private dialog: Dialog,
   ) {}
 
   ngOnInit() {}

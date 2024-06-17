@@ -20,7 +20,7 @@ describe('BannerService', () => {
     beforeEach(() => {
       shallow = new Shallow(MobileBannerService, CoreModule).mock(
         DeviceService,
-        mockAndroidDeviceService
+        mockAndroidDeviceService,
       );
     });
 
@@ -37,7 +37,7 @@ describe('BannerService', () => {
     beforeEach(() => {
       shallow = new Shallow(MobileBannerService, CoreModule).mock(
         DeviceService,
-        mockIosDeviceService
+        mockIosDeviceService,
       );
     });
 

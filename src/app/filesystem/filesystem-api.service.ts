@@ -20,7 +20,7 @@ export class FilesystemApiService implements FilesystemApi {
 
   public async navigate(folder: FolderIdentifier): Promise<FolderVO> {
     const response = await firstValueFrom(
-      this.api.folder.navigateLean(new FolderVO(folder))
+      this.api.folder.navigateLean(new FolderVO(folder)),
     );
     if (!response.isSuccessful) {
       throw response;

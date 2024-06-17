@@ -30,7 +30,7 @@ export function getFirst<T>(observable: Observable<T[]>): Observable<T> {
   return observable.pipe(
     map((obj) => {
       return obj[0];
-    })
+    }),
   );
 }
 
@@ -51,7 +51,7 @@ export class HttpV2Service {
   constructor(
     protected http: HttpClient,
     protected storage: StorageService,
-    protected secrets: SecretsService
+    protected secrets: SecretsService,
   ) {
     this.authToken = this.storage.local.get(AUTH_KEY) ?? '';
   }
@@ -60,14 +60,14 @@ export class HttpV2Service {
     endpoint: string,
     data: any = {},
     responseClass?: ResponseClass<T>,
-    options: RequestOptions = defaultOptions
+    options: RequestOptions = defaultOptions,
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       endpoint,
       data,
       'post',
       responseClass,
-      this.getOptions(options)
+      this.getOptions(options),
     );
   }
 
@@ -75,14 +75,14 @@ export class HttpV2Service {
     endpoint: string,
     data: any = {},
     responseClass?: ResponseClass<T>,
-    options: RequestOptions = defaultOptions
+    options: RequestOptions = defaultOptions,
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       this.getEndpointWithData(endpoint, data),
       {},
       'get',
       responseClass,
-      this.getOptions(options)
+      this.getOptions(options),
     );
   }
 
@@ -90,14 +90,14 @@ export class HttpV2Service {
     endpoint: string,
     data: any = {},
     responseClass?: ResponseClass<T>,
-    options: RequestOptions = defaultOptions
+    options: RequestOptions = defaultOptions,
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       endpoint,
       data,
       'put',
       responseClass,
-      this.getOptions(options)
+      this.getOptions(options),
     );
   }
 
@@ -105,14 +105,14 @@ export class HttpV2Service {
     endpoint: string,
     data: any = {},
     responseClass?: ResponseClass<T>,
-    options: RequestOptions = defaultOptions
+    options: RequestOptions = defaultOptions,
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       this.getEndpointWithData(endpoint, data),
       {},
       'delete',
       responseClass,
-      this.getOptions(options)
+      this.getOptions(options),
     );
   }
 
@@ -148,13 +148,13 @@ export class HttpV2Service {
   protected getFullUrl(endpoint: string, options: RequestOptions): string {
     return Location.joinWithSlash(
       this.getRequestDomain(endpoint, options),
-      endpoint
+      endpoint,
     );
   }
 
   protected getRequestDomain(
     endpoint: string,
-    options: RequestOptions
+    options: RequestOptions,
   ): string {
     if (
       options.useStelaDomain &&
@@ -185,7 +185,7 @@ export class HttpV2Service {
     url: string,
     data: any = {},
     method: HttpMethod,
-    options: RequestOptions
+    options: RequestOptions,
   ): Observable<unknown> {
     if (method === 'put') {
       return this.http.put(url, data, this.getHeaders(options));
@@ -196,7 +196,7 @@ export class HttpV2Service {
   protected getObservableWithNoBody(
     url: string,
     method: HttpMethod,
-    options: RequestOptions
+    options: RequestOptions,
   ): Observable<unknown> {
     if (method === 'delete') {
       return this.http.delete(url, this.getHeaders(options));
@@ -208,20 +208,20 @@ export class HttpV2Service {
     endpoint: string,
     data: any = {},
     method: HttpMethod = 'post',
-    options: RequestOptions = defaultOptions
+    options: RequestOptions = defaultOptions,
   ): Observable<unknown> {
     if (method === 'post' || method === 'put') {
       return this.getObservableWithBody(
         this.getFullUrl(endpoint, options),
         options.csrf ? this.appendCsrf(data) : data,
         method,
-        options
+        options,
       );
     }
     return this.getObservableWithNoBody(
       this.getFullUrl(endpoint, options),
       method,
-      options
+      options,
     );
   }
 
@@ -230,7 +230,7 @@ export class HttpV2Service {
     data: any = {},
     method: HttpMethod = 'post',
     responseClass?: new (data: any) => T,
-    options: RequestOptions = defaultOptions
+    options: RequestOptions = defaultOptions,
   ): Observable<T[]> {
     const observable = this.getObservable(endpoint, data, method, options);
     return observable.pipe(
@@ -256,7 +256,7 @@ export class HttpV2Service {
           this.tokenExpired.next();
         }
         return throwError(err);
-      })
+      }),
     );
   }
 }

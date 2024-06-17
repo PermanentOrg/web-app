@@ -51,7 +51,7 @@ export class StorageDialogComponent
     private message: MessageService,
     private route: ActivatedRoute,
     private device: DeviceService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],
@@ -75,7 +75,7 @@ export class StorageDialogComponent
         if (this.activeTab === 'promo' && param) {
           this.promoForm.setValue({ code: param });
         }
-      })
+      }),
     );
   }
 

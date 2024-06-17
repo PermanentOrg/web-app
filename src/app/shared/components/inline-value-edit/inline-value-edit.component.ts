@@ -120,7 +120,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
       'keydown',
       (event: KeyboardEvent) => {
         event.stopPropagation();
-      }
+      },
     );
   }
 
@@ -223,18 +223,18 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     if (this.dateOnly) {
       this.editValue = `${zeroPad(date.year, 4)}-${zeroPad(
         date.month,
-        2
+        2,
       )}-${zeroPad(date.day, 2)}`;
     } else {
       const currentOffset = getOffsetMomentFromDTString(
         this.editValue as string,
-        this.item?.TimezoneVO
+        this.item?.TimezoneVO,
       );
       const currentTime = currentOffset.format('HH:mm:ss');
       const tzOffset = currentOffset.format('Z');
       const newOffsetString = `${date.year}-${zeroPad(date.month, 2)}-${zeroPad(
         date.day,
-        2
+        2,
       )}T${currentTime}${tzOffset}`;
       const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
       this.editValue = newOffset.toISOString();
@@ -244,13 +244,13 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   onTimeChange(time: NgbTimeStruct) {
     const currentOffset = getOffsetMomentFromDTString(
       this.editValue as string,
-      this.item?.TimezoneVO
+      this.item?.TimezoneVO,
     );
     const currentDate = currentOffset.format('YYYY-MM-DD');
     const tzOffset = currentOffset.format('Z');
     const newOffsetString = `${currentDate}T${zeroPad(time.hour, 2)}:${zeroPad(
       time.minute,
-      2
+      2,
     )}:${zeroPad(time.second, 2)}${tzOffset}`;
     const newOffset = getUtcMomentFromOffsetDTString(newOffsetString);
     this.editValue = newOffset.toISOString();

@@ -11,7 +11,7 @@ try {
   secrets = require('@root/secrets').SECRETS;
 } catch (err) {
   throw new Error(
-    'Unable to read secrets.ts - make sure to run `node secrets.js` before building!'
+    'Unable to read secrets.ts - make sure to run `node secrets.js` before building!',
   );
 }
 
@@ -32,7 +32,7 @@ export class SecretsService {
 
     this.debug(
       'Loaded %d secrets from secrets.ts',
-      Object.keys(secrets).length
+      Object.keys(secrets).length,
     );
 
     if (missingSecrets.length) {
@@ -47,7 +47,7 @@ export class SecretsService {
   static getStatic(key: string) {
     if (secrets[key] === undefined) {
       throw new Error(
-        `Secret ${key} not found. Check your .env file and restart`
+        `Secret ${key} not found. Check your .env file and restart`,
       );
     }
 

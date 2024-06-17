@@ -57,13 +57,13 @@ export class UploadButtonComponent
     private dataService: DataService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.subscriptions.push(
       this.dataService.currentFolderChange.subscribe((currentFolder) => {
         this.currentFolder = currentFolder;
         this.checkCurrentFolder();
-      })
+      }),
     );
 
     this.upload.registerButtonComponent(this);
@@ -91,11 +91,11 @@ export class UploadButtonComponent
       this.disabled =
         !checkMinimumAccess(
           this.currentFolder.accessRole,
-          AccessRole.Contributor
+          AccessRole.Contributor,
         ) ||
         !checkMinimumAccess(
           this.account.getArchive().accessRole,
-          AccessRole.Contributor
+          AccessRole.Contributor,
         ) ||
         (this.currentFolder.type.includes('app') &&
           this.currentFolder.special !== 'familysearch.root.folder');
@@ -109,7 +109,7 @@ export class UploadButtonComponent
         try {
           await this.prompt.confirm(
             'Upload to public',
-            'This is a public folder. Are you sure you want to upload here?'
+            'This is a public folder. Are you sure you want to upload here?',
           );
           this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.uploaded.params);
           this.upload.uploadFiles(this.currentFolder, this.files);

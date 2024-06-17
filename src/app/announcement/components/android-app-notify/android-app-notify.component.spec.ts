@@ -90,7 +90,7 @@ describe('AndroidAppNotifyComponent', () => {
 
     expect(find('div').length).toBe(0);
     const dismissed = localStorage.getItem(
-      AndroidAppNotifyComponent.storageKey
+      AndroidAppNotifyComponent.storageKey,
     );
 
     expect(dismissed).toBeTruthy();

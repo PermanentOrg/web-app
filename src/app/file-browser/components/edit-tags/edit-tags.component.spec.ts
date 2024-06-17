@@ -44,7 +44,7 @@ describe('EditTagsComponent', () => {
   let shallow: Shallow<EditTagsComponent>;
   async function defaultRender(
     item: ItemVO = defaultItem,
-    tagType: TagType = 'keyword'
+    tagType: TagType = 'keyword',
   ) {
     return await shallow.render(
       `<pr-edit-tags [item]="item" [tagType]="tagType"></pr-edit-tags>`,
@@ -53,7 +53,7 @@ describe('EditTagsComponent', () => {
           item: item,
           tagType: tagType,
         },
-      }
+      },
     );
   }
 
@@ -88,47 +88,47 @@ describe('EditTagsComponent', () => {
     const { element } = await defaultRender();
 
     expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne')
+      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
     ).toBeTruthy();
 
     expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo')
+      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueOne'
-      )
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueTwo'
-      )
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagOne'
-      )
+        (tag) => tag.name === 'tagOne',
+      ),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagTwo'
-      )
+        (tag) => tag.name === 'tagTwo',
+      ),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueOne'
-      )
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueTwo'
-      )
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
     ).not.toBeTruthy();
   });
 
@@ -136,47 +136,47 @@ describe('EditTagsComponent', () => {
     const { element } = await defaultRender(defaultItem, 'customMetadata');
 
     expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne')
+      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
     ).not.toBeTruthy();
 
     expect(
-      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo')
+      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueOne'
-      )
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.itemTags.find(
-        (tag) => tag.name === 'customField:customValueTwo'
-      )
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagOne'
-      )
+        (tag) => tag.name === 'tagOne',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'tagTwo'
-      )
+        (tag) => tag.name === 'tagTwo',
+      ),
     ).not.toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueOne'
-      )
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
     ).toBeTruthy();
 
     expect(
       element.componentInstance.matchingTags.find(
-        (tag) => tag.name === 'customField:customValueTwo'
-      )
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
     ).toBeTruthy();
   });
 
@@ -207,7 +207,7 @@ describe('EditTagsComponent', () => {
 
     find('.manage-tags-message .manage-tags-link').triggerEventHandler(
       'click',
-      {}
+      {},
     );
 
     expect(dialogOpenSpy.open).toHaveBeenCalled();

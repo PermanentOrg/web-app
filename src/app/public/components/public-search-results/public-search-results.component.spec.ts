@@ -53,7 +53,7 @@ describe('PublicSearchResultsComponent', () => {
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(
       [mockItem.archiveNbr, mockItem.folder_linkId],
-      { relativeTo: {} as any }
+      { relativeTo: {} as any },
     );
   });
 
@@ -72,7 +72,7 @@ describe('PublicSearchResultsComponent', () => {
         'record',
         mockItem.archiveNbr,
       ],
-      { relativeTo: {} as any }
+      { relativeTo: {} as any },
     );
   });
 });

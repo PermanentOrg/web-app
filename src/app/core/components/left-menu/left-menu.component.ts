@@ -76,7 +76,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private profile: ProfileService,
     private payerService: PayerService,
     private deviceService: DeviceService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();
@@ -93,7 +93,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
       this.payerService.payerIdObs.subscribe((id) => {
         this.setPayer(id);
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -102,7 +102,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
           this.currentUrl = this.router.url;
           this.urlMatches.clear();
         }
-      })
+      }),
     );
   }
 
@@ -162,7 +162,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.urlMatches.has(urlSegment)) {
       this.urlMatches.set(
         urlSegment,
-        this.currentUrl?.replace(/[()]/g, '').includes(urlSegment)
+        this.currentUrl?.replace(/[()]/g, '').includes(urlSegment),
       );
     }
 
@@ -174,7 +174,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.dialog.open(
       'ConnectionsDialogComponent',
       { connections },
-      { width: '1000px' }
+      { width: '1000px' },
     );
     this.showArchiveOptions = false;
   }
@@ -198,7 +198,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   async onMembersClick() {
     const currentAccount = this.accountService.getAccount();
     const response = await this.api.archive.getMembers(
-      this.accountService.getArchive()
+      this.accountService.getArchive(),
     );
     const members = response.getAccountVOs();
     members.forEach((member: AccountVO) => {
@@ -224,7 +224,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
       Sentry.captureException(err);
       this.leftMenuDebug(
         'Error loading apps subfolders, silently failing',
-        err
+        err,
       );
     }
   }
@@ -249,7 +249,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     }
     window.sessionStorage.setItem(
       'showArchiveOptions',
-      (+this.showArchiveOptions).toString()
+      (+this.showArchiveOptions).toString(),
     );
   }
 
@@ -257,7 +257,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.showAppsSubfolders = !this.showAppsSubfolders;
     window.sessionStorage.setItem(
       'showAppsSubfolders',
-      (+this.showAppsSubfolders).toString()
+      (+this.showAppsSubfolders).toString(),
     );
   }
 

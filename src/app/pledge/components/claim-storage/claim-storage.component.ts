@@ -34,7 +34,7 @@ export class ClaimStorageComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private accountService: AccountService,
-    private pledgeService: PledgeService
+    private pledgeService: PledgeService,
   ) {
     if (!pledgeService.currentPledgeData) {
       this.router.navigate(['..'], { relativeTo: this.route });
@@ -73,7 +73,7 @@ export class ClaimStorageComponent implements OnInit {
         formValue.optIn,
         null,
         null,
-        true
+        true,
       )
       .then(async (account: AccountVO) => {
         await this.pledgeService.linkAccount(account);
@@ -81,14 +81,14 @@ export class ClaimStorageComponent implements OnInit {
           formValue.email,
           formValue.password,
           true,
-          true
+          true,
         );
 
         const billingVo = this.pledgeService.createBillingPaymentVo(account);
 
         const billingResponse = await this.api.billing.claimPledge(
           billingVo,
-          this.pledgeService.getPledgeId()
+          this.pledgeService.getPledgeId(),
         );
 
         this.waiting = false;

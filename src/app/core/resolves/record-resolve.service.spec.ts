@@ -52,7 +52,7 @@ describe('RecordResolveService', () => {
   it('should return a record that is fully cached by dataservice', async () => {
     const record = new RecordVO(
       { displayName: 'Test Record', archiveNbr: '1234-abcd' },
-      { dataStatus: DataStatus.Full }
+      { dataStatus: DataStatus.Full },
     );
     const spy = spyOn(data, 'getItemByArchiveNbr').and.returnValue(record);
     const fetchSpy = spyOn(data, 'fetchFullItems');
@@ -66,7 +66,7 @@ describe('RecordResolveService', () => {
   it('should fetch a lean record that is cached by dataservice', async () => {
     const record = new RecordVO(
       { displayName: 'Test Record', archiveNbr: '1234-abcd' },
-      { dataStatus: DataStatus.Lean }
+      { dataStatus: DataStatus.Lean },
     );
     const spy = spyOn(data, 'getItemByArchiveNbr').and.returnValue(record);
     spyOn(data, 'fetchFullItems').and.callFake(async () => {
@@ -97,7 +97,7 @@ describe('RecordResolveService', () => {
             ],
           },
         ],
-      })
+      }),
     );
     const result = await service.resolve(route.snapshot, null);
 
@@ -115,7 +115,7 @@ describe('RecordResolveService', () => {
             message: ['Test Error'],
           },
         ],
-      })
+      }),
     );
     let displayedErrorMessage: string;
     spyOn(message, 'showError').and.callFake((data: MessageDisplayOptions) => {

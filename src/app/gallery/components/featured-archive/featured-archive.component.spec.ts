@@ -23,7 +23,7 @@ describe('FeaturedArchiveComponent', () => {
         bind: {
           archive: testArchive,
         },
-      }
+      },
     );
 
   beforeEach(() => {
@@ -41,7 +41,7 @@ describe('FeaturedArchiveComponent', () => {
 
     expect(find('.profile-pic img').attributes.src).toBe('thumbUrl');
     expect(element.nativeElement.innerText).toContain(
-      'The Unit Testing Archive'
+      'The Unit Testing Archive',
     );
   });
 
@@ -49,7 +49,7 @@ describe('FeaturedArchiveComponent', () => {
     const { instance } = await defaultRender();
     function expectClassnameForArchiveType(
       archiveType: ArchiveType,
-      expectedClassname: string
+      expectedClassname: string,
     ) {
       instance.archive.type = archiveType;
       instance.ngOnInit();

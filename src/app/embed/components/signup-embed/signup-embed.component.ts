@@ -43,7 +43,7 @@ export class SignupEmbedComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
-    private message: MessageService
+    private message: MessageService,
   ) {
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams.invite) {
@@ -84,7 +84,7 @@ export class SignupEmbedComponent implements OnInit {
         formValue.optIn,
         null,
         formValue.invitation,
-        true
+        true,
       )
       .then((account: AccountVO) => {
         if (account.needsVerification()) {

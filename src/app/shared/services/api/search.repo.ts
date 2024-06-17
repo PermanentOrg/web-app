@@ -1,4 +1,4 @@
-import { query } from '@angular/animations';
+/* @format */
 import {
   ArchiveVO,
   RecordVO,
@@ -24,7 +24,7 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>(
       '/search/archiveByEmail',
       data,
-      SearchResponse
+      { responseClass: SearchResponse },
     );
   }
 
@@ -37,17 +37,15 @@ export class SearchRepo extends BaseRepo {
       },
     ];
 
-    return this.http.sendRequest<SearchResponse>(
-      '/search/archive',
-      data,
-      SearchResponse
-    );
+    return this.http.sendRequest<SearchResponse>('/search/archive', data, {
+      responseClass: SearchResponse,
+    });
   }
 
   public itemsByNameObservable(
     query: string,
     tags: any[] = [],
-    limit?: number
+    limit?: number,
   ): Observable<SearchResponse> {
     const data = {
       SearchVO: {
@@ -60,7 +58,7 @@ export class SearchRepo extends BaseRepo {
     return this.http.sendRequest<SearchResponse>(
       '/search/folderAndRecord',
       [data],
-      SearchResponse
+      { responseClass: SearchResponse },
     );
   }
 
@@ -68,7 +66,7 @@ export class SearchRepo extends BaseRepo {
     query: string,
     tags: TagVOData[] = [],
     archiveId: string,
-    limit?: number
+    limit?: number,
   ) {
     const data = {
       query,
@@ -80,7 +78,7 @@ export class SearchRepo extends BaseRepo {
     return getFirst(
       this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
         authToken: false,
-      })
+      }),
     );
   }
 }

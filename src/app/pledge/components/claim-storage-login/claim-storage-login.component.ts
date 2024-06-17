@@ -41,7 +41,7 @@ export class ClaimStorageLoginComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: UntypedFormBuilder,
     private message: MessageService,
-    private cookies: CookieService
+    private cookies: CookieService,
   ) {
     if (!pledgeService.currentPledge) {
       this.router.navigate(['..'], { relativeTo: this.route });
@@ -97,7 +97,7 @@ export class ClaimStorageLoginComponent implements OnInit {
         formValue.email,
         formValue.password,
         formValue.rememberMe,
-        formValue.keepLoggedIn
+        formValue.keepLoggedIn,
       )
       .then(async (response: AuthResponse) => {
         this.waiting = false;
@@ -175,7 +175,7 @@ export class ClaimStorageLoginComponent implements OnInit {
       await this.pledgeService.linkAccount(account);
       const billingResponse = await this.api.billing.claimPledge(
         payment,
-        pledgeId
+        pledgeId,
       );
       if (billingResponse.isSuccessful) {
         this.router.navigate(['..', 'done'], { relativeTo: this.route });

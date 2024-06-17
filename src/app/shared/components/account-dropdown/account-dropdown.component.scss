@@ -48,7 +48,9 @@ i.badge {
   right: 0;
   z-index: 3;
 
-  animation: fadeIn 125ms $tweaked-ease, pulse 2s $tweaked-ease infinite;
+  animation:
+    fadeIn 125ms $tweaked-ease,
+    pulse 2s $tweaked-ease infinite;
 }
 
 .account-dropdown-menu {
@@ -79,7 +81,9 @@ i.badge {
     i {
       font-size: $mat-icon-sm;
       margin-right: $grid-unit * 0.5;
-      animation: fadeIn 125ms $tweaked-ease, pulse 2s $tweaked-ease infinite;
+      animation:
+        fadeIn 125ms $tweaked-ease,
+        pulse 2s $tweaked-ease infinite;
     }
   }
 

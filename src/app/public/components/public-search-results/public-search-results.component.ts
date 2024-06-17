@@ -32,7 +32,7 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
-    private location: Location
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -77,7 +77,7 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
         ],
         {
           relativeTo: this.route.parent,
-        }
+        },
       );
     }
   }

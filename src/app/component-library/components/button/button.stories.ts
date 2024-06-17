@@ -32,7 +32,6 @@ const meta: Meta<ButtonComponent> = {
     },
   }),
   argTypes: {
-    text: { control: 'text' },
     disabled: { control: 'boolean' },
     variant: {
       control: { type: 'radio' },
@@ -56,7 +55,7 @@ const meta: Meta<ButtonComponent> = {
       control: { type: 'radio' },
     },
     faIcon: { control: 'text' },
-    attr: {
+    buttonType: {
       options: ['submit', 'reset', 'button'],
       control: { type: 'radio' },
     },
@@ -67,43 +66,43 @@ export default meta;
 type ButtonStory = StoryObj<ButtonComponent>;
 
 export const PrimaryMedium: ButtonStory = {
-  args: { variant: 'primary', text: 'Primary' },
+  args: { variant: 'primary' },
 };
 
 export const SecondaryMedium: ButtonStory = {
-  args: { variant: 'secondary', text: 'Secondary' },
+  args: { variant: 'secondary' },
 };
 
 export const PrimaryLarge: ButtonStory = {
-  args: { variant: 'primary', text: 'Primary', height: 'large' },
+  args: { variant: 'primary', height: 'large' },
 };
 
 export const SecondaryLarge: ButtonStory = {
-  args: { variant: 'secondary', text: 'Secondary', height: 'large' },
+  args: { variant: 'secondary', height: 'large' },
 };
 
 export const PrimaryFill: ButtonStory = {
-  args: { variant: 'primary', text: 'Primary', size: 'fill' },
+  args: { variant: 'primary', size: 'fill' },
 };
 
 export const SecondaryFill: ButtonStory = {
-  args: { variant: 'secondary', text: 'Secondary', size: 'fill' },
+  args: { variant: 'secondary', size: 'fill' },
 };
 
 export const DarkModePrimary: ButtonStory = {
-  args: { variant: 'primary', text: 'Primary', mode: 'dark' },
+  args: { variant: 'primary', mode: 'dark' },
   parameters: {
     backgrounds,
   },
 };
 
 export const DarkModeSecondary: ButtonStory = {
-  args: { variant: 'secondary', text: 'Secondary', mode: 'dark' },
+  args: { variant: 'secondary', mode: 'dark' },
   parameters: {
     backgrounds,
   },
 };
 
 export const TertiaryButton: ButtonStory = {
-  args: { variant: 'tertiary', text: 'Tertiary' },
+  args: { variant: 'tertiary' },
 };

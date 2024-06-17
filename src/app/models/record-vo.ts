@@ -120,7 +120,7 @@ export class RecordVO
 
     if (this.ShareVOs) {
       this.ShareVOs = sortShareVOs(
-        this.ShareVOs.map((data) => new ShareVO(data))
+        this.ShareVOs.map((data) => new ShareVO(data)),
       );
     }
 

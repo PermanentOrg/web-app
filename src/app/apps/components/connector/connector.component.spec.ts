@@ -84,7 +84,7 @@ describe('ConnectorComponent', () => {
 
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
     const button = compiled.querySelector(
-      'button#connector-connect'
+      'button#connector-connect',
     ) as HTMLButtonElement;
 
     expect(button).toBeDefined();
@@ -105,25 +105,25 @@ describe('ConnectorComponent', () => {
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
     const connectButton = compiled.querySelector(
-      'button#connector-connect'
+      'button#connector-connect',
     ) as HTMLButtonElement;
 
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
     const importButton = compiled.querySelector(
-      'button#familysearch-tree-import'
+      'button#familysearch-tree-import',
     ) as HTMLButtonElement;
 
     expect(importButton.getAttribute('hidden')).toBeNull();
 
     const uploadButton = compiled.querySelector(
-      'button#familysearch-upload'
+      'button#familysearch-upload',
     ) as HTMLButtonElement;
 
     expect(uploadButton.getAttribute('hidden')).not.toBeNull();
 
     const downloadButton = compiled.querySelector(
-      'button#familysearch-download'
+      'button#familysearch-download',
     ) as HTMLButtonElement;
 
     expect(downloadButton.getAttribute('hidden')).not.toBeNull();
@@ -143,25 +143,25 @@ describe('ConnectorComponent', () => {
     const compiled = fixture.debugElement.nativeElement as HTMLElement;
 
     const connectButton = compiled.querySelector(
-      'button#connector-connect'
+      'button#connector-connect',
     ) as HTMLButtonElement;
 
     expect(connectButton.getAttribute('hidden')).not.toBeNull();
 
     const importButton = compiled.querySelector(
-      'button#familysearch-tree-import'
+      'button#familysearch-tree-import',
     ) as HTMLButtonElement;
 
     expect(importButton.getAttribute('hidden')).toBeNull();
 
     const uploadButton = compiled.querySelector(
-      'button#familysearch-upload'
+      'button#familysearch-upload',
     ) as HTMLButtonElement;
 
     expect(uploadButton.getAttribute('hidden')).toBeNull();
 
     const downloadButton = compiled.querySelector(
-      'button#familysearch-download'
+      'button#familysearch-download',
     ) as HTMLButtonElement;
 
     expect(downloadButton.getAttribute('hidden')).toBeNull();
@@ -177,7 +177,7 @@ describe('ConnectorComponent', () => {
     expect(connectorComponentInstance).toBeDefined();
 
     const connectorClass = connectorComponentInstance.getConnectorClass(
-      hostComponent.connector.type
+      hostComponent.connector.type,
     );
     const tooltip = connectorComponentInstance.getTooltip();
 
@@ -193,12 +193,12 @@ describe('ConnectorComponent', () => {
     fixture.detectChanges();
 
     const connectorComponentInstance = fixture.debugElement.query(
-      By.directive(ConnectorComponent)
+      By.directive(ConnectorComponent),
     ).componentInstance;
     spyOn(connectorComponentInstance, 'connect');
 
     const button = fixture.debugElement.nativeElement.querySelector(
-      'button#connector-connect'
+      'button#connector-connect',
     );
     button.click();
 

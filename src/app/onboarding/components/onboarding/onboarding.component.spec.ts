@@ -133,7 +133,7 @@ describe('OnboardingComponent #onboarding', () => {
       getAccount: jasmine
         .createSpy('getAccount')
         .and.returnValue(
-          new AccountVO({ accountId: 1, fullName: 'Test Account' })
+          new AccountVO({ accountId: 1, fullName: 'Test Account' }),
         ),
     };
 
@@ -153,13 +153,13 @@ describe('OnboardingComponent #onboarding', () => {
     expect(find('pr-welcome-screen')).toHaveFoundOne();
     find('pr-welcome-screen').triggerEventHandler(
       'selectInvitation',
-      new ArchiveVO({ fullName: 'Pending Test' })
+      new ArchiveVO({ fullName: 'Pending Test' }),
     );
     fixture.detectChanges();
     await fixture.whenStable();
 
     expect(
-      element.componentInstance.selectedPendingArchive
+      element.componentInstance.selectedPendingArchive,
     ).not.toBeUndefined();
   });
 
@@ -184,7 +184,7 @@ describe('OnboardingComponent #onboarding', () => {
       getAccount: jasmine
         .createSpy('getAccount')
         .and.returnValue(
-          new AccountVO({ accountId: 1, fullName: 'Test Account' })
+          new AccountVO({ accountId: 1, fullName: 'Test Account' }),
         ),
     };
 
