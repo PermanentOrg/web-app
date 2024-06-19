@@ -63,7 +63,7 @@ export class LoginComponent {
         formValue.email,
         formValue.password,
         this.rememberMe,
-        formValue.keepLoggedIn
+        formValue.keepLoggedIn,
       )
       .then((response: AuthResponse) => {
         if (response.needsMFA()) {
