@@ -86,21 +86,12 @@
     font-size: 16px;
   }
 
-  & > .name {
-    font-family: 'UsualRegular', sans-serif;
-    font-size: 32px;
-    font-weight: 350;
-    line-height: 48px;
-    letter-spacing: -0.02em;
-    text-align: left;
-    margin-bottom: 8px;
-  }
-
-  & > .location {
-    font-family: 'UsualRegular', sans-serif;
+  & > .link {
+    font-family: 'UsualItalic', sans-serif;
     font-weight: 300;
     line-height: 24px;
     font-size: 18px;
     margin-bottom: 32px;
+    color: black;
   }
 }
