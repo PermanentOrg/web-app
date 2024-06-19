@@ -1,15 +1,13 @@
+/* @format */
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'pr-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
