@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 interface Method {
   id: string;
@@ -15,7 +17,7 @@ interface Method {
   templateUrl: './two-factor-auth.component.html',
   styleUrl: './two-factor-auth.component.scss',
 })
-export class TwoFactorAuthComponent {
+export class TwoFactorAuthComponent implements OnInit {
   turnOn: boolean = false;
   method: string = '';
   form: UntypedFormGroup;
@@ -28,14 +30,17 @@ export class TwoFactorAuthComponent {
     email: 'Email',
   };
 
-  constructor(private fb: UntypedFormBuilder) {
-    this.methods = [
-      {
-        id: 'email',
-        method: 'email',
-        value: 'email@example.com',
-      },
-    ];
+  constructor(
+    private fb: UntypedFormBuilder,
+    private api: ApiService,
+  ) {
+    // this.methods = [
+    //   {
+    //     id: 'email',
+    //     method: 'email',
+    //     value: 'email@example.com',
+    //   },
+    // ];
     this.form = fb.group({
       code: ['', Validators.required],
       contactInfo: ['', Validators.required],
@@ -46,6 +51,10 @@ export class TwoFactorAuthComponent {
         this.formatPhoneNumber(value);
       }
     });
+  }
+
+  async ngOnInit() {
+    this.methods = await this.api.idpuser.getTwoFactorMethods();
   }
 
   formatPhoneNumber(value: string) {
@@ -114,7 +123,7 @@ export class TwoFactorAuthComponent {
     try {
       // api call here
       this.methods = this.methods.filter(
-        (m) => m.id !== this.selectedMethodToDelete.id
+        (m) => m.id !== this.selectedMethodToDelete.id,
       );
       this.selectedMethodToDelete = null;
       this.codeSent = false;
