@@ -2,6 +2,13 @@
 :host {
   position: absolute;
   bottom: 0;
+
+  @media only screen and (max-width: 900px) {
+    display: none;
+  }
+  @media print {
+    display: none;
+  }
 }
 
 .user-checklist {
