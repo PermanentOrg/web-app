@@ -36,7 +36,7 @@ export class DummyChecklistApi implements ChecklistApi {
     return DummyChecklistApi.accountHidden;
   }
 
-  public isArchiveOwnedByAccount(): boolean {
+  public isDefaultArchiveOwnedByAccount(): boolean {
     return DummyChecklistApi.archiveAccess === 'access.role.owner';
   }
 }

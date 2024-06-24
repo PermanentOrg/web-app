@@ -27,13 +27,23 @@ export class UserChecklistService implements ChecklistApi {
     return this.account.getAccount()?.hideChecklist ?? true;
   }
 
-  public isArchiveOwnedByAccount(): boolean {
-    return this.account.checkMinimumArchiveAccess(AccessRole.Owner);
+  public isDefaultArchiveOwnedByAccount(): boolean {
+    return (
+      this.account.checkMinimumArchiveAccess(AccessRole.Owner) &&
+      this.isDefaultArchive()
+    );
   }
 
   public async setChecklistHidden(): Promise<void> {
     const updatedAccount = this.account.getAccount();
     updatedAccount.hideChecklist = true;
     await this.account.updateAccount(updatedAccount);
+  }
+
+  private isDefaultArchive(): boolean {
+    return (
+      this.account.getAccount().defaultArchiveId ===
+      this.account.getArchive().archiveId
+    );
   }
 }

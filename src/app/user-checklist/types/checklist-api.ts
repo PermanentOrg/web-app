@@ -5,7 +5,7 @@ import { ChecklistItem } from './checklist-item';
 export interface ChecklistApi {
   getChecklistItems(): Promise<ChecklistItem[]>;
   isAccountHidingChecklist(): boolean;
-  isArchiveOwnedByAccount(): boolean;
+  isDefaultArchiveOwnedByAccount(): boolean;
   setChecklistHidden(): Promise<void>;
 }
 
