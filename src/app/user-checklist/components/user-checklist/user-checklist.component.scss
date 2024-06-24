@@ -1,4 +1,6 @@
 /* @format */
+@import 'variables';
+
 :host {
   position: absolute;
   bottom: 0;
@@ -48,13 +50,13 @@
   }
 
   .header-description {
-    color: #131b4a; //TODO: switch to $pr-blue
+    color: $PR-blue;
     font-size: 1.125em;
   }
 }
 
 %meter-bar-value {
-  background: #5261b7;
+  background: $PR-blue-light;
   border-radius: 50px;
 }
 
@@ -77,7 +79,7 @@
     width: 100%;
 
     .meter-value {
-      background: #5261b7;
+      background: $PR-blue-light;
       border-radius: 50px;
       height: 100%;
     }
@@ -121,8 +123,8 @@ ul {
     border-radius: 3px;
 
     &.checked {
-      border-color: #5261b7;
-      background-color: #5261b7;
+      border-color: $PR-blue-light;
+      background-color: $PR-blue-light;
       color: #fff;
       display: flex;
       justify-content: center;
@@ -142,7 +144,7 @@ ul {
   .dont-show-again {
     border: none;
     background: transparent;
-    color: #018ef4;
+    color: $PR-blue-light;
     cursor: pointer;
     font-weight: 700;
     font-size: 0.75em;
