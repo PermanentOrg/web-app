@@ -19,7 +19,7 @@ export class UserChecklistComponent implements OnInit {
   public ngOnInit(): void {
     if (
       this.api.isAccountHidingChecklist() ||
-      !this.api.isArchiveOwnedByAccount()
+      !this.api.isDefaultArchiveOwnedByAccount()
     ) {
       this.isDisplayed = false;
       return;

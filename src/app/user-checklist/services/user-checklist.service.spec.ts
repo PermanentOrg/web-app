@@ -80,15 +80,33 @@ describe('UserChecklistService', () => {
   });
 
   it('can check if the current account has Owner access to the current archive', () => {
-    account.setAccount(new AccountVO({ hideChecklist: false }));
+    account.setAccount(
+      new AccountVO({ hideChecklist: false, defaultArchiveId: 1 }),
+    );
 
-    account.setArchive(new ArchiveVO({ accessRole: 'access.role.viewer' }));
+    account.setArchive(
+      new ArchiveVO({ accessRole: 'access.role.viewer', archiveId: 1 }),
+    );
 
-    expect(service.isArchiveOwnedByAccount()).toBeFalse();
+    expect(service.isDefaultArchiveOwnedByAccount()).toBeFalse();
 
-    account.setArchive(new ArchiveVO({ accessRole: 'access.role.owner' }));
+    account.setArchive(
+      new ArchiveVO({ accessRole: 'access.role.owner', archiveId: 1 }),
+    );
 
-    expect(service.isArchiveOwnedByAccount()).toBeTrue();
+    expect(service.isDefaultArchiveOwnedByAccount()).toBeTrue();
+  });
+
+  it('will also check if the current account has the current archive as its default', () => {
+    account.setAccount(
+      new AccountVO({ hideChecklist: false, defaultArchiveId: 12345 }),
+    );
+
+    account.setArchive(
+      new ArchiveVO({ accessRole: 'access.role.owner', archiveId: 98765 }),
+    );
+
+    expect(service.isDefaultArchiveOwnedByAccount()).toBeFalse();
   });
 
   it('can update the current account to hide the checklist', (done) => {
