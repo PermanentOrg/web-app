@@ -1,3 +1,4 @@
+/* @format */
 import { TestBed, inject } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
@@ -6,8 +7,8 @@ import {
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
-import { IdPuser } from './idpuser.repo';
 import { HttpV2Service } from '../http-v2/http-v2.service';
+import { IdPuser } from './idpuser.repo';
 
 describe('IdpUser', () => {
   let repo: IdPuser;
