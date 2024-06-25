@@ -8,7 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 
 interface Method {
-  id: string;
+  methodId: string;
   method: string;
   value: string;
 }
@@ -34,13 +34,6 @@ export class TwoFactorAuthComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private api: ApiService,
   ) {
-    // this.methods = [
-    //   {
-    //     id: 'email',
-    //     method: 'email',
-    //     value: 'email@example.com',
-    //   },
-    // ];
     this.form = fb.group({
       code: ['', Validators.required],
       contactInfo: ['', Validators.required],
@@ -67,29 +60,44 @@ export class TwoFactorAuthComponent implements OnInit {
     this.form.get('contactInfo').setValue(formatted, { emitEvent: false });
   }
 
-  removeMethod(method: Method): void {
-    this.selectedMethodToDelete = method;
-    this.method = this.selectedMethodToDelete.method;
-    this.updateContactInfoValidators();
-    this.form.patchValue({ contactInfo: this.selectedMethodToDelete.value });
+  async removeMethod(method: Method) {
+    try {
+      this.selectedMethodToDelete = method;
+      this.method = this.selectedMethodToDelete.method;
+      this.updateContactInfoValidators();
+      this.form.patchValue({ contactInfo: this.selectedMethodToDelete.value });
 
-    this.form.patchValue({ code: '' });
+      this.form.patchValue({ code: '' });
+    } catch (error) {}
   }
 
   submitData(value) {
     if (this.selectedMethodToDelete) {
-      // This is just for testing for the ui until the api is done
       this.submitRemoveMethod();
     } else {
-      // This is just for testing for the ui until the api is done
       this.submitCreateMethod(value);
     }
     this.form.patchValue({ code: '', contactInfo: '' });
   }
 
-  sendCode(e) {
+  async sendCode(e) {
     e.preventDefault();
-    this.codeSent = true;
+
+    try {
+      if (this.selectedMethodToDelete) {
+        await this.api.idpuser.sendDisableCode(
+          this.selectedMethodToDelete.methodId,
+        );
+      } else {
+        this.api.idpuser.sendEnableCode(
+          this.method,
+          this.form.get('contactInfo').value,
+        );
+      }
+    } catch (error) {
+    } finally {
+      this.codeSent = true;
+    }
   }
 
   cancel() {
@@ -119,22 +127,32 @@ export class TwoFactorAuthComponent implements OnInit {
     return this.methods.some((m) => m.method === method);
   }
 
-  submitRemoveMethod() {
+  async submitRemoveMethod() {
     try {
-      // api call here
+      await this.api.idpuser.disableTwoFactor(
+        this.selectedMethodToDelete.methodId,
+        this.form.get('code').value,
+      );
+    } catch (error) {
+    } finally {
       this.methods = this.methods.filter(
-        (m) => m.id !== this.selectedMethodToDelete.id,
+        (m) => m.methodId !== this.selectedMethodToDelete.methodId,
       );
       this.selectedMethodToDelete = null;
       this.codeSent = false;
       this.method = null;
-    } catch (error) {}
+    }
   }
 
   submitCreateMethod(value) {
     try {
+      this.api.idpuser.enableTwoFactor(
+        this.method,
+        this.form.get('contactInfo').value,
+        this.form.get('code').value,
+      );
       this.methods.push({
-        id: this.method,
+        methodId: this.method,
         method: this.method,
         value: value.contactInfo,
       });
