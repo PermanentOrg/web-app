@@ -2,7 +2,6 @@
 import { AccountVO, ArchiveVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { getFirst } from '../http-v2/http-v2.service';
-import { firstValueFrom } from 'rxjs';
 
 export class AccountRepo extends BaseRepo {
   public get(accountVO: AccountVO) {

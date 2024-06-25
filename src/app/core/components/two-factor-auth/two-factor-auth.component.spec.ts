@@ -3,9 +3,9 @@ import { Shallow } from 'shallow-render';
 
 import { CoreModule } from '@core/core.module';
 import { MessageService } from '@shared/services/message/message.service';
-import { TwoFactorAuthComponent } from './two-factor-auth.component';
 import { ApiService } from '@shared/services/api/api.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TwoFactorAuthComponent } from './two-factor-auth.component';
 
 const mockApiService = {
   idpuser: {
