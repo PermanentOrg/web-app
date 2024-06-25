@@ -1,5 +1,6 @@
 /* @format */
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CHECKLIST_API, ChecklistApi } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
 
@@ -8,20 +9,24 @@ import { ChecklistItem } from '../../types/checklist-item';
   templateUrl: './user-checklist.component.html',
   styleUrl: './user-checklist.component.scss',
 })
-export class UserChecklistComponent implements OnInit {
+export class UserChecklistComponent implements OnInit, OnDestroy {
   public items: ChecklistItem[] = [];
   public percentage: number = 0;
   public isOpen: boolean = true;
   public isDisplayed: boolean = true;
 
+  private archiveSubscription: Subscription;
+
   constructor(@Inject(CHECKLIST_API) private api: ChecklistApi) {}
 
   public ngOnInit(): void {
-    if (
-      this.api.isAccountHidingChecklist() ||
-      !this.api.isArchiveOwnedByAccount()
-    ) {
-      this.isDisplayed = false;
+    this.archiveSubscription = this.api
+      .getArchiveChangedEvent()
+      .subscribe(() => {
+        this.hideChecklistIfNotOwnedOrDefault();
+      });
+
+    if (this.hideChecklistIfNotOwnedOrDefault()) {
       return;
     }
 
@@ -46,6 +51,10 @@ export class UserChecklistComponent implements OnInit {
       });
   }
 
+  public ngOnDestroy(): void {
+    this.archiveSubscription.unsubscribe();
+  }
+
   public minimize(): void {
     this.isOpen = false;
   }
@@ -61,5 +70,17 @@ export class UserChecklistComponent implements OnInit {
     } catch {
       // Fail silently
     }
+  }
+
+  private hideChecklistIfNotOwnedOrDefault(): boolean {
+    if (
+      this.api.isAccountHidingChecklist() ||
+      !this.api.isDefaultArchiveOwnedByAccount()
+    ) {
+      this.isDisplayed = false;
+      return true;
+    }
+    this.isDisplayed = true;
+    return false;
   }
 }
