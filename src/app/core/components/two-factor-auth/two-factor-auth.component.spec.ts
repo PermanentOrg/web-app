@@ -4,6 +4,21 @@ import { Shallow } from 'shallow-render';
 import { CoreModule } from '@core/core.module';
 import { MessageService } from '@shared/services/message/message.service';
 import { TwoFactorAuthComponent } from './two-factor-auth.component';
+import { ApiService } from '@shared/services/api/api.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+const mockApiService = {
+  idpuser: {
+    getTwoFactorMethods: () =>
+      Promise.resolve([
+        { methodId: 'ABCD', value: 'test@example.com', method: 'mail' },
+      ]),
+    disableTwoFactor: (methodId, code) => Promise.resolve(),
+    sendDisableCode: (methodId) => Promise.resolve(),
+    sendEnableCode: (method, value) => Promise.resolve(),
+    enableTwoFactr: (method, value, code) => Promise.resolve(),
+  },
+};
 
 describe('TwoFactorAuthComponent', () => {
   let shallow: Shallow<TwoFactorAuthComponent>;
@@ -11,14 +26,14 @@ describe('TwoFactorAuthComponent', () => {
 
   beforeEach(async () => {
     messageShown = false;
-    shallow = new Shallow(TwoFactorAuthComponent, CoreModule).mock(
-      MessageService,
-      {
+    shallow = new Shallow(TwoFactorAuthComponent, CoreModule)
+      .mock(MessageService, {
         showError: () => {
           messageShown = true;
         },
-      },
-    );
+      })
+      .mock(ApiService, mockApiService)
+      .import(HttpClientTestingModule);
   });
 
   it('should create', async () => {
@@ -30,7 +45,7 @@ describe('TwoFactorAuthComponent', () => {
   it('should remove method and update form state', async () => {
     const { instance } = await shallow.render();
     const method = {
-      id: 'email',
+      methodId: 'email',
       method: 'email',
       value: 'user@example.com',
     };
@@ -85,8 +100,8 @@ describe('TwoFactorAuthComponent', () => {
 
   it('should display methods correctly in the table', async () => {
     const methods = [
-      { id: 'email', method: 'email', value: 'janedoe@example.com' },
-      { id: 'sms', method: 'sms', value: '(123) 456-7890' },
+      { methodId: 'email', method: 'email', value: 'janedoe@example.com' },
+      { methodId: 'sms', method: 'sms', value: '(123) 456-7890' },
     ];
 
     const { instance, find, fixture } = await shallow.render();
