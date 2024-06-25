@@ -142,4 +142,26 @@ describe('UserChecklistService', () => {
       isSuccessful: true,
     });
   });
+
+  it('binds its recheck archive event to the accountservice', (done) => {
+    service.getArchiveChangedEvent().subscribe(() => {
+      service.getArchiveChangedEvent().unsubscribe();
+      done();
+    });
+
+    account.archiveChange.next(new ArchiveVO({}));
+  });
+
+  it('unsubscribes from the accountservice when it is destroyed', (done) => {
+    service.getArchiveChangedEvent().subscribe(() => {
+      done.fail('Service is still subscribed to AccountService');
+    });
+
+    service.ngOnDestroy();
+
+    account.archiveChange.next(new ArchiveVO({}));
+    setTimeout(() => {
+      done();
+    }, 1);
+  });
 });

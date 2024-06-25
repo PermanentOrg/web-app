@@ -147,6 +147,50 @@ describe('UserChecklistComponent', () => {
     await expectAsync(instance.hideChecklistForever()).not.toBeRejected();
   });
 
+  it('should be able to watch for archive info changes and hide when archive is not owned', async () => {
+    const { find, fixture, inject } = await shallow.render();
+
+    await fixture.whenStable();
+    DummyChecklistApi.archiveAccess = 'access.role.viewer';
+
+    expect(find('.user-checklist').length).toBe(1);
+
+    const api = inject(CHECKLIST_API) as DummyChecklistApi;
+    api.sendArchiveChangeEvent();
+    fixture.detectChanges();
+
+    expectComponentToBeInvisible(find);
+  });
+
+  it('should be able to watch for archive info changes and show when archive is owned', async () => {
+    DummyChecklistApi.archiveAccess = 'access.role.viewer';
+    const { find, fixture, inject } = await shallow.render();
+
+    await fixture.whenStable();
+
+    DummyChecklistApi.archiveAccess = 'access.role.owner';
+
+    expectComponentToBeInvisible(find);
+
+    const api = inject(CHECKLIST_API) as DummyChecklistApi;
+    api.sendArchiveChangeEvent();
+    fixture.detectChanges();
+
+    expect(find('.user-checklist').length).toBe(1);
+  });
+
+  it('unsubscribes from any subscriptions on destroy', async () => {
+    const { instance, inject } = await shallow.render();
+
+    instance.ngOnDestroy();
+
+    DummyChecklistApi.archiveAccess = 'access.role.viewer';
+    const api = inject(CHECKLIST_API) as DummyChecklistApi;
+    api.sendArchiveChangeEvent();
+
+    expect(instance.isDisplayed).toBeTruthy();
+  });
+
   describe('Percentage completion', () => {
     async function expectPercentage(
       completed: number,

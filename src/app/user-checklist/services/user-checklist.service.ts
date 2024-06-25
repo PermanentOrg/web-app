@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Subject, Subscription, firstValueFrom } from 'rxjs';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role';
@@ -9,11 +9,22 @@ import { ChecklistApiResponse, ChecklistItem } from '../types/checklist-item';
 @Injectable({
   providedIn: 'root',
 })
-export class UserChecklistService implements ChecklistApi {
+export class UserChecklistService implements ChecklistApi, OnDestroy {
+  private recheckArchive = new Subject<void>();
+  private accountSubscription: Subscription;
+
   constructor(
     private httpv2: HttpV2Service,
     private account: AccountService,
-  ) {}
+  ) {
+    this.accountSubscription = account.archiveChange.subscribe(() => {
+      this.recheckArchive.next();
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.accountSubscription.unsubscribe();
+  }
 
   public async getChecklistItems(): Promise<ChecklistItem[]> {
     return (
@@ -38,6 +49,10 @@ export class UserChecklistService implements ChecklistApi {
     const updatedAccount = this.account.getAccount();
     updatedAccount.hideChecklist = true;
     await this.account.updateAccount(updatedAccount);
+  }
+
+  public getArchiveChangedEvent(): Subject<void> {
+    return this.recheckArchive;
   }
 
   private isDefaultArchive(): boolean {

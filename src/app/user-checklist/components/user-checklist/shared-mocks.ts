@@ -1,5 +1,6 @@
 /* @format */
 import { AccessRoleType } from '@models/access-role';
+import { Subject } from 'rxjs';
 import { ChecklistApi } from '../../types/checklist-api';
 import { ChecklistItem } from '../../types/checklist-item';
 
@@ -8,7 +9,10 @@ export class DummyChecklistApi implements ChecklistApi {
   public static items: ChecklistItem[] = [];
   public static accountHidden: boolean = false;
   public static archiveAccess: AccessRoleType = 'access.role.owner';
+  public static defaultArchive: boolean = true;
   public static savedAccount: boolean = false;
+
+  private recheckArchive = new Subject<void>();
 
   public static reset(): void {
     this.items = [];
@@ -38,5 +42,13 @@ export class DummyChecklistApi implements ChecklistApi {
 
   public isDefaultArchiveOwnedByAccount(): boolean {
     return DummyChecklistApi.archiveAccess === 'access.role.owner';
+  }
+
+  public getArchiveChangedEvent(): Subject<void> {
+    return this.recheckArchive;
+  }
+
+  public sendArchiveChangeEvent(): void {
+    this.recheckArchive.next();
   }
 }
