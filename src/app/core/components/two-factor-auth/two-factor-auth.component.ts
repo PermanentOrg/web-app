@@ -24,6 +24,7 @@ export class TwoFactorAuthComponent implements OnInit {
   methods: Method[] = [];
   selectedMethodToDelete: Method;
   codeSent = false;
+  loading = false;
 
   methodsDictionary = {
     sms: 'SMS Text',
@@ -47,7 +48,9 @@ export class TwoFactorAuthComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.loading = true;
     this.methods = await this.api.idpuser.getTwoFactorMethods();
+    this.loading = false;
   }
 
   formatPhoneNumber(value: string) {
@@ -129,6 +132,7 @@ export class TwoFactorAuthComponent implements OnInit {
 
   async submitRemoveMethod() {
     try {
+      this.loading = true;
       await this.api.idpuser.disableTwoFactor(
         this.selectedMethodToDelete.methodId,
         this.form.get('code').value,
@@ -141,24 +145,26 @@ export class TwoFactorAuthComponent implements OnInit {
       this.selectedMethodToDelete = null;
       this.codeSent = false;
       this.method = null;
+      this.loading = false;
     }
   }
 
-  submitCreateMethod(value) {
+  async submitCreateMethod(value) {
     try {
-      this.api.idpuser.enableTwoFactor(
+      this.loading = true;
+      await this.api.idpuser.enableTwoFactor(
         this.method,
         this.form.get('contactInfo').value,
         this.form.get('code').value,
       );
-      this.methods.push({
-        methodId: this.method,
-        method: this.method,
-        value: value.contactInfo,
-      });
+    } catch (error) {
+    } finally {
+      const methods = await this.api.idpuser.getTwoFactorMethods();
+      this.methods = methods;
       this.method = null;
       this.turnOn = false;
       this.codeSent = false;
-    } catch (error) {}
+      this.loading = false;
+    }
   }
 }
