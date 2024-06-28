@@ -13,6 +13,7 @@ export class DummyChecklistApi implements ChecklistApi {
   public static savedAccount: boolean = false;
 
   private recheckArchive = new Subject<void>();
+  private refreshChecklist = new Subject<void>();
 
   public static reset(): void {
     this.items = [];
@@ -53,6 +54,10 @@ export class DummyChecklistApi implements ChecklistApi {
   }
 
   public getRefreshChecklistEvent(): Subject<void> {
-    return new Subject<void>();
+    return this.refreshChecklist;
+  }
+
+  public sendRefreshEvent(): void {
+    this.refreshChecklist.next();
   }
 }

@@ -16,6 +16,7 @@ export class UserChecklistComponent implements OnInit, OnDestroy {
   public isDisplayed: boolean = true;
 
   private archiveSubscription: Subscription;
+  private refreshSubscription: Subscription;
 
   constructor(@Inject(CHECKLIST_API) private api: ChecklistApi) {}
 
@@ -30,29 +31,18 @@ export class UserChecklistComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.api
-      .getChecklistItems()
-      .then((items) => {
-        this.items = items;
-        if (this.items.length > 0) {
-          this.percentage =
-            (this.items.reduce((sum, i) => sum + +i.completed, 0) /
-              this.items.length) *
-            100;
-        }
-      })
-      .catch(() => {
-        // fail silently and let the finally block hide the component
-      })
-      .finally(() => {
-        if (this.items.length == 0) {
-          this.isDisplayed = false;
-        }
+    this.refreshSubscription = this.api
+      .getRefreshChecklistEvent()
+      .subscribe(() => {
+        this.refreshChecklist();
       });
+
+    this.refreshChecklist();
   }
 
   public ngOnDestroy(): void {
     this.archiveSubscription.unsubscribe();
+    this.refreshSubscription.unsubscribe();
   }
 
   public minimize(): void {
@@ -82,5 +72,29 @@ export class UserChecklistComponent implements OnInit, OnDestroy {
     }
     this.isDisplayed = true;
     return false;
+  }
+
+  private refreshChecklist() {
+    if (this.isDisplayed) {
+      this.api
+        .getChecklistItems()
+        .then((items) => {
+          this.items = items;
+          if (this.items.length > 0) {
+            this.percentage =
+              (this.items.reduce((sum, i) => sum + +i.completed, 0) /
+                this.items.length) *
+              100;
+          }
+        })
+        .catch(() => {
+          // fail silently and let the finally block hide the component
+        })
+        .finally(() => {
+          if (this.items.length == 0) {
+            this.isDisplayed = false;
+          }
+        });
+    }
   }
 }
