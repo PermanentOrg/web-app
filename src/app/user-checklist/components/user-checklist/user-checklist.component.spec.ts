@@ -179,7 +179,7 @@ describe('UserChecklistComponent', () => {
     expect(find('.user-checklist').length).toBe(1);
   });
 
-  it('unsubscribes from any subscriptions on destroy', async () => {
+  it('unsubscribes from archive change subscriptions on destroy', async () => {
     const { instance, inject } = await shallow.render();
 
     instance.ngOnDestroy();
@@ -189,6 +189,34 @@ describe('UserChecklistComponent', () => {
     api.sendArchiveChangeEvent();
 
     expect(instance.isDisplayed).toBeTruthy();
+  });
+
+  it('should refresh the checklist when a refresh event fires', async () => {
+    const { fixture, instance, inject } = await shallow.render();
+
+    DummyChecklistApi.items = [
+      createTestTask({ id: 'refresh', title: 'Refresh the checklist' }),
+    ];
+    const api = inject(CHECKLIST_API) as DummyChecklistApi;
+    api.sendRefreshEvent();
+    await fixture.whenStable();
+
+    expect(instance.items[0].id).toBe('refresh');
+  });
+
+  it('unsubscribes from refresh subscriptions on destroy', async () => {
+    const { fixture, instance, inject } = await shallow.render();
+
+    instance.ngOnDestroy();
+
+    DummyChecklistApi.items = [
+      createTestTask({ id: 'refresh', title: 'Refresh the checklist' }),
+    ];
+    const api = inject(CHECKLIST_API) as DummyChecklistApi;
+    api.sendRefreshEvent();
+    await fixture.whenStable();
+
+    expect(instance.items[0].id).not.toBe('refresh');
   });
 
   describe('Percentage completion', () => {
