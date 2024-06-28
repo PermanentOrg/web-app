@@ -225,6 +225,7 @@
         [weekdays]="true"
         (dateSelect)="onDateChange($event)"
         [footerTemplate]="!dateOnly ? timePicker : null"
+        [firstDayOfWeek]="7"
       ></ngb-datepicker>
       <ng-template #timePicker>
         <div class="datepicker-footer">
