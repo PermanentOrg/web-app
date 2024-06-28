@@ -9,7 +9,7 @@ import { HttpV2Service } from '../http-v2/http-v2.service';
 import { MixpanelData, MixpanelService } from './mixpanel.service';
 
 describe('MixpanelRepo', () => {
-  let repo: MixpanelService;
+  let service: MixpanelService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('MixpanelRepo', () => {
       imports: [HttpClientTestingModule],
     });
 
-    repo = new MixpanelService(TestBed.inject(HttpV2Service));
+    service = new MixpanelService(TestBed.inject(HttpV2Service));
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -51,7 +51,7 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo
+    service
       .update(testData)
       .catch(() => {
         fail();
@@ -79,7 +79,7 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo
+    service
       .update(testData)
       .catch(() => {
         fail();
@@ -110,7 +110,7 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo
+    service
       .update(testData)
       .catch(() => {
         fail();
@@ -138,7 +138,7 @@ describe('MixpanelRepo', () => {
       body: { analytics: { event: 'testEvent', data: {} } },
     };
 
-    repo
+    service
       .update(testData)
       .catch(() => {
         // Even though the request failed, our `update` function should not
@@ -151,5 +151,27 @@ describe('MixpanelRepo', () => {
 
     expect(req.request.method).toEqual('POST');
     req.error(new ProgressEvent('error'));
+  });
+
+  it('should ignore events with the noTransmit flag in the body', (done) => {
+    prepareAccountStorage('12345', true);
+    const testData: MixpanelData = {
+      entity: 'account',
+      action: 'update',
+      version: 1,
+      entityId: 'testEntityId',
+      body: {
+        noTransmit: true,
+      },
+    };
+
+    service
+      .update(testData)
+      .catch(() => {
+        done.fail();
+      })
+      .finally(() => done());
+
+    httpMock.expectNone(`${environment.apiUrl}/v2/event`);
   });
 });
