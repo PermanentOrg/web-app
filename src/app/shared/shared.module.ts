@@ -219,7 +219,6 @@ export class SharedModule {
     library.addIcons(faFileArchive, faPenSquare);
     this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
-    this.datePickerConfig.weekdays = false;
     this.datePickerConfig.minDate = {
       year: 1,
       day: 1,

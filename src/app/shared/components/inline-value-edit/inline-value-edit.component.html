@@ -205,14 +205,14 @@
         <ng-container *ngIf="!dateOnly">
           {{
             displayValue
-              ? (displayValue | prDate : item?.TimezoneVO)
+              ? (displayValue | prDate: item?.TimezoneVO)
               : (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
           }}
         </ng-container>
         <ng-container *ngIf="dateOnly">
           {{
             displayValue
-              ? (displayValue | date : 'yyyy-MM-dd' : '+0000')
+              ? (displayValue | date: 'yyyy-MM-dd' : '+0000')
               : (!canEdit ? readOnlyEmptyMessage : emptyMessage) || '&nbsp;'
           }}
         </ng-container>
@@ -222,6 +222,7 @@
         [startDate]="ngbDate"
         [hidden]="!isEditing"
         [maxDate]="maxNgbDate"
+        [weekdays]="true"
         (dateSelect)="onDateChange($event)"
         [footerTemplate]="!dateOnly ? timePicker : null"
       ></ngb-datepicker>
