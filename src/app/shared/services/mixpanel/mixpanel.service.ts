@@ -35,7 +35,10 @@ export type MixpanelAction =
   | 'open_verify_email'
   | 'open_billing_info'
   | 'open_legacy_contact'
-  | 'open_archive_steward';
+  | 'open_archive_steward'
+  | 'publish'
+  | 'move'
+  | 'copy';
 
 export class MixpanelData {
   entity: MixpanelEntity;
@@ -49,6 +52,7 @@ export class MixpanelData {
       distinctId?: string;
       data: Record<string, unknown>;
     };
+    noTransmit?: boolean;
     [key: string]: unknown;
   };
 
@@ -68,6 +72,10 @@ export class MixpanelService implements AnalyticsObserver {
   constructor(private httpV2: HttpV2Service) {}
 
   public async update(data: MixpanelData) {
+    if (data.body.noTransmit) {
+      return;
+    }
+
     const account =
       localStorage.getItem('account') || sessionStorage.getItem('account');
 
