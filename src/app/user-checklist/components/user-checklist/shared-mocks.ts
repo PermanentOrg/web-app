@@ -51,4 +51,8 @@ export class DummyChecklistApi implements ChecklistApi {
   public sendArchiveChangeEvent(): void {
     this.recheckArchive.next();
   }
+
+  public getRefreshChecklistEvent(): Subject<void> {
+    return new Subject<void>();
+  }
 }

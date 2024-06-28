@@ -55,6 +55,10 @@ export class UserChecklistService implements ChecklistApi, OnDestroy {
     return this.recheckArchive;
   }
 
+  public getRefreshChecklistEvent(): Subject<void> {
+    return new Subject<void>();
+  }
+
   private isDefaultArchive(): boolean {
     return (
       this.account.getAccount().defaultArchiveId ===
