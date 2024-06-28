@@ -11,6 +11,7 @@ import { AccountVO } from '@models/account-vo';
 import { ArchiveVO } from '@models/index';
 import { ChecklistApiResponse } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
+import { ChecklistAnalyticsObserverService } from './checklist-analytics-observer.service';
 
 describe('UserChecklistService', () => {
   let service: UserChecklistService;
@@ -163,5 +164,19 @@ describe('UserChecklistService', () => {
     setTimeout(() => {
       done();
     }, 1);
+  });
+
+  it('binds to the checklist analytics observer service', (done) => {
+    service.getRefreshChecklistEvent().subscribe(() => {
+      done();
+    });
+
+    TestBed.inject(ChecklistAnalyticsObserverService).update({
+      action: 'initiate_upload',
+      entity: 'record',
+      version: 1,
+      entityId: 'test',
+      body: {},
+    });
   });
 });
