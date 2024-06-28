@@ -49,6 +49,7 @@ export class MixpanelData {
       distinctId?: string;
       data: Record<string, unknown>;
     };
+    noTransmit?: boolean;
     [key: string]: unknown;
   };
 
@@ -68,6 +69,10 @@ export class MixpanelService implements AnalyticsObserver {
   constructor(private httpV2: HttpV2Service) {}
 
   public async update(data: MixpanelData) {
+    if (data.body.noTransmit) {
+      return;
+    }
+
     const account =
       localStorage.getItem('account') || sessionStorage.getItem('account');
 
