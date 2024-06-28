@@ -20,6 +20,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
 import { Router } from '@angular/router';
 import { PublishIaData } from '@models/publish-ia-vo';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 
 @Component({
   selector: 'pr-publish',
@@ -52,6 +53,7 @@ export class PublishComponent implements OnInit {
     private router: Router,
     private linkPipe: PublicLinkPipe,
     private routePipe: PublicRoutePipe,
+    private analytics: AnalyticsService,
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 
@@ -113,6 +115,16 @@ export class PublishComponent implements OnInit {
         this.publicItem = response.getRecordVO();
       }
       this.publicLink = this.linkPipe.transform(this.publicItem);
+
+      this.analytics.notifyObservers({
+        entity: 'record',
+        action: 'publish',
+        version: 1,
+        entityId: this.account.getAccount()?.accountId.toString(),
+        body: {
+          noTransmit: true,
+        },
+      });
     } catch (err) {
       if (err.getMessage) {
         this.messageService.showError(err.getMessage());

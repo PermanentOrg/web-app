@@ -35,7 +35,10 @@ export type MixpanelAction =
   | 'open_verify_email'
   | 'open_billing_info'
   | 'open_legacy_contact'
-  | 'open_archive_steward';
+  | 'open_archive_steward'
+  | 'publish'
+  | 'move'
+  | 'copy';
 
 export class MixpanelData {
   entity: MixpanelEntity;
