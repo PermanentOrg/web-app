@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { UserChecklistComponent } from './components/user-checklist/user-checklist.component';
 import { ChecklistIconComponent } from './components/checklist-icon/checklist-icon.component';
 import { TaskIconComponent } from './components/task-icon/task-icon.component';
@@ -27,4 +28,11 @@ import { ChecklistAnalyticsObserverService } from './services/checklist-analytic
     ChecklistAnalyticsObserverService,
   ],
 })
-export class UserChecklistModule {}
+export class UserChecklistModule {
+  constructor(
+    analytics: AnalyticsService,
+    checklistAnalyticsObserver: ChecklistAnalyticsObserverService,
+  ) {
+    analytics.addObserver(checklistAnalyticsObserver);
+  }
+}
