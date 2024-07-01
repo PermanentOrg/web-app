@@ -1,12 +1,12 @@
 /* @format */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-type VARIANT = 'primary' | 'secondary' | 'tertiary';
+type VARIANT = 'primary' | 'secondary' | 'tertiary' | 'link';
 type MODE = 'light' | 'dark';
 type SIZE = 'hug' | 'fill';
 type ORIENTATION = 'left' | 'right';
 type HEIGHT = 'medium' | 'large';
-type ATTR = 'submit' | 'reset' | 'button';
+type TYPE = 'submit' | 'reset' | 'button';
 
 @Component({
   selector: 'pr-button',
@@ -15,7 +15,6 @@ type ATTR = 'submit' | 'reset' | 'button';
 })
 export class ButtonComponent {
   //Inputs
-  @Input() text: string = '';
   @Input() variant: VARIANT = 'primary';
   @Input() height: HEIGHT = 'medium';
   @Input() mode: MODE = 'light';
@@ -24,7 +23,7 @@ export class ButtonComponent {
   @Input() icon: string = '';
   @Input() orientation: ORIENTATION = 'left';
   @Input() faIcon: string = '';
-  @Input() attr: ATTR = 'button';
+  @Input() buttonType: TYPE = 'button';
 
   //Outputs
   @Output() buttonClick = new EventEmitter<MouseEvent>();

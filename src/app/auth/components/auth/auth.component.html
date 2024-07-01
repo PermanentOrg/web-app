@@ -1,12 +1,28 @@
-<div class="perm-banner">
-  <div class="banner-content">
-  <a href="/">
-    <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
-  </a>
+<!-- @format -->
+<div class="auth-container">
+  <div class="image">
+    <div class="testimony">
+      <p class="text">
+        At Permanent, we celebrate our members’ hard work through our public
+        gallery and archive spotlights. Explore our public archive spotlights
+        and, when you’re ready, publish or share your own public archive!
+      </p>
+      <a
+        class="link"
+        href="https://permanent.org/blog/tag/public-archive-spotlight/"
+        >Start Exploring Now.</a
+      >
+    </div>
+    <img src="assets/img/sign_in_image.png" />
+  </div>
+  <div class="auth">
+    <div class="permanent-logo">
+      <img src="assets/svg/app-icon-glam.svg" alt="Permanent.org logo" />
+    </div>
+    <router-outlet></router-outlet>
   </div>
 </div>
 <pr-mobile-banner></pr-mobile-banner>
 <pr-announcement></pr-announcement>
 <pr-android-app-notify></pr-android-app-notify>
 <pr-prompt></pr-prompt>
-<router-outlet></router-outlet>

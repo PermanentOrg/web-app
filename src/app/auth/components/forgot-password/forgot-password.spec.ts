@@ -1,21 +1,21 @@
-/* @format  */
+/* @format */
+import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 
-import { MfaComponent } from '@auth/components/mfa/mfa.component';
 import { LogoComponent } from '@auth/components/logo/logo.component';
 import { MessageService } from '@shared/services/message/message.service';
 
 describe('MfaComponent', () => {
-  let component: MfaComponent;
-  let fixture: ComponentFixture<MfaComponent>;
+  let component: ForgotPasswordComponent;
+  let fixture: ComponentFixture<ForgotPasswordComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MfaComponent, LogoComponent],
+      declarations: [ForgotPasswordComponent, LogoComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -27,7 +27,7 @@ describe('MfaComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MfaComponent);
+    fixture = TestBed.createComponent(ForgotPasswordComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -36,14 +36,24 @@ describe('MfaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set error for missing code', () => {
-    component.mfaForm.get('token').markAsTouched();
-    component.mfaForm.patchValue({
-      token: '',
+  it('should set error for missing email', () => {
+    component.forgotForm.get('email').markAsTouched();
+    component.forgotForm.patchValue({
+      email: '',
     });
 
-    expect(component.mfaForm.invalid).toBeTruthy();
-    expect(component.mfaForm.get('token').errors.required).toBeTruthy();
+    expect(component.forgotForm.invalid).toBeTruthy();
+    expect(component.forgotForm.get('email').errors.required).toBeTruthy();
+  });
+
+  it('should set error for invalid email', () => {
+    component.forgotForm.get('email').markAsTouched();
+    component.forgotForm.patchValue({
+      email: 'test',
+    });
+
+    expect(component.forgotForm.invalid).toBeTruthy();
+    expect(component.forgotForm.get('email').errors.email).toBeTruthy();
   });
 
   it('should display the loading spinner', () => {

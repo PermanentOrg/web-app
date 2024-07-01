@@ -46,6 +46,8 @@ export class SignupComponent implements OnInit {
   shareItem: RecordVO | FolderVO;
   shareFromName: string;
   shareItemIsRecord = false;
+  agreedTerms = false;
+  showTerms: boolean = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -108,7 +110,6 @@ export class SignupComponent implements OnInit {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      agreed: [false, [Validators.requiredTrue]],
       optIn: [true],
     });
 
@@ -143,7 +144,7 @@ export class SignupComponent implements OnInit {
         formValue.name,
         formValue.password,
         formValue.confirm,
-        formValue.agreed,
+        this.agreedTerms,
         formValue.optIn,
         null,
         formValue.invitation,
@@ -215,5 +216,20 @@ export class SignupComponent implements OnInit {
         ]);
       }, 500);
     }
+  }
+
+  displayTerms(): void {
+    this.showTerms = true;
+  }
+
+  acceptTerms(accepted: boolean): void {
+    this.agreedTerms = accepted;
+    this.showTerms = false;
+  }
+
+  navigateToAuth() {
+    this.router.navigate(['..', 'login'], {
+      relativeTo: this.route,
+    });
   }
 }
