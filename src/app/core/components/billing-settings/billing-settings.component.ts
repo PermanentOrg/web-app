@@ -12,7 +12,7 @@ import {
   Country,
 } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-billing-settings',
@@ -30,7 +30,7 @@ export class BillingSettingsComponent implements OnInit {
     private prConstants: PrConstantsService,
     private api: ApiService,
     private message: MessageService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map((c) => {

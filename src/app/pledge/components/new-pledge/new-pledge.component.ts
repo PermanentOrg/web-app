@@ -29,7 +29,7 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
 import { AccountVO } from '@models/account-vo';
 import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
@@ -73,7 +73,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private iframe: IFrameService,
     private pledgeService: PledgeService,
     private deviceService: DeviceService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();

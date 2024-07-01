@@ -31,7 +31,7 @@ import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.serv
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 import { ApiService } from '@shared/services/api/api.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   transition(
@@ -77,7 +77,7 @@ export class AccountDropdownComponent
     private guidedTour: GuidedTourService,
     private api: ApiService,
     private deviceService: DeviceService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {}
 
   ngOnInit() {

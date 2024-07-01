@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { Directive } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 export type DialogState = 'display' | 'edit';
 
@@ -14,7 +14,7 @@ export type DialogState = 'display' | 'edit';
 export class DirectiveDialogComponent {
   constructor(
     private accountService: AccountService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     const account = this.accountService.getAccount();
     this.analytics.notifyObservers({

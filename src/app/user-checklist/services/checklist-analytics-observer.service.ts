@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AnalyticsObserver } from '@shared/services/analytics/analytics.service';
+import { EventObserver } from '@shared/services/event/event.service';
 import { MixpanelData } from '@shared/services/mixpanel/mixpanel.service';
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ChecklistAnalyticsObserverService implements AnalyticsObserver {
+export class ChecklistAnalyticsObserverService implements EventObserver {
   private subject = new Subject<void>();
 
   constructor() {}

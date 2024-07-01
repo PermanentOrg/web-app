@@ -28,7 +28,7 @@ import {
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-upload-button',
@@ -57,7 +57,7 @@ export class UploadButtonComponent
     private dataService: DataService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.subscriptions.push(
       this.dataService.currentFolderChange.subscribe((currentFolder) => {

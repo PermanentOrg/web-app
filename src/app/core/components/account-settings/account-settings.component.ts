@@ -24,7 +24,7 @@ import {
   PromptField,
   PromptService,
 } from '@shared/services/prompt/prompt.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-account-settings',
@@ -50,7 +50,7 @@ export class AccountSettingsComponent implements OnInit {
     private message: MessageService,
     private fb: UntypedFormBuilder,
     private prompt: PromptService,
-    private analytics: AnalyticsService
+    private analytics: EventService,
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map((c) => {
@@ -65,7 +65,7 @@ export class AccountSettingsComponent implements OnInit {
           text: s,
           value: s,
         };
-      }
+      },
     );
 
     this.changePasswordForm = fb.group({
@@ -145,7 +145,7 @@ export class AccountSettingsComponent implements OnInit {
     try {
       try {
         const loginResp = await this.accountService.checkForMFAWithLogin(
-          value.passwordOld
+          value.passwordOld,
         );
         if (loginResp.needsMFA()) {
           try {
@@ -155,7 +155,7 @@ export class AccountSettingsComponent implements OnInit {
                 this.accountService.getAccount().keepLoggedIn;
               const mfaResp = await this.accountService.verifyMfa(
                 mfa.verificationCode,
-                keepLoggedIn
+                keepLoggedIn,
               );
               trustToken = mfaResp.getTrustToken().value;
             } catch (err) {
@@ -196,7 +196,7 @@ export class AccountSettingsComponent implements OnInit {
     };
     return this.prompt.prompt(
       [mfaField],
-      'A verification code has been sent to your email address or phone number. Please enter it below to change your password.'
+      'A verification code has been sent to your email address or phone number. Please enter it below to change your password.',
     );
   }
 }

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
 import {
   UntypedFormBuilder,
@@ -89,7 +89,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.isGlam = localStorage.getItem('isGlam') === 'true';
     if (!this.isGlam) {

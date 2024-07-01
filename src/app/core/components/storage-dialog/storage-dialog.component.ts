@@ -20,7 +20,7 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
@@ -51,7 +51,7 @@ export class StorageDialogComponent
     private message: MessageService,
     private route: ActivatedRoute,
     private device: DeviceService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],

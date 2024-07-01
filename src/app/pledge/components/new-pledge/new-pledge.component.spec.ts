@@ -7,10 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {
-  AnalyticsService,
-  EventData,
-} from '@shared/services/analytics/analytics.service';
+import { EventService, EventData } from '@shared/services/event/event.service';
 import { PledgeService } from '../../services/pledge.service';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { PledgeModule } from '../../pledge.module';
@@ -83,7 +80,7 @@ describe('NewPledgeComponent', () => {
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .mock(PledgeService, mockPledgeService)
-      .mock(AnalyticsService, mockAnalyticsService)
+      .mock(EventService, mockAnalyticsService)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;

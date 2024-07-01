@@ -2,16 +2,12 @@
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {
-  AnalyticsObserver,
-  AnalyticsService,
-  EventData,
-} from './analytics.service';
+import { EventObserver, EventService, EventData } from './event.service';
 
-describe('AnalyticsService', () => {
-  let shallow: Shallow<AnalyticsService>;
+describe('EventService', () => {
+  let shallow: Shallow<EventService>;
   beforeEach(() => {
-    shallow = new Shallow(AnalyticsService, SharedModule).import(
+    shallow = new Shallow(EventService, SharedModule).import(
       HttpClientTestingModule,
     );
   });
@@ -24,7 +20,7 @@ describe('AnalyticsService', () => {
 
   it('should add an observer', async () => {
     const { instance } = await shallow.createService();
-    const mockObserver: AnalyticsObserver = {
+    const mockObserver: EventObserver = {
       update: async (data: EventData) => {},
     };
 
@@ -35,10 +31,10 @@ describe('AnalyticsService', () => {
 
   it('should notify all observers', async () => {
     const { instance } = await shallow.createService();
-    const mockObserver1: AnalyticsObserver = {
+    const mockObserver1: EventObserver = {
       update: jasmine.createSpy('update'),
     };
-    const mockObserver2: AnalyticsObserver = {
+    const mockObserver2: EventObserver = {
       update: jasmine.createSpy('update'),
     };
 
@@ -60,7 +56,7 @@ describe('AnalyticsService', () => {
 
   it('should remove an observer', async () => {
     const { instance } = await shallow.createService();
-    const mockObserver: AnalyticsObserver = {
+    const mockObserver: EventObserver = {
       update: jasmine.createSpy('update'),
     };
 
@@ -80,10 +76,10 @@ describe('AnalyticsService', () => {
 
   it('should not notify removed observers', async () => {
     const { instance } = await shallow.createService();
-    const mockObserver: AnalyticsObserver = {
+    const mockObserver: EventObserver = {
       update: jasmine.createSpy('update'),
     };
-    const mockObserver2: AnalyticsObserver = {
+    const mockObserver2: EventObserver = {
       update: jasmine.createSpy('update'),
     };
 

@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Directive, DirectiveUpdateRequest } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -24,7 +24,7 @@ export class DirectiveEditComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private analytics: AnalyticsService
+    private analytics: EventService,
   ) {}
 
   ngOnInit(): void {

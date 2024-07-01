@@ -7,7 +7,7 @@ import { DialogRef } from '@root/app/dialog/dialog.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { EventData } from '@shared/services/google-analytics/google-analytics.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { PromoVOData } from '../../../models/promo-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
@@ -92,7 +92,7 @@ describe('StorageDialogComponent', () => {
       })
       .provide({ provide: AccountService, useValue: mockAccountService })
       .provide({ provide: ApiService, useValue: mockApiService })
-      .provide({ provide: AnalyticsService, useValue: mockAnalyticksService })
+      .provide({ provide: EventService, useValue: mockAnalyticksService })
       .provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
   });
 

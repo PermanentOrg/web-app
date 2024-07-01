@@ -45,14 +45,14 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
 import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
 import { FormsModule } from '@angular/forms';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
 
 declare var ga: any;
 
 export function initializeAnalytics(
-  analyticsService: AnalyticsService,
+  analyticsService: EventService,
   mixpanelService: MixpanelService,
 ): () => void {
   return () => {
@@ -165,7 +165,7 @@ export class PermErrorHandler implements ErrorHandler {
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAnalytics,
-      deps: [AnalyticsService, MixpanelService],
+      deps: [EventService, MixpanelService],
       multi: true,
     },
     {

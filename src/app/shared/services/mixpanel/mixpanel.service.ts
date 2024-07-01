@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpV2Service } from '../http-v2/http-v2.service';
-import { AnalyticsObserver } from '../analytics/analytics.service';
+import { EventObserver } from '../event/event.service';
 
 type MixpanelEntity =
   | 'account'
@@ -68,7 +68,7 @@ export class MixpanelData {
 @Injectable({
   providedIn: 'root',
 })
-export class MixpanelService implements AnalyticsObserver {
+export class MixpanelService implements EventObserver {
   constructor(private httpV2: HttpV2Service) {}
 
   public async update(data: MixpanelData) {

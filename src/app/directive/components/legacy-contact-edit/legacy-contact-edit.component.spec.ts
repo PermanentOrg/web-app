@@ -5,10 +5,7 @@ import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
 import { LegacyContact } from '@models/directive';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-import {
-  EventData,
-  AnalyticsService,
-} from '@shared/services/analytics/analytics.service';
+import { EventData, EventService } from '@shared/services/event/event.service';
 import { DirectiveModule } from '../../directive.module';
 import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
@@ -58,7 +55,7 @@ describe('LegacyContactEditComponent', () => {
         useClass: MockMessageService,
       },
       {
-        provide: AnalyticsService,
+        provide: EventService,
         useClass: MockAnalyticsService,
       },
     );

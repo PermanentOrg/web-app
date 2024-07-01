@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { LegacyContact } from '@models/directive';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { DialogState } from '../directive-dialog/directive-dialog.component';
 
 @Component({
@@ -15,7 +15,7 @@ export class LegacyContactDialogComponent {
   constructor(
     private api: ApiService,
     private accountService: AccountService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     const account = this.accountService.getAccount();
     this.analytics.notifyObservers({

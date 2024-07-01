@@ -20,7 +20,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
 import { Router } from '@angular/router';
 import { PublishIaData } from '@models/publish-ia-vo';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-publish',
@@ -53,7 +53,7 @@ export class PublishComponent implements OnInit {
     private router: Router,
     private linkPipe: PublicLinkPipe,
     private routePipe: PublicRoutePipe,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 

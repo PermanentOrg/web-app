@@ -2,7 +2,7 @@
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { UploadItem } from './uploadItem';
 
 const buildForm = (fields: object, file: File) => {
@@ -25,7 +25,7 @@ export class Uploader {
   constructor(
     private api: ApiService,
     private httpClient: HttpClient,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {}
 
   private getUploadData = async (item: UploadItem) => {

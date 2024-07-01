@@ -8,9 +8,9 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import {
   EventData,
-  AnalyticsService,
-  AnalyticsObserver,
-} from '@shared/services/analytics/analytics.service';
+  EventService,
+  EventObserver,
+} from '@shared/services/event/event.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
@@ -28,7 +28,7 @@ const mockApiService = {
 };
 
 const mockAnalyticsService = {
-  addObserver: (observer: AnalyticsObserver): void => {},
+  addObserver: (observer: EventObserver): void => {},
   notifyObservers: (data: EventData): void => {},
 };
 
@@ -67,7 +67,7 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
-      .mock(AnalyticsService, mockAnalyticsService);
+      .mock(EventService, mockAnalyticsService);
   });
 
   it('should exist', async () => {

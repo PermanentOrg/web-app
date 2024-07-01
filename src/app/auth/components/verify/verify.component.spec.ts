@@ -18,10 +18,7 @@ import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
-import {
-  AnalyticsService,
-  EventData,
-} from '@shared/services/analytics/analytics.service';
+import { EventService, EventData } from '@shared/services/event/event.service';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
@@ -53,7 +50,7 @@ describe('VerifyComponent', () => {
     });
 
     config.providers.push({
-      provide: AnalyticsService,
+      provide: EventService,
       useValue: {
         notifyObservers: (data: EventData) => {},
       },

@@ -13,7 +13,7 @@ import {
 import { AccountVO } from '@root/app/models';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-verify',
@@ -45,7 +45,7 @@ export class VerifyComponent implements OnInit {
     private message: MessageService,
     private route: ActivatedRoute,
     public secrets: SecretsService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.captchaPassed = false;
     this.captchaSiteKey = secrets.get('RECAPTCHA_API_KEY');

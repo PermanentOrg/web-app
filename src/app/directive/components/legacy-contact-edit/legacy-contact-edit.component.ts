@@ -1,7 +1,7 @@
 /* @format */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegacyContact } from '@models/directive';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -20,7 +20,7 @@ export class LegacyContactEditComponent implements OnInit {
   constructor(
     private api: ApiService,
     private message: MessageService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {}
 
   ngOnInit(): void {

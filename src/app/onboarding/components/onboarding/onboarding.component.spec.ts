@@ -12,9 +12,9 @@ import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   EventData,
-  AnalyticsService,
-  AnalyticsObserver,
-} from '@shared/services/analytics/analytics.service';
+  EventService,
+  EventObserver,
+} from '@shared/services/event/event.service';
 import { OnboardingModule } from '../../onboarding.module';
 import { OnboardingComponent } from './onboarding.component';
 
@@ -26,7 +26,7 @@ class NullRoute {
 
 const mockAnalyticsService = {
   notifyObservers: (data: EventData) => {},
-  addObserver: (observer: AnalyticsObserver) => {},
+  addObserver: (observer: EventObserver) => {},
 };
 
 let throwError: boolean = false;
@@ -83,7 +83,7 @@ describe('OnboardingComponent #onboarding', () => {
       .mock(AccountService, mockAccountService)
       .mock(Router, mockRouter)
       .mock(MessageService, mockMessageService)
-      .mock(AnalyticsService, mockAnalyticsService)
+      .mock(EventService, mockAnalyticsService)
       .replaceModule(RouterModule, RouterTestingModule);
   });
 

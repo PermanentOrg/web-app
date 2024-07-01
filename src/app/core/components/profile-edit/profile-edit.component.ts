@@ -34,7 +34,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
 @Component({
@@ -83,7 +83,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private message: MessageService,
     private cookies: CookieService,
     private device: DeviceService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {}
 
   async ngOnInit(): Promise<void> {

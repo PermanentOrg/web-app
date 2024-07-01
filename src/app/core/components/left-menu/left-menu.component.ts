@@ -35,7 +35,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
 import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-left-menu',
@@ -76,7 +76,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private profile: ProfileService,
     private payerService: PayerService,
     private deviceService: DeviceService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     if (this.accountService.getArchive()) {
       this.archive = this.accountService.getArchive();

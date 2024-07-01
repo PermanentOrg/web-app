@@ -15,7 +15,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-nav',
@@ -31,7 +31,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private device: DeviceService,
     private account: AccountService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog,

@@ -34,7 +34,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
@@ -126,7 +126,7 @@ export class EditService {
     private dialog: Dialog,
     private device: DeviceService,
     private secrets: SecretsService,
-    private analytics: AnalyticsService,
+    private analytics: EventService,
   ) {
     this.loadGoogleMapsApi();
   }

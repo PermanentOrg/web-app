@@ -4,19 +4,19 @@ import { MixpanelData, MixpanelService } from '../mixpanel/mixpanel.service';
 
 export type EventData = MixpanelData;
 
-export interface AnalyticsObserver {
+export interface EventObserver {
   update(eventData: EventData): Promise<void>;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class AnalyticsService {
-  private observers: AnalyticsObserver[] = [];
+export class EventService {
+  private observers: EventObserver[] = [];
 
   constructor() {}
 
-  public addObserver(observer: AnalyticsObserver): void {
+  public addObserver(observer: EventObserver): void {
     this.observers.push(observer);
   }
 
@@ -26,7 +26,7 @@ export class AnalyticsService {
     });
   }
 
-  public removeObserver(observer: AnalyticsObserver): void {
+  public removeObserver(observer: EventObserver): void {
     const index = this.observers.indexOf(observer);
     if (index > -1) {
       this.observers.splice(index, 1);
