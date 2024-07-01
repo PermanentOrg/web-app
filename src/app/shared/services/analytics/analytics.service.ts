@@ -68,7 +68,7 @@ export class MixpanelData {
 @Injectable({
   providedIn: 'root',
 })
-export class MixpanelService implements EventObserver {
+export class AnalyticsService implements EventObserver {
   constructor(private httpV2: HttpV2Service) {}
 
   public async update(data: MixpanelData) {

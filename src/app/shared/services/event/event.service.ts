@@ -1,6 +1,6 @@
 /* @format */
 import { Injectable } from '@angular/core';
-import { MixpanelData, MixpanelService } from '../mixpanel/mixpanel.service';
+import { MixpanelData, AnalyticsService } from '../analytics/analytics.service';
 
 export type EventData = MixpanelData;
 

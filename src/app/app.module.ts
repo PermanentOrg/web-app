@@ -43,7 +43,7 @@ import {
 } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { DialogModule } from './dialog/dialog.module';
@@ -53,7 +53,7 @@ declare var ga: any;
 
 export function initializeAnalytics(
   analyticsService: EventService,
-  mixpanelService: MixpanelService,
+  mixpanelService: AnalyticsService,
 ): () => void {
   return () => {
     analyticsService.addObserver(mixpanelService);
@@ -161,11 +161,11 @@ export class PermErrorHandler implements ErrorHandler {
   providers: [
     CookieService,
     MessageService,
-    MixpanelService,
+    AnalyticsService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAnalytics,
-      deps: [EventService, MixpanelService],
+      deps: [EventService, AnalyticsService],
       multi: true,
     },
     {
@@ -188,7 +188,7 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
-    private mixpanel: MixpanelService,
+    private mixpanel: AnalyticsService,
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {

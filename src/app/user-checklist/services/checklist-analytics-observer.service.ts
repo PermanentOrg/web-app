@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EventObserver } from '@shared/services/event/event.service';
-import { MixpanelData } from '@shared/services/mixpanel/mixpanel.service';
+import { MixpanelData } from '@shared/services/analytics/analytics.service';
 import { Subject } from 'rxjs';
 
 @Injectable({

@@ -6,10 +6,10 @@ import {
 } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { HttpV2Service } from '../http-v2/http-v2.service';
-import { MixpanelData, MixpanelService } from './mixpanel.service';
+import { MixpanelData, AnalyticsService } from './analytics.service';
 
-describe('MixpanelRepo', () => {
-  let service: MixpanelService;
+describe('AnalyticsService', () => {
+  let service: AnalyticsService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('MixpanelRepo', () => {
       imports: [HttpClientTestingModule],
     });
 
-    service = new MixpanelService(TestBed.inject(HttpV2Service));
+    service = new AnalyticsService(TestBed.inject(HttpV2Service));
     httpMock = TestBed.inject(HttpTestingController);
   });
 

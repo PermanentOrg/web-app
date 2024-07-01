@@ -12,7 +12,7 @@ import {
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
-import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
+import { MixpanelAction } from '@shared/services/analytics/analytics.service';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
