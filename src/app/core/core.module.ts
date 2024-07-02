@@ -66,6 +66,9 @@ import { SkipOnboardingDialogComponent } from './components/skip-onboarding-dial
 import { GiftStorageComponent } from './components/gift-storage/gift-storage.component';
 import { ConfirmGiftDialogComponent } from './components/confirm-gift-dialog/confirm-gift-dialog.component';
 import { AdvancedSettingsComponent } from './components/advanced-settings/advanced-settings.component';
+import { AccountSecurityComponent } from './components/account-security/account-security.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-auth.component';
 
 @NgModule({
   imports: [
@@ -122,6 +125,9 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
     GiftStorageComponent,
     ConfirmGiftDialogComponent,
     AdvancedSettingsComponent,
+    AccountSecurityComponent,
+    ChangePasswordComponent,
+    TwoFactorAuthComponent,
   ],
   providers: [
     DataService,
