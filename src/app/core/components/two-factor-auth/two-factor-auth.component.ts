@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 interface Method {
-  id: string;
+  methodId: string;
   method: string;
   value: string;
 }
@@ -15,27 +17,24 @@ interface Method {
   templateUrl: './two-factor-auth.component.html',
   styleUrl: './two-factor-auth.component.scss',
 })
-export class TwoFactorAuthComponent {
+export class TwoFactorAuthComponent implements OnInit {
   turnOn: boolean = false;
   method: string = '';
   form: UntypedFormGroup;
   methods: Method[] = [];
   selectedMethodToDelete: Method;
   codeSent = false;
+  loading = false;
 
   methodsDictionary = {
     sms: 'SMS Text',
     email: 'Email',
   };
 
-  constructor(private fb: UntypedFormBuilder) {
-    this.methods = [
-      {
-        id: 'email',
-        method: 'email',
-        value: 'email@example.com',
-      },
-    ];
+  constructor(
+    private fb: UntypedFormBuilder,
+    private api: ApiService,
+  ) {
     this.form = fb.group({
       code: ['', Validators.required],
       contactInfo: ['', Validators.required],
@@ -48,6 +47,12 @@ export class TwoFactorAuthComponent {
     });
   }
 
+  async ngOnInit() {
+    this.loading = true;
+    this.methods = await this.api.idpuser.getTwoFactorMethods();
+    this.loading = false;
+  }
+
   formatPhoneNumber(value: string) {
     let numbers = value.replace(/\D/g, '');
     let char = { 0: '(', 3: ')  ', 6: ' - ' };
@@ -58,29 +63,44 @@ export class TwoFactorAuthComponent {
     this.form.get('contactInfo').setValue(formatted, { emitEvent: false });
   }
 
-  removeMethod(method: Method): void {
-    this.selectedMethodToDelete = method;
-    this.method = this.selectedMethodToDelete.method;
-    this.updateContactInfoValidators();
-    this.form.patchValue({ contactInfo: this.selectedMethodToDelete.value });
+  async removeMethod(method: Method) {
+    try {
+      this.selectedMethodToDelete = method;
+      this.method = this.selectedMethodToDelete.method;
+      this.updateContactInfoValidators();
+      this.form.patchValue({ contactInfo: this.selectedMethodToDelete.value });
 
-    this.form.patchValue({ code: '' });
+      this.form.patchValue({ code: '' });
+    } catch (error) {}
   }
 
   submitData(value) {
     if (this.selectedMethodToDelete) {
-      // This is just for testing for the ui until the api is done
       this.submitRemoveMethod();
     } else {
-      // This is just for testing for the ui until the api is done
       this.submitCreateMethod(value);
     }
     this.form.patchValue({ code: '', contactInfo: '' });
   }
 
-  sendCode(e) {
+  async sendCode(e) {
     e.preventDefault();
-    this.codeSent = true;
+
+    try {
+      if (this.selectedMethodToDelete) {
+        await this.api.idpuser.sendDisableCode(
+          this.selectedMethodToDelete.methodId,
+        );
+      } else {
+        this.api.idpuser.sendEnableCode(
+          this.method,
+          this.form.get('contactInfo').value,
+        );
+      }
+    } catch (error) {
+    } finally {
+      this.codeSent = true;
+    }
   }
 
   cancel() {
@@ -110,28 +130,41 @@ export class TwoFactorAuthComponent {
     return this.methods.some((m) => m.method === method);
   }
 
-  submitRemoveMethod() {
+  async submitRemoveMethod() {
     try {
-      // api call here
+      this.loading = true;
+      await this.api.idpuser.disableTwoFactor(
+        this.selectedMethodToDelete.methodId,
+        this.form.get('code').value,
+      );
+    } catch (error) {
+    } finally {
       this.methods = this.methods.filter(
-        (m) => m.id !== this.selectedMethodToDelete.id
+        (m) => m.methodId !== this.selectedMethodToDelete.methodId,
       );
       this.selectedMethodToDelete = null;
       this.codeSent = false;
       this.method = null;
-    } catch (error) {}
+      this.loading = false;
+    }
   }
 
-  submitCreateMethod(value) {
+  async submitCreateMethod(value) {
     try {
-      this.methods.push({
-        id: this.method,
-        method: this.method,
-        value: value.contactInfo,
-      });
+      this.loading = true;
+      await this.api.idpuser.enableTwoFactor(
+        this.method,
+        this.form.get('contactInfo').value,
+        this.form.get('code').value,
+      );
+    } catch (error) {
+    } finally {
+      const methods = await this.api.idpuser.getTwoFactorMethods();
+      this.methods = methods;
       this.method = null;
       this.turnOn = false;
       this.codeSent = false;
-    } catch (error) {}
+      this.loading = false;
+    }
   }
 }
