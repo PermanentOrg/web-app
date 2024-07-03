@@ -6,6 +6,10 @@
   width: 100%;
 }
 
+.dialog-content {
+  background-color: white;
+}
+
 .header {
   @include tabbedDialogHeader;
   background-color: white;

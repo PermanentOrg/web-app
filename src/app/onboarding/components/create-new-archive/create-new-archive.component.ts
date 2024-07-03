@@ -18,6 +18,8 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import {
   reasons,
   goals,
@@ -28,6 +30,7 @@ import {
   archiveOptions,
   ArchiveCreateEvent,
 } from '../glam/types/archive-types';
+import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 
 type NewArchiveScreen =
   | 'goals'
@@ -43,7 +46,7 @@ type NewArchiveScreen =
   templateUrl: './create-new-archive.component.html',
   styleUrls: ['./create-new-archive.component.scss'],
 })
-export class CreateNewArchiveComponent implements OnInit, OnDestroy {
+export class CreateNewArchiveComponent implements OnInit {
   @Output() back = new EventEmitter<void>();
   @Output() createdArchive = new EventEmitter<ArchiveVO>();
   @Output() error = new EventEmitter<string>();
@@ -87,7 +90,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   constructor(
     private fb: UntypedFormBuilder,
     private api: ApiService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private accountService: AccountService,
     private event: EventService,
   ) {
@@ -104,27 +107,11 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     } else {
       this.progress.emit(0);
     }
-    this.subscription = this.accountService.createAccountForMe.subscribe(
-      (value) => {
-        if (value.action === 'confirm') {
-          this.name = value.name;
-          this.archiveType = 'type.archive.person';
-          this.archiveTypeTag = OnboardingTypes.myself;
-          this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
-          this.screen = 'goals';
-          this.progress.emit(1);
-        }
-      },
-    );
     this.progress.emit(0);
     this.event.dispatch({
       entity: 'account',
       action: 'start_onboarding',
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   public onBackPress(): void {
@@ -221,11 +208,21 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       action: 'skip_create_archive',
     });
     if (!this.isGlam) {
-      this.dialog.open(
-        'SkipOnboardingDialogComponent',
-        { skipOnboarding: this.skipOnboarding },
-        { width: '600px' },
-      );
+      this.dialog
+        .open(SkipOnboardingDialogComponent, {
+          data: { skipOnboarding: this.skipOnboarding },
+          width: '600px',
+        })
+        .closed.subscribe((result: { action: string; name: string }) => {
+          if (result.action === 'confirm') {
+            this.name = result.name;
+            this.archiveType = 'type.archive.person';
+            this.archiveTypeTag = OnboardingTypes.myself;
+            this.selectedValue = `${this.archiveType}+${this.archiveTypeTag}`;
+            this.screen = 'goals';
+            this.progress.emit(1);
+          }
+        });
     } else {
       this.screen = 'create-archive-for-me';
     }
