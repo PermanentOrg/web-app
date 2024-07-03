@@ -22,8 +22,12 @@ import {
   forkJoin,
 } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { Dialog } from '../../../dialog/dialog.service';
 import { AccountService } from '../../../shared/services/account/account.service';
+import { ConfirmGiftDialogComponent } from '../confirm-gift-dialog/confirm-gift-dialog.component';
+import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 @Component({
   selector: 'pr-gift-storage',
@@ -55,7 +59,9 @@ export class GiftStorageComponent implements OnDestroy {
   constructor(
     private fb: UntypedFormBuilder,
     private accountService: AccountService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
+    private api: ApiService,
+    private msg: MessageService,
   ) {
     this.account = this.accountService.getAccount();
     this.availableSpace = this.bytesToGigabytes(this.account?.spaceLeft);
@@ -84,37 +90,6 @@ export class GiftStorageComponent implements OnDestroy {
       message: ['', []],
     });
     this.subscriptions.push(
-      this.giftResult.subscribe((response) => {
-        if (response.isSuccessful) {
-          this.emailsSentTo = [
-            ...new Set([
-              ...response.response.invitationSent,
-              ...response.response.giftDelivered,
-            ]),
-          ];
-          this.alreadyInvited = response.response.alreadyInvited;
-          const giftedAmount = response.response.storageGifted;
-          const remainingSpaceAfterGift =
-            Number(this.availableSpace) - giftedAmount;
-          this.availableSpace = String(remainingSpaceAfterGift.toFixed(2));
-
-          const remainingSpaceInBytes =
-            remainingSpaceAfterGift * this.bytesPerGigabyte;
-
-          const totalSpace =
-            this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte;
-
-          const newAccount = new AccountVO({
-            ...this.account,
-            spaceLeft: remainingSpaceInBytes,
-            spaceTotal: totalSpace,
-          });
-
-          this.accountService.setAccount(newAccount);
-          this.isSuccessful = response.isSuccessful;
-        }
-      }),
-
       this.giftForm.get('email')?.valueChanges.subscribe((value) => {
         this.successMessage = '';
         this.giftForm.get('amount')?.updateValueAndValidity();
@@ -141,18 +116,59 @@ export class GiftStorageComponent implements OnDestroy {
     message: string;
   }) {
     const emails = this.parseEmailString(value.email);
-    this.dialog.open(
-      'ConfirmGiftDialogComponent',
-      {
-        emails,
-        amount: value.amount,
-        message: value.message,
-        giftResult: this.giftResult,
-      },
-      {
+    this.dialog
+      .open(ConfirmGiftDialogComponent, {
+        data: {
+          emails,
+          amount: value.amount,
+          message: value.message,
+          giftResult: this.giftResult,
+        },
         width: '700px',
-      },
-    );
+      })
+      .closed.subscribe(async (confirm) => {
+        try {
+          if (confirm) {
+            const response = await this.api.billing.giftStorage(
+              emails,
+              Number(value.amount),
+              value.message,
+            );
+
+            this.emailsSentTo = [
+              ...new Set([
+                ...response.invitationSent,
+                ...response.giftDelivered,
+              ]),
+            ];
+            this.alreadyInvited = response.alreadyInvited;
+            const giftedAmount = response.storageGifted;
+            const remainingSpaceAfterGift =
+              Number(this.availableSpace) - giftedAmount;
+            this.availableSpace = String(remainingSpaceAfterGift.toFixed(2));
+
+            const remainingSpaceInBytes =
+              remainingSpaceAfterGift * this.bytesPerGigabyte;
+
+            const totalSpace =
+              this.account.spaceTotal - giftedAmount * this.bytesPerGigabyte;
+
+            const newAccount = new AccountVO({
+              ...this.account,
+              spaceLeft: remainingSpaceInBytes,
+              spaceTotal: totalSpace,
+            });
+
+            this.accountService.setAccount(newAccount);
+            this.isSuccessful = true;
+          }
+        } catch (e) {
+          this.msg.showError({
+            message: 'Something went wrong! Please try again.',
+          });
+          this.giftResult.next({ isSuccessful: false, response: null });
+        }
+      });
   }
 
   closeSuccessMessage() {
