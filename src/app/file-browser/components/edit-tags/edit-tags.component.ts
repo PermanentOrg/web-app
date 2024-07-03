@@ -25,8 +25,9 @@ import { TagResponse } from '@shared/services/api/tag.repo';
 import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { ngIfScaleAnimation } from '@shared/animations';
-import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
+import { Dialog } from '@root/app/dialog/dialog.module';
 import { SearchService } from '@search/services/search.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 export type TagType = 'keyword' | 'customMetadata';
 
@@ -35,6 +36,7 @@ export type TagType = 'keyword' | 'customMetadata';
   templateUrl: './edit-tags.component.html',
   styleUrls: ['./edit-tags.component.scss'],
   animations: [ngIfScaleAnimation],
+  providers: [SearchService, DataService],
 })
 export class EditTagsComponent
   implements OnInit, DoCheck, OnDestroy, HasSubscriptions

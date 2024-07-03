@@ -69,6 +69,7 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
 import { AccountSecurityComponent } from './components/account-security/account-security.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-auth.component';
+import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
 
 @NgModule({
   imports: [
@@ -87,6 +88,7 @@ import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-
     DirectiveModule,
     FilesystemModule,
     UserChecklistModule,
+    DialogCdkModule,
   ],
   declarations: [
     MainComponent,

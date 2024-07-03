@@ -15,8 +15,6 @@ import {
   PromptField,
 } from '@shared/services/prompt/prompt.service';
 import {
-  DIALOG_DATA,
-  DialogRef,
   Dialog,
 } from '@root/app/dialog/dialog.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
@@ -45,6 +43,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { copyFromInputElement } from '@shared/utilities/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 const ShareActions: { [key: string]: PromptButton } = {
   ChangeAccess: {

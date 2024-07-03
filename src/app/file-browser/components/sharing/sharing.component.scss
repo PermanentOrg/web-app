@@ -7,6 +7,10 @@
   max-width: 100%;
 }
 
+.dialog-content {
+  @include tabbedDialogContent();
+}
+
 .share-link-button {
   padding: 10px;
 }
@@ -34,7 +38,7 @@
 
 .share-item-members {
   padding: 0px 10px 10px;
-  
+
   pr-archive-small {
     margin-bottom: 20px;
   }

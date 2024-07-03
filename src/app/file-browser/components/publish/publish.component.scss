@@ -1,9 +1,16 @@
+/* @format */
 :host {
   flex: 1;
   max-width: 100%;
 }
 
-.public-link-button, .public-link {
+.dialog-content {
+  background-color: white;
+  padding: 10px;
+}
+
+.public-link-button,
+.public-link {
   padding: 0 10px;
 }
 

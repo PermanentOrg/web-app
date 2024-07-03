@@ -24,11 +24,13 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
 import { TagsService } from '../../../core/services/tags/tags.service';
+import { SearchService } from '@search/services/search.service';
 
 @Component({
   selector: 'pr-file-viewer',
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss'],
+  providers: [SearchService],
 })
 export class FileViewerComponent implements OnInit, OnDestroy {
   // Record
@@ -384,6 +386,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   public onTagsClick(type: string): void {
     if (this.canEdit) {
+      console.log('open tags dialog');
       this.editService.openTagsDialog(this.currentRecord as ItemVO, type);
     }
   }

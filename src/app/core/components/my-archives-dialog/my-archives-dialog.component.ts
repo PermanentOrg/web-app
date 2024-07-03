@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import {
   IsTabbedDialog,
-  DialogRef,
-  DIALOG_DATA,
 } from '@root/app/dialog/dialog.module';
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
@@ -30,6 +28,8 @@ import {
   RELATION_OPTIONS,
   PromptService,
 } from '@shared/services/prompt/prompt.service';
+
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 export type MyArchivesTab = 'switch' | 'new' | 'pending';
 

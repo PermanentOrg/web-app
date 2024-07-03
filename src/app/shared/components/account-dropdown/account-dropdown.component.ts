@@ -161,7 +161,10 @@ export class AccountDropdownComponent
 
   async openArchivesDialog() {
     await this.accountService.refreshArchives();
-    this.dialog.open(MyArchivesDialogComponent);
+    this.dialog.open(MyArchivesDialogComponent, {
+      panelClass: 'dialog',
+      width: '1000px',
+    });
   }
 
   handleOpenAccountMenu() {
