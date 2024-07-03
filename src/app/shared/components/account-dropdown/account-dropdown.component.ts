@@ -24,11 +24,18 @@ import {
   query,
   animateChild,
 } from '@angular/animations';
-import { Dialog } from '@root/app/dialog/dialog.module';
+// import { Dialog } from '@root/app/dialog/dialog.module';
 import { SettingsTab } from '@core/components/account-settings-dialog/account-settings-dialog.component';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 import { EventService } from '@shared/services/event/event.service';
+import { ApiService } from '@shared/services/api/api.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { MyArchivesDialogComponent } from '@core/components/my-archives-dialog/my-archives-dialog.component';
+import { AccountSettingsDialogComponent } from '@core/components/account-settings-dialog/account-settings-dialog.component';
+import { InvitationsDialogComponent } from '@core/components/invitations-dialog/invitations-dialog.component';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   transition(
@@ -69,7 +76,7 @@ export class AccountDropdownComponent
     public accountService: AccountService,
     private router: Router,
     private element: ElementRef,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private guidedTour: GuidedTourService,
     private event: EventService,
   ) {}
@@ -139,24 +146,22 @@ export class AccountDropdownComponent
   openSettingsDialog(activeTab: SettingsTab) {
     this.showMenu = false;
     try {
-      this.dialog.open(
-        'SettingsDialogComponent',
-        { tab: activeTab },
-        { width: '1000px' },
-      );
+      this.dialog.open(AccountSettingsDialogComponent, {
+        data: { tab: activeTab },
+      });
     } catch (err) {}
   }
 
   openInvitationsDialog() {
     this.showMenu = false;
     try {
-      this.dialog.open('InvitationsDialogComponent', {}, { width: '1000px' });
+      this.dialog.open(InvitationsDialogComponent);
     } catch (err) {}
   }
 
   async openArchivesDialog() {
     await this.accountService.refreshArchives();
-    this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px' });
+    this.dialog.open(MyArchivesDialogComponent);
   }
 
   handleOpenAccountMenu() {
