@@ -1,8 +1,5 @@
-import { Observable } from '@shared/services/http/http.service';
 import { Component, Inject } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
-import { ApiService } from '@shared/services/api/api.service';
-import { MessageService } from '@shared/services/message/message.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-confirm-payer-dialog',
@@ -17,7 +14,7 @@ export class ConfirmPayerDialogComponent {
 
   constructor(
     private dialogRef: DialogRef,
-    @Inject(DIALOG_DATA) public data: any
+    @Inject(DIALOG_DATA) public data: any,
   ) {
     this.archiveId = this.data.archiveId;
     this.isPayerDifferentThanLoggedUser =

@@ -1,4 +1,4 @@
-import { Dialog } from '@root/app/dialog/dialog.module';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
@@ -7,6 +7,7 @@ import { SwitcherComponent } from '@shared/components/switcher/switcher.componen
 import { AccountVO } from '../../../models/account-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { MessageService } from '../../../shared/services/message/message.service';
+import { ConfirmPayerDialogComponent } from '../confirm-payer-dialog/confirm-payer-dialog.component';
 
 @Component({
   selector: 'pr-archive-payer',
@@ -31,10 +32,10 @@ export class ArchivePayerComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private api: ApiService,
     private msg: MessageService,
-    private payerService: PayerService
+    private payerService: PayerService,
   ) {
     this.account = this.accountService.getAccount();
   }
@@ -54,13 +55,11 @@ export class ArchivePayerComponent implements OnInit {
   }
 
   setArchivePayer(data) {
-    this.dialog.open(
-      'ConfirmPayerDialogComponent',
-      {
-        ...data,
-      },
-      { width: '550px' }
-    );
+    this.dialog.open(ConfirmPayerDialogComponent, {
+      data,
+      width: '550px',
+      panelClass: 'dialog',
+    });
   }
 
   async handleAccountInfoChange(val: boolean) {
