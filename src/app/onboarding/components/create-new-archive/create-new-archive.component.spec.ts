@@ -82,55 +82,6 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     expect(outputs.progress.emit).toHaveBeenCalledWith(0);
   });
 
-  it('should NOT show disabled-overlay when selectedValue is truthy', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'create';
-
-    const childComponent = find('pr-archive-type-select').componentInstance;
-    childComponent.valueChange.emit('Some Value');
-
-    fixture.detectChanges();
-
-    const overlayDiv = find('.disabled-overlay');
-
-    expect(overlayDiv.length).toBe(0);
-  });
-
-  it('should enable the next button if a name has been inputted', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'create';
-    const childComponent = find('pr-archive-type-select').componentInstance;
-    childComponent.valueChange.emit('Some Value');
-
-    instance.name = 'Some Name';
-
-    fixture.detectChanges();
-
-    const button = find('.chart-path').nativeElement;
-
-    expect(button.disabled).toBe(false);
-  });
-
-  it('should show disabled-overlay when selectedValue is falsy', async () => {
-    const { find, instance } = await shallow.render();
-
-    instance.selectedValue = '';
-    const overlayDiv = find('.disabled-overlay');
-
-    expect(overlayDiv.length).toBe(1);
-  });
-
-  it('should show the goals screen after selecting a value and inputting a name and then clicking next', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'create';
-
-    find('.chart-path').triggerEventHandler('click', null);
-
-    fixture.detectChanges();
-
-    expect(instance.screen).toBe('goals');
-  });
-
   it('the next button should be disabled if no goals have been selected', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.screen = 'goals';
@@ -155,6 +106,18 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     fixture.detectChanges();
 
     expect(instance.screen).toBe('reasons'); // Expecting the overlay to be present
+  });
+
+  it('the create archive button should not work without any reasons selected', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    instance.screen = 'reasons';
+    instance.selectedReasons = [];
+
+    fixture.detectChanges();
+
+    const button = find('.create-archive').nativeElement;
+
+    expect(button.disabled).toBe(true);
   });
 
   it('the create archive button should not work without any reasons selected', async () => {

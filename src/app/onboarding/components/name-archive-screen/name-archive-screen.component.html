@@ -1,0 +1,47 @@
+<div class="archive-naming">
+    <div>
+      <p>
+        Name your new archive. This is the legal or official name of the person,
+        family, group, or organization the archive is about. You can edit the name
+        later if needed.
+      </p>
+      <div class="name-archive-input">
+        <p class="the-text">The</p>
+        <pr-form-input-glam
+          type="text"
+          fieldName="name"
+          [variant]="'dark'"
+          [control]="nameForm.controls['name']"
+          [styling]="{
+            height: '50px',
+            padding: '0px',
+            'padding-left': '80px',
+            'font-size': '24px'
+          }"
+          [hideLabel]="true"
+          placeholder="Archive Subject"
+        ></pr-form-input-glam>
+        <p class="archive-text">Archive</p>
+      </div>
+    </div>
+  
+    <div class="buttons-container">
+      <pr-button
+        [orientation]="'right'"
+        (buttonClick)="backToCreate()"
+        [icon]="'/onboarding/back'"
+        class="back-button"
+        >Back</pr-button
+      >
+      <pr-button
+        [orientation]="'right'"
+        [variant]="'secondary'"
+        [icon]="'/onboarding/arrow-right'"
+        [disabled]="!nameForm.valid"
+        (buttonClick)="createArchive()"
+        [size]="'fill'"
+        class="create-archive-button"
+        >Create the archive</pr-button
+      >
+    </div>
+  </div>

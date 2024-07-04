@@ -1,0 +1,60 @@
+/* @format */
+@import '../welcome-screen/welcome-screen.component.scss';
+@import 'variables';
+@import 'fonts';
+
+:host {
+  width: 560px;
+
+  @media screen and (max-width: 640px) {
+    width: auto;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  gap: 32px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  & > .btn-link {
+    text-decoration: underline;
+  }
+  & > .btn {
+    width: 250px;
+    margin: 0;
+  }
+
+  & > .btn-disabled {
+    background-color: #c8c8c8;
+    color: #646464;
+    border-color: #c8c8c8;
+  }
+}
+
+.type-selection-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 75vh;
+
+  @media screen and (max-width: 768px) {
+    height: 70vh;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 900px) {
+    height: 81vh;
+  }
+
+  & > .archive-type-selection {
+    & > p {
+      color: white;
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 32px;
+    }
+  }
+}
+
+.create-archive-button {
+  width: 100%;
+}

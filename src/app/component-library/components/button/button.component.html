@@ -1,12 +1,14 @@
+
 <!-- @format  -->
 <button
-  [attr.type]="attr"
+  [attr.type]="buttonType"
   class="button"
   [ngClass]="[
     'button-' + variant,
     'button-' + size,
     'button-' + mode,
     'button-' + height,
+    size === 'fill' && !icon && !faIcon ? 'button-fill-no-icon' : '',
     orientation === 'right' ? 'button-reverse' : ''
   ]"
   [disabled]="disabled"
@@ -14,5 +16,5 @@
 >
   <img *ngIf="icon" class="icon" src="{{ 'assets/svg/' + icon + '.svg' }}" />
   <fa-icon class="icon" *ngIf="faIcon" [icon]="['fas', faIcon]"></fa-icon>
-  <p class="button-text">{{ text }}</p>
+  <p class="button-text"><ng-content></ng-content></p>
 </button>

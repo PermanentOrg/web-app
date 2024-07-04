@@ -20,6 +20,12 @@ import { OnboardingComponent } from './components/onboarding/onboarding.componen
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
 import { CreateNewArchiveComponent } from './components/create-new-archive/create-new-archive.component';
 import { ArchiveTypeSelectComponent } from './components/archive-type-select/archive-type-select.component';
+import { ArchiveCreationStartScreenComponent } from './components/archive-creation-start-screen/archive-creation-start-screen.component';
+import { ComponentsModule } from '../component-library/components.module';
+import { SelectArchiveTypeScreenComponent } from './components/select-archive-type-screen/select-archive-type-screen.component';
+import { NameArchiveScreenComponent } from './components/name-archive-screen/name-archive-screen.component';
+import { GlamArchiveTypeSelectComponent } from './components/glam/archive-type-select/archive-type-select.component';
+import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/archive-type-icon.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +33,9 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     WelcomeScreenComponent,
     CreateNewArchiveComponent,
     ArchiveTypeSelectComponent,
+    ArchiveCreationStartScreenComponent,
+    SelectArchiveTypeScreenComponent,
+    NameArchiveScreenComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +45,9 @@ import { ArchiveTypeSelectComponent } from './components/archive-type-select/arc
     DialogModule,
     DialogCdkModule,
     FontAwesomeModule,
+    ComponentsModule,
+    GlamArchiveTypeSelectComponent,
+    ArchiveTypeIconComponent,
   ],
 })
 export class OnboardingModule {

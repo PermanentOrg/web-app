@@ -1,24 +1,33 @@
+
 /* @format */
 @import 'variables';
 
-@mixin darkButton {
-  background-color: rgba(19, 27, 74, 1);
-  border: 1px solid rgba(19, 27, 74, 1);
+@mixin darkButton($isLink: false) {
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0.32);
 
   & > .button-text {
     color: white;
     margin: 0;
     @include bodyMedium;
+
+    @if $isLink {
+      font-size: 14px;
+    }
   }
 }
 
-@mixin lightButton {
+@mixin lightButton($isLink: false) {
   background-color: $white;
   border: 1px solid rgba(184, 187, 201, 1);
   & > .button-text {
     color: rgba(19, 27, 74, 1);
     margin: 0;
     @include bodyMedium;
+
+    @if $isLink {
+      font-size: 14px;
+    }
   }
 
   & > .icon {
@@ -27,6 +36,11 @@
 }
 
 .button {
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   &:focus {
     outline: none;
   }
@@ -53,8 +67,10 @@
 
   &-primary {
     &.button-light {
-      //the button on a white background will be blue
       @include darkButton();
+      &:focus {
+        border: 2px solid white;
+      }
     }
     &.button-dark {
       @include lightButton();
@@ -64,6 +80,9 @@
   &-secondary {
     &.button-light {
       @include lightButton();
+      &:focus {
+        border: 2px solid black;
+      }
     }
     &.button-dark {
       @include darkButton();
@@ -88,8 +107,12 @@
 
   &-fill {
     width: 100%;
-    padding: 0px 24px;
+    padding: 12px 24px;
     height: 56px;
+    justify-content: space-between;
+    &-no-icon {
+      justify-content: center;
+    }
   }
 
   &-fill.button-large {
@@ -100,5 +123,27 @@
     color: white;
     margin: 0;
     @include bodyMedium;
+  }
+
+  &-link {
+    margin-left: 4px;
+    padding: 0px;
+    &.button-dark {
+      @include darkButton(true);
+      font-size: 14px;
+      border: 1px solid transparent;
+    }
+    &.button-light {
+      @include lightButton(true);
+      font-size: 14px;
+      border: 1px solid transparent;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: #e0e0e0;
+      box-shadow: 0 0 0 3px rgba(21, 156, 228, 0.4);
+      border-color: #159ce4;
+    }
   }
 }

@@ -9,19 +9,29 @@ import {
   OnDestroy,
   Input,
 } from '@angular/core';
-import { ArchiveVO } from '@models/archive-vo';
+import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import {
   reasons,
   goals,
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import { ArchiveType } from '../../../models/archive-vo';
+import { archiveOptions } from '../glam/types/archive-types';
 
-type NewArchiveScreen = 'goals' | 'reasons' | 'create';
+type NewArchiveScreen =
+  | 'goals'
+  | 'reasons'
+  | 'create'
+  | 'start'
+  | 'name-archive';
 
 @Component({
   selector: 'pr-create-new-archive',
@@ -44,26 +54,46 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
 
   public archiveType: string;
   public archiveName: string = '';
-  public screen: NewArchiveScreen = 'create';
+  public screen: NewArchiveScreen = 'start';
   public loading: boolean = false;
   public selectedGoals: string[] = [];
   public selectedReasons: string[] = [];
   public selectedValue: string = '';
-  public name: string = '';
+  public nameForm: UntypedFormGroup;
   public goals = goals;
   public reasons = reasons;
+  public headerText = 'Personal';
   archiveTypeTag: OnboardingTypes;
+  public buttonOptions = {
+    archiveType: 'Personal',
+    article: 'a',
+  };
+
+  public isGlam = false;
+
+  public name = '';
+
+  public buttonText = '';
 
   skipOnboarding: Observable<{ name: string }>;
 
   subscription: Subscription;
 
   constructor(
+    private fb: UntypedFormBuilder,
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService,
-  ) {}
+    private analytics: AnalyticsService
+  ) {
+    this.nameForm = fb.group({
+      name: ['', [Validators.required]],
+    });
+    this.isGlam = localStorage.getItem('isGlam') === 'true';
+    if (!this.isGlam) {
+      this.screen = 'create';
+    }
+  }
 
   ngOnInit(): void {
     if (this.pendingArchive) {
@@ -82,7 +112,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.screen = 'goals';
           this.progress.emit(1);
         }
-      },
+      }
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();
@@ -148,8 +178,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public async onSubmit(): Promise<void> {
     try {
       this.loading = true;
+      const fullName = this.name;
       const archive = new ArchiveVO({
-        fullName: this.name,
+        fullName,
         type: this.archiveType,
       });
 
@@ -199,16 +230,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onValueChange(value: {
-    type: ArchiveType;
-    tag: OnboardingTypes;
-  }): void {
-    this.selectedValue = `${value.type}+${value.tag}`;
-    this.archiveType = value.type;
-    this.archiveTypeTag = value.tag as OnboardingTypes;
-    this.setName(this.archiveTypeTag);
-  }
-
   public makeMyArchive(): void {
     const account = this.accountService.getAccount();
     this.analytics.notifyObservers({
@@ -226,7 +247,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.dialog.open(
       'SkipOnboardingDialogComponent',
       { skipOnboarding: this.skipOnboarding },
-      { width: '600px' },
+      { width: '600px' }
     );
   }
 
@@ -262,11 +283,42 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   private setName(archiveTypeTag: OnboardingTypes): void {
     switch (archiveTypeTag) {
       case OnboardingTypes.unsure:
-        this.name = this.accountService.getAccount().fullName;
+        const name = this.accountService.getAccount().fullName;
+        this.name = name;
         break;
       default:
         this.name = '';
         break;
     }
+  }
+
+  public getArchiveType = (type: string): string => {
+    return archiveOptions.find((val) => val.type === type).text;
+  };
+
+  public navigate(event): void {
+    this.screen = event;
+  }
+
+  public handleCreationScreenEvents(event: Record<string, string>): void {
+    this.archiveTypeTag = event.tag as OnboardingTypes;
+    this.archiveType = event.type;
+    this.headerText = event.headerText;
+    this.screen = 'name-archive';
+  }
+
+  public navigateToGoals(event: string) {
+    this.name = event;
+    this.screen = 'goals';
+  }
+
+  public onValueChange(value: {
+    type: ArchiveType;
+    tag: OnboardingTypes;
+  }): void {
+    this.selectedValue = `${value.type}+${value.tag}`;
+    this.archiveType = value.type;
+    this.archiveTypeTag = value.tag as OnboardingTypes;
+    this.setName(this.archiveTypeTag);
   }
 }

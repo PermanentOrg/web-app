@@ -1,6 +1,7 @@
 /* @format */
 @import '../welcome-screen/welcome-screen.component.scss';
 @import 'variables';
+@import 'fonts';
 
 form {
   margin: 0;
@@ -229,4 +230,22 @@ h3 {
 
 .new-account-screens-container {
   width: 95%;
+}
+
+.heading-container {
+  width: 50%;
+  & > .heading {
+    color: white;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}
+
+.create-new-archive {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 }

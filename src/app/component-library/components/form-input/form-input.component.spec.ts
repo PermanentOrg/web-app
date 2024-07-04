@@ -11,7 +11,7 @@ describe('FormInputComponent', () => {
 
   beforeEach(async () => {
     shallow = new Shallow(FormInputComponent, ComponentsModule).import(
-      ReactiveFormsModule,
+      ReactiveFormsModule
     );
   });
 
@@ -92,7 +92,7 @@ describe('FormInputComponent', () => {
     expect(inputElement.getAttribute('autocorrect')).toBe(config.autocorrect);
 
     expect(inputElement.getAttribute('autocapitalize')).toBe(
-      config.autocapitalize,
+      config.autocapitalize
     );
 
     expect(inputElement.getAttribute('spellcheck')).toBe(config.spellcheck);
