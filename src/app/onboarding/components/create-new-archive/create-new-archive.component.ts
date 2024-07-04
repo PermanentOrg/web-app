@@ -84,7 +84,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
   ) {
     this.nameForm = fb.group({
       name: ['', [Validators.required]],
@@ -112,7 +112,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
           this.screen = 'goals';
           this.progress.emit(1);
         }
-      }
+      },
     );
     this.progress.emit(0);
     const account = this.accountService.getAccount();
@@ -247,7 +247,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.dialog.open(
       'SkipOnboardingDialogComponent',
       { skipOnboarding: this.skipOnboarding },
-      { width: '600px' }
+      { width: '600px' },
     );
   }
 

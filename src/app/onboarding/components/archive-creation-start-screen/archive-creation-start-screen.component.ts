@@ -11,7 +11,7 @@ export class ArchiveCreationStartScreenComponent {
   @Output() public createArchiveForMeOutput = new EventEmitter<void>();
   public name: string = '';
 
-  constructor(private account:AccountService){
+  constructor(private account: AccountService) {
     this.name = this.account.getAccount().fullName;
   }
 

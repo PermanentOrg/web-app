@@ -66,7 +66,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
     fixture.detectChanges();
 
     const createButton = fixture.debugElement.query(
-      By.css('.create-archive-button')
+      By.css('.create-archive-button'),
     );
     createButton.triggerEventHandler('buttonClick', null);
 

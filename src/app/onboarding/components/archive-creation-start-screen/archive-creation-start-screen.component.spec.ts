@@ -34,7 +34,7 @@ describe('ArchiveCreationStartScreenComponent', () => {
   it('should render the account name in the greeting', async () => {
     const { fixture } = await shallow.render();
     const greetingElement = fixture.debugElement.query(
-      By.css('.greetings-container b')
+      By.css('.greetings-container b'),
     ).nativeElement;
 
     expect(greetingElement.textContent).toContain('John Doe');
@@ -57,7 +57,7 @@ describe('ArchiveCreationStartScreenComponent', () => {
     spyOn(instance, 'createArchiveForMe').and.callThrough();
 
     const createArchiveButton = fixture.debugElement.query(
-      By.css('.create-archive-for-me')
+      By.css('.create-archive-for-me'),
     );
     createArchiveButton.triggerEventHandler('buttonClick', null);
 
