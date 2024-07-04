@@ -1,0 +1,67 @@
+/* @format */
+@import 'variables';
+@import 'fonts';
+
+p {
+  color: white;
+  font-family: 'UsualRegular', sans-serif;
+  font-size: 16px;
+}
+
+.title {
+  font-size: 56px;
+}
+
+.finalize-archive {
+  display: flex;
+  gap: 64px;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+    height: 100vh;
+  }
+}
+
+.square {
+  border-radius: 6px;
+  background: #a6f4c5;
+  width: 72px;
+  padding: 6px;
+
+  & > span {
+    color: rgba(19, 27, 74, 1);
+  }
+}
+
+.archive-info {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+
+  & > p {
+    margin-bottom: 0px;
+    margin-right: 100px;
+  }
+
+  & img {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+hr {
+  margin: 32px 0px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 50vh;
+
+  @media screen and (max-width: 900px) {
+    height: 60vh;
+  }
+}

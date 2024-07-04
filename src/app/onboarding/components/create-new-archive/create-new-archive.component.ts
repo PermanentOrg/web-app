@@ -35,7 +35,8 @@ type NewArchiveScreen =
   | 'create'
   | 'start'
   | 'name-archive'
-  | 'create-archive-for-me';
+  | 'create-archive-for-me'
+  | 'finalize';
 
 @Component({
   selector: 'pr-create-new-archive',
@@ -332,5 +333,15 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.archiveType = event.type;
     this.archiveTypeTag = OnboardingTypes.myself;
     this.setScreen('goals');
+  }
+
+  public goToReasons(event): void {
+    this.selectedGoals = event.goals;
+    this.setScreen('reasons');
+  }
+
+  public finalizeArchive(event): void {
+    this.selectedReasons = event.reasons;
+    this.screen = 'finalize';
   }
 }
