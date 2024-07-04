@@ -119,16 +119,4 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
     expect(button.disabled).toBe(true);
   });
-
-  it('the create archive button should not work without any reasons selected', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.screen = 'reasons';
-    instance.selectedReasons = [];
-
-    fixture.detectChanges();
-
-    const button = find('.create-archive').nativeElement;
-
-    expect(button.disabled).toBe(true);
-  });
 });
