@@ -25,13 +25,15 @@ import {
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
 import { archiveOptions } from '../glam/types/archive-types';
+import { ArchiveCreateEvent } from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
   | 'reasons'
   | 'create'
   | 'start'
-  | 'name-archive';
+  | 'name-archive'
+  | 'create-archive-for-me';
 
 @Component({
   selector: 'pr-create-new-archive',
@@ -86,9 +88,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private analytics: AnalyticsService,
   ) {
-    this.nameForm = fb.group({
-      name: ['', [Validators.required]],
-    });
     this.isGlam = localStorage.getItem('isGlam') === 'true';
     if (!this.isGlam) {
       this.screen = 'create';
@@ -244,11 +243,15 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
         },
       },
     });
-    this.dialog.open(
-      'SkipOnboardingDialogComponent',
-      { skipOnboarding: this.skipOnboarding },
-      { width: '600px' },
-    );
+    if (!this.isGlam) {
+      this.dialog.open(
+        'SkipOnboardingDialogComponent',
+        { skipOnboarding: this.skipOnboarding },
+        { width: '600px' },
+      );
+    } else {
+      this.screen = 'create-archive-for-me';
+    }
   }
 
   public skipStep(): void {
@@ -307,11 +310,6 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.screen = 'name-archive';
   }
 
-  public navigateToGoals(event: string) {
-    this.name = event;
-    this.screen = 'goals';
-  }
-
   public onValueChange(value: {
     type: ArchiveType;
     tag: OnboardingTypes;
@@ -320,5 +318,17 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     this.archiveType = value.type;
     this.archiveTypeTag = value.tag as OnboardingTypes;
     this.setName(this.archiveTypeTag);
+  }
+
+  public navigateToGoals(event: string) {
+    this.name = event;
+    this.setScreen('goals');
+  }
+
+  public navToGoals(event: ArchiveCreateEvent): void {
+    this.name = event.name;
+    this.archiveType = event.type;
+    this.archiveTypeTag = OnboardingTypes.myself;
+    this.setScreen('goals');
   }
 }
