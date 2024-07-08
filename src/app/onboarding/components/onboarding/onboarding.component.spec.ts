@@ -11,10 +11,10 @@ import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
-  EventData,
   EventService,
   EventObserver,
 } from '@shared/services/event/event.service';
+import { EventData } from '@shared/services/event/event-types';
 import { OnboardingModule } from '../../onboarding.module';
 import { OnboardingComponent } from './onboarding.component';
 

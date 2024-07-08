@@ -6,7 +6,7 @@ import { CoreModule } from '@core/core.module';
 import { DialogRef } from '@root/app/dialog/dialog.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { EventData } from '@shared/services/google-analytics/google-analytics.service';
+import { GaEventData } from '@shared/services/google-analytics/google-analytics.service';
 import { EventService } from '@shared/services/event/event.service';
 import { PromoVOData } from '../../../models/promo-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
@@ -40,7 +40,7 @@ class MockBillingRepo {
 }
 
 class MockAnalyticsService {
-  public notifiyObservers(data: EventData): void {}
+  public notifiyObservers(data: GaEventData): void {}
 }
 
 interface MockApiService {

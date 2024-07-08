@@ -7,10 +7,10 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import {
-  EventData,
   EventService,
   EventObserver,
 } from '@shared/services/event/event.service';
+import { EventData } from '@shared/services/event/event-types';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;

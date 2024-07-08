@@ -2,7 +2,8 @@
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventObserver, EventService, EventData } from './event.service';
+import { EventObserver, EventService } from './event.service';
+import { EventData } from './event-types';
 
 describe('EventService', () => {
   let shallow: Shallow<EventService>;

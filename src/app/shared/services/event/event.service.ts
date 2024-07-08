@@ -1,8 +1,6 @@
 /* @format */
 import { Injectable } from '@angular/core';
-import { MixpanelData, AnalyticsService } from '../analytics/analytics.service';
-
-export type EventData = MixpanelData;
+import { EventData } from './event-types';
 
 export interface EventObserver {
   update(eventData: EventData): Promise<void>;

@@ -18,7 +18,8 @@ import { environment } from '@root/environments/environment';
 import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
-import { EventService, EventData } from '@shared/services/event/event.service';
+import { EventService } from '@shared/services/event/event.service';
+import { EventData } from '@shared/services/event/event-types';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
