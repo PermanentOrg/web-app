@@ -14,7 +14,7 @@ import {
   EventService,
   EventObserver,
 } from '@shared/services/event/event.service';
-import { EventData } from '@shared/services/event/event-types';
+import { EventData, PermanentEvent } from '@shared/services/event/event-types';
 import { OnboardingModule } from '../../onboarding.module';
 import { OnboardingComponent } from './onboarding.component';
 
@@ -25,8 +25,8 @@ class NullRoute {
 }
 
 const mockAnalyticsService = {
-  notifyObservers: (data: EventData) => {},
-  addObserver: (observer: EventObserver) => {},
+  notifyObservers: (_: PermanentEvent) => {},
+  addObserver: (_: EventObserver) => {},
 };
 
 let throwError: boolean = false;

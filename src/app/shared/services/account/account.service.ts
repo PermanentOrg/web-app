@@ -391,14 +391,7 @@ export class AccountService {
             this.analytics.notifyObservers({
               entity: 'account',
               action: 'login',
-              version: 1,
-              entityId: newAccount.accountId.toString(),
-              body: {
-                analytics: {
-                  event: 'Sign in',
-                  data: {},
-                },
-              },
+              account: newAccount,
             });
 
             this.accountChange.emit(this.account);

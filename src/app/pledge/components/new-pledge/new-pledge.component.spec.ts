@@ -8,7 +8,7 @@ import { AccountVO } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@shared/services/event/event.service';
-import { EventData } from '@shared/services/event/event-types';
+import { EventData, PermanentEvent } from '@shared/services/event/event-types';
 import { PledgeService } from '../../services/pledge.service';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { PledgeModule } from '../../pledge.module';
@@ -66,7 +66,7 @@ const mockApiService = {
 };
 
 const mockAnalyticsService = {
-  notifyObservers: (data: EventData) => {},
+  notifyObservers: (_: PermanentEvent) => {},
 };
 
 describe('NewPledgeComponent', () => {

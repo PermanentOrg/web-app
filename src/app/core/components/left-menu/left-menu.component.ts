@@ -232,19 +232,9 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   public toggleArchiveOptions(): void {
     this.showArchiveOptions = !this.showArchiveOptions;
     if (this.showArchiveOptions) {
-      const pageView = this.deviceService.getViewMessageForEventTracking();
-      const account = this.accountService.getAccount();
       this.analytics.notifyObservers({
         entity: 'account',
         action: 'open_archive_menu',
-        version: 1,
-        entityId: account.accountId.toString(),
-        body: {
-          analytics: {
-            event: pageView,
-            data: { page: 'Archive Menu' },
-          },
-        },
       });
     }
     window.sessionStorage.setItem(

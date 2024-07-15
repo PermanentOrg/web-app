@@ -48,14 +48,7 @@ export class LegacyContactEditComponent implements OnInit {
       await this.analytics.notifyObservers({
         entity: 'legacy_contact',
         action: this.isUpdating() ? 'update' : 'create',
-        version: 1,
-        entityId: returnedLegacyContact.legacyContactId.toString(),
-        body: {
-          analytics: {
-            event: 'Edit Legacy Contact',
-            data: {},
-          },
-        },
+        legacyContact: returnedLegacyContact,
       });
     } catch {
       this.message.showError({

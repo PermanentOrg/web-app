@@ -86,21 +86,9 @@ export class StorageDialogComponent
   setTab(tab: StorageDialogTab) {
     this.activeTab = tab;
     if (tab === 'promo') {
-      const pageView = this.device.getViewMessageForEventTracking();
-      const account = this.account.getAccount();
       this.analytics.notifyObservers({
         action: 'open_promo_entry',
         entity: 'account',
-        version: 1,
-        entityId: account.accountId.toString(),
-        body: {
-          analytics: {
-            event: pageView,
-            data: {
-              page: 'Redeem Gift',
-            },
-          },
-        },
       });
     }
   }
@@ -112,23 +100,14 @@ export class StorageDialogComponent
   async onPromoFormSubmit(value: PromoVOData) {
     try {
       this.waiting = true;
-      const account = this.account.getAccount();
       const response = await this.api.billing.redeemPromoCode(value);
       await this.account.refreshAccount();
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
       this.account.addStorageBytes(bytes);
-      await this.analytics.notifyObservers({
+      this.analytics.notifyObservers({
         entity: 'account',
         action: 'submit_promo',
-        version: 1,
-        entityId: account.accountId.toString(),
-        body: {
-          analytics: {
-            event: 'Redeem Gift',
-            data: {},
-          },
-        },
       });
       const pipe = new FileSizePipe();
       this.message.showMessage({

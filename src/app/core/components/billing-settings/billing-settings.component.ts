@@ -53,16 +53,6 @@ export class BillingSettingsComponent implements OnInit {
     this.analytics.notifyObservers({
       action: 'open_billing_info',
       entity: 'account',
-      version: 1,
-      entityId: this.account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'View Billing Info',
-          data: {
-            page: 'Billing Info',
-          },
-        },
-      },
     });
   }
 

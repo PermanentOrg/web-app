@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EventObserver } from '@shared/services/event/event.service';
-import { MixpanelData } from '@shared/services/analytics/analytics.service';
 import { Subject } from 'rxjs';
+import { PermanentEvent } from '@shared/services/event/event-types';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class ChecklistAnalyticsObserverService implements EventObserver {
 
   constructor() {}
 
-  public async update(_: MixpanelData): Promise<void> {
+  public async update(_: PermanentEvent): Promise<void> {
     this.subject.next();
   }
 

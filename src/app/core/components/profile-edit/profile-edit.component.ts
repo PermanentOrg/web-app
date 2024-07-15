@@ -87,21 +87,9 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    const pageView = this.device.getViewMessageForEventTracking();
-    const account = this.account.getAccount();
     this.analytics.notifyObservers({
       entity: 'account',
       action: 'open_archive_profile',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: pageView,
-          data: {
-            page: 'Archive Profile',
-          },
-        },
-      },
     });
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
@@ -293,14 +281,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     this.analytics.notifyObservers({
       action: 'update',
       entity: 'profile_item',
-      version: 1,
-      entityId: item.profile_itemId.toString(),
-      body: {
-        analytics: {
-          event: 'Edit Archive Profile',
-          data: {},
-        },
-      },
+      profileItem: item,
     });
   }
 }

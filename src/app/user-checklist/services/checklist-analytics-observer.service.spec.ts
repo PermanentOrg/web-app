@@ -21,10 +21,7 @@ describe('ChecklistAnalyticsObserverService', () => {
 
     service.update({
       action: 'initiate_upload',
-      entity: 'record',
-      version: 1,
-      entityId: 'test',
-      body: {},
+      entity: 'account',
     });
   });
 });

@@ -52,21 +52,9 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showHamburgerMenu() {
-    const account = this.account.getAccount();
-    const pageView = this.device.getViewMessageForEventTracking();
     this.analytics.notifyObservers({
       action: 'open_archive_menu',
       entity: 'account',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: pageView,
-          data: {
-            page: 'Archive Menu',
-          },
-        },
-      },
     });
     this.hambugerMenuVisible = true;
   }

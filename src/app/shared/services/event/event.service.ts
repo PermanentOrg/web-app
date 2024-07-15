@@ -1,9 +1,9 @@
 /* @format */
 import { Injectable } from '@angular/core';
-import { EventData } from './event-types';
+import { EventData, PermanentEvent } from './event-types';
 
 export interface EventObserver {
-  update(eventData: EventData): Promise<void>;
+  update(eventData: PermanentEvent): Promise<void>;
 }
 
 @Injectable({
@@ -18,7 +18,7 @@ export class EventService {
     this.observers.push(observer);
   }
 
-  public notifyObservers(eventData: EventData): void {
+  public notifyObservers(eventData: PermanentEvent): void {
     this.observers.forEach((observer) => {
       observer.update(eventData);
     });

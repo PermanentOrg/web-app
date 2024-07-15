@@ -168,18 +168,9 @@ export class AccountDropdownComponent
   handleOpenAccountMenu() {
     this.showMenu = !this.showMenu;
     if (this.showMenu) {
-      const screen = this.deviceService.getViewMessageForEventTracking();
       this.analytics.notifyObservers({
         action: 'open_account_menu',
         entity: 'account',
-        version: 1,
-        entityId: this.account.accountId.toString(),
-        body: {
-          analytics: {
-            event: screen,
-            data: { page: 'Account Menu' },
-          },
-        },
       });
     }
   }

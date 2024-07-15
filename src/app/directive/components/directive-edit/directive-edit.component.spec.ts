@@ -6,7 +6,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
 import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
 import { EventService } from '@shared/services/event/event.service';
-import { EventData } from '@shared/services/event/event-types';
+import { EventData, PermanentEvent } from '@shared/services/event/event-types';
 import { MessageService } from '@shared/services/message/message.service';
 import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
@@ -22,7 +22,7 @@ class MockApiService {
 }
 
 class MockAnalyticService {
-  public notifyObservers(data: EventData): void {}
+  public notifyObservers(_: PermanentEvent): void {}
 }
 
 type Find = (

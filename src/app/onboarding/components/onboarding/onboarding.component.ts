@@ -76,14 +76,6 @@ export class OnboardingComponent implements OnInit {
     this.analytics.notifyObservers({
       entity: 'account',
       action: 'create',
-      entityId: this.account.getAccount().accountId.toString(),
-      version: 1,
-      body: {
-        analytics: {
-          event: 'Sign up',
-          data: {},
-        },
-      },
     });
   }
 

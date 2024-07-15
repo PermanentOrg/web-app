@@ -52,14 +52,7 @@ export class DirectiveEditComponent implements OnInit {
         this.analytics.notifyObservers({
           entity: 'directive',
           action: 'update',
-          version: 1,
-          entityId: this.directive.directiveId.toString(),
-          body: {
-            analytics: {
-              event: 'Edit Archive Steward',
-              data: {},
-            },
-          },
+          directive: this.directive,
         });
       } else {
         const savedDirective = await this.api.directive.create({
@@ -78,14 +71,7 @@ export class DirectiveEditComponent implements OnInit {
         this.analytics.notifyObservers({
           entity: 'directive',
           action: 'create',
-          version: 1,
-          entityId: savedDirective.directiveId.toString(),
-          body: {
-            analytics: {
-              event: 'Edit Archive Steward',
-              data: {},
-            },
-          },
+          directive: savedDirective,
         });
       }
     } catch {

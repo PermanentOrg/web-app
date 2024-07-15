@@ -1,8 +1,6 @@
 /* @format */
 import { Component } from '@angular/core';
 import { LegacyContact } from '@models/directive';
-import { ApiService } from '@shared/services/api/api.service';
-import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
 import { DialogState } from '../directive-dialog/directive-dialog.component';
 
@@ -12,25 +10,10 @@ import { DialogState } from '../directive-dialog/directive-dialog.component';
   styleUrls: ['./legacy-contact-dialog.component.scss'],
 })
 export class LegacyContactDialogComponent {
-  constructor(
-    private api: ApiService,
-    private accountService: AccountService,
-    private analytics: EventService,
-  ) {
-    const account = this.accountService.getAccount();
+  constructor(private analytics: EventService) {
     this.analytics.notifyObservers({
       entity: 'account',
       action: 'open_legacy_contact',
-      version: 1,
-      entityId: account?.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'View Legacy Contact',
-          data: {
-            page: 'Legacy Contact',
-          },
-        },
-      },
     });
   }
   public mode: DialogState = 'display';

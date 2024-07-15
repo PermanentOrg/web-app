@@ -10,7 +10,7 @@ import {
   EventService,
   EventObserver,
 } from '@shared/services/event/event.service';
-import { EventData } from '@shared/services/event/event-types';
+import { EventData, PermanentEvent } from '@shared/services/event/event-types';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
@@ -28,8 +28,8 @@ const mockApiService = {
 };
 
 const mockAnalyticsService = {
-  addObserver: (observer: EventObserver): void => {},
-  notifyObservers: (data: EventData): void => {},
+  addObserver: (_: EventObserver): void => {},
+  notifyObservers: (_: PermanentEvent): void => {},
 };
 
 const mockAccountService = {

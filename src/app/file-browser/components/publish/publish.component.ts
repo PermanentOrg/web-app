@@ -119,11 +119,6 @@ export class PublishComponent implements OnInit {
       this.analytics.notifyObservers({
         entity: 'record',
         action: 'publish',
-        version: 1,
-        entityId: this.account.getAccount()?.accountId.toString(),
-        body: {
-          noTransmit: true,
-        },
       });
     } catch (err) {
       if (err.getMessage) {

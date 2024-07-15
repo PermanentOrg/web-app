@@ -468,11 +468,6 @@ export class EditService {
         this.analytics.notifyObservers({
           entity: 'record',
           action: 'move',
-          entityId: this.accountService.getAccount()?.accountId.toString(),
-          version: 1,
-          body: {
-            noTransmit: true,
-          },
         });
         return results;
       })
@@ -514,11 +509,6 @@ export class EditService {
       this.analytics.notifyObservers({
         entity: 'record',
         action: 'copy',
-        entityId: this.accountService.getAccount()?.accountId.toString(),
-        version: 1,
-        body: {
-          noTransmit: true,
-        },
       });
       this.accountService.refreshAccountDebounced();
     });

@@ -4,45 +4,15 @@ import { firstValueFrom } from 'rxjs';
 import { environment } from '@root/environments/environment';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventObserver } from '../event/event.service';
-
-type MixpanelEntity =
-  | 'account'
-  | 'legacy_contact'
-  | 'directive'
-  | 'record'
-  | 'profile_item';
-
-export type MixpanelAction =
-  | 'create'
-  | 'login'
-  | 'start_onboarding'
-  | 'submit_goals'
-  | 'submit_reasons'
-  | 'open_account_menu'
-  | 'open_archive_menu'
-  | 'initiate_upload'
-  | 'submit'
-  | 'open_archive_profile'
-  | 'update'
-  | 'open_storage_modal'
-  | 'purchase_storage'
-  | 'open_promo_entry'
-  | 'submit_promo'
-  | 'skip_create_archive'
-  | 'skip_goals'
-  | 'skip_why_permanent'
-  | 'open_login_info'
-  | 'open_verify_email'
-  | 'open_billing_info'
-  | 'open_legacy_contact'
-  | 'open_archive_steward'
-  | 'publish'
-  | 'move'
-  | 'copy';
+import { PermanentEvent } from '../event/event-types';
+import { DeviceService } from '../device/device.service';
+import { DataService } from '../data/data.service';
+import { AccountService } from '../account/account.service';
+import { AnalyticsBodies } from './analytics-bodies';
 
 export class MixpanelData {
-  entity: MixpanelEntity;
-  action: MixpanelAction;
+  entity: PermanentEvent['entity'];
+  action: PermanentEvent['action'];
   version: number;
   entityId: string;
   userAgent?: string;
@@ -69,31 +39,113 @@ export class MixpanelData {
   providedIn: 'root',
 })
 export class AnalyticsService implements EventObserver {
-  constructor(private httpV2: HttpV2Service) {}
+  constructor(
+    private httpV2: HttpV2Service,
+    private device: DeviceService,
+    private data: DataService,
+    private account: AccountService,
+  ) {}
 
-  public async update(data: MixpanelData) {
-    if (data.body.noTransmit) {
+  public async update(event: PermanentEvent) {
+    const mixpanelEvent: MixpanelData = this.getEventTemplate(event);
+
+    if (typeof mixpanelEvent.body.analytics === 'undefined') {
+      // Event does not have Mixpanel data; do not send to event endpoint
       return;
     }
 
-    const account =
-      localStorage.getItem('account') || sessionStorage.getItem('account');
+    this.assignEntityId(mixpanelEvent, event);
+    this.assignDistinctId(mixpanelEvent);
 
+    await firstValueFrom(
+      this.httpV2.post('/v2/event', mixpanelEvent, null),
+    ).catch(() => {
+      // Silently ignore an HTTP error, since we don't want calling code to
+      // have to handle analytics errors.
+    });
+  }
+
+  private getEventTemplate(event: PermanentEvent): MixpanelData {
+    return {
+      entity: event.entity,
+      action: event.action,
+      version: 1,
+      entityId: null,
+      body: {
+        analytics: this.getAnalyticsBody(event),
+      },
+    };
+  }
+
+  private getAnalyticsBody(
+    event: PermanentEvent,
+  ): MixpanelData['body']['analytics'] | undefined {
+    if (AnalyticsBodies[event.entity]) {
+      if (AnalyticsBodies[event.entity][event.action]) {
+        const analytics = { ...AnalyticsBodies[event.entity][event.action] };
+        this.setDeviceSpecificAnalyticsEvent(analytics);
+        this.setWorkspaceSpecificAnalyticsData(analytics);
+        return analytics;
+      }
+    }
+    return undefined;
+  }
+
+  private setWorkspaceSpecificAnalyticsData(analytics: {
+    event: string;
+    data: Record<string, unknown>;
+  }) {
+    if (analytics.data.workspace) {
+      analytics.data.workspace = this.data.currentFolder.type.includes(
+        'private',
+      )
+        ? 'Private Files'
+        : 'Public Files';
+    }
+  }
+
+  private setDeviceSpecificAnalyticsEvent(analytics: {
+    event: string;
+    data: Record<string, unknown>;
+  }) {
+    if (analytics.event === 'Page View') {
+      if (this.device.isMobileWidth()) {
+        analytics.event = 'Screen View';
+      }
+    }
+  }
+
+  private assignEntityId(mixpanelEvent: MixpanelData, event: PermanentEvent) {
+    switch (event.entity) {
+      case 'account':
+        if (event.account) {
+          mixpanelEvent.entityId = `${event.account.accountId}`;
+        } else {
+          mixpanelEvent.entityId = `${this.account.getAccount()?.accountId}`;
+        }
+        break;
+      case 'directive':
+        mixpanelEvent.entityId = event.directive.directiveId;
+        break;
+      case 'legacy_contact':
+        mixpanelEvent.entityId = event.legacyContact.legacyContactId;
+        break;
+      case 'profile_item':
+        mixpanelEvent.entityId = `${event.profileItem.profile_itemId}`;
+        break;
+      case 'record':
+        mixpanelEvent.entityId = `${event.record.recordId}`;
+        break;
+    }
+  }
+
+  private assignDistinctId(mixpanelEvent: MixpanelData) {
+    const account = this.account.getAccount();
     if (account) {
       const mixpanelIdentifier = environment.analyticsDebug
-        ? `${environment.environment}:${JSON.parse(account).accountId}`
-        : `${JSON.parse(account).accountId}`;
-
-      if (data.body.analytics) {
-        data.body.analytics.distinctId = mixpanelIdentifier;
-      }
-
-      await firstValueFrom(this.httpV2.post('/v2/event', data, null)).catch(
-        () => {
-          // Silently ignore an HTTP error, since we don't want calling code to
-          // have to handle analytics errors.
-        },
-      );
+        ? `${environment.environment}:${account.accountId}`
+        : `${account.accountId}`;
+      mixpanelEvent.body.analytics.distinctId = mixpanelIdentifier;
     }
   }
 }

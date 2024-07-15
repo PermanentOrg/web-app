@@ -122,21 +122,9 @@ export class UploadButtonComponent
   }
 
   filePickerClick(): boolean {
-    const workspace = this.getFolderWorkspaceType(this.currentFolder);
-    const account = this.account.getAccount();
     this.analytics.notifyObservers({
       entity: 'account',
       action: 'initiate_upload',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'Initiate Upload',
-          data: {
-            workspace,
-          },
-        },
-      },
     });
     return true;
   }

@@ -12,24 +12,10 @@ export type DialogState = 'display' | 'edit';
   styleUrls: ['./directive-dialog.component.scss'],
 })
 export class DirectiveDialogComponent {
-  constructor(
-    private accountService: AccountService,
-    private analytics: EventService,
-  ) {
-    const account = this.accountService.getAccount();
+  constructor(private analytics: EventService) {
     this.analytics.notifyObservers({
       entity: 'account',
       action: 'open_archive_steward',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'View Archive Steward',
-          data: {
-            page: 'Archive Steward',
-          },
-        },
-      },
     });
   }
   public mode: DialogState = 'display';

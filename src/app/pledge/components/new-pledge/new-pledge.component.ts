@@ -123,19 +123,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chooseDonationAmount('custom');
       }
     }
-    const account = this.accountService.getAccount();
-    const pageView = this.deviceService.getViewMessageForEventTracking();
     this.analytics.notifyObservers({
       action: 'open_storage_modal',
       entity: 'account',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: pageView,
-          data: { page: 'Storage' },
-        },
-      },
     });
   }
 
@@ -282,14 +272,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
             this.analytics.notifyObservers({
               entity: 'account',
               action: 'purchase_storage',
-              version: 1,
-              entityId: account.accountId.toString(),
-              body: {
-                analytics: {
-                  event: 'Purchase Storage',
-                  data: {},
-                },
-              },
             });
             this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage({

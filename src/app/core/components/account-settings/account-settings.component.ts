@@ -84,16 +84,6 @@ export class AccountSettingsComponent implements OnInit {
     this.analytics.notifyObservers({
       action: 'open_login_info',
       entity: 'account',
-      version: 1,
-      entityId: this.account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'View Login Info',
-          data: {
-            page: 'Login info',
-          },
-        },
-      },
     });
   }
 

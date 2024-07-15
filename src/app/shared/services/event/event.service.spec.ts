@@ -3,7 +3,7 @@ import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventObserver, EventService } from './event.service';
-import { EventData } from './event-types';
+import { PermanentEvent } from './event-types';
 
 describe('EventService', () => {
   let shallow: Shallow<EventService>;
@@ -22,7 +22,7 @@ describe('EventService', () => {
   it('should add an observer', async () => {
     const { instance } = await shallow.createService();
     const mockObserver: EventObserver = {
-      update: async (data: EventData) => {},
+      update: async (_: PermanentEvent) => {},
     };
 
     instance.addObserver(mockObserver);
@@ -42,12 +42,9 @@ describe('EventService', () => {
     instance.addObserver(mockObserver1);
     instance.addObserver(mockObserver2);
 
-    const eventData: EventData = {
+    const eventData: PermanentEvent = {
       entity: 'account',
       action: 'login',
-      version: 1,
-      entityId: 'testEntityId',
-      body: {},
     };
     instance.notifyObservers(eventData);
 
@@ -63,14 +60,10 @@ describe('EventService', () => {
 
     instance.addObserver(mockObserver);
     instance.removeObserver(mockObserver);
-    const eventData: EventData = {
+    instance.notifyObservers({
       entity: 'account',
       action: 'login',
-      version: 1,
-      entityId: 'testEntityId',
-      body: {},
-    };
-    instance.notifyObservers(eventData);
+    });
 
     expect(mockObserver.update).not.toHaveBeenCalled();
   });
@@ -88,14 +81,10 @@ describe('EventService', () => {
     instance.addObserver(mockObserver2);
     instance.removeObserver(mockObserver);
 
-    const eventData: EventData = {
+    instance.notifyObservers({
       entity: 'account',
       action: 'login',
-      version: 1,
-      entityId: 'testEntityId',
-      body: {},
-    };
-    instance.notifyObservers(eventData);
+    });
 
     expect(mockObserver.update).not.toHaveBeenCalled();
   });

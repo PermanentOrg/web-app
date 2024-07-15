@@ -33,6 +33,6 @@ export class UserChecklistModule {
     analytics: EventService,
     checklistAnalyticsObserver: ChecklistAnalyticsObserverService,
   ) {
-    analytics.addObserver(checklistAnalyticsObserver);
+    // analytics.addObserver(checklistAnalyticsObserver);
   }
 }
