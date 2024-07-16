@@ -63,16 +63,4 @@ describe('DeviceService', () => {
 
     expect(instance.didOptOut()).toBeTrue();
   });
-
-  it('should return correct view message for event tracking based on width', async () => {
-    spyOn(window, 'matchMedia').and.callFake((query: string) => {
-      return {
-        matches: query !== '(min-width: 900px)',
-      } as MediaQueryList;
-    });
-
-    const { instance } = await shallow.createService();
-
-    expect(instance.getViewMessageForEventTracking()).toEqual('Screen View');
-  });
 });

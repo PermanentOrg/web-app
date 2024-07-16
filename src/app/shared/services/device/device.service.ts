@@ -36,7 +36,4 @@ export class DeviceService {
   didOptOut() {
     return this.cookies?.check('permBetaOptOut');
   }
-  getViewMessageForEventTracking() {
-    return this.isMobileWidth() ? 'Screen View' : 'Page View';
-  }
 }
