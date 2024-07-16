@@ -46,6 +46,7 @@ import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@shared/services/event/event.service';
+import { DataService } from '@shared/services/data/data.service';
 import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
 
@@ -161,7 +162,7 @@ export class PermErrorHandler implements ErrorHandler {
   providers: [
     CookieService,
     MessageService,
-    AnalyticsService,
+    DataService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAnalytics,
