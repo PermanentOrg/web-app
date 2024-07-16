@@ -1,6 +1,18 @@
 /* @format */
+@import 'variables';
+
 $mobile-breakpoint: 950px;
 $mobile-transition-breakpoint: 1200px;
+
+:host(.glam) {
+  background: $linear-gradient-background;
+  display: block;
+  height: 100vh;
+
+  @include beforeDesktop {
+    height: auto;
+  }
+}
 
 .onboarding {
   @media only screen and (max-width: $mobile-transition-breakpoint) {
@@ -10,7 +22,7 @@ $mobile-transition-breakpoint: 1200px;
     width: auto;
     margin: 20px;
   }
-  width: 50%;
+  width: 70%;
   margin: 0 auto;
 }
 
@@ -35,11 +47,18 @@ $mobile-transition-breakpoint: 1200px;
 }
 
 .progress-chunk {
+  opacity: 0.1;
   &.completed {
     background-color: #5261b7;
+    opacity: 1;
+  }
+
+  &.completed-glam {
+    background: linear-gradient(90deg, #8d0085 0%, #ff9400 100%);
+    opacity: 1;
   }
   width: 30%;
-  height: 10px;
+  height: 4px;
   background-color: #eaeaea;
   transition: background-color 0.3s;
 }
@@ -94,4 +113,7 @@ pr-create-new-archive {
   display: flex;
   align-items: center;
   flex-direction: column;
+  @media screen and (max-width: 770px) {
+    flex-direction: column;
+  }
 }

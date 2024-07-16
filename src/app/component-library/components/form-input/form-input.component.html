@@ -1,7 +1,7 @@
 <!-- @format -->
 <div
   class="input-vertical-label"
-  [class.hidden]="isLabelHidden()"
+  [class.hidden]="isLabelHidden() || hideLabel"
   [class.input-vertical-label-light]="variant === 'light'"
   [class.input-vertical-label-dark]="variant === 'dark'"
 >
@@ -14,15 +14,18 @@
 ></fa-icon>
 <input
   [type]="type"
-  (input)="onInputChange($event.target.value)"
   class="form-control form-input"
+  (input)="onInputChange($event)"
   [id]="fieldName"
   [name]="fieldName"
   [placeholder]="placeholder"
+  [formControl]="control"
+  [class.form-input-with-text]="!isLabelHidden()"
   [class.validate-dirty]="config && config.validateDirty"
   [class.form-input-errors]="errors"
   [class.form-input-light]="variant === 'light'"
   [class.form-input-dark]="variant === 'dark'"
+  [style]="styling"
 />
 <div class="input-vertical-error" [class.hidden]="!errors">
   {{ errors }}
