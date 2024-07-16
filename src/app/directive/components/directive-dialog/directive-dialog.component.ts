@@ -13,7 +13,7 @@ export type DialogState = 'display' | 'edit';
 })
 export class DirectiveDialogComponent {
   constructor(private analytics: EventService) {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'open_archive_steward',
     });

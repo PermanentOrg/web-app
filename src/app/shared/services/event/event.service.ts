@@ -18,7 +18,7 @@ export class EventService {
     this.observers.push(observer);
   }
 
-  public notifyObservers(eventData: PermanentEvent): void {
+  public dispatch(eventData: PermanentEvent): void {
     this.observers.forEach((observer) => {
       observer.update(eventData);
     });

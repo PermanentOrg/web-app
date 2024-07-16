@@ -122,7 +122,7 @@ export class UploadButtonComponent
   }
 
   filePickerClick(): boolean {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'initiate_upload',
     });

@@ -66,7 +66,7 @@ describe('AnalyticsService Integration Tests', () => {
     inputEvent: PermanentEvent,
     expected: MixpanelData,
   ) {
-    event.notifyObservers(inputEvent);
+    event.dispatch(inputEvent);
 
     const req = http.expectOne(`${environment.apiUrl}/v2/event`);
 
@@ -76,7 +76,7 @@ describe('AnalyticsService Integration Tests', () => {
   }
 
   function expectNoAnalyticsCall(input: PermanentEvent) {
-    event.notifyObservers(input);
+    event.dispatch(input);
 
     http.expectNone(`${environment.apiUrl}/v2/event`);
   }
@@ -830,7 +830,7 @@ describe('AnalyticsService Integration Tests', () => {
   it('Sets distinct ID correctly', () => {
     account.setAccount(new AccountVO({ accountId: 12345 }));
 
-    event.notifyObservers(createAccountEvent('login'));
+    event.dispatch(createAccountEvent('login'));
 
     const req = http.expectOne(`${environment.apiUrl}/v2/event`);
 
@@ -846,7 +846,7 @@ describe('AnalyticsService Integration Tests', () => {
     environment.environment = 'unittest';
     account.setAccount(new AccountVO({ accountId: 12345 }));
 
-    event.notifyObservers(createAccountEvent('login'));
+    event.dispatch(createAccountEvent('login'));
 
     const req = http.expectOne(`${environment.apiUrl}/v2/event`);
 
@@ -861,7 +861,7 @@ describe('AnalyticsService Integration Tests', () => {
   it('gets accountId from AccountService if not supplied', () => {
     account.setAccount(new AccountVO({ accountId: 12345 }));
 
-    event.notifyObservers({ entity: 'account', action: 'login' });
+    event.dispatch({ entity: 'account', action: 'login' });
 
     const req = http.expectOne(`${environment.apiUrl}/v2/event`);
 

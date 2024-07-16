@@ -107,7 +107,7 @@ export class VerifyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'open_verify_email',
       account: this.accountService.getAccount(),

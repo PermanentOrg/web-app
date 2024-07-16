@@ -52,7 +52,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showHamburgerMenu() {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'open_archive_menu',
       entity: 'account',
     });

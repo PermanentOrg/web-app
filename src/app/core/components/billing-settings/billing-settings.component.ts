@@ -50,7 +50,7 @@ export class BillingSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'open_billing_info',
       entity: 'account',
     });

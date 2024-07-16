@@ -465,7 +465,7 @@ export class EditService {
     return Promise.all(promises)
       .then((results) => {
         this.dataService.hideItemsInCurrentFolder(items);
-        this.analytics.notifyObservers({
+        this.analytics.dispatch({
           entity: 'record',
           action: 'move',
         });
@@ -506,7 +506,7 @@ export class EditService {
     }
 
     Promise.all(promises).then(() => {
-      this.analytics.notifyObservers({
+      this.analytics.dispatch({
         entity: 'record',
         action: 'copy',
       });

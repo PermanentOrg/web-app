@@ -46,7 +46,7 @@ describe('EventService', () => {
       entity: 'account',
       action: 'login',
     };
-    instance.notifyObservers(eventData);
+    instance.dispatch(eventData);
 
     expect(mockObserver1.update).toHaveBeenCalledWith(eventData);
     expect(mockObserver2.update).toHaveBeenCalledWith(eventData);
@@ -60,7 +60,7 @@ describe('EventService', () => {
 
     instance.addObserver(mockObserver);
     instance.removeObserver(mockObserver);
-    instance.notifyObservers({
+    instance.dispatch({
       entity: 'account',
       action: 'login',
     });
@@ -81,7 +81,7 @@ describe('EventService', () => {
     instance.addObserver(mockObserver2);
     instance.removeObserver(mockObserver);
 
-    instance.notifyObservers({
+    instance.dispatch({
       entity: 'account',
       action: 'login',
     });

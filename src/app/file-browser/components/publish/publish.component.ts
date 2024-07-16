@@ -116,7 +116,7 @@ export class PublishComponent implements OnInit {
       }
       this.publicLink = this.linkPipe.transform(this.publicItem);
 
-      this.analytics.notifyObservers({
+      this.analytics.dispatch({
         entity: 'record',
         action: 'publish',
       });

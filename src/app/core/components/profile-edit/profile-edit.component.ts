@@ -87,7 +87,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'open_archive_profile',
     });
@@ -278,7 +278,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   }
 
   private trackProfileEdit(item: ProfileItemVOData) {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'update',
       entity: 'profile_item',
       profileItem: item,

@@ -11,7 +11,7 @@ import { DialogState } from '../directive-dialog/directive-dialog.component';
 })
 export class LegacyContactDialogComponent {
   constructor(private analytics: EventService) {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'open_legacy_contact',
     });

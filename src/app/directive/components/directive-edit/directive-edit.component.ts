@@ -49,7 +49,7 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(response);
         this.directive = response;
         this.savedDirective.emit(this.directive);
-        this.analytics.notifyObservers({
+        this.analytics.dispatch({
           entity: 'directive',
           action: 'update',
           directive: this.directive,
@@ -68,7 +68,7 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(savedDirective);
         this.savedDirective.emit(savedDirective);
 
-        this.analytics.notifyObservers({
+        this.analytics.dispatch({
           entity: 'directive',
           action: 'create',
           directive: savedDirective,

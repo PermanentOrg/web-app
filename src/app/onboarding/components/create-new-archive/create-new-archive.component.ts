@@ -120,7 +120,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       },
     );
     this.progress.emit(0);
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'start_onboarding',
     });
@@ -148,7 +148,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       this.goToInvitations();
     }
     const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: action,
     });
@@ -219,7 +219,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public makeMyArchive(): void {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'skip_create_archive',
     });
@@ -237,7 +237,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public skipStep(): void {
     const action = this.mixpanelActions[this.screen];
     if (action) {
-      this.analytics.notifyObservers({
+      this.analytics.dispatch({
         entity: 'account',
         action: action,
       });

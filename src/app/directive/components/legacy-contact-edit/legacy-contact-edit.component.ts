@@ -45,7 +45,7 @@ export class LegacyContactEditComponent implements OnInit {
         });
       }
       this.savedLegacyContact.emit(returnedLegacyContact);
-      await this.analytics.notifyObservers({
+      await this.analytics.dispatch({
         entity: 'legacy_contact',
         action: this.isUpdating() ? 'update' : 'create',
         legacyContact: returnedLegacyContact,

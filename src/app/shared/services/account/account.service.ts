@@ -388,7 +388,7 @@ export class AccountService {
               this.api.auth.httpV2.setAuthToken(authToken);
             }
 
-            this.analytics.notifyObservers({
+            this.analytics.dispatch({
               entity: 'account',
               action: 'login',
               account: newAccount,

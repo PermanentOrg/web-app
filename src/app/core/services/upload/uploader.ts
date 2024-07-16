@@ -50,7 +50,7 @@ export class Uploader {
 
     const record = registerResponse.Results[0].data[0].RecordVO;
 
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'submit',
       entity: 'record',
       record,
@@ -135,7 +135,7 @@ export class Uploader {
 
     const record = response.getRecordVO();
 
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'submit',
       entity: 'record',
       record,

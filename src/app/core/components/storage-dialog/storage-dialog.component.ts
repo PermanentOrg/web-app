@@ -86,7 +86,7 @@ export class StorageDialogComponent
   setTab(tab: StorageDialogTab) {
     this.activeTab = tab;
     if (tab === 'promo') {
-      this.analytics.notifyObservers({
+      this.analytics.dispatch({
         action: 'open_promo_entry',
         entity: 'account',
       });
@@ -105,7 +105,7 @@ export class StorageDialogComponent
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
       this.account.addStorageBytes(bytes);
-      this.analytics.notifyObservers({
+      this.analytics.dispatch({
         entity: 'account',
         action: 'submit_promo',
       });

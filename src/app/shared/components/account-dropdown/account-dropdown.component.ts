@@ -168,7 +168,7 @@ export class AccountDropdownComponent
   handleOpenAccountMenu() {
     this.showMenu = !this.showMenu;
     if (this.showMenu) {
-      this.analytics.notifyObservers({
+      this.analytics.dispatch({
         action: 'open_account_menu',
         entity: 'account',
       });

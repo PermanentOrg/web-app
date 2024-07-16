@@ -123,7 +123,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chooseDonationAmount('custom');
       }
     }
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'open_storage_modal',
       entity: 'account',
     });
@@ -269,7 +269,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
-            this.analytics.notifyObservers({
+            this.analytics.dispatch({
               entity: 'account',
               action: 'purchase_storage',
             });

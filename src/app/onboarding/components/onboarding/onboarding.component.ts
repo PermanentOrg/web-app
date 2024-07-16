@@ -73,7 +73,7 @@ export class OnboardingComponent implements OnInit {
         }
       }
     });
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       entity: 'account',
       action: 'create',
     });

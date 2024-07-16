@@ -81,7 +81,7 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.analytics.notifyObservers({
+    this.analytics.dispatch({
       action: 'open_login_info',
       entity: 'account',
     });
