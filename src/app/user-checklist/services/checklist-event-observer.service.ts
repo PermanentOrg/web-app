@@ -8,14 +8,21 @@ import { PermanentEvent } from '@shared/services/event/event-types';
 })
 export class ChecklistEventObserverService implements EventObserver {
   private subject = new Subject<void>();
+  private delayMs: number = 1000;
 
   constructor() {}
 
   public async update(_: PermanentEvent): Promise<void> {
-    this.subject.next();
+    setTimeout(() => {
+      this.subject.next();
+    }, this.delayMs);
   }
 
   public getSubject(): Subject<void> {
     return this.subject;
+  }
+
+  public setDelay(ms: number): void {
+    this.delayMs = ms;
   }
 }

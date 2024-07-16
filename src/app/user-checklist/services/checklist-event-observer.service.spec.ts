@@ -7,6 +7,7 @@ describe('ChecklistEventObserverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(ChecklistEventObserverService);
+    service.setDelay(0);
   });
 
   it('should be created', () => {
