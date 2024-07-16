@@ -10,8 +10,8 @@ import { DialogState } from '../directive-dialog/directive-dialog.component';
   styleUrls: ['./legacy-contact-dialog.component.scss'],
 })
 export class LegacyContactDialogComponent {
-  constructor(private analytics: EventService) {
-    this.analytics.dispatch({
+  constructor(private event: EventService) {
+    this.event.dispatch({
       entity: 'account',
       action: 'open_legacy_contact',
     });

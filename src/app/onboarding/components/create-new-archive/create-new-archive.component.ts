@@ -12,10 +12,7 @@ import {
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
-import {
-  AccountEventAction,
-  PermanentEvent,
-} from '@shared/services/event/event-types';
+import { AccountEventAction } from '@shared/services/event/event-types';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -92,7 +89,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     this.isGlam = localStorage.getItem('isGlam') === 'true';
     if (!this.isGlam) {
@@ -120,7 +117,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       },
     );
     this.progress.emit(0);
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: 'start_onboarding',
     });
@@ -148,7 +145,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       this.goToInvitations();
     }
     const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: action,
     });
@@ -219,7 +216,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public makeMyArchive(): void {
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: 'skip_create_archive',
     });
@@ -237,7 +234,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   public skipStep(): void {
     const action = this.mixpanelActions[this.screen];
     if (action) {
-      this.analytics.dispatch({
+      this.event.dispatch({
         entity: 'account',
         action: action,
       });

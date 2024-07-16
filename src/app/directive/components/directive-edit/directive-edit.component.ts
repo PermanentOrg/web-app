@@ -1,3 +1,4 @@
+/* @format */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Directive, DirectiveUpdateRequest } from '@models/directive';
@@ -24,7 +25,7 @@ export class DirectiveEditComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private analytics: EventService,
+    private event: EventService,
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +50,7 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(response);
         this.directive = response;
         this.savedDirective.emit(this.directive);
-        this.analytics.dispatch({
+        this.event.dispatch({
           entity: 'directive',
           action: 'update',
           directive: this.directive,
@@ -68,7 +69,7 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(savedDirective);
         this.savedDirective.emit(savedDirective);
 
-        this.analytics.dispatch({
+        this.event.dispatch({
           entity: 'directive',
           action: 'create',
           directive: savedDirective,

@@ -69,7 +69,7 @@ export class AccountService {
     private router: Router,
     private httpv2: HttpV2Service,
     private location: LocationStrategy,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
@@ -388,7 +388,7 @@ export class AccountService {
               this.api.auth.httpV2.setAuthToken(authToken);
             }
 
-            this.analytics.dispatch({
+            this.event.dispatch({
               entity: 'account',
               action: 'login',
               account: newAccount,

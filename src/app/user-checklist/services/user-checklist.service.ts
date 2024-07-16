@@ -5,7 +5,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccessRole } from '@models/access-role';
 import { ChecklistApi } from '../types/checklist-api';
 import { ChecklistApiResponse, ChecklistItem } from '../types/checklist-item';
-import { ChecklistAnalyticsObserverService } from './checklist-analytics-observer.service';
+import { ChecklistEventObserverService } from './checklist-event-observer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class UserChecklistService implements ChecklistApi, OnDestroy {
   constructor(
     private httpv2: HttpV2Service,
     private account: AccountService,
-    private analyticsObserver: ChecklistAnalyticsObserverService,
+    private analyticsObserver: ChecklistEventObserverService,
   ) {
     this.accountSubscription = account.archiveChange.subscribe(() => {
       this.recheckArchive.next();

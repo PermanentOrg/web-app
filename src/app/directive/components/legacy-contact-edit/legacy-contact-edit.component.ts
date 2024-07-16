@@ -20,7 +20,7 @@ export class LegacyContactEditComponent implements OnInit {
   constructor(
     private api: ApiService,
     private message: MessageService,
-    private analytics: EventService,
+    private event: EventService,
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class LegacyContactEditComponent implements OnInit {
         });
       }
       this.savedLegacyContact.emit(returnedLegacyContact);
-      await this.analytics.dispatch({
+      this.event.dispatch({
         entity: 'legacy_contact',
         action: this.isUpdating() ? 'update' : 'create',
         legacyContact: returnedLegacyContact,

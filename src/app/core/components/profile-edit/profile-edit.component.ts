@@ -3,7 +3,6 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import {
   ProfileItemVOData,
-  FieldNameUI,
   ProfileItemVODictionary,
   FieldNameUIShort,
 } from '@models/profile-item-vo';
@@ -82,12 +81,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private prompt: PromptService,
     private message: MessageService,
     private cookies: CookieService,
-    private device: DeviceService,
-    private analytics: EventService,
+    private event: EventService,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: 'open_archive_profile',
     });
@@ -278,7 +276,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   }
 
   private trackProfileEdit(item: ProfileItemVOData) {
-    this.analytics.dispatch({
+    this.event.dispatch({
       action: 'update',
       entity: 'profile_item',
       profileItem: item,

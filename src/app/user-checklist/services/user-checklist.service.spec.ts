@@ -11,7 +11,7 @@ import { AccountVO } from '@models/account-vo';
 import { ArchiveVO } from '@models/index';
 import { ChecklistApiResponse } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
-import { ChecklistAnalyticsObserverService } from './checklist-analytics-observer.service';
+import { ChecklistEventObserverService } from './checklist-event-observer.service';
 
 describe('UserChecklistService', () => {
   let service: UserChecklistService;
@@ -171,7 +171,7 @@ describe('UserChecklistService', () => {
       done();
     });
 
-    TestBed.inject(ChecklistAnalyticsObserverService).update({
+    TestBed.inject(ChecklistEventObserverService).update({
       action: 'initiate_upload',
       entity: 'account',
     });

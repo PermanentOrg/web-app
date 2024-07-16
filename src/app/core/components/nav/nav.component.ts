@@ -2,17 +2,15 @@
 import {
   Component,
   OnInit,
-  HostBinding,
   AfterViewInit,
   ViewChild,
   Optional,
   OnDestroy,
 } from '@angular/core';
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
-import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
+import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
-import { ApiService } from '@shared/services/api/api.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
@@ -29,9 +27,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   constructor(
-    private device: DeviceService,
-    private account: AccountService,
-    private analytics: EventService,
+    private event: EventService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog,
@@ -52,7 +48,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showHamburgerMenu() {
-    this.analytics.dispatch({
+    this.event.dispatch({
       action: 'open_archive_menu',
       entity: 'account',
     });

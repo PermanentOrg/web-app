@@ -14,21 +14,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { APP_CONFIG } from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-
 import { environment } from '@root/environments/environment';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
-
 import { PledgeService } from '@pledge/services/pledge.service';
-
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
-import { AccountVO } from '@models/account-vo';
-import { DeviceService } from '@shared/services/device/device.service';
 import { EventService } from '@shared/services/event/event.service';
 
 const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
@@ -72,8 +65,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private iframe: IFrameService,
     private pledgeService: PledgeService,
-    private deviceService: DeviceService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
@@ -123,7 +115,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chooseDonationAmount('custom');
       }
     }
-    this.analytics.dispatch({
+    this.event.dispatch({
       action: 'open_storage_modal',
       entity: 'account',
     });
@@ -269,7 +261,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
-            this.analytics.dispatch({
+            this.event.dispatch({
               entity: 'account',
               action: 'purchase_storage',
             });

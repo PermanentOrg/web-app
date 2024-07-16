@@ -8,7 +8,7 @@ import {
   UntypedFormBuilder,
   Validators,
 } from '@angular/forms';
-import { PromoVOData, AccountVO } from '@models';
+import { PromoVOData } from '@models';
 import { Subscription } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -19,7 +19,6 @@ import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
-import { DeviceService } from '@shared/services/device/device.service';
 import { EventService } from '@shared/services/event/event.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
@@ -50,8 +49,7 @@ export class StorageDialogComponent
     private api: ApiService,
     private message: MessageService,
     private route: ActivatedRoute,
-    private device: DeviceService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],
@@ -86,7 +84,7 @@ export class StorageDialogComponent
   setTab(tab: StorageDialogTab) {
     this.activeTab = tab;
     if (tab === 'promo') {
-      this.analytics.dispatch({
+      this.event.dispatch({
         action: 'open_promo_entry',
         entity: 'account',
       });
@@ -105,7 +103,7 @@ export class StorageDialogComponent
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
       this.account.addStorageBytes(bytes);
-      this.analytics.dispatch({
+      this.event.dispatch({
         entity: 'account',
         action: 'submit_promo',
       });

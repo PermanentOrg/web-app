@@ -6,7 +6,7 @@ import { PermanentEvent } from '@shared/services/event/event-types';
 @Injectable({
   providedIn: 'root',
 })
-export class ChecklistAnalyticsObserverService implements EventObserver {
+export class ChecklistEventObserverService implements EventObserver {
   private subject = new Subject<void>();
 
   constructor() {}

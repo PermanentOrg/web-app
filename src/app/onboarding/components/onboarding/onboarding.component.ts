@@ -39,13 +39,13 @@ export class OnboardingComponent implements OnInit {
   public isGlam = false;
 
   constructor(
-    private route: ActivatedRoute,
+    route: ActivatedRoute,
     private location: Location,
     private router: Router,
     private api: ApiService,
     private account: AccountService,
     private detector: ChangeDetectorRef,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -73,7 +73,7 @@ export class OnboardingComponent implements OnInit {
         }
       }
     });
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: 'create',
     });

@@ -17,17 +17,12 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { AccountService } from '@shared/services/account/account.service';
-import {
-  DragService,
-  DragTargetDroppableComponent,
-  DragServiceEvent,
-} from '@shared/services/drag/drag.service';
+import { DragServiceEvent } from '@shared/services/drag/drag.service';
 import {
   HasSubscriptions,
   unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
-import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
 
 @Component({
@@ -57,7 +52,7 @@ export class UploadButtonComponent
     private dataService: DataService,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     this.subscriptions.push(
       this.dataService.currentFolderChange.subscribe((currentFolder) => {
@@ -122,16 +117,12 @@ export class UploadButtonComponent
   }
 
   filePickerClick(): boolean {
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: 'initiate_upload',
     });
     return true;
   }
 
-  private getFolderWorkspaceType(folder: FolderVO) {
-    return folder.type.includes('private') ? 'Private Files' : 'Public Files';
-  }
-
-  onDragServiceEvent(dragEvent: DragServiceEvent) {}
+  onDragServiceEvent(_dragEvent: DragServiceEvent) {}
 }

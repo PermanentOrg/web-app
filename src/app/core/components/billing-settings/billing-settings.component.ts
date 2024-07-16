@@ -2,8 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, AccountVO, NotificationPreferencesI } from '@models';
-import { cloneDeep } from 'lodash';
+import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
@@ -30,7 +29,7 @@ export class BillingSettingsComponent implements OnInit {
     private prConstants: PrConstantsService,
     private api: ApiService,
     private message: MessageService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map((c) => {
@@ -50,7 +49,7 @@ export class BillingSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.analytics.dispatch({
+    this.event.dispatch({
       action: 'open_billing_info',
       entity: 'account',
     });

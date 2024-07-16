@@ -25,7 +25,7 @@ export class Uploader {
   constructor(
     private api: ApiService,
     private httpClient: HttpClient,
-    private analytics: EventService,
+    private event: EventService,
   ) {}
 
   private getUploadData = async (item: UploadItem) => {
@@ -50,7 +50,7 @@ export class Uploader {
 
     const record = registerResponse.Results[0].data[0].RecordVO;
 
-    this.analytics.dispatch({
+    this.event.dispatch({
       action: 'submit',
       entity: 'record',
       record,
@@ -135,7 +135,7 @@ export class Uploader {
 
     const record = response.getRecordVO();
 
-    this.analytics.dispatch({
+    this.event.dispatch({
       action: 'submit',
       entity: 'record',
       record,

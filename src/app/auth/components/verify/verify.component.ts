@@ -45,7 +45,7 @@ export class VerifyComponent implements OnInit {
     private message: MessageService,
     private route: ActivatedRoute,
     public secrets: SecretsService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     this.captchaPassed = false;
     this.captchaSiteKey = secrets.get('RECAPTCHA_API_KEY');
@@ -107,7 +107,7 @@ export class VerifyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.analytics.dispatch({
+    this.event.dispatch({
       entity: 'account',
       action: 'open_verify_email',
       account: this.accountService.getAccount(),

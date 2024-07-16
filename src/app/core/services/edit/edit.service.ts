@@ -1,7 +1,7 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { partition, remove, find } from 'lodash';
+/* @format */
+import { Injectable } from '@angular/core';
+import { partition } from 'lodash';
 import { Subject } from 'rxjs';
-import { environment } from '@root/environments/environment';
 import debug from 'debug';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -126,7 +126,7 @@ export class EditService {
     private dialog: Dialog,
     private device: DeviceService,
     private secrets: SecretsService,
-    private analytics: EventService,
+    private event: EventService,
   ) {
     this.loadGoogleMapsApi();
   }
@@ -465,7 +465,7 @@ export class EditService {
     return Promise.all(promises)
       .then((results) => {
         this.dataService.hideItemsInCurrentFolder(items);
-        this.analytics.dispatch({
+        this.event.dispatch({
           entity: 'record',
           action: 'move',
         });
@@ -506,7 +506,7 @@ export class EditService {
     }
 
     Promise.all(promises).then(() => {
-      this.analytics.dispatch({
+      this.event.dispatch({
         entity: 'record',
         action: 'copy',
       });

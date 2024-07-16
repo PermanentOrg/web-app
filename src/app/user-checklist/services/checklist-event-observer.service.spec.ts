@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { ChecklistEventObserverService } from './checklist-event-observer.service';
 
-import { ChecklistAnalyticsObserverService } from './checklist-analytics-observer.service';
-
-describe('ChecklistAnalyticsObserverService', () => {
-  let service: ChecklistAnalyticsObserverService;
+describe('ChecklistEventObserverService', () => {
+  let service: ChecklistEventObserverService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ChecklistAnalyticsObserverService);
+    service = TestBed.inject(ChecklistEventObserverService);
   });
 
   it('should be created', () => {

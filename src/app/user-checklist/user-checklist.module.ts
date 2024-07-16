@@ -9,7 +9,7 @@ import { TaskIconComponent } from './components/task-icon/task-icon.component';
 import { MinimizeIconComponent } from './components/minimize-icon/minimize-icon.component';
 import { CHECKLIST_API } from './types/checklist-api';
 import { UserChecklistService } from './services/user-checklist.service';
-import { ChecklistAnalyticsObserverService } from './services/checklist-analytics-observer.service';
+import { ChecklistEventObserverService } from './services/checklist-event-observer.service';
 
 @NgModule({
   declarations: [
@@ -25,14 +25,14 @@ import { ChecklistAnalyticsObserverService } from './services/checklist-analytic
       provide: CHECKLIST_API,
       useClass: UserChecklistService,
     },
-    ChecklistAnalyticsObserverService,
+    ChecklistEventObserverService,
   ],
 })
 export class UserChecklistModule {
   constructor(
-    analytics: EventService,
-    checklistAnalyticsObserver: ChecklistAnalyticsObserverService,
+    event: EventService,
+    checklistEventObserver: ChecklistEventObserverService,
   ) {
-    // analytics.addObserver(checklistAnalyticsObserver);
+    event.addObserver(checklistEventObserver);
   }
 }
