@@ -8,7 +8,6 @@ import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
 import { VerifyComponent } from '@auth/components/verify/verify.component';
-import { LogoComponent } from '@auth/components/logo/logo.component';
 import { SharedModule } from '@shared/shared.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
@@ -19,7 +18,6 @@ import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
-import { EventData } from '@shared/services/event/event-types';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
 
@@ -50,12 +48,7 @@ describe('VerifyComponent', () => {
       },
     });
 
-    config.providers.push({
-      provide: EventService,
-      useValue: {
-        notifyObservers: (data: EventData) => {},
-      },
-    });
+    config.providers.push(EventService);
 
     // Define the re-captcha element as a custom element so it's only mocked out
     config.schemas = [CUSTOM_ELEMENTS_SCHEMA];

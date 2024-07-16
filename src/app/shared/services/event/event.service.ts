@@ -1,6 +1,6 @@
 /* @format */
 import { Injectable } from '@angular/core';
-import { EventData, PermanentEvent } from './event-types';
+import { PermanentEvent } from './event-types';
 
 export interface EventObserver {
   update(eventData: PermanentEvent): Promise<void>;

@@ -6,11 +6,7 @@ import { ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
-import {
-  EventService,
-  EventObserver,
-} from '@shared/services/event/event.service';
-import { EventData, PermanentEvent } from '@shared/services/event/event-types';
+import { EventService } from '@shared/services/event/event.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
@@ -25,11 +21,6 @@ const mockApiService = {
       };
     },
   },
-};
-
-const mockAnalyticsService = {
-  addObserver: (_: EventObserver): void => {},
-  notifyObservers: (_: PermanentEvent): void => {},
 };
 
 const mockAccountService = {
@@ -67,7 +58,8 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
-      .mock(EventService, mockAnalyticsService);
+      .provide(EventService)
+      .dontMock(EventService);
   });
 
   it('should exist', async () => {

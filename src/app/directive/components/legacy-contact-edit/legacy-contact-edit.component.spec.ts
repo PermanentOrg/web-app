@@ -6,7 +6,6 @@ import { LegacyContact } from '@models/directive';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { EventService } from '@shared/services/event/event.service';
-import { EventData } from '@shared/services/event/event-types';
 import { DirectiveModule } from '../../directive.module';
 import { MockDirectiveRepo } from '../legacy-contact-display/test-utils';
 import { MockMessageService } from '../directive-edit/test-utils';
@@ -21,10 +20,6 @@ type Find = (
 
 class MockApiService {
   public directive = new MockDirectiveRepo();
-}
-
-class MockAnalyticsService {
-  public notifiyObservers(data: EventData): void {}
 }
 
 describe('LegacyContactEditComponent', () => {
@@ -43,23 +38,19 @@ describe('LegacyContactEditComponent', () => {
   };
 
   beforeEach(() => {
-    shallow = new Shallow(
-      LegacyContactEditComponent,
-      DirectiveModule,
-    ).provideMock(
-      {
-        provide: ApiService,
-        useClass: MockApiService,
-      },
-      {
-        provide: MessageService,
-        useClass: MockMessageService,
-      },
-      {
-        provide: EventService,
-        useClass: MockAnalyticsService,
-      },
-    );
+    shallow = new Shallow(LegacyContactEditComponent, DirectiveModule)
+      .provideMock(
+        {
+          provide: ApiService,
+          useClass: MockApiService,
+        },
+        {
+          provide: MessageService,
+          useClass: MockMessageService,
+        },
+      )
+      .provide(EventService)
+      .dontMock(EventService);
     MockDirectiveRepo.reset();
   });
 

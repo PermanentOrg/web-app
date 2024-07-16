@@ -17,12 +17,11 @@ import {
   AccountEventAction,
   DirectiveAction,
   DirectiveEvent,
-  EventData,
   LegacyContactAction,
   LegacyContactEvent,
   PermanentEvent,
 } from '../event/event-types';
-import { AnalyticsService } from './analytics.service';
+import { AnalyticsService, MixpanelData } from './analytics.service';
 
 class MockDeviceMobileWidth {
   private mobileWidth: boolean = false;
@@ -65,7 +64,7 @@ describe('AnalyticsService Integration Tests', () => {
 
   function expectInputEventMatchesMixpanelData(
     inputEvent: PermanentEvent,
-    expected: EventData,
+    expected: MixpanelData,
   ) {
     event.notifyObservers(inputEvent);
 
@@ -133,7 +132,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('VerifyComponent', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       entity: 'account',
       action: 'open_verify_email',
       version: 1,
@@ -152,7 +151,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('AccountSettingsComponent', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       action: 'open_login_info',
       entity: 'account',
       version: 1,
@@ -173,7 +172,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('BillingSettingsComponent', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       action: 'open_billing_info',
       entity: 'account',
       version: 1,
@@ -200,7 +199,7 @@ describe('AnalyticsService Integration Tests', () => {
     - NavComponent
     */
 
-    function getExpected(event: 'Page View' | 'Screen View'): EventData {
+    function getExpected(event: 'Page View' | 'Screen View'): MixpanelData {
       return {
         entity: 'account',
         action: 'open_archive_menu',
@@ -235,7 +234,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   describe('ProfileEditComponent', () => {
-    function getExpected(pageView: 'Page View' | 'Screen View'): EventData {
+    function getExpected(pageView: 'Page View' | 'Screen View'): MixpanelData {
       return {
         entity: 'account',
         action: 'open_archive_profile',
@@ -271,7 +270,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Update ProfileItem', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         action: 'update',
         entity: 'profile_item',
         version: 1,
@@ -297,7 +296,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   describe('StorageDialogComponent', () => {
-    function getExpected(pageView: 'Page View' | 'Screen View'): EventData {
+    function getExpected(pageView: 'Page View' | 'Screen View'): MixpanelData {
       return {
         action: 'open_promo_entry',
         entity: 'account',
@@ -333,7 +332,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Redeem Gift', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         entity: 'account',
         action: 'submit_promo',
         version: 1,
@@ -355,7 +354,7 @@ describe('AnalyticsService Integration Tests', () => {
   describe('UploadButtonComponent', () => {
     function getExpected(
       workspace: 'Private Files' | 'Public Files',
-    ): EventData {
+    ): MixpanelData {
       return {
         entity: 'account',
         action: 'initiate_upload',
@@ -412,7 +411,7 @@ describe('AnalyticsService Integration Tests', () => {
   describe('Uploader events', () => {
     function getExpected(
       workspace: 'Private Files' | 'Public Files',
-    ): EventData {
+    ): MixpanelData {
       return {
         action: 'submit',
         entity: 'record',
@@ -449,7 +448,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('DirectiveDialogComponent', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       entity: 'account',
       action: 'open_archive_steward',
       version: 1,
@@ -478,7 +477,7 @@ describe('AnalyticsService Integration Tests', () => {
       };
     }
     it('update', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         entity: 'directive',
         action: 'update',
         version: 1,
@@ -497,7 +496,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('create', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         entity: 'directive',
         action: 'create',
         version: 1,
@@ -517,7 +516,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('LegacyContactDialog', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       entity: 'account',
       action: 'open_legacy_contact',
       version: 1,
@@ -551,7 +550,7 @@ describe('AnalyticsService Integration Tests', () => {
         },
       };
     }
-    function getExpected(action: 'create' | 'update'): EventData {
+    function getExpected(action: 'create' | 'update'): MixpanelData {
       return {
         entity: 'legacy_contact',
         action,
@@ -593,7 +592,7 @@ describe('AnalyticsService Integration Tests', () => {
 
   describe('CreateNewArchiveComponent', () => {
     it('Start Onboarding', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         entity: 'account',
         action: 'start_onboarding',
         version: 1,
@@ -612,7 +611,9 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     describe('Screens', () => {
-      function getExpected(screen: 'create' | 'goals' | 'reasons'): EventData {
+      function getExpected(
+        screen: 'create' | 'goals' | 'reasons',
+      ): MixpanelData {
         return {
           entity: 'account',
           action:
@@ -646,7 +647,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Skip Onboarding', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         entity: 'account',
         action: 'skip_create_archive',
         version: 1,
@@ -665,7 +666,9 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     describe('Skip steps', () => {
-      function getExpected(screen: 'goals' | 'reasons' | 'create'): EventData {
+      function getExpected(
+        screen: 'goals' | 'reasons' | 'create',
+      ): MixpanelData {
         const mixpanelActions: { [key: string]: PermanentEvent['action'] } = {
           goals: 'skip_goals',
           reasons: 'skip_why_permanent',
@@ -704,7 +707,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('OnboardingComponent', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       entity: 'account',
       action: 'create',
       entityId: '1',
@@ -721,7 +724,9 @@ describe('AnalyticsService Integration Tests', () => {
 
   describe('NewPledgeComponent', () => {
     describe('Open', () => {
-      function getExpected(pageView: 'Page View' | 'Screen View'): EventData {
+      function getExpected(
+        pageView: 'Page View' | 'Screen View',
+      ): MixpanelData {
         return {
           action: 'open_storage_modal',
           entity: 'account',
@@ -754,7 +759,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Purchase Storage', () => {
-      const expected: EventData = {
+      const expected: MixpanelData = {
         entity: 'account',
         action: 'purchase_storage',
         version: 1,
@@ -774,7 +779,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   describe('AccountDropdown', () => {
-    function getExpected(pageView: 'Page View' | 'Screen View'): EventData {
+    function getExpected(pageView: 'Page View' | 'Screen View'): MixpanelData {
       return {
         action: 'open_account_menu',
         entity: 'account',
@@ -807,7 +812,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('AccountService', () => {
-    const expected: EventData = {
+    const expected: MixpanelData = {
       entity: 'account',
       action: 'login',
       version: 1,
