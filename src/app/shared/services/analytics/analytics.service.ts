@@ -10,29 +10,19 @@ import { DataService } from '../data/data.service';
 import { AccountService } from '../account/account.service';
 import { AnalyticsBodies } from './analytics-bodies';
 
-export class MixpanelData {
+export interface MixpanelData {
   entity: PermanentEvent['entity'];
   action: PermanentEvent['action'];
   version: number;
   entityId: string;
-  userAgent?: string;
   body: {
     analytics?: {
       event: string;
       distinctId?: string;
       data: Record<string, unknown>;
     };
-    noTransmit?: boolean;
     [key: string]: unknown;
   };
-
-  constructor(data: MixpanelData) {
-    this.entity = data.entity;
-    this.action = data.action;
-    this.version = data.version;
-    this.entityId = data.entityId;
-    this.body = data.body;
-  }
 }
 
 @Injectable({
