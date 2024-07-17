@@ -24,8 +24,7 @@ import {
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
 import { Dialog } from '../../../dialog/dialog.service';
-import { archiveOptions } from '../glam/types/archive-types';
-import { ArchiveCreateEvent } from '../glam/types/archive-types';
+import { archiveOptions, ArchiveCreateEvent } from '../glam/types/archive-types';
 
 type NewArchiveScreen =
   | 'goals'
