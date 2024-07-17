@@ -5,6 +5,12 @@
     (createArchiveForMeOutput)="makeMyArchive()"
     *ngIf="screen === 'start' && isGlam"
   ></pr-archive-creation-start-screen>
+  @if (screen === 'create-archive-for-me' && isGlam) {
+    <pr-create-archive-for-me-screen
+      (goBackOutput)="setScreen($event)"
+      (continueOutput)="navToGoals($event)"
+    ></pr-create-archive-for-me-screen>
+  }
   <div *ngIf="screen === 'create' || screen === 'name-archive'">
     <h2 *ngIf="!isGlam">Welcome! Let’s create your first archive together.</h2>
     <div *ngIf="!isGlam" class="welcome-message no-invitations">

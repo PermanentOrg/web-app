@@ -26,6 +26,7 @@ import { SelectArchiveTypeScreenComponent } from './components/select-archive-ty
 import { NameArchiveScreenComponent } from './components/name-archive-screen/name-archive-screen.component';
 import { GlamArchiveTypeSelectComponent } from './components/glam/archive-type-select/archive-type-select.component';
 import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/archive-type-icon.component';
+import { CreateArchiveForMeScreenComponent } from './components/create-archive-for-me-screen/create-archive-for-me-screen.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/ar
     ArchiveCreationStartScreenComponent,
     SelectArchiveTypeScreenComponent,
     NameArchiveScreenComponent,
+    CreateArchiveForMeScreenComponent,
   ],
   imports: [
     CommonModule,
