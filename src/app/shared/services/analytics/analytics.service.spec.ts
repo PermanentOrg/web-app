@@ -21,7 +21,7 @@ import {
   LegacyContactEvent,
   PermanentEvent,
 } from '../event/event-types';
-import { AnalyticsService, MixpanelData } from './analytics.service';
+import { AnalyticsService, EventRequestBody } from './analytics.service';
 
 class MockDeviceMobileWidth {
   private mobileWidth: boolean = false;
@@ -64,7 +64,7 @@ describe('AnalyticsService Integration Tests', () => {
 
   function expectInputEventMatchesMixpanelData(
     inputEvent: PermanentEvent,
-    expected: MixpanelData,
+    expected: EventRequestBody,
   ) {
     event.dispatch(inputEvent);
 
@@ -132,7 +132,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('VerifyComponent', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       entity: 'account',
       action: 'open_verify_email',
       version: 1,
@@ -151,7 +151,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('AccountSettingsComponent', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       action: 'open_login_info',
       entity: 'account',
       version: 1,
@@ -172,7 +172,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('BillingSettingsComponent', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       action: 'open_billing_info',
       entity: 'account',
       version: 1,
@@ -199,7 +199,7 @@ describe('AnalyticsService Integration Tests', () => {
     - NavComponent
     */
 
-    function getExpected(event: 'Page View' | 'Screen View'): MixpanelData {
+    function getExpected(event: 'Page View' | 'Screen View'): EventRequestBody {
       return {
         entity: 'account',
         action: 'open_archive_menu',
@@ -234,7 +234,9 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   describe('ProfileEditComponent', () => {
-    function getExpected(pageView: 'Page View' | 'Screen View'): MixpanelData {
+    function getExpected(
+      pageView: 'Page View' | 'Screen View',
+    ): EventRequestBody {
       return {
         entity: 'account',
         action: 'open_archive_profile',
@@ -270,7 +272,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Update ProfileItem', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         action: 'update',
         entity: 'profile_item',
         version: 1,
@@ -296,7 +298,9 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   describe('StorageDialogComponent', () => {
-    function getExpected(pageView: 'Page View' | 'Screen View'): MixpanelData {
+    function getExpected(
+      pageView: 'Page View' | 'Screen View',
+    ): EventRequestBody {
       return {
         action: 'open_promo_entry',
         entity: 'account',
@@ -332,7 +336,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Redeem Gift', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         entity: 'account',
         action: 'submit_promo',
         version: 1,
@@ -354,7 +358,7 @@ describe('AnalyticsService Integration Tests', () => {
   describe('UploadButtonComponent', () => {
     function getExpected(
       workspace: 'Private Files' | 'Public Files',
-    ): MixpanelData {
+    ): EventRequestBody {
       return {
         entity: 'account',
         action: 'initiate_upload',
@@ -411,7 +415,7 @@ describe('AnalyticsService Integration Tests', () => {
   describe('Uploader events', () => {
     function getExpected(
       workspace: 'Private Files' | 'Public Files',
-    ): MixpanelData {
+    ): EventRequestBody {
       return {
         action: 'submit',
         entity: 'record',
@@ -448,7 +452,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('DirectiveDialogComponent', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       entity: 'account',
       action: 'open_archive_steward',
       version: 1,
@@ -477,7 +481,7 @@ describe('AnalyticsService Integration Tests', () => {
       };
     }
     it('update', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         entity: 'directive',
         action: 'update',
         version: 1,
@@ -496,7 +500,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('create', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         entity: 'directive',
         action: 'create',
         version: 1,
@@ -516,7 +520,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('LegacyContactDialog', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       entity: 'account',
       action: 'open_legacy_contact',
       version: 1,
@@ -550,7 +554,7 @@ describe('AnalyticsService Integration Tests', () => {
         },
       };
     }
-    function getExpected(action: 'create' | 'update'): MixpanelData {
+    function getExpected(action: 'create' | 'update'): EventRequestBody {
       return {
         entity: 'legacy_contact',
         action,
@@ -592,7 +596,7 @@ describe('AnalyticsService Integration Tests', () => {
 
   describe('CreateNewArchiveComponent', () => {
     it('Start Onboarding', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         entity: 'account',
         action: 'start_onboarding',
         version: 1,
@@ -613,7 +617,7 @@ describe('AnalyticsService Integration Tests', () => {
     describe('Screens', () => {
       function getExpected(
         screen: 'create' | 'goals' | 'reasons',
-      ): MixpanelData {
+      ): EventRequestBody {
         return {
           entity: 'account',
           action:
@@ -647,7 +651,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Skip Onboarding', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         entity: 'account',
         action: 'skip_create_archive',
         version: 1,
@@ -668,7 +672,7 @@ describe('AnalyticsService Integration Tests', () => {
     describe('Skip steps', () => {
       function getExpected(
         screen: 'goals' | 'reasons' | 'create',
-      ): MixpanelData {
+      ): EventRequestBody {
         const mixpanelActions: { [key: string]: PermanentEvent['action'] } = {
           goals: 'skip_goals',
           reasons: 'skip_why_permanent',
@@ -707,7 +711,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('OnboardingComponent', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       entity: 'account',
       action: 'create',
       entityId: '1',
@@ -726,7 +730,7 @@ describe('AnalyticsService Integration Tests', () => {
     describe('Open', () => {
       function getExpected(
         pageView: 'Page View' | 'Screen View',
-      ): MixpanelData {
+      ): EventRequestBody {
         return {
           action: 'open_storage_modal',
           entity: 'account',
@@ -759,7 +763,7 @@ describe('AnalyticsService Integration Tests', () => {
     });
 
     it('Purchase Storage', () => {
-      const expected: MixpanelData = {
+      const expected: EventRequestBody = {
         entity: 'account',
         action: 'purchase_storage',
         version: 1,
@@ -779,7 +783,9 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   describe('AccountDropdown', () => {
-    function getExpected(pageView: 'Page View' | 'Screen View'): MixpanelData {
+    function getExpected(
+      pageView: 'Page View' | 'Screen View',
+    ): EventRequestBody {
       return {
         action: 'open_account_menu',
         entity: 'account',
@@ -812,7 +818,7 @@ describe('AnalyticsService Integration Tests', () => {
   });
 
   it('AccountService', () => {
-    const expected: MixpanelData = {
+    const expected: EventRequestBody = {
       entity: 'account',
       action: 'login',
       version: 1,

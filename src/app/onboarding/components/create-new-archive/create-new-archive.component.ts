@@ -52,7 +52,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   @Input() pendingArchives: ArchiveVO[] = [];
   @Input() pendingArchive: ArchiveVO;
 
-  private mixpanelActions: { [key: string]: AccountEventAction } = {
+  private actionsForScreen: { [key: string]: AccountEventAction } = {
     goals: 'skip_goals',
     reasons: 'skip_why_permanent',
   };
@@ -232,7 +232,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public skipStep(): void {
-    const action = this.mixpanelActions[this.screen];
+    const action = this.actionsForScreen[this.screen];
     if (action) {
       this.event.dispatch({
         entity: 'account',

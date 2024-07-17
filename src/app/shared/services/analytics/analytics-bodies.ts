@@ -1,6 +1,6 @@
 import { PermanentEvent } from '../event/event-types';
 
-type AnaltyicsLookupTable = {
+type AnalyticsLookupTable = {
   [T in PermanentEvent['entity']]?: {
     [U in PermanentEvent['action']]?: {
       event: string;
@@ -16,7 +16,7 @@ function createPageViewBody(page: string) {
   };
 }
 
-export const AnalyticsBodies: AnaltyicsLookupTable = {
+export const AnalyticsBodies: AnalyticsLookupTable = {
   account: {
     create: {
       event: 'Sign up',

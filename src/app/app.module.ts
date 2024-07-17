@@ -53,11 +53,11 @@ import { RouteHistoryModule } from './route-history/route-history.module';
 declare var ga: any;
 
 export function initializeAnalytics(
-  analyticsService: EventService,
-  mixpanelService: AnalyticsService,
+  event: EventService,
+  analytics: AnalyticsService,
 ): () => void {
   return () => {
-    analyticsService.addObserver(mixpanelService);
+    event.addObserver(analytics);
   };
 }
 
@@ -189,7 +189,6 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
-    private mixpanel: AnalyticsService,
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {

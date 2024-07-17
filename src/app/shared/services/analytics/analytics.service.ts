@@ -10,7 +10,7 @@ import { DataService } from '../data/data.service';
 import { AccountService } from '../account/account.service';
 import { AnalyticsBodies } from './analytics-bodies';
 
-export interface MixpanelData {
+export interface EventRequestBody {
   entity: PermanentEvent['entity'];
   action: PermanentEvent['action'];
   version: number;
@@ -37,7 +37,7 @@ export class AnalyticsService implements EventObserver {
   ) {}
 
   public async update(event: PermanentEvent) {
-    const mixpanelEvent: MixpanelData = this.getEventTemplate(event);
+    const mixpanelEvent: EventRequestBody = this.getEventTemplate(event);
 
     if (typeof mixpanelEvent.body.analytics === 'undefined') {
       // Event does not have Mixpanel data; do not send to event endpoint
@@ -55,7 +55,7 @@ export class AnalyticsService implements EventObserver {
     });
   }
 
-  private getEventTemplate(event: PermanentEvent): MixpanelData {
+  private getEventTemplate(event: PermanentEvent): EventRequestBody {
     return {
       entity: event.entity,
       action: event.action,
@@ -69,7 +69,7 @@ export class AnalyticsService implements EventObserver {
 
   private getAnalyticsBody(
     event: PermanentEvent,
-  ): MixpanelData['body']['analytics'] | undefined {
+  ): EventRequestBody['body']['analytics'] | undefined {
     if (AnalyticsBodies[event.entity]) {
       if (AnalyticsBodies[event.entity][event.action]) {
         const analytics = { ...AnalyticsBodies[event.entity][event.action] };
@@ -105,7 +105,10 @@ export class AnalyticsService implements EventObserver {
     }
   }
 
-  private assignEntityId(mixpanelEvent: MixpanelData, event: PermanentEvent) {
+  private assignEntityId(
+    mixpanelEvent: EventRequestBody,
+    event: PermanentEvent,
+  ) {
     switch (event.entity) {
       case 'account':
         if (event.account) {
@@ -129,7 +132,7 @@ export class AnalyticsService implements EventObserver {
     }
   }
 
-  private assignDistinctId(mixpanelEvent: MixpanelData) {
+  private assignDistinctId(mixpanelEvent: EventRequestBody) {
     const account = this.account.getAccount();
     if (account) {
       const mixpanelIdentifier = environment.analyticsDebug
