@@ -43,20 +43,21 @@ import {
 } from '@fortawesome/angular-fontawesome';
 import { faFileArchive, fas } from '@fortawesome/free-solid-svg-icons';
 
-import { MixpanelService } from '@shared/services/mixpanel/mixpanel.service';
-import { FormsModule } from '@angular/forms';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { FormsModule } from '@angular/forms';
+import { EventService } from '@shared/services/event/event.service';
+import { DataService } from '@shared/services/data/data.service';
 import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
 
 declare var ga: any;
 
 export function initializeAnalytics(
-  analyticsService: AnalyticsService,
-  mixpanelService: MixpanelService,
+  event: EventService,
+  analytics: AnalyticsService,
 ): () => void {
   return () => {
-    analyticsService.addObserver(mixpanelService);
+    event.addObserver(analytics);
   };
 }
 
@@ -161,11 +162,11 @@ export class PermErrorHandler implements ErrorHandler {
   providers: [
     CookieService,
     MessageService,
-    MixpanelService,
+    DataService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAnalytics,
-      deps: [AnalyticsService, MixpanelService],
+      deps: [EventService, AnalyticsService],
       multi: true,
     },
     {
@@ -188,7 +189,6 @@ export class AppModule {
     private route: ActivatedRoute,
     private storage: StorageService,
     private library: FaIconLibrary,
-    private mixpanel: MixpanelService,
   ) {
     library.addIcons(faFileArchive);
     if (environment.debug) {

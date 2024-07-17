@@ -2,20 +2,18 @@
 import {
   Component,
   OnInit,
-  HostBinding,
   AfterViewInit,
   ViewChild,
   Optional,
   OnDestroy,
 } from '@angular/core';
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
-import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
+import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
-import { ApiService } from '@shared/services/api/api.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-nav',
@@ -29,9 +27,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(CdkPortalOutlet) portalOutlet: CdkPortalOutlet;
 
   constructor(
-    private device: DeviceService,
-    private account: AccountService,
-    private analytics: AnalyticsService,
+    private event: EventService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog,
@@ -52,21 +48,9 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showHamburgerMenu() {
-    const account = this.account.getAccount();
-    const pageView = this.device.getViewMessageForEventTracking();
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       action: 'open_archive_menu',
       entity: 'account',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: pageView,
-          data: {
-            page: 'Archive Menu',
-          },
-        },
-      },
     });
     this.hambugerMenuVisible = true;
   }

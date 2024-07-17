@@ -1,8 +1,9 @@
+/* @format */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Directive, DirectiveUpdateRequest } from '@models/directive';
 import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -24,7 +25,7 @@ export class DirectiveEditComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private analytics: AnalyticsService
+    private event: EventService,
   ) {}
 
   ngOnInit(): void {
@@ -49,17 +50,10 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(response);
         this.directive = response;
         this.savedDirective.emit(this.directive);
-        this.analytics.notifyObservers({
+        this.event.dispatch({
           entity: 'directive',
           action: 'update',
-          version: 1,
-          entityId: this.directive.directiveId.toString(),
-          body: {
-            analytics: {
-              event: 'Edit Archive Steward',
-              data: {},
-            },
-          },
+          directive: this.directive,
         });
       } else {
         const savedDirective = await this.api.directive.create({
@@ -75,17 +69,10 @@ export class DirectiveEditComponent implements OnInit {
         this.catchNotFoundError(savedDirective);
         this.savedDirective.emit(savedDirective);
 
-        this.analytics.notifyObservers({
+        this.event.dispatch({
           entity: 'directive',
           action: 'create',
-          version: 1,
-          entityId: savedDirective.directiveId.toString(),
-          body: {
-            analytics: {
-              event: 'Edit Archive Steward',
-              data: {},
-            },
-          },
+          directive: savedDirective,
         });
       }
     } catch {

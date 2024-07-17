@@ -1,7 +1,7 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { partition, remove, find } from 'lodash';
+/* @format */
+import { Injectable } from '@angular/core';
+import { partition } from 'lodash';
 import { Subject } from 'rxjs';
-import { environment } from '@root/environments/environment';
 import debug from 'debug';
 
 import { ApiService } from '@shared/services/api/api.service';
@@ -34,6 +34,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
+import { EventService } from '@shared/services/event/event.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
@@ -124,7 +125,8 @@ export class EditService {
     private accountService: AccountService,
     private dialog: Dialog,
     private device: DeviceService,
-    private secrets: SecretsService
+    private secrets: SecretsService,
+    private event: EventService,
   ) {
     this.loadGoogleMapsApi();
   }
@@ -203,7 +205,7 @@ export class EditService {
           title,
           null,
           null,
-          `<p>No actions available</p>`
+          `<p>No actions available</p>`,
         );
       } catch (err) {}
     }
@@ -212,7 +214,7 @@ export class EditService {
   async handleAction(
     items: ItemVO[],
     value: ActionType,
-    actionDeferred: Deferred
+    actionDeferred: Deferred,
   ) {
     try {
       switch (value) {
@@ -244,7 +246,7 @@ export class EditService {
           break;
         case 'share':
           const response: ShareResponse = await this.api.share.getShareLink(
-            items[0]
+            items[0],
           );
           actionDeferred.resolve();
           this.dialog.open('SharingComponent', {
@@ -265,7 +267,7 @@ export class EditService {
 
   createFolder(
     folderName: string,
-    parentFolder: FolderVO
+    parentFolder: FolderVO,
   ): Promise<FolderVO | FolderResponse> {
     const newFolder = new FolderVO({
       parentFolderId: parentFolder.folderId,
@@ -281,7 +283,7 @@ export class EditService {
   }
 
   async deleteItems(
-    items: any[]
+    items: any[],
   ): Promise<FolderResponse | RecordResponse | any> {
     let folders: FolderVO[];
     let records: RecordVO[];
@@ -331,7 +333,7 @@ export class EditService {
   public async saveItemVoProperty(
     item: ItemVO,
     property: KeysOfType<ItemVO, string>,
-    value: string
+    value: string,
   ) {
     if (item) {
       const originalValue = item[property];
@@ -352,7 +354,7 @@ export class EditService {
 
   updateItems(
     items: any[],
-    whitelist?: (keyof ItemVO)[]
+    whitelist?: (keyof ItemVO)[],
   ): Promise<FolderResponse | RecordResponse | any> {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
@@ -433,7 +435,7 @@ export class EditService {
 
   moveItems(
     items: ItemVO[],
-    destination: FolderVO
+    destination: FolderVO,
   ): Promise<FolderResponse | RecordResponse | any> {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
@@ -463,6 +465,10 @@ export class EditService {
     return Promise.all(promises)
       .then((results) => {
         this.dataService.hideItemsInCurrentFolder(items);
+        this.event.dispatch({
+          entity: 'record',
+          action: 'move',
+        });
         return results;
       })
       .catch((err) => {
@@ -473,7 +479,7 @@ export class EditService {
 
   copyItems(
     items: any[],
-    destination: FolderVO
+    destination: FolderVO,
   ): Promise<FolderResponse | RecordResponse | any> {
     const folders: FolderVO[] = [];
     const records: RecordVO[] = [];
@@ -500,6 +506,10 @@ export class EditService {
     }
 
     Promise.all(promises).then(() => {
+      this.event.dispatch({
+        entity: 'record',
+        action: 'copy',
+      });
       this.accountService.refreshAccountDebounced();
     });
 
@@ -520,7 +530,7 @@ export class EditService {
         this.dialog.open(
           'SharingDialogComponent',
           { item, link: response.getShareByUrlVO() },
-          { menuClass: 'split-dialog', width: '600px' }
+          { menuClass: 'split-dialog', width: '600px' },
         );
       } catch (err) {}
     }
@@ -538,13 +548,13 @@ export class EditService {
     this.dialog.open(
       'LocationPickerComponent',
       { item },
-      { height: 'auto', width: '600px' }
+      { height: 'auto', width: '600px' },
     );
   }
 
   public openFolderPicker(
     items: ItemVO[],
-    operation: FolderPickerOperations
+    operation: FolderPickerOperations,
   ): Promise<void> {
     const deferred = new Deferred();
     const rootFolder = this.accountService.getRootFolder();
@@ -563,7 +573,7 @@ export class EditService {
           rootFolder,
           operation,
           deferred.promise,
-          filterFolderLinkIds
+          filterFolderLinkIds,
         )
         .then((destination: FolderVO) => {
           switch (operation) {

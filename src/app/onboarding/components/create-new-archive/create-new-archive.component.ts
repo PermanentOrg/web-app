@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { ArchiveType, ArchiveVO } from '@models/archive-vo';
 import { ApiService } from '@shared/services/api/api.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
-import { MixpanelAction } from '@shared/services/mixpanel/mixpanel.service';
+import { EventService } from '@shared/services/event/event.service';
+import { AccountEventAction } from '@shared/services/event/event-types';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -52,7 +52,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   @Input() pendingArchives: ArchiveVO[] = [];
   @Input() pendingArchive: ArchiveVO;
 
-  private mixpanelActions: { [key: string]: MixpanelAction } = {
+  private actionsForScreen: { [key: string]: AccountEventAction } = {
     goals: 'skip_goals',
     reasons: 'skip_why_permanent',
   };
@@ -89,7 +89,7 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private dialog: Dialog,
     private accountService: AccountService,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {
     this.isGlam = localStorage.getItem('isGlam') === 'true';
     if (!this.isGlam) {
@@ -117,18 +117,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
       },
     );
     this.progress.emit(0);
-    const account = this.accountService.getAccount();
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       entity: 'account',
       action: 'start_onboarding',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'Onboarding: start',
-          data: {},
-        },
-      },
     });
   }
 
@@ -153,18 +144,10 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
     if (this.pendingArchive && screen === 'create') {
       this.goToInvitations();
     }
-    const account = this.accountService.getAccount();
-    this.analytics.notifyObservers({
+    const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
+    this.event.dispatch({
       entity: 'account',
-      action: ('submit_' + screen) as MixpanelAction,
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'Onboarding: ' + screen,
-          data: {},
-        },
-      },
+      action: action,
     });
     this.screen = screen;
     if (screen === 'reasons') {
@@ -233,18 +216,9 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public makeMyArchive(): void {
-    const account = this.accountService.getAccount();
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       entity: 'account',
       action: 'skip_create_archive',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'Skip Create Archive',
-          data: {},
-        },
-      },
     });
     if (!this.isGlam) {
       this.dialog.open(
@@ -258,20 +232,13 @@ export class CreateNewArchiveComponent implements OnInit, OnDestroy {
   }
 
   public skipStep(): void {
-    const account = this.accountService.getAccount();
-    const event = this.screen === 'goals' ? 'Skip goals' : 'Skip why permanent';
-    this.analytics.notifyObservers({
-      entity: 'account',
-      action: this.mixpanelActions[this.screen],
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event,
-          data: {},
-        },
-      },
-    });
+    const action = this.actionsForScreen[this.screen];
+    if (action) {
+      this.event.dispatch({
+        entity: 'account',
+        action: action,
+      });
+    }
     if (this.screen === 'goals') {
       this.screen = 'reasons';
       this.progress.emit(2);

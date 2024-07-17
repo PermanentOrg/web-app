@@ -23,7 +23,7 @@ import {
 import * as Sentry from '@sentry/browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
-import { AnalyticsService } from '../analytics/analytics.service';
+import { EventService } from '../event/event.service';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -69,7 +69,7 @@ export class AccountService {
     private router: Router,
     private httpv2: HttpV2Service,
     private location: LocationStrategy,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {
     const cachedAccount = this.getStorage(ACCOUNT_KEY);
 
@@ -388,17 +388,10 @@ export class AccountService {
               this.api.auth.httpV2.setAuthToken(authToken);
             }
 
-            this.analytics.notifyObservers({
+            this.event.dispatch({
               entity: 'account',
               action: 'login',
-              version: 1,
-              entityId: newAccount.accountId.toString(),
-              body: {
-                analytics: {
-                  event: 'Sign in',
-                  data: {},
-                },
-              },
+              account: newAccount,
             });
 
             this.accountChange.emit(this.account);

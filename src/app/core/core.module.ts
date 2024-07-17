@@ -124,7 +124,6 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
     AdvancedSettingsComponent,
   ],
   providers: [
-    DataService,
     FolderViewService,
     FolderPickerService,
     ProfileService,

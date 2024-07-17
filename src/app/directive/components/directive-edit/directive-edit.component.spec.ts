@@ -5,10 +5,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { Shallow } from 'shallow-render';
 import { QueryMatch } from 'shallow-render/dist/lib/models/query-match';
-import {
-  AnalyticsService,
-  EventData,
-} from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
+import { PermanentEvent } from '@shared/services/event/event-types';
 import { MessageService } from '@shared/services/message/message.service';
 import { DirectiveModule } from '../../directive.module';
 import { MockAccountService } from '../directive-display/test-utils';
@@ -21,10 +19,6 @@ import {
 
 class MockApiService {
   public directive = new MockDirectiveRepo();
-}
-
-class MockAnalyticService {
-  public notifyObservers(data: EventData): void {}
 }
 
 type Find = (
@@ -74,12 +68,8 @@ describe('DirectiveEditComponent', () => {
           useClass: MockMessageService,
         },
       ])
-      .provideMock([
-        {
-          provide: AnalyticsService,
-          useClass: MockAnalyticService,
-        },
-      ]);
+      .provide(EventService)
+      .dontMock(EventService);
   });
 
   it('should create', async () => {

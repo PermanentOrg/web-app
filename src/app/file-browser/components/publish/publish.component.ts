@@ -6,8 +6,8 @@ import {
   ElementRef,
   Inject,
 } from '@angular/core';
-import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models';
-import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
+import { RecordVO, FolderVO } from '@models';
+import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { find, maxBy } from 'lodash';
@@ -20,6 +20,7 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
 import { Router } from '@angular/router';
 import { PublishIaData } from '@models/publish-ia-vo';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-publish',
@@ -52,6 +53,7 @@ export class PublishComponent implements OnInit {
     private router: Router,
     private linkPipe: PublicLinkPipe,
     private routePipe: PublicRoutePipe,
+    private event: EventService,
   ) {
     this.sourceItem = this.data.item as FolderVO | RecordVO;
 
@@ -113,6 +115,11 @@ export class PublishComponent implements OnInit {
         this.publicItem = response.getRecordVO();
       }
       this.publicLink = this.linkPipe.transform(this.publicItem);
+
+      this.event.dispatch({
+        entity: 'record',
+        action: 'publish',
+      });
     } catch (err) {
       if (err.getMessage) {
         this.messageService.showError(err.getMessage());

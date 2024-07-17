@@ -14,22 +14,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { APP_CONFIG } from '@root/app/app.config';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
-
 import { environment } from '@root/environments/environment';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
-
 import { PledgeService } from '@pledge/services/pledge.service';
-
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 import { HttpClient } from '@angular/common/http';
-import { AccountVO } from '@models/account-vo';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 const stripe = window['Stripe'](SecretsService.getStatic('STRIPE_API_KEY'));
 const elements = stripe.elements();
@@ -72,8 +65,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     private http: HttpClient,
     private iframe: IFrameService,
     private pledgeService: PledgeService,
-    private deviceService: DeviceService,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {
     NewPledgeComponent.currentInstance = this;
     this.initStripeElements();
@@ -123,19 +115,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chooseDonationAmount('custom');
       }
     }
-    const account = this.accountService.getAccount();
-    const pageView = this.deviceService.getViewMessageForEventTracking();
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       action: 'open_storage_modal',
       entity: 'account',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: pageView,
-          data: { page: 'Storage' },
-        },
-      },
     });
   }
 
@@ -279,17 +261,9 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.waiting = false;
           if (billingResponse.isSuccessful) {
-            this.analytics.notifyObservers({
+            this.event.dispatch({
               entity: 'account',
               action: 'purchase_storage',
-              version: 1,
-              entityId: account.accountId.toString(),
-              body: {
-                analytics: {
-                  event: 'Purchase Storage',
-                  data: {},
-                },
-              },
             });
             this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage({

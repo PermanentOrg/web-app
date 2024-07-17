@@ -8,7 +8,7 @@ import {
   UntypedFormBuilder,
   Validators,
 } from '@angular/forms';
-import { PromoVOData, AccountVO } from '@models';
+import { PromoVOData } from '@models';
 import { Subscription } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -19,8 +19,7 @@ import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
@@ -50,8 +49,7 @@ export class StorageDialogComponent
     private api: ApiService,
     private message: MessageService,
     private route: ActivatedRoute,
-    private device: DeviceService,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {
     this.promoForm = this.fb.group({
       code: ['', [Validators.required]],
@@ -86,21 +84,9 @@ export class StorageDialogComponent
   setTab(tab: StorageDialogTab) {
     this.activeTab = tab;
     if (tab === 'promo') {
-      const pageView = this.device.getViewMessageForEventTracking();
-      const account = this.account.getAccount();
-      this.analytics.notifyObservers({
+      this.event.dispatch({
         action: 'open_promo_entry',
         entity: 'account',
-        version: 1,
-        entityId: account.accountId.toString(),
-        body: {
-          analytics: {
-            event: pageView,
-            data: {
-              page: 'Redeem Gift',
-            },
-          },
-        },
       });
     }
   }
@@ -112,23 +98,14 @@ export class StorageDialogComponent
   async onPromoFormSubmit(value: PromoVOData) {
     try {
       this.waiting = true;
-      const account = this.account.getAccount();
       const response = await this.api.billing.redeemPromoCode(value);
       await this.account.refreshAccount();
       const promo = response.getPromoVO();
       const bytes = promo.sizeInMB * (1024 * 1024);
       this.account.addStorageBytes(bytes);
-      await this.analytics.notifyObservers({
+      this.event.dispatch({
         entity: 'account',
         action: 'submit_promo',
-        version: 1,
-        entityId: account.accountId.toString(),
-        body: {
-          analytics: {
-            event: 'Redeem Gift',
-            data: {},
-          },
-        },
       });
       const pipe = new FileSizePipe();
       this.message.showMessage({

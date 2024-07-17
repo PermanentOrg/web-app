@@ -2,7 +2,7 @@
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { UploadItem } from './uploadItem';
 
 const buildForm = (fields: object, file: File) => {
@@ -25,7 +25,7 @@ export class Uploader {
   constructor(
     private api: ApiService,
     private httpClient: HttpClient,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {}
 
   private getUploadData = async (item: UploadItem) => {
@@ -49,24 +49,11 @@ export class Uploader {
     }
 
     const record = registerResponse.Results[0].data[0].RecordVO;
-    const recordId = record.recordId;
-    const workspace = record.folder_linkType.includes('private')
-      ? 'Private'
-      : 'Public';
 
-    await this.analytics.notifyObservers({
+    this.event.dispatch({
       action: 'submit',
       entity: 'record',
-      version: 1,
-      entityId: recordId.toString(),
-      body: {
-        analytics: {
-          event: 'Finalize Upload',
-          data: {
-            workspace,
-          },
-        },
-      },
+      record,
     });
     return registerResponse;
   };
@@ -148,23 +135,10 @@ export class Uploader {
 
     const record = response.getRecordVO();
 
-    const workspace = record.folder_linkType.includes('private')
-      ? 'Private'
-      : 'Public';
-
-    await this.analytics.notifyObservers({
+    this.event.dispatch({
       action: 'submit',
       entity: 'record',
-      version: 1,
-      entityId: record.recordId.toString(),
-      body: {
-        analytics: {
-          event: 'Finalize Upload',
-          data: {
-            workspace,
-          },
-        },
-      },
+      record,
     });
 
     return response;

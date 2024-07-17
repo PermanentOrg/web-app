@@ -9,6 +9,7 @@ export interface ChecklistApi {
   isDefaultArchiveOwnedByAccount(): boolean;
   setChecklistHidden(): Promise<void>;
   getArchiveChangedEvent(): Subject<void>;
+  getRefreshChecklistEvent(): Subject<void>;
 }
 
 export const CHECKLIST_API = new InjectionToken<ChecklistApi>('ChecklistApi');

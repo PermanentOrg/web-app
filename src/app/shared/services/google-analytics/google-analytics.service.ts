@@ -8,13 +8,13 @@ export interface EventParams {
   eventAction: string;
 }
 
-export interface EventData {
+export interface GaEventData {
   key: string;
   params: EventParams;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GoogleAnalyticsService {
   private tracker: any;
@@ -40,5 +40,4 @@ export class GoogleAnalyticsService {
       this.tracker.send(eventData);
     }
   }
-
 }

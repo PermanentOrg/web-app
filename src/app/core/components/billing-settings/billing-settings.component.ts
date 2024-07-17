@@ -2,8 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
-import { FolderVO, AccountVO, NotificationPreferencesI } from '@models';
-import { cloneDeep } from 'lodash';
+import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
@@ -12,7 +11,7 @@ import {
   Country,
 } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-billing-settings',
@@ -30,7 +29,7 @@ export class BillingSettingsComponent implements OnInit {
     private prConstants: PrConstantsService,
     private api: ApiService,
     private message: MessageService,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {
     this.account = this.accountService.getAccount();
     this.countries = this.prConstants.getCountries().map((c) => {
@@ -50,19 +49,9 @@ export class BillingSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       action: 'open_billing_info',
       entity: 'account',
-      version: 1,
-      entityId: this.account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'View Billing Info',
-          data: {
-            page: 'Billing Info',
-          },
-        },
-      },
     });
   }
 

@@ -13,7 +13,6 @@ import {
   unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
-import { MessageService } from '@shared/services/message/message.service';
 import { Router, NavigationStart } from '@angular/router';
 import { ngIfFadeInAnimationSlow, TWEAKED } from '@shared/animations';
 import {
@@ -29,9 +28,7 @@ import { Dialog } from '@root/app/dialog/dialog.module';
 import { SettingsTab } from '@core/components/account-settings-dialog/account-settings-dialog.component';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
-import { ApiService } from '@shared/services/api/api.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [
   transition(
@@ -70,14 +67,11 @@ export class AccountDropdownComponent
 
   constructor(
     public accountService: AccountService,
-    private messageService: MessageService,
     private router: Router,
     private element: ElementRef,
     private dialog: Dialog,
     private guidedTour: GuidedTourService,
-    private api: ApiService,
-    private deviceService: DeviceService,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {}
 
   ngOnInit() {
@@ -168,18 +162,9 @@ export class AccountDropdownComponent
   handleOpenAccountMenu() {
     this.showMenu = !this.showMenu;
     if (this.showMenu) {
-      const screen = this.deviceService.getViewMessageForEventTracking();
-      this.analytics.notifyObservers({
+      this.event.dispatch({
         action: 'open_account_menu',
         entity: 'account',
-        version: 1,
-        entityId: this.account.accountId.toString(),
-        body: {
-          analytics: {
-            event: screen,
-            data: { page: 'Account Menu' },
-          },
-        },
       });
     }
   }

@@ -7,10 +7,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {
-  AnalyticsService,
-  EventData,
-} from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { PledgeService } from '../../services/pledge.service';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { PledgeModule } from '../../pledge.module';
@@ -67,10 +64,6 @@ const mockApiService = {
   },
 };
 
-const mockAnalyticsService = {
-  notifyObservers: (data: EventData) => {},
-};
-
 describe('NewPledgeComponent', () => {
   let shallow: Shallow<NewPledgeComponent>;
   let messageShown = false;
@@ -83,12 +76,13 @@ describe('NewPledgeComponent', () => {
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .mock(PledgeService, mockPledgeService)
-      .mock(AnalyticsService, mockAnalyticsService)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;
         },
-      });
+      })
+      .provide(EventService)
+      .dontMock(EventService);
   });
 
   it('should exist', async () => {

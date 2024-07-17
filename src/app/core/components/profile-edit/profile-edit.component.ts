@@ -3,7 +3,6 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { FolderVO, ArchiveVO, RecordVO } from '@models';
 import {
   ProfileItemVOData,
-  FieldNameUI,
   ProfileItemVODictionary,
   FieldNameUIShort,
 } from '@models/profile-item-vo';
@@ -34,7 +33,7 @@ import { Deferred } from '@root/vendor/deferred';
 import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
 
 @Component({
@@ -82,26 +81,13 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private prompt: PromptService,
     private message: MessageService,
     private cookies: CookieService,
-    private device: DeviceService,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    const pageView = this.device.getViewMessageForEventTracking();
-    const account = this.account.getAccount();
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       entity: 'account',
       action: 'open_archive_profile',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: pageView,
-          data: {
-            page: 'Archive Profile',
-          },
-        },
-      },
     });
     this.archive = this.account.getArchive();
     this.publicRoot = new FolderVO(this.account.getPublicRoot());
@@ -290,17 +276,10 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
   }
 
   private trackProfileEdit(item: ProfileItemVOData) {
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       action: 'update',
       entity: 'profile_item',
-      version: 1,
-      entityId: item.profile_itemId.toString(),
-      body: {
-        analytics: {
-          event: 'Edit Archive Profile',
-          data: {},
-        },
-      },
+      profileItem: item,
     });
   }
 }

@@ -14,7 +14,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { routes } from '@onboarding/onboarding.routes';
 import { partition as lodashPartition } from 'lodash';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-onboarding',
@@ -39,13 +39,13 @@ export class OnboardingComponent implements OnInit {
   public isGlam = false;
 
   constructor(
-    private route: ActivatedRoute,
+    route: ActivatedRoute,
     private location: Location,
     private router: Router,
     private api: ApiService,
     private account: AccountService,
     private detector: ChangeDetectorRef,
-    private analytics: AnalyticsService,
+    private event: EventService,
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
@@ -73,17 +73,9 @@ export class OnboardingComponent implements OnInit {
         }
       }
     });
-    this.analytics.notifyObservers({
+    this.event.dispatch({
       entity: 'account',
       action: 'create',
-      entityId: this.account.getAccount().accountId.toString(),
-      version: 1,
-      body: {
-        analytics: {
-          event: 'Sign up',
-          data: {},
-        },
-      },
     });
   }
 

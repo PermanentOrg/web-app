@@ -1,8 +1,7 @@
 /* @format */
 import { Component } from '@angular/core';
 import { Directive } from '@models/directive';
-import { AccountService } from '@shared/services/account/account.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { EventService } from '@shared/services/event/event.service';
 
 export type DialogState = 'display' | 'edit';
 
@@ -12,24 +11,10 @@ export type DialogState = 'display' | 'edit';
   styleUrls: ['./directive-dialog.component.scss'],
 })
 export class DirectiveDialogComponent {
-  constructor(
-    private accountService: AccountService,
-    private analytics: AnalyticsService,
-  ) {
-    const account = this.accountService.getAccount();
-    this.analytics.notifyObservers({
+  constructor(private event: EventService) {
+    this.event.dispatch({
       entity: 'account',
       action: 'open_archive_steward',
-      version: 1,
-      entityId: account.accountId.toString(),
-      body: {
-        analytics: {
-          event: 'View Archive Steward',
-          data: {
-            page: 'Archive Steward',
-          },
-        },
-      },
     });
   }
   public mode: DialogState = 'display';
