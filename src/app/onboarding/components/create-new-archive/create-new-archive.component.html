@@ -45,40 +45,40 @@
             />
             <span>Archive</span>
           </div>
+          <div *ngIf="!selectedValue" class="disabled-overlay"></div>
         </div>
-        <div *ngIf="!selectedValue" class="disabled-overlay"></div>
-      </div>
-      <div class="buttons">
+        <div class="buttons">
+          <button
+            *ngIf="!pendingArchives.length"
+            (click)="makeMyArchive()"
+            class="btn btn-link"
+          >
+            Make my archive for me
+          </button>
+          <button
+            *ngIf="pendingArchives.length"
+            (click)="goToInvitations()"
+            class="btn btn-link"
+          >
+            Go back
+          </button>
+          <button
+            [class.btn-disabled]="!name"
+            (click)="setScreen('goals')"
+            [disabled]="!name"
+            class="btn btn-primary chart-path"
+          >
+            Next: Chart your path
+          </button>
+        </div>
         <button
-          *ngIf="!pendingArchives.length"
+          *ngIf="pendingArchives.length"
           (click)="makeMyArchive()"
           class="btn btn-link"
         >
           Make my archive for me
         </button>
-        <button
-          *ngIf="pendingArchives.length"
-          (click)="goToInvitations()"
-          class="btn btn-link"
-        >
-          Go back
-        </button>
-        <button
-          [class.btn-disabled]="!name"
-          (click)="setScreen('goals')"
-          [disabled]="!name"
-          class="btn btn-primary chart-path"
-        >
-          Next: Chart your path
-        </button>
       </div>
-      <button
-        *ngIf="pendingArchives.length"
-        (click)="makeMyArchive()"
-        class="btn btn-link"
-      >
-        Make my archive for me
-      </button>
     </div>
   </div>
   <div *ngIf="isGlam" class="create-new-archive">
@@ -106,7 +106,27 @@
     ></pr-name-archive-screen>
   </div>
 </div>
-<div class="goals" *ngIf="screen === 'goals'">
+@if (screen === 'goals' && isGlam) {
+  <pr-glam-goals-screen
+    (backToNameArchiveOutput)="setScreen($event)"
+    (goToNextReasonsOutput)="goToReasons($event)"
+  ></pr-glam-goals-screen>
+}
+
+@if (screen === 'reasons' && isGlam) {
+  <pr-glam-reasons-screen
+    (backToGoalsOutput)="setScreen($event)"
+    (finalizeArchiveOutput)="finalizeArchive($event)"
+  ></pr-glam-reasons-screen>
+}
+
+@if (screen === 'finalize' && isGlam) {
+  <pr-finalize-archive-creation-screen
+    [name]="name"
+    (finalizeArchiveOutput)="onSubmit()"
+  ></pr-finalize-archive-creation-screen>
+}
+<div class="goals" *ngIf="screen === 'goals' && !isGlam">
   <h2>My goal is to...</h2>
 
   <p class="explanation">
@@ -141,7 +161,7 @@
     </button>
   </div>
 </div>
-<div *ngIf="screen === 'reasons'">
+<div *ngIf="!isGlam && screen === 'reasons'">
   <h2>Lastly, we’re curious -- what brought you to Permanent.org?</h2>
   <p class="explanation">Select all that apply.</p>
   <div class="grid-container">
@@ -168,8 +188,6 @@
     </button>
   </div>
 </div>
-<div
-  *ngIf="screen !== 'create' && screen !== 'start' && screen !== 'name-archive'"
->
+<div *ngIf="!isGlam">
   <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
 </div>
