@@ -1,7 +1,6 @@
 /* @format */
 @use 'sass:math';
 @import 'variables';
-@import url('https://fonts.cdnfonts.com/css/usual');
 
 @mixin marginBottomSearchResults {
   margin-bottom: $grid-unit * 0.7;
