@@ -1,5 +1,4 @@
 @use 'sass:math';
-@import url('https://fonts.cdnfonts.com/css/usual');
 @import 'variables';
 
 $row-height: $file-list-row-height;
@@ -122,7 +121,7 @@ $bg-transition-length: 0.075s;
 .name {
   @include file-list-col-name;
 
-  &-expanded{
+  &-expanded {
     height: fit-content !important;
   }
 
@@ -140,18 +139,18 @@ $bg-transition-length: 0.075s;
       width: 100%;
     }
 
-    .item-name-hovered{
+    .item-name-hovered {
       -webkit-line-clamp: initial;
       -webkit-box-orien: initial;
       text-overflow: initial;
       overflow: auto;
       white-space: initial;
-      overflow-wrap:break-word;
-      -ms-overflow-style: none;  /* Internet Explorer 10+ */
+      overflow-wrap: break-word;
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
       scrollbar-width: none;
 
       &::-webkit-scrollbar {
-        display: none;  /* Safari and Chrome */
+        display: none; /* Safari and Chrome */
       }
     }
   }
@@ -433,7 +432,6 @@ $multi-select-radius: 30px;
   color: #999999;
 }
 
-
-.public-archive{
+.public-archive {
   margin-bottom: 5rem;
 }
