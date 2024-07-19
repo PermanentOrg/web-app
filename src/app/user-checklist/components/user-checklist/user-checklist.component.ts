@@ -27,22 +27,22 @@ export class UserChecklistComponent implements OnInit, OnDestroy {
         this.hideChecklistIfNotOwnedOrDefault();
       });
 
-    if (this.hideChecklistIfNotOwnedOrDefault()) {
-      return;
-    }
-
     this.refreshSubscription = this.api
       .getRefreshChecklistEvent()
       .subscribe(() => {
         this.refreshChecklist();
       });
 
+    if (this.hideChecklistIfNotOwnedOrDefault()) {
+      return;
+    }
+
     this.refreshChecklist();
   }
 
   public ngOnDestroy(): void {
-    this.archiveSubscription.unsubscribe();
-    this.refreshSubscription.unsubscribe();
+    this.archiveSubscription?.unsubscribe();
+    this.refreshSubscription?.unsubscribe();
   }
 
   public minimize(): void {

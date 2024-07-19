@@ -219,6 +219,14 @@ describe('UserChecklistComponent', () => {
     expect(instance.items[0].id).not.toBe('refresh');
   });
 
+  it('should not throw errors if subscriptions are undefined', async () => {
+    DummyChecklistApi.accountHidden = true;
+
+    const { instance } = await shallow.render();
+
+    expect(() => instance.ngOnDestroy()).not.toThrow();
+  });
+
   describe('Percentage completion', () => {
     async function expectPercentage(
       completed: number,
