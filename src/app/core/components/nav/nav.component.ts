@@ -9,8 +9,9 @@ import {
 import { SidebarActionPortalService } from '@core/services/sidebar-action-portal/sidebar-action-portal.service';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import { EventService } from '@shared/services/event/event.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { NotificationDialogComponent } from '@root/app/notifications/components/notification-dialog/notification-dialog.component';
 
 @Component({
   selector: 'pr-nav',
@@ -27,7 +28,7 @@ export class NavComponent implements AfterViewInit, OnDestroy {
     private event: EventService,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
-    @Optional() private dialog: Dialog,
+    @Optional() private dialog: DialogCdkService,
   ) {}
 
   ngAfterViewInit() {
@@ -64,9 +65,8 @@ export class NavComponent implements AfterViewInit, OnDestroy {
 
   showNotificationMenu() {
     try {
-      this.dialog.open('NotificationDialogComponent', null, {
+      this.dialog.open(NotificationDialogComponent, {
         height: 'fullscreen',
-        menuClass: 'notification-dialog',
       });
     } catch (err) {}
   }

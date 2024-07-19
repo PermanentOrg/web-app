@@ -1,8 +1,7 @@
 /* @format */
 import { ArchiveVO } from '@models/archive-vo';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { Dialog } from '@root/app/dialog/dialog.service';
-
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 @Component({
   selector: 'pr-switcher',
   templateUrl: './switcher.component.html',
@@ -14,5 +13,5 @@ export class SwitcherComponent {
   @Input() archive: ArchiveVO;
   @Input() data: any;
   @ViewChild('switch', { static: false }) switch: ElementRef;
-  constructor(private dialog: Dialog) {}
+  constructor(private dialog: DialogCdkService) {}
 }

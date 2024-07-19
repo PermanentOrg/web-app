@@ -5,9 +5,9 @@ import {
   ViewChildren,
   AfterViewInit,
   OnDestroy,
+  ElementRef,
   QueryList,
 } from '@angular/core';
-import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import {
   HasSubscriptions,
   unsubscribeAll,
@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { NotificationVOData } from '@models/notification-vo';
 import { NotificationComponent } from '../notification/notification.component';
 import { NotificationService } from '../../services/notification.service';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-notification-dialog',

@@ -1,5 +1,5 @@
 /* @format */
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes, Route } from '@angular/router';
@@ -26,6 +26,7 @@ export interface RouteData {
   isPublic?: boolean;
 
   dialogToken?: DialogComponentToken;
+  component?: any,
   dialogOptions?: DialogOptions;
 
   folderView?: FolderView;

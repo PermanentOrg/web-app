@@ -1,6 +1,6 @@
 /* @format*/
 import { Component, OnInit } from '@angular/core';
-import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
+import { IsTabbedDialog } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { TagsService } from '@core/services/tags/tags.service';
@@ -9,6 +9,7 @@ import { ArchiveVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccountVO } from '../../../models/account-vo';
+import { DialogRef } from '@angular/cdk/dialog';
 
 type ArchiveSettingsDialogTab =
   | 'manage-keywords'

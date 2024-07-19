@@ -28,6 +28,8 @@ import { ngIfScaleAnimation } from '@shared/animations';
 import { Dialog } from '@root/app/dialog/dialog.module';
 import { SearchService } from '@search/services/search.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { ArchiveSettingsDialogComponent } from '@core/components/archive-settings-dialog/archive-settings-dialog.component';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 export type TagType = 'keyword' | 'customMetadata';
 
@@ -82,7 +84,7 @@ export class EditTagsComponent
     private api: ApiService,
     private dataService: DataService,
     private elementRef: ElementRef,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {
@@ -251,7 +253,7 @@ export class EditTagsComponent
   }
 
   onManageTagsClick() {
-    this.dialog.open('ArchiveSettingsDialogComponent', {}, { width: '1000px' });
+    this.dialog.open(ArchiveSettingsDialogComponent, { width: '1000px' });
   }
 
   filterTagsByType(tags: TagVOData[]): TagVOData[] {

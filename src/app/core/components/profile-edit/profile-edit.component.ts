@@ -15,7 +15,7 @@ import {
   FolderResponse,
 } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import {
   ProfileService,
   ProfileItemsDataCol,
@@ -34,8 +34,13 @@ import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { DeviceService } from '@shared/services/device/device.service';
 import { EventService } from '@shared/services/event/event.service';
-import { PROFILE_ONBOARDING_COOKIE } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
-
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import {
+  PROFILE_ONBOARDING_COOKIE,
+  ProfileEditFirstTimeDialogComponent,
+} from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 @Component({
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',
@@ -74,7 +79,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     private account: AccountService,
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private api: ApiService,
     private folderPicker: FolderPickerService,
     private profile: ProfileService,
@@ -115,7 +120,7 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
     }
 
     try {
-      this.dialog.open('ProfileEditFirstTimeDialogComponent', null, {
+      this.dialog.open(ProfileEditFirstTimeDialogComponent, {
         width: '760px',
         height: 'auto',
       });
@@ -247,11 +252,11 @@ export class ProfileEditComponent implements OnInit, AfterViewInit {
 
   async chooseLocationForItem(item: ProfileItemVOData) {
     try {
-      await this.dialog.open(
-        'LocationPickerComponent',
-        { profileItem: item },
-        { height: 'auto', width: '600px' },
-      );
+      await this.dialog.open(LocationPickerComponent, {
+        data: { profileItem: item },
+        height: 'auto',
+        width: '600px',
+      });
     } finally {
       this.updateProgress();
       this.trackProfileEdit(item);

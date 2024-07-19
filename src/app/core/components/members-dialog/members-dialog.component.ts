@@ -1,10 +1,6 @@
 /* @format */
 import { Component, Inject } from '@angular/core';
-import {
-  DIALOG_DATA,
-  DialogRef,
-  IsTabbedDialog,
-} from '@root/app/dialog/dialog.module';
+import { IsTabbedDialog } from '@root/app/dialog/dialog.module';
 import {
   PromptButton,
   PromptField,
@@ -24,6 +20,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { clone, remove, partition } from 'lodash';
 import { PayerService } from '@shared/services/payer/payer.service';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 const MemberActions: { [key: string]: PromptButton } = {
   Edit: {

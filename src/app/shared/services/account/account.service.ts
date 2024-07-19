@@ -14,16 +14,19 @@ import {
 } from '@shared/services/api/index.repo';
 import { LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import {
   AccessRole,
   AccessRoleType,
   checkMinimumAccess,
 } from '@models/access-role';
+import { ArchiveSwitcherComponent } from '@core/components/archive-switcher/archive-switcher.component';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import * as Sentry from '@sentry/browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventService } from '../event/event.service';
+import { AnalyticsService } from '../analytics/analytics.service';
+
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -57,7 +60,7 @@ export class AccountService {
     private api: ApiService,
     private storage: StorageService,
     private cookies: CookieService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private router: Router,
     private httpv2: HttpV2Service,
     private location: LocationStrategy,
@@ -616,9 +619,9 @@ export class AccountService {
     await this.refreshArchives();
     if (this.archives.length > 1) {
       return this.dialog.open(
-        'ArchiveSwitcherDialogComponent',
-        { promptText },
-        { height: 'auto', width: 'fullscreen' },
+        ArchiveSwitcherComponent,
+
+        { height: 'auto', width: 'fullscreen', data: { promptText } },
       );
     }
   }

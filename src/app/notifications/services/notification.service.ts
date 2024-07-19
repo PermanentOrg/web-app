@@ -9,9 +9,12 @@ import { MessageService } from '@shared/services/message/message.service';
 import { filter } from 'lodash';
 import debug from 'debug';
 import { Router } from '@angular/router';
-import { Dialog } from '@root/app/dialog/dialog.module';
-import { MyArchivesTab } from '@core/components/my-archives-dialog/my-archives-dialog.component';
+import {
+  MyArchivesDialogComponent,
+  MyArchivesTab,
+} from '@core/components/my-archives-dialog/my-archives-dialog.component';
 import { ConnectionsTab } from '@core/components/connections-dialog/connections-dialog.component';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 const REFRESH_INTERVAL = 30 * 1000;
 @Injectable()
@@ -30,7 +33,7 @@ export class NotificationService {
     private message: MessageService,
     private account: AccountService,
     private router: Router,
-    private dialog: Dialog
+    private dialog: DialogCdkService,
   ) {
     this.reset();
 
@@ -93,7 +96,7 @@ export class NotificationService {
     try {
       if (this.notifications.length) {
         const response = await this.api.notification.getNotificationsSince(
-          this.notifications[0]
+          this.notifications[0],
         );
         const newNotifications = response.getNotificationVOs();
         this.debug('got new notifications %d', newNotifications.length);
@@ -121,13 +124,13 @@ export class NotificationService {
       this.notifications,
       (n) =>
         n.status === 'status.notification.new' ||
-        n.status === 'status.notification.emailed'
+        n.status === 'status.notification.emailed',
     ).length;
   }
 
   async setNotificationStatus(
     notifications: NotificationVOData[],
-    status: NotificationStatus
+    status: NotificationStatus,
   ) {
     const needsUpdate = notifications.filter((n) => n.status !== status);
 
@@ -159,7 +162,7 @@ export class NotificationService {
 
   markAsSeen() {
     const notRead = this.notifications.filter(
-      (n) => n.status !== 'status.notification.read'
+      (n) => n.status !== 'status.notification.read',
     );
     this.setNotificationStatus(notRead, 'status.notification.seen');
   }
@@ -201,7 +204,8 @@ export class NotificationService {
         };
       }
       try {
-        this.dialog.open('MyArchivesDialogComponent', data, {
+        this.dialog.open(MyArchivesDialogComponent, {
+          data,
           width: '1000px',
         });
       } catch (err) {}

@@ -17,7 +17,7 @@ import {
   PromptButton,
 } from '@shared/services/prompt/prompt.service';
 import { StorageService } from '@shared/services/storage/storage.service';
-import { Dialog } from '@root/app/dialog/dialog.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ConnectorType } from '@models/connector-overview-vo';
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import {
@@ -25,6 +25,7 @@ import {
   ImportFamilyTree,
 } from '@shared/services/guided-tour/tours/familysearch.tour';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
+import { FamilySearchImportComponent } from '../family-search-import/family-search-import.component';
 
 export enum ConnectorImportType {
   Everything,
@@ -60,8 +61,8 @@ export class ConnectorComponent implements OnInit {
     private message: MessageService,
     private prompt: PromptService,
     private storage: StorageService,
-    private dialog: Dialog,
-    private guidedTour: GuidedTourService
+    private dialog: DialogCdkService,
+    private guidedTour: GuidedTourService,
   ) {}
 
   ngOnInit() {
@@ -87,9 +88,8 @@ export class ConnectorComponent implements OnInit {
     this.waiting = true;
     const archive = this.account.getArchive();
     try {
-      const response = await this.api.connector.familysearchMemoryUploadRequest(
-        archive
-      );
+      const response =
+        await this.api.connector.familysearchMemoryUploadRequest(archive);
       this.message.showMessage({
         message:
           'FamilySearch memory upload started in background. This may take a few moments.',
@@ -108,9 +108,8 @@ export class ConnectorComponent implements OnInit {
     this.waiting = true;
     const archive = this.account.getArchive();
     try {
-      const response = await this.api.connector.familysearchMemoryImportRequest(
-        archive
-      );
+      const response =
+        await this.api.connector.familysearchMemoryImportRequest(archive);
       this.message.showMessage({
         message:
           'FamilySearch memory download started in background. This may take a few moments.',
@@ -129,9 +128,8 @@ export class ConnectorComponent implements OnInit {
     this.waiting = true;
     const archive = this.account.getArchive();
     try {
-      const response = await this.api.connector.familysearchMemorySyncRequest(
-        archive
-      );
+      const response =
+        await this.api.connector.familysearchMemorySyncRequest(archive);
       this.message.showMessage({
         message:
           'FamilySearch sync started in background. This may take a few moments.',
@@ -162,7 +160,7 @@ export class ConnectorComponent implements OnInit {
             }),
           },
         ],
-        'How many generations of ancestors would you like to import?'
+        'How many generations of ancestors would you like to import?',
       );
 
       generationsToImport = parseInt(result.generations, 10);
@@ -179,11 +177,11 @@ export class ConnectorComponent implements OnInit {
     data.treeData = data.treeData.filter(
       (i) =>
         parseInt(i.display.ascendancyNumber, 10) <
-        Math.pow(2, generationsToImport + 1)
+        Math.pow(2, generationsToImport + 1),
     );
 
     try {
-      await this.dialog.open('FamilySearchImportComponent', data);
+      await this.dialog.open(FamilySearchImportComponent, { data });
     } catch (err) {}
   }
 
@@ -192,13 +190,13 @@ export class ConnectorComponent implements OnInit {
 
     try {
       const userResponse = await this.api.connector.getFamilysearchTreeUser(
-        this.account.getArchive()
+        this.account.getArchive(),
       );
       const userResponseData = userResponse.getResultsData()[0][0];
 
       const treeResponse = await this.api.connector.getFamilysearchAncestry(
         this.account.getArchive(),
-        userResponseData.id
+        userResponseData.id,
       );
       this.waiting = false;
 
@@ -244,12 +242,12 @@ export class ConnectorComponent implements OnInit {
           this.prConstants.translate(this.connector.type),
           null,
           null,
-          template
+          template,
         )
         .then((val) => {
           window.open(
             'https://desk.zoho.com/portal/permanent/en/kb/articles/import-persons-memories-familysearch',
-            '_blank'
+            '_blank',
           );
         })
         .catch(() => {
@@ -296,7 +294,7 @@ export class ConnectorComponent implements OnInit {
             }
 
             return response.getSimpleVO();
-          })
+          }),
         )
         .toPromise()
         .then((result: SimpleVO) => {
@@ -329,7 +327,7 @@ export class ConnectorComponent implements OnInit {
             }
 
             return response.getConnectorOverviewVO();
-          })
+          }),
         )
         .toPromise()
         .then((connector: ConnectorOverviewVO) => {
@@ -352,7 +350,7 @@ export class ConnectorComponent implements OnInit {
 
     const connectRequest = this.api.connector.familysearchAuthorize(
       archive,
-      code
+      code,
     );
 
     if (connectRequest) {
@@ -372,7 +370,7 @@ export class ConnectorComponent implements OnInit {
                 show: () => {
                   this.guidedTour.markStepComplete(
                     'familysearch',
-                    'importFamilyTree'
+                    'importFamilyTree',
                   );
                 },
               },

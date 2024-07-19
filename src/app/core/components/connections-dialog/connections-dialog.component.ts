@@ -21,16 +21,12 @@ import { AccountService } from '@shared/services/account/account.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { RelationVO, ArchiveVO } from '@models';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import {
-  DIALOG_DATA,
-  DialogRef,
-  Dialog,
-  IsTabbedDialog,
-} from '@root/app/dialog/dialog.module';
+import { Dialog, IsTabbedDialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
 import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 const ConnectionActions: { [key: string]: PromptButton } = {
   Edit: {
@@ -59,6 +55,7 @@ export type ConnectionsTab = 'connections' | 'pending' | 'new';
   selector: 'pr-connections-dialog',
   templateUrl: './connections-dialog.component.html',
   styleUrls: ['./connections-dialog.component.scss'],
+  providers: [DataService],
 })
 export class ConnectionsDialogComponent implements IsTabbedDialog {
   connections: RelationVO[] = [];
@@ -82,6 +79,8 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
   ) {
+
+    console.log(this.data)
     this.data.connections.map((relation: RelationVO) => {
       if (relation.status.includes('ok')) {
         // existing connectionship

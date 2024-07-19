@@ -1,11 +1,11 @@
 /* @format */
 import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { FolderVO } from '@models';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { PublicLinkPipe } from '@shared/pipes/public-link.pipe';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-timeline-complete-dialog',

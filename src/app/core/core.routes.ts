@@ -24,6 +24,8 @@ import { ProfileItemsResolveService } from './resolves/profile-items-resolve.ser
 import { TagsResolveService } from './resolves/tags.resolve.service';
 import { AllArchivesComponent } from './components/all-archives/all-archives.component';
 import { MyfilesGuard } from './guards/myfiles.guard';
+import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
+import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService,
@@ -131,6 +133,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Connections',
           dialogToken: 'ConnectionsDialogComponent',
+          component: ConnectionsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
         resolve: { connections: RelationshipsResolveService },
@@ -282,6 +285,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Storage',
           dialogToken: 'StorageDialogComponent',
+          component: StorageDialogComponent,
           dialogOptions: { width: '1000px' },
         },
       },

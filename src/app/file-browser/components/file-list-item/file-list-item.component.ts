@@ -49,11 +49,11 @@ import { FolderPickerOperations } from '@core/components/folder-picker/folder-pi
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
-import { Dialog } from '@root/app/dialog/dialog.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { checkMinimumAccess, AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 import {
   DragService,
@@ -73,6 +73,9 @@ import { RouteData } from '@root/app/app.routes';
 
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { ItemClickEvent } from '../file-list/file-list.component';
+import { SharingComponent } from '../sharing/sharing.component';
+import { PublishComponent } from '../publish/publish.component';
+import { EditTagsComponent } from '../edit-tags/edit-tags.component';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
@@ -236,11 +239,11 @@ export class FileListItemComponent
     @Optional() private edit: EditService,
     private accountService: AccountService,
     @Optional() private folderPicker: FolderPickerService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private device: DeviceService,
     @Optional() private drag: DragService,
     private storage: StorageService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
   ) {}
 
   ngOnInit() {
@@ -297,7 +300,7 @@ export class FileListItemComponent
     if (
       !this.accountService.checkMinimumAccess(
         this.item.accessRole,
-        AccessRole.Editor
+        AccessRole.Editor,
       )
     ) {
       this.canEdit = false;
@@ -311,7 +314,7 @@ export class FileListItemComponent
       this.subscriptions.push(
         this.drag.events().subscribe((dragEvent) => {
           this.onDragServiceEvent(dragEvent);
-        })
+        }),
       );
     }
   }
@@ -362,7 +365,7 @@ export class FileListItemComponent
       try {
         await this.prompt.confirm(
           'Move',
-          `Move ${itemText} to ${destination.displayName}?`
+          `Move ${itemText} to ${destination.displayName}?`,
         );
         await this.edit.moveItems(itemsToMove, destination);
       } catch (err) {
@@ -482,7 +485,7 @@ export class FileListItemComponent
           srcComponent: this,
           event,
         },
-        event.type === 'dragenter' ? 1 : 0
+        event.type === 'dragenter' ? 1 : 0,
       );
       this.isDropTarget = enter;
     }
@@ -621,7 +624,7 @@ export class FileListItemComponent
 
     if (
       (event.target as HTMLElement).classList.contains(
-        'right-menu-toggler-icon'
+        'right-menu-toggler-icon',
       )
     ) {
       this.touchStartEvent = null;
@@ -634,7 +637,7 @@ export class FileListItemComponent
     const startY = this.touchStartEvent.touches.item(0).clientY;
     const endY = (event as TouchEvent).changedTouches.item(0).clientY;
     const distance = Math.sqrt(
-      Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2)
+      Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2),
     );
 
     if (distance > 15) {
@@ -679,11 +682,11 @@ export class FileListItemComponent
 
     const isAtLeastCurator = this.accountService.checkMinimumAccess(
       this.item.accessRole,
-      AccessRole.Curator
+      AccessRole.Curator,
     );
     const isOwner = this.accountService.checkMinimumAccess(
       this.item.accessRole,
-      AccessRole.Owner
+      AccessRole.Owner,
     );
 
     if (this.canEdit) {
@@ -735,7 +738,7 @@ export class FileListItemComponent
         .promptButtons(
           actionButtons,
           this.item.displayName,
-          actionDeferred.promise
+          actionDeferred.promise,
         )
         .then((value: ActionType) => {
           this.onActionClick(value, actionDeferred);
@@ -748,7 +751,7 @@ export class FileListItemComponent
           this.item.displayName,
           null,
           null,
-          `<p>No actions available</p>`
+          `<p>No actions available</p>`,
         );
       } catch (err) {}
     }
@@ -782,9 +785,11 @@ export class FileListItemComponent
           .getShareLink(this.item)
           .then((response: ShareResponse) => {
             actionDeferred.resolve();
-            this.dialog.open('SharingComponent', {
-              item: this.item,
-              link: response.getShareByUrlVO(),
+            this.dialog.open(SharingComponent, {
+              data: {
+                item: this.item,
+                link: response.getShareByUrlVO(),
+              },
             });
           });
         break;
@@ -794,19 +799,17 @@ export class FileListItemComponent
         break;
       case 'publish':
         actionDeferred.resolve();
-        this.dialog.open(
-          'PublishComponent',
-          { item: this.item },
-          { height: 'auto' }
-        );
+        this.dialog.open(PublishComponent, {
+          data: { item: this.item },
+          height: 'auto',
+        });
         break;
       case 'tags':
         actionDeferred.resolve();
-        this.dialog.open(
-          'EditTagsComponent',
-          { item: this.item },
-          { height: 'auto' }
-        );
+        this.dialog.open(EditTagsComponent, {
+          data: { item: this.item },
+          height: 'auto',
+        });
         break;
       case 'setFolderView':
         actionDeferred.resolve();
@@ -935,7 +938,7 @@ export class FileListItemComponent
         `Rename "${this.item.displayName}"`,
         updateDeferred.promise,
         'Rename',
-        'Cancel'
+        'Cancel',
       );
       this.saveUpdates(values, updateDeferred);
     } catch (err) {
@@ -956,7 +959,7 @@ export class FileListItemComponent
         `Set folder view for "${this.item.displayName}"`,
         updateDeferred.promise,
         'Save',
-        'Cancel'
+        'Cancel',
       )
       .then((values) => {
         this.saveUpdates(values, updateDeferred);
@@ -1047,7 +1050,7 @@ export class FileListItemComponent
             const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
             const allChildren = newFolderVO.ChildItemVOs;
             const sortedItems = newFolderVO.ChildItemVOs.filter((item) =>
-              item.type.includes('type.record')
+              item.type.includes('type.record'),
             );
             sortedItems.sort((a, b) => {
               return calculateSortPriority(a) - calculateSortPriority(b);

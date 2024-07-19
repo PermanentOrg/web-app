@@ -9,7 +9,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   DialogRef,
-  Dialog,
   DialogComponentToken,
 } from '@root/app/dialog/dialog.module';
 import { RouteData } from '@root/app/app.routes';
@@ -22,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { Title } from '@angular/platform-browser';
 import { slideUpAnimation } from '@shared/animations';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 @Component({
   selector: 'pr-routed-dialog-wrapper',
@@ -38,6 +38,7 @@ export class RoutedDialogWrapperComponent
   private dialogToken: DialogComponentToken;
   private dialogOptions: DialogOptions;
   private dialogRef: DialogRef;
+  private component: any;
 
   private closedByNavigate = false;
 
@@ -47,7 +48,7 @@ export class RoutedDialogWrapperComponent
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private routeHistory: RouteHistoryService,
     private title: Title,
   ) {}
@@ -55,9 +56,18 @@ export class RoutedDialogWrapperComponent
   ngAfterViewInit(): void {
     this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
 
+    console.log(this.route.snapshot.data);
+
     this.dialogToken = (this.route.snapshot.data as RouteData).dialogToken;
+    this.component = (this.route.snapshot.data as RouteData).component;
 
     if (!this.dialogToken) {
+      throw new Error(
+        "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog",
+      );
+    }
+
+    if (!this.component) {
       throw new Error(
         "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog",
       );
@@ -71,13 +81,15 @@ export class RoutedDialogWrapperComponent
       outletTemplate: this.outletTemplate,
     };
 
-    this.dialogRef = this.dialog.createDialog(
-      this.dialogToken,
-      dialogData,
-      this.dialogOptions,
-      this.outletTemplate,
-      this.route,
-    );
+    // this.dialogRef = this.dialog.createDialog(
+    //   this.dialogToken,
+    //   dialogData,
+    //   this.dialogOptions,
+    //   this.outletTemplate,
+    //   this.route,
+    // );
+
+    this.dialog.open(this.component, this.dialogOptions);
 
     this.dialogRef.dialogComponent.show();
 
