@@ -71,6 +71,7 @@ import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
+import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 
 @NgModule({
   imports: [
@@ -189,7 +190,13 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     AccessRolePipe,
     MobileBannerComponent,
   ],
-  providers: [PublicLinkPipe, PublicRoutePipe, PrLocationPipe, DatePipe],
+  providers: [
+    PublicLinkPipe,
+    PublicRoutePipe,
+    PrLocationPipe,
+    DatePipe,
+    DialogCdkService,
+  ],
 })
 export class SharedModule {
   private dialogComponents: DialogChildComponentData[] = [

@@ -70,6 +70,7 @@ import { AccountSecurityComponent } from './components/account-security/account-
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-auth.component';
 import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
+import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 
 @NgModule({
   imports: [
@@ -141,6 +142,7 @@ import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
     EditService,
     DragService,
     SidebarActionPortalService,
+    DialogCdkService
   ],
 })
 export class CoreModule {

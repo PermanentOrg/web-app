@@ -25,8 +25,12 @@ import { Dialog, IsTabbedDialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
-import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+import {
+  ArchivePickerComponent,
+  ArchivePickerComponentConfig,
+} from '@shared/components/archive-picker/archive-picker.component';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 const ConnectionActions: { [key: string]: PromptButton } = {
   Edit: {
@@ -75,12 +79,11 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
     private prConstants: PrConstantsService,
     private accountService: AccountService,
     private relationService: RelationshipService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
   ) {
-
-    console.log(this.data)
+    console.log(this.data);
     this.data.connections.map((relation: RelationVO) => {
       if (relation.status.includes('ok')) {
         // existing connectionship
@@ -220,8 +223,8 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
       hideAccessRoleOnInvite: true,
     };
 
-    return this.dialog
-      .open('ArchivePickerComponent', config)
+    return (this.dialog
+      .open(ArchivePickerComponent, { data: config }) as any)
       .then((archive: ArchiveVO) => {
         if (find(this.connections, { relationArchiveId: archive.archiveId })) {
           return this.messageService.showMessage({

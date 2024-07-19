@@ -1,6 +1,5 @@
 /* @format */
 import { Component, Inject } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import {
   PromptService,
   PromptField,
@@ -24,6 +23,7 @@ import { clone } from 'lodash';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { FormInputSelectOption } from '../form-input/form-input.component';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];
@@ -158,6 +158,6 @@ export class ArchivePickerComponent {
   }
 
   cancel() {
-    this.dialogRef.close(null, true);
+    this.dialogRef.close();
   }
 }

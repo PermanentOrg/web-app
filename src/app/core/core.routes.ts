@@ -26,6 +26,12 @@ import { AllArchivesComponent } from './components/all-archives/all-archives.com
 import { MyfilesGuard } from './guards/myfiles.guard';
 import { ConnectionsDialogComponent } from './components/connections-dialog/connections-dialog.component';
 import { StorageDialogComponent } from './components/storage-dialog/storage-dialog.component';
+import { WelcomeInvitationDialogComponent } from './components/welcome-invitation-dialog/welcome-invitation-dialog.component';
+import { WelcomeDialogComponent } from './components/welcome-dialog/welcome-dialog.component';
+import { ArchiveSettingsDialogComponent } from './components/archive-settings-dialog/archive-settings-dialog.component';
+import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
+import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
+import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService,
@@ -115,6 +121,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Invitations',
           dialogToken: 'InvitationsDialogComponent',
+          component: InvitationsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
       },
@@ -161,6 +168,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Archive Profile',
           dialogToken: 'ProfileEditComponent',
+          component: ProfileEditComponent,
           dialogOptions: {
             width: '100%',
             height: 'fullscreen',
@@ -180,6 +188,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Account',
           dialogToken: 'SettingsDialogComponent',
+          component: AccountSettingsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
       },
@@ -209,6 +218,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Account',
           dialogToken: 'SettingsDialogComponent',
+          component: AccountSettingsDialogComponent,
           tab: 'legacy-contact',
           dialogOptions: { width: '1000px' },
         },
@@ -224,6 +234,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Archive Members',
           dialogToken: 'MembersDialogComponent',
+          component: MembersDialogComponent,
           dialogOptions: { width: '1000px' },
         },
         resolve: { members: MembersResolveService },
@@ -243,6 +254,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Archive Settings',
           dialogToken: 'ArchiveSettingsDialogComponent',
+          component: ArchiveSettingsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
       },
@@ -257,6 +269,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Welcome!',
           dialogToken: 'WelcomeDialogComponent',
+          component: WelcomeDialogComponent,
           dialogOptions: { width: '600px' },
         },
       },
@@ -271,6 +284,7 @@ export const routes: RoutesWithData = [
         data: {
           title: 'Welcome!',
           dialogToken: 'WelcomeInvitationDialogComponent',
+          component: WelcomeInvitationDialogComponent,
           dialogOptions: { width: '600px' },
         },
       },

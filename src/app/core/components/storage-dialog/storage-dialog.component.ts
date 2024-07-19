@@ -19,14 +19,11 @@ import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
 import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
-<<<<<<< HEAD
 import { EventService } from '@shared/services/event/event.service';
-=======
 import { DeviceService } from '@shared/services/device/device.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogRef } from '@angular/cdk/dialog';
 import { UploadService } from '@core/services/upload/upload.service';
->>>>>>> 8b92536d (Changed all the files to use the dialog cdk.)
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
@@ -34,7 +31,6 @@ type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
   selector: 'pr-storage-dialog',
   templateUrl: './storage-dialog.component.html',
   styleUrls: ['./storage-dialog.component.scss'],
-  providers: [UploadService],
 })
 export class StorageDialogComponent
   implements OnInit, IsTabbedDialog, OnDestroy

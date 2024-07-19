@@ -1,11 +1,11 @@
 /* @format */
 import { Component, Inject } from '@angular/core';
-import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 export type SettingsTab =
   | 'storage'
