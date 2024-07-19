@@ -223,8 +223,11 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
       hideAccessRoleOnInvite: true,
     };
 
-    return (this.dialog
-      .open(ArchivePickerComponent, { data: config }) as any)
+    return (
+      this.dialog.open(ArchivePickerComponent, {
+        data: config,
+      }) as unknown as Promise<ArchiveVO>
+    )
       .then((archive: ArchiveVO) => {
         if (find(this.connections, { relationArchiveId: archive.archiveId })) {
           return this.messageService.showMessage({
