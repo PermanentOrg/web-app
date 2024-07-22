@@ -32,7 +32,10 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { MyArchivesDialogComponent } from '@core/components/my-archives-dialog/my-archives-dialog.component';
-import { AccountSettingsDialogComponent, SettingsTab } from '@core/components/account-settings-dialog/account-settings-dialog.component';
+import {
+  AccountSettingsDialogComponent,
+  SettingsTab,
+} from '@core/components/account-settings-dialog/account-settings-dialog.component';
 import { InvitationsDialogComponent } from '@core/components/invitations-dialog/invitations-dialog.component';
 
 const dropdownMenuAnimation = trigger('dropdownMenuAnimation', [

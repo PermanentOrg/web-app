@@ -41,7 +41,6 @@ import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.c
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
-
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
     buttonName: 'rename',

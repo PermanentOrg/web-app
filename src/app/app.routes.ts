@@ -26,7 +26,7 @@ export interface RouteData {
   isPublic?: boolean;
 
   dialogToken?: DialogComponentToken;
-  component?: any,
+  component?: any;
   dialogOptions?: DialogOptions;
 
   folderView?: FolderView;

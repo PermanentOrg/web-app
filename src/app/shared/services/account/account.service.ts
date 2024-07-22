@@ -27,7 +27,6 @@ import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventService } from '../event/event.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 
-
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
 const ROOT_KEY = 'root';

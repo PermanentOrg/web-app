@@ -8,7 +8,6 @@ import { BehaviorSubject } from 'rxjs';
 import { GaEventData } from '@shared/services/google-analytics/google-analytics.service';
 import { EventService } from '@shared/services/event/event.service';
 import { DialogRef } from '@angular/cdk/dialog';
-import { EventData } from '@shared/services/google-analytics/google-analytics.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { PromoVOData } from '../../../models/promo-vo';
 import { ApiService } from '../../../shared/services/api/api.service';

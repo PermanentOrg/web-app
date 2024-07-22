@@ -142,7 +142,7 @@ import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-
     EditService,
     DragService,
     SidebarActionPortalService,
-    DialogCdkService
+    DialogCdkService,
   ],
 })
 export class CoreModule {
