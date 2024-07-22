@@ -15,6 +15,9 @@
 
 .content {
   @include tabbedDialogContent(500px);
+  @include desktop {
+    height: 100vh;
+  }
 }
 
 .tabs {
@@ -48,7 +51,8 @@
     margin-left: $grid-unit;
   }
 
-  .panel-header-top-row, .panel-header-bottom-row {
+  .panel-header-top-row,
+  .panel-header-bottom-row {
     display: flex;
     align-items: center;
     height: pxToGrid(100px);
@@ -183,7 +187,6 @@
   @include profileSectionHeader;
 }
 
-
 .profile-group {
   @include profileGroup;
 }
@@ -200,4 +203,3 @@
 .profile-field {
   @include profileField;
 }
-

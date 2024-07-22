@@ -14,9 +14,9 @@ import {
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { NotificationVOData } from '@models/notification-vo';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { NotificationComponent } from '../notification/notification.component';
 import { NotificationService } from '../../services/notification.service';
-import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-notification-dialog',

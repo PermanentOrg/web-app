@@ -23,11 +23,10 @@ import {
 } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { Dialog } from '../../../dialog/dialog.service';
-import { AccountService } from '../../../shared/services/account/account.service';
-import { ConfirmGiftDialogComponent } from '../confirm-gift-dialog/confirm-gift-dialog.component';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { AccountService } from '../../../shared/services/account/account.service';
+import { ConfirmGiftDialogComponent } from '../confirm-gift-dialog/confirm-gift-dialog.component';
 
 @Component({
   selector: 'pr-gift-storage',

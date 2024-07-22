@@ -2,6 +2,7 @@
 import { ArchiveVO } from '@models/archive-vo';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+
 @Component({
   selector: 'pr-switcher',
   templateUrl: './switcher.component.html',

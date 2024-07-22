@@ -1,10 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ArchivePickerComponent } from './archive-picker.component';
+
+class MockDialogRef {
+  close() {}
+}
 
 describe('ArchivePickerComponent', () => {
   let component: ArchivePickerComponent;
@@ -15,7 +19,7 @@ describe('ArchivePickerComponent', () => {
       declarations: [ArchivePickerComponent],
       imports: [HttpClientTestingModule],
       providers: [
-        { provide: DialogRef, useValue: {} },
+        { provide: DialogRef, useClass: MockDialogRef },
         { provide: DIALOG_DATA, useValue: {} },
         { provide: ApiService, useValue: {} },
         { provide: AccountService, useValue: {} },

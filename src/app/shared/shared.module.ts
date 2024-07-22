@@ -29,6 +29,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
 import { DialogModule } from '../dialog/dialog.module';
+import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { FileSizePipe } from './pipes/filesize.pipe';
@@ -71,7 +72,6 @@ import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
-import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 
 @NgModule({
   imports: [

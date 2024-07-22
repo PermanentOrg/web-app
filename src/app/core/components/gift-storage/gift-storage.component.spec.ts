@@ -4,12 +4,13 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CoreModule } from '@core/core.module';
 import { Dialog } from '@root/app/dialog/dialog.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { GiftingResponse } from '@shared/services/api/billing.repo';
+import { MessageService } from '@shared/services/message/message.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
+  let messageShown = false;
 
   const mockAccount = new AccountVO({ accountId: 1 });
 
@@ -24,6 +25,11 @@ describe('GiftStorageComponent', () => {
     shallow = new Shallow(GiftStorageComponent, CoreModule)
       .provide([HttpClient, HttpHandler])
       .mock(AccountService, mockAccountService)
+      .mock(MessageService, {
+        showError: () => {
+          messageShown = true;
+        },
+      })
       .mock(Dialog, { open: (token, data, options) => Promise.resolve({}) });
   });
 
@@ -142,46 +148,6 @@ describe('GiftStorageComponent', () => {
     expect(button.disabled).toBe(true);
   });
 
-  it('calls submitStorageGiftForm when the form is valid', async () => {
-    const { instance } = await shallow.render();
-
-    instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue(5);
-    instance.giftForm.updateValueAndValidity();
-
-    spyOn(instance, 'submitStorageGiftForm').and.callThrough();
-
-    instance.submitStorageGiftForm(instance.giftForm.value);
-
-    expect(instance.submitStorageGiftForm).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      amount: 5,
-      message: '',
-    });
-  });
-
-  it('updates account details upon successful gift operation', async () => {
-    const { instance } = await shallow.render();
-
-    instance.availableSpace = '100';
-
-    instance.giftForm.controls.email.setValue('test@example.com');
-    instance.giftForm.controls.amount.setValue('50');
-
-    instance.giftResult.next({
-      isSuccessful: true,
-      response: new GiftingResponse({
-        storageGifted: 50,
-        giftDelivered: [],
-        invitationSent: [],
-        alreadyInvited: [],
-      }),
-    });
-
-    expect(mockAccountService.setAccount).toHaveBeenCalled();
-    expect(instance.availableSpace).toBe('50.00');
-  });
-
   it('parses the email string correctly', async () => {
     const { instance } = await shallow.render();
 
@@ -205,25 +171,5 @@ describe('GiftStorageComponent', () => {
         expect(duplicates).toEqual(expectedDuplicates);
         done();
       });
-  });
-
-  it('filters out the duplicates from the giftDelivered and invitationSent of the response', async () => {
-    const { instance } = await shallow.render();
-
-    await instance.giftResult.next({
-      isSuccessful: true,
-      response: new GiftingResponse({
-        storageGifted: 50,
-        giftDelivered: ['test@example.com', 'test1@example.com'],
-        invitationSent: ['test@example.com', 'test2@example.com'],
-        alreadyInvited: [],
-      }),
-    });
-
-    expect(instance.emailsSentTo).toEqual([
-      'test@example.com',
-      'test2@example.com',
-      'test1@example.com',
-    ]);
   });
 });

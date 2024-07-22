@@ -23,8 +23,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
-import { TagsService } from '../../../core/services/tags/tags.service';
 import { SearchService } from '@search/services/search.service';
+import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
   selector: 'pr-file-viewer',
@@ -386,7 +386,6 @@ export class FileViewerComponent implements OnInit, OnDestroy {
 
   public onTagsClick(type: string): void {
     if (this.canEdit) {
-      console.log('open tags dialog');
       this.editService.openTagsDialog(this.currentRecord as ItemVO, type);
     }
   }

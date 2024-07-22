@@ -30,6 +30,8 @@ import { ProfileService } from '@shared/services/profile/profile.service';
 import { CountUpModule } from 'ngx-countup';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PledgeModule } from '../pledge/pledge.module';
+import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
+import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { ManageMetadataModule } from '../archive-settings/manage-metadata/manage-metadata.module';
 import { DirectiveModule } from '../directive/directive.module';
@@ -69,8 +71,6 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
 import { AccountSecurityComponent } from './components/account-security/account-security.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-auth.component';
-import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
-import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 
 @NgModule({
   imports: [

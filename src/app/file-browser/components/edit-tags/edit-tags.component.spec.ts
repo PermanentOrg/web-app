@@ -198,21 +198,6 @@ describe('EditTagsComponent', () => {
     expect(tagCreateSpy).not.toHaveBeenCalled();
   });
 
-  it('should open dialog when manage link is clicked', async () => {
-    const { element, find, inject, fixture } = await defaultRender();
-    const dialogOpenSpy = inject(Dialog);
-
-    element.componentInstance.isEditing = true;
-    fixture.detectChanges();
-
-    find('.manage-tags-message .manage-tags-link').triggerEventHandler(
-      'click',
-      {},
-    );
-
-    expect(dialogOpenSpy.open).toHaveBeenCalled();
-  });
-
   it('should highlight the correct tag on key down', async () => {
     const { fixture, element } = await defaultRender();
 

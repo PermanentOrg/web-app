@@ -22,8 +22,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { clone } from 'lodash';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
-import { FormInputSelectOption } from '../form-input/form-input.component';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { FormInputSelectOption } from '../form-input/form-input.component';
 
 export interface ArchivePickerComponentConfig {
   relations?: RelationVO[];

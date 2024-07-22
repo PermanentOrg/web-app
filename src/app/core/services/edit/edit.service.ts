@@ -35,11 +35,12 @@ import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { EventService } from '@shared/services/event/event.service';
-import { FolderPickerService } from '../folder-picker/folder-picker.service';
 import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
 import { PublishComponent } from '@fileBrowser/components/publish/publish.component';
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { FolderPickerService } from '../folder-picker/folder-picker.service';
+
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
@@ -258,7 +259,6 @@ export class EditService {
               item: items[0],
               link: response.getShareByUrlVO(),
             },
-            
           });
           break;
         default:
@@ -548,8 +548,7 @@ export class EditService {
       data: { item },
       height: 'auto',
       panelClass: 'dialog',
-    }).closed.subscribe(() => {
-      console.log('Publish dialog closed');
+      width: '50%',
     });
   }
 

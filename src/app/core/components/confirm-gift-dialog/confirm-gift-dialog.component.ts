@@ -10,14 +10,6 @@ import { GiftingResponse } from '@shared/services/api/billing.repo';
   styleUrls: ['./confirm-gift-dialog.component.scss'],
 })
 export class ConfirmGiftDialogComponent {
-  emails: string[];
-  amount: number;
-  message: string;
-  giftResult: BehaviorSubject<{
-    isSuccessful: boolean;
-    response: GiftingResponse | null;
-  }>;
-
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,

@@ -1,14 +1,18 @@
 /* @format */
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import {
   ComponentFixture,
   TestBed,
   TestModuleMetadata,
 } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { cloneDeep } from 'lodash';
 import { SharedModule } from '../../../shared/shared.module';
 import { ConfirmPayerDialogComponent } from './confirm-payer-dialog.component';
+
+class MockDialogRef {
+  close() {}
+}
 
 describe('ConfirmPayerDialogComponent', () => {
   let component: ConfirmPayerDialogComponent;
@@ -31,8 +35,6 @@ describe('ConfirmPayerDialogComponent', () => {
       cancelAccountPayerSet: () => {},
     };
 
-    dialogRef = new DialogRef(1, null);
-
     config.imports.push(SharedModule);
     config.declarations.push(ConfirmPayerDialogComponent);
     config.providers.push({
@@ -43,7 +45,7 @@ describe('ConfirmPayerDialogComponent', () => {
     });
     config.providers.push({
       provide: DialogRef,
-      useValue: dialogRef,
+      useClass: MockDialogRef,
     });
     await TestBed.configureTestingModule(config).compileComponents();
   });

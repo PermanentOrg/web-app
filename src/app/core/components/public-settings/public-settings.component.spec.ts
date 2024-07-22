@@ -1,9 +1,9 @@
-
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 import { PublicSettingsComponent } from './public-settings.component';
 
 @NgModule({
@@ -32,6 +32,7 @@ const mockApiService = {
 
 describe('PublicSettingsComponent', () => {
   let shallow: Shallow<PublicSettingsComponent>;
+  let messageShown = false;
   async function defaultRender(a: ArchiveVO = archive) {
     return await shallow.render(
       `<pr-public-settings [archive]="archive"></pr-public-settings>`,
@@ -39,7 +40,7 @@ describe('PublicSettingsComponent', () => {
         bind: {
           archive: a,
         },
-      }
+      },
     );
   }
   beforeEach(() => {
@@ -49,10 +50,13 @@ describe('PublicSettingsComponent', () => {
     archive = {
       allowPublicDownload: true,
     } as ArchiveVO;
-    shallow = new Shallow(PublicSettingsComponent, DummyModule).mock(
-      ApiService,
-      mockApiService
-    );
+    shallow = new Shallow(PublicSettingsComponent, DummyModule)
+      .mock(ApiService, mockApiService)
+      .mock(MessageService, {
+        showError: () => {
+          messageShown = true;
+        },
+      });
   });
 
   it('should exist', async () => {

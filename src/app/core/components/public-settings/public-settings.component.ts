@@ -5,8 +5,8 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveType } from '@models/archive-vo';
 import { Observable } from 'rxjs';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-import { ArchiveTypeChangeDialogComponent } from '../archive-type-change-dialog/archive-type-change-dialog.component';
 import { MessageService } from '@shared/services/message/message.service';
+import { ArchiveTypeChangeDialogComponent } from '../archive-type-change-dialog/archive-type-change-dialog.component';
 
 @Component({
   selector: 'pr-public-settings',

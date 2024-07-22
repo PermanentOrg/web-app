@@ -1,7 +1,7 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
-import { AccountService } from '../../../shared/services/account/account.service';
 import { DialogRef } from '@angular/cdk/dialog';
+import { AccountService } from '../../../shared/services/account/account.service';
 
 @Component({
   selector: 'pr-skip-onboarding-dialog',

@@ -35,12 +35,13 @@ import { copyFromInputElement } from '@shared/utilities/forms';
 import { DeviceService } from '@shared/services/device/device.service';
 import { EventService } from '@shared/services/event/event.service';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import {
   PROFILE_ONBOARDING_COOKIE,
   ProfileEditFirstTimeDialogComponent,
 } from '../profile-edit-first-time-dialog/profile-edit-first-time-dialog.component';
-import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+
 @Component({
   selector: 'pr-profile-edit',
   templateUrl: './profile-edit.component.html',

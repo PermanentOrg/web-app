@@ -20,6 +20,7 @@ import {
 } from '@angular/forms';
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import {
   reasons,
   goals,
@@ -30,7 +31,6 @@ import {
   archiveOptions,
   ArchiveCreateEvent,
 } from '../glam/types/archive-types';
-import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 
 type NewArchiveScreen =
   | 'goals'

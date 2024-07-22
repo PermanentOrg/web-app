@@ -83,7 +83,6 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
   ) {
-    console.log(this.data);
     this.data.connections.map((relation: RelationVO) => {
       if (relation.status.includes('ok')) {
         // existing connectionship

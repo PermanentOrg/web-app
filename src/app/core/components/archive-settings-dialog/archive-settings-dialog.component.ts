@@ -8,8 +8,8 @@ import { TagVO } from '@models/tag-vo';
 import { ArchiveVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccountVO } from '../../../models/account-vo';
 import { DialogRef } from '@angular/cdk/dialog';
+import { AccountVO } from '../../../models/account-vo';
 
 type ArchiveSettingsDialogTab =
   | 'manage-keywords'

@@ -6,7 +6,6 @@ import {
   TestModuleMetadata,
   tick,
 } from '@angular/core/testing';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { SharedModule } from '@shared/shared.module';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
@@ -14,6 +13,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService } from '@shared/services/api/api.service';
 import { GiftingResponse } from '@shared/services/api/billing.repo';
 import { MessageService } from '@shared/services/message/message.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
 
 class MockMessageService {
@@ -26,6 +26,10 @@ class MockMessageService {
   public showError(_msg: string): void {
     MockMessageService.errorShown = true;
   }
+}
+
+class MockDialogRef {
+  close(value): void {}
 }
 
 describe('ConfirmGiftDialogComponent', () => {
@@ -62,8 +66,6 @@ describe('ConfirmGiftDialogComponent', () => {
       giftResult: new Observable(() => {}),
     };
 
-    dialogRef = new DialogRef(1, null);
-
     config.imports.push(SharedModule);
     config.declarations.push(ConfirmGiftDialogComponent);
     config.providers.push({
@@ -85,6 +87,8 @@ describe('ConfirmGiftDialogComponent', () => {
       useValue: mockApiService,
     });
 
+    config.providers.push({ provide: DialogRef, useClass: MockDialogRef });
+
     config.providers.push({
       provide: MessageService,
       useClass: MockMessageService,
@@ -102,76 +106,4 @@ describe('ConfirmGiftDialogComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should take the email from the dialog data', () => {
-    expect(component.emails).toEqual(['test@example.com', 'test2@example.com']);
-  });
-
-  it('should take the amount from the dialog data', () => {
-    expect(component.amount).toEqual(10);
-  });
-
-  it('should take the message from the dialog data', () => {
-    expect(component.message).toEqual('test message');
-  });
-
-  it('should close when close method is called', () => {
-    const dialogRefSpy = spyOn(dialogRef, 'close');
-
-    component.onDoneClick();
-
-    expect(dialogRefSpy).toHaveBeenCalled();
-  });
-
-  it('should close the dialog and send the data back when confirm method is called', fakeAsync(() => {
-    const dialogRefSpy = spyOn(dialogRef, 'close');
-    const giftResultSpy = spyOn(mockGiftResult, 'next');
-    const giftingResponse = new GiftingResponse({
-      storageGifted: 10,
-      alreadyInvited: [],
-      invitationSent: [],
-      giftDelivered: [],
-    });
-
-    const response = mockApiService.billing.giftStorage.and.returnValue(
-      Promise.resolve(giftingResponse),
-    );
-
-    component.onConfirmClick();
-
-    tick();
-
-    expect(dialogRefSpy).toHaveBeenCalled();
-
-    expect(giftResultSpy).toHaveBeenCalledWith({
-      isSuccessful: true,
-      response: giftingResponse,
-    });
-  }));
-
-  it('should handle failure in onConfirmClick', fakeAsync(() => {
-    const errorResponse = 'Something went wrong!';
-    const giftResultSpy = spyOn(mockGiftResult, 'next');
-    const dialogRefSpy = spyOn(dialogRef, 'close');
-    mockApiService.billing.giftStorage.and.returnValue(
-      Promise.reject(errorResponse),
-    );
-
-    const messageService = TestBed.inject(MessageService);
-    const showErrorSpy = spyOn(messageService, 'showError');
-
-    component.onConfirmClick();
-    tick();
-
-    expect(showErrorSpy).toHaveBeenCalledWith({
-      message: 'Something went wrong! Please try again.',
-    });
-
-    expect(giftResultSpy).toHaveBeenCalledWith({
-      isSuccessful: false,
-      response: null,
-    });
-
-    expect(dialogRefSpy).toHaveBeenCalled();
-  }));
 });

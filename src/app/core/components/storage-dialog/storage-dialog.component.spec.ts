@@ -3,16 +3,24 @@ import { Shallow } from 'shallow-render';
 import { BillingResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
 import { CoreModule } from '@core/core.module';
-import { DialogRef } from '@root/app/dialog/dialog.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { GaEventData } from '@shared/services/google-analytics/google-analytics.service';
 import { EventService } from '@shared/services/event/event.service';
+import { DialogRef } from '@angular/cdk/dialog';
+import { EventData } from '@shared/services/google-analytics/google-analytics.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { PromoVOData } from '../../../models/promo-vo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { AccountVO } from '../../../models/account-vo';
 import { MessageService } from '../../../shared/services/message/message.service';
 import { StorageDialogComponent } from './storage-dialog.component';
+
+class MockDialogRef {
+  close(value?: any): void {
+    // Mock close method
+  }
+}
 
 const mockPromoResponse = {
   Results: [
@@ -66,7 +74,6 @@ describe('StorageDialogComponent', () => {
   let mockAccountService: MockAccountService;
   let mockApiService: MockApiService;
   let mockAnalyticksService: MockAnalyticsService;
-  const dialogRef = new DialogRef(1, null);
   let mockActivatedRoute;
   const paramMap = new BehaviorSubject(convertToParamMap({}));
   const queryParamMap = new BehaviorSubject(convertToParamMap({}));
@@ -84,7 +91,6 @@ describe('StorageDialogComponent', () => {
     shallow = new Shallow(StorageDialogComponent, CoreModule)
       .dontMock(AccountService)
       .dontMock(ApiService)
-      .mock(DialogRef, dialogRef)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;
@@ -92,7 +98,8 @@ describe('StorageDialogComponent', () => {
       })
       .provide({ provide: AccountService, useValue: mockAccountService })
       .provide({ provide: ApiService, useValue: mockApiService })
-      .provide({ provide: EventService, useValue: mockAnalyticksService })
+      .provide({ provide: AnalyticsService, useValue: mockAnalyticksService })
+      .provide({ provide: DialogRef, useClass: MockDialogRef })
       .provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
   });
 
