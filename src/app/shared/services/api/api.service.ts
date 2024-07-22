@@ -1,3 +1,4 @@
+/* @format */
 import { Injectable } from '@angular/core';
 import { HttpService } from '@shared/services/http/http.service';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
@@ -24,8 +25,12 @@ export class ApiService {
   public share: Repo.ShareRepo;
   public system: Repo.SystemRepo;
   public tag: Repo.TagRepo;
+  public idpuser: Repo.IdPuser;
 
-  constructor(private http: HttpService, private httpV2: HttpV2Service) {
+  constructor(
+    private http: HttpService,
+    private httpV2: HttpV2Service,
+  ) {
     this.auth = new Repo.AuthRepo(this.http, this.httpV2);
     this.account = new Repo.AccountRepo(this.http, this.httpV2);
     this.archive = new Repo.ArchiveRepo(this.http, this.httpV2);
@@ -43,5 +48,6 @@ export class ApiService {
     this.share = new Repo.ShareRepo(this.http, this.httpV2);
     this.system = new Repo.SystemRepo(this.http, this.httpV2);
     this.tag = new Repo.TagRepo(this.http, this.httpV2);
+    this.idpuser = new Repo.IdPuser(this.http, this.httpV2);
   }
 }

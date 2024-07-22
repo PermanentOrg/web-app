@@ -10,22 +10,29 @@
     <div class="settings-tabs">
       <div
         class="settings-tab"
-        (click)="setTab('notification')"
-        [class.active]="activeTab === 'notification'"
-      >
-        Notification Preferences
-      </div>
-      <div
-        class="settings-tab"
         (click)="setTab('account')"
         [class.active]="activeTab === 'account'"
       >
-        Login Info
+        Account Info
         <i
           class="material-icons text-warning"
           *ngIf="accountService.isEmailOrPhoneUnverified()"
           >report_problem</i
         >
+      </div>
+      <div
+        class="settings-tab"
+        (click)="setTab('security')"
+        [class.active]="activeTab === 'security'"
+      >
+        Login and Security
+      </div>
+      <div
+        class="settings-tab"
+        (click)="setTab('notification')"
+        [class.active]="activeTab === 'notification'"
+      >
+        Notification Preferences
       </div>
       <div
         class="settings-tab"
@@ -63,6 +70,7 @@
           *ngSwitchCase="'advanced-settings'"
         ></pr-advanced-settings>
         <pr-account-settings *ngSwitchCase="'account'"></pr-account-settings>
+        <pr-account-security *ngSwitchCase="'security'"></pr-account-security>
         <pr-billing-settings *ngSwitchCase="'billing'"></pr-billing-settings>
         <pr-notification-preferences
           *ngSwitchCase="'notification'"

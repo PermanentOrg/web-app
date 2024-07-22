@@ -15,7 +15,8 @@ export type SettingsTab =
   | 'billing'
   | 'legacy-contact'
   | 'delete'
-  | 'advanced-settings';
+  | 'advanced-settings'
+  | 'security';
 
 @Component({
   selector: 'pr-account-settings-dialog',
