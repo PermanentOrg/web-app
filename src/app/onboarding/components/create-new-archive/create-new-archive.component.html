@@ -188,6 +188,6 @@
     </button>
   </div>
 </div>
-<div *ngIf="!isGlam">
+<div *ngIf="!isGlam && screen !== 'create' && screen !== 'name-archive'">
   <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
 </div>
