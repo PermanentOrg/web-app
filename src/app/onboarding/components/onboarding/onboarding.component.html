@@ -23,24 +23,35 @@
     <div [ngClass]="getProgressChunkClasses(1)"></div>
     <div [ngClass]="getProgressChunkClasses(2)"></div>
   </div>
-  <ng-container [ngSwitch]="screen">
-    <pr-welcome-screen
-      (nextScreen)="setScreen($event)"
-      (selectInvitation)="selectArchiveInvitation($event)"
-      [pendingArchives]="pendingArchives"
-      *ngSwitchCase="OnboardingScreen.pendingArchives"
-    ></pr-welcome-screen>
-    <pr-create-new-archive
-      (back)="setScreen(OnboardingScreen.pendingArchives)"
-      (createdArchive)="setNewArchive($event)"
-      (progress)="setProgress($event)"
-      (error)="errorMessage = $event"
-      [pendingArchives]="pendingArchives"
-      [pendingArchive]="selectedPendingArchive"
-      *ngSwitchCase="OnboardingScreen.welcomeScreen"
-    ></pr-create-new-archive>
-    <div *ngSwitchCase="OnboardingScreen.done" class="loading">Loading...</div>
-    <div *ngSwitchDefault>Something went wrong.</div>
+  <ng-container>
+    @if (OnboardingScreen.pendingArchives && !isGlam) {
+      <pr-welcome-screen
+        (nextScreen)="setScreen($event)"
+        (selectInvitation)="selectArchiveInvitation($event)"
+        [pendingArchives]="pendingArchives"
+      ></pr-welcome-screen>
+
+    } @else if (OnboardingScreen.pendingArchives && isGlam) {
+      <pr-glam-pending-archives
+        [pendingArchives]="pendingArchives"
+      ></pr-glam-pending-archives>
+
+    } @else if (OnboardingScreen.welcomeScreen) {
+      <pr-create-new-archive
+        (back)="setScreen(OnboardingScreen.pendingArchives)"
+        (createdArchive)="setNewArchive($event)"
+        (progress)="setProgress($event)"
+        (error)="errorMessage = $event"
+        [pendingArchives]="pendingArchives"
+        [pendingArchive]="selectedPendingArchive"
+      ></pr-create-new-archive>
+
+    } @else if (OnboardingScreen.done) {
+      <div class="loading">Loading...</div>
+
+    } @else {
+      <div>Something went wrong.</div>
+    }
   </ng-container>
 </div>
 <ng-template #loading>
