@@ -197,7 +197,7 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Account',
-          dialogToken: 'SettingsDialogComponent',
+          component: AccountSettingsDialogComponent,
           tab: 'security',
           dialogOptions: { width: '1000px' },
         },
