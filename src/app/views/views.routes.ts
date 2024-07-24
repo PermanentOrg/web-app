@@ -36,7 +36,7 @@ export const routes: RoutesWithData = [
         path: '',
         component: RoutedDialogWrapperComponent,
         data: {
-          dialogToken: 'TimelineViewComponent',
+          component: TimelineViewComponent,
           dialogOptions: { width: '100%', height: 'fullscreen' }
         },
         resolve: leanFolderResolve,
@@ -46,7 +46,7 @@ export const routes: RoutesWithData = [
         path: ':archiveNbr/:folderLinkId',
         component: RoutedDialogWrapperComponent,
         data: {
-          dialogToken: 'TimelineViewComponent',
+          component: TimelineViewComponent,
           dialogOptions: { width: '100%', height: 'fullscreen', menuClass: 'always-fullscreen-dialog' }
         },
         resolve: leanFolderResolve,

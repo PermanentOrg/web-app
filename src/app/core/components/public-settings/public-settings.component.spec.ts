@@ -32,7 +32,6 @@ const mockApiService = {
 
 describe('PublicSettingsComponent', () => {
   let shallow: Shallow<PublicSettingsComponent>;
-  let messageShown = false;
   async function defaultRender(a: ArchiveVO = archive) {
     return await shallow.render(
       `<pr-public-settings [archive]="archive"></pr-public-settings>`,
@@ -53,9 +52,7 @@ describe('PublicSettingsComponent', () => {
     shallow = new Shallow(PublicSettingsComponent, DummyModule)
       .mock(ApiService, mockApiService)
       .mock(MessageService, {
-        showError: () => {
-          messageShown = true;
-        },
+        showError: () => {},
       });
   });
 

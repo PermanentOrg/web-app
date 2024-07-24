@@ -27,9 +27,6 @@ import {
 import { GuidedTourService } from '@shared/services/guided-tour/guided-tour.service';
 import { GuidedTourEvent } from '@shared/services/guided-tour/events';
 import { EventService } from '@shared/services/event/event.service';
-import { ApiService } from '@shared/services/api/api.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { MyArchivesDialogComponent } from '@core/components/my-archives-dialog/my-archives-dialog.component';
 import {

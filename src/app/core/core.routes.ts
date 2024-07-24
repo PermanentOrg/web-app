@@ -120,7 +120,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Invitations',
-          dialogToken: 'InvitationsDialogComponent',
           component: InvitationsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
@@ -139,7 +138,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Connections',
-          dialogToken: 'ConnectionsDialogComponent',
           component: ConnectionsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
@@ -167,7 +165,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Archive Profile',
-          dialogToken: 'ProfileEditComponent',
           component: ProfileEditComponent,
           dialogOptions: {
             width: '100%',
@@ -187,7 +184,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Account',
-          dialogToken: 'SettingsDialogComponent',
           component: AccountSettingsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
@@ -217,7 +213,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Account',
-          dialogToken: 'SettingsDialogComponent',
           component: AccountSettingsDialogComponent,
           tab: 'legacy-contact',
           dialogOptions: { width: '1000px' },
@@ -233,7 +228,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Archive Members',
-          dialogToken: 'MembersDialogComponent',
           component: MembersDialogComponent,
           dialogOptions: { width: '1000px' },
         },
@@ -253,7 +247,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Archive Settings',
-          dialogToken: 'ArchiveSettingsDialogComponent',
           component: ArchiveSettingsDialogComponent,
           dialogOptions: { width: '1000px' },
         },
@@ -268,7 +261,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Welcome!',
-          dialogToken: 'WelcomeDialogComponent',
           component: WelcomeDialogComponent,
           dialogOptions: { width: '600px' },
         },
@@ -283,7 +275,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Welcome!',
-          dialogToken: 'WelcomeInvitationDialogComponent',
           component: WelcomeInvitationDialogComponent,
           dialogOptions: { width: '600px' },
         },
@@ -298,7 +289,6 @@ export const routes: RoutesWithData = [
         outlet: 'dialog',
         data: {
           title: 'Storage',
-          dialogToken: 'StorageDialogComponent',
           component: StorageDialogComponent,
           dialogOptions: { width: '1000px' },
         },

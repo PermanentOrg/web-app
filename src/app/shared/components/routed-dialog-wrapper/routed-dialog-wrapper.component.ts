@@ -4,7 +4,6 @@ import {
   AfterViewInit,
   ViewChild,
   TemplateRef,
-  Injector,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -40,7 +39,6 @@ export class RoutedDialogWrapperComponent
     private route: ActivatedRoute,
     private router: Router,
     private dialogService: DialogCdkService,
-    private injector: Injector,
     private routeHistory: RouteHistoryService,
     private title: Title
   ) {}
@@ -48,14 +46,7 @@ export class RoutedDialogWrapperComponent
   ngAfterViewInit(): void {
     this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
 
-    const dialogToken = (this.route.snapshot.data as RouteData).dialogToken;
     const component = (this.route.snapshot.data as RouteData).component;
-
-    if (!dialogToken) {
-      throw new Error(
-        "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog"
-      );
-    }
 
     const dialogOptions = (this.route.snapshot.data as RouteData).dialogOptions;
 
