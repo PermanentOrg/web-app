@@ -1,11 +1,15 @@
 /* @format */
 import { ApiService } from '@shared/services/api/api.service';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { InviteVO } from '@root/app/models';
 import { CoreModule } from '@core/core.module';
 import { Shallow } from 'shallow-render';
 import { MessageService } from '@shared/services/message/message.service';
 import { InvitationsDialogComponent } from './invitations-dialog.component';
+
+class DialogRefMock {
+  close() {}
+}
 
 const mockApiService = {
   invite: {
@@ -17,13 +21,15 @@ const mockApiService = {
 
 describe('InvitationsDialog', () => {
   let shallow: Shallow<InvitationsDialogComponent>;
-  const dialogRef = new DialogRef(1, null);
   let messageShown: boolean = false;
 
   beforeEach(() => {
     shallow = new Shallow(InvitationsDialogComponent, CoreModule)
       .mock(DIALOG_DATA, { useValue: {} })
-      .mock(DialogRef, dialogRef)
+      .provide({
+        provide: DialogRef,
+        useClass: DialogRefMock,
+      })
       .mock(ApiService, mockApiService)
       .mock(MessageService, {
         showError: () => {

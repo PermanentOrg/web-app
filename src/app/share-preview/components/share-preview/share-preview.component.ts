@@ -450,13 +450,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
             menuClass: 'floating-mobile-dialog',
           } as const)
         : { width: '600px', borderRadius: '5px' };
-      (
-        this.dialog.open(CreateAccountDialogComponent, {
-          data: { sharerName: this.shareAccount.fullName, ...options },
-        }) as unknown as Promise<void>
-      ).finally(() => {
+
+      const dialogRef = this.dialog.open(CreateAccountDialogComponent, {
+        data: { sharerName: this.shareAccount.fullName, ...options },
+      });
+      dialogRef.closed?.subscribe(() => {
         this.createAccountDialogIsOpen = false;
       });
+
       this.createAccountDialogIsOpen = true;
     }
   }

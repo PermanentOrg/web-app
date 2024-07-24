@@ -7,15 +7,19 @@ import {
 import { RouterTestingModule } from '@angular/router/testing';
 import { cloneDeep } from 'lodash';
 import { SharedModule } from '@shared/shared.module';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import * as Testing from '@root/test/testbedConfig';
 import { CreateAccountDialogComponent } from './create-account-dialog.component';
+
+class MockDialogRef {
+  close() {}
+}
 
 describe('CreateAccountDialogComponent', () => {
   let component: CreateAccountDialogComponent;
   let fixture: ComponentFixture<CreateAccountDialogComponent>;
   let dialogData: { sharerName: string };
-  let dialogRef: DialogRef;
+  let dialogRefSpy: jasmine.SpyObj<DialogRef<CreateAccountDialogComponent>>;
 
   beforeEach(async () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -23,8 +27,6 @@ describe('CreateAccountDialogComponent', () => {
     dialogData = {
       sharerName: 'John Rando',
     };
-
-    dialogRef = new DialogRef(1, null);
 
     config.imports.push(SharedModule);
     config.imports.push(
@@ -40,9 +42,12 @@ describe('CreateAccountDialogComponent', () => {
         sharerName: 'John Rando',
       },
     });
+
+    dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+
     config.providers.push({
       provide: DialogRef,
-      useValue: dialogRef,
+      useValue: dialogRefSpy,
     });
     await TestBed.configureTestingModule(config).compileComponents();
   });
@@ -62,25 +67,21 @@ describe('CreateAccountDialogComponent', () => {
   });
 
   it('should close when close method is called', () => {
-    const dialogRefSpy = spyOn(dialogRef, 'close');
-
     component.close();
 
-    expect(dialogRefSpy).toHaveBeenCalled();
+    expect(dialogRefSpy.close).toHaveBeenCalled();
   });
 
   it('should call the close method when signup link is clicked', async () => {
-    const dialogRefSpy = spyOn(dialogRef, 'close');
     const button = findLink(fixture, 'a.btn.btn-primary');
 
-    expectLinkClosesDialog(button, '/app/signup', dialogRefSpy);
+    expectLinkClosesDialog(button, '/app/signup', dialogRefSpy.close);
   });
 
   it('should call the close method when login link is clicked', () => {
-    const dialogRefSpy = spyOn(dialogRef, 'close');
     const link = findLink(fixture, '.login');
 
-    expectLinkClosesDialog(link, '/app/login', dialogRefSpy);
+    expectLinkClosesDialog(link, '/app/login', dialogRefSpy.close);
   });
 
   function findLink(

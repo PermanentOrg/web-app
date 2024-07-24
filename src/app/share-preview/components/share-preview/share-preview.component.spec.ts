@@ -18,14 +18,14 @@ import { cloneDeep } from 'lodash';
 
 import { SharedModule } from '@shared/shared.module';
 import * as Testing from '@root/test/testbedConfig';
-import { Dialog } from '@root/app/dialog/dialog.module';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { RecordVO } from '@root/app/models';
 import { SharePreviewComponent } from './share-preview.component';
 
 describe('SharePreviewComponent', () => {
   let component: SharePreviewComponent;
   let fixture: ComponentFixture<SharePreviewComponent>;
-  let dialog: Dialog;
+  let dialog: DialogCdkService;
   let router: Router;
 
   beforeEach(async () => {
@@ -64,7 +64,7 @@ describe('SharePreviewComponent', () => {
 
     await TestBed.configureTestingModule(config).compileComponents();
 
-    dialog = TestBed.inject(Dialog);
+    dialog = TestBed.inject(DialogCdkService);
     router = TestBed.inject(Router);
     spyOn(router, 'navigate');
   });
@@ -80,7 +80,8 @@ describe('SharePreviewComponent', () => {
   });
 
   it('should open dialog shortly after loading if user logged out', fakeAsync(() => {
-    const dialogSpy = spyOn(dialog, 'open').and.returnValue(Promise.resolve());
+    const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+    const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
 
     component.isLoggedIn = false;
     component.ngAfterViewInit();
@@ -100,7 +101,8 @@ describe('SharePreviewComponent', () => {
   }));
 
   it('should open dialog when a thumbnail is clicked', fakeAsync(() => {
-    const dialogSpy = spyOn(dialog, 'open').and.returnValue(Promise.resolve());
+    const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
+    const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
 
     const mockFileList = { itemClicked: new EventEmitter<any>() };
 
