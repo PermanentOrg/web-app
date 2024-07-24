@@ -6,9 +6,9 @@ import { RouterModule, Routes, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
+import { DialogConfig } from '@angular/cdk/dialog';
 import { FolderVO, RecordVO } from './models';
 import { DialogComponent } from './dialog-cdk/dialog-cdk.service';
-import { DialogConfig } from '@angular/cdk/dialog';
 
 export interface RouteData {
   title?: string;

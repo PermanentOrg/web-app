@@ -4,9 +4,9 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CoreModule } from '@core/core.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
-import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
