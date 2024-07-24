@@ -27,8 +27,6 @@ import {
   fas,
   faPenSquare,
 } from '@fortawesome/free-solid-svg-icons';
-import { Dialog, DialogChildComponentData } from '../dialog/dialog.service';
-import { DialogModule } from '../dialog/dialog.module';
 import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
@@ -79,7 +77,6 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    DialogModule,
     NgbDatepickerModule,
     NgbTimepickerModule,
     NgbTooltipModule,
@@ -199,23 +196,7 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
   ],
 })
 export class SharedModule {
-  private dialogComponents: DialogChildComponentData[] = [
-    {
-      token: 'ArchivePickerComponent',
-      component: ArchivePickerComponent,
-    },
-    {
-      token: 'ArchiveSwitcherDialogComponent',
-      component: ArchiveSwitcherDialogComponent,
-    },
-    {
-      token: 'TimelineCompleteDialogComponent',
-      component: TimelineCompleteDialogComponent,
-    },
-  ];
-
   constructor(
-    private dialog: Dialog,
     private resolver: ComponentFactoryResolver,
     private datePickerConfig: NgbDatepickerConfig,
     private timePickerConfig: NgbTimepickerConfig,
@@ -224,7 +205,6 @@ export class SharedModule {
     private library: FaIconLibrary,
   ) {
     library.addIcons(faFileArchive, faPenSquare);
-    this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
 
     this.datePickerConfig.minDate = {
       year: 1,

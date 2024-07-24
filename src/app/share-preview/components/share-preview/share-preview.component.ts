@@ -33,7 +33,8 @@ import { EVENTS } from '@shared/services/google-analytics/events';
 import { READ_ONLY_FIELD } from '@shared/components/prompt/prompt-fields';
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
-import { Dialog } from '@root/app/dialog/dialog.module';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -113,7 +114,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     private fb: UntypedFormBuilder,
     private prompt: PromptService,
     private ga: GoogleAnalyticsService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
   ) {
     this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -449,15 +450,13 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
             menuClass: 'floating-mobile-dialog',
           } as const)
         : { width: '600px', borderRadius: '5px' };
-      this.dialog
-        .open(
-          'CreateAccountDialogComponent',
-          { sharerName: this.shareAccount.fullName },
-          options,
-        )
-        .finally(() => {
-          this.createAccountDialogIsOpen = false;
-        });
+      (
+        this.dialog.open(CreateAccountDialogComponent, {
+          data: { sharerName: this.shareAccount.fullName, ...options },
+        }) as unknown as Promise<void>
+      ).finally(() => {
+        this.createAccountDialogIsOpen = false;
+      });
       this.createAccountDialogIsOpen = true;
     }
   }

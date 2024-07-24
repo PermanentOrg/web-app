@@ -17,11 +17,6 @@ import { UploadProgressComponent } from '@core/components/upload-progress/upload
 import { UploadButtonComponent } from '@core/components/upload-button/upload-button.component';
 import { RightMenuComponent } from '@core/components/right-menu/right-menu.component';
 import { FolderPickerComponent } from '@core/components/folder-picker/folder-picker.component';
-import {
-  DialogModule,
-  DialogChildComponentData,
-  Dialog,
-} from '@root/app/dialog/dialog.module';
 import { RouterModule } from '@angular/router';
 import { DragService } from '@shared/services/drag/drag.service';
 import { SearchModule } from '@search/search.module';
@@ -79,7 +74,6 @@ import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-
     SharedModule,
     CoreRoutingModule,
     RouterModule,
-    DialogModule,
     SearchModule,
     PortalModule,
     CountUpModule,
@@ -145,80 +139,4 @@ import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-
     DialogCdkService,
   ],
 })
-export class CoreModule {
-  private dialogComponents: DialogChildComponentData[] = [
-    {
-      token: 'SettingsDialogComponent',
-      component: AccountSettingsDialogComponent,
-    },
-    {
-      token: 'ConnectionsDialogComponent',
-      component: ConnectionsDialogComponent,
-    },
-    {
-      token: 'ProfileEditComponent',
-      component: ProfileEditComponent,
-    },
-    {
-      token: 'ProfileEditFirstTimeDialogComponent',
-      component: ProfileEditFirstTimeDialogComponent,
-    },
-    {
-      token: 'MembersDialogComponent',
-      component: MembersDialogComponent,
-    },
-    {
-      token: 'MyArchivesDialogComponent',
-      component: MyArchivesDialogComponent,
-    },
-    {
-      token: 'InvitationsDialogComponent',
-      component: InvitationsDialogComponent,
-    },
-    {
-      token: 'StorageDialogComponent',
-      component: StorageDialogComponent,
-    },
-    {
-      token: 'ArchiveSettingsDialogComponent',
-      component: ArchiveSettingsDialogComponent,
-    },
-    {
-      token: 'WelcomeDialogComponent',
-      component: WelcomeDialogComponent,
-    },
-    {
-      token: 'WelcomeInvitationDialogComponent',
-      component: WelcomeInvitationDialogComponent,
-    },
-    {
-      token: 'ArchiveTypeChangeDialogComponent',
-      component: ArchiveTypeChangeDialogComponent,
-    },
-    {
-      token: 'ConfirmPayerDialogComponent',
-      component: ConfirmPayerDialogComponent,
-    },
-    {
-      token: 'SkipOnboardingDialogComponent',
-      component: SkipOnboardingDialogComponent,
-    },
-    {
-      token: 'ConfirmGiftDialogComponent',
-      component: ConfirmGiftDialogComponent,
-    },
-  ];
-
-  constructor(
-    @Optional() private dialog?: Dialog,
-    @Optional() private resolver?: ComponentFactoryResolver,
-  ) {
-    if (this.dialog) {
-      this.dialog.registerComponents(
-        this.dialogComponents,
-        this.resolver,
-        true,
-      );
-    }
-  }
-}
+export class CoreModule {}

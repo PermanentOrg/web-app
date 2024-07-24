@@ -11,7 +11,6 @@ import { FileListItemComponent } from '@fileBrowser/components/file-list-item/fi
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { VideoComponent } from '@shared/components/video/video.component';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { DialogModule } from '../dialog/dialog.module';
 import { FileBrowserComponentsModule } from './file-browser-components.module';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { FileBrowserComponentsModule } from './file-browser-components.module';
     FileBrowserComponentsModule,
     FileBrowserRoutingModule,
     SharedModule,
-    DialogModule,
     NgbTooltipModule,
   ],
   exports: [

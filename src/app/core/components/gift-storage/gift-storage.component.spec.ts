@@ -2,11 +2,11 @@
 import { Shallow } from 'shallow-render';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CoreModule } from '@core/core.module';
-import { Dialog } from '@root/app/dialog/dialog.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountVO } from '../../../models/account-vo';
 import { GiftStorageComponent } from './gift-storage.component';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 describe('GiftStorageComponent', () => {
   let shallow: Shallow<GiftStorageComponent>;
@@ -30,7 +30,10 @@ describe('GiftStorageComponent', () => {
           messageShown = true;
         },
       })
-      .mock(Dialog, { open: (token, data, options) => Promise.resolve({}) });
+      .mock(
+        DialogCdkService,
+        jasmine.createSpyObj('DialogCdkService', ['open']),
+      );
   });
 
   it('should create', async () => {

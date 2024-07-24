@@ -17,8 +17,8 @@ import { RelationshipService } from '@core/services/relationship/relationship.se
 import { ShareVO, ShareByUrlVO, ItemVO, ArchiveVO, InviteVO } from '@models';
 import { AccessRoleType } from '@models/access-role';
 import { sortShareVOs } from '@models/share-vo';
-import { DIALOG_DATA, DialogRef, Dialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import {
   ngIfScaleAnimation,
   ngIfScaleAnimationDynamic,

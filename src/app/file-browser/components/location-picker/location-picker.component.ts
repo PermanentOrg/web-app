@@ -11,10 +11,10 @@ import {
   NgZone,
 } from '@angular/core';
 import { ItemVO, ArchiveVO, LocnVOData } from '@models';
-import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { MapInfoWindow, GoogleMap } from '@angular/google-maps';
 import { ApiService } from '@shared/services/api/api.service';
 import { ngIfFadeInAnimation } from '@shared/animations';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { find } from 'lodash';
 import { PrLocationPipe, LocnPipeOutput } from '@shared/pipes/pr-location.pipe';
 import { MessageService } from '@shared/services/message/message.service';

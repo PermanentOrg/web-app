@@ -1,6 +1,5 @@
 /* @format */
 import { Component, Inject } from '@angular/core';
-import { IsTabbedDialog } from '@root/app/dialog/dialog.module';
 import {
   PromptButton,
   PromptField,
@@ -41,7 +40,7 @@ type MembersTab = 'members' | 'pending' | 'add';
   templateUrl: './members-dialog.component.html',
   styleUrls: ['./members-dialog.component.scss'],
 })
-export class MembersDialogComponent implements IsTabbedDialog {
+export class MembersDialogComponent {
   members: AccountVO[];
   pendingMembers: AccountVO[];
   canEdit: boolean;

@@ -25,7 +25,6 @@ import { TagResponse } from '@shared/services/api/tag.repo';
 import { BaseResponse } from '@shared/services/api/base';
 import { MessageService } from '@shared/services/message/message.service';
 import { ngIfScaleAnimation } from '@shared/animations';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import { SearchService } from '@search/services/search.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ArchiveSettingsDialogComponent } from '@core/components/archive-settings-dialog/archive-settings-dialog.component';

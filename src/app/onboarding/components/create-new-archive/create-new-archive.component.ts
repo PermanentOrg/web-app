@@ -26,7 +26,6 @@ import {
   goals,
   OnboardingTypes,
 } from '../../shared/onboarding-screen';
-import { Dialog } from '../../../dialog/dialog.service';
 import {
   archiveOptions,
   ArchiveCreateEvent,

@@ -10,12 +10,11 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { SearchService } from '@search/services/search.service';
 import { TagResponse } from '@shared/services/api/tag.repo';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { EditTagsComponent, TagType } from './edit-tags.component';
-import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 const defaultTagList: TagVOData[] = [
   {

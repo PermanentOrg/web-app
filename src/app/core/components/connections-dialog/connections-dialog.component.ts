@@ -21,7 +21,6 @@ import { AccountService } from '@shared/services/account/account.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { RelationVO, ArchiveVO } from '@models';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import { Dialog, IsTabbedDialog } from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
@@ -31,6 +30,7 @@ import {
 } from '@shared/components/archive-picker/archive-picker.component';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { DataService } from '@shared/services/data/data.service';
 
 const ConnectionActions: { [key: string]: PromptButton } = {
   Edit: {
@@ -61,7 +61,7 @@ export type ConnectionsTab = 'connections' | 'pending' | 'new';
   styleUrls: ['./connections-dialog.component.scss'],
   providers: [DataService],
 })
-export class ConnectionsDialogComponent implements IsTabbedDialog {
+export class ConnectionsDialogComponent {
   connections: RelationVO[] = [];
   connectionRequests: RelationVO[] = [];
   sentConnectionsRequests: RelationVO[] = [];

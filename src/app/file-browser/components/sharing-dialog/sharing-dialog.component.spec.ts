@@ -8,11 +8,7 @@ import {
 import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash';
 import * as Testing from '@root/test/testbedConfig';
-import {
-  DialogModule,
-  DialogRef,
-  DIALOG_DATA,
-} from '@root/app/dialog/dialog.module';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ArchiveVO, ItemVO, RecordVO, ShareVO } from '@models';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -63,6 +59,10 @@ pendingShare.accessRole = 'access.role.viewer';
 pendingShare.status = 'status.generic.pending';
 pendingShare.requestToken = 'testToken';
 
+class MockDialogRef {
+  close() {}
+}
+
 describe('SharingDialogComponent', () => {
   let component: SharingDialogComponent;
   let fixture: ComponentFixture<SharingDialogComponent>;
@@ -90,8 +90,6 @@ describe('SharingDialogComponent', () => {
       item,
     };
 
-    const dialogRef = new DialogRef(1, null);
-
     config.imports.push(SharedModule);
     config.declarations.push(SharingDialogComponent);
     config.providers.push({
@@ -102,22 +100,22 @@ describe('SharingDialogComponent', () => {
     });
     config.providers.push({
       provide: DialogRef,
-      useValue: dialogRef,
+      useClass: MockDialogRef,
     });
     await TestBed.configureTestingModule(config).compileComponents();
 
     relationUpdateSpy = spyOn(
       TestBed.inject(RelationshipService),
-      'update'
+      'update',
     ).and.returnValue(Promise.resolve());
 
     showMessageSpy = spyOn(
       TestBed.inject(MessageService),
-      'showMessage'
+      'showMessage',
     ).and.returnValue();
     showErrorSpy = spyOn(
       TestBed.inject(MessageService),
-      'showError'
+      'showError',
     ).and.returnValue();
 
     apiService = TestBed.inject(ApiService);
@@ -169,7 +167,7 @@ describe('SharingDialogComponent', () => {
     ];
 
     const apiSpy = spyOn(apiService.share, 'upsert').and.returnValue(
-      Promise.resolve(shareResponse)
+      Promise.resolve(shareResponse),
     );
 
     component.onAddArchive(shareViewer.ArchiveVO);
@@ -201,7 +199,7 @@ describe('SharingDialogComponent', () => {
     ];
 
     const apiSpy = spyOn(apiService.share, 'upsert').and.returnValue(
-      Promise.resolve(shareResponse)
+      Promise.resolve(shareResponse),
     );
 
     expect(component.pendingShares.length).toBe(1);
@@ -223,7 +221,7 @@ describe('SharingDialogComponent', () => {
     component.ngOnInit();
 
     const confirmSpy = spyOn(component, 'confirmRemove').and.returnValue(
-      Promise.reject(false)
+      Promise.reject(false),
     );
 
     const share = component.shares[0];
@@ -243,7 +241,7 @@ describe('SharingDialogComponent', () => {
     component.ngOnInit();
 
     const confirmSpy = spyOn(component, 'confirmOwnerAdd').and.returnValue(
-      Promise.reject(false)
+      Promise.reject(false),
     );
 
     const share = component.shares[0];
@@ -272,7 +270,7 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
 
     const shallow = new Shallow<SharingDialogComponent>(
       SharingDialogComponent,
-      ShallowTestingModule
+      ShallowTestingModule,
     )
       .mock(AccountService, new MockAccountService())
       .mock(ApiService, new MockApiService())
@@ -296,7 +294,7 @@ describe('SharingDialogComponent - Shallow Rendering', () => {
     instance.linkDefaultAccessRole = 'access.role.owner';
     await instance.onShareLinkPropChange(
       'defaultAccessRole',
-      'access.role.owner'
+      'access.role.owner',
     );
 
     expect(instance.shareLink.defaultAccessRole).toBe('access.role.owner');

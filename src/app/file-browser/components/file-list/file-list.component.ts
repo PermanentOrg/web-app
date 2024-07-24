@@ -53,7 +53,6 @@ import { DragService } from '@shared/services/drag/drag.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import debug from 'debug';
 import { CdkPortal } from '@angular/cdk/portal';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
@@ -138,7 +137,6 @@ export class FileListComponent
     private dataService: DataService,
     private router: Router,
     private elementRef: ElementRef,
-    private dialog: Dialog,
     private folderViewService: FolderViewService,
     private routeHistory: RouteHistoryService,
     private location: Location,

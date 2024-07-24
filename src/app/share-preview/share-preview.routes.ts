@@ -6,10 +6,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
 import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
-import { DialogChildComponentData } from '@root/app/dialog/dialog.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
-import { Dialog, DialogModule } from '../dialog/dialog.module';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
@@ -108,7 +106,6 @@ export const routes: Routes = [
     CommonModule,
     FileBrowserComponentsModule,
     NgbModule,
-    DialogModule,
     AnnouncementModule,
   ],
   declarations: [
@@ -126,18 +123,4 @@ export const routes: Routes = [
     RelationshipShareResolveService,
   ],
 })
-export class SharePreviewRoutingModule {
-  private dialogComponents: DialogChildComponentData[] = [
-    {
-      token: 'CreateAccountDialogComponent',
-      component: CreateAccountDialogComponent,
-    },
-  ];
-
-  constructor(
-    @Optional() private dialog?: Dialog,
-    @Optional() private resolver?: ComponentFactoryResolver,
-  ) {
-    this.dialog.registerComponents(this.dialogComponents, this.resolver, true);
-  }
-}
+export class SharePreviewRoutingModule {}

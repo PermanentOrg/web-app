@@ -1,10 +1,10 @@
 /* @format */
 import { Component, Inject } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models';
 
 import { orderBy } from 'lodash';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-archive-switcher-dialog',
@@ -57,6 +57,6 @@ export class ArchiveSwitcherDialogComponent {
   }
 
   cancel() {
-    this.dialogRef.close(null, true);
+    this.dialogRef.close();
   }
 }

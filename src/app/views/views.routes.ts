@@ -14,15 +14,15 @@ import { RoutesWithData } from '../app.routes';
 import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
 
 const folderResolve = {
-  currentFolder: FolderResolveService
+  currentFolder: FolderResolveService,
 };
 
 const leanFolderResolve = {
-  currentFolder: LeanFolderResolveService
+  currentFolder: LeanFolderResolveService,
 };
 
 const recordResolve = {
-  currentRecord: RecordResolveService
+  currentRecord: RecordResolveService,
 };
 
 export const routes: RoutesWithData = [
@@ -37,58 +37,56 @@ export const routes: RoutesWithData = [
         component: RoutedDialogWrapperComponent,
         data: {
           component: TimelineViewComponent,
-          dialogOptions: { width: '100%', height: 'fullscreen' }
+          dialogOptions: { width: '100%', height: 'fullscreen' },
         },
         resolve: leanFolderResolve,
-        children: fileListChildRoutes
+        children: fileListChildRoutes,
       },
       {
         path: ':archiveNbr/:folderLinkId',
         component: RoutedDialogWrapperComponent,
         data: {
           component: TimelineViewComponent,
-          dialogOptions: { width: '100%', height: 'fullscreen', menuClass: 'always-fullscreen-dialog' }
+          dialogOptions: { width: '100%', height: 'fullscreen' },
         },
         resolve: leanFolderResolve,
-        children: fileListChildRoutes
-      }
+        children: fileListChildRoutes,
+      },
     ],
   },
   {
     path: 'grid',
     data: {
-      folderView: FolderView.Grid
+      folderView: FolderView.Grid,
     },
     children: [
       {
         path: '',
         component: FileListComponent,
         resolve: folderResolve,
-        children: fileListChildRoutes
+        children: fileListChildRoutes,
       },
       {
-      path: ':archiveNbr/:folderLinkId',
-      component: FileListComponent,
-      resolve: folderResolve,
-      children: fileListChildRoutes
-      }
+        path: ':archiveNbr/:folderLinkId',
+        component: FileListComponent,
+        resolve: folderResolve,
+        children: fileListChildRoutes,
+      },
     ],
-  }
+  },
 ];
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
     SharedModule,
-    FileBrowserComponentsModule
+    FileBrowserComponentsModule,
   ],
-  exports: [
-  ],
+  exports: [],
   providers: [
     LeanFolderResolveService,
     RecordResolveService,
-    FolderResolveService
+    FolderResolveService,
   ],
-  declarations: []
+  declarations: [],
 })
-export class ViewsRoutingModule { }
-
+export class ViewsRoutingModule {}

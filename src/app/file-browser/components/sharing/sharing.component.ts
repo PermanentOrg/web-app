@@ -14,15 +14,11 @@ import {
   PromptService,
   PromptField,
 } from '@shared/services/prompt/prompt.service';
-import {
-  Dialog,
-} from '@root/app/dialog/dialog.service';
-import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ShareResponse } from '@shared/services/api/share.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 
 import {
@@ -33,7 +29,10 @@ import {
   ShareByUrlVO,
   ItemVO,
 } from '@models';
-import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+import {
+  ArchivePickerComponent,
+  ArchivePickerComponentConfig,
+} from '@shared/components/archive-picker/archive-picker.component';
 import {
   ACCESS_ROLE_FIELD_INITIAL,
   ON_OFF_FIELD,
@@ -87,13 +86,13 @@ export class SharingComponent implements OnInit {
   constructor(
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private route: ActivatedRoute,
     private promptService: PromptService,
     private api: ApiService,
     private messageService: MessageService,
     private relationshipService: RelationshipService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
   ) {
     this.shareItem = this.data.item as ItemVO;
     this.shareLink = this.data.link;
@@ -177,7 +176,7 @@ export class SharingComponent implements OnInit {
     this.promptService
       .promptButtons(
         buttons,
-        `Sharing request from ${shareVo.ArchiveVO.fullName}`
+        `Sharing request from ${shareVo.ArchiveVO.fullName}`,
       )
       .then((value: 'approve' | 'remove') => {
         switch (value) {
@@ -211,8 +210,11 @@ export class SharingComponent implements OnInit {
         });
       }
 
-      return this.dialog
-        .open('ArchivePickerComponent', config)
+      return (
+        this.dialog.open(ArchivePickerComponent, {
+          data: config,
+        }) as unknown as Promise<ArchiveVO>
+      )
         .then((archive: ArchiveVO) => {
           const newShareVo = new ShareVO({
             ArchiveVO: archive,
@@ -228,11 +230,11 @@ export class SharingComponent implements OnInit {
         .then(() => {
           if (isExistingRelation) {
             this.ga.sendEvent(
-              EVENTS.SHARE.ShareByRelationship.initiated.params
+              EVENTS.SHARE.ShareByRelationship.initiated.params,
             );
           } else {
             this.ga.sendEvent(
-              EVENTS.SHARE.ShareByAccountNoRel.initiated.params
+              EVENTS.SHARE.ShareByAccountNoRel.initiated.params,
             );
           }
         });
@@ -383,19 +385,19 @@ export class SharingComponent implements OnInit {
       ON_OFF_FIELD(
         'previewToggle',
         'Share preview',
-        this.shareLink.previewToggle ? 'on' : 'off'
+        this.shareLink.previewToggle ? 'on' : 'off',
       ),
       NUMBER_FIELD(
         'maxUses',
         'Max number of uses (optional)',
         this.shareLink.maxUses,
-        false
+        false,
       ),
       DATE_FIELD(
         'expiresDT',
         'Expiration date (optional)',
         currentDate,
-        new Date()
+        new Date(),
       ),
     ];
 
@@ -419,9 +421,8 @@ export class SharingComponent implements OnInit {
           }
 
           try {
-            const updateResponse = await this.api.share.updateShareLink(
-              updatedShareVo
-            );
+            const updateResponse =
+              await this.api.share.updateShareLink(updatedShareVo);
             this.shareLink = updateResponse.getShareByUrlVO();
             deferred.resolve();
           } catch (response) {
@@ -430,7 +431,7 @@ export class SharingComponent implements OnInit {
               this.messageService.showError(response.getMessage());
             }
           }
-        }
+        },
       )
       .catch((err) => {
         if (err instanceof ShareResponse) {
@@ -447,7 +448,7 @@ export class SharingComponent implements OnInit {
         'Remove link',
         'Are you sure you want to remove this link?',
         deferred.promise,
-        'btn-danger'
+        'btn-danger',
       );
 
       await this.api.share.removeShareLink(this.shareLink);

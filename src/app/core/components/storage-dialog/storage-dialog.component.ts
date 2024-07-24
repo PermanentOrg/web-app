@@ -1,8 +1,6 @@
 /* @format */
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IsTabbedDialog } from '@root/app/dialog/dialog.module';
-
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -32,9 +30,7 @@ type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
   templateUrl: './storage-dialog.component.html',
   styleUrls: ['./storage-dialog.component.scss'],
 })
-export class StorageDialogComponent
-  implements OnInit, IsTabbedDialog, OnDestroy
-{
+export class StorageDialogComponent implements OnInit, OnDestroy {
   activeTab: StorageDialogTab = 'add';
 
   promoForm: UntypedFormGroup;

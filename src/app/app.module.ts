@@ -47,7 +47,6 @@ import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { DataService } from '@shared/services/data/data.service';
-import { DialogModule } from './dialog/dialog.module';
 import { RouteHistoryModule } from './route-history/route-history.module';
 
 declare var ga: any;
@@ -152,7 +151,6 @@ export class PermErrorHandler implements ErrorHandler {
     CommonModule,
     BrowserAnimationsModule,
     InViewportModule,
-    DialogModule.forRoot(),
     FontAwesomeModule,
     FormsModule,
     RouteHistoryModule,

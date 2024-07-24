@@ -32,9 +32,7 @@ import {
 import { Deferred } from '@root/vendor/deferred';
 import { CookieService } from 'ngx-cookie-service';
 import { copyFromInputElement } from '@shared/utilities/forms';
-import { DeviceService } from '@shared/services/device/device.service';
 import { EventService } from '@shared/services/event/event.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import {

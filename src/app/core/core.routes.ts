@@ -169,7 +169,6 @@ export const routes: RoutesWithData = [
           dialogOptions: {
             width: '100%',
             height: 'fullscreen',
-            menuClass: 'profile-editor-dialog',
           },
         },
         resolve: { profileItems: ProfileItemsResolveService },
