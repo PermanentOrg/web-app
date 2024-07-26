@@ -1,9 +1,9 @@
 /* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { GiftingResponse } from '@shared/services/api/billing.repo';
+import { ConfirmGiftDialogComponent } from './confirm-gift-dialog.component';
 
 class MockDialogRef {
   close(value?: any): void {}
