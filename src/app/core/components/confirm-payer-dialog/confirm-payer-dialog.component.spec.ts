@@ -17,7 +17,9 @@ class MockDialogRef {
 describe('ConfirmPayerDialogComponent', () => {
   let component: ConfirmPayerDialogComponent;
   let fixture: ComponentFixture<ConfirmPayerDialogComponent>;
-  let dialogRef: DialogRef;
+  let dialogRef: MockDialogRef;
+  let cancelAccountPayerSet: jasmine.Spy;
+  let handleAccountInfoChange: jasmine.Spy;
   let dialogData: {
     archiveId: number;
     isPayerDifferentThanLoggedUser: boolean;
@@ -26,6 +28,8 @@ describe('ConfirmPayerDialogComponent', () => {
   };
 
   beforeEach(async () => {
+    handleAccountInfoChange = jasmine.createSpy('handleAccountInfoChange');
+    cancelAccountPayerSet = jasmine.createSpy('cancelAccountPayerSet');
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     dialogData = {
@@ -40,7 +44,10 @@ describe('ConfirmPayerDialogComponent', () => {
     config.providers.push({
       provide: DIALOG_DATA,
       useValue: {
-        sharerName: 'John Rando',
+        archiveId: 1,
+        isPayerDifferentThanLoggedUser: false,
+        handleAccountInfoChange,
+        cancelAccountPayerSet,
       },
     });
     config.providers.push({
@@ -53,10 +60,24 @@ describe('ConfirmPayerDialogComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmPayerDialogComponent);
     component = fixture.componentInstance;
+    dialogRef = TestBed.inject(DialogRef) as unknown as MockDialogRef;
+    spyOn(dialogRef, 'close').and.callThrough();
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should close the dialog when onDoneClick is called', () => {
+    component.onDoneClick();
+    expect(cancelAccountPayerSet).toHaveBeenCalled();
+    expect(dialogRef.close).toHaveBeenCalled();
+  });
+
+  it('should close the dialog when onConfrmClick is called', () => {
+    component.onConfirmClick();
+    expect(handleAccountInfoChange).toHaveBeenCalledWith(true);
+    expect(dialogRef.close).toHaveBeenCalled();
   });
 });
