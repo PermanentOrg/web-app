@@ -71,7 +71,7 @@ describe('ConfirmPayerDialogComponent', () => {
 
   it('should close the dialog when onDoneClick is called', () => {
     component.onDoneClick();
-    
+
     expect(cancelAccountPayerSet).toHaveBeenCalled();
     expect(dialogRef.close).toHaveBeenCalled();
   });
