@@ -29,6 +29,7 @@ import { GlamUserSurveySquareComponent } from './components/glam/glam-user-surve
 import { OnboardingHeaderComponent } from './components/header/header.component';
 import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/glam-header.component';
 import { GlamPendingArchivesComponent } from './components/glam-pending-archives/glam-pending-archives.component';
+import { PendingArchiveComponent } from './components/glam/pending-archive/pending-archive.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { GlamPendingArchivesComponent } from './components/glam-pending-archives
     OnboardingHeaderComponent,
     GlamOnboardingHeaderComponent,
     GlamPendingArchivesComponent,
+    PendingArchiveComponent,
   ],
   imports: [
     CommonModule,

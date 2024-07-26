@@ -16,9 +16,41 @@ p {
 }
 
 .text-container {
+  width: 50%;
 }
 
 .pending-archives {
   display: flex;
   gap: 64px;
+  margin-top: 64px;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
+}
+
+.pending-archives-container {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 70vh;
+
+  @media screen and (max-width: 900px) {
+    height: 40vh;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.next-button {
+  width: 50%;
+}
+
+.create-button {
+  width: 50%;
 }

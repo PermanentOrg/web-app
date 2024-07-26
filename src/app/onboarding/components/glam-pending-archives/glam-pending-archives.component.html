@@ -11,4 +11,42 @@
       accepting an invitation, or by creating a new archive of your own.
     </p>
   </div>
+  <div class="pending-archives-container">
+    @for (archive of pendingArchives; track archive.archiveId) {
+      <pr-pending-archive
+        [archive]="archive"
+        (acceptArchiveOutput)="selectArchive(archive)"
+        [isSelected]="
+          selectedArchive && selectedArchive.archiveId === archive.archiveId
+        "
+      ></pr-pending-archive>
+    }
+
+    <div class="buttons">
+      <div class="create-button">
+        <pr-button
+          [variant]="'primary'"
+          [orientation]="'right'"
+          [icon]="'/onboarding/plus'"
+          (buttonClick)="createNewArchive()"
+          [size]="'fill'"
+        >
+          Create new Archive</pr-button
+        >
+      </div>
+
+      <div class="next-button">
+        <pr-button
+          [variant]="'secondary'"
+          [orientation]="'right'"
+          [icon]="'/onboarding/arrow-right'"
+          (buttonClick)="next()"
+          [size]="'fill'"
+          [disabled]="!selectedArchive"
+        >
+          Next</pr-button
+        >
+      </div>
+    </div>
+  </div>
 </div>

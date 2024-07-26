@@ -1,3 +1,4 @@
+/* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PendingArchiveComponent } from './pending-archive.component';

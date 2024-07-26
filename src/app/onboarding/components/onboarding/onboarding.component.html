@@ -24,19 +24,19 @@
     <div [ngClass]="getProgressChunkClasses(2)"></div>
   </div>
   <ng-container>
-    @if (OnboardingScreen.pendingArchives && !isGlam) {
+    @if (screen === OnboardingScreen.pendingArchives && !isGlam) {
       <pr-welcome-screen
         (nextScreen)="setScreen($event)"
         (selectInvitation)="selectArchiveInvitation($event)"
         [pendingArchives]="pendingArchives"
       ></pr-welcome-screen>
-
-    } @else if (OnboardingScreen.pendingArchives && isGlam) {
+    } @else if (screen === OnboardingScreen.pendingArchives && isGlam) {
       <pr-glam-pending-archives
         [pendingArchives]="pendingArchives"
+        (createNewArchiveOutput)="setScreen(OnboardingScreen.welcomeScreen)"
+        (nextOutput)="selectArchiveInvitation($event)"
       ></pr-glam-pending-archives>
-
-    } @else if (OnboardingScreen.welcomeScreen) {
+    } @else if (screen === OnboardingScreen.welcomeScreen) {
       <pr-create-new-archive
         (back)="setScreen(OnboardingScreen.pendingArchives)"
         (createdArchive)="setNewArchive($event)"
@@ -45,10 +45,8 @@
         [pendingArchives]="pendingArchives"
         [pendingArchive]="selectedPendingArchive"
       ></pr-create-new-archive>
-
-    } @else if (OnboardingScreen.done) {
+    } @else if (screen === OnboardingScreen.done) {
       <div class="loading">Loading...</div>
-
     } @else {
       <div>Something went wrong.</div>
     }
