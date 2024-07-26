@@ -46,9 +46,12 @@ describe('ProfileEditComponent', () => {
         { provide: ProfileService, useValue: mockProfileService },
         { provide: FolderPickerService, useValue: {} },
         { provide: PromptService, useValue: {} },
-        { provide: EventService, useValue: {
+        {
+          provide: EventService,
+          useValue: {
             dispatch: () => {},
-        } },
+          },
+        },
         { provide: CookieService, useValue: mockCookieService },
         { provide: DIALOG_DATA, useValue: {} },
         { provide: DialogRef, useValue: mockDialogRef },
