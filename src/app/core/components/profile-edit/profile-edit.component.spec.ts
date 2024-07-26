@@ -1,6 +1,5 @@
 /* @format */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProfileEditComponent } from './profile-edit.component';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -10,8 +9,8 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { PromptService } from '@shared/services/prompt/prompt.service';
 import { EventService } from '@shared/services/event/event.service';
 import { CookieService } from 'ngx-cookie-service';
-import { of } from 'rxjs';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { ProfileEditComponent } from './profile-edit.component';
 
 describe('ProfileEditComponent', () => {
   let component: ProfileEditComponent;

@@ -29,8 +29,6 @@ describe('SkipOnboardingDialogComponent', () => {
   beforeEach(async () => {
     const config: TestModuleMetadata = cloneDeep(Testing.BASE_TEST_CONFIG);
 
-    // dialogRef = new DialogRef(1, null);
-
     config.imports.push(SharedModule);
     config.declarations.push(SkipOnboardingDialogComponent);
     config.providers.push({
