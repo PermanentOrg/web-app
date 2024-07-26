@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+/* @format */
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -11,7 +12,7 @@ import { Subject } from 'rxjs';
   templateUrl: './value-edit.component.html',
   styleUrls: ['./value-edit.component.scss'],
 })
-export class EditValueComponent implements OnInit {
+export class EditValueComponent {
   @Input() public tag: TagVO;
   @Input() public dismissEvent: Subject<number>;
 
@@ -21,16 +22,14 @@ export class EditValueComponent implements OnInit {
   constructor(
     private api: ApiService,
     private msg: MessageService,
-    private prompt: PromptService
+    private prompt: PromptService,
   ) {}
-
-  ngOnInit(): void {}
 
   public async delete() {
     try {
       await this.prompt.confirm(
         'Delete',
-        `Are you sure you want to delete this metadata value? (${this.tag.name})`
+        `Are you sure you want to delete this metadata value? (${this.tag.name})`,
       );
     } catch {
       return;
@@ -46,7 +45,7 @@ export class EditValueComponent implements OnInit {
           'There was an error deleting the custom value. Please try again.',
       });
       throw new Error(
-        'There was an error deleting the custom value. Please try again.'
+        'There was an error deleting the custom value. Please try again.',
       );
     }
   }
@@ -67,7 +66,7 @@ export class EditValueComponent implements OnInit {
           'There was an error saving the custom value. Please try again.',
       });
       throw new Error(
-        'There was an error saving the custom value. Please try again.'
+        'There was an error saving the custom value. Please try again.',
       );
     }
   }

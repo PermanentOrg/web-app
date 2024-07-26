@@ -1,3 +1,4 @@
+/* @format */
 import { RecordVO } from '@root/app/models';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
@@ -20,7 +21,7 @@ type SidebarTab = 'info' | 'details' | 'sharing' | 'views';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
+export class SidebarComponent implements OnDestroy, HasSubscriptions {
   currentTab: SidebarTab = 'info';
   selectedItem: ItemVO = this.dataService.currentFolder;
   selectedItems: ItemVO[];
@@ -44,7 +45,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
     private dataService: DataService,
     private editService: EditService,
     private accountService: AccountService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.currentArchive = this.accountService.getArchive();
 
@@ -95,14 +96,14 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           this.selectedItem.FileVOs[0]
         ) {
           this.originalFileExtension = this.selectedItem.FileVOs.find(
-            (item) => item.format === 'file.format.original'
+            (item) => item.format === 'file.format.original',
           )
             ?.type.split('.')
             .pop();
 
           this.permanentFileExtension =
             this.selectedItem.FileVOs.find(
-              (item) => item.format === 'file.format.converted'
+              (item) => item.format === 'file.format.converted',
             )
               ?.type.split('.')
               .pop() || this.originalFileExtension;
@@ -110,11 +111,9 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
           this.originalFileExtension = '';
           this.permanentFileExtension = '';
         }
-      })
+      }),
     );
   }
-
-  ngOnInit() {}
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);
@@ -126,7 +125,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
       items,
       (i) =>
         i.accessRole === 'access.role.viewer' ||
-        i.accessRole === 'access.role.contributor'
+        i.accessRole === 'access.role.contributor',
     );
 
     this.canEdit =
@@ -141,7 +140,7 @@ export class SidebarComponent implements OnInit, OnDestroy, HasSubscriptions {
         !this.isRootFolder &&
         this.accountService.checkMinimumAccess(
           this.selectedItem.accessRole,
-          AccessRole.Owner
+          AccessRole.Owner,
         );
     }
   }

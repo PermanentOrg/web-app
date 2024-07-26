@@ -1,7 +1,6 @@
 /* @format */
 import {
   Component,
-  OnInit,
   OnDestroy,
   EventEmitter,
   Output,
@@ -17,15 +16,11 @@ import {
   unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription, Subject } from 'rxjs';
-import { min, get } from 'lodash';
+import { min } from 'lodash';
 import { AccountService } from '@shared/services/account/account.service';
 import { ItemVO, AccessRole, SortType, FolderVO, RecordVO } from '@models';
 import { getAccessAsEnum } from '@models/access-role';
-import { fadeAnimation, ngIfFadeInAnimation } from '@shared/animations';
-import {
-  FolderResponse,
-  RecordResponse,
-} from '@shared/services/api/index.repo';
+import { ngIfFadeInAnimation } from '@shared/animations';
 import { EditService } from '@core/services/edit/edit.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
@@ -60,9 +55,7 @@ type FileListColumn = 'name' | 'date' | 'type';
   styleUrls: ['./file-list-controls.component.scss'],
   animations: [ngIfFadeInAnimation],
 })
-export class FileListControlsComponent
-  implements OnInit, OnDestroy, HasSubscriptions
-{
+export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
   public isSorting$ = new Subject<boolean>();
 
   @Input() allowSort = true;
@@ -138,8 +131,6 @@ export class FileListControlsComponent
       }),
     );
   }
-
-  ngOnInit(): void {}
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);

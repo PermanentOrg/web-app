@@ -1,11 +1,10 @@
 /* @format */
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 export type SettingsTab =
@@ -23,7 +22,7 @@ export type SettingsTab =
   templateUrl: './account-settings-dialog.component.html',
   styleUrls: ['./account-settings-dialog.component.scss'],
 })
-export class AccountSettingsDialogComponent implements OnInit {
+export class AccountSettingsDialogComponent {
   public activeTab: SettingsTab = 'account';
 
   public readonly verifyText = 'DELETE';
@@ -42,8 +41,6 @@ export class AccountSettingsDialogComponent implements OnInit {
       this.activeTab = data.tab;
     }
   }
-
-  ngOnInit(): void {}
 
   onDoneClick() {
     this.dialogRef.close();

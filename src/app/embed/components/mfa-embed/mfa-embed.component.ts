@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+/* @format */
+import { Component } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
 import {
@@ -20,23 +19,20 @@ import { IFrameService } from '@shared/services/iframe/iframe.service';
   templateUrl: './mfa-embed.component.html',
   styleUrls: ['./mfa-embed.component.scss'],
 })
-export class MfaEmbedComponent implements OnInit {
+export class MfaEmbedComponent {
   verifyForm: UntypedFormGroup;
   waiting: boolean;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private accountService: AccountService,
-    private router: Router,
     private message: MessageService,
-    private iFrame: IFrameService
+    private iFrame: IFrameService,
   ) {
     this.verifyForm = fb.group({
       token: ['', Validators.required],
     });
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;
@@ -46,7 +42,7 @@ export class MfaEmbedComponent implements OnInit {
       .then(() => {
         return this.accountService.switchToDefaultArchive();
       })
-      .then((response: ArchiveResponse) => {
+      .then((_: ArchiveResponse) => {
         this.waiting = false;
         this.iFrame.setParentUrl('/app');
       })

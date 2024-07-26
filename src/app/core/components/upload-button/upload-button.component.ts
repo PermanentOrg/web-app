@@ -1,12 +1,10 @@
 /* @format */
 import {
   Component,
-  OnInit,
   OnDestroy,
   ViewChild,
   ElementRef,
   Input,
-  Optional,
   HostBinding,
 } from '@angular/core';
 import { UploadService } from '@core/services/upload/upload.service';
@@ -30,9 +28,7 @@ import { EventService } from '@shared/services/event/event.service';
   templateUrl: './upload-button.component.html',
   styleUrls: ['./upload-button.component.scss'],
 })
-export class UploadButtonComponent
-  implements OnInit, OnDestroy, HasSubscriptions
-{
+export class UploadButtonComponent implements OnDestroy, HasSubscriptions {
   private files: File[];
   @Input() fullWidth: boolean;
 
@@ -63,8 +59,6 @@ export class UploadButtonComponent
 
     this.upload.registerButtonComponent(this);
   }
-
-  ngOnInit() {}
 
   ngOnDestroy() {
     this.upload.unregisterButtonComponent(this);

@@ -1,18 +1,25 @@
-import { Component, OnInit, ElementRef, AfterViewInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+/* @format */
+import {
+  Component,
+  ElementRef,
+  Input,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 import { LocnVOData, ItemVO } from '@models';
-import { environment } from '@root/environments/environment';
 import { compact } from 'lodash';
 import { SecretsService } from '../../services/secrets/secrets.service';
-
 
 @Component({
   selector: 'pr-static-map',
   templateUrl: './static-map.component.html',
-  styleUrls: ['./static-map.component.scss']
+  styleUrls: ['./static-map.component.scss'],
 })
-export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
+export class StaticMapComponent implements OnChanges {
   private dpiScale = 1;
-  private baseUrl = `https://maps.googleapis.com/maps/api/staticmap?key=${this.secrets.get('GOOGLE_API_KEY')}`;
+  private baseUrl = `https://maps.googleapis.com/maps/api/staticmap?key=${this.secrets.get(
+    'GOOGLE_API_KEY',
+  )}`;
 
   @Input() item: ItemVO;
   @Input() items: ItemVO[];
@@ -24,38 +31,32 @@ export class StaticMapComponent implements OnInit, OnChanges, AfterViewInit {
 
   constructor(
     private elementRef: ElementRef,
-    private secrets: SecretsService
+    private secrets: SecretsService,
   ) {
     this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
   }
 
-  ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     setTimeout(() => {
       this.buildUrl();
     });
-  }
-
-  ngAfterViewInit() {
   }
 
   buildUrl() {
     let locations: LocnVOData[];
 
     if (this.item) {
-      locations = [ this.item.LocnVO ];
+      locations = [this.item.LocnVO];
     } else if (this.items) {
-      locations = this.items.map(i => i.LocnVO);
+      locations = this.items.map((i) => i.LocnVO);
     } else if (this.location) {
-      locations = [ this.location ];
+      locations = [this.location];
     }
 
     locations = compact(locations);
 
     if (!locations.length) {
-      return this.imageUrl = null;
+      return (this.imageUrl = null);
     }
 
     const width = (this.elementRef.nativeElement as HTMLElement).clientWidth;

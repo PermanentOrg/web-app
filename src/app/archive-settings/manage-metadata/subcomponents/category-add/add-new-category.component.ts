@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+/*@format */
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TagVO } from '@models/tag-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -13,17 +14,15 @@ import { Subject } from 'rxjs';
   templateUrl: './add-new-category.component.html',
   styleUrls: ['./add-new-category.component.scss'],
 })
-export class AddNewCategoryComponent implements OnInit {
+export class AddNewCategoryComponent {
   @Input() public dismissEvent: Subject<number>;
   @Output() public tagsUpdate = new EventEmitter<void>();
   @Output() public newCategory = new EventEmitter<string>();
   constructor(
     private prompt: PromptService,
     private api: ApiService,
-    private msg: MessageService
+    private msg: MessageService,
   ) {}
-
-  ngOnInit(): void {}
 
   public async createNewCategory(categoryName: string) {
     if (categoryName.includes(':')) {
@@ -44,7 +43,7 @@ export class AddNewCategoryComponent implements OnInit {
     try {
       ({ valueName } = await this.prompt.prompt(
         [promptField],
-        'Please create a default value to go into the new field'
+        'Please create a default value to go into the new field',
       ));
     } catch {
       // They canceled out of the prompt, return out of the error without throwing.

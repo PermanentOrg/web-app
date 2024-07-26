@@ -1,4 +1,5 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+/* @format */
+import { Component, HostBinding, OnDestroy } from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { Subscription } from 'rxjs';
 import { ItemVO } from '@models';
@@ -8,9 +9,9 @@ import { PromptButton } from '@shared/services/prompt/prompt.service';
 @Component({
   selector: 'pr-multi-select-status',
   templateUrl: './multi-select-status.component.html',
-  styleUrls: ['./multi-select-status.component.scss']
+  styleUrls: ['./multi-select-status.component.scss'],
 })
-export class MultiSelectStatusComponent implements OnInit, OnDestroy {
+export class MultiSelectStatusComponent implements OnDestroy {
   @HostBinding('class.visible') isMultiSelectEnabled = false;
   isMultiSelectEnabledSubscription: Subscription;
 
@@ -18,15 +19,13 @@ export class MultiSelectStatusComponent implements OnInit, OnDestroy {
 
   constructor(
     private data: DataService,
-    private edit: EditService
+    private edit: EditService,
   ) {
     this.multiclickItems = this.data.multiclickItems;
-    this.isMultiSelectEnabledSubscription = this.data.multiSelectChange.subscribe(enabled => {
-      this.isMultiSelectEnabled = enabled;
-    });
-  }
-
-  ngOnInit() {
+    this.isMultiSelectEnabledSubscription =
+      this.data.multiSelectChange.subscribe((enabled) => {
+        this.isMultiSelectEnabled = enabled;
+      });
   }
 
   ngOnDestroy() {
@@ -35,7 +34,7 @@ export class MultiSelectStatusComponent implements OnInit, OnDestroy {
 
   onDoneClick() {
     const items: ItemVO[] = [];
-    this.multiclickItems.forEach(i => items.push(i));
+    this.multiclickItems.forEach((i) => items.push(i));
     this.data.setMultiSelect(false);
 
     const actions: PromptButton[] = [
@@ -45,11 +44,10 @@ export class MultiSelectStatusComponent implements OnInit, OnDestroy {
       {
         buttonName: 'cancel',
         buttonText: 'Cancel',
-        class: 'btn-secondary'
-      }
+        class: 'btn-secondary',
+      },
     ];
 
     this.edit.promptForAction(items, actions);
   }
-
 }

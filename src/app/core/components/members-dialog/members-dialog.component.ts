@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+/* @format */
+import { Component, Inject } from '@angular/core';
 import {
   DIALOG_DATA,
   DialogRef,
@@ -43,7 +44,7 @@ type MembersTab = 'members' | 'pending' | 'add';
   templateUrl: './members-dialog.component.html',
   styleUrls: ['./members-dialog.component.scss'],
 })
-export class MembersDialogComponent implements OnInit, IsTabbedDialog {
+export class MembersDialogComponent implements IsTabbedDialog {
   members: AccountVO[];
   pendingMembers: AccountVO[];
   canEdit: boolean;
@@ -57,17 +58,15 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     private message: MessageService,
     private api: ApiService,
     private accountService: AccountService,
-    private payerService: PayerService
+    private payerService: PayerService,
   ) {
     [this.members, this.pendingMembers] = partition(this.data.members, {
       status: 'status.generic.ok',
     });
     this.canEdit = this.accountService.checkMinimumArchiveAccess(
-      AccessRole.Manager
+      AccessRole.Manager,
     );
   }
-
-  ngOnInit(): void {}
 
   setTab(tab: MembersTab) {
     this.activeTab = tab;
@@ -103,7 +102,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     const value: any = await this.promptService.prompt(
       fields,
       `Edit access for ${member.fullName}`,
-      deferred.promise
+      deferred.promise,
     );
     const updatedMember = clone(member);
     updatedMember.accessRole = value.accessRole as AccessRoleType;
@@ -113,7 +112,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
         await this.confirmOwnershipTransfer();
         const response = await this.api.archive.transferOwnership(
           updatedMember,
-          this.accountService.getArchive()
+          this.accountService.getArchive(),
         );
         this.message.showMessage({
           message: 'Ownership transfer request sent.',
@@ -125,7 +124,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       } else {
         const response = await this.api.archive.updateMember(
           updatedMember,
-          this.accountService.getArchive()
+          this.accountService.getArchive(),
         );
         this.message.showMessage({
           message: 'Member access saved successfully.',
@@ -153,7 +152,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
       .then(() => {
         return this.api.archive.removeMember(
           member,
-          this.accountService.getArchive()
+          this.accountService.getArchive(),
         );
       })
       .then((response: ArchiveResponse) => {
@@ -194,10 +193,10 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
           'Add Member',
           null,
           null,
-          `You do not have permission to add members to this archive.`
+          `You do not have permission to add members to this archive.`,
         );
         window.open(
-          'https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing'
+          'https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing',
         );
       } catch {
         // Catch PromptService rejection, but do nothing on "Cancel" button press
@@ -225,7 +224,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
     const value = await this.promptService.prompt(
       fields,
       'Add member',
-      deferred.promise
+      deferred.promise,
     );
     member = value as AccountVO;
 
@@ -273,7 +272,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
   confirmOwnershipTransfer() {
     return this.promptService.confirm(
       'Transfer ownership',
-      'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Manager'
+      'Permanent Archives can only have one owner at a time. Once this is complete, your role will be changed to Manager',
     );
   }
 
@@ -300,7 +299,7 @@ export class MembersDialogComponent implements OnInit, IsTabbedDialog {
         member.fullName = value.fullName;
         return this.api.invite.sendMemberInvite(
           member,
-          this.accountService.getArchive()
+          this.accountService.getArchive(),
         );
       })
       .then((response: InviteResponse) => {

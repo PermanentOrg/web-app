@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
 declare var iosInnerHeight: Function;
 
@@ -8,7 +8,7 @@ declare var iosInnerHeight: Function;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   @HostBinding('class.mobile-safari') isMobileSafari = false;
   @HostBinding('class.mobile-safari-menu-bar-showing') isMenuBarShowing = false;
 
@@ -25,6 +25,4 @@ export class AppComponent implements OnInit {
       });
     }
   }
-
-  ngOnInit() {}
 }

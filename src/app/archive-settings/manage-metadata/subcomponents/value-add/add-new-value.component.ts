@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+/* @format */
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { Subject } from 'rxjs';
@@ -8,14 +9,15 @@ import { Subject } from 'rxjs';
   templateUrl: './add-new-value.component.html',
   styleUrls: ['./add-new-value.component.scss'],
 })
-export class AddNewValueComponent implements OnInit {
+export class AddNewValueComponent {
   @Input() public dismissEvent: Subject<number>;
   @Input() public category: string;
   @Output() public tagsUpdate: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private api: ApiService, private msg: MessageService) {}
-
-  ngOnInit(): void {}
+  constructor(
+    private api: ApiService,
+    private msg: MessageService,
+  ) {}
 
   public async createNewTag(tagName: string) {
     try {
@@ -23,7 +25,7 @@ export class AddNewValueComponent implements OnInit {
         {
           name: this.category + ':' + tagName,
         },
-        {}
+        {},
       );
       this.tagsUpdate.emit();
     } catch {
@@ -32,7 +34,7 @@ export class AddNewValueComponent implements OnInit {
           'There was an error creating the custom value. Please try again.',
       });
       throw new Error(
-        'There was an error creating the custom value. Please try again.'
+        'There was an error creating the custom value. Please try again.',
       );
     }
   }

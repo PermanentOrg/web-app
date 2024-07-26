@@ -2,7 +2,6 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
   AfterViewInit,
   ViewChild,
   ElementRef,
@@ -55,7 +54,6 @@ export class MainComponent
   implements
     OnInit,
     AfterViewInit,
-    OnDestroy,
     DraggableComponent,
     DragTargetDroppableComponent
 {
@@ -155,8 +153,6 @@ export class MainComponent
     }
     this.checkCta();
   }
-
-  ngOnDestroy() {}
 
   ngAfterViewInit() {
     this.checkShareByUrl();

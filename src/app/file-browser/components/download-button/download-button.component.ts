@@ -2,7 +2,6 @@
 import {
   Component,
   Input,
-  OnInit,
   ElementRef,
   ViewChild,
   HostListener,
@@ -21,7 +20,7 @@ interface Format {
   templateUrl: './download-button.component.html',
   styleUrls: ['./download-button.component.scss'],
 })
-export class DownloadButtonComponent implements OnInit {
+export class DownloadButtonComponent {
   @Input() selectedItem;
 
   displayDownloadDropdown = false;
@@ -36,8 +35,6 @@ export class DownloadButtonComponent implements OnInit {
     private data: DataService,
     private message: MessageService,
   ) {}
-
-  ngOnInit(): void {}
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event) {

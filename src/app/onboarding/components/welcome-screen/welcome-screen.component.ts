@@ -1,6 +1,5 @@
 /* @format */
-import { Dialog } from '@root/app/dialog/dialog.module';
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { OnboardingScreen } from '@onboarding/shared/onboarding-screen';
 import { ArchiveVO } from '@models/archive-vo';
 
@@ -9,7 +8,7 @@ import { ArchiveVO } from '@models/archive-vo';
   templateUrl: './welcome-screen.component.html',
   styleUrls: ['./welcome-screen.component.scss'],
 })
-export class WelcomeScreenComponent implements OnInit {
+export class WelcomeScreenComponent {
   @Input() pendingArchives: ArchiveVO[] = [];
   @Output() nextScreen = new EventEmitter<OnboardingScreen>();
   @Output() selectInvitation = new EventEmitter<ArchiveVO>();
@@ -20,8 +19,6 @@ export class WelcomeScreenComponent implements OnInit {
   public OnboardingScreen: typeof OnboardingScreen = OnboardingScreen;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   public goToScreen(screen: OnboardingScreen): void {
     this.nextScreen.emit(screen);

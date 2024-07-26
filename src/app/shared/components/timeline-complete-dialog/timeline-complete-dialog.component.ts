@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+/* @format */
+import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { FolderVO } from '@models';
 import { copyFromInputElement } from '@shared/utilities/forms';
@@ -9,9 +10,9 @@ import { GoogleAnalyticsService } from '@shared/services/google-analytics/google
 @Component({
   selector: 'pr-timeline-complete-dialog',
   templateUrl: './timeline-complete-dialog.component.html',
-  styleUrls: ['./timeline-complete-dialog.component.scss']
+  styleUrls: ['./timeline-complete-dialog.component.scss'],
 })
-export class TimelineCompleteDialogComponent implements OnInit {
+export class TimelineCompleteDialogComponent {
   public folder: FolderVO;
   public publicLink: string;
 
@@ -20,15 +21,12 @@ export class TimelineCompleteDialogComponent implements OnInit {
 
   constructor(
     private dialogRef: DialogRef,
-    private linkPipe: PublicLinkPipe,
+    linkPipe: PublicLinkPipe,
     private ga: GoogleAnalyticsService,
     @Inject(DIALOG_DATA) public data: any,
   ) {
     this.folder = this.data.folder;
     this.publicLink = linkPipe.transform(this.folder);
-  }
-
-  ngOnInit() {
   }
 
   copyPublicLink() {
@@ -47,5 +45,4 @@ export class TimelineCompleteDialogComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
-
 }

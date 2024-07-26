@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+/* @format */
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -6,9 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './archive-search.component.html',
   styleUrls: ['./archive-search.component.scss'],
 })
-export class ArchiveSearchComponent implements OnInit {
-
-  @Output() search = new EventEmitter<string>()
+export class ArchiveSearchComponent {
+  @Output() search = new EventEmitter<string>();
 
   public searchForm: FormGroup;
 
@@ -16,16 +16,10 @@ export class ArchiveSearchComponent implements OnInit {
 
   public displayIcon: boolean = true;
 
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.searchForm = this.fb.group({
       query: ['', [Validators.required]],
     });
-  }
-
-  ngOnInit(): void {
-    
   }
 
   public clearForm(): void {
@@ -35,6 +29,4 @@ export class ArchiveSearchComponent implements OnInit {
   public onHandleSearch(): void {
     this.search.emit(this.searchForm.value.query);
   }
-
- 
 }

@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { DeviceService } from '@shared/services/device/device.service';
 
@@ -8,7 +8,7 @@ import { DeviceService } from '@shared/services/device/device.service';
   templateUrl: './create-account-dialog.component.html',
   styleUrls: ['./create-account-dialog.component.scss'],
 })
-export class CreateAccountDialogComponent implements OnInit {
+export class CreateAccountDialogComponent {
   sharerName: string = this.data.sharerName;
 
   constructor(
@@ -16,8 +16,6 @@ export class CreateAccountDialogComponent implements OnInit {
     private device: DeviceService,
     @Inject(DIALOG_DATA) public data: any,
   ) {}
-
-  ngOnInit(): void {}
 
   isMobile(): boolean {
     return this.device.isMobileWidth();

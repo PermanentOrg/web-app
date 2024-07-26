@@ -1,7 +1,19 @@
-import { Component, OnInit, EventEmitter, Input, Output, ElementRef, OnDestroy, ViewChildren, QueryList } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-
-import { PromptService, PromptField, PromptButton, PromptConfig } from '@shared/services/prompt/prompt.service';
+/* @format */
+import {
+  Component,
+  Input,
+  ElementRef,
+  OnDestroy,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import {
+  PromptService,
+  PromptField,
+  PromptButton,
+  PromptConfig,
+} from '@shared/services/prompt/prompt.service';
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 
 const DEFAULT_SAVE_TEXT = 'OK';
@@ -10,9 +22,9 @@ const DEFAULT_CANCEL_TEXT = 'Cancel';
 @Component({
   selector: 'pr-prompt',
   templateUrl: './prompt.component.html',
-  styleUrls: ['./prompt.component.scss']
+  styleUrls: ['./prompt.component.scss'],
 })
-export class PromptComponent implements OnInit, OnDestroy {
+export class PromptComponent implements OnDestroy {
   @Input() isVisible: boolean;
 
   @ViewChildren(FormInputComponent) inputQuery: QueryList<FormInputComponent>;
@@ -39,12 +51,13 @@ export class PromptComponent implements OnInit, OnDestroy {
 
   private promptQueue: PromptConfig[] = [];
 
-  constructor(private service: PromptService, private fb: UntypedFormBuilder, private element: ElementRef) {
+  constructor(
+    private service: PromptService,
+    private fb: UntypedFormBuilder,
+    private element: ElementRef,
+  ) {
     this.service.registerComponent(this);
     this.defaultForm = fb.group({});
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -69,7 +82,7 @@ export class PromptComponent implements OnInit, OnDestroy {
     donePromise?: Promise<any>,
     doneResolve?: Function,
     doneReject?: Function,
-    template?: string
+    template?: string,
   ) {
     if (this.donePromise) {
       let newDoneReject, newDoneResolve;
@@ -88,7 +101,7 @@ export class PromptComponent implements OnInit, OnDestroy {
         cancelText: cancelText,
         donePromise: newDonePromise,
         doneResolve: newDoneResolve,
-        doneReject: newDoneReject
+        doneReject: newDoneReject,
       });
 
       return newDonePromise;
@@ -157,9 +170,13 @@ export class PromptComponent implements OnInit, OnDestroy {
   }
 
   getInput(fieldName: string) {
-    const component = this.inputQuery.find(input => input.fieldName === fieldName);
+    const component = this.inputQuery.find(
+      (input) => input.fieldName === fieldName,
+    );
     if (component) {
-      return component.getElement().nativeElement.querySelector('.form-control');
+      return component
+        .getElement()
+        .nativeElement.querySelector('.form-control');
     } else {
       return null;
     }
@@ -172,7 +189,7 @@ export class PromptComponent implements OnInit, OnDestroy {
     donePromise?: Promise<any>,
     doneResolve?: Function,
     doneReject?: Function,
-    template?: string
+    template?: string,
   ) {
     if (this.donePromise) {
       let newDoneReject, newDoneResolve;
@@ -189,7 +206,7 @@ export class PromptComponent implements OnInit, OnDestroy {
         donePromise: newDonePromise,
         doneResolve: newDoneResolve,
         doneReject: newDoneReject,
-        template: template
+        template: template,
       });
 
       return newDonePromise;
@@ -238,14 +255,14 @@ export class PromptComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.editForm =  null;
+    this.editForm = null;
     this.editButtons = null;
     this.title = null;
     this.fields = null;
     this.donePromise = null;
     this.doneResolve = null;
     this.doneReject = null;
-    this.template =  null;
+    this.template = null;
     this.waiting = false;
 
     if (this.promptQueue.length) {
@@ -261,7 +278,7 @@ export class PromptComponent implements OnInit, OnDestroy {
           next.donePromise,
           next.doneResolve,
           next.doneReject,
-          next.template
+          next.template,
         );
       } else if (next.buttons) {
         this.promptButtons(
@@ -271,7 +288,7 @@ export class PromptComponent implements OnInit, OnDestroy {
           next.donePromise,
           next.doneResolve,
           next.doneReject,
-          next.template
+          next.template,
         );
       }
     }

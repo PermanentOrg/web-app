@@ -1,7 +1,6 @@
 /* @format */
 import {
   Component,
-  OnInit,
   AfterViewInit,
   ViewChild,
   Optional,
@@ -11,8 +10,6 @@ import { SidebarActionPortalService } from '@core/services/sidebar-action-portal
 import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { NotificationService } from '@root/app/notifications/services/notification.service';
 import { Dialog } from '@root/app/dialog/dialog.module';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
 
 @Component({
@@ -20,7 +17,7 @@ import { EventService } from '@shared/services/event/event.service';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NavComponent implements AfterViewInit, OnDestroy {
   hambugerMenuVisible: boolean;
   rightMenuVisible: boolean;
 
@@ -32,8 +29,6 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: Dialog,
   ) {}
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.portalService) {

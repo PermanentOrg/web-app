@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -13,7 +13,7 @@ import { AuthResponse } from '@shared/services/api/auth.repo';
   templateUrl: './forgot-password-embed.component.html',
   styleUrls: ['./forgot-password-embed.component.scss'],
 })
-export class ForgotPasswordEmbedComponent implements OnInit {
+export class ForgotPasswordEmbedComponent {
   forgotForm: UntypedFormGroup;
   formErrors: any = {};
 
@@ -21,16 +21,14 @@ export class ForgotPasswordEmbedComponent implements OnInit {
   success: boolean;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private api: ApiService,
-    private message: MessageService
+    private message: MessageService,
   ) {
     this.forgotForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;

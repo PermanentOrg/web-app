@@ -1,9 +1,9 @@
+/* @format */
 import {
   Component,
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -37,7 +37,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
   templateUrl: './new-archive-form.component.html',
   styleUrls: ['./new-archive-form.component.scss'],
 })
-export class NewArchiveFormComponent implements OnInit {
+export class NewArchiveFormComponent {
   @Input() showRelations: boolean = false;
   @Output() success = new EventEmitter<ArchiveVO>();
   @Output() error = new EventEmitter();
@@ -55,8 +55,6 @@ export class NewArchiveFormComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {}
-
   public isFormValid() {
     return (
       this.fullNameRef?.nativeElement.validity.valid &&
@@ -71,7 +69,7 @@ export class NewArchiveFormComponent implements OnInit {
     try {
       this.waiting = true;
       const response = await this.api.archive.create(
-        new ArchiveVO(this.formData)
+        new ArchiveVO(this.formData),
       );
       const newArchive = response.getArchiveVO();
       this.success.emit(newArchive);

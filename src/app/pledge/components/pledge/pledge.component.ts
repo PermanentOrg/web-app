@@ -1,15 +1,14 @@
+/* @format */
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { IFrameService } from '@shared/services/iframe/iframe.service';
-
 
 @Component({
   selector: 'pr-pledge',
   templateUrl: './pledge.component.html',
-  styleUrls: ['./pledge.component.scss']
+  styleUrls: ['./pledge.component.scss'],
 })
-export class PledgeComponent implements OnInit, OnDestroy {
+export class PledgeComponent implements OnInit {
   @HostBinding('class.for-light-bg') forLightBg = true;
   @HostBinding('class.for-dark-bg') forDarkBg = false;
   @HostBinding('class.visible') visible = false;
@@ -26,8 +25,5 @@ export class PledgeComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.visible = true;
     });
-  }
-
-  ngOnDestroy() {
   }
 }

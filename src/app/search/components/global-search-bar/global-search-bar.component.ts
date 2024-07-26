@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostBinding, Inject } from '@angular/core';
+/* @format */
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  HostBinding,
+  Inject,
+} from '@angular/core';
 import { SearchService } from '@search/services/search.service';
 import { ItemVO, RecordVO, TagVOData } from '@models';
 import { DataService } from '@shared/services/data/data.service';
@@ -21,9 +28,9 @@ type ResultsListType = 'local' | 'global' | 'tag';
   selector: 'pr-global-search-bar',
   templateUrl: './global-search-bar.component.html',
   styleUrls: ['./global-search-bar.component.scss'],
-  animations: [ngIfScaleHeightEnterAnimation]
+  animations: [ngIfScaleHeightEnterAnimation],
 })
-export class GlobalSearchBarComponent implements OnInit {
+export class GlobalSearchBarComponent {
   public searchTerm: string;
 
   public localResults: ItemVO[];
@@ -51,64 +58,78 @@ export class GlobalSearchBarComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private account: AccountService,
     private router: Router,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
   ) {
     this.formControl = this.fb.control('');
     this.initFormHandler();
   }
 
-  ngOnInit(): void {
-  }
-
   initFormHandler() {
-    this.formControl.valueChanges.pipe(
-      map(term => {
-        return this.searchService.parseSearchTerm(term);
-      }),
-      tap(([term, tags]) => {
-        this.showResults = true;
-        this.updateLocalResults(term as string, tags);
-        this.updateTagsResults(term as string, tags);
-      }),
-      debounceTime(100),
-      switchMap(([term, tags]) => {
-        if (term?.length || tags?.length) {
-          this.waiting = true;
-          return this.searchService.getResultsInCurrentArchive(term, tags, 10)
-            .pipe(catchError(err => {
-              return of(err);
-            }));
-        } else {
-          return of(null);
-        }
-      })
-    ).subscribe(response => {
-      this.waiting = false;
-      if (response) {
-        if (response instanceof SearchResponse && response.isSuccessful) {
-          this.globalResults = response.getItemVOs().filter(i => {
-            let showShouldInGlobal = false;
-            const inCurrentFolder = i.parentFolder_linkId === this.data.currentFolder?.folder_linkId;
-            if (i instanceof RecordVO) {
-              showShouldInGlobal = !this.localResultsByRecordId.has(i.recordId);
-            } else {
-              showShouldInGlobal = !this.localResultsByFolderId.has(i.folderId) && this.data.currentFolder?.folderId !== i.folderId;
-            }
+    this.formControl.valueChanges
+      .pipe(
+        map((term) => {
+          return this.searchService.parseSearchTerm(term);
+        }),
+        tap(([term, tags]) => {
+          this.showResults = true;
+          this.updateLocalResults(term as string, tags);
+          this.updateTagsResults(term as string, tags);
+        }),
+        debounceTime(100),
+        switchMap(([term, tags]) => {
+          if (term?.length || tags?.length) {
+            this.waiting = true;
+            return this.searchService
+              .getResultsInCurrentArchive(term, tags, 10)
+              .pipe(
+                catchError((err) => {
+                  return of(err);
+                }),
+              );
+          } else {
+            return of(null);
+          }
+        }),
+      )
+      .subscribe((response) => {
+        this.waiting = false;
+        if (response) {
+          if (response instanceof SearchResponse && response.isSuccessful) {
+            this.globalResults = response
+              .getItemVOs()
+              .filter((i) => {
+                let showShouldInGlobal = false;
+                const inCurrentFolder =
+                  i.parentFolder_linkId ===
+                  this.data.currentFolder?.folder_linkId;
+                if (i instanceof RecordVO) {
+                  showShouldInGlobal = !this.localResultsByRecordId.has(
+                    i.recordId,
+                  );
+                } else {
+                  showShouldInGlobal =
+                    !this.localResultsByFolderId.has(i.folderId) &&
+                    this.data.currentFolder?.folderId !== i.folderId;
+                }
 
-            if (showShouldInGlobal && inCurrentFolder) {
-              this.localResults?.push(i);
-              return false;
-            } else {
-              return showShouldInGlobal;
-            }
-          }).slice(0, (2 * LOCAL_RESULTS_LIMIT) - (this.localResults?.length || 0));
+                if (showShouldInGlobal && inCurrentFolder) {
+                  this.localResults?.push(i);
+                  return false;
+                } else {
+                  return showShouldInGlobal;
+                }
+              })
+              .slice(
+                0,
+                2 * LOCAL_RESULTS_LIMIT - (this.localResults?.length || 0),
+              );
+          } else {
+            this.globalResults = [];
+          }
         } else {
-          this.globalResults = [];
+          this.reset();
         }
-      } else {
-        this.reset();
-      }
-    });
+      });
   }
 
   resultTrackByFn(index, item: ItemVO) {
@@ -146,14 +167,17 @@ export class GlobalSearchBarComponent implements OnInit {
     const globalLength = this.globalResults?.length || 0;
     const totalLength = localLength + globalLength;
 
-    if (!(isArrow  || isEnter) || !totalLength) {
+    if (!(isArrow || isEnter) || !totalLength) {
       return;
     }
 
     if (isArrow) {
       const direction = event.keyCode === DOWN_ARROW ? 1 : -1;
       const newActiveResultIndex = this.activeResultIndex + direction;
-      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), totalLength - 1);
+      this.activeResultIndex = Math.min(
+        Math.max(-1, newActiveResultIndex),
+        totalLength - 1,
+      );
     } else if (event.keyCode === ENTER) {
       this.onInputEnter();
     }
@@ -166,10 +190,18 @@ export class GlobalSearchBarComponent implements OnInit {
 
     if (this.activeResultIndex === -1) {
       this.onAllResultsClick();
-    } else if (-1 < this.activeResultIndex && this.activeResultIndex < localLength) {
+    } else if (
+      -1 < this.activeResultIndex &&
+      this.activeResultIndex < localLength
+    ) {
       this.onLocalResultClick(this.localResults[this.activeResultIndex]);
-    } else if (localLength <= this.activeResultIndex && this.activeResultIndex < totalLength ) {
-      this.onGlobalResultClick(this.globalResults[this.activeResultIndex - localLength]);
+    } else if (
+      localLength <= this.activeResultIndex &&
+      this.activeResultIndex < totalLength
+    ) {
+      this.onGlobalResultClick(
+        this.globalResults[this.activeResultIndex - localLength],
+      );
     }
     this.reset();
     setTimeout(() => {
@@ -185,9 +217,8 @@ export class GlobalSearchBarComponent implements OnInit {
         offset = this.localResults.length;
     }
 
-    return (this.activeResultIndex - offset) === listIndex;
+    return this.activeResultIndex - offset === listIndex;
   }
-
 
   reset() {
     this.showResults = false;
@@ -204,7 +235,10 @@ export class GlobalSearchBarComponent implements OnInit {
     this.localResultsByRecordId.clear();
 
     if (!tags?.length) {
-      this.localResults = this.searchService.getResultsInCurrentFolder(term, LOCAL_RESULTS_LIMIT);
+      this.localResults = this.searchService.getResultsInCurrentFolder(
+        term,
+        LOCAL_RESULTS_LIMIT,
+      );
       for (const result of this.localResults) {
         if (result instanceof RecordVO) {
           this.localResultsByRecordId.add(result.recordId);
@@ -221,8 +255,10 @@ export class GlobalSearchBarComponent implements OnInit {
 
   updateTagsResults(term: string, selectedTags: TagVOData[]) {
     const termMatches = this.searchService.getTagResults(term);
-    const selectedNames = selectedTags.map(t => t.name);
-    this.tagResults = termMatches.filter(i => !selectedNames.includes(i.name));
+    const selectedNames = selectedTags.map((t) => t.name);
+    this.tagResults = termMatches.filter(
+      (i) => !selectedNames.includes(i.name),
+    );
   }
 
   onLocalResultClick(item: ItemVO) {
@@ -234,11 +270,13 @@ export class GlobalSearchBarComponent implements OnInit {
     let searchTerm: string;
     let tags: TagVOData[];
 
-    [ searchTerm, tags]  = this.searchService.parseSearchTerm(this.formControl.value);
+    [searchTerm, tags] = this.searchService.parseSearchTerm(
+      this.formControl.value,
+    );
 
     // replace any text query with existing tags + clicked tag
     tags.push(tag);
-    const tagString = tags.map(t => `tag:"${t.name}"`).join(' ') + ' ';
+    const tagString = tags.map((t) => `tag:"${t.name}"`).join(' ') + ' ';
     this.formControl.setValue(tagString);
     if (this.tagResults) {
       remove(this.tagResults, tag);
@@ -261,26 +299,39 @@ export class GlobalSearchBarComponent implements OnInit {
       if (item.parentArchiveNbr === publicRoot.archiveNbr) {
         routerPath = ['/app', 'public'];
       } else {
-        routerPath = ['/app', 'public', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = [
+          '/app',
+          'public',
+          item.parentArchiveNbr,
+          item.parentFolder_linkId,
+        ];
       }
     } else if (item.folder_linkType === 'type.folder_link.private') {
       if (item.parentArchiveNbr === privateRoot.archiveNbr) {
         routerPath = ['/app', 'private'];
       } else {
-        routerPath = ['/app', 'private', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = [
+          '/app',
+          'private',
+          item.parentArchiveNbr,
+          item.parentFolder_linkId,
+        ];
       }
     }
 
     if (routerPath) {
-      this.router.navigate(routerPath, { queryParams: { showItem: item.folder_linkId }});
+      this.router.navigate(routerPath, {
+        queryParams: { showItem: item.folder_linkId },
+      });
     }
 
     this.onCoverClick();
   }
 
   onAllResultsClick() {
-    this.router.navigate(['/app', 'search'], { queryParams: { query: this.formControl.value?.trim() } });
+    this.router.navigate(['/app', 'search'], {
+      queryParams: { query: this.formControl.value?.trim() },
+    });
     this.onCoverClick();
   }
-
 }

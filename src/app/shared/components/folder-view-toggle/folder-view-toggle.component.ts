@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 
@@ -21,9 +21,7 @@ interface FolderViewToggleOption {
   templateUrl: './folder-view-toggle.component.html',
   styleUrls: ['./folder-view-toggle.component.scss'],
 })
-export class FolderViewToggleComponent
-  implements OnInit, OnDestroy, HasSubscriptions
-{
+export class FolderViewToggleComponent implements OnDestroy, HasSubscriptions {
   currentFolderView: FolderView;
   folderViews: FolderViewToggleOption[] = [
     {
@@ -52,8 +50,6 @@ export class FolderViewToggleComponent
       }),
     );
   }
-
-  ngOnInit(): void {}
 
   ngOnDestroy() {
     unsubscribeAll(this.subscriptions);

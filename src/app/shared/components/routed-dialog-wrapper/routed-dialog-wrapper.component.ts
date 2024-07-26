@@ -1,7 +1,6 @@
 /* @format */
 import {
   Component,
-  OnInit,
   OnDestroy,
   AfterViewInit,
   ViewChild,
@@ -34,7 +33,7 @@ import { slideUpAnimation } from '@shared/animations';
   animations: [slideUpAnimation],
 })
 export class RoutedDialogWrapperComponent
-  implements OnInit, AfterViewInit, HasSubscriptions, OnDestroy
+  implements AfterViewInit, HasSubscriptions, OnDestroy
 {
   private dialogToken: DialogComponentToken;
   private dialogOptions: DialogOptions;
@@ -52,8 +51,6 @@ export class RoutedDialogWrapperComponent
     private routeHistory: RouteHistoryService,
     private title: Title,
   ) {}
-
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
