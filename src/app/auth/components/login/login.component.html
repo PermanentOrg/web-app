@@ -4,12 +4,13 @@
   [formGroup]="loginForm"
   (ngSubmit)="onSubmit(loginForm.value)"
 >
-  <h1 class="page-title">Sign in to your Account</h1>
+  <h1 class="page-title">Sign in to Permanent</h1>
   <div class="email-input">
     <pr-form-input-glam
       type="email"
       fieldName="email"
       [variant]="'dark'"
+      [style]="{ height: '64px' }"
       placeholder="Email Address"
       [control]="loginForm.controls['email']"
       [config]="{
@@ -26,6 +27,7 @@
       [variant]="'dark'"
       fieldName="password"
       placeholder="Password"
+      [style]="{ height: '64px' }"
       [control]="loginForm.controls['password']"
       [config]="{ autocomplete: 'current-password' }"
     ></pr-form-input-glam>
@@ -37,9 +39,6 @@
       (isCheckedChange)="rememberMe = $event"
       [text]="'Remember me'"
     ></pr-checkbox>
-    <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
-      Forgot password?
-    </a>
   </div>
 
   <div class="auth-buttons">
@@ -52,7 +51,12 @@
       [disabled]="waiting || loginForm.invalid"
       >Sign in</pr-button
     >
-    <pr-or-divider></pr-or-divider>
+    <div class="forgot-password-button">
+      <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
+        Forgot password?
+      </a>
+    </div>
+    <pr-or-divider [text]="'NEW TO PERMANENT ?'"></pr-or-divider>
     <pr-button
       [buttonType]="'button'"
       [variant]="'primary'"

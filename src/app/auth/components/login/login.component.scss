@@ -14,7 +14,7 @@
 
 .page-title {
   @include pageTitle;
-  margin-bottom: 175px;
+  margin-bottom: 64px;
   @include beforeDesktop {
     margin-bottom: 10%;
   }
@@ -30,6 +30,17 @@
   align-items: center;
   justify-content: space-between;
 
+  & > a {
+    color: white;
+    font-size: 14px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}
+
+.forgot-password-button {
+  margin: 32px 0px;
+  display: flex;
+  justify-content: center;
   & > a {
     color: white;
     font-size: 14px;
