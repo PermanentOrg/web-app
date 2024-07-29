@@ -2,7 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
-import { OnboardingModule } from '../../onboarding.module'; 
+import { OnboardingModule } from '../../onboarding.module';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
 const mockAccountService = {
