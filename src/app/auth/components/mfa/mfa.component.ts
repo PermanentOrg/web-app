@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AccountService } from '@shared/services/account/account.service';
 import {
@@ -16,13 +16,13 @@ import { DeviceService } from '@shared/services/device/device.service';
   templateUrl: './mfa.component.html',
   styleUrls: ['./mfa.component.scss'],
 })
-export class MfaComponent implements OnInit {
+export class MfaComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   mfaForm: UntypedFormGroup;
   waiting: boolean;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
@@ -33,8 +33,6 @@ export class MfaComponent implements OnInit {
       token: [],
     });
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;

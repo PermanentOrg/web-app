@@ -1,11 +1,5 @@
 /* @format */
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Inject,
-} from '@angular/core';
+import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
 import { RecordVO, FolderVO } from '@models';
 import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import { ApiService } from '@shared/services/api/api.service';
@@ -27,7 +21,7 @@ import { EventService } from '@shared/services/event/event.service';
   templateUrl: './publish.component.html',
   styleUrls: ['./publish.component.scss'],
 })
-export class PublishComponent implements OnInit {
+export class PublishComponent {
   public sourceItem: RecordVO | FolderVO = null;
   public publicItem: RecordVO | FolderVO = null;
 
@@ -66,8 +60,6 @@ export class PublishComponent implements OnInit {
       this.checkInternetArchiveLink();
     }
   }
-
-  ngOnInit() {}
 
   async publishItem() {
     if (this.sourceItem.type.includes('public')) {

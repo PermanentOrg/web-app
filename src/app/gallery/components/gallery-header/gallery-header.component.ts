@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 
 @Component({
@@ -6,12 +6,10 @@ import { AccountService } from '@shared/services/account/account.service';
   templateUrl: './gallery-header.component.html',
   styleUrls: ['./gallery-header.component.scss'],
 })
-export class GalleryHeaderComponent implements OnInit {
+export class GalleryHeaderComponent {
   public isLoggedIn: boolean;
 
   constructor(protected account: AccountService) {
     this.isLoggedIn = this.account.isLoggedIn();
   }
-
-  ngOnInit(): void {}
 }

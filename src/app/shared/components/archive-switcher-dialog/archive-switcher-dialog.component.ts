@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-
+/* @format */
+import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models';
@@ -9,9 +9,9 @@ import { orderBy } from 'lodash';
 @Component({
   selector: 'pr-archive-switcher-dialog',
   templateUrl: './archive-switcher-dialog.component.html',
-  styleUrls: ['./archive-switcher-dialog.component.scss']
+  styleUrls: ['./archive-switcher-dialog.component.scss'],
 })
-export class ArchiveSwitcherDialogComponent implements OnInit {
+export class ArchiveSwitcherDialogComponent {
   public loadingArchives = false;
   public archives: ArchiveVO[] = [];
   public currentArchive: ArchiveVO;
@@ -23,14 +23,13 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: any,
-    private account: AccountService
+    private account: AccountService,
   ) {
-    this.archives = orderBy(this.account.getArchives(), a => a.fullName.toLowerCase());
+    this.archives = orderBy(this.account.getArchives(), (a) =>
+      a.fullName.toLowerCase(),
+    );
 
     this.promptText = data.promptText;
-  }
-
-  ngOnInit() {
   }
 
   async onArchiveClick(archive: ArchiveVO) {
@@ -39,8 +38,8 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
       try {
         await this.account.changeArchive(archive);
         this.close();
-      } catch (err) {}
-      finally {
+      } catch (err) {
+      } finally {
         this.waiting = false;
       }
     }
@@ -60,5 +59,4 @@ export class ArchiveSwitcherDialogComponent implements OnInit {
   cancel() {
     this.dialogRef.close(null, true);
   }
-
 }

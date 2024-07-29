@@ -1,11 +1,10 @@
 /* @format */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
   Validators,
 } from '@angular/forms';
-
 import { APP_CONFIG } from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,7 +20,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   templateUrl: './claim-storage.component.html',
   styleUrls: ['./claim-storage.component.scss'],
 })
-export class ClaimStorageComponent implements OnInit {
+export class ClaimStorageComponent {
   public signupForm: UntypedFormGroup;
   public pledge: PledgeData = this.pledgeService.currentPledgeData;
 
@@ -29,7 +28,7 @@ export class ClaimStorageComponent implements OnInit {
   public storageAmount: number;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
@@ -57,8 +56,6 @@ export class ClaimStorageComponent implements OnInit {
       optIn: [true],
     });
   }
-
-  ngOnInit() {}
 
   async onSubmit(formValue: any) {
     this.waiting = true;

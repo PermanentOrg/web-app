@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -8,10 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-
 import { ApiService } from '@shared/services/api/api.service';
 import { PledgeService } from '@pledge/services/pledge.service';
-
 import { APP_CONFIG } from '@root/app/app.config';
 import {
   AuthResponse,
@@ -25,7 +23,7 @@ import { MessageService } from '@shared/services/message/message.service';
   templateUrl: './claim-storage-login.component.html',
   styleUrls: ['./claim-storage-login.component.scss'],
 })
-export class ClaimStorageLoginComponent implements OnInit {
+export class ClaimStorageLoginComponent {
   public waiting = false;
   public loggedIn = false;
   public needsMfa = false;
@@ -39,7 +37,7 @@ export class ClaimStorageLoginComponent implements OnInit {
     private pledgeService: PledgeService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private message: MessageService,
     private cookies: CookieService,
   ) {
@@ -72,8 +70,6 @@ export class ClaimStorageLoginComponent implements OnInit {
       token: [],
     });
   }
-
-  ngOnInit() {}
 
   async logOut() {
     this.waiting = true;

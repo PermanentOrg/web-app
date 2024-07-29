@@ -1,6 +1,5 @@
 /* @format */
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-
+import { Component, HostListener, ElementRef } from '@angular/core';
 import {
   adjustLayoutForAnnouncement,
   resetLayoutForAnnouncement,
@@ -16,7 +15,7 @@ export interface BeforeInstallPromptEvent extends Event {
   templateUrl: './android-app-notify.component.html',
   styleUrls: ['./android-app-notify.component.scss'],
 })
-export class AndroidAppNotifyComponent implements OnInit {
+export class AndroidAppNotifyComponent {
   public static readonly storageKey = 'androidAppNotificationDismissed';
   public active = false;
   public deferredPrompt: BeforeInstallPromptEvent;
@@ -31,8 +30,6 @@ export class AndroidAppNotifyComponent implements OnInit {
       adjustLayoutForAnnouncement(this);
     }
   }
-
-  ngOnInit(): void {}
 
   public showPrompt(): void {
     this.deferredPrompt.prompt();

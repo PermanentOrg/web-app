@@ -1,11 +1,5 @@
 /* @format */
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  HostBinding,
-} from '@angular/core';
+import { Component, Input, OnChanges, HostBinding } from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import { orderBy } from 'lodash';
 import { ngIfScaleAnimationDynamic } from '@shared/animations';
@@ -16,7 +10,7 @@ import { ngIfScaleAnimationDynamic } from '@shared/animations';
   styleUrls: ['./tags.component.scss'],
   animations: [ngIfScaleAnimationDynamic],
 })
-export class TagsComponent implements OnInit, OnChanges {
+export class TagsComponent implements OnChanges {
   @Input() tags: TagVOData[];
   @HostBinding('class.read-only') @Input() readOnly = true;
   @Input() canEdit = false;
@@ -27,8 +21,6 @@ export class TagsComponent implements OnInit, OnChanges {
   orderedTags: TagVOData[] = [];
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   ngOnChanges() {
     if (!this.tags?.length) {

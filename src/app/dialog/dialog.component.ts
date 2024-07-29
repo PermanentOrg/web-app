@@ -4,7 +4,6 @@ import {
   ViewContainerRef,
   ViewChild,
   ElementRef,
-  AfterViewInit,
 } from '@angular/core';
 import { DeviceService } from '@shared/services/device/device.service';
 import { DialogOptions, DialogRef } from './dialog.service';
@@ -14,7 +13,7 @@ import { DialogOptions, DialogRef } from './dialog.service';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
 })
-export class DialogComponent implements AfterViewInit {
+export class DialogComponent {
   public isVisible = false;
   public height = 'fullscreen';
   public width = 'fullscreen';
@@ -31,8 +30,6 @@ export class DialogComponent implements AfterViewInit {
   menuWrapperElement: ElementRef;
 
   constructor(private device: DeviceService) {}
-
-  ngAfterViewInit() {}
 
   bindDialogRef(dialogRef: DialogRef) {
     if (!this.dialogRef) {

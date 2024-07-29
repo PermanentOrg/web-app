@@ -1,9 +1,7 @@
+/* @format */
 import {
   Component,
-  OnInit,
   AfterViewInit,
-  QueryList,
-  ViewChildren,
   Optional,
   OnDestroy,
   ViewChild,
@@ -37,7 +35,7 @@ import { CdkPortal } from '@angular/cdk/portal';
   templateUrl: './all-archives.component.html',
   styleUrls: ['./all-archives.component.scss'],
 })
-export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AllArchivesComponent implements AfterViewInit, OnDestroy {
   public currentArchive: ArchiveVO;
   public archives: ArchiveVO[];
   public pendingArchives: ArchiveVO[];
@@ -53,14 +51,14 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
     private prompt: PromptService,
     private message: MessageService,
     private router: Router,
-    @Optional() private portalService: SidebarActionPortalService
+    @Optional() private portalService: SidebarActionPortalService,
   ) {
     this.data.setCurrentFolder(
       new FolderVO({
         displayName: 'Archives',
         pathAsText: ['Archives'],
         type: 'page',
-      })
+      }),
     );
     this.currentArchive = accountService.getArchive();
 
@@ -69,7 +67,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
       archivesData.map((archiveData) => {
         return new ArchiveVO(archiveData);
       }),
-      'fullName'
+      'fullName',
     );
     const currentArchiveFetched = remove(archives, {
       archiveId: this.currentArchive.archiveId,
@@ -80,11 +78,9 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
 
     [this.pendingArchives, this.archives] = partition(
       archives as ArchiveVO[],
-      (a) => a.isPending()
+      (a) => a.isPending(),
     );
   }
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.portalService) {
@@ -121,7 +117,7 @@ export class AllArchivesComponent implements OnInit, AfterViewInit, OnDestroy {
       message = `You have been invited to collaborate on the ${
         archive.fullName
       } archive. Accept ${this.prConstants.translate(
-        archive.accessRole
+        archive.accessRole,
       )} access and switch?`;
     }
 

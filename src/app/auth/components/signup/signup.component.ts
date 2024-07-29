@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -32,7 +32,7 @@ const NEW_ONBOARDING_CHANCE = 1;
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
@@ -48,9 +48,8 @@ export class SignupComponent implements OnInit {
   shareItemIsRecord = false;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private accountService: AccountService,
-    private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     private message: MessageService,
@@ -118,8 +117,6 @@ export class SignupComponent implements OnInit {
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
   }
-
-  ngOnInit() {}
 
   shouldCreateDefaultArchive() {
     if (window.location.search.includes('createArchive')) {

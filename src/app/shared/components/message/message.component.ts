@@ -1,5 +1,5 @@
 /* @format */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   MessageService,
   MessageDisplayOptions,
@@ -21,7 +21,7 @@ interface Message {
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent {
   displayText: string;
   navigateTo: string[];
   navigateParams: any;
@@ -41,8 +41,6 @@ export class MessageComponent implements OnInit {
   ) {
     this.service.registerComponent(this);
   }
-
-  ngOnInit() {}
 
   display(data: MessageDisplayOptions) {
     if (this.visible) {

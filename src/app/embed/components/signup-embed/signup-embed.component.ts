@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -7,15 +7,11 @@ import {
   UntypedFormControl,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { APP_CONFIG } from '@root/app/app.config';
 import { AccountVO } from '@root/app/models';
 import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
-
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-
-import * as FormUtilities from '@shared/utilities/forms';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -24,7 +20,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   templateUrl: './signup-embed.component.html',
   styleUrls: ['./signup-embed.component.scss'],
 })
-export class SignupEmbedComponent implements OnInit {
+export class SignupEmbedComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
@@ -39,7 +35,7 @@ export class SignupEmbedComponent implements OnInit {
   };
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
@@ -68,8 +64,6 @@ export class SignupEmbedComponent implements OnInit {
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;

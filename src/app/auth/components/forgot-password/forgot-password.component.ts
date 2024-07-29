@@ -1,12 +1,10 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { ApiService } from '@shared/services/api/api.service';
@@ -16,7 +14,7 @@ import { ApiService } from '@shared/services/api/api.service';
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss'],
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   forgotForm: UntypedFormGroup;
   formErrors: any = {};
@@ -25,18 +23,14 @@ export class ForgotPasswordComponent implements OnInit {
   success: boolean;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private api: ApiService,
-    private router: Router,
     private message: MessageService,
-    private cookies: CookieService,
   ) {
     this.forgotForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;

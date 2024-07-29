@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+/* @format */
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { TagVO } from '@models/tag-vo';
@@ -11,7 +12,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
   templateUrl: './category-edit.component.html',
   styleUrls: ['./category-edit.component.scss'],
 })
-export class CategoryEditComponent implements OnInit {
+export class CategoryEditComponent {
   @Input() public category: string;
   @Input() public tags: TagVO[];
   @Input() public dismissEvent: Subject<number>;
@@ -22,17 +23,15 @@ export class CategoryEditComponent implements OnInit {
   constructor(
     private api: ApiService,
     private msg: MessageService,
-    private prompt: PromptService
+    private prompt: PromptService,
   ) {}
-
-  ngOnInit(): void {}
 
   public async delete(): Promise<void> {
     const deleted = this.getMatchingMetadataTags();
     try {
       await this.prompt.confirm(
         'Delete',
-        `Are you sure you want to delete the "${this.category}" field? (This will remove ${deleted.length} metadata values)`
+        `Are you sure you want to delete the "${this.category}" field? (This will remove ${deleted.length} metadata values)`,
       );
     } catch {
       return;
@@ -46,7 +45,7 @@ export class CategoryEditComponent implements OnInit {
         message: 'There was an error deleting the field. Please try again.',
       });
       throw new Error(
-        'There was an error deleting the field. Please try again.'
+        'There was an error deleting the field. Please try again.',
       );
     }
   }
@@ -57,7 +56,7 @@ export class CategoryEditComponent implements OnInit {
         new TagVO({
           tagId: tag.tagId,
           name: [newCategory].concat(tag.name.split(':').slice(1)).join(':'),
-        })
+        }),
     );
     try {
       await this.api.tag.update(updated);
@@ -73,7 +72,7 @@ export class CategoryEditComponent implements OnInit {
   protected getMatchingMetadataTags(): TagVO[] {
     return this.tags.filter(
       (tag) =>
-        tag.isCustomMetadata() && tag.name.split(':')[0] === this.category
+        tag.isCustomMetadata() && tag.name.split(':')[0] === this.category,
     );
   }
 }

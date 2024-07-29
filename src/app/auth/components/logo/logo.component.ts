@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+/* @format */
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pr-login-logo',
   templateUrl: './logo.component.html',
-  styleUrls: ['./logo.component.scss']
+  styleUrls: ['./logo.component.scss'],
 })
-export class LogoComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class LogoComponent {
+  constructor() {}
 }

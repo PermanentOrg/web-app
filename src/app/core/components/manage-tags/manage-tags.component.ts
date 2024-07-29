@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+/* @format */
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TagVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
@@ -6,9 +7,9 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 @Component({
   selector: 'pr-manage-tags',
   templateUrl: './manage-tags.component.html',
-  styleUrls: ['./manage-tags.component.scss']
+  styleUrls: ['./manage-tags.component.scss'],
 })
-export class ManageTagsComponent implements OnInit {
+export class ManageTagsComponent {
   @Input() tags: TagVO[] = [];
   @Output() refreshTags = new EventEmitter<void>();
 
@@ -18,18 +19,19 @@ export class ManageTagsComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private prompt: PromptService
-  ) { }
-
-  ngOnInit(): void {
-  }
+    private prompt: PromptService,
+  ) {}
 
   public getFilteredTags(): TagVO[] {
-    return this.tags.filter((t) =>
-      t.name.toLocaleLowerCase().includes(
-        this.filter.trim().toLocaleLowerCase()
-      ) && !t.isCustomMetadata()
-    ).sort((a, b) => a.name.localeCompare(b.name));
+    return this.tags
+      .filter(
+        (t) =>
+          t.name
+            .toLocaleLowerCase()
+            .includes(this.filter.trim().toLocaleLowerCase()) &&
+          !t.isCustomMetadata(),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 
   public getTagCount(): number {
@@ -48,28 +50,28 @@ export class ManageTagsComponent implements OnInit {
 
   public async deleteTag(tag: TagVO): Promise<void> {
     return this.prompt
-    .confirm(
-      'Delete',
-      'Are you sure you want to delete this tag from all items in the current archive?'
-    )
-    .then(async () => {
-      this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
-      return this.api.tag
-        .delete(tag)
-        .then(() => {
-          this.refreshTags.emit();
-        })
-        .catch(() => {
-          // Let's add the tag back to UI to show it isn't deleted.
-          this.tags.push(tag);
-          throw new Error('Manage Tags: Error accessing delete endpoint');
-        });
-    })
-    .catch((e: Error) => {
-      if (e) {
-        throw new Error(e.message);
-      }
-    });
+      .confirm(
+        'Delete',
+        'Are you sure you want to delete this tag from all items in the current archive?',
+      )
+      .then(async () => {
+        this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
+        return this.api.tag
+          .delete(tag)
+          .then(() => {
+            this.refreshTags.emit();
+          })
+          .catch(() => {
+            // Let's add the tag back to UI to show it isn't deleted.
+            this.tags.push(tag);
+            throw new Error('Manage Tags: Error accessing delete endpoint');
+          });
+      })
+      .catch((e: Error) => {
+        if (e) {
+          throw new Error(e.message);
+        }
+      });
   }
 
   public isEditingTag(tag: TagVO): boolean {

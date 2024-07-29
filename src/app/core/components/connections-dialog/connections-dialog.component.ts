@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -7,7 +8,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '@shared/services/api/api.service';
-import { DataService } from '@shared/services/data/data.service';
 import {
   PromptService,
   PromptButton,
@@ -60,7 +60,7 @@ export type ConnectionsTab = 'connections' | 'pending' | 'new';
   templateUrl: './connections-dialog.component.html',
   styleUrls: ['./connections-dialog.component.scss'],
 })
-export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
+export class ConnectionsDialogComponent implements IsTabbedDialog {
   connections: RelationVO[] = [];
   connectionRequests: RelationVO[] = [];
   sentConnectionsRequests: RelationVO[] = [];
@@ -73,7 +73,6 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private dataService: DataService,
     private promptService: PromptService,
     private messageService: MessageService,
     private prConstants: PrConstantsService,
@@ -81,7 +80,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
     private relationService: RelationshipService,
     private dialog: Dialog,
     @Inject(DIALOG_DATA) public data: any,
-    private dialogRef: DialogRef
+    private dialogRef: DialogRef,
   ) {
     this.data.connections.map((relation: RelationVO) => {
       if (relation.status.includes('ok')) {
@@ -116,8 +115,6 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
     }
   }
 
-  ngOnInit(): void {}
-
   onDoneClick(): void {
     this.dialogRef.close();
   }
@@ -132,7 +129,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
     this.promptService
       .promptButtons(
         buttons,
-        `Relationship with ${relation.RelationArchiveVO.fullName}`
+        `Relationship with ${relation.RelationArchiveVO.fullName}`,
       )
       .then((value: string) => {
         switch (value) {
@@ -152,7 +149,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
     this.promptService
       .promptButtons(
         buttons,
-        `Relationship with ${relation.RelationArchiveVO.fullName}`
+        `Relationship with ${relation.RelationArchiveVO.fullName}`,
       )
       .then((value: string) => {
         switch (value) {
@@ -172,7 +169,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
         `Accept relationship with ${relation.ArchiveVO.fullName}?`,
         deferred.promise,
         'Accept',
-        skipDecline ? 'Cancel' : 'Decline'
+        skipDecline ? 'Cancel' : 'Decline',
       )
       .then((value) => {
         const relationMyVo = new RelationVO({
@@ -253,7 +250,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
         fields,
         `Relationship with ${relation.RelationArchiveVO.fullName}`,
         deferred.promise,
-        'Save'
+        'Save',
       )
       .then((value) => {
         updatedRelation = new RelationVO({
@@ -310,7 +307,7 @@ export class ConnectionsDialogComponent implements OnInit, IsTabbedDialog {
         confirmText,
         confirmTitle,
         deferred.promise,
-        'btn-danger'
+        'btn-danger',
       );
       const response = await this.relationService.remove(relation);
       this.messageService.showMessage({

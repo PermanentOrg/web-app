@@ -5,7 +5,6 @@ import {
   ElementRef,
   ViewChild,
   AfterViewInit,
-  OnDestroy,
   Input,
 } from '@angular/core';
 import {
@@ -32,7 +31,7 @@ const elements = stripe.elements();
   templateUrl: './new-pledge.component.html',
   styleUrls: ['./new-pledge.component.scss'],
 })
-export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NewPledgeComponent implements OnInit, AfterViewInit {
   @Input() inlineFlow: boolean = false;
   public waiting: boolean;
   public pledgeForm: UntypedFormGroup;
@@ -298,8 +297,6 @@ export class NewPledgeComponent implements OnInit, AfterViewInit, OnDestroy {
     const bytesInGiB = 1073741824;
     return Math.floor(amount / 10) * bytesInGiB;
   }
-
-  ngOnDestroy() {}
 }
 
 export interface PledgeData {

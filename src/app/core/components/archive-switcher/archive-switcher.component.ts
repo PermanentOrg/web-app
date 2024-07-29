@@ -1,10 +1,5 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+/* @format */
+import { Component, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
 
@@ -24,7 +19,6 @@ import { ArchiveVO, FolderVO } from '@root/app/models';
 import { BaseResponse } from '@shared/services/api/base';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
-import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { RELATIONSHIP_FIELD } from '@shared/components/prompt/prompt-fields';
 import { DataService } from '@shared/services/data/data.service';
@@ -34,7 +28,7 @@ import { DataService } from '@shared/services/data/data.service';
   templateUrl: './archive-switcher.component.html',
   styleUrls: ['./archive-switcher.component.scss'],
 })
-export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
+export class ArchiveSwitcherComponent implements AfterViewInit {
   public currentArchive: ArchiveVO;
   public archives: ArchiveVO[];
   constructor(
@@ -45,14 +39,14 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private prompt: PromptService,
     private message: MessageService,
-    private router: Router
+    private router: Router,
   ) {
     this.data.setCurrentFolder(
       new FolderVO({
         displayName: 'Archives',
         pathAsText: ['Archives'],
         type: 'page',
-      })
+      }),
     );
     this.currentArchive = accountService.getArchive();
 
@@ -61,7 +55,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
       archivesData.map((archiveData) => {
         return new ArchiveVO(archiveData);
       }),
-      'fullName'
+      'fullName',
     );
     const currentArchiveFetched = remove(archives, {
       archiveId: this.currentArchive.archiveId,
@@ -73,11 +67,9 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
     this.archives = archives as ArchiveVO[];
   }
 
-  ngOnInit() {}
-
   ngAfterViewInit() {
     const targetElems = document.querySelectorAll(
-      '.archive-list pr-archive-small'
+      '.archive-list pr-archive-small',
     );
     gsap.from(targetElems, {
       duration: 0.75,
@@ -112,7 +104,7 @@ export class ArchiveSwitcherComponent implements OnInit, AfterViewInit {
       message = `You have been invited to collaborate on the ${
         archive.fullName
       } archive. Accept ${this.prConstants.translate(
-        archive.accessRole
+        archive.accessRole,
       )} access and switch?`;
     }
 

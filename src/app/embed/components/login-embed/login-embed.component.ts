@@ -1,21 +1,15 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
   Validators,
-  FormControl,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { APP_CONFIG } from '@root/app/app.config';
-import { matchControlValidator } from '@shared/utilities/forms';
-
 import { AccountService } from '@shared/services/account/account.service';
 import { AuthResponse } from '@shared/services/api/auth.repo';
 import { MessageService } from '@shared/services/message/message.service';
-import { AccountResponse } from '@shared/services/api/index.repo';
-
 import * as FormUtilities from '@shared/utilities/forms';
 import { IFrameService } from '@shared/services/iframe/iframe.service';
 
@@ -26,7 +20,7 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   templateUrl: './login-embed.component.html',
   styleUrls: ['./login-embed.component.scss'],
 })
-export class LoginEmbedComponent implements OnInit {
+export class LoginEmbedComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   loginForm: UntypedFormGroup;
   waiting: boolean;
@@ -68,8 +62,6 @@ export class LoginEmbedComponent implements OnInit {
       this.iFrame.setParentUrl('/app');
     }
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;

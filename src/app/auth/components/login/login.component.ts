@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -21,13 +21,13 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   loginForm: UntypedFormGroup;
   waiting: boolean;
 
   constructor(
-    private fb: UntypedFormBuilder,
+    fb: UntypedFormBuilder,
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
@@ -48,8 +48,6 @@ export class LoginComponent implements OnInit {
       keepLoggedIn: [true],
     });
   }
-
-  ngOnInit() {}
 
   onSubmit(formValue: any) {
     this.waiting = true;

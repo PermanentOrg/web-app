@@ -1,17 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+/* @format */
+import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import {
   PromptService,
   PromptField,
 } from '@shared/services/prompt/prompt.service';
-import {
-  RelationVO,
-  ArchiveVO,
-  InviteVO,
-  FolderVO,
-  RecordVO,
-  ItemVO,
-} from '@models';
+import { RelationVO, ArchiveVO, InviteVO, ItemVO } from '@models';
 import { Deferred } from '@root/vendor/deferred';
 import { ApiService } from '@shared/services/api/api.service';
 import {
@@ -43,7 +37,7 @@ export interface ArchivePickerComponentConfig {
   templateUrl: './archive-picker.component.html',
   styleUrls: ['./archive-picker.component.scss'],
 })
-export class ArchivePickerComponent implements OnInit {
+export class ArchivePickerComponent {
   relations: RelationVO[];
   relationOptions: FormInputSelectOption[];
   hideAccessRoleOnInvite = false;
@@ -58,7 +52,7 @@ export class ArchivePickerComponent implements OnInit {
     private accountService: AccountService,
     private message: MessageService,
     private prConstants: PrConstantsService,
-    private ga: GoogleAnalyticsService
+    private ga: GoogleAnalyticsService,
   ) {
     this.relations = this.dialogData.relations;
     this.hideAccessRoleOnInvite = this.dialogData.hideAccessRoleOnInvite;
@@ -69,8 +63,6 @@ export class ArchivePickerComponent implements OnInit {
       };
     });
   }
-
-  ngOnInit() {}
 
   searchByEmail() {
     const deferred = new Deferred();
@@ -120,7 +112,7 @@ export class ArchivePickerComponent implements OnInit {
         fields,
         forShare ? 'Invite to share' : 'Send invitation',
         deferred.promise,
-        'Send'
+        'Send',
       )
       .then((value) => {
         const invite = new InviteVO({
@@ -133,7 +125,7 @@ export class ArchivePickerComponent implements OnInit {
         if (this.dialogData.shareItem) {
           return this.api.invite.sendShareInvite(
             [invite],
-            this.dialogData.shareItem
+            this.dialogData.shareItem,
           );
         } else {
           return this.api.invite.send([invite]);

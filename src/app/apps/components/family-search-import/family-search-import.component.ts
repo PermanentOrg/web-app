@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+/* @format */
+import { Component, Inject } from '@angular/core';
 import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { filter } from 'lodash';
 import { ArchiveVO } from '@models';
@@ -31,7 +32,7 @@ interface FamilyMember {
   templateUrl: './family-search-import.component.html',
   styleUrls: ['./family-search-import.component.scss'],
 })
-export class FamilySearchImportComponent implements OnInit {
+export class FamilySearchImportComponent {
   public stage: 'people' | 'memories' | 'importing' = 'people';
   public importMemories = 'yes';
   public familyMembers: FamilySearchPersonI[] = [];
@@ -44,16 +45,14 @@ export class FamilySearchImportComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private api: ApiService,
     private message: MessageService,
-    private guidedTour: GuidedTourService
+    private guidedTour: GuidedTourService,
   ) {
     this.currentUser = data.currentUserData;
     this.familyMembers = filter(
       data.treeData,
-      (person) => person.id !== this.currentUser.id
+      (person) => person.id !== this.currentUser.id,
     );
   }
-
-  ngOnInit() {}
 
   cancel() {
     this.dialogRef.close(null, true);
@@ -71,7 +70,7 @@ export class FamilySearchImportComponent implements OnInit {
         fullName: person.display.name,
         type: 'type.archive.person',
         relationType: this.getRelationshipFromAncestryNumber(
-          person.display.ascendancyNumber
+          person.display.ascendancyNumber,
         ),
       });
     });
@@ -97,13 +96,13 @@ export class FamilySearchImportComponent implements OnInit {
 
       await this.api.connector.familysearchFactImportRequest(
         newArchives,
-        personIds
+        personIds,
       );
 
       if (this.importMemories === 'yes') {
         await this.api.connector.familysearchMemoryImportRequest(
           newArchives,
-          personIds
+          personIds,
         );
       }
 
@@ -131,7 +130,7 @@ export class FamilySearchImportComponent implements OnInit {
               show: () => {
                 this.guidedTour.markStepComplete(
                   'familysearch',
-                  'switchArchives'
+                  'switchArchives',
                 );
               },
             },

@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+/* @format */
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pr-missing-pledge',
   templateUrl: './missing-pledge.component.html',
-  styleUrls: ['./missing-pledge.component.scss']
+  styleUrls: ['./missing-pledge.component.scss'],
 })
-export class MissingPledgeComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class MissingPledgeComponent {
+  constructor() {}
 }
