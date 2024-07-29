@@ -99,3 +99,10 @@ jobs:
 
       - name: Copy package to S3
         run: aws s3 cp ../mdot.tar.gz s3://permanent-repos/dev/mdot.tar.gz
+
+  deploy:
+    needs: [upload-code, upload-sourcemaps]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger dev deploy
+        run: curl -X POST -H 'Accept:application/vnd.github.v3+json' -H 'Authorization:Bearer ${{ secrets.PERMANENT_DEPLOY_PAT }}' https://api.github.com/repos/PermanentOrg/infrastructure/actions/workflows/deploy-dev.yml/dispatches -d '{"ref":"main"}'
