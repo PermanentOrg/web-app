@@ -1,8 +1,8 @@
 /* @format */
 import { Shallow } from 'shallow-render';
 import { OnboardingModule } from '@root/app/onboarding/onboarding.module';
-import { PendingArchiveComponent } from './pending-archive.component';
 import { ArchiveVO } from '@models/index';
+import { PendingArchiveComponent } from './pending-archive.component';
 
 describe('PendingArchiveComponent', () => {
   let shallow: Shallow<PendingArchiveComponent>;

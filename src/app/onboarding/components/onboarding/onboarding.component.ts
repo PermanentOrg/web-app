@@ -83,7 +83,6 @@ export class OnboardingComponent implements OnInit {
   }
 
   public setScreen(screen: OnboardingScreen): void {
-    console.log('setScreen', screen);
     this.screen = screen;
     if (this.selectedPendingArchive) {
       this.selectedPendingArchive = null;

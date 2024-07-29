@@ -132,7 +132,6 @@ export class CreateNewArchiveComponent implements OnInit {
       this.pendingArchive &&
       (screen === 'create' || screen === 'name-archive')
     ) {
-      console.log(screen);
       this.goToInvitations();
     }
     const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
