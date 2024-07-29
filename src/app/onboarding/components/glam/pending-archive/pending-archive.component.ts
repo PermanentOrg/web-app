@@ -1,5 +1,5 @@
 /* @format */
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 
 @Component({
@@ -7,7 +7,7 @@ import { ArchiveVO } from '@models/index';
   templateUrl: './pending-archive.component.html',
   styleUrl: './pending-archive.component.scss',
 })
-export class PendingArchiveComponent implements OnInit {
+export class PendingArchiveComponent {
   readonly roles = {
     'access.role.viewer': 'Viewer',
     'access.role.editor': 'Editor',
@@ -20,10 +20,6 @@ export class PendingArchiveComponent implements OnInit {
   @Input() isSelected: boolean = false;
 
   @Output() acceptArchiveOutput = new EventEmitter<ArchiveVO>();
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   acceptArchive(archive: ArchiveVO): void {
     this.acceptArchiveOutput.emit(archive);

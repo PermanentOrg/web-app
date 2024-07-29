@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+/* @format */
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 
@@ -7,7 +8,7 @@ import { AccountService } from '@shared/services/account/account.service';
   templateUrl: './glam-pending-archives.component.html',
   styleUrl: './glam-pending-archives.component.scss',
 })
-export class GlamPendingArchivesComponent implements OnInit {
+export class GlamPendingArchivesComponent {
   @Input() pendingArchives: ArchiveVO[] = [];
 
   @Output() createNewArchiveOutput = new EventEmitter<void>();
@@ -18,10 +19,6 @@ export class GlamPendingArchivesComponent implements OnInit {
 
   constructor(private account: AccountService) {
     this.accountName = this.account.getAccount().fullName;
-  }
-
-  ngOnInit(): void {
-    console.log(this.pendingArchives);
   }
 
   createNewArchive(): void {
