@@ -78,6 +78,7 @@ describe('PendingArchiveComponent', () => {
     });
 
     const roleElement = find('.role');
+    
     expect(roleElement.nativeElement.textContent).toContain('Editor');
   });
 

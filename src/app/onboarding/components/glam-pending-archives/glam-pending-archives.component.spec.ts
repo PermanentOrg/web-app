@@ -2,8 +2,8 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
+import { OnboardingModule } from '../../onboarding.module'; 
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
-import { OnboardingModule } from '../../onboarding.module';
 
 const mockAccountService = {
   getAccount: () => {
@@ -46,6 +46,7 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     const archiveElements = find('pr-pending-archive');
+
     expect(archiveElements.length).toBe(2);
   });
 
@@ -57,6 +58,7 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     instance.selectArchive(archive);
+
     expect(instance.selectedArchive).toBe(archive);
   });
 
