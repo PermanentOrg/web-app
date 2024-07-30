@@ -154,9 +154,4 @@ export class OnboardingComponent implements OnInit {
     this.selectedPendingArchive = archive;
     this.screen = OnboardingScreen.welcomeScreen;
   }
-
-  public logOut(): void {
-    this.account.clear();
-    this.router.navigate(['/app', 'auth']);
-  }
 }

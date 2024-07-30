@@ -31,6 +31,7 @@ import { FinalizeArchiveCreationScreenComponent } from './components/finalize-ar
 import { GlamReasonsScreenComponent } from './components/glam-reasons-screen/glam-reasons-screen.component';
 import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-goals-screen.component';
 import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
+import { OnboardingHeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { GlamUserSurveySquareComponent } from './components/glam/glam-user-surve
     GlamReasonsScreenComponent,
     GlamGoalsScreenComponent,
     GlamUserSurveySquareComponent,
+    OnboardingHeaderComponent,
   ],
   imports: [
     CommonModule,

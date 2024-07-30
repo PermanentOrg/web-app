@@ -1,13 +1,5 @@
 <!-- @format  -->
-<div class="perm-banner">
-  <div class="banner-content">
-    <img class="banner-logo" src="assets/img/logo/sideways_logo.png" />
-    <div class="banner-logout">
-      <strong>{{ accountName }}</strong>
-      <button class="btn btn-primary" (click)="logOut()">Log Out</button>
-    </div>
-  </div>
-</div>
+<pr-onboarding-header [accountName]="accountName"></pr-onboarding-header>
 <div *ngIf="errorMessage.length > 0">
   <div class="alert-wrapper" class="visible fade">
     <div class="alert alert-primary alert-warning">

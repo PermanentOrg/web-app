@@ -26,19 +26,6 @@ $mobile-transition-breakpoint: 1200px;
   margin: 0 auto;
 }
 
-.banner-content {
-  justify-content: space-between;
-}
-
-.banner-logout {
-  .btn {
-    padding: 0.5em;
-    width: auto;
-    background-color: #41496e;
-    margin: 0 auto;
-  }
-}
-
 .progress-bar {
   display: flex;
   flex-direction: row;
