@@ -10,10 +10,9 @@ describe('GlamHeaderComponent', () => {
   let shallow: Shallow<GlamOnboardingHeaderComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(
-      GlamOnboardingHeaderComponent,
-      OnboardingModule,
-    ).import(HttpClientTestingModule);
+    shallow = new Shallow(GlamOnboardingHeaderComponent, OnboardingModule)
+      .import(HttpClientTestingModule)
+      .provideMock({ provide: AccountService, useValue: { clear: () => {} } });
   });
 
   it('should create', async () => {
