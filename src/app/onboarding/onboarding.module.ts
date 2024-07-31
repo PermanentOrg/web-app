@@ -26,7 +26,7 @@ import { SelectArchiveTypeScreenComponent } from './components/select-archive-ty
 import { NameArchiveScreenComponent } from './components/name-archive-screen/name-archive-screen.component';
 import { GlamArchiveTypeSelectComponent } from './components/glam/archive-type-select/archive-type-select.component';
 import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/archive-type-icon.component';
-import { CreateArchiveForMeScreenComponent } from './components/create-archive-for-me-screen/create-archive-for-me-screen.component';
+import { CreateArchiveForMeScreenComponent } from './components/glam/create-archive-for-me-screen/create-archive-for-me-screen.component';
 import { FinalizeArchiveCreationScreenComponent } from './components/finalize-archive-creation-screen/finalize-archive-creation-screen.component';
 import { GlamReasonsScreenComponent } from './components/glam-reasons-screen/glam-reasons-screen.component';
 import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-goals-screen.component';
