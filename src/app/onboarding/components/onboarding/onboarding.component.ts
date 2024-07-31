@@ -12,7 +12,6 @@ import { ArchiveVO } from '@models/archive-vo';
 import { AccountVO } from '@models/account-vo';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
-import { routes } from '@onboarding/onboarding.routes';
 import { partition as lodashPartition } from 'lodash';
 import { EventService } from '@shared/services/event/event.service';
 
@@ -87,17 +86,6 @@ export class OnboardingComponent implements OnInit {
     this.screen = screen;
     if (this.selectedPendingArchive) {
       this.selectedPendingArchive = null;
-    }
-    const correspondingRoute = routes.find((route) => {
-      if (route.data?.onboardingScreen) {
-        if ((route.data.onboardingScreen as OnboardingScreen) === screen) {
-          return true;
-        }
-      }
-      return false;
-    });
-    if (correspondingRoute) {
-      this.location.go('app/onboarding/' + correspondingRoute.path);
     }
     if (screen === OnboardingScreen.done) {
       if (this.acceptedInvite) {
