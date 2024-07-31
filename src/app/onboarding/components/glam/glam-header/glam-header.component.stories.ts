@@ -4,7 +4,6 @@ import {
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';

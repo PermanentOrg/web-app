@@ -1,5 +1,5 @@
 /* @format */
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '@shared/services/account/account.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';

@@ -32,7 +32,7 @@ import { GlamReasonsScreenComponent } from './components/glam-reasons-screen/gla
 import { GlamGoalsScreenComponent } from './components/glam/glam-goals-screen/glam-goals-screen.component';
 import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
 import { OnboardingHeaderComponent } from './components/header/header.component';
-import { GlamOnboardingHeaderComponent } from './components/glam-header/glam-header.component';
+import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/glam-header.component';
 
 @NgModule({
   declarations: [
