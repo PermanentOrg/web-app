@@ -1,6 +1,6 @@
 /* @format */
 import { Component, Output, EventEmitter } from '@angular/core';
-import { reasons } from '../../shared/onboarding-screen';
+import { reasons } from '../../../shared/onboarding-screen';
 
 @Component({
   selector: 'pr-glam-reasons-screen',
