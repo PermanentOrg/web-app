@@ -1,7 +1,7 @@
 /* @format */
 import { Shallow } from 'shallow-render';
 import { By } from '@angular/platform-browser';
-import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingModule } from '../../../onboarding.module';
 import { SelectArchiveTypeScreenComponent } from './select-archive-type-screen.component';
 
 describe('SelectArchiveTypeScreenComponent', () => {
