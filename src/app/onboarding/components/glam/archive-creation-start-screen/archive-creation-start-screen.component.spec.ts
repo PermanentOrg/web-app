@@ -3,7 +3,7 @@ import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { By } from '@angular/platform-browser';
-import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingModule } from '../../../onboarding.module';
 import { ArchiveCreationStartScreenComponent } from './archive-creation-start-screen.component';
 
 const mockAccountService = {
