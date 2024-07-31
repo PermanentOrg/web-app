@@ -29,7 +29,7 @@ import { ArchiveTypeIconComponent } from './components/glam/archive-type-icon/ar
 import { CreateArchiveForMeScreenComponent } from './components/glam/create-archive-for-me-screen/create-archive-for-me-screen.component';
 import { FinalizeArchiveCreationScreenComponent } from './components/glam/finalize-archive-creation-screen/finalize-archive-creation-screen.component';
 import { GlamReasonsScreenComponent } from './components/glam-reasons-screen/glam-reasons-screen.component';
-import { GlamGoalsScreenComponent } from './components/glam-goals-screen/glam-goals-screen.component';
+import { GlamGoalsScreenComponent } from './components/glam/glam-goals-screen/glam-goals-screen.component';
 import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
 import { OnboardingHeaderComponent } from './components/header/header.component';
 import { GlamOnboardingHeaderComponent } from './components/glam-header/glam-header.component';
