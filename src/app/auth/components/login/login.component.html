@@ -46,9 +46,10 @@
       [buttonType]="'submit'"
       [variant]="'secondary'"
       [size]="'fill'"
-      [icon]="'/auth/sign-in'"
+      [icon]="'/auth/arrow-right'"
       [orientation]="'right'"
       [disabled]="waiting || loginForm.invalid"
+      [style]="{ justifyContent: 'center' }"
       >Sign in</pr-button
     >
     <div class="forgot-password-button">
@@ -63,6 +64,8 @@
       [size]="'fill'"
       [orientation]="'right'"
       (buttonClick)="navigateToRegister()"
+      [icon]="'/auth/sign-up-white'"
+      [style]="{ justifyContent: 'center' }"
       >Register</pr-button
     >
   </div>
