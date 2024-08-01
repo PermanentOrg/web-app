@@ -71,23 +71,24 @@
 
 .testimony {
   position: absolute;
-  background: #ffffffa3;
+  background: rgba(255, 255, 255, 0.9);
   padding: 64px;
   top: 50%;
-  left: 25%;
+  left: 40%;
   transform: translate(-50%, -50%);
   border-radius: 12px;
 
   & > .text {
-    width: 232px;
-    font-family: 'UsualItalic', sans-serif;
+    width: 525px;
+    font-family: 'UsualRegular', sans-serif;
     font-weight: 400;
     line-height: 24px;
     font-size: 16px;
+    margin-top: 32px;
   }
 
   & > .link {
-    font-family: 'UsualItalic', sans-serif;
+    font-family: 'UsualRegular', sans-serif;
     font-weight: 300;
     line-height: 24px;
     font-size: 18px;

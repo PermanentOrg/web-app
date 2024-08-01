@@ -112,15 +112,17 @@
       [size]="'fill'"
       [icon]="'/auth/sign-up'"
       [orientation]="'right'"
+      [style]="{ justifyContent: 'center' }"
       [disabled]="waiting || signupForm.invalid || !agreedTerms"
       >Register</pr-button
     >
     <pr-or-divider></pr-or-divider>
     <pr-button
       [size]="'fill'"
-      [orientation]="'right'"
       (buttonClick)="navigateToAuth()"
-      >Sign in</pr-button
+      [icon]="'/auth/back'"
+      [style]="{ justifyContent: 'center' }"
+      >Back to sign in</pr-button
     >
   </div>
 </form>
