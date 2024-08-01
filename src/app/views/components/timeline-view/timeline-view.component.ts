@@ -153,7 +153,6 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   constructor(
     @Inject(DIALOG_DATA) public dialogData: any,
-    // @Inject(OUTLET_TEMPLATE) public outletTemplate: any,
     private route: ActivatedRoute,
     private dataService: DataService,
     private api: ApiService,
