@@ -13,7 +13,11 @@
     </div>
   </div>
 </div>
-<div class="onboarding" *ngIf="showOnboarding; else loading">
+<div
+  class="onboarding"
+  [ngClass]="{ 'onboarding-glam': isGlam }"
+  *ngIf="showOnboarding; else loading"
+>
   <div class="progress-bar">
     <div [ngClass]="getProgressChunkClasses(0)"></div>
     <div [ngClass]="getProgressChunkClasses(1)"></div>

@@ -31,6 +31,13 @@ $mobile-transition-breakpoint: 1200px;
   margin: 0 auto;
 }
 
+.onboarding-glam {
+  height: auto;
+  @include beforeDesktop {
+    height: auto;
+  }
+}
+
 .progress-bar {
   display: flex;
   flex-direction: row;
