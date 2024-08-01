@@ -30,10 +30,17 @@ p {
   @media screen and (max-width: 600px) {
     width: 100%;
   }
-  & > p {
+  & > .greeting {
     font-size: 50px;
-    font-family: 'UsualRegular', sans-serif;
+    font-family: 'UsualLight', sans-serif;
+
+    & > b {
+      font-family: 'UsualRegular', sans-serif;
+    }
   }
+
+
+
 }
 
 .text-buttons-container {
@@ -41,7 +48,7 @@ p {
   justify-content: space-between;
   width: 50%;
   display: flex;
-  height: 75vh;
+  height: 60vh;
 
   @media screen and (max-width: 600px) {
     height: auto;
