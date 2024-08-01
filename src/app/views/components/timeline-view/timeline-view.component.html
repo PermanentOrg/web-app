@@ -1,9 +1,14 @@
-
 <pr-timeline-breadcrumbs
   (breadcrumbClicked)="onBreadcrumbClick($event)"
-  [timelineGroups]="timelineGroups"></pr-timeline-breadcrumbs>
-<div class="timeline" #timelineContainer [ngClass]="{'navigating': isNavigating}" (click)="showFolderDetails = false;"></div>
-<div class="timeline-zoom-controls" (click)="showFolderDetails = false;">
+  [timelineGroups]="timelineGroups"
+></pr-timeline-breadcrumbs>
+<div
+  class="timeline"
+  #timelineContainer
+  [ngClass]="{ navigating: isNavigating }"
+  (click)="showFolderDetails = false"
+></div>
+<div class="timeline-zoom-controls" (click)="showFolderDetails = false">
   <div class="control-row">
     <button class="btn" (click)="onZoomInClick()">+</button>
   </div>
@@ -15,18 +20,39 @@
     <button class="btn" (click)="onZoomOutClick()">-</button>
   </div>
 </div>
-<div class="timeline-folder-info" [ngClass]="{'showing-details': showFolderDetails}">
+<div
+  class="timeline-folder-info"
+  [ngClass]="{ 'showing-details': showFolderDetails }"
+>
   <div class="timeline-folder-info-content">
-    <span class="timeline-folder-info-name">{{timelineRootFolder.displayName}}</span>
-    <a class="timeline-folder-details-button" *ngIf="timelineRootFolder.description && timelineRootFolder.ChildItemVOs.length" (click)="toggleFolderDetails()">{{showFolderDetails ? 'Hide details' : 'Click for details'}}</a>
-    <span class="timeline-folder-details-button" *ngIf="!timelineRootFolder.ChildItemVOs.length" (click)="toggleFolderDetails()">This folder is empty</span>
+    <span class="timeline-folder-info-name">{{
+      timelineRootFolder.displayName
+    }}</span>
+    <a
+      class="timeline-folder-details-button"
+      *ngIf="
+        timelineRootFolder.description && timelineRootFolder.ChildItemVOs.length
+      "
+      (click)="toggleFolderDetails()"
+      >{{ showFolderDetails ? 'Hide details' : 'Click for details' }}</a
+    >
+    <span
+      class="timeline-folder-details-button"
+      *ngIf="!timelineRootFolder.ChildItemVOs.length"
+      (click)="toggleFolderDetails()"
+      >This folder is empty</span
+    >
     <span class="timeline-folder-info-date">
-      {{timelineRootFolder.displayDT | date:'shortDate'}}{{timelineRootFolder.displayEndDT  ? ' to ' : ''}}{{timelineRootFolder.displayEndDT | date:'shortDate'}}
+      {{ timelineRootFolder.displayDT | date: 'shortDate'
+      }}{{ timelineRootFolder.displayEndDT ? ' to ' : ''
+      }}{{ timelineRootFolder.displayEndDT | date: 'shortDate' }}
     </span>
   </div>
-  <div class="timeline-folder-info-details" *ngIf="timelineRootFolder.description">
+  <div
+    class="timeline-folder-info-details"
+    *ngIf="timelineRootFolder.description"
+  >
     <div>About</div>
     <p [innerHTML]="timelineRootFolder.description"></p>
   </div>
 </div>
-<ng-container [ngTemplateOutlet]="outletTemplate"></ng-container>
