@@ -47,7 +47,6 @@ export class SignupComponent {
   shareFromName: string;
   shareItemIsRecord = false;
   agreedTerms = false;
-  showTerms: boolean = false;
 
   constructor(
     fb: UntypedFormBuilder,
@@ -216,12 +215,7 @@ export class SignupComponent {
   }
 
   displayTerms(): void {
-    this.showTerms = true;
-  }
-
-  acceptTerms(accepted: boolean): void {
-    this.agreedTerms = accepted;
-    this.showTerms = false;
+    window.open('https://www.permanent.org/terms/', '_blank');
   }
 
   navigateToAuth() {

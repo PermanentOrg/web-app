@@ -72,19 +72,20 @@
 .testimony {
   position: absolute;
   background: rgba(255, 255, 255, 0.9);
-  padding: 64px;
-  top: 50%;
-  left: 40%;
+  padding: 38px 64px;
+  top: 65%;
+  left: 35%;
   transform: translate(-50%, -50%);
   border-radius: 12px;
 
   & > .text {
-    width: 525px;
+    width: 397px;
     font-family: 'UsualRegular', sans-serif;
     font-weight: 400;
     line-height: 24px;
     font-size: 16px;
     margin-top: 32px;
+    color: #131B4A;
   }
 
   & > .link {
@@ -93,6 +94,11 @@
     line-height: 24px;
     font-size: 18px;
     margin-bottom: 32px;
-    color: black;
+    color: #131B4A;
+
+  }
+
+  & > .archive-data{
+    font-size: 10px;
   }
 }
