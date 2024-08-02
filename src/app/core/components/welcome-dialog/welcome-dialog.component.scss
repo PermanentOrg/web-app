@@ -11,6 +11,11 @@
     width: auto;
     margin: 0;
     flex: 0 0 auto;
+
+    &:focus {
+      box-shadow: none;
+      border: none;
+    }
   }
   height: 2rem;
   flex: 0 0 auto;
