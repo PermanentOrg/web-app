@@ -12,6 +12,7 @@ import { NotificationService } from '@root/app/notifications/services/notificati
 import { EventService } from '@shared/services/event/event.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { NotificationDialogComponent } from '@root/app/notifications/components/notification-dialog/notification-dialog.component';
+import { Overlay } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'pr-nav',
@@ -26,6 +27,7 @@ export class NavComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private event: EventService,
+    private overlay: Overlay,
     @Optional() private portalService: SidebarActionPortalService,
     @Optional() public notificationService: NotificationService,
     @Optional() private dialog: DialogCdkService,
@@ -67,6 +69,8 @@ export class NavComponent implements AfterViewInit, OnDestroy {
     try {
       this.dialog.open(NotificationDialogComponent, {
         height: 'fullscreen',
+        panelClass: 'notification-dialog',
+        positionStrategy: this.overlay.position().global().right('0'),
       });
     } catch (err) {}
   }

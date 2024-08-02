@@ -39,6 +39,7 @@ import { SharingComponent } from '@fileBrowser/components/sharing/sharing.compon
 import { PublishComponent } from '@fileBrowser/components/publish/publish.component';
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
@@ -533,7 +534,7 @@ export class EditService {
       } catch (err) {}
     } else {
       try {
-        this.dialog.open(SharingComponent, {
+        this.dialog.open(SharingDialogComponent, {
           data: { item, link: response.getShareByUrlVO() },
           width: '600px',
           panelClass: 'dialog',
