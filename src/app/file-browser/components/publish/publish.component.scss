@@ -6,7 +6,7 @@
 
 .dialog-content {
   background-color: white;
-  padding: 10px;
+  padding-bottom: 2px;
 }
 
 .public-link-button,
@@ -25,5 +25,11 @@
 
   .btn:not(:last-child) {
     margin-right: 10px;
+  }
+}
+
+.dialog-footer {
+  & > .btn {
+    width: 380px;
   }
 }

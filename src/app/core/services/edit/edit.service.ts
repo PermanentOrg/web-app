@@ -547,7 +547,7 @@ export class EditService {
       data: { item },
       height: 'auto',
       panelClass: 'dialog',
-      width: '50%',
+      width: '400px',
     });
   }
 
