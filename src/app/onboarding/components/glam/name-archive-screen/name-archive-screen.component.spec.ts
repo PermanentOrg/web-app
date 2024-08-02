@@ -2,7 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingModule } from '../../../onboarding.module';
 import { NameArchiveScreenComponent } from './name-archive-screen.component';
 
 describe('NameArchiveScreenComponent', () => {

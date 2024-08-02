@@ -1,7 +1,7 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { OnboardingModule } from '../../onboarding.module';
-import { reasons } from '../../shared/onboarding-screen';
+import { OnboardingModule } from '../../../onboarding.module';
+import { reasons } from '../../../shared/onboarding-screen';
 import { GlamReasonsScreenComponent } from './glam-reasons-screen.component';
 
 describe('GlamReasonsScreenComponent', () => {

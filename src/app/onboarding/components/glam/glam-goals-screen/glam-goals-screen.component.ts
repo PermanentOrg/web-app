@@ -1,6 +1,6 @@
 /* @format */
 import { Component, EventEmitter, Output } from '@angular/core';
-import { goals } from '../../shared/onboarding-screen';
+import { goals } from '../../../shared/onboarding-screen';
 
 @Component({
   selector: 'pr-glam-goals-screen',

@@ -2,7 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { By } from '@angular/platform-browser';
-import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingModule } from '../../../onboarding.module';
 import { CreateArchiveForMeScreenComponent } from './create-archive-for-me-screen.component';
 
 const mockAccountService = {

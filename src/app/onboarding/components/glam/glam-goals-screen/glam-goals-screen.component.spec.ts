@@ -1,7 +1,7 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { OnboardingModule } from '../../onboarding.module';
-import { goals } from '../../shared/onboarding-screen';
+import { OnboardingModule } from '../../../onboarding.module';
+import { goals } from '../../../shared/onboarding-screen';
 import { GlamGoalsScreenComponent } from './glam-goals-screen.component';
 
 describe('GlamGoalsScreenComponent', () => {

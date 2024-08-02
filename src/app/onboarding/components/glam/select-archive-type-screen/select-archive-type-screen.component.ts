@@ -1,11 +1,11 @@
 /* @format */
 import { Component, Output, EventEmitter } from '@angular/core';
-import { generateElementText } from '../../utils/utils';
+import { generateElementText } from '../../../utils/utils';
 import {
   archiveOptionsWithArticle,
   archiveCreationHeaderText,
   archiveOptions,
-} from '../glam/types/archive-types';
+} from '../types/archive-types';
 
 @Component({
   selector: 'pr-select-archive-type-screen',
