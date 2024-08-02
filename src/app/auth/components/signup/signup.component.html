@@ -1,14 +1,6 @@
 <!-- @format -->
-<h1
-  class="page-title"
-  *ngIf="!isForShareInvite"
->
-  Create your new Account
-</h1>
-<form
-  [formGroup]="signupForm"
-  (ngSubmit)="onSubmit(signupForm.value)"
->
+<h1 class="page-title" *ngIf="!isForShareInvite">Create your new Account</h1>
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
   <h1 class="page-title" *ngIf="isForShareInvite">
     {{ shareFromName }} has shared <em>{{ shareItem.displayName }}</em> with you
   </h1>
