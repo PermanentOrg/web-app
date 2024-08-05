@@ -1,8 +1,6 @@
 /* @format */
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IsTabbedDialog, DialogRef } from '@root/app/dialog/dialog.module';
-
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -20,6 +18,10 @@ import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { DialogRef } from '@angular/cdk/dialog';
+import { UploadService } from '@core/services/upload/upload.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
 
@@ -28,9 +30,7 @@ type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
   templateUrl: './storage-dialog.component.html',
   styleUrls: ['./storage-dialog.component.scss'],
 })
-export class StorageDialogComponent
-  implements OnInit, IsTabbedDialog, OnDestroy
-{
+export class StorageDialogComponent implements OnInit, OnDestroy {
   activeTab: StorageDialogTab = 'add';
 
   promoForm: UntypedFormGroup;

@@ -1,7 +1,7 @@
 /* @format */
 import { Component, Inject } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { DeviceService } from '@shared/services/device/device.service';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-create-account-dialog',

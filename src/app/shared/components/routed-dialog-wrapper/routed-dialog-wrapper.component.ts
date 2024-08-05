@@ -1,4 +1,3 @@
-/* @format */
 import {
   Component,
   OnDestroy,
@@ -7,63 +6,49 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  DialogRef,
-  Dialog,
-  DialogComponentToken,
-} from '@root/app/dialog/dialog.module';
+import { DialogRef } from '@angular/cdk/dialog';
 import { RouteData } from '@root/app/app.routes';
-import { DialogOptions } from '@root/app/dialog/dialog.service';
-import {
-  HasSubscriptions,
-  unsubscribeAll,
-} from '@shared/utilities/hasSubscriptions';
-import { Subscription } from 'rxjs';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { Title } from '@angular/platform-browser';
 import { slideUpAnimation } from '@shared/animations';
+import { Subscription } from 'rxjs';
+import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 @Component({
   selector: 'pr-routed-dialog-wrapper',
-  template: ` <ng-template #outletTemplate>
-    <div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
-      <router-outlet #o="outlet"></router-outlet>
-    </div>
-  </ng-template>`,
+  template: `
+    <ng-template #outletTemplate>
+      <div [@slideUpAnimation]="o.isActivated ? o.activatedRoute : ''">
+        <router-outlet #o="outlet"></router-outlet>
+      </div>
+    </ng-template>
+  `,
   animations: [slideUpAnimation],
 })
 export class RoutedDialogWrapperComponent
   implements AfterViewInit, HasSubscriptions, OnDestroy
 {
-  private dialogToken: DialogComponentToken;
-  private dialogOptions: DialogOptions;
-  private dialogRef: DialogRef;
-
-  private closedByNavigate = false;
-
   @ViewChild('outletTemplate') private outletTemplate: TemplateRef<any>;
 
   subscriptions: Subscription[] = [];
+  private dialogRef: DialogRef<any> | null = null;
+  private closedByNavigate = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: Dialog,
+    private dialogService: DialogCdkService,
     private routeHistory: RouteHistoryService,
-    private title: Title,
+    private title: Title
   ) {}
 
   ngAfterViewInit(): void {
     this.title.setTitle(`${this.route.snapshot.data.title} | Permanent.org`);
 
-    this.dialogToken = (this.route.snapshot.data as RouteData).dialogToken;
+    const component = (this.route.snapshot.data as RouteData).component;
 
-    if (!this.dialogToken) {
-      throw new Error(
-        "RoutedDialogWrapperComponent - missing dialog token on route data, can't open dialog",
-      );
-    }
-
-    this.dialogOptions = (this.route.snapshot.data as RouteData).dialogOptions;
+    const dialogOptions = (this.route.snapshot.data as RouteData).dialogOptions;
 
     const dialogData = {
       ...this.route.snapshot.data,
@@ -71,23 +56,7 @@ export class RoutedDialogWrapperComponent
       outletTemplate: this.outletTemplate,
     };
 
-    this.dialogRef = this.dialog.createDialog(
-      this.dialogToken,
-      dialogData,
-      this.dialogOptions,
-      this.outletTemplate,
-      this.route,
-    );
-
-    this.dialogRef.dialogComponent.show();
-
-    this.dialogRef.closePromise.finally(() => {
-      this.dialogRef = null;
-      if (!this.closedByNavigate) {
-        const targetRoute = this.routeHistory.previousRoute || '/app/';
-        this.router.navigateByUrl(targetRoute);
-      }
-    });
+    this.openDialog(component, dialogData, dialogOptions);
   }
 
   ngOnDestroy(): void {
@@ -96,5 +65,25 @@ export class RoutedDialogWrapperComponent
     }
     this.closedByNavigate = true;
     unsubscribeAll(this.subscriptions);
+  }
+
+  private openDialog(component: any, dialogData: any, dialogOptions: any): void {
+    const config = {
+      ...dialogOptions,
+      data: dialogData,
+      hasBackdrop: true,
+      backdropClass: 'cdk-overlay-dark-backdrop',
+      panelClass: 'custom-dialog-panel', // Add any custom class you want
+    };
+
+    this.dialogRef = this.dialogService.open(component, config);
+
+    this.dialogRef.closed.subscribe(() => {
+      this.dialogRef = null;
+      if (!this.closedByNavigate) {
+        const targetRoute = this.routeHistory.previousRoute || '/app/';
+        this.router.navigateByUrl(targetRoute);
+      }
+    });
   }
 }

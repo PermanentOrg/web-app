@@ -24,11 +24,17 @@ import {
   ngIfScaleHeightAnimation,
 } from '@shared/animations';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
-import { Dialog } from '@root/app/dialog/dialog.module';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
 import { EventService } from '@shared/services/event/event.service';
+import { DeviceService } from '@shared/services/device/device.service';
+import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { ConnectionsDialogComponent } from '../connections-dialog/connections-dialog.component';
+import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
+import { MyArchivesDialogComponent } from '../my-archives-dialog/my-archives-dialog.component';
+import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 
 @Component({
   selector: 'pr-left-menu',
@@ -65,7 +71,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
     private messageService: MessageService,
     private router: Router,
     private relationshipService: RelationshipService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private profile: ProfileService,
     private payerService: PayerService,
     private event: EventService,
@@ -163,27 +169,25 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   async onConnectionsClick() {
     const connections = await this.relationshipService.get();
-    this.dialog.open(
-      'ConnectionsDialogComponent',
-      { connections },
-      { width: '1000px' },
-    );
+    this.dialog.open(ConnectionsDialogComponent, {
+      data: { connections },
+      width: '1000px',
+    });
     this.showArchiveOptions = false;
   }
 
   async onProfileClick() {
     await this.profile.fetchProfileItems();
-    this.dialog.open('ProfileEditComponent', null, {
+    this.dialog.open(ProfileEditComponent, {
       width: '100%',
       height: 'fullscreen',
-      menuClass: 'profile-editor-dialog',
     });
     this.showArchiveOptions = false;
   }
 
   async onAllArchivesClick() {
     await this.accountService.refreshArchives();
-    this.dialog.open('MyArchivesDialogComponent', null, { width: '1000px' });
+    this.dialog.open(MyArchivesDialogComponent, { width: '1000px' });
     this.showArchiveOptions = false;
   }
 
@@ -198,7 +202,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
         member.isCurrent = true;
       }
     });
-    this.dialog.open('MembersDialogComponent', { members }, { width: '800px' });
+    this.dialog.open(MembersDialogComponent, { data: members, width: '800px' });
     this.showArchiveOptions = false;
   }
 

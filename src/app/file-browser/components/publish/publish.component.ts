@@ -1,7 +1,12 @@
 /* @format */
-import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
-import { RecordVO, FolderVO } from '@models';
-import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Inject,
+} from '@angular/core';
+import { RecordVO, FolderVO, ShareVO, ShareByUrlVO, ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { find, maxBy } from 'lodash';
@@ -15,11 +20,13 @@ import { PublicRoutePipe } from '@shared/pipes/public-route.pipe';
 import { Router } from '@angular/router';
 import { PublishIaData } from '@models/publish-ia-vo';
 import { EventService } from '@shared/services/event/event.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-publish',
   templateUrl: './publish.component.html',
   styleUrls: ['./publish.component.scss'],
+  providers: [PublicLinkPipe, PublicRoutePipe],
 })
 export class PublishComponent {
   public sourceItem: RecordVO | FolderVO = null;

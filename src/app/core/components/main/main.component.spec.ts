@@ -17,7 +17,6 @@ import { UploadButtonComponent } from '@core/components/upload-button/upload-but
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
-import { DialogModule } from '@root/app/dialog/dialog.module';
 import { GlobalSearchBarComponent } from '@search/components/global-search-bar/global-search-bar.component';
 import { SearchService } from '@search/services/search.service';
 import { TagsService } from '@core/services/tags/tags.service';
@@ -58,7 +57,6 @@ describe('MainComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.imports.push(SharedModule);
-    config.imports.push(DialogModule.forRoot());
     config.imports.push(NoopAnimationsModule);
 
     config.declarations.push(MainComponent);

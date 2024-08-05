@@ -11,6 +11,11 @@
     width: auto;
     margin: 0;
     flex: 0 0 auto;
+
+    &:focus {
+      box-shadow: none;
+      border: none;
+    }
   }
   height: 2rem;
   flex: 0 0 auto;
@@ -45,4 +50,8 @@ h3 {
 .btn-primary {
   width: 30%;
   margin-top: 50px;
+}
+
+.dialog-content {
+  background-color: white;
 }

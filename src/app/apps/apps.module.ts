@@ -8,7 +8,6 @@ import { AppsComponent } from '@apps/components/apps/apps.component';
 import { ConnectorComponent } from '@apps/components/connector/connector.component';
 import { FamilySearchImportComponent } from '@apps/components/family-search-import/family-search-import.component';
 import { SharedModule } from '@shared/shared.module';
-import { DialogChildComponentData, Dialog } from '../dialog/dialog.module';
 
 @NgModule({
   imports: [
@@ -16,23 +15,13 @@ import { DialogChildComponentData, Dialog } from '../dialog/dialog.module';
     SharedModule,
     RouterModule,
     AppsRoutingModule,
-    FileBrowserModule
+    FileBrowserModule,
   ],
   declarations: [
     AppsComponent,
     ConnectorComponent,
-    FamilySearchImportComponent
+    FamilySearchImportComponent,
   ],
-  providers: [
-  ]
+  providers: [],
 })
-export class AppsModule {
-  private dialogComponents: DialogChildComponentData[] = [{
-    token: 'FamilySearchImportComponent',
-    component: FamilySearchImportComponent
-  }];
-
-  constructor(private dialog: Dialog, resolver: ComponentFactoryResolver) {
-    this.dialog.registerComponents(this.dialogComponents, resolver, true);
-  }
-}
+export class AppsModule {}

@@ -21,16 +21,16 @@ import { AccountService } from '@shared/services/account/account.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { RelationVO, ArchiveVO } from '@models';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
-import {
-  DIALOG_DATA,
-  DialogRef,
-  Dialog,
-  IsTabbedDialog,
-} from '@root/app/dialog/dialog.module';
 import { Deferred } from '@root/vendor/deferred';
 import { RelationResponse } from '@shared/services/api/index.repo';
 import { remove, find } from 'lodash';
-import { ArchivePickerComponentConfig } from '@shared/components/archive-picker/archive-picker.component';
+import {
+  ArchivePickerComponent,
+  ArchivePickerComponentConfig,
+} from '@shared/components/archive-picker/archive-picker.component';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { DataService } from '@shared/services/data/data.service';
 
 const ConnectionActions: { [key: string]: PromptButton } = {
   Edit: {
@@ -59,8 +59,9 @@ export type ConnectionsTab = 'connections' | 'pending' | 'new';
   selector: 'pr-connections-dialog',
   templateUrl: './connections-dialog.component.html',
   styleUrls: ['./connections-dialog.component.scss'],
+  providers: [DataService],
 })
-export class ConnectionsDialogComponent implements IsTabbedDialog {
+export class ConnectionsDialogComponent {
   connections: RelationVO[] = [];
   connectionRequests: RelationVO[] = [];
   sentConnectionsRequests: RelationVO[] = [];
@@ -78,7 +79,7 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
     private prConstants: PrConstantsService,
     private accountService: AccountService,
     private relationService: RelationshipService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
   ) {
@@ -221,8 +222,11 @@ export class ConnectionsDialogComponent implements IsTabbedDialog {
       hideAccessRoleOnInvite: true,
     };
 
-    return this.dialog
-      .open('ArchivePickerComponent', config)
+    return (
+      this.dialog.open(ArchivePickerComponent, {
+        data: config,
+      }) as unknown as Promise<ArchiveVO>
+    )
       .then((archive: ArchiveVO) => {
         if (find(this.connections, { relationArchiveId: archive.archiveId })) {
           return this.messageService.showMessage({

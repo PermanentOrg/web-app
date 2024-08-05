@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogRef } from '@root/app/dialog/dialog.module';
 import { CookieService } from 'ngx-cookie-service';
+import { DialogRef } from '@angular/cdk/dialog';
 
 export const PROFILE_ONBOARDING_COOKIE = 'hasSeenProfileMessage';
 

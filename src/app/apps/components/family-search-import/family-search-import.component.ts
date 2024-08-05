@@ -1,6 +1,5 @@
-/* @format */
 import { Component, Inject } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { filter } from 'lodash';
 import { ArchiveVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
@@ -55,7 +54,7 @@ export class FamilySearchImportComponent {
   }
 
   cancel() {
-    this.dialogRef.close(null, true);
+    this.dialogRef.close();
   }
 
   async startImport() {

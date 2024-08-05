@@ -9,7 +9,6 @@ import { FolderResponse } from '@shared/services/api/index.repo';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
-import { DEFAULT_ANIMATION_LENGTH } from '@root/app/dialog/dialog.service';
 
 export enum FolderPickerOperations {
   Move = 1,
@@ -203,7 +202,7 @@ export class FolderPickerComponent implements OnDestroy {
       this.chooseFolderDeferred = null;
       this.isRootFolder = true;
       this.cancelResetTimeout = null;
-    }, DEFAULT_ANIMATION_LENGTH);
+    }, 500);
   }
 
   ngOnDestroy() {

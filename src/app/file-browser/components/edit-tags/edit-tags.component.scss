@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import 'variables';
 
@@ -6,6 +6,7 @@
   display: block;
   flex: 1;
   max-width: 100%;
+  background-color: white;
 
   &.is-waiting {
     opacity: 0.5;
@@ -102,17 +103,17 @@
 }
 
 .input-vertical-error {
-    position: absolute;
-    font-size: 10px;
-    line-height: .85rem * 1.5;
-    background: none;
-    pointer-events: none;
-    opacity: 1;
-    transition: 0.1s ease-in opacity;
-    bottom: 0px;
-    right: 3.75rem;
-    color: $red;
-    z-index: 100;
+  position: absolute;
+  font-size: 10px;
+  line-height: 0.85rem * 1.5;
+  background: none;
+  pointer-events: none;
+  opacity: 1;
+  transition: 0.1s ease-in opacity;
+  bottom: 0px;
+  right: 3.75rem;
+  color: $red;
+  z-index: 100;
 }
 
 .manage-tags-message {

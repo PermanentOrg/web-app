@@ -29,3 +29,8 @@
 .dialog-form {
   @include tabbedDialogPanelForm;
 }
+
+.btn:focus {
+  box-shadow: none;
+  border: none;
+}

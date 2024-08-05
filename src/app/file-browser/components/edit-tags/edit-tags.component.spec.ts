@@ -10,9 +10,9 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { MessageService } from '@shared/services/message/message.service';
 import { SearchService } from '@search/services/search.service';
 import { TagResponse } from '@shared/services/api/tag.repo';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { EditTagsComponent, TagType } from './edit-tags.component';
 
@@ -75,7 +75,10 @@ describe('EditTagsComponent', () => {
         },
       })
       .mock(DataService, { fetchFullItems: (items) => Promise.resolve([]) })
-      .mock(Dialog, { open: (token, data, options) => Promise.resolve({}) });
+      .mock(
+        DialogCdkService,
+        jasmine.createSpyObj('DialogCdkService', ['open']),
+      );
   }));
 
   it('should create', async () => {
@@ -198,21 +201,6 @@ describe('EditTagsComponent', () => {
     expect(tagCreateSpy).not.toHaveBeenCalled();
   });
 
-  it('should open dialog when manage link is clicked', async () => {
-    const { element, find, inject, fixture } = await defaultRender();
-    const dialogOpenSpy = inject(Dialog);
-
-    element.componentInstance.isEditing = true;
-    fixture.detectChanges();
-
-    find('.manage-tags-message .manage-tags-link').triggerEventHandler(
-      'click',
-      {},
-    );
-
-    expect(dialogOpenSpy.open).toHaveBeenCalled();
-  });
-
   it('should highlight the correct tag on key down', async () => {
     const { fixture, element } = await defaultRender();
 
@@ -267,5 +255,20 @@ describe('EditTagsComponent', () => {
     const focusedElement = document.activeElement as HTMLElement;
 
     expect(focusedElement).toEqual(input.nativeElement);
+  });
+
+  it('should open dialog when manage link is clicked', async () => {
+    const { element, find, inject, fixture } = await defaultRender();
+    const dialogOpenSpy = inject(DialogCdkService);
+
+    element.componentInstance.isEditing = true;
+    fixture.detectChanges();
+
+    find('.manage-tags-message .manage-tags-link').triggerEventHandler(
+      'click',
+      {},
+    );
+
+    expect(dialogOpenSpy.open).toHaveBeenCalled();
   });
 });

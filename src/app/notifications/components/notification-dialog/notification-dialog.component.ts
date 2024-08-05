@@ -5,15 +5,16 @@ import {
   ViewChildren,
   AfterViewInit,
   OnDestroy,
+  ElementRef,
   QueryList,
 } from '@angular/core';
-import { DIALOG_DATA, DialogRef } from '@root/app/dialog/dialog.module';
 import {
   HasSubscriptions,
   unsubscribeAll,
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { NotificationVOData } from '@models/notification-vo';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { NotificationComponent } from '../notification/notification.component';
 import { NotificationService } from '../../services/notification.service';
 

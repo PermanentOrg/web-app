@@ -32,7 +32,6 @@ import { Deferred } from '@root/vendor/deferred';
 import { Validators } from '@angular/forms';
 import { DataService } from '@shared/services/data/data.service';
 import { UploadSessionStatus } from '@core/services/upload/upload.session';
-import { Dialog } from '@root/app/dialog/dialog.module';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import {
@@ -44,6 +43,8 @@ import {
 } from '@shared/services/drag/drag.service';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
+import { TimelineCompleteDialogComponent } from '@shared/components/timeline-complete-dialog/timeline-complete-dialog.component';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 @Component({
   selector: 'pr-main',
@@ -76,7 +77,7 @@ export class MainComponent
     private prompt: PromptService,
     @Optional() private routeHistory: RouteHistoryService,
     private api: ApiService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private ga: GoogleAnalyticsService,
     @Optional() private drag: DragService,
     private data: DataService,
@@ -243,11 +244,10 @@ export class MainComponent
       async (progressEvent) => {
         if (progressEvent.sessionStatus === UploadSessionStatus.Done) {
           try {
-            await this.dialog.open(
-              'TimelineCompleteDialogComponent',
-              { folder: newFolder },
-              { height: 'auto' },
-            );
+            await this.dialog.open(TimelineCompleteDialogComponent, {
+              data: { folder: newFolder },
+              height: 'auto',
+            });
           } catch (err) {}
           uploadListener.unsubscribe();
         } else if (progressEvent.sessionStatus > UploadSessionStatus.Done) {

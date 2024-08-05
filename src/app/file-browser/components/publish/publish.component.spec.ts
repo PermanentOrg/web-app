@@ -5,9 +5,9 @@ import { FolderVO, RecordVO } from '@models/index';
 import { FolderResponse } from '@shared/services/api/folder.repo';
 import { Observable } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ArchiveVO } from '../../../models/archive-vo';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
-import { DialogRef, DIALOG_DATA } from '../../../dialog/dialog.service';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { PublishComponent } from './publish.component';
 
@@ -17,6 +17,10 @@ const mockAccountService = {
     return archive;
   },
 };
+
+class MockDialogRef {
+  close() {}
+}
 
 const mockApiService = {
   folder: {
@@ -43,7 +47,7 @@ describe('PublishComponent', () => {
       .mock(DIALOG_DATA, {
         item: { folder_linkType: 'linkType' },
       })
-      .provide({ provide: DialogRef, useValue: new DialogRef(1, null) })
+      .provide({ provide: DialogRef, useClass: MockDialogRef })
       .mock(MessageService, {
         showError: () => {
           messageShown = true;

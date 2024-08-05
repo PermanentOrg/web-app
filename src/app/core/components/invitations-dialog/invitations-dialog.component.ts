@@ -5,11 +5,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import {
-  IsTabbedDialog,
-  DIALOG_DATA,
-  DialogRef,
-} from '@root/app/dialog/dialog.module';
+
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -20,6 +16,7 @@ import { InviteVOData, InviteVO } from '@models';
 import { InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { partition, filter } from 'lodash';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 type InvitationsTab = 'new' | 'pending' | 'accepted';
 
@@ -28,7 +25,7 @@ type InvitationsTab = 'new' | 'pending' | 'accepted';
   templateUrl: './invitations-dialog.component.html',
   styleUrls: ['./invitations-dialog.component.scss'],
 })
-export class InvitationsDialogComponent implements OnInit, IsTabbedDialog {
+export class InvitationsDialogComponent implements OnInit {
   newInviteForm: UntypedFormGroup;
   waiting = false;
 

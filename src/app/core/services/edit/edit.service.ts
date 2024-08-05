@@ -29,12 +29,17 @@ import {
 import { Deferred } from '@root/vendor/deferred';
 import { FolderPickerOperations } from '@core/components/folder-picker/folder-picker.component';
 import { AccountService } from '@shared/services/account/account.service';
-import { Dialog } from '@root/app/dialog/dialog.service';
 import { DeviceService } from '@shared/services/device/device.service';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { EventService } from '@shared/services/event/event.service';
+import { SharingComponent } from '@fileBrowser/components/sharing/sharing.component';
+import { PublishComponent } from '@fileBrowser/components/publish/publish.component';
+import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
+import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
+import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
@@ -123,7 +128,7 @@ export class EditService {
     private dataService: DataService,
     private prompt: PromptService,
     private accountService: AccountService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
     private device: DeviceService,
     private secrets: SecretsService,
     private event: EventService,
@@ -249,9 +254,11 @@ export class EditService {
             items[0],
           );
           actionDeferred.resolve();
-          this.dialog.open('SharingComponent', {
-            item: items[0],
-            link: response.getShareByUrlVO(),
+          this.dialog.open(SharingComponent, {
+            data: {
+              item: items[0],
+              link: response.getShareByUrlVO(),
+            },
           });
           break;
         default:
@@ -520,36 +527,46 @@ export class EditService {
     const response = await this.api.share.getShareLink(item);
     if (this.device.isMobile()) {
       try {
-        this.dialog.open('SharingComponent', {
-          item,
-          link: response.getShareByUrlVO(),
+        this.dialog.open(SharingComponent, {
+          panelClass: 'dialog',
+          data: { item, link: response.getShareByUrlVO() },
         });
       } catch (err) {}
     } else {
       try {
-        this.dialog.open(
-          'SharingDialogComponent',
-          { item, link: response.getShareByUrlVO() },
-          { menuClass: 'split-dialog', width: '600px' },
-        );
+        this.dialog.open(SharingDialogComponent, {
+          data: { item, link: response.getShareByUrlVO() },
+          width: '600px',
+          panelClass: 'dialog',
+        });
       } catch (err) {}
     }
   }
 
   async openPublishDialog(item: ItemVO) {
-    this.dialog.open('PublishComponent', { item }, { height: 'auto' });
+    this.dialog.open(PublishComponent, {
+      data: { item },
+      height: 'auto',
+      panelClass: 'dialog',
+      width: '400px',
+    });
   }
 
   async openTagsDialog(item: ItemVO, type: string) {
-    this.dialog.open('EditTagsComponent', { item, type }, { height: 'auto' });
+    this.dialog.open(EditTagsComponent, {
+      data: { item, type },
+      height: 'auto',
+      panelClass: 'dialog',
+    });
   }
 
   async openLocationDialog(item: ItemVO) {
-    this.dialog.open(
-      'LocationPickerComponent',
-      { item },
-      { height: 'auto', width: '600px' },
-    );
+    this.dialog.open(LocationPickerComponent, {
+      data: { item },
+      panelClass: 'dialog',
+      height: 'auto',
+      width: '600px',
+    });
   }
 
   public openFolderPicker(

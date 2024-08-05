@@ -13,6 +13,13 @@ select.form-control {
 
 .dialog-body {
   overflow-y: visible !important;
+  background-color: white;
+  border-radius: 0.3rem;
+  box-shadow: 0 0.5rem 1rem #0000004d;
+  &-top {
+    margin-bottom: 10px;
+  }
+
   .content {
     padding: 0 $grid-unit $grid-unit;
   }
@@ -52,7 +59,8 @@ p {
   }
 }
 
-.shares-title, .shares-empty {
+.shares-title,
+.shares-empty {
   margin-top: $grid-unit * 0.5;
   height: $grid-unit * 2;
   display: flex;
@@ -166,15 +174,17 @@ p {
   }
 }
 
-.share-link-settings, .public-settings {
-  .link-settings-item, .settings-item {
+.share-link-settings,
+.public-settings {
+  .link-settings-item,
+  .settings-item {
     display: flex;
     align-items: center;
 
     &:not(:first-child) {
       margin-top: $grid-unit;
     }
-      
+
     > label {
       font-weight: $font-weight-semibold;
       margin: 0;
@@ -197,4 +207,10 @@ p {
       margin: 0;
     }
   }
+}
+
+
+.btn:focus {
+  box-shadow: none;
+  border: none;
 }

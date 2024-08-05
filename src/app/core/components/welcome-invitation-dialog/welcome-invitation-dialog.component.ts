@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.module';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
+import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'pr-welcome-invitation-dialog',

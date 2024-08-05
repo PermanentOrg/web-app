@@ -23,12 +23,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
+import { SearchService } from '@search/services/search.service';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
   selector: 'pr-file-viewer',
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss'],
+  providers: [SearchService],
 })
 export class FileViewerComponent implements OnInit, OnDestroy {
   // Record

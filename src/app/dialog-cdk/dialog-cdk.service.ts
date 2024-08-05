@@ -2,6 +2,8 @@ import { Injectable, TemplateRef } from '@angular/core';
 import { Dialog, DialogConfig, DialogRef } from '@angular/cdk/dialog';
 import { BasePortalOutlet, ComponentType } from '@angular/cdk/portal';
 
+export type DialogComponent = ComponentType<any> | TemplateRef<any>;
+
 @Injectable({
   providedIn: 'root',
 })

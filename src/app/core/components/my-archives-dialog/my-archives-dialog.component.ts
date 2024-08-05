@@ -7,11 +7,6 @@ import {
   QueryList,
   Inject,
 } from '@angular/core';
-import {
-  IsTabbedDialog,
-  DialogRef,
-  DIALOG_DATA,
-} from '@root/app/dialog/dialog.module';
 import { ArchiveVO, AccountVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
@@ -30,6 +25,8 @@ import {
   RELATION_OPTIONS,
   PromptService,
 } from '@shared/services/prompt/prompt.service';
+
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 export type MyArchivesTab = 'switch' | 'new' | 'pending';
 
@@ -63,7 +60,7 @@ const ARCHIVE_TYPES: { text: string; value: ArchiveType }[] = [
   templateUrl: './my-archives-dialog.component.html',
   styleUrls: ['./my-archives-dialog.component.scss'],
 })
-export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
+export class MyArchivesDialogComponent implements OnInit {
   account: AccountVO;
   currentArchive: ArchiveVO;
   archives: ArchiveVO[];
@@ -87,7 +84,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     private api: ApiService,
     private prompt: PromptService,
     private message: MessageService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
   ) {
     this.newArchiveForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -105,9 +102,9 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     this.currentArchive = this.accountService.getArchive();
     [this.pendingArchives, this.archives] = partition(
       orderBy(this.accountService.getArchives(), (a) =>
-        a.fullName.toLowerCase()
+        a.fullName.toLowerCase(),
       ),
-      { status: 'status.generic.pending' }
+      { status: 'status.generic.pending' },
     );
   }
 
@@ -124,7 +121,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
     setTimeout(() => {
       const component = find(
         this.archiveComponents.toArray(),
-        (cmp) => cmp.archive === archive
+        (cmp) => cmp.archive === archive,
       );
       if (component) {
         (component.element.nativeElement as HTMLElement).scrollIntoView({
@@ -191,7 +188,7 @@ export class MyArchivesDialogComponent implements OnInit, IsTabbedDialog {
         `Delete The ${archive.fullName} Archive`,
         'Are you sure you want to permanently delete this archive?',
         null,
-        'btn-danger'
+        'btn-danger',
       );
     } catch (err) {
       return;

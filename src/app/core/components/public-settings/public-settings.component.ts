@@ -3,8 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { ArchiveType } from '@models/archive-vo';
-import { Dialog } from '@root/app/dialog/dialog.service';
 import { Observable } from 'rxjs';
+import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
+import { MessageService } from '@shared/services/message/message.service';
+import { ArchiveTypeChangeDialogComponent } from '../archive-type-change-dialog/archive-type-change-dialog.component';
 
 @Component({
   selector: 'pr-public-settings',
@@ -39,7 +41,8 @@ export class PublicSettingsComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private dialog: Dialog,
+    private dialog: DialogCdkService,
+    private msg: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -63,16 +66,28 @@ export class PublicSettingsComponent implements OnInit {
   }
 
   public async onArchiveTypeChange() {
-    this.dialog.open(
-      'ArchiveTypeChangeDialogComponent',
-      {
-        archive: this.archive,
-        archiveType: this.archiveType,
-        archiveClose: this.archiveClose,
-      },
-      {
+    this.dialog
+      .open(ArchiveTypeChangeDialogComponent, {
+        data: {
+          archive: this.archive,
+          archiveType: this.archiveType,
+          archiveClose: this.archiveClose,
+        },
         width: '700px',
-      },
-    );
+      })
+      .closed.subscribe(async (type: ArchiveType) => {
+        this.archive.type = type;
+        this.updating = true;
+        try {
+          await this.api.archive.update(this.archive);
+        } catch {
+          this.msg.showError({
+            message:
+              'There was an error changing the archive type. Please try again.',
+          });
+        } finally {
+          this.updating = false;
+        }
+      });
   }
 }

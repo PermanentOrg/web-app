@@ -6,7 +6,6 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { DialogModule } from '../dialog/dialog.module';
 import { SharePreviewRoutingModule } from './share-preview.routes';
 import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
@@ -17,7 +16,6 @@ import { SharePreviewFooterComponent } from './components/share-preview-footer/s
     SharePreviewRoutingModule,
     CommonModule,
     FormsModule,
-    DialogModule,
     NgbTooltipModule,
   ],
   providers: [DataService, FolderViewService],
