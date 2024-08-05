@@ -33,6 +33,8 @@ import { OnboardingHeaderComponent } from '../header/header.component';
 import { GlamOnboardingHeaderComponent } from '../glam/glam-header/glam-header.component';
 import { GlamArchiveTypeSelectComponent } from '../glam/archive-type-select/archive-type-select.component';
 import { ArchiveTypeIconComponent } from '../glam/archive-type-icon/archive-type-icon.component';
+import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pending-archives.component';
+import { PendingArchiveComponent } from '../glam/pending-archive/pending-archive.component';
 import { OnboardingComponent } from './onboarding.component';
 
 class MockAccountService {
@@ -155,6 +157,8 @@ export default {
         GlamOnboardingHeaderComponent,
         ArchiveSmallComponent,
         BgImageSrcDirective,
+        GlamPendingArchivesComponent,
+        PendingArchiveComponent,
       ],
       imports: [
         CommonModule,
