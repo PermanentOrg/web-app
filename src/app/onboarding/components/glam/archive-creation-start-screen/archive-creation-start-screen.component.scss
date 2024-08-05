@@ -31,8 +31,11 @@ p {
     width: 100%;
   }
   & > .greeting {
-    font-size: 50px;
+    font-size: 4rem;
     font-family: 'UsualLight', sans-serif;
+    line-height: 4rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0px;
 
     & > b {
       font-family: 'UsualRegular', sans-serif;
