@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ViewsComponentsModule } from './views-components.module';
 import { ViewsRoutingModule } from './views.routes';
 import { TimelineViewComponent } from './components/timeline-view/timeline-view.component';
+import { DialogModule } from '@angular/cdk/dialog';
 
 @NgModule({
   declarations: [],
@@ -13,6 +14,7 @@ import { TimelineViewComponent } from './components/timeline-view/timeline-view.
     RouterModule,
     ViewsComponentsModule,
     ViewsRoutingModule,
+    DialogModule
   ],
 })
 export class ViewsModule {}

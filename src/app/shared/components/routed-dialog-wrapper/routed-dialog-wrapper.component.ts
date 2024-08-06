@@ -56,6 +56,8 @@ export class RoutedDialogWrapperComponent
       outletTemplate: this.outletTemplate,
     };
 
+    console.log('dialogData', dialogData.activatedRoute.snapshot.params);
+
     this.openDialog(component, dialogData, dialogOptions);
   }
 

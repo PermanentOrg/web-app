@@ -25,7 +25,7 @@ import {
   TimezoneVO,
   TimezoneVOData,
 } from '@models';
-import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { BasePortalOutlet } from '@angular/cdk/portal';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
@@ -84,6 +84,8 @@ const DEFAULT_MAJOR_HOUR_LABEL = 'MMMM Do, h A';
 })
 export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   public isNavigating = false;
+
+  private route: ActivatedRoute;
 
   private throttledZoomHandler = throttle((evt) => {
     this.onTimelineZoom();
@@ -153,13 +155,14 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   constructor(
     @Inject(DIALOG_DATA) public dialogData: any,
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
     private dataService: DataService,
     private api: ApiService,
     private router: Router,
     private elementRef: ElementRef,
     private fvService: FolderViewService,
     private device: DeviceService,
+    private dialog: DialogRef,
   ) {
     this.currentTimespan = TimelineGroupTimespan.Year;
     this.dataService.showBreadcrumbs = false;
@@ -170,6 +173,7 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const data = dialogData as RouteData;
     this.timelineRootFolder = data.currentFolder;
     this.dataService.setCurrentFolder(data.currentFolder);
+    this.route = dialogData.activatedRoute;
   }
 
   ngOnInit() {
