@@ -1,11 +1,10 @@
 /* @format */
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
-
 import { HttpService } from '@shared/services/http/http.service';
 import { AccountRepo } from '@shared/services/api/account.repo';
 import { AccountVO } from '@root/app/models';
@@ -56,5 +55,46 @@ describe('AccountRepo', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('Request-Version')).toBe('2');
     req.flush(expected);
+  });
+
+  it('update should call v2 of /account/update', (done) => {
+    const update = {
+      primaryEmail: 'test@example.com',
+      fullName: 'Dr. Test User',
+    };
+
+    repo
+      .update(update)
+      .then((account) => {
+        expect(account).toBeInstanceOf(AccountVO);
+        expect(account.fullName).toBe(update.fullName);
+      })
+      .catch(() => {
+        done.fail();
+      })
+      .finally(() => done());
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/account/update`);
+
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+    req.flush(update);
+  });
+
+  it('should map the `zip` propety to `postalCode` when calling /account/update', (done) => {
+    const update = {
+      primaryEmail: 'test@example.com',
+      zip: '12345',
+    };
+
+    repo.update(update).finally(() => done());
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/account/update`);
+
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+    expect(req.request.body.zip).toBeUndefined();
+    expect(req.request.body.postalCode).toBe('12345');
+    req.flush(update);
   });
 });

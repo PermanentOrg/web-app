@@ -1,17 +1,14 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { DataService } from '@shared/services/data/data.service';
 import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
-import {
-  PrConstantsService,
-  Country,
-} from '@shared/services/pr-constants/pr-constants.service';
+import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { EventService } from '@shared/services/event/event.service';
+import { savePropertyOnAccount } from '@shared/services/account/account.service.helpers';
 
 @Component({
   selector: 'pr-billing-settings',
@@ -25,7 +22,6 @@ export class BillingSettingsComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private dataService: DataService,
     private prConstants: PrConstantsService,
     private api: ApiService,
     private message: MessageService,
@@ -56,25 +52,14 @@ export class BillingSettingsComponent implements OnInit {
   }
 
   async onSaveInfo(prop: keyof AccountVO, value: string) {
-    const originalValue = this.account[prop];
-    const data: AccountVOData = new AccountVO(this.account);
-    data[prop] = value;
-    delete data.notificationPreferences;
-    const updateAccountVo = new AccountVO(data);
-    this.account.update(data);
-    const response = await this.api.account.update(updateAccountVo);
-    if (!response.isSuccessful) {
-      const revertData: AccountVOData = {};
-      revertData[prop] = originalValue;
-      this.account.update(revertData);
-      this.message.showError({
-        message: 'There was a problem saving your account changes',
-      });
-    } else {
-      this.message.showMessage({
-        message: 'Account information saved.',
-        style: 'success',
-      });
-    }
+    savePropertyOnAccount(
+      this.account,
+      { prop, value },
+      {
+        accountService: this.accountService,
+        messageService: this.message,
+        apiService: this.api,
+      },
+    );
   }
 }

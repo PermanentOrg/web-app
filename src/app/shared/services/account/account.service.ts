@@ -288,13 +288,10 @@ export class AccountService {
     const updated = new AccountVO(this.account);
     updated.update(accountChanges);
 
-    return this.api.account
-      .update(updated)
-      .then((response: AccountResponse) => {
-        const newAccount = response.getAccountVO();
-        this.account.update(newAccount);
-        this.storage.local.set(ACCOUNT_KEY, this.account);
-      });
+    return this.api.account.update(updated).then((newAccount: AccountVO) => {
+      this.account.update(newAccount);
+      this.storage.local.set(ACCOUNT_KEY, this.account);
+    });
   }
 
   public changeArchive(archive: ArchiveVO) {
