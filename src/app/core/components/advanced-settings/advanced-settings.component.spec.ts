@@ -4,7 +4,6 @@ import { AccountVO } from '@root/app/models';
 import { CoreModule } from '@core/core.module';
 import { MessageService } from '@shared/services/message/message.service';
 import { Shallow } from 'shallow-render';
-import { AccountResponse } from '../../../shared/services/api/account.repo';
 import { ApiService } from '../../../shared/services/api/api.service';
 import { AdvancedSettingsComponent } from './advanced-settings.component';
 
@@ -18,14 +17,13 @@ const mockAccountService = {
 const mockApiService = {
   account: {
     update: (account: AccountVO) => {
-      return Promise.resolve(new AccountResponse({}));
+      return Promise.resolve(account);
     },
   },
 };
 
 describe('AdvancedSettingsComponent', () => {
   let shallow: Shallow<AdvancedSettingsComponent>;
-  let component: AdvancedSettingsComponent;
   let messageShown = false;
 
   beforeEach(async () => {
@@ -54,8 +52,8 @@ describe('AdvancedSettingsComponent', () => {
   it('updates account on calling onAllowSFTPDeletion', async () => {
     const { instance, inject } = await shallow.render();
     const apiService = inject(ApiService);
-    const spy = spyOn(apiService.account, 'update').and.returnValue(
-      Promise.resolve(new AccountResponse({})),
+    const spy = spyOn(apiService.account, 'update').and.resolveTo(
+      new AccountVO({}),
     );
 
     await instance.onAllowSFTPDeletion();
@@ -65,7 +63,6 @@ describe('AdvancedSettingsComponent', () => {
 
   it('handles errors in onAllowSFTPDeletion', async () => {
     const { instance, inject } = await shallow.render();
-    const messageService = inject(MessageService);
 
     spyOn(inject(ApiService).account, 'update').and.throwError('test error');
 

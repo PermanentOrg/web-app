@@ -125,22 +125,9 @@ describe('UserChecklistService', () => {
     const req = http.expectOne(`${environment.apiUrl}/account/update`);
 
     expect(req.request.method).toBe('POST');
-    expect(
-      req.request.body.RequestVO.data[0].AccountVO.hideChecklist,
-    ).toBeTrue();
+    expect(req.request.body.hideChecklist).toBeTrue();
     req.flush({
-      Results: [
-        {
-          data: [
-            {
-              AccountVO: {
-                hideChecklist: true,
-              },
-            },
-          ],
-        },
-      ],
-      isSuccessful: true,
+      hideChecklist: true,
     });
   });
 

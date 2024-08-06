@@ -1,8 +1,12 @@
 /* @format */
 import { AccountVO, ArchiveVO, SimpleVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
+import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
+type AccountUpdateRequest = Pick<AccountVO, 'primaryEmail'> & {
+  postalCode?: string;
+} & Partial<AccountVO>;
 export class AccountRepo extends BaseRepo {
   public get(accountVO: AccountVO) {
     const account = {
@@ -48,21 +52,16 @@ export class AccountRepo extends BaseRepo {
     );
   }
 
-  public update(accountVO: AccountVO) {
-    const clone = new AccountVO(accountVO);
-    delete clone.notificationPreferences;
+  public async update(accountUpdateRequest: AccountUpdateRequest) {
+    const requestBody = { ...accountUpdateRequest };
+    requestBody.postalCode = requestBody.zip;
+    delete requestBody.zip;
 
-    const data = [
-      {
-        AccountVO: clone,
-      },
-    ];
-
-    return this.http.sendRequestPromise<AccountResponse>(
-      '/account/update',
-      data,
-      { responseClass: AccountResponse },
-    );
+    return (
+      await firstValueFrom(
+        this.httpV2.post<AccountVO>('/account/update', requestBody, AccountVO),
+      )
+    )[0];
   }
 
   public delete(accountVO: AccountVO) {

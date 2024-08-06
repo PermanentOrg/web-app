@@ -1,27 +1,15 @@
 /* @format */
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
-import { DataService } from '@shared/services/data/data.service';
-import { AccountVO, AccountPasswordVOData } from '@models';
+import { AccountVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountVOData } from '@models/account-vo';
 import { MessageService } from '@shared/services/message/message.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { FormInputSelectOption } from '@shared/components/form-input/form-input.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-  UntypedFormGroup,
-  UntypedFormBuilder,
-  Validators,
-  UntypedFormControl,
-} from '@angular/forms';
-import { AuthResponse } from '@shared/services/api/auth.repo';
-import { matchControlValidator } from '@shared/utilities/forms';
-import {
-  PromptField,
-  PromptService,
-} from '@shared/services/prompt/prompt.service';
 import { EventService } from '@shared/services/event/event.service';
+import { savePropertyOnAccount } from '@shared/services/account/account.service.helpers';
 
 @Component({
   selector: 'pr-account-settings',
@@ -36,14 +24,11 @@ export class AccountSettingsComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private dataService: DataService,
     private prConstants: PrConstantsService,
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
     private message: MessageService,
-    private fb: UntypedFormBuilder,
-    private prompt: PromptService,
     private event: EventService,
   ) {
     this.account = this.accountService.getAccount();
@@ -71,28 +56,15 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   async onSaveProfileInfo(prop: keyof AccountVO, value: string) {
-    const originalValue = this.account[prop];
-    const data: AccountVOData = new AccountVO(this.account);
-    data[prop] = value;
-    delete data.notificationPreferences;
-    const updateAccountVo = new AccountVO(data);
-    this.account.update(data);
-    try {
-      const response = await this.api.account.update(updateAccountVo);
-      this.account.update(response.getAccountVO());
-      this.accountService.setAccount(this.account);
-      this.message.showMessage({
-        message: 'Account information saved.',
-        style: 'success',
-      });
-    } catch (err) {
-      const revertData: AccountVOData = {};
-      revertData[prop] = originalValue;
-      this.account.update(revertData);
-      this.message.showError({
-        message: 'There was a problem saving your account changes',
-      });
-    }
+    savePropertyOnAccount(
+      this.account,
+      { prop, value },
+      {
+        accountService: this.accountService,
+        messageService: this.message,
+        apiService: this.api,
+      },
+    );
   }
 
   async onValidateEmailClick() {
