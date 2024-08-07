@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
-import { DialogRef, DIALOG_DATA } from '@root/app/dialog/dialog.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { PromptService } from '@shared/services/prompt/prompt.service';
