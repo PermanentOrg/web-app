@@ -14,6 +14,7 @@ export class PendingArchiveComponent {
     'access.role.contributor': 'Contributor',
     'access.role.curator': 'Curator',
     'access.role.manager': 'Manager',
+    'access.role.owner': 'Owner',
   };
 
   @Input() archive: ArchiveVO;
