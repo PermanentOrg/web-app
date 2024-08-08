@@ -85,13 +85,12 @@
       [variant]="'secondary'"
     ></pr-checkbox>
     <label class="form-check-label" for="terms">
-      I agree with the
-      <pr-button
-        [variant]="'link'"
-        [mode]="'dark'"
-        class="terms"
-        (click)="displayTerms()"
-        >terms</pr-button
+      I agree to the &nbsp;  
+      <a
+        href="https://www.permanent.org/terms/"
+        target="_blank"
+        aria-label="Permanent.org Terms of Service"
+        >Permanent.Org Terms of Service</a
       >
     </label>
   </div>
