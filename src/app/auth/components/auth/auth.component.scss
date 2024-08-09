@@ -73,8 +73,12 @@
   position: absolute;
   background: rgba(255, 255, 255, 0.9);
   padding: 2.5% 5%;
-  top: 65%;
+  top: 70%;
   left: 35%;
+
+  @media screen and (max-width: 1379px) and (min-width: 900px) {
+    top: 50%;
+  }
   transform: translate(-50%, -50%);
   border-radius: 12px;
   width: 50%;
@@ -83,7 +87,7 @@
     font-family: 'UsualRegular', sans-serif;
     font-weight: 400;
     line-height: 24px;
-    font-size: 1vw;
+    font-size: 1rem;
     color: #131b4a;
   }
 
@@ -91,7 +95,7 @@
     font-family: 'UsualRegular', sans-serif;
     font-weight: 300;
     line-height: 24px;
-    font-size: 1.1vw;
+    font-size: 1.1rem;
     color: #131b4a;
   }
 
