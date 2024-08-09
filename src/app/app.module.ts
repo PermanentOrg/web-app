@@ -47,8 +47,8 @@ import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { DataService } from '@shared/services/data/data.service';
-import { RouteHistoryModule } from './route-history/route-history.module';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { RouteHistoryModule } from './route-history/route-history.module';
 import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
 
 declare var ga: any;
