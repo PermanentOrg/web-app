@@ -510,9 +510,11 @@ export class TimelineViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async onRecordClick(record: RecordVO) {
     this.isNavigating = true;
-    await this.router.navigate(['record', record.archiveNbr], {
-      relativeTo: this.route,
-    });
+    await this.router.navigate([
+      this.router.routerState.snapshot.url.split('/record')[0],
+      'record',
+      record.archiveNbr,
+    ]);
     this.isNavigating = false;
   }
 
