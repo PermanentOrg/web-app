@@ -8,7 +8,7 @@
 
 .page-title {
   @include pageTitle;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 .input-container {
@@ -113,9 +113,4 @@ form {
 .terms-buttons {
   display: flex;
   gap: 16px;
-}
-
-.form-check-label {
-  display: flex;
-  align-items: center;
 }
