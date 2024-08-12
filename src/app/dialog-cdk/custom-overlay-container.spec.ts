@@ -12,14 +12,14 @@ describe('CustomOverlayContainer', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: OverlayContainer, useClass: CustomOverlayContainer },
-        { provide: DOCUMENT, useValue: window.document }, 
+        { provide: DOCUMENT, useValue: window.document },
       ],
     });
 
     customOverlayContainer = TestBed.inject(
       OverlayContainer,
     ) as CustomOverlayContainer;
-    document = TestBed.inject(DOCUMENT); 
+    document = TestBed.inject(DOCUMENT);
   });
 
   it('should be created', () => {
