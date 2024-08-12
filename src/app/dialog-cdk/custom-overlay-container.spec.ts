@@ -1,8 +1,8 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import { CustomOverlayContainer } from './custom-overlay-container';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { DOCUMENT } from '@angular/common';
+import { CustomOverlayContainer } from './custom-overlay-container';
 
 describe('CustomOverlayContainer', () => {
   let customOverlayContainer: CustomOverlayContainer;
@@ -34,6 +34,7 @@ describe('CustomOverlayContainer', () => {
       customOverlayContainer['_createContainer']();
 
       const container = document.querySelector('.cdk-overlay-container');
+
       expect(container).toBeTruthy();
       expect(mockAppRoot.contains(container!)).toBeTrue();
 
@@ -45,6 +46,7 @@ describe('CustomOverlayContainer', () => {
       customOverlayContainer['_createContainer']();
 
       const container = document.querySelector('.cdk-overlay-container');
+
       expect(container).toBeTruthy();
       expect(document.body.contains(container!)).toBeTrue();
 
