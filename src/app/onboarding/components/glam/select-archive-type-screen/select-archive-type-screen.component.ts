@@ -42,8 +42,6 @@ export class SelectArchiveTypeScreenComponent implements OnInit {
   public onValueChange(event: string): void {
     this.tag = event;
     this.type = archiveOptions.find((val) => val.type === event).value;
-    console.log(this.type);
-    console.log(event);
     this.selectedValue = `${this.type}+${event}`;
     this.buttonText = generateElementText(event, archiveOptionsWithArticle);
     this.headerText = generateElementText(event, archiveCreationHeaderText);

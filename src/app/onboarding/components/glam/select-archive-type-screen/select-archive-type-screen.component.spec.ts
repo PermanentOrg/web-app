@@ -29,9 +29,17 @@ describe('SelectArchiveTypeScreenComponent', () => {
 
   it('should emit navigation event when navigate is called with start', async () => {
     const { instance, outputs } = await shallow.render();
+    instance['type'] = 'mockType';
+    instance['tag'] = 'mockTag';
+    instance['headerText'] = 'mockHeaderText';
     instance.navigate('start');
 
-    expect(outputs.submitEmitter.emit).toHaveBeenCalledWith('start');
+    expect(outputs.submitEmitter.emit).toHaveBeenCalledWith({
+      screen: 'start',
+      type: 'mockType',
+      tag: 'mockTag',
+      headerText: 'mockHeaderText',
+    });
   });
 
   it('should emit submit event when navigate is called with other screen', async () => {
