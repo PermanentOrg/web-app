@@ -2,7 +2,10 @@
 <div class="type-selection-container">
   <div class="archive-type-selection">
     <p>With my first archive, I plan to capture and preserve material about…</p>
-    <pr-glam-archive-type-select [currentType]="tag" (typeSelected)="onValueChange($event)" />
+    <pr-glam-archive-type-select
+      [currentType]="tag"
+      (typeSelected)="onValueChange($event)"
+    />
   </div>
   <div class="buttons-container">
     <pr-button

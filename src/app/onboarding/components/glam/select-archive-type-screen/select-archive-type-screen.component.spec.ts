@@ -21,7 +21,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
     const { instance } = await shallow.render();
 
     expect(instance.selectedValue).toBe('');
-    expect(instance.buttonText).toBe('');
+    expect(instance.buttonText).toBe('a Personal');
     expect(instance['headerText']).toBe('');
     expect(instance['tag']).toBe('');
     expect(instance['type']).toBe('');
@@ -31,7 +31,7 @@ describe('SelectArchiveTypeScreenComponent', () => {
     const { instance, outputs } = await shallow.render();
     instance.navigate('start');
 
-    expect(outputs.navigationEmitter.emit).toHaveBeenCalledWith('start');
+    expect(outputs.submitEmitter.emit).toHaveBeenCalledWith('start');
   });
 
   it('should emit submit event when navigate is called with other screen', async () => {

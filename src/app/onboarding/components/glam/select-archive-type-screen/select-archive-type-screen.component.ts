@@ -19,7 +19,6 @@ export class SelectArchiveTypeScreenComponent implements OnInit {
   @Input() tag: string = '';
   public type: string = '';
 
-  @Output() navigationEmitter = new EventEmitter<string>();
   @Output() submitEmitter = new EventEmitter<Record<string, string>>();
 
   ngOnInit(): void {
@@ -38,7 +37,6 @@ export class SelectArchiveTypeScreenComponent implements OnInit {
       tag: this.tag,
       headerText: this.headerText,
     });
-    console.log(screen);
   }
 
   public onValueChange(event: string): void {
