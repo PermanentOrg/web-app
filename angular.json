@@ -71,6 +71,17 @@
               "baseHref": "/",
               "tsConfig": "src/tsconfig.serve.json"
             },
+            "proxy_local-docker": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local-docker.proxy.ts"
+                }
+              ],
+              "deployUrl": "/",
+              "baseHref": "/",
+              "tsConfig": "src/tsconfig.serve.json"
+            },
             "development": {
               "fileReplacements": [
                 {
@@ -154,6 +165,13 @@
               "ssl": true,
               "proxyConfig": "proxy.conf.local.json",
               "buildTarget": "mdot:build:proxy_local"
+            },
+            "local-docker": {
+              "host": "local.permanent.org",
+              "hmr": false,
+              "ssl": true,
+              "proxyConfig": "proxy.conf.local.json",
+              "buildTarget": "mdot:build:proxy_local-docker"
             }
           }
         },
