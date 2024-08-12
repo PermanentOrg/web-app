@@ -101,6 +101,8 @@ export class CreateNewArchiveComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.archiveType);
+    console.log(this.archiveTypeTag);
     if (this.pendingArchive) {
       this.screen = 'goals';
       this.progress.emit(1);
@@ -277,7 +279,7 @@ export class CreateNewArchiveComponent implements OnInit {
     this.archiveTypeTag = event.tag as OnboardingTypes;
     this.archiveType = event.type;
     this.headerText = event.headerText;
-    this.screen = 'name-archive';
+    this.screen = event.screen as NewArchiveScreen;
   }
 
   public onValueChange(value: {

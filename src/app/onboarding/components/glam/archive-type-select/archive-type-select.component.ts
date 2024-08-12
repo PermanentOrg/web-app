@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
@@ -14,15 +14,21 @@ import { ArchiveTypeIconComponent } from '../archive-type-icon/archive-type-icon
   templateUrl: './archive-type-select.component.html',
   styleUrl: './archive-type-select.component.scss',
 })
-export class GlamArchiveTypeSelectComponent {
+export class GlamArchiveTypeSelectComponent implements OnInit {
   @Output() public typeSelected = new EventEmitter<OnboardingTypes>();
-  public currentType: OnboardingTypes = OnboardingTypes.myself;
+  @Input() currentType: OnboardingTypes = OnboardingTypes.myself;
   public typeName: string;
   public typeDescription: string;
   public chevronDown = faChevronDown;
 
   constructor(private dialog: DialogCdkService) {
     this.refreshArchiveTypeText();
+  }
+
+  ngOnInit(): void {
+    if (this.currentType) {
+      this.refreshArchiveTypeText();
+    }
   }
 
   public onClick(): void {
