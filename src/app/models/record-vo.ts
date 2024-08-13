@@ -3,7 +3,6 @@ import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO, sortShareVOs } from '@models/share-vo';
 import { formatDateISOString } from '@shared/utilities/dateTime';
-import { orderBy } from 'lodash';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
@@ -11,6 +10,7 @@ import { RecordType, FolderLinkType } from './vo-types';
 import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
+import { HasThumbnails } from './get-thumbnail';
 
 interface RecordVoOptions {
   dataStatus: DataStatus;
@@ -18,7 +18,7 @@ interface RecordVoOptions {
 
 export class RecordVO
   extends BaseVO
-  implements ChildItemData, HasParentFolder, DynamicListChild
+  implements ChildItemData, HasParentFolder, DynamicListChild, HasThumbnails
 {
   public cleanParams = [
     'recordId',
@@ -68,12 +68,16 @@ export class RecordVO
   public type: RecordType;
 
   // Thumbnails
-  public thumbStatus;
-  public thumbURL200;
-  public thumbURL500;
-  public thumbURL1000;
-  public thumbURL2000;
+  public thumbStatus: string;
+  public thumbURL200: string;
+  public thumbURL500: string;
+  public thumbURL1000: string;
+  public thumbURL2000: string;
   public thumbDT;
+
+  // New thumbnails
+  public thumbnail256: string;
+  public thumbnail256CloudPath: string;
 
   // Statuses
   public fileStatus;
@@ -179,10 +183,12 @@ export interface RecordVOData extends BaseVOData {
   refArchiveNbr?: any;
   type?: any;
   thumbStatus?: any;
-  thumbURL200?: any;
-  thumbURL500?: any;
-  thumbURL1000?: any;
-  thumbURL2000?: any;
+  thumbURL200?: string;
+  thumbURL500?: string;
+  thumbURL1000?: string;
+  thumbURL2000?: string;
+  thumbnail256?: string;
+  thumbnail256CloudPath?: string;
   thumbDT?: any;
   fileStatus?: any;
   status?: any;

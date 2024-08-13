@@ -33,10 +33,10 @@ export class ArchiveVO extends BaseVO implements DynamicListChild {
   public birthDay;
   public company;
   public description;
-  public thumbURL200;
-  public thumbURL500;
-  public thumbURL1000;
-  public thumbURL2000;
+  public thumbURL200: string;
+  public thumbURL500: string;
+  public thumbURL1000: string;
+  public thumbURL2000: string;
   public thumbArchiveNbr: string;
   public type: ArchiveType;
   public isPendingAction: boolean;

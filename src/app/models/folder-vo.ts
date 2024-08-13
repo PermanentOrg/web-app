@@ -10,6 +10,7 @@ import { TimezoneVOData } from './timezone-vo';
 import { FolderType, SortType, FolderLinkType } from './vo-types';
 import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
+import { HasThumbnails } from './get-thumbnail';
 import { ItemVO, ArchiveVO } from '.';
 
 export interface HasParentFolder {
@@ -30,7 +31,7 @@ export interface ChildItemData {
 
 export class FolderVO
   extends BaseVO
-  implements ChildItemData, HasParentFolder, DynamicListChild
+  implements ChildItemData, HasParentFolder, DynamicListChild, HasThumbnails
 {
   public isFolder = true;
   public isRecord = false;
@@ -66,11 +67,15 @@ export class FolderVO
 
   // Thumbnails
   public thumbStatus;
-  public thumbURL200;
-  public thumbURL500;
-  public thumbURL1000;
-  public thumbURL2000;
+  public thumbURL200: string;
+  public thumbURL500: string;
+  public thumbURL1000: string;
+  public thumbURL2000: string;
   public thumbDT;
+
+  // New thumbnails
+  public thumbnail256: string;
+  public thumbnail256CloudPath: string;
 
   public status;
   public publicDT;
@@ -190,11 +195,13 @@ export interface FolderVOData extends BaseVOData {
   imageRatio?: any;
   type?: any;
   thumbStatus?: any;
-  thumbURL200?: any;
-  thumbURL500?: any;
-  thumbURL1000?: any;
-  thumbURL2000?: any;
+  thumbURL200?: string;
+  thumbURL500?: string;
+  thumbURL1000?: string;
+  thumbURL2000?: string;
   thumbDT?: any;
+  thumbnail256?: string;
+  thumbnail256CloudPath?: string;
   status?: any;
   publicDT?: any;
   parentFolderId?: any;

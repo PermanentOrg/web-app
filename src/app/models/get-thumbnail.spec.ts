@@ -50,4 +50,16 @@ describe('GetThumbnail', () => {
 
     expect(GetThumbnail(folder, 1000)).toBe('https://example.com/correct');
   });
+
+  it('can handle a 256x256 thumbnail size', () => {
+    expect(
+      GetThumbnail(
+        {
+          thumbURL200: 'https://example.com/invalid',
+          thumbnail256: 'https://example.com/correct',
+        },
+        225,
+      ),
+    ).toBe('https://example.com/correct');
+  });
 });
