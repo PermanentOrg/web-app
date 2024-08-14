@@ -3,7 +3,7 @@
 .archive-type-select-dialog {
   font-family: 'UsualRegular', sans-serif;
   background: #fff;
-  border-radius: 12px 12px 0px 0px;
+  border-radius: 12px;
   display: flex;
   width: auto;
   height: 80vh;
@@ -32,7 +32,7 @@
   align-items: center;
   flex-shrink: 0;
   align-self: stretch;
-  border-bottom: 1px solid #E7E8ED;
+  border-bottom: 1px solid #e7e8ed;
 
   .dialog-label {
     color: $darkBlue;

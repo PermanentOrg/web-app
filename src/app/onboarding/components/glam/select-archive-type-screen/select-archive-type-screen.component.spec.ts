@@ -80,4 +80,28 @@ describe('SelectArchiveTypeScreenComponent', () => {
 
     expect(instance.navigate).toHaveBeenCalledWith('name-archive');
   });
+
+  it('should set buttonText correctly in ngOnInit if tag is defined', async () => {
+    const { instance } = await shallow.render({
+      bind: {
+        tag: 'type:community',
+      },
+    });
+
+    instance.ngOnInit();
+
+    expect(instance.buttonText).toBe('a Community');
+  });
+
+  it('should not call generateElementText if tag is not defined', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    instance.tag = '';
+
+    fixture.detectChanges();
+
+    instance.ngOnInit();
+
+    expect(instance.buttonText).toBe('a Personal'); // Default value
+  });
 });
