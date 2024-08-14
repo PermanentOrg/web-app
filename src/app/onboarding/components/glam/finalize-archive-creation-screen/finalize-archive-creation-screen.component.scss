@@ -38,10 +38,15 @@ p {
   flex-direction: row;
   gap: 16px;
   align-items: center;
+  justify-content: space-between;
 
-  & > p {
-    margin-bottom: 0px;
-    margin-right: 100px;
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    & > p {
+      margin-bottom: 0px;
+    }
   }
 
   & img {
