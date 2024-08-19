@@ -14,7 +14,7 @@
 
 .page-title {
   @include pageTitle;
-  margin-bottom: 64px;
+  margin-bottom: 16px;
   @include beforeDesktop {
     margin-bottom: 10%;
   }
