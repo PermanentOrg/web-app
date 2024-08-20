@@ -5,77 +5,67 @@ import {
   ElementRef,
   HostListener,
   DoCheck,
-  Renderer2,
-  NgZone,
   OnDestroy,
   AfterViewInit,
   Output,
   EventEmitter,
   Inject,
+  OnInit,
 } from '@angular/core';
 
 import { debounce } from 'lodash';
-import debug from 'debug';
-
 import { RecordVO, ItemVO } from '@root/app/models';
 import { DataStatus } from '@models/data-status.enum';
 import * as OpenSeaDragon from 'openseadragon';
 import { ZoomEvent, FullScreenEvent } from 'openseadragon';
-
-const THUMB_SIZES = [200, 500, 1000, 2000];
+import { GetThumbnailInfo } from '@models/get-thumbnail';
 
 @Component({
   selector: 'pr-thumbnail',
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss'],
 })
-export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
-  @Input() item: ItemVO;
-  @Input() maxWidth;
+export class ThumbnailComponent
+  implements OnInit, DoCheck, OnDestroy, AfterViewInit
+{
+  @Input() public item: ItemVO;
+  @Input() public maxWidth: number | undefined;
+  @Input() public hideResizableImage: boolean = true;
 
-  @Output() public imageLoaded = new EventEmitter<void>();
+  @Output() public disableSwipe = new EventEmitter<boolean>(false);
+  @Output() public isFullScreen = new EventEmitter<boolean>(false);
 
-  thumbLoaded = false;
+  public thumbLoaded = false;
+  public isZip = false;
+  public viewer: OpenSeaDragon.Viewer;
+  public imageUrl: string | undefined;
 
   private lastItemFolderLinkId: number;
   private lastMaxWidth: number;
 
   private element: Element;
-  private imageElement: Element;
   private resizableImageElement: Element;
 
   private initialZoom: number;
 
   private targetThumbWidth: number;
-  private currentThumbWidth = 200;
   private currentThumbUrl: string;
   private dpiScale = 1;
 
   private lastItemDataStatus: DataStatus;
 
-  private debouncedResize;
-  private debug = debug('component:thumbnail');
-
-  public isZip: boolean = false;
-
-  @Input() hideResizableImage: boolean = true;
-  @Output() disableSwipe = new EventEmitter<boolean>(false);
-  @Output() isFullScreen = new EventEmitter<boolean>(false);
-
-  viewer: OpenSeaDragon.Viewer;
+  private debouncedResize: () => void | undefined;
 
   constructor(
     elementRef: ElementRef,
-    private renderer: Renderer2,
-    private zone: NgZone,
     @Inject('Image') private imageClass: typeof Image,
   ) {
     this.element = elementRef.nativeElement;
-    this.debouncedResize = debounce(this.checkElementWidth, 100);
+    this.debouncedResize = debounce(this.calculateWidthsAndSetImageBg, 100);
     this.dpiScale = window?.devicePixelRatio > 1.75 ? 2 : 1;
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     const resizableImageElement = this.element.querySelector('#openseadragon');
 
     if (
@@ -123,10 +113,11 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
     }
   }
 
-  ngDoCheck() {
-    if (!this.imageElement) {
-      this.getImageElement();
-    }
+  public ngOnInit(): void {
+    this.resetImage();
+  }
+
+  public ngDoCheck() {
     if (this.shouldResetImage()) {
       this.resetImage();
     }
@@ -140,103 +131,54 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
     );
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     if (this.viewer) {
       this.viewer.destroy();
     }
   }
 
-  getImageElement() {
-    this.imageElement = this.element.querySelector('.pr-thumbnail-image');
-  }
-
-  resetImage() {
+  public resetImage() {
     this.lastItemFolderLinkId = this.item.folder_linkId;
     this.lastMaxWidth = this.maxWidth;
-    if (!this.item.isFolder) {
-      this.isZip = this.item.type === 'type.record.archive';
-      this.setImageBg(this.item.thumbURL200);
-      this.currentThumbWidth = 200;
-      this.targetThumbWidth = 200;
-      this.checkElementWidth();
-      this.lastItemDataStatus = this.item.dataStatus;
-    } else {
-      this.isZip = false;
-      this.setImageBg();
-      this.currentThumbWidth = 200;
-      this.targetThumbWidth = 200;
-      this.lastItemDataStatus = this.item.dataStatus;
-    }
+    this.lastItemDataStatus = this.item.dataStatus;
+    this.isZip = this.item.type === 'type.record.archive';
+    this.calculateWidthsAndSetImageBg();
   }
 
   @HostListener('window:resize', [])
-  onViewportResize(event) {
+  public onViewportResize() {
     this.debouncedResize();
   }
 
-  checkElementWidth() {
+  public calculateWidthsAndSetImageBg() {
     const elemSize = this.element.clientWidth * this.dpiScale;
     const checkSize = this.maxWidth
       ? Math.min(this.maxWidth, elemSize)
       : elemSize;
-    if (checkSize <= this.currentThumbWidth) {
-      return;
-    }
-    let targetWidth;
 
-    for (const size of THUMB_SIZES) {
-      if (checkSize <= size) {
-        targetWidth = size;
-      } else if (checkSize >= THUMB_SIZES[THUMB_SIZES.length - 1]) {
-        targetWidth = THUMB_SIZES[THUMB_SIZES.length - 1];
-      }
-
-      if (targetWidth) {
-        break;
-      }
-    }
-
-    this.targetThumbWidth = targetWidth;
-    this.checkItemThumbs();
+    const thumbInfo = GetThumbnailInfo(this.item, checkSize);
+    this.targetThumbWidth = thumbInfo?.size ?? 200;
+    this.setImageBg(thumbInfo?.url);
   }
 
-  checkItemThumbs() {
-    const targetUrl = this.item[`thumbURL${this.targetThumbWidth}`];
-    if (targetUrl) {
-      this.currentThumbWidth = this.targetThumbWidth;
-      this.setImageBg(targetUrl);
-    }
-  }
-
-  setImageBg(imageUrl?: string) {
+  public setImageBg(imageUrl?: string) {
     this.currentThumbUrl = imageUrl;
 
-    if (!imageUrl) {
-      this.renderer.addClass(this.imageElement, 'image-loading');
-    } else {
+    if (imageUrl) {
       const imageLoader = new this.imageClass();
       const targetFolderLinkId = this.item.folder_linkId;
-      imageLoader.onerror = () => {
-        this.imageLoaded.emit();
-      };
       imageLoader.onload = () => {
         this.thumbLoaded = true;
-        this.renderer.removeClass(this.imageElement, 'image-loading');
         if (this.item.folder_linkId === targetFolderLinkId) {
-          this.renderer.setStyle(
-            this.imageElement,
-            'background-image',
-            `url(${imageUrl})`,
-          );
+          this.imageUrl = imageUrl;
         }
-        this.imageLoaded.emit();
       };
 
       imageLoader.src = imageUrl;
     }
   }
 
-  chooseFullSizeImage(record: RecordVO) {
+  public chooseFullSizeImage(record: RecordVO) {
     if (record.FileVOs.length > 1) {
       const convertedUrl = record.FileVOs.find(
         (file) => file.format == 'file.format.converted',

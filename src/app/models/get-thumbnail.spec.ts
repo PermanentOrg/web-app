@@ -62,4 +62,16 @@ describe('GetThumbnail', () => {
       ),
     ).toBe('https://example.com/correct');
   });
+
+  it('should return the maximum size if a size bigger than all thumb sizes is requested', () => {
+    expect(
+      GetThumbnail(
+        {
+          thumbURL200: 'https://example.com/invalid',
+          thumbURL2000: 'https://example.com/correct',
+        },
+        100000,
+      ),
+    ).toBe('https://example.com/correct');
+  });
 });

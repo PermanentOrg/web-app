@@ -4,6 +4,7 @@ import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.compo
 import { FolderVO, ItemVO, RecordVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
 import { NgModule } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
 
 class TestImage {
@@ -90,7 +91,8 @@ describe('ThumbnailComponent', () => {
       .provideMock({
         provide: 'Image',
         useValue: TestImage,
-      });
+      })
+      .import(FontAwesomeModule);
   });
 
   async function renderWithItem(
@@ -145,12 +147,7 @@ describe('ThumbnailComponent', () => {
 
   it('should use image 500 for high DPI at width 200', async () => {
     window.devicePixelRatio = 2;
-    const { instance, fixture } = await renderWithItem(leanItem, 200);
-
-    // TODO: MAKE IT SO WE DON'T HAVE TO USE ITEM.UPDATE
-    instance.item.update(fullItem);
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
+    const { instance } = await renderWithItem(fullItem, 200);
 
     expect(instance.getTargetThumbWidth()).toEqual(500);
     expect(instance.getCurrentThumbUrl()).toEqual(image500);
@@ -158,11 +155,7 @@ describe('ThumbnailComponent', () => {
 
   it('should use the maximum image size if there is no bigger thumbnail', async () => {
     window.devicePixelRatio = 10000;
-    const { instance, fixture } = await renderWithItem(minItem, 10000);
-
-    instance.item.update(fullItem);
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
+    const { instance, fixture } = await renderWithItem(fullItem, 10000);
 
     expect(instance.getTargetThumbWidth()).toEqual(2000);
     expect(instance.getCurrentThumbUrl()).toEqual(image2000);
@@ -170,11 +163,7 @@ describe('ThumbnailComponent', () => {
 
   it('should use reset when changing records', async () => {
     window.devicePixelRatio = 2;
-    const { instance, fixture } = await renderWithItem(leanItem, 200);
-
-    instance.item.update(fullItem);
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
+    const { instance, fixture } = await renderWithItem(fullItem, 200);
 
     expect(instance.getTargetThumbWidth()).toEqual(500);
     expect(instance.getCurrentThumbUrl()).toEqual(image500);
@@ -187,24 +176,21 @@ describe('ThumbnailComponent', () => {
   });
 
   it('should show a zip icon if the item is a .zip archive', async () => {
-    const { instance, find, fixture } = await renderWithItem(leanItem, 200);
-
-    instance.item.update(fullItem);
-    instance.item.type = 'type.record.archive';
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
+    const { find } = await renderWithItem(
+      new RecordVO({ ...fullItem, type: 'type.record.archive' }),
+      200,
+    );
 
     expect(find('fa-icon').length).toBeGreaterThan(0);
     expect(find('.pr-thumbnail-image:not([hidden])').length).toBe(0);
   });
 
   it('should show a folder icon if the item is a folder', async () => {
-    const { instance, find, fixture } = await renderWithItem(new FolderVO({}));
-
-    instance.item.update({
-      thumbURL200: 'https://www.example.com/do-not-use',
-    });
-    fixture.detectChanges();
+    const { find } = await renderWithItem(
+      new FolderVO({
+        thumbURL200: 'https://do-not-use',
+      }),
+    );
 
     expect(find('.pr-thumbnail-image[hidden]').length).toBe(1);
     expect(find('i.ion-md-folder[hidden]').length).toBe(0);
@@ -212,44 +198,38 @@ describe('ThumbnailComponent', () => {
 
   it('can have a maximum width set', async () => {
     window.devicePixelRatio = 2;
-    const { instance, fixture } = await renderWithItem(minItem, 10000, 200);
-
-    instance.item.update(fullItem);
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
+    const { instance } = await renderWithItem(fullItem, 10000, 200);
 
     expect(instance.getTargetThumbWidth()).toEqual(200);
     expect(instance.getCurrentThumbUrl()).toEqual(image200);
   });
 
   it('should show set the background image after it loads', async (done) => {
-    const { instance, find, fixture, outputs } = await renderWithItem(minItem);
+    const { find, fixture } = await renderWithItem(fullItem);
 
-    instance.item.update(fullItem);
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
+    setTimeout(() => {
+      fixture.detectChanges();
 
-    outputs.imageLoaded.subscribe(() => {
       expect(
         find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
       ).toContain(image200);
       done();
-    });
+    }, 1);
   });
 
   it('should be able to handle an image erroring out', async (done) => {
     TestImage.testError = true;
-    const { instance, find, fixture, outputs } = await renderWithItem(minItem);
+    const { instance, find, fixture } = await renderWithItem(leanItem);
 
     instance.item.update(fullItem);
-    instance.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
 
-    outputs.imageLoaded.subscribe(() => {
+    setTimeout(() => {
+      fixture.detectChanges();
+
       expect(
         find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
       ).toBe('');
       done();
-    });
+    }, 1);
   });
 });

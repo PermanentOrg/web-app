@@ -10,6 +10,7 @@
   [attr.aria-label]="item | getAltText"
   [attr.role]="'img'"
   [ngClass]="{ loaded: thumbLoaded }"
+  [style.backgroundImage]="imageUrl ? 'url(\'' + imageUrl + '\')' : undefined"
   [hidden]="
     (!hideResizableImage && item?.type === 'type.record.image') ||
     item?.isFolder ||
