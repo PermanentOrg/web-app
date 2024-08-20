@@ -193,6 +193,7 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     PrLocationPipe,
     DatePipe,
     DialogCdkService,
+    {provide: 'Image', useValue: Image},
   ],
 })
 export class SharedModule {

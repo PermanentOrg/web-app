@@ -11,6 +11,7 @@ import {
   AfterViewInit,
   Output,
   EventEmitter,
+  Inject,
 } from '@angular/core';
 
 import { debounce } from 'lodash';
@@ -31,6 +32,8 @@ const THUMB_SIZES = [200, 500, 1000, 2000];
 export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
   @Input() item: ItemVO;
   @Input() maxWidth;
+
+  @Output() public imageLoaded = new EventEmitter<void>();
 
   thumbLoaded = false;
 
@@ -65,10 +68,11 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
     elementRef: ElementRef,
     private renderer: Renderer2,
     private zone: NgZone,
+    @Inject('Image') private imageClass: typeof Image,
   ) {
     this.element = elementRef.nativeElement;
     this.debouncedResize = debounce(this.checkElementWidth, 100);
-    this.dpiScale = (window ? window.devicePixelRatio > 1.75 : false) ? 2 : 1;
+    this.dpiScale = window?.devicePixelRatio > 1.75 ? 2 : 1;
   }
 
   ngAfterViewInit() {
@@ -210,8 +214,11 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
     if (!imageUrl) {
       this.renderer.addClass(this.imageElement, 'image-loading');
     } else {
-      const imageLoader = new Image();
+      const imageLoader = new this.imageClass();
       const targetFolderLinkId = this.item.folder_linkId;
+      imageLoader.onerror = () => {
+        this.imageLoaded.emit();
+      };
       imageLoader.onload = () => {
         this.thumbLoaded = true;
         this.renderer.removeClass(this.imageElement, 'image-loading');
@@ -222,6 +229,7 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
             `url(${imageUrl})`,
           );
         }
+        this.imageLoaded.emit();
       };
 
       imageLoader.src = imageUrl;
@@ -242,5 +250,13 @@ export class ThumbnailComponent implements DoCheck, OnDestroy, AfterViewInit {
   public enablePanning(flag: boolean): void {
     (this.viewer as OpenSeaDragon.Options).panHorizontal = flag;
     (this.viewer as OpenSeaDragon.Options).panVertical = flag;
+  }
+
+  public getCurrentThumbUrl(): string {
+    return this.currentThumbUrl;
+  }
+
+  public getTargetThumbWidth(): number {
+    return this.targetThumbWidth;
   }
 }

@@ -1,12 +1,41 @@
 /* @format */
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Shallow } from 'shallow-render';
 import { ThumbnailComponent } from '@shared/components/thumbnail/thumbnail.component';
-import { RecordVO } from '@models';
+import { FolderVO, ItemVO, RecordVO } from '@models';
 import { DataStatus } from '@models/data-status.enum';
-import { Component, ViewChild } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
 
-const baseImageUrl = 'https://via.placeholder.com';
+class TestImage {
+  public static testError: boolean = false;
+  public onload = () => {};
+  public onerror = () => {};
+  private source: string;
+
+  constructor(_w: number, _h: number) {}
+
+  set src(src: string) {
+    this.source = src;
+    if (TestImage.testError) {
+      setTimeout(() => {
+        this.onerror();
+      });
+    } else {
+      setTimeout(() => {
+        this.onload();
+      });
+    }
+  }
+
+  get src(): string {
+    return this.source;
+  }
+}
+
+// For headless test runs, this URL doesn't matter since loading shouldn't
+// actually occur, but this URL provides free placeholder graphics for the
+// HTML Karma test runner.
+const baseImageUrl = 'https://placehold.co';
 
 const image200 = `${baseImageUrl}/200`;
 const image500 = `${baseImageUrl}/500`;
@@ -31,24 +60,12 @@ const fullItem = new RecordVO(
     thumbURL200: image200,
     thumbURL500: image500,
     thumbURL1000: image1000,
+    thumbURL2000: image2000,
     type: 'type.record.image',
   },
   { dataStatus: DataStatus.Full },
 );
 
-const minItem2 = new RecordVO(
-  {
-    folder_linkId: 2,
-  },
-  { dataStatus: DataStatus.Placeholder },
-);
-const leanItem2 = new RecordVO(
-  {
-    folder_linkId: 2,
-    thumbURL200: addParam(image200, 'item2'),
-  },
-  { dataStatus: DataStatus.Lean },
-);
 const fullItem2 = new RecordVO(
   {
     folder_linkId: 2,
@@ -59,138 +76,180 @@ const fullItem2 = new RecordVO(
   { dataStatus: DataStatus.Full },
 );
 
-@Component({
-  selector: `pr-test-host-component`,
-  template: `<pr-thumbnail
-    [item]="item"
-    [style.width]="size"
-    [style.height]="size"
-  ></pr-thumbnail>`,
-  styles: [
-    `
-      pr-thumbnail {
-        display: block;
-        width: 0px;
-        height: 0px;
-      }
-    `,
-  ],
-})
-class TestHostComponent {
-  @ViewChild(ThumbnailComponent) public component: ThumbnailComponent;
-  public item: RecordVO = new RecordVO(minItem);
-  public size = '200px';
-}
+@NgModule({})
+class DummyModule {}
 
 describe('ThumbnailComponent', () => {
-  let component: ThumbnailComponent;
-  let hostComponent: TestHostComponent;
-
-  let fixture: ComponentFixture<TestHostComponent>;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ThumbnailComponent, TestHostComponent, GetAltTextPipe],
-    }).compileComponents();
-  }));
+  let shallow: Shallow<ThumbnailComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestHostComponent);
-    hostComponent = fixture.componentInstance;
-    fixture.detectChanges();
-    component = hostComponent.component;
+    TestImage.testError = false;
+    window.devicePixelRatio = 1;
+    shallow = new Shallow(ThumbnailComponent, DummyModule)
+      .declare(GetAltTextPipe)
+      .provideMock({
+        provide: 'Image',
+        useValue: TestImage,
+      });
   });
 
-  it('should create host component', () => {
-    expect(hostComponent).toBeTruthy();
-    expect(component).toBeTruthy();
+  async function renderWithItem(
+    item: ItemVO = minItem,
+    size: number = 200,
+    maxWidth?: number,
+  ) {
+    return await shallow.render(
+      `<div [style.width]="'${size}px'" [style.height]="'${size}px'"><pr-thumbnail [item]="item" [maxWidth]="maxWidth"></pr-thumbnail></div>`,
+      {
+        bind: {
+          item: item.isFolder ? new FolderVO(item) : new RecordVO(item),
+          maxWidth,
+        },
+      },
+    );
+  }
+
+  it('should exist', async () => {
+    const { instance } = await renderWithItem();
+
+    expect(instance).toBeTruthy();
   });
 
   it('should use image 200 if item is lean at any DPI and width', async () => {
-    hostComponent.item.update(leanItem);
-    hostComponent.item.dataStatus = leanItem.dataStatus;
-    fixture.detectChanges();
+    const { instance } = await renderWithItem(leanItem);
 
-    expect(component['currentThumbUrl']).toEqual(image200);
+    expect(instance.getCurrentThumbUrl()).toEqual(image200);
   });
 
   it('should use image 200 for low DPI at width 100', async () => {
-    hostComponent.size = '100px';
-    component['dpiScale'] = 1;
-    fixture.detectChanges();
+    const { instance } = await renderWithItem(fullItem, 100);
 
-    hostComponent.item.update(fullItem);
-    hostComponent.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
-
-    expect(component['targetThumbWidth']).toEqual(200);
-    expect(component['currentThumbUrl']).toEqual(image200);
+    expect(instance.getTargetThumbWidth()).toEqual(200);
+    expect(instance.getCurrentThumbUrl()).toEqual(image200);
   });
 
   it('should use image 200 for high DPI at width 100', async () => {
-    hostComponent.size = '100px';
-    component['dpiScale'] = 2;
-    fixture.detectChanges();
+    window.devicePixelRatio = 2;
+    const { instance } = await renderWithItem(fullItem, 100);
 
-    hostComponent.item.update(fullItem);
-    hostComponent.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
-
-    expect(component['targetThumbWidth']).toEqual(200);
-    expect(component['currentThumbUrl']).toEqual(image200);
+    expect(instance.getTargetThumbWidth()).toEqual(200);
+    expect(instance.getCurrentThumbUrl()).toEqual(image200);
   });
 
   it('should use image 200 for low DPI at width 200', async () => {
-    hostComponent.size = '200px';
-    component['dpiScale'] = 1;
-    fixture.detectChanges();
+    const { instance } = await renderWithItem(fullItem, 200);
 
-    hostComponent.item.update(fullItem);
-    hostComponent.item.dataStatus = fullItem.dataStatus;
-    fixture.detectChanges();
-
-    expect(component['targetThumbWidth']).toEqual(200);
-    expect(component['currentThumbUrl']).toEqual(image200);
+    expect(instance.getTargetThumbWidth()).toEqual(200);
+    expect(instance.getCurrentThumbUrl()).toEqual(image200);
   });
 
   it('should use image 500 for high DPI at width 200', async () => {
-    component['dpiScale'] = 2;
+    window.devicePixelRatio = 2;
+    const { instance, fixture } = await renderWithItem(leanItem, 200);
 
-    hostComponent.item.update(fullItem);
-    hostComponent.item.dataStatus = fullItem.dataStatus;
+    // TODO: MAKE IT SO WE DON'T HAVE TO USE ITEM.UPDATE
+    instance.item.update(fullItem);
+    instance.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
 
-    expect(component['targetThumbWidth']).toEqual(500);
-    expect(component['currentThumbUrl']).toEqual(image500);
+    expect(instance.getTargetThumbWidth()).toEqual(500);
+    expect(instance.getCurrentThumbUrl()).toEqual(image500);
+  });
+
+  it('should use the maximum image size if there is no bigger thumbnail', async () => {
+    window.devicePixelRatio = 10000;
+    const { instance, fixture } = await renderWithItem(minItem, 10000);
+
+    instance.item.update(fullItem);
+    instance.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+
+    expect(instance.getTargetThumbWidth()).toEqual(2000);
+    expect(instance.getCurrentThumbUrl()).toEqual(image2000);
   });
 
   it('should use reset when changing records', async () => {
-    component['dpiScale'] = 2;
+    window.devicePixelRatio = 2;
+    const { instance, fixture } = await renderWithItem(leanItem, 200);
 
-    hostComponent.item.update(fullItem);
-    hostComponent.item.dataStatus = fullItem.dataStatus;
+    instance.item.update(fullItem);
+    instance.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
 
-    expect(component['targetThumbWidth']).toEqual(500);
-    expect(component['currentThumbUrl']).toEqual(image500);
+    expect(instance.getTargetThumbWidth()).toEqual(500);
+    expect(instance.getCurrentThumbUrl()).toEqual(image500);
 
-    hostComponent.item = fullItem2;
+    instance.item = fullItem2;
     fixture.detectChanges();
 
-    expect(component['targetThumbWidth']).toEqual(500);
-    expect(component['currentThumbUrl']).toEqual(fullItem2.thumbURL500);
+    expect(instance.getTargetThumbWidth()).toEqual(500);
+    expect(instance.getCurrentThumbUrl()).toEqual(fullItem2.thumbURL500);
   });
 
   it('should show a zip icon if the item is a .zip archive', async () => {
-    component['dpiScale'] = 2;
+    const { instance, find, fixture } = await renderWithItem(leanItem, 200);
 
-    hostComponent.item.update(fullItem);
-    hostComponent.item.type = 'type.record.archive';
-    hostComponent.item.dataStatus = fullItem.dataStatus;
+    instance.item.update(fullItem);
+    instance.item.type = 'type.record.archive';
+    instance.item.dataStatus = fullItem.dataStatus;
     fixture.detectChanges();
 
-    expect(component['element'].querySelector('fa-icon')).not.toBeNull();
-    expect(
-      component['element'].querySelector('.pr-thumbnail-image:not([hidden])'),
-    ).toBeNull();
+    expect(find('fa-icon').length).toBeGreaterThan(0);
+    expect(find('.pr-thumbnail-image:not([hidden])').length).toBe(0);
+  });
+
+  it('should show a folder icon if the item is a folder', async () => {
+    const { instance, find, fixture } = await renderWithItem(new FolderVO({}));
+
+    instance.item.update({
+      thumbURL200: 'https://www.example.com/do-not-use',
+    });
+    fixture.detectChanges();
+
+    expect(find('.pr-thumbnail-image[hidden]').length).toBe(1);
+    expect(find('i.ion-md-folder[hidden]').length).toBe(0);
+  });
+
+  it('can have a maximum width set', async () => {
+    window.devicePixelRatio = 2;
+    const { instance, fixture } = await renderWithItem(minItem, 10000, 200);
+
+    instance.item.update(fullItem);
+    instance.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+
+    expect(instance.getTargetThumbWidth()).toEqual(200);
+    expect(instance.getCurrentThumbUrl()).toEqual(image200);
+  });
+
+  it('should show set the background image after it loads', async (done) => {
+    const { instance, find, fixture, outputs } = await renderWithItem(minItem);
+
+    instance.item.update(fullItem);
+    instance.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+
+    outputs.imageLoaded.subscribe(() => {
+      expect(
+        find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
+      ).toContain(image200);
+      done();
+    });
+  });
+
+  it('should be able to handle an image erroring out', async (done) => {
+    TestImage.testError = true;
+    const { instance, find, fixture, outputs } = await renderWithItem(minItem);
+
+    instance.item.update(fullItem);
+    instance.item.dataStatus = fullItem.dataStatus;
+    fixture.detectChanges();
+
+    outputs.imageLoaded.subscribe(() => {
+      expect(
+        find('.pr-thumbnail-image').nativeElement.style.backgroundImage,
+      ).toBe('');
+      done();
+    });
   });
 });
