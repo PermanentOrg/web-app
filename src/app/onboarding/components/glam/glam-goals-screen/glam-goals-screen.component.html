@@ -2,10 +2,13 @@
 <div>
   <div class="text-container">
     <p class="chart-path">Chart your <b>path</b> to success</p>
-    <p class="text">
-      Let’s set some goals. Everyone has unique goals for preserving their
-      legacy. We want to learn more about how we can help you achieve yours.
-    </p>
+    <div class="text-right">
+      <p class="text">
+        Let’s set some goals. Everyone has unique goals for preserving their
+        legacy. We want to learn more about how we can help you achieve yours.
+      </p>
+      <p class="text"><b>My goal is to...</b></p>
+    </div>
   </div>
   <div class="goals">
     @for (item of goals; track $index) {
@@ -28,7 +31,6 @@
       [orientation]="'right'"
       [icon]="'/onboarding/arrow-right'"
       [variant]="'secondary'"
-      [disabled]="!selectedGoals.length"
       >Next</pr-button
     >
   </div>
