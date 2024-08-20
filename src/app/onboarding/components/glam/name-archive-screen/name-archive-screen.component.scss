@@ -9,6 +9,11 @@
   @media screen and (max-width: 592px) {
     width: auto;
   }
+
+  @media screen and (min-width: 769px) {
+    margin-left: 64px;
+    
+  }
 }
 
 .archive-type-name {

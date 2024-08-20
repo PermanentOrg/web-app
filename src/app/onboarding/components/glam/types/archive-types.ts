@@ -108,7 +108,7 @@ export const archiveCreationHeaderText = [
   },
   {
     type: OnboardingTypes.famhist,
-    text: 'History',
+    text: 'Family History',
   },
   {
     type: OnboardingTypes.community,

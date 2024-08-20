@@ -59,6 +59,9 @@ export const FORM_ERROR_MESSAGES = {
   name: {
     required: 'Full name required',
   },
+  archiveName: {
+    required: 'Archive name required',
+  },
   invitation: {
     required: 'Invitation code required',
   },

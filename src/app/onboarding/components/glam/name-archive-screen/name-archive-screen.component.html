@@ -1,18 +1,17 @@
 <div class="archive-naming">
   <div>
     <p>
-      Name your new archive. This is the legal or official name of the person,
-      family, group, or organization the archive is about. You can edit the name
-      later if needed.
+      Name your new archive. This is the formal or official name of the person,
+      family, group, or organization the archive represents.
     </p>
     <div class="name-archive-input">
       <p class="the-text">The</p>
       <pr-form-input-glam
         type="text"
-        fieldName="name"
+        fieldName="archiveName"
         [variant]="'dark'"
-        [control]="nameForm.controls['name']"
         [iconPosition]="{ right: '-25px' }"
+        [control]="nameForm.controls['archiveName']"
         [styling]="{
           height: '50px',
           padding: '0px',
@@ -20,7 +19,7 @@
           'font-size': '24px'
         }"
         [hideLabel]="true"
-        placeholder="Archive Subject"
+        placeholder=""
       ></pr-form-input-glam>
       <p class="archive-text">Archive</p>
     </div>
@@ -42,7 +41,7 @@
       (buttonClick)="createArchive()"
       [size]="'fill'"
       class="create-archive-button"
-      >Create the archive</pr-button
+      >Next</pr-button
     >
   </div>
 </div>
