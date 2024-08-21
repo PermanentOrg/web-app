@@ -25,9 +25,6 @@ export class ThumbnailComponent implements OnInit, DoCheck {
   @Input() public item: ItemVO;
   @Input() public maxWidth: number | undefined;
 
-  @Output() public disableSwipe = new EventEmitter<boolean>(false);
-  @Output() public isFullScreen = new EventEmitter<boolean>(false);
-
   public thumbLoaded = false;
   public isZip = false;
   public imageUrl: string | undefined;

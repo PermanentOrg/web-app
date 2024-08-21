@@ -42,8 +42,6 @@
           "
         ></pr-zooming-image-viewer>
         <pr-thumbnail
-          (disableSwipe)="toggleSwipe($event)"
-          (isFullScreen)="toggleFullscreen($event)"
           [item]="currentRecord"
           *ngIf="
             showThumbnail &&
