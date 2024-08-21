@@ -1,14 +1,25 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges, HostBinding, Output, EventEmitter, ElementRef } from '@angular/core';
-
+/* @format */
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  Input,
+  SimpleChanges,
+  HostBinding,
+  Output,
+  EventEmitter,
+  ElementRef,
+} from '@angular/core';
 import { ArchiveVO } from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { PrConstantsService } from '@shared/services/pr-constants/pr-constants.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { GetThumbnail } from '@models/get-thumbnail';
 
 @Component({
   selector: 'pr-archive-small',
   templateUrl: './archive-small.component.html',
-  styleUrls: ['./archive-small.component.scss']
+  styleUrls: ['./archive-small.component.scss'],
 })
 export class ArchiveSmallComponent implements OnInit, OnChanges {
   @Input() archive: ArchiveVO = null;
@@ -46,13 +57,14 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
     private account: AccountService,
     private api: ApiService,
     private prConstants: PrConstantsService,
-    public element: ElementRef
-  ) { }
+    public element: ElementRef,
+  ) {}
 
   ngOnInit() {
     const currentArchive = this.account.getArchive();
     if (currentArchive) {
-      this.isCurrent = this.account.getArchive().archiveId === this.archive.archiveId;
+      this.isCurrent =
+        this.account.getArchive().archiveId === this.archive.archiveId;
     } else {
       this.isCurrent = false;
     }
@@ -86,7 +98,10 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   }
 
   checkArchiveThumbnail() {
-    if (!this.archive.thumbURL200 && this.archive.status === 'status.archive.gen_avatar') {
+    if (
+      !GetThumbnail(this.archive, 200) &&
+      this.archive.status === 'status.archive.gen_avatar'
+    ) {
       setTimeout(async () => {
         const response = await this.api.archive.get([this.archive]);
         const updated = response.getArchiveVO();
@@ -97,7 +112,8 @@ export class ArchiveSmallComponent implements OnInit, OnChanges {
   }
 
   isDefaultArchive() {
-    return this.account.getAccount()?.defaultArchiveId === this.archive.archiveId;
+    return (
+      this.account.getAccount()?.defaultArchiveId === this.archive.archiveId
+    );
   }
-
 }

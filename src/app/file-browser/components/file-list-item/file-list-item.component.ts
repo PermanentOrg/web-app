@@ -1,3 +1,4 @@
+/* @format */
 import {
   Component,
   OnInit,
@@ -13,12 +14,8 @@ import {
   ViewChild,
   AfterViewInit,
 } from '@angular/core';
-import { Router, ActivatedRoute, RouterState } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router';
 import { getFormattedDate } from '@shared/utilities/dateTime';
-
-import { clone, find } from 'lodash';
-
 import { DataService } from '@shared/services/data/data.service';
 import {
   PromptService,
@@ -26,7 +23,6 @@ import {
   PromptField,
   FOLDER_VIEW_FIELD_INIIAL,
 } from '@shared/services/prompt/prompt.service';
-
 import {
   FolderVO,
   RecordVO,
@@ -50,11 +46,10 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { Deferred } from '@root/vendor/deferred';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { ApiService } from '@shared/services/api/api.service';
-import { checkMinimumAccess, AccessRole } from '@models/access-role';
+import { AccessRole } from '@models/access-role';
 import { DeviceService } from '@shared/services/device/device.service';
 import { StorageService } from '@shared/services/storage/storage.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
-
 import {
   DragService,
   DragServiceEvent,
@@ -70,8 +65,8 @@ import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
-
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
+import { GetThumbnail } from '@models/get-thumbnail';
 import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
 import { PublishComponent } from '../publish/publish.component';
@@ -1058,9 +1053,12 @@ export class FileListItemComponent
             const thumbnailItem = sortedItems.shift();
             if (thumbnailItem) {
               if (sortPriorities.includes(thumbnailItem.type)) {
-                if (thumbnailItem.thumbURL200 && thumbnailItem.thumbURL500) {
-                  this.folderThumb200 = thumbnailItem.thumbURL200;
-                  this.folderThumb500 = thumbnailItem.thumbURL500;
+                if (
+                  GetThumbnail(thumbnailItem, 200) &&
+                  GetThumbnail(thumbnailItem, 500)
+                ) {
+                  this.folderThumb200 = GetThumbnail(thumbnailItem, 200);
+                  this.folderThumb500 = GetThumbnail(thumbnailItem, 500);
                 } else {
                   this.folderContentsType =
                     FolderContentsType.BROKEN_THUMBNAILS;
@@ -1104,7 +1102,7 @@ export class FileListItemComponent
         return '';
       }
     } else {
-      return this.inGridView ? this.item.thumbURL500 : this.item.thumbURL200;
+      return GetThumbnail(this.item, 500);
     }
   }
 
