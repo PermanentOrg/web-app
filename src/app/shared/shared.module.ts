@@ -27,6 +27,7 @@ import {
   fas,
   faPenSquare,
 } from '@fortawesome/free-solid-svg-icons';
+import OpenSeadragon from 'openseadragon';
 import { DialogCdkService } from '../dialog-cdk/dialog-cdk.service';
 import { ArchivePickerComponent } from './components/archive-picker/archive-picker.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
@@ -70,6 +71,7 @@ import { SwitcherComponent } from './components/switcher/switcher.component';
 import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
+import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/zooming-image-viewer.component';
 
 @NgModule({
   imports: [
@@ -137,6 +139,7 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     GetAltTextPipe,
     AccessRolePipe,
     MobileBannerComponent,
+    ZoomingImageViewerComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -186,6 +189,7 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     GetAltTextPipe,
     AccessRolePipe,
     MobileBannerComponent,
+    ZoomingImageViewerComponent,
   ],
   providers: [
     PublicLinkPipe,
@@ -193,7 +197,8 @@ import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.
     PrLocationPipe,
     DatePipe,
     DialogCdkService,
-    {provide: 'Image', useValue: Image},
+    { provide: 'Image', useValue: Image },
+    { provide: 'openseadragon', useValue: OpenSeadragon },
   ],
 })
 export class SharedModule {

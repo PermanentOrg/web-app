@@ -29,12 +29,29 @@
         *ngIf="isQueued(i)"
       ></div>
       <div *ngIf="currentRecord === record" class="full" [ngSwitch]="">
+        <pr-zooming-image-viewer
+          [item]="currentRecord"
+          (disableSwipe)="toggleSwipe($event)"
+          (isFullScreen)="toggleFullscreen($event)"
+          *ngIf="
+            showThumbnail &&
+            isZoomableImage &&
+            !isDocument &&
+            !isVideo &&
+            !isAudio
+          "
+        ></pr-zooming-image-viewer>
         <pr-thumbnail
           (disableSwipe)="toggleSwipe($event)"
           (isFullScreen)="toggleFullscreen($event)"
           [item]="currentRecord"
-          *ngIf="showThumbnail && !isDocument && !isVideo && !isAudio"
-          [hideResizableImage]="false"
+          *ngIf="
+            showThumbnail &&
+            !isZoomableImage &&
+            !isDocument &&
+            !isVideo &&
+            !isAudio
+          "
         ></pr-thumbnail>
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>

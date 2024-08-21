@@ -1,21 +1,11 @@
 <!-- @format -->
 <div
-  [attr.aria-label]="item | getAltText"
-  [attr.role]="'img'"
-  [hidden]="hideResizableImage && item?.type === 'type.record.image'"
-  id="openseadragon"
-></div>
-<div
   class="pr-thumbnail-image"
   [attr.aria-label]="item | getAltText"
   [attr.role]="'img'"
   [ngClass]="{ loaded: thumbLoaded }"
   [style.backgroundImage]="imageUrl ? 'url(\'' + imageUrl + '\')' : undefined"
-  [hidden]="
-    (!hideResizableImage && item?.type === 'type.record.image') ||
-    item?.isFolder ||
-    isZip
-  "
+  [hidden]="item?.isFolder || isZip"
 ></div>
 <div class="pr-thumbnail-icon" [hidden]="!item?.isFolder">
   <i class="ion-md-folder"></i>
