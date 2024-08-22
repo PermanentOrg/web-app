@@ -303,8 +303,8 @@ export class CreateNewArchiveComponent implements OnInit {
     this.setScreen(event.screen);
   }
 
-  public finalizeArchive(event): void {
+  public handleReasonsEmit(event): void {
     this.selectedReasons = event.reasons;
-    this.screen = 'finalize';
+    this.setScreen(event.screen as NewArchiveScreen);
   }
 }
