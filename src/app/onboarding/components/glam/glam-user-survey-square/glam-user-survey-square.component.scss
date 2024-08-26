@@ -10,6 +10,10 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   cursor: pointer;
   display: flex;
+
+  @media screen and (max-width: 770px) {
+    width: 300px;
+  }
 }
 
 .text {

@@ -7,7 +7,6 @@ p {
 }
 
 .create-archive-for-me {
-  margin-top: 64px;
   display: flex;
   gap: 64px;
 
@@ -15,11 +14,8 @@ p {
     flex-direction: column;
   }
 
-  @media screen and (max-width: 900px) {
-    height: 85vh;
-  }
-
   & > .title {
+    width: 50%;
     font-size: 56px;
     font-family: 'UsualRegular', sans-serif;
 
@@ -47,16 +43,18 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 498px;
+    height: 60vh;
+    width: 100%;
 
     @media screen and (max-width: 1000px) {
-      gap: 200px;
+      gap: 50px;
     }
   }
 
   & .buttons {
     display: flex;
     justify-content: space-between;
+    gap: 16px;
   }
 
   & .archive-type {

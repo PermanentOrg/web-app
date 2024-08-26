@@ -81,13 +81,17 @@
       </div>
     </div>
   </div>
-  <div *ngIf="isGlam" class="create-new-archive">
+  <div
+    *ngIf="isGlam && (screen === 'create' || screen === 'name-archive')"
+    class="create-new-archive"
+  >
     <div class="heading-container">
       <h1 *ngIf="screen === 'create'" class="heading">
         Create your first <b>Archive</b>
       </h1>
       <h1 *ngIf="screen === 'name-archive'" class="heading">
         Create your first
+        <br />
         <pr-archive-type-icon [type]="archiveTypeTag" />
         <b>{{ headerText }}</b> Archive
       </h1>

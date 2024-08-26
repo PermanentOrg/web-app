@@ -6,7 +6,6 @@
   flex-direction: row;
   justify-content: space-evenly;
   gap: 64px;
-  margin-top: 64px;
 
   @media screen and (max-width: 600px) {
     flex-direction: column;
@@ -45,7 +44,11 @@ p {
   height: 75vh;
 
   @media screen and (max-width: 600px) {
-    height: 60vh;
+    height: auto;
+  }
+
+  @media screen and (max-width: 750px) {
+    width: 100%;
   }
 
   & > .text > p {

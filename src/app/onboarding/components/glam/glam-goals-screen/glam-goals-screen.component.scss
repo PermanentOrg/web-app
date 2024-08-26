@@ -1,8 +1,8 @@
 /* @format */
 @import 'fonts';
+@import 'variables';
 
 .goals {
-  margin-bottom: 64px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -20,6 +20,10 @@
   font-family: 'UsualRegular', sans-serif;
   font-size: 56px;
   width: 500px;
+
+  @media screen and (max-width: 1024px) {
+    width: 400px;
+  }
 
   @media screen and (max-width: 500px) {
     width: auto;
@@ -41,7 +45,6 @@ p {
 }
 
 .text-container {
-  margin: 64px 0px;
   display: flex;
   justify-content: space-between;
   @media (max-width: 854px) {
@@ -54,6 +57,7 @@ p {
   flex-direction: row;
   justify-content: flex-end;
   gap: 32px;
+  margin-top: 24px;
 
   @media (max-width: 768px) {
     justify-content: space-between;
