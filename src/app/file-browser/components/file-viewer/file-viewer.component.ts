@@ -24,6 +24,7 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
 import { SearchService } from '@search/services/search.service';
+import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -39,6 +40,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   public nextRecord: RecordVO;
   public records: RecordVO[];
   public currentIndex: number;
+  public isZoomableImage = false;
   public isVideo = false;
   public isAudio = false;
   public isDocument = false;
@@ -189,6 +191,10 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   initRecord() {
     this.isAudio = this.currentRecord.type.includes('audio');
     this.isVideo = this.currentRecord.type.includes('video');
+    this.isZoomableImage =
+      this.currentRecord.type.includes('image') &&
+      this.currentRecord.FileVOs?.length &&
+      ZoomingImageViewerComponent.chooseFullSizeImage(this.currentRecord);
     this.isDocument = this.currentRecord.FileVOs?.some(
       (obj: ItemVO) => obj.type.includes('pdf') || obj.type.includes('txt'),
     );

@@ -29,8 +29,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { PayerService } from '@shared/services/payer/payer.service';
 import { EventService } from '@shared/services/event/event.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
+import { GetThumbnail } from '@models/get-thumbnail';
 import { ConnectionsDialogComponent } from '../connections-dialog/connections-dialog.component';
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 import { MyArchivesDialogComponent } from '../my-archives-dialog/my-archives-dialog.component';
@@ -110,7 +109,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   checkArchiveThumbnail() {
-    if (!this.archive.thumbURL500) {
+    if (!GetThumbnail(this.archive, 500)) {
       setTimeout(async () => {
         await this.accountService.refreshArchive();
         this.checkArchiveThumbnail();
