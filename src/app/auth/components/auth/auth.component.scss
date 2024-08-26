@@ -1,0 +1,113 @@
+/* @format */
+@import 'variables';
+
+:host {
+  background: $linear-gradient-background;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding: 0px 64px;
+
+  @media screen {
+    padding: 20px 0px;
+  }
+}
+
+.auth-container {
+  display: flex;
+  gap: 64px;
+  width: 100%;
+  align-items: center;
+  overflow-y: scroll;
+
+  @include beforeDesktop {
+    justify-content: center;
+  }
+}
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 25%;
+  height: 100%;
+
+  @include beforeDesktop {
+    width: 100%;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 900px) {
+    padding-right: 64px;
+  }
+}
+
+.image {
+  position: relative;
+  width: 80%;
+  height: 100%;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    color: white;
+  }
+
+  @include beforeDesktop {
+    display: none;
+  }
+}
+
+.permanent-logo {
+  margin-bottom: 32px;
+  @include beforeDesktop {
+    width: 80%;
+
+    @media screen and (orientation: landscape) {
+      width: 40%;
+    }
+  }
+}
+
+.testimony {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2.5% 5%;
+  top: 75%;
+  left: 28%;
+
+  @media screen and (max-width: 1379px) and (min-width: 900px) {
+    top: 60%;
+  }
+  @media screen and (max-width: 2450px) and (min-width: 1380px) {
+    top: 75%;
+  }
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  width: 50%;
+
+  & > .text {
+    font-family: 'UsualRegular', sans-serif;
+    font-weight: 400;
+    line-height: 24px;
+    font-size: 1rem;
+    color: #131b4a;
+  }
+
+  & > .link {
+    font-family: 'UsualRegular', sans-serif;
+    font-weight: 300;
+    line-height: 24px;
+    font-size: 1.1rem;
+    color: #131b4a;
+  }
+
+  & > .archive-data {
+    font-size: 10px;
+  }
+
+  & > p {
+    margin: 0;
+  }
+}

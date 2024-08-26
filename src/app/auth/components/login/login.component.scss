@@ -1,0 +1,49 @@
+/* @format */
+@import 'variables';
+@import 'mixins';
+@import 'fonts';
+
+:host {
+  position: relative;
+}
+
+.login-form {
+  padding: 0;
+  margin: 0;
+}
+
+.page-title {
+  @include pageTitle;
+  margin-bottom: 16px;
+  @include beforeDesktop {
+    margin-bottom: 10%;
+  }
+}
+
+.email-input {
+  margin-bottom: 16px;
+}
+
+.auth-options {
+  margin: 32px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & > a {
+    color: white;
+    font-size: 14px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}
+
+.forgot-password-button {
+  margin: 32px 0px;
+  display: flex;
+  justify-content: center;
+  & > a {
+    color: white;
+    font-size: 14px;
+    font-family: 'UsualRegular', sans-serif;
+  }
+}

@@ -46,6 +46,7 @@ export class SignupComponent {
   shareItem: RecordVO | FolderVO;
   shareFromName: string;
   shareItemIsRecord = false;
+  agreedTerms = false;
 
   constructor(
     fb: UntypedFormBuilder,
@@ -107,7 +108,6 @@ export class SignupComponent {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      agreed: [false, [Validators.requiredTrue]],
       optIn: [true],
     });
 
@@ -140,7 +140,7 @@ export class SignupComponent {
         formValue.name,
         formValue.password,
         formValue.confirm,
-        formValue.agreed,
+        this.agreedTerms,
         formValue.optIn,
         null,
         formValue.invitation,
@@ -212,5 +212,15 @@ export class SignupComponent {
         ]);
       }, 500);
     }
+  }
+
+  displayTerms(): void {
+    window.open('https://www.permanent.org/terms/', '_blank');
+  }
+
+  navigateToAuth() {
+    this.router.navigate(['..', 'login'], {
+      relativeTo: this.route,
+    });
   }
 }
