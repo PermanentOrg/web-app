@@ -14,16 +14,17 @@ import {
   AccountResponse,
 } from '@shared/services/api/index.repo';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
-import { MessageService } from '@shared/services/message/message.service';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
 import { EventService } from '@shared/services/event/event.service';
-import { DeviceService } from '@shared/services/device/device.service';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogRef } from '@angular/cdk/dialog';
-import { UploadService } from '@core/services/upload/upload.service';
 
 type StorageDialogTab = 'add' | 'file' | 'transaction' | 'promo' | 'gift';
+
+interface StorageRedemptionMessage {
+  successful: boolean;
+  message: string;
+}
 
 @Component({
   selector: 'pr-storage-dialog',
@@ -40,14 +41,13 @@ export class StorageDialogComponent implements OnInit, OnDestroy {
   tabs = ['add', 'gift', 'promo', 'transaction', 'file'];
   subscriptions: Subscription[] = [];
 
-  private TELLYOURSTORY = 'TellYourStory';
+  public resultMessage: StorageRedemptionMessage | undefined;
 
   constructor(
     private fb: UntypedFormBuilder,
     private dialogRef: DialogRef,
     private account: AccountService,
     private api: ApiService,
-    private message: MessageService,
     private route: ActivatedRoute,
     private event: EventService,
   ) {
@@ -99,33 +99,44 @@ export class StorageDialogComponent implements OnInit, OnDestroy {
     try {
       this.waiting = true;
       const response = await this.api.billing.redeemPromoCode(value);
-      await this.account.refreshAccount();
-      const promo = response.getPromoVO();
-      const bytes = promo.sizeInMB * (1024 * 1024);
-      this.account.addStorageBytes(bytes);
-      this.event.dispatch({
-        entity: 'account',
-        action: 'submit_promo',
-      });
-      const pipe = new FileSizePipe();
-      this.message.showMessage({
-        message: `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
-        style: 'success',
-      });
-      this.promoForm.reset();
-    } catch (err) {
-      if (err instanceof BillingResponse || err instanceof AccountResponse) {
-        this.message.showError({ message: err.getMessage(), translate: true });
-      } else {
-        this.message.showError({
-          message: 'There was an error redeeming your code.',
-        });
-      }
+      await this.handleValidPromoCode(response);
+    } catch (err: unknown) {
+      this.showPromoCodeError(err);
     } finally {
       this.waiting = false;
     }
   }
-  public getAccountForTesting() {
-    return this.account;
+
+  private showPromoCodeError(err: unknown) {
+    const message =
+      err instanceof BillingResponse || err instanceof AccountResponse
+        ? err.getMessage()
+        : 'There was an error redeeming your code.';
+    this.resultMessage = { message, successful: false };
+  }
+
+  private async handleValidPromoCode(response: BillingResponse) {
+    await this.updateAccountStorageBytes(response);
+    this.event.dispatch({
+      entity: 'account',
+      action: 'submit_promo',
+    });
+    this.promoForm.reset();
+  }
+
+  private async updateAccountStorageBytes(response: BillingResponse) {
+    await this.account.refreshAccount();
+    const promo = response.getPromoVO();
+    const bytes = promo.sizeInMB * (1024 * 1024);
+    this.account.addStorageBytes(bytes);
+    this.showPromoCodeSuccess(bytes);
+  }
+
+  private showPromoCodeSuccess(bytes: number) {
+    const pipe = new FileSizePipe();
+    this.resultMessage = {
+      message: `Gift code redeemed for ${pipe.transform(bytes)} of storage`,
+      successful: true,
+    };
   }
 }

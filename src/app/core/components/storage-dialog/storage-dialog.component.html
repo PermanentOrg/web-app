@@ -86,6 +86,13 @@
                 formControlName="code"
               />
             </div>
+            <div
+              class="results-message"
+              *ngIf="resultMessage"
+              [class.successful]="resultMessage?.successful"
+            >
+              {{ resultMessage.message }}
+            </div>
             <div class="dialog-form-field">
               <button
                 class="btn btn-primary"

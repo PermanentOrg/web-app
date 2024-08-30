@@ -38,11 +38,26 @@ const mockPromoResponse = {
   isSuccessful: true,
 };
 
+const failedPromoResponse = {
+  Results: [
+    {
+      data: null,
+      message: ['warning.promo.not_found'],
+      status: false,
+    },
+  ],
+  isSuccessful: false,
+};
+
 class MockBillingRepo {
   public calledRedeemPromoCode = false;
+  public isSuccessful = true;
   public redeemPromoCode(_value: PromoVOData): Promise<BillingResponse> {
     this.calledRedeemPromoCode = true;
-    return Promise.resolve(new BillingResponse(mockPromoResponse));
+    if (this.isSuccessful) {
+      return Promise.resolve(new BillingResponse(mockPromoResponse));
+    }
+    return Promise.reject(new BillingResponse(failedPromoResponse));
   }
 }
 
@@ -55,7 +70,11 @@ interface MockApiService {
 }
 class MockAccountService {
   public addedStorage: number | undefined;
+  public failRefresh: boolean = false;
   public refreshAccount(): Promise<void> {
+    if (this.failRefresh) {
+      return Promise.reject();
+    }
     return Promise.resolve();
   }
   public setAccount(_account: AccountVO): void {}
@@ -72,7 +91,6 @@ describe('StorageDialogComponent', () => {
   let messageShown: boolean = false;
   let mockAccountService: MockAccountService;
   let mockApiService: MockApiService;
-  let mockAnalyticksService: MockAnalyticsService;
   let mockActivatedRoute;
   const paramMap = new BehaviorSubject(convertToParamMap({}));
   const queryParamMap = new BehaviorSubject(convertToParamMap({}));
@@ -86,7 +104,6 @@ describe('StorageDialogComponent', () => {
     mockApiService = {
       billing: new MockBillingRepo(),
     };
-    mockAnalyticksService = new MockAnalyticsService();
     shallow = new Shallow(StorageDialogComponent, CoreModule)
       .dontMock(AccountService)
       .dontMock(ApiService)
@@ -97,7 +114,6 @@ describe('StorageDialogComponent', () => {
       })
       .provide({ provide: AccountService, useValue: mockAccountService })
       .provide({ provide: ApiService, useValue: mockApiService })
-      .provide({ provide: AnalyticsService, useValue: mockAnalyticksService })
       .provide({ provide: DialogRef, useClass: MockDialogRef })
       .provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
   });
@@ -108,23 +124,25 @@ describe('StorageDialogComponent', () => {
     expect(element).not.toBeNull();
   });
 
-  it('should fetch dialog information from the API', async () => {
+  it('should send an API request when submitting a promo code', async () => {
     const { instance } = await shallow.render();
     const promoData: PromoVOData = { code: 'promo' };
     await instance.onPromoFormSubmit(promoData);
 
     expect(mockApiService.billing.calledRedeemPromoCode).toBeTruthy();
+    expect(instance.resultMessage.successful).toBeTrue();
   });
 
-  it('should update the account after submititng the form ', async () => {
+  it('should update the account after redeeming a promo code', async () => {
     const { instance } = await shallow.render();
     const promoData: PromoVOData = { code: 'promo' };
     await instance.onPromoFormSubmit(promoData);
 
     expect(mockAccountService.addedStorage).toBe(5000 * 1024 * 1024);
+    expect(instance.resultMessage.successful).toBeTrue();
   });
 
-  it('should enable the button after adding a promo code', async () => {
+  it('should enable the submit button after adding a promo code', async () => {
     const { find, instance, fixture } = await shallow.render();
     instance.promoForm.patchValue({
       code: 'promo1',
@@ -135,6 +153,23 @@ describe('StorageDialogComponent', () => {
     const button = find('.btn-primary');
 
     expect(button.nativeElement.disabled).toBeFalsy();
+  });
+
+  it('should handle an invalid promo code', async () => {
+    const { instance } = await shallow.render();
+    mockApiService.billing.isSuccessful = false;
+    await instance.onPromoFormSubmit({ code: 'potato' });
+
+    expect(instance.resultMessage.successful).toBeFalse();
+    expect(instance.resultMessage.message).toBe('warning.promo.not_found');
+  });
+
+  it('should handle any other unexpected errors when redeeming promo code', async () => {
+    const { instance } = await shallow.render();
+    mockAccountService.failRefresh = true;
+    await instance.onPromoFormSubmit({ code: 'potato' });
+
+    expect(instance.resultMessage.successful).toBeFalse();
   });
 
   it('should handle route and query parameter changes', async () => {
