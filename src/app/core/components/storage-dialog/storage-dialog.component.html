@@ -66,42 +66,7 @@
           <pr-gift-storage></pr-gift-storage>
         </ng-container>
         <ng-container *ngSwitchCase="'promo'">
-          <div class="panel-title">Redeem Gift</div>
-          <p>
-            If you've been given a gift code, you can redeem it for free storage
-            below.
-          </p>
-          <form
-            [formGroup]="promoForm"
-            class="dialog-form"
-            (submit)="onPromoFormSubmit(promoForm.value)"
-          >
-            <div class="dialog-form-field">
-              <label for="promoCode">Gift code</label>
-              <input
-                type="text"
-                class="form-control"
-                id="promoCode"
-                name="name"
-                formControlName="code"
-              />
-            </div>
-            <div
-              class="results-message"
-              *ngIf="resultMessage"
-              [class.successful]="resultMessage?.successful"
-            >
-              {{ resultMessage.message }}
-            </div>
-            <div class="dialog-form-field">
-              <button
-                class="btn btn-primary"
-                [disabled]="promoForm.invalid || waiting"
-              >
-                Redeem
-              </button>
-            </div>
-          </form>
+          <pr-redeem-gift [promoCode]="promoCode"></pr-redeem-gift>
         </ng-container>
         <ng-container *ngSwitchCase="'transaction'">
           <div class="panel-title">Transaction History</div>

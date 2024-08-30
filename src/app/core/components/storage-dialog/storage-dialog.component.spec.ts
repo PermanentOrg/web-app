@@ -1,96 +1,20 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import { BillingResponse } from '@shared/services/api/index.repo';
-import { AccountService } from '@shared/services/account/account.service';
 import { CoreModule } from '@core/core.module';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { GaEventData } from '@shared/services/google-analytics/google-analytics.service';
-import { EventService } from '@shared/services/event/event.service';
 import { DialogRef } from '@angular/cdk/dialog';
-import { AnalyticsService } from '@shared/services/analytics/analytics.service';
-import { PromoVOData } from '../../../models/promo-vo';
-import { ApiService } from '../../../shared/services/api/api.service';
-import { AccountVO } from '../../../models/account-vo';
-import { MessageService } from '../../../shared/services/message/message.service';
+import { EventService } from '@shared/services/event/event.service';
 import { StorageDialogComponent } from './storage-dialog.component';
 
 class MockDialogRef {
-  close(value?: any): void {
+  close(_?: any): void {
     // Mock close method
-  }
-}
-
-const mockPromoResponse = {
-  Results: [
-    {
-      data: [
-        {
-          PromoVO: {
-            promoId: 13,
-            code: 'promo9',
-            sizeInMB: 5000,
-          },
-        },
-      ],
-    },
-  ],
-  isSuccessful: true,
-};
-
-const failedPromoResponse = {
-  Results: [
-    {
-      data: null,
-      message: ['warning.promo.not_found'],
-      status: false,
-    },
-  ],
-  isSuccessful: false,
-};
-
-class MockBillingRepo {
-  public calledRedeemPromoCode = false;
-  public isSuccessful = true;
-  public redeemPromoCode(_value: PromoVOData): Promise<BillingResponse> {
-    this.calledRedeemPromoCode = true;
-    if (this.isSuccessful) {
-      return Promise.resolve(new BillingResponse(mockPromoResponse));
-    }
-    return Promise.reject(new BillingResponse(failedPromoResponse));
-  }
-}
-
-class MockAnalyticsService {
-  public notifiyObservers(data: GaEventData): void {}
-}
-
-interface MockApiService {
-  billing: MockBillingRepo;
-}
-class MockAccountService {
-  public addedStorage: number | undefined;
-  public failRefresh: boolean = false;
-  public refreshAccount(): Promise<void> {
-    if (this.failRefresh) {
-      return Promise.reject();
-    }
-    return Promise.resolve();
-  }
-  public setAccount(_account: AccountVO): void {}
-  public getAccount(): AccountVO {
-    return new AccountVO({ spaceLeft: 10000, spaceTotal: 10000 });
-  }
-  public addStorageBytes(sizeInBytes: number): void {
-    this.addedStorage = sizeInBytes;
   }
 }
 
 describe('StorageDialogComponent', () => {
   let shallow: Shallow<StorageDialogComponent>;
-  let messageShown: boolean = false;
-  let mockAccountService: MockAccountService;
-  let mockApiService: MockApiService;
   let mockActivatedRoute;
   const paramMap = new BehaviorSubject(convertToParamMap({}));
   const queryParamMap = new BehaviorSubject(convertToParamMap({}));
@@ -100,21 +24,8 @@ describe('StorageDialogComponent', () => {
       paramMap: paramMap.asObservable(),
       queryParamMap: queryParamMap.asObservable(),
     };
-    mockAccountService = new MockAccountService();
-    mockApiService = {
-      billing: new MockBillingRepo(),
-    };
     shallow = new Shallow(StorageDialogComponent, CoreModule)
-      .dontMock(AccountService)
-      .dontMock(ApiService)
-      .mock(MessageService, {
-        showError: () => {
-          messageShown = true;
-        },
-      })
-      .provide({ provide: AccountService, useValue: mockAccountService })
-      .provide({ provide: ApiService, useValue: mockApiService })
-      .provide({ provide: DialogRef, useClass: MockDialogRef })
+      .provideMock({ provide: DialogRef, useClass: MockDialogRef })
       .provideMock([{ provide: ActivatedRoute, useValue: mockActivatedRoute }]);
   });
 
@@ -124,63 +35,15 @@ describe('StorageDialogComponent', () => {
     expect(element).not.toBeNull();
   });
 
-  it('should send an API request when submitting a promo code', async () => {
-    const { instance } = await shallow.render();
-    const promoData: PromoVOData = { code: 'promo' };
-    await instance.onPromoFormSubmit(promoData);
-
-    expect(mockApiService.billing.calledRedeemPromoCode).toBeTruthy();
-    expect(instance.resultMessage.successful).toBeTrue();
-  });
-
-  it('should update the account after redeeming a promo code', async () => {
-    const { instance } = await shallow.render();
-    const promoData: PromoVOData = { code: 'promo' };
-    await instance.onPromoFormSubmit(promoData);
-
-    expect(mockAccountService.addedStorage).toBe(5000 * 1024 * 1024);
-    expect(instance.resultMessage.successful).toBeTrue();
-  });
-
-  it('should enable the submit button after adding a promo code', async () => {
-    const { find, instance, fixture } = await shallow.render();
-    instance.promoForm.patchValue({
-      code: 'promo1',
-    });
-    instance.promoForm.updateValueAndValidity();
-    instance.activeTab = 'promo';
-    fixture.detectChanges();
-    const button = find('.btn-primary');
-
-    expect(button.nativeElement.disabled).toBeFalsy();
-  });
-
-  it('should handle an invalid promo code', async () => {
-    const { instance } = await shallow.render();
-    mockApiService.billing.isSuccessful = false;
-    await instance.onPromoFormSubmit({ code: 'potato' });
-
-    expect(instance.resultMessage.successful).toBeFalse();
-    expect(instance.resultMessage.message).toBe('warning.promo.not_found');
-  });
-
-  it('should handle any other unexpected errors when redeeming promo code', async () => {
-    const { instance } = await shallow.render();
-    mockAccountService.failRefresh = true;
-    await instance.onPromoFormSubmit({ code: 'potato' });
-
-    expect(instance.resultMessage.successful).toBeFalse();
-  });
-
   it('should handle route and query parameter changes', async () => {
     const { instance } = await shallow.render();
 
     paramMap.next(convertToParamMap({ path: 'promo' }));
 
-    queryParamMap.next(convertToParamMap({ promoCode: 'TellYourStory' }));
+    queryParamMap.next(convertToParamMap({ promoCode: 'potato' }));
 
     expect(instance.activeTab).toBe('promo');
-    expect(instance.promoForm.value).toEqual({ code: 'TellYourStory' });
+    expect(instance.promoCode).toEqual('potato');
   });
 
   it('should handle route changes', async () => {
@@ -189,5 +52,27 @@ describe('StorageDialogComponent', () => {
     paramMap.next(convertToParamMap({ path: 'add' }));
 
     expect(instance.activeTab).toBe('add');
+  });
+
+  it('can close the dialog', async () => {
+    const { instance, inject } = await shallow.render();
+    const spy = spyOn(inject(DialogRef), 'close');
+    instance.onDoneClick();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should emit an event when the promo tab is selected', async () => {
+    const { fixture, instance, inject } = await shallow.render();
+    let eventCalled = false;
+    inject(EventService).addObserver({
+      async update() {
+        eventCalled = true;
+      },
+    });
+    instance.setTab('promo');
+    await fixture.whenStable();
+
+    expect(eventCalled).toBeTrue();
   });
 });
