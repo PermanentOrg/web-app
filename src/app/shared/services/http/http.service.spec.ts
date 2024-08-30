@@ -1,12 +1,17 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { HttpService } from '@shared/services/http/http.service';
+import { environment } from '@root/environments/environment';
 import { StorageService } from '../storage/storage.service';
 
 describe('HttpService', () => {
   let service: HttpService;
   let storage: StorageService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -15,6 +20,7 @@ describe('HttpService', () => {
     });
     service = TestBed.inject(HttpService);
     storage = TestBed.inject(StorageService);
+    httpMock = TestBed.inject(HttpTestingController);
     storage.local.clear();
   });
 
@@ -48,5 +54,27 @@ describe('HttpService', () => {
     expect(
       service.generateHeaders({ useAuthorizationHeader: false }).keys().length,
     ).toBe(0);
+  });
+
+  it('should trigger an event if it receives a 401 response', async (done) => {
+    let expirationObserved = false;
+    const subscription = service.tokenExpired.subscribe(() => {
+      expirationObserved = true;
+    });
+
+    service.sendRequestPromise('/test').catch(() => {
+      expect(expirationObserved).toBeTrue();
+      subscription.unsubscribe();
+      done();
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/test`);
+    req.flush(
+      { error: 'error message' },
+      {
+        status: 401,
+        statusText: 'unauthorized',
+      },
+    );
   });
 });

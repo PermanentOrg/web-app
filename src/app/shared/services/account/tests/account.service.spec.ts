@@ -9,6 +9,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { AuthResponse } from '@shared/services/api/index.repo';
 import { AccountVO, ArchiveVO, FolderVO, RecordVO } from '@root/app/models';
+import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
+import { HttpService } from '@shared/services/http/http.service';
 import { AppModule } from '../../../../app.module';
 import { StorageService } from '../../storage/storage.service';
 import { EditService } from '../../../../core/services/edit/edit.service';
@@ -205,5 +207,23 @@ describe('AccountService', () => {
     await instance.deductAccountStorage(-sizeOfItemsToDelete);
 
     expect(instance.getAccount().spaceLeft).toEqual(100400);
+  });
+
+  describe('Log out on token expiration', () => {
+    it('HttpV2Service', async () => {
+      const { instance, inject } = shallow.createService();
+      const logOut = spyOn(instance, 'logOut').and.rejectWith(false);
+      inject(HttpV2Service).tokenExpired.next();
+
+      expect(logOut).toHaveBeenCalled();
+    });
+
+    it('HttpService', async () => {
+      const { instance, inject } = shallow.createService();
+      const spy = spyOn(instance, 'logOut').and.rejectWith(false);
+      inject(HttpService).tokenExpired.next();
+
+      expect(spy).toHaveBeenCalled();
+    });
   });
 });
