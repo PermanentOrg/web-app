@@ -26,6 +26,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventService } from '../event/event.service';
 import { AnalyticsService } from '../analytics/analytics.service';
+import { HttpService } from '../http/http.service';
 
 const ACCOUNT_KEY = 'account';
 const ARCHIVE_KEY = 'archive';
@@ -61,6 +62,7 @@ export class AccountService {
     private cookies: CookieService,
     private dialog: DialogCdkService,
     private router: Router,
+    private http: HttpService,
     private httpv2: HttpV2Service,
     private location: LocationStrategy,
     private event: EventService,
@@ -87,11 +89,14 @@ export class AccountService {
       this.refreshRoot();
     }
 
-    this.httpv2.tokenExpired.subscribe(() => {
+    const tokenExpireHandler = () => {
       this.logOut().then(() => {
         window.location.reload();
       });
-    });
+    };
+
+    this.httpv2.tokenExpired.subscribe(tokenExpireHandler);
+    this.http.tokenExpired.subscribe(tokenExpireHandler);
   }
 
   public setAccount(newAccount: AccountVO) {

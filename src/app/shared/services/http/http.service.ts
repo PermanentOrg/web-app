@@ -1,8 +1,8 @@
 /* @format */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '@root/environments/environment';
 
 import { RequestVO } from '@models/request-vo';
@@ -20,6 +20,7 @@ interface RequestOptions {
   providedIn: 'root',
 })
 export class HttpService {
+  public tokenExpired = new Subject<void>();
   private apiUrl = environment.apiUrl;
   private defaultResponseClass = BaseResponse;
 
@@ -52,6 +53,12 @@ export class HttpService {
           } else {
             return new this.defaultResponseClass(response);
           }
+        }),
+        catchError((err) => {
+          if (err.status === 401) {
+            this.tokenExpired.next();
+          }
+          return throwError(err);
         }),
       );
   }
