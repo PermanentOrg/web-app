@@ -66,6 +66,7 @@ import { AdvancedSettingsComponent } from './components/advanced-settings/advanc
 import { AccountSecurityComponent } from './components/account-security/account-security.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-auth.component';
+import { RedeemGiftComponent } from './components/redeem-gift/redeem-gift.component';
 
 @NgModule({
   imports: [
@@ -125,6 +126,7 @@ import { TwoFactorAuthComponent } from './components/two-factor-auth/two-factor-
     AccountSecurityComponent,
     ChangePasswordComponent,
     TwoFactorAuthComponent,
+    RedeemGiftComponent,
   ],
   providers: [
     FolderViewService,
