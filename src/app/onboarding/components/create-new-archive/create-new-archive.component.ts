@@ -298,9 +298,9 @@ export class CreateNewArchiveComponent implements OnInit {
     this.setScreen('goals');
   }
 
-  public goToReasons(event): void {
+  public handleGoalsNav(event): void {
     this.selectedGoals = event.goals;
-    this.setScreen('reasons');
+    this.setScreen(event.screen);
   }
 
   public finalizeArchive(event): void {

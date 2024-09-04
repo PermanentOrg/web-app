@@ -4,10 +4,14 @@
 
 .goals {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) and (min-width: 990px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 990px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -17,7 +21,7 @@
 }
 
 .chart-path {
-  font-family: 'UsualRegular', sans-serif;
+  font-family: 'UsualLight', sans-serif;
   font-size: 56px;
   width: 500px;
 
@@ -31,9 +35,13 @@
 }
 
 .text {
-  font-family: 'UsualRegular', sans-serif;
-  font-size: 16px;
-  width: 300px;
+  font-family: 'UsualLight', sans-serif;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.text-right {
+  width: 40%;
 
   @media screen and (max-width: 500px) {
     width: auto;
@@ -46,9 +54,10 @@ p {
 
 .text-container {
   display: flex;
-  justify-content: space-between;
+  gap: 64px;
   @media (max-width: 854px) {
     flex-direction: column;
+    gap: 16px;
   }
 }
 

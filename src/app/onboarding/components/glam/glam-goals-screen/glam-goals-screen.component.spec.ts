@@ -44,9 +44,10 @@ describe('GlamGoalsScreenComponent', () => {
     const { instance, outputs } = await shallow.render();
     instance.backToNameArchive();
 
-    expect(outputs.backToNameArchiveOutput.emit).toHaveBeenCalledWith(
-      'name-archive',
-    );
+    expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
+      screen: 'name-archive',
+      goals: [],
+    });
   });
 
   it('should emit goToNextReasonsOutput with selectedGoals when goToNextReasons is called', async () => {
@@ -55,7 +56,7 @@ describe('GlamGoalsScreenComponent', () => {
     instance.addGoal(goal);
     instance.goToNextReasons();
 
-    expect(outputs.goToNextReasonsOutput.emit).toHaveBeenCalledWith({
+    expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
       screen: 'reasons',
       goals: [goal],
     });
