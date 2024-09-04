@@ -31,6 +31,7 @@ import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 import { FolderViewService } from '@shared/services/folder-view/folder-view.service';
 import { isKeyEventFromBody } from '@shared/utilities/events';
 import debug from 'debug';
+import { EventService } from '@shared/services/event/event.service';
 
 interface FileListActions {
   delete: boolean;
@@ -109,6 +110,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
     private account: AccountService,
     private api: ApiService,
     private folderView: FolderViewService,
+    private event: EventService,
   ) {
     this.getSortFromCurrentFolder();
     this.initialSortType = this.data.currentFolder?.sort;
@@ -401,6 +403,11 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
     if (!this.can.share || !this.edit) {
       return;
     }
+
+    this.event.dispatch({
+      action: 'open_share_modal',
+      entity: 'account',
+    });
 
     this.edit.openShareDialog(this.selectedItems[0]);
   }

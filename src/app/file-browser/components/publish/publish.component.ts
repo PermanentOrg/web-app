@@ -132,6 +132,11 @@ export class PublishComponent {
   copyPublicLink() {
     this.ga.sendEvent(EVENTS.PUBLISH.PublishByUrl.getLink.params);
 
+    this.event.dispatch({
+      entity: 'account',
+      action: 'copy_share_link',
+    });
+
     const element = this.publicLinkInput.nativeElement as HTMLInputElement;
     copyFromInputElement(element);
 

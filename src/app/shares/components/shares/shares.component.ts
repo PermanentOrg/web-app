@@ -34,6 +34,7 @@ import {
 } from '@shared/utilities/hasSubscriptions';
 import { EditService } from '@core/services/edit/edit.service';
 import { filter } from 'rxjs/operators';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-shares',
@@ -63,6 +64,7 @@ export class SharesComponent
     private editService: EditService,
     private accountService: AccountService,
     public device: DeviceService,
+    private event: EventService,
     @Inject(DOCUMENT) private document: any,
   ) {
     this.sharesFolder = new FolderVO({
@@ -70,6 +72,11 @@ export class SharesComponent
       pathAsText: ['Shares'],
       type: 'type.folder.root.share',
       ChildItemVOs: [],
+    });
+
+    this.event.dispatch({
+      action: 'open_shared_workspace',
+      entity: 'account',
     });
 
     this.dataService.setCurrentFolder(this.sharesFolder);
