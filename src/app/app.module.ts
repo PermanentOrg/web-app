@@ -47,7 +47,9 @@ import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '@shared/services/event/event.service';
 import { DataService } from '@shared/services/data/data.service';
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { RouteHistoryModule } from './route-history/route-history.module';
+import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
 
 declare var ga: any;
 
@@ -161,6 +163,10 @@ export class PermErrorHandler implements ErrorHandler {
     CookieService,
     MessageService,
     DataService,
+    {
+      provide: OverlayContainer,
+      useClass: CustomOverlayContainer,
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAnalytics,

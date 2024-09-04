@@ -12,7 +12,10 @@ import { RouteHistoryService } from '@root/app/route-history/route-history.servi
 import { Title } from '@angular/platform-browser';
 import { slideUpAnimation } from '@shared/animations';
 import { Subscription } from 'rxjs';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 
 @Component({
@@ -40,7 +43,7 @@ export class RoutedDialogWrapperComponent
     private router: Router,
     private dialogService: DialogCdkService,
     private routeHistory: RouteHistoryService,
-    private title: Title
+    private title: Title,
   ) {}
 
   ngAfterViewInit(): void {
@@ -67,7 +70,11 @@ export class RoutedDialogWrapperComponent
     unsubscribeAll(this.subscriptions);
   }
 
-  private openDialog(component: any, dialogData: any, dialogOptions: any): void {
+  private openDialog(
+    component: any,
+    dialogData: any,
+    dialogOptions: any,
+  ): void {
     const config = {
       ...dialogOptions,
       data: dialogData,
