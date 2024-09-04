@@ -34,7 +34,6 @@ export class GlamGoalsScreenComponent {
       goals: this.selectedGoals,
     });
   }
-  p;
   public addGoal(goal: string): void {
     if (this.selectedGoals.includes(goal)) {
       this.selectedGoals = this.selectedGoals.filter((g) => g !== goal);
