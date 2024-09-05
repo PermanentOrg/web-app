@@ -1,5 +1,5 @@
 <!-- @format -->
-@if (screen !== 'goals') {
+@if (screen !== 'reasons' && screen !== 'goals') {
   <div class="new-account-screens-container">
     <pr-archive-creation-start-screen
       (getStartedOutput)="setScreen('create')"
@@ -84,6 +84,18 @@
           </button>
         </div>
       </div>
+      <pr-select-archive-type-screen
+        (navigationEmitter)="setScreen($event)"
+        (submitEmitter)="handleCreationScreenEvents($event)"
+        *ngIf="screen === 'create'"
+      ></pr-select-archive-type-screen>
+      `
+      <pr-name-archive-screen
+        *ngIf="screen === 'name-archive'"
+        (backToCreateEmitter)="setScreen($event)"
+        (archiveCreatedEmitter)="navigateToGoals($event)"
+        [name]="name"
+      ></pr-name-archive-screen>
     </div>
   </div>
   <div
@@ -124,8 +136,8 @@
 
 @if (screen === 'reasons' && isGlam) {
   <pr-glam-reasons-screen
-    (backToGoalsOutput)="setScreen($event)"
-    (finalizeArchiveOutput)="finalizeArchive($event)"
+    (reasonsEmit)="handleReasonsEmit($event)"
+    [selectedReasons]="selectedReasons"
   ></pr-glam-reasons-screen>
 }
 

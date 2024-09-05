@@ -40,21 +40,26 @@ describe('GlamReasonsScreenComponent', () => {
     expect(instance.selectedReasons).not.toContain(reason);
   });
 
-  it('should emit backToGoalsOutput when backToGoals is called', async () => {
-    const { instance, outputs } = await shallow.render();
-    instance.backToGoals();
-
-    expect(outputs.backToGoalsOutput.emit).toHaveBeenCalledWith('goals');
-  });
-
-  it('should emit finalizeArchiveOutput with selectedReasons when finalizeArchive is called', async () => {
+  it('should emit reasonsEmit with selectedReasons when finalizeArchive is called', async () => {
     const { instance, outputs } = await shallow.render();
     const reason = 'Test Reason';
     instance.addReason(reason);
     instance.finalizeArchive();
 
-    expect(outputs.finalizeArchiveOutput.emit).toHaveBeenCalledWith({
+    expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
       screen: 'finalize',
+      reasons: [reason],
+    });
+  });
+
+  it('should emit reasonsEmit with selectedReasons when backToGoals is called', async () => {
+    const { instance, outputs } = await shallow.render();
+    const reason = 'Test Reason';
+    instance.addReason(reason);
+    instance.backToGoals();
+
+    expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
+      screen: 'goals',
       reasons: [reason],
     });
   });

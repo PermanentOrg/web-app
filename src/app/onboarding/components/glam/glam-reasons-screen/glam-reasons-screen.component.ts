@@ -1,6 +1,11 @@
 /* @format */
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { reasons } from '../../../shared/onboarding-screen';
+
+interface ReasonsEmit {
+  screen: string;
+  reasons: string[];
+}
 
 @Component({
   selector: 'pr-glam-reasons-screen',
@@ -9,23 +14,20 @@ import { reasons } from '../../../shared/onboarding-screen';
 })
 export class GlamReasonsScreenComponent {
   public reasons = [];
-  public selectedReasons = [];
-  @Output() backToGoalsOutput = new EventEmitter<string>();
-  @Output() finalizeArchiveOutput = new EventEmitter<{
-    screen: string;
-    reasons: string[];
-  }>();
+  @Input() selectedReasons = [];
+  @Output() backToGoalsOutput = new EventEmitter<ReasonsEmit>();
+  @Output() reasonsEmit = new EventEmitter<ReasonsEmit>();
 
   constructor() {
     this.reasons = reasons;
   }
 
   backToGoals() {
-    this.backToGoalsOutput.emit('goals');
+    this.reasonsEmit.emit({ screen: 'goals', reasons: this.selectedReasons });
   }
 
   finalizeArchive() {
-    this.finalizeArchiveOutput.emit({
+    this.reasonsEmit.emit({
       screen: 'finalize',
       reasons: this.selectedReasons,
     });
