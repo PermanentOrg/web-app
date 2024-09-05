@@ -59,7 +59,7 @@
     top: 5px;
   }
   & > .archive-text {
-    right: 16px;
+    right: 50px;
     top: 5px;
   }
 }
@@ -74,7 +74,7 @@
   }
 
   @media screen and (max-width: 768px) {
-    height: 65vh;
+    height: 45vh;
   }
 
   @media screen and (min-width: 768px) and (max-width: 900px) {
@@ -88,4 +88,12 @@
 
 .create-archive-button {
   width: 100%;
+}
+
+.back-button-container {
+  width: 50%;
+}
+
+.create-archive-button-container {
+  width: 50%;
 }

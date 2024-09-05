@@ -26,22 +26,27 @@
   </div>
 
   <div class="buttons-container">
-    <pr-button
-      [orientation]="'right'"
-      (buttonClick)="backToCreate()"
-      [icon]="'/onboarding/back'"
-      class="back-button"
-      >Back</pr-button
-    >
-    <pr-button
-      [orientation]="'right'"
-      [variant]="'secondary'"
-      [icon]="'/onboarding/arrow-right'"
-      [disabled]="!nameForm.valid"
-      (buttonClick)="createArchive()"
-      [size]="'fill'"
-      class="create-archive-button"
-      >Next</pr-button
-    >
+    <div class="back-button-container">
+      <pr-button
+        [orientation]="'right'"
+        (buttonClick)="backToCreate()"
+        [icon]="'/onboarding/back'"
+        [size]="'fill'"
+        class="back-button"
+        >Back</pr-button
+      >
+    </div>
+    <div class="create-archive-button-container">
+      <pr-button
+        [orientation]="'right'"
+        [variant]="'secondary'"
+        [icon]="'/onboarding/arrow-right'"
+        [disabled]="!nameForm.valid"
+        (buttonClick)="createArchive()"
+        [size]="'fill'"
+        class="create-archive-button"
+        >Next</pr-button
+      >
+    </div>
   </div>
 </div>

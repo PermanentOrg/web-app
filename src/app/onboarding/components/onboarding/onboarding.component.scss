@@ -21,7 +21,7 @@ $mobile-transition-breakpoint: 1200px;
   }
   @media only screen and (max-width: $mobile-breakpoint) {
     width: auto;
-    margin: 20px;
+    margin: 10px;
   }
   width: 70%;
   margin: 0 auto;
@@ -41,7 +41,7 @@ $mobile-transition-breakpoint: 1200px;
 .progress-bar {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   margin: 1.5em 0;
 }
 
