@@ -24,7 +24,10 @@
   </div>
   <div class="buttons">
     <div class="back-button">
-      <pr-button (buttonClick)="backToNameArchive()" [icon]="'/onboarding/back'"
+      <pr-button
+        (buttonClick)="backToNameArchive()"
+        [size]="'fill'"
+        [icon]="'/onboarding/back'"
         >Back</pr-button
       >
     </div>
@@ -34,6 +37,7 @@
         [orientation]="'right'"
         [icon]="'/onboarding/arrow-right'"
         [variant]="'secondary'"
+        [size]="'fill'"
         >Next</pr-button
       >
     </div>
