@@ -79,3 +79,17 @@ p {
     justify-content: center;
   }
 }
+
+.back-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
+  }
+}
+
+.next-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
+  }
+}
