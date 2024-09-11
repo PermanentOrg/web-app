@@ -5,7 +5,7 @@
 .goals {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 16px 50px;
 
   @media (max-width: 1200px) and (min-width: 990px) {
     grid-template-columns: repeat(3, 1fr);
@@ -77,5 +77,19 @@ p {
   @media (max-width: 768px) {
     display: flex;
     justify-content: center;
+  }
+}
+
+.back-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
+  }
+}
+
+.next-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
   }
 }

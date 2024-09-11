@@ -16,6 +16,7 @@ export class CheckboxComponent {
   @Input() value: Value = '';
   @Input() disabled: boolean = false;
   @Input() variant: Variant = 'primary';
+  @Input() onboarding: boolean = false;
 
   toggleCheck() {
     if (!this.disabled) {

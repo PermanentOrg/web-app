@@ -5,6 +5,9 @@
   [class.checkbox-container-enabled]="!disabled"
   [class.checkbox-container-primary]="variant === 'primary'"
   [class.checkbox-container-secondary]="variant === 'secondary'"
+  [class.checkbox-container-secondary-onboarding]="
+    variant === 'secondary' && onboarding
+  "
   (click)="toggleCheck()"
   (keydown)="handleKeyDown($event)"
 >
