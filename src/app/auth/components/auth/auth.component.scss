@@ -79,22 +79,28 @@
   padding: 2.5% 5%;
   top: 75%;
   left: 28%;
+  width: 50%;
 
   @media screen and (max-width: 1379px) and (min-width: 900px) {
-    top: 60%;
+    top: 57%;
+    width: 70%;
+    left: 40%;
   }
   @media screen and (max-width: 2450px) and (min-width: 1380px) {
-    top: 75%;
+    top: 62%;
   }
   transform: translate(-50%, -50%);
   border-radius: 12px;
-  width: 50%;
 
   & > .text {
     font-family: 'UsualRegular', sans-serif;
     font-weight: 400;
     line-height: 24px;
-    font-size: 1rem;
+    font-size: 0.8;
+    @media screen and (min-width: 1800px) {
+      font-size: 1rem;
+    }
+
     color: #131b4a;
   }
 
@@ -102,7 +108,10 @@
     font-family: 'UsualRegular', sans-serif;
     font-weight: 300;
     line-height: 24px;
-    font-size: 1.1rem;
+    font-size: 0.8rem;
+    @media screen and (min-width: 1800px) {
+      font-size: 1.1rem;
+    }
     color: #131b4a;
   }
 
