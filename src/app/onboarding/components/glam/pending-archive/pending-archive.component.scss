@@ -1,0 +1,43 @@
+/* @format */
+@import 'fonts';
+
+.pending-archive-container {
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+}
+
+.name {
+  color: white;
+  font-size: 14px;
+  font-family: 'UsualRegular', sans-serif;
+  margin-bottom: 0;
+}
+
+.role {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'UsualRegular', sans-serif;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.pending-archive {
+  display: flex;
+  justify-content: space-between;
+}
+
+.accept-button {
+  display: flex;
+  align-items: center;
+}
+
+.archive-image-and-text {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.archive-image > img {
+  width: 50px;
+  height: 50px;
+}

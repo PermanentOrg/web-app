@@ -28,6 +28,8 @@ import { GlamGoalsScreenComponent } from './components/glam/glam-goals-screen/gl
 import { GlamUserSurveySquareComponent } from './components/glam/glam-user-survey-square/glam-user-survey-square.component';
 import { OnboardingHeaderComponent } from './components/header/header.component';
 import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/glam-header.component';
+import { GlamPendingArchivesComponent } from './components/glam-pending-archives/glam-pending-archives.component';
+import { PendingArchiveComponent } from './components/glam/pending-archive/pending-archive.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/gla
     GlamUserSurveySquareComponent,
     OnboardingHeaderComponent,
     GlamOnboardingHeaderComponent,
+    GlamPendingArchivesComponent,
+    PendingArchiveComponent,
   ],
   imports: [
     CommonModule,

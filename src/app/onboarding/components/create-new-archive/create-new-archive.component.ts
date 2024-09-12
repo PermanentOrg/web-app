@@ -51,6 +51,7 @@ export class CreateNewArchiveComponent implements OnInit {
   @Output() error = new EventEmitter<string>();
   @Output() progress = new EventEmitter<number>();
   @Output() chartPathClicked = new EventEmitter<void>();
+  @Output() backToPendingArchivesOutput = new EventEmitter<void>();
   @Input() pendingArchives: ArchiveVO[] = [];
   @Input() pendingArchive: ArchiveVO;
 
@@ -127,7 +128,10 @@ export class CreateNewArchiveComponent implements OnInit {
   }
 
   public setScreen(screen: NewArchiveScreen): void {
-    if (this.pendingArchive && screen === 'create') {
+    if (
+      this.pendingArchive &&
+      (screen === 'create' || screen === 'name-archive')
+    ) {
       this.goToInvitations();
     }
     const action = screen === 'reasons' ? 'submit_reasons' : 'submit_goals';
