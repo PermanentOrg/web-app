@@ -2,7 +2,7 @@
 <div class="pending-archives">
   <div class="text-container">
     <p class="greeting">
-      Hello <b>{{ accountName }}</b
+      Hello <b class="bold">{{ accountName }}</b
       >. Welcome to Permanent!
     </p>
     <p class="text">
@@ -13,15 +13,17 @@
     </p>
   </div>
   <div class="pending-archives-container">
-    @for (archive of pendingArchives; track archive.archiveId) {
-      <pr-pending-archive
-        [archive]="archive"
-        (acceptArchiveOutput)="selectArchive(archive)"
-        [isSelected]="
-          selectedArchive && selectedArchive.archiveId === archive.archiveId
-        "
-      ></pr-pending-archive>
-    }
+    <div class="pending-info">
+      @for (archive of pendingArchives; track archive.archiveId) {
+        <pr-pending-archive
+          [archive]="archive"
+          (acceptArchiveOutput)="selectArchive(archive)"
+          [isSelected]="
+            selectedArchive && selectedArchive.archiveId === archive.archiveId
+          "
+        ></pr-pending-archive>
+      }
+    </div>
 
     <div class="buttons">
       <div class="create-button">
@@ -44,6 +46,7 @@
           (buttonClick)="next()"
           [size]="'fill'"
           [disabled]="!selectedArchive"
+          [style]="{ justifyContent: 'center' }"
         >
           Next</pr-button
         >

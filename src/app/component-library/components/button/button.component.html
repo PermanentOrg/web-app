@@ -12,6 +12,7 @@
   ]"
   [disabled]="disabled"
   (click)="onClick($event)"
+  [style]="style"
 >
   <img *ngIf="icon" class="icon" src="{{ 'assets/svg/' + icon + '.svg' }}" />
   <fa-icon class="icon" *ngIf="faIcon" [icon]="['fas', faIcon]"></fa-icon>
