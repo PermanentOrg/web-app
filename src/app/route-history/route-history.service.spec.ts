@@ -65,4 +65,13 @@ describe('RouteHistoryService', () => {
     await router.navigate(['/profile']);
     expectRoutesToBeUndefined();
   });
+
+  it('should not record history on popstate', async () => {
+    await router.navigate(['/home']);
+    await router.navigate(['/profile']);
+    (service as any).popstate = true;
+    await router.navigate(['/home']);
+
+    expect(service.previousRoute).toBeUndefined();
+  });
 });
