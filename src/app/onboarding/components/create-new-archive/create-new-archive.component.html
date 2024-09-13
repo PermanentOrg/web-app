@@ -84,18 +84,6 @@
           </button>
         </div>
       </div>
-      <pr-select-archive-type-screen
-        (navigationEmitter)="setScreen($event)"
-        (submitEmitter)="handleCreationScreenEvents($event)"
-        *ngIf="screen === 'create'"
-      ></pr-select-archive-type-screen>
-      `
-      <pr-name-archive-screen
-        *ngIf="screen === 'name-archive'"
-        (backToCreateEmitter)="setScreen($event)"
-        (archiveCreatedEmitter)="navigateToGoals($event)"
-        [name]="name"
-      ></pr-name-archive-screen>
     </div>
   </div>
   <div
@@ -118,7 +106,6 @@
       (submitEmitter)="handleCreationScreenEvents($event)"
       *ngIf="screen === 'create'"
     ></pr-select-archive-type-screen>
-    `
     <pr-name-archive-screen
       *ngIf="screen === 'name-archive'"
       (backToCreateEmitter)="setScreen($event)"
