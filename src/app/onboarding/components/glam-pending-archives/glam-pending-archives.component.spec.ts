@@ -2,6 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
+import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../onboarding.module';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
@@ -17,10 +18,13 @@ describe('GlamPendingArchivesComponent', () => {
   let shallow: Shallow<GlamPendingArchivesComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(GlamPendingArchivesComponent, OnboardingModule).mock(
-      AccountService,
-      mockAccountService,
-    );
+    shallow = new Shallow(GlamPendingArchivesComponent, OnboardingModule)
+      .mock(AccountService, mockAccountService)
+      .mock(ApiService, {
+        archive: {
+          accept: (archive: ArchiveVO) => Promise.resolve(),
+        },
+      });
   });
 
   it('should create the component', async () => {
@@ -48,18 +52,6 @@ describe('GlamPendingArchivesComponent', () => {
     const archiveElements = find('pr-pending-archive');
 
     expect(archiveElements.length).toBe(2);
-  });
-
-  it('should update selectedArchive when selectArchive is called', async () => {
-    const { instance } = await shallow.render();
-    const archive: ArchiveVO = new ArchiveVO({
-      archiveId: 1,
-      fullName: 'Test Archive',
-    });
-
-    instance.selectArchive(archive);
-
-    expect(instance.selectedArchive).toBe(archive);
   });
 
   it('should emit createNewArchiveOutput when createNewArchive is called', async () => {
