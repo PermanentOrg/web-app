@@ -18,9 +18,7 @@
         <pr-pending-archive
           [archive]="archive"
           (acceptArchiveOutput)="selectArchive(archive)"
-          [isSelected]="
-            selectedArchive && selectedArchive.archiveId === archive.archiveId
-          "
+          [isSelected]="isSelected(archive.archiveId)"
         ></pr-pending-archive>
       }
     </div>

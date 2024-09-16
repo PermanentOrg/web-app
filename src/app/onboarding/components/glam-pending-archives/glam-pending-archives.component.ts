@@ -2,6 +2,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-glam-pending-archives',
@@ -16,8 +17,12 @@ export class GlamPendingArchivesComponent {
 
   public accountName: string = '';
   public selectedArchive: ArchiveVO = null;
+  public acceptedArchives: ArchiveVO[] = [];
 
-  constructor(private account: AccountService) {
+  constructor(
+    private account: AccountService,
+    private api: ApiService,
+  ) {
     this.accountName = this.account.getAccount().fullName;
   }
 
@@ -29,7 +34,19 @@ export class GlamPendingArchivesComponent {
     this.nextOutput.emit(this.selectedArchive);
   }
 
-  selectArchive(archive: ArchiveVO): void {
-    this.selectedArchive = archive;
+  async selectArchive(archive: ArchiveVO) {
+    try {
+      await this.api.archive.accept(archive);
+      this.acceptedArchives.push(archive);
+      if (!this.selectedArchive) {
+        this.selectedArchive = archive;
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  isSelected(archiveId: string | number): boolean {
+    return !!this.acceptedArchives.find((a) => a.archiveId === archiveId);
   }
 }
