@@ -8,11 +8,15 @@ p {
 
 .greeting {
   font-size: 56px;
-  font-family: 'UsualRegular', sans-serif;
+  font-family: 'UsualLight', sans-serif;
+}
+
+.bold {
+  font-family: 'UsualExtraBold', sans-serif;
 }
 
 .text {
-  font-size: 16px;
+  font-size: 0.6rem;
   font-family: 'UsualRegular', sans-serif;
 }
 
@@ -22,6 +26,7 @@ p {
 
 .pending-archives {
   display: flex;
+  justify-content: space-between;
   gap: 64px;
 
   @media screen and (max-width: 900px) {
@@ -30,7 +35,7 @@ p {
 }
 
 .pending-archives-container {
-  width: 500px;
+  width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -48,7 +53,7 @@ p {
 .buttons {
   display: flex;
   justify-content: space-between;
-  gap: 32px;
+  gap: 16px;
 }
 
 .next-button {

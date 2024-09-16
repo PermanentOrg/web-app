@@ -101,6 +101,10 @@ export class CreateNewArchiveComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.pendingArchives.length && !this.pendingArchive) {
+      this.screen = 'create';
+    }
+
     if (this.pendingArchive) {
       this.screen = 'goals';
       this.progress.emit(1);
@@ -129,8 +133,8 @@ export class CreateNewArchiveComponent implements OnInit {
 
   public setScreen(screen: NewArchiveScreen): void {
     if (
-      this.pendingArchive &&
-      (screen === 'create' || screen === 'name-archive')
+      (this.pendingArchive || this.pendingArchives.length) &&
+      (screen === 'create' || screen === 'name-archive' || screen === 'start')
     ) {
       this.goToInvitations();
     }
