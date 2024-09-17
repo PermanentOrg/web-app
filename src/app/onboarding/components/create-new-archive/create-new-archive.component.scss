@@ -229,14 +229,14 @@ h3 {
 }
 
 .new-account-screens-container {
-  width: 95%;
+  width: 100%;
 }
 
 .heading-container {
   width: 50%;
   & > .heading {
     color: white;
-    font-family: 'UsualRegular', sans-serif;
+    font-family: 'UsualLight', sans-serif;
   }
 }
 
@@ -248,4 +248,8 @@ h3 {
   @media screen and (max-width: 768px) {
     flex-direction: column;
   }
+}
+
+.bold {
+  font-family: 'UsualExtraBold', sans-serif;
 }

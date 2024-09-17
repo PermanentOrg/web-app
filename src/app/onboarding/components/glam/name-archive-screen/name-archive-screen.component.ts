@@ -20,12 +20,12 @@ export class NameArchiveScreenComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder) {
     this.nameForm = fb.group({
-      name: ['', [Validators.required]],
+      archiveName: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
-    this.nameForm.patchValue({ name: this.name });
+    this.nameForm.patchValue({ archiveName: this.name });
   }
 
   public backToCreate(): void {
@@ -34,7 +34,7 @@ export class NameArchiveScreenComponent implements OnInit {
 
   public createArchive(): void {
     if (this.nameForm.valid) {
-      this.archiveCreatedEmitter.emit(this.nameForm.value.name);
+      this.archiveCreatedEmitter.emit(this.nameForm.value.archiveName);
     }
   }
 }

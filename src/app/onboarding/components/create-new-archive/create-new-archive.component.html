@@ -92,13 +92,13 @@
   >
     <div class="heading-container">
       <h1 *ngIf="screen === 'create'" class="heading">
-        Create your first <b>Archive</b>
+        Create your first <b class="bold">Archive</b>
       </h1>
       <h1 *ngIf="screen === 'name-archive'" class="heading">
-        Create your first
+        Create your
         <br />
         <pr-archive-type-icon [type]="archiveTypeTag" />
-        <b>{{ headerText }}</b> Archive
+        &nbsp;<b>{{ headerText }}</b> Archive
       </h1>
     </div>
     <pr-select-archive-type-screen
