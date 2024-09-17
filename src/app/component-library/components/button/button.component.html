@@ -16,5 +16,7 @@
 >
   <img *ngIf="icon" class="icon" src="{{ 'assets/svg/' + icon + '.svg' }}" />
   <fa-icon class="icon" *ngIf="faIcon" [icon]="['fas', faIcon]"></fa-icon>
-  <p [style]="textColor" class="button-text"><ng-content></ng-content></p>
+  <p [style]="{ color: color }" class="button-text">
+    <ng-content></ng-content>
+  </p>
 </button>
