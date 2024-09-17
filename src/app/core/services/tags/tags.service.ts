@@ -13,7 +13,7 @@ import { ApiService } from '@shared/services/api/api.service';
   providedIn: 'root',
 })
 export class TagsService {
-  private tags: Map<number, TagVOData> = new Map();
+  private tags: Map<number, TagVOData> = new Map<number, TagVOData>();
   private tagsSubject: Subject<TagVOData[]> = new Subject();
   private itemsTagsSubject: Subject<TagVOData[]> = new Subject();
   private debug = debug('service:tagsService');
@@ -25,7 +25,6 @@ export class TagsService {
 
     this.account.archiveChange.subscribe(() => {
       this.resetTags();
-      this.refreshTags();
     });
 
     debugSubscribable('getTags', this.debug, this.getTags$());
