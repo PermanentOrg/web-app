@@ -25,6 +25,7 @@ export class ButtonComponent {
   @Input() faIcon: string = '';
   @Input() buttonType: TYPE = 'button';
   @Input() style = {};
+  @Input() color = '';
 
   //Outputs
   @Output() buttonClick = new EventEmitter<MouseEvent>();
