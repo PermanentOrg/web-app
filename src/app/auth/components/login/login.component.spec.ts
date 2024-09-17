@@ -1,104 +1,109 @@
 /* @format */
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NgModule } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-
+import { Shallow } from 'shallow-render';
 import { LoginComponent } from '@auth/components/login/login.component';
-import { LogoComponent } from '@auth/components/logo/logo.component';
-import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { MessageService } from '@shared/services/message/message.service';
 import { TEST_DATA } from '@core/core.module.spec';
 import { AccountService } from '@shared/services/account/account.service';
-import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
+
+@NgModule()
+class DummyModule {}
+
+class MockAccountService {}
+
+class MockActivatedRoute {}
 
 describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+  let shallow: Shallow<LoginComponent>;
+  let cookieService: Map<string, string>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [LogoComponent, LoginComponent, FormInputComponent],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-      ],
-      providers: [CookieService, MessageService, AccountService],
-    }).compileComponents();
-  }));
+  const testEmail = 'unittest@example.com';
 
   beforeEach(() => {
-    const cookieService = TestBed.get(CookieService) as CookieService;
-    cookieService.set('rememberMe', TEST_DATA.account.primaryEmail);
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    cookieService = new Map<string, string>();
+    cookieService.set('rememberMe', testEmail);
+    shallow = new Shallow(LoginComponent, DummyModule)
+      .provideMock(
+        {
+          provide: AccountService,
+          useClass: MockAccountService,
+        },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: CookieService, useValue: cookieService },
+      )
+      .provide(MessageService);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create', async () => {
+    const { instance } = await shallow.render();
+
+    expect(instance).toBeTruthy();
   });
 
-  it('should autofill with the email from cookies', () => {
-    expect(component.loginForm.value.email).toEqual(
-      TEST_DATA.account.primaryEmail,
-    );
+  it('should autofill with the email from cookies', async () => {
+    const { instance } = await shallow.render();
+
+    expect(instance.loginForm.value.email).toEqual(testEmail);
   });
 
-  it('should set error for missing email', () => {
-    component.loginForm.get('email').markAsTouched();
-    component.loginForm.patchValue({
+  it('should set error for missing email', async () => {
+    const { instance } = await shallow.render();
+    instance.loginForm.get('email').markAsTouched();
+    instance.loginForm.patchValue({
       email: '',
       password: TEST_DATA.user.password,
     });
 
-    expect(component.loginForm.invalid).toBeTruthy();
-    expect(component.loginForm.get('email').errors.required).toBeTruthy();
+    expect(instance.loginForm.invalid).toBeTruthy();
+    expect(instance.loginForm.get('email').errors.required).toBeTruthy();
   });
 
-  it('should set error for invalid email', () => {
-    component.loginForm.get('email').markAsTouched();
-    component.loginForm.patchValue({
+  it('should set error for invalid email', async () => {
+    const { instance } = await shallow.render();
+    instance.loginForm.get('email').markAsTouched();
+    instance.loginForm.patchValue({
       email: 'lasld;f;aslkj',
       password: TEST_DATA.user.password,
     });
 
-    expect(component.loginForm.invalid).toBeTruthy();
-    expect(component.loginForm.get('email').errors.email).toBeTruthy();
+    expect(instance.loginForm.invalid).toBeTruthy();
+    expect(instance.loginForm.get('email').errors.email).toBeTruthy();
   });
 
-  it('should set error for missing password', () => {
-    component.loginForm.get('password').markAsTouched();
-    component.loginForm.patchValue({
+  it('should set error for missing password', async () => {
+    const { instance } = await shallow.render();
+    instance.loginForm.get('password').markAsTouched();
+    instance.loginForm.patchValue({
       email: TEST_DATA.user.email,
       password: '',
     });
 
-    expect(component.loginForm.invalid).toBeTruthy();
-    expect(component.loginForm.get('password').errors.required).toBeTruthy();
+    expect(instance.loginForm.invalid).toBeTruthy();
+    expect(instance.loginForm.get('password').errors.required).toBeTruthy();
   });
 
-  it('should set error for too short password', () => {
-    component.loginForm.get('password').markAsTouched();
-    component.loginForm.patchValue({
+  it('should set error for too short password', async () => {
+    const { instance } = await shallow.render();
+    instance.loginForm.get('password').markAsTouched();
+    instance.loginForm.patchValue({
       email: TEST_DATA.user.email,
       password: 'short',
     });
 
-    expect(component.loginForm.invalid).toBeTruthy();
-    expect(component.loginForm.get('password').errors.minlength).toBeTruthy();
+    expect(instance.loginForm.invalid).toBeTruthy();
+    expect(instance.loginForm.get('password').errors.minlength).toBeTruthy();
   });
 
-  it('should have no errors when email and password valid', () => {
-    component.loginForm.markAsTouched();
-    component.loginForm.patchValue({
+  it('should have no errors when email and password valid', async () => {
+    const { instance } = await shallow.render();
+    instance.loginForm.markAsTouched();
+    instance.loginForm.patchValue({
       email: TEST_DATA.user.email,
       password: TEST_DATA.user.password,
     });
 
-    expect(component.loginForm.valid).toBeTruthy();
+    expect(instance.loginForm.valid).toBeTruthy();
   });
 });
