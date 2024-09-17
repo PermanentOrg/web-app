@@ -107,4 +107,14 @@ describe('StorageDialogComponent', () => {
 
     expect(instance.resultMessage.successful).toBeFalse();
   });
+
+  it('should not bump up account storage if it has already been done on the server side', async () => {
+    const { instance } = await shallow.render();
+    mockAccountService.addMoreSpaceAfterRefresh = true;
+    await instance.onPromoFormSubmit({ code: 'potato' });
+
+    expect(mockAccountService.account.spaceLeft).toBe(
+      5000 * 1024 * 1024 + 1024,
+    );
+  });
 });

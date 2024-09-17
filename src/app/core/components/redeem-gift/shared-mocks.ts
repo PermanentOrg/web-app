@@ -45,14 +45,28 @@ export interface MockApiService {
 export class MockAccountService {
   public addedStorage: number | undefined;
   public failRefresh: boolean = false;
+  public addMoreSpaceAfterRefresh: boolean = false;
+  public account: AccountVO = new AccountVO({
+    spaceLeft: 1024,
+    spaceTotal: 1024,
+  });
   public refreshAccount(): Promise<void> {
     if (this.failRefresh) {
       return Promise.reject();
     }
+    if (this.addMoreSpaceAfterRefresh) {
+      this.account.spaceLeft += 5000 * 1024 * 1024;
+      this.account.spaceTotal += 5000 * 1024 * 1024;
+    }
     return Promise.resolve();
+  }
+  public getAccount(): AccountVO {
+    return this.account;
   }
   public setAccount(_account: AccountVO): void {}
   public addStorageBytes(sizeInBytes: number): void {
+    this.account.spaceLeft += sizeInBytes;
+    this.account.spaceTotal += sizeInBytes;
     this.addedStorage = sizeInBytes;
   }
 }
