@@ -277,7 +277,7 @@ export class CreateNewArchiveComponent implements OnInit {
     this.archiveTypeTag = event.tag as OnboardingTypes;
     this.archiveType = event.type;
     this.headerText = event.headerText;
-    this.screen = 'name-archive';
+    this.screen = event.screen as NewArchiveScreen;
   }
 
   public onValueChange(value: {

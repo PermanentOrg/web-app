@@ -1,5 +1,5 @@
 /* @format */
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { generateElementText } from '../../../utils/utils';
 import {
   archiveOptionsWithArticle,
@@ -12,27 +12,31 @@ import {
   templateUrl: './select-archive-type-screen.component.html',
   styleUrl: './select-archive-type-screen.component.scss',
 })
-export class SelectArchiveTypeScreenComponent {
+export class SelectArchiveTypeScreenComponent implements OnInit {
   selectedValue = '';
-  buttonText = '';
+  buttonText = 'a Personal';
   public headerText: string = '';
-  public tag: string = '';
+  @Input() tag: string = '';
   public type: string = '';
 
-  @Output() navigationEmitter = new EventEmitter<string>();
   @Output() submitEmitter = new EventEmitter<Record<string, string>>();
 
-  public navigate(screen) {
-    if (screen === 'start') {
-      this.navigationEmitter.emit(screen);
-    } else {
-      this.submitEmitter.emit({
-        screen,
-        type: this.type,
-        tag: this.tag,
-        headerText: this.headerText,
-      });
+  ngOnInit(): void {
+    if (this.tag) {
+      this.buttonText = generateElementText(
+        this.tag,
+        archiveOptionsWithArticle,
+      );
     }
+  }
+
+  public navigate(screen) {
+    this.submitEmitter.emit({
+      screen,
+      type: this.type,
+      tag: this.tag,
+      headerText: this.headerText,
+    });
   }
 
   public onValueChange(event: string): void {
