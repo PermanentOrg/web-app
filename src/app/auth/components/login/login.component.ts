@@ -110,23 +110,27 @@ export class LoginComponent {
             window.location.assign(`/app/public?cta=timeline`);
           }
         } else {
-          const archives = this.accountService
-            .getArchives()
-            .filter((archive) => !archive.isPending());
-          if (archives.length > 0) {
-            this.router
-              .navigate(['/'], { queryParamsHandling: 'preserve' })
-              .then(() => {
-                this.message.showMessage({
-                  message: `Logged in as ${
-                    this.accountService.getAccount().primaryEmail
-                  }.`,
-                  style: 'success',
-                });
+          this.accountService.refreshArchives().then(() => {
+            const archives = this.accountService
+              .getArchives()
+              .filter((archive) => !archive.isPending());
+            if (archives.length > 0) {
+              this.accountService.switchToDefaultArchive().then(() => {
+                this.router
+                  .navigate(['/'], { queryParamsHandling: 'preserve' })
+                  .then(() => {
+                    this.message.showMessage({
+                      message: `Logged in as ${
+                        this.accountService.getAccount().primaryEmail
+                      }.`,
+                      style: 'success',
+                    });
+                  });
               });
-          } else {
-            this.router.navigate(['/app/onboarding']);
-          }
+            } else {
+              this.router.navigate(['/app/onboarding']);
+            }
+          });
         }
       })
       .catch((response: AuthResponse) => {
