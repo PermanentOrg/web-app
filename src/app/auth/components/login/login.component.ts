@@ -49,7 +49,12 @@ export class LoginComponent {
     });
   }
 
-  onSubmit(formValue: any) {
+  onSubmit(formValue: {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+    keepLoggedIn: boolean;
+  }) {
     this.waiting = true;
 
     return this.accountService
