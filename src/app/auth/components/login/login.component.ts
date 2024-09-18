@@ -52,7 +52,7 @@ export class LoginComponent {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.accountService
+    return this.accountService
       .logIn(
         formValue.email,
         formValue.password,
