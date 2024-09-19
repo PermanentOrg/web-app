@@ -63,7 +63,7 @@ describe('FileListComponent', () => {
     snapshot: {
       data: {
         currentFolder: new FolderVO({
-            type: 'type.folder.root',
+          type: 'type.folder.root',
         }),
         showSidebar: true,
         fileListCentered: false,
@@ -79,7 +79,7 @@ describe('FileListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, NoopAnimationsModule],
-      declarations: [FileListComponent, FileListItemComponent, CdkPortal], 
+      declarations: [FileListComponent, FileListItemComponent, CdkPortal],
       providers: [
         { provide: DataService, useValue: dataServiceMock },
         { provide: AccountService, useValue: accountServiceMock },
