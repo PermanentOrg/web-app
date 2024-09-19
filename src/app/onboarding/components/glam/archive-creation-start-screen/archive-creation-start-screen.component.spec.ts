@@ -3,9 +3,9 @@ import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { By } from '@angular/platform-browser';
+import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../../onboarding.module';
 import { ArchiveCreationStartScreenComponent } from './archive-creation-start-screen.component';
-import { ApiService } from '@shared/services/api/api.service';
 
 const mockAccountService = {
   getAccount: () => ({ fullName: 'John Doe' }),
@@ -92,6 +92,7 @@ describe('ArchiveCreationStartScreenComponent', () => {
     expect(mockApi.invite.getFullShareInvite).toHaveBeenCalledWith(
       'shareToken',
     );
+
     expect(instance.sharerName).toBe('Sharer Name');
     expect(instance.sharedItemName).toBe('Shared Item Name');
   });
