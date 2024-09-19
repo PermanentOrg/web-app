@@ -1,18 +1,37 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
+import { ApiService } from '@shared/services/api/api.service';
 
 @Component({
   selector: 'pr-archive-creation-start-screen',
   templateUrl: './archive-creation-start-screen.component.html',
   styleUrl: './archive-creation-start-screen.component.scss',
 })
-export class ArchiveCreationStartScreenComponent {
+export class ArchiveCreationStartScreenComponent implements OnInit {
   @Output() public getStartedOutput = new EventEmitter<void>();
   @Output() public createArchiveForMeOutput = new EventEmitter<void>();
   public name: string = '';
+  public hasShareToken = false;
+  public sharerName: string;
+  public sharedItemName: string;
 
-  constructor(private account: AccountService) {
+  constructor(
+    private account: AccountService,
+    private api: ApiService,
+  ) {
     this.name = this.account.getAccount().fullName;
+  }
+
+  ngOnInit(): void {
+    const token = localStorage.getItem('shareToken');
+    if (token) {
+      this.hasShareToken = true;
+      this.api.invite.getFullShareInvite(token).then((invite) => {
+        const inviteVO = invite.getInviteVO();
+        this.sharerName = inviteVO.AccountVO.fullName;
+        this.sharedItemName = inviteVO.ArchiveVO.fullName;
+      });
+    }
   }
 
   public getStarted() {
