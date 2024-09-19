@@ -49,7 +49,7 @@ export class AnalyticsService implements EventObserver {
 
     await firstValueFrom(
       this.httpV2.post('/v2/event', mixpanelEvent, null),
-    ).catch((err) => {
+    ).catch(() => {
       // Silently ignore an HTTP error, since we don't want calling code to
       // have to handle analytics errors.
     });
