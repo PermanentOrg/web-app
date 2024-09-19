@@ -5,6 +5,7 @@ import { FolderVO, RecordVO } from '@models/index';
 import { FolderResponse } from '@shared/services/api/folder.repo';
 import { Observable } from 'rxjs';
 import { MessageService } from '@shared/services/message/message.service';
+import { EventService } from '@shared/services/event/event.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ArchiveVO } from '../../../models/archive-vo';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
@@ -48,6 +49,8 @@ describe('PublishComponent', () => {
         item: { folder_linkType: 'linkType' },
       })
       .provide({ provide: DialogRef, useClass: MockDialogRef })
+      .provide(EventService)
+      .dontMock(EventService)
       .mock(MessageService, {
         showError: () => {
           messageShown = true;
