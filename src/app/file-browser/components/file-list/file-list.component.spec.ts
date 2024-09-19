@@ -13,6 +13,7 @@ import { FolderVO } from '@models/folder-vo';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CdkPortal } from '@angular/cdk/portal';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FileListComponent } from './file-list.component';
 
 describe('FileListComponent', () => {
@@ -61,7 +62,9 @@ describe('FileListComponent', () => {
   const routeMock = {
     snapshot: {
       data: {
-        currentFolder: new FolderVO({}),
+        currentFolder: new FolderVO({
+            type: 'type.folder.root',
+        }),
         showSidebar: true,
         fileListCentered: false,
         isPublicArchive: false,
@@ -75,8 +78,8 @@ describe('FileListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [FileListComponent, FileListItemComponent, CdkPortal], // Declare child components
+      imports: [RouterTestingModule, NoopAnimationsModule],
+      declarations: [FileListComponent, FileListItemComponent, CdkPortal], 
       providers: [
         { provide: DataService, useValue: dataServiceMock },
         { provide: AccountService, useValue: accountServiceMock },
