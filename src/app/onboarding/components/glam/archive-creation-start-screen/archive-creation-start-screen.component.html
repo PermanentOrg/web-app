@@ -6,18 +6,48 @@
   <p class="greeting">Welcome to Permanent!</p>
 </div>
 <div class="text-buttons-container">
-  <div class="text">
-    <p>We’re so glad you’re here!</p>
-    <p>
-      At Permanent, it is our mission to provide a safe and secure place to
-      store, preserve, and share the digital legacy of all people, whether
-      that's for you or for your friends, family, interests or organizations.
-    </p>
-    <p>
-      We know that starting this journey can sometimes be overwhelming, but
-      don’t worry. We’re here to help you every step of the way.
-    </p>
-  </div>
+  @if (!hasShareToken) {
+    <div class="text text-no-share">
+      <p>We’re so glad you’re here!</p>
+      <p>
+        At Permanent, it is our mission to provide a safe and secure place to
+        store, preserve, and share the digital legacy of all people, whether
+        that's for you or for your friends, family, interests or organizations.
+      </p>
+      <p>
+        We know that starting this journey can sometimes be overwhelming, but
+        don’t worry. We’re here to help you every step of the way.
+      </p>
+    </div>
+  }
+  @if (hasShareToken) {
+    <div class="text text-share">
+      <p>
+        You’ve just taken the first step on a journey to preserving what matters
+        the most to you by creating archives that can represent yourself, your
+        family, or your community.
+      </p>
+      <div class="invitation-info">
+        <div class="img-container">
+          <img src="assets/svg/onboarding/shared_item.svg" />
+        </div>
+        <div class="sharer-info">
+          <p class="shared-item-name">{{ sharedItemName }}</p>
+          <p class="sharer-name">Shared by {{ sharerName }} on Permanent.org</p>
+        </div>
+      </div>
+      <p>
+        In order to accept {{ sharerName }}’s invitation to share their item
+        {{ sharedItemName }}, you first need to create a Permanent archive — a
+        collection of digital materials about an individual, family, group, or
+        organization — from which to access your shares.
+      </p>
+      <p>
+        Get started by designing your archive, or skip this step and create a
+        default personal archive.
+      </p>
+    </div>
+  }
   <div class="buttons">
     <pr-button
       [icon]="'/onboarding/plus'"

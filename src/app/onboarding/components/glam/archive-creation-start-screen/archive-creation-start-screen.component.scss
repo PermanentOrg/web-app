@@ -16,7 +16,7 @@
   }
 
   @media screen and (max-width: 364px) {
-    height: 106vh;
+    height: auto;
   }
 }
 
@@ -48,7 +48,7 @@ p {
   justify-content: space-between;
   width: 50%;
   display: flex;
-  height: 60vh;
+  height: 76vh;
 
   @media screen and (max-width: 600px) {
     height: auto;
@@ -67,4 +67,33 @@ p {
     display: flex;
     gap: 32px;
   }
+}
+
+.invitation-info {
+  display: flex;
+}
+
+.text-share {
+  & > p {
+    margin-bottom: 1rem;
+    font-family: 'UsualRegular', sans-serif;
+  }
+
+  & > div {
+    margin-bottom: 1rem;
+  }
+}
+
+.sharer-info {
+  margin-left: 10px;
+}
+
+.shared-item-name {
+  font-family: 'UsualBold', sans-serif;
+  margin-bottom: 5px;
+}
+
+.sharer-name {
+  color: rgba(184, 187, 201, 1);
+  margin-bottom: 0px;
 }
