@@ -22,13 +22,17 @@
 }
 
 .what-is-important {
-  font-family: 'UsualRegular', sans-serif;
+  font-family: 'UsualLight', sans-serif;
   font-size: 56px;
   width: 60%;
 
   @media screen and (max-width: 500px) {
     width: auto;
   }
+}
+
+.bold {
+  font-family: 'UsualBold', sans-serif;
 }
 
 .text {
@@ -47,11 +51,11 @@ p {
 
 .text-container {
   display: flex;
-  gap: 16px;
-  gap: 150px;
+  gap: 15rem;
 
   @media (max-width: 1062px) {
     flex-direction: column;
+    gap: 2rem;
   }
 }
 

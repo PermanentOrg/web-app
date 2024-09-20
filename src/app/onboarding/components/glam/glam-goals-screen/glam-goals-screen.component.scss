@@ -7,7 +7,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 16px 50px;
 
-  @media (max-width: 1200px) and (min-width: 990px) {
+  @media (max-width: 1270px) and (min-width: 990px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -38,6 +38,10 @@
   font-family: 'UsualLight', sans-serif;
   font-size: 1rem;
   text-align: left;
+}
+
+.bold {
+  font-family: 'UsualBold', sans-serif;
 }
 
 .text-right {
