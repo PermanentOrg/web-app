@@ -117,7 +117,7 @@ export const ItemActions: { [key: string]: PromptButton } = {
   },
   Tags: {
     buttonName: 'tags',
-    buttonText: 'Tags',
+    buttonText: 'Keywords',
   },
 };
 
