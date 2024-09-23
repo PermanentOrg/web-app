@@ -123,7 +123,7 @@ export class EditTagsComponent
 
   ngOnInit() {
     this.placeholderText =
-      this.tagType === 'keyword' ? 'Add new tag' : 'Add new field:value';
+      this.tagType === 'keyword' ? 'Add new keyword' : 'Add new field:value';
     this.allTags = this.filterTagsByType(this.tagsService.getTags());
     this.matchingTags = this.allTags;
 
@@ -183,7 +183,7 @@ export class EditTagsComponent
     } catch (err) {
       if (err instanceof BaseResponse) {
         this.message.showError({
-          message: 'There was a problem saving tags for this item.',
+          message: 'There was a problem saving keywords for this item.',
         });
       }
     } finally {

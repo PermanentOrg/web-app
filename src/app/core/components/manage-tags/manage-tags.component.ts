@@ -52,7 +52,7 @@ export class ManageTagsComponent {
     return this.prompt
       .confirm(
         'Delete',
-        'Are you sure you want to delete this tag from all items in the current archive?',
+        'Are you sure you want to delete this keyword from all items in the current archive?',
       )
       .then(async () => {
         this.tags = this.tags.filter((t) => t.tagId !== tag.tagId);
@@ -64,7 +64,7 @@ export class ManageTagsComponent {
           .catch(() => {
             // Let's add the tag back to UI to show it isn't deleted.
             this.tags.push(tag);
-            throw new Error('Manage Tags: Error accessing delete endpoint');
+            throw new Error('Manage Keywords: Error accessing delete endpoint');
           });
       })
       .catch((e: Error) => {
