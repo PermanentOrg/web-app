@@ -74,10 +74,17 @@ export class RedeemGiftComponent implements OnInit {
   }
 
   private async updateAccountStorageBytes(response: BillingResponse) {
+    const spaceBeforeRefresh = this.account.getAccount()?.spaceTotal;
     await this.account.refreshAccount();
+
+    const spaceAfterRefresh = this.account.getAccount()?.spaceTotal;
     const promo = response.getPromoVO();
     const bytes = promo.sizeInMB * (1024 * 1024);
-    this.account.addStorageBytes(bytes);
+
+    if (spaceBeforeRefresh == spaceAfterRefresh) {
+      this.account.addStorageBytes(bytes);
+    }
+
     this.showPromoCodeSuccess(bytes);
   }
 
