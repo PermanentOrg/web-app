@@ -26,11 +26,6 @@ export class ArchiveCreationStartScreenComponent implements OnInit {
     const token = localStorage.getItem('shareToken');
     if (token) {
       this.hasShareToken = true;
-      this.api.invite.getFullShareInvite(token).then((invite) => {
-        const inviteVO = invite.getInviteVO();
-        this.sharerName = inviteVO.AccountVO.fullName;
-        this.sharedItemName = inviteVO.ArchiveVO.fullName;
-      });
     }
   }
 
