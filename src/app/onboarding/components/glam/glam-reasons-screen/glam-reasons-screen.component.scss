@@ -2,6 +2,10 @@
 @import 'fonts';
 @import 'variables';
 
+:host {
+  max-width: 78rem;
+}
+
 .reasons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

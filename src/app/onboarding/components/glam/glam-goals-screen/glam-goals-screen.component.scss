@@ -2,6 +2,10 @@
 @import 'fonts';
 @import 'variables';
 
+:host {
+  max-width: 80rem;
+}
+
 .goals {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -58,7 +62,8 @@ p {
 
 .text-container {
   display: flex;
-  gap: 64px;
+  gap: 15rem;
+  justify-content: space-between;
   @media (max-width: 854px) {
     flex-direction: column;
     gap: 16px;
