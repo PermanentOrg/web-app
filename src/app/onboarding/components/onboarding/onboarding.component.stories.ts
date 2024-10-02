@@ -35,8 +35,8 @@ import { GlamArchiveTypeSelectComponent } from '../glam/archive-type-select/arch
 import { ArchiveTypeIconComponent } from '../glam/archive-type-icon/archive-type-icon.component';
 import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pending-archives.component';
 import { PendingArchiveComponent } from '../glam/pending-archive/pending-archive.component';
-import { OnboardingComponent } from './onboarding.component';
 import { ArchiveCreationWithShareComponent } from '../archive-creation-with-share/archive-creation-with-share.component';
+import { OnboardingComponent } from './onboarding.component';
 
 class MockAccountService {
   public static accountName = 'Test User';
