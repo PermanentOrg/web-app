@@ -266,5 +266,6 @@ export const GlamShareInvite: Story = StoryTemplate.bind({});
 GlamShareInvite.args = {
   accountName: 'Test User',
   isGlam: true,
-  hasShareToken: true,
+  shareToken: true,
+  hasInvitations: false,
 };
