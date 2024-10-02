@@ -81,13 +81,25 @@
   left: 28%;
   width: 50%;
 
-  @media screen and (max-width: 1379px) and (min-width: 900px) {
-    top: 57%;
-    width: 70%;
-    left: 40%;
+  @media screen and (max-width: 1099px) and (min-width: 901px) {
+    top: 55%;
+    width: 40%;
+    left: 23%;
   }
-  @media screen and (max-width: 2450px) and (min-width: 1380px) {
-    top: 62%;
+
+  @media screen and (max-width: 1379px) and (min-width: 1100px) {
+    top: 63%;
+    width: 40%;
+    left: 27%;
+  }
+
+  @media screen and (max-width: 1990px) and (min-width: 1380px) {
+    top: 64%;
+    width: 40%;
+  }
+  @media screen and (max-width: 2450px) and (min-width: 1990px) {
+    top: 80%;
+    width: 40%;
   }
   transform: translate(-50%, -50%);
   border-radius: 12px;
@@ -96,8 +108,16 @@
     font-family: 'UsualRegular', sans-serif;
     font-weight: 400;
     line-height: 24px;
-    font-size: 0.8;
+    font-size: 0.8rem;
     @media screen and (min-width: 1800px) {
+      font-size: 1rem;
+    }
+
+    @media screen and (max-width: 1099px) and (min-width: 901px) {
+      font-size: 0.7rem;
+    }
+
+    @media screen and (max-width: 1379px) and (min-width: 1100px) {
       font-size: 1rem;
     }
 
