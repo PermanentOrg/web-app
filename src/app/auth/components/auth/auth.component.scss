@@ -101,6 +101,11 @@
     top: 80%;
     width: 40%;
   }
+
+  @media screen and (min-width: 2451px) {
+    top: 85%;
+  }
+  
   transform: translate(-50%, -50%);
   border-radius: 12px;
 
