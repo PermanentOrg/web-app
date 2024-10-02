@@ -15,10 +15,7 @@ export class ArchiveCreationStartScreenComponent implements OnInit {
   public sharerName: string;
   public sharedItemName: string;
 
-  constructor(
-    private account: AccountService,
-    private api: ApiService,
-  ) {
+  constructor(private account: AccountService) {
     this.name = this.account.getAccount().fullName;
   }
 
