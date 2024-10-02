@@ -1,8 +1,6 @@
 /* @format */
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AccountService } from '@shared/services/account/account.service';
-import { By } from '@angular/platform-browser';
 import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../onboarding.module';
 import { ArchiveCreationWithShareComponent } from './archive-creation-with-share.component';
