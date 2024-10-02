@@ -65,4 +65,26 @@ describe('ArchiveCreationStartScreenComponent', () => {
     expect(instance.createArchiveForMe).toHaveBeenCalled();
     expect(outputs.createArchiveForMeOutput.emit).toHaveBeenCalled();
   });
+
+  it('should set hasToken to true if there is a token in the local storage', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue('someToken');
+
+    instance.ngOnInit();
+    fixture.detectChanges();
+
+    expect(instance.hasShareToken).toBeTrue();
+  });
+
+  it('should not set hasShareToken if shareToken does not exist in localStorage', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+
+    instance.ngOnInit();
+    fixture.detectChanges();
+
+    expect(instance.hasShareToken).toBeFalse();
+  });
 });
