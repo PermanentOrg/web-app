@@ -32,6 +32,7 @@
         [variant]="'secondary'"
         [icon]="'/accept'"
         [size]="'fill'"
+        [disabled]="isArchiveSubmitted"
         (buttonClick)="finalizeArchive()"
         >Done</pr-button
       >

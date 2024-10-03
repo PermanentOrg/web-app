@@ -9,8 +9,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class FinalizeArchiveCreationScreenComponent {
   @Input() name: string = '';
   @Output() finalizeArchiveOutput = new EventEmitter<string>();
+  public isArchiveSubmitted: boolean = false;
 
   finalizeArchive() {
+    this.isArchiveSubmitted = true;
     this.finalizeArchiveOutput.emit();
   }
 }

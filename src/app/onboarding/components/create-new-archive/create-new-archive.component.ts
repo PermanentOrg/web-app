@@ -64,6 +64,7 @@ export class CreateNewArchiveComponent implements OnInit {
   public archiveName: string = '';
   public screen: NewArchiveScreen = 'start';
   public loading: boolean = false;
+  public isArchiveSubmitted: boolean = false;
   public selectedGoals: string[] = [];
   public selectedReasons: string[] = [];
   public selectedValue: string = '';
@@ -153,6 +154,7 @@ export class CreateNewArchiveComponent implements OnInit {
   public async onSubmit(): Promise<void> {
     try {
       this.loading = true;
+      this.isArchiveSubmitted = true;
       const fullName = this.name;
       const archive = new ArchiveVO({
         fullName,
