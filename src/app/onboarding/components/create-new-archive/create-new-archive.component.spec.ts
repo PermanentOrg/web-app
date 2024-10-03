@@ -111,4 +111,18 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
     expect(button.disabled).toBe(true);
   });
+
+  it('should disable the Skip This Step and submit buttons when the archive has been submitted', async () => {
+    const { find, instance, fixture } = await shallow.render();
+    instance.screen = 'reasons';
+    instance.isArchiveSubmitted = true;
+
+    fixture.detectChanges();
+    const submitButton = find('.create-archive').nativeElement;
+
+    const skipStepButton = find('.skip-step').nativeElement;
+
+    expect(submitButton.disabled).toBe(true);
+    expect(skipStepButton.disabled).toBe(true);
+  });
 });
