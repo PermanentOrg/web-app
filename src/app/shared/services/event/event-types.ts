@@ -26,7 +26,14 @@ export type AccountEventAction =
   | 'open_verify_email'
   | 'open_billing_info'
   | 'open_legacy_contact'
-  | 'open_archive_steward';
+  | 'open_archive_steward'
+  | 'open_share_modal'
+  | 'open_public_workspace'
+  | 'open_private_workspace'
+  | 'open_shared_workspace'
+  | 'open_public_gallery'
+  | 'open_redeem_gift'
+  | 'copy_share_link';
 
 export type LegacyContactAction = 'create' | 'update';
 

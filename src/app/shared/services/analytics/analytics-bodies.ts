@@ -97,6 +97,44 @@ export const AnalyticsBodies: AnalyticsLookupTable = {
       event: 'Onboarding: reasons',
       data: {},
     },
+    open_private_workspace: {
+      event: 'View Private Workspace',
+      data: {
+        workspace: 'Private Files',
+      },
+    },
+    open_public_workspace: {
+      event: 'View Public Workspace',
+      data: {
+        workspace: 'Public Files',
+      },
+    },
+    open_shared_workspace: {
+      event: 'View Shared Workspace',
+      data: {
+        workspace: 'Shared Files',
+      },
+    },
+    open_public_gallery: {
+      event: 'View Public Gallery',
+      data: {
+        page: 'Public Gallery',
+      },
+    },
+    open_redeem_gift: {
+      event: 'View Redeem Gift',
+      data: {
+        page: 'Redeem Gift',
+      },
+    },
+    open_share_modal: {
+      event: 'Share',
+      data: {},
+    },
+    copy_share_link: {
+      event: 'Copy Share Link',
+      data: {},
+    },
   },
   directive: {
     create: {

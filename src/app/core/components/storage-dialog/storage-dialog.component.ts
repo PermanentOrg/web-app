@@ -56,6 +56,10 @@ export class StorageDialogComponent implements OnInit, OnDestroy {
         action: 'open_promo_entry',
         entity: 'account',
       });
+      this.event.dispatch({
+        action: 'open_redeem_gift',
+        entity: 'account',
+      });
     }
   }
 

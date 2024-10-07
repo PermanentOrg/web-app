@@ -56,6 +56,7 @@ import { CdkPortal } from '@angular/cdk/portal';
 import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
+import { EventService } from '@shared/services/event/event.service';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -145,6 +146,7 @@ export class FileListComponent
     private renderer: Renderer2,
     public device: DeviceService,
     private ngZone: NgZone,
+    private event: EventService,
   ) {
     this.currentFolder = this.route.snapshot.data.currentFolder;
     // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
@@ -175,6 +177,24 @@ export class FileListComponent
     this.registerRouterEventHandlers();
     this.registerDataServiceHandlers();
     this.registerDragServiceHandlers();
+
+    const isPrivateRoot =
+      this.currentFolder.type === 'type.folder.root.private';
+    const isPublicRoot = this.currentFolder.type === 'type.folder.root.public';
+
+    if (isPrivateRoot) {
+      this.event.dispatch({
+        action: 'open_private_workspace',
+        entity: 'account',
+      });
+    }
+
+    if (isPublicRoot) {
+      this.event.dispatch({
+        action: 'open_public_workspace',
+        entity: 'account',
+      });
+    }
   }
 
   registerArchiveChangeHandlers() {
