@@ -44,4 +44,14 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
 
     expect(instance.finalizeArchive).toHaveBeenCalled();
   });
+
+  it('should disable the done button when it is clicked', async () => {
+    const { instance, fixture, find } = await shallow.render();
+    const doneButton = find('pr-button');
+    doneButton.triggerEventHandler('buttonClick', null);
+
+    fixture.detectChanges();
+
+    expect(instance.isArchiveSubmitted).toBe(true);
+  });
 });
