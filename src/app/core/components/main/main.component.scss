@@ -15,6 +15,10 @@
   }
 }
 
+pr-folder-picker {
+  z-index: 1010;
+}
+
 @include desktop {
   :host {
     display: flex;

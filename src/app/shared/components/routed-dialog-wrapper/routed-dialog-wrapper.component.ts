@@ -63,10 +63,10 @@ export class RoutedDialogWrapperComponent
   }
 
   ngOnDestroy(): void {
+    this.closedByNavigate = true;
     if (this.dialogRef) {
       this.dialogRef.close();
     }
-    this.closedByNavigate = true;
     unsubscribeAll(this.subscriptions);
   }
 
