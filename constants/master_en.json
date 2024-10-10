@@ -23,7 +23,7 @@
       "private": "Private",
       "relation": "Relation",
       "share": "Share",
-      "tag": "Tag",
+      "tag": "Keyword",
       "task": "Task",
       "unit_test": "UnitTest"
     }
@@ -214,7 +214,7 @@
       "mysql": ""
     },
     "tag": {
-      "lookup": "Tag not found"
+      "lookup": "Keyword not found"
     },
     "task_singleton": {
       "lookup": "Data lookup failed (TS)"

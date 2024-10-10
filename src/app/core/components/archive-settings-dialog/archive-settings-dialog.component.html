@@ -40,7 +40,7 @@
     <div class="panel" #panel>
       <ng-container [ngSwitch]="activeTab">
         <ng-container *ngSwitchCase="'manage-keywords'">
-          <div class="panel-title">Manage Tags</div>
+          <div class="panel-title">Manage Keywords</div>
           <ng-container *ngIf="hasTagsAccess; else noAccess">
             <pr-manage-tags
               [tags]="tags"
@@ -48,7 +48,7 @@
               (refreshTags)="refreshTags()"
             >
             </pr-manage-tags>
-            <ng-template #loadText> Loading Archive Tags... </ng-template>
+            <ng-template #loadText> Loading Archive Keywords... </ng-template>
           </ng-container>
           <ng-template #noAccess>
             <p>

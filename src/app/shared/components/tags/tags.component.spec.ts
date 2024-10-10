@@ -79,6 +79,6 @@ describe('TagsComponent', () => {
     fixture.detectChanges();
     const div = fixture.debugElement.query(By.css('.empty'));
 
-    expect(div.nativeElement.textContent.trim()).toBe('No tags');
+    expect(div.nativeElement.textContent.trim()).toBe('No keywords');
   });
 });
