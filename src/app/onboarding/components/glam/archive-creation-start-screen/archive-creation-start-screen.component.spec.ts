@@ -3,6 +3,7 @@ import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { By } from '@angular/platform-browser';
+import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../../onboarding.module';
 import { ArchiveCreationStartScreenComponent } from './archive-creation-start-screen.component';
 
@@ -63,5 +64,27 @@ describe('ArchiveCreationStartScreenComponent', () => {
 
     expect(instance.createArchiveForMe).toHaveBeenCalled();
     expect(outputs.createArchiveForMeOutput.emit).toHaveBeenCalled();
+  });
+
+  it('should set hasToken to true if there is a token in the local storage', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue('someToken');
+
+    instance.ngOnInit();
+    fixture.detectChanges();
+
+    expect(instance.hasShareToken).toBeTrue();
+  });
+
+  it('should not set hasShareToken if shareToken does not exist in localStorage', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+
+    instance.ngOnInit();
+    fixture.detectChanges();
+
+    expect(instance.hasShareToken).toBeFalse();
   });
 });

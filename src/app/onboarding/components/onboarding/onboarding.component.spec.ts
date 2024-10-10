@@ -193,4 +193,23 @@ describe('OnboardingComponent #onboarding', () => {
       expect(instance.screen).toBe(OnboardingScreen.pendingArchives);
     }
   });
+
+  it('should remove shareToken from localStorage', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    const getItemSpy = spyOn(localStorage, 'getItem').and.returnValue(
+      'someToken',
+    );
+    const removeItemSpy = spyOn(localStorage, 'removeItem');
+
+    instance.screen = OnboardingScreen.done;
+    instance.acceptedInvite = true;
+
+    instance.setScreen(OnboardingScreen.done);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(getItemSpy).toHaveBeenCalledWith('shareToken');
+    expect(removeItemSpy).toHaveBeenCalledWith('shareToken');
+  });
 });
