@@ -442,17 +442,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   showCreateAccountDialog() {
     if (!this.createAccountDialogIsOpen) {
-      const options = this.device.isMobileWidth()
-        ? ({
-            mobileWidth: '374px',
-            borderRadius: '4px',
-            height: 'auto',
-            menuClass: 'floating-mobile-dialog',
-          } as const)
-        : { width: '600px', borderRadius: '5px' };
-
       const dialogRef = this.dialog.open(CreateAccountDialogComponent, {
-        data: { sharerName: this.shareAccount.fullName, ...options },
+        data: { sharerName: this.shareAccount.fullName },
       });
       dialogRef.closed?.subscribe(() => {
         this.createAccountDialogIsOpen = false;
