@@ -1,8 +1,15 @@
 /* @format */
+@import 'variables';
+
 :host {
   display: block;
-  width: 100%;
+  width: 600px;
   border-radius: 5px;
+  background-color: white;
+
+  @media screen and (max-width: 600px) {
+    width: 300px;
+  }
 }
 
 .dialog-content {
