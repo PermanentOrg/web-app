@@ -13,15 +13,18 @@
     >
       {{ item }}
     </a>
-    <a [ngbTooltip]="item" class="link" [href]="item | prependProtocol" *ngFor="let item of websites">
+    <a
+      [ngbTooltip]="item"
+      class="link"
+      [href]="item | prependProtocol"
+      *ngFor="let item of websites"
+    >
       {{ item }}
     </a>
   </div>
 
   <div *ngIf="description" [ngClass]="componentName + '-about'">
     <p class="title">About</p>
-    <p class="description">
-      {{ description }}
-    </p>
+    <div [innerHTML]="description" class="description"></div>
   </div>
 </div>
