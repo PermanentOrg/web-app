@@ -4,7 +4,7 @@
 <i class="ion-md-search"></i>
 <div class="search-results" *ngIf="showResults">
   <div class="search-result-group" *ngIf="tagResults?.length">
-    <div class="search-result-group-title">Tags</div>
+    <div class="search-result-group-title">Keywords</div>
     <div class="search-result-tags">
       <div class="tag" *ngFor="let tag of tagResults" (click)="onTagResultClick(tag)">{{tag.name}}</div>
     </div>

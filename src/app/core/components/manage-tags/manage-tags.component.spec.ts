@@ -106,14 +106,14 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(find('.tag')[0].nativeElement.textContent).toContain('Potato');
   });
 
-  it('should have a delete button for each tag', async () => {
+  it('should have a delete button for each keyword', async () => {
     const { find, outputs } = await defaultRender();
 
     expect(find('.delete').length).toBeGreaterThan(0);
     expect(outputs.refreshTags.emit).not.toHaveBeenCalled();
   });
 
-  it('should be able to delete a tag', async () => {
+  it('should be able to delete a keyword', async () => {
     const { find, fixture, outputs } = await defaultRender();
     find('.delete')[0].nativeElement.click();
     await fixture.whenStable();
@@ -125,7 +125,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(find('.tag').length).toBe(1);
   });
 
-  it('should not delete a tag if an error happens', async () => {
+  it('should not delete a keyword if an error happens', async () => {
     const { element } = await defaultRender();
     throwError = true;
     try {
@@ -137,13 +137,13 @@ describe('ManageTagsComponent #manage-tags', () => {
     }
   });
 
-  it('should have edit buttons for each tag', async () => {
+  it('should have edit buttons for each keyword', async () => {
     const { find } = await defaultRender();
 
     expect(find('.edit').length).toBeGreaterThan(0);
   });
 
-  it('should be able to enter edit mode for a tag', async() => {
+  it('should be able to enter edit mode for a keyword', async() => {
     const { find, fixture } = await defaultRender();
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
@@ -169,7 +169,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(outputs.refreshTags.emit).toHaveBeenCalled();
   });
 
-  it('can cancel out of renaming a tag', async () => {
+  it('can cancel out of renaming a keyword', async () => {
     const { find, fixture } = await defaultRender();
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
@@ -189,7 +189,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(find('.tagList').length).toBe(0);
   });
 
-  describe('Tags filtering', () => {
+  describe('Keywords filtering', () => {
     async function testValue(val: string, expectedCount: number) {
       const { find, fixture } = await defaultRender();
       find('input.filter').nativeElement.value = val;

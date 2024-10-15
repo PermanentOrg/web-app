@@ -1,7 +1,7 @@
 <div>
   <div *ngIf="tags.length > 0; else noTags">
-    <p>There are {{getTagCount()}} tags defined in the current archive.</p>
-    <input type="text" class="filter" placeholder="Search Tags..." (change)="filter = $event.target.value" (keyup)="filter = $event.target.value" />
+    <p>There are {{getTagCount()}} keywords defined in the current archive.</p>
+    <input type="text" class="filter" placeholder="Search Keywords..." (change)="filter = $event.target.value" (keyup)="filter = $event.target.value" />
     <div class="tagsList" *ngIf="getFilteredTags().length > 0; else noMatchedTags">
       <ng-container *ngFor="let tag of getFilteredTags();">
         <ng-container *ngIf="!isEditingTag(tag); else editMode">
@@ -27,10 +27,10 @@
       </ng-container>
     </div>
     <ng-template #noMatchedTags>
-      <div>No tags match your search query.</div>
+      <div>No keywords match your search query.</div>
     </ng-template>
   </div>
   <ng-template #noTags>
-    There are no tags used in this Archive.
+    There are no keywords used in this Archive.
   </ng-template>
 </div>

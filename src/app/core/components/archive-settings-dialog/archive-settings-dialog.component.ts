@@ -62,7 +62,7 @@ export class ArchiveSettingsDialogComponent implements OnInit {
               this.ngOnInit();
             } else {
               throw new Error(
-                'Archive Settings: Maximum number of tag fetch attempts reached.',
+                'Archive Settings: Maximum number of keyword fetch attempts reached.',
               );
             }
           }, 1000);

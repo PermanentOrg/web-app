@@ -29,7 +29,7 @@
     <div *ngIf="newTagInputError" class="input-vertical-error">
       {{
         this.tagType === 'keyword'
-          ? "Tag cannot contain ':'"
+          ? "Keyword cannot contain ':'"
           : 'Format must be key:value'
       }}
     </div>
@@ -65,7 +65,7 @@
   </div>
   <p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
     <span class="manage-tags-link" (click)="onManageTagsClick()">
-      Manage {{ this.tagType === 'keyword' ? 'tags' : 'custom metadata' }}</span
+      Manage {{ this.tagType === 'keyword' ? 'keywords' : 'custom metadata' }}</span
     >
     in archive settings.
   </p>
@@ -99,7 +99,7 @@
           <div *ngIf="newTagInputError" class="input-vertical-error">
             {{
               this.tagType === 'keyword'
-                ? "Tag cannot contain ':'"
+                ? "Keyword cannot contain ':'"
                 : 'Format must be key:value'
             }}
           </div>
@@ -134,13 +134,13 @@
             </div>
           </div>
           <div class="edit-tag" *ngIf="!matchingTags.length">
-            No existing tags found
+            No existing keywords found
           </div>
         </div>
         <p class="manage-tags-message" *ngIf="isEditing" @ngIfScaleAnimation>
           <span class="manage-tags-link" (click)="onManageTagsClick()">
             Manage
-            {{ this.tagType === 'keyword' ? 'tags' : 'custom metadata' }}</span
+            {{ this.tagType === 'keyword' ? 'keywords' : 'custom metadata' }}</span
           >
           in archive settings.
         </p>
