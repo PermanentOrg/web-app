@@ -19,7 +19,6 @@ export class ArchiveCreationWithShareComponent implements OnInit {
     if (token) {
       this.api.invite.getFullShareInvite(token).then((invite) => {
         const inviteVO = invite.getInviteVO();
-        console.log(invite);
         this.sharerName = inviteVO.AccountVO.fullName;
         this.sharedItemName = inviteVO.RecordVO
           ? inviteVO.RecordVO.displayName
