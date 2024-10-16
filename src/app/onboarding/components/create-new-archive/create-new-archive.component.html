@@ -190,12 +190,18 @@
     <button
       (click)="onSubmit()"
       class="btn btn-primary next-button create-archive"
-      [disabled]="!selectedReasons.length || loading"
+      [disabled]="!selectedReasons.length || loading || isArchiveSubmitted"
     >
       Create my archive
     </button>
   </div>
 </div>
 <div *ngIf="!isGlam && screen !== 'create' && screen !== 'name-archive'">
-  <button (click)="skipStep()" class="btn btn-link">Skip this step</button>
+  <button
+    [disabled]="isArchiveSubmitted"
+    (click)="skipStep()"
+    class="btn btn-link skip-step"
+  >
+    Skip this step
+  </button>
 </div>
