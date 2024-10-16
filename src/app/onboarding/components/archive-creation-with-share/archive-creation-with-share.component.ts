@@ -22,8 +22,7 @@ export class ArchiveCreationWithShareComponent implements OnInit {
         this.sharerName = inviteVO.AccountVO.fullName;
         this.sharedItemName = inviteVO.RecordVO
           ? inviteVO.RecordVO.displayName
-          : inviteVO.FolderVO.displayName
-          ;
+          : inviteVO.FolderVO.displayName;
       });
     }
   }
