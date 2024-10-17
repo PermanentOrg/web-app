@@ -160,10 +160,17 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
   async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
     this.editService.saveItemVoProperty(this.selectedItem, property, value);
     this.cdr.detectChanges();
+    console.log('here');
   }
 
   onLocationClick() {
     if (this.canEdit) {
+      this.editService.openLocationDialog(this.selectedItem);
+    }
+  }
+
+  onLocationEnterPress(e: KeyboardEvent): void {
+    if (this.canEdit && e.key === 'Enter') {
       this.editService.openLocationDialog(this.selectedItem);
     }
   }
