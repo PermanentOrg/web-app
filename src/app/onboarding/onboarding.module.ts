@@ -30,6 +30,7 @@ import { OnboardingHeaderComponent } from './components/header/header.component'
 import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/glam-header.component';
 import { GlamPendingArchivesComponent } from './components/glam-pending-archives/glam-pending-archives.component';
 import { PendingArchiveComponent } from './components/glam/pending-archive/pending-archive.component';
+import { ArchiveCreationWithShareComponent } from './components/archive-creation-with-share/archive-creation-with-share.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PendingArchiveComponent } from './components/glam/pending-archive/pendi
     GlamOnboardingHeaderComponent,
     GlamPendingArchivesComponent,
     PendingArchiveComponent,
+    ArchiveCreationWithShareComponent,
   ],
   imports: [
     CommonModule,
