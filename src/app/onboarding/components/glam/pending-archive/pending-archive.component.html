@@ -20,7 +20,7 @@
       [icon]="isSelected ? '/accept-green' : ''"
       [textColor]="isSelected ? { color: '#32D583' } : {}"
     >
-      Accept
+      {{ isSelected ? 'Accepted' : 'Accept' }}
     </pr-button>
   </div>
 </div>
