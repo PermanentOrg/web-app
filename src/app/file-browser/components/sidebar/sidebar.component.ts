@@ -160,7 +160,6 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
   async onFinishEditing(property: KeysOfType<ItemVO, String>, value: string) {
     this.editService.saveItemVoProperty(this.selectedItem, property, value);
     this.cdr.detectChanges();
-    console.log('here');
   }
 
   onLocationClick() {
