@@ -168,6 +168,12 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
     }
   }
 
+  onLocationEnterPress(e: KeyboardEvent): void {
+    if (this.canEdit && e.key === 'Enter') {
+      this.editService.openLocationDialog(this.selectedItem);
+    }
+  }
+
   onShareClick() {
     this.editService.openShareDialog(this.selectedItem);
   }
