@@ -73,6 +73,7 @@ describe('GlamPendingArchivesComponent', () => {
 
     expect(outputs.nextOutput.emit).toHaveBeenCalledWith(selectedArchive);
   });
+  
   it('should call api.archive.accept when selectArchive is called', async () => {
     const { instance, inject } = await shallow.render();
     const apiService = inject(ApiService);
@@ -84,6 +85,7 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     await instance.selectArchive(archive);
+
     expect(apiService.archive.accept).toHaveBeenCalledWith(archive);
   });
 
@@ -95,6 +97,7 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     await instance.selectArchive(archive);
+
     expect(instance.acceptedArchives.length).toBe(1);
     expect(instance.acceptedArchives[0].archiveId).toBe(1);
   });
@@ -108,6 +111,7 @@ describe('GlamPendingArchivesComponent', () => {
 
     expect(instance.selectedArchive).toBeNull();
     await instance.selectArchive(archive);
+
     expect(instance.selectedArchive.archiveId).toBe(archive.archiveId);
   });
 
@@ -119,6 +123,7 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     await instance.selectArchive(archive);
+
     expect(instance.isSelected(1)).toBeTrue();
   });
 
