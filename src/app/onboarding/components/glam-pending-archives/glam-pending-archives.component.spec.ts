@@ -2,6 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
+import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../onboarding.module';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
@@ -17,10 +18,13 @@ describe('GlamPendingArchivesComponent', () => {
   let shallow: Shallow<GlamPendingArchivesComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(GlamPendingArchivesComponent, OnboardingModule).mock(
-      AccountService,
-      mockAccountService,
-    );
+    shallow = new Shallow(GlamPendingArchivesComponent, OnboardingModule)
+      .mock(AccountService, mockAccountService)
+      .mock(ApiService, {
+        archive: {
+          accept: (archive: ArchiveVO) => Promise.resolve(),
+        },
+      });
   });
 
   it('should create the component', async () => {
@@ -50,18 +54,6 @@ describe('GlamPendingArchivesComponent', () => {
     expect(archiveElements.length).toBe(2);
   });
 
-  it('should update selectedArchive when selectArchive is called', async () => {
-    const { instance } = await shallow.render();
-    const archive: ArchiveVO = new ArchiveVO({
-      archiveId: 1,
-      fullName: 'Test Archive',
-    });
-
-    instance.selectArchive(archive);
-
-    expect(instance.selectedArchive).toBe(archive);
-  });
-
   it('should emit createNewArchiveOutput when createNewArchive is called', async () => {
     const { instance, outputs } = await shallow.render();
     instance.createNewArchive();
@@ -80,5 +72,68 @@ describe('GlamPendingArchivesComponent', () => {
     instance.next();
 
     expect(outputs.nextOutput.emit).toHaveBeenCalledWith(selectedArchive);
+  });
+
+  it('should call api.archive.accept when selectArchive is called', async () => {
+    const { instance, inject } = await shallow.render();
+    const apiService = inject(ApiService);
+    spyOn(apiService.archive, 'accept').and.callThrough();
+
+    const archive: ArchiveVO = new ArchiveVO({
+      archiveId: 1,
+      fullName: 'Test Archive',
+    });
+
+    await instance.selectArchive(archive);
+
+    expect(apiService.archive.accept).toHaveBeenCalledWith(archive);
+  });
+
+  it('should add archive to acceptedArchives when selectArchive is called', async () => {
+    const { instance } = await shallow.render();
+    const archive: ArchiveVO = new ArchiveVO({
+      archiveId: 1,
+      fullName: 'Test Archive',
+    });
+
+    await instance.selectArchive(archive);
+
+    expect(instance.acceptedArchives.length).toBe(1);
+    expect(instance.acceptedArchives[0].archiveId).toBe(1);
+  });
+
+  it('should set selectedArchive if no archive was previously selected', async () => {
+    const { instance } = await shallow.render();
+    const archive: ArchiveVO = new ArchiveVO({
+      archiveId: 1,
+      fullName: 'Test Archive',
+    });
+
+    expect(instance.selectedArchive).toBeNull();
+    await instance.selectArchive(archive);
+
+    expect(instance.selectedArchive.archiveId).toBe(archive.archiveId);
+  });
+
+  it('should return true when isSelected is called for an accepted archive', async () => {
+    const { instance } = await shallow.render();
+    const archive: ArchiveVO = new ArchiveVO({
+      archiveId: 1,
+      fullName: 'Test Archive',
+    });
+
+    await instance.selectArchive(archive);
+
+    expect(instance.isSelected(1)).toBeTrue();
+  });
+
+  it('should return false when isSelected is called for a non-accepted archive', async () => {
+    const { instance } = await shallow.render();
+    const archive: ArchiveVO = new ArchiveVO({
+      archiveId: 1,
+      fullName: 'Test Archive',
+    });
+
+    expect(instance.isSelected(1)).toBeFalse();
   });
 });
