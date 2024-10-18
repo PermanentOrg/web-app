@@ -73,7 +73,7 @@ describe('GlamPendingArchivesComponent', () => {
 
     expect(outputs.nextOutput.emit).toHaveBeenCalledWith(selectedArchive);
   });
-  
+
   it('should call api.archive.accept when selectArchive is called', async () => {
     const { instance, inject } = await shallow.render();
     const apiService = inject(ApiService);
