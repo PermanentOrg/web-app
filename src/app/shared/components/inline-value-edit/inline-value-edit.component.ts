@@ -166,7 +166,7 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
   }
 
   save(skipBlur = false) {
-    if (this.ngModel?.invalid || !this.isEditing) {
+    if (this.type !== 'select' && (this.ngModel?.invalid || !this.isEditing)) {
       return;
     }
 
