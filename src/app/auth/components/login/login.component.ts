@@ -24,7 +24,9 @@ const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 export class LoginComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   loginForm: UntypedFormGroup;
-  waiting: boolean;
+  waiting: boolean = false;
+
+  rememberMe: boolean = true;
 
   constructor(
     fb: UntypedFormBuilder,
@@ -44,7 +46,6 @@ export class LoginComponent {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      rememberMe: [true],
       keepLoggedIn: [true],
     });
   }
@@ -61,7 +62,7 @@ export class LoginComponent {
       .logIn(
         formValue.email,
         formValue.password,
-        formValue.rememberMe,
+        this.rememberMe,
         formValue.keepLoggedIn,
       )
       .then((response: AuthResponse) => {
@@ -156,5 +157,11 @@ export class LoginComponent {
           });
         }
       });
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['..', 'signup'], {
+      relativeTo: this.route,
+    });
   }
 }

@@ -1,11 +1,17 @@
 <!-- @format -->
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
-  <h1 class="form-title">Log in to Permanent.org</h1>
-  <div class="input-group-vertical">
-    <pr-form-input
+<form
+  class="login-form"
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit(loginForm.value)"
+>
+  <h1 class="page-title">Sign in to Permanent</h1>
+  <div class="email-input">
+    <pr-form-input-glam
       type="email"
       fieldName="email"
-      placeholder="Email"
+      [variant]="'dark'"
+      [style]="{ height: '64px' }"
+      placeholder="Email Address"
       [control]="loginForm.controls['email']"
       [config]="{
         autocomplete: 'username',
@@ -13,46 +19,55 @@
         autocapitalize: 'off',
         spellcheck: 'off'
       }"
-    ></pr-form-input>
-    <pr-form-input
+    ></pr-form-input-glam>
+  </div>
+  <div class="password-input">
+    <pr-form-input-glam
       type="password"
+      [variant]="'dark'"
       fieldName="password"
       placeholder="Password"
+      [style]="{ height: '64px' }"
       [control]="loginForm.controls['password']"
       [config]="{ autocomplete: 'current-password' }"
-    ></pr-form-input>
+    ></pr-form-input-glam>
   </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      id="rememberMe"
-      formControlName="rememberMe"
-    />
-    <label class="form-check-label" for="rememberMe"> Remember me </label>
+  <div class="auth-options">
+    <pr-checkbox
+      [variant]="'secondary'"
+      [isChecked]="rememberMe"
+      (isCheckedChange)="rememberMe = $event"
+      [text]="'Remember me'"
+    ></pr-checkbox>
   </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      id="keepLoggedIn"
-      formControlName="keepLoggedIn"
-    />
-    <label class="form-check-label" for="keepLoggedIn">
-      Keep me logged in
-    </label>
+
+  <div class="auth-buttons">
+    <pr-button
+      [buttonType]="'submit'"
+      [variant]="'secondary'"
+      [size]="'fill'"
+      [icon]="'/auth/arrow-right'"
+      [orientation]="'right'"
+      [disabled]="waiting || loginForm.invalid"
+      [style]="{ justifyContent: 'center' }"
+      >Sign in</pr-button
+    >
+    <div class="forgot-password-button">
+      <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
+        Forgot password?
+      </a>
+    </div>
+    <pr-or-divider [text]="'NEW TO PERMANENT ?'"></pr-or-divider>
+    <pr-button
+      [buttonType]="'button'"
+      [variant]="'primary'"
+      [size]="'fill'"
+      [orientation]="'right'"
+      (buttonClick)="navigateToRegister()"
+      [icon]="'/auth/sign-up-white'"
+      [style]="{ justifyContent: 'center' }"
+      >Sign Up</pr-button
+    >
   </div>
-  <button
-    type="submit"
-    class="btn btn-primary"
-    [disabled]="waiting || loginForm.invalid"
-  >
-    Log in
-  </button>
-  <a [routerLink]="['..', 'signup']" queryParamsHandling="merge">
-    Need to sign up?
-  </a>
-  <a [routerLink]="['..', 'forgot']" queryParamsHandling="merge">
-    Forgot password?
-  </a>
 </form>
+<pr-loading-spinner *ngIf="waiting"></pr-loading-spinner>

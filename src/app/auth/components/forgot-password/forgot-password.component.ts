@@ -35,18 +35,9 @@ export class ForgotPasswordComponent {
   onSubmit(formValue: any) {
     this.waiting = true;
 
-    this.api.auth
-      .forgotPassword(formValue.email)
-      .subscribe((response: AuthResponse) => {
-        this.waiting = false;
-        if (response.isSuccessful) {
-          this.success = true;
-        } else {
-          this.message.showError({
-            message: response.getMessage(),
-            translate: true,
-          });
-        }
-      });
+    this.api.auth.forgotPassword(formValue.email).subscribe(() => {
+      this.waiting = false;
+      this.success = true;
+    });
   }
 }

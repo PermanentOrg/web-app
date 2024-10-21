@@ -1,3 +1,4 @@
+/* @format  */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -33,5 +34,24 @@ describe('MfaComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set error for missing code', () => {
+    component.mfaForm.get('token').markAsTouched();
+    component.mfaForm.patchValue({
+      token: '',
+    });
+
+    expect(component.mfaForm.invalid).toBeTruthy();
+    expect(component.mfaForm.get('token').errors.required).toBeTruthy();
+  });
+
+  it('should display the loading spinner', () => {
+    component.waiting = true;
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    const loadingSpinner = compiled.querySelector('pr-loading-spinner');
+
+    expect(loadingSpinner).toBeTruthy();
   });
 });

@@ -48,7 +48,7 @@
     background: rgba(255, 255, 255, 0.08);
     opacity: 0.8;
     color: white;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.16);
     &:focus {
       background-color: $form-background-dark !important;
       opacity: 1;
@@ -92,6 +92,6 @@
 .error-icon {
   position: absolute;
   right: 20px;
-  top: 12px;
+  top: 25%;
   color: $form-error-red;
 }

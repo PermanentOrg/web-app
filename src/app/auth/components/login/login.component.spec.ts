@@ -331,4 +331,15 @@ describe('LoginComponent', () => {
     expect(messageSpy).toHaveBeenCalled();
     expect(harness.hasPasswordBeenCleared()).toBeTrue();
   });
+
+  it('should display the loading spinner', async () => {
+    const { inject, instance, fixture } = await shallow.render();
+
+    instance.waiting = true;
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    const loadingSpinner = compiled.querySelector('pr-loading-spinner');
+
+    expect(loadingSpinner).toBeTruthy();
+  });
 });

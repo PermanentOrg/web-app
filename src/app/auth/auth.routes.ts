@@ -12,8 +12,10 @@ import { MfaComponent } from '@auth/components/mfa/mfa.component';
 import { LoginComponent } from '@auth/components/login/login.component';
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
+import { ComponentsModule } from '../component-library/components.module';
 import { AuthComponent } from './components/auth/auth.component';
 import { ShareInviteResolveService } from './resolves/share-invite-resolve.service';
+import { OrDividerComponent } from './components/or-divider/or-divider.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
@@ -63,6 +65,7 @@ const routes: Routes = [
     SharedModule,
     AnnouncementModule,
     RecaptchaModule,
+    ComponentsModule,
   ],
   declarations: [
     LoginComponent,
@@ -71,6 +74,7 @@ const routes: Routes = [
     VerifyComponent,
     SignupComponent,
     ForgotPasswordComponent,
+    OrDividerComponent,
   ],
   providers: [ShareInviteResolveService],
 })
