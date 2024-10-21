@@ -66,7 +66,9 @@ describe('NameArchiveScreenComponent', () => {
   it('should call backToCreate when Back button is clicked', async () => {
     const { fixture, instance } = await shallow.render();
     spyOn(instance, 'backToCreate');
-    const backButton = fixture.debugElement.query(By.css('.back-button'));
+    const backButton = fixture.debugElement.query(
+      By.css('.back-button-component'),
+    );
     backButton.triggerEventHandler('buttonClick', null);
 
     expect(instance.backToCreate).toHaveBeenCalled();

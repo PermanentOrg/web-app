@@ -229,7 +229,7 @@ h3 {
 }
 
 .new-account-screens-container {
-  width: 100%;
+  width: 97%;
 }
 
 .heading-container {
@@ -250,6 +250,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   margin-top: 64px;
+  gap: 120px;
 
   @media screen and (max-width: 768px) {
     flex-direction: column;

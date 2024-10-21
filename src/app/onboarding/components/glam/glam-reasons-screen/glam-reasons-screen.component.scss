@@ -1,5 +1,10 @@
 /* @format */
 @import 'fonts';
+@import 'variables';
+
+:host {
+  max-width: 78rem;
+}
 
 .reasons {
   display: grid;
@@ -21,19 +26,23 @@
 }
 
 .what-is-important {
-  font-family: 'UsualRegular', sans-serif;
+  font-family: 'UsualLight', sans-serif;
   font-size: 56px;
-  width: 500px;
+  width: 60%;
 
   @media screen and (max-width: 500px) {
     width: auto;
   }
 }
 
+.bold {
+  font-family: 'UsualBold', sans-serif;
+}
+
 .text {
   font-family: 'UsualRegular', sans-serif;
   font-size: 16px;
-  width: 500px;
+  width: 40%;
 
   @media screen and (max-width: 500px) {
     width: auto;
@@ -46,10 +55,11 @@ p {
 
 .text-container {
   display: flex;
-  gap: 16px;
+  gap: 15rem;
 
   @media (max-width: 1062px) {
     flex-direction: column;
+    gap: 2rem;
   }
 }
 
@@ -57,7 +67,7 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  gap: 32px;
+  gap: 16px;
   padding-bottom: 100px;
 
   @media (max-width: 768px) {
@@ -69,5 +79,19 @@ p {
   @media (max-width: 768px) {
     display: flex;
     justify-content: center;
+  }
+}
+
+.back-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
+  }
+}
+
+.next-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
   }
 }

@@ -2,12 +2,16 @@
 @import 'fonts';
 @import 'variables';
 
+:host {
+  max-width: 80rem;
+}
+
 .goals {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 16px 50px;
 
-  @media (max-width: 1200px) and (min-width: 990px) {
+  @media (max-width: 1270px) and (min-width: 990px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -40,6 +44,10 @@
   text-align: left;
 }
 
+.bold {
+  font-family: 'UsualBold', sans-serif;
+}
+
 .text-right {
   width: 40%;
 
@@ -54,7 +62,8 @@ p {
 
 .text-container {
   display: flex;
-  gap: 64px;
+  gap: 15rem;
+  justify-content: space-between;
   @media (max-width: 854px) {
     flex-direction: column;
     gap: 16px;
@@ -77,5 +86,19 @@ p {
   @media (max-width: 768px) {
     display: flex;
     justify-content: center;
+  }
+}
+
+.back-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
+  }
+}
+
+.next-button {
+  width: 280px;
+  @include beforeDesktop {
+    width: 100%;
   }
 }

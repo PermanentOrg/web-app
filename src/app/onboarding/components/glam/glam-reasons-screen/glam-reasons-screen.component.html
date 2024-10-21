@@ -1,7 +1,9 @@
 <!-- @format -->
 <div>
   <div class="text-container">
-    <p class="what-is-important">Tell us what's <b>important</b> to you</p>
+    <p class="what-is-important">
+      Tell us what's <b class="bold">important</b> to you
+    </p>
     <p class="text">
       Finally, we’re curious... <br /><b>What brought you to Permanent.org?</b>
     </p>
@@ -19,15 +21,25 @@
     }
   </div>
   <div class="buttons">
-    <pr-button (buttonClick)="backToGoals()" [icon]="'/onboarding/back'"
-      >Back</pr-button
-    >
-    <pr-button
-      (buttonClick)="finalizeArchive()"
-      [orientation]="'right'"
-      [icon]="'/onboarding/arrow-right'"
-      [variant]="'secondary'"
-      >Next</pr-button
-    >
+    <div class="back-button">
+      <pr-button
+        (buttonClick)="backToGoals()"
+        [size]="'fill'"
+        [icon]="'/onboarding/back'"
+        [style]="{ 'justify-content': 'center' }"
+        >Back</pr-button
+      >
+    </div>
+    <div class="next-button">
+      <pr-button
+        (buttonClick)="finalizeArchive()"
+        [orientation]="'right'"
+        [icon]="'/onboarding/arrow-right'"
+        [size]="'fill'"
+        [variant]="'secondary'"
+        [style]="{ 'justify-content': 'center' }"
+        >Next</pr-button
+      >
+    </div>
   </div>
 </div>

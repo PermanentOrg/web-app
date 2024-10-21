@@ -26,18 +26,18 @@
   </div>
 
   <div class="buttons-container">
-    <div class="back-button-container">
+    <div class="back-button">
       <pr-button
         [orientation]="'right'"
         (buttonClick)="backToCreate()"
         [icon]="'/onboarding/back'"
+        class="back-button-component"
+        [style]="{ 'justify-content': 'center' }"
         [size]="'fill'"
-        [style]="{ justifyContent: 'center' }"
-        class="back-button"
         >Back</pr-button
       >
     </div>
-    <div class="create-archive-button-container">
+    <div class="next-button">
       <pr-button
         [orientation]="'right'"
         [variant]="'secondary'"
@@ -46,7 +46,7 @@
         (buttonClick)="createArchive()"
         [size]="'fill'"
         class="create-archive-button"
-        [style]="{ justifyContent: 'center' }"
+        [style]="{ 'justify-content': 'center' }"
         >Next</pr-button
       >
     </div>
