@@ -176,3 +176,37 @@ label {
   margin: 0;
   cursor: pointer;
 }
+
+.checkbox-container-enabled.checkbox-container-secondary.checkbox-container-secondary-onboarding {
+  & > .checkbox.checked {
+    border: 2.5px solid white;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    background-color: white;
+  }
+  & > .checkbox.checked::before,
+  & > .checkbox.checked::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    transition: opacity 0.2s;
+    opacity: 0;
+    border-radius: 2px;
+    background: linear-gradient(
+      to right,
+      rgba(184, 67, 166, 1),
+      rgba(128, 0, 128, 1)
+    );
+  }
+
+  @include checkbox-before-and-after;
+
+  & > .checkbox.checked::before,
+  & > .checkbox.checked::after {
+    opacity: 1;
+  }
+
+  & > label {
+    color: white;
+  }
+}
