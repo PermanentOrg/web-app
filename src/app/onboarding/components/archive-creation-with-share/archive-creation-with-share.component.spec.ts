@@ -28,7 +28,7 @@ describe('ArchiveCreationWithShareToken', () => {
           Promise.resolve({
             getInviteVO: () => ({
               AccountVO: { fullName: 'Sharer Name' },
-              ArchiveVO: { fullName: 'Shared Item Name' },
+              RecordVO: { displayName: 'Shared Item Name' },
             }),
           }),
         ),
@@ -75,7 +75,7 @@ describe('ArchiveCreationWithShareToken', () => {
 
   it('should not set sharerName or sharedItemName if no token is present', async () => {
     const { instance } = await shallow.render();
-    spyOn(localStorage, 'getItem').and.returnValue(null); // No token
+    spyOn(localStorage, 'getItem').and.returnValue(null); 
 
     instance.ngOnInit();
 
