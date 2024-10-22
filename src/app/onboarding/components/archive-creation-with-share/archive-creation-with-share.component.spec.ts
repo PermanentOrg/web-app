@@ -75,7 +75,7 @@ describe('ArchiveCreationWithShareToken', () => {
 
   it('should not set sharerName or sharedItemName if no token is present', async () => {
     const { instance } = await shallow.render();
-    spyOn(localStorage, 'getItem').and.returnValue(null); 
+    spyOn(localStorage, 'getItem').and.returnValue(null);
 
     instance.ngOnInit();
 
