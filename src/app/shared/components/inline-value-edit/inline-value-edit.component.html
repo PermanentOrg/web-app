@@ -252,6 +252,7 @@
           #model="ngModel"
           [(ngModel)]="editValue"
           (blur)="onTextInputBlur()"
+          (change)="save()"
           [required]="required"
           [class.is-editing]="isEditing"
         >

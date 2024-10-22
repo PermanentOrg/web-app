@@ -412,4 +412,42 @@ describe('InlineValueEditComponent', () => {
 
     expect(nameContainer.classList).toContain('is-name-hovered');
   });
+
+  it('should support save a select element on change', async () => {
+    component.type = 'select';
+    component.selectOptions = [
+      { text: 'test1', value: 'test1' },
+      { text: 'test2', value: 'test2' },
+    ];
+    const saveSpy = spyOn(component.doneEditing, 'emit');
+    fixture.detectChanges();
+    const select = fixture.debugElement.query(By.css('select')).nativeElement;
+    select.value = 'test1';
+    component.editValue = 'test1';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(saveSpy).toHaveBeenCalled();
+  });
+
+  it('should not save a select element if the value has not changed', async () => {
+    component.type = 'select';
+    component.selectOptions = [
+      { text: 'test1', value: 'test1' },
+      { text: 'test2', value: 'test2' },
+    ];
+    component.displayValue = 'test1';
+    component.editValue = 'test1';
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('select')).nativeElement;
+    const saveSpy = spyOn(component.doneEditing, 'emit');
+
+    select.value = 'test1';
+    component.editValue = 'test1';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(saveSpy).not.toHaveBeenCalled();
+  });
 });
