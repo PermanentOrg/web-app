@@ -6,9 +6,8 @@ import { EditService } from '@core/services/edit/edit.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO, RecordVO } from '@models/index';
 import { of } from 'rxjs';
+import { RecordCastPipe } from '@shared/pipes/cast.pipe';
 import { SidebarComponent } from './sidebar.component';
-
-const itemsArray = [new RecordVO({}), new RecordVO({})];
 
 const mockDataService = {
   selectedItems$: () =>
@@ -19,11 +18,11 @@ const mockDataService = {
         }),
       ]),
     ),
-  fetchFullItems: (itemsArray) => {},
+  fetchFullItems: (_) => {},
 };
 
 const mockEditService = {
-  openLocationDialog: (record) => {},
+  openLocationDialog: (_) => {},
 };
 
 class MockAccountService {
@@ -47,14 +46,15 @@ describe('SidebarComponent', () => {
         provide: DataService,
         useValue: mockDataService,
       })
-      .provide({
+      .provideMock({
         provide: EditService,
         useValue: mockEditService,
       })
       .provideMock({
         provide: AccountService,
         useClass: MockAccountService,
-      });
+      })
+      .dontMock(RecordCastPipe);
   });
 
   it('should create', async () => {
@@ -64,22 +64,17 @@ describe('SidebarComponent', () => {
   });
 
   it('should open location dialog on Enter key press if editable', async () => {
-    const { instance, fixture, inject } = await shallow.render();
+    const { instance } = await shallow.render();
 
-    inject(AccountService);
+    const locationDialogSpy = spyOn(
+      mockEditService,
+      'openLocationDialog',
+    ).and.callThrough();
 
-    instance.canEdit = true;
-    instance.selectedItem = new RecordVO({
-      accessRole: 'access.role.owner',
-    });
-    instance.selectedItems = [instance.selectedItem];
-    fixture.detectChanges();
-
-    const mockEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-    instance.onLocationEnterPress(mockEvent);
-
-    expect(mockEditService.openLocationDialog).toHaveBeenCalledWith(
-      instance.selectedItem,
+    instance.onLocationEnterPress(
+      new KeyboardEvent('keydown', { key: 'Enter' }),
     );
+
+    expect(locationDialogSpy).toHaveBeenCalledWith(instance.selectedItem);
   });
 });

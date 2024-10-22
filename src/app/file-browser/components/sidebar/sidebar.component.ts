@@ -93,6 +93,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
         }
         if (
           this.selectedItem instanceof RecordVO &&
+          this.selectedItem.FileVOs &&
           this.selectedItem.FileVOs[0]
         ) {
           this.originalFileExtension = this.selectedItem.FileVOs.find(
