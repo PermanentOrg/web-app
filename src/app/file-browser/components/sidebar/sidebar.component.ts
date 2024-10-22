@@ -51,10 +51,10 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
     this.subscriptions.push(
       this.dataService.selectedItems$().subscribe(async (selectedItems) => {
-        if (!selectedItems.size) {
+        if (!selectedItems?.size) {
           this.selectedItem = this.dataService.currentFolder;
           this.selectedItems = null;
-        } else if (selectedItems.size === 1) {
+        } else if (selectedItems?.size === 1) {
           this.selectedItem = Array.from(selectedItems.keys())[0];
           this.selectedItems = null;
         } else {
@@ -132,7 +132,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
       !viewOnly &&
       this.accountService.checkMinimumArchiveAccess(AccessRole.Editor);
 
-    if (items.length !== 1) {
+    if (items?.length !== 1) {
       this.canShare = false;
     } else {
       this.canShare =

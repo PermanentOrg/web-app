@@ -1,25 +1,82 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/* @format */
+import { Shallow } from 'shallow-render';
+import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-components.module';
+import { DataService } from '@shared/services/data/data.service';
+import { EditService } from '@core/services/edit/edit.service';
+import { AccountService } from '@shared/services/account/account.service';
+import { ArchiveVO, RecordVO } from '@models/index';
+import { of } from 'rxjs';
+import { SidebarComponent } from './sidebar.component';
 
-// import { SidebarComponent } from './sidebar.component';
+const mockDataService = {
+  selectedItems$: () =>
+    of(
+      new Set([
+        new RecordVO({
+          accessRole: 'access.role.owner',
+        }),
+      ]),
+    ),
+};
 
-// describe('SidebarComponent', () => {
-//   let component: SidebarComponent;
-//   let fixture: ComponentFixture<SidebarComponent>;
+const mockEditService = {
+  openLocationDialog: (record) => {},
+};
 
-//   beforeEach(async(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [ SidebarComponent ]
-//     })
-//     .compileComponents();
-//   }));
+class MockAccountService {
+  getArchive() {
+    return new ArchiveVO({});
+  }
+  checkMinimumArchiveAccess() {
+    return true;
+  }
+  checkMinimumAccess() {
+    return true;
+  }
+}
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(SidebarComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+describe('SidebarComponent', () => {
+  let shallow: Shallow<SidebarComponent>;
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-// });
+  beforeEach(() => {
+    shallow = new Shallow(SidebarComponent, FileBrowserComponentsModule)
+      .provideMock({
+        provide: DataService,
+        useValue: mockDataService,
+      })
+      .provide({
+        provide: EditService,
+        useValue: mockEditService,
+      })
+      .provideMock({
+        provide: AccountService,
+        useClass: MockAccountService,
+      });
+  });
+
+  it('should create', async () => {
+    const { instance } = await shallow.render();
+
+    expect(instance).toBeTruthy();
+  });
+
+  it('should open location dialog on Enter key press if editable', async () => {
+    const { instance, fixture, inject } = await shallow.render();
+
+    inject(AccountService);
+
+    instance.canEdit = true;
+    instance.selectedItem = new RecordVO({
+      accessRole: 'access.role.owner',
+    });
+    instance.selectedItems = [instance.selectedItem];
+    fixture.detectChanges();
+
+    const mockEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+    instance.onLocationEnterPress(mockEvent);
+
+    expect(mockEditService.openLocationDialog).toHaveBeenCalledWith(
+      instance.selectedItem,
+    );
+  });
+});
