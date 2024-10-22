@@ -8,6 +8,8 @@ import { ArchiveVO, RecordVO } from '@models/index';
 import { of } from 'rxjs';
 import { SidebarComponent } from './sidebar.component';
 
+const itemsArray = [new RecordVO({}), new RecordVO({})];
+
 const mockDataService = {
   selectedItems$: () =>
     of(
@@ -17,6 +19,7 @@ const mockDataService = {
         }),
       ]),
     ),
+  fetchFullItems: (itemsArray) => {},
 };
 
 const mockEditService = {
