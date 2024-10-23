@@ -6,18 +6,22 @@
   <p class="greeting">Welcome to Permanent!</p>
 </div>
 <div class="text-buttons-container">
-  <div class="text">
-    <p>We’re so glad you’re here!</p>
-    <p>
-      At Permanent, it is our mission to provide a safe and secure place to
-      store, preserve, and share the digital legacy of all people, whether
-      that's for you or for your friends, family, interests or organizations.
-    </p>
-    <p>
-      We know that starting this journey can sometimes be overwhelming, but
-      don’t worry. We’re here to help you every step of the way.
-    </p>
-  </div>
+  @if (!hasShareToken) {
+    <div class="text text-no-share">
+      <p>We’re so glad you’re here!</p>
+      <p>
+        At Permanent, it is our mission to provide a safe and secure place to
+        store, preserve, and share the digital legacy of all people, whether
+        that's for you or for your friends, family, interests or organizations.
+      </p>
+      <p>
+        We know that starting this journey can sometimes be overwhelming, but
+        don’t worry. We’re here to help you every step of the way.
+      </p>
+    </div>
+  } @else {
+    <pr-archive-creation-with-share></pr-archive-creation-with-share>
+  }
   <div class="buttons">
     <pr-button
       [icon]="'/onboarding/plus'"

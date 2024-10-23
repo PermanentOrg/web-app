@@ -679,4 +679,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   dispatchBannerClose(): void {
     this.hideBannerSubject.next();
   }
+
+  public navToAuth(): void {
+    if (this.isRelationshipShare) {
+      this.router.navigate(['/app', 'auth', 'login']);
+    } else {
+      this.router.navigate(['/app', 'auth', 'signup']);
+    }
+  }
 }

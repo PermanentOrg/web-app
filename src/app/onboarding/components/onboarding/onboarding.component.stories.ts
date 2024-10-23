@@ -35,6 +35,7 @@ import { GlamArchiveTypeSelectComponent } from '../glam/archive-type-select/arch
 import { ArchiveTypeIconComponent } from '../glam/archive-type-icon/archive-type-icon.component';
 import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pending-archives.component';
 import { PendingArchiveComponent } from '../glam/pending-archive/pending-archive.component';
+import { ArchiveCreationWithShareComponent } from '../archive-creation-with-share/archive-creation-with-share.component';
 import { OnboardingComponent } from './onboarding.component';
 
 class MockAccountService {
@@ -92,6 +93,22 @@ class MockAccountService {
 }
 
 class MockApiService {
+  public invite = {
+    getFullShareInvite: async (token: string) => {
+      action('Get Full Share Invite')(token);
+      return {
+        getInviteVO: () => ({
+          AccountVO: {
+            fullName: 'John Doe',
+          },
+          ArchiveVO: {
+            fullName: 'Family Photos',
+          },
+        }),
+      };
+    },
+  };
+
   public account = {
     updateAccountTags: async (tags: string[]) => {
       action('Mailchimp Tag')(tags);
@@ -137,6 +154,12 @@ export default {
       defaultValue: false,
       description: 'Use the GLAM onboarding flow.',
     },
+    shareToken: {
+      control: { type: 'boolean' },
+      name: 'Has Share Token',
+      defaultValue: false,
+      description: 'Enables the "Share Token" onboarding flow.',
+    },
   },
   decorators: [
     moduleMetadata({
@@ -159,6 +182,7 @@ export default {
         BgImageSrcDirective,
         GlamPendingArchivesComponent,
         PendingArchiveComponent,
+        ArchiveCreationWithShareComponent,
       ],
       imports: [
         CommonModule,
@@ -182,6 +206,7 @@ interface StoryArgs {
   accountName?: string;
   hasInvitations?: boolean;
   isGlam?: boolean;
+  shareToken?: boolean;
 }
 const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
   MockAccountService.resetStatics();
@@ -195,6 +220,12 @@ const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
     localStorage.setItem('isGlam', 'true');
   } else {
     localStorage.removeItem('isGlam');
+  }
+
+  if (args.shareToken) {
+    localStorage.setItem('shareToken', 'token');
+  } else {
+    localStorage.removeItem('shareToken');
   }
   return {
     render: () => {
@@ -229,4 +260,12 @@ Glam.args = {
   accountName: 'Test User',
   hasInvitations: false,
   isGlam: true,
+};
+
+export const GlamShareInvite: Story = StoryTemplate.bind({});
+GlamShareInvite.args = {
+  accountName: 'Test User',
+  isGlam: true,
+  shareToken: true,
+  hasInvitations: false,
 };
