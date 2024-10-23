@@ -93,6 +93,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
         }
         if (
           this.selectedItem instanceof RecordVO &&
+          this.selectedItem.FileVOs &&
           this.selectedItem.FileVOs[0]
         ) {
           this.originalFileExtension = this.selectedItem.FileVOs.find(
@@ -164,6 +165,12 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
 
   onLocationClick() {
     if (this.canEdit) {
+      this.editService.openLocationDialog(this.selectedItem);
+    }
+  }
+
+  onLocationEnterPress(e: KeyboardEvent): void {
+    if (this.canEdit && e.key === 'Enter') {
       this.editService.openLocationDialog(this.selectedItem);
     }
   }
