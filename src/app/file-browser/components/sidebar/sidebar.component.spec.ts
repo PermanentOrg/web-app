@@ -77,4 +77,62 @@ describe('SidebarComponent', () => {
 
     expect(locationDialogSpy).toHaveBeenCalledWith(instance.selectedItem);
   });
+
+  it('should set currentTab correctly when setCurrentTab is called', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    instance.setCurrentTab('info');
+    fixture.detectChanges();
+
+    expect(instance.currentTab).toBe('info');
+
+    instance.isRootFolder = false;
+    instance.isPublicItem = false;
+    instance.setCurrentTab('sharing');
+    fixture.detectChanges();
+
+    expect(instance.currentTab).toBe('sharing');
+  });
+
+  it('should call editService.openLocationDialog when onLocationClick is called if editable', async () => {
+    const { instance, inject } = await shallow.render();
+    const editService = inject(EditService);
+    spyOn(editService, 'openLocationDialog');
+  
+    instance.canEdit = true;
+    instance.selectedItem = new RecordVO({}); 
+  
+    instance.onLocationClick();
+    
+    expect(editService.openLocationDialog).toHaveBeenCalledWith(instance.selectedItem);
+  });
+  
+
+  it('should correctly update canEdit and canShare when checkPermissions is called', async () => {
+    const { instance } = await shallow.render();
+
+    instance.selectedItem = new RecordVO({
+      accessRole: 'access.role.editor',
+    });
+    instance.selectedItems = [instance.selectedItem];
+    instance.isRootFolder = false;
+    instance.isPublicItem = false;
+
+    instance.checkPermissions();
+
+    expect(instance.canEdit).toBe(true);
+    expect(instance.canShare).toBe(true);
+
+    instance.selectedItem = new RecordVO({
+      accessRole: 'access.role.viewer',
+    });
+    instance.selectedItems = [instance.selectedItem];
+    instance.isRootFolder = false;
+    instance.isPublicItem = false;
+
+    instance.checkPermissions();
+
+    expect(instance.canEdit).toBe(false);
+    expect(instance.canShare).toBe(true);
+  });
 });
