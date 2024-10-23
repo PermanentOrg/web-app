@@ -11,6 +11,7 @@ export class ArchiveCreationWithShareComponent implements OnInit {
   public hasShareToken = false;
   public sharerName: string;
   public sharedItemName: string;
+  public isFolder: boolean = false;
 
   constructor(private api: ApiService) {}
 
@@ -23,6 +24,7 @@ export class ArchiveCreationWithShareComponent implements OnInit {
         this.sharedItemName = inviteVO.RecordVO
           ? inviteVO.RecordVO.displayName
           : inviteVO.FolderVO.displayName;
+        this.isFolder = !inviteVO.RecordVO;
       });
     }
   }

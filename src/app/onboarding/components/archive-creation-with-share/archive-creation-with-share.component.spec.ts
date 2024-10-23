@@ -82,4 +82,56 @@ describe('ArchiveCreationWithShareToken', () => {
     expect(instance.sharerName).toBeUndefined();
     expect(instance.sharedItemName).toBeUndefined();
   });
+
+  it('should display the record icon if the shared item is a record', async () => {
+    const mockApi = {
+      invite: {
+        getFullShareInvite: jasmine.createSpy().and.returnValue(
+          Promise.resolve({
+            getInviteVO: () => ({
+              AccountVO: { fullName: 'Sharer Name' },
+              RecordVO: { displayName: 'Shared Item Name' },
+            }),
+          }),
+        ),
+      },
+    };
+
+    const { instance, fixture } = await shallow
+      .mock(ApiService, mockApi)
+      .render();
+
+    spyOn(localStorage, 'getItem').and.returnValue('shareToken');
+
+    instance.ngOnInit();
+    await fixture.whenStable();
+
+    expect(instance.isFolder).toBe(false);
+  });
+
+  it('should display the folder icon if the shared item is a folder', async () => {
+    const mockApi = {
+      invite: {
+        getFullShareInvite: jasmine.createSpy().and.returnValue(
+          Promise.resolve({
+            getInviteVO: () => ({
+              AccountVO: { fullName: 'Sharer Name' },
+              RecordVO: null,
+            }),
+          }),
+        ),
+      },
+    };
+
+    const { instance, fixture } = await shallow
+      .mock(ApiService, mockApi)
+      .render();
+
+    spyOn(localStorage, 'getItem').and.returnValue('shareToken');
+
+    instance.ngOnInit();
+    await fixture.whenStable();
+
+    expect(instance.isFolder).toBe(false);
+  });
 });
