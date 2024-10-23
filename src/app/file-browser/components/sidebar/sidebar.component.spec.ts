@@ -98,15 +98,16 @@ describe('SidebarComponent', () => {
     const { instance, inject } = await shallow.render();
     const editService = inject(EditService);
     spyOn(editService, 'openLocationDialog');
-  
+
     instance.canEdit = true;
-    instance.selectedItem = new RecordVO({}); 
-  
+    instance.selectedItem = new RecordVO({});
+
     instance.onLocationClick();
-    
-    expect(editService.openLocationDialog).toHaveBeenCalledWith(instance.selectedItem);
+
+    expect(editService.openLocationDialog).toHaveBeenCalledWith(
+      instance.selectedItem,
+    );
   });
-  
 
   it('should correctly update canEdit and canShare when checkPermissions is called', async () => {
     const { instance } = await shallow.render();
