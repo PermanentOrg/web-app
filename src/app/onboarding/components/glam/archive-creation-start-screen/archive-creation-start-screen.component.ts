@@ -20,7 +20,9 @@ export class ArchiveCreationStartScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('shareToken');
+    const token =
+      localStorage.getItem('shareToken') ||
+      localStorage.getItem('shareTokenFromCopy');
     if (token) {
       this.hasShareToken = true;
     }
