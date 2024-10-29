@@ -105,9 +105,11 @@ export class AccountService {
     this.setStorage(this.account?.keepLoggedIn, ACCOUNT_KEY, this.account);
 
     // set account data on Sentry scope
-    Sentry.configureScope((scope) => {
-      scope.setUser({ id: this.account.accountId });
-    });
+    if (this.account?.accountId) {
+      Sentry.configureScope((scope) => {
+        scope.setUser({ id: this.account.accountId });
+      });
+    }
   }
 
   public setArchive(newArchive: ArchiveVO) {
