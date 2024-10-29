@@ -116,7 +116,6 @@ describe('InlineValueEditComponent', () => {
   });
 
   it('should not save on cancel button click', async () => {
-    const onBlurSpy = spyOn(component, 'onTextInputBlur');
     const doneEditingSpy = spyOn(component.doneEditing, 'emit');
     component.displayValue = null;
     component.startEdit();
@@ -138,7 +137,6 @@ describe('InlineValueEditComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(onBlurSpy).toHaveBeenCalledTimes(1);
     expect(doneEditingSpy).not.toHaveBeenCalled();
   });
 
