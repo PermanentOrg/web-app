@@ -26,31 +26,26 @@ describe('CustomOverlayContainer', () => {
     expect(customOverlayContainer).toBeTruthy();
   });
 
-  describe('_createContainer', () => {
-    it('should append the container to pr-app-root if it exists', () => {
-      const mockAppRoot = document.createElement('pr-app-root');
-      document.body.appendChild(mockAppRoot);
+  it('should append the container to pr-app-root if it exists', () => {
+    const mockBodyNode = document.createElement('body');
+    const mockAppRoot = document.createElement('pr-app-root');
+    mockBodyNode.appendChild(mockAppRoot);
 
-      customOverlayContainer['_createContainer']();
+    customOverlayContainer.appendContainer(mockBodyNode);
 
-      const container = document.querySelector('.cdk-overlay-container');
+    const container = mockBodyNode.querySelector('.cdk-overlay-container');
 
-      expect(container).toBeTruthy();
-      expect(mockAppRoot.contains(container!)).toBeTrue();
+    expect(container).toBeTruthy();
+    expect(mockAppRoot.contains(container!)).toBeTrue();
+  });
 
-      mockAppRoot.remove();
-      container?.remove();
-    });
+  it('should append the container to document.body if pr-app-root does not exist', () => {
+    const mockBodyNode = document.createElement('body');
+    customOverlayContainer.appendContainer(mockBodyNode);
 
-    it('should append the container to document.body if pr-app-root does not exist', () => {
-      customOverlayContainer['_createContainer']();
+    const container = mockBodyNode.querySelector('.cdk-overlay-container');
 
-      const container = document.querySelector('.cdk-overlay-container');
-
-      expect(container).toBeTruthy();
-      expect(document.body.contains(container!)).toBeTrue();
-
-      container?.remove();
-    });
+    expect(container).toBeTruthy();
+    expect(mockBodyNode.contains(container!)).toBeTrue();
   });
 });
