@@ -2,106 +2,105 @@
 import { Shallow } from 'shallow-render';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService } from '@shared/services/api/api.service';
+import { InviteVO, InviteVOData } from '@models/invite-vo';
+import { InviteResponse } from '@shared/services/api/invite.repo';
 import { OnboardingModule } from '../../onboarding.module';
 import { ArchiveCreationWithShareComponent } from './archive-creation-with-share.component';
 
+class MockInviteApiResponse extends InviteResponse {
+  public inviteVo: InviteVO | undefined;
+
+  constructor(invite: InviteVOData) {
+    super({});
+    this.inviteVo = new InviteVO(invite);
+  }
+
+  public getInviteVO(): InviteVO {
+    return this.inviteVo;
+  }
+}
+
+class MockInviteRepo {
+  public inviteVo: InviteVOData = {};
+  protected token: string = null;
+
+  public resetToken(): void {
+    this.token = null;
+  }
+
+  public getToken(): string {
+    return this.token;
+  }
+
+  public async getFullShareInvite(token: string): Promise<InviteResponse> {
+    this.token = token;
+    return new MockInviteApiResponse(this.inviteVo);
+  }
+}
+
 describe('ArchiveCreationWithShareToken', () => {
   let shallow: Shallow<ArchiveCreationWithShareComponent>;
+  let mockInvite: MockInviteRepo;
+
+  function setLocalStorage(token: string) {
+    spyOn(localStorage, 'getItem').and.returnValue(token);
+  }
 
   beforeEach(() => {
-    shallow = new Shallow(
-      ArchiveCreationWithShareComponent,
-      OnboardingModule,
-    ).import(HttpClientTestingModule);
+    mockInvite = new MockInviteRepo();
+
+    shallow = new Shallow(ArchiveCreationWithShareComponent, OnboardingModule)
+      .provideMock({
+        provide: ApiService,
+        useValue: { invite: mockInvite },
+      })
+      .import(HttpClientTestingModule);
   });
 
   it('should create', async () => {
+    setLocalStorage(null);
     const { instance } = await shallow.render();
 
     expect(instance).toBeTruthy();
   });
 
   it('should fetch invite data and set sharer and shared item names when shareToken is present', async () => {
-    const mockApi = {
-      invite: {
-        getFullShareInvite: jasmine.createSpy().and.returnValue(
-          Promise.resolve({
-            getInviteVO: () => ({
-              AccountVO: { fullName: 'Sharer Name' },
-              RecordVO: { displayName: 'Shared Item Name' },
-            }),
-          }),
-        ),
-      },
+    mockInvite.inviteVo = {
+      AccountVO: { fullName: 'Sharer Name' },
+      RecordVO: { displayName: 'Shared Item Name' },
     };
+    setLocalStorage('shareToken');
 
-    const { instance, fixture } = await shallow
-      .mock(ApiService, mockApi)
-      .render();
-
-    spyOn(localStorage, 'getItem').and.returnValue('shareToken');
+    const { instance, fixture } = await shallow.render();
 
     instance.ngOnInit();
     await fixture.whenStable();
 
-    expect(mockApi.invite.getFullShareInvite).toHaveBeenCalledWith(
-      'shareToken',
-    );
-
+    expect(mockInvite.getToken()).toBe('shareToken');
     expect(instance.sharerName).toBe('Sharer Name');
     expect(instance.sharedItemName).toBe('Shared Item Name');
   });
 
   it('should not fetch invite data if no shareToken is present', async () => {
-    const mockApi = {
-      invite: {
-        getFullShareInvite: jasmine.createSpy(),
-      },
-    };
-
-    const { instance, fixture } = await shallow
-      .mock(ApiService, mockApi)
-      .render();
-
-    spyOn(localStorage, 'getItem').and.returnValue(null);
+    setLocalStorage(null);
+    const { instance, fixture } = await shallow.render();
 
     instance.ngOnInit();
     await fixture.whenStable();
 
-    expect(mockApi.invite.getFullShareInvite).not.toHaveBeenCalled();
-    expect(instance.sharerName).toBeUndefined();
-    expect(instance.sharedItemName).toBeUndefined();
-  });
-
-  it('should not set sharerName or sharedItemName if no token is present', async () => {
-    const { instance } = await shallow.render();
-    spyOn(localStorage, 'getItem').and.returnValue(null);
-
-    instance.ngOnInit();
-
+    expect(mockInvite.getToken()).toBeNull();
     expect(instance.sharerName).toBeUndefined();
     expect(instance.sharedItemName).toBeUndefined();
   });
 
   it('should display the record icon if the shared item is a record', async () => {
-    const mockApi = {
-      invite: {
-        getFullShareInvite: jasmine.createSpy().and.returnValue(
-          Promise.resolve({
-            getInviteVO: () => ({
-              AccountVO: { fullName: 'Sharer Name' },
-              RecordVO: { displayName: 'Shared Item Name' },
-            }),
-          }),
-        ),
-      },
+    mockInvite.inviteVo = {
+      AccountVO: { fullName: 'Sharer Name' },
+      RecordVO: { displayName: 'Shared Item Name' },
     };
+    setLocalStorage('shareToken');
 
-    const { instance, fixture } = await shallow
-      .mock(ApiService, mockApi)
-      .render();
-
-    spyOn(localStorage, 'getItem').and.returnValue('shareToken');
+    const { instance, fixture } = await shallow.render();
 
     instance.ngOnInit();
     await fixture.whenStable();
@@ -110,28 +109,17 @@ describe('ArchiveCreationWithShareToken', () => {
   });
 
   it('should display the folder icon if the shared item is a folder', async () => {
-    const mockApi = {
-      invite: {
-        getFullShareInvite: jasmine.createSpy().and.returnValue(
-          Promise.resolve({
-            getInviteVO: () => ({
-              AccountVO: { fullName: 'Sharer Name' },
-              RecordVO: null,
-            }),
-          }),
-        ),
-      },
+    mockInvite.inviteVo = {
+      AccountVO: { fullName: 'Sharer Name' },
+      FolderVO: { displayName: 'potato' },
     };
+    setLocalStorage('shareToken');
 
-    const { instance, fixture } = await shallow
-      .mock(ApiService, mockApi)
-      .render();
-
-    spyOn(localStorage, 'getItem').and.returnValue('shareToken');
+    const { instance, fixture } = await shallow.render();
 
     instance.ngOnInit();
     await fixture.whenStable();
 
-    expect(instance.isFolder).toBe(false);
+    expect(instance.isFolder).toBe(true);
   });
 });

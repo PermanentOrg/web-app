@@ -1,6 +1,15 @@
 /* @format */
 import { BaseVO } from '@models/base-vo';
-import { ArchiveVO, AccountVO, RecordVO, FolderVO, ShareVO } from '.';
+import { AccountVOData } from './account-vo';
+import {
+  ArchiveVO,
+  AccountVO,
+  RecordVO,
+  FolderVO,
+  ShareVO,
+  RecordVOData,
+  FolderVOData,
+} from '.';
 
 type InviteStatusType =
   | 'status.invite.pending'
@@ -59,4 +68,8 @@ export interface InviteVOData {
 
   byArchiveId?: number;
   accessRole?: string;
+
+  AccountVO?: AccountVOData;
+  RecordVO?: RecordVOData;
+  FolderVO?: FolderVOData;
 }
