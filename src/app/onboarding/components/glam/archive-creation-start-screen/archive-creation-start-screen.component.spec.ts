@@ -78,9 +78,8 @@ describe('ArchiveCreationStartScreenComponent', () => {
   });
 
   it('should not set hasShareToken if shareToken does not exist in localStorage', async () => {
-    const { instance, fixture } = await shallow.render();
-
     spyOn(localStorage, 'getItem').and.returnValue(null);
+    const { instance, fixture } = await shallow.render();
 
     instance.ngOnInit();
     fixture.detectChanges();
