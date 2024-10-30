@@ -122,4 +122,83 @@ describe('ArchiveCreationWithShareToken', () => {
 
     expect(instance.isFolder).toBe(true);
   });
+
+  it('should fetch invite data and set sharer and shared item names when copyToken is present', async () => {
+    const mockApi = {
+      share: {
+        checkShareLink: jasmine.createSpy().and.returnValue(
+          Promise.resolve({
+            Results: [
+              {
+                data: [
+                  {
+                    Shareby_urlVO: {
+                      AccountVO: { fullName: 'Sharer Name' },
+                      RecordVO: { displayName: 'Shared Item Name' },
+                    },
+                  },
+                ],
+              },
+            ],
+          }),
+        ),
+      },
+    };
+
+    const { instance, fixture } = await shallow
+      .mock(ApiService, mockApi)
+      .render();
+
+    spyOn(localStorage, 'getItem').and.callFake((key) => {
+      if (key === 'shareTokenFromCopy') return 'copyToken';
+      return null;
+    });
+
+    instance.ngOnInit();
+    await fixture.whenStable();
+
+    expect(mockApi.share.checkShareLink).toHaveBeenCalledWith('copyToken');
+
+    expect(instance.sharerName).toBe('Sharer Name');
+    expect(instance.sharedItemName).toBe('Shared Item Name');
+  });
+
+  it('should set sharedItemName using FolderVO if RecordVO is missing', async () => {
+    const mockApi = {
+      share: {
+        checkShareLink: jasmine.createSpy().and.returnValue(
+          Promise.resolve({
+            Results: [
+              {
+                data: [
+                  {
+                    Shareby_urlVO: {
+                      AccountVO: { fullName: 'Sharer Name' },
+                      FolderVO: { displayName: 'Shared Folder Name' },
+                    },
+                  },
+                ],
+              },
+            ],
+          }),
+        ),
+      },
+    };
+
+    const { instance, fixture } = await shallow
+      .mock(ApiService, mockApi)
+      .render();
+
+    spyOn(localStorage, 'getItem').and.callFake((key) => {
+      if (key === 'shareTokenFromCopy') return 'copyToken';
+      return null;
+    });
+
+    instance.ngOnInit();
+    await fixture.whenStable();
+
+    expect(mockApi.share.checkShareLink).toHaveBeenCalledWith('copyToken');
+    expect(instance.sharerName).toBe('Sharer Name');
+    expect(instance.sharedItemName).toBe('Shared Folder Name'); // Folder name should be set
+  });
 });

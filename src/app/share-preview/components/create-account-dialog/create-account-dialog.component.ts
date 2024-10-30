@@ -21,8 +21,13 @@ export class CreateAccountDialogComponent implements OnInit {
 
   ngOnInit(): void {
     const url = window.location.href;
-    const token = url.split('/').pop();
-    localStorage.setItem('shareToken', token);
+    if (url.includes('share/invite')) {
+      const token = url.split('/').pop();
+      localStorage.setItem('shareToken', token);
+    } else if (url.includes('share')) {
+      const token = url.split('/').pop();
+      localStorage.setItem('shareTokenFromCopy', token);
+    }
   }
 
   isMobile(): boolean {
