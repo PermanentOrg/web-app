@@ -35,6 +35,7 @@
 
   @media screen and (max-width: 500px) {
     width: auto;
+    margin-top: 20px;
   }
 }
 
@@ -67,6 +68,10 @@ p {
   @media (max-width: 854px) {
     flex-direction: column;
     gap: 16px;
+  }
+
+  @media screen and (max-width: 425px) {
+    padding: 0px 60px;
   }
 }
 
