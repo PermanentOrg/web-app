@@ -19,10 +19,16 @@ import { TEST_DATA } from '@core/core.module.spec';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FORM_ERROR_MESSAGES } from '@shared/utilities/forms';
 import { ApiService } from '@shared/services/api/api.service';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
+import { AccountVO } from '@models/account-vo';
+import { AccountService } from '@shared/services/account/account.service';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
+  let accountService: AccountService;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -37,6 +43,7 @@ describe('SignupComponent', () => {
         CookieService,
         MessageService,
         ApiService,
+        AccountService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -57,6 +64,7 @@ describe('SignupComponent', () => {
     fixture = TestBed.createComponent(SignupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    accountService = TestBed.inject(AccountService);
   });
 
   it('should create', () => {
@@ -178,5 +186,36 @@ describe('SignupComponent', () => {
     const loadingSpinner = compiled.querySelector('pr-loading-spinner');
 
     expect(loadingSpinner).toBeTruthy();
+  });
+
+  it('should pass receiveUpdatesViaEmail to signUp correctly', () => {
+    const formValue = {
+      email: 'test@example.com',
+      name: 'Test User',
+      password: 'password123',
+      confirm: 'password123',
+      invitation: 'inviteCode',
+    };
+
+    component.receiveUpdatesViaEmail = true;
+    component.agreedTerms = true; // assuming agreedTerms is needed
+
+    spyOn(accountService, 'signUp').and.returnValue(
+      Promise.resolve(new AccountVO({})),
+    );
+
+    component.onSubmit(formValue);
+
+    expect(accountService.signUp).toHaveBeenCalledWith(
+      formValue.email,
+      formValue.name,
+      formValue.password,
+      formValue.confirm,
+      component.agreedTerms,
+      true, // checks receiveUpdatesViaEmail is true
+      null,
+      formValue.invitation,
+      component.shouldCreateDefaultArchive(),
+    );
   });
 });

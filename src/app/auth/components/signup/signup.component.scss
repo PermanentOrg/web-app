@@ -21,15 +21,19 @@
 
 .auth-options {
   display: flex;
-  align-items: center;
+  flex-direction: column;
 
-  & > label,
-  label > a {
-    color: white;
-    font-family: 'UsualRegular', sans-serif;
-    font-size: 14px;
+  & > .checkbox-container {
+    margin-bottom: 32px;
+
+    display: flex;
+    > label,
+    label > a {
+      color: white;
+      font-family: 'UsualRegular', sans-serif;
+      font-size: 14px;
+    }
   }
-  margin-bottom: 32px;
 }
 
 form {
