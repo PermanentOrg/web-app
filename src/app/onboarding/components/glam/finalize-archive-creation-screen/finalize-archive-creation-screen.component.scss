@@ -10,6 +10,10 @@ p {
 
 .title {
   font-size: 56px;
+  @media screen and (max-width: 465px) {
+    text-align: center;
+    font-size: 36px;
+  }
 }
 
 .finalize-archive {
@@ -68,5 +72,19 @@ hr {
 
   @media screen and (max-width: 900px) {
     height: 60vh;
+  }
+
+  @media screen and (max-width: 465px) {
+    padding: 0px 50px;
+
+    & .archive-info {
+      justify-content: center;
+    }
+  }
+}
+
+.button-container {
+  @media screen and (max-width: 465px) {
+    padding: 20px;
   }
 }

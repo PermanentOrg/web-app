@@ -61,6 +61,10 @@ p {
     flex-direction: column;
     gap: 2rem;
   }
+
+  @media screen and (max-width: 425px) {
+    padding: 0px 60px;
+  }
 }
 
 .buttons {
@@ -93,5 +97,11 @@ p {
   width: 280px;
   @include beforeDesktop {
     width: 100%;
+  }
+}
+
+.raesons-screen {
+  @media screen and (max-width: 465px) {
+    margin-top: 20px;
   }
 }
