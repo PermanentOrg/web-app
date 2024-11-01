@@ -80,21 +80,15 @@
   </div>
   <div class="auth-options">
     <div class="checkbox-container">
-      <pr-checkbox
-        [isChecked]="receiveUpdatesViaEmail"
-        (isCheckedChange)="receiveUpdatesViaEmail = $event"
-        [variant]="'secondary'"
-      ></pr-checkbox>
       <label class="form-check-label">
         I agree to receive updates via email
       </label>
+      <pr-toggle
+        [isChecked]="receiveUpdatesViaEmail"
+        (isCheckedChange)="receiveUpdatesViaEmail = $event"
+      ></pr-toggle>
     </div>
     <div class="checkbox-container">
-      <pr-checkbox
-        [isChecked]="agreedTerms"
-        (isCheckedChange)="agreedTerms = $event"
-        [variant]="'secondary'"
-      ></pr-checkbox>
       <label class="form-check-label" for="terms">
         I agree to the &nbsp;
         <a
@@ -104,6 +98,10 @@
           >Terms of Service</a
         >
       </label>
+      <pr-toggle
+        [isChecked]="agreedTerms"
+        (isCheckedChange)="agreedTerms = $event"
+      ></pr-toggle>
     </div>
   </div>
   <div class="buttons">
