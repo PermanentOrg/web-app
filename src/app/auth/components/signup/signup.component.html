@@ -79,20 +79,30 @@
     ></pr-form-input-glam>
   </div>
   <div class="auth-options">
-    <pr-checkbox
-      [isChecked]="agreedTerms"
-      (isCheckedChange)="agreedTerms = $event"
-      [variant]="'secondary'"
-    ></pr-checkbox>
-    <label class="form-check-label" for="terms">
-      I agree to the &nbsp;
-      <a
-        href="https://www.permanent.org/terms/"
-        target="_blank"
-        aria-label="Permanent.org Terms of Service"
-        >Terms of Service</a
-      >
-    </label>
+    <div class="checkbox-container">
+      <label class="form-check-label">
+        I agree to receive updates via email
+      </label>
+      <pr-toggle
+        [isChecked]="receiveUpdatesViaEmail"
+        (isCheckedChange)="receiveUpdatesViaEmail = $event"
+      ></pr-toggle>
+    </div>
+    <div class="checkbox-container">
+      <label class="form-check-label" for="terms">
+        I agree to the &nbsp;
+        <a
+          href="https://www.permanent.org/terms/"
+          target="_blank"
+          aria-label="Permanent.org Terms of Service"
+          >Terms of Service</a
+        >
+      </label>
+      <pr-toggle
+        [isChecked]="agreedTerms"
+        (isCheckedChange)="agreedTerms = $event"
+      ></pr-toggle>
+    </div>
   </div>
   <div class="buttons">
     <pr-button

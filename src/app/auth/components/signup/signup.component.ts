@@ -47,6 +47,7 @@ export class SignupComponent {
   shareFromName: string;
   shareItemIsRecord = false;
   agreedTerms = false;
+  receiveUpdatesViaEmail = false;
 
   constructor(
     fb: UntypedFormBuilder,
@@ -108,7 +109,6 @@ export class SignupComponent {
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
-      optIn: [true],
     });
 
     const confirmPasswordControl = new UntypedFormControl('', [
@@ -141,7 +141,7 @@ export class SignupComponent {
         formValue.password,
         formValue.confirm,
         this.agreedTerms,
-        formValue.optIn,
+        this.receiveUpdatesViaEmail,
         null,
         formValue.invitation,
         this.shouldCreateDefaultArchive(),

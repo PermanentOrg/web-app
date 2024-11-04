@@ -22,7 +22,7 @@
     height: 20px;
     border-radius: 25px;
     position: relative;
-    background-color: $toggle;
+    background-color: rgba(255, 255, 255, 0.32);
     transition: background-color 0.2s;
 
     & > .toggle-knob {
