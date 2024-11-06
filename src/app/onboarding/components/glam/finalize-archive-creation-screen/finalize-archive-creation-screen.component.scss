@@ -28,12 +28,12 @@ p {
 
 .square {
   border-radius: 6px;
-  background: #a6f4c5;
+  background: rgba(255, 255, 255, 0.08);
   width: 72px;
   padding: 6px;
 
   & > span {
-    color: rgba(19, 27, 74, 1);
+    color: white;
   }
 }
 
@@ -84,7 +84,20 @@ hr {
 }
 
 .button-container {
+  display: flex;
+  justify-content: flex-end;
   @media screen and (max-width: 465px) {
     padding: 20px;
   }
+}
+
+.button {
+  width: 50%;
+}
+
+.get-started-text {
+  & > a {
+    color: white;
+  }
+  margin-bottom: 2rem;
 }
