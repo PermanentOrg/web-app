@@ -78,6 +78,7 @@ export class TagsService {
 
   getTagByName(name: string) {
     const tags = this.getTags();
+    console.log('tags', tags);
     return find(tags, { name });
   }
 

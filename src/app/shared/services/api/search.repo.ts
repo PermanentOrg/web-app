@@ -64,7 +64,7 @@ export class SearchRepo extends BaseRepo {
 
   public itemsByNameInPublicArchiveObservable(
     query: string,
-    tags: TagVOData[] = [],
+    tags: string[] = [],
     archiveId: string,
     limit?: number,
   ) {

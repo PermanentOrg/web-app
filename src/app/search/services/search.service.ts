@@ -55,6 +55,8 @@ export class SearchService {
     let queryString: string;
     const parsedTags: TagVOData[] = [];
 
+    console.log(termString)
+
     if (termString.match(/tag:"(.*)"/)) {
       const queryParts = [];
       const parts = termString.split(splitByTerm).filter((x) => x && x !== '"');
@@ -100,7 +102,7 @@ export class SearchService {
 
   public getResultsInPublicArchive(
     searchTerm: string,
-    tags: TagVOData[],
+    tags: string[],
     archiveId: string,
     limit?: number,
   ) {
