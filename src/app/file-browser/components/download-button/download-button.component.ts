@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { RecordVO } from '@models/index';
 import { DataService } from '@shared/services/data/data.service';
+import { FileFormat } from '@models/file-vo';
 import { MessageService } from '../../../shared/services/message/message.service';
 
 interface Format {
@@ -79,10 +80,12 @@ export class DownloadButtonComponent {
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
     const original = (this.selectedItem as RecordVO).FileVOs?.find(
-      (item) => item.format === 'file.format.original',
+      (item) => item.format === FileFormat.Original,
     );
     const converted = (this.selectedItem as RecordVO).FileVOs?.filter(
-      (item) => item.format === 'file.format.converted',
+      (item) =>
+        item.format === FileFormat.Converted ||
+        item.format === FileFormat.ArchivematicaAccess,
     ).map((item) => ({
       name: item.type,
       extension: item.type.split('.').pop(),
