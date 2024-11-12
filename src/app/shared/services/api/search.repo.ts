@@ -68,11 +68,25 @@ export class SearchRepo extends BaseRepo {
     archiveId: string,
     limit?: number,
   ) {
+    const jsonTags = JSON.stringify([
+      {
+        tagId: 2,
+        name: 'asd',
+        archiveId: 11,
+        status: 'status.generic.ok',
+        type: 'type.generic.placeholder',
+        createdDT: '2024-07-03T11:55:57',
+        updatedDT: '2024-11-11T13:09:54',
+      },
+    ]);
+
+    console.log(jsonTags);
     const data = {
       query,
-      tags,
+      tags: jsonTags,
       archiveId,
       publicOnly: true,
+      numberOfResults: limit,
     };
 
     return getFirst(

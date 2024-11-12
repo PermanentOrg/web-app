@@ -55,8 +55,6 @@ export class SearchService {
     let queryString: string;
     const parsedTags: TagVOData[] = [];
 
-    console.log(termString)
-
     if (termString.match(/tag:"(.*)"/)) {
       const queryParts = [];
       const parts = termString.split(splitByTerm).filter((x) => x && x !== '"');

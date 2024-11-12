@@ -1,0 +1,25 @@
+<div class="public-search-bar-results">
+  <div class="search-results">
+    <p>Suggested file results:</p>
+    @for (item of searchResults; track $index) {
+      <div class="results">
+        <div class="info">
+          <img [src]="item.thumbURL200" />
+          <span>{{ item.displayName }}</span>
+        </div>
+        <div class="resulty-type">
+          <span>{{ types[item.type] }}</span>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="tag-results">
+    <p>Keywords</p>
+  </div>
+  <hr />
+  <div class="view-all-results">
+    <div class="button-results">
+      <button class="btn btn-link">View all results</button>
+    </div>
+  </div>
+</div>

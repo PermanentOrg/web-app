@@ -68,7 +68,7 @@ export class ArchiveSearchComponent {
           if (term?.length || tags?.length) {
             this.waiting = true;
             return this.searchService
-              .getResultsInPublicArchive(term, [], archiveId, 10)
+              .getResultsInPublicArchive(term, [], archiveId, 3)
               .pipe(
                 catchError((err) => {
                   return of(err);
