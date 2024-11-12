@@ -11,6 +11,7 @@ import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
+import { PermanentFile } from './file-vo';
 
 interface RecordVoOptions {
   dataStatus: DataStatus;
@@ -107,7 +108,7 @@ export class RecordVO
   // Other stuff
   public LocnVO: LocnVOData;
   public TimezoneVO: TimezoneVOData;
-  public FileVOs;
+  public FileVOs: PermanentFile[];
   public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs: ArchiveVO[];
