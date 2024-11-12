@@ -147,10 +147,10 @@ export class UploadService implements HasSubscriptions, OnDestroy {
     return this.uploadSession.queueFiles(parentFolder, files);
   }
 
-  async uploadFolders(parentFolder: FolderVO, items: DataTransferItem[]) {
+  async uploadFolders(parentFolder: FolderVO, entries: FileSystemEntry[]) {
     this.debug(
       'uploadFolders %d items to folder %o',
-      items.length,
+      entries.length,
       parentFolder,
     );
 
@@ -162,7 +162,6 @@ export class UploadService implements HasSubscriptions, OnDestroy {
 
     foldersByPath.set('', { path: '', folder: parentFolder });
 
-    const entries = items.map((i) => i.webkitGetAsEntry());
     await getItemsFromItemList(entries);
     this.createFoldersAndUploadFiles(foldersByPath, filesByPath);
 

@@ -401,6 +401,10 @@ export class MainComponent
     }
 
     const items = (dragEvent.event as DragEvent).dataTransfer.items;
+    const supportsFolderUpload = items[0].webkitGetAsEntry !== null;
+    const copiedItems = Array.from(items).map(
+      (i) => i.webkitGetAsEntry && i.webkitGetAsEntry(),
+    );
 
     let targetFolder: FolderVO;
 
@@ -416,14 +420,14 @@ export class MainComponent
           'Upload to public',
           'This is a public folder. Are you sure you want to upload here?',
         );
-      } catch (error) {
+      } catch (_) {
         return;
       }
     }
 
-    if (items?.length && items[0].webkitGetAsEntry != null) {
+    if (copiedItems.length && supportsFolderUpload) {
       // browser supports folders and file entry
-      this.upload.uploadFolders(targetFolder, Array.from(items));
+      this.upload.uploadFolders(targetFolder, copiedItems);
     } else {
       this.upload.uploadFiles(targetFolder, Array.from(files));
     }
