@@ -92,7 +92,7 @@ describe('ArchiveSearchComponent', () => {
     component.searchForm.patchValue({ query: 'test' });
 
     component.clearForm();
-    
+
     expect(component.searchForm.value.query).toBe(null);
   });
 

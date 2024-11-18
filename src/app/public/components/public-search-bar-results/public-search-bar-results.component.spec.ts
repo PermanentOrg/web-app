@@ -115,7 +115,7 @@ describe('PublicSearchBarResultsComponent', () => {
     const tagResultsSection = fixture.debugElement.query(
       By.css('.tag-results'),
     );
-    
+
     expect(tagResultsSection).toBeNull();
   });
 });
