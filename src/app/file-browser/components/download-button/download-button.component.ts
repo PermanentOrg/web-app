@@ -79,21 +79,9 @@ export class DownloadButtonComponent {
 
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
-    const original = (this.selectedItem as RecordVO).FileVOs?.find(
-      (item) => item.format === FileFormat.Original,
-    );
-    const converted = (this.selectedItem as RecordVO).FileVOs?.filter(
-      (item) =>
-        item.format === FileFormat.Converted ||
-        item.format === FileFormat.ArchivematicaAccess,
-    ).map((item) => ({
-      name: item.type,
-      extension: item.type.split('.').pop(),
-    }));
-    this.downloadOptions = [
-      { name: original?.type, extension: original?.type.split('.').pop() },
-      ...converted,
-    ];
+    this.downloadOptions = (
+      this.selectedItem as RecordVO
+    ).getDownloadOptionsList();
   }
 
   bringDropdownIntoView() {

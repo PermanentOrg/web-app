@@ -494,19 +494,8 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
 
   displayDownloadOptions() {
     this.displayDownloadDropdown = true;
-    const original = (this.selectedItems[0] as RecordVO).FileVOs?.find(
-      (item) => item.format === 'file.format.original',
-    );
-    const converted = (this.selectedItems[0] as RecordVO).FileVOs?.filter(
-      (item) => item.format === 'file.format.converted',
-    ).map((item) => ({
-      name: item.type,
-      extension: item.type.split('.').pop(),
-    }));
-
-    this.downloadOptions = [
-      { name: original?.type, extension: original?.type.split('.').pop() },
-      ...converted,
-    ];
+    this.downloadOptions = (
+      this.selectedItems[0] as RecordVO
+    ).getDownloadOptionsList();
   }
 }

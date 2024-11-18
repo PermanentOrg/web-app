@@ -11,7 +11,7 @@ import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
-import { PermanentFile } from './file-vo';
+import { FileFormat, PermanentFile } from './file-vo';
 
 interface RecordVoOptions {
   dataStatus: DataStatus;
@@ -155,6 +155,20 @@ export class RecordVO
     if (this.ShareVOs) {
       this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
+  }
+
+  public getDownloadOptionsList() {
+    const files = [...(this.FileVOs ?? [])];
+    return files
+      .sort(
+        (a, b) =>
+          Number(b.format === FileFormat.Original) -
+          Number(a.format === FileFormat.Original),
+      )
+      .map((file) => ({
+        name: file.type,
+        extension: file.type.split('.').pop(),
+      }));
   }
 }
 
