@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { RecordVO } from '@models/index';
 import { DataService } from '@shared/services/data/data.service';
-import { FileFormat } from '@models/file-vo';
 import { MessageService } from '../../../shared/services/message/message.service';
 
 interface Format {
