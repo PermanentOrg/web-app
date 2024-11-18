@@ -3,6 +3,7 @@ import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO, sortShareVOs } from '@models/share-vo';
 import { formatDateISOString } from '@shared/utilities/dateTime';
+import { prioritizeIf } from '@root/utils/prioritize-if';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
@@ -159,16 +160,13 @@ export class RecordVO
 
   public getDownloadOptionsList() {
     const files = [...(this.FileVOs ?? [])];
-    return files
-      .sort(
-        (a, b) =>
-          Number(b.format === FileFormat.Original) -
-          Number(a.format === FileFormat.Original),
-      )
-      .map((file) => ({
-        name: file.type,
-        extension: file.type.split('.').pop(),
-      }));
+    return prioritizeIf(
+      files,
+      (file) => file.format === FileFormat.Original,
+    ).map((file) => ({
+      name: file.type,
+      extension: file.type.split('.').pop(),
+    }));
   }
 }
 

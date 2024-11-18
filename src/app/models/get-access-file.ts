@@ -1,3 +1,4 @@
+import { prioritizeIf } from '@root/utils/prioritize-if';
 import { FileFormat, PermanentFile } from './file-vo';
 
 export interface HasFiles {
@@ -9,15 +10,10 @@ function getArchivematicaAccess(files: PermanentFile[]) {
 }
 
 function getPrioritizedConvertedFile(files: PermanentFile[]) {
-  return files
-    .filter((file) => file.format === FileFormat.Converted)
-    .sort((a, b) => {
-      const preferredType = 'pdf';
-      return (
-        Number(b.type.includes(preferredType)) -
-        Number(a.type.includes(preferredType))
-      );
-    })[0];
+  return prioritizeIf(
+    files.filter((file) => file.format === FileFormat.Converted),
+    (file) => file.type.includes('pdf'),
+  )[0];
 }
 
 export function GetAccessFile(record: HasFiles): PermanentFile | undefined {
