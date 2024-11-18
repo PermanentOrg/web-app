@@ -1,9 +1,9 @@
 /* @format */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PublicSearchBarResultsComponent } from './public-search-bar-results.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { FolderVO, RecordVO } from '@models/index';
+import { PublicSearchBarResultsComponent } from './public-search-bar-results.component';
 
 describe('PublicSearchBarResultsComponent', () => {
   let component: PublicSearchBarResultsComponent;
@@ -81,6 +81,7 @@ describe('PublicSearchBarResultsComponent', () => {
     fixture.detectChanges();
 
     const resultElements = fixture.debugElement.queryAll(By.css('.result'));
+
     expect(resultElements.length).toBe(1);
     expect(resultElements[0].nativeElement.textContent).toContain('Image 1');
   });
@@ -90,6 +91,7 @@ describe('PublicSearchBarResultsComponent', () => {
     fixture.detectChanges();
 
     const tagElements = fixture.debugElement.queryAll(By.css('.tag'));
+
     expect(tagElements.length).toBe(2);
     expect(tagElements[0].nativeElement.textContent).toContain('Tag 1');
     expect(tagElements[1].nativeElement.textContent).toContain('Tag 2');
@@ -102,6 +104,7 @@ describe('PublicSearchBarResultsComponent', () => {
     const searchResultsSection = fixture.debugElement.query(
       By.css('.search-results'),
     );
+
     expect(searchResultsSection).toBeNull();
   });
 
@@ -112,6 +115,7 @@ describe('PublicSearchBarResultsComponent', () => {
     const tagResultsSection = fixture.debugElement.query(
       By.css('.tag-results'),
     );
+    
     expect(tagResultsSection).toBeNull();
   });
 });

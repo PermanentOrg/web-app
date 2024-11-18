@@ -3,11 +3,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { of } from 'rxjs';
-import { ArchiveSearchComponent } from './archive-search.component';
 import { SearchService } from '@search/services/search.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { ArchiveVO, TagVO } from '@models/index';
-import { SearchResponse } from '@shared/services/api/search.repo';
+import { ArchiveSearchComponent } from './archive-search.component';
 
 describe('ArchiveSearchComponent', () => {
   let component: ArchiveSearchComponent;
@@ -93,6 +92,7 @@ describe('ArchiveSearchComponent', () => {
     component.searchForm.patchValue({ query: 'test' });
 
     component.clearForm();
+    
     expect(component.searchForm.value.query).toBe(null);
   });
 

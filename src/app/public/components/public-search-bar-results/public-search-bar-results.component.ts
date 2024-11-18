@@ -1,5 +1,5 @@
 /* @format */
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FolderVO, RecordVO, TagVOData } from '@models/index';
 
@@ -8,7 +8,7 @@ import { FolderVO, RecordVO, TagVOData } from '@models/index';
   templateUrl: './public-search-bar-results.component.html',
   styleUrl: './public-search-bar-results.component.scss',
 })
-export class PublicSearchBarResultsComponent implements OnInit {
+export class PublicSearchBarResultsComponent {
   @Input() searchResults = [];
   @Input() tags = [];
 
@@ -26,8 +26,6 @@ export class PublicSearchBarResultsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {}
-
-  ngOnInit(): void {}
 
   public viewAllResults(): void {
     this.search.emit();
