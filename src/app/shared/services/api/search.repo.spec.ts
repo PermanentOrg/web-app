@@ -34,14 +34,14 @@ describe('SearchRepo', () => {
   it('returns the correct search results', () => {
     const expected = require('@root/test/responses/search.get.publicFiles.success.json');
     repo
-      .itemsByNameInPublicArchiveObservable('test', [], '1')
+      .itemsByNameInPublicArchiveObservable('test', [], '1', 4)
       .toPromise()
       .then((response: SearchResponse) => {
         expect(JSON.stringify(response)).toEqual(JSON.stringify(expected[0]));
       });
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/search/folderAndRecord?query=test&archiveId=1&publicOnly=true`,
+      `${environment.apiUrl}/search/folderAndRecord?query=test&archiveId=1&publicOnly=true&numberOfResults=4`,
     );
     req.flush(expected);
   });

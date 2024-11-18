@@ -33,7 +33,13 @@
       [icon]="['fas', 'times-circle']"
     ></fa-icon>
   </form>
-  <pr-public-search-bar-results *ngIf="searchResults.length" [searchResults]="searchResults" />
+  <pr-public-search-bar-results
+    (search)="onHandleSearch()"
+    *ngIf="searchResults.length || filteredTags.length"
+    [tags]="filteredTags"
+    [searchResults]="searchResults"
+    (tagClickOutput)="onTagClick($event)"
+  />
 </div>
 
 <div class="fade-ring-loader" *ngIf="waiting"></div>

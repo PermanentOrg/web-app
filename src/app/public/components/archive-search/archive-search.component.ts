@@ -1,5 +1,5 @@
 /* @format */
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ArchiveVO, TagVO } from '@models/index';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
@@ -11,7 +11,7 @@ import { catchError, debounceTime, map, of, switchMap, tap } from 'rxjs';
   templateUrl: './archive-search.component.html',
   styleUrls: ['./archive-search.component.scss'],
 })
-export class ArchiveSearchComponent {
+export class ArchiveSearchComponent implements OnInit {
   @Output() search = new EventEmitter<string>();
 
   private archive: ArchiveVO;
@@ -23,6 +23,10 @@ export class ArchiveSearchComponent {
   public displayIcon: boolean = true;
 
   public searchResults = [];
+  public tags = [];
+  public filteredTags = [];
+
+  public tag: TagVO[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -40,38 +44,43 @@ export class ArchiveSearchComponent {
     this.initFormHandler();
   }
 
+  ngOnInit() {
+    this.searchService
+      .getPublicArchiveTags(this.archive.archiveId)
+      .subscribe((res) => {
+        this.tags = res;
+      });
+  }
+
   initFormHandler() {
-    this.searchForm.valueChanges
-      .pipe(
-        map((term) => {
-          console.log('term', term);
-          return this.searchService.parseSearchTerm(term.query);
-        }),
-        tap(([term, tags]) => {
-          console.log('term', term);
-          console.log('tags', tags);
-
-          // this.showResults = true;
-          // this.updateLocalResults(term as string, tags);
-          // this.updateTagsResults(term as string, tags);
-        }),
+    this.searchForm?.valueChanges
+      ?.pipe(
         debounceTime(100),
-        switchMap(([term, tags]) => {
+        map((value) => value.query?.trim() || ''),
+        tap((term) => {
+          this.filteredTags = this.tags.filter((tag) =>
+            tag.name.toLowerCase().includes(term.toLowerCase()),
+          );
+        }),
+        switchMap((term) => {
+          if (!term) {
+            this.tag = [];
+          }
+
           const archiveId = this.archive?.archiveId;
-
-          console.log(archiveId);
-
-          const tagstest = this.searchService.getTagResults('asd');
-
-          console.log('tagstest', tagstest);
-
-          if (term?.length || tags?.length) {
+          if (term.length || this.filteredTags.length) {
             this.waiting = true;
             return this.searchService
-              .getResultsInPublicArchive(term, [], archiveId, 3)
+              .getResultsInPublicArchive(
+                term,
+                this.tag.length ? this.tag : [],
+                archiveId,
+                3,
+              )
               .pipe(
                 catchError((err) => {
-                  return of(err);
+                  console.error(err);
+                  return of(null);
                 }),
               );
           } else {
@@ -80,9 +89,13 @@ export class ArchiveSearchComponent {
         }),
       )
       .subscribe((response) => {
+        this.waiting = false;
+
         if (response) {
-          this.waiting = false;
           this.searchResults = response.ChildItemVOs;
+        } else {
+          this.searchResults = [];
+          this.filteredTags = [];
         }
       });
   }
@@ -93,5 +106,10 @@ export class ArchiveSearchComponent {
 
   public onHandleSearch(): void {
     this.search.emit(this.searchForm.value.query);
+  }
+
+  public onTagClick(tag: TagVO[]): void {
+    this.searchForm.patchValue({ query: tag[0].name });
+    this.tag = tag;
   }
 }

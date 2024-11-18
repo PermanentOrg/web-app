@@ -100,7 +100,7 @@ export class SearchService {
 
   public getResultsInPublicArchive(
     searchTerm: string,
-    tags: string[],
+    tags: TagVOData[],
     archiveId: string,
     limit?: number,
   ) {
@@ -110,6 +110,10 @@ export class SearchService {
       archiveId,
       limit,
     );
+  }
+
+  public getPublicArchiveTags(archiveId: string) {
+    return this.api.search.getPublicArchiveTags(archiveId);
   }
 
   private searchWithFuse<T>(

@@ -64,36 +64,25 @@ export class SearchRepo extends BaseRepo {
 
   public itemsByNameInPublicArchiveObservable(
     query: string,
-    tags: string[] = [],
+    tags: TagVOData[] = [],
     archiveId: string,
     limit?: number,
   ) {
-    const jsonTags = JSON.stringify([
-      {
-        tagId: 2,
-        name: 'asd',
-        archiveId: 11,
-        status: 'status.generic.ok',
-        type: 'type.generic.placeholder',
-        createdDT: '2024-07-03T11:55:57',
-        updatedDT: '2024-11-11T13:09:54',
-      },
-    ]);
+    let queryString = `/search/folderAndRecord?query=${query}&archiveId=${archiveId}&publicOnly=true&numberOfResults=${limit}`;
 
-    console.log(jsonTags);
-    const data = {
-      query,
-      tags: jsonTags,
-      archiveId,
-      publicOnly: true,
-      numberOfResults: limit,
-    };
+    if (tags.length) {
+      queryString += `&tags[0][tagId]=${tags[0].tagId}`;
+    }
 
     return getFirst(
-      this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
+      this.httpV2.get<SearchResponse>(queryString, {}, null, {
         authToken: false,
       }),
     );
+  }
+
+  public getPublicArchiveTags(archiveId) {
+    return this.httpV2.get(`v2/archive/${archiveId}/tags/public`);
   }
 }
 

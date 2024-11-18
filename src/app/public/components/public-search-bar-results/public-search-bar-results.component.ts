@@ -1,4 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+/* @format */
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FolderVO, RecordVO, TagVOData } from '@models/index';
 
 @Component({
   selector: 'pr-public-search-bar-results',
@@ -9,6 +12,9 @@ export class PublicSearchBarResultsComponent implements OnInit {
   @Input() searchResults = [];
   @Input() tags = [];
 
+  @Output() search = new EventEmitter<void>();
+  @Output() tagClickOutput = new EventEmitter<TagVOData[]>();
+
   public types = {
     'type.folder.private': 'Folder',
     'type.folder.public': 'Folder',
@@ -16,8 +22,30 @@ export class PublicSearchBarResultsComponent implements OnInit {
     'type.record.video': 'Video',
   };
 
-  ngOnInit(): void {
-    console.log(this.searchResults)
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
+
+  ngOnInit(): void {}
+
+  public viewAllResults(): void {
+    this.search.emit();
   }
 
+  public onTagClick(tag: TagVOData): void {
+    this.tagClickOutput.emit([tag]);
+  }
+
+  public goToFile(item: RecordVO | FolderVO): void {
+    if (item.type === 'type.folder.public') {
+      this.router.navigate([item.archiveNbr, item.folder_linkId], {
+        relativeTo: this.route,
+      });
+    } else {
+      this.router.navigate(['record', item.archiveNbr], {
+        relativeTo: this.route,
+      });
+    }
+  }
 }
