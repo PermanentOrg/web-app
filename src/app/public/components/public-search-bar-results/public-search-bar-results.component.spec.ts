@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { FolderVO, RecordVO } from '@models/index';
-import { PublicSearchBarResultsComponent } from './public-search-bar-results.component';
 import { GetFileTypePipe } from '@shared/pipes/get-file-type.pipe';
+import { PublicSearchBarResultsComponent } from './public-search-bar-results.component';
 
 describe('PublicSearchBarResultsComponent', () => {
   let component: PublicSearchBarResultsComponent;
