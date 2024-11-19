@@ -5,6 +5,15 @@
   </div>
   <div class="content-container">
     <div>
+      <p class="get-started-text">
+        Get started by uploading your first files, or learn more about your new
+        archive by
+        <a
+          target="_blank"
+          href="https://permanent.zohodesk.com/portal/en/kb/permanent-legacy-foundation"
+          >viewing our help articles here.</a
+        >
+      </p>
       <div class="archive-info">
         <div>
           <img
@@ -20,22 +29,20 @@
         </div>
       </div>
       <hr />
-      <p class="get-started-text">
-        Get started by uploading your first files, or learn more about your new
-        archive by viewing our help articles through the ‘?’ button in the lower
-        right-hand corner.
-      </p>
     </div>
     <div class="button-container">
-      <pr-button
-        [orientation]="'right'"
-        [variant]="'secondary'"
-        [icon]="'/accept'"
-        [size]="'fill'"
-        [disabled]="isArchiveSubmitted"
-        (buttonClick)="finalizeArchive()"
-        >Done</pr-button
-      >
+      <div class="button">
+        <pr-button
+          [orientation]="'right'"
+          [variant]="'secondary'"
+          [icon]="'/accept'"
+          [size]="'fill'"
+          [disabled]="isArchiveSubmitted"
+          (buttonClick)="finalizeArchive()"
+          [style]="{ justifyContent: 'center' }"
+          >Done</pr-button
+        >
+      </div>
     </div>
   </div>
 </div>
