@@ -30,6 +30,7 @@ import {
   archiveOptions,
   ArchiveCreateEvent,
 } from '../glam/types/archive-types';
+import { OnboardingService } from '../../services/onboarding.service';
 
 type NewArchiveScreen =
   | 'goals'
@@ -94,6 +95,7 @@ export class CreateNewArchiveComponent implements OnInit {
     private dialog: DialogCdkService,
     private accountService: AccountService,
     private event: EventService,
+    private onboardingService: OnboardingService,
   ) {
     this.isGlam = localStorage.getItem('isGlam') === 'true';
     if (!this.isGlam) {
@@ -181,6 +183,7 @@ export class CreateNewArchiveComponent implements OnInit {
         } else {
           response = await this.api.archive.create(archive);
           createdArchive = response.getArchiveVO();
+          this.onboardingService.registerArchive(createdArchive);
         }
       } catch (archiveError) {
         this.error.emit('An error occurred. Please try again.');

@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { EventService } from '@shared/services/event/event.service';
+import { OnboardingService } from '../../services/onboarding.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
@@ -59,7 +60,8 @@ describe('CreateNewArchiveComponent #onboarding', () => {
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .provide(EventService)
-      .dontMock(EventService);
+      .dontMock(EventService)
+      .dontMock(OnboardingService);
   });
 
   it('should exist', async () => {
@@ -124,5 +126,18 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
     expect(submitButton.disabled).toBe(true);
     expect(skipStepButton.disabled).toBe(true);
+  });
+
+  it('should register a created archive with the onboarding service', async () => {
+    const { instance, inject } = await shallow.render();
+    instance.name = 'Unit Test';
+    instance.archiveType = 'type.archive.person';
+    await instance.onSubmit();
+    const onboardingService = inject(OnboardingService);
+    const registeredArchives = onboardingService.getFinalArchives();
+
+    expect(registeredArchives.length).toBe(1);
+    expect(registeredArchives[0].fullName).toBe('Unit Test');
+    expect(registeredArchives[0].type).toBe('type.archive.person');
   });
 });

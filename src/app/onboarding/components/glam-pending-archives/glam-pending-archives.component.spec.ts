@@ -4,6 +4,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingService } from '../../services/onboarding.service';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
 const mockAccountService = {
@@ -24,7 +25,8 @@ describe('GlamPendingArchivesComponent', () => {
         archive: {
           accept: (archive: ArchiveVO) => Promise.resolve(),
         },
-      });
+      })
+      .dontMock(OnboardingService);
   });
 
   it('should create the component', async () => {
@@ -135,5 +137,30 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     expect(instance.isSelected(1)).toBeFalse();
+  });
+
+  it('should register accepted archives with the onboardingservice', async () => {
+    const { instance, inject } = await shallow.render();
+    const archives: ArchiveVO[] = [
+      new ArchiveVO({
+        archiveId: 1,
+        fullName: 'Test Archive',
+      }),
+      new ArchiveVO({
+        archiveId: 2,
+        fullName: 'Test Archive',
+      }),
+      new ArchiveVO({
+        archiveId: 3,
+        fullName: 'Test Archive',
+      }),
+    ];
+    for (const archive of archives) {
+      await instance.selectArchive(archive);
+    }
+    instance.next();
+    const onboardingService = inject(OnboardingService);
+
+    expect(onboardingService.getFinalArchives().length).toBe(3);
   });
 });

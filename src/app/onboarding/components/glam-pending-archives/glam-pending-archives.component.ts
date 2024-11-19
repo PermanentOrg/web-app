@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { OnboardingService } from '../../services/onboarding.service';
 
 @Component({
   selector: 'pr-glam-pending-archives',
@@ -22,6 +23,7 @@ export class GlamPendingArchivesComponent {
   constructor(
     private account: AccountService,
     private api: ApiService,
+    private onboardingService: OnboardingService,
   ) {
     this.accountName = this.account.getAccount().fullName;
   }
@@ -31,6 +33,9 @@ export class GlamPendingArchivesComponent {
   }
 
   next(): void {
+    for (const archive of this.acceptedArchives) {
+      this.onboardingService.registerArchive(archive);
+    }
     this.nextOutput.emit(this.selectedArchive);
   }
 
