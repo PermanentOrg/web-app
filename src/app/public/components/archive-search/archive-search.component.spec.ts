@@ -53,7 +53,7 @@ describe('ArchiveSearchComponent', () => {
       of(new ArchiveVO({ archiveId: '123' })),
     );
     searchService.getPublicArchiveTags.and.returnValue(
-      of([{ name: 'Tag1', tagId: '1' }]),
+      of([{ name: 'Tag1', tagId: 1 }]),
     );
 
     fixture.detectChanges();
@@ -69,14 +69,14 @@ describe('ArchiveSearchComponent', () => {
 
   it('should fetch tags on initialization', () => {
     searchService.getPublicArchiveTags.and.returnValue(
-      of([{ name: 'Tag1', tagId: '1' }]),
+      of([{ name: 'Tag1', tagId: 1 }]),
     );
 
     component.ngOnInit();
     fixture.detectChanges();
 
     expect(searchService.getPublicArchiveTags).toHaveBeenCalledWith('123');
-    expect(component.tags).toEqual([{ name: 'Tag1', tagId: '1' }]);
+    expect(component.tags).toEqual([{ name: 'Tag1', tagId: 1 }]);
   });
 
   it('should emit search event on handleSearch', () => {

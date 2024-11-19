@@ -9,7 +9,7 @@
           <span class="result-name">{{ item.displayName }}</span>
         </div>
         <div class="resulty-type">
-          <span>{{ types[item.type] }}</span>
+          <span>{{ item.type | prGetFileType }}</span>
         </div>
       </div>
     }

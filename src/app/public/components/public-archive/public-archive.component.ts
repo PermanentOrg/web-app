@@ -35,13 +35,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   waiting = true;
 
-  types = {
-    'type.folder.private': 'Folder',
-    'type.folder.public': 'Folder',
-    'type.record.image': 'Image',
-    'type.record.video': 'Video',
-  };
-
   query: string = '';
 
   isViewingProfile$ = merge(
@@ -51,16 +44,16 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         if (event instanceof NavigationEnd) {
           return event.url.includes('/profile');
         }
-      })
+      }),
     ),
-    of(this.router.url.includes('/profile'))
+    of(this.router.url.includes('/profile')),
   );
   subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private publicProfile: PublicProfileService,
-    private searchService: SearchService
+    private searchService: SearchService,
   ) {}
 
   ngOnInit(): void {
@@ -81,7 +74,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
           (items) =>
             (this.description = items['description']
               ? items['description'][0].textData1
-              : '')
+              : ''),
         ),
       this.publicProfile.profileItemsDictionary$().subscribe((items) => {
         this.emails = items['email']
@@ -99,7 +92,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
         } else {
           this.showShortText = false;
         }
-      })
+      }),
     );
   }
 

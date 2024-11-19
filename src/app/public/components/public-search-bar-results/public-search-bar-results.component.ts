@@ -9,18 +9,11 @@ import { FolderVO, RecordVO, TagVOData } from '@models/index';
   styleUrl: './public-search-bar-results.component.scss',
 })
 export class PublicSearchBarResultsComponent {
-  @Input() searchResults = [];
-  @Input() tags = [];
+  @Input() searchResults: FolderVO[] | RecordVO[] = [];
+  @Input() tags: TagVOData[] = [];
 
   @Output() search = new EventEmitter<void>();
   @Output() tagClickOutput = new EventEmitter<TagVOData[]>();
-
-  public types = {
-    'type.folder.private': 'Folder',
-    'type.folder.public': 'Folder',
-    'type.record.image': 'Image',
-    'type.record.video': 'Video',
-  };
 
   constructor(
     private router: Router,

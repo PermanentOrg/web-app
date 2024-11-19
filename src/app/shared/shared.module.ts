@@ -72,6 +72,7 @@ import { GetAltTextPipe } from './pipes/get-alt-text.pipe';
 import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
 import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/zooming-image-viewer.component';
+import { GetFileTypePipe } from './pipes/get-file-type.pipe';
 
 @NgModule({
   imports: [
@@ -137,6 +138,7 @@ import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/z
     PrependProtocolPipe,
     SwitcherComponent,
     GetAltTextPipe,
+    GetFileTypePipe,
     AccessRolePipe,
     MobileBannerComponent,
     ZoomingImageViewerComponent,
@@ -187,6 +189,7 @@ import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/z
     PrependProtocolPipe,
     SwitcherComponent,
     GetAltTextPipe,
+    GetFileTypePipe,
     AccessRolePipe,
     MobileBannerComponent,
     ZoomingImageViewerComponent,

@@ -72,11 +72,11 @@ describe('PublicSearchBarResultsComponent', () => {
 
   it('should display search results when searchResults have items', () => {
     component.searchResults = [
-      {
+      new RecordVO({
         thumbURL200: 'image1.png',
         displayName: 'Image 1',
         type: 'type.record.image',
-      },
+      }),
     ];
     fixture.detectChanges();
 
