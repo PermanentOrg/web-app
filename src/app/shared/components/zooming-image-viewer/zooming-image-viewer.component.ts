@@ -10,6 +10,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { GetAccessFile } from '@models/get-access-file';
 import { RecordVO } from '@models/index';
 import * as OpenSeaDragon from 'openseadragon';
 import { ZoomEvent, FullScreenEvent } from 'openseadragon';
@@ -84,13 +85,7 @@ export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   public static chooseFullSizeImage(record: RecordVO) {
-    if (record.FileVOs.length > 1) {
-      const convertedUrl = record.FileVOs.find(
-        (file) => file.format == 'file.format.converted',
-      )?.fileURL;
-      return convertedUrl ?? record.FileVOs[0]?.fileURL;
-    }
-    return record.FileVOs[0]?.fileURL;
+    return GetAccessFile(record)?.fileURL;
   }
 
   private enablePanning(flag: boolean): void {

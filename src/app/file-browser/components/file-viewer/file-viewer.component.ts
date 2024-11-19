@@ -25,6 +25,8 @@ import type { KeysOfType } from '@shared/utilities/keysoftype';
 import { Subscription } from 'rxjs';
 import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
+import { FileFormat } from '@models/file-vo';
+import { GetAccessFile } from '@models/get-access-file';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -194,9 +196,11 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.isZoomableImage =
       this.currentRecord.type.includes('image') &&
       this.currentRecord.FileVOs?.length &&
-      ZoomingImageViewerComponent.chooseFullSizeImage(this.currentRecord);
+      typeof ZoomingImageViewerComponent.chooseFullSizeImage(
+        this.currentRecord,
+      ) !== 'undefined';
     this.isDocument = this.currentRecord.FileVOs?.some(
-      (obj: ItemVO) => obj.type.includes('pdf') || obj.type.includes('txt'),
+      (obj) => obj.type.includes('pdf') || obj.type.includes('txt'),
     );
     this.documentUrl = this.getDocumentUrl();
     this.setCurrentTags();
@@ -215,19 +219,17 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const original = find(this.currentRecord.FileVOs, {
-      format: 'file.format.original',
-    }) as any;
-    const pdf = find(this.currentRecord.FileVOs, (f) =>
-      f.type.includes('pdf'),
-    ) as any;
+    const original = this.currentRecord.FileVOs.find(
+      (file) => file.format === FileFormat.Original,
+    );
+    const access = GetAccessFile(this.currentRecord);
 
     let url;
 
     if (original?.type.includes('pdf') || original?.type.includes('txt')) {
       url = original?.fileURL;
-    } else if (pdf) {
-      url = pdf?.fileURL;
+    } else if (access) {
+      url = access?.fileURL;
     }
 
     if (!url) {

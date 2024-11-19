@@ -3,6 +3,7 @@ import { BaseVO, BaseVOData, DynamicListChild } from '@models/base-vo';
 import { DataStatus } from '@models/data-status.enum';
 import { ShareVO, sortShareVOs } from '@models/share-vo';
 import { formatDateISOString } from '@shared/utilities/dateTime';
+import { prioritizeIf } from '@root/utils/prioritize-if';
 import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
@@ -11,6 +12,7 @@ import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
+import { FileFormat, PermanentFile } from './file-vo';
 
 interface RecordVoOptions {
   dataStatus: DataStatus;
@@ -107,7 +109,7 @@ export class RecordVO
   // Other stuff
   public LocnVO: LocnVOData;
   public TimezoneVO: TimezoneVOData;
-  public FileVOs;
+  public FileVOs: PermanentFile[];
   public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs: ArchiveVO[];
@@ -154,6 +156,17 @@ export class RecordVO
     if (this.ShareVOs) {
       this.ShareVOs = this.ShareVOs.map((data) => new ShareVO(data));
     }
+  }
+
+  public getDownloadOptionsList() {
+    const files = [...(this.FileVOs ?? [])];
+    return prioritizeIf(
+      files,
+      (file) => file.format === FileFormat.Original,
+    ).map((file) => ({
+      name: file.type,
+      extension: file.type.split('.').pop(),
+    }));
   }
 }
 

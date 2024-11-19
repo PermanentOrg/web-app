@@ -1,26 +1,18 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+/* @format */
+import { Component, Input, OnChanges } from '@angular/core';
 import { RecordVO } from '@models';
-import { find } from 'lodash';
+import { GetAccessFile } from '@models/get-access-file';
 
 @Component({
   selector: 'pr-audio',
   templateUrl: './audio.component.html',
-  styleUrls: ['./audio.component.scss']
+  styleUrls: ['./audio.component.scss'],
 })
 export class AudioComponent implements OnChanges {
   @Input() item: RecordVO;
   audioSrc: string;
-  constructor() { }
 
   ngOnChanges(): void {
-    const convertedFile = find(this.item.FileVOs, {format: 'file.format.converted'}) as any;
-    const originalFile = find(this.item.FileVOs, {format: 'file.format.original'}) as any;
-
-    if (convertedFile) {
-      this.audioSrc = convertedFile.fileURL;
-    } else if (originalFile) {
-      this.audioSrc = originalFile.fileURL;
-    }
+    this.audioSrc = GetAccessFile(this.item)?.fileURL;
   }
-
 }

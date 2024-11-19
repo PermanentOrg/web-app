@@ -1,5 +1,6 @@
 /* @format */
 import { DataStatus } from './data-status.enum';
+import { FileFormat } from './file-vo';
 import { RecordVO, ShareVO } from '.';
 
 describe('RecordVO', () => {
@@ -104,5 +105,75 @@ describe('RecordVO', () => {
     record.update({ ShareVOs: [{}] });
 
     expect(record.ShareVOs[0]).toBeInstanceOf(ShareVO);
+  });
+
+  describe('Download options', () => {
+    it('returns an empty array for an empty record', () => {
+      const record = new RecordVO({});
+
+      expect(record.getDownloadOptionsList()).toEqual([]);
+    });
+
+    it('converts to download option format', () => {
+      const record = new RecordVO({});
+      record.FileVOs = [
+        {
+          format: FileFormat.Converted,
+          fileId: 0,
+          type: 'test.pdf',
+          fileURL: 'test',
+          downloadURL: 'test',
+          size: 0,
+        },
+        {
+          format: FileFormat.Converted,
+          fileId: 0,
+          type: 'test.odt',
+          fileURL: 'test',
+          downloadURL: 'test',
+          size: 0,
+        },
+      ];
+      const downloadOptions = record.getDownloadOptionsList();
+
+      expect(downloadOptions.length).toBe(2);
+      expect(downloadOptions[0].name).toBe('test.pdf');
+      expect(downloadOptions[0].extension).toBe('pdf');
+    });
+
+    it('prioritizes original before others', () => {
+      const record = new RecordVO({});
+      record.FileVOs = [
+        {
+          format: FileFormat.Converted,
+          fileId: 0,
+          type: 'test.pdf',
+          fileURL: 'test',
+          downloadURL: 'test',
+          size: 0,
+        },
+        {
+          format: FileFormat.Original,
+          fileId: 0,
+          type: 'test.docx',
+          fileURL: 'test',
+          downloadURL: 'test',
+          size: 0,
+        },
+        {
+          format: FileFormat.Converted,
+          fileId: 0,
+          type: 'test.odt',
+          fileURL: 'test',
+          downloadURL: 'test',
+          size: 0,
+        },
+      ];
+      const downloadOptions = record.getDownloadOptionsList();
+
+      expect(downloadOptions.length).toBe(3);
+      expect(downloadOptions[0].name).toBe('test.docx');
+      expect(downloadOptions[0].extension).toBe('docx');
+    });
   });
 });
