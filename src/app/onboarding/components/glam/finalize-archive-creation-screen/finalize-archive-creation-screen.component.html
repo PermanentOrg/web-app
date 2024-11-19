@@ -15,18 +15,22 @@
         >
       </p>
       <div class="archive-info">
-        <div>
-          <img
-            src="assets/svg/onboarding/default-archive.svg"
-            alt="Custom Archive Icon"
-          />
-          <p>
-            The <b>{{ name }}</b> Archive
-          </p>
-        </div>
-        <div class="square">
-          <span>OWNER</span>
-        </div>
+        @for (archive of archives; track archive.archiveId) {
+          <div class="single-archive">
+            <div>
+              <img
+                src="assets/svg/onboarding/default-archive.svg"
+                alt="Custom Archive Icon"
+              />
+              <p>
+                The <b>{{ archive.fullName }}</b> Archive
+              </p>
+            </div>
+            <div class="square">
+              <span>{{ archive.accessRole | accessRole }}</span>
+            </div>
+          </div>
+        }
       </div>
       <hr />
     </div>

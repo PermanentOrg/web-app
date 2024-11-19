@@ -130,7 +130,6 @@
 
 @if (screen === 'finalize' && isGlam) {
   <pr-finalize-archive-creation-screen
-    [name]="name ? name : pendingArchive.fullName"
     (finalizeArchiveOutput)="onSubmit()"
   ></pr-finalize-archive-creation-screen>
 }

@@ -18,6 +18,7 @@ import { Subject } from 'rxjs';
 import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-small.component';
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ComponentsModule } from '@root/app/component-library/components.module';
+import { AccessRolePipe } from '@shared/pipes/access-role.pipe';
 import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
 import { CreateNewArchiveComponent } from '../create-new-archive/create-new-archive.component';
 import { ArchiveTypeSelectComponent } from '../archive-type-select/archive-type-select.component';
@@ -36,6 +37,7 @@ import { ArchiveTypeIconComponent } from '../glam/archive-type-icon/archive-type
 import { GlamPendingArchivesComponent } from '../glam-pending-archives/glam-pending-archives.component';
 import { PendingArchiveComponent } from '../glam/pending-archive/pending-archive.component';
 import { ArchiveCreationWithShareComponent } from '../archive-creation-with-share/archive-creation-with-share.component';
+import { OnboardingService } from '../../services/onboarding.service';
 import { OnboardingComponent } from './onboarding.component';
 
 class MockAccountService {
@@ -183,6 +185,7 @@ export default {
         GlamPendingArchivesComponent,
         PendingArchiveComponent,
         ArchiveCreationWithShareComponent,
+        AccessRolePipe,
       ],
       imports: [
         CommonModule,
@@ -196,6 +199,7 @@ export default {
         { provide: ActivatedRoute, useValue: { snapshot: { data: {} } } },
         { provide: AccountService, useClass: MockAccountService },
         { provide: ApiService, useClass: MockApiService },
+        OnboardingService,
       ],
     }),
   ],
