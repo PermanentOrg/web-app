@@ -7,9 +7,9 @@ import {
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
+import { TagVO } from '@models/tag-vo';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { SearchRepo, SearchResponse } from './search.repo';
-import { TagVO } from '@models/tag-vo';
 
 describe('SearchRepo', () => {
   let repo: SearchRepo;
@@ -66,10 +66,12 @@ describe('SearchRepo', () => {
     const req = httpMock.expectOne((req) =>
       req.url.includes('/search/folderAndRecord'),
     );
+
     expect(req.request.method).toBe('GET');
     expect(req.request.urlWithParams).toContain(
       `tags[0][tagId]=1&tags[1][tagId]=2`,
     );
+
     expect(req.request.urlWithParams).toContain(
       `query=${query}&archiveId=${archiveId}&publicOnly=true&numberOfResults=${limit}`,
     );
@@ -92,6 +94,7 @@ describe('SearchRepo', () => {
     const req = httpMock.expectOne((req) =>
       req.url.includes('/search/folderAndRecord'),
     );
+
     expect(req.request.method).toBe('GET');
     expect(req.request.urlWithParams).not.toContain('tags');
     expect(req.request.urlWithParams).toContain(
@@ -115,6 +118,7 @@ describe('SearchRepo', () => {
     const req = httpMock.expectOne(
       `${environment.apiUrl}/v2/archive/${archiveId}/tags/public`,
     );
+
     expect(req.request.method).toBe('GET');
 
     req.flush(expectedTags);
@@ -133,11 +137,12 @@ describe('SearchRepo', () => {
     const req = httpMock.expectOne(
       `${environment.apiUrl}/v2/archive/${archiveId}/tags/public`,
     );
+
     expect(req.request.method).toBe('GET');
 
     req.flush(
       { message: 'Not Found' },
       { status: 404, statusText: 'Not Found' },
-    ); 
+    );
   });
 });
