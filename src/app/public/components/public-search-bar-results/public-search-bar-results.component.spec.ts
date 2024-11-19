@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { FolderVO, RecordVO } from '@models/index';
 import { PublicSearchBarResultsComponent } from './public-search-bar-results.component';
+import { GetFileTypePipe } from '@shared/pipes/get-file-type.pipe';
 
 describe('PublicSearchBarResultsComponent', () => {
   let component: PublicSearchBarResultsComponent;
@@ -11,7 +12,7 @@ describe('PublicSearchBarResultsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PublicSearchBarResultsComponent],
+      declarations: [PublicSearchBarResultsComponent, GetFileTypePipe],
       imports: [RouterTestingModule],
     }).compileComponents();
 
