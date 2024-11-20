@@ -49,9 +49,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
 
   it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', async () => {
     const { outputs, fixture } = await shallow.render();
-    const continueButton = fixture.debugElement.query(
-      By.css('.continue'),
-    );
+    const continueButton = fixture.debugElement.query(By.css('.continue'));
 
     continueButton.triggerEventHandler('buttonClick', null);
 
