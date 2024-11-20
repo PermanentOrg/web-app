@@ -40,7 +40,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
 
   it('should emit goBackOutput when the Back button is clicked', async () => {
     const { fixture, outputs } = await shallow.render();
-    const backButton = fixture.debugElement.query(By.css('.back-button'));
+    const backButton = fixture.debugElement.query(By.css('.back'));
 
     backButton.triggerEventHandler('buttonClick', null);
 
@@ -50,7 +50,7 @@ describe('CreateArchiveForMeScreenComponent', () => {
   it('should emit continueOutput with correct payload when the Yes, create archive button is clicked', async () => {
     const { outputs, fixture } = await shallow.render();
     const continueButton = fixture.debugElement.query(
-      By.css('.continue-button'),
+      By.css('.continue'),
     );
 
     continueButton.triggerEventHandler('buttonClick', null);
