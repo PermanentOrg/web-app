@@ -59,9 +59,7 @@ const mockMessageService = {
 };
 
 const mockRouter = {
-  async navigate(path: any[]) {
-    return {};
-  },
+  navigate: jasmine.createSpy('navigate'),
 };
 
 describe('OnboardingComponent #onboarding', () => {
@@ -211,5 +209,18 @@ describe('OnboardingComponent #onboarding', () => {
 
     expect(getItemSpy).toHaveBeenCalledWith('shareToken');
     expect(removeItemSpy).toHaveBeenCalledWith('shareToken');
+  });
+
+  it('should navigate to /app if shareToken is not in localStorage', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+
+    instance.setScreen(OnboardingScreen.done);
+    instance.selectedPendingArchive = null;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/app']);
   });
 });

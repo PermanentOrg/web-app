@@ -90,14 +90,11 @@ export class OnboardingComponent implements OnInit {
       this.selectedPendingArchive = null;
     }
     if (screen === OnboardingScreen.done) {
-      if (this.acceptedInvite) {
-        this.router.navigate(['/app', 'welcome-invitation']);
-      }
       if (localStorage.getItem('shareToken')) {
         localStorage.removeItem('shareToken');
         this.router.navigate(['/app', 'shares']);
       } else {
-        this.router.navigate(['/app', 'welcome']);
+        this.router.navigate(['/app']);
       }
     }
   }
