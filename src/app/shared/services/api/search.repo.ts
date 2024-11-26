@@ -70,14 +70,23 @@ export class SearchRepo extends BaseRepo {
   ) {
     const endpoint = '/search/folderAndRecord';
 
-    const tagsQuery = tags
-      .map((tag, index) => `tags[${index}][tagId]=${tag.tagId}`)
-      .join('&');
+    const tagsDict = tags.reduce((obj, tag, index) => {
+      obj[`tags[${index}][tagId]`] = tag.tagId;
+      return obj;
+    }, {});
+
+    console.log(tagsDict);
+
+    let tagsQuery = '';
+
+    Object.keys(tagsDict).forEach((key) => {
+      tagsQuery += `&${key}=${tagsDict[key]}`;
+    });
 
     const queryString =
       `query=${query}&archiveId=${archiveId}&publicOnly=true` +
       (limit ? `&numberOfResults=${limit}` : '') +
-      (tagsQuery ? `&${tagsQuery}` : '');
+      (tagsQuery ? `${tagsQuery}` : '');
 
     return getFirst(
       this.httpV2.get<SearchResponse>(`${endpoint}?${queryString}`, {}, null, {
