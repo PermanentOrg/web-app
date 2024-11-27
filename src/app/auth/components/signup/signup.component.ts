@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -23,6 +23,7 @@ import {
 } from '@models';
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { passwordStrength } from 'check-password-strength';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
@@ -32,7 +33,7 @@ const NEW_ONBOARDING_CHANCE = 1;
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
@@ -48,6 +49,9 @@ export class SignupComponent {
   shareItemIsRecord = false;
   agreedTerms = false;
   receiveUpdatesViaEmail = false;
+
+  passwordStrengthMessage: string = '';
+  passwordStrengthClass: string = '';
 
   constructor(
     fb: UntypedFormBuilder,
@@ -110,12 +114,53 @@ export class SignupComponent {
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
     });
-
     const confirmPasswordControl = new UntypedFormControl('', [
       Validators.required,
       matchControlValidator(this.signupForm.controls['password']),
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
+  }
+
+  ngOnInit(): void {
+    this.signupForm.controls['password'].valueChanges.subscribe((password) => {
+      this.updatePasswordStrength(password);
+    });
+  }
+
+  updatePasswordStrength(password: string): void {
+    const strength = passwordStrength(password);
+    this.passwordStrengthMessage = this.getStrengthMessage(strength.id);
+    this.passwordStrengthClass = this.getStrengthClass(strength.id);
+  }
+
+  getStrengthMessage(strengthId: number): string {
+    switch (strengthId) {
+      case 0:
+        return 'Too Weak';
+      case 1:
+        return 'Weak';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Strong';
+      default:
+        return '';
+    }
+  }
+
+  getStrengthClass(strengthId: number): string {
+    switch (strengthId) {
+      case 0:
+        return 'strength-too-weak';
+      case 1:
+        return 'strength-weak';
+      case 2:
+        return 'strength-medium';
+      case 3:
+        return 'strength-strong';
+      default:
+        return '';
+    }
   }
 
   shouldCreateDefaultArchive() {
