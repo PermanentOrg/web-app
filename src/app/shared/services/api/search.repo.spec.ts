@@ -69,7 +69,7 @@ describe('SearchRepo', () => {
 
     expect(req.request.method).toBe('GET');
     expect(req.request.urlWithParams).toContain(
-      `tags[0][tagId]=1&tags[1][tagId]=2`,
+      `tags%5B0%5D%5BtagId%5D=1&tags%5B1%5D%5BtagId%5D=2`,
     );
 
     expect(req.request.urlWithParams).toContain(
