@@ -61,6 +61,11 @@
         spellcheck: 'off'
       }"
     ></pr-form-input-glam>
+    <div *ngIf="passwordStrengthMessage" class="password-strength-meter">
+      <span [class]="passwordStrengthClass"
+        >Your password is {{ passwordStrengthMessage }}</span
+      >
+    </div>
   </div>
   <div class="input-container confirm-password-input">
     <pr-form-input-glam
@@ -112,7 +117,12 @@
       [icon]="'/auth/sign-up'"
       [orientation]="'right'"
       [style]="{ justifyContent: 'center' }"
-      [disabled]="waiting || signupForm.invalid || !agreedTerms"
+      [disabled]="
+        waiting ||
+        signupForm.invalid ||
+        !agreedTerms ||
+        passwordStrengthMessage !== 'Strong'
+      "
       >Sign Up</pr-button
     >
     <pr-or-divider></pr-or-divider>
