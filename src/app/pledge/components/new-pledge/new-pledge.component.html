@@ -1,5 +1,10 @@
 <!-- @format -->
 <form (submit)="submitPledge(pledgeForm.value)" [formGroup]="pledgeForm">
+  <pr-loading-spinner
+    [isFullScreen]="true"
+    *ngIf="waiting"
+  ></pr-loading-spinner>
+
   <div class="input-group-vertical">
     <div class="input-vertical pledge-buttons">
       <div
@@ -85,4 +90,8 @@
     }}
     GB
   </button>
+  <p class="success-message" *ngIf="isSuccessful">
+    Success! {{ amountInGb }} GB of Permanent storage has been added to your
+    account.
+  </p>
 </form>
