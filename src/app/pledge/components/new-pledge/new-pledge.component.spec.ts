@@ -208,6 +208,8 @@ describe('NewPledgeComponent', () => {
 
     const displayedMessage = find('.success-message');
 
-    expect(displayedMessage.nativeElement.textContent).toContain('Success! 5 GB of Permanent storage has been added to your account.');
+    expect(displayedMessage.nativeElement.textContent).toContain(
+      'Success! 5 GB of Permanent storage has been added to your account.',
+    );
   });
 });
