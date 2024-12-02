@@ -189,4 +189,25 @@ describe('NewPledgeComponent', () => {
 
     expect(instance.donationSelection).toBe('custom');
   });
+
+  it('should display the loading spinner', async () => {
+    const { find, instance } = await shallow.render();
+
+    instance.waiting = true;
+
+    expect(find('pr-loading-spinner')).toBeTruthy();
+  });
+
+  it('should display the correct amount of storage if the transaction is succesful', async () => {
+    const { find, instance, fixture } = await shallow.render();
+
+    instance.isSuccessful = true;
+    instance.amountInGb = 5;
+
+    fixture.detectChanges();
+
+    const displayedMessage = find('.success-message');
+
+    expect(displayedMessage.nativeElement.textContent).toContain('Success! 5 GB of Permanent storage has been added to your account.');
+  });
 });
