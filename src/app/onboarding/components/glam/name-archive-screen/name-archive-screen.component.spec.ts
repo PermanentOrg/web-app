@@ -2,6 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { OnboardingModule } from '../../../onboarding.module';
 import { NameArchiveScreenComponent } from './name-archive-screen.component';
 
@@ -9,9 +10,10 @@ describe('NameArchiveScreenComponent', () => {
   let shallow: Shallow<NameArchiveScreenComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(NameArchiveScreenComponent, OnboardingModule).import(
-      ReactiveFormsModule,
-    );
+    shallow = new Shallow(NameArchiveScreenComponent, OnboardingModule)
+      .import(ReactiveFormsModule)
+      .provide(OnboardingService)
+      .dontMock(OnboardingService);
   });
 
   it('should create', async () => {

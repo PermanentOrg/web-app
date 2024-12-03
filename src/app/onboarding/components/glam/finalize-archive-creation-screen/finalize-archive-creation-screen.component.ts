@@ -1,5 +1,5 @@
 /* @format */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 

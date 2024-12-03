@@ -1,6 +1,8 @@
 /* @format */
 import { Component, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
+import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
+import { ArchiveVO } from '@models/index';
 import { ArchiveCreateEvent } from '../types/archive-types';
 
 @Component({
@@ -15,7 +17,10 @@ export class CreateArchiveForMeScreenComponent {
   @Output() goBackOutput = new EventEmitter<string>();
   @Output() continueOutput = new EventEmitter<ArchiveCreateEvent>();
 
-  constructor(private account: AccountService) {
+  constructor(
+    private account: AccountService,
+    private onboardingService: OnboardingService,
+  ) {
     this.name = this.account.getAccount().fullName;
   }
 
@@ -24,6 +29,9 @@ export class CreateArchiveForMeScreenComponent {
   }
 
   public continue(): void {
+    this.onboardingService.registerArchive(
+      new ArchiveVO({ fullName: this.name, accessRole: 'access.role.owner' }),
+    );
     this.continueOutput.emit({
       screen: 'goals',
       type: this.TYPE,

@@ -127,17 +127,4 @@ describe('CreateNewArchiveComponent #onboarding', () => {
     expect(submitButton.disabled).toBe(true);
     expect(skipStepButton.disabled).toBe(true);
   });
-
-  it('should register a created archive with the onboarding service', async () => {
-    const { instance, inject } = await shallow.render();
-    instance.name = 'Unit Test';
-    instance.archiveType = 'type.archive.person';
-    await instance.onSubmit();
-    const onboardingService = inject(OnboardingService);
-    const registeredArchives = onboardingService.getFinalArchives();
-
-    expect(registeredArchives.length).toBe(1);
-    expect(registeredArchives[0].fullName).toBe('Unit Test');
-    expect(registeredArchives[0].type).toBe('type.archive.person');
-  });
 });

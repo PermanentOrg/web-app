@@ -183,7 +183,6 @@ export class CreateNewArchiveComponent implements OnInit {
         } else {
           response = await this.api.archive.create(archive);
           createdArchive = response.getArchiveVO();
-          this.onboardingService.registerArchive(createdArchive);
         }
       } catch (archiveError) {
         this.error.emit('An error occurred. Please try again.');
