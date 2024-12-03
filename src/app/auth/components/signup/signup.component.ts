@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -24,16 +24,19 @@ import {
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { passwordStrength } from 'check-password-strength';
+import { Subscription } from 'rxjs';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
+
+type PasswordType = '' | 'Too Weak' | 'Weak' | 'Medium' | 'Strong';
 
 @Component({
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
   @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
@@ -50,8 +53,10 @@ export class SignupComponent implements OnInit {
   agreedTerms = false;
   receiveUpdatesViaEmail = false;
 
-  passwordStrengthMessage: string = '';
+  passwordStrengthMessage: PasswordType = '';
   passwordStrengthClass: string = '';
+
+  private passwordSubscription: Subscription;
 
   constructor(
     fb: UntypedFormBuilder,
@@ -122,9 +127,17 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signupForm.controls['password'].valueChanges.subscribe((password) => {
+    this.passwordSubscription = this.signupForm.controls[
+      'password'
+    ].valueChanges.subscribe((password) => {
       this.updatePasswordStrength(password);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.passwordSubscription) {
+      this.passwordSubscription.unsubscribe();
+    }
   }
 
   updatePasswordStrength(password: string): void {
@@ -133,7 +146,7 @@ export class SignupComponent implements OnInit {
     this.passwordStrengthClass = this.getStrengthClass(strength.id);
   }
 
-  getStrengthMessage(strengthId: number): string {
+  getStrengthMessage(strengthId: number): PasswordType {
     switch (strengthId) {
       case 0:
         return 'Too Weak';
