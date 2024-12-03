@@ -25,20 +25,29 @@
       </div>
     </div>
     <div class="buttons">
-      <pr-button
-        [icon]="'/onboarding/back'"
-        (buttonClick)="goBack()"
-        class="back-button"
-        >Back</pr-button
-      >
-      <pr-button
-        [icon]="'/onboarding/arrow-right'"
-        [variant]="'secondary'"
-        [orientation]="'right'"
-        (buttonClick)="continue()"
-        class="continue-button"
-        >Yes, create archive</pr-button
-      >
+      <div class="back-button">
+        <pr-button
+          [icon]="'/onboarding/back'"
+          (buttonClick)="goBack()"
+          [size]="'fill'"
+          [style]="{ justifyContent: 'center' }"
+          class="back"
+          >Back</pr-button
+        >
+      </div>
+      <div class="continue-button">
+        <pr-button
+          [icon]="'/onboarding/arrow-right'"
+          [variant]="'secondary'"
+          [orientation]="'right'"
+          (buttonClick)="continue()"
+          class="continue-button"
+          [size]="'fill'"
+          [style]="{ justifyContent: 'center' }"
+          class="continue"
+          >Yes, create archive</pr-button
+        >
+      </div>
     </div>
   </div>
 </div>

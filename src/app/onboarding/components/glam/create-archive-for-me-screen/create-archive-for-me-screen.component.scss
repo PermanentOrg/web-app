@@ -15,9 +15,10 @@ p {
   }
 
   & > .title {
-    width: 50%;
+    width: 82%;
     font-size: 56px;
-    font-family: 'UsualRegular', sans-serif;
+    font-family: 'UsualLight', sans-serif;
+    line-height: 72px;
 
     @media screen and (max-width: 1440px) {
       width: 100%;
@@ -44,7 +45,6 @@ p {
     flex-direction: column;
     justify-content: space-between;
     height: 60vh;
-    width: 100%;
 
     @media screen and (max-width: 1000px) {
       gap: 50px;
@@ -73,4 +73,9 @@ p {
       margin-bottom: 8px;
     }
   }
+}
+
+.back-button,
+.continue-button {
+  width: 100%;
 }
