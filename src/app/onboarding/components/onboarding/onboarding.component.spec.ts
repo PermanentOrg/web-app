@@ -211,16 +211,17 @@ describe('OnboardingComponent #onboarding', () => {
     expect(removeItemSpy).toHaveBeenCalledWith('shareToken');
   });
 
-  it('should navigate to /app if shareToken is not in localStorage', async () => {
+  it('should navigate to /app/welcome if shareToken is not in localStorage and isGlam is false', async () => {
     const { instance, fixture } = await shallow.render();
 
     spyOn(localStorage, 'getItem').and.returnValue(null);
-
+    instance.isGlam = false;
+    instance.acceptedInvite = false;
     instance.setScreen(OnboardingScreen.done);
     instance.selectedPendingArchive = null;
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/app']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/app', 'welcome']);
   });
 });
