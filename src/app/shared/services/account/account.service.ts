@@ -210,7 +210,7 @@ export class AccountService {
           const account = this.getStorage('account');
           newAccount.keepLoggedIn = account?.keepLoggedIn;
           this.account.update(newAccount);
-          this.archive.update(newArchive);
+          this.archive?.update(newArchive);
           this.setStorage(newAccount.keepLoggedIn, ARCHIVE_KEY, this.archive);
         } else {
           throw loggedIn;

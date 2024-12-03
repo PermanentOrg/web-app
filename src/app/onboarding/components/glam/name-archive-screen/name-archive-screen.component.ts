@@ -1,25 +1,33 @@
 /* @format */
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { AccessRole } from '@models/access-role';
 import { ArchiveVO } from '@models/index';
 import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pr-name-archive-screen',
   templateUrl: './name-archive-screen.component.html',
   styleUrl: './name-archive-screen.component.scss',
 })
-export class NameArchiveScreenComponent implements OnInit {
+export class NameArchiveScreenComponent implements OnInit, OnDestroy {
   public nameForm: UntypedFormGroup;
 
   @Input() name = '';
   @Output() backToCreateEmitter = new EventEmitter<string>();
   @Output() archiveCreatedEmitter = new EventEmitter<string>();
+  private nameSubscription: Subscription;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -31,7 +39,23 @@ export class NameArchiveScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const storageName = sessionStorage.getItem('archiveName');
+    if (storageName) {
+      this.name = storageName;
+    }
     this.nameForm.patchValue({ archiveName: this.name });
+
+    this.nameSubscription = this.nameForm
+      .get('archiveName')
+      .valueChanges.subscribe((value) => {
+        sessionStorage.setItem('archiveName', value);
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.nameSubscription) {
+      this.nameSubscription.unsubscribe();
+    }
   }
 
   public backToCreate(): void {
