@@ -224,4 +224,35 @@ describe('OnboardingComponent #onboarding', () => {
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/app', 'welcome']);
   });
+
+  it('should navigate to /app if shareToken is not in localStorage and isGlam is true', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+    instance.isGlam = true;
+    instance.acceptedInvite = false;
+    instance.setScreen(OnboardingScreen.done);
+    instance.selectedPendingArchive = null;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/app']);
+  });
+
+  it('should navigate to /app/welcome-invite if shareToken is not in localStorage and isGlam is true', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+    instance.isGlam = false;
+    instance.acceptedInvite = true;
+    instance.setScreen(OnboardingScreen.done);
+    instance.selectedPendingArchive = null;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith([
+      '/app',
+      'welcome-invitation',
+    ]);
+  });
 });
