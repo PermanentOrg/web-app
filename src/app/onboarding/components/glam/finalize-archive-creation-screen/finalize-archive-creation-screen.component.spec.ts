@@ -20,7 +20,7 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
   });
 
   it('should display the archive name correctly', async () => {
-    const name = 'Test Archive';
+    const name = 'John Doe';
     const { fixture, find } = await shallow.render({ bind: { name } });
     const archiveNameElement = find('.archive-info p');
 

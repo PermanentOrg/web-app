@@ -7,10 +7,28 @@ import { NameArchiveScreenComponent } from './name-archive-screen.component';
 
 describe('NameArchiveScreenComponent', () => {
   let shallow: Shallow<NameArchiveScreenComponent>;
+  const mockSessionStorage: { [key: string]: string } = {};
 
   beforeEach(async () => {
     shallow = new Shallow(NameArchiveScreenComponent, OnboardingModule).import(
       ReactiveFormsModule,
+    );
+
+    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+      return mockSessionStorage[key] || null;
+    });
+    spyOn(sessionStorage, 'setItem').and.callFake(
+      (key: string, value: string) => {
+        mockSessionStorage[key] = value;
+      },
+    );
+    spyOn(sessionStorage, 'removeItem').and.callFake((key: string) => {
+      delete mockSessionStorage[key];
+    });
+
+    // Clear the mock session storage before each test
+    Object.keys(mockSessionStorage).forEach(
+      (key) => delete mockSessionStorage[key],
     );
   });
 
@@ -31,7 +49,6 @@ describe('NameArchiveScreenComponent', () => {
     const { instance } = await shallow.render({
       bind: { name: 'Test Archive' },
     });
-    instance.ngOnInit();
 
     expect(instance.nameForm.controls['archiveName'].value).toBe(
       'Test Archive',
@@ -102,5 +119,24 @@ describe('NameArchiveScreenComponent', () => {
     createButton.triggerEventHandler('buttonClick', null);
 
     expect(instance.createArchive).toHaveBeenCalled();
+  });
+
+  it('should initialize archiveName from sessionStorage if available', async () => {
+    mockSessionStorage['archiveName'] = 'Stored Archive Name';
+    const { instance } = await shallow.render();
+
+    expect(instance.nameForm.controls['archiveName'].value).toBe(
+      'Stored Archive Name',
+    );
+  });
+
+  it('should update sessionStorage when archiveName value changes', async () => {
+    const { instance } = await shallow.render();
+    instance.nameForm.controls['archiveName'].setValue('Updated Archive Name');
+
+    expect(sessionStorage.setItem).toHaveBeenCalledWith(
+      'archiveName',
+      'Updated Archive Name',
+    );
   });
 });

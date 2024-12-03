@@ -24,6 +24,8 @@ export class CreateArchiveForMeScreenComponent {
   }
 
   public continue(): void {
+    sessionStorage.setItem('archiveName', this.name);
+    sessionStorage.setItem('archiveType', this.TYPE);
     this.continueOutput.emit({
       screen: 'goals',
       type: this.TYPE,
