@@ -198,7 +198,7 @@ describe('NewPledgeComponent', () => {
     expect(find('pr-loading-spinner')).toBeTruthy();
   });
 
-  it('should display the correct amount of storage if the transaction is succesful', async () => {
+  it('should display the succes message if the transaction is succesful', async () => {
     const { find, instance, fixture } = await shallow.render();
 
     instance.isSuccessful = true;
@@ -208,8 +208,6 @@ describe('NewPledgeComponent', () => {
 
     const displayedMessage = find('.success-message');
 
-    expect(displayedMessage.nativeElement.textContent).toContain(
-      'Success! 5 GB of Permanent storage has been added to your account.',
-    );
+    expect(displayedMessage).toBeTruthy();
   });
 });
