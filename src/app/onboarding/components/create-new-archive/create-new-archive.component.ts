@@ -101,6 +101,13 @@ export class CreateNewArchiveComponent implements OnInit {
     if (!this.isGlam) {
       this.screen = 'create';
     }
+
+    const screen = sessionStorage.getItem('onboardingScreen');
+    if (screen) {
+      this.screen = screen as NewArchiveScreen;
+    } else {
+      sessionStorage.setItem('onboardingScreen', this.screen);
+    }
   }
 
   ngOnInit(): void {
@@ -119,6 +126,26 @@ export class CreateNewArchiveComponent implements OnInit {
       entity: 'account',
       action: 'start_onboarding',
     });
+
+    const storageGoals = sessionStorage.getItem('goals');
+    if (storageGoals) {
+      this.selectedGoals = JSON.parse(storageGoals);
+    }
+
+    const storageReasons = sessionStorage.getItem('reasons');
+    if (storageReasons) {
+      this.selectedReasons = JSON.parse(storageReasons);
+    }
+
+    const storageName = sessionStorage.getItem('archiveName');
+    if (storageName) {
+      this.name = storageName;
+    }
+
+    const storageType = sessionStorage.getItem('archiveType');
+    if (storageType) {
+      this.archiveType = storageType;
+    }
   }
 
   public onBackPress(): void {
@@ -132,6 +159,7 @@ export class CreateNewArchiveComponent implements OnInit {
       this.screen = 'goals';
       this.progress.emit(1);
     }
+    sessionStorage.setItem('onboardingScreen', this.screen);
   }
 
   public setScreen(screen: NewArchiveScreen): void {
@@ -147,6 +175,7 @@ export class CreateNewArchiveComponent implements OnInit {
       action: action,
     });
     this.screen = screen;
+    sessionStorage.setItem('onboardingScreen', screen);
     if (screen === 'reasons') {
       this.progress.emit(2);
       this.chartPathClicked.emit();
@@ -250,10 +279,12 @@ export class CreateNewArchiveComponent implements OnInit {
     if (this.screen === 'goals') {
       this.screen = 'reasons';
       this.progress.emit(2);
+      sessionStorage.setItem('onboardingScreen', this.screen);
       this.selectedGoals = [];
     } else if (this.screen === 'reasons') {
       this.selectedReasons = [];
       this.onSubmit();
+      sessionStorage.removeItem('onboardingScreen');
     }
   }
 
@@ -264,8 +295,9 @@ export class CreateNewArchiveComponent implements OnInit {
   private setName(archiveTypeTag: OnboardingTypes): void {
     switch (archiveTypeTag) {
       case OnboardingTypes.unsure:
-        const name = this.accountService.getAccount().fullName;
+        const name = this.accountService.getAccount()?.fullName;
         this.name = name;
+        sessionStorage.setItem('archiveName', name);
         break;
       default:
         this.name = '';
@@ -284,8 +316,10 @@ export class CreateNewArchiveComponent implements OnInit {
   public handleCreationScreenEvents(event: Record<string, string>): void {
     this.archiveTypeTag = event.tag as OnboardingTypes;
     this.archiveType = event.type;
+    sessionStorage.setItem('archiveType', this.archiveType);
+    sessionStorage.setItem('archiveTypeTag', this.archiveTypeTag);
     this.headerText = event.headerText;
-    this.screen = event.screen as NewArchiveScreen;
+    this.setScreen(event.screen as NewArchiveScreen);
   }
 
   public onValueChange(value: {
@@ -300,6 +334,7 @@ export class CreateNewArchiveComponent implements OnInit {
 
   public navigateToGoals(event: string) {
     this.name = event;
+    sessionStorage.setItem('archiveName', this.name);
     this.setScreen('goals');
   }
 
@@ -318,5 +353,13 @@ export class CreateNewArchiveComponent implements OnInit {
   public handleReasonsEmit(event): void {
     this.selectedReasons = event.reasons;
     this.setScreen(event.screen as NewArchiveScreen);
+  }
+
+  private clearSessionStorage(): void {
+    sessionStorage.removeItem('goals');
+    sessionStorage.removeItem('reasons');
+    sessionStorage.removeItem('archiveName');
+    sessionStorage.removeItem('archiveType');
+    sessionStorage.removeItem('archiveTypeTag');
   }
 }

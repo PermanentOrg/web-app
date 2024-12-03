@@ -1,5 +1,5 @@
 /* @format */
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { reasons } from '../../../shared/onboarding-screen';
 
 interface ReasonsEmit {
@@ -12,7 +12,7 @@ interface ReasonsEmit {
   templateUrl: './glam-reasons-screen.component.html',
   styleUrl: './glam-reasons-screen.component.scss',
 })
-export class GlamReasonsScreenComponent {
+export class GlamReasonsScreenComponent implements OnInit {
   public reasons = [];
   @Input() selectedReasons = [];
   @Output() backToGoalsOutput = new EventEmitter<ReasonsEmit>();
@@ -20,6 +20,13 @@ export class GlamReasonsScreenComponent {
 
   constructor() {
     this.reasons = reasons;
+  }
+
+  ngOnInit(): void {
+    const storageReasons = sessionStorage.getItem('reasons');
+    if (storageReasons) {
+      this.selectedReasons = JSON.parse(storageReasons);
+    }
   }
 
   backToGoals() {
@@ -39,5 +46,6 @@ export class GlamReasonsScreenComponent {
     } else {
       this.selectedReasons.push(reason);
     }
+    sessionStorage.setItem('reasons', JSON.stringify(this.selectedReasons));
   }
 }

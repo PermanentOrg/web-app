@@ -9,6 +9,17 @@ describe('GlamReasonsScreenComponent', () => {
 
   beforeEach(async () => {
     shallow = new Shallow(GlamReasonsScreenComponent, OnboardingModule);
+
+    spyOn(sessionStorage, 'getItem').and.callFake((key) => {
+      const store = {
+        reasons: JSON.stringify(['Mock Reason']),
+      };
+      return store[key] || null;
+    });
+
+    spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {
+      console.log(`Mock setItem called with key: ${key}, value: ${value}`);
+    });
   });
 
   it('should create', async () => {
@@ -21,6 +32,25 @@ describe('GlamReasonsScreenComponent', () => {
     const { instance } = await shallow.render();
 
     expect(instance.reasons).toEqual(reasons);
+  });
+
+  it('should initialize selectedReasons from sessionStorage', async () => {
+    const { instance } = await shallow.render();
+
+    expect(sessionStorage.getItem).toHaveBeenCalledWith('reasons');
+    expect(instance.selectedReasons).toEqual(['Mock Reason']);
+  });
+
+  it('should update sessionStorage when addReason is called', async () => {
+    const { instance } = await shallow.render();
+    const reason = 'Test Reason';
+
+    instance.addReason(reason);
+
+    expect(sessionStorage.setItem).toHaveBeenCalledWith(
+      'reasons',
+      JSON.stringify(['Mock Reason', 'Test Reason']),
+    );
   });
 
   it('should add reason to selectedReasons when addReason is called', async () => {
@@ -48,7 +78,7 @@ describe('GlamReasonsScreenComponent', () => {
 
     expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
       screen: 'finalize',
-      reasons: [reason],
+      reasons: ['Mock Reason', reason],
     });
   });
 
@@ -60,7 +90,7 @@ describe('GlamReasonsScreenComponent', () => {
 
     expect(outputs.reasonsEmit.emit).toHaveBeenCalledWith({
       screen: 'goals',
-      reasons: [reason],
+      reasons: ['Mock Reason', reason],
     });
   });
 });
