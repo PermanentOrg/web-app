@@ -98,19 +98,24 @@ export class RecordRepo extends BaseRepo {
     ]);
   }
 
-  public registerRecord(recordVO: RecordVO, s3url: string): Promise<RecordVO> {
-    return firstValueFrom(
-      this.httpV2.post(
-        '/record/registerRecord',
-        {
-          displayName: recordVO.displayName,
-          parentFolderId: recordVO.parentFolderId,
-          uploadFileName: recordVO.uploadFileName,
-          size: recordVO.size,
-          s3url,
-        },
-        RecordVO,
-      ),
+  public async registerRecord(
+    recordVO: RecordVO,
+    s3url: string,
+  ): Promise<RecordVO> {
+    return (
+      await firstValueFrom(
+        this.httpV2.post(
+          '/record/registerRecord',
+          {
+            displayName: recordVO.displayName,
+            parentFolderId: recordVO.parentFolderId,
+            uploadFileName: recordVO.uploadFileName,
+            size: recordVO.size,
+            s3url,
+          },
+          RecordVO,
+        ),
+      )
     )[0];
   }
 
