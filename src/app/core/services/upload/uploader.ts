@@ -40,22 +40,21 @@ export class Uploader {
   };
 
   private registerRecord = async (item: UploadItem, destinationUrl: string) => {
-    const registerResponse = await this.api.record.registerRecord(
-      item.RecordVO,
-      destinationUrl,
-    );
-    if (registerResponse.isSuccessful !== true) {
-      throw registerResponse;
+    try {
+      const record = await this.api.record.registerRecord(
+        item.RecordVO,
+        destinationUrl,
+      );
+
+      this.event.dispatch({
+        action: 'submit',
+        entity: 'record',
+        record,
+      });
+      return record;
+    } catch (response) {
+      throw response;
     }
-
-    const record = registerResponse.Results[0].data[0].RecordVO;
-
-    this.event.dispatch({
-      action: 'submit',
-      entity: 'record',
-      record,
-    });
-    return registerResponse;
   };
 
   private upload = async (
