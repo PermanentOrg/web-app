@@ -17,8 +17,10 @@ const mockAccountService = {
 
 describe('GlamPendingArchivesComponent', () => {
   let shallow: Shallow<GlamPendingArchivesComponent>;
+  let onboardingService: OnboardingService;
 
   beforeEach(async () => {
+    onboardingService = new OnboardingService();
     shallow = new Shallow(GlamPendingArchivesComponent, OnboardingModule)
       .mock(AccountService, mockAccountService)
       .mock(ApiService, {
@@ -26,6 +28,7 @@ describe('GlamPendingArchivesComponent', () => {
           accept: (archive: ArchiveVO) => Promise.resolve(),
         },
       })
+      .provide({ provide: OnboardingService, useValue: onboardingService })
       .dontMock(OnboardingService);
   });
 
@@ -162,5 +165,20 @@ describe('GlamPendingArchivesComponent', () => {
     const onboardingService = inject(OnboardingService);
 
     expect(onboardingService.getFinalArchives().length).toBe(3);
+  });
+
+  it('fetches previously accepted archives from onboarding service', async () => {
+    const archive = new ArchiveVO({ archiveId: 1, fullName: 'Archive 1' });
+    onboardingService.registerArchive(archive);
+
+    const { instance } = await shallow.render({
+      bind: {
+        pendingArchives: [archive],
+      },
+    });
+
+    expect(instance.acceptedArchives.length).toBe(1);
+    expect(instance.acceptedArchives[0].archiveId).toBe(archive.archiveId);
+    expect(instance.selectedArchive).not.toBeNull();
   });
 });

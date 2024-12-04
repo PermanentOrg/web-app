@@ -25,6 +25,8 @@ export class GlamPendingArchivesComponent {
     private api: ApiService,
     private onboardingService: OnboardingService,
   ) {
+    this.acceptedArchives = [...this.onboardingService.getFinalArchives()];
+    this.selectedArchive = this.acceptedArchives[0] ?? null;
     this.accountName = this.account.getAccount().fullName;
   }
 
@@ -33,9 +35,6 @@ export class GlamPendingArchivesComponent {
   }
 
   next(): void {
-    for (const archive of this.acceptedArchives) {
-      this.onboardingService.registerArchive(archive);
-    }
     this.nextOutput.emit(this.selectedArchive);
   }
 
@@ -43,6 +42,7 @@ export class GlamPendingArchivesComponent {
     try {
       await this.api.archive.accept(archive);
       this.acceptedArchives.push(archive);
+      this.onboardingService.registerArchive(archive);
       if (!this.selectedArchive) {
         this.selectedArchive = archive;
       }
