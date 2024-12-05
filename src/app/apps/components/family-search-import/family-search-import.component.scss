@@ -5,6 +5,11 @@
   padding: 1em;
 }
 
+.family-member-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
 .family-member {
   display: flex;
   height: 50px;
