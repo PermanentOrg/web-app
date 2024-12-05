@@ -8,6 +8,7 @@ import {
 
 import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
+import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
 const MIN_WHITELIST: (keyof RecordVO)[] = [
@@ -97,17 +98,25 @@ export class RecordRepo extends BaseRepo {
     ]);
   }
 
-  public registerRecord(
+  public async registerRecord(
     recordVO: RecordVO,
     s3url: string,
-  ): Promise<RecordResponse> {
-    return this.http.sendRequestPromise('/record/registerRecord', {
-      RecordVO: recordVO,
-      SimpleVO: {
-        key: 's3url',
-        value: s3url,
-      },
-    });
+  ): Promise<RecordVO> {
+    return (
+      await firstValueFrom(
+        this.httpV2.post(
+          '/record/registerRecord',
+          {
+            displayName: recordVO.displayName,
+            parentFolderId: recordVO.parentFolderId,
+            uploadFileName: recordVO.uploadFileName,
+            size: recordVO.size,
+            s3url,
+          },
+          RecordVO,
+        ),
+      )
+    )[0];
   }
 
   public getMultipartUploadURLs(
