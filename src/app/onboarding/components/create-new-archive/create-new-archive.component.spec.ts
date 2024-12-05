@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { EventService } from '@shared/services/event/event.service';
+import { OnboardingService } from '../../services/onboarding.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
 let calledCreate: boolean = false;
@@ -59,7 +60,8 @@ describe('CreateNewArchiveComponent #onboarding', () => {
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .provide(EventService)
-      .dontMock(EventService);
+      .dontMock(EventService)
+      .dontMock(OnboardingService);
   });
 
   it('should exist', async () => {

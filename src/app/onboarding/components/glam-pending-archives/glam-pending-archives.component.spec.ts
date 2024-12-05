@@ -4,6 +4,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ArchiveVO } from '@models/index';
 import { ApiService } from '@shared/services/api/api.service';
 import { OnboardingModule } from '../../onboarding.module';
+import { OnboardingService } from '../../services/onboarding.service';
 import { GlamPendingArchivesComponent } from './glam-pending-archives.component';
 
 const mockAccountService = {
@@ -16,15 +17,19 @@ const mockAccountService = {
 
 describe('GlamPendingArchivesComponent', () => {
   let shallow: Shallow<GlamPendingArchivesComponent>;
+  let onboardingService: OnboardingService;
 
   beforeEach(async () => {
+    onboardingService = new OnboardingService();
     shallow = new Shallow(GlamPendingArchivesComponent, OnboardingModule)
       .mock(AccountService, mockAccountService)
       .mock(ApiService, {
         archive: {
           accept: (archive: ArchiveVO) => Promise.resolve(),
         },
-      });
+      })
+      .provide({ provide: OnboardingService, useValue: onboardingService })
+      .dontMock(OnboardingService);
   });
 
   it('should create the component', async () => {
@@ -135,5 +140,45 @@ describe('GlamPendingArchivesComponent', () => {
     });
 
     expect(instance.isSelected(1)).toBeFalse();
+  });
+
+  it('should register accepted archives with the onboardingservice', async () => {
+    const { instance, inject } = await shallow.render();
+    const archives: ArchiveVO[] = [
+      new ArchiveVO({
+        archiveId: 1,
+        fullName: 'Test Archive',
+      }),
+      new ArchiveVO({
+        archiveId: 2,
+        fullName: 'Test Archive',
+      }),
+      new ArchiveVO({
+        archiveId: 3,
+        fullName: 'Test Archive',
+      }),
+    ];
+    for (const archive of archives) {
+      await instance.selectArchive(archive);
+    }
+    instance.next();
+    const onboardingService = inject(OnboardingService);
+
+    expect(onboardingService.getFinalArchives().length).toBe(3);
+  });
+
+  it('fetches previously accepted archives from onboarding service', async () => {
+    const archive = new ArchiveVO({ archiveId: 1, fullName: 'Archive 1' });
+    onboardingService.registerArchive(archive);
+
+    const { instance } = await shallow.render({
+      bind: {
+        pendingArchives: [archive],
+      },
+    });
+
+    expect(instance.acceptedArchives.length).toBe(1);
+    expect(instance.acceptedArchives[0].archiveId).toBe(archive.archiveId);
+    expect(instance.selectedArchive).not.toBeNull();
   });
 });

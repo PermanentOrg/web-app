@@ -31,6 +31,7 @@ import { GlamOnboardingHeaderComponent } from './components/glam/glam-header/gla
 import { GlamPendingArchivesComponent } from './components/glam-pending-archives/glam-pending-archives.component';
 import { PendingArchiveComponent } from './components/glam/pending-archive/pending-archive.component';
 import { ArchiveCreationWithShareComponent } from './components/archive-creation-with-share/archive-creation-with-share.component';
+import { OnboardingService } from './services/onboarding.service';
 
 @NgModule({
   declarations: [
@@ -63,12 +64,10 @@ import { ArchiveCreationWithShareComponent } from './components/archive-creation
     GlamArchiveTypeSelectComponent,
     ArchiveTypeIconComponent,
   ],
+  providers: [OnboardingService],
 })
 export class OnboardingModule {
-  constructor(
-    private resolver: ComponentFactoryResolver,
-    private library: FaIconLibrary,
-  ) {
+  constructor(private library: FaIconLibrary) {
     library.addIcons(faHeart);
   }
 }

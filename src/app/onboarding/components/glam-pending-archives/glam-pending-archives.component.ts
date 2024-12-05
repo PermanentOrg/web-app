@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ArchiveVO } from '@models/index';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { OnboardingService } from '../../services/onboarding.service';
 
 @Component({
   selector: 'pr-glam-pending-archives',
@@ -22,7 +23,10 @@ export class GlamPendingArchivesComponent {
   constructor(
     private account: AccountService,
     private api: ApiService,
+    private onboardingService: OnboardingService,
   ) {
+    this.acceptedArchives = [...this.onboardingService.getFinalArchives()];
+    this.selectedArchive = this.acceptedArchives[0] ?? null;
     this.accountName = this.account.getAccount().fullName;
   }
 
@@ -38,6 +42,7 @@ export class GlamPendingArchivesComponent {
     try {
       await this.api.archive.accept(archive);
       this.acceptedArchives.push(archive);
+      this.onboardingService.registerArchive(archive);
       if (!this.selectedArchive) {
         this.selectedArchive = archive;
       }

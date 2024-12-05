@@ -29,20 +29,21 @@ p {
 .square {
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.08);
-  width: 72px;
   padding: 6px;
 
   & > span {
     color: white;
+    text-transform: uppercase;
   }
 }
 
-.archive-info {
+.single-archive {
   display: flex;
   flex-direction: row;
   gap: 16px;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 
   & > div {
     display: flex;

@@ -5,6 +5,9 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { AccessRole } from '@models/access-role';
+import { ArchiveVO } from '@models/index';
+import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 
 @Component({
   selector: 'pr-name-archive-screen',
@@ -18,7 +21,10 @@ export class NameArchiveScreenComponent implements OnInit {
   @Output() backToCreateEmitter = new EventEmitter<string>();
   @Output() archiveCreatedEmitter = new EventEmitter<string>();
 
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(
+    private fb: UntypedFormBuilder,
+    private onboardingService: OnboardingService,
+  ) {
     this.nameForm = fb.group({
       archiveName: ['', [Validators.required]],
     });
@@ -35,6 +41,12 @@ export class NameArchiveScreenComponent implements OnInit {
   public createArchive(): void {
     if (this.nameForm.valid) {
       this.archiveCreatedEmitter.emit(this.nameForm.value.archiveName);
+      this.onboardingService.registerArchive(
+        new ArchiveVO({
+          fullName: this.nameForm.value.archiveName,
+          accessRole: 'access.role.owner',
+        }),
+      );
     }
   }
 }

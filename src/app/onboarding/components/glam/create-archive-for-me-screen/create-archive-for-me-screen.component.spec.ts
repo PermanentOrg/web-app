@@ -2,6 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { By } from '@angular/platform-browser';
+import { OnboardingService } from '@root/app/onboarding/services/onboarding.service';
 import { OnboardingModule } from '../../../onboarding.module';
 import { CreateArchiveForMeScreenComponent } from './create-archive-for-me-screen.component';
 
@@ -13,10 +14,10 @@ describe('CreateArchiveForMeScreenComponent', () => {
   let shallow: Shallow<CreateArchiveForMeScreenComponent>;
 
   beforeEach(async () => {
-    shallow = new Shallow(
-      CreateArchiveForMeScreenComponent,
-      OnboardingModule,
-    ).mock(AccountService, mockAccountService);
+    shallow = new Shallow(CreateArchiveForMeScreenComponent, OnboardingModule)
+      .mock(AccountService, mockAccountService)
+      .provide(OnboardingService)
+      .dontMock(OnboardingService);
   });
 
   it('should create', async () => {
