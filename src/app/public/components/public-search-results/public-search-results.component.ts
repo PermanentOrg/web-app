@@ -16,13 +16,6 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
   public waiting = false;
   public query = '';
 
-  public types = {
-    'type.folder.private': 'Folder',
-    'type.folder.public': 'Folder',
-    'type.record.image': 'Image',
-    'type.record.video': 'Video',
-  };
-
   public archivePath = ['..', '..', '..'];
 
   protected searchSubscription: Subscription;

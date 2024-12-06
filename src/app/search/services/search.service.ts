@@ -112,6 +112,10 @@ export class SearchService {
     );
   }
 
+  public getPublicArchiveTags(archiveId: string) {
+    return this.api.search.getPublicArchiveTags(archiveId);
+  }
+
   private searchWithFuse<T>(
     fuse: Fuse<T>,
     searchTerm: string,

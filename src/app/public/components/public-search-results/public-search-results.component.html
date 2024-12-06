@@ -61,7 +61,7 @@
           </svg>
 
           <p class="result-text result-archive-type">
-            {{ types[result.type] }}
+            {{ result.type | prGetFileType }}
           </p>
         </div>
         <p class="result-nav result-text result-archive-name">

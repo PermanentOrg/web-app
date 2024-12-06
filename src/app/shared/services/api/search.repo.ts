@@ -68,11 +68,17 @@ export class SearchRepo extends BaseRepo {
     archiveId: string,
     limit?: number,
   ) {
+    const tagsDict = tags.reduce((obj, tag, index) => {
+      obj[`tags[${index}][tagId]`] = tag.tagId;
+      return obj;
+    }, {});
+
     const data = {
       query,
-      tags,
       archiveId,
       publicOnly: true,
+      numberOfResults: limit,
+      ...tagsDict,
     };
 
     return getFirst(
@@ -80,6 +86,10 @@ export class SearchRepo extends BaseRepo {
         authToken: false,
       }),
     );
+  }
+
+  public getPublicArchiveTags(archiveId: string): Observable<TagVOData[]> {
+    return this.httpV2.get(`v2/archive/${archiveId}/tags/public`);
   }
 }
 
