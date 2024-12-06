@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -23,16 +23,21 @@ import {
 } from '@models';
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
+import { passwordStrength } from 'check-password-strength';
+import { Subscription } from 'rxjs';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
+
+type PasswordType = '' | 'Too Weak' | 'Weak' | 'Medium' | 'Strong';
 
 @Component({
   selector: 'pr-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit, OnDestroy {
   @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
@@ -49,6 +54,13 @@ export class SignupComponent {
   agreedTerms = false;
   receiveUpdatesViaEmail = false;
 
+  passwordStrengthMessage: PasswordType = '';
+  passwordStrengthClass: string = '';
+
+  enabledPasswordCheckStrength: boolean;
+
+  private passwordSubscription: Subscription;
+
   constructor(
     fb: UntypedFormBuilder,
     private accountService: AccountService,
@@ -57,8 +69,12 @@ export class SignupComponent {
     private message: MessageService,
     private device: DeviceService,
     private ga: GoogleAnalyticsService,
+    private featureFlagService: FeatureFlagService,
   ) {
     const params = route.snapshot.queryParams;
+
+    this.enabledPasswordCheckStrength =
+      this.featureFlagService.isEnabled('passwordStrngth');
 
     let name, email, inviteCode;
 
@@ -107,15 +123,85 @@ export class SignupComponent {
       name: [name || '', Validators.required],
       password: [
         '',
-        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+        [
+          Validators.required,
+          Validators.minLength(MIN_PASSWORD_LENGTH),
+          ...(this.enabledPasswordCheckStrength
+            ? [this.passwordStrengthValidator()]
+            : []),
+        ],
       ],
     });
-
     const confirmPasswordControl = new UntypedFormControl('', [
       Validators.required,
       matchControlValidator(this.signupForm.controls['password']),
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
+  }
+
+  ngOnInit(): void {
+    this.passwordSubscription = this.signupForm.controls[
+      'password'
+    ].valueChanges.subscribe((password) => {
+      if (this.featureFlagService.isEnabled('passwordStrngth')) {
+        this.updatePasswordStrength(password);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.passwordSubscription) {
+      this.passwordSubscription.unsubscribe();
+    }
+  }
+
+  updatePasswordStrength(password: string): void {
+    const strength = passwordStrength(password);
+    this.passwordStrengthMessage = this.getStrengthMessage(strength.id);
+    this.passwordStrengthClass = this.getStrengthClass(strength.id);
+  }
+
+  private passwordStrengthValidator() {
+    return (control: UntypedFormControl) => {
+      const value = control.value;
+      if (!value) return null;
+
+      const strength = passwordStrength(value);
+      if (strength.id < 2) {
+        return { passwordStrength: true }; // Custom error for weak passwords
+      }
+      return null;
+    };
+  }
+
+  getStrengthMessage(strengthId: number): PasswordType {
+    switch (strengthId) {
+      case 0:
+        return 'Too Weak';
+      case 1:
+        return 'Weak';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Strong';
+      default:
+        return '';
+    }
+  }
+
+  getStrengthClass(strengthId: number): string {
+    switch (strengthId) {
+      case 0:
+        return 'strength-too-weak';
+      case 1:
+        return 'strength-weak';
+      case 2:
+        return 'strength-medium';
+      case 3:
+        return 'strength-strong';
+      default:
+        return '';
+    }
   }
 
   shouldCreateDefaultArchive() {
