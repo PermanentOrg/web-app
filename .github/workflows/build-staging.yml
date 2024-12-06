@@ -21,7 +21,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install dependencies
-        run: npm install
+        run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
       - name: Build
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_STAGING }}
