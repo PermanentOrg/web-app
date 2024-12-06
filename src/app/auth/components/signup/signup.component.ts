@@ -25,6 +25,7 @@ import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { passwordStrength } from 'check-password-strength';
 import { Subscription } from 'rxjs';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
@@ -56,6 +57,8 @@ export class SignupComponent implements OnInit, OnDestroy {
   passwordStrengthMessage: PasswordType = '';
   passwordStrengthClass: string = '';
 
+  enabledPasswordCheckStrength: boolean;
+
   private passwordSubscription: Subscription;
 
   constructor(
@@ -66,8 +69,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     private message: MessageService,
     private device: DeviceService,
     private ga: GoogleAnalyticsService,
+    private featureFlagService: FeatureFlagService,
   ) {
     const params = route.snapshot.queryParams;
+
+    this.enabledPasswordCheckStrength =
+      this.featureFlagService.isEnabled('passwordStrngth');
 
     let name, email, inviteCode;
 
@@ -116,7 +123,13 @@ export class SignupComponent implements OnInit, OnDestroy {
       name: [name || '', Validators.required],
       password: [
         '',
-        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
+        [
+          Validators.required,
+          Validators.minLength(MIN_PASSWORD_LENGTH),
+          ...(this.enabledPasswordCheckStrength
+            ? [this.passwordStrengthValidator()]
+            : []),
+        ],
       ],
     });
     const confirmPasswordControl = new UntypedFormControl('', [
@@ -130,7 +143,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.passwordSubscription = this.signupForm.controls[
       'password'
     ].valueChanges.subscribe((password) => {
-      this.updatePasswordStrength(password);
+      if (this.featureFlagService.isEnabled('passwordStrngth')) {
+        this.updatePasswordStrength(password);
+      }
     });
   }
 
@@ -144,6 +159,19 @@ export class SignupComponent implements OnInit, OnDestroy {
     const strength = passwordStrength(password);
     this.passwordStrengthMessage = this.getStrengthMessage(strength.id);
     this.passwordStrengthClass = this.getStrengthClass(strength.id);
+  }
+
+  private passwordStrengthValidator() {
+    return (control: UntypedFormControl) => {
+      const value = control.value;
+      if (!value) return null;
+
+      const strength = passwordStrength(value);
+      if (strength.id < 2) {
+        return { passwordStrength: true }; // Custom error for weak passwords
+      }
+      return null;
+    };
   }
 
   getStrengthMessage(strengthId: number): PasswordType {
