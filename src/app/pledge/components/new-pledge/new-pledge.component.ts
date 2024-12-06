@@ -33,7 +33,7 @@ const elements = stripe.elements();
 })
 export class NewPledgeComponent implements OnInit, AfterViewInit {
   @Input() inlineFlow: boolean = false;
-  public waiting: boolean;
+  public waiting: boolean = false;
   public pledgeForm: UntypedFormGroup;
 
   public donationLevels = [10, 20, 50];
@@ -42,6 +42,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
   public donationAmount = 10;
 
   public pricePerGb = 10;
+  public isSuccessful: boolean = false;
 
   @ViewChild('customDonationAmount', { static: true })
   customDonationInput: ElementRef;
@@ -53,6 +54,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
 
   public static stripeCardInstance: any;
   public static currentInstance: NewPledgeComponent;
+  public amountInGb: number = 0;
 
   constructor(
     private api: ApiService,
@@ -264,6 +266,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
               entity: 'account',
               action: 'purchase_storage',
             });
+            this.isSuccessful = true;
             this.accountService.addStorageBytes(sizeInBytes);
             this.message.showMessage({
               message: `You just claimed ${this.getStorageAmount(
@@ -271,6 +274,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
               )} GB of storage!`,
               style: 'success',
             });
+            this.amountInGb = this.getStorageAmount(pledge.dollarAmount);
           }
         } catch (err) {
           this.waiting = false;
