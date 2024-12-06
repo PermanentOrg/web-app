@@ -17,7 +17,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
       - name: Install dependencies
-        run: npm install
+        run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
       - name: Run Prettier
         run: npx prettier --check --require-pragma .
       - name: Run eslint
