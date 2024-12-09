@@ -28,9 +28,9 @@ describe('FinalizeArchiveCreationScreenComponent', () => {
   });
 
   it('should display the archive name correctly', async () => {
-    const name = 'Test Archive';
+    const name = 'John Doe';
     onboardingService.registerArchive(new ArchiveVO({ fullName: name }));
-    const { find } = await shallow.render();
+    const { fixture, find } = await shallow.render();
     const archiveNameElement = find('.archive-info p');
 
     expect(archiveNameElement.nativeElement.textContent).toContain(

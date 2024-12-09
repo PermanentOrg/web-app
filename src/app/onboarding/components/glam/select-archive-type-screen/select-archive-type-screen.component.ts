@@ -22,6 +22,14 @@ export class SelectArchiveTypeScreenComponent implements OnInit {
   @Output() submitEmitter = new EventEmitter<Record<string, string>>();
 
   ngOnInit(): void {
+    const storageTag = sessionStorage.getItem('archiveTypeTag');
+    const storageType = sessionStorage.getItem('archiveType');
+
+    if (storageTag && storageType) {
+      this.tag = storageTag;
+      this.type = storageType;
+    }
+
     if (this.tag) {
       this.buttonText = generateElementText(
         this.tag,
