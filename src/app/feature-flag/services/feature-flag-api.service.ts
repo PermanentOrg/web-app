@@ -13,7 +13,9 @@ export class FeatureFlagApiService implements FeatureFlagApi {
 
   public async getFeatureFlags(): Promise<FeatureFlag[]> {
     try {
-      return await firstValueFrom(this.http.get(`/v2/feature-flags`));
+      return await firstValueFrom(
+        this.http.get(`/v2/feature-flags`, {}, null, { authToken: false }),
+      );
     } catch {
       return [];
     }
