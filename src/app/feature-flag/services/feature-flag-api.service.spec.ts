@@ -27,15 +27,17 @@ describe('FeatureFlagApiService', () => {
   });
 
   it('can fetch feature flags from the back end', (done) => {
-    const expectedFlags: FeatureFlag[] = [
-      { name: 'potato', globallyEnabled: true },
-      { name: 'tomato', globallyEnabled: true },
-    ];
+    const expectedFlags = {
+      items: [
+        { name: 'potato', globallyEnabled: true },
+        { name: 'tomato', globallyEnabled: true },
+      ],
+    };
 
     service
       .getFeatureFlags()
       .then((flags) => {
-        expect(flags).toEqual(expectedFlags);
+        expect(flags).toEqual(expectedFlags.items);
         done();
       })
       .catch(() => {
