@@ -19,7 +19,7 @@ export class FeatureFlagService {
   public async fetchFromApi(): Promise<void> {
     try {
       const flags = await this.api.getFeatureFlags();
-      flags.forEach((flag) => this.set(flag.name, flag.globallyEnabled));
+      flags.forEach((flag) => this.set(flag.name, true));
     } catch {
       // Do nothing
     }

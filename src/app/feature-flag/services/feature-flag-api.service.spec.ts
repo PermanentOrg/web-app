@@ -28,10 +28,7 @@ describe('FeatureFlagApiService', () => {
 
   it('can fetch feature flags from the back end', (done) => {
     const expectedFlags = {
-      items: [
-        { name: 'potato', globallyEnabled: true },
-        { name: 'tomato', globallyEnabled: true },
-      ],
+      items: [{ name: 'potato' }, { name: 'tomato' }],
     };
 
     service

@@ -60,14 +60,11 @@ describe('FeatureFlagService', () => {
   });
 
   it('should fetch from the API on init', async () => {
-    mockApi.flags = [
-      { name: 'api0', globallyEnabled: true },
-      { name: 'api1', globallyEnabled: false },
-    ];
+    mockApi.flags = [{ name: 'api0', globallyEnabled: true }, { name: 'api1' }];
     await service.fetchFromApi();
 
     expect(service.isEnabled('api0')).toBeTrue();
-    expect(service.isEnabled('api1')).toBeFalse();
+    expect(service.isEnabled('api1')).toBeTrue();
   });
 
   it('should fetch from Secrets on local environment', async () => {
