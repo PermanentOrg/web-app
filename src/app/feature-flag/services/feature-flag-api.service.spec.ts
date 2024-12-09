@@ -27,15 +27,14 @@ describe('FeatureFlagApiService', () => {
   });
 
   it('can fetch feature flags from the back end', (done) => {
-    const expectedFlags: FeatureFlag[] = [
-      { name: 'potato', globallyEnabled: true },
-      { name: 'tomato', globallyEnabled: true },
-    ];
+    const expectedFlags = {
+      items: [{ name: 'potato' }, { name: 'tomato' }],
+    };
 
     service
       .getFeatureFlags()
       .then((flags) => {
-        expect(flags).toEqual(expectedFlags);
+        expect(flags).toEqual(expectedFlags.items);
         done();
       })
       .catch(() => {
@@ -46,6 +45,7 @@ describe('FeatureFlagApiService', () => {
 
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Request-Version')).toBe('2');
+    expect(req.request.headers.get('Authorization')).toBeFalsy();
     req.flush(expectedFlags);
   });
 
