@@ -11,6 +11,7 @@ import { CoreModule } from '@core/core.module';
 import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
 import { DialogCdkModule } from '../dialog-cdk/dialog-cdk.module';
 import { ComponentsModule } from '../component-library/components.module';
+import { FeatureFlagModule } from '../feature-flag/feature-flag.module';
 import { OnboardingRoutingModule } from './onboarding.routes';
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { WelcomeScreenComponent } from './components/welcome-screen/welcome-screen.component';
@@ -63,6 +64,7 @@ import { OnboardingService } from './services/onboarding.service';
     ComponentsModule,
     GlamArchiveTypeSelectComponent,
     ArchiveTypeIconComponent,
+    FeatureFlagModule,
   ],
   providers: [OnboardingService],
 })

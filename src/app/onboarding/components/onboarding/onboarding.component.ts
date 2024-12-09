@@ -14,6 +14,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { partition as lodashPartition } from 'lodash';
 import { EventService } from '@shared/services/event/event.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 @Component({
   selector: 'pr-onboarding',
@@ -45,12 +46,13 @@ export class OnboardingComponent implements OnInit {
     private account: AccountService,
     private detector: ChangeDetectorRef,
     private event: EventService,
+    feature: FeatureFlagService,
   ) {
     if (route.snapshot.data.onboardingScreen) {
       this.screen = route.snapshot.data.onboardingScreen as OnboardingScreen;
     }
 
-    this.isGlam = localStorage.getItem('isGlam') === 'true';
+    this.isGlam = feature.isEnabled('glam-onboarding');
   }
 
   ngOnInit(): void {
