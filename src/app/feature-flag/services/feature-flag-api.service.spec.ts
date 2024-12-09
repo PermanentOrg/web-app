@@ -46,6 +46,7 @@ describe('FeatureFlagApiService', () => {
 
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Request-Version')).toBe('2');
+    expect(req.request.headers.get('Authorization')).toBeFalsy();
     req.flush(expectedFlags);
   });
 
