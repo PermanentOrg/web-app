@@ -25,15 +25,15 @@ for (const secret of optionalSecrets) {
 if (missingSecrets.length) {
   console.error(
     `ERROR: Missing the following environment variables: ${missingSecrets.join(
-      ','
-    )}`
+      ',',
+    )}`,
   );
   process.exit(1);
 }
 
 // write to secrets.ts file
 const secretsFileContent = `export const SECRETS = { ${requiredSecrets
-  .map((name) => `${name}: '${process.env[name]}'`)
+  .map((name) => `'${name}': '${process.env[name]}'`)
   .join(', ')} }`;
 try {
   writeFileSync(outputFile, secretsFileContent);
