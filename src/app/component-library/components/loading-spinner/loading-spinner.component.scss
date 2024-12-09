@@ -11,6 +11,12 @@
   border: 1px solid rgba(54, 68, 147, 0.4);
   border-radius: 12px;
 }
+
+:host(.full-screen) {
+  left: 0;
+  z-index: 2;
+}
+
 .spinner-container {
   position: relative;
   display: flex;
