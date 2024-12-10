@@ -17,8 +17,7 @@ describe('GlamGoalsScreenComponent', () => {
       return store[key] || null;
     });
 
-    spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {
-    });
+    spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
   });
 
   it('should create', async () => {
