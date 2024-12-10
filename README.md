@@ -8,13 +8,17 @@ This is the source code for Permanent.org's front-end.
 
 To get started, first create the file for the environment variables.
 
-```
+```sh
 cp .env.template .env
 ```
 
 Add your environment secrets to `.env`.
 
-Install the project dependencies with `npm install`.
+You need access to FontAwesome Pro packages to install dependencies. You can install the project dependencies with:
+
+```sh
+FONTAWESOME_PACKAGE_TOKEN="insert_token_here" npm install
+```
 
 Then run the app using `npm run dev` to point the dev server against your `local.permanent.org` VM accessible at `https://ng.permanent.org:4200`
 
