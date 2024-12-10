@@ -18,7 +18,6 @@ describe('GlamGoalsScreenComponent', () => {
     });
 
     spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {
-      console.log(`Mock setItem called with key: ${key}, value: ${value}`);
     });
   });
 
