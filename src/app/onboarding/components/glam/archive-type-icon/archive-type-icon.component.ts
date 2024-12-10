@@ -6,6 +6,8 @@ import {
   faHeart,
   faPeopleGroup,
   faScrollOld,
+  faShapes,
+  faSquareEllipsis,
   faUser,
 } from '@fortawesome/pro-regular-svg-icons';
 import { OnboardingTypes } from '@root/app/onboarding/shared/onboarding-screen';
@@ -25,7 +27,7 @@ export class ArchiveTypeIconComponent {
     'type:famhist': faScrollOld,
     'type:community': faPeopleGroup,
     'type:org': faBuildingColumns,
-    'type:other': faHeart,
-    'type:unsure': faHeart,
+    'type:other': faSquareEllipsis,
+    'type:unsure': faShapes,
   };
 }
