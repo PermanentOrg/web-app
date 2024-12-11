@@ -61,7 +61,23 @@ describe('TwoFactorAuthComponent', () => {
     instance.method = 'sms';
     instance.formatPhoneNumber('1234567890');
 
-    expect(instance.form.get('contactInfo').value).toBe('(123)  456 - 7890');
+    expect(instance.form.get('contactInfo').value).toBe('(123) 456-7890');
+  });
+
+  it('should format phone number with country code correctly', async () => {
+    const { instance } = await shallow.render();
+    instance.method = 'sms';
+    instance.formatPhoneNumber('+12345678900');
+
+    expect(instance.form.get('contactInfo').value).toBe('+1 (234) 567-8900');
+  });
+
+  it('should format international phone numbers correctly', async () => {
+    const { instance } = await shallow.render();
+    instance.method = 'sms';
+    instance.formatPhoneNumber('0040123456789');
+
+    expect(instance.form.get('contactInfo').value).toBe('+401 (234) 567-89');
   });
 
   it('should set codeSent to true when sendCode is called', async () => {
