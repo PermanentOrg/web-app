@@ -69,12 +69,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     private message: MessageService,
     private device: DeviceService,
     private ga: GoogleAnalyticsService,
-    private featureFlagService: FeatureFlagService,
+    private feature: FeatureFlagService,
   ) {
     const params = route.snapshot.queryParams;
 
     this.enabledPasswordCheckStrength =
-      this.featureFlagService.isEnabled('passwordStrngth');
+      this.feature.isEnabled('password-strength');
 
     let name, email, inviteCode;
 
@@ -143,7 +143,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.passwordSubscription = this.signupForm.controls[
       'password'
     ].valueChanges.subscribe((password) => {
-      if (this.featureFlagService.isEnabled('passwordStrngth')) {
+      if (this.feature.isEnabled('password-strength')) {
         this.updatePasswordStrength(password);
       }
     });
