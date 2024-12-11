@@ -36,6 +36,33 @@ jobs:
         with:
           name: dist
           path: dist
+  build-storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Archive `storybook-static`
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook
+          path: storybook-static
 
   upload-sourcemaps:
     needs: build
@@ -66,7 +93,7 @@ jobs:
           sentry-cli releases files $VERSION upload-sourcemaps --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
 
   upload-code:
-    needs: build
+    needs: [build, build-storybook]
     runs-on: ubuntu-latest
     steps:
       - name: Download dist
@@ -74,11 +101,17 @@ jobs:
         with:
           name: dist
           path: dist
+      - name: Download storybook
+        uses: actions/download-artifact@v4
+        with:
+          name: storybook
+          path: storybook
       - name: Create a tar archive
         run: |
           cd ..
           mkdir mdot
           mv web-app/dist mdot/dist
+          mv web-app/storybook mdot/storybook
           tar -czvf mdot.tar.gz mdot
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
