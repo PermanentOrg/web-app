@@ -86,7 +86,7 @@ describe('TwoFactorAuthComponent', () => {
     instance.formatPhoneNumber('+40123456789');
 
     expect(instance.form.get('contactInfo').value).toBe('+401 (234) 567-89');
-  })
+  });
 
   it('should set codeSent to true when sendCode is called', async () => {
     const { instance } = await shallow.render();
