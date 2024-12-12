@@ -54,8 +54,8 @@ export const archiveDescriptions = {
     'Create an archive that preserves the history of a community, group, or other association of people.',
   'type:org':
     'Create an archive that preserves the history of an organization or nonprofit.',
-  'type:other': '',
-  'type:unsure': '',
+  'type:other': 'Create an archive about something else.',
+  'type:unsure': 'I’m not sure what type of archive I want to create.',
 };
 
 export const archiveOptionsWithArticle = [
