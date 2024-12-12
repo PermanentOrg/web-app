@@ -20,7 +20,7 @@
     "jest": "jest",
     "prettier": "prettier",
     "storybook": "ng run mdot:storybook",
-    "build-storybook": "ng run mdot:build-storybook"
+    "build-storybook": "npm run secrets && ng run mdot:build-storybook"
   },
   "private": true,
   "dependencies": {
