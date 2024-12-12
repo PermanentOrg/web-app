@@ -59,9 +59,7 @@ const mockMessageService = {
 };
 
 const mockRouter = {
-  async navigate(path: any[]) {
-    return {};
-  },
+  navigate: jasmine.createSpy('navigate'),
 };
 
 describe('OnboardingComponent #onboarding', () => {
@@ -211,5 +209,50 @@ describe('OnboardingComponent #onboarding', () => {
 
     expect(getItemSpy).toHaveBeenCalledWith('shareToken');
     expect(removeItemSpy).toHaveBeenCalledWith('shareToken');
+  });
+
+  it('should navigate to /app/welcome if shareToken is not in localStorage and isGlam is false', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+    instance.isGlam = false;
+    instance.acceptedInvite = false;
+    instance.setScreen(OnboardingScreen.done);
+    instance.selectedPendingArchive = null;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/app', 'welcome']);
+  });
+
+  it('should navigate to /app if shareToken is not in localStorage and isGlam is true', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+    instance.isGlam = true;
+    instance.acceptedInvite = false;
+    instance.setScreen(OnboardingScreen.done);
+    instance.selectedPendingArchive = null;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/app']);
+  });
+
+  it('should navigate to /app/welcome-invite if shareToken is not in localStorage and isGlam is true', async () => {
+    const { instance, fixture } = await shallow.render();
+
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+    instance.isGlam = false;
+    instance.acceptedInvite = true;
+    instance.setScreen(OnboardingScreen.done);
+    instance.selectedPendingArchive = null;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith([
+      '/app',
+      'welcome-invitation',
+    ]);
   });
 });
