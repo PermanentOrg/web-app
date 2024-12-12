@@ -9,6 +9,15 @@ describe('GlamGoalsScreenComponent', () => {
 
   beforeEach(async () => {
     shallow = new Shallow(GlamGoalsScreenComponent, OnboardingModule);
+
+    spyOn(sessionStorage, 'getItem').and.callFake((key) => {
+      const store = {
+        goals: JSON.stringify(['Mock Goal']),
+      };
+      return store[key] || null;
+    });
+
+    spyOn(sessionStorage, 'setItem').and.callFake((key, value) => {});
   });
 
   it('should create', async () => {
@@ -21,6 +30,25 @@ describe('GlamGoalsScreenComponent', () => {
     const { instance } = await shallow.render();
 
     expect(instance.goals).toEqual(goals);
+  });
+
+  it('should initialize selectedGoals from sessionStorage', async () => {
+    const { instance } = await shallow.render();
+
+    expect(sessionStorage.getItem).toHaveBeenCalledWith('goals');
+    expect(instance.selectedGoals).toEqual(['Mock Goal']);
+  });
+
+  it('should update sessionStorage when addGoal is called', async () => {
+    const { instance } = await shallow.render();
+    const goal = 'Test Goal';
+
+    instance.addGoal(goal);
+
+    expect(sessionStorage.setItem).toHaveBeenCalledWith(
+      'goals',
+      JSON.stringify(['Mock Goal', 'Test Goal']),
+    );
   });
 
   it('should add goal to selectedGoals when addGoal is called', async () => {
@@ -46,7 +74,7 @@ describe('GlamGoalsScreenComponent', () => {
 
     expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
       screen: 'name-archive',
-      goals: [],
+      goals: ['Mock Goal'],
     });
   });
 
@@ -58,7 +86,7 @@ describe('GlamGoalsScreenComponent', () => {
 
     expect(outputs.goalsOutput.emit).toHaveBeenCalledWith({
       screen: 'reasons',
-      goals: [goal],
+      goals: ['Mock Goal', goal],
     });
   });
 });

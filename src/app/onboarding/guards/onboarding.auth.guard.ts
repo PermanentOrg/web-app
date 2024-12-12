@@ -24,6 +24,7 @@ export class OnboardingAuthGuard  {
         }
         return true;
       });
+      
     }
     return this.router.parseUrl('/app/auth');
   }
