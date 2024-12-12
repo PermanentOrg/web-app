@@ -21,6 +21,7 @@ import {
 import { AnalyticsService } from '@shared/services/analytics/analytics.service';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { SkipOnboardingDialogComponent } from '@core/components/skip-onboarding-dialog/skip-onboarding-dialog.component';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 import {
   reasons,
   goals,
@@ -96,8 +97,9 @@ export class CreateNewArchiveComponent implements OnInit {
     private accountService: AccountService,
     private event: EventService,
     private onboardingService: OnboardingService,
+    feature: FeatureFlagService,
   ) {
-    this.isGlam = localStorage.getItem('isGlam') === 'true';
+    this.isGlam = feature.isEnabled('glam-onboarding');
     if (!this.isGlam) {
       this.screen = 'create';
     }

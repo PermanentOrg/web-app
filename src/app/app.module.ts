@@ -50,6 +50,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { RouteHistoryModule } from './route-history/route-history.module';
 import { CustomOverlayContainer } from './dialog-cdk/custom-overlay-container';
+import { FeatureFlagModule } from './feature-flag/feature-flag.module';
 
 declare var ga: any;
 
@@ -156,6 +157,7 @@ export class PermErrorHandler implements ErrorHandler {
     FontAwesomeModule,
     FormsModule,
     RouteHistoryModule,
+    FeatureFlagModule,
   ],
   exports: [],
   declarations: [AppComponent, MessageComponent],

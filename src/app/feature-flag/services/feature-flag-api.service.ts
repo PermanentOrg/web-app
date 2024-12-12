@@ -13,7 +13,12 @@ export class FeatureFlagApiService implements FeatureFlagApi {
 
   public async getFeatureFlags(): Promise<FeatureFlag[]> {
     try {
-      return await firstValueFrom(this.http.get(`/v2/feature-flags`));
+      const response = await firstValueFrom(
+        this.http.get<{ items: FeatureFlag[] }>(`/v2/feature-flags`, {}, null, {
+          authToken: false,
+        }),
+      );
+      return response[0].items;
     } catch {
       return [];
     }
