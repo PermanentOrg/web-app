@@ -19,6 +19,9 @@ import { ArchiveSmallComponent } from '@shared/components/archive-small/archive-
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ComponentsModule } from '@root/app/component-library/components.module';
 import { AccessRolePipe } from '@shared/pipes/access-role.pipe';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
+import { FeatureFlagApi } from '@root/app/feature-flag/types/feature-flag-api';
 import { WelcomeScreenComponent } from '../welcome-screen/welcome-screen.component';
 import { CreateNewArchiveComponent } from '../create-new-archive/create-new-archive.component';
 import { ArchiveTypeSelectComponent } from '../archive-type-select/archive-type-select.component';
@@ -133,6 +136,24 @@ class MockApiService {
   };
 }
 
+class StaticFeatureFlagService extends FeatureFlagService {
+  public static Features: string[] = [];
+
+  constructor() {
+    super(
+      {} as FeatureFlagApi,
+      {
+        get() {
+          throw false;
+        },
+      } as unknown as SecretsService,
+    );
+    StaticFeatureFlagService.Features.forEach((flag) => {
+      this.set(flag, true);
+    });
+  }
+}
+
 export default {
   title: 'Onboarding Demo',
   component: OnboardingComponent,
@@ -200,6 +221,7 @@ export default {
         { provide: AccountService, useClass: MockAccountService },
         { provide: ApiService, useClass: MockApiService },
         OnboardingService,
+        { provide: FeatureFlagService, useClass: StaticFeatureFlagService },
       ],
     }),
   ],
@@ -213,6 +235,7 @@ interface StoryArgs {
   shareToken?: boolean;
 }
 const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
+  sessionStorage.clear();
   MockAccountService.resetStatics();
   if (args.accountName) {
     MockAccountService.accountName = args.accountName;
@@ -221,9 +244,9 @@ const StoryTemplate: (a: StoryArgs) => Story = (args: StoryArgs) => {
     MockAccountService.pendingInivitations = args.hasInvitations;
   }
   if (args.isGlam) {
-    localStorage.setItem('isGlam', 'true');
+    StaticFeatureFlagService.Features = ['glam-onboarding'];
   } else {
-    localStorage.removeItem('isGlam');
+    StaticFeatureFlagService.Features = [];
   }
 
   if (args.shareToken) {
