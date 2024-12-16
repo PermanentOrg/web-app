@@ -4,6 +4,7 @@
   display: block;
   flex: 1;
   max-width: 100%;
+  background-color: white;
 }
 
 .map-wrapper {
@@ -50,3 +51,6 @@
 //     flex-basis: auto;
 //   }
 // }
+.dialog-content {
+  background-color: white;
+}
