@@ -119,3 +119,24 @@ form {
   display: flex;
   gap: 16px;
 }
+
+.strength-too-weak {
+  color: red;
+}
+
+.strength-weak {
+  color: orange;
+}
+
+.strength-medium {
+  color: blue;
+}
+
+.strength-strong {
+  color: green;
+}
+
+.password-strength-meter {
+  margin-top: 5px;
+  font-size: 0.9em;
+}
