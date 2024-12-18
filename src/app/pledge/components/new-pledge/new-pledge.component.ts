@@ -212,6 +212,7 @@ export class NewPledgeComponent implements OnInit, AfterViewInit {
       stripeToken: stripeResult.token.id,
       zip: stripeResult.token.card?.address_zip,
       timestamp: new Date().getTime(),
+      client: 'Web App',
     };
 
     try {
@@ -317,4 +318,5 @@ export interface PledgeData {
   id?: string;
   paid?: boolean;
   stripeChargeId?: string;
+  client?: 'Web App';
 }
