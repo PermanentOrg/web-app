@@ -20,6 +20,9 @@ on:
       mixpanel-token:
         description: "Mixpanel API key"
         required: true
+      fusionauth-host:
+        description: "FusionAuth host"
+        required: false
       fontawesome-token:
         description: "FontAwesome package token"
         required: true
@@ -61,6 +64,7 @@ jobs:
           RECAPTCHA_API_KEY: ${{ secrets.recaptcha-api-key }}
           STELA_DOMAIN: ${{ secrets.stela-domain }}
           MIXPANEL_TOKEN: ${{ secrets.mixpanel-token }}
+          FUSIONAUTH_HOST: ${{ secrets.fusionauth-host }}
         run: npm run ${{ inputs.build-command }}
 
       - name: Archive `dist`

@@ -1,4 +1,4 @@
-name: Prod build
+name: Prod build and upload
 
 on:
   push:
@@ -7,122 +7,37 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-      - uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-      - name: Install dependencies
-        run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
-      - name: Build
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY_PROD }}
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY_PROD }}
-          STRIPE_API_KEY: ${{ secrets.STRIPE_LIVE_KEY }}
-          RECAPTCHA_API_KEY: ${{ secrets.RECAPTCHA_API_KEY }}
-          FUSIONAUTH_HOST: ${{ secrets.FUSIONAUTH_PROD_HOST }}
-          STELA_DOMAIN: ${{ secrets.STELA_DOMAIN_PROD }}
-          MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN_PROD }}
-        run: npm run build
-      - name: Archive `dist`
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-  
+    uses: ./.github/workflows/build.yml
+    secrets:
+      google-api-key: ${{ secrets.GOOGLE_API_KEY_PROD }}
+      firebase-api-key: ${{ secrets.FIREBASE_API_KEY_PROD }}
+      stripe-api-key: ${{ secrets.STRIPE_LIVE_KEY }}
+      recaptcha-api-key: ${{ secrets.RECAPTCHA_API_KEY }}
+      fusionauth-host: ${{ secrets.FUSIONAUTH_PROD_HOST }}
+      stela-domain: ${{ secrets.STELA_DOMAIN_PROD }}
+      mixpanel-token: ${{ secrets.MIXPANEL_TOKEN_PROD }}
+      fontawesome-token: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
+    with:
+      build-command: "build"
+      artifact-name: "prod"
+
   build-storybook:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-
-      - uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
-
-      - name: Install dependencies
-        run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
-
-      - name: Build Storybook
-        run: npm run build-storybook
-        env:
-          GOOGLE_API_KEY: "-"
-          FIREBASE_API_KEY: "-"
-          STRIPE_API_KEY: "-"
-
-      - name: Archive `storybook-static`
-        uses: actions/upload-artifact@v4
-        with:
-          name: storybook
-          path: storybook-static
+    uses: ./.github/workflows/build-storybook.yml
+    secrets: inherit
+    with:
+      artifact-name: "prod"
 
   upload-sourcemaps:
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Setup Sentry CLI
-        uses: mathieu-bour/setup-sentry-cli@v2
-        with:
-          token: ${{ secrets.SENTRY_TOKEN }}
-          organization: permanentorg
-          project: mdot
-      - name: Download dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-      - name: Upload sourcemaps
-        shell: bash
-        run: |
-          cp -r dist/mdot dist/app
-          cp -r dist/mdot dist/share
-          cp -r dist/mdot dist/p
-          declare -x VERSION=mdot@$(sentry-cli releases propose-version)
-          sentry-cli releases set-commits $VERSION --auto --ignore-missing
-          sentry-cli releases files $VERSION upload-sourcemaps --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
+    uses: ./.github/workflows/upload-sourcemaps.yml
+    secrets: inherit
+    with:
+      artifact-name: "prod"
 
   upload-code:
     needs: [build, build-storybook]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-      - name: Download storybook
-        uses: actions/download-artifact@v4
-        with:
-          name: storybook
-          path: storybook
-      - name: Create a tar archive
-        run: |
-          cd ..
-          mkdir mdot
-          mv web-app/dist mdot/dist
-          mv web-app/storybook mdot/storybook
-          tar -czvf mdot.tar.gz mdot
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-      - name: Copy package to S3
-        run: aws s3 cp ../mdot.tar.gz s3://permanent-repos/prod/mdot.tar.gz
+    uses: ./.github/workflows/upload-code.yml
+    secrets: inherit
+    with:
+      artifact-name: "prod"
+      s3-destination: "s3://permanent-repos/prod/mdot.tar.gz"
