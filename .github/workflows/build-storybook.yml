@@ -1,0 +1,41 @@
+name: Build static Storybook
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'Artifact name to be downloaded later. "-storybook" is appended to the end.'
+        required: true
+        type: string
+jobs:
+  build-storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies
+        run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
+
+      - name: Build Storybook
+        run: npm run build-storybook
+        env:
+          GOOGLE_API_KEY: "-"
+          FIREBASE_API_KEY: "-"
+          STRIPE_API_KEY: "-"
+
+      - name: Archive `storybook-static`
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}-storybook
+          path: storybook-static
+          retention-days: 5

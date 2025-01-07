@@ -1,0 +1,46 @@
+name: Upload Built Artifacts
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'Name of artifact to download'
+        required: true
+        type: string
+      s3-destination:
+        description: 'S3 upload destination'
+        required: true
+        type: string
+
+jobs:
+   upload-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: dist
+
+      - name: Download storybook
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}-storybook
+          path: storybook
+
+      - name: Create a tar archive
+        run: |
+          cd ..
+          mkdir mdot
+          mv web-app/dist mdot/dist
+          mv web-app/storybook mdot/storybook
+          tar -czvf mdot.tar.gz mdot
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Copy package to S3
+        run: aws s3 cp ../mdot.tar.gz ${{ inputs.s3-destination }}
