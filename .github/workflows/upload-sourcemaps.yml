@@ -1,0 +1,39 @@
+name: Upload Sourcemaps
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'Name of artifact to download'
+        required: true
+        type: string
+
+jobs:
+  upload-sourcemaps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Sentry CLI
+        uses: mathieu-bour/setup-sentry-cli@v2
+        with:
+          token: ${{ secrets.SENTRY_TOKEN }}
+          organization: permanentorg
+          project: mdot
+
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: dist
+
+      - name: Upload sourcemaps
+        shell: bash
+        run: |
+          cp -r dist/mdot dist/app
+          cp -r dist/mdot dist/share
+          cp -r dist/mdot dist/p
+          declare -x VERSION=mdot@$(sentry-cli releases propose-version)
+          sentry-cli releases set-commits $VERSION --auto --ignore-missing
+          sentry-cli releases files $VERSION upload-sourcemaps --validate --log-level info --strip-common-prefix ./dist/ --ignore mdot
