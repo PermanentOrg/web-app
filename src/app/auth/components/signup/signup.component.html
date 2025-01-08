@@ -61,11 +61,11 @@
         spellcheck: 'off'
       }"
     ></pr-form-input-glam>
-    <div *ngIf="passwordStrengthMessage" class="password-strength-meter">
-      <span [class]="passwordStrengthClass"
-        >Your password is {{ passwordStrengthMessage }}</span
-      >
-    </div>
+    <pr-strength-meter
+      *ngIf="passwordStrengthMessage"
+      [message]="passwordStrengthMessage"
+      [passwordClass]="passwordStrengthClass"
+    ></pr-strength-meter>
   </div>
   <div class="input-container confirm-password-input">
     <pr-form-input-glam

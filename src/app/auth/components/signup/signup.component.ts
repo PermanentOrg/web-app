@@ -143,9 +143,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.passwordSubscription = this.signupForm.controls[
       'password'
     ].valueChanges.subscribe((password) => {
-      if (this.feature.isEnabled('password-strength')) {
-        this.updatePasswordStrength(password);
-      }
+      // if (this.feature.isEnabled('password-strength')) {
+      this.updatePasswordStrength(password);
+      // }
     });
   }
 
@@ -156,9 +156,10 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   updatePasswordStrength(password: string): void {
-    const strength = passwordStrength(password);
-    this.passwordStrengthMessage = this.getStrengthMessage(strength.id);
-    this.passwordStrengthClass = this.getStrengthClass(strength.id);
+    const { message, class: strengthClass } =
+      this.getPasswordStrengthDetails(password);
+    this.passwordStrengthMessage = message as PasswordType;
+    this.passwordStrengthClass = strengthClass;
   }
 
   private passwordStrengthValidator() {
@@ -174,18 +175,18 @@ export class SignupComponent implements OnInit, OnDestroy {
     };
   }
 
-  getStrengthMessage(strengthId: number): PasswordType {
-    switch (strengthId) {
+  public getPasswordStrengthDetails(password: string) {
+    const strength = passwordStrength(password);
+
+    switch (strength.id) {
       case 0:
-        return 'Too Weak';
+        return { message: 'weak', class: 'too-weak' };
       case 1:
-        return 'Weak';
-      case 2:
-        return 'Medium';
+        return { message: 'medium', class: 'weak' };
       case 3:
-        return 'Strong';
+        return { message: 'strong', class: 'strong' };
       default:
-        return '';
+        return { message: '', class: '' };
     }
   }
 
