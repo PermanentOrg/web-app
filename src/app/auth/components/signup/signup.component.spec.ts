@@ -219,28 +219,4 @@ describe('SignupComponent', () => {
       component.shouldCreateDefaultArchive(),
     );
   });
-
-  it('should return null for empty password', () => {
-    const validator = component['passwordStrengthValidator']();
-    const control = new UntypedFormControl('');
-    const result = validator(control);
-
-    expect(result).toBeNull();
-  });
-
-  it('should return an error for a password with strength ID less than 2 (Too Weak or Weak)', () => {
-    const validator = component['passwordStrengthValidator']();
-    const control = new UntypedFormControl('123');
-    const result = validator(control);
-
-    expect(result).toEqual({ passwordStrength: true });
-  });
-
-  it('should return null for a password with strength ID 2 or greater (Medium or Strong)', () => {
-    const validator = component['passwordStrengthValidator']();
-    const control = new UntypedFormControl('StrongPassword123.');
-    const result = validator(control);
-
-    expect(result).toBeNull();
-  });
 });

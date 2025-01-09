@@ -1,5 +1,5 @@
 /* @format */
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import {
   UntypedFormGroup,
   UntypedFormBuilder,
@@ -13,7 +13,6 @@ import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ApiService } from '@shared/services/api/api.service';
 import {
   RecordVO,
   FolderVO,
@@ -24,8 +23,6 @@ import {
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
 import { passwordStrength } from 'check-password-strength';
-import { Subscription } from 'rxjs';
-import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
@@ -37,7 +34,7 @@ type PasswordType = '' | 'Too Weak' | 'Weak' | 'Medium' | 'Strong';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnInit, OnDestroy {
+export class SignupComponent {
   @HostBinding('class.pr-auth-form') classBinding = true;
   signupForm: UntypedFormGroup;
   waiting: boolean;
@@ -54,13 +51,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   agreedTerms = false;
   receiveUpdatesViaEmail = false;
 
-  passwordStrengthMessage: PasswordType = '';
-  passwordStrengthClass: string = '';
-
-  enabledPasswordCheckStrength: boolean;
-
-  private passwordSubscription: Subscription;
-
   constructor(
     fb: UntypedFormBuilder,
     private accountService: AccountService,
@@ -69,12 +59,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     private message: MessageService,
     private device: DeviceService,
     private ga: GoogleAnalyticsService,
-    private feature: FeatureFlagService,
   ) {
     const params = route.snapshot.queryParams;
-
-    this.enabledPasswordCheckStrength =
-      this.feature.isEnabled('password-strength');
 
     let name, email, inviteCode;
 
@@ -123,13 +109,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       name: [name || '', Validators.required],
       password: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(MIN_PASSWORD_LENGTH),
-          ...(this.enabledPasswordCheckStrength
-            ? [this.passwordStrengthValidator()]
-            : []),
-        ],
+        [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
     });
     const confirmPasswordControl = new UntypedFormControl('', [
@@ -137,72 +117,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       matchControlValidator(this.signupForm.controls['password']),
     ]);
     this.signupForm.addControl('confirm', confirmPasswordControl);
-  }
-
-  ngOnInit(): void {
-    this.passwordSubscription = this.signupForm.controls[
-      'password'
-    ].valueChanges.subscribe((password) => {
-      // if (this.feature.isEnabled('password-strength')) {
-      this.updatePasswordStrength(password);
-      // }
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.passwordSubscription) {
-      this.passwordSubscription.unsubscribe();
-    }
-  }
-
-  updatePasswordStrength(password: string): void {
-    const { message, class: strengthClass } =
-      this.getPasswordStrengthDetails(password);
-    this.passwordStrengthMessage = message as PasswordType;
-    this.passwordStrengthClass = strengthClass;
-  }
-
-  private passwordStrengthValidator() {
-    return (control: UntypedFormControl) => {
-      const value = control.value;
-      if (!value) return null;
-
-      const strength = passwordStrength(value);
-      if (strength.id < 2) {
-        return { passwordStrength: true }; // Custom error for weak passwords
-      }
-      return null;
-    };
-  }
-
-  public getPasswordStrengthDetails(password: string) {
-    const strength = passwordStrength(password);
-
-    switch (strength.id) {
-      case 0:
-        return { message: 'weak', class: 'too-weak' };
-      case 1:
-        return { message: 'medium', class: 'weak' };
-      case 3:
-        return { message: 'strong', class: 'strong' };
-      default:
-        return { message: '', class: '' };
-    }
-  }
-
-  getStrengthClass(strengthId: number): string {
-    switch (strengthId) {
-      case 0:
-        return 'strength-too-weak';
-      case 1:
-        return 'strength-weak';
-      case 2:
-        return 'strength-medium';
-      case 3:
-        return 'strength-strong';
-      default:
-        return '';
-    }
   }
 
   shouldCreateDefaultArchive() {

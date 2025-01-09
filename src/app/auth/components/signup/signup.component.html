@@ -61,11 +61,10 @@
         spellcheck: 'off'
       }"
     ></pr-form-input-glam>
-    <pr-strength-meter
-      *ngIf="passwordStrengthMessage"
-      [message]="passwordStrengthMessage"
-      [passwordClass]="passwordStrengthClass"
-    ></pr-strength-meter>
+    <pr-password-strength
+      *ngIf="signupForm.controls['password']?.value"
+      [password]="signupForm.controls['password']?.value"
+    ></pr-password-strength>
   </div>
   <div class="input-container confirm-password-input">
     <pr-form-input-glam
