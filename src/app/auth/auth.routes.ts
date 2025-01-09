@@ -11,7 +11,7 @@ import { VerifyComponent } from '@auth/components/verify/verify.component';
 import { MfaComponent } from '@auth/components/mfa/mfa.component';
 import { LoginComponent } from '@auth/components/login/login.component';
 import { ForgotPasswordComponent } from '@auth/components/forgot-password/forgot-password.component';
-import { PasswordStrengthComponent } from '@shared/components/strength-meter/password-strength';
+import { PasswordStrengthComponent } from '@auth/components/password-strength/password-strength';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { ComponentsModule } from '../component-library/components.module';
 import { AuthComponent } from './components/auth/auth.component';
