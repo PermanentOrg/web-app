@@ -73,7 +73,6 @@ import { AccessRolePipe } from './pipes/access-role.pipe';
 import { MobileBannerComponent } from './components/mobile-banner/mobile-banner.component';
 import { ZoomingImageViewerComponent } from './components/zooming-image-viewer/zooming-image-viewer.component';
 import { GetFileTypePipe } from './pipes/get-file-type.pipe';
-import { StrengthMeterComponent } from './components/strength-meter/strength-meter.component';
 
 @NgModule({
   imports: [
@@ -143,7 +142,6 @@ import { StrengthMeterComponent } from './components/strength-meter/strength-met
     AccessRolePipe,
     MobileBannerComponent,
     ZoomingImageViewerComponent,
-    StrengthMeterComponent,
   ],
   declarations: [
     ThumbnailComponent,
@@ -195,7 +193,6 @@ import { StrengthMeterComponent } from './components/strength-meter/strength-met
     AccessRolePipe,
     MobileBannerComponent,
     ZoomingImageViewerComponent,
-    StrengthMeterComponent,
   ],
   providers: [
     PublicLinkPipe,
