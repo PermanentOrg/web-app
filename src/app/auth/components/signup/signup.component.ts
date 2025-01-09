@@ -22,12 +22,9 @@ import {
 } from '@models';
 import { DeviceService } from '@shared/services/device/device.service';
 import { GoogleAnalyticsService } from '@shared/services/google-analytics/google-analytics.service';
-import { passwordStrength } from 'check-password-strength';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 const NEW_ONBOARDING_CHANCE = 1;
-
-type PasswordType = '' | 'Too Weak' | 'Weak' | 'Medium' | 'Strong';
 
 @Component({
   selector: 'pr-signup',

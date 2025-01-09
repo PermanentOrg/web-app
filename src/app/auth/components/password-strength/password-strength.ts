@@ -16,13 +16,42 @@ enum PasswordStrength {
   styleUrls: ['./password-strength.scss'],
 })
 export class PasswordStrengthComponent implements OnChanges {
-  progressBars: string[] = ['', '', ''];
+  @Input() password: string = '';
 
+  public progressBars: [string, string, string] = ['', '', ''];
   public strength: PasswordStrength = PasswordStrength.Null;
   public message: string = '';
   public passwordClass: string = '';
-  @Input() password: string = '';
   public enabledPasswordCheckStrength: boolean;
+
+  private readonly strengthConfig: {
+    [key in PasswordStrength]: {
+      message: string;
+      class: string;
+      progressBars: [string, string, string];
+    };
+  } = {
+    [PasswordStrength.Null]: {
+      message: '',
+      class: '',
+      progressBars: ['', '', ''],
+    },
+    [PasswordStrength.Weak]: {
+      message: 'weak',
+      class: 'too-weak',
+      progressBars: ['weak', '', ''],
+    },
+    [PasswordStrength.Medium]: {
+      message: 'medium',
+      class: 'weak',
+      progressBars: ['half', 'half', ''],
+    },
+    [PasswordStrength.Strong]: {
+      message: 'strong',
+      class: 'strong',
+      progressBars: ['filled', 'filled', 'filled'],
+    },
+  };
 
   constructor(private feature: FeatureFlagService) {
     this.enabledPasswordCheckStrength =
@@ -39,28 +68,26 @@ export class PasswordStrengthComponent implements OnChanges {
     switch (strengthId) {
       case 0:
         this.strength = PasswordStrength.Weak;
-        this.message = 'weak';
-        this.passwordClass = 'too-weak';
-        this.progressBars = ['weak', '', ''];
         break;
       case 1:
         this.strength = PasswordStrength.Medium;
-        this.message = 'medium';
-        this.passwordClass = 'weak';
-        this.progressBars = ['half', 'half', ''];
         break;
       case 3:
         this.strength = PasswordStrength.Strong;
-        this.message = 'strong';
-        this.passwordClass = 'strong';
-        this.progressBars = ['filled', 'filled', 'filled'];
         break;
       default:
         this.strength = PasswordStrength.Null;
-        this.message = '';
-        this.passwordClass = '';
-        this.progressBars = ['', '', ''];
     }
+
+    const {
+      message,
+      class: passwordClass,
+      progressBars,
+    } = this.strengthConfig[this.strength];
+
+    this.message = message;
+    this.passwordClass = passwordClass;
+    this.progressBars = progressBars;
   }
 
   private updatePasswordStrength(): void {
