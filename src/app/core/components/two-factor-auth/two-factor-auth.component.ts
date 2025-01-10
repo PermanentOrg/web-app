@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
+  UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
@@ -50,16 +51,38 @@ export class TwoFactorAuthComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     this.methods = await this.api.idpuser.getTwoFactorMethods();
+
     this.loading = false;
   }
 
   formatPhoneNumber(value: string) {
     let numbers = value.replace(/\D/g, '');
-    let char = { 0: '(', 3: ')  ', 6: ' - ' };
-    let formatted = '';
+    let countryCode = '';
+
+    if (numbers.startsWith('00')) {
+      const match = numbers.match(/^00(\d{1,3})/);
+      if (match) {
+        countryCode = `+${match[1]}`;
+        numbers = numbers.substring(match[0].length);
+      }
+    } else if (numbers.startsWith('1') && value.startsWith('+')) {
+      countryCode = '+1';
+      numbers = numbers.substring(1);
+    } else if (value.startsWith('+')) {
+      const match = numbers.match(/^(\d{1,3})/);
+      if (match) {
+        countryCode = `+${match[1]}`;
+        numbers = numbers.substring(match[1].length);
+      }
+    }
+
+    const char = { 0: '(', 3: ') ', 6: '-' };
+    let formatted = countryCode ? `${countryCode} ` : '';
     for (let i = 0; i < numbers.length; i++) {
       formatted += (char[i] || '') + numbers[i];
     }
+
+    // Update the form control without emitting events
     this.form.get('contactInfo').setValue(formatted, { emitEvent: false });
   }
 
@@ -119,11 +142,20 @@ export class TwoFactorAuthComponent implements OnInit {
     } else if (this.method === 'sms') {
       contactInfoControl.setValidators([
         Validators.required,
-        Validators.maxLength(17),
-        Validators.minLength(17),
+        this.smsLengthValidator(),
       ]);
     }
     contactInfoControl.updateValueAndValidity();
+  }
+
+  private smsLengthValidator() {
+    return (control: UntypedFormControl) => {
+      const value = control.value || '';
+      if (value.length === 14 || value.length === 18 || value.length === 17) {
+        return null;
+      }
+      return { invalidSmsLength: true };
+    };
   }
 
   hasMethod(method: string): boolean {
