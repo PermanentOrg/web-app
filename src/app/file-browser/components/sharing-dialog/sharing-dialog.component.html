@@ -80,17 +80,19 @@
           </select>
         </div>
         <div class="sharing-explanation">
-          Entering an archive name filters the available archives to share with.
-          If you cannot find the archive you are looking for, enter an email
-          address. If an account does not exist, send a share invitation email
-          to that address. If an account does exist, the default archive
-          associated with that account will be listed.
-          <a
-            [href]="
-              'https://permanent.zohodesk.com/portal/en/kb/articles/default-archives'
-            "
-            >Learn more.</a
-          >
+          <small>
+            Entering an archive name filters the available archives to share
+            with. If you cannot find the archive you are looking for, enter an
+            email address. If an account does not exist, send a share invitation
+            email to that address. If an account does exist, the default archive
+            associated with that account will be listed.
+            <a
+              [href]="
+                'https://permanent.zohodesk.com/portal/en/kb/articles/default-archives'
+              "
+              >Learn more.</a
+            >
+          </small>
         </div>
         <ng-container *ngIf="!shares?.length && !pendingShares?.length">
           <div class="shares-empty">Not shared with anyone</div>
