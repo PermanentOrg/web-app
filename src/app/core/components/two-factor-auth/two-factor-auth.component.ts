@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
+  UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
@@ -50,6 +51,7 @@ export class TwoFactorAuthComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     this.methods = await this.api.idpuser.getTwoFactorMethods();
+
     this.loading = false;
   }
 
@@ -140,11 +142,20 @@ export class TwoFactorAuthComponent implements OnInit {
     } else if (this.method === 'sms') {
       contactInfoControl.setValidators([
         Validators.required,
-        Validators.maxLength(18),
-        Validators.minLength(17),
+        this.smsLengthValidator(),
       ]);
     }
     contactInfoControl.updateValueAndValidity();
+  }
+
+  private smsLengthValidator() {
+    return (control: UntypedFormControl) => {
+      const value = control.value || '';
+      if (value.length === 14 || value.length === 18 || value.length === 17) {
+        return null;
+      }
+      return { invalidSmsLength: true };
+    };
   }
 
   hasMethod(method: string): boolean {
