@@ -77,9 +77,12 @@ export class SearchRepo extends BaseRepo {
       query,
       archiveId,
       publicOnly: true,
-      numberOfResults: limit,
       ...tagsDict,
     };
+
+    if (limit) {
+      data['numberOfResults'] = limit;
+    }
 
     return getFirst(
       this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {
