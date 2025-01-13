@@ -55,7 +55,7 @@ export class PasswordStrengthComponent implements OnChanges {
 
   constructor(private feature: FeatureFlagService) {
     this.enabledPasswordCheckStrength =
-      !this.feature.isEnabled('password-strength');
+      this.feature.isEnabled('password-strength');
   }
 
   ngOnChanges(): void {
