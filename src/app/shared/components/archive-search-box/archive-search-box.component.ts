@@ -163,8 +163,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
 
   onBlur() {
     setTimeout(() => {
-      this.focused = false;
-      this.control.reset();
+      this.focused = true;
     }, 150);
   }
 }
