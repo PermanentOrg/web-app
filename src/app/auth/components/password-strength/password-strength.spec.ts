@@ -43,7 +43,7 @@ describe('PasswordStrengthComponent', () => {
 
     const message = fixture.debugElement.query(By.css('p'));
 
-    expect(message.nativeElement.textContent).toContain('Password is weak!');
+    expect(message.nativeElement.textContent).toContain('Password strength: weak');
   });
 
   it('should display "medium" password strength correctly when feature flag is enabled', () => {
@@ -58,7 +58,7 @@ describe('PasswordStrengthComponent', () => {
 
     const message = fixture.debugElement.query(By.css('p'));
 
-    expect(message.nativeElement.textContent).toContain('Password is medium!');
+    expect(message.nativeElement.textContent).toContain('Password strength: medium');
   });
 
   it('should display "strong" password strength correctly when feature flag is enabled', () => {
@@ -73,7 +73,7 @@ describe('PasswordStrengthComponent', () => {
 
     const message = fixture.debugElement.query(By.css('p'));
 
-    expect(message.nativeElement.textContent).toContain('Password is strong!');
+    expect(message.nativeElement.textContent).toContain('Password strength: strong');
   });
 
   it('should not display anything when feature flag is disabled', () => {
