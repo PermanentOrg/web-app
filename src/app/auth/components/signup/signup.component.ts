@@ -13,7 +13,6 @@ import { matchControlValidator, trimWhitespace } from '@shared/utilities/forms';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { MessageService } from '@shared/services/message/message.service';
-import { ApiService } from '@shared/services/api/api.service';
 import {
   RecordVO,
   FolderVO,
@@ -110,7 +109,6 @@ export class SignupComponent {
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
       ],
     });
-
     const confirmPasswordControl = new UntypedFormControl('', [
       Validators.required,
       matchControlValidator(this.signupForm.controls['password']),
