@@ -73,7 +73,13 @@ export class SearchRepo extends BaseRepo {
       return obj;
     }, {});
 
-    const data = {
+    const data: {
+      query: string;
+      archiveId: string | number;
+      publicOnly: boolean;
+      tagsDict?: Record<string, string>;
+      numberOfResults?: number;
+    } = {
       query,
       archiveId,
       publicOnly: true,
@@ -81,7 +87,7 @@ export class SearchRepo extends BaseRepo {
     };
 
     if (limit) {
-      data['numberOfResults'] = limit;
+      data.numberOfResults = limit;
     }
 
     return getFirst(
