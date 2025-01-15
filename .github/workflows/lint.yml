@@ -19,6 +19,6 @@ jobs:
       - name: Install dependencies
         run: FONTAWESOME_PACKAGE_TOKEN="${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}" npm install
       - name: Run Prettier
-        run: npx prettier --check --require-pragma .
+        run: npx prettier --check .
       - name: Run eslint
         run: npm run lint
