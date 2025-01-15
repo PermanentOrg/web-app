@@ -73,13 +73,22 @@ export class SearchRepo extends BaseRepo {
       return obj;
     }, {});
 
-    const data = {
+    const data: {
+      query: string;
+      archiveId: string | number;
+      publicOnly: boolean;
+      tagsDict?: Record<string, string>;
+      numberOfResults?: number;
+    } = {
       query,
       archiveId,
       publicOnly: true,
-      numberOfResults: limit,
       ...tagsDict,
     };
+
+    if (limit) {
+      data.numberOfResults = limit;
+    }
 
     return getFirst(
       this.httpV2.get<SearchResponse>('/search/folderAndRecord', data, null, {

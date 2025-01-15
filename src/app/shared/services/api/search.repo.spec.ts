@@ -56,6 +56,8 @@ describe('SearchRepo', () => {
     const archiveId = '1';
     const limit = 5;
 
+    const tagString = `tags%5B0%5D%5BtagId%5D=1&tags%5B1%5D%5BtagId%5D=2`;
+
     repo
       .itemsByNameInPublicArchiveObservable(query, tags, archiveId, limit)
       .toPromise()
@@ -68,12 +70,10 @@ describe('SearchRepo', () => {
     );
 
     expect(req.request.method).toBe('GET');
-    expect(req.request.urlWithParams).toContain(
-      `tags%5B0%5D%5BtagId%5D=1&tags%5B1%5D%5BtagId%5D=2`,
-    );
+    expect(req.request.urlWithParams).toContain(tagString);
 
     expect(req.request.urlWithParams).toContain(
-      `query=${query}&archiveId=${archiveId}&publicOnly=true&numberOfResults=${limit}`,
+      `query=${query}&archiveId=${archiveId}&publicOnly=true&${tagString}&numberOfResults=${limit}`,
     );
 
     req.flush({});
@@ -99,6 +99,29 @@ describe('SearchRepo', () => {
     expect(req.request.urlWithParams).not.toContain('tags');
     expect(req.request.urlWithParams).toContain(
       `query=${query}&archiveId=${archiveId}&publicOnly=true&numberOfResults=${limit}`,
+    );
+
+    req.flush({});
+  });
+
+  it('should exclude numberOfResults from the query string when no limit is provided', () => {
+    const query = 'exampleQuery';
+    const archiveId = '1';
+
+    repo
+      .itemsByNameInPublicArchiveObservable(query, [], archiveId)
+      .toPromise()
+      .then((response: SearchResponse) => {
+        expect(response).toBeTruthy();
+      });
+
+    const req = httpMock.expectOne((req) =>
+      req.url.includes('/search/folderAndRecord'),
+    );
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.urlWithParams).toContain(
+      `query=${query}&archiveId=${archiveId}&publicOnly=true`,
     );
 
     req.flush({});
