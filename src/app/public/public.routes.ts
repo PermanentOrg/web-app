@@ -49,6 +49,10 @@ export const routes: RoutesWithData = [
             component: PublicSearchResultsComponent,
           },
           {
+            path: 'search-tag/:archiveId/:tagId',
+            component: PublicSearchResultsComponent,
+          },
+          {
             path: 'profile',
             component: PublicProfileComponent,
           },

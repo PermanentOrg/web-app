@@ -1,10 +1,18 @@
 /* @format */
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ArchiveVO, TagVO } from '@models/index';
+import { ArchiveVO, TagVO, TagVOData } from '@models/index';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { SearchService } from '@search/services/search.service';
-import { catchError, debounceTime, map, of, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  map,
+  of,
+  Subscription,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'pr-archive-search',
@@ -13,8 +21,10 @@ import { catchError, debounceTime, map, of, switchMap, tap } from 'rxjs';
 })
 export class ArchiveSearchComponent implements OnInit {
   @Output() search = new EventEmitter<string>();
+  @Output() searchByTag = new EventEmitter<number>();
 
-  private archive: ArchiveVO;
+  public archive: ArchiveVO;
+  private valueChangesSubscription: Subscription;
 
   public searchForm: FormGroup;
 
@@ -26,7 +36,7 @@ export class ArchiveSearchComponent implements OnInit {
   public tags = [];
   public filteredTags = [];
 
-  public tag: TagVO[] = [];
+  public tag: TagVOData[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -53,26 +63,32 @@ export class ArchiveSearchComponent implements OnInit {
   }
 
   initFormHandler() {
-    this.searchForm?.valueChanges
+    const valueChangesSubscription = this.searchForm?.valueChanges
       ?.pipe(
         debounceTime(100),
-        map((value) => value.query?.trim() || ''),
-        tap((term) => {
+        map((term) => {
+          return this.searchService.parseSearchTerm(term.query);
+        }),
+        tap(([term, tags]) => {
+          let value = term ? term : tags[0]?.name;
           this.filteredTags = this.tags.filter((tag) =>
-            tag.name.toLowerCase().includes(term.toLowerCase()),
+            tag.name.toLowerCase().includes(value?.toLowerCase()),
           );
         }),
-        switchMap((term) => {
-          if (!term) {
+        switchMap(([term, tags]) => {
+          if (!term && !tags.length) {
             this.tag = [];
+          } else {
+            this.tag = tags;
           }
 
           const archiveId = this.archive?.archiveId;
-          if (term.length || this.filteredTags.length) {
+          if (term?.length || this.filteredTags.length) {
             this.waiting = true;
+
             return this.searchService
               .getResultsInPublicArchive(
-                term,
+                term ? term : '',
                 this.tag.length ? this.tag : [],
                 archiveId,
                 3,
@@ -98,6 +114,7 @@ export class ArchiveSearchComponent implements OnInit {
           this.filteredTags = [];
         }
       });
+    this.valueChangesSubscription = valueChangesSubscription;
   }
 
   public clearForm(): void {
@@ -109,7 +126,12 @@ export class ArchiveSearchComponent implements OnInit {
   }
 
   public onTagClick(tag: TagVO[]): void {
-    this.searchForm.patchValue({ query: tag[0].name });
     this.tag = tag;
+    this.searchByTag.emit(tag[0].tagId);
+
+    this.valueChangesSubscription.unsubscribe();
+    this.searchForm.patchValue({ query: `tag:"${tag[0].name}"` });
+
+    this.initFormHandler();
   }
 }

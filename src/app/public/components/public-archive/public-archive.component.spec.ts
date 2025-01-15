@@ -4,6 +4,7 @@ import { PublicModule } from '@public/public.module';
 import { Shallow } from 'shallow-render';
 import { of } from 'rxjs';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { Router } from '@angular/router';
 import { PublicArchiveComponent } from './public-archive.component';
 
 const publicProfileServiceMock = {
@@ -53,5 +54,35 @@ describe('PublicArchiveComponent', () => {
       'archive-description': true,
       'archive-description-show': true,
     });
+  });
+
+  it('should navigate to the correct search URL on handleSearch', async () => {
+    const { instance, inject } = await shallow.render();
+    const router = inject(Router);
+    spyOn(router, 'navigate');
+
+    instance.archive = { archiveId: '123' } as any;
+
+    instance.onHandleSearch('test-query');
+
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['search', '123', 'test-query'],
+      { relativeTo: instance.route },
+    );
+  });
+
+  it('should navigate to the correct search-tag URL on tag click', async () => {
+    const { instance, inject } = await shallow.render();
+    const router = inject(Router);
+    spyOn(router, 'navigate');
+
+    instance.archive = { archiveId: '123' } as any;
+
+    instance.onTagClick('example-tag');
+
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['search-tag', '123', 'example-tag'],
+      { relativeTo: instance.route },
+    );
   });
 });
