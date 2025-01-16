@@ -106,6 +106,7 @@ describe('ThumbnailCache', () => {
       expect(thumbz.folderContentsType).toBe(
         FolderContentsType.BROKEN_THUMBNAILS,
       );
+
       expect(storage.session.get('folderThumbnailCache').length).toBe(0);
     });
 

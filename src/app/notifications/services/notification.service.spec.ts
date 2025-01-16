@@ -153,6 +153,7 @@ describe('NotificationService', () => {
     expect(service.notifications.length).toBe(
       allNotificationsData.length + newNotificationData.length,
     );
+
     expect(service.notifications[0]).toEqual(newNotificationData[0]);
     discardPeriodicTasks();
   }));

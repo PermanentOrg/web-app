@@ -67,6 +67,7 @@ describe('FolderPickerComponent', () => {
     expect(component.currentFolder.folder_linkId).toEqual(
       myFiles.folder_linkId,
     );
+
     expect(some(component.currentFolder.ChildItemVOs, 'isRecord')).toBeFalsy();
 
     const getLeanItemsExpected = require('@root/test/responses/folder.getLeanItems.folderPicker.myFiles.success.json');
