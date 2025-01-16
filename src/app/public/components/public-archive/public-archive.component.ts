@@ -122,10 +122,15 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     this.showProfileInformation = !this.showProfileInformation;
   }
 
-  public onTagClick(tagName: string): void {
+  public onTagClick(tag): void {
     try {
       this.router.navigate(
-        ['search-tag', this.archive.archiveId, `${tagName}`],
+        [
+          'search-tag',
+          this.archive.archiveId,
+          `${tag.tagId}`,
+          `${tag.tagName}`,
+        ],
         {
           relativeTo: this.route,
         },

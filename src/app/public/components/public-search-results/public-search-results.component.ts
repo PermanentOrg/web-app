@@ -15,6 +15,7 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
   public waiting = false;
   public query = '';
   public tags = [];
+  public searchString = '';
 
   public archivePath = ['..', '..', '..'];
 
@@ -31,9 +32,13 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     if (this.route.params) {
       this.paramsSubscription = this.route.params.subscribe((params) => {
         this.archivePath = ['/p/archive', params.publicArchiveNbr];
-        
+
         this.query = params.query ? params.query : '';
         this.tags = params.tagId ? [new TagVO({ tagId: params.tagId })] : [];
+
+        this.searchString = this.query
+          ? this.query
+          : `Keyword: ${params.tagName}`;
 
         this.searchSubscription = this.searchService
           .getResultsInPublicArchive(this.query, this.tags, params.archiveId)

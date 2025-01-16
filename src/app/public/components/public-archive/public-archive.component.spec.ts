@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { Router } from '@angular/router';
 import { PublicArchiveComponent } from './public-archive.component';
+import { ArchiveVO } from '@models/index';
 
 const publicProfileServiceMock = {
   publicRoot$: () => of({}),
@@ -76,12 +77,12 @@ describe('PublicArchiveComponent', () => {
     const router = inject(Router);
     spyOn(router, 'navigate');
 
-    instance.archive = { archiveId: '123' } as any;
+    instance.archive = new ArchiveVO({ archiveId: '123' });
 
-    instance.onTagClick('example-tag');
+    instance.onTagClick({ tagId: 'example-tag-id', tagName: 'tag-name' });
 
     expect(router.navigate).toHaveBeenCalledWith(
-      ['search-tag', '123', 'example-tag'],
+      ['search-tag', '123', 'example-tag-id', 'tag-name'],
       { relativeTo: instance.route },
     );
   });

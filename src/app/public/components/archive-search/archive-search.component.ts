@@ -21,7 +21,10 @@ import {
 })
 export class ArchiveSearchComponent implements OnInit {
   @Output() search = new EventEmitter<string>();
-  @Output() searchByTag = new EventEmitter<number>();
+  @Output() searchByTag = new EventEmitter<{
+    tagId: number;
+    tagName: string;
+  }>();
 
   public archive: ArchiveVO;
   private valueChangesSubscription: Subscription;
@@ -127,7 +130,7 @@ export class ArchiveSearchComponent implements OnInit {
 
   public onTagClick(tag: TagVO[]): void {
     this.tag = tag;
-    this.searchByTag.emit(tag[0].tagId);
+    this.searchByTag.emit({ tagId: tag[0].tagId, tagName: tag[0].name });
 
     this.valueChangesSubscription.unsubscribe();
     this.searchForm.patchValue({ query: `tag:"${tag[0].name}"` });

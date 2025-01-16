@@ -124,6 +124,9 @@ describe('ArchiveSearchComponent', () => {
 
     component.onTagClick([new TagVO({ name: 'Tag1', tagId: 1 })]);
 
-    expect(component.searchByTag.emit).toHaveBeenCalledWith(1);
+    expect(component.searchByTag.emit).toHaveBeenCalledWith({
+      tagId: 1,
+      tagName: 'Tag1',
+    });
   });
 });
