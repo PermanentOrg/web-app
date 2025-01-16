@@ -8,9 +8,8 @@ describe('PublicArchiveWebLinksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PublicArchiveWebLinksComponent ]
-    })
-    .compileComponents();
+      declarations: [PublicArchiveWebLinksComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

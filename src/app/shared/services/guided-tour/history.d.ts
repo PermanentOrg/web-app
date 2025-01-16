@@ -9,5 +9,4 @@ export interface GuidedTourHistory {
 
 export type TourName = keyof GuidedTourHistory;
 
-export type TourStep = keyof (FamilySearchTourHistory);
-
+export type TourStep = keyof FamilySearchTourHistory;

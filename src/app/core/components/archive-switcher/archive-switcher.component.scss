@@ -13,7 +13,7 @@
   background-color: white;
   text-align: center;
   padding: 10px 10px 0px;
-  
+
   @include mainContentScrollDesktop;
   @include desktop {
     position: relative;
@@ -27,7 +27,7 @@
   font-weight: 600;
 }
 
-.archive-list-wrapper{
+.archive-list-wrapper {
   flex: 1 1;
   max-width: 360px;
   width: 100%;
@@ -39,7 +39,7 @@
   border: 1px solid $gray-300;
   border-radius: 0.25rem;
   padding: 20px;
-}  
+}
 
 .archive-list {
   padding: 20px;

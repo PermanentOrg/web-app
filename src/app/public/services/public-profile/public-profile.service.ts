@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ArchiveVO, FolderVO } from '@models';
-import { ProfileItemVODictionary, ProfileItemVOData } from '@models/profile-item-vo';
-import { addProfileItemToDictionary, orderItemsInDictionary } from '@shared/services/profile/profile.service';
+import {
+  ProfileItemVODictionary,
+  ProfileItemVOData,
+} from '@models/profile-item-vo';
+import {
+  addProfileItemToDictionary,
+  orderItemsInDictionary,
+} from '@shared/services/profile/profile.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -10,7 +16,7 @@ export class PublicProfileService {
   archiveBs = new BehaviorSubject<ArchiveVO>(null);
   profileItemsDictionaryBs = new BehaviorSubject<ProfileItemVODictionary>({});
 
-  constructor() { }
+  constructor() {}
 
   publicRoot$() {
     return this.publicRootBs.asObservable();

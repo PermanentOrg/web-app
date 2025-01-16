@@ -1,12 +1,20 @@
 <div *ngIf="!showForArchive" class="space-title">Storage</div>
 <div class="space-meter" [ngClass]="{ 'space-meter-archive': showForArchive }">
-  <div class="space-meter-inner" [ngClass]="{ 'space-meter-inner-archive': showForArchive }" [style]="getMeterTransform()"></div>
+  <div
+    class="space-meter-inner"
+    [ngClass]="{ 'space-meter-inner-archive': showForArchive }"
+    [style]="getMeterTransform()"
+  ></div>
 </div>
 <div *ngIf="!showForArchive" class="space-label">
   {{ accountSpaceTotal - accountSpaceLeft | prStorageAmount }} of
-  {{ accountSpaceTotal | dsFileSize : 0 }} used
+  {{ accountSpaceTotal | dsFileSize: 0 }} used
 </div>
-<div *ngIf="showForArchive" class="space-label" [ngClass]="{ 'space-label-archive': showForArchive }">
+<div
+  *ngIf="showForArchive"
+  class="space-label"
+  [ngClass]="{ 'space-label-archive': showForArchive }"
+>
   {{ archiveSpaceTotal - archiveSpaceLeft | prStorageAmount }} of
-  {{ archiveSpaceTotal | dsFileSize : 0 }} used
+  {{ archiveSpaceTotal | dsFileSize: 0 }} used
 </div>

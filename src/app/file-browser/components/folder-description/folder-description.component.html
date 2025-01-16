@@ -1,3 +1,6 @@
 <ng-container *ngIf="folder.description">
-  <div class="folder-description" [innerHTML]="folder.description | newlineText | safeHtml"></div>
+  <div
+    class="folder-description"
+    [innerHTML]="folder.description | newlineText | safeHtml"
+  ></div>
 </ng-container>

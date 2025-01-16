@@ -10,7 +10,7 @@ $dual-ring-size: 95px;
   transform: translate(-50%, -50%);
 }
 .lds-dual-ring:after {
-  content: " ";
+  content: ' ';
   display: block;
   width: $dual-ring-size;
   height: $dual-ring-size;
@@ -38,7 +38,7 @@ $dual-ring-size: 95px;
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
-    opacity: 1
+    opacity: 1;
   }
 
   50% {
@@ -62,13 +62,31 @@ $fade-ring-opacity: 0.6;
   height: $fade-ring-size;
   border-radius: 50%;
   background: #ffffff;
-  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -moz-linear-gradient(
+    left,
+    #ffffff 10%,
+    rgba(255, 255, 255, 0) 42%
+  );
+  background: -webkit-linear-gradient(
+    left,
+    #ffffff 10%,
+    rgba(255, 255, 255, 0) 42%
+  );
   background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
-  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(
+    left,
+    #ffffff 10%,
+    rgba(255, 255, 255, 0) 42%
+  );
+  background: linear-gradient(
+    to right,
+    #ffffff 10%,
+    rgba(255, 255, 255, 0) 42%
+  );
   position: relative;
-  animation: load3 1.4s infinite linear, fadeInHalf 0.25s ease;
+  animation:
+    load3 1.4s infinite linear,
+    fadeInHalf 0.25s ease;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);

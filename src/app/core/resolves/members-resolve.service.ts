@@ -7,12 +7,18 @@ import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models';
 
 @Injectable()
-export class MembersResolveService  {
+export class MembersResolveService {
+  constructor(
+    private api: ApiService,
+    private accountService: AccountService,
+  ) {}
 
-  constructor(private api: ApiService, private accountService: AccountService) { }
-
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
-    return this.api.archive.getMembers(this.accountService.getArchive())
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<any> {
+    return this.api.archive
+      .getMembers(this.accountService.getArchive())
       .then((response: ArchiveResponse) => {
         const currentAccount = this.accountService.getAccount();
         const members = response.getAccountVOs();

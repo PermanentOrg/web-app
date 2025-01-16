@@ -15,10 +15,7 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
     AppsRoutingModule,
     FileBrowserComponentsModule,
   ],
-  declarations: [
-    SharesComponent,
-  ],
-  providers: [
-  ]
+  declarations: [SharesComponent],
+  providers: [],
 })
-export class SharesModule { }
+export class SharesModule {}

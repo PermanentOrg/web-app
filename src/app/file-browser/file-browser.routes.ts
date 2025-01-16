@@ -8,19 +8,19 @@ import { FileListComponent } from '@fileBrowser/components/file-list/file-list.c
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 
 const folderResolve = {
-  currentFolder: FolderResolveService
+  currentFolder: FolderResolveService,
 };
 
 const recordResolve = {
-  currentRecord: RecordResolveService
+  currentRecord: RecordResolveService,
 };
 
 export const fileListChildRoutes = [
   {
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,
-    resolve: recordResolve
-  }
+    resolve: recordResolve,
+  },
 ];
 
 export const routes: Routes = [
@@ -29,30 +29,24 @@ export const routes: Routes = [
     component: FileListComponent,
     resolve: folderResolve,
     children: fileListChildRoutes,
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
   },
   {
     path: 'view',
-    loadChildren: () => import('../views/views.module').then(m => m.ViewsModule)
+    loadChildren: () =>
+      import('../views/views.module').then((m) => m.ViewsModule),
   },
   {
     path: ':archiveNbr/:folderLinkId',
     component: FileListComponent,
     resolve: folderResolve,
-    children: fileListChildRoutes
-  }
+    children: fileListChildRoutes,
+  },
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-  ],
-  exports: [
-  ],
-  providers: [
-    FolderResolveService,
-    RecordResolveService
-  ],
-  declarations: []
+  imports: [RouterModule.forChild(routes)],
+  exports: [],
+  providers: [FolderResolveService, RecordResolveService],
+  declarations: [],
 })
-export class FileBrowserRoutingModule { }
-
+export class FileBrowserRoutingModule {}

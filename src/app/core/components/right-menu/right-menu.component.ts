@@ -54,13 +54,13 @@ export class RightMenuComponent implements OnInit {
     private dataService: DataService,
     private account: AccountService,
     private prompt: PromptService,
-    private folderViewService: FolderViewService
+    private folderViewService: FolderViewService,
   ) {
     this.dataService.currentFolderChange.subscribe(
       (currentFolder: FolderVO) => {
         this.currentFolder = currentFolder;
         this.setAvailableActions();
-      }
+      },
     );
 
     this.folderViewService.viewChange.subscribe((folderView: FolderView) => {
@@ -98,11 +98,11 @@ export class RightMenuComponent implements OnInit {
       !isSpecialFolder &&
       checkMinimumAccess(
         this.currentFolder.accessRole,
-        AccessRole.Contributor
+        AccessRole.Contributor,
       ) &&
       checkMinimumAccess(
         this.account.getArchive().accessRole,
-        AccessRole.Contributor
+        AccessRole.Contributor,
       );
     this.allowedActions.multiSelect = this.allowedActions.createFolder;
     this.allowedActions.folderActions =
@@ -203,7 +203,7 @@ export class RightMenuComponent implements OnInit {
       !isPublic &&
       this.account.checkMinimumAccess(
         this.dataService.currentFolder.accessRole,
-        AccessRole.Owner
+        AccessRole.Owner,
       )
     ) {
       actions.push(ItemActions.Share);

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { RecordVO } from '@root/app/models';
 import { GetAltTextPipe } from '../../pipes/get-alt-text.pipe';
@@ -14,7 +14,7 @@ describe('VideoComponent', () => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 
     config.declarations.push(VideoComponent);
-    config.declarations.push(GetAltTextPipe)
+    config.declarations.push(GetAltTextPipe);
 
     TestBed.configureTestingModule(config).compileComponents();
   }));
@@ -23,7 +23,7 @@ describe('VideoComponent', () => {
     fixture = TestBed.createComponent(VideoComponent);
     component = fixture.componentInstance;
     component.item = new RecordVO({
-      displayName: 'test video'
+      displayName: 'test video',
     });
     fixture.detectChanges();
   });

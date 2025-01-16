@@ -3,49 +3,48 @@ import { LocnVOData } from './locn-vo';
 import { TimezoneVOData } from './timezone-vo';
 
 export type FieldNameUI =
-'profile.basic' |
-'profile.birth_info' |
-'profile.blurb' |
-'profile.closure_info' |
-'profile.death_info' |
-'profile.description' |
-'profile.established_info' |
-'profile.email' |
-'profile.gender' |
-'profile.home' |
-'profile.job' |
-'profile.milestone' |
-'profile.location' |
-'profile.phone_nbr' |
-'profile.social_media' |
-'profile.timezone' |
-'profile.FORCE_PUBLIC_UPDATE';
+  | 'profile.basic'
+  | 'profile.birth_info'
+  | 'profile.blurb'
+  | 'profile.closure_info'
+  | 'profile.death_info'
+  | 'profile.description'
+  | 'profile.established_info'
+  | 'profile.email'
+  | 'profile.gender'
+  | 'profile.home'
+  | 'profile.job'
+  | 'profile.milestone'
+  | 'profile.location'
+  | 'profile.phone_nbr'
+  | 'profile.social_media'
+  | 'profile.timezone'
+  | 'profile.FORCE_PUBLIC_UPDATE';
 
 export type FieldNameUIShort =
-'basic' |
-'birth_info' |
-'blurb' |
-'closure_info' |
-'death_info' |
-'description' |
-'established_info' |
-'email' |
-'gender' |
-'home' |
-'job' |
-'milestone' |
-'location' |
-'phone_nbr' |
-'social_media' |
-'timezone';
+  | 'basic'
+  | 'birth_info'
+  | 'blurb'
+  | 'closure_info'
+  | 'death_info'
+  | 'description'
+  | 'established_info'
+  | 'email'
+  | 'gender'
+  | 'home'
+  | 'job'
+  | 'milestone'
+  | 'location'
+  | 'phone_nbr'
+  | 'social_media'
+  | 'timezone';
 
 type ProfileItemType =
-  'type.widget.string' |
-  'type.widget.wysiwyg' |
-  'type.widget.locn' |
-  'type.widget.date' |
-  'type.widget.timezone'
-  ;
+  | 'type.widget.string'
+  | 'type.widget.wysiwyg'
+  | 'type.widget.locn'
+  | 'type.widget.date'
+  | 'type.widget.timezone';
 
 export interface ProfileItemVOData extends BaseVOData, DynamicListChild {
   profile_itemId?: number;
@@ -80,27 +79,29 @@ export interface ProfileItemVOData extends BaseVOData, DynamicListChild {
   textData1?: string;
   textData2?: string;
 
-  archiveNbr?:  string;
+  archiveNbr?: string;
 }
 
 export type ProfileItemVOMap = Map<FieldNameUI, ProfileItemVOData[]>;
-export type ProfileItemVODictionary = { [key in FieldNameUIShort]?: ProfileItemVOData[] };
+export type ProfileItemVODictionary = {
+  [key in FieldNameUIShort]?: ProfileItemVOData[];
+};
 
 export interface ProfileTemplate {
   [key: string]: {
     [key in FieldNameUIShort]: {
       grouping: string;
-      field_name_ui: FieldNameUI,
-      description: string,
-      position: number,
-      allow_multiple: number,
-      date_added: string,
+      field_name_ui: FieldNameUI;
+      description: string;
+      position: number;
+      allow_multiple: number;
+      date_added: string;
       values: {
         [key: string]: {
-          field_name_ui: string,
-          description: string,
-        }
-      }
-    }
+          field_name_ui: string;
+          description: string;
+        };
+      };
+    };
   };
 }

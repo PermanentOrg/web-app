@@ -9,17 +9,8 @@ import { GlobalSearchResultsComponent } from './components/global-search-results
 
 @NgModule({
   declarations: [GlobalSearchBarComponent, GlobalSearchResultsComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    FormsModule
-  ],
-  providers: [
-    SearchService
-  ],
-  exports: [
-    GlobalSearchBarComponent,
-    GlobalSearchResultsComponent
-  ]
+  imports: [CommonModule, SharedModule, FormsModule],
+  providers: [SearchService],
+  exports: [GlobalSearchBarComponent, GlobalSearchResultsComponent],
 })
-export class SearchModule { }
+export class SearchModule {}

@@ -24,7 +24,7 @@ export class TransactionHistoryComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private device: DeviceService
+    private device: DeviceService,
   ) {
     if (this.device.isMobileWidth()) {
       this.maxPageCount = 5;
@@ -38,7 +38,7 @@ export class TransactionHistoryComponent implements OnInit {
   async loadTransactionHistory() {
     try {
       const response = await this.api.billing.getTransactionHistory(
-        this.account.getAccount()
+        this.account.getAccount(),
       );
       const ledgerItems = response.getLedgerFinancialVOs().reverse();
       this.ledgerItemCount = ledgerItems.length;

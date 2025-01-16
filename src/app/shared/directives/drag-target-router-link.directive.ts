@@ -1,13 +1,28 @@
-import { Directive, ElementRef, Input, HostBinding, HostListener, OnDestroy, AfterViewInit, Optional } from '@angular/core';
-import { DragService, DragTargetDroppableComponent, DragServiceEvent } from '@shared/services/drag/drag.service';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  HostBinding,
+  HostListener,
+  OnDestroy,
+  AfterViewInit,
+  Optional,
+} from '@angular/core';
+import {
+  DragService,
+  DragTargetDroppableComponent,
+  DragServiceEvent,
+} from '@shared/services/drag/drag.service';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from '@shared/services/data/data.service';
 
 @Directive({
-  selector: '[prDragTargetRouterLink]'
+  selector: '[prDragTargetRouterLink]',
 })
-export class DragTargetRouterLinkDirective implements DragTargetDroppableComponent, OnDestroy, AfterViewInit {
+export class DragTargetRouterLinkDirective
+  implements DragTargetDroppableComponent, OnDestroy, AfterViewInit
+{
   private nativeElement: HTMLElement;
   private dragSubscription: Subscription;
 
@@ -16,18 +31,17 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
 
   @Input() routerLink: string[];
   linkText: string;
-  constructor (
+  constructor(
     private element: ElementRef,
     @Optional() private drag: DragService,
     private data: DataService,
   ) {
     this.nativeElement = this.element.nativeElement;
     if (this.drag) {
-      this.dragSubscription = this.drag.events().subscribe(dragEvent => {
+      this.dragSubscription = this.drag.events().subscribe((dragEvent) => {
         this.onDragServiceEvent(dragEvent);
       });
     }
-
   }
 
   ngAfterViewInit() {
@@ -93,7 +107,7 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
       this.drag.dispatch({
         type,
         srcComponent: this,
-        event
+        event,
       });
       this.isDropTarget = enter;
     }
@@ -106,5 +120,4 @@ export class DragTargetRouterLinkDirective implements DragTargetDroppableCompone
       return 'type.folder.root.public';
     }
   }
-
 }

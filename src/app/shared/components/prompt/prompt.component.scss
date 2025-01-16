@@ -2,7 +2,7 @@
 
 $transition-length: 0.4s;
 
-:host{
+:host {
   z-index: 100000;
 }
 
@@ -22,7 +22,6 @@ $transition-length: 0.4s;
   max-height: 85vh;
   overflow-y: auto;
   webkit-overflow-scrolling: touch;
-
 
   @include after($tablet-horizontal) {
     opacity: 0;
@@ -54,13 +53,12 @@ $transition-length: 0.4s;
   }
 }
 
-
 .prompt-field-buttons {
   text-align: right;
   button {
     display: inline-block;
     width: auto;
-    margin: 0 0 0 10px
+    margin: 0 0 0 10px;
   }
 }
 

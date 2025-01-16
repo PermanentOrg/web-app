@@ -1,7 +1,10 @@
 import { Shallow } from 'shallow-render';
 import { SharedModule } from '@shared/shared.module';
 import { ApiService } from '@shared/services/api/api.service';
-import { ArchiveFormData, NewArchiveFormComponent } from './new-archive-form.component';
+import {
+  ArchiveFormData,
+  NewArchiveFormComponent,
+} from './new-archive-form.component';
 
 let created: boolean = false;
 let throwError: boolean = false;
@@ -11,23 +14,23 @@ const mockApiService = {
   archive: {
     create: async (data: any) => {
       if (throwError) {
-        throw "Test Error";
+        throw 'Test Error';
       }
       created = true;
       createdArchive = data as ArchiveFormData;
       return {
         getArchiveVO: () => {
           return data;
-        }
-      }
-    }
-  }
-}
+        },
+      };
+    },
+  },
+};
 
 describe('NewArchiveFormComponent #onboarding', () => {
   let shallow: Shallow<NewArchiveFormComponent>;
   let expectedApiVal: ArchiveFormData;
-  function fillOutForm (find: (a: string) => any) {
+  function fillOutForm(find: (a: string) => any) {
     const input = find('#newArchiveName');
     input.nativeElement.value = 'Test User';
     input.triggerEventHandler('input', { target: input.nativeElement });
@@ -40,7 +43,10 @@ describe('NewArchiveFormComponent #onboarding', () => {
     throwError = false;
     //I hate to do this but I don't have time to mock out the entire API service in a type-safe way.
     //@ts-ignore
-    shallow = new Shallow(NewArchiveFormComponent, SharedModule).mock(ApiService, mockApiService);
+    shallow = new Shallow(NewArchiveFormComponent, SharedModule).mock(
+      ApiService,
+      mockApiService,
+    );
   });
 
   it('should create', async () => {
@@ -106,7 +112,9 @@ describe('NewArchiveFormComponent #onboarding', () => {
   });
 
   it('should have an input that enables relations', async () => {
-    const { find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
+    const { find, fixture } = await shallow.render(
+      '<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>',
+    );
     fillOutForm(find);
     fixture.detectChanges();
 
@@ -118,7 +126,9 @@ describe('NewArchiveFormComponent #onboarding', () => {
   });
 
   it('should submit relationType to API if it is enabled', async () => {
-    const { element, find, fixture } = await shallow.render('<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>');
+    const { element, find, fixture } = await shallow.render(
+      '<pr-new-archive-form [showRelations]="true"></pr-new-archive-form>',
+    );
     fillOutForm(find);
     fixture.detectChanges();
     find('select').nativeElement.value = 'relation.other';

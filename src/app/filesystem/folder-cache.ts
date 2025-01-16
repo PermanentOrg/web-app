@@ -8,7 +8,7 @@ export class FolderCache {
 
   private fetchFromCache(
     query: FolderIdentifier,
-    property: KeysOfUnion<FolderIdentifier>
+    property: KeysOfUnion<FolderIdentifier>,
   ): FolderVO | undefined {
     if (property in query) {
       return this.folders.find((f) => f[property] === query[property]);

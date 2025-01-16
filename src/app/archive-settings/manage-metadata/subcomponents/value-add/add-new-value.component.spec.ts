@@ -21,7 +21,7 @@ describe('AddNewValueComponent', () => {
         bind: {
           category: categoryName,
         },
-      }
+      },
     );
 
   beforeEach(async () => {

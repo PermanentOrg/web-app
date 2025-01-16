@@ -13,12 +13,12 @@ export class RootFolderResolveService {
   constructor(
     private api: ApiService,
     private accountService: AccountService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   async resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Promise<any> {
     // check for targetArchiveNbr parameter and switch archives if possible
     const targetArchiveNbr = route.queryParams.targetArchiveNbr;

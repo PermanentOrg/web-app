@@ -91,7 +91,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
     this.className = getAlternatingTimelineItemClass();
     this.start = getTimezoneDateFromDisplayDate(
       item.displayDT,
-      timezone
+      timezone,
     ).valueOf();
 
     if (item instanceof FolderVO) {
@@ -99,7 +99,7 @@ export class TimelineItem implements DataItem, TimelineDataItem {
       this.imageWidth = `${imageHeight}px`;
       const end = getTimezoneDateFromDisplayDate(
         item.displayEndDT,
-        timezone
+        timezone,
       ).valueOf();
       if (end - this.start > 6 * Month) {
         this.end = end;
@@ -133,7 +133,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
     items: RecordVO[],
     timespan: TimelineGroupTimespan,
     name: string,
-    timezone: TimezoneVOData = null
+    timezone: TimezoneVOData = null,
   ) {
     this.groupItems = items;
     this.previewThumbs = getEvenSpreadItems(items.map((i) => i.thumbURL200));
@@ -166,16 +166,16 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
     if (diff >= minDiffForRange && !neverRange) {
       this.start = getTimezoneDateFromDisplayDate(
         this.groupStart,
-        timezone
+        timezone,
       ).valueOf();
       this.end = getTimezoneDateFromDisplayDate(
         this.groupEnd,
-        timezone
+        timezone,
       ).valueOf();
     } else {
       this.start = getTimezoneDateFromDisplayDate(
         meanBy(this.groupItems, (i) => new Date(i.displayDT).valueOf()),
-        timezone
+        timezone,
       ).valueOf();
     }
   }
@@ -183,7 +183,7 @@ export class TimelineGroup implements DataItem, TimelineDataItem {
 
 function getTimezoneDateFromDisplayDate(
   displayDate: string | number,
-  timezone: TimezoneVOData = null
+  timezone: TimezoneVOData = null,
 ) {
   const m = moment.utc(displayDate);
   if (!timezone) {
@@ -206,7 +206,7 @@ export function GroupByTimespan(
   items: ItemVO[],
   timespan: TimelineGroupTimespan,
   bestFit = false,
-  timezone: TimezoneVOData = null
+  timezone: TimezoneVOData = null,
 ) {
   const timelineItems: (TimelineGroup | TimelineItem)[] = [];
   const records: RecordVO[] = [];
@@ -258,7 +258,7 @@ export function GroupByTimespan(
           const timelineGroup = new TimelineGroup(
             groupItems,
             timespan,
-            parts[1]
+            parts[1],
           );
           timelineItems.push(timelineGroup);
         }
@@ -298,25 +298,25 @@ export function GetBreadcrumbsFromRange(start: number, end: number) {
 
   if (range <= Year * 1.05) {
     path.push(
-      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Year))
+      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Year)),
     );
   }
 
   if (range <= Month + Day) {
     path.push(
-      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Month))
+      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Month)),
     );
   }
 
   if (range <= Day + Hour) {
     path.push(
-      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Day))
+      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Day)),
     );
   }
 
   if (range <= Hour + 5 * Minute) {
     path.push(
-      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Hour))
+      mid.format(getDisplayDateFormatFromTimespan(TimelineGroupTimespan.Hour)),
     );
   }
 
@@ -324,7 +324,7 @@ export function GetBreadcrumbsFromRange(start: number, end: number) {
 }
 
 function getDateGroupFormatFromTimespan(
-  timespan: TimelineGroupTimespan
+  timespan: TimelineGroupTimespan,
 ): string {
   switch (timespan) {
     case TimelineGroupTimespan.Year:
@@ -339,7 +339,7 @@ function getDateGroupFormatFromTimespan(
 }
 
 function getDisplayDateFormatFromTimespan(
-  timespan: TimelineGroupTimespan
+  timespan: TimelineGroupTimespan,
 ): string {
   switch (timespan) {
     case TimelineGroupTimespan.Year:
@@ -356,7 +356,7 @@ function getDisplayDateFormatFromTimespan(
 }
 
 export function getBestFitTimespanForItems(
-  items: ItemVO[]
+  items: ItemVO[],
 ): TimelineGroupTimespan {
   if (!items || !items.length) {
     return TimelineGroupTimespan.Year;

@@ -64,7 +64,7 @@ type ShareByUrlProps =
   | 'previewToggle';
 
 const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
-  Expiration
+  Expiration,
 ).map((x) => {
   return {
     value: x,
@@ -126,7 +126,7 @@ export class SharingDialogComponent implements OnInit {
     private messageService: MessageService,
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.invitationForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -233,7 +233,7 @@ export class SharingDialogComponent implements OnInit {
   confirmOwnerAdd(share: ShareVO) {
     return this.promptService.confirm(
       'Add owner',
-      `Are you sure you share this item with The ${share.ArchiveVO.fullName} Archive as an owner?`
+      `Are you sure you share this item with The ${share.ArchiveVO.fullName} Archive as an owner?`,
     );
   }
 
@@ -242,7 +242,7 @@ export class SharingDialogComponent implements OnInit {
       'Remove',
       `Are you sure you want to remove The ${share.ArchiveVO.fullName} Archive?`,
       null,
-      'btn-danger'
+      'btn-danger',
     );
   }
 
@@ -251,7 +251,7 @@ export class SharingDialogComponent implements OnInit {
       'Deny request',
       `Are you sure you want deny The ${share.ArchiveVO.fullName} Archive access?`,
       null,
-      'btn-danger'
+      'btn-danger',
     );
   }
 
@@ -403,7 +403,7 @@ export class SharingDialogComponent implements OnInit {
 
     const diff = differenceInHours(
       new Date(expiresDT),
-      new Date(this.shareLink.createdDT)
+      new Date(this.shareLink.createdDT),
     );
 
     if (diff <= 24 * ExpirationDays.Day) {
@@ -439,7 +439,7 @@ export class SharingDialogComponent implements OnInit {
       this.previewToggle = this.shareLink.previewToggle;
       this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
       this.expiration = this.getExpirationFromExpiresDT(
-        this.shareLink.expiresDT
+        this.shareLink.expiresDT,
       );
       this.linkDefaultAccessRole = this.shareLink.defaultAccessRole;
       this.expirationOptions = EXPIRATION_OPTIONS.filter((expiration) => {
@@ -450,8 +450,8 @@ export class SharingDialogComponent implements OnInit {
           default:
             return !isPast(
               new Date(
-                this.getExpiresDTFromExpiration(expiration.value as Expiration)
-              )
+                this.getExpiresDTFromExpiration(expiration.value as Expiration),
+              ),
             );
         }
       });
@@ -504,7 +504,7 @@ export class SharingDialogComponent implements OnInit {
         'Remove link',
         'Are you sure you want to remove this link?',
         deferred.promise,
-        'btn-danger'
+        'btn-danger',
       );
 
       await this.api.share.removeShareLink(this.shareLink);

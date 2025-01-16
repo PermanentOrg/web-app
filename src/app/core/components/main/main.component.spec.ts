@@ -51,7 +51,7 @@ describe('MainComponent', () => {
     ]);
     mockDragService.events.and.returnValue(mockDragEvents.asObservable());
     mockDragService.getDestinationFromDropTarget.and.returnValue(
-      new FolderVO({ type: 'type.folder.public' })
+      new FolderVO({ type: 'type.folder.public' }),
     );
 
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
@@ -183,7 +183,7 @@ describe('MainComponent', () => {
 
     const targetFolder = { isDropTarget: true };
     mockDragService.getDestinationFromDropTarget.and.returnValue(
-      new FolderVO({ type: 'type.folder.public' })
+      new FolderVO({ type: 'type.folder.public' }),
     );
     await component.onDrop(targetFolder, mockDragEvent);
 

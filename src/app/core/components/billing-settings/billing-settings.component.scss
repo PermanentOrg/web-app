@@ -23,7 +23,6 @@ p {
   font-size: $font-size-sm;
 }
 
-
 .settings-item {
   @include desktop {
     display: flex;
@@ -49,6 +48,4 @@ p {
       max-width: 30rem;
     }
   }
-
-
 }

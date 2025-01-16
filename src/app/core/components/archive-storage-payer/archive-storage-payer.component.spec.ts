@@ -8,9 +8,8 @@ describe('ArchiveStoragePayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArchiveStoragePayerComponent ]
-    })
-    .compileComponents();
+      declarations: [ArchiveStoragePayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ArchiveStoragePayerComponent);
     component = fixture.componentInstance;

@@ -35,7 +35,7 @@ $row-height: 2 * $grid-unit;
   }
 }
 
-.visible .folder-picker{
+.visible .folder-picker {
   opacity: 1;
 }
 
@@ -71,7 +71,8 @@ $row-height: 2 * $grid-unit;
   padding-top: 10px;
 }
 
-.picker-header, .picker-footer {
+.picker-header,
+.picker-footer {
   box-shadow: $box-shadow-sm;
 }
 
@@ -110,7 +111,7 @@ $row-height: 2 * $grid-unit;
   }
 
   button.btn-secondary {
-    flex: 0 0 33.33%
+    flex: 0 0 33.33%;
   }
 }
 
@@ -125,7 +126,9 @@ $row-height: 2 * $grid-unit;
   cursor: pointer;
   user-select: none;
 
-  [prBgImage], pr-thumbnail, .folder-icon {
+  [prBgImage],
+  pr-thumbnail,
+  .folder-icon {
     height: $row-height - pxToGrid(10px);
     width: $row-height - pxToGrid(10px);
     flex: 0 0 $row-height - pxToGrid(10px);

@@ -86,8 +86,7 @@ $header-height: 3 * $grid-unit;
 
     &.active {
       font-weight: $font-weight-semibold;
-      &::before 
-      {
+      &::before {
         opacity: 1;
         background-color: $color;
       }
@@ -147,7 +146,10 @@ $header-height: 3 * $grid-unit;
   padding-bottom: $grid-unit;
 }
 
-@mixin tabbedDialogPanelForm($fieldClass: 'dialog-form-field', $labelWidth: 8rem) {
+@mixin tabbedDialogPanelForm(
+  $fieldClass: 'dialog-form-field',
+  $labelWidth: 8rem
+) {
   margin-left: 0;
   max-width: 500px;
   padding: $grid-unit 0;
@@ -210,7 +212,7 @@ $header-height: 3 * $grid-unit;
     margin-right: auto;
     margin-left: $labelWidth + $grid-unit;
     width: auto;
-    
+
     @include beforeDesktop {
       margin: 0 auto;
     }

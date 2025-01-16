@@ -14,7 +14,7 @@ const STORAGE_KEY = 'guidedTour';
 type AllTourHistory = Record<number, GuidedTourHistory>;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GuidedTourService {
   private eventsSubject = new Subject<GuidedTourEvent>();
@@ -23,7 +23,7 @@ export class GuidedTourService {
     private shepherd: ShepherdService,
     private storage: StorageService,
     private account: AccountService,
-    private device: DeviceService
+    private device: DeviceService,
   ) {
     this.shepherd.modal = true;
   }
@@ -64,7 +64,7 @@ export class GuidedTourService {
     if (skipMobile && this.device.isMobileWidth()) {
       return true;
     }
-    
+
     const history = this.getHistoryForAccount();
 
     if (!history[tour]) {

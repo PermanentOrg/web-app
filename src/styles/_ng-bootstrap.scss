@@ -15,7 +15,7 @@ ngb-datepicker {
       &:focus {
         outline: 0;
       }
-    }    
+    }
   }
 
   .ngb-dp-month {
@@ -25,7 +25,8 @@ ngb-datepicker {
       justify-content: space-evenly;
     }
 
-    .ngb-dp-weekday, .ngb-dp-day {
+    .ngb-dp-weekday,
+    .ngb-dp-day {
       // flex: 1 1 auto;
     }
   }
@@ -40,15 +41,17 @@ ngb-datepicker {
 }
 
 ngb-timepicker {
-  .ngb-tp-input-container, .ngb-tp-meridian {
-    input, button {
+  .ngb-tp-input-container,
+  .ngb-tp-meridian {
+    input,
+    button {
       padding: $input-padding-y-sm * 0.5 $input-padding-x-sm * 0.5;
     }
 
     button {
       margin: 0;
       background: white;
-      border-color: $input-border-color
+      border-color: $input-border-color;
     }
   }
 

@@ -1,5 +1,14 @@
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Optional, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Optional,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ArchiveVO } from '@models';
@@ -12,7 +21,7 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'pr-archive-search-box',
   templateUrl: './archive-search-box.component.html',
-  styleUrls: ['./archive-search-box.component.scss']
+  styleUrls: ['./archive-search-box.component.scss'],
 })
 export class ArchiveSearchBoxComponent implements OnInit {
   @Input() searchPublicArchives = false;
@@ -37,8 +46,8 @@ export class ArchiveSearchBoxComponent implements OnInit {
   constructor(
     @Optional() private relationshipService: RelationshipService,
     @Optional() private accountService: AccountService,
-    private apiService: ApiService
-  ) { }
+    private apiService: ApiService,
+  ) {}
 
   ngOnInit(): void {
     this.initFormHandler();
@@ -64,7 +73,10 @@ export class ArchiveSearchBoxComponent implements OnInit {
     if (isArrow) {
       const direction = event.keyCode === DOWN_ARROW ? 1 : -1;
       const newActiveResultIndex = this.activeResultIndex + direction;
-      this.activeResultIndex = Math.min(Math.max(-1, newActiveResultIndex), this.resultsCount - 1);
+      this.activeResultIndex = Math.min(
+        Math.max(-1, newActiveResultIndex),
+        this.resultsCount - 1,
+      );
     } else if (event.keyCode === ENTER) {
       this.onArchiveSelect(this.results[this.activeResultIndex]);
     }
@@ -72,7 +84,7 @@ export class ArchiveSearchBoxComponent implements OnInit {
 
   searchArchives(text$: Observable<string>) {
     return text$.pipe(
-      map(term => {
+      map((term) => {
         this.activeResultIndex = -1;
         if (!term && !this.focused) {
           this.resultsCount = null;
@@ -85,38 +97,46 @@ export class ArchiveSearchBoxComponent implements OnInit {
           return of(null);
         } else if (!term && this.focused) {
           return of(
-              this.relationshipService.getSync()
-                .map(relation => relation.RelationArchiveVO)
-                .filter(a => this.filterFn ? this.filterFn(a) : true)
-            );
+            this.relationshipService
+              .getSync()
+              .map((relation) => relation.RelationArchiveVO)
+              .filter((a) => (this.filterFn ? this.filterFn(a) : true)),
+          );
         } else if (!term.includes('@') && this.relationshipService) {
           return of(
-            this.relationshipService.searchRelationsByName(term)
-              .map(relation => relation.RelationArchiveVO)
-              .filter(a => this.filterFn ? this.filterFn(a) : true)
-            );
+            this.relationshipService
+              .searchRelationsByName(term)
+              .map((relation) => relation.RelationArchiveVO)
+              .filter((a) => (this.filterFn ? this.filterFn(a) : true)),
+          );
         } else if (this.control.valid) {
-            return this.apiService.search.archiveByEmail(term)
-            .pipe(
-              map(response => {
-                return response.getArchiveVOs()
-                  .filter(a => a.archiveId !== this.accountService?.getArchive()?.archiveId);
-              })
-            );
+          return this.apiService.search.archiveByEmail(term).pipe(
+            map((response) => {
+              return response
+                .getArchiveVOs()
+                .filter(
+                  (a) =>
+                    a.archiveId !==
+                    this.accountService?.getArchive()?.archiveId,
+                );
+            }),
+          );
         } else {
           return of([]);
         }
       }),
-      map(results => {
+      map((results) => {
         if (results) {
           this.resultsCount = results.length;
-          results = orderBy(results, (a: ArchiveVO) => a.fullName.toLowerCase());
+          results = orderBy(results, (a: ArchiveVO) =>
+            a.fullName.toLowerCase(),
+          );
         } else {
           this.resultsCount = null;
         }
         this.results = results;
         return results;
-      })
+      }),
     );
   }
 

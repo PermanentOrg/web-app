@@ -7,8 +7,11 @@ import { ArchiveVO } from '@models/index';
 @Injectable({
   providedIn: 'root',
 })
-export class PublicTagsResolveService  {
-  constructor(private api: ApiService, private storage: StorageService) {}
+export class PublicTagsResolveService {
+  constructor(
+    private api: ApiService,
+    private storage: StorageService,
+  ) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const archiveNbr = route.params.publicArchiveNbr;

@@ -7,7 +7,7 @@ export enum UploadStatus {
   Meta,
   Transfer,
   Done,
-  Cancelled
+  Cancelled,
 }
 
 export class UploadItem {
@@ -15,14 +15,17 @@ export class UploadItem {
   public uploadStatus: UploadStatus = UploadStatus.Init;
   public transferProgress = 0;
 
-  constructor(public file: File, public parentFolder: FolderVO) {
+  constructor(
+    public file: File,
+    public parentFolder: FolderVO,
+  ) {
     this.RecordVO = new RecordVO({
       parentFolderId: parentFolder.folderId,
       parentFolder_linkId: parentFolder.folder_linkId,
       displayName: file.name,
       uploadFileName: file.name,
       size: file.size,
-      derivedCreatedDT: new Date(file.lastModified)
+      derivedCreatedDT: new Date(file.lastModified),
     });
   }
 }

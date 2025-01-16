@@ -28,7 +28,7 @@ describe('CategoryEditComponent', () => {
           category,
           tags,
         },
-      }
+      },
     );
   beforeEach(() => {
     category = 'test';

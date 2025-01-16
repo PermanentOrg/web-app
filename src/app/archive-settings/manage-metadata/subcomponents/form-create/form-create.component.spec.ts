@@ -8,7 +8,7 @@ describe('FormCreateComponent', () => {
   let shallow: Shallow<FormCreateComponent>;
 
   const defaultRender = async (
-    c: (tagName: string) => Promise<void> = async () => {}
+    c: (tagName: string) => Promise<void> = async () => {},
   ) =>
     await shallow.render(
       '<pr-metadata-creation-form placeholder="Add New Test" [submitCallback]="callback"></pr-metadata-creation-form>',
@@ -16,7 +16,7 @@ describe('FormCreateComponent', () => {
         bind: {
           callback: c,
         },
-      }
+      },
     );
 
   beforeEach(async () => {
@@ -50,7 +50,7 @@ describe('FormCreateComponent', () => {
     const { find, fixture } = await defaultRender();
 
     expect(find('.placeholder-text').nativeElement.innerText).toBe(
-      'Add New Test'
+      'Add New Test',
     );
     find('.placeholder-text').triggerEventHandler('click', {});
     fixture.detectChanges();

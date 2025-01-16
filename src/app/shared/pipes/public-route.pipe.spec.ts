@@ -12,12 +12,18 @@ describe('PublicRoutePipe', () => {
     const pipe = new PublicRoutePipe();
     const folder = new FolderVO({
       folder_linkId: 100,
-      archiveNbr: '0001-00gh'
+      archiveNbr: '0001-00gh',
     });
     const route = pipe.transform(folder);
 
     expect(route).toBeDefined();
-    expect(route).toEqual(['/p', 'archive', '0001-0000', folder.archiveNbr, folder.folder_linkId ]);
+    expect(route).toEqual([
+      '/p',
+      'archive',
+      '0001-0000',
+      folder.archiveNbr,
+      folder.folder_linkId,
+    ]);
   });
 
   it('returns correct link for record', () => {
@@ -30,11 +36,19 @@ describe('PublicRoutePipe', () => {
         }),
       ],
       folder_linkId: 1001,
-      archiveNbr: '0001-00gp'
+      archiveNbr: '0001-00gp',
     });
     const route = pipe.transform(record);
 
     expect(route).toBeDefined();
-    expect(route).toEqual(['/p', 'archive', '0001-0000', '0001-meow', '1234', 'record', record.archiveNbr ]);
+    expect(route).toEqual([
+      '/p',
+      'archive',
+      '0001-0000',
+      '0001-meow',
+      '1234',
+      'record',
+      record.archiveNbr,
+    ]);
   });
 });

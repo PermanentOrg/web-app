@@ -9,7 +9,7 @@ describe('DragService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...BASE_TEST_CONFIG.imports],
-      providers: [...BASE_TEST_CONFIG.providers, DragService]
+      providers: [...BASE_TEST_CONFIG.providers, DragService],
     });
     service = TestBed.inject(DragService);
   });

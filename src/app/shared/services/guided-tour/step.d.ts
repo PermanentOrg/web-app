@@ -1,15 +1,15 @@
 export interface ShepherdStep {
   id: string;
-  advanceOn?: AdvanceOn
+  advanceOn?: AdvanceOn;
   attachTo: AttachTo;
   beforeShowPromise?: ShowOrHideOrBeforeShowPromise;
-  buttons?: (ButtonsEntity)[] | null;
+  buttons?: ButtonsEntity[] | null;
   cancelIcon?: CancelIcon;
   classes?: string;
   highlightClass?: string;
   scrollTo?: boolean;
   title?: string;
-  text?: (string)[] | null;
+  text?: string[] | null;
   when?: When;
 }
 interface AdvanceOn {
@@ -21,8 +21,7 @@ export interface AttachTo {
   element: string;
   on: 'left' | 'right' | 'top' | 'bottom';
 }
-export interface ShowOrHideOrBeforeShowPromise {
-}
+export interface ShowOrHideOrBeforeShowPromise {}
 export interface ButtonsEntity {
   classes: string;
   text: string;

@@ -7,17 +7,21 @@
   </div>
   <div class="content">
     <div class="tabs">
-      <div class="dialog-tab"
-        (click)="setTab('members')" [class.active]="activeTab === 'members'">
+      <div
+        class="dialog-tab"
+        (click)="setTab('members')"
+        [class.active]="activeTab === 'members'"
+      >
         Members
       </div>
-      <div class="dialog-tab"
-        (click)="setTab('pending')" [class.active]="activeTab === 'pending'">
+      <div
+        class="dialog-tab"
+        (click)="setTab('pending')"
+        [class.active]="activeTab === 'pending'"
+      >
         Pending Members
       </div>
-      <div class="dialog-tab" (click)="onAddMemberClick()">
-        Add Member
-      </div>
+      <div class="dialog-tab" (click)="onAddMemberClick()">Add Member</div>
     </div>
     <div class="panel">
       <ng-container [ngSwitch]="activeTab">
@@ -27,30 +31,56 @@
             <div class="member" *ngFor="let member of members">
               <div class="member-info">
                 <div class="member-name">
-                  {{member.fullName}}
+                  {{ member.fullName }}
                   <span *ngIf="member.isCurrent">(you)</span>
                 </div>
                 <div class="member-email">
-                  {{member.primaryEmail}}
+                  {{ member.primaryEmail }}
                 </div>
                 <div class="member-access">
-                  <i class="ion-md-information-circle" [ngbTooltip]="getTooltipForAccess(member.accessRole) | prTooltip"></i>
-                  Access: {{member.accessRole | prConstants}}
+                  <i
+                    class="ion-md-information-circle"
+                    [ngbTooltip]="
+                      getTooltipForAccess(member.accessRole) | prTooltip
+                    "
+                  ></i>
+                  Access: {{ member.accessRole | prConstants }}
                 </div>
               </div>
               <div class="member-button hide-desktop">
-                <button class="btn btn-primary" (click)="onMemberClick(member)"
-                  [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+                <button
+                  class="btn btn-primary"
+                  (click)="onMemberClick(member)"
+                  [disabled]="
+                    (member.accessRole.includes('owner') &&
+                      member.status !== 'status.generic.pending') ||
+                    !canEdit
+                  "
+                >
                   Manage
                 </button>
               </div>
               <div class="member-button hide-mobile">
-                <button class="btn btn-primary" (click)="editMember(member)"
-                  [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+                <button
+                  class="btn btn-primary"
+                  (click)="editMember(member)"
+                  [disabled]="
+                    (member.accessRole.includes('owner') &&
+                      member.status !== 'status.generic.pending') ||
+                    !canEdit
+                  "
+                >
                   Edit
                 </button>
-                  <button class="btn btn-danger" (click)="removeMember(member)"
-                  [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+                <button
+                  class="btn btn-danger"
+                  (click)="removeMember(member)"
+                  [disabled]="
+                    (member.accessRole.includes('owner') &&
+                      member.status !== 'status.generic.pending') ||
+                    !canEdit
+                  "
+                >
                   Remove
                 </button>
               </div>
@@ -64,30 +94,57 @@
             <div class="member" *ngFor="let member of pendingMembers">
               <div class="member-info">
                 <div class="member-name">
-                  {{member.fullName}}
+                  {{ member.fullName }}
                   <span *ngIf="member.isCurrent">(you)</span>
                 </div>
                 <div class="member-email">
-                  {{member.primaryEmail}}
+                  {{ member.primaryEmail }}
                 </div>
                 <div class="member-access">
-                  <i class="ion-md-information-circle" [ngbTooltip]="getTooltipForAccess(member.accessRole) | prTooltip"></i>
-                  Access: {{member.accessRole | prConstants}} <span>(pending)</span>
+                  <i
+                    class="ion-md-information-circle"
+                    [ngbTooltip]="
+                      getTooltipForAccess(member.accessRole) | prTooltip
+                    "
+                  ></i>
+                  Access: {{ member.accessRole | prConstants }}
+                  <span>(pending)</span>
                 </div>
               </div>
               <div class="member-button hide-desktop">
-                <button class="btn btn-primary" (click)="onMemberClick(member)"
-                  [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+                <button
+                  class="btn btn-primary"
+                  (click)="onMemberClick(member)"
+                  [disabled]="
+                    (member.accessRole.includes('owner') &&
+                      member.status !== 'status.generic.pending') ||
+                    !canEdit
+                  "
+                >
                   Manage
                 </button>
               </div>
               <div class="member-button hide-mobile">
-                <button class="btn btn-primary" (click)="editMember(member)"
-                  [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+                <button
+                  class="btn btn-primary"
+                  (click)="editMember(member)"
+                  [disabled]="
+                    (member.accessRole.includes('owner') &&
+                      member.status !== 'status.generic.pending') ||
+                    !canEdit
+                  "
+                >
                   Edit
                 </button>
-                  <button class="btn btn-danger" (click)="removeMember(member)"
-                  [disabled]="(member.accessRole.includes('owner') && member.status !== 'status.generic.pending') || !canEdit">
+                <button
+                  class="btn btn-danger"
+                  (click)="removeMember(member)"
+                  [disabled]="
+                    (member.accessRole.includes('owner') &&
+                      member.status !== 'status.generic.pending') ||
+                    !canEdit
+                  "
+                >
                   Remove
                 </button>
               </div>

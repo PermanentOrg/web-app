@@ -3,12 +3,10 @@ import { FolderVO, RecordVO } from '@models';
 import { FolderView } from '@shared/services/folder-view/folder-view.enum';
 
 @Pipe({
-  name: 'itemTypeIcon'
+  name: 'itemTypeIcon',
 })
 export class ItemTypeIconPipe implements PipeTransform {
-
-  constructor(
-  ) { }
+  constructor() {}
 
   transform(item: RecordVO | FolderVO, view?: FolderView): any {
     if (item instanceof RecordVO) {
@@ -36,5 +34,4 @@ export class ItemTypeIconPipe implements PipeTransform {
       }
     }
   }
-
 }

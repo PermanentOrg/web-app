@@ -7,14 +7,13 @@ export const PROFILE_ONBOARDING_COOKIE = 'hasSeenProfileMessage';
 @Component({
   selector: 'pr-profile-edit-first-time-dialog',
   templateUrl: './profile-edit-first-time-dialog.component.html',
-  styleUrls: ['./profile-edit-first-time-dialog.component.scss']
+  styleUrls: ['./profile-edit-first-time-dialog.component.scss'],
 })
 export class ProfileEditFirstTimeDialogComponent implements OnInit {
-
   constructor(
     private dialogRef: DialogRef,
-    private cookies: CookieService
-  ) { }
+    private cookies: CookieService,
+  ) {}
 
   ngOnInit(): void {
     this.cookies.set(PROFILE_ONBOARDING_COOKIE, 'true', new Date('01-01-2030'));
@@ -23,5 +22,4 @@ export class ProfileEditFirstTimeDialogComponent implements OnInit {
   close(): void {
     this.dialogRef.close();
   }
-
 }

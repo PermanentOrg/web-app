@@ -3,15 +3,12 @@ import { get } from 'lodash';
 import { TOOLTIPS } from './tooltips';
 
 @Pipe({
-  name: 'prTooltip'
+  name: 'prTooltip',
 })
 export class TooltipsPipe implements PipeTransform {
-
-  constructor(
-  ) { }
+  constructor() {}
 
   transform(value: any, args?: any): any {
     return get(TOOLTIPS, value) || value;
   }
-
 }

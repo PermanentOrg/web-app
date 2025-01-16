@@ -13,7 +13,7 @@ export const MOMENT_DATE_FORMAT = {
   full24: 'YYYY-MM-DD HH:mm',
   date: 'YYYY-MM-DD',
   time: 'hh:mm A',
-  time24: 'HH:mm'
+  time24: 'HH:mm',
 };
 
 export const NG_DATE_FORMAT = {
@@ -22,18 +22,20 @@ export const NG_DATE_FORMAT = {
   full24: 'yyyy-MM-dd HH:mm',
   date: 'yyyy-MM-dd',
   time: 'hh:mm a',
-  time24: 'HH:mm'
+  time24: 'HH:mm',
 };
 
 @Pipe({
-  name: 'prDate'
+  name: 'prDate',
 })
 export class PrDatePipe implements PipeTransform {
+  constructor() {}
 
-  constructor(
-  ) { }
-
-  transform(dtString: string | number, timezoneVO?: TimezoneVOData, part?: 'date' | 'time'): any {
+  transform(
+    dtString: string | number,
+    timezoneVO?: TimezoneVOData,
+    part?: 'date' | 'time',
+  ): any {
     if (!dtString) {
       return;
     }

@@ -54,7 +54,7 @@ describe('Permanent Filesystem (Folder Caching)', () => {
   it('should use the cached version of a folder immediately', async () => {
     api.addFolder(new FolderVO({ folderId: 0, displayName: 'Updated Value' }));
     cache.saveFolder(
-      new FolderVO({ folderId: 0, displayName: 'Cached Value' })
+      new FolderVO({ folderId: 0, displayName: 'Cached Value' }),
     );
     // Copy the initial value returned from the cache so it will never be modified
     const folder = Object.assign({}, await fs.getFolder({ folderId: 0 }));
@@ -64,7 +64,7 @@ describe('Permanent Filesystem (Folder Caching)', () => {
 
   it('should still fetch and update a folder after retrieving the cached version', async (done) => {
     cache.saveFolder(
-      new FolderVO({ folderId: 0, displayName: 'Cached Value' })
+      new FolderVO({ folderId: 0, displayName: 'Cached Value' }),
     );
     // Simulate a backend change happening in another window/tab/client/etc.
     api.addFolder(new FolderVO({ folderId: 0, displayName: 'Updated Value' }));

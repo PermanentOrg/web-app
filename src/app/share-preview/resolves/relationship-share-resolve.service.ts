@@ -20,7 +20,7 @@ export class RelationshipShareResolveService {
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

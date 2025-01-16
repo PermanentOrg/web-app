@@ -8,10 +8,9 @@ describe('ArchiveTypeIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ArchiveTypeIconComponent]
-    })
-    .compileComponents();
-    
+      imports: [ArchiveTypeIconComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ArchiveTypeIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

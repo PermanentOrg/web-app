@@ -1,7 +1,7 @@
 //BRAND COLORS
 $PR-blue: #131b4a;
 $PR-purple: #800080;
-$PR-orange: #FF9933;
+$PR-orange: #ff9933;
 
 // VARIATIONS
 $PR-blue-light: #5261b7;
@@ -13,13 +13,13 @@ $PR-orange-lightest: #ffead5;
 $PR-purple-light: #e2c1ea;
 
 // UI COLORS
-$folder-icon: #F7C985;
+$folder-icon: #f7c985;
 $gray-dark: #646464;
 $gray-light: #c8c8c8;
 $red: #a10000;
 
 //BOOTSTRAP COLORS
-$white:    #fff !default;
+$white: #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
@@ -29,17 +29,16 @@ $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
-$black:    #000 !default;
+$black: #000 !default;
 
 // THIRD PARTY COLORS
 $familysearch-brand: #87ba41;
 $facebook-brand: #1877f2;
 
-$toggle-checked:#12b76a;
-$toggle:#e7e8ed;
-
+$toggle-checked: #12b76a;
+$toggle: #e7e8ed;
 
 $theme-colors: (
-  "primary-light": $PR-blue-light,
-  "white": $white
-)
+  'primary-light': $PR-blue-light,
+  'white': $white,
+);

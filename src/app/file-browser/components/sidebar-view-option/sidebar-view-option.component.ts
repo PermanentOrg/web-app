@@ -10,7 +10,7 @@ type FolderViewImages = {
 @Component({
   selector: 'pr-sidebar-view-option',
   templateUrl: './sidebar-view-option.component.html',
-  styleUrls: ['./sidebar-view-option.component.scss']
+  styleUrls: ['./sidebar-view-option.component.scss'],
 })
 export class SidebarViewOptionComponent {
   @Input() folderView: FolderViewType;
@@ -22,9 +22,8 @@ export class SidebarViewOptionComponent {
 
   images: FolderViewImages = {
     'folder.view.grid': 'assets/img/views/grid.png',
-    'folder.view.timeline': 'assets/img/views/timeline.png'
+    'folder.view.timeline': 'assets/img/views/timeline.png',
   };
 
-  constructor(
-  ) { }
+  constructor() {}
 }

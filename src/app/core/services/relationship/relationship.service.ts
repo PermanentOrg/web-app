@@ -6,11 +6,10 @@ import { RelationResponse } from '@shared/services/api/index.repo';
 import Fuse from 'fuse.js';
 import { find, remove } from 'lodash';
 
-
 const REFRESH_THRESHOLD = 2 * 60 * 1000;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RelationshipService {
   private relations: RelationVO[] = null;
@@ -19,13 +18,13 @@ export class RelationshipService {
 
   private fuseOptions: Fuse.IFuseOptions<RelationVO> = {
     keys: ['RelationArchiveVO.fullName'],
-    threshold: 0.1
+    threshold: 0.1,
   };
   private fuse = new Fuse([], this.fuseOptions);
 
   constructor(
     private accountService: AccountService,
-    private api: ApiService
+    private api: ApiService,
   ) {
     this.currentArchive = this.accountService.getArchive();
     this.accountService.archiveChange.subscribe((newArchive: ArchiveVO) => {
@@ -36,10 +35,9 @@ export class RelationshipService {
 
   get(): Promise<RelationVO[]> {
     if (!this.relations || this.needsFetch()) {
-      return this.update()
-        .then(() => {
-          return this.relations;
-        });
+      return this.update().then(() => {
+        return this.relations;
+      });
     } else {
       return Promise.resolve(this.relations);
     }
@@ -50,10 +48,11 @@ export class RelationshipService {
   }
 
   update(): Promise<any> {
-    return this.api.relation.getAll(this.currentArchive)
+    return this.api.relation
+      .getAll(this.currentArchive)
       .then((response: RelationResponse) => {
         this.lastUpdated = new Date();
-        this.relations  = response.getRelationVOs();
+        this.relations = response.getRelationVOs();
         this.indexArchivesForSearch();
       });
   }
@@ -68,7 +67,10 @@ export class RelationshipService {
   indexArchivesForSearch() {
     if (this.relations) {
       this.fuse.setCollection(
-        this.relations.filter(r => r.RelationArchiveVO.archiveId !== this.currentArchive.archiveId)
+        this.relations.filter(
+          (r) =>
+            r.RelationArchiveVO.archiveId !== this.currentArchive.archiveId,
+        ),
       );
     } else {
       this.fuse.setCollection([]);
@@ -103,7 +105,7 @@ export class RelationshipService {
   }
 
   searchRelationsByName(query: string) {
-    return this.fuse.search(query).map(i => {
+    return this.fuse.search(query).map((i) => {
       return i.item as RelationVO;
     });
   }

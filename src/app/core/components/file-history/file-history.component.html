@@ -1,10 +1,6 @@
-<em *ngIf="loading">
-  Loading...
-</em>
+<em *ngIf="loading"> Loading... </em>
 <ng-container *ngIf="!loading">
-  <p *ngIf="!ledgerItemPages.length">
-    This account has uploaded no files.
-  </p>
+  <p *ngIf="!ledgerItemPages.length">This account has uploaded no files.</p>
   <ng-container *ngIf="ledgerItemPages?.length">
     <table class="table table-striped">
       <thead>
@@ -16,9 +12,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of ledgerItemPages[currentPage - 1]">
-          <td>{{item.createdDT | date}}</td>
-          <td>{{item.spaceDelta | dsFileSize}}</td>
-          <td>{{item.type | prConstants}}</td>
+          <td>{{ item.createdDT | date }}</td>
+          <td>{{ item.spaceDelta | dsFileSize }}</td>
+          <td>{{ item.type | prConstants }}</td>
         </tr>
       </tbody>
     </table>
@@ -28,7 +24,8 @@
       [collectionSize]="ledgerItemCount"
       [maxSize]="maxPageCount"
       [rotate]="true"
-      [ellipses]="false">
+      [ellipses]="false"
+    >
     </ngb-pagination>
   </ng-container>
 </ng-container>

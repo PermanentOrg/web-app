@@ -21,12 +21,12 @@ export class LeanFolderResolveService {
     private api: ApiService,
     private accountService: AccountService,
     private message: MessageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<any> | Promise<any> {
     let targetFolder;
 
@@ -69,7 +69,7 @@ export class LeanFolderResolveService {
           }
 
           return response.getFolderVO(true);
-        })
+        }),
       )
       .toPromise()
       .catch((response: FolderResponse) => {

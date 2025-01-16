@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { FolderResolveService } from '@core/resolves/folder-resolve.service';
 
@@ -12,7 +12,10 @@ describe('FolderResolveService', () => {
     TestBed.configureTestingModule(config);
   });
 
-  it('should be created', inject([FolderResolveService], (service: FolderResolveService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [FolderResolveService],
+    (service: FolderResolveService) => {
+      expect(service).toBeTruthy();
+    },
+  ));
 });

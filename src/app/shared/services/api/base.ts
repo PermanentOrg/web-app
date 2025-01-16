@@ -79,7 +79,10 @@ export class BaseResponse {
 }
 
 export class BaseRepo {
-  constructor(public http: HttpService, public httpV2?: HttpV2Service) {}
+  constructor(
+    public http: HttpService,
+    public httpV2?: HttpV2Service,
+  ) {}
 }
 
 export const LeanWhitelist = [

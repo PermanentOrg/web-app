@@ -62,14 +62,14 @@ nav.navbar {
     > * {
       flex: 1 1 50%;
     }
-    
+
     .btn {
       height: 2 * $grid-unit;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: $font-weight-bold;
-      
+
       i {
         margin-right: $navbar-button-icon-padding;
       }
@@ -121,7 +121,8 @@ nav.nav-desktop {
 
   $button-size: $grid-unit * 1.5;
 
-  > a, > i {
+  > a,
+  > i {
     border-radius: 50%;
     width: $button-size;
     height: $button-size;
@@ -148,7 +149,9 @@ nav.nav-desktop {
         background: $red;
         border-radius: 50%;
 
-        animation:  fadeIn 125ms $tweaked-ease, scaleIn 250ms $tweaked-ease;
+        animation:
+          fadeIn 125ms $tweaked-ease,
+          scaleIn 250ms $tweaked-ease;
       }
     }
   }

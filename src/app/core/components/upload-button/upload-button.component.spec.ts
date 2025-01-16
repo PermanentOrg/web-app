@@ -31,7 +31,7 @@ describe('UploadButtonComponent', () => {
     accountService.setArchive(
       new ArchiveVO({
         accessRole: 'access.role.owner',
-      })
+      }),
     );
     dataService = TestBed.get(DataService);
 
@@ -55,7 +55,7 @@ describe('UploadButtonComponent', () => {
       new FolderVO({
         type: 'type.folder.private',
         accessRole: 'access.role.owner',
-      })
+      }),
     );
     await fixture.whenStable();
 
@@ -68,7 +68,7 @@ describe('UploadButtonComponent', () => {
       new FolderVO({
         accessRole: 'access.role.owner',
         type: 'type.folder.app',
-      })
+      }),
     );
     await fixture.whenStable();
 
@@ -81,7 +81,7 @@ describe('UploadButtonComponent', () => {
       new FolderVO({
         type: 'type.folder.private',
         accessRole: 'access.role.viewer',
-      })
+      }),
     );
     await fixture.whenStable();
 
@@ -110,7 +110,7 @@ describe('UploadButtonComponent', () => {
       new FolderVO({
         type: 'type.folder.private',
         accessRole: 'access.role.viewer',
-      })
+      }),
     );
     accountService.setAccount(new AccountVO({ accountId: 1 }));
 

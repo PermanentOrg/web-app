@@ -130,8 +130,7 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
 
     expect(instance.tagsList.length).toBe(2);
     instance.tagsList.forEach((tag) =>
-
-      expect(tag.name.startsWith('a:')).toBeFalse()
+      expect(tag.name.startsWith('a:')).toBeFalse(),
     );
   });
 

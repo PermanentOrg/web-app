@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import { EmbedRoutingModule } from '@embed/embed.routes';
 
 @NgModule({
-  imports: [
-    EmbedRoutingModule,
-  ],
-  declarations: []
+  imports: [EmbedRoutingModule],
+  declarations: [],
 })
-export class EmbedModule { }
+export class EmbedModule {}

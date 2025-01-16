@@ -1,10 +1,16 @@
-import { Component, OnInit, Input, ElementRef, HostBinding } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ElementRef,
+  HostBinding,
+} from '@angular/core';
 import { NotificationVOData } from '@models/notification-vo';
 
 @Component({
   selector: 'pr-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  styleUrls: ['./notification.component.scss'],
 })
 export class NotificationComponent implements OnInit {
   @Input() notification: NotificationVOData;
@@ -14,14 +20,11 @@ export class NotificationComponent implements OnInit {
 
   showActions = false;
 
-  constructor(
-    private elementRef: ElementRef
-  ) {
+  constructor(private elementRef: ElementRef) {
     this.element = elementRef.nativeElement as HTMLElement;
   }
 
   ngOnInit(): void {
     this.showActions = this.notification.type === 'type.notification.zip';
   }
-
 }

@@ -9,23 +9,23 @@ export interface LocnPipeOutput {
 }
 
 @Pipe({
-  name: 'prLocation'
+  name: 'prLocation',
 })
 export class PrLocationPipe implements PipeTransform {
-
-  constructor(
-  ) { }
+  constructor() {}
 
   transform(locnVO: LocnVOData): LocnPipeOutput {
     if (!locnVO) {
       return null;
     }
-    
+
     const output: LocnPipeOutput = {};
 
     // order by priority/usefulness
     const queue = [
-      locnVO.streetNumber ? locnVO.streetNumber + ' ' + locnVO.streetName : locnVO.streetName,
+      locnVO.streetNumber
+        ? locnVO.streetNumber + ' ' + locnVO.streetName
+        : locnVO.streetName,
       locnVO.locality,
       locnVO.adminOneName,
       locnVO.latitude + ', ' + locnVO.longitude,
@@ -37,10 +37,12 @@ export class PrLocationPipe implements PipeTransform {
 
     // step through, fill line 1 first, fill line 2 as needed
     queue.forEach((item, i) => {
-      if (!item) { return; }
+      if (!item) {
+        return;
+      }
       if (!output.line1) {
         output.line1 = item;
-      } else if ((i === 3) || (line2.length > 1 && i === 4) || (line2.length > 2)) {
+      } else if (i === 3 || (line2.length > 1 && i === 4) || line2.length > 2) {
         return;
       } else {
         line2.push(item);

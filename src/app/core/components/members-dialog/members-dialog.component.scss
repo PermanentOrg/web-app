@@ -6,7 +6,7 @@
 }
 
 .header {
-  @include tabbedDialogHeader($PR-blue-light)
+  @include tabbedDialogHeader($PR-blue-light);
 }
 
 .content {
@@ -40,16 +40,17 @@
   font-size: $font-size-sm;
   min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
 
   > * {
     overflow: hidden;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
   }
 }
 
-.member-email, .member-access {
-  color: $text-muted
+.member-email,
+.member-access {
+  color: $text-muted;
 }
 
 .member-button {

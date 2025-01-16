@@ -1,4 +1,10 @@
-import { Injectable, Inject, Renderer2, RendererFactory2, NgZone } from '@angular/core';
+import {
+  Injectable,
+  Inject,
+  Renderer2,
+  RendererFactory2,
+  NgZone,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { throttle, find } from 'lodash';
 import { FileListItemComponent } from '@fileBrowser/components/file-list-item/file-list-item.component';
@@ -18,7 +24,10 @@ import { DataService } from '../data/data.service';
 export type DragTargetType = 'folder' | 'record';
 
 export interface DraggableComponent {
-  onDrop(dropTarget: DragTargetDroppableComponent, dragEvent?: DragServiceEvent);
+  onDrop(
+    dropTarget: DragTargetDroppableComponent,
+    dragEvent?: DragServiceEvent,
+  );
 }
 
 export interface DragTargetDroppableComponent {
@@ -41,7 +50,9 @@ export interface DragServiceEnterLeaveEvent {
   srcComponent: DragTargetDroppableComponent;
 }
 
-export type DragServiceEvent = DragServiceStartEndEvent | DragServiceEnterLeaveEvent;
+export type DragServiceEvent =
+  | DragServiceStartEndEvent
+  | DragServiceEnterLeaveEvent;
 
 const DRAG_CURSOR_OFFSET_X = 15;
 @Injectable()
@@ -69,7 +80,7 @@ export class DragService {
     private dataService: DataService,
     private accountService: AccountService,
     rendererFactory: RendererFactory2,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {
     this.renderer = rendererFactory.createRenderer(null, null);
 
@@ -84,7 +95,7 @@ export class DragService {
         type: 'end',
         targetTypes: ['folder'],
         srcComponent: this.dragSrc,
-        event: event
+        event: event,
       });
     };
 
@@ -115,7 +126,7 @@ export class DragService {
 
     this.subject.next(dragEvent);
 
-    if (dragEvent.type === 'end' && (this.dropTarget || this.hasFiles) ) {
+    if (dragEvent.type === 'end' && (this.dropTarget || this.hasFiles)) {
       dragEvent.srcComponent.onDrop(this.dropTarget, dragEvent);
       this.dropTarget = null;
     }
@@ -171,10 +182,15 @@ export class DragService {
   }
 
   private createOutline() {
-    this.screenOutlineElement = this.renderer.createElement('div') as HTMLElement;
-    this.renderer.addClass(this.screenOutlineElement, 'drag-service-screen-outline');
+    this.screenOutlineElement = this.renderer.createElement(
+      'div',
+    ) as HTMLElement;
+    this.renderer.addClass(
+      this.screenOutlineElement,
+      'drag-service-screen-outline',
+    );
     this.renderer.appendChild(this.document.body, this.screenOutlineElement);
-    gsap.from(this.screenOutlineElement, { opacity: 0 , duration: 0.125 });
+    gsap.from(this.screenOutlineElement, { opacity: 0, duration: 0.125 });
   }
 
   private destroyOutline() {
@@ -184,7 +200,12 @@ export class DragService {
       this.renderer.removeChild(outline.parentNode, outline);
     };
 
-    gsap.to(outline, { duration, opacity: 0, ease: 'ease', onComplete: destroy });
+    gsap.to(outline, {
+      duration,
+      opacity: 0,
+      ease: 'ease',
+      onComplete: destroy,
+    });
   }
 
   private createDragCursor(event: MouseEvent) {
@@ -200,7 +221,6 @@ export class DragService {
     this.renderer.appendChild(parent, actionLabel);
     this.renderer.appendChild(this.document.body, parent);
 
-
     this.dragCursorElement = parent;
     this.actionLabelElement = actionLabel;
     this.itemsLabelElement = itemLabel;
@@ -213,19 +233,19 @@ export class DragService {
       this.renderer.addClass(this.dragCursorElement, 'for-file-upload');
     }
 
-    gsap.from(this.dragCursorElement, { opacity: 0 , duration: 0.125 });
+    gsap.from(this.dragCursorElement, { opacity: 0, duration: 0.125 });
   }
 
   private setCursorPosition(event: MouseEvent) {
     if (!(this.dragSrc instanceof MainComponent)) {
       const width = this.dragCursorElement.clientWidth;
       const height = this.dragCursorElement.clientHeight;
-      const targetX = event.clientX - (width / 2);
+      const targetX = event.clientX - width / 2;
       const targetY = event.clientY - 5;
       this.renderer.setStyle(
         this.dragCursorElement,
         'transform',
-        `translate(${targetX}px, ${targetY}px)`
+        `translate(${targetX}px, ${targetY}px)`,
       );
     }
   }
@@ -239,9 +259,21 @@ export class DragService {
 
     const duration = 1 / 6;
     if (!didDrop || this.hasFiles) {
-      gsap.to(cursor, { duration, opacity: 0, ease: 'ease', onComplete: destroy });
+      gsap.to(cursor, {
+        duration,
+        opacity: 0,
+        ease: 'ease',
+        onComplete: destroy,
+      });
     } else {
-      gsap.to(cursor, { duration, rotate: -5, opacity: 0, scale: 0.5, ease: 'ease', onComplete: destroy});
+      gsap.to(cursor, {
+        duration,
+        rotate: -5,
+        opacity: 0,
+        scale: 0.5,
+        ease: 'ease',
+        onComplete: destroy,
+      });
     }
   }
 
@@ -287,7 +319,9 @@ export class DragService {
     this.actionLabelElement.innerText = label;
   }
 
-  public getDestinationFromDropTarget(dropTarget: DragTargetDroppableComponent) {
+  public getDestinationFromDropTarget(
+    dropTarget: DragTargetDroppableComponent,
+  ) {
     let destination: FolderVO;
 
     if (dropTarget instanceof FileListItemComponent) {
@@ -297,7 +331,7 @@ export class DragService {
         destination = new FolderVO({
           folder_linkId: dropTarget.breadcrumb.folder_linkId,
           archiveNbr: dropTarget.breadcrumb.archiveNbr,
-          displayName: dropTarget.breadcrumb.text
+          displayName: dropTarget.breadcrumb.text,
         });
       } else {
         switch (dropTarget.breadcrumb.routerPath) {

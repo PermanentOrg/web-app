@@ -7,14 +7,17 @@ import { AccountVO } from '@root/app/models';
 @Component({
   selector: 'pr-done-embed',
   templateUrl: './done-embed.component.html',
-  styleUrls: ['./done-embed.component.scss']
+  styleUrls: ['./done-embed.component.scss'],
 })
 export class DoneEmbedComponent implements OnInit {
   account: AccountVO;
   existingAccount: boolean;
   linkToFacebook = false;
 
-  constructor(private accountService: AccountService, private route: ActivatedRoute) { }
+  constructor(
+    private accountService: AccountService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
     const queryParams = this.route.snapshot.queryParams;
@@ -28,5 +31,4 @@ export class DoneEmbedComponent implements OnInit {
 
     this.account = this.accountService.getAccount();
   }
-
 }

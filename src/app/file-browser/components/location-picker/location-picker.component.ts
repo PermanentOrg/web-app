@@ -74,7 +74,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     private locationPipe: PrLocationPipe,
     private zone: NgZone,
     private message: MessageService,
-    private editService: EditService
+    private editService: EditService,
   ) {
     if (this.dialogData) {
       this.item = this.dialogData.item;
@@ -96,7 +96,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
   initAutocomplete() {
     this.autocomplete = new google.maps.places.Autocomplete(
-      this.autocompleteInputRef.nativeElement
+      this.autocompleteInputRef.nativeElement,
     );
     this.autocomplete.setFields([
       'name',
@@ -133,7 +133,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     this.currentLocation = null;
     const response = await this.api.locn.geomapLatLng(
       latLng.lat(),
-      latLng.lng()
+      latLng.lng(),
     );
     if (response.isSuccessful) {
       this.setCurrentLocation(response.getLocnVO(), true);
@@ -252,7 +252,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
     function getComponentName(
       address_components: google.maps.GeocoderAddressComponent[],
       type,
-      getShortName = true
+      getShortName = true,
     ) {
       const component = find(address_components, (c) => c.types.includes(type));
       return component

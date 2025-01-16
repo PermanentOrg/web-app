@@ -6,7 +6,6 @@
   flex: 1 1 auto;
 }
 
-
 .timeline {
   background-color: white;
   position: absolute !important;
@@ -61,13 +60,12 @@
   z-index: 2;
 
   transform: translateY(0);
-  transition:  transform $default-transition-length ease-in;
+  transition: transform $default-transition-length ease-in;
 
   &.showing-details {
     transform: translateY(calc((100% - #{$timeline-folder-info-height}) * -1));
     transition-timing-function: ease-out;
   }
-
 
   .timeline-folder-info-content {
     height: $timeline-folder-info-height;
@@ -81,11 +79,9 @@
     .timeline-folder-details-button {
       font-size: small;
     }
-
   }
 
   .timeline-folder-info-details {
-
     max-width: $public-max-width;
     padding: 10px 0px 0px;
     margin: 0 auto;
@@ -102,12 +98,11 @@
       margin-bottom: 0px;
       padding-bottom: 10px;
     }
-
-
   }
 
   @media screen and (max-width: $public-max-width) {
-    .timeline-folder-info-details, .timeline-folder-info-content {
+    .timeline-folder-info-details,
+    .timeline-folder-info-content {
       padding-left: 5px;
       padding-right: 5px;
     }
@@ -126,14 +121,8 @@
       }
     }
   }
-
-
 }
-
-
 
 .timeline-item-control {
-
   margin: 0;
 }
-

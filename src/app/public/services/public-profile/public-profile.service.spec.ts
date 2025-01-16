@@ -21,20 +21,19 @@ describe('PublicProfileService', () => {
 
     service.setPublicRoot(rootFolder);
 
-    service.publicRoot$()
+    service
+      .publicRoot$()
       .pipe(first())
-      .subscribe(currentArchive => {
+      .subscribe((currentArchive) => {
         expect(currentArchive).toBe(rootFolder);
       });
 
     tick();
 
-    service.publicRoot$()
-      .pipe(
-        skip(1),
-        first()
-      )
-      .subscribe(newArchive => {
+    service
+      .publicRoot$()
+      .pipe(skip(1), first())
+      .subscribe((newArchive) => {
         expect(newArchive).not.toBe(rootFolder);
         expect(newArchive).toBe(rootFolder2);
       });
@@ -50,20 +49,19 @@ describe('PublicProfileService', () => {
 
     service.setArchive(archive);
 
-    service.archive$()
+    service
+      .archive$()
       .pipe(first())
-      .subscribe(currentArchive => {
+      .subscribe((currentArchive) => {
         expect(currentArchive).toBe(archive);
       });
 
     tick();
 
-    service.archive$()
-      .pipe(
-        skip(1),
-        first()
-      )
-      .subscribe(newArchive => {
+    service
+      .archive$()
+      .pipe(skip(1), first())
+      .subscribe((newArchive) => {
         expect(newArchive).not.toBe(archive);
         expect(newArchive).toBe(archive2);
       });
@@ -74,9 +72,10 @@ describe('PublicProfileService', () => {
   }));
 
   it('should emit profile item changes with the proper dictionary format', fakeAsync(() => {
-    service.profileItemsDictionary$()
+    service
+      .profileItemsDictionary$()
       .pipe(first())
-      .subscribe(currentItems => {
+      .subscribe((currentItems) => {
         expect(currentItems).toEqual({});
       });
 
@@ -85,30 +84,27 @@ describe('PublicProfileService', () => {
     const profileItems: ProfileItemVOData[] = [
       {
         fieldNameUI: 'profile.basic',
-        string1: 'My Name'
+        string1: 'My Name',
       },
       {
         fieldNameUI: 'profile.job',
         string1: 'Job 2',
-        day1: '2000-01-01'
+        day1: '2000-01-01',
       },
       {
         fieldNameUI: 'profile.job',
         string2: 'Job1',
-        day1: '1960-01-01'
-      }
+        day1: '1960-01-01',
+      },
     ];
 
-    service.profileItemsDictionary$()
-      .pipe(
-        skip(1),
-        first()
-      )
-      .subscribe(newItemDict => {
+    service
+      .profileItemsDictionary$()
+      .pipe(skip(1), first())
+      .subscribe((newItemDict) => {
         expect(newItemDict.basic.length).toBe(1);
         expect(newItemDict.job.length).toBe(2);
       });
-
 
     service.setProfileItems(profileItems);
 

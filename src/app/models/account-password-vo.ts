@@ -1,4 +1,4 @@
-import { BaseVOData } from "./base-vo";
+import { BaseVOData } from './base-vo';
 
 export interface AccountPasswordVOData extends BaseVOData {
   account_passwordId?: number;
@@ -18,9 +18,9 @@ export class AccountPasswordVO implements AccountPasswordVOData {
   public passwordOld;
   public passwordVerify;
 
-  constructor (voData: any) {
+  constructor(voData: any) {
     if (voData) {
-      for ( const key in voData ) {
+      for (const key in voData) {
         if (voData[key]) {
           this[key] = voData[key];
         }

@@ -6,15 +6,15 @@ import { AccountService } from '@shared/services/account/account.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 
 @Injectable()
-export class ProfileItemsResolveService  {
+export class ProfileItemsResolveService {
   constructor(
     private profile: ProfileService,
-    private account: AccountService
+    private account: AccountService,
   ) {}
 
   async resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Promise<any> {
     return this.profile.fetchProfileItems();
   }

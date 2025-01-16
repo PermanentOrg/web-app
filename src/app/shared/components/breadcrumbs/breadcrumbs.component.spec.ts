@@ -24,10 +24,10 @@ describe('BreadcrumbsComponent', () => {
       useValue: {
         routerState: {
           snapshot: {
-            url: currentUrl || '/'
-          }
-        }
-      }
+            url: currentUrl || '/',
+          },
+        },
+      },
     });
 
     await TestBed.configureTestingModule(config).compileComponents();
@@ -51,7 +51,7 @@ describe('BreadcrumbsComponent', () => {
     const testFolder = new FolderVO({
       pathAsText: ['test'],
       pathAsArchiveNbr: ['test'],
-      pathAsFolder_linkId: [1]
+      pathAsFolder_linkId: [1],
     });
     dataService.setCurrentFolder(testFolder);
 
@@ -66,11 +66,13 @@ describe('BreadcrumbsComponent', () => {
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['My Files', 'Test Folder Parent', 'Test Folder'],
-      pathAsFolder_linkId: [1, 2, 3]
+      pathAsFolder_linkId: [1, 2, 3],
     });
     dataService.setCurrentFolder(testFolder);
 
-    expect(component.breadcrumbs.length).toBe(testFolder.pathAsArchiveNbr.length);
+    expect(component.breadcrumbs.length).toBe(
+      testFolder.pathAsArchiveNbr.length,
+    );
     const expectedUrl = `/private/${testFolder.pathAsArchiveNbr[1]}/${testFolder.pathAsFolder_linkId[1]}`;
 
     expect(component.breadcrumbs[1].routerPath).toEqual(expectedUrl);
@@ -81,7 +83,7 @@ describe('BreadcrumbsComponent', () => {
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['My Files', 'Test Folder Parent', 'Test Folder'],
-      pathAsFolder_linkId: [1, 2, 3]
+      pathAsFolder_linkId: [1, 2, 3],
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
 
@@ -94,7 +96,7 @@ describe('BreadcrumbsComponent', () => {
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['Apps', 'Facebook', 'Everything'],
-      pathAsFolder_linkId: [1, 2, 3]
+      pathAsFolder_linkId: [1, 2, 3],
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
 
@@ -107,7 +109,7 @@ describe('BreadcrumbsComponent', () => {
     const testFolder = new FolderVO({
       pathAsArchiveNbr: ['test1', 'test2', 'test3'],
       pathAsText: ['Shares', 'Archive Name', 'Shared Folder'],
-      pathAsFolder_linkId: [1, 2, 3]
+      pathAsFolder_linkId: [1, 2, 3],
     });
     TestBed.inject(DataService).setCurrentFolder(testFolder);
 

@@ -7,14 +7,14 @@ const testUser = {
   name: 'Unit Test',
   email: 'aatwood+unittest@permanent.org',
   password: 'Abc123!!!!',
-  phone: '8324553388'
+  phone: '8324553388',
 };
 
 const testUser2 = {
   name: 'Andrew Atwood',
   email: 'aatwood@permanent.org',
   password: 'Abc123!!!!',
-  phone: '8324553388'
+  phone: '8324553388',
 };
 
 describe('CoreModule', () => {
@@ -32,11 +32,11 @@ describe('CoreModule', () => {
 export const TEST_DATA = {
   user: testUser,
   archive: testData.ArchiveVO,
-  account: testData.AccountVO
+  account: testData.AccountVO,
 };
 
 export const TEST_DATA_2 = {
   user: testUser2,
   archive: testData2.ArchiveVO,
-  account: testData2.AccountVO
+  account: testData2.AccountVO,
 };

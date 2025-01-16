@@ -14,7 +14,7 @@ $transition-length: 0.25s;
   right: 0;
   bottom: 0;
   transform: translateY(100%);
-  transition:  transform $transition-length ease-in;
+  transition: transform $transition-length ease-in;
 
   .menu-item {
     padding: $input-btn-padding-y * 1.5 10px;

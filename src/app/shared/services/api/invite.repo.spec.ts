@@ -1,5 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
@@ -12,10 +15,8 @@ describe('InviteRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [HttpService]
+      imports: [HttpClientTestingModule],
+      providers: [HttpService],
     });
 
     repo = new InviteRepo(TestBed.get(HttpService));
@@ -31,11 +32,10 @@ describe('InviteRepo', () => {
 
     const invite = new InviteVO({
       fullName: 'Test Invite',
-      email: 'testinvite@gmail.com'
+      email: 'testinvite@gmail.com',
     });
 
-    repo.send([invite])
-    .then((response: InviteResponse) => {
+    repo.send([invite]).then((response: InviteResponse) => {
       expect(response.isSuccessful).toBeTruthy();
       expect(response.getInviteVO().fullName).toEqual('Test Invite');
       expect(response.getInviteVO().email).toEqual('testinvite@gmail.com');
