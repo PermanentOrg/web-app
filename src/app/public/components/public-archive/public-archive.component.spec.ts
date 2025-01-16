@@ -5,8 +5,8 @@ import { Shallow } from 'shallow-render';
 import { of } from 'rxjs';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { Router } from '@angular/router';
-import { PublicArchiveComponent } from './public-archive.component';
 import { ArchiveVO } from '@models/index';
+import { PublicArchiveComponent } from './public-archive.component';
 
 const publicProfileServiceMock = {
   publicRoot$: () => of({}),
