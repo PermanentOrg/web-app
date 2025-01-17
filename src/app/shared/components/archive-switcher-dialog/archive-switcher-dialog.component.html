@@ -1,9 +1,16 @@
 <div class="archive-switcher-wrapper">
   <div class="archive-list-wrapper">
-    <div class="archive-list" *ngIf="!loadingArchives" [ngClass]="{'switching': waiting}">
-      <pr-archive-small *ngFor="let archive of archives"
-        [archive]="archive" [accessRole]="archive.accessRole"
-        (click)="onArchiveClick(archive)">
+    <div
+      class="archive-list"
+      *ngIf="!loadingArchives"
+      [ngClass]="{ switching: waiting }"
+    >
+      <pr-archive-small
+        *ngFor="let archive of archives"
+        [archive]="archive"
+        [accessRole]="archive.accessRole"
+        (click)="onArchiveClick(archive)"
+      >
       </pr-archive-small>
       <div *ngIf="!archives.length" class="archives-empty">
         You have no other archives
@@ -14,7 +21,15 @@
     </div>
   </div>
   <div class="archive-list-button">
-    <button class="btn btn-wordpress" [disabled]="waiting" (click)="close()">Use Current Archive</button>
-    <button class="btn btn-wordpress-alternate" [disabled]="waiting" (click)="logOut()">Log Out</button>
+    <button class="btn btn-wordpress" [disabled]="waiting" (click)="close()">
+      Use Current Archive
+    </button>
+    <button
+      class="btn btn-wordpress-alternate"
+      [disabled]="waiting"
+      (click)="logOut()"
+    >
+      Log Out
+    </button>
   </div>
 </div>

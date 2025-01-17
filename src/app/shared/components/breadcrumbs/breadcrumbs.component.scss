@@ -40,7 +40,8 @@ pr-breadcrumb {
     // opacity: 0.5;
   }
 
-  &.drop-target, &.drop-target:hover {
+  &.drop-target,
+  &.drop-target:hover {
     a {
       color: $PR-purple;
       text-decoration: none;
@@ -50,7 +51,8 @@ pr-breadcrumb {
 }
 
 .breadcrumbs-dark-text {
-  pr-breadcrumb, a {
+  pr-breadcrumb,
+  a {
     color: $body-color;
   }
 

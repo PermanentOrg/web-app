@@ -62,7 +62,7 @@
   }
 }
 
-@mixin hasFloatSidebar{
+@mixin hasFloatSidebar {
   @include desktop {
     width: calc(100% - #{$sidebar-width});
   }
@@ -82,7 +82,7 @@
     border: $file-list-border;
     overflow-y: auto;
 
-    .title  {
+    .title {
       height: 2 * $grid-unit;
       display: flex;
       align-items: center;
@@ -132,7 +132,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #F7C985;
+  color: #f7c985;
 
   i {
     font-size: $height - ($grid-unit * 0.25);
@@ -151,12 +151,11 @@
   }
 }
 
-
-@mixin gradient($direction, $list) { 
+@mixin gradient($direction, $list) {
   background: -webkit-linear-gradient($direction, $list);
   background: -moz-linear-gradient($direction, $list);
   background: -o-linear-gradient($direction, $list);
-  background: linear-gradient($direction, $list);  
+  background: linear-gradient($direction, $list);
 }
 
 @mixin flexGridWithGutter($count: 4, $gutter: $grid-unit) {

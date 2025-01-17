@@ -154,10 +154,10 @@ $public-max-width: 800px;
   }
 }
 
-
 @media screen and (max-width: 767px) {
   .search-bar-focused {
-    & > a, .banner-buttons {
+    & > a,
+    .banner-buttons {
       display: none;
     }
   }

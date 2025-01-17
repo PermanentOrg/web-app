@@ -1,6 +1,11 @@
 import { DOWN_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 import { ArchiveVO, RelationVO } from '@models';
@@ -18,24 +23,18 @@ describe('ArchiveSearchBoxComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      providers: [
-        RelationshipService,
-        AccountService,
-        ApiService,
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [RelationshipService, AccountService, ApiService],
     });
 
-    relationshipService = TestBed.inject<RelationshipService>(RelationshipService);
+    relationshipService =
+      TestBed.inject<RelationshipService>(RelationshipService);
     apiService = TestBed.inject<ApiService>(ApiService);
 
     component = new ArchiveSearchBoxComponent(
       relationshipService,
       null,
-      apiService
+      apiService,
     );
     component.ngOnInit();
   });
@@ -49,8 +48,10 @@ describe('ArchiveSearchBoxComponent', () => {
   });
 
   it('should search RelationshipService when a non-email value is entered', fakeAsync(() => {
-    const searchSpy = spyOn(relationshipService, 'searchRelationsByName')
-      .and.returnValue([]);
+    const searchSpy = spyOn(
+      relationshipService,
+      'searchRelationsByName',
+    ).and.returnValue([]);
 
     const sub = component.searchResults$.subscribe((results) => {
       expect(results).toEqual([]);
@@ -80,8 +81,10 @@ describe('ArchiveSearchBoxComponent', () => {
     const relation2 = new RelationVO({});
     relation2.RelationArchiveVO = archive2;
 
-    const getAllSpy = spyOn(relationshipService, 'getSync')
-      .and.returnValue([relation1, relation2]);
+    const getAllSpy = spyOn(relationshipService, 'getSync').and.returnValue([
+      relation1,
+      relation2,
+    ]);
 
     const sub = component.searchResults$.subscribe((results) => {
       expect(getAllSpy).toHaveBeenCalled();
@@ -102,15 +105,20 @@ describe('ArchiveSearchBoxComponent', () => {
 
     const searchResponse = new SearchResponse({});
     searchResponse.isSuccessful = true;
-    searchResponse.Results = [{
-      data: [{
-        ArchiveVO: archive1
-      }]
-    }];
+    searchResponse.Results = [
+      {
+        data: [
+          {
+            ArchiveVO: archive1,
+          },
+        ],
+      },
+    ];
 
-
-    const emailSearchSpy = spyOn(apiService.search, 'archiveByEmail')
-      .and.returnValue(of(searchResponse));
+    const emailSearchSpy = spyOn(
+      apiService.search,
+      'archiveByEmail',
+    ).and.returnValue(of(searchResponse));
 
     const sub = component.searchResults$.subscribe((results) => {
       expect(emailSearchSpy).toHaveBeenCalled();
@@ -141,8 +149,10 @@ describe('ArchiveSearchBoxComponent', () => {
     const relation2 = new RelationVO({});
     relation2.RelationArchiveVO = archive2;
 
-    const getAllSpy = spyOn(relationshipService, 'getSync')
-      .and.returnValue([relation1, relation2]);
+    const getAllSpy = spyOn(relationshipService, 'getSync').and.returnValue([
+      relation1,
+      relation2,
+    ]);
 
     component.filterFn = (archive: ArchiveVO) => archive.archiveId !== 1;
 
@@ -172,11 +182,12 @@ describe('ArchiveSearchBoxComponent', () => {
     const relation2 = new RelationVO({});
     relation2.RelationArchiveVO = archive2;
 
-    const getAllSpy = spyOn(relationshipService, 'getSync')
-      .and.returnValue([relation1, relation2]);
+    const getAllSpy = spyOn(relationshipService, 'getSync').and.returnValue([
+      relation1,
+      relation2,
+    ]);
 
-    const sub = component.searchResults$.subscribe((results) => {
-    });
+    const sub = component.searchResults$.subscribe((results) => {});
 
     component.onFocus();
     tick(500);

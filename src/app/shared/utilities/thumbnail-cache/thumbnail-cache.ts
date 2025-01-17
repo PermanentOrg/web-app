@@ -1,6 +1,6 @@
-import {StorageService} from '@shared/services/storage/storage.service';
-import {FolderContentsType} from '@fileBrowser/components/file-list-item/file-list-item.component';
-import {ItemVO} from '@models';
+import { StorageService } from '@shared/services/storage/storage.service';
+import { FolderContentsType } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { ItemVO } from '@models';
 
 export interface FolderThumbData {
   folderThumb200: string;
@@ -19,7 +19,10 @@ export class ThumbnailCache {
   public saveThumbnail(item: ItemVO, thumbs: FolderThumbData): void {
     this.fetchCacheMapFromStorage();
     if (thumbs.folderContentsType === FolderContentsType.NORMAL) {
-      this.cache.set(item.folder_linkId, [thumbs.folderThumb200, thumbs.folderThumb500]);
+      this.cache.set(item.folder_linkId, [
+        thumbs.folderThumb200,
+        thumbs.folderThumb500,
+      ]);
     } else {
       this.cache.set(item.folder_linkId, ['icon', thumbs.folderContentsType]);
     }
@@ -60,7 +63,7 @@ export class ThumbnailCache {
   }
 
   public invalidateFolder(folderLinkId: number): void {
-    if(this.cache.has(folderLinkId)) {
+    if (this.cache.has(folderLinkId)) {
       this.cache.delete(folderLinkId);
       this.saveMapToStorage();
     }
@@ -77,6 +80,9 @@ export class ThumbnailCache {
   }
 
   private saveMapToStorage(): void {
-    this.storage.session.set(this.STORAGE_KEY, Array.from(this.cache.entries()));
+    this.storage.session.set(
+      this.STORAGE_KEY,
+      Array.from(this.cache.entries()),
+    );
   }
 }

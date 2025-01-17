@@ -12,20 +12,20 @@ import { RelationshipService } from './relationship.service';
 describe('RelationshipService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         CookieService,
         AccountService,
         StorageService,
-        RelationshipService
-      ]
+        RelationshipService,
+      ],
     });
   });
 
-  it('should be created', inject([RelationshipService], (service: RelationshipService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [RelationshipService],
+    (service: RelationshipService) => {
+      expect(service).toBeTruthy();
+    },
+  ));
 });

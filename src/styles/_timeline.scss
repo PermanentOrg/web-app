@@ -5,7 +5,7 @@
 
   .vis-item {
     cursor: pointer;
-    
+
     &.timeline-perm-orange {
       border-color: $PR-orange;
       background-color: lighten($PR-orange, 30%);
@@ -33,7 +33,7 @@
   //   border-color: $PR-purple;
   //   background-color: lighten($PR-purple, 70%);
   // }
-  
+
   .timeline-item {
     display: flex;
     align-items: center;
@@ -43,7 +43,7 @@
       width: auto;
       margin-right: 5px;
     }
-  
+
     .timeline-thumbnail {
       height: 40px;
       width: 40px;
@@ -60,13 +60,16 @@
     }
   }
 
-  .timeline-group, .timeline-folder, .timeline-record {
+  .timeline-group,
+  .timeline-folder,
+  .timeline-record {
     text-align: left;
     line-height: 20px;
   }
 
-  .timeline-group-name, .timeline-folder-name {
-    font-weight: bolder
+  .timeline-group-name,
+  .timeline-folder-name {
+    font-weight: bolder;
   }
 
   .timeline-record-name {
@@ -92,7 +95,8 @@
     overflow: hidden;
     margin-right: 5px;
 
-    img, > div {
+    img,
+    > div {
       height: 20px;
       width: 20px;
       flex: 0 0 20px;
@@ -117,7 +121,8 @@
       height: $record-preview-height * 2;
       max-height: $record-preview-height * 2;
 
-      img, > div {
+      img,
+      > div {
         height: $record-preview-height;
         width: $record-preview-height;
         flex: 0 0 $record-preview-height;

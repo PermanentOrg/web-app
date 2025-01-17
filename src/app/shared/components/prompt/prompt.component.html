@@ -1,20 +1,52 @@
-<div class="menu-wrapper" [ngClass]="{'visible': isVisible}" (click)="cancel($event)">
-  <div class="menu prompt" (click)="$event.stopPropagation();">
-    <div class="prompt-title" *ngIf="title">{{title}}</div>
+<div
+  class="menu-wrapper"
+  [ngClass]="{ visible: isVisible }"
+  (click)="cancel($event)"
+>
+  <div class="menu prompt" (click)="$event.stopPropagation()">
+    <div class="prompt-title" *ngIf="title">{{ title }}</div>
     <div class="prompt-template" *ngIf="template" [innerHTML]="template"></div>
     <form [formGroup]="editForm" (ngSubmit)="save($event)" *ngIf="editForm">
       <div class="input-group-vertical">
-        <pr-form-input [type]="field.type || 'text'" [fieldName]="field.fieldName" [placeholder]="field.placeholder" [control]="editForm.controls[field.fieldName]" [config]="field.config"
-          [selectOptions]="field.selectOptions" *ngFor="let field of fields"></pr-form-input>
+        <pr-form-input
+          [type]="field.type || 'text'"
+          [fieldName]="field.fieldName"
+          [placeholder]="field.placeholder"
+          [control]="editForm.controls[field.fieldName]"
+          [config]="field.config"
+          [selectOptions]="field.selectOptions"
+          *ngFor="let field of fields"
+        ></pr-form-input>
       </div>
       <div class="prompt-field-buttons">
-          <button type="button" class="btn btn-secondary" (click)="cancel($event)" [disabled]="waiting">{{cancelText}}</button>
-          <button type="submit" class="btn btn-primary" [disabled]="waiting || editForm.invalid">{{saveText}}</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cancel($event)"
+          [disabled]="waiting"
+        >
+          {{ cancelText }}
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="waiting || editForm.invalid"
+        >
+          {{ saveText }}
+        </button>
       </div>
     </form>
     <div class="prompt-buttons" *ngIf="editButtons">
-      <button [id]="button.buttonName" class="btn" type="button" *ngFor="let button of editButtons" (click)="clickButton(button, $event)" [disabled]="waiting" [ngClass]="button.class || 'btn-primary'">
-        {{button.buttonText}}
+      <button
+        [id]="button.buttonName"
+        class="btn"
+        type="button"
+        *ngFor="let button of editButtons"
+        (click)="clickButton(button, $event)"
+        [disabled]="waiting"
+        [ngClass]="button.class || 'btn-primary'"
+      >
+        {{ button.buttonText }}
       </button>
     </div>
   </div>

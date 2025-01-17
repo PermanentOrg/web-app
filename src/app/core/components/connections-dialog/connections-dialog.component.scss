@@ -6,7 +6,7 @@
 }
 
 .header {
-  @include tabbedDialogHeader($PR-blue-light)
+  @include tabbedDialogHeader($PR-blue-light);
 }
 
 .content {

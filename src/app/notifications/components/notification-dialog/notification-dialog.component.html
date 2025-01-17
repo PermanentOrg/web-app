@@ -6,11 +6,19 @@
     </button>
   </div>
   <div class="notifications">
-    <div class="empty-message" *ngIf="!notificationService.notifications">No activity</div>
-    <pr-notification *ngFor="let notification of notificationService.notifications" [isUnread]="notification.status !== 'status.notification.read'"
-      [notification]="notification" (click)="onNotificationClick(notification)"></pr-notification>
+    <div class="empty-message" *ngIf="!notificationService.notifications">
+      No activity
+    </div>
+    <pr-notification
+      *ngFor="let notification of notificationService.notifications"
+      [isUnread]="notification.status !== 'status.notification.read'"
+      [notification]="notification"
+      (click)="onNotificationClick(notification)"
+    ></pr-notification>
   </div>
   <div class="footer">
-    <button class="btn btn-primary" (click)="markAllAsRead()">Mark All Complete</button>
+    <button class="btn btn-primary" (click)="markAllAsRead()">
+      Mark All Complete
+    </button>
   </div>
 </div>

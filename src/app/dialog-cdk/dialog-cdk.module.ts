@@ -7,6 +7,11 @@ import { CoreRoutingModule } from '@core/core.routes';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, AngularCdkDialogModule, RouterModule, CoreRoutingModule],
+  imports: [
+    CommonModule,
+    AngularCdkDialogModule,
+    RouterModule,
+    CoreRoutingModule,
+  ],
 })
 export class DialogCdkModule {}

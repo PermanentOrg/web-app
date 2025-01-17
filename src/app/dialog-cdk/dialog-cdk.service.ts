@@ -12,7 +12,7 @@ export class DialogCdkService {
 
   public open<T, U, V>(
     component: ComponentType<T> | TemplateRef<T>,
-    config?: DialogConfig<V, DialogRef<U, T>, BasePortalOutlet>
+    config?: DialogConfig<V, DialogRef<U, T>, BasePortalOutlet>,
   ): DialogRef<U, T> {
     return this.dialog.open(component, config);
   }

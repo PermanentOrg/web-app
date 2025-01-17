@@ -1,4 +1,12 @@
-import { Component, OnInit, ElementRef, OnDestroy, Input, ViewEncapsulation, Optional } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  OnDestroy,
+  Input,
+  ViewEncapsulation,
+  Optional,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -10,8 +18,13 @@ import { EditService } from '@core/services/edit/edit.service';
 
 export class Breadcrumb {
   public routerPath: string;
-  constructor(rootUrl: string, public text: string, public archiveNbr?: string, public folder_linkId?: number, rootUrlOnly = false) {
-
+  constructor(
+    rootUrl: string,
+    public text: string,
+    public archiveNbr?: string,
+    public folder_linkId?: number,
+    rootUrlOnly = false,
+  ) {
     if (rootUrlOnly) {
       this.routerPath = rootUrl;
     } else if (!archiveNbr && !folder_linkId) {
@@ -62,7 +75,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private router: Router,
     private route: ActivatedRoute,
-    @Optional() private edit: EditService
+    @Optional() private edit: EditService,
   ) {}
 
   ngOnInit() {
@@ -79,7 +92,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.scrollToEnd();
         }, 0);
-      }
+      },
     );
   }
 
@@ -129,7 +142,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       if (isInFolderView) {
         const folderViewEx = /\/view\/([a-z]*)/;
         const folderViewName = folderViewEx.exec(
-          this.router.routerState.snapshot.url
+          this.router.routerState.snapshot.url,
         )[1];
         rootUrl = `/p/archive/${this.route.snapshot.params.publicArchiveNbr}/view/${folderViewName}`;
       } else {
@@ -150,14 +163,13 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
     if (showRootBreadcrumb) {
       this.breadcrumbs.push(new Breadcrumb(rootUrl, folder.pathAsText[0]));
-      if(this.breadcrumbs[0].routerPath == '/private')
+      if (this.breadcrumbs[0].routerPath == '/private')
         this.breadcrumbs[0].text = 'Private';
-
     }
 
     if (isInPublicArchive) {
       this.breadcrumbs.push(
-        new Breadcrumb(rootUrl, folder.pathAsText[0], null, null, true)
+        new Breadcrumb(rootUrl, folder.pathAsText[0], null, null, true),
       );
     }
 
@@ -171,8 +183,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
           rootUrl,
           folder.pathAsText[i],
           folder.pathAsArchiveNbr[i],
-          folder.pathAsFolder_linkId[i]
-        )
+          folder.pathAsFolder_linkId[i],
+        ),
       );
     }
 

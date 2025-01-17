@@ -12,15 +12,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'dsFileSize' })
 export class FileSizePipe implements PipeTransform {
-
-  private units: string[] = [
-    'bytes',
-    'KB',
-    'MB',
-    'GB',
-    'TB',
-    'PB'
-  ];
+  private units: string[] = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
   transform(bytes: number = 0, precision: number = 2): string {
     let result: string;
@@ -34,7 +26,7 @@ export class FileSizePipe implements PipeTransform {
         unit++;
       }
 
-      result = bytes.toFixed(+ precision) + ' ' + this.units[unit];
+      result = bytes.toFixed(+precision) + ' ' + this.units[unit];
     }
     return result;
   }

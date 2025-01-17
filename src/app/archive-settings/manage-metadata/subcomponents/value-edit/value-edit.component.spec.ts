@@ -23,7 +23,7 @@ describe('EditValueComponent', () => {
   let rejectDelete: boolean;
 
   const defaultRender = async (
-    tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' })
+    tag: TagVO = new TagVO({ tagId: 1, name: 'abc:123' }),
   ) =>
     await shallow.render(
       '<pr-metadata-edit-value [tag]="tag"></pr-metadata-edit-value>',
@@ -31,7 +31,7 @@ describe('EditValueComponent', () => {
         bind: {
           tag,
         },
-      }
+      },
     );
 
   beforeEach(() => {

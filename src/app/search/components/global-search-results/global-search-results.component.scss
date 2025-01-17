@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import 'variables';
 
@@ -22,8 +22,6 @@ $input-padding: 0.5rem;
   .fade-ring-loader {
     position: absolute;
     right: $input-padding;
-
-
   }
 }
 
@@ -49,8 +47,6 @@ i.ion-md-search {
   left: $input-padding;
   opacity: 0.5;
 }
-
-
 
 .tag-results {
   display: flex;
@@ -136,7 +132,7 @@ $result-gutter: 1rem;
     justify-content: center;
 
     i {
-      color: #F7C985;
+      color: #f7c985;
       font-size: 2.6rem;
     }
   }
@@ -167,7 +163,7 @@ $result-gutter: 1rem;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .item-name {
       // font-weight: 500;
     }
@@ -205,13 +201,13 @@ $result-gutter: 1rem;
     padding-top: 100%;
     position: relative;
     height: auto;
-  
+
     i {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       margin: 0 auto;
-      color: #F7C985;
+      color: #f7c985;
       font-size: 2.6rem;
     }
   }
@@ -219,7 +215,7 @@ $result-gutter: 1rem;
   $max-grid-width: 150px;
 
   @for $i from 2 through 6 {
-    @media screen and (min-width: ($i * $max-grid-width) + 1) and (max-width: $tablet-horizontal){
+    @media screen and (min-width: ($i * $max-grid-width) + 1) and (max-width: $tablet-horizontal) {
       .item-result-wrapper {
         width: math.div(100%, $i);
       }
@@ -227,7 +223,7 @@ $result-gutter: 1rem;
   }
 
   @for $i from 3 through 10 {
-    @media screen and (min-width: ($i * $result-width-desktop) + $left-menu-width + 1){
+    @media screen and (min-width: ($i * $result-width-desktop) + $left-menu-width + 1) {
       .item-result-wrapper {
         width: math.div(100%, $i);
       }

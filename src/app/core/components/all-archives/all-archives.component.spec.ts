@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { ArchiveResponse } from '@shared/services/api/index.repo';
 import { AccountService } from '@shared/services/account/account.service';
@@ -30,13 +30,12 @@ describe('AllArchivesComponent', () => {
       useValue: {
         snapshot: {
           data: {
-            archives: archives
-          }
-        }
-      }
+            archives: archives,
+          },
+        },
+      },
     });
-    TestBed.configureTestingModule(config)
-    .compileComponents();
+    TestBed.configureTestingModule(config).compileComponents();
   }));
 
   beforeEach(() => {

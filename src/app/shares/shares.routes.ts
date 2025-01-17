@@ -8,7 +8,7 @@ import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { RoutesWithData } from '../app.routes';
 
 const sharesRootResolve = {
-  shares: SharesResolveService
+  shares: SharesResolveService,
 };
 
 const shareRootChildren: RoutesWithData = [
@@ -16,12 +16,12 @@ const shareRootChildren: RoutesWithData = [
     path: 'record/:recArchiveNbr',
     component: FileViewerComponent,
     data: {
-      singleFile: true
+      singleFile: true,
     },
     resolve: {
-      currentRecord: RecordResolveService
-    }
-  }
+      currentRecord: RecordResolveService,
+    },
+  },
 ];
 
 export const routes: RoutesWithData = [
@@ -31,25 +31,23 @@ export const routes: RoutesWithData = [
     resolve: sharesRootResolve,
     children: shareRootChildren,
     data: {
-      showSidebar: true
-    }
+      showSidebar: true,
+    },
   },
   {
     path: ':archiveNbr',
-    redirectTo: ''
+    redirectTo: '',
   },
   {
     path: ':archiveNbr/:folderLinkId',
-    loadChildren: () => import('../file-browser/file-browser.module').then(m => m.FileBrowserModule)
-  }
+    loadChildren: () =>
+      import('../file-browser/file-browser.module').then(
+        (m) => m.FileBrowserModule,
+      ),
+  },
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  providers: [
-    SharesResolveService,
-  ]
+  imports: [RouterModule.forChild(routes)],
+  providers: [SharesResolveService],
 })
-export class AppsRoutingModule { }
-
+export class AppsRoutingModule {}

@@ -8,11 +8,13 @@ import { AccountService } from '@shared/services/account/account.service';
 import { RelationshipService } from '@core/services/relationship/relationship.service';
 
 @Injectable()
-export class RelationshipsResolveService  {
+export class RelationshipsResolveService {
+  constructor(private relationshipService: RelationshipService) {}
 
-  constructor(private relationshipService: RelationshipService) { }
-
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<any> {
     return this.relationshipService.get();
   }
 }

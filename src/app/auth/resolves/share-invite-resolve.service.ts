@@ -4,11 +4,13 @@ import { ApiService } from '@shared/services/api/api.service';
 import { RecordVOData, FolderVOData, RecordVO, FolderVO } from '@models';
 
 @Injectable()
-export class ShareInviteResolveService  {
+export class ShareInviteResolveService {
+  constructor(private apiService: ApiService) {}
 
-  constructor(private apiService: ApiService) { }
-
-  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
+  async resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<any> {
     if (!route.queryParams.shid) {
       return Promise.resolve(null);
     }
@@ -29,8 +31,9 @@ export class ShareInviteResolveService  {
       inviteCode = window.atob(params.inviteCode);
     }
 
-    return this.apiService.invite.getShareInviteInfo(email, inviteCode, params.shid, params.tp)
-      .then(response => {
+    return this.apiService.invite
+      .getShareInviteInfo(email, inviteCode, params.shid, params.tp)
+      .then((response) => {
         try {
           const responseData = response.getResultsData()[0][0];
           return Promise.resolve(responseData);

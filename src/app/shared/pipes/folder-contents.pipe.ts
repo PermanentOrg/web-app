@@ -2,12 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { FolderVO, ItemVO, RecordVO, FolderSizeVOData } from '@models';
 
 @Pipe({
-  name: 'folderContents'
+  name: 'folderContents',
 })
 export class FolderContentsPipe implements PipeTransform {
-
-  constructor() {
-  }
+  constructor() {}
 
   transform(folderSizeVo: FolderSizeVOData, args?: any): string {
     if (folderSizeVo) {

@@ -13,7 +13,7 @@ import { ViewsRoutingModule } from './views.routes';
     RouterModule,
     ViewsComponentsModule,
     ViewsRoutingModule,
-    DialogModule
+    DialogModule,
   ],
 })
 export class ViewsModule {}

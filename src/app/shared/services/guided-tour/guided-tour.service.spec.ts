@@ -13,22 +13,21 @@ describe('GuidedTourService', () => {
   beforeEach(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
     const mockAccountService = {
-      getAccount: function() {
+      getAccount: function () {
         return new AccountVO({
-          accountId: 2
+          accountId: 2,
         });
-      }
+      },
     };
 
-    config.providers.push({
-      provide: AccountService,
-      useValue: mockAccountService
-    },
-      ShepherdService
-    );
     config.providers.push(
-      GuidedTourService
+      {
+        provide: AccountService,
+        useValue: mockAccountService,
+      },
+      ShepherdService,
     );
+    config.providers.push(GuidedTourService);
     TestBed.configureTestingModule(config);
     service = TestBed.inject(GuidedTourService);
   });

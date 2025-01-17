@@ -1,6 +1,8 @@
 import { BaseVO } from '@models/base-vo';
 
-export type ConnectorType = 'type.connector.facebook' | 'type.connector.familysearch';
+export type ConnectorType =
+  | 'type.connector.facebook'
+  | 'type.connector.familysearch';
 
 export interface ConnectorOverviewVOData {
   connector_overviewId?: number;

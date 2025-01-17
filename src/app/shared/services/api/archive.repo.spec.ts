@@ -41,11 +41,11 @@ describe('ArchiveRepo', () => {
 
     repo.get([TEST_DATA.archive]).then((response) => {
       expect(response.getArchiveVO().archiveId).toEqual(
-        TEST_DATA.archive.archiveId
+        TEST_DATA.archive.archiveId,
       );
 
       expect(response.getArchiveVO().archiveNbr).toEqual(
-        TEST_DATA.archive.archiveNbr
+        TEST_DATA.archive.archiveNbr,
       );
     });
 
@@ -84,7 +84,7 @@ describe('ArchiveRepo', () => {
       });
 
     const req = httpMock.expectOne(
-      `${environment.apiUrl}/archive/getAllArchives`
+      `${environment.apiUrl}/archive/getAllArchives`,
     );
     req.flush(expected);
   });

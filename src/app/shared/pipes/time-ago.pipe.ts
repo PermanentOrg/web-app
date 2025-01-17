@@ -5,24 +5,24 @@ import { moment } from 'vis-timeline/standalone';
 moment.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
-    past:   '%s ago',
-    s  : 'now',
-    ss : '%ds',
-    m:  '1m',
+    past: '%s ago',
+    s: 'now',
+    ss: '%ds',
+    m: '1m',
     mm: '%dm',
-    h:  '1h',
+    h: '1h',
     hh: '%dh',
-    d:  '1d',
+    d: '1d',
     dd: '%dd',
-    M:  '1mo',
+    M: '1mo',
     MM: '%dmo',
-    y:  '1y',
-    yy: '%dy'
-  }
+    y: '1y',
+    yy: '%dy',
+  },
 });
 
 @Pipe({
-  name: 'timeAgo'
+  name: 'timeAgo',
 })
 export class TimeAgoPipe implements PipeTransform {
   transform(datetime: string): any {

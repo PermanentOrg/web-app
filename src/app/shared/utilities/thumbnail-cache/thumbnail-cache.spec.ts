@@ -1,7 +1,7 @@
-import {StorageService} from '@shared/services/storage/storage.service';
-import {FolderVO} from '@models';
-import {FolderContentsType} from '@fileBrowser/components/file-list-item/file-list-item.component';
-import {ThumbnailCache, FolderThumbData} from './thumbnail-cache';
+import { StorageService } from '@shared/services/storage/storage.service';
+import { FolderVO } from '@models';
+import { FolderContentsType } from '@fileBrowser/components/file-list-item/file-list-item.component';
+import { ThumbnailCache, FolderThumbData } from './thumbnail-cache';
 
 describe('ThumbnailCache', () => {
   let cache: ThumbnailCache;
@@ -33,12 +33,14 @@ describe('ThumbnailCache', () => {
 
     expect(thumbs.folderThumb200).toBeDefined();
     expect(thumbs.folderThumb500).toBeDefined();
-    expect(thumbs.folderContentsType).toBe(FolderContentsType.BROKEN_THUMBNAILS);
+    expect(thumbs.folderContentsType).toBe(
+      FolderContentsType.BROKEN_THUMBNAILS,
+    );
   });
 
   it('should be able to set and get thumbnail', () => {
     cache.saveThumbnail(folder, folderThumbData);
-    const {folderThumb200, folderThumb500} = cache.getThumbnail(folder);
+    const { folderThumb200, folderThumb500 } = cache.getThumbnail(folder);
 
     expect(folderThumb200).toBe(folderThumbData.folderThumb200);
     expect(folderThumb500).toBe(folderThumbData.folderThumb500);
@@ -54,7 +56,7 @@ describe('ThumbnailCache', () => {
   it('should use session storage to get this data', () => {
     cache.saveThumbnail(folder, folderThumbData);
     const cache2 = new ThumbnailCache(storage);
-    const {folderThumb200, folderThumb500} = cache2.getThumbnail(folder);
+    const { folderThumb200, folderThumb500 } = cache2.getThumbnail(folder);
 
     expect(folderThumb200).toBe(folderThumbData.folderThumb200);
     expect(folderThumb500).toBe(folderThumbData.folderThumb500);
@@ -71,7 +73,8 @@ describe('ThumbnailCache', () => {
       folderThumbData.folderContentsType = icon;
       folder.folder_linkId += 1;
       cache.saveThumbnail(folder, folderThumbData);
-      const {folderThumb200, folderThumb500, folderContentsType} = cache.getThumbnail(folder);
+      const { folderThumb200, folderThumb500, folderContentsType } =
+        cache.getThumbnail(folder);
 
       expect(folderThumb200).toBe('');
       expect(folderThumb500).toBe('');
@@ -100,7 +103,10 @@ describe('ThumbnailCache', () => {
 
       expect(thumbz.folderThumb200).toBe('');
       expect(thumbz.folderThumb500).toBe('');
-      expect(thumbz.folderContentsType).toBe(FolderContentsType.BROKEN_THUMBNAILS);
+      expect(thumbz.folderContentsType).toBe(
+        FolderContentsType.BROKEN_THUMBNAILS,
+      );
+
       expect(storage.session.get('folderThumbnailCache').length).toBe(0);
     });
 

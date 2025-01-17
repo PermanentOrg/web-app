@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { MessageService } from '@shared/services/message/message.service';
@@ -32,37 +36,42 @@ const blurredPhotos = [
   'preview-10.jpg',
 ];
 
-const dummyItems = shuffle(blurredPhotos.map((filename, index) => {
-  const url = `assets/img/preview/${filename}`;
+const dummyItems = shuffle(
+  blurredPhotos.map((filename, index) => {
+    const url = `assets/img/preview/${filename}`;
 
-  const data: RecordVOData = {
-    displayName: `Shared Item`,
-    archiveNbr: '0000-0000',
-    folder_linkId: 0,
-    recordId: 0,
-    thumbURL200: url,
-    thumbURL500: url,
-    thumbURL1000: url,
-    type: 'type.record.image'
-  };
+    const data: RecordVOData = {
+      displayName: `Shared Item`,
+      archiveNbr: '0000-0000',
+      folder_linkId: 0,
+      recordId: 0,
+      thumbURL200: url,
+      thumbURL500: url,
+      thumbURL1000: url,
+      type: 'type.record.image',
+    };
 
-  const record = new RecordVO(data);
-  record.dataStatus = DataStatus.Full;
+    const record = new RecordVO(data);
+    record.dataStatus = DataStatus.Full;
 
-  return record;
-}));
+    return record;
+  }),
+);
 
 @Injectable()
-export class PreviewResolveService  {
-  constructor(
-  ) { }
+export class PreviewResolveService {
+  constructor() {}
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<any> {
     const sharePreviewVO = route.parent.data.sharePreviewVO as ShareByUrlVO;
-    const showPreview = sharePreviewVO.previewToggle
-      || (sharePreviewVO.ShareVO && sharePreviewVO.ShareVO.previewToggle)
-      || !!route.params.inviteCode
-      || !!route.params.shareId;
+    const showPreview =
+      sharePreviewVO.previewToggle ||
+      (sharePreviewVO.ShareVO && sharePreviewVO.ShareVO.previewToggle) ||
+      !!route.params.inviteCode ||
+      !!route.params.shareId;
 
     if (sharePreviewVO.FolderVO && showPreview) {
       // if folder and share preview on, just show the folder after setting the dummy path
@@ -103,10 +112,10 @@ export class PreviewResolveService  {
         description: record.description,
         archiveId: record.archiveId,
         type: 'type.folder.share',
-        ChildItemVOs: [ record ],
-        pathAsText: [ record.displayName ],
+        ChildItemVOs: [record],
+        pathAsText: [record.displayName],
         pathAsArchiveNbr: ['0000-0000'],
-        pathAsFolder_linkId: [0]
+        pathAsFolder_linkId: [0],
       });
 
       return Promise.resolve(dummyRecordFolder);
@@ -115,7 +124,7 @@ export class PreviewResolveService  {
 }
 
 function setDummyPathFromDisplayName(folder: FolderVO) {
-  folder.pathAsText = [ folder.displayName ];
+  folder.pathAsText = [folder.displayName];
   folder.pathAsArchiveNbr = ['0000-0000'];
   folder.pathAsFolder_linkId = [0];
   return folder;

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { FormInputComponent } from '@shared/components/form-input/form-input.component';
 import { PromptComponent } from './prompt.component';
@@ -11,10 +11,7 @@ describe('PromptComponent', () => {
 
   beforeEach(waitForAsync(() => {
     const config = cloneDeep(Testing.BASE_TEST_CONFIG);
-    config.declarations = [
-      FormInputComponent,
-      PromptComponent
-    ];
+    config.declarations = [FormInputComponent, PromptComponent];
     TestBed.configureTestingModule(config).compileComponents();
   }));
 

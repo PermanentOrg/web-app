@@ -129,10 +129,9 @@ describe('ManageCustomMetadataComponent #custom-metadata', () => {
     await instance.refreshTagsInPlace();
 
     expect(instance.tagsList.length).toBe(2);
-    instance.tagsList.forEach((tag) =>
-
-      expect(tag.name.startsWith('a:')).toBeFalse()
-    );
+    instance.tagsList.forEach((tag) => {
+      expect(tag.name.startsWith('a:')).toBeFalse();
+    });
   });
 
   it('should be able to un-filter out deleted categories that are recreated', async () => {

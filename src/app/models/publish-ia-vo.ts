@@ -1,4 +1,4 @@
-import { BaseVOData } from "./base-vo";
+import { BaseVOData } from './base-vo';
 
 export interface PublishIaData extends BaseVOData {
   publish_iaId?: number;

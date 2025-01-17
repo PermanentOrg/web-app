@@ -4,11 +4,13 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { PledgeService } from '@pledge/services/pledge.service';
 
 @Injectable()
-export class PledgeResolveService  {
+export class PledgeResolveService {
+  constructor(private pledgeService: PledgeService) {}
 
-  constructor(private pledgeService: PledgeService) { }
-
-  async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Promise<any> {
+  async resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<any> {
     if (!route.queryParams.pledgeId) {
       return Promise.resolve(null);
     }

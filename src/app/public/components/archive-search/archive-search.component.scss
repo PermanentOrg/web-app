@@ -20,8 +20,8 @@ $min-input-width: 18rem;
 }
 
 form {
-   display: flex;
-   margin: 0 !important;
+  display: flex;
+  margin: 0 !important;
   padding: 0;
   max-width: 700px !important;
   width: 700px;
@@ -31,7 +31,6 @@ form {
     box-shadow: none;
     border: 0px solid;
     padding: 0.25rem 0;
-
   }
 }
 
@@ -67,12 +66,10 @@ form {
   }
 }
 
-
 @media screen and (max-width: 767px) {
   .search-box-button:not(.gallery) {
     display: flex;
   }
-
 }
 
 :host.search-box-active {
@@ -120,6 +117,6 @@ form {
   margin-left: 5px;
 }
 
-.search-icon{
-margin-right: 5px;
+.search-icon {
+  margin-right: 5px;
 }

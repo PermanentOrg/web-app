@@ -10,15 +10,11 @@ export function sortShareVOs(shares: ShareVO[]) {
   return orderBy(
     shares,
     [
-      share => share.status?.includes('pending') ? true : false,
-      share => getAccessAsEnum(share.accessRole),
-      share => (share.ArchiveVO.fullName as string).toLowerCase()
+      (share) => (share.status?.includes('pending') ? true : false),
+      (share) => getAccessAsEnum(share.accessRole),
+      (share) => (share.ArchiveVO.fullName as string).toLowerCase(),
     ],
-    [
-      'desc',
-      'desc',
-      'asc'
-    ]
+    ['desc', 'desc', 'asc'],
   );
 }
 
@@ -28,7 +24,10 @@ export class ShareVO extends BaseVO implements DynamicListChild {
   public archiveId;
   public accessRole: AccessRoleType;
   public type;
-  public status: 'status.generic.ok' | 'status.generic.deleted' | 'status.generic.pending';
+  public status:
+    | 'status.generic.ok'
+    | 'status.generic.deleted'
+    | 'status.generic.pending';
   public requestToken: string;
 
   public isPendingAction = false;
@@ -56,4 +55,3 @@ export class ShareVO extends BaseVO implements DynamicListChild {
     }
   }
 }
-

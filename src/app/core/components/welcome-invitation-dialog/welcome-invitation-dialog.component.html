@@ -6,9 +6,23 @@
   </div>
   <div class="dialog-body">
     <h3>Invitation accepted</h3>
-    <p>Your archive is <strong>The {{archiveName}} Archive.</strong></p>
-    <p>You are {{ accessArticle }} {{accessRole}} of this archive. This means you can {{ getRoleDescription() }} items within this archive. <a href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing" target="_blank">Read more about roles for collaboration and sharing.</a></p>
-    <p>You can manage any outstanding archive invitations at any time by going to <strong>Archive &gt; Pending Archives</strong> through the menu in the upper right-hand corner.</p>
+    <p>
+      Your archive is <strong>The {{ archiveName }} Archive.</strong>
+    </p>
+    <p>
+      You are {{ accessArticle }} {{ accessRole }} of this archive. This means
+      you can {{ getRoleDescription() }} items within this archive.
+      <a
+        href="https://desk.zoho.com/portal/permanent/en/kb/articles/roles-for-collaboration-and-sharing"
+        target="_blank"
+        >Read more about roles for collaboration and sharing.</a
+      >
+    </p>
+    <p>
+      You can manage any outstanding archive invitations at any time by going to
+      <strong>Archive &gt; Pending Archives</strong> through the menu in the
+      upper right-hand corner.
+    </p>
     <button class="btn btn-primary" (click)="close()">Explore Archive</button>
   </div>
 </div>

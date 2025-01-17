@@ -85,7 +85,6 @@
 //     expect(component.sharedByMe.length).toEqual(sharedByMe.length);
 //     expect(component.sharedWithMe.length).toEqual(sharedWithMe.length);
 
-
 //   });
 
 //   it('should work when shared by me is empty', async () => {
@@ -93,7 +92,6 @@
 //     await init(sharedByMeEmpty);
 //     expect(component.sharedByMe.length).toBe(0);
 //   });
-
 
 //   it('should work when shared with me is empty', async () => {
 //     const sharedWithMeEmpty = shares.filter((item) => item.archiveId === currentArchive.archiveId);

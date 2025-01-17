@@ -35,7 +35,7 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private upload: UploadService,
     private edit: EditService,
-    private dataService: DataService
+    private dataService: DataService,
   ) {
     this.account = this.accountService.getAccount();
     this.accountSpaceLeft = this.account.spaceLeft;
@@ -62,14 +62,14 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
 
         this.edit.deleteNotifier$.subscribe(() => {
           this.getArchiveStorage();
-        })
+        }),
       );
     } else {
       this.subscriptions.push(
         this.accountService.accountStorageUpdate.subscribe((account) => {
           this.accountSpaceTotal = account.spaceTotal;
           this.accountSpaceLeft = account.spaceLeft;
-        })
+        }),
       );
     }
   }
@@ -85,13 +85,13 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
       widthFraction = Math.min(
         (this.archiveSpaceTotal - this.archiveSpaceLeft) /
           this.archiveSpaceTotal,
-        1
+        1,
       );
     } else {
       widthFraction = Math.min(
         (this.accountSpaceTotal - this.accountSpaceLeft) /
           this.accountSpaceTotal,
-        1
+        1,
       );
     }
 
@@ -108,13 +108,13 @@ export class StorageMeterComponent implements OnInit, OnDestroy {
       widthFraction = Math.min(
         (this.archiveSpaceTotal - this.archiveSpaceLeft) /
           this.archiveSpaceTotal,
-        1
+        1,
       );
     } else {
       widthFraction = Math.min(
         (this.accountSpaceTotal - this.accountSpaceLeft) /
           this.accountSpaceTotal,
-        1
+        1,
       );
     }
     return `transform: translateX(${widthFraction * 100 - 100}%)`;

@@ -6,16 +6,17 @@ import { BaseRepo } from '@shared/services/api/base';
 describe('BaseRepo', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule
-      ],
-      providers: [HttpService]
+      imports: [HttpClientModule],
+      providers: [HttpService],
     });
   });
 
-  it('should be initialized with HttpService ', inject([HttpService], (http: HttpService) => {
-    const authRepo = new BaseRepo(http);
+  it('should be initialized with HttpService ', inject(
+    [HttpService],
+    (http: HttpService) => {
+      const authRepo = new BaseRepo(http);
 
-    expect(authRepo.http).toEqual(jasmine.any(HttpService));
-  }));
+      expect(authRepo.http).toEqual(jasmine.any(HttpService));
+    },
+  ));
 });

@@ -35,7 +35,7 @@ export class MockDirectiveRepo {
   }
 
   public async createLegacyContact(
-    legacyContact: LegacyContact
+    legacyContact: LegacyContact,
   ): Promise<LegacyContact> {
     if (MockDirectiveRepo.throwError) {
       throw new Error('Forced Unit Testing Error');
@@ -50,7 +50,7 @@ export class MockDirectiveRepo {
   }
 
   public async updateLegacyContact(
-    legacyContact: LegacyContact
+    legacyContact: LegacyContact,
   ): Promise<LegacyContact> {
     if (MockDirectiveRepo.throwError) {
       throw new Error('Forced Unit Testing Error');
@@ -59,7 +59,7 @@ export class MockDirectiveRepo {
       {
         legacyContactId: 'test-id',
       },
-      legacyContact
+      legacyContact,
     );
     MockDirectiveRepo.updatedLegacyContact = true;
     return Object.assign({}, MockDirectiveRepo.savedLegacyContact);

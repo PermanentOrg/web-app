@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import 'variables';
 
@@ -11,7 +11,6 @@
     opacity: 1;
   }
 }
-
 
 :host {
   position: relative;
@@ -90,12 +89,13 @@ $result-padding-y: 0.25rem;
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
   box-shadow: $box-shadow;
-  
+
   // .search-result-group:not(:last-child) {
   //   margin-bottom: 0.5rem;
   // }
 
-  .search-result-group-title, .search-results-all {
+  .search-result-group-title,
+  .search-results-all {
     font-weight: 600;
     font-size: $font-size-sm;
     padding: $result-padding-y $result-padding-x;
@@ -117,7 +117,8 @@ $result-padding-y: 0.25rem;
     cursor: pointer;
     padding: $result-padding-y * 2 $result-padding-x;
 
-    &:hover:not(.empty), &.selected {
+    &:hover:not(.empty),
+    &.selected {
       background-color: darken($PR-orange, $darken-percent);
     }
 
@@ -125,7 +126,8 @@ $result-padding-y: 0.25rem;
       cursor: initial;
     }
 
-    .thumbnail, .folder-icon {
+    .thumbnail,
+    .folder-icon {
       $size: $grid-unit;
       flex: 0 0 $size;
       height: $size;
@@ -145,7 +147,8 @@ $result-padding-y: 0.25rem;
       white-space: nowrap;
     }
 
-    .location, .type {
+    .location,
+    .type {
       flex: 0 2 6rem;
       margin-left: $result-padding-x;
       font-size: $font-size-sm;

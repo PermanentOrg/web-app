@@ -2,12 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { FolderVO, RecordVO } from '@models';
 
 @Pipe({
-  name: 'shareActionLabel'
+  name: 'shareActionLabel',
 })
 export class ShareActionLabelPipe implements PipeTransform {
-
-  constructor(
-  ) { }
+  constructor() {}
 
   transform(accessRole: string, args?: any): any {
     switch (accessRole) {

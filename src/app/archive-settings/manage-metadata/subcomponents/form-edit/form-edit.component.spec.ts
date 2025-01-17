@@ -6,7 +6,6 @@ import { ManageMetadataModule } from '../../manage-metadata.module';
 import { MetadataValuePipe } from '../../pipes/metadata-value.pipe';
 import { FormEditComponent } from './form-edit.component';
 
-
 describe('FormEditComponent', () => {
   let shallow: Shallow<FormEditComponent>;
   let deleted = false;
@@ -32,7 +31,7 @@ describe('FormEditComponent', () => {
           },
           subject,
         },
-      }
+      },
     );
 
   beforeEach(() => {

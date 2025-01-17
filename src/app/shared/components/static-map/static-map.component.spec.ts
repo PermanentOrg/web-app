@@ -8,9 +8,8 @@ describe('StaticMapComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StaticMapComponent ]
-    })
-    .compileComponents();
+      declarations: [StaticMapComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

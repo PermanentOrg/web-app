@@ -28,7 +28,7 @@ describe('FolderCache', () => {
     const folder = new FolderVO({ folder_linkId: 1 });
     cache.saveFolder(folder);
     cache.saveFolder(
-      new FolderVO({ folder_linkId: 1, displayName: 'Unit Test' })
+      new FolderVO({ folder_linkId: 1, displayName: 'Unit Test' }),
     );
 
     expect(cache.getFolder({ folder_linkId: 1 }).displayName).toBe('Unit Test');
@@ -70,13 +70,13 @@ describe('FolderCache', () => {
 
     it('should prioritize folderId over folder_linkId', () => {
       expect(cache.getFolder({ folderId: 1, folder_linkId: Infinity })).toEqual(
-        folder
+        folder,
       );
     });
 
     it('should prioritize folder_linkId over archiveNbr', () => {
       expect(
-        cache.getFolder({ folder_linkId: 10, archiveNbr: 'No Match' })
+        cache.getFolder({ folder_linkId: 10, archiveNbr: 'No Match' }),
       ).toEqual(folder);
     });
   });

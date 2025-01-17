@@ -24,7 +24,7 @@ export class FileHistoryComponent implements OnInit {
     private api: ApiService,
     private account: AccountService,
     private message: MessageService,
-    private device: DeviceService
+    private device: DeviceService,
   ) {
     if (this.device.isMobileWidth()) {
       this.maxPageCount = 5;
@@ -38,7 +38,7 @@ export class FileHistoryComponent implements OnInit {
   async loadFileHistory() {
     try {
       const response = await this.api.billing.getFileHistory(
-        this.account.getAccount()
+        this.account.getAccount(),
       );
       const ledgerItems = response.getLedgerNonfinancialVOs().reverse();
       this.ledgerItemCount = ledgerItems.length;

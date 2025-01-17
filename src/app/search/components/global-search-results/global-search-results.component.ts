@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { DataService } from '@shared/services/data/data.service';
 import { FolderVO, TagVOData, RecordVO, ItemVO } from '@models';
 import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
@@ -11,15 +17,20 @@ import { AccountService } from '@shared/services/account/account.service';
 import { remove } from 'lodash';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { TagsService } from '@core/services/tags/tags.service';
-import { HasSubscriptions, unsubscribeAll } from '@shared/utilities/hasSubscriptions';
+import {
+  HasSubscriptions,
+  unsubscribeAll,
+} from '@shared/utilities/hasSubscriptions';
 
 @Component({
   selector: 'pr-global-search-results',
   templateUrl: './global-search-results.component.html',
   styleUrls: ['./global-search-results.component.scss'],
-  animations: [ ngIfFadeInAnimation ]
+  animations: [ngIfFadeInAnimation],
 })
-export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubscriptions {
+export class GlobalSearchResultsComponent
+  implements OnInit, OnDestroy, HasSubscriptions
+{
   @ViewChild('searchInput') inputElementRef: ElementRef;
   public formControl: UntypedFormControl;
 
@@ -39,27 +50,29 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
     private router: Router,
     private account: AccountService,
     private route: ActivatedRoute,
-    private tags: TagsService
+    private tags: TagsService,
   ) {
-    this.data.setCurrentFolder(new FolderVO({
-      displayName: 'Search',
-      pathAsText: ['Search'],
-      type: 'page'
-    }));
+    this.data.setCurrentFolder(
+      new FolderVO({
+        displayName: 'Search',
+        pathAsText: ['Search'],
+        type: 'page',
+      }),
+    );
 
     this.formControl = this.fb.control('');
 
     this.initFormHandler();
 
     this.subscriptions.push(
-      this.route.queryParamMap.subscribe(params => {
+      this.route.queryParamMap.subscribe((params) => {
         if (params.has('query')) {
           const newQuery = params.get('query')?.trim();
           if (newQuery !== this.formControl.value) {
-            this.formControl.setValue(newQuery, {emitEvent: true});
+            this.formControl.setValue(newQuery, { emitEvent: true });
           }
         }
-      })
+      }),
     );
   }
 
@@ -68,7 +81,7 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
 
     if (initQuery) {
       setTimeout(() => {
-        this.formControl.setValue(initQuery, {emitEvent: true});
+        this.formControl.setValue(initQuery, { emitEvent: true });
       });
     }
   }
@@ -97,68 +110,73 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
     if (params.query === this.route.snapshot.queryParamMap.get('query')) {
       return;
     } else {
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: params,
-          queryParamsHandling: 'merge'
-        }
-      );
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: params,
+        queryParamsHandling: 'merge',
+      });
     }
   }
 
   initFormHandler() {
-    this.formControl.valueChanges.pipe(
-      map(term => {
-        return this.searchService.parseSearchTerm(term);
-      }),
-      tap(([term, tags]) => {
-        this.showResults = true;
-        this.updateTagsResults(term as string, tags);
-      }),
-      debounceTime(50),
-      switchMap(([term, tags]) => {
-        if (term?.length || tags?.length) {
-          this.waiting = true;
-          return this.searchService.getResultsInCurrentArchive(term, tags, 1000)
-            .pipe(catchError(err => {
-              return of(err);
-            }));
-        } else {
-          return of(null);
-        }
-      })
-    ).subscribe(response => {
-      this.waiting = false;
-      if (response) {
-        if (response instanceof SearchResponse && response.isSuccessful) {
-          this.setQueryParams(this.formControl.value);
-          const records: RecordVO[] = [];
-          const folders: FolderVO[] = [];
+    this.formControl.valueChanges
+      .pipe(
+        map((term) => {
+          return this.searchService.parseSearchTerm(term);
+        }),
+        tap(([term, tags]) => {
+          this.showResults = true;
+          this.updateTagsResults(term as string, tags);
+        }),
+        debounceTime(50),
+        switchMap(([term, tags]) => {
+          if (term?.length || tags?.length) {
+            this.waiting = true;
+            return this.searchService
+              .getResultsInCurrentArchive(term, tags, 1000)
+              .pipe(
+                catchError((err) => {
+                  return of(err);
+                }),
+              );
+          } else {
+            return of(null);
+          }
+        }),
+      )
+      .subscribe(
+        (response) => {
+          this.waiting = false;
+          if (response) {
+            if (response instanceof SearchResponse && response.isSuccessful) {
+              this.setQueryParams(this.formControl.value);
+              const records: RecordVO[] = [];
+              const folders: FolderVO[] = [];
 
-          response.getItemVOs().map(i => {
-            if (i instanceof RecordVO) {
-              records.push(i);
+              response.getItemVOs().map((i) => {
+                if (i instanceof RecordVO) {
+                  records.push(i);
+                } else {
+                  folders.push(i);
+                }
+              });
+
+              this.itemResults = response.getItemVOs();
+              this.recordResults = records;
+              this.folderResults = folders;
             } else {
-              folders.push(i);
+              this.itemResults = [];
+              this.recordResults = [];
+              this.folderResults = [];
             }
-          });
-
-          this.itemResults = response.getItemVOs();
-          this.recordResults = records;
-          this.folderResults = folders;
-        } else {
-          this.itemResults = [];
-          this.recordResults = [];
-          this.folderResults = [];
-        }
-      } else {
-        this.reset();
-      }
-    }, err => {
-      throw err;
-    });
+          } else {
+            this.reset();
+          }
+        },
+        (err) => {
+          throw err;
+        },
+      );
   }
 
   resultTrackByFn(index, item: ItemVO) {
@@ -167,8 +185,10 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
 
   updateTagsResults(term: string, selectedTags: TagVOData[]) {
     const termMatches = this.searchService.getTagResults(term);
-    const selectedNames = selectedTags.map(t => t.name);
-    this.tagResults = termMatches.filter(i => !selectedNames.includes(i.name));
+    const selectedNames = selectedTags.map((t) => t.name);
+    this.tagResults = termMatches.filter(
+      (i) => !selectedNames.includes(i.name),
+    );
   }
 
   reset() {
@@ -182,11 +202,13 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
     let searchTerm: string;
     let tags: TagVOData[];
 
-    [ searchTerm, tags]  = this.searchService.parseSearchTerm(this.formControl.value);
+    [searchTerm, tags] = this.searchService.parseSearchTerm(
+      this.formControl.value,
+    );
 
     // replace any text query with existing tags + clicked tag
     tags.push(tag);
-    const tagString = tags.map(t => `tag:"${t.name}"`).join(' ') + ' ';
+    const tagString = tags.map((t) => `tag:"${t.name}"`).join(' ') + ' ';
     this.formControl.setValue(tagString);
     if (this.tagResults) {
       remove(this.tagResults, tag);
@@ -205,19 +227,30 @@ export class GlobalSearchResultsComponent implements OnInit, OnDestroy, HasSubsc
       if (item.parentArchiveNbr === publicRoot.archiveNbr) {
         routerPath = ['/app', 'public'];
       } else {
-        routerPath = ['/app', 'public', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = [
+          '/app',
+          'public',
+          item.parentArchiveNbr,
+          item.parentFolder_linkId,
+        ];
       }
     } else if (item.folder_linkType === 'type.folder_link.private') {
       if (item.parentArchiveNbr === privateRoot.archiveNbr) {
         routerPath = ['/app', 'private'];
       } else {
-        routerPath = ['/app', 'private', item.parentArchiveNbr, item.parentFolder_linkId];
+        routerPath = [
+          '/app',
+          'private',
+          item.parentArchiveNbr,
+          item.parentFolder_linkId,
+        ];
       }
     }
 
     if (routerPath) {
-      this.router.navigate(routerPath, { queryParams: { showItem: item.folder_linkId }});
+      this.router.navigate(routerPath, {
+        queryParams: { showItem: item.folder_linkId },
+      });
     }
   }
-
 }

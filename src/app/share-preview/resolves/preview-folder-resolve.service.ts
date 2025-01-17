@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
 import { FolderVO, RecordVO, RecordVOData } from '@models';
 import { DataStatus } from '@models/data-status.enum';
-
 
 // URLs for dummy images
 const blurredPhotos = [
@@ -39,7 +42,7 @@ const dummyItems = blurredPhotos.map((filename, index) => {
     thumbURL200: url,
     thumbURL500: url,
     thumbURL1000: url,
-    type: 'type.record.image'
+    type: 'type.record.image',
   };
 
   const record = new RecordVO(data);
@@ -49,11 +52,10 @@ const dummyItems = blurredPhotos.map((filename, index) => {
 });
 
 @Injectable()
-export class PreviewFolderResolveService  {
-  constructor(
-  ) { }
+export class PreviewFolderResolveService {
+  constructor() {}
 
-  resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const previewItem = route.parent.data.previewItem as FolderVO;
 
     // generate a dummy 'preview folder' using random blurred images
@@ -62,9 +64,9 @@ export class PreviewFolderResolveService  {
       archiveId: previewItem,
       type: 'type.folder.share',
       ChildItemVOs: dummyItems,
-      pathAsText: [ previewItem.displayName ],
+      pathAsText: [previewItem.displayName],
       pathAsArchiveNbr: ['0000-0000'],
-      pathAsFolder_linkId: [0]
+      pathAsFolder_linkId: [0],
     });
 
     return dummyFolder;

@@ -17,7 +17,7 @@ export type AccessRoleType =
 
 export function checkMinimumAccess(
   accessRole: AccessRoleType,
-  minimumAccess: AccessRole
+  minimumAccess: AccessRole,
 ) {
   return getAccessAsEnum(accessRole) >= minimumAccess;
 }

@@ -1,14 +1,29 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, Input, HostListener, HostBinding, Optional } from '@angular/core';
-import { DragTargetDroppableComponent, DragServiceEvent, DragService } from '@shared/services/drag/drag.service';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewEncapsulation,
+  Input,
+  HostListener,
+  HostBinding,
+  Optional,
+} from '@angular/core';
+import {
+  DragTargetDroppableComponent,
+  DragServiceEvent,
+  DragService,
+} from '@shared/services/drag/drag.service';
 import { Subscription } from 'rxjs';
 import debug from 'debug';
 import { Breadcrumb } from './breadcrumbs.component';
 
 @Component({
   selector: 'pr-breadcrumb',
-  templateUrl: './breadcrumb.component.html'
+  templateUrl: './breadcrumb.component.html',
 })
-export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDestroy, OnInit {
+export class BreadcrumbComponent
+  implements DragTargetDroppableComponent, OnDestroy, OnInit
+{
   @Input() breadcrumb: Breadcrumb;
   @Input() last: boolean;
   @Input() hideBreadcrumbText: boolean = false;
@@ -16,17 +31,14 @@ export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDest
   @HostBinding('class.drag-target') public isDragTarget = false;
   @HostBinding('class.drop-target') public isDropTarget = false;
 
-
-
   private dragSubscription: Subscription;
   private debug = debug('component:breadcrumb');
-  constructor(@Optional() private drag: DragService ) {
+  constructor(@Optional() private drag: DragService) {
     if (this.drag) {
-      this.dragSubscription = this.drag.events().subscribe(dragEvent => {
+      this.dragSubscription = this.drag.events().subscribe((dragEvent) => {
         this.onDragServiceEvent(dragEvent);
       });
     }
-
   }
 
   ngOnInit() {
@@ -66,7 +78,7 @@ export class BreadcrumbComponent implements DragTargetDroppableComponent, OnDest
       this.drag.dispatch({
         type,
         srcComponent: this,
-        event
+        event,
       });
       this.isDropTarget = enter;
     }

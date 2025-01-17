@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-
 const MB = 1024 * 1024;
 const GB = 1024 * MB;
 const TB = 1024 * GB;
@@ -15,11 +14,11 @@ export class StorageAmountPipe implements PipeTransform {
     if (isNaN(parseFloat(String(bytes))) || !isFinite(bytes)) {
       result = '';
     } else if (bytes > TB_THRESHOLD) {
-      result = (bytes / TB).toFixed(+ precision) + ' ' + 'TB';
+      result = (bytes / TB).toFixed(+precision) + ' ' + 'TB';
     } else if (bytes > GB_THRESHOLD) {
-      result = (bytes / GB).toFixed(+ precision) + ' ' + 'GB';
+      result = (bytes / GB).toFixed(+precision) + ' ' + 'GB';
     } else {
-      result = (bytes / MB).toFixed(+ precision) + ' ' + 'MB';
+      result = (bytes / MB).toFixed(+precision) + ' ' + 'MB';
     }
     return result;
   }

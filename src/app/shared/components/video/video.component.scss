@@ -27,7 +27,8 @@
 
   &.processing {
     background-color: rgba(white, 0.7);
-    video, .loader {
+    video,
+    .loader {
       display: none;
     }
   }
@@ -50,7 +51,7 @@ video {
 .tall video {
   height: 100%;
   width: auto;
-  max-width: 100%
+  max-width: 100%;
 }
 
 .message {

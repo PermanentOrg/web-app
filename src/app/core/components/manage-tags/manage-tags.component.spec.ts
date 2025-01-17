@@ -10,9 +10,9 @@ import { ManageTagsComponent } from './manage-tags.component';
   declarations: [], // components your module owns.
   imports: [], // other modules your module needs.
   providers: [ApiService], // providers available to your module.
-  bootstrap: [] // bootstrap this root component.
+  bootstrap: [], // bootstrap this root component.
 })
-class DummyModule {};
+class DummyModule {}
 
 let throwError: boolean = false;
 let deleted: boolean = false;
@@ -30,7 +30,7 @@ const mockApiService = {
       return {
         getTagVOData: () => {
           return data;
-        }
+        },
       };
     },
     update: async (data: any) => {
@@ -42,11 +42,11 @@ const mockApiService = {
       return {
         getTagVOData: () => {
           return data;
-        }
+        },
       };
-    }
-  }
-}
+    },
+  },
+};
 let confirm: boolean = true;
 const mockPromptService = {
   async confirm(): Promise<boolean> {
@@ -55,18 +55,21 @@ const mockPromptService = {
     } else {
       return Promise.reject();
     }
-  }
-}
+  },
+};
 
 describe('ManageTagsComponent #manage-tags', () => {
   let shallow: Shallow<ManageTagsComponent>;
   let defaultTags: TagVO[] = [];
   async function defaultRender(tags: TagVO[] = defaultTags) {
-    return await shallow.render(`<pr-manage-tags [tags]="tags"></pr-manage-tags>`, {
-      bind: {
-        tags,
-      }
-    });
+    return await shallow.render(
+      `<pr-manage-tags [tags]="tags"></pr-manage-tags>`,
+      {
+        bind: {
+          tags,
+        },
+      },
+    );
   }
   beforeEach(() => {
     throwError = false;
@@ -88,9 +91,11 @@ describe('ManageTagsComponent #manage-tags', () => {
         name: 'vegetable:potato',
         tagId: 3,
         type: 'type.tag.metadata.customField',
-      })
+      }),
     ];
-    shallow = new Shallow(ManageTagsComponent, DummyModule).mock(ApiService, mockApiService).mock(PromptService, mockPromptService);
+    shallow = new Shallow(ManageTagsComponent, DummyModule)
+      .mock(ApiService, mockApiService)
+      .mock(PromptService, mockPromptService);
   });
 
   it('should exist', async () => {
@@ -143,7 +148,7 @@ describe('ManageTagsComponent #manage-tags', () => {
     expect(find('.edit').length).toBeGreaterThan(0);
   });
 
-  it('should be able to enter edit mode for a keyword', async() => {
+  it('should be able to enter edit mode for a keyword', async () => {
     const { find, fixture } = await defaultRender();
     find('.edit')[0].nativeElement.click();
     await fixture.detectChanges();
@@ -179,7 +184,9 @@ describe('ManageTagsComponent #manage-tags', () => {
     await fixture.detectChanges();
 
     expect(find('.cancel').length).toBe(0);
-    expect(find('.tag')[0].nativeElement.textContent).not.toContain('Do Not Show Value');
+    expect(find('.tag')[0].nativeElement.textContent).not.toContain(
+      'Do Not Show Value',
+    );
   });
 
   it('should have a null state', async () => {

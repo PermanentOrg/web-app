@@ -12,10 +12,7 @@ import { MfaEmbedComponent } from './components/mfa-embed/mfa-embed.component';
 import { ForgotPasswordEmbedComponent } from './components/forgot-password-embed/forgot-password-embed.component';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    RouterModule
-  ],
+  imports: [SharedModule, RouterModule],
   declarations: [
     LoginEmbedComponent,
     SignupEmbedComponent,
@@ -23,7 +20,7 @@ import { ForgotPasswordEmbedComponent } from './components/forgot-password-embed
     VerifyEmbedComponent,
     MfaEmbedComponent,
     NewsletterSignupComponent,
-    ForgotPasswordEmbedComponent
+    ForgotPasswordEmbedComponent,
   ],
   exports: [
     LoginEmbedComponent,
@@ -32,7 +29,7 @@ import { ForgotPasswordEmbedComponent } from './components/forgot-password-embed
     VerifyEmbedComponent,
     MfaEmbedComponent,
     NewsletterSignupComponent,
-    ForgotPasswordEmbedComponent
-  ]
+    ForgotPasswordEmbedComponent,
+  ],
 })
-export class EmbedComponentsModule { }
+export class EmbedComponentsModule {}

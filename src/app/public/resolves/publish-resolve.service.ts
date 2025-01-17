@@ -16,12 +16,12 @@ export class PublishResolveService {
   constructor(
     private api: ApiService,
     private message: MessageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Promise<any> {
     return this.api.publish
       .getResource(route.params.publishUrlToken)

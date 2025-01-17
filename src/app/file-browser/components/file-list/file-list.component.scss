@@ -8,14 +8,13 @@
     padding-top: 0px;
   }
 
-
   &.file-list-centered {
     @include public-centered;
   }
 
   .file-list-scroll {
     opacity: 1;
-    
+
     &.is-sorting {
       opacity: 0.5;
       cursor: wait;
@@ -45,7 +44,7 @@
   font-weight: 700;
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
 
   &.active {
     z-index: 10;

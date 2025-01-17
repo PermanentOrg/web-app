@@ -6,7 +6,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 @Component({
   selector: 'pr-welcome-invitation-dialog',
   templateUrl: './welcome-invitation-dialog.component.html',
-  styleUrls: ['./welcome-invitation-dialog.component.scss']
+  styleUrls: ['./welcome-invitation-dialog.component.scss'],
 })
 export class WelcomeInvitationDialogComponent implements OnInit {
   public archiveName: string;
@@ -16,19 +16,21 @@ export class WelcomeInvitationDialogComponent implements OnInit {
   constructor(
     private dialogRef: DialogRef,
     private account: AccountService,
-    private constants: PrConstantsService
-  ) { }
+    private constants: PrConstantsService,
+  ) {}
 
   ngOnInit(): void {
     const archive = this.account.getArchive();
     this.archiveName = archive.fullName;
     this.accessRole = this.constants.translate(archive.accessRole);
-    this.accessArticle = this.accessRole.charAt(0).match(/[aeiou]/i) ? 'an' : 'a';
+    this.accessArticle = this.accessRole.charAt(0).match(/[aeiou]/i)
+      ? 'an'
+      : 'a';
   }
 
   public getRoleDescription(): string {
     const archive = this.account.getArchive();
-    switch(archive.accessRole) {
+    switch (archive.accessRole) {
       case 'access.role.contributor':
         return 'view, create, and upload';
       case 'access.role.editor':

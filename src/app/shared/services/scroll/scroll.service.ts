@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { throttle } from 'lodash';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ScrollService {
   private subject: Subject<Event> = new Subject();
@@ -12,7 +12,7 @@ export class ScrollService {
     // this.subject.next(event);
   }, 64);
 
-  constructor() { }
+  constructor() {}
 
   scrollEvent(event: Event) {
     this.throttled(event);

@@ -1,29 +1,51 @@
 <div class="public-banner">
   <div class="banner-content">
-      <a href="/">
-        <img class="banner-logo" src="assets/img/logo/sideways_logo.png">
-      </a>
-      <pr-search-box (searchBarFocusChange)="onSearchBarFocusChange($event)"></pr-search-box>
-      <div class="banner-buttons">
-        <div class="banner-archive-thumb" prBgImage [bgSrc]="archive.thumbURL200" *ngIf="isLoggedIn && archive" (click)="onArchiveThumbClick()" [cover]="true"></div>
-        <button class="btn btn-wordpress banner-button-full-email" *ngIf="isLoggedIn && !archive" (click)="onMyAccountClick()">My Archive</button>
-        <button class="btn btn-wordpress" (click)="onSignupClick()" *ngIf="!isLoggedIn">Sign Up</button>
-      </div>
+    <a href="/">
+      <img class="banner-logo" src="assets/img/logo/sideways_logo.png" />
+    </a>
+    <pr-search-box
+      (searchBarFocusChange)="onSearchBarFocusChange($event)"
+    ></pr-search-box>
+    <div class="banner-buttons">
+      <div
+        class="banner-archive-thumb"
+        prBgImage
+        [bgSrc]="archive.thumbURL200"
+        *ngIf="isLoggedIn && archive"
+        (click)="onArchiveThumbClick()"
+        [cover]="true"
+      ></div>
+      <button
+        class="btn btn-wordpress banner-button-full-email"
+        *ngIf="isLoggedIn && !archive"
+        (click)="onMyAccountClick()"
+      >
+        My Archive
+      </button>
+      <button
+        class="btn btn-wordpress"
+        (click)="onSignupClick()"
+        *ngIf="!isLoggedIn"
+      >
+        Sign Up
+      </button>
+    </div>
   </div>
 </div>
 <pr-announcement></pr-announcement>
-<div class="public-content" [ngClass]="{'navigating': isNavigating}">
+<div class="public-content" [ngClass]="{ navigating: isNavigating }">
   <router-outlet></router-outlet>
 </div>
-<div class="public-footer" [ngClass]="{'public-footer-visible': bottomBannerVisible}">
+<div
+  class="public-footer"
+  [ngClass]="{ 'public-footer-visible': bottomBannerVisible }"
+>
   <div class="public-footer-content">
     <div class="public-footer-close"></div>
     <span (click)="onSignupClick()">
-        <strong>Try Permanent.org for free</strong>
+      <strong>Try Permanent.org for free</strong>
     </span>
-    <div class="public-footer-close" (click)="hideBottomBanner()">
-      ×
-    </div>
+    <div class="public-footer-close" (click)="hideBottomBanner()">×</div>
   </div>
 </div>
 <pr-prompt></pr-prompt>

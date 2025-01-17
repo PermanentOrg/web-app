@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
 
 import { ApiService } from '@shared/services/api/api.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
@@ -7,17 +11,17 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import { ArchiveVO } from '@models';
 
 @Injectable()
-export class PublicProfileItemsResolveService  {
+export class PublicProfileItemsResolveService {
   constructor(
     private api: ApiService,
-    private publicProfile: PublicProfileService
-  ) { }
+    private publicProfile: PublicProfileService,
+  ) {}
 
-  async resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
+  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const archiveNbr = route.params.publicArchiveNbr;
-    const vo = new ArchiveVO({archiveNbr});
+    const vo = new ArchiveVO({ archiveNbr });
     const response = await this.api.archive.getAllProfileItems(vo);
-    const publicItems =  response.getProfileItemVOs().filter(i => i.publicDT);
+    const publicItems = response.getProfileItemVOs().filter((i) => i.publicDT);
     this.publicProfile.setProfileItems(publicItems);
   }
 }

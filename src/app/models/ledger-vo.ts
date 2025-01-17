@@ -67,4 +67,3 @@ export interface AccountStorage {
   createdDt: Date;
   updatedDt: Date;
 }
-

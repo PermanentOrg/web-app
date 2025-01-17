@@ -13,21 +13,16 @@ import { MfaEmbedComponent } from './components/mfa-embed/mfa-embed.component';
 import { ForgotPasswordEmbedComponent } from './components/forgot-password-embed/forgot-password-embed.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginEmbedComponent},
+  { path: 'login', component: LoginEmbedComponent },
   { path: 'signup', component: SignupEmbedComponent },
   { path: 'verify', component: VerifyEmbedComponent },
   { path: 'mfa', component: MfaEmbedComponent },
   { path: 'done', component: DoneEmbedComponent },
   { path: 'forgot', component: ForgotPasswordEmbedComponent },
   { path: 'newsletterSignup', component: NewsletterSignupComponent },
-  { path: '**', redirectTo: 'signup'}
+  { path: '**', redirectTo: 'signup' },
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    EmbedComponentsModule,
-    SharedModule
-  ],
+  imports: [RouterModule.forChild(routes), EmbedComponentsModule, SharedModule],
 })
-export class EmbedRoutingModule { }
-
+export class EmbedRoutingModule {}

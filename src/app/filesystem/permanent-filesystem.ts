@@ -10,7 +10,10 @@ import { FolderCache } from './folder-cache';
 export class PermanentFilesystem {
   private folderCache: FolderCache;
 
-  constructor(private api: FilesystemApi, private cache?: FolderCache) {
+  constructor(
+    private api: FilesystemApi,
+    private cache?: FolderCache,
+  ) {
     if (cache) {
       this.folderCache = cache;
     } else {

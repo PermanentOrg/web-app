@@ -18,7 +18,10 @@ export class DirectiveDisplayComponent implements OnInit {
   public error: boolean;
   public noPlan: boolean;
 
-  constructor(private account: AccountService, private api: ApiService) {
+  constructor(
+    private account: AccountService,
+    private api: ApiService,
+  ) {
     this.error = false;
     this.noPlan = false;
   }

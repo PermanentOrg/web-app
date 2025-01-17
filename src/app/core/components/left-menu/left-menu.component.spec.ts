@@ -1,4 +1,10 @@
-import { ComponentFixture, TestBed, tick, waitForAsync, fakeAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  tick,
+  waitForAsync,
+  fakeAsync,
+} from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
 
@@ -15,7 +21,6 @@ import { By } from '@angular/platform-browser';
 import { ArchiveStoragePayerComponent } from '@core/components/archive-storage-payer/archive-storage-payer.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-
 describe('LeftMenuComponent', () => {
   let component: LeftMenuComponent;
   let fixture: ComponentFixture<LeftMenuComponent>;
@@ -28,7 +33,7 @@ describe('LeftMenuComponent', () => {
     config.declarations.push(ArchiveSmallComponent);
     config.declarations.push(BgImageSrcDirective);
     config.declarations.push(PrConstantsPipe);
-    config.declarations.push(ArchiveStoragePayerComponent)
+    config.declarations.push(ArchiveStoragePayerComponent);
     config.imports.push(NgbTooltipModule);
     config.imports.push(NoopAnimationsModule);
 
@@ -60,27 +65,31 @@ describe('LeftMenuComponent', () => {
   });
 
   it('should show the pr-archive-storage-payer component if payer is defined', fakeAsync(() => {
-    const payer = new AccountVO({accountId:1})
+    const payer = new AccountVO({ accountId: 1 });
     const showArchiveOptions = true;
     component.payer = payer;
     component.showArchiveOptions = showArchiveOptions;
 
     fixture.detectChanges();
 
-    const prArchiveStoragePayerDebugElement = fixture.debugElement.query(By.directive(ArchiveStoragePayerComponent));
+    const prArchiveStoragePayerDebugElement = fixture.debugElement.query(
+      By.directive(ArchiveStoragePayerComponent),
+    );
 
     expect(prArchiveStoragePayerDebugElement).toBeTruthy();
   }));
 
   it('should not show the pr-archive-storage-payer component if payer is undefined', () => {
-    const payer = undefined
+    const payer = undefined;
     const showArchiveOptions = true;
     component.payer = payer;
     component.showArchiveOptions = showArchiveOptions;
 
     fixture.detectChanges();
 
-    const prArchiveStoragePayerDebugElement = fixture.debugElement.query(By.directive(ArchiveStoragePayerComponent));
+    const prArchiveStoragePayerDebugElement = fixture.debugElement.query(
+      By.directive(ArchiveStoragePayerComponent),
+    );
 
     expect(prArchiveStoragePayerDebugElement).toBeFalsy();
   });

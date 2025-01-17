@@ -14,7 +14,7 @@ export class FakeFilesystemApi implements FilesystemApi {
     this.logCall('navigate');
     if ('folderId' in folder) {
       const fetchedFolder = this.folders.find(
-        (f) => f.folderId === folder.folderId
+        (f) => f.folderId === folder.folderId,
       );
       if (fetchedFolder) {
         return fetchedFolder;

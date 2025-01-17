@@ -28,7 +28,7 @@ export class TagRepo extends BaseRepo {
     return this.http.sendRequestPromise<TagResponse>(
       '/tag/deleteTagLink',
       data,
-      { responseClass: TagResponse }
+      { responseClass: TagResponse },
     );
   }
 
@@ -44,7 +44,7 @@ export class TagRepo extends BaseRepo {
     return this.http.sendRequestPromise<TagResponse>(
       '/tag/getTagsByArchive',
       data,
-      { responseClass: TagResponse }
+      { responseClass: TagResponse },
     );
   }
 

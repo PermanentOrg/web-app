@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveVO } from '@root/app/models';
@@ -19,8 +19,7 @@ describe('ArchiveSmallComponent', () => {
     config.declarations.push(ArchiveSmallComponent);
     config.declarations.push(BgImageSrcDirective);
 
-    TestBed.configureTestingModule(config)
-    .compileComponents();
+    TestBed.configureTestingModule(config).compileComponents();
   }));
 
   beforeEach(() => {

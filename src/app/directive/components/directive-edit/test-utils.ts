@@ -39,11 +39,11 @@ export class MockDirectiveRepo {
   }
 
   public async create(
-    directive: DirectiveCreateRequest
+    directive: DirectiveCreateRequest,
   ): Promise<DirectiveData> {
     if (MockDirectiveRepo.failRequest) {
       await new Promise((resolve) =>
-        setTimeout(resolve, MockDirectiveRepo.errorDelay)
+        setTimeout(resolve, MockDirectiveRepo.errorDelay),
       );
       throw new Error('Forced Unit Test Error');
     }
@@ -83,11 +83,11 @@ export class MockDirectiveRepo {
   }
 
   public async update(
-    directive: Partial<DirectiveData>
+    directive: Partial<DirectiveData>,
   ): Promise<DirectiveData> {
     if (MockDirectiveRepo.failRequest) {
       await new Promise((resolve) =>
-        setTimeout(resolve, MockDirectiveRepo.errorDelay)
+        setTimeout(resolve, MockDirectiveRepo.errorDelay),
       );
       throw new Error('Forced Unit Test Error');
     }

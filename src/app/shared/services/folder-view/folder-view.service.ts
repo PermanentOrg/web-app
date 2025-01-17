@@ -32,7 +32,7 @@ export class FolderViewService {
 
     this.debug('init view %o', this.folderView);
 
-    this.containerFlexChange.subscribe(v => {
+    this.containerFlexChange.subscribe((v) => {
       this.containerFlex = v;
     });
 

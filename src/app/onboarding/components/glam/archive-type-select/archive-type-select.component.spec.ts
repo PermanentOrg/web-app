@@ -13,7 +13,7 @@ describe('ArchiveTypeSelectComponent', () => {
   function expectCommunityDisplayed(find) {
     expect(find('.type-name').nativeElement.innerText).toContain('Community');
     expect(find('.type-description').nativeElement.innerText).toContain(
-      archiveDescriptions['type:community']
+      archiveDescriptions['type:community'],
     );
   }
 
@@ -101,7 +101,7 @@ describe('ArchiveTypeSelectComponent', () => {
     dialogRef.next(OnboardingTypes.famhist);
 
     expect(outputs.typeSelected.emit).toHaveBeenCalledWith(
-      OnboardingTypes.famhist
+      OnboardingTypes.famhist,
     );
   });
 });

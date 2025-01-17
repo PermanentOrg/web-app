@@ -6,7 +6,7 @@ import { PledgeService } from '@pledge/services/pledge.service';
 @Component({
   selector: 'pr-claim-done',
   templateUrl: './claim-done.component.html',
-  styleUrls: ['./claim-done.component.scss']
+  styleUrls: ['./claim-done.component.scss'],
 })
 export class ClaimDoneComponent implements OnInit {
   public storageAmount: number;
@@ -15,20 +15,20 @@ export class ClaimDoneComponent implements OnInit {
     private accountService: AccountService,
     private router: Router,
     private route: ActivatedRoute,
-    private pledgeService: PledgeService
-  ) {
-  }
+    private pledgeService: PledgeService,
+  ) {}
 
   async ngOnInit() {
     const loggedIn = await this.accountService.isLoggedIn();
 
     if (!loggedIn && this.pledgeService.currentPledge) {
-      return this.router.navigate(['..', 'claim'], {relativeTo: this.route});
+      return this.router.navigate(['..', 'claim'], { relativeTo: this.route });
     } else if (!this.pledgeService.currentPledge) {
-      return this.router.navigate(['..'], {relativeTo: this.route});
+      return this.router.navigate(['..'], { relativeTo: this.route });
     }
 
-    this.storageAmount = Math.floor(this.pledgeService.currentPledgeData.dollarAmount / 10);
+    this.storageAmount = Math.floor(
+      this.pledgeService.currentPledgeData.dollarAmount / 10,
+    );
   }
-
 }

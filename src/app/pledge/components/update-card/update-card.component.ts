@@ -38,7 +38,7 @@ export class UpdateCardComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private db: AngularFireDatabase,
-    private message: MessageService
+    private message: MessageService,
   ) {
     this.initStripeElements();
     this.userId = this.route.snapshot.params.userId;

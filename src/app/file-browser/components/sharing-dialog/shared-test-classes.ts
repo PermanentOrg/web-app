@@ -15,7 +15,7 @@ export class MockApiService {
     status: 'status.generic.ok',
   };
   public static shareByUrlVO: ShareByUrlVO = new ShareByUrlVO(
-    MockApiService.initialData
+    MockApiService.initialData,
   );
 
   public share = {

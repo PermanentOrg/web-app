@@ -2,7 +2,8 @@ pr-sidebar {
   transform: translateX(100%);
 }
 
-pr-file-list, pr-shares {
+pr-file-list,
+pr-shares {
   display: block;
   @include after($tablet-horizontal) {
     &.show-sidebar {
@@ -18,8 +19,12 @@ pr-file-list, pr-shares {
       .file-list-scroll {
         overflow: hidden;
         overflow-y: auto;
-        height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
-        max-height: calc(100vh - #{$navbar-total-height-desktop + $file-list-controls-height});
+        height: calc(
+          100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
+        );
+        max-height: calc(
+          100vh - #{$navbar-total-height-desktop + $file-list-controls-height}
+        );
         margin-right: -$grid-unit;
         padding-right: $grid-unit;
         padding-bottom: $file-list-row-height * 1;
@@ -30,8 +35,8 @@ pr-file-list, pr-shares {
       .file-list-scroll {
         padding-top: $file-list-grid-gutter;
         margin: 0 (-$file-list-grid-gutter * 0.5);
-        margin-right: -($file-list-grid-gutter * 0.5) ;
-  
+        margin-right: -($file-list-grid-gutter * 0.5);
+
         @include beforeDesktop {
           margin: 0 (-$file-list-grid-gutter * 0.5);
         }
@@ -39,11 +44,11 @@ pr-file-list, pr-shares {
 
       &.show-sidebar .file-list-scroll {
         margin-right: -$grid-unit;
-        padding-right: $grid-unit - ($file-list-grid-gutter*0.5);
+        padding-right: $grid-unit - ($file-list-grid-gutter * 0.5);
       }
-  
+
       .file-list-scroll:after {
-        content: "";
+        content: '';
         display: table;
         clear: both;
       }

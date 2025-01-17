@@ -6,7 +6,6 @@ import { ApiService } from '@shared/services/api/api.service';
 import { DirectiveModule } from '../../directive.module';
 import { DirectiveDisplayComponent } from './directive-display.component';
 
-
 import {
   MockAccountService,
   MockApiService,
@@ -48,7 +47,7 @@ describe('DirectiveDisplayComponent', () => {
     const { find } = await shallow.render();
 
     expect(
-      find('.archive-steward-header')[0].nativeElement.innerText
+      find('.archive-steward-header')[0].nativeElement.innerText,
     ).toContain('The Test Archive');
   });
 
@@ -57,11 +56,11 @@ describe('DirectiveDisplayComponent', () => {
 
     expect(instance.directive).not.toBeUndefined();
     expect(find('.archive-steward-note')[0].nativeElement.innerText).toContain(
-      'Unit Testing!'
+      'Unit Testing!',
     );
 
     expect(find('.archive-steward-email')[0].nativeElement.innerText).toContain(
-      'test@example.com'
+      'test@example.com',
     );
   });
 
@@ -116,7 +115,7 @@ describe('DirectiveDisplayComponent', () => {
     MockDirectiveRepo.legacyContactName = null;
     MockDirectiveRepo.legacyContactEmail = null;
     const { find } = await shallow.render(
-      '<pr-directive-display [checkLegacyContact]="false"></pr-directive-display>'
+      '<pr-directive-display [checkLegacyContact]="false"></pr-directive-display>',
     );
 
     expect(find('.no-plan-warning').length).toBe(0);

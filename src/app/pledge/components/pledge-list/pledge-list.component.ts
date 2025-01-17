@@ -20,14 +20,20 @@ interface KeyedPledges {
 @Component({
   selector: 'pr-pledge-list',
   templateUrl: './pledge-list.component.html',
-  styleUrls: ['./pledge-list.component.scss']
+  styleUrls: ['./pledge-list.component.scss'],
 })
 export class PledgeListComponent implements OnInit, OnDestroy {
-  newPledgeRef = this.db.database.ref('/publicPledges').orderByChild('timestamp').startAt(new Date().getTime());
+  newPledgeRef = this.db.database
+    .ref('/publicPledges')
+    .orderByChild('timestamp')
+    .startAt(new Date().getTime());
   newPledgeListener: any;
 
   latestPledgeRef = this.db.database.ref('/publicPledges').limitToLast(LIMIT);
-  highestPledgeRef = this.db.database.ref('/publicPledges').orderByChild('dollarAmount').limitToLast(LIMIT);
+  highestPledgeRef = this.db.database
+    .ref('/publicPledges')
+    .orderByChild('dollarAmount')
+    .limitToLast(LIMIT);
 
   latestPledgesBs = new BehaviorSubject<PublicPledgeData[]>([]);
   highestPledgesBs = new BehaviorSubject<PublicPledgeData[]>([]);
@@ -37,20 +43,27 @@ export class PledgeListComponent implements OnInit, OnDestroy {
 
   constructor(
     private db: AngularFireDatabase,
-    private zone: NgZone
-  ) {
-  }
+    private zone: NgZone,
+  ) {}
 
   async ngOnInit() {
     this.onChangePledges();
 
-    const latest = (await this.latestPledgeRef.once('value')).val() as KeyedPledges;
-    const highest = (await this.highestPledgeRef.once('value')).val() as KeyedPledges;
+    const latest = (
+      await this.latestPledgeRef.once('value')
+    ).val() as KeyedPledges;
+    const highest = (
+      await this.highestPledgeRef.once('value')
+    ).val() as KeyedPledges;
 
-    this.latestPledgesBs.next(orderBy(Object.values(latest), 'timestamp', 'desc'));
-    this.highestPledgesBs.next(orderBy(Object.values(highest), 'dollarAmount', 'desc'));
+    this.latestPledgesBs.next(
+      orderBy(Object.values(latest), 'timestamp', 'desc'),
+    );
+    this.highestPledgesBs.next(
+      orderBy(Object.values(highest), 'dollarAmount', 'desc'),
+    );
 
-    this.newPledgeListener = this.newPledgeRef.on('child_added', snapshot => {
+    this.newPledgeListener = this.newPledgeRef.on('child_added', (snapshot) => {
       this.zone.run(() => {
         const newPledge = snapshot.val() as PublicPledgeData;
         this.addPledge(newPledge);
@@ -65,14 +78,21 @@ export class PledgeListComponent implements OnInit, OnDestroy {
     }, 5000);
 
     const latest = [newPledge, ...this.latestPledgesBs.value];
-    const highest = orderBy([newPledge, ...this.highestPledgesBs.value], 'dollarAmount', 'desc');
+    const highest = orderBy(
+      [newPledge, ...this.highestPledgesBs.value],
+      'dollarAmount',
+      'desc',
+    );
 
     this.latestPledgesBs.next(latest);
     this.highestPledgesBs.next(highest);
   }
 
   onChangePledges() {
-    const bs: BehaviorSubject<PublicPledgeData[]> = this.activeList === 'highest' ? this.highestPledgesBs : this.latestPledgesBs;
+    const bs: BehaviorSubject<PublicPledgeData[]> =
+      this.activeList === 'highest'
+        ? this.highestPledgesBs
+        : this.latestPledgesBs;
     this.pledges$ = bs.asObservable();
   }
 

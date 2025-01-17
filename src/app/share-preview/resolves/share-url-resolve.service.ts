@@ -23,7 +23,7 @@ export class ShareUrlResolveService {
     private message: MessageService,
     private router: Router,
     private device: DeviceService,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

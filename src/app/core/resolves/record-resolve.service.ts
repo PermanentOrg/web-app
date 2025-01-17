@@ -20,15 +20,15 @@ export class RecordResolveService {
   constructor(
     private api: ApiService,
     private dataService: DataService,
-    private message: MessageService
+    private message: MessageService,
   ) {}
 
   async resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Promise<RecordVO> {
     const localItem = this.dataService.getItemByArchiveNbr(
-      route.params.recArchiveNbr
+      route.params.recArchiveNbr,
     );
 
     try {

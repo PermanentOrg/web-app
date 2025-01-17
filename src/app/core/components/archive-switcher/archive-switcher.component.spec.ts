@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
-import { cloneDeep  } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { BgImageSrcDirective } from '@shared/directives/bg-image-src.directive';
 import { ArchiveResponse } from '@shared/services/api/index.repo';
@@ -31,13 +31,12 @@ describe('ArchiveSwitcherComponent', () => {
       useValue: {
         snapshot: {
           data: {
-            archives: archives
-          }
-        }
-      }
+            archives: archives,
+          },
+        },
+      },
     });
-    TestBed.configureTestingModule(config)
-    .compileComponents();
+    TestBed.configureTestingModule(config).compileComponents();
   }));
 
   beforeEach(() => {
@@ -63,6 +62,8 @@ describe('ArchiveSwitcherComponent', () => {
 
     const element = fixture.debugElement.nativeElement as HTMLElement;
 
-    expect(element.querySelectorAll('.archive-list pr-archive-small').length).toEqual(component.archives.length);
+    expect(
+      element.querySelectorAll('.archive-list pr-archive-small').length,
+    ).toEqual(component.archives.length);
   });
 });

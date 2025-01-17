@@ -1,14 +1,22 @@
-import { Directive, QueryList, ContentChildren, AfterContentInit, ElementRef, HostListener } from '@angular/core';
+import {
+  Directive,
+  QueryList,
+  ContentChildren,
+  AfterContentInit,
+  ElementRef,
+  HostListener,
+} from '@angular/core';
 import debug from 'debug';
 import { find, throttle } from 'lodash';
 import { ScrollSectionDirective } from './scroll-section.directive';
 
 @Directive({
   selector: '[prScrollNav]',
-  exportAs: 'prScrollNav'
+  exportAs: 'prScrollNav',
 })
 export class ScrollNavDirective implements AfterContentInit {
-  @ContentChildren(ScrollSectionDirective, { descendants: true }) sections!: QueryList<ScrollSectionDirective>;
+  @ContentChildren(ScrollSectionDirective, { descendants: true })
+  sections!: QueryList<ScrollSectionDirective>;
 
   private debug = debug('directive:scrollNavDirective');
 
@@ -17,16 +25,13 @@ export class ScrollNavDirective implements AfterContentInit {
   }, 64);
 
   activeSectionId: string;
-  constructor(
-    private elementRef: ElementRef
-  ) { }
+  constructor(private elementRef: ElementRef) {}
 
   ngAfterContentInit(): void {
     setTimeout(() => {
       this.checkActiveSection();
     });
   }
-
 
   @HostListener('scroll', ['$event'])
   onViewportScroll(event: Event) {
@@ -35,11 +40,13 @@ export class ScrollNavDirective implements AfterContentInit {
 
   checkActiveSection() {
     const scrollElem = this.elementRef.nativeElement as HTMLElement;
-    const scrollFromBottom = scrollElem.scrollHeight - scrollElem.clientHeight - scrollElem.scrollTop;
+    const scrollFromBottom =
+      scrollElem.scrollHeight - scrollElem.clientHeight - scrollElem.scrollTop;
     const scrollElemRect = scrollElem.getBoundingClientRect();
     const threshold = scrollElemRect.top + 280;
-    const pastThreshold = this.sections.toArray()
-      .filter(s =>  s.element.getBoundingClientRect().y <= threshold);
+    const pastThreshold = this.sections
+      .toArray()
+      .filter((s) => s.element.getBoundingClientRect().y <= threshold);
 
     if (scrollFromBottom > 50) {
       this.activeSectionId = pastThreshold.pop().sectionId;
@@ -56,7 +63,7 @@ export class ScrollNavDirective implements AfterContentInit {
     const targetSection = find(sections, { sectionId });
     if (targetSection) {
       this.debug('section found %o', targetSection);
-      targetSection.element.scrollIntoView({behavior: 'smooth'});
+      targetSection.element.scrollIntoView({ behavior: 'smooth' });
     } else {
       this.debug('section not found!');
     }

@@ -40,7 +40,7 @@ export class InvitationsDialogComponent implements OnInit {
     @Inject(DIALOG_DATA) public data: any,
     private dialogRef: DialogRef,
     private api: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     this.newInviteForm = this.fb.group({
       fullName: ['', [Validators.required]],

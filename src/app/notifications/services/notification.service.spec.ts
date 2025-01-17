@@ -1,4 +1,9 @@
-import { TestBed, fakeAsync, flushMicrotasks, discardPeriodicTasks } from '@angular/core/testing';
+import {
+  TestBed,
+  fakeAsync,
+  flushMicrotasks,
+  discardPeriodicTasks,
+} from '@angular/core/testing';
 
 import { SharedModule } from '@shared/shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -20,21 +25,21 @@ const allNotificationsData: NotificationVOData[] = [
   {
     notificationId: 2,
     type: 'type.notification.pa_response',
-    status: 'status.notification.new'
+    status: 'status.notification.new',
   },
   {
     notificationId: 3,
     type: 'type.notification.relationship_request',
-    status: 'status.notification.emailed'
-  }
+    status: 'status.notification.emailed',
+  },
 ];
 
 const newNotificationData: NotificationVOData[] = [
   {
     notificationId: 4,
     type: 'type.notification.pa_response',
-    status: 'status.notification.new'
-  }
+    status: 'status.notification.new',
+  },
 ];
 
 describe('NotificationService', () => {
@@ -57,27 +62,24 @@ describe('NotificationService', () => {
     updateSpy = null;
 
     allNotificationsResponse = new NotificationResponse();
-    allNotificationsResponse.setData(allNotificationsData.map(n => {
-      return { NotificationVO: cloneDeep(n) };
-    }));
+    allNotificationsResponse.setData(
+      allNotificationsData.map((n) => {
+        return { NotificationVO: cloneDeep(n) };
+      }),
+    );
     allNotificationsResponse.isSuccessful = true;
 
     newNotificationsResponse = new NotificationResponse();
-    newNotificationsResponse.setData(newNotificationData.map(n => {
-      return { NotificationVO: cloneDeep(n) };
-    }));
+    newNotificationsResponse.setData(
+      newNotificationData.map((n) => {
+        return { NotificationVO: cloneDeep(n) };
+      }),
+    );
     newNotificationsResponse.isSuccessful = true;
 
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      providers: [
-        NotificationService,
-        MessageService,
-      ]
+      imports: [SharedModule, HttpClientTestingModule, RouterTestingModule],
+      providers: [NotificationService, MessageService],
     });
 
     accountService = TestBed.inject(AccountService);
@@ -104,11 +106,12 @@ describe('NotificationService', () => {
   });
 
   it('should load notifications if logged in and set unread count', fakeAsync(() => {
-    loggedInSpy = spyOn(accountService, 'isLoggedIn')
-      .and.returnValue(true);
+    loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
-    getNotificationsSpy = spyOn(apiService.notification, 'getNotifications')
-      .and.returnValue(Promise.resolve(allNotificationsResponse));
+    getNotificationsSpy = spyOn(
+      apiService.notification,
+      'getNotifications',
+    ).and.returnValue(Promise.resolve(allNotificationsResponse));
 
     service = TestBed.inject(NotificationService);
 
@@ -123,14 +126,17 @@ describe('NotificationService', () => {
   }));
 
   it('should load new notifications and update the unread count', fakeAsync(() => {
-    loggedInSpy = spyOn(accountService, 'isLoggedIn')
-      .and.returnValue(true);
+    loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
-    getNotificationsSpy = spyOn(apiService.notification, 'getNotifications')
-      .and.returnValue(Promise.resolve(allNotificationsResponse));
+    getNotificationsSpy = spyOn(
+      apiService.notification,
+      'getNotifications',
+    ).and.returnValue(Promise.resolve(allNotificationsResponse));
 
-    getNotificationsSinceSpy = spyOn(apiService.notification, 'getNotificationsSince')
-      .and.returnValue(Promise.resolve(newNotificationsResponse));
+    getNotificationsSinceSpy = spyOn(
+      apiService.notification,
+      'getNotificationsSince',
+    ).and.returnValue(Promise.resolve(newNotificationsResponse));
 
     service = TestBed.inject(NotificationService);
 
@@ -144,7 +150,10 @@ describe('NotificationService', () => {
 
     expect(getNotificationsSinceSpy).toHaveBeenCalledTimes(1);
     expect(service.newNotificationCount).toBeGreaterThan(countBeforeNew);
-    expect(service.notifications.length).toBe(allNotificationsData.length + newNotificationData.length);
+    expect(service.notifications.length).toBe(
+      allNotificationsData.length + newNotificationData.length,
+    );
+
     expect(service.notifications[0]).toEqual(newNotificationData[0]);
     discardPeriodicTasks();
   }));
@@ -152,18 +161,21 @@ describe('NotificationService', () => {
   it('should mark notifications as seen and update the unread count', fakeAsync(() => {
     let countBeforeMarkSeen: number;
 
-    loggedInSpy = spyOn(accountService, 'isLoggedIn')
-      .and.returnValue(true);
+    loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
-    getNotificationsSpy = spyOn(apiService.notification, 'getNotifications')
-      .and.returnValue(Promise.resolve(allNotificationsResponse));
+    getNotificationsSpy = spyOn(
+      apiService.notification,
+      'getNotifications',
+    ).and.returnValue(Promise.resolve(allNotificationsResponse));
 
-    updateSpy = spyOn(apiService.notification, 'update').and.callFake(notifications => {
-      expect(notifications.length).toBe(countBeforeMarkSeen);
-      const response = new NotificationResponse();
-      response.isSuccessful = true;
-      return Promise.resolve(response);
-    });
+    updateSpy = spyOn(apiService.notification, 'update').and.callFake(
+      (notifications) => {
+        expect(notifications.length).toBe(countBeforeMarkSeen);
+        const response = new NotificationResponse();
+        response.isSuccessful = true;
+        return Promise.resolve(response);
+      },
+    );
 
     service = TestBed.inject(NotificationService);
 
@@ -185,18 +197,21 @@ describe('NotificationService', () => {
   it('should mark notifications as read and update the unread count', fakeAsync(() => {
     let countBeforeMarkSeen: number;
 
-    loggedInSpy = spyOn(accountService, 'isLoggedIn')
-      .and.returnValue(true);
+    loggedInSpy = spyOn(accountService, 'isLoggedIn').and.returnValue(true);
 
-    getNotificationsSpy = spyOn(apiService.notification, 'getNotifications')
-      .and.returnValue(Promise.resolve(allNotificationsResponse));
+    getNotificationsSpy = spyOn(
+      apiService.notification,
+      'getNotifications',
+    ).and.returnValue(Promise.resolve(allNotificationsResponse));
 
-    updateSpy = spyOn(apiService.notification, 'update').and.callFake(notifications => {
-      expect(notifications.length).toBe(allNotificationsData.length);
-      const response = new NotificationResponse();
-      response.isSuccessful = true;
-      return Promise.resolve(response);
-    });
+    updateSpy = spyOn(apiService.notification, 'update').and.callFake(
+      (notifications) => {
+        expect(notifications.length).toBe(allNotificationsData.length);
+        const response = new NotificationResponse();
+        response.isSuccessful = true;
+        return Promise.resolve(response);
+      },
+    );
 
     service = TestBed.inject(NotificationService);
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { throttle } from 'lodash';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IFrameService {
   private sizeTarget: HTMLElement | any;
@@ -14,7 +14,7 @@ export class IFrameService {
     this.resizeIFrame();
   }, 64);
 
-  constructor() { }
+  constructor() {}
 
   setSizeTarget(element: HTMLElement | any) {
     if (this.isIFrame()) {
@@ -23,7 +23,6 @@ export class IFrameService {
       setTimeout(() => {
         this.resizeIFrame();
       });
-
 
       if (!this.boundToResize) {
         window.addEventListener('resize', this.resizeIFrameThrottled);
@@ -34,7 +33,8 @@ export class IFrameService {
 
   resizeIFrame() {
     if (this.isIFrame() && this.sizeTarget) {
-      (window.frameElement as any).style.height = `${this.sizeTarget.offsetHeight}px`;
+      (window.frameElement as any).style.height =
+        `${this.sizeTarget.offsetHeight}px`;
     }
   }
 
