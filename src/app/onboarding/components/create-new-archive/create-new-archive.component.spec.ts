@@ -7,16 +7,27 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { EventService } from '@shared/services/event/event.service';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { OnboardingService } from '../../services/onboarding.service';
 import { CreateNewArchiveComponent } from './create-new-archive.component';
 
+let calledAccept: boolean = false;
 let calledCreate: boolean = false;
 let createdArchive: ArchiveVO | null;
+let acceptedArchive: ArchiveVO | undefined;
 const mockApiService = {
   archive: {
     create: async (a: ArchiveVO) => {
       calledCreate = true;
       createdArchive = a;
+      return {
+        getArchiveVO: () => a,
+      };
+    },
+    accept: async (a: ArchiveVO) => {
+      calledAccept = true;
+      acceptedArchive = a;
       return {
         getArchiveVO: () => a,
       };
@@ -53,15 +64,21 @@ function enterText(selector: string, text: string, find: any): void {
 }
 
 describe('CreateNewArchiveComponent #onboarding', () => {
+  let feature: FeatureFlagService;
   beforeEach(() => {
+    feature = new FeatureFlagService(undefined, new SecretsService());
     calledCreate = false;
     createdArchive = null;
+    calledAccept = false;
+    acceptedArchive = null;
     shallow = new Shallow(CreateNewArchiveComponent, OnboardingModule)
       .mock(ApiService, mockApiService)
       .mock(AccountService, mockAccountService)
       .provide(EventService)
+      .provide({ provide: FeatureFlagService, useValue: feature })
       .dontMock(EventService)
-      .dontMock(OnboardingService);
+      .dontMock(OnboardingService)
+      .dontMock(FeatureFlagService);
   });
 
   it('should exist', async () => {
@@ -126,5 +143,25 @@ describe('CreateNewArchiveComponent #onboarding', () => {
 
     expect(submitButton.disabled).toBe(true);
     expect(skipStepButton.disabled).toBe(true);
+  });
+
+  it('should accept pending archives in the old flow', async () => {
+    feature.set('glam-onboarding', false);
+    const { instance } = await shallow.render();
+    instance.pendingArchive = new ArchiveVO({ archiveId: 1234 });
+    await instance.onSubmit();
+
+    expect(calledAccept).toBeTrue();
+    expect(acceptedArchive.archiveId).toBe(1234);
+  });
+
+  it('should not accept pending archives in the glam flow (they are already accepted in an earlier step)', async () => {
+    feature.set('glam-onboarding', true);
+    const { instance } = await shallow.render();
+    instance.pendingArchive = new ArchiveVO({ archiveId: 1234 });
+    await instance.onSubmit();
+
+    expect(calledAccept).toBeFalse();
+    expect(acceptedArchive).toBeNull();
   });
 });
