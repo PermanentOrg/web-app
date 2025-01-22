@@ -34,7 +34,7 @@ export class PublicSearchBarResultsComponent {
         relativeTo: this.route,
       });
     } else {
-      this.router.navigate(['record', item.archiveNbr], {
+      this.router.navigate([item.parentArchiveNbr, item.parentFolder_linkId], {
         relativeTo: this.route,
       });
     }

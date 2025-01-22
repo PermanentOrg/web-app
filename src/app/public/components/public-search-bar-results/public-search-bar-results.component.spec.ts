@@ -61,12 +61,13 @@ describe('PublicSearchBarResultsComponent', () => {
     const routerSpy = spyOn(component['router'], 'navigate');
     const testItem = {
       type: 'type.record.image',
-      archiveNbr: '789',
+      parentArchiveNbr: '789',
+      parentFolder_linkId: '20',
     };
 
     component.goToFile(new RecordVO(testItem));
 
-    expect(routerSpy).toHaveBeenCalledWith(['record', '789'], {
+    expect(routerSpy).toHaveBeenCalledWith(['789', '20'], {
       relativeTo: component['route'],
     });
   });
