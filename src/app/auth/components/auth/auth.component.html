@@ -1,33 +1,33 @@
-<!-- @format -->
-<div class="auth-container">
-  <div class="image">
-    <div class="testimony">
-      <p class="text">
-        At Permanent, we celebrate our members’ hard work through our Public
-        Gallery and archive spotlights. Explore our gallery and, when you’re
-        ready, publish or share your own public archive!
-      </p>
-      <br />
-      <a class="link" href="https://permanent.org/gallery"
-        >Start Exploring Now.</a
-      >
-      <p class="text archive-data">
-        Haadsma Dairy Truck | The Haadsma Dairy Archive
-      </p>
-    </div>
-    <img
-      src="assets/img/sign_in_image.png"
-      alt='Black and white photo of a child with a bicycle stopped in front of a black milk truck with a man standing by the door. The milk truck reads "Haadsma&#39;s Dairy." The photo appears to be from the 1950s.'
-    />
-  </div>
-  <div class="auth">
-    <div class="permanent-logo">
-      <img src="assets/svg/app-icon-glam.svg" alt="Permanent.org logo" />
-    </div>
-    <router-outlet></router-outlet>
-  </div>
-</div>
-<pr-mobile-banner></pr-mobile-banner>
 <pr-announcement></pr-announcement>
-<pr-android-app-notify></pr-android-app-notify>
-<pr-prompt></pr-prompt>
+<div class="auth-root">
+  <div class="auth-container">
+    <div
+      class="image"
+      aria-description='Black and white photo of a child with a bicycle stopped in front of a black milk truck with a man standing by the door. The milk truck reads "Haadsma&#39;s Dairy." The photo appears to be from the 1950s.'
+    >
+      <div class="testimony">
+        <p class="text">
+          At Permanent, we celebrate our members’ hard work through our Public
+          Gallery and archive spotlights. Explore our gallery and, when you’re
+          ready, publish or share your own public archive!
+        </p>
+        <br />
+        <a class="link" href="https://permanent.org/gallery"
+          >Start Exploring Now.</a
+        >
+        <p class="text archive-data">
+          Haadsma Dairy Truck | The Haadsma Dairy Archive
+        </p>
+      </div>
+    </div>
+    <div class="auth">
+      <div class="permanent-logo">
+        <img src="assets/svg/app-icon-glam.svg" alt="Permanent.org logo" />
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <pr-mobile-banner></pr-mobile-banner>
+  <pr-android-app-notify></pr-android-app-notify>
+  <pr-prompt></pr-prompt>
+</div>
