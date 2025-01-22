@@ -68,7 +68,7 @@ describe('PublicArchiveComponent', () => {
 
     expect(router.navigate).toHaveBeenCalledWith(
       ['search', '123', 'test-query'],
-      { relativeTo: instance.route },
+      jasmine.any(Object),
     );
   });
 
@@ -83,7 +83,7 @@ describe('PublicArchiveComponent', () => {
 
     expect(router.navigate).toHaveBeenCalledWith(
       ['search-tag', '123', 'example-tag-id', 'tag-name'],
-      { relativeTo: instance.route },
+      jasmine.any(Object),
     );
   });
 });

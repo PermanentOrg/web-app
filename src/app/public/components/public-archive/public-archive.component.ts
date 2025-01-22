@@ -50,7 +50,7 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
-    public route: ActivatedRoute,
+    private route: ActivatedRoute,
     private publicProfile: PublicProfileService,
   ) {}
 
