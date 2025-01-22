@@ -210,7 +210,9 @@ export class CreateNewArchiveComponent implements OnInit {
         let response;
 
         if (this.pendingArchive) {
-          await this.api.archive.accept(this.pendingArchive);
+          if (!this.isGlam) {
+            await this.api.archive.accept(this.pendingArchive);
+          }
         } else {
           response = await this.api.archive.create(archive);
           createdArchive = response.getArchiveVO();
