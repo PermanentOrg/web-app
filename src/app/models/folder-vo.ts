@@ -45,6 +45,7 @@ export class FolderVO
 
   public folderId;
   public archiveNbr;
+  public archiveArchiveNbr: string | undefined;
   public archiveId;
   public displayName;
   public displayDT;
