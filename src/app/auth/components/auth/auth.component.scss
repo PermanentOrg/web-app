@@ -1,7 +1,7 @@
 @import 'variables';
 
 :host {
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   flex-direction: column;
   display: flex;
@@ -58,7 +58,7 @@
 .image {
   position: relative;
   height: 100%;
-  background: url('/assets/img/sign_in_image.png');
+  background: url('../../../../assets/img/sign_in_image.png');
   background-size: cover;
   background-position: center center;
   flex-grow: 1;
