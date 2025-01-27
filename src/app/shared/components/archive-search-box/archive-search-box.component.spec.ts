@@ -219,7 +219,7 @@ describe('ArchiveSearchBoxComponent', () => {
     component.focused = false;
 
     component.onBlur();
-    
+
     expect(component.focused).toBe(false);
 
     tick(150);
