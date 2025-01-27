@@ -158,6 +158,8 @@ export class ArchiveSearchBoxComponent implements OnInit {
 
   onFocus() {
     this.focused = true;
+    const previousValue = this.control.value;
+    this.control.setValue(previousValue, { emitEvent: true });
   }
 
   onBlur() {
