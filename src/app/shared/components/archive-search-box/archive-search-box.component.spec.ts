@@ -214,4 +214,16 @@ describe('ArchiveSearchBoxComponent', () => {
 
     expect(component.activeResultIndex).toBe(component.results.length - 1);
   }));
+
+  it('should set focused to true after a delay when onBlur is called', fakeAsync(() => {
+    component.focused = false;
+
+    component.onBlur();
+
+    expect(component.focused).toBe(false);
+
+    tick(150);
+
+    expect(component.focused).toBe(true);
+  }));
 });
