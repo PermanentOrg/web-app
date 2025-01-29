@@ -64,7 +64,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   @Input() darkText = false;
   @Input() large = false;
-  @Input() hideBreadcrumbText: boolean = false;
 
   private scrollElement: Element;
   private folderChangeListener: Subscription;

@@ -26,7 +26,6 @@ export class BreadcrumbComponent
 {
   @Input() breadcrumb: Breadcrumb;
   @Input() last: boolean;
-  @Input() hideBreadcrumbText: boolean = false;
 
   @HostBinding('class.drag-target') public isDragTarget = false;
   @HostBinding('class.drop-target') public isDropTarget = false;
