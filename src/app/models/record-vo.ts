@@ -44,6 +44,7 @@ export class RecordVO
   public recordId;
   public archiveId;
   public archiveNbr;
+  public archiveArchiveNbr: string | undefined;
   public publicDT;
   public note;
   public displayName;
