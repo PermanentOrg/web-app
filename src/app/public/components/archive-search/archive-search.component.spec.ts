@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { SearchService } from '@search/services/search.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { ArchiveVO, TagVO } from '@models/index';
+import { Router } from '@angular/router';
 import { ArchiveSearchComponent } from './archive-search.component';
 
 describe('ArchiveSearchComponent', () => {
@@ -13,6 +14,7 @@ describe('ArchiveSearchComponent', () => {
   let fixture: ComponentFixture<ArchiveSearchComponent>;
   let searchService: jasmine.SpyObj<SearchService>;
   let publicProfileService: jasmine.SpyObj<PublicProfileService>;
+  let router: Router;
 
   beforeEach(async () => {
     publicProfileService = jasmine.createSpyObj('PublicProfileService', [
@@ -30,6 +32,10 @@ describe('ArchiveSearchComponent', () => {
         FormBuilder,
         { provide: SearchService, useValue: searchService },
         { provide: PublicProfileService, useValue: publicProfileService },
+        {
+          provide: Router,
+          useValue: jasmine.createSpyObj('Router', ['navigate']),
+        },
       ],
     }).compileComponents();
 
@@ -100,7 +106,7 @@ describe('ArchiveSearchComponent', () => {
     const mockTag: TagVO = new TagVO({ name: 'Tag1', tagId: 1 });
     component.onTagClick([mockTag]);
 
-    expect(component.searchForm.value.query).toBe('Tag1');
+    expect(component.searchForm.value.query).toBe('tag:"Tag1"');
     expect(component.tag).toEqual([mockTag]);
   });
 
@@ -110,5 +116,17 @@ describe('ArchiveSearchComponent', () => {
 
     expect(component.searchResults).toEqual([]);
     expect(component.filteredTags).toEqual([]);
+  });
+
+  it('should emit searchByTag event on tagClick', () => {
+    spyOn(component.searchByTag, 'emit');
+    component.searchForm.patchValue({ query: 'test query' });
+
+    component.onTagClick([new TagVO({ name: 'Tag1', tagId: 1 })]);
+
+    expect(component.searchByTag.emit).toHaveBeenCalledWith({
+      tagId: 1,
+      tagName: 'Tag1',
+    });
   });
 });

@@ -1,9 +1,8 @@
 /* @format */
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { FolderVO, RecordVO } from '@models/index';
+import { FolderVO, RecordVO, TagVO } from '@models/index';
 import { SearchService } from '../../../search/services/search.service';
 
 @Component({
@@ -15,6 +14,8 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
   public searchResults = [];
   public waiting = false;
   public query = '';
+  public tags = [];
+  public searchString = '';
 
   public archivePath = ['..', '..', '..'];
 
@@ -25,17 +26,22 @@ export class PublicSearchResultsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private searchService: SearchService,
-    private location: Location,
   ) {}
 
   ngOnInit(): void {
-    //get the query param from the route
     if (this.route.params) {
       this.paramsSubscription = this.route.params.subscribe((params) => {
         this.archivePath = ['/p/archive', params.publicArchiveNbr];
-        this.query = params.query;
+
+        this.query = params.query ? params.query : '';
+        this.tags = params.tagId ? [new TagVO({ tagId: params.tagId })] : [];
+
+        this.searchString = this.query
+          ? this.query
+          : `Keyword: ${params.tagName}`;
+
         this.searchSubscription = this.searchService
-          .getResultsInPublicArchive(params.query, [], params.archiveId)
+          .getResultsInPublicArchive(this.query, this.tags, params.archiveId)
           .subscribe((response) => {
             if (response) {
               this.searchResults = response.ChildItemVOs;

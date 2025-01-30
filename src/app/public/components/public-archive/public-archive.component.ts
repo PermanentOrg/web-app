@@ -11,7 +11,6 @@ import { of, merge, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
 import { unsubscribeAll } from '@shared/utilities/hasSubscriptions';
-import { SearchService } from '@search/services/search.service';
 import { RouteData } from '@root/app/app.routes';
 
 @Component({
@@ -53,7 +52,6 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private publicProfile: PublicProfileService,
-    private searchService: SearchService,
   ) {}
 
   ngOnInit(): void {
@@ -122,5 +120,23 @@ export class PublicArchiveComponent implements OnInit, OnDestroy {
 
   toggleProfileInformation(): void {
     this.showProfileInformation = !this.showProfileInformation;
+  }
+
+  public onTagClick(tag): void {
+    try {
+      this.router.navigate(
+        [
+          'search-tag',
+          this.archive.archiveId,
+          `${tag.tagId}`,
+          `${tag.tagName}`,
+        ],
+        {
+          relativeTo: this.route,
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

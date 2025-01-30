@@ -4,6 +4,8 @@ import { PublicModule } from '@public/public.module';
 import { Shallow } from 'shallow-render';
 import { of } from 'rxjs';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { Router } from '@angular/router';
+import { ArchiveVO } from '@models/index';
 import { PublicArchiveComponent } from './public-archive.component';
 
 const publicProfileServiceMock = {
@@ -53,5 +55,35 @@ describe('PublicArchiveComponent', () => {
       'archive-description': true,
       'archive-description-show': true,
     });
+  });
+
+  it('should navigate to the correct search URL on handleSearch', async () => {
+    const { instance, inject } = await shallow.render();
+    const router = inject(Router);
+    spyOn(router, 'navigate');
+
+    instance.archive = { archiveId: '123' } as any;
+
+    instance.onHandleSearch('test-query');
+
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['search', '123', 'test-query'],
+      jasmine.any(Object),
+    );
+  });
+
+  it('should navigate to the correct search-tag URL on tag click', async () => {
+    const { instance, inject } = await shallow.render();
+    const router = inject(Router);
+    spyOn(router, 'navigate');
+
+    instance.archive = new ArchiveVO({ archiveId: '123' });
+
+    instance.onTagClick({ tagId: 'example-tag-id', tagName: 'tag-name' });
+
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['search-tag', '123', 'example-tag-id', 'tag-name'],
+      jasmine.any(Object),
+    );
   });
 });
