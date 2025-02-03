@@ -44,6 +44,7 @@
               @if ((item.id | taskLink).external) {
                 <a
                   href="{{ (item.id | taskLink).routerLink }}"
+                  target="_blank"
                   [class]="{ 'task-name': true, completed: item.completed }"
                   >{{ item.title }}</a
                 >
