@@ -1,4 +1,3 @@
-/* @format*/
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
@@ -6,15 +5,17 @@ import { TagsService } from '@core/services/tags/tags.service';
 import { TagVO } from '@models/tag-vo';
 import { ArchiveVO } from '@models/index';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { DialogRef } from '@angular/cdk/dialog';
 import { AccountVO } from '../../../models/account-vo';
 
-type ArchiveSettingsDialogTab =
-  | 'manage-keywords'
-  | 'manage-metadata'
-  | 'public-settings'
-  | 'legacy-planning';
+const archiveSettingsTabs = [
+  'manage-keywords',
+  'manage-metadata',
+  'public-settings',
+  'legacy-planning',
+] as const;
+
+type ArchiveSettingsDialogTab = (typeof archiveSettingsTabs)[number];
 
 @Component({
   selector: 'pr-archive-settings-dialog',
@@ -39,7 +40,13 @@ export class ArchiveSettingsDialogComponent implements OnInit {
     private account: AccountService,
     private tagsService: TagsService,
     public route: ActivatedRoute,
-  ) {}
+  ) {
+    if (
+      ([...archiveSettingsTabs] as string[]).includes(route.snapshot.fragment)
+    ) {
+      this.activeTab = route.snapshot.fragment as ArchiveSettingsDialogTab;
+    }
+  }
 
   public ngOnInit(): void {
     const accessRole = this.account.getArchive().accessRole;
