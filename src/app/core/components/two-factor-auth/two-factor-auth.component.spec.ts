@@ -170,4 +170,30 @@ describe('TwoFactorAuthComponent', () => {
 
     expect(codeContainer.length).toBe(0);
   });
+
+  it('should retrieve all the methods after a method has been deleted', async () => {
+    const { instance } = await shallow.render();
+
+    instance.methods = [
+      { methodId: 'email', method: 'email', value: 'janedoe@example.com' },
+    ];
+    instance.selectedMethodToDelete = {
+      methodId: 'email',
+      method: 'email',
+      value: 'janedoe@example.com',
+    };
+
+    spyOn(mockApiService.idpuser, 'disableTwoFactor').and.returnValue(
+      Promise.resolve(),
+    );
+    spyOn(mockApiService.idpuser, 'getTwoFactorMethods').and.returnValue(
+      Promise.resolve([
+        { methodId: 'sms', method: 'sms', value: '(123) 456-7890' },
+      ]),
+    );
+
+    await instance.submitRemoveMethod();
+
+    expect(mockApiService.idpuser.getTwoFactorMethods).toHaveBeenCalled();
+  });
 });

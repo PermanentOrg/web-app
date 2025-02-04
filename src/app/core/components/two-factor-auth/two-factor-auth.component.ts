@@ -5,8 +5,8 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
+import { MessageService } from '@shared/services/message/message.service';
 
 interface Method {
   methodId: string;
@@ -35,6 +35,7 @@ export class TwoFactorAuthComponent implements OnInit {
   constructor(
     private fb: UntypedFormBuilder,
     private api: ApiService,
+    private message: MessageService,
   ) {
     this.form = fb.group({
       code: ['', Validators.required],
@@ -171,9 +172,7 @@ export class TwoFactorAuthComponent implements OnInit {
       );
     } catch (error) {
     } finally {
-      this.methods = this.methods.filter(
-        (m) => m.methodId !== this.selectedMethodToDelete.methodId,
-      );
+      this.methods = await this.api.idpuser.getTwoFactorMethods();
       this.selectedMethodToDelete = null;
       this.codeSent = false;
       this.method = null;
