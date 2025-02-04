@@ -33,12 +33,12 @@ export class TaskLinkPipe implements PipeTransform {
     },
     publishContent: {
       routerLink:
-        'https://permanent.zohodesk.com/portal/en/kb/articles/upload-your-first-file',
+        'https://permanent.zohodesk.com/portal/en/kb/articles/how-to-publish',
       external: true,
     },
   };
 
-  transform(value: string, ..._: unknown[]): TaskRouterLink | undefined {
+  public transform(value: string, ..._: unknown[]): TaskRouterLink | undefined {
     if (this.links[value]) {
       return this.links[value];
     }
