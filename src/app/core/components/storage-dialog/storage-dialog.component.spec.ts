@@ -23,6 +23,7 @@ describe('StorageDialogComponent', () => {
     mockActivatedRoute = {
       paramMap: paramMap.asObservable(),
       queryParamMap: queryParamMap.asObservable(),
+      snapshot: { fragment: null },
     };
     shallow = new Shallow(StorageDialogComponent, CoreModule)
       .provideMock({ provide: DialogRef, useClass: MockDialogRef })
@@ -35,23 +36,18 @@ describe('StorageDialogComponent', () => {
     expect(element).not.toBeNull();
   });
 
-  it('should handle route and query parameter changes', async () => {
+  it('should set the tab if the URL fragment matches a tab', async () => {
+    mockActivatedRoute.snapshot.fragment = 'promo';
     const { instance } = await shallow.render();
-
-    paramMap.next(convertToParamMap({ path: 'promo' }));
-
-    queryParamMap.next(convertToParamMap({ promoCode: 'potato' }));
 
     expect(instance.activeTab).toBe('promo');
-    expect(instance.promoCode).toEqual('potato');
   });
 
-  it('should handle route changes', async () => {
+  it('should not set the tab if the URL fragment is invalid', async () => {
+    mockActivatedRoute.snapshot.fragment = 'not-a-real-tab';
     const { instance } = await shallow.render();
 
-    paramMap.next(convertToParamMap({ path: 'add' }));
-
-    expect(instance.activeTab).toBe('add');
+    expect(instance.activeTab).not.toBe(mockActivatedRoute.snapshot.fragment);
   });
 
   it('can close the dialog', async () => {

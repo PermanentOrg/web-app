@@ -40,11 +40,29 @@
               role="img"
               [attr.aria-labeledby]="'label-' + item.id"
             ></pr-task-icon>
-            <span
-              [id]="'label-' + item.id"
-              [class]="{ 'task-name': true, completed: item.completed }"
-              >{{ item.title }}</span
-            >
+            @if (item.id | taskLink) {
+              @if ((item.id | taskLink).external) {
+                <a
+                  href="{{ (item.id | taskLink).routerLink }}"
+                  target="_blank"
+                  [class]="{ 'task-name': true, completed: item.completed }"
+                  >{{ item.title }}</a
+                >
+              } @else {
+                <a
+                  [routerLink]="(item.id | taskLink).routerLink"
+                  fragment="{{ (item.id | taskLink).fragment }}"
+                  [class]="{ 'task-name': true, completed: item.completed }"
+                  >{{ item.title }}</a
+                >
+              }
+            } @else {
+              <span
+                [id]="'label-' + item.id"
+                [class]="{ 'task-name': true, completed: item.completed }"
+                >{{ item.title }}</span
+              >
+            }
             <div
               [class]="{ 'fake-checkbox': true, checked: item.completed }"
               [ariaLabel]="item.completed ? 'Complete' : 'Incomplete'"

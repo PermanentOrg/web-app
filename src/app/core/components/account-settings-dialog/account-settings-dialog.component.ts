@@ -1,4 +1,3 @@
-/* @format */
 import { Component, Inject } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountResponse } from '@shared/services/api/index.repo';
@@ -7,16 +6,18 @@ import { ApiService } from '@shared/services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
-export type SettingsTab =
-  | 'storage'
-  | 'account'
-  | 'notification'
-  | 'billing'
-  | 'legacy-contact'
-  | 'delete'
-  | 'advanced-settings'
-  | 'security';
+const settingsTabs = [
+  'storage',
+  'account',
+  'notification',
+  'billing',
+  'legacy-contact',
+  'delete',
+  'advanced-settings',
+  'security',
+] as const;
 
+export type SettingsTab = (typeof settingsTabs)[number];
 @Component({
   selector: 'pr-account-settings-dialog',
   templateUrl: './account-settings-dialog.component.html',
@@ -39,6 +40,9 @@ export class AccountSettingsDialogComponent {
   ) {
     if (data.tab) {
       this.activeTab = data.tab;
+    }
+    if (([...settingsTabs] as string[]).includes(route.snapshot.fragment)) {
+      this.activeTab = route.snapshot.fragment as SettingsTab;
     }
   }
 
