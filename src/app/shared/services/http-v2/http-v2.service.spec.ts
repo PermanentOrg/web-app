@@ -284,4 +284,23 @@ describe('HttpV2Service', () => {
       'https://local.permanent.org/api/v2/health',
     );
   });
+
+  it('should correctly handle responseType: text', (done) => {
+    service
+      .post('/api/v2/health', {}, undefined, {}, 'text')
+      .toPromise()
+      .then((response) => {
+        expect(typeof response[0]).toBe('string'); 
+        expect(response[0]).toBe('OK'); 
+        done();
+      })
+      .catch(done.fail);
+
+    const request = httpTestingController.expectOne(apiUrl('/api/v2/health'));
+
+    expect(request.request.method).toBe('POST');
+    expect(request.request.headers.get('Request-Version')).toBe('2');
+
+    request.flush('OK', { status: 200, statusText: 'OK' });
+  });
 });

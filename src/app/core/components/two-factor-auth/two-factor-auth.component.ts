@@ -116,7 +116,7 @@ export class TwoFactorAuthComponent implements OnInit {
           this.selectedMethodToDelete.methodId,
         );
       } else {
-        this.api.idpuser.sendEnableCode(
+        await this.api.idpuser.sendEnableCode(
           this.method,
           this.form.get('contactInfo').value,
         );

@@ -14,29 +14,53 @@ export class IdPuser extends BaseRepo {
 
   public sendEnableCode(method: string, value: string) {
     return firstValueFrom(
-      this.httpV2.post('/v2/idpuser/send-enable-code', { method, value }),
+      this.httpV2.post(
+        '/v2/idpuser/send-enable-code',
+        { method, value },
+        undefined,
+        {},
+        'text',
+      ),
     );
   }
 
   public enableTwoFactor(method: string, value: string, code: string) {
     return firstValueFrom(
-      this.httpV2.post('/v2/idpuser/enable-two-factor', {
-        method,
-        value,
-        code,
-      }),
+      this.httpV2.post(
+        '/v2/idpuser/enable-two-factor',
+        {
+          method,
+          value,
+          code,
+        },
+        undefined,
+        {},
+        'text',
+      ),
     );
   }
 
   public sendDisableCode(methodId: string) {
     return firstValueFrom(
-      this.httpV2.post('/v2/idpuser/send-disable-code', { methodId }),
+      this.httpV2.post(
+        '/v2/idpuser/send-disable-code',
+        { methodId },
+        undefined,
+        {},
+        'text',
+      ),
     );
   }
 
   public disableTwoFactor(methodId: string, code: string) {
     return firstValueFrom(
-      this.httpV2.post('/v2/idpuser/disable-two-factor', { code, methodId }),
+      this.httpV2.post(
+        '/v2/idpuser/disable-two-factor',
+        { code, methodId },
+        undefined,
+        {},
+        'text',
+      ),
     );
   }
 }

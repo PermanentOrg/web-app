@@ -93,7 +93,7 @@ describe('TwoFactorAuthComponent', () => {
     const event = {
       preventDefault: () => {},
     };
-    instance.sendCode(event);
+    await instance.sendCode(event);
 
     expect(instance.codeSent).toBe(true);
   });
