@@ -14,8 +14,6 @@ const AUTH_KEY = 'AUTH_TOKEN';
 type HttpMethod = 'post' | 'get' | 'put' | 'delete';
 type ResponseClass<T> = new (data: any) => T;
 
-type ResType = 'json' | 'text';
-
 interface RequestOptions {
   csrf?: boolean;
   authToken?: boolean;
