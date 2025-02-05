@@ -58,7 +58,7 @@
 .image {
   position: relative;
   height: 100%;
-  background: url('../../../../assets/img/sign_in_image.png');
+  background: url('../../../../assets/img/sign_in_image_swapped.png');
   background-size: cover;
   background-position: center center;
   flex-grow: 1;
@@ -135,4 +135,54 @@
   & > p {
     margin: 0;
   }
+}
+
+.legacy-lab-text {
+  .header,
+  .text,
+  .link {
+    color: white;
+  }
+
+  .start-date,
+  .list-item {
+    color: #ff9933;
+  }
+
+  .header {
+    font-size: 80px;
+    font-weight: bold;
+  }
+
+  .start-date {
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+
+  .text {
+    font-size: 22px;
+    width: 500px;
+  }
+
+  .link {
+    font-size: 25px;
+    font-style: italic;
+    font-weight: bold;
+  }
+
+  .list {
+    margin-left: 25px;
+
+    &-item {
+      font-size: 25px;
+    }
+  }
+}
+
+.legacy-lab-container {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: center;
 }
