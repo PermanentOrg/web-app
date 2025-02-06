@@ -287,7 +287,9 @@ describe('HttpV2Service', () => {
 
   it('should correctly handle responseType: text', (done) => {
     service
-      .post('/api/v2/health', {}, undefined, {}, 'text')
+      .post('/api/v2/health', {}, undefined, {
+        responseType: 'text',
+      })
       .toPromise()
       .then((response) => {
         expect(typeof response[0]).toBe('string');

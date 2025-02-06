@@ -18,8 +18,9 @@ export class IdPuser extends BaseRepo {
         '/v2/idpuser/send-enable-code',
         { method, value },
         undefined,
-        {},
-        'text',
+        {
+          responseType: 'text',
+        },
       ),
     );
   }
@@ -34,8 +35,9 @@ export class IdPuser extends BaseRepo {
           code,
         },
         undefined,
-        {},
-        'text',
+        {
+          responseType: 'text',
+        },
       ),
     );
   }
@@ -46,8 +48,7 @@ export class IdPuser extends BaseRepo {
         '/v2/idpuser/send-disable-code',
         { methodId },
         undefined,
-        {},
-        'text',
+        { responseType: 'text' },
       ),
     );
   }
@@ -58,8 +59,9 @@ export class IdPuser extends BaseRepo {
         '/v2/idpuser/disable-two-factor',
         { code, methodId },
         undefined,
-        {},
-        'text',
+        {
+          responseType: 'text',
+        },
       ),
     );
   }

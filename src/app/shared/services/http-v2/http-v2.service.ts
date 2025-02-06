@@ -13,17 +13,20 @@ const AUTH_KEY = 'AUTH_TOKEN';
 
 type HttpMethod = 'post' | 'get' | 'put' | 'delete';
 type ResponseClass<T> = new (data: any) => T;
+type ResponseType = 'json' | 'text';
 
 interface RequestOptions {
   csrf?: boolean;
   authToken?: boolean;
   useStelaDomain?: boolean;
+  responseType?: ResponseType;
 }
 
 const defaultOptions: RequestOptions = {
   csrf: false,
   authToken: true,
   useStelaDomain: true,
+  responseType: 'json',
 };
 
 export function getFirst<T>(observable: Observable<T[]>): Observable<T> {
@@ -61,7 +64,6 @@ export class HttpV2Service {
     data: any = {},
     responseClass?: ResponseClass<T>,
     options: RequestOptions = defaultOptions,
-    responseType?: 'json' | 'text',
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       endpoint,
@@ -69,7 +71,6 @@ export class HttpV2Service {
       'post',
       responseClass,
       this.getOptions(options),
-      responseType,
     );
   }
 
@@ -78,7 +79,6 @@ export class HttpV2Service {
     data: any = {},
     responseClass?: ResponseClass<T>,
     options: RequestOptions = defaultOptions,
-    responseType?: 'json' | 'text',
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       this.getEndpointWithData(endpoint, data),
@@ -86,7 +86,6 @@ export class HttpV2Service {
       'get',
       responseClass,
       this.getOptions(options),
-      responseType,
     );
   }
 
@@ -95,7 +94,6 @@ export class HttpV2Service {
     data: any = {},
     responseClass?: ResponseClass<T>,
     options: RequestOptions = defaultOptions,
-    responseType?: 'json' | 'text',
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       endpoint,
@@ -103,7 +101,6 @@ export class HttpV2Service {
       'put',
       responseClass,
       this.getOptions(options),
-      responseType,
     );
   }
 
@@ -112,7 +109,6 @@ export class HttpV2Service {
     data: any = {},
     responseClass?: ResponseClass<T>,
     options: RequestOptions = defaultOptions,
-    responseType?: 'json' | 'text',
   ): Observable<T[]> {
     return this.makeHttpClientRequest(
       this.getEndpointWithData(endpoint, data),
@@ -120,7 +116,6 @@ export class HttpV2Service {
       'delete',
       responseClass,
       this.getOptions(options),
-      responseType,
     );
   }
 
@@ -194,33 +189,30 @@ export class HttpV2Service {
     data: any = {},
     method: HttpMethod,
     options: RequestOptions,
-    responseType: any = 'json',
   ): Observable<unknown> {
-    if (method === 'put') {
-      return this.http.put(url, data, {
-        ...this.getHeaders(options),
-        responseType,
-      });
-    }
-    return this.http.post(url, data, {
+    const requestOptions: Object = {
       ...this.getHeaders(options),
-      responseType,
-    });
+      responseType: options.responseType,
+    };
+    if (method === 'put') {
+      return this.http.put(url, data, requestOptions);
+    }
+    return this.http.post(url, data, requestOptions);
   }
 
   protected getObservableWithNoBody(
     url: string,
     method: HttpMethod,
     options: RequestOptions,
-    responseType: any = 'json',
   ): Observable<unknown> {
+    const requestOptions: Object = {
+      ...this.getHeaders(options),
+      responseType: options.responseType,
+    };
     if (method === 'delete') {
-      return this.http.delete(url, {
-        ...this.getHeaders(options),
-        responseType,
-      });
+      return this.http.delete(url, requestOptions);
     }
-    return this.http.get(url, { ...this.getHeaders(options), responseType });
+    return this.http.get(url, requestOptions);
   }
 
   protected getObservable(
@@ -228,7 +220,6 @@ export class HttpV2Service {
     data: any = {},
     method: HttpMethod = 'post',
     options: RequestOptions = defaultOptions,
-    responseType: 'json' | 'text' = 'json',
   ): Observable<unknown> {
     if (method === 'post' || method === 'put') {
       return this.getObservableWithBody(
@@ -236,14 +227,12 @@ export class HttpV2Service {
         options.csrf ? this.appendCsrf(data) : data,
         method,
         options,
-        responseType,
       );
     }
     return this.getObservableWithNoBody(
       this.getFullUrl(endpoint, options),
       method,
       options,
-      responseType,
     );
   }
 
@@ -253,19 +242,12 @@ export class HttpV2Service {
     method: HttpMethod = 'post',
     responseClass?: new (data: any) => T,
     options: RequestOptions = defaultOptions,
-    responseType: 'json' | 'text' = 'json', // NEW: response type parameter
   ): Observable<T[]> {
-    const observable = this.getObservable(
-      endpoint,
-      data,
-      method,
-      options,
-      responseType,
-    );
+    const observable = this.getObservable(endpoint, data, method, options);
 
     return observable.pipe(
       map((response: Object | Array<Object>) => {
-        if (responseType === 'text') {
+        if (options.responseType === 'text') {
           return [response as unknown as T];
         }
 
