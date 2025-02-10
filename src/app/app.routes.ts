@@ -142,6 +142,10 @@ const routes: RoutesWithData = [
       { path: 'm/embed', redirectTo: 'app/embed' },
       { path: 'm/pledge', redirectTo: 'app/pledge' },
       {
+        path: 'app/v3',
+        loadChildren: () => import('./v3/v3.module').then((m) => m.V3Module),
+      },
+      {
         path: '',
         loadChildren: () =>
           import('./core/core.module').then((m) => m.CoreModule),
