@@ -139,8 +139,8 @@
 
 .legacy-lab-text {
   .header,
-  .text,
-  .link {
+  p,
+  a {
     color: white;
   }
 
@@ -173,7 +173,7 @@
     }
   }
 
-  .a {
+  a {
     font-size: 40px;
     font-style: italic;
     font-weight: bold;
