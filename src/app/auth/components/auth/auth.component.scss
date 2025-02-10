@@ -58,7 +58,7 @@
 .image {
   position: relative;
   height: 100%;
-  background: url('../../../../assets/img/sign_in_image_swapped.png');
+  background: url('../../../../assets/img/legacy_lab_sign_in_image.png');
   background-size: cover;
   background-position: center center;
   flex-grow: 1;
@@ -145,7 +145,7 @@
   }
 
   .start-date,
-  .list-item {
+  li {
     color: #ff9933;
   }
 
@@ -180,12 +180,12 @@
     font-family: 'UsualBold', sans-serif;
   }
 
-  .list {
+  ul {
     margin-left: 50px;
     list-style: none;
     margin-bottom: 40px;
 
-    &-item {
+    & > li {
       font-size: 40px;
       font-family: 'UsualRegular', sans-serif;
       position: relative;
