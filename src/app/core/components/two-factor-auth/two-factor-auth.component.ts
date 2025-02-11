@@ -198,14 +198,4 @@ export class TwoFactorAuthComponent implements OnInit {
       this.loading = false;
     }
   }
-
-  public onEnterPress(event: KeyboardEvent, action: string): void {
-    event.preventDefault();
-
-    if (action === 'sendCode') {
-      this.sendCode(event);
-    } else if (action === 'submitData') {
-      this.submitData(this.form.value);
-    }
-  }
 }
