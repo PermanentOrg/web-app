@@ -50,7 +50,11 @@
     <option [disabled]="hasMethod('email')" value="email">Email</option>
     <option [disabled]="hasMethod('sms')" value="sms">SMS</option>
   </select>
-  <form *ngIf="method" [formGroup]="form" (submit)="submitData(form.value)">
+  <form
+    *ngIf="method"
+    [formGroup]="form"
+    (submit)="submitData(form.value); $event.preventDefault()"
+  >
     <p *ngIf="!selectedMethodToDelete">
       2. Enter your contact information for the preferred method below and click
       the button to send a one-time use code.
@@ -72,6 +76,7 @@
         }}"
         [control]="form.controls['contactInfo']"
         [disabled]="!!selectedMethodToDelete"
+        (keydown.enter)="onEnterPress($event, 'sendCode')"
       ></pr-form-input>
       <small *ngIf="form.get('contactInfo').errors?.email" class="text-danger">
         Please enter a valid email address.
@@ -85,6 +90,8 @@
     </div>
     <div class="send-code-button button-container">
       <button
+        #sendCodeButton
+        type="button"
         role="button"
         [disabled]="!form.value.contactInfo || form.get('contactInfo').errors"
         (click)="sendCode($event)"
@@ -101,13 +108,15 @@
           type="text"
           placeholder="XXXX"
           [control]="form.controls['code']"
+          (keydown.enter)="onEnterPress($event, 'submitData')"
         ></pr-form-input>
       </div>
       <div class="button-container button-group">
         <button
-          type="submit"
           [disabled]="!form.value.code"
           class="btn btn-primary"
+          type="button"
+          (click)="submitData(form.value)"
         >
           {{ selectedMethodToDelete ? 'Delete' : 'Enable' }}
         </button>

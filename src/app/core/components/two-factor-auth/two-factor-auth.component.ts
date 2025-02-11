@@ -47,6 +47,8 @@ export class TwoFactorAuthComponent implements OnInit {
         this.formatPhoneNumber(value);
       }
     });
+
+    this.form.get('code').valueChanges.subscribe(() => {});
   }
 
   async ngOnInit() {
@@ -108,8 +110,6 @@ export class TwoFactorAuthComponent implements OnInit {
   }
 
   async sendCode(e) {
-    e.preventDefault();
-
     try {
       if (this.selectedMethodToDelete) {
         await this.api.idpuser.sendDisableCode(
@@ -196,6 +196,16 @@ export class TwoFactorAuthComponent implements OnInit {
       this.turnOn = false;
       this.codeSent = false;
       this.loading = false;
+    }
+  }
+
+  public onEnterPress(event: KeyboardEvent, action: string): void {
+    event.preventDefault();
+
+    if (action === 'sendCode') {
+      this.sendCode(event);
+    } else if (action === 'submitData') {
+      this.submitData(this.form.value);
     }
   }
 }

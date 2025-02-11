@@ -196,4 +196,39 @@ describe('TwoFactorAuthComponent', () => {
 
     expect(mockApiService.idpuser.getTwoFactorMethods).toHaveBeenCalled();
   });
+
+  it('should call sendCode when Enter is pressed on contactInfo input', async () => {
+    const { instance } = await shallow.render();
+    const event = {
+      preventDefault: jasmine.createSpy('preventDefault'),
+    } as unknown as KeyboardEvent;
+
+    instance.form.patchValue({ contactInfo: 'user@example.com' });
+
+    const sendCodeSpy = spyOn(instance, 'sendCode').and.callThrough();
+
+    instance.onEnterPress(event, 'sendCode');
+
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(sendCodeSpy).toHaveBeenCalled();
+  });
+
+  it('should call submitData when Enter is pressed on code input', async () => {
+    const { instance } = await shallow.render();
+    const event = {
+      preventDefault: jasmine.createSpy('preventDefault'),
+    } as unknown as KeyboardEvent;
+
+    instance.form.patchValue({ code: '1234', contactInfo: 'user@example.com' });
+
+    const submitDataSpy = spyOn(instance, 'submitData').and.callThrough();
+
+    instance.onEnterPress(event, 'submitData');
+
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(submitDataSpy).toHaveBeenCalledWith({
+      code: '1234',
+      contactInfo: 'user@example.com',
+    });
+  });
 });
