@@ -50,7 +50,12 @@
     <option [disabled]="hasMethod('email')" value="email">Email</option>
     <option [disabled]="hasMethod('sms')" value="sms">SMS</option>
   </select>
-  <form *ngIf="method" [formGroup]="form" (submit)="submitData(form.value)">
+  <form
+    class="send-code-form"
+    *ngIf="method"
+    [formGroup]="form"
+    (submit)="sendCode(form.value)"
+  >
     <p *ngIf="!selectedMethodToDelete">
       2. Enter your contact information for the preferred method below and click
       the button to send a one-time use code.
@@ -85,15 +90,17 @@
     </div>
     <div class="send-code-button button-container">
       <button
+        type="submit"
         role="button"
         [disabled]="!form.value.contactInfo || form.get('contactInfo').errors"
-        (click)="sendCode($event)"
         class="btn btn-primary"
       >
         Send Code
       </button>
     </div>
-    <div class="code-container" *ngIf="codeSent">
+  </form>
+  <div class="code-container" *ngIf="codeSent">
+    <form (submit)="submitData(form.value)">
       <p>3. Enter the four digit code below</p>
       <div class="input-group-vertical">
         <pr-form-input
@@ -105,14 +112,16 @@
       </div>
       <div class="button-container button-group">
         <button
-          type="submit"
           [disabled]="!form.value.code"
           class="btn btn-primary"
+          type="submit"
         >
           {{ selectedMethodToDelete ? 'Delete' : 'Enable' }}
         </button>
-        <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">
+          Cancel
+        </button>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
