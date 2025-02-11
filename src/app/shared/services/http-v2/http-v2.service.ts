@@ -13,17 +13,20 @@ const AUTH_KEY = 'AUTH_TOKEN';
 
 type HttpMethod = 'post' | 'get' | 'put' | 'delete';
 type ResponseClass<T> = new (data: any) => T;
+type ResponseType = 'json' | 'text';
 
 interface RequestOptions {
   csrf?: boolean;
   authToken?: boolean;
   useStelaDomain?: boolean;
+  responseType?: ResponseType;
 }
 
 const defaultOptions: RequestOptions = {
   csrf: false,
   authToken: true,
   useStelaDomain: true,
+  responseType: 'json',
 };
 
 export function getFirst<T>(observable: Observable<T[]>): Observable<T> {
@@ -187,10 +190,14 @@ export class HttpV2Service {
     method: HttpMethod,
     options: RequestOptions,
   ): Observable<unknown> {
+    const requestOptions: Object = {
+      ...this.getHeaders(options),
+      responseType: options.responseType,
+    };
     if (method === 'put') {
-      return this.http.put(url, data, this.getHeaders(options));
+      return this.http.put(url, data, requestOptions);
     }
-    return this.http.post(url, data, this.getHeaders(options));
+    return this.http.post(url, data, requestOptions);
   }
 
   protected getObservableWithNoBody(
@@ -198,10 +205,14 @@ export class HttpV2Service {
     method: HttpMethod,
     options: RequestOptions,
   ): Observable<unknown> {
+    const requestOptions: Object = {
+      ...this.getHeaders(options),
+      responseType: options.responseType,
+    };
     if (method === 'delete') {
-      return this.http.delete(url, this.getHeaders(options));
+      return this.http.delete(url, requestOptions);
     }
-    return this.http.get(url, this.getHeaders(options));
+    return this.http.get(url, requestOptions);
   }
 
   protected getObservable(
@@ -233,8 +244,13 @@ export class HttpV2Service {
     options: RequestOptions = defaultOptions,
   ): Observable<T[]> {
     const observable = this.getObservable(endpoint, data, method, options);
+
     return observable.pipe(
       map((response: Object | Array<Object>) => {
+        if (options.responseType === 'text') {
+          return [response as unknown as T];
+        }
+
         if (Array.isArray(response)) {
           return response.map((obj) => {
             if (responseClass) {
