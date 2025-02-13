@@ -204,6 +204,8 @@
 }
 
 .legacy-lab-container {
+  position: relative;
+  z-index: 1;
   margin-left: 50px;
   margin-top: 20px;
   display: flex;
