@@ -10,20 +10,6 @@
     <div class="tabs">
       <div
         class="dialog-tab"
-        (click)="setTab('manage-keywords')"
-        [class.active]="activeTab === 'manage-keywords'"
-      >
-        Manage Keywords
-      </div>
-      <div
-        class="dialog-tab"
-        (click)="setTab('manage-metadata')"
-        [class.active]="activeTab === 'manage-metadata'"
-      >
-        Manage Metadata
-      </div>
-      <div
-        class="dialog-tab"
         (click)="setTab('public-settings')"
         [class.active]="activeTab === 'public-settings'"
       >
@@ -35,6 +21,20 @@
         [class.active]="activeTab === 'legacy-planning'"
       >
         Legacy Planning
+      </div>
+      <div
+        class="dialog-tab"
+        (click)="setTab('manage-keywords')"
+        [class.active]="activeTab === 'manage-keywords'"
+      >
+        Manage Keywords
+      </div>
+      <div
+        class="dialog-tab"
+        (click)="setTab('manage-metadata')"
+        [class.active]="activeTab === 'manage-metadata'"
+      >
+        Manage Metadata
       </div>
     </div>
     <div class="panel" #panel>
