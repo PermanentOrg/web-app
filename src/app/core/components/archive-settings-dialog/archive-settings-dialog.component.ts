@@ -24,7 +24,7 @@ type ArchiveSettingsDialogTab = (typeof archiveSettingsTabs)[number];
 })
 export class ArchiveSettingsDialogComponent implements OnInit {
   public readonly MAX_FETCH_ATTEMPTS: number = 5;
-  public activeTab: ArchiveSettingsDialogTab = 'manage-keywords';
+  public activeTab: ArchiveSettingsDialogTab = 'public-settings';
   public tags: TagVO[] = [];
   public loadingTags: boolean = true;
   public hasTagsAccess: boolean;
