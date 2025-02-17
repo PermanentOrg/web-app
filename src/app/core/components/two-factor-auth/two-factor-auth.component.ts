@@ -47,6 +47,8 @@ export class TwoFactorAuthComponent implements OnInit {
         this.formatPhoneNumber(value);
       }
     });
+
+    this.form.get('code').valueChanges.subscribe(() => {});
   }
 
   async ngOnInit() {
@@ -108,8 +110,6 @@ export class TwoFactorAuthComponent implements OnInit {
   }
 
   async sendCode(e) {
-    e.preventDefault();
-
     try {
       if (this.selectedMethodToDelete) {
         await this.api.idpuser.sendDisableCode(
