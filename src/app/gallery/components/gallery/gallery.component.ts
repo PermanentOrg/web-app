@@ -6,6 +6,7 @@ import {
   FEATURED_ARCHIVE_API,
   FeaturedArchiveApi,
 } from '../../types/featured-archive-api';
+import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-gallery',
@@ -20,8 +21,13 @@ export class GalleryComponent implements OnInit {
   constructor(
     @Inject(FEATURED_ARCHIVE_API) private api: FeaturedArchiveApi,
     private accountService: AccountService,
+    private event: EventService,
   ) {
     this.isLoggedIn = this.accountService.isLoggedIn();
+    this.event.dispatch({
+      entity: 'account',
+      action: 'view_public_gallery',
+    });
   }
 
   async ngOnInit() {

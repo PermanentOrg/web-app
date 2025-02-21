@@ -33,7 +33,8 @@ export type AccountEventAction =
   | 'open_shared_workspace'
   | 'open_public_gallery'
   | 'open_redeem_gift'
-  | 'copy_share_link';
+  | 'copy_share_link'
+  | 'view_public_gallery';
 
 export type LegacyContactAction = 'create' | 'update';
 
