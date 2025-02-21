@@ -1,12 +1,12 @@
 /* @format */
 import { Component, Inject, OnInit } from '@angular/core';
 import { AccountService } from '@shared/services/account/account.service';
+import { EventService } from '@shared/services/event/event.service';
 import { FeaturedArchive } from '../../types/featured-archive';
 import {
   FEATURED_ARCHIVE_API,
   FeaturedArchiveApi,
 } from '../../types/featured-archive-api';
-import { EventService } from '@shared/services/event/event.service';
 
 @Component({
   selector: 'pr-gallery',
