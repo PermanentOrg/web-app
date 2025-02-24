@@ -7,8 +7,8 @@ import {
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { BillingPaymentVO } from '@models';
-import { getFirst } from '../http-v2/http-v2.service';
 import { firstValueFrom } from 'rxjs';
+import { getFirst } from '../http-v2/http-v2.service';
 
 export class BillingRepo extends BaseRepo {
   public claimPledge(billingPaymentVO: BillingPaymentVO, pledgeId: string) {
