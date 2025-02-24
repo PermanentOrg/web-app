@@ -48,7 +48,8 @@ export class RedeemGiftComponent implements OnInit {
     try {
       this.waiting = true;
       const response = await this.api.billing.redeemPromoCode(value);
-      await this.handleValidPromoCode(response);
+
+      await this.handleValidPromoCode(response[0]);
     } catch (err: unknown) {
       this.showPromoCodeError(err);
     } finally {
@@ -64,7 +65,7 @@ export class RedeemGiftComponent implements OnInit {
     this.resultMessage = { message, successful: false };
   }
 
-  private async handleValidPromoCode(response: BillingResponse) {
+  private async handleValidPromoCode(response) {
     await this.updateAccountStorageBytes(response);
     this.event.dispatch({
       entity: 'account',
@@ -73,12 +74,12 @@ export class RedeemGiftComponent implements OnInit {
     this.promoForm.reset();
   }
 
-  private async updateAccountStorageBytes(response: BillingResponse) {
+  private async updateAccountStorageBytes(response) {
     const spaceBeforeRefresh = this.account.getAccount()?.spaceTotal;
     await this.account.refreshAccount();
 
     const spaceAfterRefresh = this.account.getAccount()?.spaceTotal;
-    const promo = response.getPromoVO();
+    const promo = response;
     const bytes = promo.sizeInMB * (1024 * 1024);
 
     if (spaceBeforeRefresh == spaceAfterRefresh) {
