@@ -61,6 +61,11 @@
             >
           </p>
           <pr-new-pledge [inlineFlow]="true"></pr-new-pledge>
+          <p class="nav-to-redeem">
+            <a href="#" (click)="setTab('promo'); $event.preventDefault()">
+              Have a code to redeem for free storage? Click here to redeem it.
+            </a>
+          </p>
         </ng-container>
         <ng-container *ngSwitchCase="'gift'">
           <pr-gift-storage></pr-gift-storage>
