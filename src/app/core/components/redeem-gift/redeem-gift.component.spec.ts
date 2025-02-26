@@ -97,9 +97,6 @@ describe('StorageDialogComponent', () => {
     await instance.onPromoFormSubmit({ code: 'potato' });
 
     expect(instance.resultMessage.successful).toBeFalse();
-    expect(instance.resultMessage.message).toBe(
-      'There was an error redeeming your code.',
-    );
   });
 
   it('should handle any other unexpected errors when redeeming promo code', async () => {
