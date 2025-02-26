@@ -119,7 +119,6 @@ select {
 
 .inline-value-textarea {
   min-height: 6 * 1.5rem;
-  white-space: pre-wrap;
   overflow-wrap: break-word;
 
   &.showing-empty-message {
