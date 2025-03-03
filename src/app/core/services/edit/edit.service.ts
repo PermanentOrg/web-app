@@ -425,8 +425,6 @@ export class EditService {
       if (recordResponse) {
         const res = recordResponse[0];
 
-        console.log(res);
-
         const newData: RecordVOData = {
           updatedDT: res.updatedDT,
         };
@@ -439,7 +437,6 @@ export class EditService {
           (itemsByLinkId[res.folder_linkId] as RecordVO) ||
           recordsByRecordId.get(res.recordId);
 
-        console.log(newData);
         record.update(newData);
       }
     });
