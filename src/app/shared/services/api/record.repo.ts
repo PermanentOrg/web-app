@@ -158,21 +158,6 @@ export class RecordRepo extends BaseRepo {
   }
 
   public async update(recordVOs: RecordVO[], archiveId) {
-    const payload = {
-      recordId: recordVOs[0].recordId,
-      displayName: recordVOs[0].displayName,
-      publicDt: recordVOs[0].publicDT,
-      note: recordVOs[0].note,
-      description: recordVOs[0].description,
-      displayDt: recordVOs[0].displayDT,
-      displayEndDt: recordVOs[0].displayEndDT,
-      altText: recordVOs[0].altText,
-      archiveId: archiveId,
-      locnVO: {
-        locnId: recordVOs[0].locnId,
-      },
-    };
-
     return await firstValueFrom(
       this.httpV2.post('/record/update', { ...recordVOs[0], archiveId }, null),
     );
