@@ -174,7 +174,7 @@ export class RecordRepo extends BaseRepo {
     };
 
     return await firstValueFrom(
-      this.httpV2.post('/record/update', payload, null),
+      this.httpV2.post('/record/update', { ...recordVOs[0], archiveId }, null),
     );
   }
 
