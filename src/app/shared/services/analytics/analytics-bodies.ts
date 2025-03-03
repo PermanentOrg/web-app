@@ -127,6 +127,10 @@ export const AnalyticsBodies: AnalyticsLookupTable = {
         page: 'Redeem Gift',
       },
     },
+    view_public_gallery: {
+      event: 'View Public Gallery',
+      data: {},
+    },
     open_share_modal: {
       event: 'Share',
       data: {},
