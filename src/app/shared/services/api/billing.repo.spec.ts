@@ -12,6 +12,7 @@ import {
   BillingResponse,
   ClaimingPromoResponse,
 } from '@shared/services/api/billing.repo';
+import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('BillingRepo', () => {
   let repo: BillingRepo;
@@ -23,8 +24,11 @@ describe('BillingRepo', () => {
       providers: [HttpService],
     });
 
-    repo = new BillingRepo(TestBed.get(HttpService));
-    httpMock = TestBed.get(HttpTestingController);
+    repo = new BillingRepo(
+      TestBed.inject(HttpService),
+      TestBed.inject(HttpV2Service),
+    );
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
