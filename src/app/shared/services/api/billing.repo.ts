@@ -65,10 +65,10 @@ export class BillingRepo extends BaseRepo {
     const data = { code };
 
     return await firstValueFrom(
-      this.httpV2.post<ClaimingPromoResonse>(
+      this.httpV2.post<ClaimingPromoResponse>(
         '/promo/entry',
         data,
-        ClaimingPromoResonse,
+        ClaimingPromoResponse,
       ),
     );
   }
@@ -132,7 +132,7 @@ export class GiftingResponse {
   }
 }
 
-export class ClaimingPromoResonse {
+export class ClaimingPromoResponse {
   promoId: number;
   code: string;
   sizeInMB: number;
