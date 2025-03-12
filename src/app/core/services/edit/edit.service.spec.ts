@@ -161,7 +161,7 @@ describe('EditService', () => {
       mockRecords,
       archiveId,
     );
-    
+
     expect(results[0][0].updatedDT).toBe('2024-03-03');
   });
 
