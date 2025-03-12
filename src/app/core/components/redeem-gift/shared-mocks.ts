@@ -1,6 +1,6 @@
 import { AccountVO } from '@models/account-vo';
 import { PromoVOData } from '@models/promo-vo';
-import { ClaimingPromoResonse } from '@shared/services/api/billing.repo';
+import { ClaimingPromoResponse } from '@shared/services/api/billing.repo';
 
 const mockPromoResponse = [
   {
@@ -22,12 +22,12 @@ const failedPromoResponse = {
 export class MockBillingRepo {
   public calledRedeemPromoCode = false;
   public isSuccessful = true;
-  public redeemPromoCode(_value: PromoVOData): Promise<ClaimingPromoResonse> {
+  public redeemPromoCode(_value: PromoVOData): Promise<ClaimingPromoResponse> {
     this.calledRedeemPromoCode = true;
     if (this.isSuccessful) {
-      return Promise.resolve(new ClaimingPromoResonse(mockPromoResponse));
+      return Promise.resolve(new ClaimingPromoResponse(mockPromoResponse));
     }
-    return Promise.reject(new ClaimingPromoResonse(failedPromoResponse));
+    return Promise.reject(new ClaimingPromoResponse(failedPromoResponse));
   }
 }
 export interface MockApiService {

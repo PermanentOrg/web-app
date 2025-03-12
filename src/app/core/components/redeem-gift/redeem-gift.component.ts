@@ -10,7 +10,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import {
   BillingResponse,
   AccountResponse,
-  ClaimingPromoResonse,
+  ClaimingPromoResponse,
 } from '@shared/services/api/index.repo';
 import { FileSizePipe } from '@shared/pipes/filesize.pipe';
 import { AccountService } from '@shared/services/account/account.service';
@@ -66,7 +66,7 @@ export class RedeemGiftComponent implements OnInit {
     this.resultMessage = { message, successful: false };
   }
 
-  private async handleValidPromoCode(response: ClaimingPromoResonse) {
+  private async handleValidPromoCode(response: ClaimingPromoResponse) {
     await this.updateAccountStorageBytes(response);
     this.event.dispatch({
       entity: 'account',
