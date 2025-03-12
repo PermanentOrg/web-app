@@ -56,7 +56,7 @@ describe('BillingRepo', () => {
     const promise = repo.redeemPromoCode(promo);
 
     const req = httpMock.expectOne(apiUrl('/promo/entry'));
-    
+
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ code: 'TESTCODE' });
 
