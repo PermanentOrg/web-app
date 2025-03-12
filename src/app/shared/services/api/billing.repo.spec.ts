@@ -50,9 +50,11 @@ describe('BillingRepo', () => {
     };
 
     const response = await repo.redeemPromoCode(promo);
-    expect(response).toEqual([mockResponse]);
 
     const req = httpMock.expectOne('/promo/entry');
+    req.flush(mockResponse);
+
     expect(req.request.method).toBe('POST');
+    expect(response).toEqual([mockResponse]);
   });
 });
