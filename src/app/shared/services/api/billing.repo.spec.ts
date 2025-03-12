@@ -14,6 +14,8 @@ import {
 } from '@shared/services/api/billing.repo';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
+const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
+
 describe('BillingRepo', () => {
   let repo: BillingRepo;
   let httpMock: HttpTestingController;
@@ -37,7 +39,7 @@ describe('BillingRepo', () => {
 
   it('should send a POST request and return expected response', async () => {
     const promo = { code: 'TESTCODE' };
-    const mockResponse: ClaimingPromoResponse = {
+    const mockResponseData = {
       sizeInMB: 1000,
       promoId: 123,
       code: 'TESTCODE',
@@ -49,12 +51,16 @@ describe('BillingRepo', () => {
       updatedDT: '2025-12-31T23:59:59Z',
     };
 
-    const response = await repo.redeemPromoCode(promo);
+    const mockResponse = new ClaimingPromoResponse(mockResponseData);
 
-    const req = httpMock.expectOne('/promo/entry');
-    req.flush(mockResponse);
+    const promise = repo.redeemPromoCode(promo);
 
+    const req = httpMock.expectOne(apiUrl('/promo/entry'));
     expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ code: 'TESTCODE' });
+
+    req.flush(mockResponseData);
+    const response = await promise;
     expect(response).toEqual([mockResponse]);
   });
 });
