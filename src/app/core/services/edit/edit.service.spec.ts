@@ -54,7 +54,7 @@ describe('EditService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should call update when records exist', async () => {
+  it('should call update when there are records', async () => {
     const mockRecords = [new RecordVO({ recordId: 1, displayName: 'Test' })];
     (apiService.record.update as jasmine.Spy).and.returnValue(
       Promise.resolve([{ updatedDT: '2024-03-03' }]),
@@ -161,11 +161,11 @@ describe('EditService', () => {
       mockRecords,
       archiveId,
     );
+    
     expect(results[0][0].updatedDT).toBe('2024-03-03');
   });
 
   it('should NOT update record when recordResponse is empty', () => {
-    // Arrange
     const recordMock = new RecordVO({ recordId: 1, folder_linkId: 10 });
     recordMock.update = jasmine.createSpy('update');
 
@@ -173,7 +173,6 @@ describe('EditService', () => {
     const itemsByLinkId = { 10: recordMock };
     const recordsByRecordId = new Map<number, RecordVO>();
 
-    // Act
     if (mockResponse.length) {
       const res = mockResponse[0];
 
