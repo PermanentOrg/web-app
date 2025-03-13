@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@root/environments/environment';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { EventObserver } from '../event/event.service';
 import { PermanentEvent } from '../event/event-types';
@@ -44,12 +45,20 @@ export class AnalyticsService implements EventObserver {
       return;
     }
 
+    if (!this.httpV2.isAuthTokenSet()) {
+      // The endpoint does not like unauthenticated requests.
+      return;
+    }
+
     this.assignEntityId(mixpanelEvent, event);
     this.assignDistinctId(mixpanelEvent);
 
     await firstValueFrom(
       this.httpV2.post('/v2/event', mixpanelEvent, null),
-    ).catch(() => {
+    ).catch((resp: HttpErrorResponse) => {
+      if (resp.status === 401) {
+        this.httpV2.clearAuthToken();
+      }
       // Silently ignore an HTTP error, since we don't want calling code to
       // have to handle analytics errors.
     });

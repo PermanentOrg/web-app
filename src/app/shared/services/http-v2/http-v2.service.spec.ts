@@ -305,4 +305,14 @@ describe('HttpV2Service', () => {
 
     request.flush('OK', { status: 200, statusText: 'OK' });
   });
+
+  it('should be able to test if the auth token is defined', () => {
+    service.setAuthToken('potato');
+
+    expect(service.isAuthTokenSet()).toBeTruthy();
+
+    service.clearAuthToken();
+
+    expect(service.isAuthTokenSet()).toBeFalsy();
+  });
 });
