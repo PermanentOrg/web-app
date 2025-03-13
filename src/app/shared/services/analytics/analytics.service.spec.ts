@@ -61,6 +61,8 @@ describe('AnalyticsService Integration Tests', () => {
   let device: MockDeviceMobileWidth;
   let data: MockDataCurrentFolder;
   let account: MockAccountId;
+  let httpv2: HttpV2Service;
+  let analytics: AnalyticsService;
 
   function expectInputEventMatchesMixpanelData(
     inputEvent: PermanentEvent,
@@ -111,11 +113,14 @@ describe('AnalyticsService Integration Tests', () => {
         },
       ],
     });
+    analytics = TestBed.inject(AnalyticsService);
     event = TestBed.inject(EventService);
     http = TestBed.inject(HttpTestingController);
     device = TestBed.inject(DeviceService) as any as MockDeviceMobileWidth;
     data = TestBed.inject(DataService) as any as MockDataCurrentFolder;
     account = TestBed.inject(AccountService) as any as MockAccountId;
+    httpv2 = TestBed.inject(HttpV2Service);
+    httpv2.setAuthToken('potato');
     event.addObserver(TestBed.inject(AnalyticsService));
     localStorage.setItem('account', JSON.stringify({ accountId: '1' }));
     environment.analyticsDebug = false;
@@ -874,5 +879,21 @@ describe('AnalyticsService Integration Tests', () => {
     expect(req.request.body.entityId).toBe('12345');
 
     req.flush({});
+  });
+
+  it('does not send data if the auth token is not set', () => {
+    httpv2.clearAuthToken();
+
+    expectNoAnalyticsCall({ entity: 'account', action: 'login' });
+  });
+
+  it('should clear the auth token if a 401 error happens', (done) => {
+    analytics.update({ entity: 'account', action: 'login' }).finally(() => {
+      expect(httpv2.isAuthTokenSet()).toBeFalsy();
+      done();
+    });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/event`);
+    req.flush({}, { status: 401, statusText: 'Simulated 401 error' });
   });
 });

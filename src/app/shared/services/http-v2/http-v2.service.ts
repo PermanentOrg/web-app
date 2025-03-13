@@ -59,6 +59,10 @@ export class HttpV2Service {
     this.authToken = this.storage.local.get(AUTH_KEY) ?? '';
   }
 
+  public isAuthTokenSet(): boolean {
+    return this.authToken && this.authToken.length > 0;
+  }
+
   public post<T>(
     endpoint: string,
     data: any = {},
