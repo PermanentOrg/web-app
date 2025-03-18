@@ -157,7 +157,7 @@ export class RecordRepo extends BaseRepo {
     ).toPromise() as unknown as RecordResponse;
   }
 
-  public async update(recordVOs: RecordVO[], archiveId) {
+  public async update(recordVOs: RecordVO[], archiveId: number) {
     return await firstValueFrom(
       this.httpV2.post('/record/update', { ...recordVOs[0], archiveId }, null),
     );

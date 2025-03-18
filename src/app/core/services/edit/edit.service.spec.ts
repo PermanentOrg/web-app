@@ -55,23 +55,14 @@ describe('EditService', () => {
   }));
 
   it('should call update when there are records', async () => {
-    const mockRecords = [new RecordVO({ recordId: 1, displayName: 'Test' })];
+    const record = new RecordVO({ recordId: 1, displayName: 'Test' });
+    const mockRecords = [record];
     (apiService.record.update as jasmine.Spy).and.returnValue(
       Promise.resolve([{ updatedDT: '2024-03-03' }]),
     );
-
-    const promises = [];
-    if (mockRecords.length) {
-      const archiveId = accountService.getArchive().archiveId;
-      promises.push(apiService.record.update(mockRecords, archiveId));
-    } else {
-      promises.push(Promise.resolve());
-    }
-
-    const results = await Promise.all(promises);
-
+    await service.updateItems(mockRecords);
     expect(apiService.record.update).toHaveBeenCalledWith(mockRecords, 123);
-    expect(results[0][0].updatedDT).toBe('2024-03-03');
+    expect(record.updatedDT).toBe('2024-03-03');
   });
 
   it('should not call update when records list is empty', async () => {
