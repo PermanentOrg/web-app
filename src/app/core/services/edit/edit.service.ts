@@ -402,7 +402,7 @@ export class EditService {
 
     return Promise.all(promises).then((results) => {
       let folderResponse: FolderResponse;
-      let recordResponse: RecordResponse;
+      let recordResponse: RecordVO;
 
       [folderResponse, recordResponse] = results;
       if (folderResponse) {
@@ -434,7 +434,7 @@ export class EditService {
         }
 
         const record =
-          (itemsByLinkId[res.folder_linkId] as RecordVO) ||
+          itemsByLinkId[res.folder_linkId] ||
           recordsByRecordId.get(res.recordId);
 
         record.update(newData);
