@@ -6,9 +6,12 @@ import {
   AccountVO,
   ArchiveVO,
   ItemVO,
+  ShareVO,
+  AccessRole,
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 export class InviteRepo extends BaseRepo {
   public send(invites: InviteVO[]): Promise<InviteResponse> {
@@ -25,26 +28,17 @@ export class InviteRepo extends BaseRepo {
     );
   }
 
-  public sendMemberInvite(
-    member: AccountVO,
-    archive: ArchiveVO,
-  ): Promise<InviteResponse> {
-    const data = [
-      {
-        InviteVO: {
-          accessRole: member.accessRole,
-          byArchiveId: archive.archiveId,
-          email: member.primaryEmail,
-          fullName: member.fullName,
-          type: 'type.invite.archive',
-        },
-      },
-    ];
+  public async sendMemberInvite(member: AccountVO, archive: ArchiveVO) {
+    const data = {
+      accessRole: member.accessRole,
+      byArchiveId: archive.archiveId,
+      email: member.primaryEmail,
+      fullName: member.fullName,
+      type: 'type.invite.archive',
+    };
 
-    return this.http.sendRequestPromise<InviteResponse>(
-      '/invite/byEmailAddress',
-      data,
-      { responseClass: InviteResponse },
+    return await firstValueFrom(
+      this.httpV2.post('/invite/byEmailAddress', data, null),
     );
   }
 
