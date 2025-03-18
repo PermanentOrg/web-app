@@ -7,6 +7,7 @@ import {
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { BillingPaymentVO } from '@models';
+import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
 
 export class BillingRepo extends BaseRepo {
@@ -58,16 +59,18 @@ export class BillingRepo extends BaseRepo {
     );
   }
 
-  public redeemPromoCode(promo: PromoVOData) {
-    const data = [
-      {
-        PromoVO: promo,
-      },
-    ];
+  public async redeemPromoCode(promo: PromoVOData) {
+    const { code } = promo;
 
-    return this.http.sendRequestPromise<BillingResponse>('/promo/entry', data, {
-      responseClass: BillingResponse,
-    });
+    const data = { code };
+
+    return await firstValueFrom(
+      this.httpV2.post<ClaimingPromoResponse>(
+        '/promo/entry',
+        data,
+        ClaimingPromoResponse,
+      ),
+    );
   }
 
   public giftStorage(
@@ -121,6 +124,24 @@ export class GiftingResponse {
   giftDelivered: string[];
   invitationSent: string[];
   alreadyInvited: string[];
+
+  constructor(props: Object) {
+    for (const prop in props) {
+      this[prop] = props[prop];
+    }
+  }
+}
+
+export class ClaimingPromoResponse {
+  promoId: number;
+  code: string;
+  sizeInMB: number;
+  expiresDT: string;
+  remainingUses: number;
+  status: string;
+  type: string;
+  createdDT: string;
+  updatedDT: string;
 
   constructor(props: Object) {
     for (const prop in props) {
