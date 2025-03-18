@@ -70,11 +70,12 @@ describe('InviteRepo', () => {
       archiveId: 123,
     });
 
-    const promise = repo.sendMemberInvite(member, archive);
+    repo.sendMemberInvite(member, archive);
 
     const req = httpMock.expectOne(
       `${environment.apiUrl}/invite/byEmailAddress`,
     );
+
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({
       accessRole: member.accessRole,
