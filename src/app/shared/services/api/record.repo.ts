@@ -157,31 +157,9 @@ export class RecordRepo extends BaseRepo {
     ).toPromise() as unknown as RecordResponse;
   }
 
-  public update(
-    recordVOs: RecordVO[],
-    whitelist = DEFAULT_WHITELIST,
-  ): Promise<RecordResponse> {
-    if (whitelist !== DEFAULT_WHITELIST) {
-      whitelist = [...whitelist, ...MIN_WHITELIST];
-    }
-
-    const data = recordVOs.map((vo) => {
-      const updateData: RecordVOData = {};
-      for (const prop of whitelist) {
-        if (vo[prop] !== undefined) {
-          updateData[prop] = vo[prop];
-        }
-      }
-
-      return {
-        RecordVO: new RecordVO(updateData),
-      };
-    });
-
-    return this.http.sendRequestPromise<RecordResponse>(
-      '/record/update',
-      data,
-      { responseClass: RecordResponse },
+  public async update(recordVOs: RecordVO[], archiveId: number) {
+    return await firstValueFrom(
+      this.httpV2.post('/record/update', { ...recordVOs[0], archiveId }, null),
     );
   }
 
