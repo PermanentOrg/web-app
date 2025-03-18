@@ -61,7 +61,7 @@ describe('EditService', () => {
       Promise.resolve([{ updatedDT: '2024-03-03' }]),
     );
     await service.updateItems(mockRecords);
-    
+
     expect(apiService.record.update).toHaveBeenCalledWith(mockRecords, 123);
     expect(record.updatedDT).toBe('2024-03-03');
   });
