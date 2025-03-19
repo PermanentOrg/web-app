@@ -9,6 +9,7 @@ import {
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 export class InviteRepo extends BaseRepo {
   public send(invites: InviteVO[]): Promise<InviteResponse> {
@@ -48,27 +49,32 @@ export class InviteRepo extends BaseRepo {
     );
   }
 
-  public sendShareInvite(
-    invites: InviteVO[],
-    itemToShare: ItemVO,
-  ): Promise<InviteResponse> {
-    const data = invites.map((invite) => {
-      const vos: any = {
-        InviteVO: invite,
-      };
+  public async sendShareInvite(invite: InviteVO, itemToShare: ItemVO) {
+    const data: {
+      email: string;
+      byArchiveId: number;
+      fullName: string;
+      accessRole: string;
+      folderLinkId: number;
+      relationship: string;
+      recordId?: number;
+      folderId?: number;
+    } = {
+      email: invite.email,
+      byArchiveId: invite.byArchiveId,
+      fullName: invite.fullName,
+      accessRole: invite.accessRole,
+      folderLinkId: itemToShare.folder_linkId,
+      relationship: invite.relationship,
+    };
 
-      if (itemToShare.isRecord) {
-        vos.RecordVO = itemToShare;
-      } else {
-        vos.FolderVO = itemToShare;
-      }
+    if (itemToShare instanceof RecordVO && itemToShare.isRecord) {
+      data.recordId = itemToShare.recordId;
+    } else if (itemToShare instanceof FolderVO && itemToShare.isFolder) {
+      data.folderId = itemToShare.folderId;
+    }
 
-      return vos;
-    });
-
-    return this.http.sendRequestPromise<InviteResponse>('/invite/share', data, {
-      responseClass: InviteResponse,
-    });
+    return await firstValueFrom(this.httpV2.post('/invite/share', data, null));
   }
 
   public getShareInviteInfo(

@@ -124,14 +124,14 @@ export class ArchivePickerComponent {
         });
         if (this.dialogData.shareItem) {
           return this.api.invite.sendShareInvite(
-            [invite],
+            invite,
             this.dialogData.shareItem,
-          );
+          ) as any;
         } else {
           return this.api.invite.send([invite]);
         }
       })
-      .then((response: InviteResponse) => {
+      .then((response: any) => {
         this.message.showMessage({
           message: 'Invite sent succesfully.',
           style: 'success',
