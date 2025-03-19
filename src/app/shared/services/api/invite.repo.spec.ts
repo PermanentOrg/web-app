@@ -86,8 +86,8 @@ describe('InviteRepo', () => {
 
     const itemToShare = new RecordVO({
       folder_linkId: 456,
-            recordId: 789,
-    }) 
+      recordId: 789,
+    });
 
     repo.sendShareInvite(invite, itemToShare).then((response) => {
       expect(response).toEqual([mockResponse]);
