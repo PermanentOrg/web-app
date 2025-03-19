@@ -207,12 +207,14 @@ export class SharingDialogComponent implements OnInit {
       this.sendingInvitation = true;
       const invite = new InviteVO({
         email: value.email,
-        fullName: value.name,
+        fullName: value.fullName,
         byArchiveId: this.accountService.getArchive().archiveId,
         relationship: 'relation.family.uncle',
         accessRole: value.accessRole,
       });
-      await this.api.invite.sendShareInvite([invite], this.shareItem);
+
+      console.log(invite);
+      await this.api.invite.sendShareInvite(invite, this.shareItem);
       this.messageService.showMessage({
         message: 'Share invitation sent.',
         style: 'success',
