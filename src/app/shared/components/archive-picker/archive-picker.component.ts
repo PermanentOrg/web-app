@@ -128,10 +128,10 @@ export class ArchivePickerComponent {
             this.dialogData.shareItem,
           );
         } else {
-          return this.api.invite.send([invite]);
+          return this.api.invite.send(invite, this.accountService.getArchive());
         }
       })
-      .then((response: InviteResponse) => {
+      .then(() => {
         this.message.showMessage({
           message: 'Invite sent succesfully.',
           style: 'success',

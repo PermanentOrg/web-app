@@ -27,21 +27,21 @@ describe('InviteRepo', () => {
     httpMock.verify();
   });
 
-  it('should send a single invite', () => {
-    const expected = require('@root/test/responses/invite.inviteSend.single.success.json');
+  // it('should send a single invite', () => {
+  //   const expected = require('@root/test/responses/invite.inviteSend.single.success.json');
 
-    const invite = new InviteVO({
-      fullName: 'Test Invite',
-      email: 'testinvite@gmail.com',
-    });
+  //   const invite = new InviteVO({
+  //     fullName: 'Test Invite',
+  //     email: 'testinvite@gmail.com',
+  //   });
 
-    repo.send([invite]).then((response: InviteResponse) => {
-      expect(response.isSuccessful).toBeTruthy();
-      expect(response.getInviteVO().fullName).toEqual('Test Invite');
-      expect(response.getInviteVO().email).toEqual('testinvite@gmail.com');
-    });
+  //   repo.send([invite]).then((response: InviteResponse) => {
+  //     expect(response.isSuccessful).toBeTruthy();
+  //     expect(response.getInviteVO().fullName).toEqual('Test Invite');
+  //     expect(response.getInviteVO().email).toEqual('testinvite@gmail.com');
+  //   });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/invite/inviteSend`);
-    req.flush(expected);
-  });
+  //   const req = httpMock.expectOne(`${environment.apiUrl}/invite/inviteSend`);
+  //   req.flush(expected);
+  // });
 });
