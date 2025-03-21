@@ -5,8 +5,8 @@ import { AccountVO, InviteVO } from '@root/app/models';
 import { CoreModule } from '@core/core.module';
 import { Shallow } from 'shallow-render';
 import { MessageService } from '@shared/services/message/message.service';
-import { InvitationsDialogComponent } from './invitations-dialog.component';
 import { AccountService } from '@shared/services/account/account.service';
+import { InvitationsDialogComponent } from './invitations-dialog.component';
 
 const mockAccountService = {
   getAccount: () => {
