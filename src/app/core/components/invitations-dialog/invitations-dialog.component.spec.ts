@@ -1,11 +1,20 @@
 /* @format */
 import { ApiService } from '@shared/services/api/api.service';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { InviteVO } from '@root/app/models';
+import { AccountVO, InviteVO } from '@root/app/models';
 import { CoreModule } from '@core/core.module';
 import { Shallow } from 'shallow-render';
 import { MessageService } from '@shared/services/message/message.service';
 import { InvitationsDialogComponent } from './invitations-dialog.component';
+import { AccountService } from '@shared/services/account/account.service';
+
+const mockAccountService = {
+  getAccount: () => {
+    return new AccountVO({
+      accountId: 1,
+    });
+  },
+};
 
 class DialogRefMock {
   close() {}
@@ -30,6 +39,7 @@ describe('InvitationsDialog', () => {
         provide: DialogRef,
         useClass: DialogRefMock,
       })
+      .mock(AccountService, mockAccountService)
       .mock(ApiService, mockApiService)
       .mock(MessageService, {
         showError: () => {

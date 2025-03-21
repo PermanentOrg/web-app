@@ -9,19 +9,19 @@ import {
 } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { flatten } from 'lodash';
+import { firstValueFrom } from 'rxjs';
 
 export class InviteRepo extends BaseRepo {
-  public send(invites: InviteVO[]): Promise<InviteResponse> {
-    const data = invites.map((invite) => {
-      return {
-        InviteVO: invite,
-      };
-    });
+  public async send(invite: InviteVO, archive: ArchiveVO): Promise<any> {
+    const data = {
+      email: invite.email,
+      fullName: invite.fullName,
+      relationship: invite.relationship,
+      byArchiveId: archive.archiveId,
+    };
 
-    return this.http.sendRequestPromise<InviteResponse>(
-      '/invite/inviteSend',
-      data,
-      { responseClass: InviteResponse },
+    return await firstValueFrom(
+      this.httpV2.post('/invite/inviteSend', data, null),
     );
   }
 
@@ -48,10 +48,7 @@ export class InviteRepo extends BaseRepo {
     );
   }
 
-  public sendShareInvite(
-    invites: InviteVO[],
-    itemToShare: ItemVO,
-  ): Promise<InviteResponse> {
+  public sendShareInvite(invites: InviteVO[], itemToShare: ItemVO) {
     const data = invites.map((invite) => {
       const vos: any = {
         InviteVO: invite,
@@ -66,9 +63,7 @@ export class InviteRepo extends BaseRepo {
       return vos;
     });
 
-    return this.http.sendRequestPromise<InviteResponse>('/invite/share', data, {
-      responseClass: InviteResponse,
-    });
+    return this.http.sendRequestPromise<InviteResponse>('/invite/share', data);
   }
 
   public getShareInviteInfo(
