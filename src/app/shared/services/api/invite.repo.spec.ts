@@ -47,10 +47,10 @@ describe('InviteRepo', () => {
       email: 'testinvite@gmail.com',
     });
 
-    repo.send([invite]).then((response: InviteResponse) => {
+    repo.send(invite, new ArchiveVO({})).then((response) => {
       expect(response.isSuccessful).toBeTruthy();
-      expect(response.getInviteVO().fullName).toEqual('Test Invite');
-      expect(response.getInviteVO().email).toEqual('testinvite@gmail.com');
+      expect(response.fullName).toEqual('Test Invite');
+      expect(response.email).toEqual('testinvite@gmail.com');
     });
 
     const req = httpMock.expectOne(`${environment.apiUrl}/invite/inviteSend`);
