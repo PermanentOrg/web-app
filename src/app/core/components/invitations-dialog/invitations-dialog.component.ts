@@ -17,6 +17,7 @@ import { InviteResponse } from '@shared/services/api/index.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { partition, filter } from 'lodash';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { AccountService } from '@shared/services/account/account.service';
 
 type InvitationsTab = 'new' | 'pending' | 'accepted';
 
@@ -41,6 +42,7 @@ export class InvitationsDialogComponent implements OnInit {
     private dialogRef: DialogRef,
     private api: ApiService,
     private messageService: MessageService,
+    private accountService: AccountService,
   ) {
     this.newInviteForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -84,9 +86,10 @@ export class InvitationsDialogComponent implements OnInit {
   async onNewInviteFormSubmit(value: InviteVOData) {
     try {
       this.waiting = true;
+      const archive = this.accountService.getArchive();
       value.relationship = 'relation.friend';
       const newInvite = new InviteVO(value);
-      await this.api.invite.send([newInvite]);
+      await this.api.invite.send(newInvite, archive);
       const message = `Invitation to ${newInvite.email} successfully sent`;
       this.messageService.showMessage({ message, style: 'success' });
       this.newInviteForm.reset();
