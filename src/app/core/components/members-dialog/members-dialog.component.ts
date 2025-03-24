@@ -300,7 +300,7 @@ export class MembersDialogComponent {
           this.accountService.getArchive(),
         );
       })
-      .then((response: InviteResponse) => {
+      .then(() => {
         deferred.resolve();
         this.message.showMessage({
           message: 'Invite sent successfully.',
