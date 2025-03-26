@@ -402,7 +402,7 @@ export class EditService {
 
     return Promise.all(promises).then((results) => {
       let folderResponse: FolderResponse;
-      let recordResponse: RecordVO;
+      let recordResponse: RecordVO[];
 
       [folderResponse, recordResponse] = results;
       if (folderResponse) {
