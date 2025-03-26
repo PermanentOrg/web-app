@@ -69,4 +69,33 @@ describe('RecordRepo', () => {
     });
     req.flush(testRecord);
   });
+
+  it('should send a POST request for update', (done) => {
+    const testRecord = new RecordVO({
+      recordId: 1,
+      displayName: 'Updated Test',
+      parentFolderId: 2,
+      uploadFileName: 'updated.jpg',
+      size: 4321,
+    });
+    const archiveId = 10;
+
+    repo
+      .update([testRecord], archiveId)
+      .then((_) => {
+        done();
+      })
+      .catch(done.fail);
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/record/update`);
+
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+    expect(req.request.body).toEqual({
+      ...testRecord,
+      archiveId,
+    });
+
+    req.flush(testRecord);
+  });
 });

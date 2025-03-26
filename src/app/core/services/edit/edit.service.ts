@@ -394,14 +394,15 @@ export class EditService {
     }
 
     if (records.length) {
-      promises.push(this.api.record.update(records, whitelist));
+      const archiveId = this.accountService.getArchive().archiveId;
+      promises.push(this.api.record.update(records, archiveId));
     } else {
       promises.push(Promise.resolve());
     }
 
     return Promise.all(promises).then((results) => {
       let folderResponse: FolderResponse;
-      let recordResponse: RecordResponse;
+      let recordResponse: RecordVO[];
 
       [folderResponse, recordResponse] = results;
       if (folderResponse) {
@@ -422,20 +423,21 @@ export class EditService {
       }
 
       if (recordResponse) {
-        recordResponse.getRecordVOs().forEach((updatedItem) => {
-          const newData: RecordVOData = {
-            updatedDT: updatedItem.updatedDT,
-          };
+        const res = recordResponse[0];
 
-          if (updatedItem.TimezoneVO) {
-            newData.TimezoneVO = updatedItem.TimezoneVO;
-          }
+        const newData: RecordVOData = {
+          updatedDT: res.updatedDT,
+        };
 
-          const record =
-            (itemsByLinkId[updatedItem.folder_linkId] as RecordVO) ||
-            recordsByRecordId.get(updatedItem.recordId);
-          record.update(newData);
-        });
+        if (res.TimezoneVO) {
+          newData.TimezoneVO = res.TimezoneVO;
+        }
+
+        const record =
+          itemsByLinkId[res.folder_linkId] ||
+          recordsByRecordId.get(res.recordId);
+
+        record.update(newData);
       }
     });
   }
