@@ -33,6 +33,8 @@ export class SearchService {
       this.indexCurrentFolder();
     });
 
+    this.indexTags(this.tags.getTags());
+
     this.tags.getTags$().subscribe((newTags) => {
       this.indexTags(newTags);
     });

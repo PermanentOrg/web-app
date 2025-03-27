@@ -35,6 +35,10 @@ class MockTagsService {
   private tags: TagVOData[] = [];
   private tagsSubject = new Subject<TagVOData[]>();
 
+  public getTags(): TagVOData[] {
+    return this.tags;
+  }
+
   public getTags$(): Subject<TagVOData[]> {
     return this.tagsSubject;
   }
