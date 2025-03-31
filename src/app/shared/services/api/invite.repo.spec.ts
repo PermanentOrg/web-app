@@ -7,18 +7,15 @@ import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
 import { InviteRepo, InviteResponse } from '@shared/services/api/invite.repo';
-<<<<<<< HEAD
 import {
   AccessRole,
   AccountVO,
   ArchiveVO,
+  FolderVO,
   InviteVO,
   RecordVO,
 } from '@root/app/models';
 import { AccessRoleType } from '@models/access-role';
-=======
-import { FolderVO, InviteVO, RecordVO } from '@root/app/models';
->>>>>>> 7a0b8c60 (Add new test)
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
 describe('InviteRepo', () => {
@@ -60,7 +57,6 @@ describe('InviteRepo', () => {
     req.flush(expected);
   });
 
-<<<<<<< HEAD
   it('should send a member invite successfully', async () => {
     const expectedResponse = {
       accessRole: 'ADMIN',
@@ -97,10 +93,8 @@ describe('InviteRepo', () => {
 
     req.flush(expectedResponse);
   });
+
   it('should send a share invite successfully', () => {
-=======
-  it('should send a share invite for a record successfully', () => {
->>>>>>> 7a0b8c60 (Add new test)
     const mockResponse = {
       inviteId: 8,
       email: 'john.doe@gmail.com',
