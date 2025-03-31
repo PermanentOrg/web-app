@@ -159,8 +159,26 @@ export class RecordRepo extends BaseRepo {
 
   public async update(recordVOs: RecordVO[], archiveId: number) {
     return await firstValueFrom(
-      this.httpV2.post('/record/update', { ...recordVOs[0], archiveId }, null),
+      this.httpV2.post(
+        '/record/update',
+        this.prepareUpdateRecordRequest(recordVOs, archiveId),
+        null,
+      ),
     );
+  }
+
+  private prepareUpdateRecordRequest(recordVOs: RecordVO[], archiveId: number) {
+    const record: any = Object.assign({}, recordVOs[0]);
+    record.displayDt = record.displayDT;
+    record.displayEndDt = record.displayEndDT;
+    record.publicDt = record.publicDT;
+    delete record.displayDT;
+    delete record.displayEndDT;
+    delete record.publicDT;
+    return {
+      ...record,
+      archiveId,
+    };
   }
 
   public delete(recordVOs: RecordVO[]): Promise<RecordResponse> {
