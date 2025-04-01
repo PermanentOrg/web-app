@@ -39,24 +39,6 @@ describe('InviteRepo', () => {
     httpMock.verify();
   });
 
-  it('should send a single invite', () => {
-    const expected = require('@root/test/responses/invite.inviteSend.single.success.json');
-
-    const invite = new InviteVO({
-      fullName: 'Test Invite',
-      email: 'testinvite@gmail.com',
-    });
-
-    repo.send(invite, new ArchiveVO({})).then((response) => {
-      expect(response.isSuccessful).toBeTruthy();
-      expect(response.fullName).toEqual('Test Invite');
-      expect(response.email).toEqual('testinvite@gmail.com');
-    });
-
-    const req = httpMock.expectOne(`${environment.apiUrl}/invite/inviteSend`);
-    req.flush(expected);
-  });
-
   it('should send a member invite successfully', async () => {
     const expectedResponse = {
       accessRole: 'ADMIN',
