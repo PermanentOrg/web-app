@@ -197,4 +197,25 @@ describe('InviteRepo', () => {
 
     req.flush(mockResponse);
   });
+
+  it('should send an invite successfully', () => {
+    const data = {
+      email: 'test@example.com',
+      fullName: 'John Doe',
+      relationship: 'relation.family.uncle',
+      byArchiveId: 1,
+    };
+
+    const archive = new ArchiveVO({ archiveId: 1 });
+
+    repo.send(new InviteVO(data), archive).then((response) => {
+      expect(response).toEqual([{}]);
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/invite/inviteSend`);
+
+    expect(req.request.method).toBe('POST');
+
+    req.flush({});
+  });
 });
