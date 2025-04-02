@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '@root/environments/environment';
+import { firstValueFrom } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 import { SecretsService } from '../secrets/secrets.service';
 import { getFirst, HttpV2Service } from './http-v2.service';
@@ -314,5 +315,20 @@ describe('HttpV2Service', () => {
     service.clearAuthToken();
 
     expect(service.isAuthTokenSet()).toBeFalsy();
+  });
+
+  it('should be able to add array parameters to GET requests', (done) => {
+    firstValueFrom(service.get('v2/health', { arrayVals: [1, 2, 3] })).finally(
+      () => done(),
+    );
+
+    const req = httpTestingController.expectOne(
+      apiUrl('/v2/health?arrayVals[]=1&arrayVals[]=2&arrayVals[]=3'),
+    );
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+
+    req.flush('OK', { status: 200, statusText: 'OK' });
   });
 });
