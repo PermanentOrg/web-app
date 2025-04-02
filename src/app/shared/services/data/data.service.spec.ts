@@ -146,7 +146,10 @@ describe('DataService', () => {
         });
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/record/get`);
+      const req = httpMock.expectOne(
+        `${environment.apiUrl}/v2/record?recordIds%5B%5D=55381&recordIds%5B%5D=54846&recordIds%5B%5D=54845`,
+      );
+
       req.flush(getFullRecordsData);
     },
   ));
