@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { StorageService } from '../storage/storage.service';
 import { SecretsService } from '../secrets/secrets.service';
+import { HttpV2Encoder } from './http-v2-encoder';
 
 const CSRF_KEY = 'CSRF';
 const AUTH_KEY = 'AUTH_TOKEN';
@@ -137,8 +138,22 @@ export class HttpV2Service {
     return Object.assign({}, defaultOptions, opts);
   }
 
+  protected updateArrayParamNames(data: unknown = {}): any {
+    const workingData = Object.assign({}, data);
+    const keys = Object.keys(data);
+    for (const key of keys) {
+      if (Array.isArray(data[key])) {
+        workingData[`${key}[]`] = workingData[key];
+        delete workingData[key];
+      }
+    }
+    return workingData;
+  }
+
   protected getEndpointWithData(endpoint: string, data: any = {}): string {
-    const params = new HttpParams().appendAll(data);
+    const params = new HttpParams({ encoder: new HttpV2Encoder() }).appendAll(
+      this.updateArrayParamNames(data),
+    );
     if (params.toString().length === 0) {
       return endpoint;
     }

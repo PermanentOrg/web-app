@@ -56,7 +56,7 @@ describe('SearchRepo', () => {
     const archiveId = '1';
     const limit = 5;
 
-    const tagString = `tags%5B0%5D%5BtagId%5D=1&tags%5B1%5D%5BtagId%5D=2`;
+    const tagString = `tags[0]%5BtagId%5D=1&tags[1]%5BtagId%5D=2`;
 
     repo
       .itemsByNameInPublicArchiveObservable(query, tags, archiveId, limit)
