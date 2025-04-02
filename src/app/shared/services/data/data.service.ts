@@ -303,7 +303,7 @@ export class DataService {
 
     return Promise.all(promises)
       .then((results) => {
-        let recordResponse: RecordResponse;
+        let recordResponse: RecordVO[];
         let folderResponse: FolderResponse;
 
         [recordResponse, folderResponse] = results;
@@ -312,7 +312,7 @@ export class DataService {
         let fullFolders: Array<any | FolderVO>;
 
         if (recordResponse) {
-          fullRecords = recordResponse.getRecordVOs();
+          fullRecords = recordResponse;
         }
 
         if (folderResponse) {

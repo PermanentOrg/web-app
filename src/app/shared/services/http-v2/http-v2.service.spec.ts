@@ -323,7 +323,7 @@ describe('HttpV2Service', () => {
     );
 
     const req = httpTestingController.expectOne(
-      apiUrl('/v2/health?arrayVals[]=1&arrayVals[]=2&arrayVals[]=3'),
+      apiUrl('/v2/health?arrayVals%5B%5D=1&arrayVals%5B%5D=2&arrayVals%5B%5D=3'),
     );
 
     expect(req.request.method).toBe('GET');
