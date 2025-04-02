@@ -10,7 +10,6 @@ import { StorageService } from '@shared/services/storage/storage.service';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
 import { firstValueFrom } from 'rxjs';
 import { getFirst } from '../http-v2/http-v2.service';
-import { HttpParams } from '@angular/common/http';
 
 const MIN_WHITELIST: (keyof RecordVO)[] = [
   'recordId',
