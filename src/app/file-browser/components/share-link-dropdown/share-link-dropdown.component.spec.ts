@@ -32,7 +32,6 @@ describe('ShareLinkDropdownComponent', () => {
     fixture.detectChanges();
 
     const options = find('.option');
-    
 
     expect(options.length).toBe(linkTypes.length);
     expect(options[0].nativeElement.textContent).toContain('Viewer');
