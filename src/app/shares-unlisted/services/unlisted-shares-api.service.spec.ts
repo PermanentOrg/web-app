@@ -1,0 +1,122 @@
+import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
+import { environment } from '@root/environments/environment';
+import { StelaItems } from '@root/utils/stela-items';
+import { ShareLink } from '../models/share-link';
+import { UnlistedSharesApiService } from './unlisted-shares-api.service';
+
+fdescribe('UnlistedSharesApiService', () => {
+  let service: UnlistedSharesApiService;
+  let http: HttpTestingController;
+
+  function makeShareLinks(quantity: number): ShareLink[] {
+    return new Array(quantity).fill({
+      id: '123',
+      itemId: 'record-id',
+      itemType: 'record',
+      token: 'test-token',
+      permissionsLevel: 'viewer',
+      accessRestrictions: 'none',
+      maxUses: null,
+      usesExpended: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [HttpV2Service],
+    });
+    service = TestBed.inject(UnlistedSharesApiService);
+    http = TestBed.inject(HttpTestingController);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should be able to get multiple share links by id', (done) => {
+    const expectedShareLink: StelaItems<ShareLink> = {
+      items: makeShareLinks(3),
+    };
+
+    service
+      .getShareLinksById([123, 456, 789])
+      .then((links) => {
+        expect(links).toEqual(expectedShareLink.items);
+        done();
+      })
+      .catch(() => {
+        done.fail('Rejection in promise.');
+      });
+
+    const req = http.expectOne(
+      `${environment.apiUrl}/v2/share-links?shareLinkIds[]=123&shareLinkIds[]=456&shareLinkIds[]=789`,
+    );
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+    expect(req.request.headers.get('Authorization')).toBeFalsy();
+    req.flush(expectedShareLink);
+  });
+
+  it('should handle a share link by id GET request error', (done) => {
+    service
+      .getShareLinksById([123])
+      .then(() => {
+        done.fail('This promise should have been rejected');
+      })
+      .catch(() => {
+        done();
+      });
+
+    const req = http.expectOne(
+      `${environment.apiUrl}/v2/share-links?shareLinkIds[]=123`,
+    );
+
+    req.flush({}, { status: 400, statusText: 'Bad Request' });
+  });
+
+  it('should get a share link by token', (done) => {
+    const items: StelaItems<ShareLink> = { items: makeShareLinks(1) };
+    service
+      .getShareLinksByToken(['token-1', 'token-2', 'token-3'])
+      .then((links) => {
+        expect(links).toEqual(items.items);
+        done();
+      })
+      .catch(() => done.fail);
+
+    const req = http.expectOne(
+      `${environment.apiUrl}/v2/share-links?shareTokens[]=token-1&shareTokens[]=token-2&shareTokens[]=token-3`,
+    );
+
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+    expect(req.request.headers.get('Authorization')).toBeFalsy();
+    req.flush(items);
+  });
+
+  it('should handle a share link by token GET request error', (done) => {
+    service
+      .getShareLinksByToken(['token'])
+      .then(() => {
+        done.fail('This promise should have been rejected');
+      })
+      .catch(() => {
+        done();
+      });
+
+    const req = http.expectOne(
+      `${environment.apiUrl}/v2/share-links?shareTokens[]=token`,
+    );
+
+    req.flush({}, { status: 400, statusText: 'Bad Request' });
+  });
+});
