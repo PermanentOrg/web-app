@@ -1041,8 +1041,8 @@ export class FileListItemComponent
       this.api.folder
         .getWithChildren([this.item as FolderVO])
         .then((resp) => {
-          if (resp.isSuccessful) {
-            const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
+          if (resp) {
+            const newFolderVO = resp;
             const allChildren = newFolderVO.ChildItemVOs;
             const sortedItems = newFolderVO.ChildItemVOs.filter((item) =>
               item.type.includes('type.record'),
