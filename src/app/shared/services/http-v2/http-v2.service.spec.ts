@@ -9,6 +9,7 @@ import { environment } from '@root/environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 import { SecretsService } from '../secrets/secrets.service';
+import { buildUrlWithParams } from '../api/test-utils';
 import { getFirst, HttpV2Service } from './http-v2.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
@@ -322,11 +323,13 @@ describe('HttpV2Service', () => {
       () => done(),
     );
 
-    const req = httpTestingController.expectOne(
-      apiUrl(
-        '/v2/health?arrayVals%5B%5D=1&arrayVals%5B%5D=2&arrayVals%5B%5D=3',
-      ),
-    );
+    const params = {
+      arrayVals: [1, 2, 3],
+    };
+
+    const expectedUrl = buildUrlWithParams(apiUrl('/v2/health'), params);
+
+    const req = httpTestingController.expectOne(expectedUrl);
 
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Request-Version')).toBe('2');

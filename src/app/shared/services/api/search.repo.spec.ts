@@ -10,6 +10,9 @@ import { HttpService } from '@shared/services/http/http.service';
 import { TagVO } from '@models/tag-vo';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 import { SearchRepo, SearchResponse } from './search.repo';
+import { buildUrlWithParams } from './test-utils';
+
+const apiUrl = (endpoint: string) => `${environment.apiUrl}/${endpoint}`;
 
 describe('SearchRepo', () => {
   let repo: SearchRepo;
@@ -56,7 +59,13 @@ describe('SearchRepo', () => {
     const archiveId = '1';
     const limit = 5;
 
-    const tagString = `tags%5B0%5D%5BtagId%5D=1&tags%5B1%5D%5BtagId%5D=2`;
+    const expectedUrl = buildUrlWithParams(apiUrl('search/folderAndRecord'), {
+      query: 'exampleQuery',
+      archiveId: '1',
+      publicOnly: true,
+      tags: [{ tagId: 1 }, { tagId: 2 }],
+      numberOfResults: 5,
+    });
 
     repo
       .itemsByNameInPublicArchiveObservable(query, tags, archiveId, limit)
@@ -70,11 +79,8 @@ describe('SearchRepo', () => {
     );
 
     expect(req.request.method).toBe('GET');
-    expect(req.request.urlWithParams).toContain(tagString);
 
-    expect(req.request.urlWithParams).toContain(
-      `query=${query}&archiveId=${archiveId}&publicOnly=true&${tagString}&numberOfResults=${limit}`,
-    );
+    expect(req.request.urlWithParams).toContain(expectedUrl);
 
     req.flush({});
   });
