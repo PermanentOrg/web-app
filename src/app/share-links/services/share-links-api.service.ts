@@ -54,4 +54,9 @@ export class ShareLinksApiService {
 
     return response[0].data;
   }
+  public async deleteShareLink(shareLinkId: string) {
+    await firstValueFrom(
+      this.http.delete(`v2/share-links/${shareLinkId}`, {}, null),
+    );
+  }
 }
