@@ -9,7 +9,7 @@ import { StelaItems } from '@root/utils/stela-items';
 import { ShareLink } from '../models/share-link';
 import { ShareLinksApiService } from './share-links-api.service';
 
-fdescribe('ShareLinksApiService', () => {
+describe('ShareLinksApiService', () => {
   let service: ShareLinksApiService;
   let http: HttpTestingController;
 
