@@ -7,7 +7,7 @@ import { ShareLink } from '../models/share-link';
 @Injectable({
   providedIn: 'root',
 })
-export class UnlistedSharesApiService {
+export class ShareLinksApiService {
   constructor(private http: HttpV2Service) {}
 
   public async getShareLinksById(shareLinkIds: number[]): Promise<ShareLink[]> {

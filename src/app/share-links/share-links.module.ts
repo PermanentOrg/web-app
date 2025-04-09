@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
-import { UnlistedSharesApiService } from './services/unlisted-shares-api.service';
+import { ShareLinksApiService } from './services/share-links-api.service';
 
 @NgModule({
   declarations: [],
-  providers: [UnlistedSharesApiService],
+  providers: [ShareLinksApiService],
   imports: [CommonModule, SharedModule],
 })
-export class SharesUnlistedModule {}
+export class ShareLinksModule {}
