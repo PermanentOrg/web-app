@@ -88,6 +88,7 @@ describe('ShareLinksApiService', () => {
     service
       .getShareLinksByToken(['token-1', 'token-2', 'token-3'])
       .then((links) => {
+        
         expect(links).toEqual(items.items);
         done();
       })
@@ -142,11 +143,13 @@ describe('ShareLinksApiService', () => {
     service
       .generateShareLink({ itemId: '1', itemType: 'record' })
       .then((res) => {
+
         expect(res).toEqual(expectedResponse);
         done();
       });
 
     const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
+
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ itemId: '1', itemType: 'record' });
 
@@ -164,6 +167,43 @@ describe('ShareLinksApiService', () => {
       });
 
     const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
+
+    req.flush(
+      {},
+      {
+        status: 400,
+        statusText: 'Bad Request',
+      },
+    );
+  });
+
+  it('should handle a share link DELETE call', (done) => {
+    service.deleteShareLink('7').then(() => {
+      done();
+    });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
+
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+
+    req.flush({}, { status: 204, statusText: 'No Content' });
+  });
+
+  it('should handle a share link DELETE error', (done) => {
+    service
+      .deleteShareLink('7')
+      .then(() => {
+        done.fail('This promise should have been rejected');
+      })
+      .catch(() => {
+        done();
+      });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
+
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
 
     req.flush(
       {},
