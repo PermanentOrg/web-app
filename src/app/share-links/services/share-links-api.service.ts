@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { firstValueFrom } from 'rxjs';
 import { StelaItems } from '@root/utils/stela-items';
-import { ShareLink } from '../models/share-link';
+import { ShareLink, ShareLinkPayload } from '../models/share-link';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +34,24 @@ export class ShareLinksApiService {
       ),
     );
     return response[0].items;
+  }
+
+  public async generateShareLink({
+    itemId,
+    itemType,
+  }: {
+    itemId: string;
+    itemType: 'record' | 'folder';
+  }): Promise<ShareLink> {
+    const response = await firstValueFrom(
+      this.http.post<ShareLinkPayload>(
+        'v2/share-links',
+        { itemId, itemType },
+        null,
+        { authToken: false },
+      ),
+    );
+
+    return response[0].data;
   }
 }

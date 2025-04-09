@@ -119,4 +119,58 @@ describe('ShareLinksApiService', () => {
 
     req.flush({}, { status: 400, statusText: 'Bad Request' });
   });
+
+  it('should generate a share link', (done) => {
+    const expectedResponse: ShareLink = {
+      id: '7',
+      itemId: '4',
+      itemType: 'record',
+      token: '971299ea-6732-4699-8629-34186a624e07',
+      permissionsLevel: 'viewer',
+      accessRestrictions: 'none',
+      maxUses: null,
+      usesExpended: null,
+      expirationTimestamp: null,
+      createdAt: new Date('2025-04-09T13:09:07.755Z'),
+      updatedAt: new Date('2025-04-09T13:09:07.755Z'),
+    };
+
+    const mockApiResponse = {
+      data: expectedResponse,
+    };
+
+    service
+      .generateShareLink({ itemId: '1', itemType: 'record' })
+      .then((res) => {
+        expect(res).toEqual(expectedResponse);
+        done();
+      });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ itemId: '1', itemType: 'record' });
+
+    req.flush(mockApiResponse);
+  });
+
+  it('should handle a share link POST error', (done) => {
+    service
+      .generateShareLink({ itemId: '1', itemType: 'record' })
+      .then(() => {
+        done.fail('This promise should have been rejected');
+      })
+      .catch(() => {
+        done();
+      });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
+
+    req.flush(
+      {},
+      {
+        status: 400,
+        statusText: 'Bad Request',
+      },
+    );
+  });
 });
