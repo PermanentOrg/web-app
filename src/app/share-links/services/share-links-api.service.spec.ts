@@ -7,10 +7,10 @@ import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
 import { StelaItems } from '@root/utils/stela-items';
 import { ShareLink } from '../models/share-link';
-import { UnlistedSharesApiService } from './unlisted-shares-api.service';
+import { ShareLinksApiService } from './share-links-api.service';
 
-fdescribe('UnlistedSharesApiService', () => {
-  let service: UnlistedSharesApiService;
+fdescribe('ShareLinksApiService', () => {
+  let service: ShareLinksApiService;
   let http: HttpTestingController;
 
   function makeShareLinks(quantity: number): ShareLink[] {
@@ -33,7 +33,7 @@ fdescribe('UnlistedSharesApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [HttpV2Service],
     });
-    service = TestBed.inject(UnlistedSharesApiService);
+    service = TestBed.inject(ShareLinksApiService);
     http = TestBed.inject(HttpTestingController);
   });
 
