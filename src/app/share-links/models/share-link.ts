@@ -11,3 +11,7 @@ export interface ShareLink {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ShareLinkPayload {
+  data: ShareLink;
+}
