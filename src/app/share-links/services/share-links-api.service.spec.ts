@@ -142,6 +142,9 @@ describe('ShareLinksApiService', () => {
       .then((res) => {
         expect(res).toEqual(expectedResponse);
         done();
+      })
+      .catch(() => {
+        done.fail('Rejection in promise.');
       });
 
     const req = http.expectOne(`${environment.apiUrl}/v2/share-links`);
@@ -174,10 +177,14 @@ describe('ShareLinksApiService', () => {
   });
 
   it('should handle a share link DELETE call', (done) => {
-    service.deleteShareLink('7').then(() => {
-      done();
-    });
-
+    service
+      .deleteShareLink('7')
+      .then(() => {
+        done();
+      })
+      .catch(() => {
+        done.fail('Rejection in promise.');
+      });
     const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
 
     expect(req.request.method).toBe('DELETE');
@@ -234,8 +241,10 @@ describe('ShareLinksApiService', () => {
       .then((res) => {
         expect(res).toEqual(expectedResponse);
         done();
+      })
+      .catch(() => {
+        done.fail('Rejection in promise.');
       });
-
     const req = http.expectOne(`${environment.apiUrl}/v2/share-links/1`);
 
     expect(req.request.method).toBe('PATCH');
