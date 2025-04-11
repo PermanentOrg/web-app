@@ -123,7 +123,7 @@ export class SharingDialogComponent implements OnInit {
     {
       text: 'Restricted',
       value: 'private',
-      description: 'Anyone with the link can view and download.',
+      description: 'Must be logged in to view.',
     },
   ];
 
