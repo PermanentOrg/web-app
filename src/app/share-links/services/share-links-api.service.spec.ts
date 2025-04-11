@@ -62,7 +62,6 @@ describe('ShareLinksApiService', () => {
 
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Request-Version')).toBe('2');
-    expect(req.request.headers.get('Authorization')).toBeFalsy();
     req.flush(expectedShareLink);
   });
 
@@ -88,7 +87,6 @@ describe('ShareLinksApiService', () => {
     service
       .getShareLinksByToken(['token-1', 'token-2', 'token-3'])
       .then((links) => {
-        
         expect(links).toEqual(items.items);
         done();
       })
@@ -100,7 +98,6 @@ describe('ShareLinksApiService', () => {
 
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Request-Version')).toBe('2');
-    expect(req.request.headers.get('Authorization')).toBeFalsy();
     req.flush(items);
   });
 
@@ -143,7 +140,6 @@ describe('ShareLinksApiService', () => {
     service
       .generateShareLink({ itemId: '1', itemType: 'record' })
       .then((res) => {
-
         expect(res).toEqual(expectedResponse);
         done();
       });
@@ -203,6 +199,64 @@ describe('ShareLinksApiService', () => {
     const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
 
     expect(req.request.method).toBe('DELETE');
+    expect(req.request.headers.get('Request-Version')).toBe('2');
+
+    req.flush(
+      {},
+      {
+        status: 400,
+        statusText: 'Bad Request',
+      },
+    );
+  });
+
+  it('should update a share link', (done) => {
+    const expectedResponse: ShareLink = {
+      id: '7',
+      itemId: '4',
+      itemType: 'record',
+      token: '971299ea-6732-4699-8629-34186a624e07',
+      permissionsLevel: 'viewer',
+      accessRestrictions: 'account',
+      maxUses: null,
+      usesExpended: null,
+      expirationTimestamp: null,
+      createdAt: new Date('2025-04-09T13:09:07.755Z'),
+      updatedAt: new Date('2025-04-09T13:09:07.755Z'),
+    };
+
+    const mockApiResponse = {
+      data: expectedResponse,
+    };
+
+    service
+      .updateShareLink('1', { accessRestrictions: 'account' })
+      .then((res) => {
+        expect(res).toEqual(expectedResponse);
+        done();
+      });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/share-links/1`);
+
+    expect(req.request.method).toBe('PATCH');
+    expect(req.request.body).toEqual({ accessRestrictions: 'account' });
+
+    req.flush(mockApiResponse);
+  });
+
+  it('should handle a share link PATCH error', (done) => {
+    service
+      .updateShareLink('7', { accessRestrictions: 'account' })
+      .then(() => {
+        done.fail('This promise should have been rejected');
+      })
+      .catch(() => {
+        done();
+      });
+
+    const req = http.expectOne(`${environment.apiUrl}/v2/share-links/7`);
+
+    expect(req.request.method).toBe('PATCH');
     expect(req.request.headers.get('Request-Version')).toBe('2');
 
     req.flush(

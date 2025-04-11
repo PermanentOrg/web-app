@@ -16,7 +16,6 @@ export class ShareLinksApiService {
         'v2/share-links',
         { shareLinkIds },
         null,
-        { authToken: false },
       ),
     );
     return response[0].items;
@@ -30,7 +29,6 @@ export class ShareLinksApiService {
         'v2/share-links',
         { shareTokens },
         null,
-        { authToken: false },
       ),
     );
     return response[0].items;
@@ -48,7 +46,6 @@ export class ShareLinksApiService {
         'v2/share-links',
         { itemId, itemType },
         null,
-        { authToken: false },
       ),
     );
 
@@ -58,5 +55,20 @@ export class ShareLinksApiService {
     await firstValueFrom(
       this.http.delete(`v2/share-links/${shareLinkId}`, {}, null),
     );
+  }
+
+  public async updateShareLink(
+    shareLinkId: string,
+    payload: Partial<ShareLink>,
+  ): Promise<ShareLink> {
+    const response = await firstValueFrom(
+      this.http.patch<ShareLinkPayload>(
+        `v2/share-links/${shareLinkId}`,
+        payload,
+        null,
+      ),
+    );
+
+    return response[0].data;
   }
 }
