@@ -14,17 +14,16 @@ import { flatten } from 'lodash';
 import { firstValueFrom } from 'rxjs';
 
 export class InviteRepo extends BaseRepo {
-  public send(invites: InviteVO[]): Promise<InviteResponse> {
-    const data = invites.map((invite) => {
-      return {
-        InviteVO: invite,
-      };
-    });
+  public async send(invite: InviteVO, archive: ArchiveVO): Promise<any> {
+    const data = {
+      email: invite.email,
+      fullName: invite.fullName,
+      relationship: invite.relationship,
+      byArchiveId: archive.archiveId,
+    };
 
-    return this.http.sendRequestPromise<InviteResponse>(
-      '/invite/inviteSend',
-      data,
-      { responseClass: InviteResponse },
+    return await firstValueFrom(
+      this.httpV2.post('/invite/inviteSend', data, null),
     );
   }
 
