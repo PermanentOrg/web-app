@@ -2,7 +2,7 @@
 import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 
 const MIN_WHITELIST: (keyof FolderVO)[] = [
@@ -42,22 +42,17 @@ export class FolderRepo extends BaseRepo {
     });
   }
 
-  public getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const data = folderVOs.map((folderVO) => {
-      return {
-        FolderVO: {
-          archiveNbr: folderVO.archiveNbr,
-          folder_linkId: folderVO.folder_linkId,
-          folderId: folderVO.folderId,
-        },
-      };
-    });
+  public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderVO> {
+    const params = {
+      archiveId: folderVOs[0].archiveId,
+      folderId: folderVOs[0].folderId,
+    };
 
-    return this.http.sendRequestPromise<FolderResponse>(
-      '/folder/getWithChildren',
-      data,
-      { responseClass: FolderResponse },
+    const resultArray = await firstValueFrom(
+      this.httpV2.get<FolderVO>('/folder/getWithChildren', params),
     );
+
+    return resultArray[0];
   }
 
   public navigate(folderVO: FolderVO): Observable<FolderResponse> {
