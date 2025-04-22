@@ -464,6 +464,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
     const basePath = 'fileList.actions';
     const actionAllowed = this.can[action];
     const multiSelected = this.selectedItems?.length > 1;
+    const noneSelected = this.selectedItems?.length === 0;
 
     if (action === 'publish' && this.isPublic) {
       action = 'getLink' as keyof FileListActions;
@@ -479,6 +480,8 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
       return `${basePath}.${tooltipKey}.enabled`;
     } else if (multiSelected && (action === 'share' || action === 'publish')) {
       return `${basePath}.${tooltipKey}.disabledMulti`;
+    } else if (noneSelected) {
+      return '';
     } else {
       return `${basePath}.${tooltipKey}.disabled`;
     }
