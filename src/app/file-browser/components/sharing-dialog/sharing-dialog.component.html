@@ -207,7 +207,20 @@
     </div>
   </div>
   <div class="dialog-body" *ngIf="canShare">
-    <div class="header-small">Share link</div>
+    <div class="header-container">
+      <div class="header-small">Create link to share</div>
+      <div *ngIf="shareLink" class="remove-link" (click)="removeShareLink()">
+        <fa-icon class="trash-icon" [icon]="trashIcon" />
+        <span>Remove Link</span>
+      </div>
+    </div>
+    <div class="header-container">
+      <p>
+        Generate a link to send via text or email for others to view this
+        material. Learn more.
+      </p>
+    </div>
+    <hr />
     <div class="content">
       <div class="share-link">
         <div class="share-link-container" *ngIf="shareLink">
@@ -253,11 +266,21 @@
         </button>
       </div>
       <div
+        *ngIf="showLinkSettings && displayDropdown"
+        class="share-link-type-dropdown"
+      >
+        <span class="link-type-text"><b>Link Type</b></span>
+        <pr-share-link-dropdown
+          [linkTypes]="shareLinkTypes"
+          [(value)]="linkType"
+        ></pr-share-link-dropdown>
+      </div>
+      <div
         class="share-link-settings"
         *ngIf="showLinkSettings && shareLink"
         @ngIfScaleAnimation
       >
-        <div class="link-settings-item">
+        <div *ngIf="linkType === 'private'" class="link-settings-item">
           <label>Share Preview</label>
           <div class="form-check form-check-inline">
             <input
@@ -294,7 +317,11 @@
             >
           </div>
         </div>
-        <small class="text-muted" [ngSwitch]="previewToggle">
+        <small
+          *ngIf="linkType === 'private'"
+          class="text-muted"
+          [ngSwitch]="previewToggle"
+        >
           <ng-container *ngSwitchCase="1">
             Recipients can see a preview without being logged in.
           </ng-container>
@@ -302,7 +329,7 @@
             Recipients must be granted access to view content.
           </ng-container>
         </small>
-        <div class="link-settings-item">
+        <div *ngIf="linkType === 'private'" class="link-settings-item">
           <label>Auto Approve</label>
           <div class="form-check form-check-inline">
             <input
@@ -337,7 +364,11 @@
             >
           </div>
         </div>
-        <small class="text-muted" [ngSwitch]="autoApproveToggle">
+        <small
+          *ngIf="linkType === 'private'"
+          class="text-muted"
+          [ngSwitch]="autoApproveToggle"
+        >
           <ng-container *ngSwitchCase="1">
             Recipients will automatically be granted access when requested.
           </ng-container>
@@ -345,7 +376,7 @@
             Recipients must manually be granted access when requested.
           </ng-container>
         </small>
-        <div class="link-settings-item">
+        <div *ngIf="linkType === 'private'" class="link-settings-item">
           <label>Default Share Role</label>
           <select
             class="form-control"
@@ -363,7 +394,7 @@
             </option>
           </select>
         </div>
-        <small class="text-muted"
+        <small *ngIf="linkType === 'private'" class="text-muted"
           >Archives joining this share are given this role by default.
           <a
             href="https://permanent.zohodesk.com/portal/en/kb/articles/what-do-the-different-access-permissions-mean"
@@ -392,9 +423,6 @@
               {{ option.text }}
             </option>
           </select>
-          <button class="btn btn-danger ml-auto" (click)="removeShareLink()">
-            Remove link
-          </button>
         </div>
         <small class="text-muted" [ngSwitch]="shareLink.expiresDT">
           <ng-container *ngSwitchCase="null">

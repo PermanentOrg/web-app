@@ -40,6 +40,8 @@ import { getSQLDateTime } from '@shared/utilities/dateTime';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { addDays, differenceInHours, isPast } from 'date-fns';
 import { find, partition, remove } from 'lodash';
+import { faTrash } from '@fortawesome/pro-regular-svg-icons';
+import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
 
 enum Expiration {
   Never = 'Never',
@@ -98,6 +100,10 @@ export class SharingDialogComponent implements OnInit {
   public linkCopied = false;
   public showLinkSettings = false;
 
+  public linkType = 'private';
+
+  public trashIcon = faTrash;
+
   public newAccessRole: AccessRoleType = 'access.role.viewer';
   public accessRoleOptions: FormInputSelectOption[] =
     SHARE_ACCESS_ROLE_FIELD.selectOptions.reverse();
@@ -107,6 +113,21 @@ export class SharingDialogComponent implements OnInit {
   public sendingInvitation = false;
   public showInvitationForm = false;
   public invitationForm: UntypedFormGroup;
+
+  public shareLinkTypes = [
+    {
+      text: 'Anyone can view',
+      value: 'public',
+      description: 'Anyone with the link can view and download.',
+    },
+    {
+      text: 'Restricted',
+      value: 'private',
+      description: 'Must be logged in to view.',
+    },
+  ];
+
+  public displayDropdown = false;
 
   @ViewChild('shareUrlInput', { static: false }) shareUrlInput: ElementRef;
 
@@ -127,6 +148,7 @@ export class SharingDialogComponent implements OnInit {
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService,
     private route: ActivatedRoute,
+    private feature: FeatureFlagService,
   ) {
     this.invitationForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -136,6 +158,8 @@ export class SharingDialogComponent implements OnInit {
     });
 
     this.shareItem = this.data.item as ItemVO;
+
+    this.displayDropdown = feature.isEnabled('unlisted-share');
   }
 
   ngOnInit(): void {

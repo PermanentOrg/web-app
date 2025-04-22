@@ -25,6 +25,7 @@ import { EditTagsComponent } from './components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from './components/location-picker/location-picker.component';
 import { SidebarViewOptionComponent } from './components/sidebar-view-option/sidebar-view-option.component';
 import { SharingDialogComponent } from './components/sharing-dialog/sharing-dialog.component';
+import { ShareLinkDropdownComponent } from './components/share-link-dropdown/share-link-dropdown.component';
 
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 
@@ -47,6 +48,7 @@ import { DownloadButtonComponent } from './components/download-button/download-b
     EditTagsComponent,
     LocationPickerComponent,
     SharingDialogComponent,
+    ShareLinkDropdownComponent,
   ],
   declarations: [
     FileListComponent,
@@ -64,6 +66,7 @@ import { DownloadButtonComponent } from './components/download-button/download-b
     SidebarViewOptionComponent,
     SharingDialogComponent,
     DownloadButtonComponent,
+    ShareLinkDropdownComponent,
   ],
 })
 export class FileBrowserComponentsModule {
