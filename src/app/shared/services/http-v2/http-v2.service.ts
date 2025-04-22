@@ -12,7 +12,7 @@ import { HttpV2Encoder } from './http-v2-encoder';
 const CSRF_KEY = 'CSRF';
 const AUTH_KEY = 'AUTH_TOKEN';
 
-type HttpMethod = 'post' | 'get' | 'put' | 'delete';
+type HttpMethod = 'post' | 'get' | 'put' | 'delete' | 'patch';
 type ResponseClass<T> = new (data: any) => T;
 type ResponseType = 'json' | 'text';
 
@@ -104,6 +104,21 @@ export class HttpV2Service {
       endpoint,
       data,
       'put',
+      responseClass,
+      this.getOptions(options),
+    );
+  }
+
+  public patch<T>(
+    endpoint: string,
+    data: any = {},
+    responseClass?: ResponseClass<T>,
+    options: RequestOptions = defaultOptions,
+  ): Observable<T[]> {
+    return this.makeHttpClientRequest(
+      endpoint,
+      data,
+      'patch',
       responseClass,
       this.getOptions(options),
     );
@@ -216,6 +231,10 @@ export class HttpV2Service {
     if (method === 'put') {
       return this.http.put(url, data, requestOptions);
     }
+
+    if (method === 'patch') {
+      return this.http.patch(url, data, requestOptions);
+    }
     return this.http.post(url, data, requestOptions);
   }
 
@@ -240,7 +259,7 @@ export class HttpV2Service {
     method: HttpMethod = 'post',
     options: RequestOptions = defaultOptions,
   ): Observable<unknown> {
-    if (method === 'post' || method === 'put') {
+    if (method === 'post' || method === 'put' || method === 'patch') {
       return this.getObservableWithBody(
         this.getFullUrl(endpoint, options),
         options.csrf ? this.appendCsrf(data) : data,
