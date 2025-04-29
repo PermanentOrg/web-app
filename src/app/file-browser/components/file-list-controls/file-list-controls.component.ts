@@ -493,6 +493,7 @@ export class FileListControlsComponent implements OnDestroy, HasSubscriptions {
   }
 
   displayDownloadOptions() {
+    console.log(this.selectedItems)
     this.displayDownloadDropdown = true;
     this.downloadOptions = (
       this.selectedItems[0] as RecordVO
