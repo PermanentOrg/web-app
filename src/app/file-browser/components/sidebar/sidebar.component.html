@@ -220,8 +220,11 @@
           <div class="sidebar-detail-content">.{{ originalFileExtension }}</div>
         </div>
         <div
-          *ngIf="!originalFileExtension || originalFileExtension === 'null'"
-          class="sidebar-detail"
+          *ngIf="
+            isRecord &&
+            (!originalFileExtension || originalFileExtension === 'null')
+          "
+          class="sidebar-detail unknown"
         >
           <label>Original Format</label>
           <div class="sidebar-detail-content">unknown</div>
