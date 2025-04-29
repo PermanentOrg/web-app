@@ -16,7 +16,7 @@ import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
@@ -45,6 +45,14 @@ describe('VerifyComponent', () => {
           queryParams: queryParams,
           params: {},
         },
+      },
+    });
+
+    config.providers.push({
+      provide: Router,
+      useValue: {
+        navigate: jasmine.createSpy('navigate'),
+        navigateByUrl: jasmine.createSpy('navigateByUrl'),
       },
     });
 
