@@ -14,6 +14,7 @@ import { AccountVO } from '@root/app/models';
 import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { RecaptchaErrorParameters } from 'ng-recaptcha';
 import { EventService } from '@shared/services/event/event.service';
+import { C } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'pr-verify',
@@ -59,11 +60,10 @@ export class VerifyComponent implements OnInit {
       });
       return;
     }
-
-    this.needsEmail = account.emailNeedsVerification();
-    this.needsPhone = account.phoneNeedsVerification();
-
     const queryParams = route.snapshot.queryParams;
+
+    this.needsEmail = queryParams.sendEmail;
+    this.needsPhone = queryParams.sendSms;
 
     this.verifyForm = fb.group({
       token: [queryParams.token || ''],
