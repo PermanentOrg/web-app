@@ -101,7 +101,7 @@ describe('VerifyComponent', () => {
   it('should require only phone verification if only phone unverified', async () => {
     const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
     await init(unverifiedPhoneData, { sendSms: true });
-    
+
     expect(component.verifyingPhone).toBeTruthy();
     expect(component.needsPhone).toBeTruthy();
     expect(component.needsEmail).toBeFalsy();
