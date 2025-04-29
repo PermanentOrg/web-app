@@ -258,7 +258,10 @@ export class FileListItemComponent
     if (this.router.routerState.snapshot.url.includes('/share/')) {
       this.allowActions = false;
       this.isInSharePreview = true;
+      this.canSelect = true;
     }
+
+    console.log(this.canSelect)
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
@@ -409,7 +412,6 @@ export class FileListItemComponent
         break;
     }
   }
-
   onItemMouseDown(mouseDownEvent: MouseEvent) {
     if (this.isShareRoot || this.isInApps) {
       return;
@@ -494,8 +496,9 @@ export class FileListItemComponent
         event: event as MouseEvent,
         selectable: false,
       });
-    } else {
-      this.onItemSingleClick(event);
+    }
+    else {
+    this.onItemSingleClick(event);
     }
   }
 
@@ -590,6 +593,7 @@ export class FileListItemComponent
     }
 
     if (this.waitingForDoubleClick) {
+      console.log(this.waitingForDoubleClick);
       this.waitingForDoubleClick = false;
       return this.onItemDoubleClick();
     }

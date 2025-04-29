@@ -20,6 +20,8 @@ import { InviteShareResolveService } from './resolves/invite-share-resolve.servi
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
@@ -96,7 +98,16 @@ export const routes: Routes = [
     data: {
       noFileListPadding: true,
     },
-    children: sharePreviewChildren,
+    children: [
+      ...sharePreviewChildren,
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        resolve: {
+          currentRecord: RecordResolveService,
+        },
+      },
+    ],
   },
 ];
 @NgModule({

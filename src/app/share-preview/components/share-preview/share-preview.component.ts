@@ -659,9 +659,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     }
 
     this.fileListClickListener = componentReference.itemClicked.subscribe(
-      () => {
-        this.dispatchBannerClose();
-        this.showCreateAccountDialog();
+      (item) => {
+        console.log(item);
+        // this.dispatchBannerClose();
+        // this.showCreateAccountDialog();
+
+        this.router.navigate(['record', item.item.archiveNbr], {
+          relativeTo: this.route,
+        });
       },
     );
   }
