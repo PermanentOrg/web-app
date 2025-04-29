@@ -106,7 +106,7 @@ export class RecordVO
   public parentArchiveNbr: string;
   public parentDisplayName: string;
   public pathAsArchiveNbr;
-  public files: any;
+  public files: PermanentFile[];
 
   // Other stuff
   public LocnVO: LocnVOData;

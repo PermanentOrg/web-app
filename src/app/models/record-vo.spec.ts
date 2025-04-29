@@ -114,9 +114,9 @@ describe('RecordVO', () => {
       expect(record.getDownloadOptionsList()).toEqual([]);
     });
 
-    it('converts to download option format', () => {
+    it('converts to dogyyyyyyywnload option format', () => {
       const record = new RecordVO({});
-      record.FileVOs = [
+      record.files = [
         {
           format: FileFormat.Converted,
           fileId: 0,
@@ -143,7 +143,7 @@ describe('RecordVO', () => {
 
     it('prioritizes original before others', () => {
       const record = new RecordVO({});
-      record.FileVOs = [
+      record.files = [
         {
           format: FileFormat.Converted,
           fileId: 0,
