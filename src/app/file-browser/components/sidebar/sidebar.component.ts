@@ -93,19 +93,17 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
         }
         if (
           this.selectedItem instanceof RecordVO &&
-          this.selectedItem.FileVOs &&
-          this.selectedItem.FileVOs[0]
+          this.selectedItem.files &&
+          this.selectedItem.files[0]
         ) {
-          this.originalFileExtension = this.selectedItem.FileVOs.find(
-            (item) => item.format === 'file.format.original',
-          )
+          this.originalFileExtension = this.selectedItem.files
+            .find((item) => item.format === 'file.format.original')
             ?.type.split('.')
             .pop();
 
           this.permanentFileExtension =
-            this.selectedItem.FileVOs.find(
-              (item) => item.format === 'file.format.converted',
-            )
+            this.selectedItem.files
+              .find((item) => item.format === 'file.format.converted')
               ?.type.split('.')
               .pop() || this.originalFileExtension;
         } else {
