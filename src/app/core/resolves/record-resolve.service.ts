@@ -41,7 +41,8 @@ export class RecordResolveService {
         const response = await this.api.record.get([
           new RecordVO({ archiveNbr: route.params.recArchiveNbr }),
         ]);
-        const record = response.getRecordVO();
+
+        const record = response[0];
         record.dataStatus = DataStatus.Full;
         return record;
       }

@@ -12,6 +12,7 @@ import { environment } from '@root/environments/environment';
 import { DataStatus } from '@models/data-status.enum';
 
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { buildUrlWithParams } from '../api/test-utils';
 
 const navigateMinData = require('@root/test/responses/folder.navigateMin.success.json');
 const getLeanItemsData = require('@root/test/responses/folder.getLeanItems.success.json');
@@ -24,6 +25,8 @@ const testRecord = new RecordVO({
   folder_linkId: 4,
   archiveNbr: 'archivenbr',
 });
+
+const apiUrl = (endpoint: string) => `${environment.apiUrl}/${endpoint}`;
 
 describe('DataService', () => {
   beforeEach(() => {
@@ -146,7 +149,14 @@ describe('DataService', () => {
         });
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/record/get`);
+      const params = {
+        recordIds: [55381, 54846, 54845],
+      };
+
+      const expectedUrl = buildUrlWithParams(apiUrl('v2/record'), params);
+
+      const req = httpMock.expectOne(expectedUrl);
+
       req.flush(getFullRecordsData);
     },
   ));

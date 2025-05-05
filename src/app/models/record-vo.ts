@@ -106,6 +106,7 @@ export class RecordVO
   public parentArchiveNbr: string;
   public parentDisplayName: string;
   public pathAsArchiveNbr;
+  public files: PermanentFile[];
 
   // Other stuff
   public LocnVO: LocnVOData;
@@ -160,7 +161,7 @@ export class RecordVO
   }
 
   public getDownloadOptionsList() {
-    const files = [...(this.FileVOs ?? [])];
+    const files = [...(this.files ?? [])];
     return prioritizeIf(
       files,
       (file) => file.format === FileFormat.Original,
