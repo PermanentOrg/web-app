@@ -42,6 +42,8 @@ import { addDays, differenceInHours, isPast } from 'date-fns';
 import { find, partition, remove } from 'lodash';
 import { faTrash } from '@fortawesome/pro-regular-svg-icons';
 import { FeatureFlagService } from '@root/app/feature-flag/services/feature-flag.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
+import { shareUrlBuilder } from '@fileBrowser/utils/utils';
 
 enum Expiration {
   Never = 'Never',
@@ -82,6 +84,7 @@ const EXPIRATION_OPTIONS: FormInputSelectOption[] = Object.values(
 })
 export class SharingDialogComponent implements OnInit {
   public shareItem: ItemVO = null;
+  public shareLinkResponse = null;
 
   public originalRoles = new Map<number, AccessRoleType>();
   public canShare = false;
@@ -89,12 +92,12 @@ export class SharingDialogComponent implements OnInit {
   public shares: ShareVO[] = [];
   public pendingShares: ShareVO[] = [];
 
-  public shareLink: ShareByUrlVO = null;
+  public shareLink = '';
 
   public previewToggle: 0 | 1 = 1;
   public autoApproveToggle: 0 | 1 = 1;
   public expiration: Expiration;
-  public linkDefaultAccessRole: AccessRoleType = 'access.role.viewer';
+  public linkDefaultAccessRole = 'viewer';
 
   public updatingLink = false;
   public linkCopied = false;
@@ -149,6 +152,7 @@ export class SharingDialogComponent implements OnInit {
     private ga: GoogleAnalyticsService,
     private route: ActivatedRoute,
     private feature: FeatureFlagService,
+    private shareLinkService: ShareLinksApiService,
   ) {
     this.invitationForm = this.fb.group({
       fullName: ['', [Validators.required]],
@@ -158,6 +162,7 @@ export class SharingDialogComponent implements OnInit {
     });
 
     this.shareItem = this.data.item as ItemVO;
+    this.shareLinkResponse = this.data.shareLinkResponse;
 
     this.displayDropdown = feature.isEnabled('unlisted-share');
   }
@@ -178,7 +183,11 @@ export class SharingDialogComponent implements OnInit {
 
     this.relationshipService.update();
 
-    this.shareLink = this.data.link;
+    this.shareLink = shareUrlBuilder(
+      this.data.shareLinkResponse.itemType,
+      this.data.shareLinkResponse.token,
+      this.data.shareLinkResponse.itemId,
+    );
     this.setShareLinkFormValue();
 
     this.checkQueryParams();
@@ -428,7 +437,7 @@ export class SharingDialogComponent implements OnInit {
 
     const diff = differenceInHours(
       new Date(expiresDT),
-      new Date(this.shareLink.createdDT),
+      new Date(this.shareLinkResponse.createdDT),
     );
 
     if (diff <= 24 * ExpirationDays.Day) {
@@ -449,24 +458,35 @@ export class SharingDialogComponent implements OnInit {
       case Expiration.Never:
         return null;
       case Expiration.Day:
-        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 1));
+        return getSQLDateTime(
+          addDays(new Date(this.shareLinkResponse.createdDT), 1),
+        );
       case Expiration.Week:
-        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 7));
+        return getSQLDateTime(
+          addDays(new Date(this.shareLinkResponse.createdDT), 7),
+        );
       case Expiration.Month:
-        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 30));
+        return getSQLDateTime(
+          addDays(new Date(this.shareLinkResponse.createdDT), 30),
+        );
       case Expiration.Year:
-        return getSQLDateTime(addDays(new Date(this.shareLink.createdDT), 365));
+        return getSQLDateTime(
+          addDays(new Date(this.shareLinkResponse.createdDT), 365),
+        );
     }
   }
 
   setShareLinkFormValue(): void {
-    if (this.shareLink) {
-      this.previewToggle = this.shareLink.previewToggle;
-      this.autoApproveToggle = this.shareLink.autoApproveToggle || 0;
+    if (this.shareLinkResponse) {
+      console.log(this.shareLinkResponse);
+      this.previewToggle = this.shareLinkResponse.previewToggle;
+      this.autoApproveToggle = this.shareLinkResponse.autoApproveToggle || 0;
       this.expiration = this.getExpirationFromExpiresDT(
-        this.shareLink.expiresDT,
+        this.shareLinkResponse.expiresDT,
       );
-      this.linkDefaultAccessRole = this.shareLink.defaultAccessRole;
+      console.log(this.shareLinkResponse);
+      console.log(this.shareLinkResponse.permissionsLevel);
+      this.linkDefaultAccessRole = this.shareLinkResponse.permissionLevel;
       this.expirationOptions = EXPIRATION_OPTIONS.filter((expiration) => {
         switch (expiration.value) {
           case Expiration.Never:
@@ -492,10 +512,10 @@ export class SharingDialogComponent implements OnInit {
     this.updatingLink = true;
     try {
       const response = await this.api.share.generateShareLink(this.shareItem);
-      this.shareLink = response.getShareByUrlVO();
-      this.shareLink.autoApproveToggle = this.autoApproveToggle || 0;
-      this.shareLink.previewToggle = this.previewToggle || 0;
-      await this.api.share.updateShareLink(this.shareLink);
+      this.shareLinkResponse = response;
+      this.shareLinkResponse.autoApproveToggle = this.autoApproveToggle || 0;
+      this.shareLinkResponse.previewToggle = this.previewToggle || 0;
+      await this.api.share.updateShareLink(this.shareLinkResponse);
       this.setShareLinkFormValue();
       this.showLinkSettings = true;
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
@@ -532,7 +552,7 @@ export class SharingDialogComponent implements OnInit {
         'btn-danger',
       );
 
-      await this.api.share.removeShareLink(this.shareLink);
+      await this.api.share.removeShareLink(this.shareLinkResponse);
       this.shareLink = null;
       this.setShareLinkFormValue();
       deferred.resolve();

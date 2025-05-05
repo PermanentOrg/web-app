@@ -99,7 +99,7 @@ export const SHARE_ACCESS_ROLE_FIELD: PromptField = {
   fieldName: 'accessRole',
   placeholder: 'Access Level',
   type: 'select',
-  initialValue: 'access.role.viewer',
+  initialValue: 'viewer',
   validators: [Validators.required],
   config: {
     autocomplete: 'off',
