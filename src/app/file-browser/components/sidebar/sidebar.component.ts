@@ -31,6 +31,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
   isLoading = false;
   isRootFolder = false;
   isPublicItem = false;
+  isRecord = false;
 
   currentArchive: ArchiveVO;
 
@@ -109,6 +110,7 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
         } else {
           this.originalFileExtension = '';
           this.permanentFileExtension = '';
+          this.isRecord = !this.selectedItem.isFolder;
         }
       }),
     );

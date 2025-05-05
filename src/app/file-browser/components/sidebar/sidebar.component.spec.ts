@@ -136,4 +136,17 @@ describe('SidebarComponent', () => {
     expect(instance.canEdit).toBe(false);
     expect(instance.canShare).toBe(true);
   });
+
+  it('should hide the original format for folders', async () => {
+    const { instance, find, fixture } = await shallow.render();
+
+    instance.isRecord = false;
+
+    fixture.detectChanges();
+
+    const unknownTypeContainer =
+      fixture.nativeElement.querySelector('.unknown');
+
+    expect(unknownTypeContainer).toBeFalsy();
+  });
 });
