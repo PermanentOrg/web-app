@@ -6,20 +6,21 @@
 
 .breadcrumbs {
   width: 100%;
-  overflow-y: hidden;
-  overflow-x: auto;
-  padding: 5px 10px;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-  user-select: none;
-  height: $breadcrumb-height;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  white-space: normal;
+  overflow: visible;
+  min-width: 0;
 }
 
 pr-breadcrumb {
-  display: inline-block;
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0; // ✅ allow shrinking in flex layout
   color: white;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 
   @include after($tablet-horizontal) {
     padding: 0.25rem 0;
@@ -28,6 +29,11 @@ pr-breadcrumb {
   a {
     color: white;
     text-decoration: none;
+
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .current {
@@ -64,7 +70,6 @@ pr-breadcrumb {
 .breadcrumbs-large {
   @include desktop {
     font-size: $large-size;
-    height: 2 * $grid-unit;
   }
 }
 
