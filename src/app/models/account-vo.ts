@@ -115,6 +115,9 @@ export class AccountVO extends BaseVO {
   }
 
   emailNeedsVerification(): boolean {
-    return this.emailStatus === 'status.auth.unverified';
+    return (
+      (this.primaryEmail && !this.emailStatus) ||
+      this.emailStatus === 'status.auth.unverified'
+    );
   }
 }

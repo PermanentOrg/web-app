@@ -62,8 +62,10 @@ export class VerifyComponent implements OnInit {
     }
     const queryParams = route.snapshot.queryParams;
 
-    this.needsEmail = queryParams.sendEmail;
-    this.needsPhone = queryParams.sendSms;
+    this.needsEmail =
+      (account.emailNeedsVerification() || queryParams.sendEmail) &&
+      !queryParams.sendSms;
+    this.needsPhone = account.phoneNeedsVerification() || queryParams.sendSms;
 
     this.verifyForm = fb.group({
       token: [queryParams.token || ''],
