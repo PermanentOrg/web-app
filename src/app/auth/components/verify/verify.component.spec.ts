@@ -104,6 +104,11 @@ describe('VerifyComponent', () => {
     expect(component.verifyingEmail).toBeTruthy();
     expect(component.needsEmail).toBeTruthy();
     expect(component.needsPhone).toBeFalsy();
+
+    const account = accountService.getAccount();
+
+    expect(account.emailNeedsVerification()).toBeTrue();
+    expect(account.phoneNeedsVerification()).toBeFalse();
   });
 
   it('should require only phone verification if only phone unverified', async () => {
@@ -117,30 +122,49 @@ describe('VerifyComponent', () => {
 
   it('should require verification of both if both unverified, and verify email first', async () => {
     const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
-    await init(unverifiedBothData, { sendEmail: true, sendSms: true });
+    await init(unverifiedBothData);
 
-    expect(component.verifyingEmail).toBeTruthy();
-    expect(component.needsPhone).toBeTruthy();
-    expect(component.needsEmail).toBeTruthy();
+    expect(component.verifyingEmail).toBeTrue();
+    expect(component.verifyingPhone).toBeFalse();
+
+    expect(component.needsEmail).toBeTrue();
+    expect(component.needsPhone).toBeTrue();
+
+    const account = accountService.getAccount();
+
+    expect(account.emailNeedsVerification()).toBeTrue();
+    expect(account.phoneNeedsVerification()).toBeTrue();
   });
 
   it('should verify email and then switch to phone verification if needed', async () => {
     const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
-    await init(unverifiedBothData, { sendEmail: true, sendSms: true });
 
-    expect(component.verifyingEmail).toBeTruthy();
-    expect(component.needsPhone).toBeTruthy();
-    expect(component.needsEmail).toBeTruthy();
+    // Remove query params -- let accountService drive both verifications
+    await init(unverifiedBothData);
+
+    expect(component.verifyingEmail).toBeTrue();
+    expect(component.needsPhone).toBeTrue();
+    expect(component.needsEmail).toBeTrue();
+
+    const account = accountService.getAccount();
+
+    expect(account.emailNeedsVerification()).toBeTrue();
+    expect(account.phoneNeedsVerification()).toBeTrue();
 
     component.onSubmit(component.verifyForm.value).then(() => {
-      expect(component.waiting).toBeFalsy();
-      expect(component.verifyingEmail).toBeFalsy();
-      expect(component.needsEmail).toBeFalsy();
-      expect(component.needsPhone).toBeTruthy();
-      expect(component.verifyingPhone).toBeTruthy();
+      expect(component.waiting).toBeFalse();
+      expect(component.verifyingEmail).toBeFalse();
+      expect(component.needsEmail).toBeFalse();
+      expect(component.needsPhone).toBeTrue();
+      expect(component.verifyingPhone).toBeTrue();
+
+      const updatedAccount = accountService.getAccount();
+
+      expect(updatedAccount.emailNeedsVerification()).toBeFalse();
+      expect(updatedAccount.phoneNeedsVerification()).toBeTrue();
     });
 
-    expect(component.waiting).toBeTruthy();
+    expect(component.waiting).toBeTrue();
 
     const verifyEmailResponse = require('@root/test/responses/auth.verify.verifyEmailThenPhone.success.json');
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
