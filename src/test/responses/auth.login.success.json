@@ -6,6 +6,7 @@
           "AccountVO": {
             "accountId": 1,
             "primaryEmail": "aatwood+unittest@permanent.org",
+            "emailStatus":"type.auth.unverified",
             "fullName": "Unit Test",
             "address": null,
             "address2": null,

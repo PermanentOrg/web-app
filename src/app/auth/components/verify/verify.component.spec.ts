@@ -16,7 +16,7 @@ import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
 import { ApiService } from '@shared/services/api/api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@shared/services/event/event.service';
 
 const defaultAuthData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
@@ -45,6 +45,14 @@ describe('VerifyComponent', () => {
           queryParams: queryParams,
           params: {},
         },
+      },
+    });
+
+    config.providers.push({
+      provide: Router,
+      useValue: {
+        navigate: jasmine.createSpy('navigate'),
+        navigateByUrl: jasmine.createSpy('navigateByUrl'),
       },
     });
 
@@ -91,16 +99,21 @@ describe('VerifyComponent', () => {
   // });
 
   it('should require only email verification if only email unverified', async () => {
-    await init();
+    await init(defaultAuthData, { sendEmail: true });
 
     expect(component.verifyingEmail).toBeTruthy();
     expect(component.needsEmail).toBeTruthy();
     expect(component.needsPhone).toBeFalsy();
+
+    const account = accountService.getAccount();
+
+    expect(account.emailNeedsVerification()).toBeTrue();
+    expect(account.phoneNeedsVerification()).toBeFalse();
   });
 
   it('should require only phone verification if only phone unverified', async () => {
     const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
-    await init(unverifiedPhoneData);
+    await init(unverifiedPhoneData, { sendSms: true });
 
     expect(component.verifyingPhone).toBeTruthy();
     expect(component.needsPhone).toBeTruthy();
@@ -111,28 +124,47 @@ describe('VerifyComponent', () => {
     const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
     await init(unverifiedBothData);
 
-    expect(component.verifyingEmail).toBeTruthy();
-    expect(component.needsPhone).toBeTruthy();
-    expect(component.needsEmail).toBeTruthy();
+    expect(component.verifyingEmail).toBeTrue();
+    expect(component.verifyingPhone).toBeFalse();
+
+    expect(component.needsEmail).toBeTrue();
+    expect(component.needsPhone).toBeTrue();
+
+    const account = accountService.getAccount();
+
+    expect(account.emailNeedsVerification()).toBeTrue();
+    expect(account.phoneNeedsVerification()).toBeTrue();
   });
 
   it('should verify email and then switch to phone verification if needed', async () => {
     const unverifiedBothData = require('@root/test/responses/auth.verify.unverifiedBoth.success.json');
+
+    // Remove query params -- let accountService drive both verifications
     await init(unverifiedBothData);
 
-    expect(component.verifyingEmail).toBeTruthy();
-    expect(component.needsPhone).toBeTruthy();
-    expect(component.needsEmail).toBeTruthy();
+    expect(component.verifyingEmail).toBeTrue();
+    expect(component.needsPhone).toBeTrue();
+    expect(component.needsEmail).toBeTrue();
+
+    const account = accountService.getAccount();
+
+    expect(account.emailNeedsVerification()).toBeTrue();
+    expect(account.phoneNeedsVerification()).toBeTrue();
 
     component.onSubmit(component.verifyForm.value).then(() => {
-      expect(component.waiting).toBeFalsy();
-      expect(component.verifyingEmail).toBeFalsy();
-      expect(component.needsEmail).toBeFalsy();
-      expect(component.needsPhone).toBeTruthy();
-      expect(component.verifyingPhone).toBeTruthy();
+      expect(component.waiting).toBeFalse();
+      expect(component.verifyingEmail).toBeFalse();
+      expect(component.needsEmail).toBeFalse();
+      expect(component.needsPhone).toBeTrue();
+      expect(component.verifyingPhone).toBeTrue();
+
+      const updatedAccount = accountService.getAccount();
+
+      expect(updatedAccount.emailNeedsVerification()).toBeFalse();
+      expect(updatedAccount.phoneNeedsVerification()).toBeTrue();
     });
 
-    expect(component.waiting).toBeTruthy();
+    expect(component.waiting).toBeTrue();
 
     const verifyEmailResponse = require('@root/test/responses/auth.verify.verifyEmailThenPhone.success.json');
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/verify`);
@@ -141,7 +173,7 @@ describe('VerifyComponent', () => {
 
   it('should verify email and redirect if only email needed', async () => {
     const unverifiedEmailData = require('@root/test/responses/auth.verify.unverifiedEmail.success.json');
-    await init(unverifiedEmailData);
+    await init(unverifiedEmailData, { sendEmail: true });
 
     const finishSpy = spyOn(component, 'finish');
 
@@ -165,7 +197,7 @@ describe('VerifyComponent', () => {
 
   it('should verify phone and redirect if only phone needed', async () => {
     const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
-    await init(unverifiedPhoneData);
+    await init(unverifiedPhoneData, { sendSms: true });
 
     const finishSpy = spyOn(component, 'finish');
 
@@ -190,7 +222,7 @@ describe('VerifyComponent', () => {
 
   it('should show CAPTCHA before verifying phone', async () => {
     const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
-    await init(unverifiedPhoneData);
+    await init(unverifiedPhoneData, { sendSms: true });
 
     // Testing environments might not have the site key enabled,
     // so force captchaEnabled to be true.
