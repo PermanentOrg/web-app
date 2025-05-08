@@ -122,6 +122,7 @@ export class RecordVO
   public RecordExifVO;
   public ShareVOs: ShareVO[];
   public AccessVO;
+  public tags; 
 
   constructor(voData: RecordVOData, options?: Partial<RecordVoOptions>) {
     super(voData);

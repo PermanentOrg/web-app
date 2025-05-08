@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import debug from 'debug';
-import { ItemVO } from '@models';
+import { FolderVO, ItemVO, RecordVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { orderBy, find } from 'lodash';
 import { Subject } from 'rxjs';
@@ -53,13 +53,28 @@ export class TagsService {
   }
 
   checkTagsOnItem(item: ItemVO) {
-    if (!item.TagVOs?.length) {
+    if (
+      (item instanceof RecordVO && !item.tags?.length) ||
+      (item instanceof FolderVO && !item.TagVOs?.length)
+    ) {
       return;
     }
 
     let hasNew = false;
 
     for (const itemTag of item.TagVOs) {
+      if (
+        !this.tags.has(itemTag.tagId) &&
+        itemTag.name &&
+        itemTag.archiveId === this.account.getArchive().archiveId
+      ) {
+        this.tags.set(itemTag.tagId, itemTag);
+        hasNew = true;
+        this.debug('new tag seen %o', itemTag);
+      }
+    }
+
+    for (const itemTag of (item as RecordVO).tags) {
       if (
         !this.tags.has(itemTag.tagId) &&
         itemTag.name &&
@@ -94,6 +109,7 @@ export class TagsService {
   }
 
   setItemTags(tags: TagVOData[]) {
+    console.log(tags)
     this.itemsTagsSubject.next(tags);
   }
 }

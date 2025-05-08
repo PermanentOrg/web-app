@@ -12,7 +12,7 @@ import {
   Inject,
 } from '@angular/core';
 import { TagsService } from '@core/services/tags/tags.service';
-import { ItemVO, TagVOData, TagLinkVOData, FolderVO } from '@models';
+import { ItemVO, TagVOData, TagLinkVOData, FolderVO, RecordVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { Subject, Subscription } from 'rxjs';
 import {
@@ -162,7 +162,7 @@ export class EditTagsComponent
     this.onTagType(this.newTagName);
   }
 
-  async onTagClick(tag: TagVOData) {
+  async onTagClick(tag) {
     const tagLink: TagLinkVOData = {};
     if (this.item instanceof FolderVO) {
       tagLink.refTable = 'folder';
@@ -174,11 +174,15 @@ export class EditTagsComponent
 
     this.waiting = true;
     try {
-      if (tag.tagId && this.itemTagsById.has(tag.tagId)) {
+      if (
+        (tag.tagId && this.itemTagsById.has(tag.tagId)) ||
+        (tag.id && this.itemTagsById.has(tag.id))
+      ) {
         await this.api.tag.deleteTagLink(tag, tagLink);
       } else {
         await this.api.tag.create(tag, tagLink);
       }
+      console.log('here')
       await this.dataService.fetchFullItems([this.item]);
     } catch (err) {
       if (err instanceof BaseResponse) {
@@ -232,23 +236,41 @@ export class EditTagsComponent
 
     this.itemTagsById.clear();
 
-    this.itemTags = this.filterTagsByType(
-      (this.item?.TagVOs || [])
-        .map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
-        .filter(
-          // Filter out tags that are now null from deletion
-          (tag) => tag?.name,
-        ),
-    );
+    if (this.item instanceof FolderVO) {
+      this.itemTags = this.filterTagsByType(
+        (this.item?.TagVOs || [])
+          .map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
+          .filter(
+            // Filter out tags that are now null from deletion
+            (tag) => tag?.name,
+          ),
+      );
+    }
 
-    if (!this.item?.TagVOs?.length) {
+    if (this.item instanceof RecordVO) {
+      this.itemTags = this.filterTagsByType(
+        (this.item?.tags || [])
+          .map((tag) => this.allTags?.find((t) => t.tagId === +tag.id))
+          .filter(
+            // Filter out tags that are now null from deletion
+            (tag) => tag?.name,
+          ),
+      );
+    }
+
+    if (
+      !(this.item as FolderVO)?.TagVOs?.length ||
+      !(this.item as RecordVO).tags?.length
+    ) {
       return;
     }
 
     for (const tag of this.itemTags) {
       this.itemTagsById.add(tag.tagId);
     }
-    this.tagsService.setItemTags(this.item.TagVOs);
+    this.tagsService.setItemTags(
+      this.item instanceof FolderVO ? this.item.TagVOs : this.item.tags,
+    );
   }
 
   onManageTagsClick() {
