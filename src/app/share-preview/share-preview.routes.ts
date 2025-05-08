@@ -93,6 +93,14 @@ export const routes: Routes = [
     children: sharePreviewChildren,
   },
   {
+    path: '',
+    resolve: shareResolve,
+    data: {
+      noFileListPadding: true,
+    },
+    children: sharePreviewChildren,
+  },
+  {
     path: ':shareToken',
     resolve: shareResolve,
     data: {

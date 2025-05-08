@@ -15,6 +15,7 @@ import {
   ShareResponse,
 } from '@shared/services/api/index.repo';
 import { RecordVO, ArchiveVO, FolderVO } from '@models';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 
 @Injectable()
 export class ShareUrlResolveService {
@@ -24,9 +25,23 @@ export class ShareUrlResolveService {
     private router: Router,
     private device: DeviceService,
     private accountService: AccountService,
+    private shareLinkApiService: ShareLinksApiService,
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    console.log(route.queryParams);
+
+    const token = route.queryParams.token;
+
+    return this.shareLinkApiService
+      .getShareLinksByToken([token])
+      .then((response) => {
+        console.log(response);
+
+        const shareResponse = response[0];
+        return shareResponse;
+      });
+
     return this.api.share
       .checkShareLink(route.params.shareToken)
       .then((response: ShareResponse): any => {
