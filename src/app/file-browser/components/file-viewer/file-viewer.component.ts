@@ -219,7 +219,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const original = this.currentRecord.FileVOs.find(
+    const original = this.currentRecord.FileVOs?.find(
       (file) => file.format === FileFormat.Original,
     );
     const access = GetAccessFile(this.currentRecord);
@@ -407,11 +407,16 @@ export class FileViewerComponent implements OnInit, OnDestroy {
   }
 
   private setCurrentTags(): void {
-    this.keywords = this.currentRecord.TagVOs.filter(
+    this.keywords = this.currentRecord.tags?.filter(
       (tag) => !tag.type.includes('type.tag.metadata'),
     );
-    this.customMetadata = this.currentRecord.TagVOs.filter((tag) =>
-      tag.type.includes('type.tag.metadata'),
-    );
+
+    this.customMetadata = this.currentRecord.tags
+      ?.filter((tag) => tag.type.includes('type.tag.metadata'))
+      .map((tag) => ({
+        id: tag.id,
+        name: `${tag.name}:${tag.type.split('.')[tag.type.split.length - 1]}`,
+        type: tag.type,
+      }));
   }
 }

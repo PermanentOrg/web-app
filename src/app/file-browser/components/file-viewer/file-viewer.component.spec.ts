@@ -38,13 +38,13 @@ const defaultTagList: TagVOData[] = [
 ];
 const defaultItem: ItemVO = new RecordVO({
   displayName: 'Default Item',
-  TagVOs: defaultTagList,
+  tags: defaultTagList,
   type: 'document',
   folder_linkId: 0,
 });
 const secondItem: ItemVO = new RecordVO({
   displayName: 'Second Item',
-  TagVOs: [],
+  tags: [],
   type: 'image',
   folder_linkId: 1,
 });
@@ -157,7 +157,12 @@ describe('FileViewerComponent', () => {
   });
 
   it('should correctly distinguish between keywords and custom metadata', async () => {
-    const { element } = await defaultRender();
+    const { element, fixture } = await defaultRender();
+
+    // Emit tags
+    tagsService.itemTagsObservable.next(defaultTagList);
+    await fixture.whenStable();
+    fixture.detectChanges();
 
     expect(
       element.componentInstance.keywords.find((tag) => tag.name === 'tagOne'),
