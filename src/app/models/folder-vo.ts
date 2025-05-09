@@ -114,6 +114,7 @@ export class FolderVO
   // For the UI
   public posStart;
   public posLimit;
+  public tags;
 
   constructor(
     voData: FolderVOData,

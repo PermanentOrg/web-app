@@ -81,9 +81,9 @@ export class EditTagsComponent
     private tagsService: TagsService,
     private message: MessageService,
     private api: ApiService,
-    private dataService: DataService,
     private elementRef: ElementRef,
     private dialog: DialogCdkService,
+    private dataService: DataService,
   ) {
     this.subscriptions.push(
       this.tagsService.getTags$().subscribe((tags) => {
@@ -113,9 +113,15 @@ export class EditTagsComponent
               (tag) => !tag.type.includes('type.tag.metadata'),
             );
           } else {
-            this.dialogTags = tags?.filter((tag) =>
-              tag.type.includes('type.tag.metadata'),
-            );
+            this.dialogTags = tags
+              ?.filter((tag) => tag.type.includes('type.tag.metadata'))
+              .map((tag) => ({
+                id: tag.id,
+                name: `${tag.name}:${
+                  tag.type.split('.')[tag.type.split.length - 1]
+                }`,
+                type: tag.type,
+              }));
           }
         });
     }
@@ -181,8 +187,8 @@ export class EditTagsComponent
         await this.api.tag.deleteTagLink(tag, tagLink);
       } else {
         await this.api.tag.create(tag, tagLink);
+        await this.tagsService.refreshTags();
       }
-      console.log('here')
       await this.dataService.fetchFullItems([this.item]);
     } catch (err) {
       if (err instanceof BaseResponse) {
@@ -236,7 +242,7 @@ export class EditTagsComponent
 
     this.itemTagsById.clear();
 
-    if (this.item instanceof FolderVO) {
+    if (this.item && this.item?.isFolder) {
       this.itemTags = this.filterTagsByType(
         (this.item?.TagVOs || [])
           .map((tag) => this.allTags?.find((t) => t.tagId === tag.tagId))
@@ -247,7 +253,7 @@ export class EditTagsComponent
       );
     }
 
-    if (this.item instanceof RecordVO) {
+    if (this.item && this.item?.isRecord) {
       this.itemTags = this.filterTagsByType(
         (this.item?.tags || [])
           .map((tag) => this.allTags?.find((t) => t.tagId === +tag.id))
@@ -258,19 +264,17 @@ export class EditTagsComponent
       );
     }
 
-    if (
-      !(this.item as FolderVO)?.TagVOs?.length ||
-      !(this.item as RecordVO).tags?.length
-    ) {
-      return;
+    if (Array.isArray(this.itemTags)) {
+      for (const tag of this.itemTags) {
+        this.itemTagsById.add(tag.tagId);
+      }
     }
 
-    for (const tag of this.itemTags) {
-      this.itemTagsById.add(tag.tagId);
+    if (this.item) {
+      this.tagsService.setItemTags(
+        this.item.isFolder ? this.item.TagVOs : (this.item as RecordVO).tags,
+      );
     }
-    this.tagsService.setItemTags(
-      this.item instanceof FolderVO ? this.item.TagVOs : this.item.tags,
-    );
   }
 
   onManageTagsClick() {

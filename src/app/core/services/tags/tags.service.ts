@@ -54,35 +54,40 @@ export class TagsService {
 
   checkTagsOnItem(item: ItemVO) {
     if (
-      (item instanceof RecordVO && !item.tags?.length) ||
-      (item instanceof FolderVO && !item.TagVOs?.length)
+      (item.isRecord && !item.tags?.length) ||
+      (item.isFolder && !item.TagVOs?.length)
     ) {
       return;
     }
 
     let hasNew = false;
 
-    for (const itemTag of item.TagVOs) {
-      if (
-        !this.tags.has(itemTag.tagId) &&
-        itemTag.name &&
-        itemTag.archiveId === this.account.getArchive().archiveId
-      ) {
-        this.tags.set(itemTag.tagId, itemTag);
-        hasNew = true;
-        this.debug('new tag seen %o', itemTag);
+    if (item.isFolder) {
+      for (const itemTag of item.TagVOs) {
+        if (
+          !this.tags.has(itemTag.tagId) &&
+          itemTag.name &&
+          itemTag.archiveId === this.account.getArchive().archiveId
+        ) {
+          this.tags.set(itemTag.tagId, itemTag);
+          hasNew = true;
+          this.debug('new tag seen %o', itemTag);
+        }
       }
     }
 
-    for (const itemTag of (item as RecordVO).tags) {
-      if (
-        !this.tags.has(itemTag.tagId) &&
-        itemTag.name &&
-        itemTag.archiveId === this.account.getArchive().archiveId
-      ) {
-        this.tags.set(itemTag.tagId, itemTag);
-        hasNew = true;
-        this.debug('new tag seen %o', itemTag);
+    if (item.isRecord) {
+      for (const itemTag of (item as RecordVO).tags) {
+        if (
+          !this.tags.has(itemTag.id) &&
+          itemTag.name &&
+          itemTag.archiveId === this.account.getArchive().archiveId
+        ) {
+          const tagId = itemTag.tagId ?? itemTag.id;
+          this.tags.set(tagId, { ...itemTag, tagId });
+          hasNew = true;
+          this.debug('new tag seen %o', itemTag);
+        }
       }
     }
 
@@ -109,7 +114,6 @@ export class TagsService {
   }
 
   setItemTags(tags: TagVOData[]) {
-    console.log(tags)
     this.itemsTagsSubject.next(tags);
   }
 }

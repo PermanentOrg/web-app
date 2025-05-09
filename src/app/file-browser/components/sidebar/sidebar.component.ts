@@ -114,7 +114,6 @@ export class SidebarComponent implements OnDestroy, HasSubscriptions {
         }
       }),
     );
-    console.log(this.selectedItem);
   }
 
   ngOnDestroy() {
