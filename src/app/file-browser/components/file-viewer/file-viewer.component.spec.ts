@@ -336,21 +336,21 @@ describe('FileViewerComponent', () => {
         type: 'document',
         displayName: 'Test Doc',
         TagVOs: [],
-        FileVOs: [
+        files: [
           {
             format: 'file.format.original',
             type: typeOfOriginal,
-            fileURL: fileURLOfOriginal,
+            fileUrl: fileURLOfOriginal,
           },
           {
             format: 'file.format.converted',
             type: 'odt',
-            fileURL: 'http://example.com/ignored',
+            fileUrl: 'http://example.com/ignored',
           },
           {
             format: 'file.format.converted',
             type: 'pdf',
-            fileURL: 'http://example.com/used',
+            fileUrl: 'http://example.com/used',
           },
         ],
       });

@@ -49,7 +49,7 @@ describe('ZoomingImageViewerComponent', () => {
 
   function getValidTestRecord(): RecordVO {
     return new RecordVO({
-      FileVOs: [{ fileURL: 'https://invalid-url' }],
+      files: [{ fileUrl: 'https://invalid-url' }],
       type: 'type.record.image',
     });
   }
@@ -61,29 +61,29 @@ describe('ZoomingImageViewerComponent', () => {
   });
 
   describe('Choose full size image', async () => {
-    it('will return undefined if no FileVOs are defined', () => {
+    it('will return undefined if no files are defined', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
-          new RecordVO({ FileVOs: [] }),
+          new RecordVO({ files: [] }),
         ),
       ).toBeUndefined();
     });
 
-    it('will return the only FileVO url if it exists', () => {
+    it('will return the only file url if it exists', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
-          new RecordVO({ FileVOs: [{ fileURL: 'test' }] }),
+          new RecordVO({ files: [{ fileUrl: 'test' }] }),
         ),
       ).toBe('test');
     });
 
-    it('will return the converted FileVO url', () => {
+    it('will return the converted file url', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
           new RecordVO({
-            FileVOs: [
-              { fileURL: 'invalid' },
-              { format: 'file.format.converted', fileURL: 'test' },
+            files: [
+              { fileUrl: 'invalid' },
+              { format: 'file.format.converted', fileUrl: 'test' },
             ],
           }),
         ),
@@ -94,7 +94,7 @@ describe('ZoomingImageViewerComponent', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
           new RecordVO({
-            FileVOs: [{ fileURL: 'test' }, { fileURL: 'invalid' }],
+            files: [{ fileUrl: 'test' }, { fileUrl: 'invalid' }],
           }),
         ),
       ).toBe('test');

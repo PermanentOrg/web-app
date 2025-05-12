@@ -42,7 +42,7 @@ export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
     if (
       viewerDiv &&
       this.item instanceof RecordVO &&
-      this.item.FileVOs &&
+      this.item.files &&
       this.item.type === 'type.record.image'
     ) {
       const fullSizeImage = ZoomingImageViewerComponent.chooseFullSizeImage(
@@ -85,7 +85,7 @@ export class ZoomingImageViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   public static chooseFullSizeImage(record: RecordVO) {
-    return GetAccessFile(record)?.fileURL;
+    return GetAccessFile(record)?.fileUrl;
   }
 
   private enablePanning(flag: boolean): void {

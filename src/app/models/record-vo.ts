@@ -239,4 +239,5 @@ export interface RecordVOData extends BaseVOData {
   isFolder?: boolean;
   tags?: any;
   isRecord?: boolean;
+  files?: any;
 }
