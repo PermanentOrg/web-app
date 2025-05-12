@@ -1,6 +1,8 @@
 <ng-container
   *ngIf="
-    (verifyingPhone || showCaptchaForEmail) && captchaEnabled && !captchaPassed;
+    (currentVerifyFlow === 'phone' || showCaptchaForEmail) &&
+      captchaEnabled &&
+      !captchaPassed;
     else verifyFormElement
   "
 >
@@ -19,25 +21,27 @@
 <ng-template #verifyFormElement>
   <form [formGroup]="verifyForm" (ngSubmit)="onSubmit(verifyForm.value)">
     <h1 class="page-title">
-      {{ formTitle }}
+      {{
+        currentVerifyFlow === 'email' ? 'Verify Email' : 'Verify Phone Number'
+      }}
     </h1>
     <p class="verify-text">
       A verification code has been sent to your
-      {{ verifyingEmail ? 'email address' : 'mobile device' }}.
-      <span *ngIf="!verifyingEmail"
-        >Permanent only supports US and Canada numbers.</span
-      >
+      {{ currentVerifyFlow === 'email' ? 'email address' : 'mobile device' }}.
+      <span *ngIf="currentVerifyFlow === 'phone'">
+        Permanent only supports US and Canada numbers.
+      </span>
     </p>
     <p class="verify-text">Enter it below to continue.</p>
     <div class="input-container">
       <pr-form-input-glam
-        type="{{ verifyingEmail ? 'email' : 'tel' }}"
+        type="{{ currentVerifyFlow === 'email' ? 'email' : 'tel' }}"
         fieldName="token"
         [variant]="'dark'"
         placeholder="Code"
         [control]="verifyForm.controls['token']"
         [config]="{
-          autocomplete: verifyingEmail ? 'email' : 'tel',
+          autocomplete: currentVerifyFlow === 'email' ? 'email' : 'tel',
           autocorrect: 'off',
           autocapitalize: 'off',
           spellcheck: 'off'

@@ -24,11 +24,7 @@ import { C } from '@angular/cdk/keycodes';
 export class VerifyComponent implements OnInit {
   @HostBinding('class.pr-auth-form') classBinding = true;
   verifyForm: UntypedFormGroup;
-  formTitle = 'Verify Email';
   waiting: boolean;
-
-  verifyingEmail = true;
-  verifyingPhone = false;
 
   currentVerifyFlow: 'none' | 'email' | 'phone' = 'none';
 
@@ -110,15 +106,8 @@ export class VerifyComponent implements OnInit {
       }
     }
 
-    switch (this.currentVerifyFlow) {
-      case 'phone':
-        this.verifyingEmail = false;
-        this.verifyingPhone = true;
-        this.formTitle = 'Verify Phone Number';
-        break;
-      case 'none':
-        this.router.navigate(['/private'], { queryParamsHandling: 'preserve' });
-        break;
+    if (this.currentVerifyFlow === 'none') {
+      this.router.navigate(['/private'], { queryParamsHandling: 'preserve' });
     }
   }
 
@@ -135,12 +124,15 @@ export class VerifyComponent implements OnInit {
 
     let verifyPromise: Promise<AuthResponse>;
 
-    if (this.verifyingEmail) {
-      verifyPromise = this.accountService.verifyEmail(formValue.token);
-    } else if (this.verifyingPhone) {
-      verifyPromise = this.accountService.verifyPhone(formValue.token);
-    } else {
-      return;
+    switch (this.currentVerifyFlow) {
+      case 'email':
+        verifyPromise = this.accountService.verifyEmail(formValue.token);
+        break;
+      case 'phone':
+        verifyPromise = this.accountService.verifyPhone(formValue.token);
+        break;
+      default:
+        return;
     }
 
     return verifyPromise
@@ -163,9 +155,7 @@ export class VerifyComponent implements OnInit {
 
         if (this.needsPhone) {
           this.verifyForm.controls['token'].setValue('');
-          this.verifyingEmail = false;
-          this.verifyingPhone = true;
-          this.formTitle = 'Verify Phone Number';
+          this.currentVerifyFlow = 'phone';
         } else {
           this.finish();
         }
@@ -183,14 +173,19 @@ export class VerifyComponent implements OnInit {
     this.waiting = true;
 
     let resendPromise: Promise<AuthResponse>;
-    if (this.verifyingEmail) {
-      if (this.canSendCodes('email')) {
-        resendPromise = this.accountService.resendEmailVerification();
-      }
-    } else {
-      if (this.canSendCodes('phone')) {
-        resendPromise = this.accountService.resendPhoneVerification();
-      }
+    switch (this.currentVerifyFlow) {
+      case 'email':
+        if (this.canSendCodes('email')) {
+          resendPromise = this.accountService.resendEmailVerification();
+        }
+        break;
+      case 'phone':
+        if (this.canSendCodes('phone')) {
+          resendPromise = this.accountService.resendPhoneVerification();
+        }
+        break;
+      default:
+        return;
     }
 
     resendPromise
@@ -219,9 +214,8 @@ export class VerifyComponent implements OnInit {
       .then((response: ArchiveResponse) => {
         this.message.showMessage({
           message: `${
-            this.verifyingEmail ? 'Email' : 'Phone number'
+            this.currentVerifyFlow === 'email' ? 'Email' : 'Phone number'
           } verified.`,
-          style: 'success',
         });
         if (this.route.snapshot.queryParams.shareByUrl) {
           this.router
