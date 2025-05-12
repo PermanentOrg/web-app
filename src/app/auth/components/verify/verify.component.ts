@@ -30,6 +30,8 @@ export class VerifyComponent implements OnInit {
   verifyingEmail = true;
   verifyingPhone = false;
 
+  currentVerifyFlow: 'none' | 'email' | 'phone' = 'none';
+
   needsEmail: boolean;
   needsPhone: boolean;
 
@@ -62,10 +64,19 @@ export class VerifyComponent implements OnInit {
     }
     const queryParams = route.snapshot.queryParams;
 
-    this.needsEmail =
-      (account.emailNeedsVerification() || queryParams.sendEmail) &&
-      !queryParams.sendSms;
-    this.needsPhone = account.phoneNeedsVerification() || queryParams.sendSms;
+    this.needsEmail = account.emailNeedsVerification();
+    this.needsPhone = account.phoneNeedsVerification();
+
+    if ((this.needsEmail || queryParams.sendEmail) && !queryParams.sendSms) {
+      this.currentVerifyFlow = 'email';
+    } else if (
+      (this.needsPhone || queryParams.sendSms) &&
+      !queryParams.sendEmail
+    ) {
+      this.currentVerifyFlow = 'phone';
+    } else {
+      this.currentVerifyFlow = 'none';
+    }
 
     this.verifyForm = fb.group({
       token: [queryParams.token || ''],
@@ -99,12 +110,15 @@ export class VerifyComponent implements OnInit {
       }
     }
 
-    if (!this.needsEmail && this.needsPhone) {
-      this.verifyingEmail = false;
-      this.verifyingPhone = true;
-      this.formTitle = 'Verify Phone Number';
-    } else if (!this.needsEmail) {
-      this.router.navigate(['/private'], { queryParamsHandling: 'preserve' });
+    switch (this.currentVerifyFlow) {
+      case 'phone':
+        this.verifyingEmail = false;
+        this.verifyingPhone = true;
+        this.formTitle = 'Verify Phone Number';
+        break;
+      case 'none':
+        this.router.navigate(['/private'], { queryParamsHandling: 'preserve' });
+        break;
     }
   }
 

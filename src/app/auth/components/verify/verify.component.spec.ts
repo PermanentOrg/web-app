@@ -236,4 +236,19 @@ describe('VerifyComponent', () => {
     expect(component.captchaPassed).toBeTruthy();
     expect(component.canSendCodes('phone')).toBeTruthy();
   });
+
+  it('should set flow to email when only email is unverified', async () => {
+    await init(defaultAuthData, { sendEmail: true });
+
+    expect(component.currentVerifyFlow).toBe('email');
+    expect(component.formTitle).toBe('Verify Email');
+  });
+
+  it('should set flow to phone when only phone is unverified', async () => {
+    const unverifiedPhoneData = require('@root/test/responses/auth.verify.unverifiedPhone.success.json');
+    await init(unverifiedPhoneData, { sendSms: true });
+
+    expect(component.currentVerifyFlow).toBe('phone');
+    expect(component.formTitle).toBe('Verify Phone Number');
+  });
 });
