@@ -9,7 +9,7 @@ describe('GetAccessFile', () => {
         fileId: 0,
         size: 0,
         format: FileFormat.Original,
-        fileURL: 'test',
+        fileUrl: 'test',
         downloadURL: 'test',
         type: 'test',
       },
@@ -23,7 +23,7 @@ describe('GetAccessFile', () => {
     expect(GetAccessFile(files)).toBeFalsy();
   });
 
-  it('should return null for an object with no FileVOs', () => {
+  it('should return null for an object with no files', () => {
     expect(GetAccessFile({ files: [] })).toBeFalsy();
   });
 

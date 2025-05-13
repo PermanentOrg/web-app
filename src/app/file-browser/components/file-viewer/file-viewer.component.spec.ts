@@ -10,6 +10,7 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { FileFormat } from '@models/file-vo';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
@@ -330,7 +331,7 @@ describe('FileViewerComponent', () => {
   describe('URLs of PDF files', () => {
     function setUpCurrentRecord(
       typeOfOriginal: string,
-      fileURLOfOriginal: string | false = 'http://example.com/original',
+      fileURLOfOriginal: string = 'http://example.com/original',
     ) {
       activatedRouteData.currentRecord = new RecordVO({
         type: 'document',
@@ -338,17 +339,26 @@ describe('FileViewerComponent', () => {
         TagVOs: [],
         files: [
           {
-            format: 'file.format.original',
+            fileId: 1,
+            size: 10,
+            downloadURL: 'valid',
+            format: FileFormat.Original,
             type: typeOfOriginal,
             fileUrl: fileURLOfOriginal,
           },
           {
-            format: 'file.format.converted',
+            fileId: 1,
+            size: 10,
+            downloadURL: 'valid',
+            format: FileFormat.Converted,
             type: 'odt',
             fileUrl: 'http://example.com/ignored',
           },
           {
-            format: 'file.format.converted',
+            fileId: 1,
+            size: 10,
+            downloadURL: 'valid',
+            format: FileFormat.Converted,
             type: 'pdf',
             fileUrl: 'http://example.com/used',
           },
@@ -391,7 +401,7 @@ describe('FileViewerComponent', () => {
     });
 
     it('will have a falsy document URL if the URL is falsy', async () => {
-      setUpCurrentRecord('pdf', false);
+      setUpCurrentRecord('pdf', '');
       const { instance } = await defaultRender();
 
       expect(instance.getDocumentUrl()).toBeFalsy();

@@ -65,7 +65,7 @@
            "pathAsArchiveNbr":null,
            "LocnVO":null,
            "TimezoneVO":null,
-           "FileVOs":null,
+           "files":null,
            "TagVOs":[
 
            ],
