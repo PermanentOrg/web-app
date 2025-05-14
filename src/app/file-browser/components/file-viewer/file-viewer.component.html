@@ -166,7 +166,7 @@
           <td class="location-container" (click)="onLocationClick()">
             <pr-static-map
               [location]="currentRecord.LocnVO || currentRecord.location"
-              *ngIf="currentRecord.location || currentRecord.LocnVO"
+              *ngIf="currentRecord.location?.id || currentRecord.LocnVO"
             ></pr-static-map>
             <span *ngIf="currentRecord.location || currentRecord.LocnVO">{{
               (currentRecord.location || currentRecord.LocnVO | prLocation)

@@ -165,6 +165,7 @@
         [class.can-edit]="canEdit"
       >
         <pr-static-map
+          *ngIf="selectedItem.location?.id || selectedItem.LocnVO"
           [location]="selectedItem.LocnVO || selectedItem.location"
         ></pr-static-map>
       </div>

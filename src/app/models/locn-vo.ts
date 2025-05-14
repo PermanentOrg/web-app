@@ -3,6 +3,7 @@ import { BaseVOData } from '@models/base-vo';
 export interface LocnVOData extends BaseVOData {
   locnId?: number;
   timeZoneId?: number;
+  id?: string;
 
   displayName?: string;
   geoCodeLookup?: string;
