@@ -195,11 +195,12 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     this.isVideo = this.currentRecord.type.includes('video');
     this.isZoomableImage =
       this.currentRecord.type.includes('image') &&
-      this.currentRecord.FileVOs?.length &&
+      this.currentRecord.files?.length &&
       typeof ZoomingImageViewerComponent.chooseFullSizeImage(
         this.currentRecord,
       ) !== 'undefined';
-    this.isDocument = this.currentRecord.FileVOs?.some(
+
+    this.isDocument = this.currentRecord.files?.some(
       (obj) => obj.type.includes('pdf') || obj.type.includes('txt'),
     );
     this.documentUrl = this.getDocumentUrl();
@@ -219,7 +220,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const original = this.currentRecord.FileVOs?.find(
+    const original = this.currentRecord.files.find(
       (file) => file.format === FileFormat.Original,
     );
     const access = GetAccessFile(this.currentRecord);
@@ -227,9 +228,9 @@ export class FileViewerComponent implements OnInit, OnDestroy {
     let url;
 
     if (original?.type.includes('pdf') || original?.type.includes('txt')) {
-      url = original?.fileURL;
+      url = original?.fileUrl;
     } else if (access) {
-      url = access?.fileURL;
+      url = access?.fileUrl;
     }
 
     if (!url) {

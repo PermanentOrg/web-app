@@ -2,7 +2,7 @@ import { prioritizeIf } from '@root/utils/prioritize-if';
 import { FileFormat, PermanentFile } from './file-vo';
 
 export interface HasFiles {
-  FileVOs: PermanentFile[];
+  files: PermanentFile[];
 }
 
 function getArchivematicaAccess(files: PermanentFile[]) {
@@ -17,7 +17,7 @@ function getPrioritizedConvertedFile(files: PermanentFile[]) {
 }
 
 export function GetAccessFile(record: HasFiles): PermanentFile | undefined {
-  const files = record?.FileVOs ?? [];
+  const files = record?.files ?? [];
   return (
     getArchivematicaAccess(files) ||
     getPrioritizedConvertedFile(files) ||
