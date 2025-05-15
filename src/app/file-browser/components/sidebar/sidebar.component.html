@@ -164,7 +164,10 @@
         (keydown)="onLocationEnterPress($event)"
         [class.can-edit]="canEdit"
       >
-        <pr-static-map [location]="selectedItem.LocnVO"></pr-static-map>
+        <pr-static-map
+          *ngIf="selectedItem.location?.id || selectedItem.LocnVO"
+          [location]="selectedItem.LocnVO || selectedItem.location"
+        ></pr-static-map>
       </div>
     </div>
     <div class="sidebar-item">

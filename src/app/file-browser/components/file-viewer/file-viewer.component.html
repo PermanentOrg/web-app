@@ -165,16 +165,27 @@
           <td class="title">Location</td>
           <td class="location-container" (click)="onLocationClick()">
             <pr-static-map
-              [location]="currentRecord.LocnVO"
-              *ngIf="currentRecord.LocnVO"
+              [location]="currentRecord.LocnVO || currentRecord.location"
+              *ngIf="currentRecord.location?.id || currentRecord.LocnVO"
             ></pr-static-map>
-            <span *ngIf="currentRecord.LocnVO">{{
-              (currentRecord.LocnVO | prLocation)?.full
+            <span *ngIf="currentRecord.location || currentRecord.LocnVO">{{
+              (currentRecord.location || currentRecord.LocnVO | prLocation)
+                ?.full
             }}</span>
-            <span class="add-location" *ngIf="!currentRecord.LocnVO && canEdit">
+            <span
+              class="add-location"
+              *ngIf="
+                !currentRecord.location && !currentRecord.LocnVO && canEdit
+              "
+            >
               Click to add location</span
             >
-            <span *ngIf="!currentRecord.LocnVO && !canEdit">No location</span>
+            <span
+              *ngIf="
+                !currentRecord.location && !currentRecord.LocnVO && !canEdit
+              "
+              >No location</span
+            >
           </td>
         </tr>
         <tr></tr>
