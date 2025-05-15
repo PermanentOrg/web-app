@@ -36,8 +36,13 @@ form {
 
   re-captcha {
     display: flex;
-    justify-content: center;
     align-items: center;
+  }
+
+  & > p {
+    font-family: 'UsualRegular', sans-serif;
+    color: white;
+    margin-bottom: 32px;
   }
 }
 
