@@ -8,7 +8,7 @@ import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
 import { RecordType, FolderLinkType } from './vo-types';
-import { Location, LocnVOData } from './locn-vo';
+import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
@@ -106,12 +106,12 @@ export class RecordVO
   public parentArchiveNbr: string;
   public parentDisplayName: string;
   public pathAsArchiveNbr;
+  public files: PermanentFile[];
 
   // Other stuff
   public LocnVO: LocnVOData;
-  public location: Location;
   public TimezoneVO: TimezoneVOData;
-  public files: PermanentFile[];
+  public FileVOs: PermanentFile[];
   public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs: ArchiveVO[];
@@ -122,7 +122,6 @@ export class RecordVO
   public RecordExifVO;
   public ShareVOs: ShareVO[];
   public AccessVO;
-  public tags;
 
   constructor(voData: RecordVOData, options?: Partial<RecordVoOptions>) {
     super(voData);
@@ -162,7 +161,7 @@ export class RecordVO
   }
 
   public getDownloadOptionsList() {
-    const files = [...(this.files ?? [])];
+    const files = [...(this.FileVOs ?? [])];
     return prioritizeIf(
       files,
       (file) => file.format === FileFormat.Original,
@@ -225,6 +224,7 @@ export interface RecordVOData extends BaseVOData {
   pathAsArchiveNbr?: any;
   LocnVO?: any;
   TimezoneVO?: TimezoneVOData;
+  FileVOs?: any;
   TagVOs?: any;
   TextDataVOs?: any;
   ArchiveVOs?: ArchiveVO[];
@@ -236,7 +236,4 @@ export interface RecordVOData extends BaseVOData {
   ShareVOs?: any;
   AccessVO?: any;
   isFolder?: boolean;
-  tags?: any;
-  isRecord?: boolean;
-  files?: PermanentFile[];
 }

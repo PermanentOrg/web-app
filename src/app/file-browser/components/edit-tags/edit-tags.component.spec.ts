@@ -3,7 +3,7 @@ import { async } from '@angular/core/testing';
 import { Shallow } from 'shallow-render';
 import { Observable, of } from 'rxjs';
 
-import { ItemVO, TagVOData, RecordVO, FolderVO } from '@models';
+import { ItemVO, TagVOData, RecordVO } from '@models';
 import { ApiService } from '@shared/services/api/api.service';
 import { DataService } from '@shared/services/data/data.service';
 import { TagsService } from '@core/services/tags/tags.service';
@@ -38,35 +38,12 @@ const defaultTagList: TagVOData[] = [
     type: 'type.tag.metadata.customField',
   },
 ];
-const defaultRecord = new RecordVO({
-  tags: defaultTagList,
-  isRecord: true,
-});
-
-const defaultFolder = new FolderVO({
-  TagVOs: defaultTagList,
-  isFolder: true,
-});
+const defaultItem: ItemVO = new RecordVO({ TagVOs: defaultTagList });
 
 describe('EditTagsComponent', () => {
   let shallow: Shallow<EditTagsComponent>;
-  async function defaultRenderRecord(
-    item: ItemVO = defaultRecord,
-    tagType: TagType = 'keyword',
-  ) {
-    return await shallow.render(
-      `<pr-edit-tags [item]="item" [tagType]="tagType"></pr-edit-tags>`,
-      {
-        bind: {
-          item: item,
-          tagType: tagType,
-        },
-      },
-    );
-  }
-
-  async function defaultRenderFolder(
-    item: ItemVO = defaultFolder,
+  async function defaultRender(
+    item: ItemVO = defaultItem,
     tagType: TagType = 'keyword',
   ) {
     return await shallow.render(
@@ -104,32 +81,14 @@ describe('EditTagsComponent', () => {
       );
   }));
 
-  it('should create record tags', async () => {
-    const { element } = await defaultRenderRecord();
+  it('should create', async () => {
+    const { element } = await defaultRender();
 
     expect(element).not.toBeNull();
   });
 
-  it('should create folder tags', async () => {
-    const { element } = await defaultRenderFolder();
-
-    expect(element).not.toBeNull();
-  });
-
-  it('should only show keywords in keyword mode for records', async () => {
-    const { element, fixture } = await defaultRenderRecord();
-
-    element.componentInstance.itemTags = [
-      { name: 'tagOne' },
-      { name: 'tagTwo' },
-    ];
-
-    element.componentInstance.matchingTags = [
-      { name: 'tagOne' },
-      { name: 'tagTwo' },
-    ];
-
-    fixture.detectChanges();
+  it('should only show keywords in keyword mode', async () => {
+    const { element } = await defaultRender();
 
     expect(
       element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
@@ -176,8 +135,56 @@ describe('EditTagsComponent', () => {
     ).not.toBeTruthy();
   });
 
-  it('should not create custom metadata in keyword mode for records', async () => {
-    const { element } = await defaultRenderRecord();
+  it('should only show custom metadata in custom metadata mode', async () => {
+    const { element } = await defaultRender(defaultItem, 'customMetadata');
+
+    expect(
+      element.componentInstance.itemTags.find((tag) => tag.name === 'tagOne'),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.itemTags.find((tag) => tag.name === 'tagTwo'),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.itemTags.find(
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
+    ).toBeTruthy();
+
+    expect(
+      element.componentInstance.itemTags.find(
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
+    ).toBeTruthy();
+
+    expect(
+      element.componentInstance.matchingTags.find(
+        (tag) => tag.name === 'tagOne',
+      ),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.matchingTags.find(
+        (tag) => tag.name === 'tagTwo',
+      ),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.matchingTags.find(
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
+    ).toBeTruthy();
+
+    expect(
+      element.componentInstance.matchingTags.find(
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
+    ).toBeTruthy();
+  });
+
+  it('should not create custom metadata in keyword mode', async () => {
+    const { element } = await defaultRender();
     const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
     await element.componentInstance.onInputEnter('key:value');
 
@@ -185,11 +192,8 @@ describe('EditTagsComponent', () => {
     expect(tagCreateSpy).not.toHaveBeenCalled();
   });
 
-  it('should not create keyword in custom metadata mode for records', async () => {
-    const { element } = await defaultRenderRecord(
-      defaultRecord,
-      'customMetadata',
-    );
+  it('should not create keyword in custom metadata mode', async () => {
+    const { element } = await defaultRender(defaultItem, 'customMetadata');
     const tagCreateSpy = spyOn(element.componentInstance.api.tag, 'create');
     await element.componentInstance.onInputEnter('keyword');
 
@@ -198,25 +202,7 @@ describe('EditTagsComponent', () => {
   });
 
   it('should highlight the correct tag on key down', async () => {
-    const { fixture, element } = await defaultRenderFolder();
-
-    element.componentInstance.isEditing = true;
-
-    fixture.detectChanges();
-    const tags = fixture.debugElement.queryAll(By.css('.edit-tag'));
-
-    const arrowKeyDown = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-    tags[0].nativeElement.dispatchEvent(arrowKeyDown);
-
-    fixture.detectChanges();
-
-    const focusedElement = document.activeElement as HTMLElement;
-
-    expect(focusedElement).toBe(tags[1].nativeElement);
-  });
-
-  it('should highlight the correct tag for folders on key down', async () => {
-    const { fixture, element } = await defaultRenderFolder();
+    const { fixture, element } = await defaultRender();
 
     element.componentInstance.isEditing = true;
 
@@ -234,7 +220,7 @@ describe('EditTagsComponent', () => {
   });
 
   it('should highlight the correct tag on key up', async () => {
-    const { fixture, element } = await defaultRenderRecord();
+    const { fixture, element } = await defaultRender();
 
     element.componentInstance.isEditing = true;
 
@@ -252,7 +238,7 @@ describe('EditTagsComponent', () => {
   });
 
   it('should highlight the input on key up', async () => {
-    const { fixture, element } = await defaultRenderRecord();
+    const { fixture, element } = await defaultRender();
 
     element.componentInstance.isEditing = true;
 
@@ -272,7 +258,7 @@ describe('EditTagsComponent', () => {
   });
 
   it('should open dialog when manage link is clicked', async () => {
-    const { element, find, inject, fixture } = await defaultRenderRecord();
+    const { element, find, inject, fixture } = await defaultRender();
     const dialogOpenSpy = inject(DialogCdkService);
 
     element.componentInstance.isEditing = true;

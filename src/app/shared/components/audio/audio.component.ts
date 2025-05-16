@@ -13,6 +13,6 @@ export class AudioComponent implements OnChanges {
   audioSrc: string;
 
   ngOnChanges(): void {
-    this.audioSrc = GetAccessFile(this.item)?.fileUrl;
+    this.audioSrc = GetAccessFile(this.item)?.fileURL;
   }
 }

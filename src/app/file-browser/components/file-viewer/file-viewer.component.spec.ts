@@ -10,7 +10,6 @@ import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { TagsService } from '@core/services/tags/tags.service';
 import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
-import { FileFormat } from '@models/file-vo';
 import { FileBrowserComponentsModule } from '../../file-browser-components.module';
 import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerComponent } from './file-viewer.component';
@@ -39,13 +38,13 @@ const defaultTagList: TagVOData[] = [
 ];
 const defaultItem: ItemVO = new RecordVO({
   displayName: 'Default Item',
-  tags: defaultTagList,
+  TagVOs: defaultTagList,
   type: 'document',
   folder_linkId: 0,
 });
 const secondItem: ItemVO = new RecordVO({
   displayName: 'Second Item',
-  tags: [],
+  TagVOs: [],
   type: 'image',
   folder_linkId: 1,
 });
@@ -158,12 +157,7 @@ describe('FileViewerComponent', () => {
   });
 
   it('should correctly distinguish between keywords and custom metadata', async () => {
-    const { element, fixture } = await defaultRender();
-
-    // Emit tags
-    tagsService.itemTagsObservable.next(defaultTagList);
-    await fixture.whenStable();
-    fixture.detectChanges();
+    const { element } = await defaultRender();
 
     expect(
       element.componentInstance.keywords.find((tag) => tag.name === 'tagOne'),
@@ -331,36 +325,27 @@ describe('FileViewerComponent', () => {
   describe('URLs of PDF files', () => {
     function setUpCurrentRecord(
       typeOfOriginal: string,
-      fileURLOfOriginal: string = 'http://example.com/original',
+      fileURLOfOriginal: string | false = 'http://example.com/original',
     ) {
       activatedRouteData.currentRecord = new RecordVO({
         type: 'document',
         displayName: 'Test Doc',
         TagVOs: [],
-        files: [
+        FileVOs: [
           {
-            fileId: 1,
-            size: 10,
-            downloadURL: 'valid',
-            format: FileFormat.Original,
+            format: 'file.format.original',
             type: typeOfOriginal,
-            fileUrl: fileURLOfOriginal,
+            fileURL: fileURLOfOriginal,
           },
           {
-            fileId: 1,
-            size: 10,
-            downloadURL: 'valid',
-            format: FileFormat.Converted,
+            format: 'file.format.converted',
             type: 'odt',
-            fileUrl: 'http://example.com/ignored',
+            fileURL: 'http://example.com/ignored',
           },
           {
-            fileId: 1,
-            size: 10,
-            downloadURL: 'valid',
-            format: FileFormat.Converted,
+            format: 'file.format.converted',
             type: 'pdf',
-            fileUrl: 'http://example.com/used',
+            fileURL: 'http://example.com/used',
           },
         ],
       });
@@ -401,7 +386,7 @@ describe('FileViewerComponent', () => {
     });
 
     it('will have a falsy document URL if the URL is falsy', async () => {
-      setUpCurrentRecord('pdf', '');
+      setUpCurrentRecord('pdf', false);
       const { instance } = await defaultRender();
 
       expect(instance.getDocumentUrl()).toBeFalsy();

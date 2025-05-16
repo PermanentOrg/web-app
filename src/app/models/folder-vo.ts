@@ -111,10 +111,10 @@ export class FolderVO
   public ShareArchiveVO: ArchiveVO;
   public AccessVO;
   public AccessVOs;
+
   // For the UI
   public posStart;
   public posLimit;
-  public tags;
 
   constructor(
     voData: FolderVOData,

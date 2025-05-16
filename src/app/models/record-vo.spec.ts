@@ -114,14 +114,14 @@ describe('RecordVO', () => {
       expect(record.getDownloadOptionsList()).toEqual([]);
     });
 
-    it('converts to dogyyyyyyywnload option format', () => {
+    it('converts to download option format', () => {
       const record = new RecordVO({});
-      record.files = [
+      record.FileVOs = [
         {
           format: FileFormat.Converted,
           fileId: 0,
           type: 'test.pdf',
-          fileUrl: 'test',
+          fileURL: 'test',
           downloadURL: 'test',
           size: 0,
         },
@@ -129,7 +129,7 @@ describe('RecordVO', () => {
           format: FileFormat.Converted,
           fileId: 0,
           type: 'test.odt',
-          fileUrl: 'test',
+          fileURL: 'test',
           downloadURL: 'test',
           size: 0,
         },
@@ -143,12 +143,12 @@ describe('RecordVO', () => {
 
     it('prioritizes original before others', () => {
       const record = new RecordVO({});
-      record.files = [
+      record.FileVOs = [
         {
           format: FileFormat.Converted,
           fileId: 0,
           type: 'test.pdf',
-          fileUrl: 'test',
+          fileURL: 'test',
           downloadURL: 'test',
           size: 0,
         },
@@ -156,7 +156,7 @@ describe('RecordVO', () => {
           format: FileFormat.Original,
           fileId: 0,
           type: 'test.docx',
-          fileUrl: 'test',
+          fileURL: 'test',
           downloadURL: 'test',
           size: 0,
         },
@@ -164,7 +164,7 @@ describe('RecordVO', () => {
           format: FileFormat.Converted,
           fileId: 0,
           type: 'test.odt',
-          fileUrl: 'test',
+          fileURL: 'test',
           downloadURL: 'test',
           size: 0,
         },

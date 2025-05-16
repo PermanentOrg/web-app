@@ -43,7 +43,7 @@ export class VideoComponent implements OnInit {
     const accessFile = GetAccessFile(this.item);
 
     if (accessFile) {
-      this.videoSrc = accessFile.fileUrl;
+      this.videoSrc = accessFile.fileURL;
       this.isProcessing = false;
     } else {
       this.renderer.removeClass(this.videoWrapperElem, 'loading');

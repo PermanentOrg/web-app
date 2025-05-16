@@ -29,6 +29,6 @@ export class AppsFolderResolveService {
       new FolderVO(appsFolder),
     ]);
 
-    return folderResponse;
+    return folderResponse.getFolderVO(true);
   }
 }

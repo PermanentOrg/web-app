@@ -188,14 +188,7 @@ export class LocationPickerComponent implements OnInit, AfterViewInit {
 
   async saveItem() {
     this.item.update({ LocnVO: this.currentLocation });
-
-    const clonedItem = Object.assign(
-      Object.create(Object.getPrototypeOf(this.item)),
-      this.item,
-    );
-    delete clonedItem.locnId;
-
-    await this.editService.updateItems([clonedItem], ['LocnVO']);
+    await this.editService.updateItems([this.item], ['LocnVO']);
   }
 
   async saveProfileItem() {

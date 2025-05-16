@@ -96,7 +96,7 @@ describe('TagsService', () => {
 
   it('should only cache tags from the current archive', () => {
     const item = new RecordVO({
-      tags: [
+      TagVOs: [
         { tagId: 1, name: 'testOne', archiveId: 1 },
         { tagId: 2, name: 'testTwo', archiveId: 2 },
       ],
