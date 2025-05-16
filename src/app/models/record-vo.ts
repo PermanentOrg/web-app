@@ -122,7 +122,6 @@ export class RecordVO
   public RecordExifVO;
   public ShareVOs: ShareVO[];
   public AccessVO;
-  public tags;
 
   constructor(voData: RecordVOData, options?: Partial<RecordVoOptions>) {
     super(voData);
@@ -237,6 +236,4 @@ export interface RecordVOData extends BaseVOData {
   ShareVOs?: any;
   AccessVO?: any;
   isFolder?: boolean;
-  tags?: any;
-  isRecord?: boolean;
 }

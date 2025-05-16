@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { TagVOData } from '@models/tag-vo';
 import debug from 'debug';
-import { FolderVO, ItemVO, RecordVO } from '@models';
+import { ItemVO } from '@models';
 import { AccountService } from '@shared/services/account/account.service';
 import { orderBy, find } from 'lodash';
 import { Subject } from 'rxjs';
@@ -53,41 +53,21 @@ export class TagsService {
   }
 
   checkTagsOnItem(item: ItemVO) {
-    if (
-      (item.isRecord && !item.tags?.length) ||
-      (item.isFolder && !item.TagVOs?.length)
-    ) {
+    if (!item.TagVOs?.length) {
       return;
     }
 
     let hasNew = false;
 
-    if (item.isFolder) {
-      for (const itemTag of item.TagVOs) {
-        if (
-          !this.tags.has(itemTag.tagId) &&
-          itemTag.name &&
-          itemTag.archiveId === this.account.getArchive().archiveId
-        ) {
-          this.tags.set(itemTag.tagId, itemTag);
-          hasNew = true;
-          this.debug('new tag seen %o', itemTag);
-        }
-      }
-    }
-
-    if (item.isRecord) {
-      for (const itemTag of (item as RecordVO).tags) {
-        if (
-          !this.tags.has(itemTag.id) &&
-          itemTag.name &&
-          itemTag.archiveId === this.account.getArchive().archiveId
-        ) {
-          const tagId = itemTag.tagId ?? itemTag.id;
-          this.tags.set(tagId, { ...itemTag, tagId });
-          hasNew = true;
-          this.debug('new tag seen %o', itemTag);
-        }
+    for (const itemTag of item.TagVOs) {
+      if (
+        !this.tags.has(itemTag.tagId) &&
+        itemTag.name &&
+        itemTag.archiveId === this.account.getArchive().archiveId
+      ) {
+        this.tags.set(itemTag.tagId, itemTag);
+        hasNew = true;
+        this.debug('new tag seen %o', itemTag);
       }
     }
 
