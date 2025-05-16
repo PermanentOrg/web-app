@@ -213,7 +213,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
       const folderResponse = await this.api.folder.getWithChildren([
         new FolderVO(apps),
       ]);
-      const appsFolder = folderResponse;
+      const appsFolder = folderResponse.getFolderVO(true);
       this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
     } catch (err) {
       Sentry.captureException(err);
