@@ -8,7 +8,7 @@ import { AccessRoleType } from './access-role';
 import { TimezoneVOData } from './timezone-vo';
 import { ChildItemData, HasParentFolder } from './folder-vo';
 import { RecordType, FolderLinkType } from './vo-types';
-import { Location, LocnVOData } from './locn-vo';
+import { LocnVOData } from './locn-vo';
 import { TagVOData } from './tag-vo';
 import { ArchiveVO } from './archive-vo';
 import { HasThumbnails } from './get-thumbnail';
@@ -110,7 +110,6 @@ export class RecordVO
 
   // Other stuff
   public LocnVO: LocnVOData;
-  public location: Location;
   public TimezoneVO: TimezoneVOData;
   public FileVOs: PermanentFile[];
   public TagVOs: TagVOData[];
