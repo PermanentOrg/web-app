@@ -57,7 +57,7 @@ describe('ShareLinksApiService', () => {
       });
 
     const req = http.expectOne(
-      `${environment.apiUrl}/v2/share-links?shareLinkIds%5B%5D=123&shareLinkIds%5B%5D=456&shareLinkIds%5B%5D=789`,
+      `${environment.apiUrl}/v2/share-links?shareLinkIds[]=123&shareLinkIds[]=456&shareLinkIds[]=789`,
     );
 
     expect(req.request.method).toBe('GET');
@@ -76,7 +76,7 @@ describe('ShareLinksApiService', () => {
       });
 
     const req = http.expectOne(
-      `${environment.apiUrl}/v2/share-links?shareLinkIds%5B%5D=123`,
+      `${environment.apiUrl}/v2/share-links?shareLinkIds[]=123`,
     );
 
     req.flush({}, { status: 400, statusText: 'Bad Request' });
@@ -93,7 +93,7 @@ describe('ShareLinksApiService', () => {
       .catch(() => done.fail);
 
     const req = http.expectOne(
-      `${environment.apiUrl}/v2/share-links?shareTokens%5B%5D=token-1&shareTokens%5B%5D=token-2&shareTokens%5B%5D=token-3`,
+      `${environment.apiUrl}/v2/share-links?shareTokens[]=token-1&shareTokens[]=token-2&shareTokens[]=token-3`,
     );
 
     expect(req.request.method).toBe('GET');
@@ -112,7 +112,7 @@ describe('ShareLinksApiService', () => {
       });
 
     const req = http.expectOne(
-      `${environment.apiUrl}/v2/share-links?shareTokens%5B%5D=token`,
+      `${environment.apiUrl}/v2/share-links?shareTokens[]=token`,
     );
 
     req.flush({}, { status: 400, statusText: 'Bad Request' });

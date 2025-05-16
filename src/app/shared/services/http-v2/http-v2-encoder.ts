@@ -2,7 +2,7 @@ import { HttpParameterCodec } from '@angular/common/http';
 
 export class HttpV2Encoder implements HttpParameterCodec {
   public encodeKey(key: string): string {
-    return encodeURIComponent(key).replace('%255B', '[').replace('%255D', ']');
+    return encodeURIComponent(key).replace('%5B', '[').replace('%5D', ']');
   }
 
   public encodeValue(value: string): string {

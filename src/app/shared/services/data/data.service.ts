@@ -303,7 +303,7 @@ export class DataService {
 
     return Promise.all(promises)
       .then((results) => {
-        let recordResponse: RecordVO[];
+        let recordResponse: RecordResponse;
         let folderResponse: FolderResponse;
 
         [recordResponse, folderResponse] = results;
@@ -312,7 +312,7 @@ export class DataService {
         let fullFolders: Array<any | FolderVO>;
 
         if (recordResponse) {
-          fullRecords = recordResponse;
+          fullRecords = recordResponse.getRecordVOs();
         }
 
         if (folderResponse) {
@@ -501,21 +501,17 @@ export class DataService {
 
     function downloadFile(fileItem: any, type?: string) {
       const fileVO = getFile(fileItem, type) as any;
-
       const link = document.createElement('a');
-      link.href = fileVO.downloadUrl;
-      link.setAttribute('download', fileVO.fileName || 'download');
-      document.body.appendChild(link);
+      link.href = fileVO.downloadURL;
       link.click();
-      document.body.removeChild(link);
     }
 
     function getFile(fileItem: RecordVO, type?: string) {
       if (type) {
-        return find(fileItem.files, { type });
+        return find(fileItem.FileVOs, { type });
       }
 
-      return find(fileItem.files, { format: 'file.format.original' });
+      return find(fileItem.FileVOs, { format: 'file.format.original' });
     }
   }
 
