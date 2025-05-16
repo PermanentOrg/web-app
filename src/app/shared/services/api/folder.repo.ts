@@ -4,6 +4,7 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
+import { result } from 'lodash';
 
 const MIN_WHITELIST: (keyof FolderVO)[] = [
   'folderId',
