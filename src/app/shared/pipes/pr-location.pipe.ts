@@ -15,7 +15,7 @@ export class PrLocationPipe implements PipeTransform {
   constructor() {}
 
   transform(locnVO: LocnVOData): LocnPipeOutput {
-    if (!locnVO || !locnVO?.id) {
+    if (!locnVO) {
       return null;
     }
 
