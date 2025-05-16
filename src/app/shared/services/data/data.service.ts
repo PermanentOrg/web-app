@@ -490,7 +490,7 @@ export class DataService {
   }
 
   public downloadFile(item: RecordVO, type?: string): Promise<any> {
-    if (item.files && item.files.length) {
+    if (item.FileVOs && item.FileVOs.length) {
       downloadFile(item, type);
       return Promise.resolve();
     } else {
