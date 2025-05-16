@@ -106,12 +106,13 @@ export class RecordVO
   public parentArchiveNbr: string;
   public parentDisplayName: string;
   public pathAsArchiveNbr;
+  public files: PermanentFile[];
 
   // Other stuff
   public LocnVO: LocnVOData;
   public location: Location;
   public TimezoneVO: TimezoneVOData;
-  public files: PermanentFile[];
+  public FileVOs: PermanentFile[];
   public TagVOs: TagVOData[];
   public TextDataVOs;
   public ArchiveVOs: ArchiveVO[];
@@ -225,6 +226,7 @@ export interface RecordVOData extends BaseVOData {
   pathAsArchiveNbr?: any;
   LocnVO?: any;
   TimezoneVO?: TimezoneVOData;
+  FileVOs?: any;
   TagVOs?: any;
   TextDataVOs?: any;
   ArchiveVOs?: ArchiveVO[];
@@ -238,5 +240,4 @@ export interface RecordVOData extends BaseVOData {
   isFolder?: boolean;
   tags?: any;
   isRecord?: boolean;
-  files?: PermanentFile[];
 }

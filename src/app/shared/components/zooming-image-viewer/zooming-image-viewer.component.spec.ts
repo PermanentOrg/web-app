@@ -4,7 +4,6 @@ import OpenSeadragon from 'openseadragon';
 import { NgModule } from '@angular/core';
 import { GetAltTextPipe } from '@shared/pipes/get-alt-text.pipe';
 import { RecordVO } from '@models/index';
-import { FileFormat } from '@models/file-vo';
 import { ZoomingImageViewerComponent } from './zooming-image-viewer.component';
 
 @NgModule()
@@ -50,16 +49,7 @@ describe('ZoomingImageViewerComponent', () => {
 
   function getValidTestRecord(): RecordVO {
     return new RecordVO({
-      files: [
-        {
-          fileId: 1,
-          size: 10,
-          format: FileFormat.Original,
-          fileUrl: 'https://valid-url',
-          type: 'image',
-          downloadURL: 'example.com',
-        },
-      ],
+      FileVOs: [{ fileURL: 'https://invalid-url' }],
       type: 'type.record.image',
     });
   }
@@ -71,46 +61,29 @@ describe('ZoomingImageViewerComponent', () => {
   });
 
   describe('Choose full size image', async () => {
-    it('will return undefined if no files are defined', () => {
+    it('will return undefined if no FileVOs are defined', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
-          new RecordVO({ files: [] }),
+          new RecordVO({ FileVOs: [] }),
         ),
       ).toBeUndefined();
     });
 
-    it('will return the only file url if it exists', () => {
+    it('will return the only FileVO url if it exists', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
-          new RecordVO({
-            files: [
-              {
-                fileId: 1,
-                size: 10,
-                format: FileFormat.Original,
-                fileUrl: 'test',
-                type: 'image',
-                downloadURL: 'example.com',
-              },
-            ],
-          }),
+          new RecordVO({ FileVOs: [{ fileURL: 'test' }] }),
         ),
       ).toBe('test');
     });
 
-    it('will return the converted file url', () => {
+    it('will return the converted FileVO url', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
           new RecordVO({
-            files: [
-              {
-                fileId: 1,
-                size: 10,
-                format: FileFormat.Converted,
-                fileUrl: 'test',
-                type: 'image',
-                downloadURL: 'example.com',
-              },
+            FileVOs: [
+              { fileURL: 'invalid' },
+              { format: 'file.format.converted', fileURL: 'test' },
             ],
           }),
         ),
@@ -121,24 +94,7 @@ describe('ZoomingImageViewerComponent', () => {
       expect(
         ZoomingImageViewerComponent.chooseFullSizeImage(
           new RecordVO({
-            files: [
-              {
-                fileId: 1,
-                size: 10,
-                format: FileFormat.Converted,
-                fileUrl: 'test',
-                type: 'image',
-                downloadURL: 'example.com',
-              },
-              {
-                fileId: 1,
-                size: 10,
-                format: FileFormat.Converted,
-                fileUrl: 'invalid',
-                type: 'image',
-                downloadURL: 'example.com',
-              },
-            ],
+            FileVOs: [{ fileURL: 'test' }, { fileURL: 'invalid' }],
           }),
         ),
       ).toBe('test');
@@ -156,7 +112,7 @@ describe('ZoomingImageViewerComponent', () => {
       await expectNoViewerWithRecord({} as RecordVO);
     });
 
-    it('needs files', async () => {
+    it('needs FileVOs', async () => {
       await expectNoViewerWithRecord(
         new RecordVO({ type: 'type.record.image' }),
       );
@@ -164,25 +120,14 @@ describe('ZoomingImageViewerComponent', () => {
 
     it('needs to be an image', async () => {
       await expectNoViewerWithRecord(
-        new RecordVO({
-          files: [
-            {
-              fileId: 1,
-              size: 10,
-              format: FileFormat.Converted,
-              fileUrl: 'test',
-              type: 'image',
-              downloadURL: 'example.com',
-            },
-          ],
-        }),
+        new RecordVO({ FileVOs: [{ fileURL: 'test' }] }),
       );
     });
 
     it('needs a valid image url', async () => {
       await expectNoViewerWithRecord(
         new RecordVO({
-          files: [],
+          FileVOs: [{}],
           type: 'type.record.image',
         }),
       );

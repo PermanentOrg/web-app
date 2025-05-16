@@ -9,7 +9,7 @@ describe('GetAccessFile', () => {
         fileId: 0,
         size: 0,
         format: FileFormat.Original,
-        fileUrl: 'test',
+        fileURL: 'test',
         downloadURL: 'test',
         type: 'test',
       },
@@ -23,14 +23,14 @@ describe('GetAccessFile', () => {
     expect(GetAccessFile(files)).toBeFalsy();
   });
 
-  it('should return null for an object with no files', () => {
-    expect(GetAccessFile({ files: [] })).toBeFalsy();
+  it('should return null for an object with no FileVOs', () => {
+    expect(GetAccessFile({ FileVOs: [] })).toBeFalsy();
   });
 
   it('should return the only given FileVO', () => {
     expect(
       GetAccessFile({
-        files: [makeTestFile()],
+        FileVOs: [makeTestFile()],
       }),
     ).toEqual(makeTestFile());
   });
@@ -43,7 +43,7 @@ describe('GetAccessFile', () => {
 
     expect(
       GetAccessFile({
-        files: [
+        FileVOs: [
           makeTestFile(),
           makeTestFile({ format: FileFormat.Converted }),
           archivematicaFile,
@@ -62,7 +62,7 @@ describe('GetAccessFile', () => {
 
     expect(
       GetAccessFile({
-        files: [makeTestFile(), convertedFile, makeTestFile()],
+        FileVOs: [makeTestFile(), convertedFile, makeTestFile()],
       }),
     ).toEqual(convertedFile);
   });
@@ -76,7 +76,7 @@ describe('GetAccessFile', () => {
 
     expect(
       GetAccessFile({
-        files: [
+        FileVOs: [
           makeTestFile(),
           makeTestFile({ format: FileFormat.Converted, fileId: 2 }),
           convertedFile,

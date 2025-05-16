@@ -9,7 +9,7 @@ export interface PermanentFile {
   size: number;
   format: FileFormat;
   parentFileId?: number;
-  fileUrl: string;
+  fileURL: string;
   downloadURL: string;
   type: string;
 }
