@@ -162,7 +162,7 @@ export class RecordVO
   }
 
   public getDownloadOptionsList() {
-    const files = [...(this.files ?? [])];
+    const files = [...(this.FileVOs ?? [])];
     return prioritizeIf(
       files,
       (file) => file.format === FileFormat.Original,
