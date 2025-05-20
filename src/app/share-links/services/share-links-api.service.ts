@@ -44,7 +44,7 @@ export class ShareLinksApiService {
     const response = await firstValueFrom(
       this.http.post<ShareLinkPayload>(
         'v2/share-links',
-        { itemId, itemType },
+        { itemId: `${itemId}`, itemType },
         null,
       ),
     );

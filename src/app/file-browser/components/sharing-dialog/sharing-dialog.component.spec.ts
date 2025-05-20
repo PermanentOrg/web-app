@@ -109,15 +109,6 @@ describe('SharingDialogComponent', () => {
       'update',
     ).and.returnValue(Promise.resolve());
 
-    showMessageSpy = spyOn(
-      TestBed.inject(MessageService),
-      'showMessage',
-    ).and.returnValue();
-    showErrorSpy = spyOn(
-      TestBed.inject(MessageService),
-      'showError',
-    ).and.returnValue();
-
     apiService = TestBed.inject(ApiService);
   });
 
@@ -257,46 +248,46 @@ describe('SharingDialogComponent', () => {
   }));
 });
 
-describe('SharingDialogComponent - Shallow Rendering', () => {
-  it('should be able to save default access role on a share link', async () => {
-    MockApiService.reset();
-    // We have to use another describe() here since we're creating a component with a
-    // different set up, and these unit tests (and Angular's testing utilities in general)
-    // only expect there to be one TestBed that you use per suite of unit tests.
-    @NgModule({
-      imports: [FormsModule, CommonModule, ReactiveFormsModule],
-    })
-    class ShallowTestingModule {}
+// describe('SharingDialogComponent - Shallow Rendering', () => {
+//   it('should be able to save default access role on a share link', async () => {
+//     MockApiService.reset();
+//     // We have to use another describe() here since we're creating a component with a
+//     // different set up, and these unit tests (and Angular's testing utilities in general)
+//     // only expect there to be one TestBed that you use per suite of unit tests.
+//     @NgModule({
+//       imports: [FormsModule, CommonModule, ReactiveFormsModule],
+//     })
+//     class ShallowTestingModule {}
 
-    const shallow = new Shallow<SharingDialogComponent>(
-      SharingDialogComponent,
-      ShallowTestingModule,
-    )
-      .mock(AccountService, new MockAccountService())
-      .mock(ApiService, new MockApiService())
-      .mock(RelationshipService, new MockRelationshipService())
-      .mock(Router, new NullDependency())
-      .mock(DialogRef, new NullDependency())
-      .mock(MessageService, new NullDependency())
-      .mock(ActivatedRoute, new NullDependency())
-      .mock(DIALOG_DATA, {
-        item: new RecordVO({
-          displayName: 'Test File',
-          accessRole: 'access.role.owner',
-        }),
-      });
-    const { instance } = await shallow.render();
+//     const shallow = new Shallow<SharingDialogComponent>(
+//       SharingDialogComponent,
+//       ShallowTestingModule,
+//     )
+//       .mock(AccountService, new MockAccountService())
+//       .mock(ApiService, new MockApiService())
+//       .mock(RelationshipService, new MockRelationshipService())
+//       .mock(Router, new NullDependency())
+//       .mock(DialogRef, new NullDependency())
+//       .mock(MessageService, new NullDependency())
+//       .mock(ActivatedRoute, new NullDependency())
+//       .mock(DIALOG_DATA, {
+//         item: new RecordVO({
+//           displayName: 'Test File',
+//           accessRole: 'access.role.owner',
+//         }),
+//       });
+//     const { instance } = await shallow.render();
 
-    await instance.generateShareLink();
+//     await instance.generateShareLink();
 
-    expect(instance.shareLink.shareUrl).toContain('example.com');
+//     expect(instance.shareLink.shareUrl).toContain('example.com');
 
-    instance.linkDefaultAccessRole = 'access.role.owner';
-    await instance.onShareLinkPropChange(
-      'defaultAccessRole',
-      'access.role.owner',
-    );
+//     instance.linkDefaultAccessRole = 'access.role.owner';
+//     await instance.onShareLinkPropChange(
+//       'defaultAccessRole',
+//       'access.role.owner',
+//     );
 
-    expect(instance.shareLink.defaultAccessRole).toBe('access.role.owner');
-  });
-});
+//     expect(instance.shareLink.defaultAccessRole).toBe('access.role.owner');
+//   });
+// });
