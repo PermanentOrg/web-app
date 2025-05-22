@@ -96,13 +96,18 @@ type StelaRecord = Omit<RecordVO, 'files'> & {
 };
 
 export class RecordRepo extends BaseRepo {
-	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
+	public async get(
+		recordVOs: RecordVO[],
+		optionalHeaders: Record<string, unknown> = {},
+	): Promise<RecordResponse> {
 		const recordIds = recordVOs.map((record: RecordVO) => record.recordId);
 		const data = {
 			recordIds,
 		};
 		const stelaRecords = await firstValueFrom(
-			this.httpV2.get<StelaRecord>('v2/record', data),
+			this.httpV2.get<StelaRecord>('v2/record', data, null, {
+				headers: optionalHeaders,
+			}),
 		);
 
 		// We need the `Results` to look the way v1 results look, for now.
