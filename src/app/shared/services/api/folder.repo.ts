@@ -2,7 +2,7 @@
 import { FolderVO, FolderVOData, ItemVO } from '@root/app/models';
 import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
 import { result } from 'lodash';
 
@@ -43,22 +43,38 @@ export class FolderRepo extends BaseRepo {
     });
   }
 
-  public getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const data = folderVOs.map((folderVO) => {
-      return {
-        FolderVO: {
-          archiveNbr: folderVO.archiveNbr,
-          folder_linkId: folderVO.folder_linkId,
-          folderId: folderVO.folderId,
-        },
-      };
-    });
+  public async getWithChildren(
+    folderVOs: FolderVO[],
+    isV2: boolean = false,
+  ): Promise<FolderResponse | FolderVO> {
+    if (!isV2) {
+      const data = folderVOs.map((folderVO) => {
+        return {
+          FolderVO: {
+            archiveNbr: folderVO.archiveNbr,
+            folder_linkId: folderVO.folder_linkId,
+            folderId: folderVO.folderId,
+          },
+        };
+      });
 
-    return this.http.sendRequestPromise<FolderResponse>(
-      '/folder/getWithChildren',
-      data,
-      { responseClass: FolderResponse },
-    );
+      return this.http.sendRequestPromise<FolderResponse>(
+        '/folder/getWithChildren',
+        data,
+        { responseClass: FolderResponse },
+      );
+    } else {
+      const params = {
+        archiveId: folderVOs[0].archiveId,
+        folderId: folderVOs[0].folderId,
+      };
+
+      const resultArray = await firstValueFrom(
+        this.httpV2.get<FolderVO>('/folder/getWithChildren', params),
+      );
+
+      return resultArray[0];
+    }
   }
 
   public navigate(folderVO: FolderVO): Observable<FolderResponse> {
