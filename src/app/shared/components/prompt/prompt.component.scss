@@ -4,6 +4,7 @@ $transition-length: 0.4s;
 
 :host {
   z-index: 100000;
+  position: absolute;
 }
 
 .menu-wrapper.visible {

@@ -99,20 +99,4 @@ describe('SharePreviewComponent', () => {
 
     expect(dialogSpy).not.toHaveBeenCalled();
   }));
-
-  it('should open dialog when a thumbnail is clicked', fakeAsync(() => {
-    const dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
-    const dialogSpy = spyOn(dialog, 'open').and.returnValue(dialogRefSpy);
-
-    const mockFileList = { itemClicked: new EventEmitter<any>() };
-
-    component.subscribeToItemClicks(mockFileList);
-    mockFileList.itemClicked.emit({
-      item: new RecordVO({}),
-      selectable: false,
-    });
-    tick();
-
-    expect(dialogSpy).toHaveBeenCalled();
-  }));
 });

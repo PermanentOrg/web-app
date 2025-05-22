@@ -64,7 +64,8 @@
       <span class="link-type-text"><b>Link Type</b></span>
       <pr-share-link-dropdown
         [linkTypes]="shareLinkTypes"
-        [(value)]="linkType"
+        [value]="accessRestrictions"
+        (valueChange)="onShareLinkPropChange('accessRestrictions', $event)"
       ></pr-share-link-dropdown>
     </div>
     <div
@@ -72,54 +73,7 @@
       *ngIf="showLinkSettings && shareLink"
       @ngIfScaleAnimation
     >
-      <div *ngIf="linkType === 'private'" class="link-settings-item">
-        <label>Share Preview</label>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="sharePreviewToggle"
-            id="sharePreviewToggleOn"
-            [value]="1"
-            [disabled]="updatingLink"
-            [(ngModel)]="previewToggle"
-            (ngModelChange)="
-              onShareLinkPropChange('previewToggle', previewToggle)
-            "
-          />
-          <label class="form-check-label" for="sharePreviewToggleOn">On</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="sharePreviewToggle"
-            id="sharePreviewToggleOff"
-            [value]="0"
-            [disabled]="updatingLink"
-            [(ngModel)]="previewToggle"
-            (ngModelChange)="
-              onShareLinkPropChange('previewToggle', previewToggle)
-            "
-          />
-          <label class="form-check-label" for="sharePreviewToggleOff"
-            >Off</label
-          >
-        </div>
-      </div>
-      <small
-        *ngIf="linkType === 'private'"
-        class="text-muted"
-        [ngSwitch]="previewToggle"
-      >
-        <ng-container *ngSwitchCase="1">
-          Recipients can see a preview without being logged in.
-        </ng-container>
-        <ng-container *ngSwitchCase="0">
-          Recipients must be granted access to view content.
-        </ng-container>
-      </small>
-      <div *ngIf="linkType === 'private'" class="link-settings-item">
+      <div *ngIf="accessRestrictions === 'account'" class="link-settings-item">
         <label>Auto Approve</label>
         <div class="form-check form-check-inline">
           <input
@@ -138,7 +92,7 @@
         </div>
         <div class="form-check form-check-inline">
           <input
-            class="form-check-input"
+            class="form-check-input auto-approve-off"
             type="radio"
             name="autoApproveToggle"
             id="autoApproveToggleOff"
@@ -153,7 +107,7 @@
         </div>
       </div>
       <small
-        *ngIf="linkType === 'private'"
+        *ngIf="accessRestrictions === 'account'"
         class="text-muted"
         [ngSwitch]="autoApproveToggle"
       >
@@ -164,25 +118,29 @@
           Recipients must manually be granted access when requested.
         </ng-container>
       </small>
-      <div *ngIf="linkType === 'private'" class="link-settings-item">
+      <div *ngIf="accessRestrictions === 'account'" class="link-settings-item">
         <label>Default Share Role</label>
         <select
-          class="form-control"
+          class="form-control permission-select"
           [disabled]="!canShare || updatingLink"
           [(ngModel)]="linkDefaultAccessRole"
           (ngModelChange)="
-            onShareLinkPropChange('defaultAccessRole', linkDefaultAccessRole)
+            onShareLinkPropChange('permissionsLevel', linkDefaultAccessRole)
           "
         >
           <option
             *ngFor="let option of shareLinkAccessRoles"
             [value]="option.value"
+            [disabled]="
+              shareLinkResponse?.accessRestrictions === 'none' &&
+              option.value !== 'viewer'
+            "
           >
             {{ option.text }}
           </option>
         </select>
       </div>
-      <small *ngIf="linkType === 'private'" class="text-muted"
+      <small *ngIf="accessRestrictions === 'account'" class="text-muted"
         >Archives joining this share are given this role by default.
         <a
           href="https://permanent.zohodesk.com/portal/en/kb/articles/what-do-the-different-access-permissions-mean"
@@ -198,7 +156,7 @@
           [(ngModel)]="expiration"
           (ngModelChange)="
             onShareLinkPropChange(
-              'expiresDT',
+              'expirationTimestamp',
               getExpiresDTFromExpiration(expiration)
             )
           "
@@ -212,13 +170,16 @@
           </option>
         </select>
       </div>
-      <small class="text-muted" [ngSwitch]="shareLink.expiresDT">
+      <small
+        class="text-muted"
+        [ngSwitch]="shareLinkResponse.expirationTimestamp"
+      >
         <ng-container *ngSwitchCase="null">
           This link will only expire if deleted
         </ng-container>
         <ng-container *ngSwitchDefault>
           This link will expire
-          {{ shareLink.expiresDT | date: "MMM d, y 'at h:mm:ss a" }}
+          {{ shareLink.expirationTimestamp | date: "MMM d, y 'at h:mm:ss a" }}
         </ng-container>
       </small>
     </div>

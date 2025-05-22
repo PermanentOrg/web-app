@@ -71,6 +71,7 @@ import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
 import { PublishComponent } from '../publish/publish.component';
 import { EditTagsComponent } from '../edit-tags/edit-tags.component';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
@@ -239,6 +240,7 @@ export class FileListItemComponent
     @Optional() private drag: DragService,
     private storage: StorageService,
     @Inject(DOCUMENT) private document: Document,
+    private shareLinksApiService: ShareLinksApiService,
   ) {}
 
   ngOnInit() {
@@ -260,8 +262,6 @@ export class FileListItemComponent
       this.isInSharePreview = true;
       this.canSelect = true;
     }
-
-    console.log(this.canSelect)
 
     if (this.router.routerState.snapshot.url.includes('/apps')) {
       this.isInApps = true;
@@ -496,9 +496,8 @@ export class FileListItemComponent
         event: event as MouseEvent,
         selectable: false,
       });
-    }
-    else {
-    this.onItemSingleClick(event);
+    } else {
+      this.onItemSingleClick(event);
     }
   }
 
@@ -593,7 +592,6 @@ export class FileListItemComponent
     }
 
     if (this.waitingForDoubleClick) {
-      console.log(this.waitingForDoubleClick);
       this.waitingForDoubleClick = false;
       return this.onItemDoubleClick();
     }
@@ -780,14 +778,24 @@ export class FileListItemComponent
         });
         break;
       case 'share':
-        this.api.share
-          .getShareLink(this.item)
-          .then((response: ShareResponse) => {
+        const itemType = this.item.isRecord ? 'record' : 'folder';
+
+        const itemId =
+          this.item instanceof RecordVO
+            ? this.item.recordId
+            : this.item.folderId;
+
+        this.shareLinksApiService
+          .generateShareLink({
+            itemId,
+            itemType,
+          })
+          .then((response) => {
             actionDeferred.resolve();
             this.dialog.open(SharingComponent, {
               data: {
                 item: this.item,
-                link: response.getShareByUrlVO(),
+                shareLinkResponse: response,
               },
             });
           });

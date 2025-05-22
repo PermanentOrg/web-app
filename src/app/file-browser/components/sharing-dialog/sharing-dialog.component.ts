@@ -127,6 +127,7 @@ export class SharingDialogComponent implements OnInit {
     });
 
     this.shareItem = this.data.item as ItemVO;
+    this.shareLinkResponse = this.data.shareLinkResponse;
   }
 
   ngOnInit(): void {
