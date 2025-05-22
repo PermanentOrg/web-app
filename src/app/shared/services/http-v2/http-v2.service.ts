@@ -213,6 +213,12 @@ export class HttpV2Service {
     if (this.authToken && options.authToken) {
       headers = headers.append('Authorization', `Bearer ${this.authToken}`);
     }
+
+    if (options.headers) {
+      for (const [key, value] of Object.entries(options.headers)) {
+        headers = headers.append(key, value);
+      }
+    }
     return {
       headers,
     };

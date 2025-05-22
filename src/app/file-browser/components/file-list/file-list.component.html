@@ -21,7 +21,7 @@
   <pr-file-list-item
     *ngFor="let item of currentFolder.ChildItemVOs"
     [@ngIfScaleAnimationDynamic]="
-      item.isPendingAction || item.isNewlyCreated ? 'animate' : 'static'
+      item?.isPendingAction || item?.isNewlyCreated ? 'animate' : 'static'
     "
     [item]="item"
     [folderView]="folderView"

@@ -323,6 +323,7 @@ export class FileListComponent
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);
+
     this.isRootFolder = this.currentFolder.type.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 
@@ -361,7 +362,7 @@ export class FileListComponent
   }
 
   ngOnDestroy() {
-    // this.dataService.setCurrentFolder();
+    this.dataService.setCurrentFolder();
     unsubscribeAll(this.subscriptions);
     if (this.unlistenMouseMove) {
       this.unlistenMouseMove();
@@ -438,7 +439,7 @@ export class FileListComponent
   }
 
   onItemClick(itemClick: ItemClickEvent) {
-    // this.itemClicked.emit(itemClick);
+    this.itemClicked.emit(itemClick);
 
     if (!this.showSidebar || !itemClick.selectable) {
       return;

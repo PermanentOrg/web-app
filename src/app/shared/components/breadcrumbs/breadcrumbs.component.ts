@@ -109,6 +109,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
     const isInSharePreview =
       this.router.routerState.snapshot.url.includes('/share/');
+
     const isInShareInvitePreview =
       this.router.routerState.snapshot.url.includes('/share/invite');
     const isInSharePreviewView =
@@ -134,7 +135,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     } else if (this.router.routerState.snapshot.url.includes('/shares')) {
       rootUrl = '/shares';
     } else if (isInSharePreviewView) {
-      rootUrl = `/share/${this.route.snapshot.params.shareToken}/view`;
+      rootUrl = `/share`;
     } else if (isInSharePreviewInviteView) {
       rootUrl = `/share/invite/${this.route.snapshot.params.inviteCode}/view`;
     } else if (isInPublicArchive) {

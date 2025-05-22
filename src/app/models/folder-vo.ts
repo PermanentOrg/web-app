@@ -45,6 +45,8 @@ export class FolderVO
 
   public folderId;
   public archiveNbr;
+  public archiveNumber;
+
   public archiveArchiveNbr: string | undefined;
   public archiveId;
   public displayName;
@@ -91,6 +93,8 @@ export class FolderVO
   public pathAsFolder_linkId: number[];
   public pathAsText: string[];
   public folder_linkId: number;
+  public folderLinkId: number;
+
   public parentFolder_linkId: number;
   public ParentFolderVOs;
   public parentArchiveNbr;

@@ -26,7 +26,7 @@ import { SharePreviewFooterComponent } from './components/share-preview-footer/s
     FolderViewService,
     RecordResolveService,
     EditService,
-    FolderPickerService
+    FolderPickerService,
   ],
 })
 export class SharePreviewModule {

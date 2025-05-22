@@ -10,6 +10,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { AccountService } from '@shared/services/account/account.service';
 
 import { FolderVO } from '@root/app/models';
+import { FolderResponse } from '@shared/services/api/folder.repo';
 
 @Injectable()
 export class AppsFolderResolveService {
@@ -29,6 +30,6 @@ export class AppsFolderResolveService {
       new FolderVO(appsFolder),
     ]);
 
-    return folderResponse.getFolderVO(true);
+    return (folderResponse as FolderResponse).getFolderVO(true);
   }
 }

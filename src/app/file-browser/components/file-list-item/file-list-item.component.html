@@ -7,7 +7,7 @@
     'drag-target': isDragTarget,
     'drop-target': isDropTarget,
     dragging: isDragging,
-    disabled: item.isPendingAction,
+    disabled: item?.isPendingAction,
     'public-archive': isPublicArchive
   }"
   (mousedown)="onItemMouseDown($event)"
@@ -46,7 +46,11 @@
     <div
       *ngIf="!item.isFolder && !isZip"
       prBgImage
-      [bgSrc]="!inGridView ? item.thumbURL200 : item.thumbURL500"
+      [bgSrc]="
+        !inGridView
+          ? item.thumbURL200 || item.thumbUrl200
+          : item.thumbURL500 || item.thumbUrl500
+      "
       [cover]="inGridView"
     ></div>
   </ng-container>
