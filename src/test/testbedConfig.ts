@@ -15,6 +15,9 @@ import { FolderPickerService } from '@core/services/folder-picker/folder-picker.
 import { TooltipsPipe } from '@shared/pipes/tooltips.pipe';
 import { ApiService } from '@shared/services/api/api.service';
 import { HttpService } from '@shared/services/http/http.service';
+import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
+import { StorageService } from '@shared/services/storage/storage.service';
+import { SecretsService } from '@shared/services/secrets/secrets.service';
 import { ProfileService } from '@shared/services/profile/profile.service';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { DeviceService } from '@shared/services/device/device.service';
@@ -34,6 +37,9 @@ export const BASE_TEST_CONFIG = {
 		Uploader,
 		PromptService,
 		HttpService,
+		HttpV2Service,
+		StorageService,
+		SecretsService,
 		ApiService,
 		DeviceService,
 		DataService,

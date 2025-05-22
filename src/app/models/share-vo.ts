@@ -18,16 +18,18 @@ export function sortShareVOs(shares: ShareVO[]) {
 	);
 }
 
+export type ShareStatus =
+	| 'status.generic.ok'
+	| 'status.generic.deleted'
+	| 'status.generic.pending';
+
 export class ShareVO extends BaseVO implements DynamicListChild {
 	public shareId;
 	public folder_linkId;
 	public archiveId;
 	public accessRole: AccessRoleType;
 	public type;
-	public status:
-		| 'status.generic.ok'
-		| 'status.generic.deleted'
-		| 'status.generic.pending';
+	public status: ShareStatus;
 	public requestToken: string;
 
 	public isPendingAction = false;
