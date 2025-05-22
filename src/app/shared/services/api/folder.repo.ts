@@ -46,15 +46,21 @@ export class FolderRepo extends BaseRepo {
 		);
 	}
 
-	public async getWithChildren(folderVOs: FolderVO[]): Promise<FolderResponse> {
+	public async getWithChildren(
+		folderVOs: FolderVO[],
+		optionalHeaders: Record<string, unknown> = {},
+	): Promise<FolderResponse> {
 		const params = {
 			archiveId: folderVOs[0].archiveId,
 			folderId: folderVOs[0].folderId,
 		};
-
 		const response = this.httpV2.get<FolderVO>(
 			'/folder/getWithChildren',
 			params,
+			null,
+			{
+				headers: optionalHeaders,
+			},
 		);
 		const folderVos = await firstValueFrom(response);
 
