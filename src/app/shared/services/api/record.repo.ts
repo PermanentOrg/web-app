@@ -1,4 +1,4 @@
-import { RecordVO, FolderVO } from '@root/app/models';
+import { RecordVO, FolderVO, TagVO } from '@root/app/models';
 import {
 	BaseResponse,
 	BaseRepo,
@@ -37,23 +37,155 @@ class MultipartUploadUrlsList {
 	}
 }
 
+// This type is here so we can shim stela responses to the format expected
+// by our components.  Eventually we will want to refactor those components
+// to simply use what stela provides, but there is work to be done regarding
+// overall type safety in this code base before we want to take that project
+// on.
+type StelaRecord = Omit<RecordVO, 'files'> & {
+	tags: { id: number; name: string; type: string }[];
+	archiveNumber: string;
+	displayDate: string;
+	folderLinkId: number;
+	folderLinkType: string;
+	parentFolderLinkId: string;
+	thumbUrl200: string;
+	thumbUrl500: string;
+	thumbUrl1000: string;
+	thumbUrl2000: string;
+	location: null | {
+		id: number;
+		streetNumber: string;
+		streetName: string;
+		locality: string;
+		county: string;
+		state: string;
+		latitude: number;
+		longitude: number;
+		country: string;
+		countryCode: string;
+		displayName: string | null;
+	};
+	files: Array<{
+		size: number;
+		type: string;
+		fileId: number;
+		format: string;
+		fileUrl: string;
+		createdAt: string;
+		updatedAt: string;
+		downloadUrl: string;
+	}>;
+	createdAt: string;
+	updatedAt: string;
+	archive: {
+		id: string;
+		archiveNumber: string;
+		name: string;
+	};
+	shares: null | Array<{
+		id: string;
+		status: string;
+		accessRole: string;
+		archive: {
+			id: number;
+			name: string;
+			thumbUrl200: string;
+		};
+	}>;
+};
+
 export class RecordRepo extends BaseRepo {
 	public async get(recordVOs: RecordVO[]): Promise<RecordResponse> {
-		const data = recordVOs.map((recordVO) => ({
-			RecordVO: new RecordVO({
-				folder_linkId: recordVO.folder_linkId,
-				recordId: recordVO.recordId,
-				archiveNbr: recordVO.archiveNbr,
-			}),
-		}));
-
-		return await this.http.sendRequestPromise<RecordResponse>(
-			'/record/get',
-			data,
-			{
-				responseClass: RecordResponse,
-			},
+		const recordIds = recordVOs.map((record: RecordVO) => record.recordId);
+		const data = {
+			recordIds,
+		};
+		const stelaRecords = await firstValueFrom(
+			this.httpV2.get<StelaRecord>('v2/record', data),
 		);
+
+		// We need the `Results` to look the way v1 results look, for now.
+		const simulatedV1RecordResponseResults = stelaRecords.map(
+			(stelaRecord) => ({
+				data: [
+					{
+						RecordVO: {
+							...stelaRecord,
+							TagVOs: stelaRecord.tags.map(
+								(tag) =>
+									new TagVO({
+										tagId: tag.id,
+										name: tag.name,
+										type: tag.type,
+										archiveId: stelaRecord.archiveId,
+									}),
+							),
+							archiveNbr: stelaRecord.archiveNumber,
+							downloadNameOk: true,
+							displayDT: stelaRecord.displayDate,
+							folder_linkId: stelaRecord.folderLinkId,
+							folder_linkType: stelaRecord.folderLinkType,
+							LocnVO: {
+								...stelaRecord.location,
+								locnId: stelaRecord.location.id,
+							},
+							FileVOs: stelaRecord.files.map((file) => ({
+								...file,
+								fileURL: file.downloadUrl,
+								downloadURL: file.downloadUrl,
+							})),
+							createdDT: stelaRecord.createdAt,
+							updatedDT: stelaRecord.updatedAt,
+							locnId: stelaRecord.location?.id || null,
+							parentFolder_linkId: stelaRecord.parentFolderLinkId,
+							TextDataVOs: [],
+							ArchiveVOs: [],
+							archiveArchiveNbr: stelaRecord.archive.archiveNumber,
+							timeZoneId: 88, // Hard coded for now
+							TimezoneVO: {
+								timeZoneId: 88,
+								displayName: 'Central Time',
+								timeZonePlace: 'America/Chicago',
+								stdName: 'Central Standard Time',
+								stdAbbrev: 'CST',
+								stdOffset: '-06:00',
+								dstName: 'Central Daylight Time',
+								dstAbbrev: 'CDT',
+								dstOffset: '-05:00',
+								countryCode: 'US',
+								country: 'United States',
+								status: 'status.timezone.ok',
+								type: 'type.generic.placeholder',
+								createdDT: '2017-05-26T00:00:00',
+								updatedDT: '2017-05-26T00:00:00',
+							},
+							ShareVOs: (stelaRecord.shares ?? []).map((share) => ({
+								shareId: share.id,
+								status: share.status,
+								accessRole: share.accessRole,
+								ArchiveVO: {
+									archiveId: share.archive.id,
+									fullName: share.archive.name,
+									thumbURL200: share.archive.thumbUrl200,
+								},
+							})),
+						},
+					},
+				],
+				message: ['Record retrieved'],
+				status: true,
+				resultDT: new Date().toISOString(),
+				createdDT: null,
+				updatedDT: null,
+			}),
+		);
+		const recordResponse = new RecordResponse({
+			isSuccessful: true,
+			isSystemUp: true,
+			Results: simulatedV1RecordResponseResults,
+		});
+		return recordResponse;
 	}
 
 	public async getLean(
