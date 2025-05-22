@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import * as Testing from '@root/test/testbedConfig';
 import { cloneDeep } from 'lodash';
+import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 
 import { DataService } from '@shared/services/data/data.service';
-import { ApiService } from '@shared/services/api/api.service';
 import { FolderVO, RecordVO } from '@root/app/models';
 import { FolderResponse } from '@shared/services/api/index.repo';
+import { of } from 'rxjs';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 import { DataStatus } from '@models/data-status.enum';
@@ -28,9 +29,6 @@ describe('DataService', () => {
 	beforeEach(() => {
 		const config = cloneDeep(Testing.BASE_TEST_CONFIG);
 		config.imports.push(NgbTooltipModule);
-		const providers = config.providers;
-		providers.push(DataService);
-		providers.push(ApiService);
 		TestBed.configureTestingModule(config);
 	});
 
@@ -118,7 +116,6 @@ describe('DataService', () => {
 
 	it('should fetch full data for placeholder items', (done) => {
 		const service = TestBed.inject(DataService);
-		const httpMock = TestBed.inject(HttpTestingController);
 		const navigateResponse = new FolderResponse(navigateMinData);
 		const currentFolder = navigateResponse.getFolderVO(true);
 		service.setCurrentFolder(currentFolder);
@@ -129,18 +126,22 @@ describe('DataService', () => {
 
 		const records = currentFolder.ChildItemVOs.filter((item) => item.isRecord);
 
+		const httpV2Service = TestBed.inject(HttpV2Service);
+		spyOn(httpV2Service, 'get').and.returnValue(of(getFullRecordsData));
+
 		service
 			.fetchFullItems(records)
 			.then(() => {
+				expect(httpV2Service.get).toHaveBeenCalledWith(
+					'v2/record',
+					jasmine.any(Object),
+				);
 				records.forEach((item) => {
 					expect(item.dataStatus).toEqual(DataStatus.Full);
 				});
 				done();
 			})
 			.catch(done.fail);
-
-		const req = httpMock.expectOne(`${environment.apiUrl}/record/get`);
-		req.flush(getFullRecordsData);
 	});
 
 	it('should handle an empty array when fetching full data', async () => {
