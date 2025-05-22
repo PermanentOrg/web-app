@@ -16,6 +16,7 @@ import { faTrash } from '@fortawesome/pro-regular-svg-icons';
 import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { ngIfScaleAnimation } from '@shared/animations';
 import { ShareLink } from '@root/app/share-links/models/share-link';
+import { AccountService } from '@shared/services/account/account.service';
 
 enum Expiration {
   Never = 'Never',
@@ -116,16 +117,23 @@ export class ShareLinkSettingsComponent implements OnInit {
     private messageService: MessageService,
     private promptService: PromptService,
     private shareLinkApiService: ShareLinksApiService,
+    private account: AccountService,
   ) {
     this.displayDropdown = feature.isEnabled('unlisted-share');
   }
 
   ngOnInit(): void {
-    this.shareLink = shareUrlBuilder(
-      this.shareLinkResponse?.itemType,
-      this.shareLinkResponse?.token,
-      this.shareLinkResponse?.itemId,
-    );
+    const accountId = this.account.getAccount().accountId;
+    const archiveNbr = this.account.getArchive().archiveNbr;
+
+    const shareLinkUrlPayload = {
+      itemType: this.shareLinkResponse?.itemType,
+      token: this.shareLinkResponse?.token,
+      itemId: this.shareLinkResponse?.itemId,
+      accountId,
+    };
+
+    this.shareLink = shareUrlBuilder(shareLinkUrlPayload);
     this.setShareLinkFormValue();
   }
 
@@ -225,11 +233,17 @@ export class ShareLinkSettingsComponent implements OnInit {
         responseId,
         this.shareLinkResponse,
       );
-      this.shareLink = shareUrlBuilder(
-        updateResponse.itemType,
-        updateResponse.token,
-        updateResponse.itemId,
-      );
+
+      const accountId = this.account.getAccount().accountId;
+
+      const shareLinkUrlPayload = {
+        itemType: response?.itemType,
+        token: response?.token,
+        itemId: response?.itemId,
+        accountId,
+      };
+
+      this.shareLink = shareUrlBuilder(shareLinkUrlPayload);
       this.setShareLinkFormValue();
       this.showLinkSettings = true;
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);

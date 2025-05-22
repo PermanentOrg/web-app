@@ -51,7 +51,7 @@ export class RecordRepo extends BaseRepo {
   public async get(
     recordVOs: RecordVO[],
     isV2: boolean = false,
-    optionalHeaders: Record<string, any> = {},
+    headers: Record<string, any> = {},
   ): Promise<RecordResponse | RecordVO[]> {
     if (!isV2) {
       const data = recordVOs.map((recordVO) => {
@@ -74,9 +74,7 @@ export class RecordRepo extends BaseRepo {
       };
 
       return await firstValueFrom(
-        this.httpV2.get('v2/record', data, null, {
-          headers: optionalHeaders,
-        }),
+        this.httpV2.get('v2/record', data, null, { headers }),
       );
     }
   }

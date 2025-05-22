@@ -44,6 +44,7 @@ export class RecordVO
   public recordId;
   public archiveId;
   public archiveNbr;
+  public archiveNumber;
   public archiveArchiveNbr: string | undefined;
   public publicDT;
   public note;
@@ -92,6 +93,8 @@ export class RecordVO
   // Comes from the FolderLinkVO
   public FolderLinkVOs;
   public folder_linkId: number;
+  public folderLinkId: number;
+
   public parentFolderId: number;
   public position;
   public accessRole: AccessRoleType;
@@ -210,6 +213,7 @@ export interface RecordVOData extends BaseVOData {
   processedDT?: any;
   FolderLinkVOs?: any;
   folder_linkId?: number;
+  folderLinkId?: number;
   parentFolderId?: number;
   position?: any;
   accessRole?: AccessRoleType;

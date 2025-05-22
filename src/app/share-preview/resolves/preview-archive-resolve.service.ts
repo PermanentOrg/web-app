@@ -27,13 +27,5 @@ export class PreviewArchiveResolveService {
       .then((response: ArchiveResponse): ArchiveVO => {
         return response.getArchiveVO();
       });
-    // return this.api.publish.getResource(route.params.publishUrlToken)
-    //   .then((response: PublishResponse): RecordVO | any => {
-    //     if (response.getRecordVO()) {
-    //       return response.getRecordVO();
-    //     } else {
-    //       return response.getFolderVO();
-    //     }
-    //   });
   }
 }

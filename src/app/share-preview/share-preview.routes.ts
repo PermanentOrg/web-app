@@ -23,17 +23,12 @@ import { RelationshipShareResolveService } from './resolves/relationship-share-r
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
-const archiveResolve = {
-  archive: PreviewArchiveResolveService,
-  currentFolder: PreviewFolderResolveService,
-};
-
 const previewResolve = {
   currentFolder: PreviewResolveService,
 };
 
 const shareResolve = {
-  sharePreviewVO: ShareUrlResolveService,
+  sharePreviewItem: ShareUrlResolveService,
 };
 
 const shareInviteResolve = {
@@ -68,6 +63,13 @@ const sharePreviewChildren = [
         },
         loadChildren: LazyLoadFileBrowserSibling,
       },
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        resolve: {
+          currentRecord: RecordResolveService,
+        },
+      },
     ],
   },
 ];
@@ -98,23 +100,15 @@ export const routes: Routes = [
     data: {
       noFileListPadding: true,
     },
-    children: sharePreviewChildren,
-  },
-  {
-    path: ':shareToken',
-    resolve: shareResolve,
-    data: {
-      noFileListPadding: true,
-    },
     children: [
       ...sharePreviewChildren,
-      {
-        path: 'record/:recArchiveNbr',
-        component: FileViewerComponent,
-        resolve: {
-          currentRecord: RecordResolveService,
-        },
-      },
+      // {
+      //   path: 'record/:recArchiveNbr',
+      //   component: FileViewerComponent,
+      //   resolve: {
+      //     currentRecord: RecordResolveService,
+      //   },
+      // },
     ],
   },
 ];

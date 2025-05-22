@@ -21,7 +21,7 @@ interface RequestOptions {
   authToken?: boolean;
   useStelaDomain?: boolean;
   responseType?: ResponseType;
-  headers?: Record<string, any>; 
+  headers?: Record<string, any>;
 }
 
 const defaultOptions: RequestOptions = {
@@ -213,6 +213,12 @@ export class HttpV2Service {
     let headers: HttpHeaders = HttpV2Service.HttpHeaders;
     if (this.authToken && options.authToken) {
       headers = headers.append('Authorization', `Bearer ${this.authToken}`);
+    }
+
+    if (options.headers) {
+      for (const [key, value] of Object.entries(options.headers)) {
+        headers = headers.append(key, value);
+      }
     }
     return {
       headers,

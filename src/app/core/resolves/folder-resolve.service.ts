@@ -42,10 +42,16 @@ export class FolderResolveService {
         type: 'type.folder.root.app',
       });
       targetFolder = new FolderVO(apps);
-    } else if (state.url.includes('/share/')) {
-      const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
-      const sharedRecord = route.parent.data.sharePreviewVO.RecordVO;
+    } else if (state.url.includes('/share')) {
+      const sharedFolder =
+        route.parent.data.sharePreviewItem?.FolderVO ||
+        route.parent.data.sharePreviewVO?.FolderVO;
+      const sharedRecord =
+        route.parent.data.sharePreviewItem?.RecordVO ||
+        route.parent.data.sharePreviewVO?.RecordVO;
       if (sharedFolder) {
+        sharedFolder.folder_linkId = sharedFolder.folderLinkId;
+        sharedFolder.archiveNbr = sharedFolder.archiveNumber;
         targetFolder = new FolderVO(sharedFolder);
       } else {
         const folder = new FolderVO(cloneDeep(route.parent.data.currentFolder));

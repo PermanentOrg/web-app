@@ -63,6 +63,7 @@ import {
 } from '@shared/utilities/hasSubscriptions';
 import { Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { ngIfFadeInAnimation } from '@shared/animations';
 import { RouteData } from '@root/app/app.routes';
 import { ThumbnailCache } from '@shared/utilities/thumbnail-cache/thumbnail-cache';
@@ -71,7 +72,6 @@ import { ItemClickEvent } from '../file-list/file-list.component';
 import { SharingComponent } from '../sharing/sharing.component';
 import { PublishComponent } from '../publish/publish.component';
 import { EditTagsComponent } from '../edit-tags/edit-tags.component';
-import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
@@ -1052,7 +1052,7 @@ export class FileListItemComponent
     } else {
       this.api.folder
         .getWithChildren([this.item as FolderVO])
-        .then((resp) => {
+        .then((resp: FolderResponse) => {
           if (resp.isSuccessful) {
             const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
             const allChildren = newFolderVO.ChildItemVOs;

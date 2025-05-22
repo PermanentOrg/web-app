@@ -46,6 +46,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { ShareLink } from '@root/app/share-links/models/share-link';
 import { shareUrlBuilder } from '@fileBrowser/utils/utils';
 import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
+import { AccountService } from '@shared/services/account/account.service';
 
 const ShareActions: { [key: string]: PromptButton } = {
   ChangeAccess: {
@@ -98,14 +99,23 @@ export class SharingComponent implements OnInit {
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService,
     private shareLinkApiService: ShareLinksApiService,
+    private account: AccountService,
   ) {
     this.shareItem = this.data.item as ItemVO;
     this.shareLinkResponse = this.data.shareLinkResponse;
-    this.shareLink = shareUrlBuilder(
-      this.shareLinkResponse.itemType,
-      this.shareLinkResponse.token,
-      this.shareLinkResponse.itemId,
-    );
+
+    const accountId = this.account.getAccount().accountId;
+
+    const shareLinkUrlPayload = {
+      itemType: this.shareLinkResponse?.itemType,
+      token: this.shareLinkResponse?.token,
+      itemId: this.shareLinkResponse?.itemId,
+      archiveId: this.shareItem.archiveId,
+      archiveNbr: this.shareItem.archiveNbr,
+      accountId,
+    };
+
+    this.shareLink = shareUrlBuilder(shareLinkUrlPayload);
 
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
       [this.pendingShares, this.shares] = partition(this.shareItem.ShareVOs, {
@@ -373,11 +383,18 @@ export class SharingComponent implements OnInit {
     if (response) {
       this.shareLinkResponse = response;
 
-      this.shareLink = shareUrlBuilder(
-        this.shareLinkResponse.itemType,
-        this.shareLinkResponse.token,
-        this.shareLinkResponse.itemId,
-      );
+      const accountId = this.account.getAccount().accountId;
+
+      const shareLinkUrlPayload = {
+        itemType: this.shareLinkResponse?.itemType,
+        token: this.shareLinkResponse?.token,
+        itemId: this.shareLinkResponse?.itemId,
+        archiveId: this.shareItem.archiveId,
+        archiveNbr: this.shareItem.archiveNbr,
+        accountId,
+      };
+
+      this.shareLink = shareUrlBuilder(shareLinkUrlPayload);
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }
   }

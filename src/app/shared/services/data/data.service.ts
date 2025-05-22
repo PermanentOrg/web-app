@@ -176,8 +176,8 @@ export class DataService {
       });
     }
     const folder = new FolderVO({
-      archiveNbr: currentFolder.archiveNbr,
-      folder_linkId: currentFolder.folder_linkId,
+      archiveNbr: currentFolder.archiveNbr || currentFolder.archiveNumber,
+      folder_linkId: currentFolder.folder_linkId || currentFolder.folderLinkId,
       ChildItemVOs: items
         .filter((item) => {
           if (item.isFetching) {
@@ -193,7 +193,7 @@ export class DataService {
         })
         .map((item) => {
           return {
-            folder_linkId: item.folder_linkId,
+            folder_linkId: item.folder_linkId || item.folderLinkId,
           };
         }),
     });

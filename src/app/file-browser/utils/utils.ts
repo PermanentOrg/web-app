@@ -1,10 +1,11 @@
 import { environment } from '@root/environments/environment';
 
-export const shareUrlBuilder = (
-  itemType: 'record' | 'folder',
-  token: string,
-  itemId: string,
-) => {
+export const shareUrlBuilder = (payload: {
+  itemType: 'record' | 'folder';
+  token: string;
+  itemId: string;
+  accountId: string;
+}) => {
   const urlDict = {
     local: 'https://local.permanent.org/share',
     staging: 'https://staging.permanent.org/share',
@@ -16,9 +17,9 @@ export const shareUrlBuilder = (
 
   const url = new URL(baseUrl);
 
-  url.searchParams.set('itemType', itemType);
-  url.searchParams.set('token', token);
-  url.searchParams.set('itemId', itemId);
+  Object.keys(payload).map((key) => {
+    url.searchParams.set(key, payload[key]);
+  });
 
   return url.toString();
 };

@@ -1,5 +1,11 @@
 /* @format */
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  OnDestroy,
+  AfterViewInit,
+} from '@angular/core';
 import {
   Router,
   ActivatedRoute,
@@ -19,12 +25,8 @@ import {
 } from '@angular/forms';
 
 import { APP_CONFIG } from '@root/app/app.config';
-import {
-  matchControlValidator,
-  trimWhitespace,
-  copyFromInputElement,
-} from '@shared/utilities/forms';
-import { AccountResponse, AuthResponse } from '@shared/services/api/index.repo';
+import { trimWhitespace, copyFromInputElement } from '@shared/utilities/forms';
+import { AuthResponse } from '@shared/services/api/index.repo';
 import { DeviceService } from '@shared/services/device/device.service';
 import { Subscription, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -49,29 +51,35 @@ enum FormType {
   templateUrl: './share-preview.component.html',
   styleUrls: ['./share-preview.component.scss'],
 })
-export class SharePreviewComponent implements OnInit, OnDestroy {
+export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   // share data
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
-  sharePreviewVO = this.route.snapshot.data.sharePreviewVO;
-  shareArchive: ArchiveVO = this.sharePreviewVO.ArchiveVO;
-  shareAccount: AccountVO = this.sharePreviewVO.AccountVO;
+
+  sharePreviewVO =
+    this.route.snapshot.data.sharePreviewVO ||
+    this.route.snapshot.data.sharePreviewItem;
+  shareArchive: ArchiveVO = this.sharePreviewVO?.ArchiveVO;
+  shareAccount = this.sharePreviewVO?.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   // access and permissions
-  isInvite = !!this.sharePreviewVO.inviteId;
-  isRelationshipShare = !!this.sharePreviewVO.shareId;
+  isInvite = !!this.sharePreviewVO?.inviteId;
+  isRelationshipShare = !!this.sharePreviewVO?.shareId;
   isLinkShare = !this.isInvite && !this.isRelationshipShare;
 
   isOriginalOwner = false;
   isLoggedIn = false;
-  hasRequested = this.isLinkShare && !!this.sharePreviewVO.ShareVO;
+  hasRequested = this.isLinkShare && !!this.sharePreviewVO;
   hasAccess = false;
   canEdit =
     this.hasAccess &&
-    !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+    (!this.sharePreviewVO.ShareVO.accessRole?.includes('viewer') ||
+      !this.sharePreviewVO.permissionsLevel?.includes('viewer'));
   canShare =
-    this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+    this.hasAccess &&
+    (!this.sharePreviewVO?.ShareVO.accessRole?.includes('owner') ||
+      !this.sharePreviewVO.permissionsLevel?.includes('owner'));
 
   // component toggles
   showCover = false;
@@ -245,6 +253,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     this.archive = this.accountService.getArchive();
     this.account = this.accountService.getAccount();
     this.shareArchive = this.sharePreviewVO.ArchiveVO;
+
     this.shareAccount = this.sharePreviewVO.AccountVO;
 
     if (this.isInvite) {
@@ -252,9 +261,11 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     }
 
     if (this.isLinkShare) {
-      this.hasRequested = !!this.sharePreviewVO.ShareVO;
-      this.hasAccess =
-        this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+      this.hasRequested = !!this.sharePreviewVO;
+      this.hasAccess = true;
+      // this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+      this.isAutoApprove = true;
+
       if (this.sharePreviewVO?.autoApproveToggle === 1) {
         this.isAutoApprove = true;
       }
@@ -263,10 +274,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     if (this.isInvite || this.isLinkShare) {
       this.canEdit =
         this.hasAccess &&
-        !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+        (!this.sharePreviewVO.accessRole?.includes('viewer') ||
+          !this.sharePreviewVO.permissionsLevel?.includes('viewer'));
       this.canShare =
         this.hasAccess &&
-        this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+        (this.sharePreviewVO.accessRole?.includes('owner') ||
+          !this.sharePreviewVO.permissionsLevel?.includes('owner'));
     }
 
     if (this.isRelationshipShare) {
@@ -274,9 +287,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         this.hasAccess =
           this.sharePreviewVO.archiveId === this.archive.archiveId;
         this.canEdit =
-          this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
+          this.hasAccess &&
+          (!this.sharePreviewVO.accessRole?.includes('viewer') ||
+            !this.sharePreviewVO.permissionsLevel.includes('viewer'));
+
         this.canShare =
-          this.hasAccess && this.sharePreviewVO.accessRole.includes('owner');
+          this.hasAccess &&
+          (this.sharePreviewVO.accessRole?.includes('owner') ||
+            !this.sharePreviewVO.permissionsLevel.includes('owner'));
       }
 
       this.formType = 2;
@@ -299,7 +317,10 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     if (this.hasAccess) {
       if (!this.route.snapshot.firstChild.data.sharePreviewView) {
         // in preview, but they have access, send to full view
-        this.router.navigate(['view'], { relativeTo: this.route });
+        this.router.navigate(['view'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve',
+        });
       }
       this.sendGaEvent('viewed');
     } else if (
@@ -443,7 +464,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   showCreateAccountDialog() {
     if (!this.createAccountDialogIsOpen) {
       const dialogRef = this.dialog.open(CreateAccountDialogComponent, {
-        data: { sharerName: this.shareAccount.fullName },
+        data: {
+          sharerName: this.shareAccount.fullName || this.shareAccount.name,
+        },
       });
       dialogRef.closed?.subscribe(() => {
         this.createAccountDialogIsOpen = false;
@@ -660,12 +683,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
     this.fileListClickListener = componentReference.itemClicked.subscribe(
       (item) => {
-        // this.dispatchBannerClose();
-        // this.showCreateAccountDialog();
-
-        this.router.navigate(['record', item.item.archiveNbr], {
-          relativeTo: this.route,
-        });
+        this.dispatchBannerClose();
+        this.showCreateAccountDialog();
       },
     );
   }

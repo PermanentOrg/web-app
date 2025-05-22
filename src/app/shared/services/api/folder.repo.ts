@@ -4,7 +4,7 @@ import { BaseResponse, BaseRepo } from '@shared/services/api/base';
 import { map } from 'rxjs/operators';
 import { firstValueFrom, Observable } from 'rxjs';
 import { DataStatus } from '@models/data-status.enum';
-import { result } from 'lodash';
+import { head, result } from 'lodash';
 
 const MIN_WHITELIST: (keyof FolderVO)[] = [
   'folderId',
@@ -27,26 +27,42 @@ export class FolderRepo extends BaseRepo {
     });
   }
 
-  public get(folderVOs: FolderVO[]): Promise<FolderResponse> {
-    const data = folderVOs.map((folderVO) => {
-      return {
-        FolderVO: {
-          archiveNbr: folderVO.archiveNbr,
-          folder_linkId: folderVO.folder_linkId,
-          folderId: folderVO.folderId,
-        },
-      };
-    });
+  public async get(
+    folderVOs: FolderVO[],
+    isV2: boolean = false,
+    headers: Record<string, any> = {},
+  ): Promise<FolderResponse | FolderVO[]> {
+    if (!isV2) {
+      const data = folderVOs.map((folderVO) => {
+        return {
+          FolderVO: {
+            archiveNbr: folderVO.archiveNbr,
+            folder_linkId: folderVO.folder_linkId,
+            folderId: folderVO.folderId,
+          },
+        };
+      });
 
-    return this.http.sendRequestPromise<FolderResponse>('/folder/get', data, {
-      responseClass: FolderResponse,
-    });
+      return this.http.sendRequestPromise<FolderResponse>('/folder/get', data, {
+        responseClass: FolderResponse,
+      });
+    } else {
+      const folderIds = folderVOs.map((folder: FolderVO) => folder.folderId);
+
+      const data = {
+        folderIds,
+      };
+
+      return await firstValueFrom(
+        this.httpV2.get('v2/folder', data, null, { headers }),
+      );
+    }
   }
 
   public async getWithChildren(
     folderVOs: FolderVO[],
     isV2: boolean = false,
-    optionalHeaders: Record<string, any> = {},
+    headers: Record<string, any> = {},
   ): Promise<FolderResponse | FolderVO> {
     if (!isV2) {
       const data = folderVOs.map((folderVO) => {
@@ -65,15 +81,15 @@ export class FolderRepo extends BaseRepo {
         { responseClass: FolderResponse },
       );
     } else {
-      const params = {
-        archiveId: folderVOs[0].archiveId,
-        folderId: folderVOs[0].folderId,
-      };
-
       const resultArray = await firstValueFrom(
-        this.httpV2.get<FolderVO>('/folder/getWithChildren', params, null, {
-          headers: optionalHeaders,
-        }),
+        this.httpV2.get<FolderVO>(
+          `v2/folder/${folderVOs[0].folderId}/children?pageSize=10`,
+          {},
+          null,
+          {
+            headers,
+          },
+        ),
       );
 
       return resultArray[0];
