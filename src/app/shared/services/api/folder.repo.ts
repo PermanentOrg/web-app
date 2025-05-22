@@ -46,6 +46,7 @@ export class FolderRepo extends BaseRepo {
   public async getWithChildren(
     folderVOs: FolderVO[],
     isV2: boolean = false,
+    optionalHeaders: Record<string, any> = {},
   ): Promise<FolderResponse | FolderVO> {
     if (!isV2) {
       const data = folderVOs.map((folderVO) => {
@@ -70,7 +71,9 @@ export class FolderRepo extends BaseRepo {
       };
 
       const resultArray = await firstValueFrom(
-        this.httpV2.get<FolderVO>('/folder/getWithChildren', params),
+        this.httpV2.get<FolderVO>('/folder/getWithChildren', params, null, {
+          headers: optionalHeaders,
+        }),
       );
 
       return resultArray[0];
