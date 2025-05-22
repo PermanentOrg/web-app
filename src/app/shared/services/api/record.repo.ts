@@ -48,20 +48,32 @@ class MultipartUploadUrlsList {
 }
 
 export class RecordRepo extends BaseRepo {
-  public get(recordVOs: RecordVO[]): Promise<RecordResponse> {
-    const data = recordVOs.map((recordVO) => {
-      return {
-        RecordVO: new RecordVO({
-          folder_linkId: recordVO.folder_linkId,
-          recordId: recordVO.recordId,
-          archiveNbr: recordVO.archiveNbr,
-        }),
-      };
-    });
+  public async get(
+    recordVOs: RecordVO[],
+    isV2: boolean = false,
+  ): Promise<RecordResponse | RecordVO[]> {
+    if (!isV2) {
+      const data = recordVOs.map((recordVO) => {
+        return {
+          RecordVO: new RecordVO({
+            folder_linkId: recordVO.folder_linkId,
+            recordId: recordVO.recordId,
+            archiveNbr: recordVO.archiveNbr,
+          }),
+        };
+      });
 
-    return this.http.sendRequestPromise<RecordResponse>('/record/get', data, {
-      responseClass: RecordResponse,
-    });
+      return this.http.sendRequestPromise<RecordResponse>('/record/get', data, {
+        responseClass: RecordResponse,
+      });
+    } else {
+      const recordIds = recordVOs.map((record: RecordVO) => record.recordId);
+      const data = {
+        recordIds,
+      };
+
+      return await firstValueFrom(this.httpV2.get('v2/record', data, null));
+    }
   }
 
   public getLean(
