@@ -105,6 +105,7 @@ export class SharingComponent implements OnInit {
       this.shareLinkResponse.itemType,
       this.shareLinkResponse.token,
       this.shareLinkResponse.itemId,
+      this.shareItem.archiveId, 
     );
 
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
@@ -377,6 +378,7 @@ export class SharingComponent implements OnInit {
         this.shareLinkResponse.itemType,
         this.shareLinkResponse.token,
         this.shareLinkResponse.itemId,
+        this.shareItem.archiveId,
       );
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }

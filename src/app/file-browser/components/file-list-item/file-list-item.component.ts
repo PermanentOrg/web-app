@@ -1052,7 +1052,7 @@ export class FileListItemComponent
     } else {
       this.api.folder
         .getWithChildren([this.item as FolderVO])
-        .then((resp) => {
+        .then((resp: FolderResponse) => {
           if (resp.isSuccessful) {
             const newFolderVO = resp.Results[0].data[0].FolderVO as FolderVO;
             const allChildren = newFolderVO.ChildItemVOs;

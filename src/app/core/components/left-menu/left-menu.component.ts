@@ -34,6 +34,7 @@ import { ConnectionsDialogComponent } from '../connections-dialog/connections-di
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 import { MyArchivesDialogComponent } from '../my-archives-dialog/my-archives-dialog.component';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
+import { FolderResponse } from '@shared/services/api/folder.repo';
 
 @Component({
   selector: 'pr-left-menu',
@@ -213,7 +214,7 @@ export class LeftMenuComponent implements OnInit, OnChanges, OnDestroy {
       const folderResponse = await this.api.folder.getWithChildren([
         new FolderVO(apps),
       ]);
-      const appsFolder = folderResponse.getFolderVO(true);
+      const appsFolder = (folderResponse as FolderResponse).getFolderVO(true);
       this.appsSubfolders = appsFolder.ChildItemVOs as FolderVO[];
     } catch (err) {
       Sentry.captureException(err);

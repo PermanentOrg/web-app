@@ -23,17 +23,12 @@ import { RelationshipShareResolveService } from './resolves/relationship-share-r
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
-const archiveResolve = {
-  archive: PreviewArchiveResolveService,
-  currentFolder: PreviewFolderResolveService,
-};
-
 const previewResolve = {
   currentFolder: PreviewResolveService,
 };
 
 const shareResolve = {
-  sharePreviewVO: ShareUrlResolveService,
+  sharePreviewItem: ShareUrlResolveService,
 };
 
 const shareInviteResolve = {

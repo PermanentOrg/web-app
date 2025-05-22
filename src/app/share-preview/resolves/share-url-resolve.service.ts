@@ -29,28 +29,14 @@ export class ShareUrlResolveService {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log(route.queryParams);
-
     const token = route.queryParams.token;
-
     return this.shareLinkApiService
       .getShareLinksByToken([token])
       .then((response) => {
         const shareResponse = response[0];
         return shareResponse;
-      });
-
-    return this.api.share
-      .checkShareLink(route.params.shareToken)
-      .then((response: ShareResponse): any => {
-        if (response.isSuccessful) {
-          const shareByUrlVO = response.getShareByUrlVO();
-
-          return shareByUrlVO;
-        } else {
-          throw response;
-        }
       })
+
       .catch((response: ShareResponse) => {
         if (response.getMessage) {
           if (response.messageIncludes('warning.auth.mfaToken')) {

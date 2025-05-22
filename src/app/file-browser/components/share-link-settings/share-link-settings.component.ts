@@ -121,10 +121,12 @@ export class ShareLinkSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.shareItem);
     this.shareLink = shareUrlBuilder(
       this.shareLinkResponse?.itemType,
       this.shareLinkResponse?.token,
       this.shareLinkResponse?.itemId,
+      this.shareItem.archiveId,
     );
     this.setShareLinkFormValue();
   }
@@ -229,6 +231,7 @@ export class ShareLinkSettingsComponent implements OnInit {
         updateResponse.itemType,
         updateResponse.token,
         updateResponse.itemId,
+        this.shareItem.archiveId,
       );
       this.setShareLinkFormValue();
       this.showLinkSettings = true;

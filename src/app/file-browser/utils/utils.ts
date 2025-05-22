@@ -4,6 +4,7 @@ export const shareUrlBuilder = (
   itemType: 'record' | 'folder',
   token: string,
   itemId: string,
+  archiveId: string,
 ) => {
   const urlDict = {
     local: 'https://local.permanent.org/share',
@@ -19,6 +20,7 @@ export const shareUrlBuilder = (
   url.searchParams.set('itemType', itemType);
   url.searchParams.set('token', token);
   url.searchParams.set('itemId', itemId);
+  url.searchParams.set('archiveId', archiveId);
 
   return url.toString();
 };

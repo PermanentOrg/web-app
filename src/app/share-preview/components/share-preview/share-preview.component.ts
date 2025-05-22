@@ -53,25 +53,26 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   // share data
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
+
   sharePreviewVO = this.route.snapshot.data.sharePreviewVO;
-  shareArchive: ArchiveVO = this.sharePreviewVO.ArchiveVO;
-  shareAccount: AccountVO = this.sharePreviewVO.AccountVO;
+  shareArchive: ArchiveVO = this.sharePreviewVO?.ArchiveVO;
+  shareAccount: AccountVO = this.sharePreviewVO?.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
 
   // access and permissions
-  isInvite = !!this.sharePreviewVO.inviteId;
-  isRelationshipShare = !!this.sharePreviewVO.shareId;
+  isInvite = !!this.sharePreviewVO?.inviteId;
+  isRelationshipShare = !!this.sharePreviewVO?.shareId;
   isLinkShare = !this.isInvite && !this.isRelationshipShare;
 
   isOriginalOwner = false;
   isLoggedIn = false;
-  hasRequested = this.isLinkShare && !!this.sharePreviewVO.ShareVO;
+  hasRequested = this.isLinkShare && !!this.sharePreviewVO?.ShareVO;
   hasAccess = false;
   canEdit =
     this.hasAccess &&
     !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
   canShare =
-    this.hasAccess && !this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+    this.hasAccess && !this.sharePreviewVO?.ShareVO.accessRole.includes('owner');
 
   // component toggles
   showCover = false;
@@ -116,6 +117,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     private ga: GoogleAnalyticsService,
     private dialog: DialogCdkService,
   ) {
+
+    console.log(this.route.snapshot.data)
+
     this.shareToken = this.route.snapshot.params.shareToken;
 
     this.signupForm = fb.group({
