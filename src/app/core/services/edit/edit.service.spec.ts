@@ -9,6 +9,7 @@ import { AccountService } from '@shared/services/account/account.service';
 import { RecordRepo } from '@shared/services/api/record.repo';
 import { MessageService } from '@shared/services/message/message.service';
 import { DataService } from '@shared/services/data/data.service';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 const mockDataService = {
@@ -17,6 +18,8 @@ const mockDataService = {
   hideItemsInCurrentFolder: (items) => {},
   itemUnshared: (item) => {},
 };
+
+const mockSharelinkApiService = {};
 
 describe('EditService', () => {
   let service: EditService;
@@ -44,6 +47,7 @@ describe('EditService', () => {
         { provide: DataService, useValue: mockDataService },
         { provide: ApiService, useValue: apiService },
         { provide: AccountService, useValue: accountService },
+        { provide: ShareLinksApiService, useValue: mockSharelinkApiService },
       ],
     });
 

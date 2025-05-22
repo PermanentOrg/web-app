@@ -297,7 +297,7 @@ export class HttpV2Service {
             return obj as T;
           });
         }
-        if (response.hasOwnProperty('csrf')) {
+        if (response?.hasOwnProperty('csrf')) {
           this.storage.session.set(CSRF_KEY, response['csrf']);
         }
         if (responseClass) {

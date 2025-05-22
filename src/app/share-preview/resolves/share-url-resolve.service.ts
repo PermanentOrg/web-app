@@ -36,8 +36,6 @@ export class ShareUrlResolveService {
     return this.shareLinkApiService
       .getShareLinksByToken([token])
       .then((response) => {
-        console.log(response);
-
         const shareResponse = response[0];
         return shareResponse;
       });

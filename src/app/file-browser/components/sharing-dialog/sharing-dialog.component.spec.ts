@@ -256,7 +256,6 @@ describe('SharingDialogComponent', () => {
     expect(component.shares[0].accessRole).toBe(shareViewer.accessRole);
   }));
 });
-
 describe('SharingDialogComponent - Shallow Rendering', () => {
   it('should be able to save default access role on a share link', async () => {
     MockApiService.reset();

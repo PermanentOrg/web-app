@@ -5,9 +5,10 @@ export interface ShareLink {
   token: string;
   permissionsLevel: 'contributor' | 'editor' | 'manager' | 'owner' | 'viewer';
   accessRestrictions: 'account' | 'approval' | 'none';
+  autoApproveToggle?: number;
   maxUses: number | null;
   usesExpended: number | null;
-  expirationTimestamp?: Date;
+  expirationTimestamp?: string;
   createdAt: Date;
   updatedAt: Date;
 }

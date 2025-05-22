@@ -40,8 +40,8 @@ import { PublishComponent } from '@fileBrowser/components/publish/publish.compon
 import { EditTagsComponent } from '@fileBrowser/components/edit-tags/edit-tags.component';
 import { LocationPickerComponent } from '@fileBrowser/components/location-picker/location-picker.component';
 import { SharingDialogComponent } from '@fileBrowser/components/sharing-dialog/sharing-dialog.component';
-import { FolderPickerService } from '../folder-picker/folder-picker.service';
 import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
+import { FolderPickerService } from '../folder-picker/folder-picker.service';
 
 export const ItemActions: { [key: string]: PromptButton } = {
   Rename: {
@@ -252,16 +252,17 @@ export class EditService {
           this.openPublishDialog(items[0]);
           break;
         case 'share':
-          // const response: ShareResponse = await this.api.share.getShareLink(
-          //   items[0],
-          // );
-          // actionDeferred.resolve();
-          // this.dialog.open(SharingComponent, {
-          //   data: {
-          //     item: items[0],
-          //     link: response.getShareByUrlVO(),
-          //   },
-          // });
+          const response: ShareResponse = await this.api.share.getShareLink(
+            items[0],
+          );
+
+          actionDeferred.resolve();
+          this.dialog.open(SharingComponent, {
+            data: {
+              item: items[0],
+              link: response.getShareByUrlVO(),
+            },
+          });
           break;
         default:
           actionDeferred.resolve();

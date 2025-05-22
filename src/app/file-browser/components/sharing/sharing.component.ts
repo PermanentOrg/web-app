@@ -43,6 +43,9 @@ import { ActivatedRoute } from '@angular/router';
 import { EVENTS } from '@shared/services/google-analytics/events';
 import { copyFromInputElement } from '@shared/utilities/forms';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { ShareLink } from '@root/app/share-links/models/share-link';
+import { shareUrlBuilder } from '@fileBrowser/utils/utils';
+import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 
 const ShareActions: { [key: string]: PromptButton } = {
   ChangeAccess: {
@@ -72,11 +75,12 @@ const ShareActions: { [key: string]: PromptButton } = {
 })
 export class SharingComponent implements OnInit {
   public shareItem: RecordVO | FolderVO = null;
+  public shareLinkResponse: ShareLink = null;
 
   public shares: ShareVO[] = [];
   public pendingShares: ShareVO[] = [];
 
-  public shareLink: ShareByUrlVO = null;
+  public shareLink: string = '';
   public loadingRelations = false;
 
   public linkCopied = false;
@@ -93,9 +97,15 @@ export class SharingComponent implements OnInit {
     private messageService: MessageService,
     private relationshipService: RelationshipService,
     private ga: GoogleAnalyticsService,
+    private shareLinkApiService: ShareLinksApiService,
   ) {
     this.shareItem = this.data.item as ItemVO;
-    this.shareLink = this.data.link;
+    this.shareLinkResponse = this.data.shareLinkResponse;
+    this.shareLink = shareUrlBuilder(
+      this.shareLinkResponse.itemType,
+      this.shareLinkResponse.token,
+      this.shareLinkResponse.itemId,
+    );
 
     if (this.shareItem.ShareVOs && this.shareItem.ShareVOs.length) {
       [this.pendingShares, this.shares] = partition(this.shareItem.ShareVOs, {
@@ -353,10 +363,21 @@ export class SharingComponent implements OnInit {
   }
 
   async generateShareLink() {
-    const response = await this.api.share.generateShareLink(this.shareItem);
+    const { itemId, itemType } = this.getItemIdAndItemType();
 
-    if (response.isSuccessful) {
-      this.shareLink = response.getShareByUrlVO();
+    const response = await this.shareLinkApiService.generateShareLink({
+      itemId,
+      itemType,
+    });
+
+    if (response) {
+      this.shareLinkResponse = response;
+
+      this.shareLink = shareUrlBuilder(
+        this.shareLinkResponse.itemType,
+        this.shareLinkResponse.token,
+        this.shareLinkResponse.itemId,
+      );
       this.ga.sendEvent(EVENTS.SHARE.ShareByUrl.initiated.params);
     }
   }
@@ -376,23 +397,12 @@ export class SharingComponent implements OnInit {
     const deferred = new Deferred();
     const title = `Manage share link for ${this.shareItem.displayName}`;
     let currentDate = null;
-    if (this.shareLink.expiresDT) {
-      currentDate = new Date(this.shareLink.expiresDT)
+    if (this.shareLinkResponse.expirationTimestamp) {
+      currentDate = new Date(this.shareLinkResponse.expirationTimestamp)
         .toISOString()
         .split('T')[0];
     }
     const fields: PromptField[] = [
-      ON_OFF_FIELD(
-        'previewToggle',
-        'Share preview',
-        this.shareLink.previewToggle ? 'on' : 'off',
-      ),
-      NUMBER_FIELD(
-        'maxUses',
-        'Max number of uses (optional)',
-        this.shareLink.maxUses,
-        false,
-      ),
       DATE_FIELD(
         'expiresDT',
         'Expiration date (optional)',
@@ -403,36 +413,29 @@ export class SharingComponent implements OnInit {
 
     this.promptService
       .prompt(fields, title, deferred.promise, 'Save')
-      .then(
-        async (result: {
-          previewToggle: 'on' | 'off';
-          expiresDT;
-          maxUses: string;
-        }) => {
-          const updatedShareVo = new ShareByUrlVO(this.shareLink);
-          updatedShareVo.previewToggle = result.previewToggle === 'on' ? 1 : 0;
+      .then(async (result) => {
+        const updatedShare: Partial<ShareLink> = {};
 
-          if (result.maxUses !== undefined) {
-            updatedShareVo.maxUses = parseInt(result.maxUses, 10);
-          }
+        if (result.expiresDT) {
+          updatedShare.expirationTimestamp = new Date(
+            result.expiresDT,
+          ).toISOString();
+        }
 
-          if (result.expiresDT) {
-            updatedShareVo.expiresDT = new Date(result.expiresDT).toISOString();
+        try {
+          const updateResponse = await this.shareLinkApiService.updateShareLink(
+            this.shareLinkResponse.id,
+            updatedShare,
+          );
+          this.shareLinkResponse = updateResponse;
+          deferred.resolve();
+        } catch (response) {
+          deferred.reject();
+          if (response.getMessage()) {
+            this.messageService.showError(response.getMessage());
           }
-
-          try {
-            const updateResponse =
-              await this.api.share.updateShareLink(updatedShareVo);
-            this.shareLink = updateResponse.getShareByUrlVO();
-            deferred.resolve();
-          } catch (response) {
-            deferred.reject();
-            if (response.getMessage()) {
-              this.messageService.showError(response.getMessage());
-            }
-          }
-        },
-      )
+        }
+      })
       .catch((err) => {
         if (err instanceof ShareResponse) {
         } else {
@@ -451,7 +454,7 @@ export class SharingComponent implements OnInit {
         'btn-danger',
       );
 
-      await this.api.share.removeShareLink(this.shareLink);
+      await this.shareLinkApiService.deleteShareLink(this.shareLinkResponse.id);
       this.shareLink = null;
       deferred.resolve();
     } catch (response) {
@@ -465,4 +468,17 @@ export class SharingComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
+
+  private getItemIdAndItemType = (): {
+    itemId: string;
+    itemType: 'record' | 'folder';
+  } => {
+    const itemId =
+      this.shareItem instanceof RecordVO
+        ? this.shareItem.recordId
+        : this.shareItem.folderId;
+    const itemType = this.shareItem instanceof RecordVO ? 'record' : 'folder';
+
+    return { itemId, itemType };
+  };
 }

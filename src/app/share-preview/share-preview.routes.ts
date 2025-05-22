@@ -8,6 +8,8 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
@@ -20,8 +22,6 @@ import { InviteShareResolveService } from './resolves/invite-share-resolve.servi
 import { RelationshipShareResolveService } from './resolves/relationship-share-resolve.service';
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
-import { RecordResolveService } from '@core/resolves/record-resolve.service';
-import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 
 const archiveResolve = {
   archive: PreviewArchiveResolveService,
