@@ -69,80 +69,41 @@ export class PreviewResolveService {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Promise<any> {
-    const token = route.queryParams.token;
-    const itemType = route.queryParams.itemType;
-    const itemId = route.queryParams.itemId;
-    const archiveId = route.queryParams.archiveId;
-
-    console.log(route.parent.data);
-
     const sharedData = route.parent.data.sharePreviewItem;
 
-    if (token && itemType && itemId) {
-      // New flow via v2 API using token
-      const headers = { 'X-Permanent-Share-Token': token };
+    // If using new flow (resolved in ShareUrlResolveService)
+    if (sharedData) {
+      const record = sharedData.RecordVO;
+      const folder = sharedData.FolderVO;
 
-      if (itemType === 'record') {
-        return this.api.record
-          .get([new RecordVO({ recordId: itemId })], true, headers)
-          .then((records) => {
-            console.log(records);
-            const record = (
-              Array.isArray(records) ? records[0] : records
-            ) as RecordVO;
-            record.dataStatus = DataStatus.Full;
-
-            const folder = new FolderVO({
-              displayName: record.displayName,
-              description: record.description,
-              archiveId: record.archiveId,
-              type: 'type.folder.share',
-              ChildItemVOs: [record],
-              pathAsText: [record.displayName],
-              pathAsArchiveNbr: ['0000-0000'],
-              pathAsFolder_linkId: [0],
-            });
-
-            return folder;
-          })
-          .catch((error) => {
-            this.message.showError({
-              message: 'share.error.invalidLink',
-              translate: true,
-            });
-            return this.router.navigate(['share', 'error']);
-          });
+      if (folder) {
+        setDummyPathFromDisplayName(folder);
+        return Promise.resolve(folder);
       }
 
-      if (itemType === 'folder') {
-        return this.api.folder
-          .getWithChildren(
-            [new FolderVO({ folderId: itemId, archiveId })],
-            true,
-            headers,
-          )
-          .then((folders) => {
-            const folder = Array.isArray(folders) ? folders[0] : folders;
-            setDummyPathFromDisplayName(folder);
-            return folder;
-          })
-          .catch((error) => {
-            this.message.showError({
-              message: 'share.error.invalidLink',
-              translate: true,
-            });
-            return this.router.navigate(['share', 'error']);
-          });
-      }
+      if (record) {
+        // record.dataStatus = DataStatus.Full;
 
-      this.message.showError({ message: 'Invalid item type.' });
-      return this.router.navigate(['share', 'error']);
+        const folderVO = new FolderVO({
+          displayName: record.displayName,
+          description: record.description,
+          archiveId: record.archiveId,
+          type: 'type.folder.share',
+          ChildItemVOs: [record],
+          pathAsText: [record.displayName],
+          pathAsArchiveNbr: ['0000-0000'],
+          pathAsFolder_linkId: [0],
+        });
+
+        return Promise.resolve(folderVO);
+      }
+      // Fallback if no usable data
     }
 
     // === OLD LOGIC ===
     const sharePreviewVO = route.parent.data.sharePreviewVO as ShareByUrlVO;
 
-    console.log(sharePreviewVO)
+    console.log(sharePreviewVO);
 
     const showPreview =
       sharePreviewVO.previewToggle ||

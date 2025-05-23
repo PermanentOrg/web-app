@@ -304,6 +304,8 @@ export class FileListItemComponent
       this.canEdit = false;
     }
 
+    console.log(this.item)
+
     this.inGridView = this.folderView === FolderView.Grid;
 
     this.isZip = this.item.type === 'type.record.archive';

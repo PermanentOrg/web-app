@@ -317,7 +317,10 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     if (this.hasAccess) {
       if (!this.route.snapshot.firstChild.data.sharePreviewView) {
         // in preview, but they have access, send to full view
-        this.router.navigate(['view'], { relativeTo: this.route });
+        this.router.navigate(['view'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve',
+        });
       }
       this.sendGaEvent('viewed');
     } else if (

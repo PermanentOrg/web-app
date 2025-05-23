@@ -34,6 +34,12 @@ export class ShareUrlResolveService {
       const accountId = route.queryParams.accountId;
       const archiveId = route.queryParams.archiveId;
       const archiveNbr = route.queryParams.archiveNbr;
+      const itemId = route.queryParams.itemId;
+      const itemType = route.queryParams.itemType;
+      let folder = null;
+      let record = null;
+
+      const headers = { 'X-Permanent-Share-Token': token };
 
       const responseArray = await this.shareLinkApiService.getShareLinksByToken(
         [token],
@@ -41,14 +47,32 @@ export class ShareUrlResolveService {
 
       const response = responseArray[0];
 
-      console.log(response);
+      if (itemType === 'folder') {
+        const response = await this.api.folder.getWithChildren(
+          [new FolderVO({ folderId: itemId, archiveId })],
+          true,
+          headers,
+        );
+        folder = response[0];
+      } else if (itemType === 'record') {
+        const response = await this.api.record.get(
+          [new RecordVO({ recordId: itemId })],
+          true,
+          headers,
+        );
+        record = response[0];
+      }
 
-      const account = await this.api.account.get(new AccountVO({ accountId }));
+      const account = (
+        await this.api.account.get(new AccountVO({ accountId }))
+      ).getAccountVO();
       const archive = await this.api.archive.get([
         new ArchiveVO({ archiveId: +archiveId, archiveNbr }),
       ]);
 
       (response as any).AccountVO = account;
+      (response as any).FolderVO = folder;
+      (response as any).RecordVO = record;
       (response as any).ArchiveVO = archive;
 
       return response;
