@@ -76,6 +76,8 @@ export class PreviewResolveService {
 
     console.log(route.parent.data);
 
+    const sharedData = route.parent.data.sharePreviewItem;
+
     if (token && itemType && itemId) {
       // New flow via v2 API using token
       const headers = { 'X-Permanent-Share-Token': token };
@@ -139,6 +141,8 @@ export class PreviewResolveService {
 
     // === OLD LOGIC ===
     const sharePreviewVO = route.parent.data.sharePreviewVO as ShareByUrlVO;
+
+    console.log(sharePreviewVO)
 
     const showPreview =
       sharePreviewVO.previewToggle ||
