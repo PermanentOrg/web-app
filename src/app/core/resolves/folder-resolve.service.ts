@@ -43,9 +43,11 @@ export class FolderResolveService {
       });
       targetFolder = new FolderVO(apps);
     } else if (state.url.includes('/share/')) {
-      console.log(route.parent.data)
-      const sharedFolder = route.parent.data.sharePreviewVO.FolderVO;
-      const sharedRecord = route.parent.data.sharePreviewVO.RecordVO;
+      console.log(route.parent.data);
+      const sharedFolder = route.parent.data.sharePreviewVO?.FolderVO;
+      const sharedRecord =
+        route.parent.data.sharePreviewItem.RecordVO ||
+        route.parent.data.sharePreviewVO.RecordVO;
       if (sharedFolder) {
         targetFolder = new FolderVO(sharedFolder);
       } else {
