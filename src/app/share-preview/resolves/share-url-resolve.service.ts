@@ -14,7 +14,7 @@ import {
   ArchiveResponse,
   ShareResponse,
 } from '@shared/services/api/index.repo';
-import { RecordVO, ArchiveVO, FolderVO } from '@models';
+import { RecordVO, ArchiveVO, FolderVO, AccountVO } from '@models';
 import { ShareLinksApiService } from '@root/app/share-links/services/share-links-api.service';
 
 @Injectable()
@@ -28,31 +28,44 @@ export class ShareUrlResolveService {
     private shareLinkApiService: ShareLinksApiService,
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const token = route.queryParams.token;
-    return this.shareLinkApiService
-      .getShareLinksByToken([token])
-      .then((response) => {
-        const shareResponse = response[0];
-        return shareResponse;
-      })
+  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    try {
+      const token = route.queryParams.token;
+      const accountId = route.queryParams.accountId;
+      const archiveId = route.queryParams.archiveId;
+      const archiveNbr = route.queryParams.archiveNbr;
 
-      .catch((response: ShareResponse) => {
-        if (response.getMessage) {
-          if (response.messageIncludes('warning.auth.mfaToken')) {
-            this.accountService.setRedirect([
-              '/share',
-              route.params.shareToken,
-            ]);
-            return this.router.navigate(['/app', 'auth', 'mfa']);
-          } else {
-            this.message.showError({
-              message: response.getMessage(),
-              translate: true,
-            });
-          }
+      const responseArray = await this.shareLinkApiService.getShareLinksByToken(
+        [token],
+      );
+
+      const response = responseArray[0];
+
+      console.log(response);
+
+      const account = await this.api.account.get(new AccountVO({ accountId }));
+      const archive = await this.api.archive.get([
+        new ArchiveVO({ archiveId: +archiveId, archiveNbr }),
+      ]);
+
+      (response as any).AccountVO = account;
+      (response as any).ArchiveVO = archive;
+
+      return response;
+    } catch (error) {
+      console.log(error);
+      if (error.getMessage) {
+        if (error.messageIncludes('warning.auth.mfaToken')) {
+          this.accountService.setRedirect(['/share', route.params.shareToken]);
+          return this.router.navigate(['/app', 'auth', 'mfa']);
+        } else {
+          this.message.showError({
+            message: error.getMessage(),
+            translate: true,
+          });
         }
-        return this.router.navigate(['share', 'error']);
-      });
+      }
+      return this.router.navigate(['share', 'error']);
+    }
   }
 }

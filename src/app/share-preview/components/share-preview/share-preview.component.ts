@@ -54,7 +54,9 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
 
-  sharePreviewVO = this.route.snapshot.data.sharePreviewVO;
+  sharePreviewVO =
+    this.route.snapshot.data.sharePreviewVO ||
+    this.route.snapshot.data.sharePreviewItem;
   shareArchive: ArchiveVO = this.sharePreviewVO?.ArchiveVO;
   shareAccount: AccountVO = this.sharePreviewVO?.AccountVO;
   displayName: string = this.route.snapshot.data.currentFolder.displayName;
@@ -66,13 +68,16 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
 
   isOriginalOwner = false;
   isLoggedIn = false;
-  hasRequested = this.isLinkShare && !!this.sharePreviewVO?.ShareVO;
+  hasRequested = this.isLinkShare && !!this.sharePreviewVO;
   hasAccess = false;
   canEdit =
     this.hasAccess &&
-    !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+    (!this.sharePreviewVO.ShareVO.accessRole?.includes('viewer') ||
+      !this.sharePreviewVO.permissionsLevel.includes('viewer'));
   canShare =
-    this.hasAccess && !this.sharePreviewVO?.ShareVO.accessRole.includes('owner');
+    this.hasAccess &&
+    (!this.sharePreviewVO?.ShareVO.accessRole?.includes('owner') ||
+      !this.sharePreviewVO.permissionsLevel.includes('owner'));
 
   // component toggles
   showCover = false;
@@ -117,8 +122,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     private ga: GoogleAnalyticsService,
     private dialog: DialogCdkService,
   ) {
-
-    console.log(this.route.snapshot.data)
+    console.log(this.sharePreviewVO);
+    console.log(this.route.snapshot.data);
 
     this.shareToken = this.route.snapshot.params.shareToken;
 
@@ -256,9 +261,11 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     }
 
     if (this.isLinkShare) {
-      this.hasRequested = !!this.sharePreviewVO.ShareVO;
-      this.hasAccess =
-        this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+      this.hasRequested = !!this.sharePreviewVO;
+      this.hasAccess = true;
+      // this.hasRequested && this.sharePreviewVO.ShareVO.status.includes('ok');
+      this.isAutoApprove = true;
+
       if (this.sharePreviewVO?.autoApproveToggle === 1) {
         this.isAutoApprove = true;
       }
@@ -267,10 +274,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
     if (this.isInvite || this.isLinkShare) {
       this.canEdit =
         this.hasAccess &&
-        !this.sharePreviewVO.ShareVO.accessRole.includes('viewer');
+        (!this.sharePreviewVO.accessRole?.includes('viewer') ||
+          !this.sharePreviewVO.permissionsLevel.includes('viewer'));
       this.canShare =
         this.hasAccess &&
-        this.sharePreviewVO.ShareVO.accessRole.includes('owner');
+        (this.sharePreviewVO.accessRole?.includes('owner') ||
+          !this.sharePreviewVO.permissionsLevel.includes('owner'));
     }
 
     if (this.isRelationshipShare) {
@@ -278,9 +287,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
         this.hasAccess =
           this.sharePreviewVO.archiveId === this.archive.archiveId;
         this.canEdit =
-          this.hasAccess && !this.sharePreviewVO.accessRole.includes('viewer');
+          this.hasAccess &&
+          (!this.sharePreviewVO.accessRole?.includes('viewer') ||
+            !this.sharePreviewVO.permissionsLevel.includes('viewer'));
+
         this.canShare =
-          this.hasAccess && this.sharePreviewVO.accessRole.includes('owner');
+          this.hasAccess &&
+          (this.sharePreviewVO.accessRole?.includes('owner') ||
+            !this.sharePreviewVO.permissionsLevel.includes('owner'));
       }
 
       this.formType = 2;

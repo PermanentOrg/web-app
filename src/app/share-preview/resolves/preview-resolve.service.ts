@@ -74,6 +74,8 @@ export class PreviewResolveService {
     const itemId = route.queryParams.itemId;
     const archiveId = route.queryParams.archiveId;
 
+    console.log(route.parent.data);
+
     if (token && itemType && itemId) {
       // New flow via v2 API using token
       const headers = { 'X-Permanent-Share-Token': token };
@@ -82,7 +84,7 @@ export class PreviewResolveService {
         return this.api.record
           .get([new RecordVO({ recordId: itemId })], true, headers)
           .then((records) => {
-            console.log(records)
+            console.log(records);
             const record = (
               Array.isArray(records) ? records[0] : records
             ) as RecordVO;
