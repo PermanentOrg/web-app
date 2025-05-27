@@ -88,15 +88,24 @@ export const routes: Routes = [
     children: sharePreviewChildren,
   },
   {
-    path: '',
-    resolve: shareResolve,
+    path: 'view',
+    resolve: shareResolve, // this matches your use of shareUrlResolveService
     data: {
       noFileListPadding: true,
     },
-    children: sharePreviewChildren,
+    children: [
+      ...sharePreviewChildren,
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        resolve: {
+          currentRecord: RecordResolveService,
+        },
+      },
+    ],
   },
   {
-    path: ':shareToken',
+    path: '',
     resolve: shareResolve,
     data: {
       noFileListPadding: true,
@@ -112,6 +121,23 @@ export const routes: Routes = [
       },
     ],
   },
+  // {
+  //   path: ':shareToken',
+  //   resolve: shareResolve,
+  //   data: {
+  //     noFileListPadding: true,
+  //   },
+  //   children: [
+  //     ...sharePreviewChildren,
+  //     {
+  //       path: 'record/:recArchiveNbr',
+  //       component: FileViewerComponent,
+  //       resolve: {
+  //         currentRecord: RecordResolveService,
+  //       },
+  //     },
+  //   ],
+  // },
 ];
 @NgModule({
   imports: [

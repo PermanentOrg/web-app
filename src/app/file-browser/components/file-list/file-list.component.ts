@@ -320,6 +320,8 @@ export class FileListComponent
   }
 
   ngOnInit() {
+    console.log('✅ FileListComponent initialized');
+
     this.currentFolder = this.route.snapshot.data.currentFolder;
     this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);

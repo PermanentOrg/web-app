@@ -9,7 +9,8 @@ export class ItemTypeIconPipe implements PipeTransform {
   constructor() {}
 
   transform(item: RecordVO | FolderVO, view?: FolderView): any {
-    if (item instanceof RecordVO) {
+    console.log(item);
+    if ((item as RecordVO).recordId) {
       switch (item.type) {
         case 'type.record.image':
           return 'image';

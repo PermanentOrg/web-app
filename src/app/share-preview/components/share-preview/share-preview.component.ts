@@ -1,5 +1,12 @@
 /* @format */
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import {
   Router,
   ActivatedRoute,
@@ -35,6 +42,7 @@ import { PromptService } from '@shared/services/prompt/prompt.service';
 import { Deferred } from '@root/vendor/deferred';
 import { DialogCdkService } from '@root/app/dialog-cdk/dialog-cdk.service';
 import { CreateAccountDialogComponent } from '../create-account-dialog/create-account-dialog.component';
+import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 
 const MIN_PASSWORD_LENGTH = APP_CONFIG.passwordMinLength;
 
@@ -49,7 +57,7 @@ enum FormType {
   templateUrl: './share-preview.component.html',
   styleUrls: ['./share-preview.component.scss'],
 })
-export class SharePreviewComponent implements OnInit, OnDestroy {
+export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   // share data
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
@@ -236,6 +244,19 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
   }
 
   async ngAfterViewInit() {
+    if (this.fileListComponentRef?.itemClicked) {
+      this.fileListClickListener =
+        this.fileListComponentRef.itemClicked.subscribe((item) => {
+          console.log('✅ Clicked item:', item);
+          const archiveNbr = item?.item?.archiveNbr;
+          if (archiveNbr) {
+            this.router.navigate(['record', archiveNbr], {
+              relativeTo: this.route,
+            });
+          }
+        });
+    }
+
     if (!this.isLoggedIn) {
       setTimeout(() => {
         this.showCreateAccountDialog();
@@ -674,7 +695,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       });
   }
 
+  @ViewChild(FileListComponent)
+  fileListComponentRef: FileListComponent;
+
   subscribeToItemClicks(componentReference) {
+    console.log('here');
+
     if (!('itemClicked' in componentReference)) {
       return;
     }
@@ -683,6 +709,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy {
       (item) => {
         // this.dispatchBannerClose();
         // this.showCreateAccountDialog();
+
+        console.log(item);
 
         this.router.navigate(['record', item.item.archiveNbr], {
           relativeTo: this.route,
