@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
 import { UploadItem } from './uploadItem';
+import { RecordVO } from '@models/index';
 
 const buildForm = (fields: object, file: File) => {
   const formData = new FormData();
@@ -132,7 +133,7 @@ export class Uploader {
       eTags,
     );
 
-    const record = response.getRecordVO();
+    const record = response as unknown as RecordVO;
 
     this.event.dispatch({
       action: 'submit',
