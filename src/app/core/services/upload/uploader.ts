@@ -3,6 +3,7 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
+import { RecordVO } from '@models/index';
 import { UploadItem } from './uploadItem';
 
 const buildForm = (fields: object, file: File) => {
@@ -132,7 +133,7 @@ export class Uploader {
       eTags,
     );
 
-    const record = response.getRecordVO();
+    const record = response as unknown as RecordVO;
 
     this.event.dispatch({
       action: 'submit',
