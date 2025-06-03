@@ -27,6 +27,7 @@ import { ArchiveSettingsDialogComponent } from './components/archive-settings-di
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
+import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 
 const rootFolderResolve = {
 	rootFolder: RootFolderResolveService,
@@ -54,9 +55,9 @@ export const routes: RoutesWithData = [
 			{
 				path: 'private',
 				loadChildren: async () =>
-					await import('../file-browser/file-browser.module').then(
-						(m) => m.FileBrowserModule,
-					),
+					(await import('../file-browser/file-browser.module'))
+						.FileBrowserModule,
+
 				data: {
 					title: 'Private Files',
 					showSidebar: true,
@@ -66,9 +67,8 @@ export const routes: RoutesWithData = [
 			{
 				path: 'public',
 				loadChildren: async () =>
-					await import('../file-browser/file-browser.module').then(
-						(m) => m.FileBrowserModule,
-					),
+					(await import('../file-browser/file-browser.module'))
+						.FileBrowserModule,
 				data: {
 					title: 'Public',
 					showSidebar: true,
@@ -78,7 +78,7 @@ export const routes: RoutesWithData = [
 			{
 				path: 'apps',
 				loadChildren: async () =>
-					await import('../apps/apps.module').then((m) => m.AppsModule),
+					(await import('../apps/apps.module')).AppsModule,
 				data: { title: 'Apps', showSidebar: true },
 			},
 			{
@@ -90,7 +90,7 @@ export const routes: RoutesWithData = [
 			{
 				path: 'shares',
 				loadChildren: async () =>
-					await import('../shares/shares.module').then((m) => m.SharesModule),
+					(await import('../shares/shares.module')).SharesModule,
 				data: { title: 'Shares', showSidebar: true },
 			},
 			{
@@ -276,6 +276,24 @@ export const routes: RoutesWithData = [
 			{
 				path: 'welcome-invitation',
 				redirectTo: '/app/(private//dialog:welcomeinvitation)',
+			},
+			{
+				path: 'archives/:path',
+				component: RoutedDialogWrapperComponent,
+				outlet: 'dialog',
+				data: {
+					title: 'Archives',
+					component: MyArchivesDialogComponent,
+					dialogOptions: { width: '1000px' },
+				},
+			},
+			{
+				path: 'archives',
+				redirectTo: '/app/(private//dialog:archives/)',
+			},
+			{
+				path: 'connections',
+				redirectTo: '/app/(private//dialog:connections)',
 			},
 			{
 				path: 'storage/:path',
