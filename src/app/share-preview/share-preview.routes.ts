@@ -8,6 +8,8 @@ import { FileBrowserComponentsModule } from '@fileBrowser/file-browser-component
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
+import { RecordResolveService } from '@core/resolves/record-resolve.service';
+import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
@@ -21,17 +23,12 @@ import { RelationshipShareResolveService } from './resolves/relationship-share-r
 
 import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
-const archiveResolve = {
-  archive: PreviewArchiveResolveService,
-  currentFolder: PreviewFolderResolveService,
-};
-
 const previewResolve = {
   currentFolder: PreviewResolveService,
 };
 
 const shareResolve = {
-  sharePreviewVO: ShareUrlResolveService,
+  sharePreviewItem: ShareUrlResolveService,
 };
 
 const shareInviteResolve = {
@@ -66,6 +63,13 @@ const sharePreviewChildren = [
         },
         loadChildren: LazyLoadFileBrowserSibling,
       },
+      {
+        path: 'record/:recArchiveNbr',
+        component: FileViewerComponent,
+        resolve: {
+          currentRecord: RecordResolveService,
+        },
+      },
     ],
   },
 ];
@@ -91,12 +95,21 @@ export const routes: Routes = [
     children: sharePreviewChildren,
   },
   {
-    path: ':shareToken',
+    path: '',
     resolve: shareResolve,
     data: {
       noFileListPadding: true,
     },
-    children: sharePreviewChildren,
+    children: [
+      ...sharePreviewChildren,
+      // {
+      //   path: 'record/:recArchiveNbr',
+      //   component: FileViewerComponent,
+      //   resolve: {
+      //     currentRecord: RecordResolveService,
+      //   },
+      // },
+    ],
   },
 ];
 @NgModule({

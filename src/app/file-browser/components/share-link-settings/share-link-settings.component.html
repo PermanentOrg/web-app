@@ -1,0 +1,187 @@
+<div class="dialog-body">
+  <div class="header-container">
+    <div class="header-small">Create link to share</div>
+    <div *ngIf="shareLink" class="remove-link" (click)="removeShareLink()">
+      <fa-icon class="trash-icon" [icon]="trashIcon" />
+      <span>Remove Link</span>
+    </div>
+  </div>
+  <div class="header-container">
+    <p>
+      Generate a link to send via text or email for others to view this
+      material. Learn more.
+    </p>
+  </div>
+  <hr />
+  <div class="content">
+    <div class="share-link">
+      <div class="share-link-container" *ngIf="shareLink">
+        <input
+          type="text"
+          class="form-control"
+          readonly
+          [value]="shareLink"
+          #shareUrlInput
+        />
+      </div>
+      <button
+        class="btn btn-primary-light"
+        *ngIf="shareLink"
+        [disabled]="linkCopied"
+        (click)="copyShareLink()"
+      >
+        {{ linkCopied ? 'Copied' : 'Copy' }}
+      </button>
+      <div class="share-link-container" *ngIf="!shareLink">
+        Generate a link to send via text or email to invite people to share this
+        content.
+      </div>
+      <button
+        class="btn btn-primary-light"
+        *ngIf="!shareLink"
+        (click)="generateShareLink()"
+        [disabled]="updatingLink"
+      >
+        Create
+      </button>
+    </div>
+    <div
+      class="share-link-settings-toggle"
+      *ngIf="shareLink"
+      @ngIfScaleAnimation
+    >
+      <button
+        class="btn btn-link"
+        (click)="showLinkSettings = !showLinkSettings"
+      >
+        {{ showLinkSettings ? 'Hide' : 'Show' }} link settings
+      </button>
+    </div>
+    <div
+      *ngIf="showLinkSettings && displayDropdown"
+      class="share-link-type-dropdown"
+    >
+      <span class="link-type-text"><b>Link Type</b></span>
+      <pr-share-link-dropdown
+        [linkTypes]="shareLinkTypes"
+        [value]="accessRestrictions"
+        (valueChange)="onShareLinkPropChange('accessRestrictions', $event)"
+      ></pr-share-link-dropdown>
+    </div>
+    <div
+      class="share-link-settings"
+      *ngIf="showLinkSettings && shareLink"
+      @ngIfScaleAnimation
+    >
+      <div *ngIf="accessRestrictions === 'account'" class="link-settings-item">
+        <label>Auto Approve</label>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="autoApproveToggle"
+            id="autoApproveToggleOn"
+            [value]="1"
+            [disabled]="updatingLink"
+            [(ngModel)]="autoApproveToggle"
+            (ngModelChange)="
+              onShareLinkPropChange('autoApproveToggle', autoApproveToggle)
+            "
+          />
+          <label class="form-check-label" for="autoApproveToggleOn">On</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input auto-approve-off"
+            type="radio"
+            name="autoApproveToggle"
+            id="autoApproveToggleOff"
+            [value]="0"
+            [disabled]="updatingLink"
+            [(ngModel)]="autoApproveToggle"
+            (ngModelChange)="
+              onShareLinkPropChange('autoApproveToggle', autoApproveToggle)
+            "
+          />
+          <label class="form-check-label" for="autoApproveToggleOff">Off</label>
+        </div>
+      </div>
+      <small
+        *ngIf="accessRestrictions === 'account'"
+        class="text-muted"
+        [ngSwitch]="autoApproveToggle"
+      >
+        <ng-container *ngSwitchCase="1">
+          Recipients will automatically be granted access when requested.
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          Recipients must manually be granted access when requested.
+        </ng-container>
+      </small>
+      <div *ngIf="accessRestrictions === 'account'" class="link-settings-item">
+        <label>Default Share Role</label>
+        <select
+          class="form-control permission-select"
+          [disabled]="!canShare || updatingLink"
+          [(ngModel)]="linkDefaultAccessRole"
+          (ngModelChange)="
+            onShareLinkPropChange('permissionsLevel', linkDefaultAccessRole)
+          "
+        >
+          <option
+            *ngFor="let option of shareLinkAccessRoles"
+            [value]="option.value"
+            [disabled]="
+              shareLinkResponse?.accessRestrictions === 'none' &&
+              option.value !== 'viewer'
+            "
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <small *ngIf="accessRestrictions === 'account'" class="text-muted"
+        >Archives joining this share are given this role by default.
+        <a
+          href="https://permanent.zohodesk.com/portal/en/kb/articles/what-do-the-different-access-permissions-mean"
+          target="_blank"
+          >Learn More</a
+        ></small
+      >
+      <div class="link-settings-item">
+        <label>Link expires after</label>
+        <select
+          class="form-control"
+          [disabled]="!canShare || updatingLink"
+          [(ngModel)]="expiration"
+          (ngModelChange)="
+            onShareLinkPropChange(
+              'expirationTimestamp',
+              getExpiresDTFromExpiration(expiration)
+            )
+          "
+        >
+          <option
+            *ngFor="let option of expirationOptions"
+            [value]="option.value"
+            [hidden]="option.value === 'Other'"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <small
+        class="text-muted"
+        [ngSwitch]="shareLinkResponse.expirationTimestamp"
+      >
+        <ng-container *ngSwitchCase="null">
+          This link will only expire if deleted
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          This link will expire
+          {{ shareLink.expirationTimestamp | date: "MMM d, y 'at h:mm:ss a" }}
+        </ng-container>
+      </small>
+    </div>
+  </div>
+</div>
