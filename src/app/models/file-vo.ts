@@ -13,3 +13,15 @@ export interface PermanentFile {
   downloadURL: string;
   type: string;
 }
+
+
+export interface File {
+  size: number;
+  type: string;
+  fileId: string;
+  format: string;
+  fileUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  downloadUrl: string;
+}

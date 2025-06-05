@@ -29,3 +29,17 @@ export interface LocnVOData extends BaseVOData {
   status?: string;
   type?: string;
 }
+
+export interface Locn {
+  id: string;
+  streetNumber: string;
+  streetName: string;
+  locality: string;
+  county: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+  country: string;
+  countryCode: string;
+  displayName?: string | null;
+}
