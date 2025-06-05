@@ -378,7 +378,10 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
   }
 
   close() {
-    this.router.navigate(['.'], { relativeTo: this.route.parent });
+    this.router.navigate(['.'], {
+      relativeTo: this.route.parent,
+      queryParamsHandling: 'preserve',
+    });
   }
 
   public async onFinishEditing(
