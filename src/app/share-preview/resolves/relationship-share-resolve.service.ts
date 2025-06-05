@@ -34,6 +34,8 @@ export class RelationshipShareResolveService {
       }
     }
 
+    console.log('here')
+
     return this.api.share
       .getShareForPreview(route.params.shareId, route.params.folder_linkId)
       .then((response: ShareResponse): any => {

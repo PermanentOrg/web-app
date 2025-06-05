@@ -334,6 +334,8 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   reloadSharePreviewData() {
+    console.log(this.isRelationshipShare);
+
     if (this.isLinkShare) {
       return this.api.share
         .checkShareLink(this.route.snapshot.params.shareToken)
@@ -344,6 +346,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
     } else if (this.isRelationshipShare) {
+      console.log('here');
       const params = this.route.snapshot.params;
       return this.api.share
         .getShareForPreview(params.shareId, params.folder_linkId)
@@ -683,8 +686,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.fileListClickListener = componentReference.itemClicked.subscribe(
       (item) => {
-        this.dispatchBannerClose();
-        this.showCreateAccountDialog();
+        // this.dispatchBannerClose();
+        // this.showCreateAccountDialog();
+        this.router.navigate(['record', 'v2', item.item.archiveNumber], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve',
+        });
       },
     );
   }

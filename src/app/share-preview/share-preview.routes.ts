@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
+import { FileViewerV2Component } from '@fileBrowser/components/file-viewer-v2/file-viewer-v2.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
@@ -64,8 +65,8 @@ const sharePreviewChildren = [
         loadChildren: LazyLoadFileBrowserSibling,
       },
       {
-        path: 'record/:recArchiveNbr',
-        component: FileViewerComponent,
+        path: 'record/v2/:recArchiveNbr',
+        component: FileViewerV2Component,
         resolve: {
           currentRecord: RecordResolveService,
         },
@@ -87,6 +88,13 @@ export const routes: Routes = [
     children: sharePreviewChildren,
   },
   {
+    path: 'view/record/:recArchiveNbr', 
+    component: FileViewerV2Component, 
+    resolve: {
+      currentRecord: RecordResolveService,
+    },
+  },
+  {
     path: 'view/:shareId/:folder_linkId',
     resolve: shareRelationshipResolve,
     data: {
@@ -100,16 +108,7 @@ export const routes: Routes = [
     data: {
       noFileListPadding: true,
     },
-    children: [
-      ...sharePreviewChildren,
-      // {
-      //   path: 'record/:recArchiveNbr',
-      //   component: FileViewerComponent,
-      //   resolve: {
-      //     currentRecord: RecordResolveService,
-      //   },
-      // },
-    ],
+    children: [...sharePreviewChildren],
   },
 ];
 @NgModule({
