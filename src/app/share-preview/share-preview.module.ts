@@ -9,9 +9,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { EditService } from '@core/services/edit/edit.service';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
+import { RecordResolveV2Service } from '@core/resolves/record-resolve-v2.service';
 import { SharePreviewRoutingModule } from './share-preview.routes';
-import { CreateAccountDialogComponent } from './components/create-account-dialog/create-account-dialog.component';
-import { SharePreviewFooterComponent } from './components/share-preview-footer/share-preview-footer.component';
 
 @NgModule({
   declarations: [],
@@ -25,6 +24,7 @@ import { SharePreviewFooterComponent } from './components/share-preview-footer/s
     DataService,
     FolderViewService,
     RecordResolveService,
+    RecordResolveV2Service,
     EditService,
     FolderPickerService,
   ],

@@ -9,12 +9,22 @@ import {
   Optional,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import {
+  Router,
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+} from '@angular/router';
 import { Key } from 'ts-key-enum';
 import * as Hammer from 'hammerjs';
 import { gsap } from 'gsap';
 import { filter, findIndex, find } from 'lodash';
-import { RecordVO, ItemVO, TagVOData, AccessRole } from '@root/app/models';
+import {
+  RecordVO,
+  ItemVO,
+  TagVOData,
+  AccessRole,
+  Record,
+} from '@root/app/models';
 import { AccountService } from '@shared/services/account/account.service';
 import { DataService } from '@shared/services/data/data.service';
 import { EditService } from '@core/services/edit/edit.service';
@@ -26,7 +36,7 @@ import { Subscription } from 'rxjs';
 import { SearchService } from '@search/services/search.service';
 import { ZoomingImageViewerComponent } from '@shared/components/zooming-image-viewer/zooming-image-viewer.component';
 import { FileFormat } from '@models/file-vo';
-import { GetAccessFile } from '@models/get-access-file';
+import { GetAccessFileV2 } from '@models/get-access-file';
 import { TagsService } from '../../../core/services/tags/tags.service';
 
 @Component({
@@ -37,10 +47,10 @@ import { TagsService } from '../../../core/services/tags/tags.service';
 })
 export class FileViewerV2Component implements OnInit, OnDestroy {
   // Record
-  public currentRecord: RecordVO;
+  public currentRecord: Record;
   public prevRecord: RecordVO;
   public nextRecord: RecordVO;
-  public records: RecordVO[];
+  public records: Record[];
   public currentIndex: number;
   public isZoomableImage = false;
   public isVideo = false;
@@ -84,6 +94,7 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
     private accountService: AccountService,
     private editService: EditService,
     private tagsService: TagsService,
+    private activatedRoute: ActivatedRoute,
     @Optional() private publicProfile: PublicProfileService,
   ) {
     // store current scroll position in file list
@@ -96,22 +107,28 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
       this.records = [this.currentRecord];
       this.currentIndex = 0;
     } else {
-      console.log(this.dataService.currentFolder);
       this.records = filter(
-        this.dataService.currentFolder.ChildItemVOs,
+        this.dataService.currentFolder?.ChildItemVOs ||
+          route.snapshot.data.sharePreviewItem?.FolderVO?.ChildItemVOs,
         'recordId',
-      ) as RecordVO[];
-      console.log(this.records);
+      ) as unknown as Record[];
+
       this.currentIndex = findIndex(this.records, {
-        folderLinkId: resolvedRecord.folder_linkId.toString(),
+        folderLinkId: resolvedRecord.folder_linkId?.toString(),
       });
-      console.log(this.records);
-      console.log(resolvedRecord);
-      console.log(this.currentIndex);
-      this.currentRecord = new RecordVO(this.records[this.currentIndex]);
-      console.log(this.currentRecord);
-      if (resolvedRecord !== this.currentRecord) {
-        this.currentRecord.update(resolvedRecord);
+
+      if (this.currentIndex === -1) {
+        this.currentIndex = 0;
+      }
+
+      this.currentRecord = this.records[this.currentIndex];
+
+      if (
+        this.currentRecord &&
+        resolvedRecord &&
+        resolvedRecord !== this.currentRecord
+      ) {
+        this.updateRecordInstance(this.currentRecord, resolvedRecord);
       }
 
       this.loadQueuedItems();
@@ -129,20 +146,49 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
 
     this.canEdit =
       this.accountService.checkMinimumAccess(
-        this.currentRecord.accessRole,
+        (this.currentRecord as unknown as RecordVO)?.accessRole,
         AccessRole.Editor,
       ) && !route.snapshot.data?.isPublicArchive;
 
     this.tagSubscription = this.tagsService
       .getItemTags$()
       ?.subscribe((tags) => {
-        this.customMetadata = tags?.filter((tag) =>
-          tag.type.includes('type.tag.metadata'),
+        this.customMetadata = tags?.filter(
+          (tag) => tag?.type.includes('type.tag.metadata'),
         );
         this.keywords = tags?.filter(
-          (tag) => !tag.type.includes('type.tag.metadata'),
+          (tag) => !tag?.type.includes('type.tag.metadata'),
         );
       });
+  }
+
+  updateRecordInstance(target: any, source: any): void {
+    if (!target || !source) {
+      return;
+    }
+    for (const key in source) {
+      if (!Object.prototype.hasOwnProperty.call(source, key)) continue;
+
+      const value = source[key];
+
+      // Skip undefined and functions
+      if (value === undefined || typeof value === 'function') continue;
+
+      // Handle nested arrays of objects (e.g. tags, files)
+      if (Array.isArray(value)) {
+        target[key] = value.map((item) =>
+          typeof item === 'object' ? { ...item } : item,
+        );
+      }
+      // Handle nested objects
+      else if (value !== null && typeof value === 'object') {
+        target[key] = { ...value };
+      }
+      // Primitive assignment
+      else {
+        target[key] = value;
+      }
+    }
   }
 
   ngOnInit() {
@@ -197,15 +243,15 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
   }
 
   initRecord() {
-    this.isAudio = this.currentRecord.type.includes('audio');
-    this.isVideo = this.currentRecord.type.includes('video');
+    this.isAudio = this.currentRecord?.type.includes('audio');
+    this.isVideo = this.currentRecord?.type.includes('video');
     this.isZoomableImage =
-      this.currentRecord.type.includes('image') &&
-      this.currentRecord.FileVOs?.length &&
-      typeof ZoomingImageViewerComponent.chooseFullSizeImage(
+      this.currentRecord?.type.includes('image') &&
+      this.currentRecord?.files?.length &&
+      typeof ZoomingImageViewerComponent.chooseFullSizeImageV2(
         this.currentRecord,
       ) !== 'undefined';
-    this.isDocument = this.currentRecord.FileVOs?.some(
+    this.isDocument = this.currentRecord?.files?.some(
       (obj) => obj.type.includes('pdf') || obj.type.includes('txt'),
     );
     this.documentUrl = this.getDocumentUrl();
@@ -225,17 +271,17 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
       return false;
     }
 
-    const original = this.currentRecord.FileVOs.find(
+    const original = this.currentRecord.files.find(
       (file) => file.format === FileFormat.Original,
     );
-    const access = GetAccessFile(this.currentRecord);
+    const access = GetAccessFileV2(this.currentRecord);
 
     let url;
 
     if (original?.type.includes('pdf') || original?.type.includes('txt')) {
-      url = original?.fileURL;
+      url = original?.fileUrl;
     } else if (access) {
-      url = access?.fileURL;
+      url = access?.fileUrl;
     }
 
     if (!url) {
@@ -342,22 +388,26 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
     this.disableSwipes = false;
     this.loadQueuedItems();
 
-    if (targetRecord.archiveNbr) {
-      this.navigateToCurrentRecord();
-    } else if (targetRecord.isFetching) {
-      targetRecord.fetched.then(() => {
-        this.navigateToCurrentRecord();
+    if (targetRecord.archiveNumber) {
+      this.navigateToCurrentRecord(targetIndex);
+    } else if ((targetRecord as unknown as RecordVO).isFetching) {
+      (targetRecord as unknown as RecordVO).fetched.then(() => {
+        this.navigateToCurrentRecord(targetIndex);
       });
     } else {
-      this.dataService.fetchLeanItems([targetRecord]).then(() => {
-        this.navigateToCurrentRecord();
-      });
+      this.dataService
+        .fetchLeanItems([targetRecord as unknown as ItemVO])
+        .then(() => {
+          this.navigateToCurrentRecord(targetIndex);
+        });
     }
   }
 
-  navigateToCurrentRecord() {
-    this.router.navigate(['../', this.currentRecord.archiveNbr], {
+  navigateToCurrentRecord(index = 0) {
+    const record = this.records[index];
+    this.router.navigate(['../', record.archiveNumber], {
       relativeTo: this.route,
+      queryParamsHandling: 'preserve',
     });
     this.loadingRecord = false;
   }
@@ -371,7 +421,9 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
     );
     const itemsToFetch = this.records
       .slice(start, end)
-      .filter((item: RecordVO) => item.dataStatus < DataStatus.Full);
+      .filter(
+        (item: Record) => item.dataStatus < DataStatus.Full,
+      ) as unknown as ItemVO[];
     if (itemsToFetch.length) {
       this.dataService.fetchFullItems(itemsToFetch);
     }
@@ -380,7 +432,6 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
   close() {
     this.router.navigate(['.'], {
       relativeTo: this.route.parent,
-      queryParamsHandling: 'preserve',
     });
   }
 
@@ -389,7 +440,7 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
     value: string,
   ): Promise<void> {
     this.editService.saveItemVoProperty(
-      this.currentRecord as ItemVO,
+      this.currentRecord as unknown as ItemVO,
       property,
       value,
     );
@@ -397,13 +448,18 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
 
   public onLocationClick(): void {
     if (this.canEdit) {
-      this.editService.openLocationDialog(this.currentRecord as ItemVO);
+      this.editService.openLocationDialog(
+        this.currentRecord as unknown as ItemVO,
+      );
     }
   }
 
   public onTagsClick(type: string): void {
     if (this.canEdit) {
-      this.editService.openTagsDialog(this.currentRecord as ItemVO, type);
+      this.editService.openTagsDialog(
+        this.currentRecord as unknown as ItemVO,
+        type,
+      );
     }
   }
 
@@ -412,15 +468,15 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
   }
 
   public onDownloadClick(): void {
-    this.dataService.downloadFile(this.currentRecord);
+    this.dataService.downloadFileV2(this.currentRecord);
   }
 
   private setCurrentTags(): void {
-    this.keywords = this.currentRecord.TagVOs.filter(
-      (tag) => !tag.type.includes('type.tag.metadata'),
-    );
-    this.customMetadata = this.currentRecord.TagVOs.filter((tag) =>
-      tag.type.includes('type.tag.metadata'),
-    );
+    this.keywords = (
+      (this.currentRecord as unknown as Record)?.tags || []
+    ).filter((tag) => !tag?.type.includes('type.tag.metadata'));
+    this.customMetadata = (
+      (this.currentRecord as unknown as Record)?.tags || []
+    ).filter((tag) => tag?.type.includes('type.tag.metadata'));
   }
 }

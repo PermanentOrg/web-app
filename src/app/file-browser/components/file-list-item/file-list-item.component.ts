@@ -548,7 +548,7 @@ export class FileListItemComponent
       rootUrl = '/private';
     }
 
-    if (this.item.isFolder) {
+    if (this.item.isFolder || (this.item as FolderVO).folderId) {
       if (this.checkFolderView && this.isFolderViewSet()) {
         this.router.navigate([
           rootUrl,
@@ -563,9 +563,24 @@ export class FileListItemComponent
         });
       }
       if (this.isInSharePreview || this.isInPublicArchive) {
-        this.router.navigate([this.item.archiveNbr, this.item.folder_linkId], {
-          relativeTo: this.route.parent,
-        });
+        const params = this.route.snapshot.params;
+        const token = params.token;
+        const itemId = (this.item as FolderVO).folderId;
+        if (token && itemId) {
+          this.router.navigate([
+            '/share/view/v2-file-list',
+            'folder',
+            token,
+            itemId,
+          ]);
+        } else {
+          this.router.navigate(
+            [this.item.archiveNbr, this.item.folder_linkId],
+            {
+              relativeTo: this.route.parent,
+            },
+          );
+        }
       } else {
         this.router.navigate([
           rootUrl,
@@ -580,15 +595,13 @@ export class FileListItemComponent
     ) {
       this.router.navigate(['/shares/record', this.item.archiveNbr]);
     } else {
-      console.log(this.item);
-      if (this.item.archiveNbr) {
-        this.router.navigate(['record', this.item.archiveNbr], {
+      if (this.item.archiveNumber) {
+        this.router.navigate(['record', 'v2', this.item.archiveNumber], {
           relativeTo: this.route,
         });
-      } else if (this.item.archiveNumber) {
-        this.router.navigate(['record','v2', this.item.archiveNumber], {
+      } else if (this.item.archiveNbr) {
+        this.router.navigate(['record', this.item.archiveNbr], {
           relativeTo: this.route,
-          queryParamsHandling: 'preserve',
         });
       }
     }

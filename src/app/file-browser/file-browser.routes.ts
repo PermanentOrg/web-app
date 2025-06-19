@@ -6,8 +6,8 @@ import { RecordResolveService } from '@core/resolves/record-resolve.service';
 
 import { FileListComponent } from '@fileBrowser/components/file-list/file-list.component';
 import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
+import { RecordResolveV2Service } from '@core/resolves/record-resolve-v2.service';
 import { FileViewerV2Component } from './components/file-viewer-v2/file-viewer-v2.component';
-import { resolve } from 'path';
 
 const folderResolve = {
   currentFolder: FolderResolveService,
@@ -15,6 +15,10 @@ const folderResolve = {
 
 const recordResolve = {
   currentRecord: RecordResolveService,
+};
+
+const recordResolveV2 = {
+  currentRecord: RecordResolveV2Service,
 };
 
 export const fileListChildRoutes = [
@@ -26,7 +30,7 @@ export const fileListChildRoutes = [
   {
     path: 'record/v2/:recArchiveNbr',
     component: FileViewerV2Component,
-    resolve: recordResolve,
+    resolve: recordResolveV2,
   },
 ];
 

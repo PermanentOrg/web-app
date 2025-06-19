@@ -9,9 +9,9 @@ import { FileListComponent } from '@fileBrowser/components/file-list/file-list.c
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
-import { FileViewerComponent } from '@fileBrowser/components/file-viewer/file-viewer.component';
 import { FileViewerV2Component } from '@fileBrowser/components/file-viewer-v2/file-viewer-v2.component';
 import { AnnouncementModule } from '../announcement/announcement.module';
+import { FileListV2Component } from '../file-browser/components/file-list-v2/file-list-v2.component';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
 import { PreviewArchiveResolveService } from './resolves/preview-archive-resolve.service';
 import { PreviewResolveService } from './resolves/preview-resolve.service';
@@ -76,6 +76,31 @@ const sharePreviewChildren = [
 ];
 export const routes: Routes = [
   {
+    path: 'view/v2-file-list/:itemType/:token/:itemId',
+    resolve: shareResolve,
+    component: SharePreviewComponent,
+    data: {
+      formDarkBg: true,
+      showFolderDescription: true,
+    },
+    children: [
+      {
+        path: '',
+        component: FileListV2Component,
+        data: {
+          noFileListNavigation: false,
+        },
+      },
+      {
+        path: 'record/v2/:recArchiveNbr',
+        component: FileViewerV2Component,
+        resolve: {
+          currentRecord: RecordResolveService,
+        },
+      },
+    ],
+  },
+  {
     path: 'error',
     component: ShareNotFoundComponent,
   },
@@ -88,8 +113,8 @@ export const routes: Routes = [
     children: sharePreviewChildren,
   },
   {
-    path: 'view/record/:recArchiveNbr', 
-    component: FileViewerV2Component, 
+    path: 'view/record/:recArchiveNbr',
+    component: FileViewerV2Component,
     resolve: {
       currentRecord: RecordResolveService,
     },

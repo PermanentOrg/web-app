@@ -1,23 +1,422 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/* @format */
+import { Router, ActivatedRoute } from '@angular/router';
+import { SecurityContext } from '@angular/core';
+import { Shallow } from 'shallow-render';
+import { Subject } from 'rxjs';
 
+import {
+  RecordVO,
+  ItemVO,
+  TagVOData,
+  ArchiveVO,
+  Record,
+  Tag,
+} from '@root/app/models';
+import { AccountService } from '@shared/services/account/account.service';
+import { DataService } from '@shared/services/data/data.service';
+import { EditService } from '@core/services/edit/edit.service';
+import { TagsService } from '@core/services/tags/tags.service';
+import { PublicProfileService } from '@public/services/public-profile/public-profile.service';
+import { FileBrowserComponentsModule } from '../../file-browser-components.module';
+import { TagsComponent } from '../../../shared/components/tags/tags.component';
 import { FileViewerV2Component } from './file-viewer-v2.component';
 
+const defaultTagList: Tag[] = [
+  {
+    id: '1',
+    name: 'tagOne',
+    type: 'type.generic.placeholder',
+  },
+  {
+    id: '2',
+    name: 'tagTwo',
+    type: 'type.generic.placeholder',
+  },
+  {
+    id: '3',
+    name: 'customField:customValueOne',
+    type: 'type.tag.metadata.customField',
+  },
+  {
+    id: '4',
+    name: 'customField:customValueTwo',
+    type: 'type.tag.metadata.customField',
+  },
+];
+const defaultItem = {
+  displayName: 'Default Item',
+  tags: defaultTagList,
+  type: 'document',
+  folderLinkId: '0',
+  folder_linkId: '0',
+};
+const secondItem = {
+  displayName: 'Second Item',
+  tags: [],
+  type: 'image',
+  folderLinkId: '1',
+  folder_linkId: '1',
+} as unknown;
+
+interface ActivatedRouteSnapshotData {
+  singleFile: boolean;
+  isPublicArchive: boolean;
+  currentRecord: Record;
+}
+
+class MockTagsService {
+  public itemTagsObservable = new Subject<TagVOData[]>();
+  public getItemTags$() {
+    return this.itemTagsObservable;
+  }
+}
+
 describe('FileViewerV2Component', () => {
-  let component: FileViewerV2Component;
-  let fixture: ComponentFixture<FileViewerV2Component>;
+  let shallow: Shallow<FileViewerV2Component>;
+  let activatedRouteData: ActivatedRouteSnapshotData;
+  let folderChildren: Record[];
+  let tagsService: MockTagsService;
+  let navigatedUrl: string[];
+  let savedProperty: { name: string; value: any };
+  let hasAccess: boolean;
+  let openedDialogs: string[];
+  let downloaded: boolean;
+  async function defaultRender() {
+    return await shallow.render(`<pr-file-viewer-v2>`);
+  }
+
+  function setUpMultipleRecords(...items: Record[] | RecordVO[]) {
+    folderChildren.push(...(items as any));
+    activatedRouteData.singleFile = false;
+  }
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FileViewerV2Component]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(FileViewerV2Component);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    navigatedUrl = [];
+    activatedRouteData = {
+      singleFile: true,
+      isPublicArchive: true,
+      currentRecord: defaultItem,
+    };
+    folderChildren = [];
+    tagsService = new MockTagsService();
+    savedProperty = undefined;
+    hasAccess = true;
+    openedDialogs = [];
+    downloaded = false;
+    shallow = new Shallow(FileViewerV2Component, FileBrowserComponentsModule)
+      .dontMock(TagsService)
+      .dontMock(PublicProfileService)
+      .mock(Router, {
+        navigate: (route: string[]) => {
+          navigatedUrl = route;
+          return Promise.resolve(true);
+        },
+        routerState: {
+          snapshot: {
+            url: 'exampleUrl.com',
+          },
+        },
+      })
+      .mock(ActivatedRoute, {
+        snapshot: {
+          data: activatedRouteData,
+        },
+      })
+      .mock(DataService, {
+        currentFolder: {
+          ChildItemVOs: folderChildren as unknown as ItemVO[],
+        },
+        fetchFullItems: async () => {},
+        fetchLeanItems: async () => {},
+        async downloadFileV2(_item: Record, _type: string) {
+          downloaded = true;
+        },
+      })
+      .mock(AccountService, {
+        checkMinimumAccess: (_itemAccessRole, _minimumAccess) => hasAccess,
+      })
+      .mock(EditService, {
+        async saveItemVoProperty(_record, name, value) {
+          savedProperty = { name: name as string, value };
+        },
+        async openLocationDialog(_item) {
+          openedDialogs.push('location');
+        },
+        async openTagsDialog(_record, _type) {
+          openedDialogs.push('tags');
+        },
+      })
+      .provide({ provide: TagsService, useValue: tagsService })
+      .provide({
+        provide: PublicProfileService,
+        useValue: new PublicProfileService(),
+      });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create', async () => {
+    const { element } = await defaultRender();
+
+    expect(element).not.toBeNull();
+  });
+
+  it('should have two tags components', async () => {
+    const { findComponent } = await defaultRender();
+
+    expect(findComponent(TagsComponent)).toHaveFound(2);
+  });
+
+  it('should correctly distinguish between keywords and custom metadata', async () => {
+    const { element } = await defaultRender();
+
+    expect(
+      element.componentInstance.keywords.find((tag) => tag.name === 'tagOne'),
+    ).toBeTruthy();
+
+    expect(
+      element.componentInstance.keywords.find((tag) => tag.name === 'tagTwo'),
+    ).toBeTruthy();
+
+    expect(
+      element.componentInstance.keywords.find(
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.keywords.find(
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.customMetadata.find(
+        (tag) => tag.name === 'tagOne',
+      ),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.customMetadata.find(
+        (tag) => tag.name === 'tagTwo',
+      ),
+    ).not.toBeTruthy();
+
+    expect(
+      element.componentInstance.customMetadata.find(
+        (tag) => tag.name === 'customField:customValueOne',
+      ),
+    ).toBeTruthy();
+
+    expect(
+      element.componentInstance.customMetadata.find(
+        (tag) => tag.name === 'customField:customValueTwo',
+      ),
+    ).toBeTruthy();
+  });
+
+  it('should be able to load multiple record in a folder', async () => {
+    setUpMultipleRecords(defaultItem, secondItem);
+    const { element } = await defaultRender();
+
+    expect(element).not.toBeNull();
+  });
+
+  it('should listen to tag updates from the tag service', async () => {
+    const { instance } = await defaultRender();
+    tagsService.itemTagsObservable.next([
+      { type: 'type.tag.metadata.customField', name: 'test:metadta' },
+      { type: 'type.generic.placeholder', name: 'test' },
+    ]);
+
+    expect(instance.keywords.length).toBe(1);
+    expect(instance.customMetadata.length).toBe(1);
+  });
+
+  it('should listen to public profile archive updates', async () => {
+    const { inject, instance } = await defaultRender();
+    const publicProfile = inject(PublicProfileService);
+    publicProfile.archiveBs.next(new ArchiveVO({ allowPublicDownload: true }));
+
+    expect(instance.allowDownloads).toBeTruthy();
+  });
+
+  it('should handle null public profile archive updates', async () => {
+    const { inject, instance } = await defaultRender();
+    const publicProfile = inject(PublicProfileService);
+    publicProfile.archiveBs.next(new ArchiveVO({ allowPublicDownload: true }));
+    publicProfile.archiveBs.next(null);
+
+    expect(instance.allowDownloads).toBeFalsy();
+  });
+
+  describe('Keyboard Input', () => {
+    function keyDown(
+      instance: FileViewerV2Component,
+      key: 'ArrowRight' | 'ArrowLeft',
+    ) {
+      instance.onKeyDown(new KeyboardEvent('keydown', { key }));
+    }
+
+    it('should handle left arrow key input', async () => {
+      setUpMultipleRecords(secondItem, defaultItem);
+      const { instance } = await defaultRender();
+      keyDown(instance, 'ArrowLeft');
+
+      expect(instance.currentIndex).toBe(0);
+    });
+
+    it('does not wrap around on left arrow', async () => {
+      setUpMultipleRecords(defaultItem, secondItem);
+      const { instance } = await defaultRender();
+      keyDown(instance, 'ArrowLeft');
+
+      expect(instance.currentIndex).toBe(0);
+    });
+  });
+
+  describe('URLs of PDF files', () => {
+    function setUpCurrentRecord(
+      typeOfOriginal: string,
+      fileURLOfOriginal: string | false = 'http://example.com/original',
+    ) {
+      activatedRouteData.currentRecord = {
+        type: 'document',
+        displayName: 'Test Doc',
+        tags: [],
+        files: [
+          {
+            format: 'file.format.original',
+            type: typeOfOriginal,
+            fileUrl: fileURLOfOriginal,
+          },
+          {
+            format: 'file.format.converted',
+            type: 'odt',
+            fileUrl: 'http://example.com/ignored',
+          },
+          {
+            format: 'file.format.converted',
+            type: 'pdf',
+            fileUrl: 'http://example.com/used',
+          },
+        ],
+      } as unknown as Record;
+    }
+    function expectSantizedUrlToContain(
+      instance: FileViewerV2Component,
+      phrase: string,
+    ) {
+      const url = instance.getDocumentUrl();
+
+      expect(url).toBeTruthy();
+      expect(
+        instance.sanitizer.sanitize(SecurityContext.RESOURCE_URL, url),
+      ).toContain(phrase);
+    }
+    it('can get the URL of a document', async () => {
+      setUpCurrentRecord('doc');
+      const { instance } = await defaultRender();
+      expectSantizedUrlToContain(instance, 'used');
+    });
+
+    it('will prefer the URL of the original if it is a PDF', async () => {
+      setUpCurrentRecord('pdf');
+      const { instance } = await defaultRender();
+      expectSantizedUrlToContain(instance, 'original');
+    });
+
+    it('will prefer the URL of the original if it is a TXT file', async () => {
+      setUpCurrentRecord('txt');
+      const { instance } = await defaultRender();
+      expectSantizedUrlToContain(instance, 'original');
+    });
+
+    it('will have a falsy document URL if it is not a document', async () => {
+      const { instance } = await defaultRender();
+
+      expect(instance.getDocumentUrl()).toBeFalsy();
+    });
+
+    it('will have a falsy document URL if the URL is falsy', async () => {
+      setUpCurrentRecord('pdf', false);
+      const { instance } = await defaultRender();
+
+      expect(instance.getDocumentUrl()).toBeFalsy();
+    });
+  });
+
+  describe('Component API', () => {
+    function setAccess(access: boolean) {
+      hasAccess = access;
+      activatedRouteData.isPublicArchive = false;
+    }
+    it('can close the file viewer', async () => {
+      const { instance } = await defaultRender();
+      instance.close();
+
+      expect(navigatedUrl).toContain('.');
+    });
+
+    it('can finish editing', async () => {
+      const { instance } = await defaultRender();
+      await instance.onFinishEditing('displayName', 'Test');
+
+      expect(savedProperty.name).toBe('displayName');
+      expect(savedProperty.value).toBe('Test');
+    });
+
+    it('can open the location dialog with edit permissions', async () => {
+      setAccess(true);
+      const { fixture, instance } = await defaultRender();
+      instance.onLocationClick();
+      await fixture.whenStable();
+
+      expect(openedDialogs).toContain('location');
+    });
+
+    it('cannot open the location dialog without edit permissions', async () => {
+      setAccess(false);
+      const { fixture, instance } = await defaultRender();
+      instance.onLocationClick();
+      await fixture.whenStable();
+
+      expect(openedDialogs).not.toContain('location');
+    });
+
+    it('can open the tags dialog with edit permissions', async () => {
+      setAccess(true);
+      const { fixture, instance } = await defaultRender();
+      instance.onTagsClick('keyword');
+      await fixture.whenStable();
+
+      expect(openedDialogs).toContain('tags');
+    });
+
+    it('cannot open the tags dialog with edit permissions', async () => {
+      setAccess(false);
+      const { fixture, instance } = await defaultRender();
+      instance.onTagsClick('keyword');
+      await fixture.whenStable();
+
+      expect(openedDialogs).not.toContain('tags');
+    });
+
+    it('can download items', async () => {
+      const { fixture, instance } = await defaultRender();
+      instance.onDownloadClick();
+      await fixture.whenStable();
+
+      expect(downloaded).toBeTrue();
+    });
+
+    it('should display "Click to add location" on fullscreen view', async () => {
+      const { fixture, instance, find } = await defaultRender();
+      instance.canEdit = true;
+      await fixture.detectChanges();
+      const locationSpan = find('.add-location');
+
+      expect(locationSpan.nativeElement.textContent.trim()).toBe(
+        'Click to add location',
+      );
+    });
   });
 });

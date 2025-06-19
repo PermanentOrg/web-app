@@ -14,7 +14,6 @@ export interface PermanentFile {
   type: string;
 }
 
-
 export interface File {
   size: number;
   type: string;

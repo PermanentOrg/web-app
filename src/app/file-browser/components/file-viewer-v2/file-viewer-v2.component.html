@@ -50,7 +50,8 @@
             !isVideo &&
             !isAudio
           "
-        ></pr-thumbnail>https://local.permanent.org/share?itemType=record&token=b5dad0af-40dc-435f-bf0c-cc01fe6e8b76&itemId=3&accountId=10
+        ></pr-thumbnail
+        >https://local.permanent.org/share?itemType=record&token=b5dad0af-40dc-435f-bf0c-cc01fe6e8b76&itemId=3&accountId=10
         <pr-video [item]="currentRecord" *ngIf="isVideo"></pr-video>
         <pr-audio [item]="currentRecord" *ngIf="isAudio"></pr-audio>
         <iframe
@@ -75,13 +76,13 @@
       <span>&#8250;</span>
     </div>
   </div>
-  <div class="file-viewer-name">{{ currentRecord.displayName }}</div>
+  <div class="file-viewer-name">{{ currentRecord?.displayName }}</div>
   <div class="file-viewer-metadata-wrapper">
     <div class="file-viewer-metadata">
       <pr-inline-value-edit
-        [displayValue]="currentRecord.displayName"
+        [displayValue]="currentRecord?.displayName"
         [isPublicArchive]="isPublicArchive"
-        [itemId]="currentRecord.folder_linkId"
+        [itemId]="currentRecord?.folderLinkId"
         [canEdit]="canEdit"
         [required]="true"
         (doneEditing)="onFinishEditing('displayName', $event)"
@@ -92,8 +93,8 @@
       ></pr-inline-value-edit>
       <div class="file-viewer-description">
         <pr-inline-value-edit
-          *ngIf="canEdit || currentRecord.description"
-          [displayValue]="currentRecord.description"
+          *ngIf="canEdit || currentRecord?.description"
+          [displayValue]="currentRecord?.description"
           [itemId]="currentRecord.folder_linkId"
           [canEdit]="canEdit"
           (doneEditing)="onFinishEditing('description', $event)"
@@ -107,10 +108,10 @@
           <td>Date</td>
           <td>
             <pr-inline-value-edit
-              [displayValue]="currentRecord.displayDT"
+              [displayValue]="currentRecord?.displayDate"
               [canEdit]="canEdit"
               [item]="currentRecord"
-              [itemId]="currentRecord.folder_linkId"
+              [itemId]="currentRecord?.folderLinkId"
               emptyMessage="Click to add date"
               readOnlyEmptyMessage="No date"
               (doneEditing)="onFinishEditing('displayDT', $event)"
@@ -122,21 +123,21 @@
         </tr>
         <tr>
           <td>Uploaded</td>
-          <td>{{ currentRecord.createdDT | date }}</td>
+          <td>{{ currentRecord?.createdAt | date }}</td>
         </tr>
         <tr>
           <td>Size</td>
-          <td>{{ currentRecord.size | dsFileSize }}</td>
+          <td>{{ currentRecord?.size | dsFileSize }}</td>
         </tr>
         <tr>
           <td>Type</td>
-          <td>{{ currentRecord.type | prConstants | titlecase }}</td>
+          <td>{{ currentRecord?.type | prConstants | titlecase }}</td>
         </tr>
       </table>
       <p class="alt-text">Alt Text</p>
       <pr-inline-value-edit
         [displayValue]="currentRecord | getAltText"
-        [itemId]="currentRecord.folder_linkId"
+        [itemId]="currentRecord?.folderLinkId"
         [canEdit]="canEdit"
         [required]="false"
         (doneEditing)="onFinishEditing('altText', $event)"
@@ -165,16 +166,21 @@
           <td class="title">Location</td>
           <td class="location-container" (click)="onLocationClick()">
             <pr-static-map
-              [location]="currentRecord.LocnVO"
-              *ngIf="currentRecord.LocnVO"
+              [location]="currentRecord?.LocnVO"
+              *ngIf="currentRecord?.location"
             ></pr-static-map>
-            <span *ngIf="currentRecord.LocnVO">{{
-              (currentRecord.LocnVO | prLocation)?.full
+            <span *ngIf="currentRecord?.location">{{
+              (currentRecord?.LocnVO | prLocation)?.full
             }}</span>
-            <span class="add-location" *ngIf="!currentRecord.LocnVO && canEdit">
+            <span
+              class="add-location"
+              *ngIf="!currentRecord?.location && canEdit"
+            >
               Click to add location</span
             >
-            <span *ngIf="!currentRecord.LocnVO && !canEdit">No location</span>
+            <span *ngIf="!currentRecord?.location && !canEdit"
+              >No location</span
+            >
           </td>
         </tr>
         <tr></tr>

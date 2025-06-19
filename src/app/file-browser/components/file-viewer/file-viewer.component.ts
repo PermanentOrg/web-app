@@ -97,7 +97,7 @@ export class FileViewerComponent implements OnInit, OnDestroy {
       this.currentIndex = 0;
     } else {
       this.records = filter(
-        this.dataService.currentFolder.ChildItemVOs,
+        this.dataService.currentFolder?.ChildItemVOs,
         'isRecord',
       ) as RecordVO[];
       this.currentIndex = findIndex(this.records, {

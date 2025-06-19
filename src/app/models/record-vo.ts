@@ -243,30 +243,30 @@ export interface RecordVOData extends BaseVOData {
 }
 
 export interface Record {
-  recordId: string;
-  displayName: string;
-  archiveId: string;
-  archiveNumber: string;
+  recordId?: string;
+  displayName?: string;
+  archiveId?: string;
+  archiveNumber?: string;
   description?: string | null;
   publicAt?: string | null;
-  downloadName: string;
-  uploadFileName: string;
-  uploadAccountId: string;
-  uploadPayerAccountId: string;
-  size: number;
-  displayDate: string;
+  downloadName?: string;
+  uploadFileName?: string;
+  uploadAccountId?: string;
+  uploadPayerAccountId?: string;
+  size?: number;
+  displayDate?: string;
   fileCreatedAt?: string | null;
-  imageRatio: number;
-  thumbUrl200: string;
-  thumbUrl500: string;
-  thumbUrl1000: string;
-  thumbUrl2000: string;
-  status: string;
-  type: string;
-  createdAt: string;
-  updatedAt: string;
+  imageRatio?: number;
+  thumbUrl200?: string;
+  thumbUrl500?: string;
+  thumbUrl1000?: string;
+  thumbUrl2000?: string;
+  status?: string;
+  type?: string;
+  createdAt?: string;
+  updatedAt?: string;
   altText?: string | null;
-  files: {
+  files?: {
     size: number;
     type: string;
     fileId: string;
@@ -276,29 +276,25 @@ export interface Record {
     updatedAt: string;
     downloadUrl: string;
   }[];
-  folderLinkId: string;
-  folderLinkType: string;
-  parentFolderId: string;
-  parentFolderLinkId: string;
-  parentFolderArchiveNumber: string;
-  tags: Tag[];
-  archiveArchiveNumber: string;
-  location: Locn;
+  folderLinkId?: string;
+  folderLinkType?: string;
+  parentFolderId?: string;
+  parentFolderLinkId?: string;
+  parentFolderArchiveNumber?: string;
+  tags?: Tag[];
+  archiveArchiveNumber?: string;
+  location?: Locn;
+  dataStatus?: number;
   shares?: any | null;
-  archive: {
+  archive?: {
     id: string;
     archiveNumber: string;
     name: string;
   };
-  shareLink: {
+  shareLink?: {
     creatorAccount: {
       id: string;
       name: string;
     };
   };
 }
-
-
-
-
-
