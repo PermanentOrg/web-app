@@ -21,6 +21,7 @@ interface RequestOptions {
   authToken?: boolean;
   useStelaDomain?: boolean;
   responseType?: ResponseType;
+  headers?: Record<string, any>;
 }
 
 const defaultOptions: RequestOptions = {
@@ -213,6 +214,12 @@ export class HttpV2Service {
     if (this.authToken && options.authToken) {
       headers = headers.append('Authorization', `Bearer ${this.authToken}`);
     }
+
+    if (options.headers) {
+      for (const [key, value] of Object.entries(options.headers)) {
+        headers = headers.append(key, value);
+      }
+    }
     return {
       headers,
     };
@@ -297,7 +304,7 @@ export class HttpV2Service {
             return obj as T;
           });
         }
-        if (response.hasOwnProperty('csrf')) {
+        if (response?.hasOwnProperty('csrf')) {
           this.storage.session.set(CSRF_KEY, response['csrf']);
         }
         if (responseClass) {
