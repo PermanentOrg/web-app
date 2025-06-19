@@ -11,6 +11,10 @@ export interface ShareLink {
   expirationTimestamp?: string;
   createdAt: Date;
   updatedAt: Date;
+  creatorAccount: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface ShareLinkPayload {

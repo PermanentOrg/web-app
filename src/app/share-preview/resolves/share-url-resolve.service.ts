@@ -83,7 +83,6 @@ export class ShareUrlResolveService {
           FolderVO: dummyFolder,
           RecordVO: record,
           ArchiveVO: record.archive,
-          AccountVO: record.shareLink?.creatorAccount,
         };
       }
 
@@ -93,6 +92,7 @@ export class ShareUrlResolveService {
       response = {
         ...response,
         shareLinkResponse,
+        AccountVO: shareLinkResponse.creatorAccount,
       };
       return response;
     } catch (error: any) {

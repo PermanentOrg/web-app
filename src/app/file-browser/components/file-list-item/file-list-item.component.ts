@@ -596,9 +596,12 @@ export class FileListItemComponent
       this.router.navigate(['/shares/record', this.item.archiveNbr]);
     } else {
       if (this.item.archiveNumber) {
-        this.router.navigate(['record', 'v2', this.item.archiveNumber], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          ['record', 'v2', (this.item as RecordVO).recordId],
+          {
+            relativeTo: this.route,
+          },
+        );
       } else if (this.item.archiveNbr) {
         this.router.navigate(['record', this.item.archiveNbr], {
           relativeTo: this.route,

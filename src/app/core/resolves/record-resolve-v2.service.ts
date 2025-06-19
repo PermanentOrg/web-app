@@ -31,16 +31,12 @@ export class RecordResolveV2Service {
       route.params.recArchiveNbr,
     );
 
-    const itemId = route.queryParams.itemId;
+    const itemId = route.params.recordId;
 
-    let token;
-
-    this.route.queryParams.subscribe((t) => {
-      token = t.token;
-    });
+    const token = route.params.token;
 
     const headers = {
-      'X-Permanent-Share-Token': token ? token : route.queryParams.token,
+      'X-Permanent-Share-Token': token,
     };
 
     try {
@@ -59,8 +55,11 @@ export class RecordResolveV2Service {
           true,
           headers,
         );
+
         const record: any = response[0];
-        record.dataStatus = DataStatus.Full;
+        if (record) {
+          record.dataStatus = DataStatus.Full;
+        }
         return record;
       }
     } catch (err) {

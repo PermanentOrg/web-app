@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LazyLoadFileBrowserSibling } from '@fileBrowser/lazy-load-file-browser-sibling';
 import { RecordResolveService } from '@core/resolves/record-resolve.service';
 import { FileViewerV2Component } from '@fileBrowser/components/file-viewer-v2/file-viewer-v2.component';
+import { RecordResolveV2Service } from '@core/resolves/record-resolve-v2.service';
 import { AnnouncementModule } from '../announcement/announcement.module';
 import { FileListV2Component } from '../file-browser/components/file-list-v2/file-list-v2.component';
 import { SharePreviewComponent } from './components/share-preview/share-preview.component';
@@ -65,10 +66,10 @@ const sharePreviewChildren = [
         loadChildren: LazyLoadFileBrowserSibling,
       },
       {
-        path: 'record/v2/:recArchiveNbr',
+        path: 'record/v2/:recordId',
         component: FileViewerV2Component,
         resolve: {
-          currentRecord: RecordResolveService,
+          currentRecord: RecordResolveV2Service,
         },
       },
     ],
@@ -92,10 +93,10 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'record/v2/:recArchiveNbr',
+        path: 'record/v2/:recordId',
         component: FileViewerV2Component,
         resolve: {
-          currentRecord: RecordResolveService,
+          currentRecord: RecordResolveV2Service,
         },
       },
     ],
