@@ -362,7 +362,6 @@ export class FileListComponent
   }
 
   ngOnDestroy() {
-    // this.dataService.setCurrentFolder();
     unsubscribeAll(this.subscriptions);
     if (this.unlistenMouseMove) {
       this.unlistenMouseMove();
@@ -439,8 +438,6 @@ export class FileListComponent
   }
 
   onItemClick(itemClick: ItemClickEvent) {
-    // this.itemClicked.emit(itemClick);
-
     if (!this.showSidebar || !itemClick.selectable) {
       return;
     }

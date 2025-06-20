@@ -52,6 +52,7 @@ export class RecordVO
   public uploadFileName;
   public downloadName;
   public uploadAccountId;
+  public folderId;
   public size;
   public description;
   public displayDT;
@@ -207,6 +208,7 @@ export interface RecordVOData extends BaseVOData {
   thumbURL2000?: string;
   thumbnail256?: string;
   thumbnail256CloudPath?: string;
+  folderId?: any;
   thumbDT?: any;
   fileStatus?: any;
   status?: any;

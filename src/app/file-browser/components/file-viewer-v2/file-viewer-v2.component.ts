@@ -405,9 +405,8 @@ export class FileViewerV2Component implements OnInit, OnDestroy {
 
   navigateToCurrentRecord(index = 0) {
     const record = this.records[index];
-    this.router.navigate(['../', record.archiveNumber], {
+    this.router.navigate(['../', record.recordId], {
       relativeTo: this.route,
-      queryParamsHandling: 'preserve',
     });
     this.loadingRecord = false;
   }

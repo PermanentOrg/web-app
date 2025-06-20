@@ -1144,7 +1144,7 @@ export class FileListItemComponent
 
   private showFolderIcon(): boolean {
     return (
-      this.item.isFolder &&
+      (this.item.isFolder || this.item.folderId) &&
       this.folderContentsType !== FolderContentsType.NORMAL
     );
   }
