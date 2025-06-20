@@ -4,7 +4,6 @@ export const shareUrlBuilder = (payload: {
   itemType: 'record' | 'folder';
   token: string;
   itemId: string;
-  accountId: string;
 }) => {
   const urlDict = {
     local: 'https://local.permanent.org/share',
@@ -15,11 +14,9 @@ export const shareUrlBuilder = (payload: {
 
   const baseUrl = urlDict[environment.environment];
 
-  const url = new URL(baseUrl);
-
-  Object.keys(payload).map((key) => {
-    url.searchParams.set(key, payload[key]);
-  });
+  const url = new URL(
+    `${baseUrl}/view/v2-file-list/${payload.itemType}/${payload.token}/${payload.itemId}`,
+  );
 
   return url.toString();
 };

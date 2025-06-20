@@ -131,6 +131,10 @@ describe('ShareLinksApiService', () => {
       expirationTimestamp: null,
       createdAt: new Date('2025-04-09T13:09:07.755Z'),
       updatedAt: new Date('2025-04-09T13:09:07.755Z'),
+      creatorAccount: {
+        id: '1',
+        name: 'Name',
+      },
     };
 
     const mockApiResponse = {
@@ -230,6 +234,10 @@ describe('ShareLinksApiService', () => {
       expirationTimestamp: null,
       createdAt: new Date('2025-04-09T13:09:07.755Z'),
       updatedAt: new Date('2025-04-09T13:09:07.755Z'),
+      creatorAccount: {
+        id: '1',
+        name: 'Name',
+      },
     };
 
     const mockApiResponse = {
