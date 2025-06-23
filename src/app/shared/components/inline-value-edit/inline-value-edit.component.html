@@ -74,7 +74,7 @@
         <div
           class="inline-value-display inline-value-textarea form-control"
           [class.is-editing]="isEditing"
-          (click)="startEdit()"
+          (click)="onDisplayClick($event)"
           [innerHTML]="
             !loading
               ? displayValue || (!canEdit ? readOnlyEmptyMessage : emptyMessage)
