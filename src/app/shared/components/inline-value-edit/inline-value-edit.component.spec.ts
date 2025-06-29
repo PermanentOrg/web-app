@@ -448,4 +448,46 @@ describe('InlineValueEditComponent', () => {
 
     expect(saveSpy).not.toHaveBeenCalled();
   });
+
+  it('should start editing when clicking a non-link element', () => {
+    component.canEdit = true;
+    component.type = 'textarea';
+    component.displayValue = 'Some content without a link';
+    fixture.detectChanges();
+
+    const displayEl = fixture.debugElement.query(
+      By.css('.inline-value-display'),
+    );
+
+    displayEl.triggerEventHandler('click', {
+      target: document.createElement('span'),
+    });
+
+    fixture.detectChanges();
+
+    expect(component.isEditing).toBeTrue();
+  });
+
+  it('should NOT start editing when clicking on a link', () => {
+    component.canEdit = true;
+    component.type = 'textarea';
+    component.displayValue = 'Some <a href="#">link</a> inside text';
+    fixture.detectChanges();
+
+    const displayEl = fixture.debugElement.query(
+      By.css('.inline-value-display'),
+    );
+
+    const anchor = document.createElement('a');
+    anchor.href = '#';
+    anchor.innerText = 'link';
+
+    displayEl.triggerEventHandler('click', {
+      target: anchor,
+    });
+
+    fixture.detectChanges();
+
+    expect(component.isEditing).toBeFalse();
+  });
 });

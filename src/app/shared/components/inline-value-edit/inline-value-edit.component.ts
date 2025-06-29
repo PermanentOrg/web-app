@@ -192,6 +192,15 @@ export class InlineValueEditComponent implements OnInit, OnChanges {
     this.blurInput();
   }
 
+  onDisplayClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('a')) {
+      return;
+    }
+
+    this.startEdit();
+  }
+
   setNgbDateAndTime() {
     if (!this.editValue) {
       this.editValue = moment.utc().toISOString();
