@@ -32,6 +32,7 @@ import { ArchiveSettingsDialogComponent } from './components/archive-settings-di
 import { MembersDialogComponent } from './components/members-dialog/members-dialog.component';
 import { AccountSettingsDialogComponent } from './components/account-settings-dialog/account-settings-dialog.component';
 import { InvitationsDialogComponent } from './components/invitations-dialog/invitations-dialog.component';
+import { MyArchivesDialogComponent } from './components/my-archives-dialog/my-archives-dialog.component';
 
 const rootFolderResolve = {
   rootFolder: RootFolderResolveService,
@@ -281,6 +282,24 @@ export const routes: RoutesWithData = [
       {
         path: 'welcome-invitation',
         redirectTo: '/app/(private//dialog:welcomeinvitation)',
+      },
+      {
+        path: 'archives/:path',
+        component: RoutedDialogWrapperComponent,
+        outlet: 'dialog',
+        data: {
+          title: 'Archives',
+          component: MyArchivesDialogComponent,
+          dialogOptions: { width: '1000px' },
+        },
+      },
+      {
+        path: 'archives',
+        redirectTo: '/app/(private//dialog:archives/)',
+      },
+      {
+        path: 'connections',
+        redirectTo: '/app/(private//dialog:connections)',
       },
       {
         path: 'storage/:path',
