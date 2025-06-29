@@ -17,6 +17,7 @@ import {
   ViewChild,
   NgZone,
   Renderer2,
+  signal,
 } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -57,6 +58,8 @@ import { AccountService } from '@shared/services/account/account.service';
 import { routeHasDialog } from '@shared/utilities/router';
 import { RouteHistoryService } from '@root/app/route-history/route-history.service';
 import { EventService } from '@shared/services/event/event.service';
+import { Dialog } from '@angular/cdk/dialog';
+import { CreateAccountDialogComponent } from '@share-preview/components/create-account-dialog/create-account-dialog.component';
 
 export interface ItemClickEvent {
   event?: MouseEvent;
@@ -108,6 +111,17 @@ export class FileListV2Component
   private visibleItemsHandlerDebounced: Function;
   private mouseMoveHandlerThrottled: Function;
 
+  shareAccount = signal<{
+    fullName?: string;
+    name?: string;
+  }>({});
+
+  private parentData = this.route.parent?.snapshot.data;
+  private sharePreviewVO =
+    this.parentData?.sharePreviewItem || this.parentData?.SharePreviewVO;
+
+  createAccountDialogIsOpen = signal(false);
+
   private reinit = false;
   private inFileView = false;
   private inDialog = false;
@@ -147,11 +161,16 @@ export class FileListV2Component
     public device: DeviceService,
     private ngZone: NgZone,
     private event: EventService,
+    private dialog: Dialog,
   ) {
     this.currentFolder = this.route.snapshot.data.sharePreviewItem?.FolderVO;
     // this.noFileListPadding = this.route.snapshot.data.noFileListPadding;
     this.fileListCentered = this.route.snapshot.data.fileListCentered;
     this.showSidebar = this.route.snapshot.data.showSidebar;
+
+    this.shareAccount.set(
+      this.sharePreviewVO?.shareLinkResponse?.creatorAccount,
+    );
 
     if (this.route.snapshot.data.noFileListNavigation) {
       this.allowNavigation = false;
@@ -324,6 +343,8 @@ export class FileListV2Component
     this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);
 
+    console.log(this.sharePreviewVO);
+
     // this.isRootFolder = this.currentFolder.type?.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 
@@ -439,6 +460,17 @@ export class FileListV2Component
   }
 
   onItemClick(itemClick: ItemClickEvent) {
+    const needsAccountDialog =
+      !this.account.getAccount() &&
+      this.sharePreviewVO?.shareLinkResponse?.accessRestrictions === 'none';
+
+    if (needsAccountDialog) {
+      this.dialog.open(CreateAccountDialogComponent, {
+        data: {
+          sharerName: this.shareAccount().name,
+        },
+      });
+    }
     this.itemClicked.emit(itemClick);
 
     if (!this.showSidebar || !itemClick.selectable) {
@@ -501,6 +533,21 @@ export class FileListV2Component
     return (
       event.target === this.document.body && !this.router.url.includes('record')
     );
+  }
+
+  showCreateAccountDialog() {
+    if (!this.createAccountDialogIsOpen()) {
+      const dialogRef = this.dialog.open(CreateAccountDialogComponent, {
+        data: {
+          sharerName: this.shareAccount().fullName || this.shareAccount().name,
+        },
+      });
+      dialogRef.closed?.subscribe(() => {
+        this.createAccountDialogIsOpen.set(false);
+      });
+
+      this.createAccountDialogIsOpen.set(true);
+    }
   }
 
   async loadVisibleItems(animate?: boolean) {

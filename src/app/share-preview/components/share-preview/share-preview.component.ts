@@ -680,25 +680,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  subscribeToItemClicks(componentReference) {
-    if (!('itemClicked' in componentReference)) {
-      return;
-    }
-
-    this.fileListClickListener = componentReference.itemClicked.subscribe(
-      () => {
-        if (
-          !this.account &&
-          this.sharePreviewVO.shareLinkResponse?.accessRestrictions ===
-            'account'
-        ) {
-          this.showCreateAccountDialog();
-          return;
-        }
-      },
-    );
-  }
-
   unsubscribeFromItemClicks() {
     if (this.fileListClickListener) {
       this.fileListClickListener.unsubscribe();

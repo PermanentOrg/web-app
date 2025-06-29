@@ -77,10 +77,7 @@
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
 <div class="share-preview-content" [ngClass]="{ navigating: isNavigating }">
-  <router-outlet
-    (activate)="subscribeToItemClicks($event)"
-    (deactivate)="unsubscribeFromItemClicks()"
-  ></router-outlet>
+  <router-outlet (deactivate)="unsubscribeFromItemClicks()"></router-outlet>
 </div>
 <div
   class="share-preview-cover from-bottom"

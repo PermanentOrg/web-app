@@ -173,12 +173,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       );
     }
 
-    for (
-      let i = 1;
-      i < folder.pathAsText?.length || i < folder.paths?.names.length;
-      i++
-    ) {
-      if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 2) {
+    console.log(folder);
+
+    for (let i = 1; i < folder.pathAsText?.length; i++) {
+      if ((isInSharePreviewView || isInSharePreviewInviteView) && i < 1) {
         continue;
       }
 
