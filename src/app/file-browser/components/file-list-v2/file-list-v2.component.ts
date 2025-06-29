@@ -439,7 +439,7 @@ export class FileListV2Component
   }
 
   onItemClick(itemClick: ItemClickEvent) {
-    // this.itemClicked.emit(itemClick);
+    this.itemClicked.emit(itemClick);
 
     if (!this.showSidebar || !itemClick.selectable) {
       return;

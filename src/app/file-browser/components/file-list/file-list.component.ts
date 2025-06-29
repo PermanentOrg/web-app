@@ -438,6 +438,8 @@ export class FileListComponent
   }
 
   onItemClick(itemClick: ItemClickEvent) {
+    this.itemClicked.emit(itemClick);
+
     if (!this.showSidebar || !itemClick.selectable) {
       return;
     }

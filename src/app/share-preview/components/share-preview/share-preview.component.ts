@@ -56,8 +56,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   account: AccountVO = this.accountService.getAccount();
   archive: ArchiveVO = this.accountService.getArchive();
 
-  private isPrivateLink = false;
-
   sharePreviewVO =
     this.route.snapshot.data.sharePreviewVO ||
     this.route.snapshot.data.sharePreviewItem;
@@ -206,12 +204,6 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async ngOnInit() {
     this.checkAccess();
-    if (
-      !this.account &&
-      this.sharePreviewVO.shareLinkResponse?.accessRestrictions === 'account'
-    ) {
-      this.isPrivateLink = true;
-    }
 
     if (!this.hasAccess) {
       this.sendGaEvent('previewed');
@@ -694,14 +686,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.fileListClickListener = componentReference.itemClicked.subscribe(
-      (item) => {
-        if (this.isPrivateLink) {
+      () => {
+        if (
+          !this.account &&
+          this.sharePreviewVO.shareLinkResponse?.accessRestrictions ===
+            'account'
+        ) {
           this.showCreateAccountDialog();
-        } else {
-          this.router.navigate(['record', 'v2', item.item.archiveNumber], {
-            relativeTo: this.route,
-            queryParamsHandling: 'preserve',
-          });
+          return;
         }
       },
     );
