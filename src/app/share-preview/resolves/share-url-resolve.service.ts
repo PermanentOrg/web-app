@@ -78,6 +78,7 @@ export class ShareUrlResolveService {
           pathAsFolder_linkId: [0, 0],
         });
         dummyFolder.ChildItemVOs = [record];
+        dummyFolder.description = record.description;
 
         response = {
           FolderVO: dummyFolder,

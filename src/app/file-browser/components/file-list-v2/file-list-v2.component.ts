@@ -343,8 +343,6 @@ export class FileListV2Component
     this.showSidebar = this.route.snapshot.data.showSidebar;
     this.dataService.setCurrentFolder(this.currentFolder);
 
-    console.log(this.sharePreviewVO);
-
     // this.isRootFolder = this.currentFolder.type?.includes('root');
     this.showFolderDescription = this.route.snapshot.data.showFolderDescription;
 
