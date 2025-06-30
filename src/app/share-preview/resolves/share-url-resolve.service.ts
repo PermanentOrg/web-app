@@ -55,7 +55,13 @@ export class ShareUrlResolveService {
         folder = {
           ...folderItems,
           ChildItemVOs: children.items,
+          pathAsFolder_linkId: [0, 0],
+          pathAsArchiveNbr: ['0000-0000', '0000-0000'],
         };
+
+        if (folderItems.paths && folderItems.paths.names) {
+          folder.pathAsText = ['Shares', ...folderItems.paths.names];
+        }
 
         response = {
           FolderVO: folder,
@@ -74,7 +80,7 @@ export class ShareUrlResolveService {
         const dummyFolder = new FolderVO({
           archiveNbr: record.archive?.archiveNbr || '0000-0000',
           pathAsArchiveNbr: ['0000-0000', '0000-0000'],
-          pathAsText: ['Shares', 'Record'],
+          pathAsText: ['Shares', 'Record', record.displayName],
           pathAsFolder_linkId: [0, 0],
         });
         dummyFolder.ChildItemVOs = [record];
