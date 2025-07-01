@@ -10,10 +10,17 @@ class MockApiService {
   public static gotPresigned: boolean = false;
   public static registeredRecord: RecordVO = null;
   public static registeredDestination: string = null;
+  public static multipartRegistered: {
+    record: RecordVO;
+    uploadId: string;
+    key: string;
+    eTags: string[];
+  } = null;
   public static reset() {
     MockApiService.gotPresigned = false;
     MockApiService.registeredRecord = null;
     MockApiService.registeredDestination = null;
+    MockApiService.multipartRegistered = null;
   }
   public record = {
     async registerRecord(record: RecordVO, url: string) {
@@ -51,6 +58,30 @@ class MockApiService {
             ],
           },
         ],
+      });
+    },
+
+    async getMultipartUploadURLs(size: number) {
+      const partSize = 10 * 1024 * 1024;
+      const partCount = Math.ceil(size / partSize);
+      return {
+        urls: Array(partCount)
+          .fill(null)
+          .map((_, i) => `multipart-url-${i}`),
+        uploadId: 'test-upload-id',
+        key: 'test-file-key',
+      };
+    },
+    async registerMultipartRecord(
+      record: RecordVO,
+      uploadId: string,
+      key: string,
+      eTags: string[],
+    ) {
+      MockApiService.multipartRegistered = { record, uploadId, key, eTags };
+      return new RecordVO({
+        displayName: 'multipart.txt',
+        parentFolderId: record.parentFolderId,
       });
     },
   };
@@ -96,5 +127,36 @@ describe('Uploader', () => {
     expect(MockApiService.registeredRecord.displayName).toBe('test.txt');
     expect(MockApiService.registeredRecord.parentFolderId).toBe(1);
     expect(MockApiService.registeredDestination).toBe('testurl');
+  });
+
+  it('can do a multipart upload using MockApiService', async () => {
+    const file = new File([new Uint8Array(200 * 1024 * 1024)], 'multipart.txt');
+    const uploadItem = new UploadItem(
+      file,
+      new FolderVO({ folderId: 2, folder_linkId: 2 }),
+    );
+
+    const progressSpy = jasmine.createSpy();
+
+    spyOn<any>(uploader, 'uploadToMultipartUrl').and.callFake(
+      async (
+        _url: string,
+        _item: UploadItem,
+        _pointer: number,
+        eTags: string[],
+      ) => {
+        eTags.push('etag-mock');
+      },
+    );
+
+    const result = await (uploader as any).uploadMultipart(
+      uploadItem,
+      progressSpy,
+    );
+
+    expect(MockApiService.multipartRegistered.record.parentFolderId).toBe(2);
+    expect(MockApiService.multipartRegistered.eTags.length).toBe(20);
+    expect(progressSpy).toHaveBeenCalled();
+    expect(result.displayName).toBe('multipart.txt');
   });
 });
