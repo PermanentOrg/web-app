@@ -32,10 +32,28 @@ export class ShareUrlResolveService {
       const token = route.params['token'];
       const itemId = route.params['itemId'];
       const headers = { 'X-Permanent-Share-Token': token };
+
       let response = {};
 
       let folder: any = null;
       let record: any = null;
+
+      const shareLinkResponseArray =
+        await this.shareLinkApi.getShareLinksByToken([token]);
+      const shareLinkResponse = shareLinkResponseArray[0];
+      response = {
+        ...response,
+        shareLinkResponse,
+        AccountVO: shareLinkResponse?.creatorAccount,
+      };
+
+      if (shareLinkResponse?.accessRestrictions !== 'none') {
+        try {
+          await this.api.share.requestShareAccess(token);
+        } catch (shareAccessError) {
+          return response;
+        }
+      }
 
       if (itemType === 'folder') {
         const folderArray = await this.api.folder.get(
@@ -59,11 +77,12 @@ export class ShareUrlResolveService {
           pathAsArchiveNbr: ['0000-0000', '0000-0000'],
         };
 
-        if (folderItems.paths && folderItems.paths.names) {
+        if (folderItems?.paths && folderItems.paths.names) {
           folder.pathAsText = ['Shares', ...folderItems.paths.names];
         }
 
         response = {
+          ...response,
           FolderVO: folder,
           ArchiveVO: folder.archive,
           AccountVO: folder.shareLink?.creatorAccount,
@@ -78,29 +97,22 @@ export class ShareUrlResolveService {
 
         // Wrap record inside a dummy folder structure if needed
         const dummyFolder = new FolderVO({
-          archiveNbr: record.archive?.archiveNbr || '0000-0000',
+          archiveNbr: record?.archive?.archiveNbr || '0000-0000',
           pathAsArchiveNbr: ['0000-0000', '0000-0000'],
-          pathAsText: ['Shares', 'Record', record.displayName],
+          pathAsText: ['Shares', 'Record', record?.displayName],
           pathAsFolder_linkId: [0, 0],
         });
         dummyFolder.ChildItemVOs = [record];
-        dummyFolder.description = record.description;
+        dummyFolder.description = record?.description;
 
         response = {
+          ...response,
           FolderVO: dummyFolder,
           RecordVO: record,
-          ArchiveVO: record.archive,
+          ArchiveVO: record?.archive,
         };
       }
 
-      const shareLinkResponseArray =
-        await this.shareLinkApi.getShareLinksByToken([token]);
-      const shareLinkResponse = shareLinkResponseArray[0];
-      response = {
-        ...response,
-        shareLinkResponse,
-        AccountVO: shareLinkResponse.creatorAccount,
-      };
       return response;
     } catch (error: any) {
       if (error.getMessage) {

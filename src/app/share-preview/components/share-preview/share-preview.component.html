@@ -76,9 +76,25 @@
 <div class="share-preview-content-breadcrumbs">
   <pr-breadcrumbs></pr-breadcrumbs>
 </div>
-<div class="share-preview-content" [ngClass]="{ navigating: isNavigating }">
+<div
+  *ngIf="!!sharedFolder()"
+  class="share-preview-content"
+  [ngClass]="{ navigating: isNavigating }"
+>
   <router-outlet (deactivate)="unsubscribeFromItemClicks()"></router-outlet>
 </div>
+
+@if (!sharedFolder() && shareLinkType() === 'account') {
+  <div class="no-response">You must be logged in to be able to view.</div>
+}
+
+@if (
+  (!sharedFolder() && shareLinkType() === 'approval') ||
+  (!sharedFolder() && !shareLinkType())
+) {
+  <div class="no-response">You must wait from approval.</div>
+}
+
 <div
   class="share-preview-cover from-bottom"
   [ngClass]="{ 'share-preview-cover-visible': showCover }"

@@ -5,6 +5,7 @@ import {
   HostListener,
   OnDestroy,
   AfterViewInit,
+  signal,
 } from '@angular/core';
 import {
   Router,
@@ -60,15 +61,22 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.snapshot.data.sharePreviewVO ||
     this.route.snapshot.data.sharePreviewItem;
   shareArchive: ArchiveVO = this.sharePreviewVO?.ArchiveVO;
-  shareAccount = this.sharePreviewVO?.AccountVO;
+  shareAccount =
+    this.sharePreviewVO?.AccountVO ||
+    this.sharePreviewVO?.shareLinkResponse?.creatorAccount;
   displayName: string =
-    this.sharePreviewVO.FolderVO?.displayName ||
-    this.sharePreviewVO.RecordVO?.displayName;
+    this.sharePreviewVO?.FolderVO?.displayName ||
+    this.sharePreviewVO?.RecordVO?.displayName ||
+    this.sharePreviewVO?.shareLinkResponse?.creatorAccount?.name;
 
   // access and permissions
   isInvite = !!this.sharePreviewVO?.inviteId;
   isRelationshipShare = !!this.sharePreviewVO?.shareId;
   isLinkShare = !this.isInvite && !this.isRelationshipShare;
+
+  sharedFolder = signal({});
+
+  shareLinkType = signal('');
 
   isOriginalOwner = false;
   isLoggedIn = false;
@@ -132,13 +140,23 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.shareToken = this.route.snapshot.params.shareToken;
 
+    this.shareAccount =
+      this.sharePreviewVO?.AccountVO ||
+      this.sharePreviewVO?.shareLinkResponse?.creatorAccount;
+
+    this.shareLinkType.set(
+      this.sharePreviewVO?.shareLinkResponse?.accessRestrictions,
+    );
+
+    this.sharedFolder.set(this.sharePreviewVO?.FolderVO);
+
     this.signupForm = fb.group({
       invitation: [this.isInvite ? this.sharePreviewVO.token : ''],
       email: [
-        this.sharePreviewVO.email,
+        this.sharePreviewVO?.email,
         [trimWhitespace, Validators.required, Validators.email],
       ],
-      name: [this.sharePreviewVO.fullName, Validators.required],
+      name: [this.sharePreviewVO?.fullName, Validators.required],
       password: [
         '',
         [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH)],
@@ -258,7 +276,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoggedIn = this.accountService.isLoggedIn();
     this.archive = this.accountService.getArchive();
     this.account = this.accountService.getAccount();
-    this.shareArchive = this.sharePreviewVO.ArchiveVO;
+    this.shareArchive = this.sharePreviewVO?.ArchiveVO;
 
     if (this.isInvite) {
       this.hasAccess = this.sharePreviewVO.status.includes('accepted');
@@ -269,7 +287,12 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
       this.hasAccess = true;
       this.isAutoApprove = true;
 
-      if (this.sharePreviewVO?.autoApproveToggle === 1) {
+      if (
+        this.sharePreviewVO?.autoApproveToggle === 1 ||
+        this.sharePreviewVO?.shareLinkResponse?.accessRestrictions ===
+          'account' ||
+        this.sharePreviewVO?.shareLinkResponse?.accessRestrictions === 'none'
+      ) {
         this.isAutoApprove = true;
       }
     }
@@ -277,14 +300,14 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.isInvite || this.isLinkShare) {
       this.canEdit =
         this.hasAccess &&
-        (!this.sharePreviewVO.accessRole?.includes('viewer') ||
-          !this.sharePreviewVO.shareLinkResponse?.permissionsLevel?.includes(
+        (!this.sharePreviewVO?.accessRole?.includes('viewer') ||
+          !this.sharePreviewVO?.shareLinkResponse?.permissionsLevel?.includes(
             'viewer',
           ));
       this.canShare =
         this.hasAccess &&
-        (this.sharePreviewVO.accessRole?.includes('owner') ||
-          !this.sharePreviewVO.shareLinkResponse?.permissionsLevel?.includes(
+        (this.sharePreviewVO?.accessRole?.includes('owner') ||
+          !this.sharePreviewVO?.shareLinkResponse?.permissionsLevel?.includes(
             'owner',
           ));
     }
@@ -469,7 +492,7 @@ export class SharePreviewComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.createAccountDialogIsOpen) {
       const dialogRef = this.dialog.open(CreateAccountDialogComponent, {
         data: {
-          sharerName: this.shareAccount.fullName || this.shareAccount.name,
+          sharerName: this.shareAccount?.fullName || this.shareAccount?.name,
         },
       });
       dialogRef.closed?.subscribe(() => {
