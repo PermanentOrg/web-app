@@ -8,12 +8,12 @@ import { ItemVO } from '../../models/index';
 })
 export class GetAltTextPipe implements PipeTransform {
   transform(value: ItemVO): string {
-    if (value.altText) {
-      return value.altText;
+    if (value?.altText) {
+      return value?.altText;
     }
-    if (!value.displayName) {
+    if (!value?.displayName) {
       return 'Click to add alt text';
     }
-    return value.displayName;
+    return value?.displayName;
   }
 }

@@ -181,6 +181,7 @@ export class FolderVO
 export interface FolderVOData extends BaseVOData {
   folderId?: any;
   archiveNbr?: any;
+  archiveNumber?: any;
   archiveArchiveNbr?: any;
   archiveId?: any;
   displayName?: any;

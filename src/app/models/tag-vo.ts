@@ -29,3 +29,9 @@ export class TagVO extends BaseVO implements TagVOData {
     return this.type?.includes('type.tag.metadata');
   }
 }
+
+export interface Tag {
+  id: string;
+  name: string;
+  type: string;
+}

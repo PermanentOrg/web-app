@@ -29,6 +29,8 @@ import { ShareLinkDropdownComponent } from './components/share-link-dropdown/sha
 
 import { DownloadButtonComponent } from './components/download-button/download-button.component';
 import { ShareLinkSettingsComponent } from './components/share-link-settings/share-link-settings.component';
+import { FileViewerV2Component } from './components/file-viewer-v2/file-viewer-v2.component';
+import { FileListV2Component } from './components/file-list-v2/file-list-v2.component';
 
 @NgModule({
   imports: [
@@ -41,8 +43,10 @@ import { ShareLinkSettingsComponent } from './components/share-link-settings/sha
   ],
   exports: [
     FileListComponent,
+    FileListV2Component,
     FileListItemComponent,
     FileViewerComponent,
+    FileViewerV2Component,
     VideoComponent,
     SidebarComponent,
     FileListControlsComponent,
@@ -54,9 +58,11 @@ import { ShareLinkSettingsComponent } from './components/share-link-settings/sha
   ],
   declarations: [
     FileListComponent,
+    FileListV2Component,
     FileListItemComponent,
     FileListControlsComponent,
     FileViewerComponent,
+    FileViewerV2Component,
     FolderViewComponent,
     VideoComponent,
     SharingComponent,
