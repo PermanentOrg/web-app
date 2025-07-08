@@ -3,6 +3,7 @@ import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api/api.service';
 import { EventService } from '@shared/services/event/event.service';
+import { RecordVO } from '@models/index';
 import { UploadItem } from './uploadItem';
 
 const buildForm = (fields: object, file: File) => {
@@ -125,14 +126,12 @@ export class Uploader {
       emitProgress(progress);
     }
 
-    const response = await this.api.record.registerMultipartRecord(
+    const record = await this.api.record.registerMultipartRecord(
       item.RecordVO,
       uploadId,
       key,
       eTags,
     );
-
-    const record = response.getRecordVO();
 
     this.event.dispatch({
       action: 'submit',
@@ -140,7 +139,7 @@ export class Uploader {
       record,
     });
 
-    return response;
+    return record;
   };
 
   async uploadFile(

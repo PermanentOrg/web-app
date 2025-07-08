@@ -138,23 +138,25 @@ export class RecordRepo extends BaseRepo {
     uploadId: string,
     key: string,
     eTags: string[],
-  ): Promise<RecordResponse> {
+  ): Promise<RecordVO> {
+    const body = {
+      displayName: record.displayName,
+      parentFolderId: record.parentFolderId,
+      uploadFileName: record.uploadFileName,
+      size: record.size,
+      multipartUploadData: {
+        uploadId,
+        key,
+        parts: eTags.map((ETag, index) => ({
+          PartNumber: index + 1,
+          ETag,
+        })),
+      },
+    };
+
     return getFirst(
-      this.httpV2.post('/record/registerRecord', {
-        displayName: record.displayName,
-        parentFolderId: record.parentFolderId,
-        uploadFileName: record.uploadFileName,
-        size: record.size,
-        multipartUploadData: {
-          uploadId,
-          key,
-          parts: eTags.map((ETag, index) => ({
-            PartNumber: index + 1,
-            ETag,
-          })),
-        },
-      }),
-    ).toPromise() as unknown as RecordResponse;
+      this.httpV2.post<RecordVO>('/record/registerRecord', body),
+    ).toPromise();
   }
 
   public async update(recordVOs: RecordVO[], archiveId: number) {
