@@ -14,11 +14,17 @@ cp .env.template .env
 
 Add your environment secrets to `.env`.
 
-You need access to FontAwesome Pro packages to install dependencies. You can install the project dependencies with:
 
-```sh
-FONTAWESOME_PACKAGE_TOKEN="insert_token_here" npm install
-```
+### ✅ With something like this:
+
+```md
+You need access to FontAwesome Pro packages to install dependencies.
+
+1. Add your FontAwesome token to `.env`:
+
+```env
+FONTAWESOME_PACKAGE_TOKEN=your_token_here
+
 
 Then run the app using `npm run dev` to point the dev server against your `local.permanent.org` VM accessible at `https://ng.permanent.org:4200`
 
