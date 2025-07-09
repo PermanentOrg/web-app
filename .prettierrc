@@ -1,10 +1,12 @@
 {
   "singleQuote": true,
+  "trailingComma": "all",
   "overrides": [
     {
       "files": "*.html",
       "options": {
-        "parser": "angular"
+        "parser": "angular",
+        "trailingComma": "none"
       }
     }
   ]

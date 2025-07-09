@@ -1,6 +1,5 @@
 /* @format */
 import { Component } from '@angular/core';
-
 import { UploadService } from '@core/services/upload/upload.service';
 import { UploadItem } from '@core/services/upload/uploadItem';
 import {
@@ -86,8 +85,9 @@ export class UploadProgressComponent {
       this.upload.getTargetFolderId() !==
       progressEvent.item?.parentFolder.folderId;
     if (this.isUploadingFolder) {
-      this.folderTargetName = `${this.upload.getTargetFolderName()}/${progressEvent
-        .item?.parentFolder.displayName}`;
+      this.folderTargetName = `${this.upload.getTargetFolderName()}/${
+        progressEvent.item?.parentFolder.displayName
+      }`;
     } else {
       if (
         progressEvent.item?.parentFolder.displayName === 'My Files' &&
