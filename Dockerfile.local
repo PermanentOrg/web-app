@@ -6,10 +6,5 @@ ENV FONTAWESOME_PACKAGE_TOKEN=${FONTAWESOME_PACKAGE_TOKEN}
 COPY web-app/ /usr/app
 WORKDIR /usr/app
 
-COPY web-app/.npmrc.template .npmrc.template
-
-RUN set -eux; \
-  apk add --no-cache gettext; \
-  envsubst < .npmrc.template > .npmrc; \
-  npm ci --legacy-peer-deps; \
-  rm .npmrc
+RUN set -eux \
+  && npm ci
