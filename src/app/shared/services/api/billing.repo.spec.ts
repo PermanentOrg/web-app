@@ -1,9 +1,6 @@
 /* @format */
 import { TestBed, inject } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { environment } from '@root/environments/environment';
 
 import { HttpService } from '@shared/services/http/http.service';
@@ -12,6 +9,7 @@ import {
   BillingResponse,
   ClaimingPromoResponse,
 } from '@shared/services/api/billing.repo';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpV2Service } from '../http-v2/http-v2.service';
 
 const apiUrl = (endpoint: string) => `${environment.apiUrl}${endpoint}`;
@@ -22,9 +20,9 @@ describe('BillingRepo', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpService],
-    });
+    imports: [],
+    providers: [HttpService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     repo = new BillingRepo(
       TestBed.inject(HttpService),

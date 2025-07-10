@@ -1,14 +1,12 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { ArchiveVO } from '@models/index';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ChecklistApiResponse } from '../types/checklist-item';
 import { UserChecklistService } from './user-checklist.service';
 import { ChecklistEventObserverService } from './checklist-event-observer.service';
@@ -20,9 +18,9 @@ describe('UserChecklistService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpV2Service, AccountService],
-    });
+    imports: [],
+    providers: [HttpV2Service, AccountService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(UserChecklistService);
     http = TestBed.inject(HttpTestingController);
     account = TestBed.inject(AccountService);

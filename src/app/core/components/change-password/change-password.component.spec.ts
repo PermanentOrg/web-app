@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MessageService } from '@shared/services/message/message.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ChangePasswordComponent } from './change-password.component';
 
 class MessageStub {
@@ -14,15 +15,17 @@ describe('ChangePasswordComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChangePasswordComponent],
-      imports: [HttpClientTestingModule],
-      providers: [
+    declarations: [ChangePasswordComponent],
+    imports: [],
+    providers: [
         {
-          provide: MessageService,
-          useClass: MessageStub,
+            provide: MessageService,
+            useClass: MessageStub,
         },
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(ChangePasswordComponent);
     component = fixture.componentInstance;

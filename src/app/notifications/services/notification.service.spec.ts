@@ -7,13 +7,14 @@ import {
 
 import { SharedModule } from '@shared/shared.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from '@shared/services/message/message.service';
 import { AccountService } from '@shared/services/account/account.service';
 import { ApiService } from '@shared/services/api/api.service';
 import { NotificationResponse } from '@shared/services/api/index.repo';
 import { NotificationVOData } from '@models/notification-vo';
 import { cloneDeep } from 'lodash';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NotificationService } from './notification.service';
 
 const allNotificationsData: NotificationVOData[] = [
@@ -78,9 +79,9 @@ describe('NotificationService', () => {
     newNotificationsResponse.isSuccessful = true;
 
     TestBed.configureTestingModule({
-      imports: [SharedModule, HttpClientTestingModule, RouterTestingModule],
-      providers: [NotificationService, MessageService],
-    });
+    imports: [SharedModule, RouterTestingModule],
+    providers: [NotificationService, MessageService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     accountService = TestBed.inject(AccountService);
     apiService = TestBed.inject(ApiService);

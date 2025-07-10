@@ -8,7 +8,7 @@ import {
   UntypedFormControl,
 } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from '@shared/services/message/message.service';
 
@@ -25,6 +25,7 @@ import { DebugElement } from '@angular/core';
 import { CheckboxComponent } from '@root/app/component-library/components/checkbox/checkbox.component';
 import { AccountVO } from '@models/account-vo';
 import { AccountService } from '@shared/services/account/account.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -33,32 +34,31 @@ describe('SignupComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SignupComponent, LogoComponent, FormInputComponent],
-      imports: [
-        FormsModule,
+    declarations: [SignupComponent, LogoComponent, FormInputComponent],
+    imports: [FormsModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-      ],
-      providers: [
+        RouterTestingModule],
+    providers: [
         CookieService,
         MessageService,
         ApiService,
         AccountService,
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              queryParams: {
-                fullName: window.btoa(TEST_DATA.user.name),
-                primaryEmail: window.btoa(TEST_DATA.user.email),
-                inviteCode: 'invite',
-              },
+            provide: ActivatedRoute,
+            useValue: {
+                snapshot: {
+                    queryParams: {
+                        fullName: window.btoa(TEST_DATA.user.name),
+                        primaryEmail: window.btoa(TEST_DATA.user.email),
+                        inviteCode: 'invite',
+                    },
+                },
             },
-          },
         },
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

@@ -3,23 +3,26 @@ import * as Testing from '@root/test/testbedConfig';
 
 import { AccountService } from '@shared/services/account/account.service';
 import { cloneDeep } from 'lodash';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { StorageService } from '@shared/services/storage/storage.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RelationshipService } from './relationship.service';
 
 describe('RelationshipService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [
+    imports: [RouterTestingModule],
+    providers: [
         CookieService,
         AccountService,
         StorageService,
         RelationshipService,
-      ],
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
   });
 
   it('should be created', inject(
