@@ -106,7 +106,7 @@
     "@storybook/angular": "^7.6.8",
     "@storybook/blocks": "^7.6.8",
     "@storybook/testing-library": "^0.2.2",
-    "@types/country-list": "^2.1.1",
+    "@types/country-list": "^2.1.4",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.8",
     "@types/jest": "^27.0.2",
