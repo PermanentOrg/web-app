@@ -8,7 +8,7 @@ module.exports = {
         project: './src/tsconfig.spec.json',
       },
       extends: ['plugin:jasmine/recommended'],
-      plugins: ['jasmine'],
+      plugins: ['jasmine', 'import'],
       env: { jasmine: true },
       rules: {
         'jasmine/new-line-before-expect': 'error',
@@ -31,13 +31,10 @@ module.exports = {
       extends: [
         'plugin:@angular-eslint/recommended',
         'plugin:@angular-eslint/template/process-inline-templates',
-        'airbnb-base',
-        'airbnb-typescript/base',
         'prettier',
         'plugin:prettier/recommended',
       ],
       rules: {
-        '@typescript-eslint/consistent-type-definitions': 'error',
         '@typescript-eslint/dot-notation': 'off',
         '@typescript-eslint/explicit-member-accessibility': [
           'off',
@@ -96,7 +93,6 @@ module.exports = {
         '@typescript-eslint/member-ordering': 'off',
         '@typescript-eslint/naming-convention': 'off',
         '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/no-empty-interface': 'off',
         '@typescript-eslint/no-shadow': 'off',
         '@typescript-eslint/no-throw-literal': 'off',
         '@typescript-eslint/no-unused-expressions': 'off',
