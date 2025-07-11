@@ -1,6 +1,6 @@
 /* @format */
 import { Shallow } from 'shallow-render';
-import {} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService } from '@shared/services/api/api.service';
 import { InviteVO, InviteVOData } from '@models/invite-vo';
 import { InviteResponse } from '@shared/services/api/invite.repo';

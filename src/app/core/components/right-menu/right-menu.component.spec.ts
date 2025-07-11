@@ -6,7 +6,7 @@ import { RightMenuComponent } from '@core/components/right-menu/right-menu.compo
 import { FolderVO, ArchiveVO } from '@models';
 import { DataService } from '@shared/services/data/data.service';
 import { AccountService } from '@shared/services/account/account.service';
-import {} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('RightMenuComponent', () => {
   let component: RightMenuComponent;
