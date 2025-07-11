@@ -2,7 +2,7 @@
 import { Shallow } from 'shallow-render';
 import { AccountService } from '@shared/services/account/account.service';
 import { Router } from '@angular/router';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {} from '@angular/common/http/testing';
 import { OnboardingModule } from '../../../onboarding.module';
 import { GlamOnboardingHeaderComponent } from './glam-header.component';
 

@@ -8,10 +8,7 @@ import { ApiService } from '@shared/services/api/api.service';
 import { FolderResponse } from '@shared/services/api/index.repo';
 import { SharedModule } from '@shared/shared.module';
 import { FolderVO } from '@root/app/models';
-import {
-  HttpTestingController,
-  TestRequest,
-} from '@angular/common/http/testing';
+import { HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { FolderPickerService } from '@core/services/folder-picker/folder-picker.service';
 import { DataStatus } from '@models/data-status.enum';
 import { of } from 'rxjs';

@@ -1,5 +1,5 @@
 /* @format */
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { of } from 'rxjs';
@@ -8,6 +8,7 @@ import { PublicProfileService } from '@public/services/public-profile/public-pro
 import { ArchiveVO, TagVO } from '@models/index';
 import { Router } from '@angular/router';
 import { ArchiveSearchComponent } from './archive-search.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ArchiveSearchComponent', () => {
   let component: ArchiveSearchComponent;
@@ -26,18 +27,20 @@ describe('ArchiveSearchComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      declarations: [ArchiveSearchComponent],
-      imports: [HttpClientTestingModule, ReactiveFormsModule],
-      providers: [
+    declarations: [ArchiveSearchComponent],
+    imports: [ReactiveFormsModule],
+    providers: [
         FormBuilder,
         { provide: SearchService, useValue: searchService },
         { provide: PublicProfileService, useValue: publicProfileService },
         {
-          provide: Router,
-          useValue: jasmine.createSpyObj('Router', ['navigate']),
+            provide: Router,
+            useValue: jasmine.createSpyObj('Router', ['navigate']),
         },
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
 
     publicProfileService.archive$.and.returnValue(
       of(new ArchiveVO({ archiveId: '123' })),

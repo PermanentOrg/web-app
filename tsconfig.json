@@ -5,6 +5,7 @@
     "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
     "sourceMap": true,
+    "esModuleInterop": true,
     "sourceRoot": "/",
     "inlineSources": true,
     "declaration": false,
@@ -12,7 +13,6 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"

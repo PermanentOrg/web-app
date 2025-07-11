@@ -2,10 +2,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApiService } from '@shared/services/api/api.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AccountService } from '@shared/services/account/account.service';
 import { AccountVO } from '@models/account-vo';
 import { DirectiveDialogComponent } from './directive-dialog.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DirectiveDialogComponent', () => {
   let component: DirectiveDialogComponent;
@@ -13,20 +14,22 @@ describe('DirectiveDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DirectiveDialogComponent],
-      providers: [
+    declarations: [DirectiveDialogComponent],
+    imports: [],
+    providers: [
         ApiService,
         {
-          provide: AccountService,
-          useValue: {
-            getAccount: () => {
-              return new AccountVO({ accountId: 1 });
+            provide: AccountService,
+            useValue: {
+                getAccount: () => {
+                    return new AccountVO({ accountId: 1 });
+                },
             },
-          },
         },
-      ],
-      imports: [HttpClientTestingModule],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(DirectiveDialogComponent);
     component = fixture.componentInstance;

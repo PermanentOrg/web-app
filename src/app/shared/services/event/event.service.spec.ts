@@ -1,7 +1,7 @@
 /* @format */
 import { SharedModule } from '@shared/shared.module';
 import { Shallow } from 'shallow-render';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {} from '@angular/common/http/testing';
 import { EventObserver, EventService } from './event.service';
 import { PermanentEvent } from './event-types';
 

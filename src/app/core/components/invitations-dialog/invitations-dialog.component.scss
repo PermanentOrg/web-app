@@ -27,7 +27,7 @@
 
 .banner {
   @include tabbedDialogPanelBanner;
-  background-image: url('^assets/svg/invitation-banner.svg');
+  background-image: url('assets/svg/invitation-banner.svg');
   background-position: 50% 50%;
   background-size: cover;
 

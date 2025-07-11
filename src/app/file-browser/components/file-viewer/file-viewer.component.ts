@@ -11,7 +11,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'ts-key-enum';
-import * as Hammer from 'hammerjs';
+import Hammer from 'hammerjs';
 import { gsap } from 'gsap';
 import { filter, findIndex, find } from 'lodash';
 import { RecordVO, ItemVO, TagVOData, AccessRole } from '@root/app/models';

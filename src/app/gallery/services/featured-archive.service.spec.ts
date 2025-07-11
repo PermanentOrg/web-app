@@ -1,13 +1,11 @@
 /* @format */
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpV2Service } from '@shared/services/http-v2/http-v2.service';
 import { environment } from '@root/environments/environment';
 import { FeaturedArchive } from '../types/featured-archive';
 import { FeaturedArchiveService } from './featured-archive.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('FeaturedArchiveService', () => {
   let service: FeaturedArchiveService;
@@ -15,9 +13,9 @@ describe('FeaturedArchiveService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [HttpV2Service],
-    });
+    imports: [],
+    providers: [HttpV2Service, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(FeaturedArchiveService);
     http = TestBed.inject(HttpTestingController);
   });
